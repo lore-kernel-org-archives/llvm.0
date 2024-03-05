@@ -1,178 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6886B7E56F;
-	Tue,  5 Mar 2024 22:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A44A12CD8B;
+	Tue,  5 Mar 2024 22:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709679010; cv=none; b=LsYRxMaCaYWiy41/b9hbrjk2oPIP6uOqhX56FItNqfwgqu6NUbC7CXdbnGP7hXI7ucnvTB9KID4j3mmt0MkFfBaZ+gHBYRrNN2t4vVTdjetLjYPamtMbnlgQgFgENytSpAzfFkSw/RM8ywZomoB8uxU90vxKPVYNuIC5ppDawVM=
+	t=1709679367; cv=none; b=FmBEh25O9VPVjqjRMjjeMEVM8fGhRD/JJgRlwsGJ0QGqzVOqHl/NFBWpOXVRzBR09+V/gHWXa0kdAOQ3tlb8eGzNkKhEub57d78hAKuqz3imaY/0I2s8sQjFXMQ/QD9PpZrlDYfz/Yai2PiEw+/rx9s7w29lSrvcZSj79mUD3ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709679010; c=relaxed/simple;
-	bh=libXhYEB0y2Po+a07lqZLW7hxPvCu5mR9D7xytZajyM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LsUKlMT0rJj3kKuLOGoxXhR7Vneo/+vCNCOSqajzg4BXCmEgdy1EuswF0YDa/ZkeI78PqXzYFwxbdrO2j/lHWdWmItB+88m9mhMYzDRQ2pbkObr3uAtPG4Y1szmF3J27u3P+bwwgx0oJNhM7cAdsvDFgfGxyVLddxqvnUQ0Fbkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I33pzm4R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709679367; c=relaxed/simple;
+	bh=3Ctn9kD2QS+q2E/Aa6YBNxfwaREc7XLGAVQqkAR6KSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Cqbz0b8Q6QAF9Lqvpv+w+46jk6Or7ZNjFEUHsavQBOQr4rm0Dlaxs+60OLQpvV1xcTOn2YFNr5RhuIw3uTgRMBQg4A8k2pic0x1l7egZIXX71kjnCHhs0xC8YY2XtZ4/8Kj2AQyHV5ChJ0m/ls0SDH9taYnKVkldeZPChD0f3Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E8DwdDi+; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I33pzm4R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE5AC433C7;
-	Tue,  5 Mar 2024 22:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709679009;
-	bh=libXhYEB0y2Po+a07lqZLW7hxPvCu5mR9D7xytZajyM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=I33pzm4R35QF1i05yNQR4QiVgQ3J17FBoTBWtU1HJ5/A/ogJ6oEb01OddljbYZrFf
-	 JsAi21uA5K4D46k66eHu3lRmb/L3rO46tVqWxjyh0bEwyUItpBOxYDg48IkasWZsPd
-	 iKjRcLGPOJCvTi8QL5WWZ1mo3wk/kNSdQws8CVmj6u3xpwSB/UeZRVXJ7ds1z5vfcK
-	 1sJjDoRYHAwJzIGdgrnbM2uav9l64fQYaS6jaMPq5WF1/rzQl3PiN6TwovHlWUYcID
-	 BP3BZR+9l99TS1z0VhnkwemixRugdZ5ICh2OHwSHJVDCArGrSu03jgHnQs24ZaS2Uo
-	 ez7Pa0TCMSXuQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 05 Mar 2024 15:49:40 -0700
-Subject: [PATCH v2] media: mxl5xx: Move xpt structures off stack
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E8DwdDi+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709679365; x=1741215365;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3Ctn9kD2QS+q2E/Aa6YBNxfwaREc7XLGAVQqkAR6KSk=;
+  b=E8DwdDi+Ohu4gdssMwg/2keJ+M2wPrxbT0B1wZIF1Ic1U9prijeANyoU
+   lGoYZpVGinDg/Q4oeCQAcsePpqrOC+S6HGhnpeGPhQSzesLTD8eap6Xy/
+   RQwDZ+W/To19jcdTMrZstTXtwWmPbHO2nLOO7C4KwGwMCmqnNEuOlP+lo
+   Kt6B/SGQ5mJLtdYh2Y97e6YWaLFO1O4RBd9QeorbuqmEnneAV4JXpmKY9
+   24KoPHAOvocGbJqhvQ5HlJPMBJ4LTaAcrdV0Y8lu46HGTro21dfuVp7/q
+   qwBhOHt5k18YJu3XV1UeGtYOTHMFXqV7GJD7ZhDqS7BoQmjR9bPewlXGy
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="4420834"
+X-IronPort-AV: E=Sophos;i="6.06,206,1705392000"; 
+   d="scan'208";a="4420834"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 14:56:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,206,1705392000"; 
+   d="scan'208";a="14239179"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 05 Mar 2024 14:56:03 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rhdhY-0003j3-1P;
+	Tue, 05 Mar 2024 22:56:00 +0000
+Date: Wed, 6 Mar 2024 06:55:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [brauner-vfs:vfs.fixes 3/3] fs/coredump.c:948:58: warning: left
+ operand of comma operator has no effect
+Message-ID: <202403060645.TvSQBOwL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240305-dvb-mxl5xx-move-structs-off-stack-v2-1-6903844aba3c@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAIOh52UC/5WNTQ6CMBBGr0Jm7ZhORUlceQ/DAsoUGn5qptjUE
- O5u5Qbuvvct3tsgsDgOcC82EI4uOL9k0KcCzNAsPaPrMoNWulREhF1scU7TNSWcfWQMq7zNGtB
- bm3djRmTSVOmW2CoN2fMSti4djWedeXBh9fI5kpF+7z/2SEhomlJfFN8qQ/QYWRaezl56qPd9/
- wJkUJXR0wAAAA==
-To: mchehab@kernel.org
-Cc: ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
- linux-media@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- stable@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5962; i=nathan@kernel.org;
- h=from:subject:message-id; bh=libXhYEB0y2Po+a07lqZLW7hxPvCu5mR9D7xytZajyM=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKnPFy5IuW3W5d887+ez+SLqmsGyLna/OE9u6SnY8cnQ9
- 5zQm739HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAik3Yz/M9pS5vEn7QlQnvh
- dqYtR1ha32aYtZiYXQh1C3N/z9NVKcXwT003Vufm9i+Rv66vlA7sF2oVOvx9O5fv7qlPNWzV3mx
- ZxQAA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When building for LoongArch with clang 18.0.0, the stack usage of
-probe() is larger than the allowed 2048 bytes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.fixes
+head:   4630f2caafcd87230ec0503bf3e809fd5367a407
+commit: dc12d343473e426a5a0f48bf5d472b5f19b08276 [3/3] coredump: get machine check errors early rather than during iov_iter
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240306/202403060645.TvSQBOwL-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240306/202403060645.TvSQBOwL-lkp@intel.com/reproduce)
 
-  drivers/media/dvb-frontends/mxl5xx.c:1698:12: warning: stack frame size (2368) exceeds limit (2048) in 'probe' [-Wframe-larger-than]
-   1698 | static int probe(struct mxl *state, struct mxl5xx_cfg *cfg)
-        |            ^
-  1 warning generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403060645.TvSQBOwL-lkp@intel.com/
 
-This is the result of the linked LLVM commit, which changes how the
-arrays of structures in config_ts() get handled with
-CONFIG_INIT_STACK_ZERO and CONFIG_INIT_STACK_PATTERN, which causes the
-above warning in combination with inlining, as config_ts() gets inlined
-into probe().
+All warnings (new ones prefixed by >>):
 
-This warning can be easily fixed by moving the array of structures off
-of the stack via 'static const', which is a better location for these
-variables anyways because they are static data that is only ever read
-from, never modified, so allocating the stack space is wasteful.
+   In file included from fs/coredump.c:6:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/coredump.c:948:58: warning: left operand of comma operator has no effect [-Wunused-value]
+     948 |                         int stop = !dump_emit_page(cprm, dump_page_copy(page, dump_page));
+         |                                                                               ^~~~~~~~~
+   fs/coredump.c:923:36: note: expanded from macro 'dump_page_copy'
+     923 | #define dump_page_copy(src, dst) ((dst), (src))
+         |                                    ^~~
+   2 warnings generated.
 
-This drops the stack usage from 2368 bytes to 256 bytes with the same
-compiler and configuration.
 
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1978
-Link: https://github.com/llvm/llvm-project/commit/afe8b93ffdfef5d8879e1894b9d7dda40dee2b8d
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Rebase on latest media tree
-- Fix typo and link in the commit message (Miguel)
-- Pick up Miguel's reviewed-by and tested-by tags
-- Link to v1: https://lore.kernel.org/r/20240111-dvb-mxl5xx-move-structs-off-stack-v1-1-ca4230e67c11@kernel.org
----
- drivers/media/dvb-frontends/mxl5xx.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+vim +948 fs/coredump.c
 
-diff --git a/drivers/media/dvb-frontends/mxl5xx.c b/drivers/media/dvb-frontends/mxl5xx.c
-index 4ebbcf05cc09..91e9c378397c 100644
---- a/drivers/media/dvb-frontends/mxl5xx.c
-+++ b/drivers/media/dvb-frontends/mxl5xx.c
-@@ -1381,57 +1381,57 @@ static int config_ts(struct mxl *state, enum MXL_HYDRA_DEMOD_ID_E demod_id,
- 	u32 nco_count_min = 0;
- 	u32 clk_type = 0;
- 
--	struct MXL_REG_FIELD_T xpt_sync_polarity[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_sync_polarity[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x90700010, 8, 1}, {0x90700010, 9, 1},
- 		{0x90700010, 10, 1}, {0x90700010, 11, 1},
- 		{0x90700010, 12, 1}, {0x90700010, 13, 1},
- 		{0x90700010, 14, 1}, {0x90700010, 15, 1} };
--	struct MXL_REG_FIELD_T xpt_clock_polarity[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_clock_polarity[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x90700010, 16, 1}, {0x90700010, 17, 1},
- 		{0x90700010, 18, 1}, {0x90700010, 19, 1},
- 		{0x90700010, 20, 1}, {0x90700010, 21, 1},
- 		{0x90700010, 22, 1}, {0x90700010, 23, 1} };
--	struct MXL_REG_FIELD_T xpt_valid_polarity[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_valid_polarity[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x90700014, 0, 1}, {0x90700014, 1, 1},
- 		{0x90700014, 2, 1}, {0x90700014, 3, 1},
- 		{0x90700014, 4, 1}, {0x90700014, 5, 1},
- 		{0x90700014, 6, 1}, {0x90700014, 7, 1} };
--	struct MXL_REG_FIELD_T xpt_ts_clock_phase[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_ts_clock_phase[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x90700018, 0, 3}, {0x90700018, 4, 3},
- 		{0x90700018, 8, 3}, {0x90700018, 12, 3},
- 		{0x90700018, 16, 3}, {0x90700018, 20, 3},
- 		{0x90700018, 24, 3}, {0x90700018, 28, 3} };
--	struct MXL_REG_FIELD_T xpt_lsb_first[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_lsb_first[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x9070000C, 16, 1}, {0x9070000C, 17, 1},
- 		{0x9070000C, 18, 1}, {0x9070000C, 19, 1},
- 		{0x9070000C, 20, 1}, {0x9070000C, 21, 1},
- 		{0x9070000C, 22, 1}, {0x9070000C, 23, 1} };
--	struct MXL_REG_FIELD_T xpt_sync_byte[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_sync_byte[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x90700010, 0, 1}, {0x90700010, 1, 1},
- 		{0x90700010, 2, 1}, {0x90700010, 3, 1},
- 		{0x90700010, 4, 1}, {0x90700010, 5, 1},
- 		{0x90700010, 6, 1}, {0x90700010, 7, 1} };
--	struct MXL_REG_FIELD_T xpt_enable_output[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_enable_output[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x9070000C, 0, 1}, {0x9070000C, 1, 1},
- 		{0x9070000C, 2, 1}, {0x9070000C, 3, 1},
- 		{0x9070000C, 4, 1}, {0x9070000C, 5, 1},
- 		{0x9070000C, 6, 1}, {0x9070000C, 7, 1} };
--	struct MXL_REG_FIELD_T xpt_err_replace_sync[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_err_replace_sync[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x9070000C, 24, 1}, {0x9070000C, 25, 1},
- 		{0x9070000C, 26, 1}, {0x9070000C, 27, 1},
- 		{0x9070000C, 28, 1}, {0x9070000C, 29, 1},
- 		{0x9070000C, 30, 1}, {0x9070000C, 31, 1} };
--	struct MXL_REG_FIELD_T xpt_err_replace_valid[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_err_replace_valid[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x90700014, 8, 1}, {0x90700014, 9, 1},
- 		{0x90700014, 10, 1}, {0x90700014, 11, 1},
- 		{0x90700014, 12, 1}, {0x90700014, 13, 1},
- 		{0x90700014, 14, 1}, {0x90700014, 15, 1} };
--	struct MXL_REG_FIELD_T xpt_continuous_clock[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_continuous_clock[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x907001D4, 0, 1}, {0x907001D4, 1, 1},
- 		{0x907001D4, 2, 1}, {0x907001D4, 3, 1},
- 		{0x907001D4, 4, 1}, {0x907001D4, 5, 1},
- 		{0x907001D4, 6, 1}, {0x907001D4, 7, 1} };
--	struct MXL_REG_FIELD_T xpt_nco_clock_rate[MXL_HYDRA_DEMOD_MAX] = {
-+	static const struct MXL_REG_FIELD_T xpt_nco_clock_rate[MXL_HYDRA_DEMOD_MAX] = {
- 		{0x90700044, 16, 80}, {0x90700044, 16, 81},
- 		{0x90700044, 16, 82}, {0x90700044, 16, 83},
- 		{0x90700044, 16, 84}, {0x90700044, 16, 85},
+   926	
+   927	int dump_user_range(struct coredump_params *cprm, unsigned long start,
+   928			    unsigned long len)
+   929	{
+   930		unsigned long addr;
+   931		struct page *dump_page = dump_page_alloc();
+   932	
+   933		if (!dump_page)
+   934			return 0;
+   935	
+   936		for (addr = start; addr < start + len; addr += PAGE_SIZE) {
+   937			struct page *page;
+   938	
+   939			/*
+   940			 * To avoid having to allocate page tables for virtual address
+   941			 * ranges that have never been used yet, and also to make it
+   942			 * easy to generate sparse core files, use a helper that returns
+   943			 * NULL when encountering an empty page table entry that would
+   944			 * otherwise have been filled with the zero page.
+   945			 */
+   946			page = get_dump_page(addr);
+   947			if (page) {
+ > 948				int stop = !dump_emit_page(cprm, dump_page_copy(page, dump_page));
+   949				put_page(page);
+   950				if (stop) {
+   951					dump_page_free(dump_page);
+   952					return 0;
+   953				}
+   954			} else {
+   955				dump_skip(cprm, PAGE_SIZE);
+   956			}
+   957		}
+   958		dump_page_free(dump_page);
+   959		return 1;
+   960	}
+   961	#endif
+   962	
 
----
-base-commit: 8c64f4cdf4e6cc5682c52523713af8c39c94e6d5
-change-id: 20240111-dvb-mxl5xx-move-structs-off-stack-e12172b1ef02
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
