@@ -1,95 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7881D18EA2;
-	Tue,  5 Mar 2024 19:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED1910949
+	for <llvm@lists.linux.dev>; Tue,  5 Mar 2024 20:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709667018; cv=none; b=sCi90Yxjj1i757ipIGla9T5YfnSP3bcDAkWoUemsk/XlUZC+chqaunQVH3GmuoqVRDetB0FsgTCPGbkMLCHbHA1p+DHCYkXLsNngk+5Q3F6/hthzSux4y3zMzY8/oH0J6URFwxKT3XtOUqL406PJSiIM3ObUdLMSFHVPMhld9lo=
+	t=1709670065; cv=none; b=GyFNsSqYNc6Q93I4oEtCxmH+JVgW3sVe2Nfu6z4F/D1y8BeBAogohRdYoZlm1rte1VUDnegdkREdOQAqgfxsyV8BLb6nfjqQmQZixvadcXYv+d7Lp7tNtGkFH/aK6a5Huk/SyXpgMuWwaG8SomIJvnpiTcAxZBfAitJ/DxL+KLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709667018; c=relaxed/simple;
-	bh=TU7ULCtZZi7jWcyR3SfCPPJFR2ljxw8j93N5IXJXUxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gKOiu59z/DTNqMlbCSwRq4Cjs5UN/YD3ay4+mQhCaHU5OIyHbZSilxCvGAWaVZIQkYvUap4LvJ7UNPdysT1m92/vxVPIpd2db0c6YyA9vjTQnPoGFNSxff2H3xNwGYUW9u0bHY2tgHAPMbAuUApFHT2gjNAZueMeykTlQqBekZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uemJS2rM; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uemJS2rM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E931C433F1;
-	Tue,  5 Mar 2024 19:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709667018;
-	bh=TU7ULCtZZi7jWcyR3SfCPPJFR2ljxw8j93N5IXJXUxQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uemJS2rMuMgBzT5h2fwcU3pGWU0E9XbFWhYKPDhkOfzmZAAgc8S62twn2OVLfmip2
-	 KvLlUw5S+HrGkwMgw7mFgoGK9l9+OPQEoW7wpeXUdgyu6Ulst5/vzAomcr02XxgAfe
-	 QZFqBHj3+nt0SD8I8EJ8OKnN8dVXVqirrADklkXyi93YCeZAdhWldBSlJ1YkyKKYTJ
-	 PTAHz3dFz7mK859VUiX9xINC+8BuRXNkjFMBzt2wu3pXP1RXpeDcGi9I/11IJjKV1I
-	 FTNAERf506r1JhprRgZ+/SR1FaR2A2oW3Sm9M634uwH7LGI8vrz/C7IZ1iNmTw7d+j
-	 pqp8Ah2Qtpaeg==
-Date: Tue, 5 Mar 2024 12:30:15 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] kbuild: Disable two Clang specific enumeration warnings
-Message-ID: <20240305193015.GA1173426@dev-arch.thelio-3990X>
-References: <20240305-disable-extra-clang-enum-warnings-v1-1-6a93ef3d35ff@kernel.org>
- <57abd8e9-3177-4260-b423-38d5cdcda44e@app.fastmail.com>
- <CAKwvOd=V_Qtd2pK8AKc6bv=zMPnAaCf08=QO74ckqH26A3sefA@mail.gmail.com>
+	s=arc-20240116; t=1709670065; c=relaxed/simple;
+	bh=6/AYUfzDqzkrxKkZjplJh9OD3V2IdKBUYScD8zp5YJg=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=V/iCzzHiUmzFlRlSHViWJOY73J0RnOheFfQ2yzHzbO4lXGyK23OJeTNJNHUfWb4cNCp9jvMqdeB2TpUGt3z3Pbpa7IpsenqGKD1ZtQ2o/BHA4arkPidbxmTJVNRjEOrEZChWa42j0Erz/sbeChwUwr0OcPj91pzaY6QiDq/s0/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-365bde344ebso69511185ab.0
+        for <llvm@lists.linux.dev>; Tue, 05 Mar 2024 12:21:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709670062; x=1710274862;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yUtUYHZsCEOa7X6Z+H+o0TaVUl7jsvxTuXTfFKtx4Og=;
+        b=DEWdjYfXKMa3Xzt8JJ25wARVPRkne0yeBzcFvdp4r9Hu1uJfmuSAbaN9Sgt6Oa6Nz+
+         grA6d44J3BrjDcVqNo1SvxqjUngLteh4T6wYlzKmTWHpxNa/VFbH1qFmp398uXM1zO20
+         N/xWxtQQY1lOGAHYZlScHoP8iVQdkqWUvlthTnBnvpuIn1vmtEBNz22XwK5dXZGnT7rY
+         JRUTLX5PlDa7LMFGkxnSPZbV3jQdNtLm9gsI2BUr/wM2WahpnWaxm9CsBkxx35tP9JGT
+         7079R9TLZLthIzYal1nzSg2Ypt+yeld+Qh/w0WNKTqU4DUtjCr7wMAbBQW8GHTB15b11
+         JD8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWHTZK8MTbKEk0vy75hdmyV5pZDluoDojUNkBpT8Hgl6iNypxitl13QA4NyUPGNdIu3rlD2avqmpWJD7cSeQ7vi7RhSRg==
+X-Gm-Message-State: AOJu0YxzYQFfW+GKM2bbYcJYS4L3Hh6wcK1Bja98XtIriwEKZ41P3nlU
+	14yG74VAvGe80/ih7TT3WmVzk9vwgl1GY/f1oqDv0ykvIaRtD2oEMnXivYnHwDjR9CUOJNA9vCb
+	K+irJu0uIg6CjkAbbmE/WEDmboKTcx2sB0JHZZPhXFDLIGVhtQaD7eFw=
+X-Google-Smtp-Source: AGHT+IG0HrTjf9tSzpW5mhEYahI6I+CdKvynp0WSCF6pQbzs6aTIrDo95uQZixM6D1ufLCf+gnTifAlBvx8apq0D07TCgFJ6wpLj
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=V_Qtd2pK8AKc6bv=zMPnAaCf08=QO74ckqH26A3sefA@mail.gmail.com>
+X-Received: by 2002:a92:6f0b:0:b0:365:fe09:6450 with SMTP id
+ k11-20020a926f0b000000b00365fe096450mr104480ilc.4.1709670062725; Tue, 05 Mar
+ 2024 12:21:02 -0800 (PST)
+Date: Tue, 05 Mar 2024 12:21:02 -0800
+In-Reply-To: <0000000000000424f205fcf9a132@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5b2ae0612ef94a9@google.com>
+Subject: Re: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in ntfs_iget
+From: syzbot <syzbot+4768a8f039aa677897d0@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, anton@tuxera.com, 
+	axboe@kernel.dk, brauner@kernel.org, ghandatmanas@gmail.com, 
+	gregkh@linuxfoundation.org, jack@suse.cz, linkinjeon@kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net, 
+	lkp@intel.com, llvm@lists.linux.dev, ntfs3@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, syzkaller-bugs@googlegroups.com, 
+	syzkaller@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 05, 2024 at 10:52:16AM -0800, Nick Desaulniers wrote:
-> On Tue, Mar 5, 2024 at 10:50 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Tue, Mar 5, 2024, at 18:42, Nathan Chancellor wrote:
-> > >
-> > > As the warnings do not appear to have a high signal to noise ratio and
-> > > the source level silencing options are not sustainable, disable the
-> > > warnings unconditionally, as they will be enabled with -Wenum-conversion
-> > > and are supported in all versions of clang that can build the kernel.
-> >
-> > I took a look at a sample of warnings in an allmodconfig build
-> > and found a number that need attention. I would much prefer to
-> > leave these turned on at the W=1 level and only disable them
-> > at the default warning level.
-> 
-> Sounds like these new diagnostics are very noisy. 0day bot sends
-> people reports at W=1. Perhaps W=2?
+syzbot suspects this issue was fixed by commit:
 
-A number of subsystems test with W=1 as well and while opting into W=1
-means that you are potentially asking for new warnings across newer
-compiler releases, a warning with this number of instances is going to
-cause a lot of issues (I think of netdev for example).
+commit 6f861765464f43a71462d52026fbddfc858239a5
+Author: Jan Kara <jack@suse.cz>
+Date:   Wed Nov 1 17:43:10 2023 +0000
 
-I think if we are going to leave it enabled at W=2, we might as well
-just take this change as is then have people who are developing the
-fixes use 'KCFLAGS=-Wenum-conversion' when building to override it,
-which is more targeted than using W=2. W=2 is not run by any CI as far
-as I am aware, so there is not really any difference between disabled
-altogether vs.  enabled at W=2 in terms of widespread testing. Once all
-the fixes (or patches to hide instances) are picked up and merged into
-Linus's tree, this change can just be reverted.
+    fs: Block writes to mounted block devices
 
-Fundamentally, I do not really care which avenue we take (either this
-change or off by default, on at W=1), I am happy to do whatever.
-Unfortunately, CONFIG_WERROR makes these decisions much more urgent
-because it is either disable it and have other warnings creep in amongst
-the sprawl of these warnings or leave it on and miss other errors for
-the same reason.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12be09f2180000
+start commit:   afead42fdfca Merge tag 'perf-tools-fixes-for-v6.4-2-2023-0..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
+dashboard link: https://syzkaller.appspot.com/bug?extid=4768a8f039aa677897d0
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12da9bbd280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=174e8115280000
 
-Cheers,
-Nathan
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: fs: Block writes to mounted block devices
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
