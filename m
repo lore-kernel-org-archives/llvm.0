@@ -1,63 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E0A1BC5E;
-	Wed,  6 Mar 2024 06:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE403E48E;
+	Wed,  6 Mar 2024 06:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709705357; cv=none; b=n0CzGmVltp69d3EdaOjLwaQcyMcwp57ml0WoUjcnG4B214+3eCnHogAxtDFZNnMquYqJVoSxsWaZFmebLqGzo3LGQMvIScFlTsOugSUF88le62FdNcrBRRJMQMMUCeNgTF9kVITkb7DVA89Z3QaKBKFvT6+EdEAY8L9lXucaTAs=
+	t=1709707458; cv=none; b=mN2qrVYPPy/ZOfV88VilUItV2e26t1kGC9dz1Jhbw95tKbWeLPD0FnnQN+VekI0mlC1AQrCuk9UmtHVTdL/LUm/QgaBtsjzMwrO0Q4v81OitI9HoyR2BkqlSymhYGyIAEuwpISN0eO7x3GBRNq+e+08+aPWHddUVLTciWY+pn/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709705357; c=relaxed/simple;
-	bh=bXo7COF7poth3DMnVOZCe6ZIAvNHLVPxhC/St+/xxiQ=;
+	s=arc-20240116; t=1709707458; c=relaxed/simple;
+	bh=h+zCD+OVKHxNt7Z/IR4iF60DxdKP9TTZsPWneMKEPuQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fiPDzmPJQVLKAcB7zvMIk8KHZ+IfJSiF/udLSczW0I5KwOJJuLFZ13tf3X/pWFZDbFvDBi93y9ZMMc3sgPkI0b51brJwvhir2gTRyRm3wb+mrV/Ck12FVy+o+aMJhINKbRllbBR+zlVJnaTMvaIFpHMXHxLDGgBuXiHnHVrn9L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QL4SYtRB; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=q3gt44Iu72LC/IxMUgyyrykjv9YnL8l+heeTCon0ns3OkBZVjllUBoWWPHu2CA79EqL0ulMMYVJkGQHn5dmDYOR81XVDjLlaEH6ZXdsTT7uUX7Vh3MDCFiSht8tn33sez+LQls4QAFtjDIYc3kusaB7ePD0/RmBlxybxbtE5/Ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IdcTk21m; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QL4SYtRB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IdcTk21m"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709705356; x=1741241356;
+  t=1709707456; x=1741243456;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bXo7COF7poth3DMnVOZCe6ZIAvNHLVPxhC/St+/xxiQ=;
-  b=QL4SYtRBdBpG4CugNnRL8Zc3+8vFnbsQ+nb97mUFrAcKjMcLFjC6RGLT
-   dR1qVJMnTeJZzt+5zwf1kC7cHvus8vgHN/9391GI+F1M09gygHgRMD8ks
-   sGYmkQHsLGXevNsP0X7cXLSQO7wKhVn5khhsU5gkIlaOiPH2tXkKa217S
-   m11b0wp2kirODHMp1cOqmnpCkrd/NNJOqaDQrJh7BZz/SW7LYz3nXXip9
-   khGwWD4Bc5pgifqQB1sR6fC9Knx50jptCnQRLofM0sw4JPmaiyDtoHKlx
-   HpEx33qNfvilkJY4TlG3wTruAR8hxMlB5KN8/DqqiDHCVm7FR4S5ZrX6Z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="15445846"
+  bh=h+zCD+OVKHxNt7Z/IR4iF60DxdKP9TTZsPWneMKEPuQ=;
+  b=IdcTk21mlp1HUmwHCeI/eYRKLqWA6a4LbxANHyw5g1VQv/0iYeTnCwkB
+   6ss+ziBRH09QMov4/+Is7xEgZHye0X2Je+NbJyydaXZiRmZGbP8+sCy6d
+   KKk5xiiTPn0ap3w1yUBEI5CrUfYdp688pRXE3eSUxmgd27a9ms3pmwug5
+   TN9JN8QmeNiRGm8M70EzQyIWaTOZHxuCrlwErKYq3F46alwoOp6caKp9M
+   FM30gNxNMZHG9xPJ6JBVCFM6BQupnYQ5rWRJHfI6pcGCEvPwhPEIttLPo
+   qKPO0Ez+KeQquBfLI4DNW/VuppAXntiHFdfmCCmEyt2CVQP0zNNJXTP/P
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="4165137"
 X-IronPort-AV: E=Sophos;i="6.06,207,1705392000"; 
-   d="scan'208";a="15445846"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 22:09:15 -0800
+   d="scan'208";a="4165137"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 22:44:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,207,1705392000"; 
-   d="scan'208";a="9548168"
+   d="scan'208";a="10051678"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 05 Mar 2024 22:09:11 -0800
+  by orviesa006.jf.intel.com with ESMTP; 05 Mar 2024 22:44:13 -0800
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rhkSj-0003y5-09;
-	Wed, 06 Mar 2024 06:09:09 +0000
-Date: Wed, 6 Mar 2024 14:08:41 +0800
+	id 1rhl0c-0003zt-0B;
+	Wed, 06 Mar 2024 06:44:10 +0000
+Date: Wed, 6 Mar 2024 14:43:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+To: Pavitrakumar M <pavitrakumarm@vayavyalabs.com>,
+	herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Soheil Hassas Yeganeh <soheil@google.com>,
-	Neal Cardwell <ncardwell@google.com>, eric.dumazet@gmail.com,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 06/18] net: move ip_packet_offload and
- ipv6_packet_offload to net_hotdata
-Message-ID: <202403061318.QMW92UEi-lkp@intel.com>
-References: <20240305160413.2231423-7-edumazet@google.com>
+	Ruud.Derwig@synopsys.com, manjunath.hadli@vayavyalabs.com,
+	Pavitrakumar M <pavitrakumarm@vayavyalabs.com>
+Subject: Re: [PATCH 4/4] Enable Driver compilation in crypto Kconfig and
+ Makefile file
+Message-ID: <202403061443.w2hFEVfJ-lkp@intel.com>
+References: <20240305112831.3380896-5-pavitrakumarm@vayavyalabs.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,171 +62,205 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240305160413.2231423-7-edumazet@google.com>
+In-Reply-To: <20240305112831.3380896-5-pavitrakumarm@vayavyalabs.com>
 
-Hi Eric,
+Hi Pavitrakumar,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on net-next/main]
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master linus/master v6.8-rc7 next-20240305]
+[cannot apply to xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-introduce-struct-net_hotdata/20240306-001407
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240305160413.2231423-7-edumazet%40google.com
-patch subject: [PATCH net-next 06/18] net: move ip_packet_offload and ipv6_packet_offload to net_hotdata
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20240306/202403061318.QMW92UEi-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240306/202403061318.QMW92UEi-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pavitrakumar-M/Add-SPAcc-driver-to-Linux-kernel/20240305-193337
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/20240305112831.3380896-5-pavitrakumarm%40vayavyalabs.com
+patch subject: [PATCH 4/4] Enable Driver compilation in crypto Kconfig and Makefile file
+config: i386-buildonly-randconfig-004-20240306 (https://download.01.org/0day-ci/archive/20240306/202403061443.w2hFEVfJ-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240306/202403061443.w2hFEVfJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403061318.QMW92UEi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403061443.w2hFEVfJ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/ipv6/ip6_offload.c:9:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from net/ipv6/ip6_offload.c:9:
-   In file included from include/linux/netdevice.h:45:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:9:
-   In file included from include/linux/security.h:35:
-   include/linux/bpf.h:736:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     736 |         ARG_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | ARG_PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:737:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     737 |         ARG_PTR_TO_MEM_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:738:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     738 |         ARG_PTR_TO_CTX_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_CTX,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:739:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     739 |         ARG_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:740:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     740 |         ARG_PTR_TO_STACK_OR_NULL        = PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:741:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     741 |         ARG_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:745:38: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     745 |         ARG_PTR_TO_UNINIT_MEM           = MEM_UNINIT | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:747:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
-     747 |         ARG_PTR_TO_FIXED_SIZE_MEM       = MEM_FIXED_SIZE | ARG_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:770:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     770 |         RET_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | RET_PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:771:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     771 |         RET_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:772:47: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     772 |         RET_PTR_TO_TCP_SOCK_OR_NULL     = PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:773:50: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     773 |         RET_PTR_TO_SOCK_COMMON_OR_NULL  = PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:775:49: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     775 |         RET_PTR_TO_DYNPTR_MEM_OR_NULL   = PTR_MAYBE_NULL | RET_PTR_TO_MEM,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   include/linux/bpf.h:776:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     776 |         RET_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:777:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
-     777 |         RET_PTR_TO_BTF_ID_TRUSTED       = PTR_TRUSTED    | RET_PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~    ^ ~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:888:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     888 |         PTR_TO_MAP_VALUE_OR_NULL        = PTR_MAYBE_NULL | PTR_TO_MAP_VALUE,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:889:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     889 |         PTR_TO_SOCKET_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_SOCKET,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   include/linux/bpf.h:890:46: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     890 |         PTR_TO_SOCK_COMMON_OR_NULL      = PTR_MAYBE_NULL | PTR_TO_SOCK_COMMON,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:891:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     891 |         PTR_TO_TCP_SOCK_OR_NULL         = PTR_MAYBE_NULL | PTR_TO_TCP_SOCK,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~
-   include/linux/bpf.h:892:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
-     892 |         PTR_TO_BTF_ID_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_BTF_ID,
-         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
->> net/ipv6/ip6_offload.c:481:14: error: no member named 'ipv6_packet_offload' in 'struct net_hotdata'; did you mean 'ip_packet_offload'?
-     481 |         net_hotdata.ipv6_packet_offload = (struct packet_offload) {
-         |                     ^~~~~~~~~~~~~~~~~~~
-         |                     ip_packet_offload
-   include/net/hotdata.h:11:24: note: 'ip_packet_offload' declared here
-      11 |         struct packet_offload   ip_packet_offload;
-         |                                 ^
-   net/ipv6/ip6_offload.c:489:31: error: no member named 'ipv6_packet_offload' in 'struct net_hotdata'; did you mean 'ip_packet_offload'?
-     489 |         dev_add_offload(&net_hotdata.ipv6_packet_offload);
-         |                                      ^~~~~~~~~~~~~~~~~~~
-         |                                      ip_packet_offload
-   include/net/hotdata.h:11:24: note: 'ip_packet_offload' declared here
-      11 |         struct packet_offload   ip_packet_offload;
-         |                                 ^
-   27 warnings and 2 errors generated.
+   drivers/crypto/dwc-spacc/spacc_ahash.c:271:9: warning: variable 'sgl_buffer' is uninitialized when used here [-Wuninitialized]
+     271 |                                                   sgl_buffer,
+         |                                                   ^~~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:231:18: note: initialize the variable 'sgl_buffer' to silence this warning
+     231 |         char *sgl_buffer;
+         |                         ^
+         |                          = NULL
+   drivers/crypto/dwc-spacc/spacc_ahash.c:679:18: warning: variable 'priv' is uninitialized when used here [-Wuninitialized]
+     679 |                                 spacc_close(&priv->spacc, tctx->handle);
+         |                                              ^~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:666:25: note: initialize the variable 'priv' to silence this warning
+     666 |         struct spacc_priv *priv;
+         |                                ^
+         |                                 = NULL
+>> drivers/crypto/dwc-spacc/spacc_ahash.c:1008:6: warning: variable 'total_len' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1008 |         if (rc < 0)
+         |             ^~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1057:28: note: uninitialized use occurs here
+    1057 |         ctx->fb.hash_req.nbytes = total_len;
+         |                                   ^~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1008:2: note: remove the 'if' if its condition is always false
+    1008 |         if (rc < 0)
+         |         ^~~~~~~~~~~
+    1009 |                 goto fallback;
+         |                 ~~~~~~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1003:6: warning: variable 'total_len' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1003 |         if (tctx->handle < 0 || !tctx->ctx_valid ||
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1004 |             req->nbytes > priv->max_msg_len)
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1057:28: note: uninitialized use occurs here
+    1057 |         ctx->fb.hash_req.nbytes = total_len;
+         |                                   ^~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1003:2: note: remove the 'if' if its condition is always false
+    1003 |         if (tctx->handle < 0 || !tctx->ctx_valid ||
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1004 |             req->nbytes > priv->max_msg_len)
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1005 |                 goto fallback;
+         |                 ~~~~~~~~~~~~~
+>> drivers/crypto/dwc-spacc/spacc_ahash.c:1003:6: warning: variable 'total_len' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    1003 |         if (tctx->handle < 0 || !tctx->ctx_valid ||
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1057:28: note: uninitialized use occurs here
+    1057 |         ctx->fb.hash_req.nbytes = total_len;
+         |                                   ^~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1003:6: note: remove the '||' if its condition is always false
+    1003 |         if (tctx->handle < 0 || !tctx->ctx_valid ||
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/crypto/dwc-spacc/spacc_ahash.c:1003:6: warning: variable 'total_len' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    1003 |         if (tctx->handle < 0 || !tctx->ctx_valid ||
+         |             ^~~~~~~~~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1057:28: note: uninitialized use occurs here
+    1057 |         ctx->fb.hash_req.nbytes = total_len;
+         |                                   ^~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:1003:6: note: remove the '||' if its condition is always false
+    1003 |         if (tctx->handle < 0 || !tctx->ctx_valid ||
+         |             ^~~~~~~~~~~~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_ahash.c:985:19: note: initialize the variable 'total_len' to silence this warning
+     985 |         int rc, total_len;
+         |                          ^
+         |                           = 0
+   6 warnings generated.
+--
+   drivers/crypto/dwc-spacc/spacc_skcipher.c:149:16: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
+     149 |         int err = -1, rc;
+         |                       ^
+>> drivers/crypto/dwc-spacc/spacc_skcipher.c:176:40: warning: overlapping comparisons always evaluate to true [-Wtautological-overlap-compare]
+     176 |         if (ctx->mode != CRYPTO_MODE_DES_ECB  ||
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+     177 |             ctx->mode != CRYPTO_MODE_DES_CBC  ||
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/crypto/dwc-spacc/spacc_skcipher.c:400:6: warning: variable 'ivsize' set but not used [-Wunused-but-set-variable]
+     400 |         int ivsize;
+         |             ^
+   3 warnings generated.
+--
+   drivers/crypto/dwc-spacc/spacc_core.c:984:26: warning: unused variable 'names' [-Wunused-const-variable]
+     984 | static const char *const names[] = {
+         |                          ^~~~~
+>> drivers/crypto/dwc-spacc/spacc_core.c:2835:56: warning: unused variable 'reg_names' [-Wunused-const-variable]
+    2835 | static const struct { unsigned int addr; char *name; } reg_names[] = {
+         |                                                        ^~~~~~~~~
+   2 warnings generated.
 
 
-vim +481 net/ipv6/ip6_offload.c
+vim +1008 drivers/crypto/dwc-spacc/spacc_ahash.c
 
-   475	
-   476		if (tcpv6_offload_init() < 0)
-   477			pr_crit("%s: Cannot add TCP protocol offload\n", __func__);
-   478		if (ipv6_exthdrs_offload_init() < 0)
-   479			pr_crit("%s: Cannot add EXTHDRS protocol offload\n", __func__);
-   480	
- > 481		net_hotdata.ipv6_packet_offload = (struct packet_offload) {
-   482			.type = cpu_to_be16(ETH_P_IPV6),
-   483			.callbacks = {
-   484				.gso_segment = ipv6_gso_segment,
-   485				.gro_receive = ipv6_gro_receive,
-   486				.gro_complete = ipv6_gro_complete,
-   487			},
-   488		};
-   489		dev_add_offload(&net_hotdata.ipv6_packet_offload);
-   490	
-   491		inet_add_offload(&sit_offload, IPPROTO_IPV6);
-   492		inet6_add_offload(&ip6ip6_offload, IPPROTO_IPV6);
-   493		inet6_add_offload(&ip4ip6_offload, IPPROTO_IPIP);
-   494	
-   495		return 0;
-   496	}
-   497	
+6ad822cec22644 Pavitrakumar M 2024-03-05   981  
+6ad822cec22644 Pavitrakumar M 2024-03-05   982  static int spacc_hash_digest(struct ahash_request *req)
+6ad822cec22644 Pavitrakumar M 2024-03-05   983  {
+6ad822cec22644 Pavitrakumar M 2024-03-05   984  	int final = 0;
+6ad822cec22644 Pavitrakumar M 2024-03-05   985  	int rc, total_len;
+6ad822cec22644 Pavitrakumar M 2024-03-05   986  	struct crypto_ahash *reqtfm = crypto_ahash_reqtfm(req);
+6ad822cec22644 Pavitrakumar M 2024-03-05   987  	struct spacc_crypto_ctx *tctx = crypto_ahash_ctx(reqtfm);
+6ad822cec22644 Pavitrakumar M 2024-03-05   988  	struct spacc_crypto_reqctx *ctx = ahash_request_ctx(req);
+6ad822cec22644 Pavitrakumar M 2024-03-05   989  	struct spacc_priv *priv = dev_get_drvdata(tctx->dev);
+6ad822cec22644 Pavitrakumar M 2024-03-05   990  
+6ad822cec22644 Pavitrakumar M 2024-03-05   991  	if (tctx->flag_ppp) {
+6ad822cec22644 Pavitrakumar M 2024-03-05   992  		/* from finup */
+6ad822cec22644 Pavitrakumar M 2024-03-05   993  		ctx->single_shot = 0;
+6ad822cec22644 Pavitrakumar M 2024-03-05   994  		ctx->final_part_pck = 1;
+6ad822cec22644 Pavitrakumar M 2024-03-05   995  		final = 2;
+6ad822cec22644 Pavitrakumar M 2024-03-05   996  	} else {
+6ad822cec22644 Pavitrakumar M 2024-03-05   997  		/* direct single shot digest call */
+6ad822cec22644 Pavitrakumar M 2024-03-05   998  		ctx->single_shot = 1;
+6ad822cec22644 Pavitrakumar M 2024-03-05   999  		ctx->rem_len = 0;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1000  		ctx->total_nents = sg_nents(req->src);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1001  	}
+6ad822cec22644 Pavitrakumar M 2024-03-05  1002  
+6ad822cec22644 Pavitrakumar M 2024-03-05 @1003  	if (tctx->handle < 0 || !tctx->ctx_valid ||
+6ad822cec22644 Pavitrakumar M 2024-03-05  1004  	    req->nbytes > priv->max_msg_len)
+6ad822cec22644 Pavitrakumar M 2024-03-05  1005  		goto fallback;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1006  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1007  	rc = spacc_hash_init_dma(tctx->dev, req, final);
+6ad822cec22644 Pavitrakumar M 2024-03-05 @1008  	if (rc < 0)
+6ad822cec22644 Pavitrakumar M 2024-03-05  1009  		goto fallback;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1010  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1011  	if (rc == 0)
+6ad822cec22644 Pavitrakumar M 2024-03-05  1012  		return 0;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1013  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1014  	if (final) {
+6ad822cec22644 Pavitrakumar M 2024-03-05  1015  		if (ctx->total_nents) {
+6ad822cec22644 Pavitrakumar M 2024-03-05  1016  			/* INIT-UPDATE-UPDATE-FINUP/FINAL */
+6ad822cec22644 Pavitrakumar M 2024-03-05  1017  			total_len = tctx->ppp_sgl[0].length;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1018  		} else if (req->src->length == 0 && ctx->total_nents == 0) {
+6ad822cec22644 Pavitrakumar M 2024-03-05  1019  			/* zero msg handling */
+6ad822cec22644 Pavitrakumar M 2024-03-05  1020  			total_len = 0;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1021  		} else {
+6ad822cec22644 Pavitrakumar M 2024-03-05  1022  			/* handle INIT-FINUP sequence, process req->nbytes */
+6ad822cec22644 Pavitrakumar M 2024-03-05  1023  			total_len = req->nbytes;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1024  		}
+6ad822cec22644 Pavitrakumar M 2024-03-05  1025  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1026  		rc = spacc_packet_enqueue_ddt(&priv->spacc, ctx->acb.new_handle,
+6ad822cec22644 Pavitrakumar M 2024-03-05  1027  				&ctx->src, &ctx->dst, total_len,
+6ad822cec22644 Pavitrakumar M 2024-03-05  1028  				0, total_len, 0, 0, 0);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1029  	} else {
+6ad822cec22644 Pavitrakumar M 2024-03-05  1030  		rc = spacc_packet_enqueue_ddt(&priv->spacc, ctx->acb.new_handle,
+6ad822cec22644 Pavitrakumar M 2024-03-05  1031  				&ctx->src, &ctx->dst, req->nbytes,
+6ad822cec22644 Pavitrakumar M 2024-03-05  1032  				0, req->nbytes, 0, 0, 0);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1033  	}
+6ad822cec22644 Pavitrakumar M 2024-03-05  1034  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1035  	if (rc < 0) {
+6ad822cec22644 Pavitrakumar M 2024-03-05  1036  		spacc_hash_cleanup_dma(tctx->dev, req);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1037  		spacc_close(&priv->spacc, ctx->acb.new_handle);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1038  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1039  		if (rc != -EBUSY) {
+6ad822cec22644 Pavitrakumar M 2024-03-05  1040  			pr_debug("Failed to enqueue job, ERR: %d\n", rc);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1041  			return rc;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1042  		}
+6ad822cec22644 Pavitrakumar M 2024-03-05  1043  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1044  		if (!(req->base.flags & CRYPTO_TFM_REQ_MAY_BACKLOG))
+6ad822cec22644 Pavitrakumar M 2024-03-05  1045  			return -EBUSY;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1046  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1047  		goto fallback;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1048  	}
+6ad822cec22644 Pavitrakumar M 2024-03-05  1049  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1050  	return -EINPROGRESS;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1051  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1052  fallback:
+6ad822cec22644 Pavitrakumar M 2024-03-05  1053  	/* Start from scratch as init is not called before digest */
+6ad822cec22644 Pavitrakumar M 2024-03-05  1054  	ctx->fb.hash_req.base = req->base;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1055  	ahash_request_set_tfm(&ctx->fb.hash_req, tctx->fb.hash);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1056  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1057  	ctx->fb.hash_req.nbytes = total_len;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1058  	ctx->fb.hash_req.src = req->src;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1059  	ctx->fb.hash_req.result = req->result;
+6ad822cec22644 Pavitrakumar M 2024-03-05  1060  
+6ad822cec22644 Pavitrakumar M 2024-03-05  1061  	return crypto_ahash_digest(&ctx->fb.hash_req);
+6ad822cec22644 Pavitrakumar M 2024-03-05  1062  }
+6ad822cec22644 Pavitrakumar M 2024-03-05  1063  
 
 -- 
 0-DAY CI Kernel Test Service
