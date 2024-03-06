@@ -1,291 +1,207 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8668911CAB;
-	Wed,  6 Mar 2024 04:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAF51BDD3
+	for <llvm@lists.linux.dev>; Wed,  6 Mar 2024 05:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709700794; cv=none; b=MAz+8GtaXZRQyGgBYkb1xdU6CO0PBbXQRpl/5YPJPTjBt3qn+TorLGF+7NucnXc4sohXenqmDWrDekS9YBxlaXs98KYBdc2v74aGfNGlfpNU8c5MVtfzCHJfyE4xvvrcOOfdnKXJ/v3lM/rD0mmjOlXZnc/HytNimdyelvnoIpw=
+	t=1709703084; cv=none; b=MHFuhaZ8LR//len9svEQqmeIa74ZyFpGh20jFBkaqn5mTm0sQZ7NFlwgdVXVWXU9cA2CXw9b8om1NkNexmfHP3xjb+N/BTnui/th5s5ynMvoVP00aTyQcjhpPR4+uycFDhPBfINhVB9WNtn25NUYayBYnfuWj09UaCcgsToyKpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709700794; c=relaxed/simple;
-	bh=o9nZuPPfrCvcN8hxg7uxH33NZEXb0OTzk2Zk0RDgkgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d8EqH3pGovoUlPU3mFZwJmHw91dK3GeXDlhXsDeEjCZwvx2WxiT/bNkSskPufLocVltcq0Ass0KHmtT5T1XPQktqZXX6NJm/1x7PifiuG62AF7VAV291HTRLqY8Vp8WgU3P73CaxSysCSBylPRqHfFyPtgrh/pofqxHMT/vUfr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CtEe2Vvb; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709703084; c=relaxed/simple;
+	bh=6j6+5u9QfT+16TvWgaOo/H9P9oVTD8r+Ewb5fmwZahY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XlRXXMf79+aHReJqBZ+aKuZ76Lux3T/bymxY0jzH/4HbEeft5fgy1i2iSNylq5OGJSgAtzo1h1AeH5dB8xrWqX0M6K5ZUJHvKYOd8lD6IxeusKNMTDxtOsiSIIPndCjjnCghzjCKtpTE2SR+TcuAqTl9VAAKKip0Hu7emLt/Iqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hoHHMFqc; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CtEe2Vvb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709700791; x=1741236791;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o9nZuPPfrCvcN8hxg7uxH33NZEXb0OTzk2Zk0RDgkgs=;
-  b=CtEe2VvbSqVxN6cauXIcnd2pU3ZQjlUpptvF4HD+cSEdFhmnJZcIN0jv
-   LdUp3ig5hmP1DB7XvMAAiJvnZLq3EuthXEj/T+NmoHYWuTomFdPEPCDkk
-   KNZ9S2B4e4Jgcyb6svVEhJ4rGWOXDshqu3sZoTsGSCgNttudHV4qRs8Aq
-   MdncCMGiaZei2OhjvogoNa04hzFBS2DWf8/B+jPpvPNg3CXi4/CAtDE8R
-   9K0Qn+SeFshUJlhWOJgHXTf9vqJDz+vIqoise5ANfQCqJSNUUOTG4F3WW
-   zmqEwlTgE0d0BOQfGKlbhPWSHs6LTszEM/DtKXf9WGbtFgNykHcCoMRI4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="15013680"
-X-IronPort-AV: E=Sophos;i="6.06,207,1705392000"; 
-   d="scan'208";a="15013680"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 20:53:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,207,1705392000"; 
-   d="scan'208";a="9566093"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 05 Mar 2024 20:53:09 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rhjH9-0003vF-0Z;
-	Wed, 06 Mar 2024 04:53:07 +0000
-Date: Wed, 6 Mar 2024 12:53:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 3/3] s390: supplement for ptdesc conversion
-Message-ID: <202403061249.4URm4Yxi-lkp@intel.com>
-References: <04beaf3255056ffe131a5ea595736066c1e84756.1709541697.git.zhengqi.arch@bytedance.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hoHHMFqc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709703081;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=O4jJw5MfBQgi/EuHGlffRnpkLPvSeE0PBMsoler8ysc=;
+	b=hoHHMFqcTolEEko9rPuO+0hMhXiWIejlMzM87HJSKbTPerCU6xiQwY37L2+LkNgv2aW6lD
+	ImB1/HeGF7NLEhLGY3Nt7c/WxepySB5fYC7q+YqPISoIaGkVc0zekHoyF0YToFh69w6ipJ
+	4b7xC0qEnOE7auNceq6pJnK39KyDQck=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-85-Q7RpPVgFO0-Ik6sjO5Tnqg-1; Wed, 06 Mar 2024 00:31:19 -0500
+X-MC-Unique: Q7RpPVgFO0-Ik6sjO5Tnqg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40FCD101A56C
+	for <llvm@lists.linux.dev>; Wed,  6 Mar 2024 05:31:19 +0000 (UTC)
+Received: from [172.64.5.48] (unknown [10.30.32.29])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E66F237FC;
+	Wed,  6 Mar 2024 05:31:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
+ (6.8.0-rc7, mainline.kernel.org-clang, 5847c977)
+Date: Wed, 06 Mar 2024 05:31:18 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <04beaf3255056ffe131a5ea595736066c1e84756.1709541697.git.zhengqi.arch@bytedance.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <26363.124030600311900681@us-mta-85.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Qi,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on s390/features]
-[also build test ERROR on kvms390/next linus/master v6.8-rc7]
-[cannot apply to akpm-mm/mm-everything next-20240305]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/mm-pgtable-correct-the-wrong-comment-about-ptdesc-__page_flags/20240304-191006
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
-patch link:    https://lore.kernel.org/r/04beaf3255056ffe131a5ea595736066c1e84756.1709541697.git.zhengqi.arch%40bytedance.com
-patch subject: [PATCH 3/3] s390: supplement for ptdesc conversion
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240306/202403061249.4URm4Yxi-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240306/202403061249.4URm4Yxi-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403061249.4URm4Yxi-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/s390/mm/gmap.c:12:
-   In file included from include/linux/pagewalk.h:5:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> arch/s390/mm/gmap.c:212:3: error: incompatible pointer types assigning to 'struct page *' from 'typeof (*(ptdesc)) *' (aka 'struct ptdesc *') [-Werror,-Wincompatible-pointer-types]
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:866:5: note: expanded from macro 'list_for_each_entry_safe'
-     866 |                 n = list_next_entry(pos, member);                       \
-         |                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/s390/mm/gmap.c:212:3: error: incompatible pointer types assigning to 'struct ptdesc *' from 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                 ^                                ~~~~
-   include/linux/list.h:868:11: note: expanded from macro 'list_for_each_entry_safe'
-     868 |              pos = n, n = list_next_entry(n, member))
-         |                  ^ ~
->> arch/s390/mm/gmap.c:212:58: error: no member named 'pt_list' in 'struct page'; did you mean 'pcp_list'?
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                                                                        ^~~~~~~
-         |                                                                        pcp_list
-   include/linux/list.h:868:39: note: expanded from macro 'list_for_each_entry_safe'
-     868 |              pos = n, n = list_next_entry(n, member))
-         |                                              ^
-   include/linux/list.h:645:20: note: expanded from macro 'list_next_entry'
-     645 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |                           ^
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^
-   include/linux/container_of.h:19:26: note: expanded from macro 'container_of'
-      19 |         void *__mptr = (void *)(ptr);                                   \
-         |                                 ^
-   include/linux/mm_types.h:103:22: note: 'pcp_list' declared here
-     103 |                                 struct list_head pcp_list;
-         |                                                  ^
->> arch/s390/mm/gmap.c:212:58: error: no member named 'pt_list' in 'struct page'; did you mean 'pcp_list'?
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                                                                        ^~~~~~~
-         |                                                                        pcp_list
-   include/linux/list.h:868:39: note: expanded from macro 'list_for_each_entry_safe'
-     868 |              pos = n, n = list_next_entry(n, member))
-         |                                              ^
-   include/linux/list.h:645:20: note: expanded from macro 'list_next_entry'
-     645 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |                           ^
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:376:63: note: expanded from macro '__same_type'
-     376 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^
-   include/linux/mm_types.h:103:22: note: 'pcp_list' declared here
-     103 |                                 struct list_head pcp_list;
-         |                                                  ^
->> arch/s390/mm/gmap.c:212:58: error: no member named 'pt_list' in 'struct page'; did you mean 'pcp_list'?
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                                                                        ^~~~~~~
-         |                                                                        pcp_list
-   include/linux/list.h:868:39: note: expanded from macro 'list_for_each_entry_safe'
-     868 |              pos = n, n = list_next_entry(n, member))
-         |                                              ^
-   include/linux/list.h:645:49: note: expanded from macro 'list_next_entry'
-     645 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |                                                        ^
-   include/linux/list.h:601:26: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                                 ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:376:74: note: expanded from macro '__same_type'
-     376 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                          ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^
-   include/linux/mm_types.h:103:22: note: 'pcp_list' declared here
-     103 |                                 struct list_head pcp_list;
-         |                                                  ^
->> arch/s390/mm/gmap.c:212:58: error: no member named 'pt_list' in 'struct page'; did you mean 'pcp_list'?
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                                                                        ^~~~~~~
-         |                                                                        pcp_list
-   include/linux/list.h:868:39: note: expanded from macro 'list_for_each_entry_safe'
-     868 |              pos = n, n = list_next_entry(n, member))
-         |                                              ^
-   include/linux/list.h:645:20: note: expanded from macro 'list_next_entry'
-     645 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |                           ^
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:376:63: note: expanded from macro '__same_type'
-     376 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^
-   include/linux/mm_types.h:103:22: note: 'pcp_list' declared here
-     103 |                                 struct list_head pcp_list;
-         |                                                  ^
->> arch/s390/mm/gmap.c:212:3: error: no member named 'pt_list' in 'page'
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                 ^                                                      ~~~~~~~
-   include/linux/list.h:868:20: note: expanded from macro 'list_for_each_entry_safe'
-     868 |              pos = n, n = list_next_entry(n, member))
-         |                           ^                  ~~~~~~
-   include/linux/list.h:645:2: note: expanded from macro 'list_next_entry'
-     645 |         list_entry((pos)->member.next, typeof(*(pos)), member)
-         |         ^                                              ~~~~~~
-   include/linux/list.h:601:2: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |         ^                       ~~~~~~
-   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
-      23 |         ((type *)(__mptr - offsetof(type, member))); })
-         |                            ^              ~~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^                        ~~~~~~
->> arch/s390/mm/gmap.c:212:3: error: assigning to 'struct page *' from incompatible type 'void'
-     212 |                 list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:868:18: note: expanded from macro 'list_for_each_entry_safe'
-     868 |              pos = n, n = list_next_entry(n, member))
-         |                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings and 8 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +212 arch/s390/mm/gmap.c
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.8-rc7-fixes' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tj/cgroup
 
-   187	
-   188	/**
-   189	 * gmap_free - free a guest address space
-   190	 * @gmap: pointer to the guest address space structure
-   191	 *
-   192	 * No locks required. There are no references to this gmap anymore.
-   193	 */
-   194	static void gmap_free(struct gmap *gmap)
-   195	{
-   196		struct page *page, *next;
-   197	
-   198		/* Flush tlb of all gmaps (if not already done for shadows) */
-   199		if (!(gmap_is_shadow(gmap) && gmap->removed))
-   200			gmap_flush_tlb(gmap);
-   201		/* Free all segment & region tables. */
-   202		list_for_each_entry_safe(page, next, &gmap->crst_list, lru)
-   203			__free_pages(page, CRST_ALLOC_ORDER);
-   204		gmap_radix_tree_free(&gmap->guest_to_host);
-   205		gmap_radix_tree_free(&gmap->host_to_guest);
-   206	
-   207		/* Free additional data for a shadow gmap */
-   208		if (gmap_is_shadow(gmap)) {
-   209			struct ptdesc *ptdesc;
-   210	
-   211			/* Free all page tables. */
- > 212			list_for_each_entry_safe(ptdesc, next, &gmap->pt_list, pt_list)
-   213				page_table_free_pgste(ptdesc);
-   214			gmap_rmap_radix_tree_free(&gmap->host_to_rmap);
-   215			/* Release reference to the parent */
-   216			gmap_put(gmap->parent);
-   217		}
-   218	
-   219		kfree(gmap);
-   220	}
-   221	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/132922
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11562525
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: Storage nvme - rdma: nvme/014 - flush: Interrupted system ca=
+ll
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1980181
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp - upstream
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
