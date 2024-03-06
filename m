@@ -1,132 +1,204 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34035F47B
-	for <llvm@lists.linux.dev>; Wed,  6 Mar 2024 09:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01BA85DF0B
+	for <llvm@lists.linux.dev>; Wed,  6 Mar 2024 09:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709715665; cv=none; b=oO9a6X/aKm/7z4qZVn8fbuIPcSKw3UAolILDmkl9ZqpXKMW/LmJ36/t/vVF1ot1DQuajheBcupNOqtDXw5VL7z5ma02oX6zkpNEG+QZBE/3897TKNg67x7XlPdWKPs2JRTzwM0c3lpEaLbmDb44giBvpb7GIQdi0vANztA/MjGM=
+	t=1709716515; cv=none; b=E7/umtH3y7Cx4TPLOw9ShdAn713ibiJGOVJqAYGYDsOF0Gj473rpd+ImguK47qLrOKAt+LMe9jcb/Cs090JAKpkMbM66faVAN/0TVqw6QMwY38YyVpNr69A21AIu9oy7XloLtevTHDBePHMA0zf0MKfmLtgATQmaAyIhpCYA0gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709715665; c=relaxed/simple;
-	bh=EwEYirvr2jvVvnPjdV6XVx23jWr+FeYoGMbUr8oZySw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a0TCGFoGdvWURUE1qIAm0s9VsUF/Mhoq5aMtp0/LLgAIrHUQxgNoeFwYM9veYnMqU+RR2vxAt9baezX9+krS4oSp/cKw25HzKCG2VBwACyIaqXHgIF8ClwOwJU9Ogd/i3yU6NSt9SHGrFuPggiNJO42rch1WHcYJiwYyqHG5Hmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UHWK9Mdv; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UHWK9Mdv"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-565223fd7d9so5660a12.1
-        for <llvm@lists.linux.dev>; Wed, 06 Mar 2024 01:01:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709715661; x=1710320461; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e/84T2ki3/neNxXjBVi8YXXkmoruSAbtUGVHX97k3rw=;
-        b=UHWK9MdvMo2v/7AG5DtbFw1Vq75ipdbbiDY3/HwHjXHq9lEkTJWr53xmCBBWMadbNG
-         bQFVs3J7pkFa1WeQaT9+nQPPihITKgDlWJSySyphwEJZ3TkFq8229kgrh9OS21KMDCrj
-         YiRf1ll5NOppCEXQ9lrmgHnl9bI0F3Y95zReZrDiBjUH0kskqbxBrN796t+ovQ5h2FWn
-         jA52bqKLDw83ADr8WCrKKe/8ys1jlKe1ADo6juQcKThbvfz01VG1aBMzOqPYGXov2zf3
-         ABQdIqgwum3hvfok5uUJpUmpWtB/8uVMA60RHLjjeovNeBXsB9cETHncFgy3OBSMG13c
-         ioCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709715661; x=1710320461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e/84T2ki3/neNxXjBVi8YXXkmoruSAbtUGVHX97k3rw=;
-        b=C6AeesZWl2if922ptbN+3rtWykwoHDi/ktwhd9iuexAI+R9fPrITy+MrQarWgRhXRr
-         ee2/tLnkYMYZBdEKNNopId6M3UkcY7PzgpcmiFqOWw82+NbJDkhNZ2XFCwneVs/38nRY
-         y6kw1AdryQZxTDz9eU5P2Jqt4FcmCE4+Dqv0ugOCfp47o9fqXkeiXcLKxOonxUTTlHw1
-         ZdOgrc4uc21ODl8Dzt8YOT5HwNSUx7mnAWGu/TbwIxbP77vJd3wNdZIcdp3o/TCBtBNL
-         i652ZJa0Br+PAV95DgZ3E/UuD6IzutyY6Svx2v8ORGEhHPJpThP/syT3aTZAD17d3ABQ
-         2g7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWfGekmgXAS4a2guaSBKvzQU+5kgYHRTzbYk/9Q1KPD5SWoqYpMT+0PyEURD8R0xmatsf6RCN2iots8eEV21ZqHmk6gNw==
-X-Gm-Message-State: AOJu0YyDx3cPyKfWbWw4tMxKS62bkN/xUe7T6DeYRt6ZKKMEKOtblxBE
-	0fu+qsy4j2rZQRB1S59zKIEpXGiqhI84MtWAqFWA964kcKxFiao1WPdLAhrvo/CCyb6Y5j5X1jY
-	NsyHZAJtBrp82U6zTwapkWZ0R4nk27oo4pLnp
-X-Google-Smtp-Source: AGHT+IE90eLXuQ/cn4OIYVYGWBfGpFwg3VwdIkidZ6fkNjkHdVuNbVDF1f16qE2ZvMGwmAXb/EBfA7GbXH+JtNTmDJY=
-X-Received: by 2002:a05:6402:11ca:b0:567:eb05:6d08 with SMTP id
- j10-20020a05640211ca00b00567eb056d08mr75504edw.6.1709715660520; Wed, 06 Mar
- 2024 01:01:00 -0800 (PST)
+	s=arc-20240116; t=1709716515; c=relaxed/simple;
+	bh=2iyDGpmJRgV0/1XqTQsnxpjyhWqdE5k8LQtMLv69+tc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kNfYzVm4TfAdyeYFzCA+r7ypHqS8FNYS+8FfhmifAuzxX+K82iijipCa8mntZsQOZJ18jYi8QWYW3kaf3AMiN/dnQ+YLFFbbYjo1PvHkMbvp1gFmha7xTrp3Y1P3zxSxH98hWqFUvWDDXF5BoBLgDUSz+Rq9o+pZojPpnPtnLDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.20.109.198])
+	by gateway (Coremail) with SMTP id _____8Axz+saNOhljQwVAA--.52653S3;
+	Wed, 06 Mar 2024 17:15:06 +0800 (CST)
+Received: from [192.168.100.8] (unknown [112.20.109.198])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxVMwVNOhlOy1PAA--.17280S3;
+	Wed, 06 Mar 2024 17:15:02 +0800 (CST)
+Message-ID: <26730f76-871d-4a6d-8b16-ea3e52ef5357@loongson.cn>
+Date: Wed, 6 Mar 2024 17:15:01 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240305160413.2231423-7-edumazet@google.com> <202403061318.QMW92UEi-lkp@intel.com>
-In-Reply-To: <202403061318.QMW92UEi-lkp@intel.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 6 Mar 2024 10:00:45 +0100
-Message-ID: <CANn89iLv8hFUDiash5LTaHg4VrzCS1QdaJR-62WNEmMVYVF7pA@mail.gmail.com>
-Subject: Re: [PATCH net-next 06/18] net: move ip_packet_offload and
- ipv6_packet_offload to net_hotdata
-To: kernel test robot <lkp@intel.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, Soheil Hassas Yeganeh <soheil@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, eric.dumazet@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] docs/zh_CN: Add dev-tools/ubsan Chinese translation
+Content-Language: en-US
+To: Dongliang Mu <dzm91@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Vegard Nossum <vegard.nossum@oracle.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240302140058.1527765-1-dzm91@hust.edu.cn>
+From: Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <20240302140058.1527765-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxVMwVNOhlOy1PAA--.17280S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj93XoW3AFWxGryfZF43AFW3AFWxKrX_yoW7Aryxpr
+	9YkrWfGr48tryUJry3GFy5GF1UAF1xu3W7Crn7Gw1Yqr18KrW3tr47t34DKrZrWryUAFy7
+	JFnrKF4j934Yk3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI
+	0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jnSdgU
+	UUUU=
 
-On Wed, Mar 6, 2024 at 7:09=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> Hi Eric,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on net-next/main]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-i=
-ntroduce-struct-net_hotdata/20240306-001407
-> base:   net-next/main
-> patch link:    https://lore.kernel.org/r/20240305160413.2231423-7-edumaze=
-t%40google.com
-> patch subject: [PATCH net-next 06/18] net: move ip_packet_offload and ipv=
-6_packet_offload to net_hotdata
-> config: hexagon-defconfig (https://download.01.org/0day-ci/archive/202403=
-06/202403061318.QMW92UEi-lkp@intel.com/config)
-> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 3=
-25f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20240306/202403061318.QMW92UEi-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202403061318.QMW92UEi-lkp=
-@intel.com/
 
-Right, all the offloads need to be there if CONFIG_INET=3Dy, regardless
-of CONFIG_IPV6
+在 2024/3/2 22:00, Dongliang Mu 写道:
+> Translate dev-tools/ubsan.rst into Chinese, add it into
+> zh_CN/dev-tools/index.rst.
+>
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-I will in v2 have changes so that the cumulative diff is :
+Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
 
-diff --git a/include/net/hotdata.h b/include/net/hotdata.h
-index 7bb6e46aec8f19deff42112041feb47724cdd538..9230052a453c1b959b9a72f1d1a=
-4878d76f243b8
-100644
---- a/include/net/hotdata.h
-+++ b/include/net/hotdata.h
-@@ -14,13 +14,13 @@ struct net_hotdata {
-        struct net_protocol     tcp_protocol;
-        struct net_offload      udpv4_offload;
-        struct net_protocol     udp_protocol;
--#endif
--#if IS_ENABLED(CONFIG_IPV6)
-        struct packet_offload   ipv6_packet_offload;
-        struct net_offload      tcpv6_offload;
-+#if defined (CONFIG_IPV6)
-        struct inet6_protocol   tcpv6_protocol;
--       struct net_offload      udpv6_offload;
-        struct inet6_protocol   udpv6_protocol;
-+#endif
-+       struct net_offload      udpv6_offload;
- #endif
-        struct list_head        offload_base;
-        struct list_head        ptype_all;
+
+Thanks,
+
+Yanteng
+
+> ---
+>   .../translations/zh_CN/dev-tools/index.rst    |  2 +-
+>   .../translations/zh_CN/dev-tools/ubsan.rst    | 91 +++++++++++++++++++
+>   2 files changed, 92 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/translations/zh_CN/dev-tools/ubsan.rst
+>
+> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
+> index c2db3e566b1b..c4463f0750f0 100644
+> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
+> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
+> @@ -22,13 +22,13 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+>      sparse
+>      gcov
+>      kasan
+> +   ubsan
+>      gdb-kernel-debugging
+>
+>   Todolist:
+>
+>    - coccinelle
+>    - kcov
+> - - ubsan
+>    - kmemleak
+>    - kcsan
+>    - kfence
+> diff --git a/Documentation/translations/zh_CN/dev-tools/ubsan.rst b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
+> new file mode 100644
+> index 000000000000..2487696b3772
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
+> @@ -0,0 +1,91 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/dev-tools/ubsan.rst
+> +:Translator: Dongliang Mu <dzm91@hust.edu.cn>
+> +
+> +未定义行为消毒剂 - UBSAN
+> +====================================
+> +
+> +UBSAN是一种动态未定义行为检查工具。
+> +
+> +UBSAN使用编译时插桩捕捉未定义行为。编译器在可能导致未定义行为的操作前插入特定
+> +检测代码。如果检查失败，即检测到未定义行为，__ubsan_handle_* 函数将被调用打印
+> +错误信息。
+> +
+> +GCC自4.9.x [1_] （详见 ``-fsanitize=undefined`` 选项及其子选项）版本后引入这
+> +一特性。GCC 5.x 版本实现了更多检查器 [2_]。
+> +
+> +报告样例
+> +--------------
+> +
+> +::
+> +
+> +	 ================================================================================
+> +	 UBSAN: Undefined behaviour in ../include/linux/bitops.h:110:33
+> +	 shift exponent 32 is to large for 32-bit type 'unsigned int'
+> +	 CPU: 0 PID: 0 Comm: swapper Not tainted 4.4.0-rc1+ #26
+> +	  0000000000000000 ffffffff82403cc8 ffffffff815e6cd6 0000000000000001
+> +	  ffffffff82403cf8 ffffffff82403ce0 ffffffff8163a5ed 0000000000000020
+> +	  ffffffff82403d78 ffffffff8163ac2b ffffffff815f0001 0000000000000002
+> +	 Call Trace:
+> +	  [<ffffffff815e6cd6>] dump_stack+0x45/0x5f
+> +	  [<ffffffff8163a5ed>] ubsan_epilogue+0xd/0x40
+> +	  [<ffffffff8163ac2b>] __ubsan_handle_shift_out_of_bounds+0xeb/0x130
+> +	  [<ffffffff815f0001>] ? radix_tree_gang_lookup_slot+0x51/0x150
+> +	  [<ffffffff8173c586>] _mix_pool_bytes+0x1e6/0x480
+> +	  [<ffffffff83105653>] ? dmi_walk_early+0x48/0x5c
+> +	  [<ffffffff8173c881>] add_device_randomness+0x61/0x130
+> +	  [<ffffffff83105b35>] ? dmi_save_one_device+0xaa/0xaa
+> +	  [<ffffffff83105653>] dmi_walk_early+0x48/0x5c
+> +	  [<ffffffff831066ae>] dmi_scan_machine+0x278/0x4b4
+> +	  [<ffffffff8111d58a>] ? vprintk_default+0x1a/0x20
+> +	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
+> +	  [<ffffffff830b2240>] setup_arch+0x405/0xc2c
+> +	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
+> +	  [<ffffffff830ae053>] start_kernel+0x83/0x49a
+> +	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
+> +	  [<ffffffff830ad386>] x86_64_start_reservations+0x2a/0x2c
+> +	  [<ffffffff830ad4f3>] x86_64_start_kernel+0x16b/0x17a
+> +	 ================================================================================
+> +
+> +用法
+> +-----
+> +
+> +使用如下内核配置启用UBSAN::
+> +
+> +	CONFIG_UBSAN=y
+> +
+> +使用如下内核配置检查整个内核::
+> +
+> +        CONFIG_UBSAN_SANITIZE_ALL=y
+> +
+> +为了在特定文件或目录启动代码插桩，需要在相应的内核Makefile中添加一行类似内容:
+> +
+> +- 单文件（如main.o）::
+> +
+> +    UBSAN_SANITIZE_main.o := y
+> +
+> +- 一个目录中的所有文件::
+> +
+> +    UBSAN_SANITIZE := y
+> +
+> +即使设置了``CONFIG_UBSAN_SANITIZE_ALL=y``，为了避免文件被插桩，可使用::
+> +
+> +  UBSAN_SANITIZE_main.o := n
+> +
+> +与::
+> +
+> +  UBSAN_SANITIZE := n
+> +
+> +未对齐的内存访问检测可通过开启独立选项 - CONFIG_UBSAN_ALIGNMENT 检测。
+> +该选项在支持未对齐访问的架构上(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y)
+> +默认为关闭。该选项仍可通过内核配置启用，但它将产生大量的UBSAN报告。
+> +
+> +参考文献
+> +----------
+> +
+> +.. _1: https://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Debugging-Options.html
+> +.. _2: https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
+> +.. _3: https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
+> --
+> 2.39.2
+>
+>
+
