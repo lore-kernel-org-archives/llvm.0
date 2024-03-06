@@ -1,94 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0216089A;
-	Wed,  6 Mar 2024 12:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CF460250;
+	Wed,  6 Mar 2024 16:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709729315; cv=none; b=IcfNeGx4ydVSYv4Fadb/xSNVUULsZx6y4nghe3//5kMXcM7++AhqB+ymkH3Pq/HloOjmYBAsFrRbQ95XGM9gBHZPrFufyo2gbnmfYravY4tqBjzUxJ/5qTi9PGwFjy2qmOAasplFcFXquxpIhd0kOy2gfvHfrvZCs0bokE4Ti9I=
+	t=1709743723; cv=none; b=O1fHKzjLr4ewtaWb5ONUi88kYoZCU7toRyRfYCNWUBoNm+rtbzV/0ZxwsDaWyDgHloSRCr8TbsBtjCM1xxNBknLEaOtLka2omHRkzWktMDuaQDI2pT08jaV90hq3fTzSPC5vxmu6N+FRvXqwZwIOf69fZO6WIwa35AA5m98IFPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709729315; c=relaxed/simple;
-	bh=HMIDAtYYzuh2SltJ4zbi//I5UQMzkPHqGSqhNT/Kv+c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=PgVQJv5QCnnr9Vt9W92r2tIcXU3Jyby9ct8Qk8wBFCRpzqw4DuIWQFEDC7vwN4c3M43Hndv7Ow30ex9yljMbEXSUdZcwjxwhK60TT+spx6XbrEr/fIHh1y6PzzS5T+3W1F2l06TEWQrt1Cwm1T4BL4GDZfceQQv6FNHL2QHsw68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hI1wS1cv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709743723; c=relaxed/simple;
+	bh=0QVMuhO8tv+yD3wGofv4vd1QwlfUDwn6eLrDolYC9js=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cGYqXe9m7Oux1HPRkRWihr3gW6o2611RFI1kM+eXWLhWU4z9u/Mn8pWk+WXqOSY1ZMPr3OeTDSgORFM+vetr8uTWSQrQQj2jO+8+YQm8NqMIeG+TCuSeyns29hknlGNK4zH7JaBXgpUbUt9Vl/6m+LuxauSqKFHepYv7i7FlwGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q+XtvBMf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hI1wS1cv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E8BC433C7;
-	Wed,  6 Mar 2024 12:48:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q+XtvBMf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02D1DC433C7;
+	Wed,  6 Mar 2024 16:48:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709729314;
-	bh=HMIDAtYYzuh2SltJ4zbi//I5UQMzkPHqGSqhNT/Kv+c=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hI1wS1cvOeIEBtmBzURU9hsHw1VLSJvdBU4jc6/zyhOQcUN/HdT+S3YdXY1+wU4fc
-	 gv1ewDyMKnBt3NQKGJ5h0BvlMWcCIMmaa1bKxiSQ4XJBtW9pgGbQS6x68Na7U2G8cK
-	 4zApdATKlsPVxFj4Pfu9Paklgupe0qwMjzSAgM1boghK8p4Rg21hvUIvst+7ZmSU16
-	 gccZh7OPn/QF/mFFch4YpRrao4kZt39ckOPdXdJXSXsqufaXHAVq5UwguXpIQLtSz1
-	 04vgFWPvkBOCtjZdZPY0o/WB54mVa16w6fEnYiDqtLohnBWs/LufuTihOhUkp1SnzJ
-	 QmPytRZA2btnQ==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	llvm@lists.linux.dev
-Subject: [PATCH] kbuild: remove GCC's default -Wpacked-bitfield-compat flag
-Date: Wed,  6 Mar 2024 21:47:09 +0900
-Message-Id: <20240306124709.324448-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.40.1
+	s=k20201202; t=1709743722;
+	bh=0QVMuhO8tv+yD3wGofv4vd1QwlfUDwn6eLrDolYC9js=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q+XtvBMfqHnTWiAQDZ8gmGdBrn5wJ0nauughUwkeXvnk/yXYoJIVAHxMcc/zanr7f
+	 vg+r3Mgg6Z/cI2QQ44tNs16macvizUbJHML4KZ/Hkj5LnE2sUVZ4TFhN2/GvBYHUic
+	 +SruEao4Ms/6vRSwBrRzsuIpWHPgqKcCbK8a2oPYC7KwLZa+Joagn22T6X2g+tnssU
+	 2Pysjy4xZGG/IZ80vBiyhxntD4brOS+0Z1StfKp9ZXnbZphRrxvUA15xMdfCNvp1hO
+	 NxusReLi/PpMSggNg25a8S8EMLwjkkdH0aC5mXlKQ32kbkH45ovDO/ZYgyRyXOIAio
+	 uJLjHjJEVcAUw==
+Date: Wed, 6 Mar 2024 09:48:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: npiggin@gmail.com, christophe.leroy@csgroup.eu, aneesh.kumar@kernel.org,
+	naveen.n.rao@linux.ibm.com, morbo@google.com,
+	justinstitt@google.com, linuxppc-dev@lists.ozlabs.org,
+	patches@lists.linux.dev, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] powerpc: xor_vmx: Add '-mhard-float' to CFLAGS
+Message-ID: <20240306164840.GA3659677@dev-arch.thelio-3990X>
+References: <20240127-ppc-xor_vmx-drop-msoft-float-v1-1-f24140e81376@kernel.org>
+ <20240305224315.GA2361659@dev-arch.thelio-3990X>
+ <874jdkp409.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874jdkp409.fsf@mail.lhotse>
 
-Commit 4a5838ad9d2d ("kbuild: Add extra gcc checks") added the
--Wpacked-bitfield-compat flag.
+On Wed, Mar 06, 2024 at 12:01:42PM +1100, Michael Ellerman wrote:
+> Nathan Chancellor <nathan@kernel.org> writes:
+> > Ping? We have been applying this in our CI since it was sent, it would
+> > be nice to have this upstream soon so it can start filtering through the
+> > stable trees.
+> 
+> Sorry, I was away in January and missed this. Will pick it up.
 
-GCC manual says:
-  "This warning is enabled by default. Use -Wno-packed-bitfield-compat
-   to disable this warning."
+No worries, I've done that more times than I would like to admit. Thanks
+a lot for the quick response and picking it up!
 
-The test code in the manual:
+Cheers,
+Nathan
 
-  struct foo
-  {
-    char a:4;
-    char b:8;
-  } __attribute__ ((packed));
-
-... emits "note: offset of packed bit-field ‘b’ has changed in GCC 4.4"
-without W=3.
-
-Let's remove it, as it is a default with GCC.
-
-Clang does not support this flag, so its removal will not affect Clang
-builds.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/Makefile.extrawarn | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index a9e552a1e910..8192b497aae8 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -185,7 +185,6 @@ KBUILD_CFLAGS += -Wpointer-arith
- KBUILD_CFLAGS += -Wredundant-decls
- KBUILD_CFLAGS += -Wsign-compare
- KBUILD_CFLAGS += -Wswitch-default
--KBUILD_CFLAGS += $(call cc-option, -Wpacked-bitfield-compat)
- 
- KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN3
- 
--- 
-2.40.1
-
+> > On Sat, Jan 27, 2024 at 11:07:43AM -0700, Nathan Chancellor wrote:
+> >> arch/powerpc/lib/xor_vmx.o is built with '-msoft-float' (from the main
+> >> powerpc Makefile) and '-maltivec' (from its CFLAGS), which causes an
+> >> error when building with clang after a recent change in main:
+> >> 
+> >>   error: option '-msoft-float' cannot be specified with '-maltivec'
+> >>   make[6]: *** [scripts/Makefile.build:243: arch/powerpc/lib/xor_vmx.o] Error 1
+> >> 
+> >> Explicitly add '-mhard-float' before '-maltivec' in xor_vmx.o's CFLAGS
+> >> to override the previous inclusion of '-msoft-float' (as the last option
+> >> wins), which matches how other areas of the kernel use '-maltivec', such
+> >> as AMDGPU.
+> >> 
+> >> Cc: stable@vger.kernel.org
+> >> Closes: https://github.com/ClangBuiltLinux/linux/issues/1986
+> >> Link: https://github.com/llvm/llvm-project/commit/4792f912b232141ecba4cbae538873be3c28556c
+> >> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> >> ---
+> >>  arch/powerpc/lib/Makefile | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >> 
+> >> diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
+> >> index 6eac63e79a89..0ab65eeb93ee 100644
+> >> --- a/arch/powerpc/lib/Makefile
+> >> +++ b/arch/powerpc/lib/Makefile
+> >> @@ -76,7 +76,7 @@ obj-$(CONFIG_PPC_LIB_RHEAP) += rheap.o
+> >>  obj-$(CONFIG_FTR_FIXUP_SELFTEST) += feature-fixups-test.o
+> >>  
+> >>  obj-$(CONFIG_ALTIVEC)	+= xor_vmx.o xor_vmx_glue.o
+> >> -CFLAGS_xor_vmx.o += -maltivec $(call cc-option,-mabi=altivec)
+> >> +CFLAGS_xor_vmx.o += -mhard-float -maltivec $(call cc-option,-mabi=altivec)
+> >>  # Enable <altivec.h>
+> >>  CFLAGS_xor_vmx.o += -isystem $(shell $(CC) -print-file-name=include)
+> >>  
+> >> 
+> >> ---
+> >> base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+> >> change-id: 20240127-ppc-xor_vmx-drop-msoft-float-ad68b437f86c
+> >> 
+> >> Best regards,
+> >> -- 
+> >> Nathan Chancellor <nathan@kernel.org>
+> >> 
+> 
