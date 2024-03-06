@@ -1,113 +1,132 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E16C5CDE8;
-	Wed,  6 Mar 2024 08:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34035F47B
+	for <llvm@lists.linux.dev>; Wed,  6 Mar 2024 09:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709712030; cv=none; b=H+3uWRFO8hW6likVin8P2kaTvLkng9zEEkKUe/b3xCxP2F7zUkiOdx9aRdbxF7I39tprc2PDjdhr4foPY/G+ggalJ/V3FeMG15TYQl1z8C1IK18B4HceXbFa7K4X/w+pgvtCM6Xu5vxOKiYXfB7kIUVR0VRMS3Sd3K4A1FuPaQM=
+	t=1709715665; cv=none; b=oO9a6X/aKm/7z4qZVn8fbuIPcSKw3UAolILDmkl9ZqpXKMW/LmJ36/t/vVF1ot1DQuajheBcupNOqtDXw5VL7z5ma02oX6zkpNEG+QZBE/3897TKNg67x7XlPdWKPs2JRTzwM0c3lpEaLbmDb44giBvpb7GIQdi0vANztA/MjGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709712030; c=relaxed/simple;
-	bh=P8YwVMpnErwixhUR1Mbw5c5QEH9e2xTfI7Qrxmz/VcA=;
+	s=arc-20240116; t=1709715665; c=relaxed/simple;
+	bh=EwEYirvr2jvVvnPjdV6XVx23jWr+FeYoGMbUr8oZySw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kOCGPcC5gLE++yRIlwD1BT6twh5wwqxR0W2a8jhxdsMKMJbopC/p4yKtSDK9TP/0ClFFOOjRmxr7WrCknCJig4+3kxCoqQWOeWIddbq/vIKx+nR1uLCIyrII78GZ0+ocq4R2s16y9nmuof0/kxEn39WQXgzdCvQSjWX+4nJhZ24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-609408d4b31so65611287b3.0;
-        Wed, 06 Mar 2024 00:00:28 -0800 (PST)
+	 To:Cc:Content-Type; b=a0TCGFoGdvWURUE1qIAm0s9VsUF/Mhoq5aMtp0/LLgAIrHUQxgNoeFwYM9veYnMqU+RR2vxAt9baezX9+krS4oSp/cKw25HzKCG2VBwACyIaqXHgIF8ClwOwJU9Ogd/i3yU6NSt9SHGrFuPggiNJO42rch1WHcYJiwYyqHG5Hmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UHWK9Mdv; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UHWK9Mdv"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-565223fd7d9so5660a12.1
+        for <llvm@lists.linux.dev>; Wed, 06 Mar 2024 01:01:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709715661; x=1710320461; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e/84T2ki3/neNxXjBVi8YXXkmoruSAbtUGVHX97k3rw=;
+        b=UHWK9MdvMo2v/7AG5DtbFw1Vq75ipdbbiDY3/HwHjXHq9lEkTJWr53xmCBBWMadbNG
+         bQFVs3J7pkFa1WeQaT9+nQPPihITKgDlWJSySyphwEJZ3TkFq8229kgrh9OS21KMDCrj
+         YiRf1ll5NOppCEXQ9lrmgHnl9bI0F3Y95zReZrDiBjUH0kskqbxBrN796t+ovQ5h2FWn
+         jA52bqKLDw83ADr8WCrKKe/8ys1jlKe1ADo6juQcKThbvfz01VG1aBMzOqPYGXov2zf3
+         ABQdIqgwum3hvfok5uUJpUmpWtB/8uVMA60RHLjjeovNeBXsB9cETHncFgy3OBSMG13c
+         ioCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709712027; x=1710316827;
+        d=1e100.net; s=20230601; t=1709715661; x=1710320461;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tIq8A3I+hnCbTkrRhH0vKNCZiun3rTR9oQdT+6QQC+0=;
-        b=BmuWkKJFfVBat/xWgtxOyysrgsw1+R3BlEvQnezDmA79VaWqhiQuDv9hCULvgUxpnW
-         lKB73TCLkrwttnem8fp14+xqGXtuUSMavI3HkpNhwLkH192D7pHDaD9p5wuP3QebLu5L
-         brBaWboElZKvSE0ZGO17ssWp4ehdrStqz1ShKBXYeQ4moprsjXBKIfLrRb8qMJ+HS8K+
-         NvpCcMw5PtZKNmBd0fHOsVP5/fc003PkQrYDhAAKcZ7GSOF3dD4bAndKmdWAJP/1niyY
-         R/33+/CmSfrlauHcLCOlAiqlZrvvEynmosdO/O2OEh6FIpOdKUKTJMAC8ArmMk0152V2
-         2RBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIYnYTscLqPRhfPmQBxYVxNz21aGLWS+t7ISPMkiUODORqJgYtTQ0+J6ZVJ95PsMAutM5VoqH75QqfaaChXQZzZE7aRjEBwXSWGg18PsLJi8/DSfv8z59SSDy4Lk87PaDwJG4=
-X-Gm-Message-State: AOJu0Yy55UKUpBpLJTOgFg9v/+ykPkQf1kApDoCH0ygDcR9rivyuffR6
-	j/WpAtOtQhObnq/hvzZVfvtiAQ8a9JPJCtJ5w6dsu0Sh7sklti7klKaifdZUtsM=
-X-Google-Smtp-Source: AGHT+IEdFYnPKVa08DJASnaI3KyepwRwy2PlEZsURVBuBNPwv4jTK5LQ5g3eF2TaniMU2+wmZWONig==
-X-Received: by 2002:a25:9101:0:b0:dc2:2d75:5fde with SMTP id v1-20020a259101000000b00dc22d755fdemr10617374ybl.29.1709712026609;
-        Wed, 06 Mar 2024 00:00:26 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id t33-20020a25f621000000b00dcda90f43d7sm3080152ybd.59.2024.03.06.00.00.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 00:00:26 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-60978e6f9a3so67977687b3.3;
-        Wed, 06 Mar 2024 00:00:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVvOjDDZQDuLyWyvV7XrxpueM7gmdUBwOWWDIf4k2EaqyJGIUDSqrlJBkUHHqehDU7gWYjdcXS0spzZ60J/VmUP9y0YYg4+ch2lrKL5hqAf8uIy4HC0FKcKY1fqSSjI+gULmfE=
-X-Received: by 2002:a81:8494:0:b0:604:9b50:e973 with SMTP id
- u142-20020a818494000000b006049b50e973mr13895375ywf.44.1709712025743; Wed, 06
- Mar 2024 00:00:25 -0800 (PST)
+        bh=e/84T2ki3/neNxXjBVi8YXXkmoruSAbtUGVHX97k3rw=;
+        b=C6AeesZWl2if922ptbN+3rtWykwoHDi/ktwhd9iuexAI+R9fPrITy+MrQarWgRhXRr
+         ee2/tLnkYMYZBdEKNNopId6M3UkcY7PzgpcmiFqOWw82+NbJDkhNZ2XFCwneVs/38nRY
+         y6kw1AdryQZxTDz9eU5P2Jqt4FcmCE4+Dqv0ugOCfp47o9fqXkeiXcLKxOonxUTTlHw1
+         ZdOgrc4uc21ODl8Dzt8YOT5HwNSUx7mnAWGu/TbwIxbP77vJd3wNdZIcdp3o/TCBtBNL
+         i652ZJa0Br+PAV95DgZ3E/UuD6IzutyY6Svx2v8ORGEhHPJpThP/syT3aTZAD17d3ABQ
+         2g7w==
+X-Forwarded-Encrypted: i=1; AJvYcCWfGekmgXAS4a2guaSBKvzQU+5kgYHRTzbYk/9Q1KPD5SWoqYpMT+0PyEURD8R0xmatsf6RCN2iots8eEV21ZqHmk6gNw==
+X-Gm-Message-State: AOJu0YyDx3cPyKfWbWw4tMxKS62bkN/xUe7T6DeYRt6ZKKMEKOtblxBE
+	0fu+qsy4j2rZQRB1S59zKIEpXGiqhI84MtWAqFWA964kcKxFiao1WPdLAhrvo/CCyb6Y5j5X1jY
+	NsyHZAJtBrp82U6zTwapkWZ0R4nk27oo4pLnp
+X-Google-Smtp-Source: AGHT+IE90eLXuQ/cn4OIYVYGWBfGpFwg3VwdIkidZ6fkNjkHdVuNbVDF1f16qE2ZvMGwmAXb/EBfA7GbXH+JtNTmDJY=
+X-Received: by 2002:a05:6402:11ca:b0:567:eb05:6d08 with SMTP id
+ j10-20020a05640211ca00b00567eb056d08mr75504edw.6.1709715660520; Wed, 06 Mar
+ 2024 01:01:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202403061131.zzApAwRB-lkp@intel.com>
-In-Reply-To: <202403061131.zzApAwRB-lkp@intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 6 Mar 2024 09:00:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW7mAzU=a3wqpsBaE0fo71-_=66X5NSvsLJDTiiZ5_k=A@mail.gmail.com>
-Message-ID: <CAMuHMdW7mAzU=a3wqpsBaE0fo71-_=66X5NSvsLJDTiiZ5_k=A@mail.gmail.com>
-Subject: Re: [geert-renesas-drivers:master 34/52] drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1340:3:
- error: field designator 'lanes' does not refer to any field in type 'const
- struct qmp_phy_cfg'
+References: <20240305160413.2231423-7-edumazet@google.com> <202403061318.QMW92UEi-lkp@intel.com>
+In-Reply-To: <202403061318.QMW92UEi-lkp@intel.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 6 Mar 2024 10:00:45 +0100
+Message-ID: <CANn89iLv8hFUDiash5LTaHg4VrzCS1QdaJR-62WNEmMVYVF7pA@mail.gmail.com>
+Subject: Re: [PATCH net-next 06/18] net: move ip_packet_offload and
+ ipv6_packet_offload to net_hotdata
 To: kernel test robot <lkp@intel.com>
-Cc: Vinod Koul <vkoul@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-renesas-soc@vger.kernel.org, 
-	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Soheil Hassas Yeganeh <soheil@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, eric.dumazet@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 4:47=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+On Wed, Mar 6, 2024 at 7:09=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
 ote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-dri=
-vers.git master
-> head:   0a76003de2b9029d5898c23d23ddbb90f5a74580
-> commit: 98177a93f8e405ce41969db23f5bf4766aa6a1f4 [34/52] Merge remote-tra=
-cking branch 'phy/next' into renesas-drivers
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/202=
-40306/202403061131.zzApAwRB-lkp@intel.com/config)
+>
+> Hi Eric,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on net-next/main]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-i=
+ntroduce-struct-net_hotdata/20240306-001407
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20240305160413.2231423-7-edumaze=
+t%40google.com
+> patch subject: [PATCH net-next 06/18] net: move ip_packet_offload and ipv=
+6_packet_offload to net_hotdata
+> config: hexagon-defconfig (https://download.01.org/0day-ci/archive/202403=
+06/202403061318.QMW92UEi-lkp@intel.com/config)
 > compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 3=
 25f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
 > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20240306/202403061131.zzApAwRB-lkp@intel.com/reproduce)
+ve/20240306/202403061318.QMW92UEi-lkp@intel.com/reproduce)
 >
 > If you fix the issue in a separate patch/commit (i.e. not just a new vers=
 ion of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202403061131.zzApAwRB-lkp=
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202403061318.QMW92UEi-lkp=
 @intel.com/
->
-> All errors (new ones prefixed by >>):
 
-> >> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1340:3: error: field designato=
-r 'lanes' does not refer to any field in type 'const struct qmp_phy_cfg'
->     1340 |         .lanes                  =3D 1,
->          |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~
->    7 warnings and 1 error generated.
+Right, all the offloads need to be there if CONFIG_INET=3Dy, regardless
+of CONFIG_IPV6
 
-Oops, that's a bad merge conflict resolution on my side.
-Please ignore.
+I will in v2 have changes so that the cumulative diff is :
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+diff --git a/include/net/hotdata.h b/include/net/hotdata.h
+index 7bb6e46aec8f19deff42112041feb47724cdd538..9230052a453c1b959b9a72f1d1a=
+4878d76f243b8
+100644
+--- a/include/net/hotdata.h
++++ b/include/net/hotdata.h
+@@ -14,13 +14,13 @@ struct net_hotdata {
+        struct net_protocol     tcp_protocol;
+        struct net_offload      udpv4_offload;
+        struct net_protocol     udp_protocol;
+-#endif
+-#if IS_ENABLED(CONFIG_IPV6)
+        struct packet_offload   ipv6_packet_offload;
+        struct net_offload      tcpv6_offload;
++#if defined (CONFIG_IPV6)
+        struct inet6_protocol   tcpv6_protocol;
+-       struct net_offload      udpv6_offload;
+        struct inet6_protocol   udpv6_protocol;
++#endif
++       struct net_offload      udpv6_offload;
+ #endif
+        struct list_head        offload_base;
+        struct list_head        ptype_all;
