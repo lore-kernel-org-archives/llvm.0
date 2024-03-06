@@ -1,204 +1,156 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01BA85DF0B
-	for <llvm@lists.linux.dev>; Wed,  6 Mar 2024 09:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1BC5D72F;
+	Wed,  6 Mar 2024 12:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709716515; cv=none; b=E7/umtH3y7Cx4TPLOw9ShdAn713ibiJGOVJqAYGYDsOF0Gj473rpd+ImguK47qLrOKAt+LMe9jcb/Cs090JAKpkMbM66faVAN/0TVqw6QMwY38YyVpNr69A21AIu9oy7XloLtevTHDBePHMA0zf0MKfmLtgATQmaAyIhpCYA0gc=
+	t=1709727719; cv=none; b=Eo7dP3AnWvXnJCmSvL0Wl+4y05wUASexnupKw8RdvyjWFfz/renMNJMO1hBlLEh95+e+rQ55CIartce0QU1jAaOA0DREy0QCHiXTjyR2cKISB5C8R8mb00oRUUgJZfHqO3CeyNCwAhjSx/AwM5GAgLIx9CmO3mpV5aNOhjLvOzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709716515; c=relaxed/simple;
-	bh=2iyDGpmJRgV0/1XqTQsnxpjyhWqdE5k8LQtMLv69+tc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kNfYzVm4TfAdyeYFzCA+r7ypHqS8FNYS+8FfhmifAuzxX+K82iijipCa8mntZsQOZJ18jYi8QWYW3kaf3AMiN/dnQ+YLFFbbYjo1PvHkMbvp1gFmha7xTrp3Y1P3zxSxH98hWqFUvWDDXF5BoBLgDUSz+Rq9o+pZojPpnPtnLDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [112.20.109.198])
-	by gateway (Coremail) with SMTP id _____8Axz+saNOhljQwVAA--.52653S3;
-	Wed, 06 Mar 2024 17:15:06 +0800 (CST)
-Received: from [192.168.100.8] (unknown [112.20.109.198])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxVMwVNOhlOy1PAA--.17280S3;
-	Wed, 06 Mar 2024 17:15:02 +0800 (CST)
-Message-ID: <26730f76-871d-4a6d-8b16-ea3e52ef5357@loongson.cn>
-Date: Wed, 6 Mar 2024 17:15:01 +0800
+	s=arc-20240116; t=1709727719; c=relaxed/simple;
+	bh=TJC1FWTDVH1fS+pEMIatbsyV4hbiOT6t4ESjbRmuabk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QIaST7sj5k3auitJSbkABBXG26XwoLUdc+Oz9mdFMh5oFoP/AIdnl32KgrvMqp6kcSNLBAB0QZgat8W1duzhyRavYdw2S7bnpGOWjnWJLza1VlOdFTa5vtEoph9XpWprg/AiKcPCgeciVs+shPrwB7ERk47gGC5tUte988z5Pyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Z5+YjsTm; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CKWaYYgO; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Z5+YjsTm; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CKWaYYgO; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Z5+YjsTm";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CKWaYYgO";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Z5+YjsTm";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CKWaYYgO"
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B95173F5D7;
+	Wed,  6 Mar 2024 12:21:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1709727715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wUdrt2veIdLubgIpffUH6xTNcOrVJbvGxnIjN06WxzU=;
+	b=Z5+YjsTmzsb1ka+SE5O92dqDnc+F66QMOHQAuPrGOvMQdehmIabEu/YwkU7p3Rj4xZWNAS
+	eqmsUhPanbbBLK4yuG7NFTtVVCLZB03SFlDYCncyU6qvv+qJXsiSGaXCOnDlp9Ko/dTUU2
+	Q2dgikpgklNbEzQb/uKntUd0C9abgkY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1709727715;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wUdrt2veIdLubgIpffUH6xTNcOrVJbvGxnIjN06WxzU=;
+	b=CKWaYYgO3W/0+VGFyG+OoCAMvSVEk8lwaVO/zi4eGa6+YA6MZPowMXJs3dVDlcGZAGwfqw
+	lt2PS4gDzaQMHqBQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1709727715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wUdrt2veIdLubgIpffUH6xTNcOrVJbvGxnIjN06WxzU=;
+	b=Z5+YjsTmzsb1ka+SE5O92dqDnc+F66QMOHQAuPrGOvMQdehmIabEu/YwkU7p3Rj4xZWNAS
+	eqmsUhPanbbBLK4yuG7NFTtVVCLZB03SFlDYCncyU6qvv+qJXsiSGaXCOnDlp9Ko/dTUU2
+	Q2dgikpgklNbEzQb/uKntUd0C9abgkY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1709727715;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wUdrt2veIdLubgIpffUH6xTNcOrVJbvGxnIjN06WxzU=;
+	b=CKWaYYgO3W/0+VGFyG+OoCAMvSVEk8lwaVO/zi4eGa6+YA6MZPowMXJs3dVDlcGZAGwfqw
+	lt2PS4gDzaQMHqBQ==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id ABD231377D;
+	Wed,  6 Mar 2024 12:21:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id 243uKeNf6GXWTAAAn2gu4w
+	(envelope-from <jack@suse.cz>); Wed, 06 Mar 2024 12:21:55 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 574E3A0803; Wed,  6 Mar 2024 13:21:55 +0100 (CET)
+Date: Wed, 6 Mar 2024 13:21:55 +0100
+From: Jan Kara <jack@suse.cz>
+To: syzbot <syzbot+4768a8f039aa677897d0@syzkaller.appspotmail.com>
+Cc: almaz.alexandrovich@paragon-software.com, anton@tuxera.com,
+	axboe@kernel.dk, brauner@kernel.org, ghandatmanas@gmail.com,
+	gregkh@linuxfoundation.org, jack@suse.cz, linkinjeon@kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+	lkp@intel.com, llvm@lists.linux.dev, ntfs3@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+	syzkaller@googlegroups.com
+Subject: Re: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in ntfs_iget
+Message-ID: <20240306122155.yr6lse3yyaduo2db@quack3>
+References: <0000000000000424f205fcf9a132@google.com>
+ <000000000000c5b2ae0612ef94a9@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs/zh_CN: Add dev-tools/ubsan Chinese translation
-Content-Language: en-US
-To: Dongliang Mu <dzm91@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Vegard Nossum <vegard.nossum@oracle.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240302140058.1527765-1-dzm91@hust.edu.cn>
-From: Yanteng Si <siyanteng@loongson.cn>
-In-Reply-To: <20240302140058.1527765-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8BxVMwVNOhlOy1PAA--.17280S3
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3AFWxGryfZF43AFW3AFWxKrX_yoW7Aryxpr
-	9YkrWfGr48tryUJry3GFy5GF1UAF1xu3W7Crn7Gw1Yqr18KrW3tr47t34DKrZrWryUAFy7
-	JFnrKF4j934Yk3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI
-	0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jnSdgU
-	UUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000c5b2ae0612ef94a9@google.com>
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: *
+X-Spam-Score: 1.58
+X-Spamd-Result: default: False [1.58 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-0.12)[66.97%];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453];
+	 TAGGED_RCPT(0.00)[4768a8f039aa677897d0];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 R_RATELIMIT(0.00)[to_ip_from(RLz5osb6fwsyu4f48yakq7oq33)];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_TWELVE(0.00)[19];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[paragon-software.com,tuxera.com,kernel.dk,kernel.org,gmail.com,linuxfoundation.org,suse.cz,vger.kernel.org,lists.linuxfoundation.org,lists.sourceforge.net,intel.com,lists.linux.dev,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 SUBJECT_HAS_QUESTION(0.00)[]
+X-Spam-Flag: NO
 
+On Tue 05-03-24 12:21:02, syzbot wrote:
+> syzbot suspects this issue was fixed by commit:
+> 
+> commit 6f861765464f43a71462d52026fbddfc858239a5
+> Author: Jan Kara <jack@suse.cz>
+> Date:   Wed Nov 1 17:43:10 2023 +0000
+> 
+>     fs: Block writes to mounted block devices
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12be09f2180000
+> start commit:   afead42fdfca Merge tag 'perf-tools-fixes-for-v6.4-2-2023-0..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4768a8f039aa677897d0
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12da9bbd280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=174e8115280000
+> 
+> If the result looks correct, please mark the issue as fixed by replying with:
+ 
+The reproducer is just mounting the fs so I'm not sure what's happening
+there. But since there's no working repro and this is ntfs3:
 
-在 2024/3/2 22:00, Dongliang Mu 写道:
-> Translate dev-tools/ubsan.rst into Chinese, add it into
-> zh_CN/dev-tools/index.rst.
->
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+#syz fix: fs: Block writes to mounted block devices
 
-Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
-
-
-Thanks,
-
-Yanteng
-
-> ---
->   .../translations/zh_CN/dev-tools/index.rst    |  2 +-
->   .../translations/zh_CN/dev-tools/ubsan.rst    | 91 +++++++++++++++++++
->   2 files changed, 92 insertions(+), 1 deletion(-)
->   create mode 100644 Documentation/translations/zh_CN/dev-tools/ubsan.rst
->
-> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
-> index c2db3e566b1b..c4463f0750f0 100644
-> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
-> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
-> @@ -22,13 +22,13 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->      sparse
->      gcov
->      kasan
-> +   ubsan
->      gdb-kernel-debugging
->
->   Todolist:
->
->    - coccinelle
->    - kcov
-> - - ubsan
->    - kmemleak
->    - kcsan
->    - kfence
-> diff --git a/Documentation/translations/zh_CN/dev-tools/ubsan.rst b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
-> new file mode 100644
-> index 000000000000..2487696b3772
-> --- /dev/null
-> +++ b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
-> @@ -0,0 +1,91 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +.. include:: ../disclaimer-zh_CN.rst
-> +
-> +:Original: Documentation/dev-tools/ubsan.rst
-> +:Translator: Dongliang Mu <dzm91@hust.edu.cn>
-> +
-> +未定义行为消毒剂 - UBSAN
-> +====================================
-> +
-> +UBSAN是一种动态未定义行为检查工具。
-> +
-> +UBSAN使用编译时插桩捕捉未定义行为。编译器在可能导致未定义行为的操作前插入特定
-> +检测代码。如果检查失败，即检测到未定义行为，__ubsan_handle_* 函数将被调用打印
-> +错误信息。
-> +
-> +GCC自4.9.x [1_] （详见 ``-fsanitize=undefined`` 选项及其子选项）版本后引入这
-> +一特性。GCC 5.x 版本实现了更多检查器 [2_]。
-> +
-> +报告样例
-> +--------------
-> +
-> +::
-> +
-> +	 ================================================================================
-> +	 UBSAN: Undefined behaviour in ../include/linux/bitops.h:110:33
-> +	 shift exponent 32 is to large for 32-bit type 'unsigned int'
-> +	 CPU: 0 PID: 0 Comm: swapper Not tainted 4.4.0-rc1+ #26
-> +	  0000000000000000 ffffffff82403cc8 ffffffff815e6cd6 0000000000000001
-> +	  ffffffff82403cf8 ffffffff82403ce0 ffffffff8163a5ed 0000000000000020
-> +	  ffffffff82403d78 ffffffff8163ac2b ffffffff815f0001 0000000000000002
-> +	 Call Trace:
-> +	  [<ffffffff815e6cd6>] dump_stack+0x45/0x5f
-> +	  [<ffffffff8163a5ed>] ubsan_epilogue+0xd/0x40
-> +	  [<ffffffff8163ac2b>] __ubsan_handle_shift_out_of_bounds+0xeb/0x130
-> +	  [<ffffffff815f0001>] ? radix_tree_gang_lookup_slot+0x51/0x150
-> +	  [<ffffffff8173c586>] _mix_pool_bytes+0x1e6/0x480
-> +	  [<ffffffff83105653>] ? dmi_walk_early+0x48/0x5c
-> +	  [<ffffffff8173c881>] add_device_randomness+0x61/0x130
-> +	  [<ffffffff83105b35>] ? dmi_save_one_device+0xaa/0xaa
-> +	  [<ffffffff83105653>] dmi_walk_early+0x48/0x5c
-> +	  [<ffffffff831066ae>] dmi_scan_machine+0x278/0x4b4
-> +	  [<ffffffff8111d58a>] ? vprintk_default+0x1a/0x20
-> +	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
-> +	  [<ffffffff830b2240>] setup_arch+0x405/0xc2c
-> +	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
-> +	  [<ffffffff830ae053>] start_kernel+0x83/0x49a
-> +	  [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
-> +	  [<ffffffff830ad386>] x86_64_start_reservations+0x2a/0x2c
-> +	  [<ffffffff830ad4f3>] x86_64_start_kernel+0x16b/0x17a
-> +	 ================================================================================
-> +
-> +用法
-> +-----
-> +
-> +使用如下内核配置启用UBSAN::
-> +
-> +	CONFIG_UBSAN=y
-> +
-> +使用如下内核配置检查整个内核::
-> +
-> +        CONFIG_UBSAN_SANITIZE_ALL=y
-> +
-> +为了在特定文件或目录启动代码插桩，需要在相应的内核Makefile中添加一行类似内容:
-> +
-> +- 单文件（如main.o）::
-> +
-> +    UBSAN_SANITIZE_main.o := y
-> +
-> +- 一个目录中的所有文件::
-> +
-> +    UBSAN_SANITIZE := y
-> +
-> +即使设置了``CONFIG_UBSAN_SANITIZE_ALL=y``，为了避免文件被插桩，可使用::
-> +
-> +  UBSAN_SANITIZE_main.o := n
-> +
-> +与::
-> +
-> +  UBSAN_SANITIZE := n
-> +
-> +未对齐的内存访问检测可通过开启独立选项 - CONFIG_UBSAN_ALIGNMENT 检测。
-> +该选项在支持未对齐访问的架构上(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y)
-> +默认为关闭。该选项仍可通过内核配置启用，但它将产生大量的UBSAN报告。
-> +
-> +参考文献
-> +----------
-> +
-> +.. _1: https://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Debugging-Options.html
-> +.. _2: https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
-> +.. _3: https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
-> --
-> 2.39.2
->
->
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
