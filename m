@@ -1,59 +1,39 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056A812EBCC;
-	Thu,  7 Mar 2024 15:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D07129A75;
+	Thu,  7 Mar 2024 17:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709824927; cv=none; b=iuhFa/BeEY+A55xCQczFNtQazFBJ4AduTMZHyyWxrOYorAZFAVZ0czwasmW/8y3GtdgReSrqDdNsl47oLVVOzHz0oThepsZfA2OKxxXU+qtbCqCU9+uxxEzLvBICwTm6iqGeqCFBn1xgSmHOjTWFR75ckudMFrLrhojq0OWSi3c=
+	t=1709831118; cv=none; b=GT5vt4gCOwkCLa/fYPYgBzn3k0YSShiohQSO1cdrl3kc4E9pF6P69dBqb80x4bVJqw5mdSfXmKhTaUsx2psP14he8LXI5d42IDgIBSi1G94RVQq/prK+9ol8BqbYAbd+z9/rScIjGDLaSTsQXgIld/zTayGNIIi+cLg2so9oYq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709824927; c=relaxed/simple;
-	bh=dXXAP6ggtVzzLfF8jgYN0QQav58miECgxTM+SNjFCi0=;
+	s=arc-20240116; t=1709831118; c=relaxed/simple;
+	bh=TtRbN1VOqJxpNVhvXT2fV/GNQQc/3umHhKwYdaOj9mE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ul/S2ayaZeOJ/0xPKMwIOFBl07tWMd5BT38cTygN3/zpYvzzyw7lDfa2rytE2zF8yx/KG/2kCMNUaC9I/cca2XMDNK1jiEW2EBG0NbgzaSYGvyEg3Ot+CEUXoQ4vvNsN1xRtas1cHt1V/63FdLEBVIgbONqwUuvw3uiofuRXNWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LgS+NoHh; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=SbpuH0n4keoz5sWaYCtcchDJ4nr+edszcxY7CtH4ujXsjVmLnDMKXJq5S33DNoBIcmp/W4h9BSXnoduHqWdpbY9Xl0SHLvsSsI8lKfyvVatr0+cWpg0sSVkP8N2zHZa2c54TKIMd4/hzQhK0vKdPfCqcotcZykiGhStxZnp1jcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoNGmWt9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LgS+NoHh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709824925; x=1741360925;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dXXAP6ggtVzzLfF8jgYN0QQav58miECgxTM+SNjFCi0=;
-  b=LgS+NoHhmTAdUkTPv42bZ82p3A7xtyqthiwJvUUeRqd5+yAQ+bHL66O9
-   61sH+uvQi+/NSvbhqYwarJk+ZWzAiKAOz2FSlv2mpBVQXX+fJw+AU1qE+
-   SguJwcKYZ+r1tjQC9SQmSD9aashEIHBHVA0MEbjxqqefEOVIJOQ54etBW
-   Eb9SvjMQhr6Owd07TWqjp+2jDCaOdCntpHII2IcTvNR1BA0b9PEOpf0YL
-   KDQzV5HUWTtaDeyq2gX6ZYbNFmRc11fTG7oTcNd6haA4/9b945SGHi2RZ
-   k0v6tqExpoutvdXex3qZB9Ge0gOloYxT/p7lI4IOudD7CUwOevjByh0I6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="4617587"
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="4617587"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 07:22:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="14801134"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 07 Mar 2024 07:22:01 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1riFZG-0005Hr-2x;
-	Thu, 07 Mar 2024 15:21:58 +0000
-Date: Thu, 7 Mar 2024 23:21:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, eric.auger@redhat.com, clg@redhat.com,
-	reinette.chatre@intel.com, linux-kernel@vger.kernel.org,
-	kevin.tian@intel.com, diana.craciun@oss.nxp.com
-Subject: Re: [PATCH 7/7] vfio/fsl-mc: Block calling interrupt handler without
- trigger
-Message-ID: <202403072356.jlxR3E5Q-lkp@intel.com>
-References: <20240306211445.1856768-8-alex.williamson@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoNGmWt9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2150C433C7;
+	Thu,  7 Mar 2024 17:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709831118;
+	bh=TtRbN1VOqJxpNVhvXT2fV/GNQQc/3umHhKwYdaOj9mE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MoNGmWt9yUrrzrEv9bdRujivJMyEWfMA9MEUM7fQYCGwnYqfEr9d8OHb89SWMqKez
+	 gygulVqQvk2N2CEUYhVxEwLUfZ+1izTwBe6siXtgrPEHwtttKGsiinm9kg4bKJVJyA
+	 zrDEoEl5CGFXhIkDZL2VuOm/gv0HWKhJAJTlndbmga6fNvHO8Q7IJANSdETHS9mgQL
+	 88HFdOS8DNeu6noSxt3KQDbDmegzm5c63eR70wtiwL2jcoIi84dKjaCYGEYm9v1yEn
+	 3GBYXyBZq8j9cWCZSnwJkWqdvY0O952PK522kNDBMRTPk4F5NNrHbrPuvLVo93tVLl
+	 78IWO4SW0LQTg==
+Date: Thu, 7 Mar 2024 10:05:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Denys Fedoryshchenko <denys.f@collabora.com>
+Cc: kernelci@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Migration to Debian Bookworm and compiler updates for KernelCI
+Message-ID: <20240307170516.GA1780841@dev-arch.thelio-3990X>
+References: <42c7f5a3e07c274c2a9d2e45a973c6306b2ba74f.camel@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,99 +42,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240306211445.1856768-8-alex.williamson@redhat.com>
+In-Reply-To: <42c7f5a3e07c274c2a9d2e45a973c6306b2ba74f.camel@collabora.com>
 
-Hi Alex,
+Hi Denys,
 
-kernel test robot noticed the following build warnings:
+On Thu, Mar 07, 2024 at 01:02:26PM +0200, Denys Fedoryshchenko wrote:
+> Hello,
+> 
+> I'm reaching out on behalf of the KernelCI project team to discuss our
+> current compiler setup and planned migration to Debian Bookworm.
+> 
+> As you may know, our compiler images are currently based on Debian
+> Bullseye, which is approaching its end of life in July 2024. We have
+> been testing using gcc-10, which has presented us with some recent
+> challenges, notably a significant bug that results in false positive
+> compilation errors (specifically, the -Werror memcpy issue in
+> security.c). This situation has prompted us to consider an urgent
+> migration to Debian Bookworm. Additionally, the migration is
+> necessitated by our requirement to upgrade to a newer Python version to
+> support KernelCI v2 development efforts.
+> 
+> However, before we proceed, we have a couple of pending questions that
+> we hope to get clarity on:
+> 
+> 1) We've noticed that the minimal available version of clang on
+> https://apt.llvm.org/bookworm/dists/ is 15, whereas our current minimal
+> requirement for the Linux kernel compilation is clang-13.0.1
+> (https://www.kernel.org/doc/html/next/process/changes.html). How
+> critical is it to continue providing compile tests for clang-13 (and
+> potentially clang-14)? This information would be vital for us in
+> planning our compiler support strategy moving forward.
 
-[auto build test WARNING on awilliam-vfio/next]
-[also build test WARNING on linus/master v6.8-rc7 next-20240307]
-[cannot apply to awilliam-vfio/for-linus]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Coverage of the minimum version of a particular toolchain for building
+the kernel is important but I would not describe it as critical.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Williamson/vfio-pci-Disable-auto-enable-of-exclusive-INTx-IRQ/20240307-051931
-base:   https://github.com/awilliam/linux-vfio.git next
-patch link:    https://lore.kernel.org/r/20240306211445.1856768-8-alex.williamson%40redhat.com
-patch subject: [PATCH 7/7] vfio/fsl-mc: Block calling interrupt handler without trigger
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240307/202403072356.jlxR3E5Q-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240307/202403072356.jlxR3E5Q-lkp@intel.com/reproduce)
+While apt.llvm.org's Bookworm distribution does not have clang-13 and
+clang-14, the Bullseye distribution of clang-13 and clang-14 does work
+on Bookworm, I personally do that for my Debian development containers:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403072356.jlxR3E5Q-lkp@intel.com/
+https://github.com/nathanchance/env/blob/12927502f12ec63f50a460f842c9d0a70a82c629/podman/dev/debian/setup-env.sh#L54-L64
 
-All warnings (new ones prefixed by >>):
+Have you explored using the kernel.org GCC and LLVM toolchains instead
+of the ones in Debian?
 
->> drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c:111:11: warning: variable 'hwirq' set but not used [-Wunused-but-set-variable]
-     111 |         int ret, hwirq;
-         |                  ^
-   1 warning generated.
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
+https://mirrors.edge.kernel.org/pub/tools/llvm/
 
+That would potentially give you more flexibility with distribution
+upgrades and stable/deterministic compiler versions around that. I
+maintain the LLVM ones, which are optimized at build time to be quicker
+than the Debian one's, so that would save you build minutes over time.
 
-vim +/hwirq +111 drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c
-
-cc0ee20bd96971 Diana Craciun   2020-10-05  104  
-2e0d29561f593a Diana Craciun   2020-10-05  105  static int vfio_fsl_mc_set_irq_trigger(struct vfio_fsl_mc_device *vdev,
-2e0d29561f593a Diana Craciun   2020-10-05  106  				       unsigned int index, unsigned int start,
-2e0d29561f593a Diana Craciun   2020-10-05  107  				       unsigned int count, u32 flags,
-2e0d29561f593a Diana Craciun   2020-10-05  108  				       void *data)
-2e0d29561f593a Diana Craciun   2020-10-05  109  {
-cc0ee20bd96971 Diana Craciun   2020-10-05  110  	struct fsl_mc_device *mc_dev = vdev->mc_dev;
-cc0ee20bd96971 Diana Craciun   2020-10-05 @111  	int ret, hwirq;
-cc0ee20bd96971 Diana Craciun   2020-10-05  112  	struct vfio_fsl_mc_irq *irq;
-cc0ee20bd96971 Diana Craciun   2020-10-05  113  	struct device *cont_dev = fsl_mc_cont_dev(&mc_dev->dev);
-cc0ee20bd96971 Diana Craciun   2020-10-05  114  	struct fsl_mc_device *mc_cont = to_fsl_mc_device(cont_dev);
-cc0ee20bd96971 Diana Craciun   2020-10-05  115  
-159246378d8483 Diana Craciun   2020-10-15  116  	if (!count && (flags & VFIO_IRQ_SET_DATA_NONE))
-159246378d8483 Diana Craciun   2020-10-15  117  		return vfio_set_trigger(vdev, index, -1);
-159246378d8483 Diana Craciun   2020-10-15  118  
-cc0ee20bd96971 Diana Craciun   2020-10-05  119  	if (start != 0 || count != 1)
-2e0d29561f593a Diana Craciun   2020-10-05  120  		return -EINVAL;
-cc0ee20bd96971 Diana Craciun   2020-10-05  121  
-da119f387e9464 Jason Gunthorpe 2021-08-05  122  	mutex_lock(&vdev->vdev.dev_set->lock);
-cc0ee20bd96971 Diana Craciun   2020-10-05  123  	ret = fsl_mc_populate_irq_pool(mc_cont,
-cc0ee20bd96971 Diana Craciun   2020-10-05  124  			FSL_MC_IRQ_POOL_MAX_TOTAL_IRQS);
-cc0ee20bd96971 Diana Craciun   2020-10-05  125  	if (ret)
-cc0ee20bd96971 Diana Craciun   2020-10-05  126  		goto unlock;
-cc0ee20bd96971 Diana Craciun   2020-10-05  127  
-cc0ee20bd96971 Diana Craciun   2020-10-05  128  	ret = vfio_fsl_mc_irqs_allocate(vdev);
-cc0ee20bd96971 Diana Craciun   2020-10-05  129  	if (ret)
-cc0ee20bd96971 Diana Craciun   2020-10-05  130  		goto unlock;
-da119f387e9464 Jason Gunthorpe 2021-08-05  131  	mutex_unlock(&vdev->vdev.dev_set->lock);
-cc0ee20bd96971 Diana Craciun   2020-10-05  132  
-cc0ee20bd96971 Diana Craciun   2020-10-05  133  	if (flags & VFIO_IRQ_SET_DATA_EVENTFD) {
-cc0ee20bd96971 Diana Craciun   2020-10-05  134  		s32 fd = *(s32 *)data;
-cc0ee20bd96971 Diana Craciun   2020-10-05  135  
-cc0ee20bd96971 Diana Craciun   2020-10-05  136  		return vfio_set_trigger(vdev, index, fd);
-cc0ee20bd96971 Diana Craciun   2020-10-05  137  	}
-cc0ee20bd96971 Diana Craciun   2020-10-05  138  
-d86a6d47bcc6b4 Thomas Gleixner 2021-12-10  139  	hwirq = vdev->mc_dev->irqs[index]->virq;
-cc0ee20bd96971 Diana Craciun   2020-10-05  140  
-cc0ee20bd96971 Diana Craciun   2020-10-05  141  	irq = &vdev->mc_irqs[index];
-cc0ee20bd96971 Diana Craciun   2020-10-05  142  
-cc0ee20bd96971 Diana Craciun   2020-10-05  143  	if (flags & VFIO_IRQ_SET_DATA_NONE) {
-dce72fdf5c6be9 Alex Williamson 2024-03-06  144  		if (irq->trigger)
-dce72fdf5c6be9 Alex Williamson 2024-03-06  145  			eventfd_signal(irq->trigger);
-cc0ee20bd96971 Diana Craciun   2020-10-05  146  
-cc0ee20bd96971 Diana Craciun   2020-10-05  147  	} else if (flags & VFIO_IRQ_SET_DATA_BOOL) {
-cc0ee20bd96971 Diana Craciun   2020-10-05  148  		u8 trigger = *(u8 *)data;
-cc0ee20bd96971 Diana Craciun   2020-10-05  149  
-dce72fdf5c6be9 Alex Williamson 2024-03-06  150  		if (trigger && irq->trigger)
-dce72fdf5c6be9 Alex Williamson 2024-03-06  151  			eventfd_signal(irq->trigger);
-cc0ee20bd96971 Diana Craciun   2020-10-05  152  	}
-cc0ee20bd96971 Diana Craciun   2020-10-05  153  
-cc0ee20bd96971 Diana Craciun   2020-10-05  154  	return 0;
-cc0ee20bd96971 Diana Craciun   2020-10-05  155  
-cc0ee20bd96971 Diana Craciun   2020-10-05  156  unlock:
-da119f387e9464 Jason Gunthorpe 2021-08-05  157  	mutex_unlock(&vdev->vdev.dev_set->lock);
-cc0ee20bd96971 Diana Craciun   2020-10-05  158  	return ret;
-cc0ee20bd96971 Diana Craciun   2020-10-05  159  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
