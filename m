@@ -1,39 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D07129A75;
-	Thu,  7 Mar 2024 17:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F9913540D
+	for <llvm@lists.linux.dev>; Thu,  7 Mar 2024 18:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709831118; cv=none; b=GT5vt4gCOwkCLa/fYPYgBzn3k0YSShiohQSO1cdrl3kc4E9pF6P69dBqb80x4bVJqw5mdSfXmKhTaUsx2psP14he8LXI5d42IDgIBSi1G94RVQq/prK+9ol8BqbYAbd+z9/rScIjGDLaSTsQXgIld/zTayGNIIi+cLg2so9oYq0=
+	t=1709837910; cv=none; b=uitGXNkR3mEQUy1D028jm1+4LQga24/dhPaxmcF9EUmCI9QTjPTVUsMbeu9qARzhl0LjTEje2JKzqtG0O4Bxo8lDqzTkzkzP1Y+j5oRxrbqTlYLpS/wGfo8Hye50LnY36JMnAM+/rib7ws+j2TDePpXM7HoaOT0HetXeATngKaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709831118; c=relaxed/simple;
-	bh=TtRbN1VOqJxpNVhvXT2fV/GNQQc/3umHhKwYdaOj9mE=;
+	s=arc-20240116; t=1709837910; c=relaxed/simple;
+	bh=dhSE82pAanQi9VtZj9Br3IxlkLhdrSPn0L9yqlFu0E8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SbpuH0n4keoz5sWaYCtcchDJ4nr+edszcxY7CtH4ujXsjVmLnDMKXJq5S33DNoBIcmp/W4h9BSXnoduHqWdpbY9Xl0SHLvsSsI8lKfyvVatr0+cWpg0sSVkP8N2zHZa2c54TKIMd4/hzQhK0vKdPfCqcotcZykiGhStxZnp1jcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoNGmWt9; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gP3ovdfFgsjy8cEKg6/wiRwK9i7UVSuBtfeurnrWLWAy9t2k937zPQtO/SUKO7n2KdlHqKzU4+yswvPjuDtlRvBkQ4DwIbrKApli9UKd5TI/6bYL8dCRdWlgTwWBNJh2lNg5VjUn49dDMkVM4qmH46qI/sW13nVDbJbM7uhC+2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JDyUnLIp; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoNGmWt9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2150C433C7;
-	Thu,  7 Mar 2024 17:05:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709831118;
-	bh=TtRbN1VOqJxpNVhvXT2fV/GNQQc/3umHhKwYdaOj9mE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MoNGmWt9yUrrzrEv9bdRujivJMyEWfMA9MEUM7fQYCGwnYqfEr9d8OHb89SWMqKez
-	 gygulVqQvk2N2CEUYhVxEwLUfZ+1izTwBe6siXtgrPEHwtttKGsiinm9kg4bKJVJyA
-	 zrDEoEl5CGFXhIkDZL2VuOm/gv0HWKhJAJTlndbmga6fNvHO8Q7IJANSdETHS9mgQL
-	 88HFdOS8DNeu6noSxt3KQDbDmegzm5c63eR70wtiwL2jcoIi84dKjaCYGEYm9v1yEn
-	 3GBYXyBZq8j9cWCZSnwJkWqdvY0O952PK522kNDBMRTPk4F5NNrHbrPuvLVo93tVLl
-	 78IWO4SW0LQTg==
-Date: Thu, 7 Mar 2024 10:05:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Denys Fedoryshchenko <denys.f@collabora.com>
-Cc: kernelci@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: Migration to Debian Bookworm and compiler updates for KernelCI
-Message-ID: <20240307170516.GA1780841@dev-arch.thelio-3990X>
-References: <42c7f5a3e07c274c2a9d2e45a973c6306b2ba74f.camel@collabora.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JDyUnLIp"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dca3951ad9so10047285ad.3
+        for <llvm@lists.linux.dev>; Thu, 07 Mar 2024 10:58:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709837908; x=1710442708; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i5KeInTN1yUJS/UDV4dQ9Ckv/gA9YRMLKit8OigORVE=;
+        b=JDyUnLIpUtcxQFgeiGl5FVFdgleJmza8D6ZZDhGumqPoSlOoLhw6N+cTGVV43KDCeo
+         B44jeJzLSti0kjwUO+a68+izi9871u+rSzKG2XiT5cE1syxtv7Bo1922ZX/XeFMaAynR
+         NsBx8XKRsp35HspVLPfAcq2V4gdqeF0or8LV4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709837908; x=1710442708;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i5KeInTN1yUJS/UDV4dQ9Ckv/gA9YRMLKit8OigORVE=;
+        b=eF9NVSwgjrDx44fA/7P0HN8QwxFY8d/0DIzDWFF/gLF5QTD49HVcbrsEE4dkV8vM85
+         CMm+YW7ZuIrFoOGSQK9xW7uUB9x2GwZtQglsklT6DS2x0wghWUyw+RziIwny6BXh3UpM
+         CuSwITk6ZwK7f+12UJ0mUVNRtXJpzZTX6IOSnzUP26UgEgjuXcOzapD7qPPGlgjrtWRU
+         xmruCGZ5AGYRWV98GOKMwaTbkRB4L0mSkMDDrRB1y/v6c0b558HWoP3QgRt7j6KVZbI2
+         OgSgZ6QOzRlNejKXfyqGhgl3nT+9JWicw3pX+1va6/8xlqUpykqV97w9+wGgH/LgPKYV
+         7lYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVr3/l18q2J2jYIqe5QMMtJW3ncvsUMlwcL4GxT4+BVcn7Q3h9tUHjDouJxmECCBk0nQ8azmTgCFqh8d0POH3p7krtwmA==
+X-Gm-Message-State: AOJu0YzWu4iKy7wh88yq5BDwkhKCRRUMWX3go8R3m4W59wvXvZ27IgXh
+	5yU3pIcmsZULjfw3xw7gCxwkR3rspWk90dtz42W/12QGb8j7eux8+KamnFJBmg==
+X-Google-Smtp-Source: AGHT+IHS6/gd4NB+AVJVXDE6UGWX96UPUw2hYAe9vzirYY4f7XTjGaGQQl+Zlfiqk2mzf8Obhm1Nag==
+X-Received: by 2002:a17:902:b610:b0:1dc:66ac:c34b with SMTP id b16-20020a170902b61000b001dc66acc34bmr6822305pls.68.1709837907807;
+        Thu, 07 Mar 2024 10:58:27 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id kx4-20020a170902f94400b001d9aa663282sm15007036plb.266.2024.03.07.10.58.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Mar 2024 10:58:26 -0800 (PST)
+Date: Thu, 7 Mar 2024 10:58:25 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 9/9] ARM: KCFI: Allow permissive CFI mode
+Message-ID: <202403071002.542D167D65@keescook>
+References: <20240307-arm32-cfi-v2-0-cc74ea0306b3@linaro.org>
+ <20240307-arm32-cfi-v2-9-cc74ea0306b3@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,56 +69,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <42c7f5a3e07c274c2a9d2e45a973c6306b2ba74f.camel@collabora.com>
+In-Reply-To: <20240307-arm32-cfi-v2-9-cc74ea0306b3@linaro.org>
 
-Hi Denys,
-
-On Thu, Mar 07, 2024 at 01:02:26PM +0200, Denys Fedoryshchenko wrote:
-> Hello,
+On Thu, Mar 07, 2024 at 03:22:08PM +0100, Linus Walleij wrote:
+> This registers a breakpoint handler for the new breakpoint type
+> (0x03) inserted by LLVM CLANG for CFI breakpoints.
 > 
-> I'm reaching out on behalf of the KernelCI project team to discuss our
-> current compiler setup and planned migration to Debian Bookworm.
+> If we are in permissive mode, just print a backtrace and continue.
 > 
-> As you may know, our compiler images are currently based on Debian
-> Bullseye, which is approaching its end of life in July 2024. We have
-> been testing using gcc-10, which has presented us with some recent
-> challenges, notably a significant bug that results in false positive
-> compilation errors (specifically, the -Werror memcpy issue in
-> security.c). This situation has prompted us to consider an urgent
-> migration to Debian Bookworm. Additionally, the migration is
-> necessitated by our requirement to upgrade to a newer Python version to
-> support KernelCI v2 development efforts.
+> Example with CONFIG_CFI_PERMISSIVE enabled:
 > 
-> However, before we proceed, we have a couple of pending questions that
-> we hope to get clarity on:
+> root@Vexpress:/ echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
+> lkdtm: Performing direct entry CFI_FORWARD_PROTO
+> lkdtm: Calling matched prototype ...
+> lkdtm: Calling mismatched prototype ...
+> hw-breakpoint: Permissive CFI breakpoint
+> CPU: 0 PID: 114 Comm: sh Not tainted 6.8.0-rc1+ #111
+> Hardware name: ARM-Versatile Express
+>  unwind_backtrace from show_stack+0x28/0x30
+>  (...)
+> lkdtm: FAIL: survived mismatched prototype function call!
+> lkdtm: Unexpected! This kernel (6.8.0-rc1+ armv7l) was
+>        built with CONFIG_CFI_CLANG=y
 > 
-> 1) We've noticed that the minimal available version of clang on
-> https://apt.llvm.org/bookworm/dists/ is 15, whereas our current minimal
-> requirement for the Linux kernel compilation is clang-13.0.1
-> (https://www.kernel.org/doc/html/next/process/changes.html). How
-> critical is it to continue providing compile tests for clang-13 (and
-> potentially clang-14)? This information would be vital for us in
-> planning our compiler support strategy moving forward.
+> As you can see the LKDTM test fails, but I expect that this would be
+> expected behaviour in the permissive mode.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  arch/arm/include/asm/hw_breakpoint.h |  1 +
+>  arch/arm/kernel/hw_breakpoint.c      | 10 ++++++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/arch/arm/include/asm/hw_breakpoint.h b/arch/arm/include/asm/hw_breakpoint.h
+> index 62358d3ca0a8..e7f9961c53b2 100644
+> --- a/arch/arm/include/asm/hw_breakpoint.h
+> +++ b/arch/arm/include/asm/hw_breakpoint.h
+> @@ -84,6 +84,7 @@ static inline void decode_ctrl_reg(u32 reg,
+>  #define ARM_DSCR_MOE(x)			((x >> 2) & 0xf)
+>  #define ARM_ENTRY_BREAKPOINT		0x1
+>  #define ARM_ENTRY_ASYNC_WATCHPOINT	0x2
+> +#define ARM_ENTRY_CFI_BREAKPOINT	0x3
+>  #define ARM_ENTRY_SYNC_WATCHPOINT	0xa
+>  
+>  /* DSCR monitor/halting bits. */
+> diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
+> index dc0fb7a81371..256146684813 100644
+> --- a/arch/arm/kernel/hw_breakpoint.c
+> +++ b/arch/arm/kernel/hw_breakpoint.c
+> @@ -932,6 +932,16 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
+>  	case ARM_ENTRY_SYNC_WATCHPOINT:
+>  		watchpoint_handler(addr, fsr, regs);
+>  		break;
+> +	case ARM_ENTRY_CFI_BREAKPOINT:
+> +		if (IS_ENABLED(CONFIG_CFI_PERMISSIVE)) {
+> +			pr_err("Permissive CFI breakpoint\n");
+> +			dump_stack();
+> +			/* Skip the breaking instruction */
 
-Coverage of the minimum version of a particular toolchain for building
-the kernel is important but I would not describe it as critical.
+Instead of open-coding this, can you make a call to report_cfi_failure()
+instead? This will keep the failure output the same across
+architectures. I think it would look something like:
 
-While apt.llvm.org's Bookworm distribution does not have clang-13 and
-clang-14, the Bullseye distribution of clang-13 and clang-14 does work
-on Bookworm, I personally do that for my Debian development containers:
+		if (report_cfi_failure(regs, addr, ...) == BUG_TRAP_TYPE_WARN)
+			instruction_pointer(regs) += 4;
+		else
+			die("Oops - CFI", regs, 0);
 
-https://github.com/nathanchance/env/blob/12927502f12ec63f50a460f842c9d0a70a82c629/podman/dev/debian/setup-env.sh#L54-L64
+-Kees
 
-Have you explored using the kernel.org GCC and LLVM toolchains instead
-of the ones in Debian?
-
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
-https://mirrors.edge.kernel.org/pub/tools/llvm/
-
-That would potentially give you more flexibility with distribution
-upgrades and stable/deterministic compiler versions around that. I
-maintain the LLVM ones, which are optimized at build time to be quicker
-than the Debian one's, so that would save you build minutes over time.
-
-Cheers,
-Nathan
+-- 
+Kees Cook
