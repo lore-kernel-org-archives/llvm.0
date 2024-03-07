@@ -1,55 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995045C82;
-	Thu,  7 Mar 2024 02:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811FFE554;
+	Thu,  7 Mar 2024 03:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709780265; cv=none; b=FyJgUPAdOGnzOTgmCFBaeotTIkUx3hH+t5ZpKrVHYhDtRanUeCY80spzovD5T3+KaSSZqS7woRR4dS8i9l1COUaBKRKk74jEQ4LPJClj/LwQKJcn2bMM4LedxDa1AOQmiEdGv0vzLhjTf/vNTM/+8I4wC1NY98POn08y5RgVJ9M=
+	t=1709783510; cv=none; b=OrfEMqdIoiupj+fIVYbfbpqUHv9FnEeuhBx+xFNIG60hqfjT733YOzMMH8swCCzpERTQaXbVMRSKhclbkaYJIoMrBqgGlU7A8aDbwawIp1+tBWt3dvBqRbDYce5lRaOY8xchHKTZ19hVBJqvfvVVoHvtkJ6174pcno8KBWyq2bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709780265; c=relaxed/simple;
-	bh=bW/njpQ/dAm1KbGtGFt5W1YOmJ5ZtXXTiG/Q/DJKpHQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QzszEWjPU7svWJLMrL6807ZRflbevK/m1Ft4VRbRC4bGhVQ2WzO3j8TlwnQlXs7s4SiGPq+moPgx60X1RUFe1Tp8TSmtK4fXButgSwXq2rDuMLDoEHKRA8VlOb3Bk20VNMA8Ha3W/4AvFI6psEhOiE9AYb2I0TqYykxdPPqqiCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CE4rs0Lc; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1709783510; c=relaxed/simple;
+	bh=qHETVGmABCOv5h0hlnwqLErCUvhtOVNNegiNhI6aBxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ngma7cgAw4DOXrXyNIYRVWEMmaotQwpEkwejlMTuRbjkj2vUenraLm52ZQulbn48woCcmb65snb8sstQEMkC83xJao2mEqg7WAfm/A8pB9LeOyICUmOD9Mo/Y54qxjE3ROU7yijlw4L5Ci5R+3ietCkJb0Y4qFuRchWZVRIpBQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NLKl13xC; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CE4rs0Lc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NLKl13xC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709780264; x=1741316264;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bW/njpQ/dAm1KbGtGFt5W1YOmJ5ZtXXTiG/Q/DJKpHQ=;
-  b=CE4rs0LcgLQI3XukDi962+IZ1ScbiKWaddCRbe75eJh7vzR/4ch3j7k8
-   q88BoXHUDn72K+hxJWZ/KGuuyLjjNUcPBbW34O0uxJr41FtCWh2QocLyQ
-   D2czVWHZ4IijRyoLSkuco0CKcx8x0En/b9O8Hl7RjSzFmBJ0snKTqQYOZ
-   86yYIiV8cRPirCuLIF1VarGNp7mFVe+qwVAjXmDcU63uwzGPpQ8A5wcX9
-   35rcZm6eEH4RUBd+PVhQBx25T+tj+7BnxvpAW6JBSDn3Ziqr6t3UDA6nn
-   epm333qDE1EoD800l9DfLqzOWbfGV1+Uw9i6ovQPP9Tg2xlXJlW2PLaD0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="15006709"
+  t=1709783509; x=1741319509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qHETVGmABCOv5h0hlnwqLErCUvhtOVNNegiNhI6aBxI=;
+  b=NLKl13xCM/XestgAMCd2C+6xBvS3RdDEwTj44tNI4MR3JF9wJLCglY/y
+   4eNNQZAzkrtiab2Na9JNBYK+gop52xI2AvdH8iYv3bGAwVvKT0ZEv4LRz
+   tp4et2lcC7k/gGp/eaeL90rRd6HEleELo+qebVu+KwZJgUwlmF0oi+kS+
+   +SjDiEltmnuHdbI/dJhYMQzzVLy5yUXKdOWlTWVLFCNppyTk3gQvXsa0Q
+   dpJAgOp4q0+lX38pKaA8a5kcMyKkMdeJ4FgOZ4iQkHGU5u5OgDEb/mWpM
+   MRfIZDj8RzQEVeQ90JXrXzGKeQvNNMqDJBaf4vlmUq+O7adReJuQ461Nd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="26907513"
 X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
-   d="scan'208";a="15006709"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 18:57:43 -0800
+   d="scan'208";a="26907513"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 19:51:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
-   d="scan'208";a="14620867"
+   d="scan'208";a="10399324"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 06 Mar 2024 18:57:41 -0800
+  by orviesa006.jf.intel.com with ESMTP; 06 Mar 2024 19:51:43 -0800
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ri3wx-0004jh-04;
-	Thu, 07 Mar 2024 02:57:39 +0000
-Date: Thu, 7 Mar 2024 10:56:42 +0800
+	id 1ri4nE-0004ll-0U;
+	Thu, 07 Mar 2024 03:51:40 +0000
+Date: Thu, 7 Mar 2024 11:51:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robertosassu:evm-fscaps-v2 29/29] security/security.c:2375:8:
- error: call to undeclared function 'ima_inode_set_fscaps'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <202403071011.ToNWLeka-lkp@intel.com>
+To: Chancel Liu <chancel.liu@nxp.com>, shengjiu.wang@gmail.com,
+	Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+	lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+	tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, linux-imx@nxp.com,
+	alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chancel Liu <chancel.liu@nxp.com>
+Subject: Re: [PATCH 3/4] ASoC: fsl: Let imx-audio-rpmsg register platform
+ device for card
+Message-ID: <202403071138.bdVPDO4p-lkp@intel.com>
+References: <20240306075510.535963-4-chancel.liu@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,187 +67,180 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240306075510.535963-4-chancel.liu@nxp.com>
 
-tree:   https://github.com/robertosassu/linux evm-fscaps-v2
-head:   49621962de7e9bad18b99e21dcb8b32f5af7b61e
-commit: 49621962de7e9bad18b99e21dcb8b32f5af7b61e [29/29] fixes
-config: hexagon-randconfig-002-20240307 (https://download.01.org/0day-ci/archive/20240307/202403071011.ToNWLeka-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240307/202403071011.ToNWLeka-lkp@intel.com/reproduce)
+Hi Chancel,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on shawnguo/for-next]
+[also build test ERROR on broonie-sound/for-next linus/master v6.8-rc7 next-20240306]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chancel-Liu/ASoC-fsl-imx_pcm_rpmsg-Register-component-with-rpmsg-channel-name/20240306-155945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240306075510.535963-4-chancel.liu%40nxp.com
+patch subject: [PATCH 3/4] ASoC: fsl: Let imx-audio-rpmsg register platform device for card
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240307/202403071138.bdVPDO4p-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 325f51237252e6dab8e4e1ea1fa7acbb4faee1cd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240307/202403071138.bdVPDO4p-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403071011.ToNWLeka-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403071138.bdVPDO4p-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from security/security.c:14:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from sound/soc/fsl/imx-audio-rpmsg.c:6:
+   In file included from sound/soc/fsl/imx-pcm-rpmsg.h:278:
+   In file included from include/sound/dmaengine_pcm.h:11:
+   In file included from include/sound/soc.h:21:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from security/security.c:14:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from sound/soc/fsl/imx-audio-rpmsg.c:6:
+   In file included from sound/soc/fsl/imx-pcm-rpmsg.h:278:
+   In file included from include/sound/dmaengine_pcm.h:11:
+   In file included from include/sound/soc.h:21:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from security/security.c:14:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from sound/soc/fsl/imx-audio-rpmsg.c:6:
+   In file included from sound/soc/fsl/imx-pcm-rpmsg.h:278:
+   In file included from include/sound/dmaengine_pcm.h:11:
+   In file included from include/sound/soc.h:21:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   In file included from arch/s390/include/asm/io.h:78:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> security/security.c:2375:8: error: call to undeclared function 'ima_inode_set_fscaps'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           ret = ima_inode_set_fscaps(idmap, dentry, caps, flags);
-                 ^
-   security/security.c:2375:8: note: did you mean 'evm_inode_set_fscaps'?
-   include/linux/evm.h:181:19: note: 'evm_inode_set_fscaps' declared here
-   static inline int evm_inode_set_fscaps(struct mnt_idmap *idmap,
-                     ^
->> security/security.c:2434:8: error: call to undeclared function 'ima_inode_remove_fscaps'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           ret = ima_inode_remove_fscaps(dentry);
-                 ^
-   security/security.c:2434:8: note: did you mean 'evm_inode_remove_fscaps'?
-   include/linux/evm.h:188:19: note: 'evm_inode_remove_fscaps' declared here
-   static inline int evm_inode_remove_fscaps(struct dentry *dentry)
-                     ^
-   6 warnings and 2 errors generated.
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> sound/soc/fsl/imx-audio-rpmsg.c:107:8: error: use of undeclared label 'fail'
+     107 |                 goto fail;
+         |                      ^
+   17 warnings and 1 error generated.
 
 
-vim +/ima_inode_set_fscaps +2375 security/security.c
+vim +/fail +107 sound/soc/fsl/imx-audio-rpmsg.c
 
-  2353	
-  2354	/**
-  2355	 * security_inode_set_fscaps() - Check if setting fscaps is allowed
-  2356	 * @idmap: idmap of the mount
-  2357	 * @dentry: file
-  2358	 * @caps: fscaps to be written
-  2359	 * @flags: flags for setxattr
-  2360	 *
-  2361	 * Check permission before setting the file capabilities given in @vfs_caps.
-  2362	 *
-  2363	 * Return: Returns 0 if permission is granted.
-  2364	 */
-  2365	int security_inode_set_fscaps(struct mnt_idmap *idmap, struct dentry *dentry,
-  2366				      const struct vfs_caps *caps, int flags)
-  2367	{
-  2368		int ret;
-  2369	
-  2370		if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-  2371			return 0;
-  2372		ret = call_int_hook(inode_set_fscaps, 0, idmap, dentry, caps, flags);
-  2373		if (ret)
-  2374			return ret;
-> 2375		ret = ima_inode_set_fscaps(idmap, dentry, caps, flags);
-  2376		if (ret)
-  2377			return ret;
-  2378		return evm_inode_set_fscaps(idmap, dentry, caps, flags);
-  2379	}
-  2380	
-  2381	/**
-  2382	 * security_inode_post_set_fscaps() - Update the inode after setting fscaps
-  2383	 * @idmap: idmap of the mount
-  2384	 * @dentry: file
-  2385	 * @caps: fscaps to be written
-  2386	 * @flags: flags for setxattr
-  2387	 *
-  2388	 * Update inode security field after successfully setting fscaps.
-  2389	 *
-  2390	 */
-  2391	void security_inode_post_set_fscaps(struct mnt_idmap *idmap,
-  2392					    struct dentry *dentry,
-  2393					    const struct vfs_caps *caps, int flags)
-  2394	{
-  2395		if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-  2396			return;
-  2397		call_void_hook(inode_post_set_fscaps, idmap, dentry, caps, flags);
-  2398		evm_inode_post_set_fscaps(idmap, dentry, caps, flags);
-  2399	}
-  2400	
-  2401	/**
-  2402	 * security_inode_get_fscaps() - Check if reading fscaps is allowed
-  2403	 * @dentry: file
-  2404	 *
-  2405	 * Check permission before getting fscaps.
-  2406	 *
-  2407	 * Return: Returns 0 if permission is granted.
-  2408	 */
-  2409	int security_inode_get_fscaps(struct mnt_idmap *idmap, struct dentry *dentry)
-  2410	{
-  2411		if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-  2412			return 0;
-  2413		return call_int_hook(inode_get_fscaps, 0, idmap, dentry);
-  2414	}
-  2415	
-  2416	/**
-  2417	 * security_inode_remove_fscaps() - Check if removing fscaps is allowed
-  2418	 * @idmap: idmap of the mount
-  2419	 * @dentry: file
-  2420	 *
-  2421	 * Check permission before removing fscaps.
-  2422	 *
-  2423	 * Return: Returns 0 if permission is granted.
-  2424	 */
-  2425	int security_inode_remove_fscaps(struct mnt_idmap *idmap, struct dentry *dentry)
-  2426	{
-  2427		int ret;
-  2428	
-  2429		if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-  2430			return 0;
-  2431		ret = call_int_hook(inode_remove_fscaps, 0, idmap, dentry);
-  2432		if (ret)
-  2433			return ret;
-> 2434		ret = ima_inode_remove_fscaps(dentry);
-  2435		if (ret)
-  2436			return ret;
-  2437		return evm_inode_remove_fscaps(dentry);
-  2438	}
-  2439	
+    74	
+    75	static int imx_audio_rpmsg_probe(struct rpmsg_device *rpdev)
+    76	{
+    77		struct imx_audio_rpmsg *data;
+    78		int ret = 0;
+    79	
+    80		dev_info(&rpdev->dev, "new channel: 0x%x -> 0x%x!\n",
+    81			 rpdev->src, rpdev->dst);
+    82	
+    83		data = devm_kzalloc(&rpdev->dev, sizeof(*data), GFP_KERNEL);
+    84		if (!data)
+    85			return -ENOMEM;
+    86	
+    87		dev_set_drvdata(&rpdev->dev, data);
+    88	
+    89		/* Register platform driver for rpmsg routine */
+    90		data->rpmsg_pdev = platform_device_register_data(&rpdev->dev,
+    91								 rpdev->id.name,
+    92								 PLATFORM_DEVID_NONE,
+    93								 NULL, 0);
+    94		if (IS_ERR(data->rpmsg_pdev)) {
+    95			dev_err(&rpdev->dev, "failed to register rpmsg platform.\n");
+    96			ret = PTR_ERR(data->rpmsg_pdev);
+    97		}
+    98	
+    99		data->card_pdev = platform_device_register_data(&rpdev->dev,
+   100								"imx-audio-rpmsg",
+   101								PLATFORM_DEVID_AUTO,
+   102								rpdev->id.name,
+   103								strlen(rpdev->id.name));
+   104		if (IS_ERR(data->card_pdev)) {
+   105			dev_err(&rpdev->dev, "failed to register rpmsg card.\n");
+   106			ret = PTR_ERR(data->card_pdev);
+ > 107			goto fail;
+   108		}
+   109	
+   110		return ret;
+   111	}
+   112	
 
 -- 
 0-DAY CI Kernel Test Service
