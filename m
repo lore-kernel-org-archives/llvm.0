@@ -1,61 +1,60 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF9E12D750
-	for <llvm@lists.linux.dev>; Thu,  7 Mar 2024 14:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFE012DDA1
+	for <llvm@lists.linux.dev>; Thu,  7 Mar 2024 14:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709821336; cv=none; b=doIkxMl9c157YRDk6mNqDlzRpL9qUGBIGR1+Lb0Wa9WGuLzlN1HO99bBIYFzfX6Ptll/6iO3cdfo9LaBBpku9iXLBTxvLEknPEZjBju6zKz6Z+a8pZhNpVNWYNdDj78SeBQyVdV5c1YqdJkZ6VfZXlkCnOsSdIRrqpKM2FtCgWc=
+	t=1709821337; cv=none; b=i+hjqjMT5BTXqDYvuSNkgn5YYDZjAYR+gbmHPn/qCLbS0wqIPXVx7kfW5eIQOCdh+2mL98n2RgkXory6M4G0XM1+RjNdHMyUQIrgc2weC2VuodUnHlsIhj0t+81htB50Q+WY9YGe8zXgLX6nqqIpWOVlXI63uXT8WXTp7gXanjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709821336; c=relaxed/simple;
-	bh=amin5G4OUB2TOd8qhHcFmiCbc8Lio6xBnelTIHekVoY=;
+	s=arc-20240116; t=1709821337; c=relaxed/simple;
+	bh=SHe823c6VGye6PdlJLuHS7JghDZjsCULh7bG4duNDrs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YKNvQtlp/+kfCV8pbptd4vcp5BE2+0kpvry86gsYM4W1s+0VEXRmi1LnnJkV1QCTJJgkqlf5LW76CSBIs1k9PD07nszNObT4G30lACMpFU3l9vAIB/sWCcE4pNCU4s0zwWYx5tnt/+HYxR+G4GadWzJKeZF91Jg5nkI/aHlyHYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dxD4PSuw; arc=none smtp.client-ip=209.85.167.41
+	 In-Reply-To:To:Cc; b=ULJu9wc9xs8CJr3JfLOz5iuVPInz1nBQQ0stlhgPH63+NugsvmKrd8SOp8V0VZ7VhlRmkSlJ8ZBOlJYymLoiv9fcmJ2oBqP6LQbj9YzvyUOZIxnrWjRNFjgv0Oa8GT4R/+QV79XyG5KiGFaqg8851DKDGJvnnO9J6FzojVPjCMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BVe5COvg; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dxD4PSuw"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-51325c38d10so1984253e87.1
-        for <llvm@lists.linux.dev>; Thu, 07 Mar 2024 06:22:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BVe5COvg"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-51326436876so1107535e87.1
+        for <llvm@lists.linux.dev>; Thu, 07 Mar 2024 06:22:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709821332; x=1710426132; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1709821334; x=1710426134; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hqBogdja5tMMOO5wTCklLeqAnS4o63/YOLSFeJQB8FQ=;
-        b=dxD4PSuwp6ySLxBRFQwuTXMEmXwPz67j9MRDUo2M5jJyeyWqOXAxUNvLc/LDnb4g/g
-         Nux8tRdEl4JmD2B6eB4wqhLcWxKixFh6ztMZ3+2ZR2awgfEY2RrhqFquXbJPEPVcNr5R
-         pOvMwuSF8NLyRCDhYQBGSqmo04aqiubeaHiqd/TkVoh9y5ZTOszhpWgWL0+7nxKGtbOR
-         3WRYjsVll7MthSQftO+X9i0G162v914Bl8Uk14aPSAOy2FZynqAex5ZjCs4eTD6mnACg
-         iZVSyWv/N2MWokynvHDEOVR5IheI79yjNWp0+Bja00gBzGcVeBMPkdcOD+1eQQ8ECMXx
-         Oh7A==
+        bh=t7VN7dAxY/atiKl1Kg9VLJc8sP0Tkd5ODVxcz6HIAw0=;
+        b=BVe5COvgk38QFeAJw+i6RxD45mFc0iRM6zSUu0vqkF7NGy2A2hFKIYN/t8sfYcrnwJ
+         3jgGH1MoWr8JoV8G9jCGZzIAUequoe/IvUw5zKfqJE+kB2itzoP+3zuJ9TvbuHL3dN4f
+         T9G1AmCfOG0yfdwEzxGu+oGIqpV0tBeyXDTPb/2uOEqrm/ROFT2PyMbV3hPtbShrymyR
+         w5d/i25Gwk2sh9ig6Z2M5d82cRHtskZ9KFq5eVpgu5Iq4UqK5y8ARKCUQX30/H9FeVOu
+         2gCte3WuOYIVPtnKpkkiTmTxjyTM/Qu7REOrcYFgjKQNkheo8R3r2JU4YyYndu2IL5CI
+         J0AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709821332; x=1710426132;
+        d=1e100.net; s=20230601; t=1709821334; x=1710426134;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hqBogdja5tMMOO5wTCklLeqAnS4o63/YOLSFeJQB8FQ=;
-        b=ukzFyBCE45WrptpkngxUAyF9zuva1aOGdP+hUvcPul6JWSmrz5FDcHEXHDsrTL8WMj
-         XCE9N6D3ediXSnZgkHGuLxIRZQYGlxK03IW3JxGVhrb9k89RfueRWIB6ztVuea1OHlvi
-         bbTrCB5U0b2ZQVqt5E+T0mvXAHIFGAIyriVqPr6xxy42sNm8EV5q2OIl9aTz9K655d9f
-         k4xRkOC+0PoxoUc+3iw84fbuIsKLcJMXSj//eRz73chb1W3uzacNmCljkciu7SyYck0Q
-         HSEg2bHS8u4jzZutKkg8xKno0KsP9lBqGPRS1n9n+avTOHrmB+DHh91cIyAHJENINW2n
-         EY8g==
-X-Forwarded-Encrypted: i=1; AJvYcCV6J1vnOXWOJUTTvR0fQEIIexN/cI7QMW/230op/21cT0SQxGe4PlGFXJGZAA8edStdylaGEPMPPm9mERS8DVyZmGCxhg==
-X-Gm-Message-State: AOJu0Yw+iRbbSH9+F8v/OwBK/gPRjH9SQstCas4xOsjz2G5ixt8phIw8
-	2EFyrlCkjxQ0AJwbH8pScYTTdtqkUs3GL3MICnUNondMABBGNUOoveC1o9sgXWc=
-X-Google-Smtp-Source: AGHT+IGHiABAzZ0gzslhFBFFCHaQfxDyREIPjRltUdsCGKwCOVgo5+NjSeovE0CeKpTNYEbNM0cxZA==
-X-Received: by 2002:a19:ca1d:0:b0:513:3b3e:c361 with SMTP id a29-20020a19ca1d000000b005133b3ec361mr610924lfg.2.1709821332426;
-        Thu, 07 Mar 2024 06:22:12 -0800 (PST)
+        bh=t7VN7dAxY/atiKl1Kg9VLJc8sP0Tkd5ODVxcz6HIAw0=;
+        b=HPZt9VgRKEg6Ugz/e74hw/BBV8/S8aFEHL9OBkfYOdMJoSUQ9ufAin0fOSnjZgbrIn
+         aDDedvVCUvo6u8GIs4N4t7gV0Kh4VrX+44rPHdDQZVQ4dZL/so8FOby/8+/OfAMCOGw8
+         nem5cCv+V7rbmrhjxIRqa0gGiEdbrIdQg3yJJgyq5lVPl6e0re2wO7AwuboNIl3ueGha
+         El7qxNJ28vlP3c4BNu/mcAF7eZ3f7us2jRiwS2QDXJqzLjwb5kQLSPxAEx9Lje2eqDJZ
+         0CYpyJh+RKJnSBBvKNoXIy9ffpd32F/bvpOQA77yzDdo388sVpWw+sLDSe35Z9TNjeNx
+         gbQg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAxtpW754JDFWtPLHWs1l5ViXip5tHB0YkQQiovOBTcXAe1YzL1XcGRbpsXn5Keav6eFyD7C3uYCL06Oa/LeC5HygItA==
+X-Gm-Message-State: AOJu0Yx7nrWXTiWMx1kZSgds2QcJMTlXROiFDH7NVmhdSU3N1t0sxTwu
+	ZTVc8MLIPmOGa/l21JaK2fn9m6ItMimli4e8+MqWZbYLWAS+46Kl9G+x7jYA/d0=
+X-Google-Smtp-Source: AGHT+IGuVdEctc6eZaqVDqgJkOSPcRt7FloO7oS7Ik9PTreXsBbLelwTC+GMVqluqHoE3YBWXS+GEQ==
+X-Received: by 2002:a05:6512:1107:b0:513:df6:dcd3 with SMTP id l7-20020a056512110700b005130df6dcd3mr2367653lfg.48.1709821333814;
+        Thu, 07 Mar 2024 06:22:13 -0800 (PST)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id x11-20020a19e00b000000b005133b381a5csm2417137lfg.90.2024.03.07.06.22.11
+        by smtp.gmail.com with ESMTPSA id x11-20020a19e00b000000b005133b381a5csm2417137lfg.90.2024.03.07.06.22.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Mar 2024 06:22:11 -0800 (PST)
+        Thu, 07 Mar 2024 06:22:13 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 07 Mar 2024 15:22:06 +0100
-Subject: [PATCH v2 7/9] ARM: page: Turn highpage accesses into static
- inlines
+Date: Thu, 07 Mar 2024 15:22:07 +0100
+Subject: [PATCH v2 8/9] ARM: ftrace: Define ftrace_stub_graph
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240307-arm32-cfi-v2-7-cc74ea0306b3@linaro.org>
+Message-Id: <20240307-arm32-cfi-v2-8-cc74ea0306b3@linaro.org>
 References: <20240307-arm32-cfi-v2-0-cc74ea0306b3@linaro.org>
 In-Reply-To: <20240307-arm32-cfi-v2-0-cc74ea0306b3@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -76,95 +75,32 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.12.4
 
-Clearing and copying pages in highmem uses either the cpu_user
-vtable or the __glue() assembler stubs to call into per-CPU
-versions of these functions.
-
-This is all really confusing for KCFI so wrap these into static
-inlines and prefix each inline function with __nocfi.
-
-__cpu_clear_user_highpage() and __cpu_copy_user_highpage() are
-exported in arch/arm/mm/proc-syms.c which causes a problem with
-using static inlines, but it turns out that these exports are
-completely unused, so we can just delete them.
+Several architectures defines this stub for the graph tracer,
+and it is needed for CFI, as it needs a separate symbol for it.
+The trick from include/asm-generic/vmlinux.lds.h to define
+ftrace_stub_graph to ftrace_stub isn't working when using CFI.
+Commit 883bbbffa5a4 contains the details.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/include/asm/page.h | 36 +++++++++++++++++++++++++++++-------
- arch/arm/mm/proc-syms.c     |  7 +------
- 2 files changed, 30 insertions(+), 13 deletions(-)
+ arch/arm/kernel/entry-ftrace.S | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
-index 119aa85d1feb..8bf297228627 100644
---- a/arch/arm/include/asm/page.h
-+++ b/arch/arm/include/asm/page.h
-@@ -138,17 +138,39 @@ void xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr);
- #ifdef MULTI_USER
- extern struct cpu_user_fns cpu_user;
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index 3e7bcaca5e07..bc598e3d8dd2 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -271,6 +271,10 @@ ENTRY(ftrace_stub)
+ 	ret	lr
+ ENDPROC(ftrace_stub)
  
--#define __cpu_clear_user_highpage	cpu_user.cpu_clear_user_highpage
--#define __cpu_copy_user_highpage	cpu_user.cpu_copy_user_highpage
-+static inline void __nocfi __cpu_clear_user_highpage(struct page *page,
-+						     unsigned long vaddr)
-+{
-+	cpu_user.cpu_clear_user_highpage(page, vaddr);
-+}
++ENTRY(ftrace_stub_graph)
++	ret	lr
++ENDPROC(ftrace_stub_graph)
 +
-+static inline void __nocfi __cpu_copy_user_highpage(struct page *to,
-+			struct page *from, unsigned long vaddr,
-+			struct vm_area_struct *vma)
-+{
-+	cpu_user.cpu_copy_user_highpage(to, from, vaddr, vma);
-+}
+ #ifdef CONFIG_DYNAMIC_FTRACE
  
- #else
- 
--#define __cpu_clear_user_highpage	__glue(_USER,_clear_user_highpage)
--#define __cpu_copy_user_highpage	__glue(_USER,_copy_user_highpage)
-+/* These turn into function declarations for each per-CPU glue function */
-+void __glue(_USER,_clear_user_highpage)(struct page *page, unsigned long vaddr);
-+void __glue(_USER,_copy_user_highpage)(struct page *to, struct page *from,
-+		unsigned long vaddr, struct vm_area_struct *vma);
-+
-+static inline void __nocfi __cpu_clear_user_highpage(struct page *page,
-+						     unsigned long vaddr)
-+{
-+	__glue(_USER,_clear_user_highpage)(page, vaddr);
-+}
-+
-+static inline void __nocfi __cpu_copy_user_highpage(struct page *to,
-+			struct page *from, unsigned long vaddr,
-+			struct vm_area_struct *vma)
-+{
-+	__glue(_USER,_copy_user_highpage)(to, from, vaddr, vma);
-+}
- 
--extern void __cpu_clear_user_highpage(struct page *page, unsigned long vaddr);
--extern void __cpu_copy_user_highpage(struct page *to, struct page *from,
--			unsigned long vaddr, struct vm_area_struct *vma);
- #endif
- 
- #define clear_user_highpage(page,vaddr)		\
-diff --git a/arch/arm/mm/proc-syms.c b/arch/arm/mm/proc-syms.c
-index e21249548e9f..c93fec38d9f4 100644
---- a/arch/arm/mm/proc-syms.c
-+++ b/arch/arm/mm/proc-syms.c
-@@ -31,14 +31,9 @@ EXPORT_SYMBOL(__cpuc_flush_dcache_area);
- EXPORT_SYMBOL(cpu_cache);
- #endif
- 
--#ifdef CONFIG_MMU
--#ifndef MULTI_USER
--EXPORT_SYMBOL(__cpu_clear_user_highpage);
--EXPORT_SYMBOL(__cpu_copy_user_highpage);
--#else
-+#if defined(CONFIG_MMU) && defined(MULTI_USER)
- EXPORT_SYMBOL(cpu_user);
- #endif
--#endif
- 
- /*
-  * No module should need to touch the TLB (and currently
+ 	__INIT
 
 -- 
 2.34.1
