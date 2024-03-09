@@ -1,280 +1,273 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D84C59171;
-	Fri,  8 Mar 2024 19:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FB72F50
+	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 00:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709925367; cv=none; b=cXDzlPiUmzoehT4z+ErUr5CMKtbLUCVADKklLKVTbeAwIYxNlMrrAfPapiLRpfMnWCthMyhJOZqh14QR6yiRqH3GIhnpsMxFcen7t9OuhbSJ3tk2XvUb5ld5uUe/HlNdB44S4lsuizMqO6HDVJCAnbT7Qe+cvmU1IFZCzlisY2M=
+	t=1709942484; cv=none; b=OHVsYfibgxhwbqe8e69OApLfVzXcBSeV5wL1L+LPKoFRSRg/sDrTLBPewW0bALF4h/wveFmdYLIU0wpHz+XNkLgGQ+fs0PW79+Wf+IIibo0Dw5pXWa8ZdxY9zM65+07C4tuBK1oG8YAGceKip9H02/eSUsFqa2Ey9gTKWXr3n1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709925367; c=relaxed/simple;
-	bh=2H8UNu4um6CbQi+/cSJpOEj9iX8gVgfwHxkHUqHmqLw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OsDJq0LGSXGtxQnDXxysWeHcr7arwKFSPAkSCkixj43ptgGqdu8MIRPOr4cZxc5WLYhz3CQoXCKY7kUrjmeKhcakgYEUKXP2iUUPb4H0MrWc39QsClhOzbSnhXH6NnmbAVofJQxtKC9wSTCWpXD3eveRjUqy/30+9CdHHIntrf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SLwgukBR; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709942484; c=relaxed/simple;
+	bh=WZ4W73MTfmE84LJqnRgEDXfG7CvAs4QRk7mjF/uxqM8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d5poseznvGS6wlW9HsNGa/FYpOJU5cg1CGdNxlhXUqZt9dlzAUKMgceCaDuuVyHTE1nLH5fxJE3XDiV7a7VEBMKFHFWjIwNfhinKO+qDy+YhG/4nOgx7UEGJofECNbz2e0ktVwQMaEcxNg1VJWrLVjwgyrHAy3OhWcFaG0tVIK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FIBtotqC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SLwgukBR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709925363; x=1741461363;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2H8UNu4um6CbQi+/cSJpOEj9iX8gVgfwHxkHUqHmqLw=;
-  b=SLwgukBRjdR4S1E71Fucvd7IyNuHPFzXn+HAr5Al3LHAKa9z3lkZ+dZk
-   dxf9CHSDM9sgEckzk/PXN6J2fcEy/MCJEre++Op2PSgLqFPNSxw3A1EJO
-   iXi3dXNC7St35UFMdA5KbdmaeVKY+jAtLQmW95wCPErQRR/wJy5QOul3U
-   +7Qz4MInPs/5NVd7MOjz8BC97MQPKAfCY0mrYXG7m5opSOSMvi2+MRwVd
-   6CC2V3U73PI7qF5CNEuKT6jp/F3j9SYsnBb39m1Zq1O7OKz8r71ewsTsX
-   hmx67OYKGJgfuSCNTm+NBTiC1rexb7g3jOa76OnfqWcNiJlRzlEDMJ+Um
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11007"; a="4508700"
-X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
-   d="scan'208";a="4508700"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 11:16:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,110,1708416000"; 
-   d="scan'208";a="15138518"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Mar 2024 11:15:59 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rifhF-0006dZ-1h;
-	Fri, 08 Mar 2024 19:15:57 +0000
-Date: Sat, 9 Mar 2024 03:15:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Samuel Thibault <samuel.thibault@ens-lyon.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [char-misc:char-misc-next 63/70]
- drivers/accessibility/speakup/devsynth.c:111:3: warning: label at end of
- compound statement is a C23 extension
-Message-ID: <202403090339.FWOVWpIL-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FIBtotqC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7203AC43390
+	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 00:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709942484;
+	bh=WZ4W73MTfmE84LJqnRgEDXfG7CvAs4QRk7mjF/uxqM8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FIBtotqCdkQJM5sYfMuWtQbKFXNFZYl48V55jbojHATXbfiTuwgwX07SCurqQZ445
+	 cv4tEsMwbgrWV1QbZkXRB+Vp3ZQriuWKFL9w2h5SaSyPYhxdtKqD4z41fCxFUAsKqO
+	 GysODStLkxHWeKlXFfcoybCeyBdJbzp6N7p4PnkieCudUyE/Hn4Pbd9Mp+SWwhcukN
+	 sMpRyrmzhcgRUPKr0cl3umAfx55NE/so51MmsllvrU4AiIW0PyKUA2xZXWwekkKuOL
+	 YBgnNtUgVTnwLxUXf5JvApWOfSygDqLTRvFptT3UHxmamrMzpp54gS8/OGtiZUJv8W
+	 sJhJ0Ix3VoSEQ==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5133bd7eb47so3110449e87.3
+        for <llvm@lists.linux.dev>; Fri, 08 Mar 2024 16:01:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVfeyOrWB8uqJ9cT3N8ZHvHNMmMB1b+hWK1cuVssmVVby0AE1glcOM0xEAPxguRXEQprjtG7VYIJ9/mCoYaZXHNXyfKgw==
+X-Gm-Message-State: AOJu0YzMciCGnA9YGz3ewr3ajFfCZ/ifv2Q7HyxDBooVuXPZV4tJ+ALo
+	9x4BP6xfrjDzewHI4NrS8sKDeB1G2fRDh4WKwP/unyJLT8MHIPWo/PoWaP0LKIe2YSqOYKiXi7A
+	OE8HmQzFWjOnEvde+FrnJ2zELf94=
+X-Google-Smtp-Source: AGHT+IE1QYFHg7LWRKwhfsVxpXPXHvI/UbI2jZsIyqdJ5blUW1p6gfiUDRpBH3EPGPM5UdFV4pCWov4+TtW7djQ9Mgc=
+X-Received: by 2002:a05:6512:10d1:b0:513:59fb:1a50 with SMTP id
+ k17-20020a05651210d100b0051359fb1a50mr365211lfg.54.1709942482582; Fri, 08 Mar
+ 2024 16:01:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240307151231.654025-1-liuyuntao12@huawei.com>
+ <58cc1053-7208-4b22-99cb-210fdf700569@app.fastmail.com> <CAMj1kXFEdRZsy8FovGrfWotoaws1KoKbFv5q+7yKL=pRV8zkZw@mail.gmail.com>
+ <CAMj1kXF7fOO6gyvTJNOKp1_PVtAUi08ezz6k1g7jHNfUXAzXUw@mail.gmail.com>
+In-Reply-To: <CAMj1kXF7fOO6gyvTJNOKp1_PVtAUi08ezz6k1g7jHNfUXAzXUw@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Sat, 9 Mar 2024 01:01:11 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXE+XeMTw6VdtiTDFw_zgWEngN_mFbUy+WECNckb5m0NAg@mail.gmail.com>
+Message-ID: <CAMj1kXE+XeMTw6VdtiTDFw_zgWEngN_mFbUy+WECNckb5m0NAg@mail.gmail.com>
+Subject: Re: [PATCH-next v2] arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Yuntao Liu <liuyuntao12@huawei.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>, 
+	Russell King <linux@armlinux.org.uk>, Andrew Davis <afd@ti.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Jonathan Corbet <corbet@lwn.net>, 
+	Mike Rapoport <rppt@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-next
-head:   367b3560e10bbae3660d8ba4d0a7cc92170d8398
-commit: 807977260ae4de1cf39cfc55713fc0bc56566f7a [63/70] speakup: Add /dev/synthu device
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240309/202403090339.FWOVWpIL-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240309/202403090339.FWOVWpIL-lkp@intel.com/reproduce)
+On Fri, 8 Mar 2024 at 16:37, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Fri, 8 Mar 2024 at 15:27, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Fri, 8 Mar 2024 at 14:16, Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Thu, Mar 7, 2024, at 16:12, Yuntao Liu wrote:
+> > > > The current arm32 architecture does not yet support the
+> > > > HAVE_LD_DEAD_CODE_DATA_ELIMINATION feature. arm32 is widely used in
+> > > > embedded scenarios, and enabling this feature would be beneficial for
+> > > > reducing the size of the kernel image.
+> > > >
+> > > > In order to make this work, we keep the necessary tables by annotating
+> > > > them with KEEP, also it requires further changes to linker script to KEEP
+> > > > some tables and wildcard compiler generated sections into the right place.
+> > > >
+> > > > It boots normally with defconfig, vexpress_defconfig and tinyconfig.
+> > > >
+> > > > The size comparison of zImage is as follows:
+> > > > defconfig       vexpress_defconfig      tinyconfig
+> > > > 5137712         5138024                 424192          no dce
+> > > > 5032560         4997824                 298384          dce
+> > > > 2.0%            2.7%                    29.7%           shrink
+> > > >
+> > > > When using smaller config file, there is a significant reduction in the
+> > > > size of the zImage.
+> > > >
+> > > > We also tested this patch on a commercially available single-board
+> > > > computer, and the comparison is as follows:
+> > > > a15eb_config
+> > > > 2161384         no dce
+> > > > 2092240         dce
+> > > > 3.2%            shrink
+> > > >
+> > > > The zImage size has been reduced by approximately 3.2%, which is 70KB on
+> > > > 2.1M.
+> > > >
+> > > > Signed-off-by: Yuntao Liu <liuyuntao12@huawei.com>
+> > >
+> > > I've retested with both gcc-13 and clang-18, and so no
+> > > more build issues. Your previous version already worked
+> > > fine for me.
+> > >
+> > > I did some tests combining this with CONFIG_TRIM_UNUSED_KSYMS,
+> > > which showed a significant improvement as expected. I also
+> > > tried combining it with an experimental CONFIG_LTO_CLANG
+> > > patch, but that did not show any further improvements.
+> > >
+> > > Tested-by: Arnd Bergmann <arnd@arndb.de>
+> > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > Adding Ard Biesheuvel and Fangrui Song to Cc, so they can comment
+> > > on the ARM_VECTORS_TEXT workaround. I don't understand enough of
+> > > the details of what is going on here.
+> > >
+> >
+> > Thanks for the cc
+> >
+> > > Full quote of the patch below so they can see the whole thing.
+> > >
+> > > If they are also happy with the patch, I think you can send it
+> > > into Russell's patch tracker at
+> > > https://www.armlinux.org.uk/developer/patches/info.php
+> > >
+> >
+> > No, not happy at all :-)
+> >
+> > The resulting kernel does not boot (built with GCC or Clang). And the
+> > patch is buggy (see below)
+> >
+> > > > ---
+> > > > v2:
+> > > >    - Support config XIP_KERNEL.
+> > > >    - Support LLVM compilation.
+> > > >
+> > > > v1: https://lore.kernel.org/all/20240220081527.23408-1-liuyuntao12@huawei.com/
+> > > > ---
+> > > >  arch/arm/Kconfig                       |  1 +
+> > > >  arch/arm/boot/compressed/vmlinux.lds.S |  4 ++--
+> > > >  arch/arm/include/asm/vmlinux.lds.h     | 18 +++++++++++++++++-
+> > > >  arch/arm/kernel/vmlinux-xip.lds.S      |  8 ++++++--
+> > > >  arch/arm/kernel/vmlinux.lds.S          | 10 +++++++---
+> > > >  5 files changed, 33 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> > > > index 0af6709570d1..de78ceb821df 100644
+> > > > --- a/arch/arm/Kconfig
+> > > > +++ b/arch/arm/Kconfig
+> > > > @@ -113,6 +113,7 @@ config ARM
+> > > >       select HAVE_KERNEL_XZ
+> > > >       select HAVE_KPROBES if !XIP_KERNEL && !CPU_ENDIAN_BE32 && !CPU_V7M
+> > > >       select HAVE_KRETPROBES if HAVE_KPROBES
+> > > > +     select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+> > > >       select HAVE_MOD_ARCH_SPECIFIC
+> > > >       select HAVE_NMI
+> > > >       select HAVE_OPTPROBES if !THUMB2_KERNEL
+> > > > diff --git a/arch/arm/boot/compressed/vmlinux.lds.S
+> > > > b/arch/arm/boot/compressed/vmlinux.lds.S
+> > > > index 3fcb3e62dc56..da21244aa892 100644
+> > > > --- a/arch/arm/boot/compressed/vmlinux.lds.S
+> > > > +++ b/arch/arm/boot/compressed/vmlinux.lds.S
+> > > > @@ -89,7 +89,7 @@ SECTIONS
+> > > >       * The EFI stub always executes from RAM, and runs strictly before
+> > > > the
+> > > >       * decompressor, so we can make an exception for its r/w data, and
+> > > > keep it
+> > > >       */
+> > > > -    *(.data.efistub .bss.efistub)
+> > > > +    *(.data.* .bss.*)
+> >
+> > Why is this necessary? There is a reason we don't allow .data in the
+> > decompressor.
+> >
+> > > >      __pecoff_data_end = .;
+> > > >
+> > > >      /*
+> > > > @@ -125,7 +125,7 @@ SECTIONS
+> > > >
+> > > >    . = BSS_START;
+> > > >    __bss_start = .;
+> > > > -  .bss                       : { *(.bss) }
+> > > > +  .bss                       : { *(.bss .bss.*) }
+> > > >    _end = .;
+> > > >
+> > > >    . = ALIGN(8);              /* the stack must be 64-bit aligned */
+> > > > diff --git a/arch/arm/include/asm/vmlinux.lds.h
+> > > > b/arch/arm/include/asm/vmlinux.lds.h
+> > > > index 4c8632d5c432..dfe2b6ad6b51 100644
+> > > > --- a/arch/arm/include/asm/vmlinux.lds.h
+> > > > +++ b/arch/arm/include/asm/vmlinux.lds.h
+> > > > @@ -42,7 +42,7 @@
+> > > >  #define PROC_INFO                                                    \
+> > > >               . = ALIGN(4);                                           \
+> > > >               __proc_info_begin = .;                                  \
+> > > > -             *(.proc.info.init)                                      \
+> > > > +             KEEP(*(.proc.info.init))                                \
+> > > >               __proc_info_end = .;
+> > > >
+> > > >  #define IDMAP_TEXT                                                   \
+> > > > @@ -87,6 +87,22 @@
+> > > >               *(.vfp11_veneer)                                        \
+> > > >               *(.v4_bx)
+> > > >
+> > > > +/*
+> > > > +When CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is enabled, it is important
+> > > > to
+> > > > +annotate .vectors sections with KEEP. While linking with ld, it is
+> > > > +acceptable to directly use KEEP with .vectors sections in ARM_VECTORS.
+> > > > +However, when using ld.lld for linking, KEEP is not recognized within
+> > > > the
+> > > > +OVERLAY command; it is treated as a regular string. Hence, it is
+> > > > advisable
+> > > > +to define a distinct section here that explicitly retains the .vectors
+> > > > +sections when CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is turned on.
+> > > > +*/
+> > > > +#define ARM_VECTORS_TEXT                                             \
+> > > > +     .vectors.text : {                                               \
+> > > > +             KEEP(*(.vectors))                                       \
+> > > > +             KEEP(*(.vectors.bhb.loop8))                             \
+> > > > +             KEEP(*(.vectors.bhb.bpiall))                            \
+> > > > +       }
+> > > > +
+> >
+> > This looks fishy to me. How is this supposed to work? You cannot emit
+> > these sections into some random other place in the binary.
+> >
+> > And also, ARM_VECTORS_TEXT is never used (by accident, see below)
+> >
+>
+> The below appears to work for me:
+>
+> --- a/arch/arm/kernel/entry-armv.S
+> +++ b/arch/arm/kernel/entry-armv.S
+> @@ -1076,7 +1076,12 @@
+>         W(b)    vector_irq
+>         W(b)    vector_fiq
+>
+> +       .text
+> +       .reloc  ., R_ARM_NONE, .vectors
+>  #ifdef CONFIG_HARDEN_BRANCH_HISTORY
+> +       .reloc  ., R_ARM_NONE, .vectors.bhb.loop8
+> +       .reloc  ., R_ARM_NONE, .vectors.bhb.bpiall
+> +
+>         .section .vectors.bhb.loop8, "ax", %progbits
+>         W(b)    vector_rst
+>         W(b)    vector_bhb_loop8_und
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403090339.FWOVWpIL-lkp@intel.com/
+... or even better:
 
-All warnings (new ones prefixed by >>):
+--- a/arch/arm/kernel/entry-armv.S
++++ b/arch/arm/kernel/entry-armv.S
+@@ -1066,4 +1066,5 @@
 
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/accessibility/speakup/devsynth.c:7:
-   In file included from drivers/accessibility/speakup/speakup.h:5:
-   In file included from drivers/accessibility/speakup/spk_types.h:14:
-   In file included from include/linux/vt_kern.h:12:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/accessibility/speakup/devsynth.c:7:
-   In file included from drivers/accessibility/speakup/speakup.h:5:
-   In file included from drivers/accessibility/speakup/spk_types.h:14:
-   In file included from include/linux/vt_kern.h:12:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/accessibility/speakup/devsynth.c:7:
-   In file included from drivers/accessibility/speakup/speakup.h:5:
-   In file included from drivers/accessibility/speakup/spk_types.h:14:
-   In file included from include/linux/vt_kern.h:12:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/accessibility/speakup/devsynth.c:111:3: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
-     111 |                 }
-         |                 ^
-   18 warnings generated.
+        .section .vectors, "ax", %progbits
++       .reloc  .text, R_ARM_NONE, .
+        W(b)    vector_rst
+        W(b)    vector_und
+@@ -1079,4 +1080,5 @@
+ #ifdef CONFIG_HARDEN_BRANCH_HISTORY
+        .section .vectors.bhb.loop8, "ax", %progbits
++       .reloc  .text, R_ARM_NONE, .
+        W(b)    vector_rst
+        W(b)    vector_bhb_loop8_und
+@@ -1091,4 +1093,5 @@
 
-
-vim +111 drivers/accessibility/speakup/devsynth.c
-
-    37	
-    38	/* UTF-8 version */
-    39	static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
-    40					   size_t nbytes, loff_t *ppos)
-    41	{
-    42		size_t count = nbytes, want;
-    43		const char __user *ptr = buffer;
-    44		size_t bytes;
-    45		unsigned long flags;
-    46		unsigned char buf[256];
-    47		u16 ubuf[256];
-    48		size_t in, in2, out;
-    49	
-    50		if (!synth)
-    51			return -ENODEV;
-    52	
-    53		want = 1;
-    54		while (count >= want) {
-    55			/* Copy some UTF-8 piece from userland */
-    56			bytes = min(count, sizeof(buf));
-    57			if (copy_from_user(buf, ptr, bytes))
-    58				return -EFAULT;
-    59	
-    60			/* Convert to u16 */
-    61			for (in = 0, out = 0; in < bytes; in++) {
-    62				unsigned char c = buf[in];
-    63				int nbytes = 8 - fls(c ^ 0xff);
-    64				u32 value;
-    65	
-    66				switch (nbytes) {
-    67				case 8: /* 0xff */
-    68				case 7: /* 0xfe */
-    69				case 1: /* 0x80 */
-    70					/* Invalid, drop */
-    71					goto drop;
-    72	
-    73				case 0:
-    74					/* ASCII, copy */
-    75					ubuf[out++] = c;
-    76					continue;
-    77	
-    78				default:
-    79					/* 2..6-byte UTF-8 */
-    80	
-    81					if (bytes - in < nbytes) {
-    82						/* We don't have it all yet, stop here
-    83						 * and wait for the rest
-    84						 */
-    85						bytes = in;
-    86						want = nbytes;
-    87						continue;
-    88					}
-    89	
-    90					/* First byte */
-    91					value = c & ((1u << (7 - nbytes)) - 1);
-    92	
-    93					/* Other bytes */
-    94					for (in2 = 2; in2 <= nbytes; in2++) {
-    95						c = buf[in + 1];
-    96						if ((c & 0xc0) != 0x80)	{
-    97							/* Invalid, drop the head */
-    98							want = 1;
-    99							goto drop;
-   100						}
-   101						value = (value << 6) | (c & 0x3f);
-   102						in++;
-   103					}
-   104	
-   105					if (value < 0x10000)
-   106						ubuf[out++] = value;
-   107					want = 1;
-   108					break;
-   109				}
-   110	drop:
- > 111			}
-   112	
-   113			count -= bytes;
-   114			ptr += bytes;
-   115	
-   116			/* And speak this up */
-   117			if (out) {
-   118				spin_lock_irqsave(&speakup_info.spinlock, flags);
-   119				for (in = 0; in < out; in++)
-   120					synth_buffer_add(ubuf[in]);
-   121				synth_start();
-   122				spin_unlock_irqrestore(&speakup_info.spinlock, flags);
-   123			}
-   124		}
-   125	
-   126		return (ssize_t)(nbytes - count);
-   127	}
-   128	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        .section .vectors.bhb.bpiall, "ax", %progbits
++       .reloc  .text, R_ARM_NONE, .
+        W(b)    vector_rst
+        W(b)    vector_bhb_bpiall_und
