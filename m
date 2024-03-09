@@ -1,89 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB3E4E1BC;
-	Sat,  9 Mar 2024 20:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A824F894
+	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 21:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710017086; cv=none; b=sgRJmRtptZbmC6yJg2zW8wvLZ1GIcedNQEGNwYm26eXrfea5TIr/s3RmQazfKV9DEdqXB5IHVaZvqGUrvCzUci+pa8ONby/wCw6Yh+OFt6u1J7gN4j+rg4d6zNmMj8e6ANdoBJyngLuxIYFcxLf08GzDZq5Uuq0Bmv69bgy2sK0=
+	t=1710019146; cv=none; b=Q4Iv4ggt+10961dyGpChr2RPpzYHnAW2KlpZm/hjh3ItHjZSwWsX892LKzQiMlQ2WbKGQcodTcNeizvAqmLSKSIZUIQJbaJCW1HDN0fSaYxOXQT6NYh6jTAzpXLTj/V3SJgXauB8j+GQ0ATFxYpwNZNQ2fZ5kE8ByqKRFVF5/r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710017086; c=relaxed/simple;
-	bh=QW1qvjL4lmCQ6vvmfs+cHdHxUhhWwGvjlAKYfEz9j84=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TCC4OZt2JBxumV+27YJqiCO4m+3Eu4M3uKKksi/gu8OTzOdKzGoijAwROrKwQxVCbky/gBRraPxgW9O1iP0DoaTVEPfoLXiwcTQSvLoPpH8EVOSyJsA91LmnD8q6k1CVrmLlLLGyHN8CN2XJNPD4mkDd6V5aH4aFdOYPWoVMzd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hr0Koh0S; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hr0Koh0S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710017085; x=1741553085;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QW1qvjL4lmCQ6vvmfs+cHdHxUhhWwGvjlAKYfEz9j84=;
-  b=Hr0Koh0S+6LnuvgbrceCSKyM3fdKLRg2hWhDukAMktFVIavcEU0pzlrY
-   0BYZZO3iDU5TJHG8O/rTOHNNKanhFTaozSeDnZyGY8X7LWYUyK5KHx3oS
-   8GmMLjpLi5Vnzwc0ZGqmzp2UHmH+H52q8ewECRfCxADc1B1bTfO/Su46W
-   2mS+QnowzIlQNsQT1zyoPehf88gaoPFqwFs3oBc1K9xqhTPq5gC4HAn4J
-   0sjwKjYKJj/Xpc7Px6xubTsi4SMeJmlrpu6xPUix0b41zMIgeSM0fyUya
-   9EW6ROWrnSiWW0TFYxljWpXCO3MP+zgzZd4x+0jmwJSu9Uu1/bobgSjct
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11008"; a="8536921"
-X-IronPort-AV: E=Sophos;i="6.07,113,1708416000"; 
-   d="scan'208";a="8536921"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2024 12:44:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,113,1708416000"; 
-   d="scan'208";a="15436536"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 09 Mar 2024 12:44:40 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rj3Yb-0007e7-2V;
-	Sat, 09 Mar 2024 20:44:37 +0000
-Date: Sun, 10 Mar 2024 04:44:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steve Jeong <how2soft@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tobetter:odroid-6.1.y 4606/14349] ERROR: modpost:
- "phys_mem_access_prot" [drivers/char/aml-gpiomem.ko] undefined!
-Message-ID: <202403100458.Kgsf6BcF-lkp@intel.com>
+	s=arc-20240116; t=1710019146; c=relaxed/simple;
+	bh=Pa7sx8/xOTjjXflylsOjtScryyrbysvuk/h52s9G43g=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=mdqpclhgu2lDm9WYAfUZE7Swwh2K83viYybm6l39b9JVQ34OWYJRtkUxY6RJASrs+aGY850Hj8cZfpr6XJ7Ht8ncu/zW5gRAETeX43YxzjTPIUMybuLFphYHP9tN2LIq6Zf4xXampkFTcV+O3NH4sU0qU4mbX7+tBBlcMQj/7R8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7c8a8526f03so39517539f.0
+        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 13:19:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710019144; x=1710623944;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PRFBXIh18wCLBO2+SM4FmreOxz5t2k1uDB7yZ8xEagg=;
+        b=Xf1SV9y7fjoYJtduuBX8LD9LrDl4PmFrBIRG/E587IZY/tTzWLrrqdCXYHCSAzpDD5
+         fcFkGOm/24wDGIy5ThlSlp4cK7U4SyByX9YgeOJFXxZvqn+t1VfiM/k885Q7NQJSRAYU
+         6XS6b9pZ3ebhhwvAogLpd77c+JWNQpxfe67vXBt/iUc+rbyVX9AQqCdUoKkpST+kXvQS
+         fBtHb+lPu+RJmU9mjCJzO0pJcsRT5RD/DPAK06XMYJkEf1dQWqRdjqi3wABz7W47ZFst
+         RIUYfrKkL1MP0IL9DhbrAmTcm9F/SWdu+i/GNPQpNuUnvZc+egOiSt7g/IfsvDdEJTwu
+         SEew==
+X-Forwarded-Encrypted: i=1; AJvYcCUeSmcaaq/YzfgztvsnFYJA0DfwAaM2PXKUneqNXKCkGUSPmLQqNk+YpjAnRwkxzwtqv91k4xcm3q596LXLut7Pvfn8eA==
+X-Gm-Message-State: AOJu0YxSJibDZBwe0kzbFofZRP7U/CQJaT3PDj1NWkqLzPpBYFb7bm9o
+	tu4pmm1JN6Lh1co0ET3kdA7B0DNUhU/EiPDKswkjmpRFXNGsEQMdxkE8NYfPs4KSqO6qeIsM5HW
+	SweIWPc42e9a1KMMHsot+u3PdJBB8koh/sbdS1b8X4pUo5O+fivdotzQ=
+X-Google-Smtp-Source: AGHT+IFQgC/Y/uWGVhcWmNcl2ho4MafDLtAn5gwYRiBKdk1E4x8S2kf/9BZ6o500V0XRqam5OriFuXksXHwaP1QMt52X96IwDuf6
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a05:6602:1653:b0:7c8:4198:c430 with SMTP id
+ y19-20020a056602165300b007c84198c430mr36002iow.2.1710019144429; Sat, 09 Mar
+ 2024 13:19:04 -0800 (PST)
+Date: Sat, 09 Mar 2024 13:19:04 -0800
+In-Reply-To: <0000000000000149eb05dd3de8cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a9c150061340dbc9@google.com>
+Subject: Re: [syzbot] [ntfs3?] KASAN: slab-out-of-bounds Read in ntfs_iget5
+From: syzbot <syzbot+b4084c18420f9fad0b4f@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, axboe@kernel.dk, 
+	brauner@kernel.org, jack@suse.cz, kari.argillander@gmail.com, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Steve,
+syzbot suspects this issue was fixed by commit:
 
-FYI, the error/warning still remains.
+commit 6f861765464f43a71462d52026fbddfc858239a5
+Author: Jan Kara <jack@suse.cz>
+Date:   Wed Nov 1 17:43:10 2023 +0000
 
-tree:   https://github.com/tobetter/linux odroid-6.1.y
-head:   d4f8b0ad1d52d7116444c0c5775d75f65b479c78
-commit: 7ff99842a2f49291177856844102f1aa00687214 [4606/14349] ODROID-N2/C4: char: Add /dev/gpiomem device
-config: i386-buildonly-randconfig-002-20240309 (https://download.01.org/0day-ci/archive/20240310/202403100458.Kgsf6BcF-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240310/202403100458.Kgsf6BcF-lkp@intel.com/reproduce)
+    fs: Block writes to mounted block devices
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403100458.Kgsf6BcF-lkp@intel.com/
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1649668e180000
+start commit:   3800a713b607 Merge tag 'mm-hotfixes-stable-2022-09-26' of ..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=755695d26ad09807
+dashboard link: https://syzkaller.appspot.com/bug?extid=b4084c18420f9fad0b4f
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ccc59c880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10928774880000
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+If the result looks correct, please mark the issue as fixed by replying with:
 
->> ERROR: modpost: "phys_mem_access_prot" [drivers/char/aml-gpiomem.ko] undefined!
+#syz fix: fs: Block writes to mounted block devices
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DEBUG_MAPLE_TREE
-   Depends on [n]: DEBUG_KERNEL [=n]
-   Selected by [y]:
-   - TEST_MAPLE_TREE [=y] && RUNTIME_TESTING_MENU [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
