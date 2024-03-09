@@ -1,130 +1,257 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5665B2E62A
-	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 06:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE5F2E64C
+	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 07:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709967419; cv=none; b=Ny0TBSZKqkCzcbCgUpLp0ANB9Rerd5njmJdYLkT/YTUqa67rNQyVvc2b0XZEOh15m0yFu5klQAFx6Z0MJS53+di43Swt+D9hGsD3v1OrGALBnewa6I36nN0o+l/TrtMLoKYQ7HNbnCVprg97uMSEwFf9L8+veQ/dh5H+yds6j9I=
+	t=1709967694; cv=none; b=OSciXSMoKadS1ygCMiGmpSBkiyAVA6XsegoNA93bFZVOUoo+HD+l+hgJnb7qxZrmb8+owqOYKxM16vNq4gvN+GQIbJohLSU3K5IIMyC5ZjH9EH1Yrxg/zb7TjnxdDmIeTolLIDmj5+SNUE6o0hslDEUgvtONDqpEN0JdyNxeVB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709967419; c=relaxed/simple;
-	bh=1qsQHg57H1LKQe3m/sT4lhmQzJvIZGKeFT5OHy8I0tM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=a86nAplea1Zy2FY1QQpxBjBO7cGuSly5uxQA5YzeRk0/Ov7rnkA57uvroFmA+kpwJgO/f5TkpB6+pJAyhRASXBVxk1kOoEZP6r1BeL+Yws6NVuqUxkk/4zzqMfJA05ENtESRFR8XfunUGQLJ51wts7UUrIqFtGG8bjWEO1CxfnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TsDKq3tgmz2BfPp;
-	Sat,  9 Mar 2024 14:54:23 +0800 (CST)
-Received: from dggpemd100004.china.huawei.com (unknown [7.185.36.20])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2F95C1A016C;
-	Sat,  9 Mar 2024 14:56:47 +0800 (CST)
-Received: from [10.67.109.211] (10.67.109.211) by
- dggpemd100004.china.huawei.com (7.185.36.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Sat, 9 Mar 2024 14:56:46 +0800
-Message-ID: <cbf5f847-a5c7-443d-9c6f-57a9678a8d2e@huawei.com>
-Date: Sat, 9 Mar 2024 14:56:46 +0800
+	s=arc-20240116; t=1709967694; c=relaxed/simple;
+	bh=5ANYPtAdf/i7QeP+XM4e9ysWty7qPyAkB3LgtifERmQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nOxlcXRRa6+FvXmxYas89DoXuwaMTg1mxomlV+REzicnc+jYAcoYBrrmn9Lkom6ysyGVDT/WJRZNsKVFdCmgr+LKP0jEWlZDCSUBVa/JRN1YS6ATEfSQl2FwLErtLqHpQu2fjmL+cIMwIhUrL1zXZ8ZdpIpEvQZmZ51OHghT7fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=busqzY/u; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="busqzY/u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709967689;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dZcQg3seVixiK5R/qXUu90iYvmeRXpSm0dGxRb8TDQo=;
+	b=busqzY/uehymI4EW2cpXpKGISZSsUUkS92hvpR8Um5IjrjVkSaATJ+mrWMgek0gomOoXuV
+	0iwpsUFM2wCbWdaFbuFr9lAHvn4WtyhZVUcYIVno6ws+y++iHRfxWtcmA5cScGaM0qMQ2g
+	0NpkNYU16gwIWzf/zioULN1/HJgutFo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-284-fVQRzuhYNAKwMGJIyUka6Q-1; Sat, 09 Mar 2024 02:01:22 -0500
+X-MC-Unique: fVQRzuhYNAKwMGJIyUka6Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29934185A789
+	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 07:01:22 +0000 (UTC)
+Received: from [172.64.5.48] (unknown [10.30.32.29])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D50CEC04220;
+	Sat,  9 Mar 2024 07:01:21 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
+ (6.8.0-rc7, mainline.kernel.org-clang, 09e5c48f)
+Date: Sat, 09 Mar 2024 07:01:21 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2] arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Content-Language: en-US
-To: Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	Fangrui Song <maskray@google.com>, Russell King <linux@armlinux.org.uk>,
-	Andrew Davis <afd@ti.com>, Andrew Morton <akpm@linux-foundation.org>, "Kirill
- A. Shutemov" <kirill.shutemov@linux.intel.com>, Geert Uytterhoeven
-	<geert+renesas@glider.be>, Jonathan Corbet <corbet@lwn.net>, Mike Rapoport
-	<rppt@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Gleixner
-	<tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
-	<llvm@lists.linux.dev>
-References: <20240307151231.654025-1-liuyuntao12@huawei.com>
- <58cc1053-7208-4b22-99cb-210fdf700569@app.fastmail.com>
- <CAMj1kXFEdRZsy8FovGrfWotoaws1KoKbFv5q+7yKL=pRV8zkZw@mail.gmail.com>
-From: "liuyuntao (F)" <liuyuntao12@huawei.com>
-In-Reply-To: <CAMj1kXFEdRZsy8FovGrfWotoaws1KoKbFv5q+7yKL=pRV8zkZw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemd100004.china.huawei.com (7.185.36.20)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <09659.124030902012200119@us-mta-284.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+Kernel information:
+    Commit message: Merge tag 'ceph-for-6.8-rc8' of https://github.com/ceph=
+/ceph-client
 
-On 2024/3/8 22:27, Ard Biesheuvel wrote:
-> On Fri, 8 Mar 2024 at 14:16, Arnd Bergmann <arnd@arndb.de> wrote:
->>
->> On Thu, Mar 7, 2024, at 16:12, Yuntao Liu wrote:
->>> The current arm32 architecture does not yet support the
->>> HAVE_LD_DEAD_CODE_DATA_ELIMINATION feature. arm32 is widely used in
->>> embedded scenarios, and enabling this feature would be beneficial for
->>> reducing the size of the kernel image.
->>>
->>> In order to make this work, we keep the necessary tables by annotating
->>> them with KEEP, also it requires further changes to linker script to KEEP
->>> some tables and wildcard compiler generated sections into the right place.
->>>
->>> It boots normally with defconfig, vexpress_defconfig and tinyconfig.
->>>
->>> The size comparison of zImage is as follows:
->>> defconfig       vexpress_defconfig      tinyconfig
->>> 5137712         5138024                 424192          no dce
->>> 5032560         4997824                 298384          dce
->>> 2.0%            2.7%                    29.7%           shrink
->>>
->>> When using smaller config file, there is a significant reduction in the
->>> size of the zImage.
->>>
->>> We also tested this patch on a commercially available single-board
->>> computer, and the comparison is as follows:
->>> a15eb_config
->>> 2161384         no dce
->>> 2092240         dce
->>> 3.2%            shrink
->>>
->>> The zImage size has been reduced by approximately 3.2%, which is 70KB on
->>> 2.1M.
->>>
->>> Signed-off-by: Yuntao Liu <liuyuntao12@huawei.com>
->>
->> I've retested with both gcc-13 and clang-18, and so no
->> more build issues. Your previous version already worked
->> fine for me.
->>
->> I did some tests combining this with CONFIG_TRIM_UNUSED_KSYMS,
->> which showed a significant improvement as expected. I also
->> tried combining it with an experimental CONFIG_LTO_CLANG
->> patch, but that did not show any further improvements.
->>
->> Tested-by: Arnd Bergmann <arnd@arndb.de>
->> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->>
->> Adding Ard Biesheuvel and Fangrui Song to Cc, so they can comment
->> on the ARM_VECTORS_TEXT workaround. I don't understand enough of
->> the details of what is going on here.
->>
-> 
-> Thanks for the cc
-> 
->> Full quote of the patch below so they can see the whole thing.
->>
->> If they are also happy with the patch, I think you can send it
->> into Russell's patch tracker at
->> https://www.armlinux.org.uk/developer/patches/info.php
->>
-> 
-> No, not happy at all :-)
-> 
-> The resulting kernel does not boot (built with GCC or Clang). And the
-> patch is buggy (see below)
-> 
-After applying .reloc .text, R_ARM_NONE, ., the resulting kernel boots 
-well in QEMU. I tested it with the latest linux-next master branch and 
-the mainline master branch.
-By the way, I used vexpress_defconfig for testing, it worked.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/133523
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - xfstests - xfs
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11604843
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/157
+                       =E2=9D=8C FAIL generic/161
+                       =E2=9D=8C FAIL generic/171
+                       =E2=9D=8C FAIL generic/172
+                       =E2=9D=8C FAIL generic/173
+                       =E2=9D=8C FAIL generic/174
+                       =E2=9D=8C FAIL generic/183
+                       =E2=9D=8C FAIL generic/185
+                       =E2=9D=8C FAIL generic/188
+                       =E2=9D=8C FAIL generic/189
+                       =E2=9D=8C FAIL generic/190
+                       =E2=9D=8C FAIL generic/191
+                       =E2=9D=8C FAIL generic/194
+                       =E2=9D=8C FAIL generic/195
+                       =E2=9D=8C FAIL generic/196
+                       =E2=9D=8C FAIL generic/197
+                       =E2=9D=8C FAIL generic/199
+                       =E2=9D=8C FAIL generic/200
+                       =E2=9D=8C FAIL generic/201
+                       =E2=9D=8C FAIL generic/202
+                       =E2=9D=8C FAIL generic/203
+                       =E2=9D=8C FAIL generic/205
+                       =E2=9D=8C FAIL generic/206
+                       =E2=9D=8C FAIL generic/216
+                       =E2=9D=8C FAIL generic/217
+                       =E2=9D=8C FAIL generic/220
+                       =E2=9D=8C FAIL generic/222
+                       =E2=9D=8C FAIL generic/227
+                       =E2=9D=8C FAIL generic/238
+                       =E2=9D=8C FAIL generic/253
+                       =E2=9D=8C FAIL generic/259
+                       =E2=9D=8C FAIL generic/261
+                       =E2=9D=8C FAIL generic/262
+                       =E2=9D=8C FAIL generic/264
+                       =E2=9D=8C FAIL generic/287
+                       =E2=9D=8C FAIL generic/289
+                       =E2=9D=8C FAIL generic/290
+                       =E2=9D=8C FAIL generic/291
+                       =E2=9D=8C FAIL generic/292
+                       =E2=9D=8C FAIL generic/293
+                       =E2=9D=8C FAIL generic/295
+                       =E2=9D=8C FAIL generic/296
+                       =E2=9D=8C FAIL generic/301
+                       =E2=9D=8C FAIL generic/302
+                       =E2=9D=8C FAIL generic/305
+                       =E2=9D=8C FAIL generic/326
+                       =E2=9D=8C FAIL generic/327
+                       =E2=9D=8C FAIL generic/328
+                       =E2=9D=8C FAIL generic/330
+                       =E2=9D=8C FAIL generic/332
+                       =E2=9D=8C FAIL generic/353
+                       =E2=9D=8C FAIL generic/358
+                       =E2=9D=8C FAIL generic/359
+                       =E2=9D=8C FAIL generic/372
+                       =E2=9D=8C FAIL generic/414
+                       =E2=9D=8C FAIL generic/493
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
