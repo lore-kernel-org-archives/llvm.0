@@ -1,187 +1,218 @@
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142CC3BB4F
-	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 13:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E518C3BBD4;
+	Sat,  9 Mar 2024 15:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709990672; cv=none; b=iu2GJc1N3fvyMEMmkMVdXkgwmW/UOjnVmZbengzmHAW4EgsDJUlSlaPUIaB98n1fk2LHXowopLT5i/k8lI4tQg2brcj5w9/s6t7Gk262xKtrEhh+45mJKj9Z/hd4Aj+FkjMrB2FhIOXfKDjbwEHjyhvnHQAl72jjGdLx1LoNKRc=
+	t=1709996697; cv=none; b=iMfcNioBeiBZlErzLMrih8dn5JltjxQ8etH2LMYjzQ7718OADuFPOUC32mg+8Vgr85xU1yNa7l0KSfizF955uckhU0JszFpdnO2pbgoEeGgtomrhsc/Dc5aB9NgsTb9E7pAtdskt3TVUoQJrAzMpF1brieQvGIRHpx6xi5E/iaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709990672; c=relaxed/simple;
-	bh=DZAXdDJegZdcErY4U3Wlr5RwaMFdtP3+j0WDzDiIPzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NsE4kpq1DqZ7oeFqFSUqsA0SxkvyLTXWySuD6cMjEU316S6oFBtFU4abHnSM4Bj53agNhYbumULuFMKmwDGI2uSvlNy8sbmuWjko+pvZBHHOqXFZ1ichgYcGVDTdthk1QXfAMf01uB2URqNg3974Z3CmJozftk6pgS30hjnvK9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4TsNz50hyKz3F0D3;
-	Sat,  9 Mar 2024 21:23:45 +0800 (CST)
-Received: from dggpemd100004.china.huawei.com (unknown [7.185.36.20])
-	by mail.maildlp.com (Postfix) with ESMTPS id A42571A016C;
-	Sat,  9 Mar 2024 21:24:26 +0800 (CST)
-Received: from [10.67.109.211] (10.67.109.211) by
- dggpemd100004.china.huawei.com (7.185.36.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Sat, 9 Mar 2024 21:24:26 +0800
-Message-ID: <346e15e5-49e9-4a7f-b163-c3316225baab@huawei.com>
-Date: Sat, 9 Mar 2024 21:24:26 +0800
+	s=arc-20240116; t=1709996697; c=relaxed/simple;
+	bh=Ug3pk0/X0wod9qPgGzb6oSlba6NAWdn4GaYMwGA06C0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aR30MUeUG2Bz4WsVmaxyYbjk5ByY6IWXTiZludX86f0jQ0KYkROBZvW5jYoDIjdJ4Ds8peqpiXtdu1LsWMCwV+t6jg0fwlX4OBzfoli/i4jToISuMVHbjVhHQAhv6F0MKsYDuoRut6r841avhGlTVnUnOvPNErnvGcs2vhbiDUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZB2SyFrc; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZB2SyFrc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709996695; x=1741532695;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ug3pk0/X0wod9qPgGzb6oSlba6NAWdn4GaYMwGA06C0=;
+  b=ZB2SyFrc/lmZyN5XNh4O3RK2qfQLhENZCGjxyKPq9GTe8DK9XjuUX6WR
+   kCDzArKi6ELCkqinwNNb07CX/QBE2ZJ5RLngbfXLo6gX11R+qH3ssiuZx
+   Xnzx1ZjnYZaOk1s606jleVsT9W+Go9JJecQlkBFYWOC2SXRsMes8stl+G
+   rhEOXKmImnggz/4tRfUy0S8I4Pbum5jRSYhkFb0vS2oFAGC1/CHTsBDEx
+   ASkMeC6p3J0iQRcvdEnNi2sUKvajKs8nU35oElXR324BV3mZXUAIeoyU6
+   LrAzqEC3Lkzfa6rfgiATvP7UxLaz+7Z1TQgtRGTR8zs9abtGH86DNp2d0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11007"; a="4576697"
+X-IronPort-AV: E=Sophos;i="6.07,112,1708416000"; 
+   d="scan'208";a="4576697"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2024 07:02:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,112,1708416000"; 
+   d="scan'208";a="10833568"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Mar 2024 07:02:29 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1riyDS-0007Pf-1Y;
+	Sat, 09 Mar 2024 15:02:26 +0000
+Date: Sat, 9 Mar 2024 23:01:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: [bpf-next:master 5/7] kernel/bpf/core.c:900:5: warning:
+ '__pte_index_size' is not defined, evaluates to 0
+Message-ID: <202403092219.dhgcuz2G-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2] arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Fangrui
- Song <maskray@google.com>
-CC: Russell King <linux@armlinux.org.uk>, Andrew Davis <afd@ti.com>, Andrew
- Morton <akpm@linux-foundation.org>, "Kirill A. Shutemov"
-	<kirill.shutemov@linux.intel.com>, Geert Uytterhoeven
-	<geert+renesas@glider.be>, Jonathan Corbet <corbet@lwn.net>, Mike Rapoport
-	<rppt@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Gleixner
-	<tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
-	<llvm@lists.linux.dev>
-References: <20240307151231.654025-1-liuyuntao12@huawei.com>
- <58cc1053-7208-4b22-99cb-210fdf700569@app.fastmail.com>
- <42892794-7668-4eb0-8d2f-c78ca0daf370@huawei.com>
- <2a90581c-f1df-4d6b-8f0b-8e7cbf150ed9@app.fastmail.com>
-From: "liuyuntao (F)" <liuyuntao12@huawei.com>
-In-Reply-To: <2a90581c-f1df-4d6b-8f0b-8e7cbf150ed9@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemd100004.china.huawei.com (7.185.36.20)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+head:   d0d131e3b655fd267d14bb1bed49e3f990a1465e
+commit: 643714ff18301f41bded2489e8f1f9d1b4782094 [5/7] bpf: cap BPF_PROG_PACK_SIZE to 2MB * num_possible_nodes()
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240309/202403092219.dhgcuz2G-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240309/202403092219.dhgcuz2G-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403092219.dhgcuz2G-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/bpf/core.c:21:
+   In file included from include/linux/filter.h:9:
+   In file included from include/linux/bpf.h:21:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/bpf/core.c:21:
+   In file included from include/linux/filter.h:9:
+   include/linux/bpf.h:739:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     739 |         ARG_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | ARG_PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:740:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     740 |         ARG_PTR_TO_MEM_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:741:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     741 |         ARG_PTR_TO_CTX_OR_NULL          = PTR_MAYBE_NULL | ARG_PTR_TO_CTX,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:742:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     742 |         ARG_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:743:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     743 |         ARG_PTR_TO_STACK_OR_NULL        = PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:744:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     744 |         ARG_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:748:38: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     748 |         ARG_PTR_TO_UNINIT_MEM           = MEM_UNINIT | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:750:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_arg_type') [-Wenum-enum-conversion]
+     750 |         ARG_PTR_TO_FIXED_SIZE_MEM       = MEM_FIXED_SIZE | ARG_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:773:48: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     773 |         RET_PTR_TO_MAP_VALUE_OR_NULL    = PTR_MAYBE_NULL | RET_PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:774:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     774 |         RET_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:775:47: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     775 |         RET_PTR_TO_TCP_SOCK_OR_NULL     = PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:776:50: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     776 |         RET_PTR_TO_SOCK_COMMON_OR_NULL  = PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:778:49: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     778 |         RET_PTR_TO_DYNPTR_MEM_OR_NULL   = PTR_MAYBE_NULL | RET_PTR_TO_MEM,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   include/linux/bpf.h:779:45: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     779 |         RET_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:780:43: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_return_type') [-Wenum-enum-conversion]
+     780 |         RET_PTR_TO_BTF_ID_TRUSTED       = PTR_TRUSTED    | RET_PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~    ^ ~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:891:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     891 |         PTR_TO_MAP_VALUE_OR_NULL        = PTR_MAYBE_NULL | PTR_TO_MAP_VALUE,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:892:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     892 |         PTR_TO_SOCKET_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_SOCKET,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+   include/linux/bpf.h:893:46: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     893 |         PTR_TO_SOCK_COMMON_OR_NULL      = PTR_MAYBE_NULL | PTR_TO_SOCK_COMMON,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:894:44: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     894 |         PTR_TO_TCP_SOCK_OR_NULL         = PTR_MAYBE_NULL | PTR_TO_TCP_SOCK,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~
+   include/linux/bpf.h:895:42: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+     895 |         PTR_TO_BTF_ID_OR_NULL           = PTR_MAYBE_NULL | PTR_TO_BTF_ID,
+         |                                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+>> kernel/bpf/core.c:900:5: warning: '__pte_index_size' is not defined, evaluates to 0 [-Wundef]
+     900 | #if PMD_SIZE <= (1 << 21)
+         |     ^
+   arch/powerpc/include/asm/book3s/64/pgtable.h:208:26: note: expanded from macro 'PMD_SIZE'
+     208 | #define PMD_SIZE        (1UL << PMD_SHIFT)
+         |                                 ^
+   arch/powerpc/include/asm/book3s/64/pgtable.h:207:33: note: expanded from macro 'PMD_SHIFT'
+     207 | #define PMD_SHIFT       (PAGE_SHIFT + PTE_INDEX_SIZE)
+         |                                       ^
+   arch/powerpc/include/asm/book3s/64/pgtable.h:156:25: note: expanded from macro 'PTE_INDEX_SIZE'
+     156 | #define PTE_INDEX_SIZE  __pte_index_size
+         |                         ^
+   26 warnings generated.
+--
+>> kernel/bpf/core.c:900:5: warning: '__pte_index_size' is not defined, evaluates to 0 [-Wundef]
+     900 | #if PMD_SIZE <= (1 << 21)
+         |     ^
+   arch/powerpc/include/asm/book3s/64/pgtable.h:208:26: note: expanded from macro 'PMD_SIZE'
+     208 | #define PMD_SIZE        (1UL << PMD_SHIFT)
+         |                                 ^
+   arch/powerpc/include/asm/book3s/64/pgtable.h:207:33: note: expanded from macro 'PMD_SHIFT'
+     207 | #define PMD_SHIFT       (PAGE_SHIFT + PTE_INDEX_SIZE)
+         |                                       ^
+   arch/powerpc/include/asm/book3s/64/pgtable.h:156:25: note: expanded from macro 'PTE_INDEX_SIZE'
+     156 | #define PTE_INDEX_SIZE  __pte_index_size
+         |                         ^
+   1 warning generated.
 
 
+vim +/__pte_index_size +900 kernel/bpf/core.c
 
-On 2024/3/9 16:20, Arnd Bergmann wrote:
-> On Sat, Mar 9, 2024, at 07:14, liuyuntao (F) wrote:
->> On 2024/3/8 21:15, Arnd Bergmann wrote:
->>> On Thu, Mar 7, 2024, at 16:12, Yuntao Liu wrote:
->>
->> Thanks for the tests, CONFIG_LD_DEAD_CODE_DATA_ELIMINATION and
->> CONFIG_TRIM_UNUSED_KSYMS do indeed result in a significant improvement.
->> I found that arm32 still doesn't support CONFIG_LTO_CLANG. I've done
->> some work on it, but without success. I'd like to learn more about the
->> CONFIG_LTO_CLANG patch. Do you have any relevant links?
-> 
-> I did not try to get it to boot and gave up when I did not see
-> any size improvement. I think there were previous attempts to
-> do it elsewhere, which I did not try to find.
-> 
+   891	
+   892	/* PMD_SIZE is not available in some special config, e.g. ARCH=arm with
+   893	 * CONFIG_MMU=n. Use PAGE_SIZE in these cases.
+   894	 */
+   895	#ifdef PMD_SIZE
+   896	/* PMD_SIZE is really big for some archs. It doesn't make sense to
+   897	 * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
+   898	 * 2MiB * num_possible_nodes().
+   899	 */
+ > 900	#if PMD_SIZE <= (1 << 21)
+   901	#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
+   902	#else
+   903	#define BPF_PROG_PACK_SIZE ((1 << 21) * num_possible_nodes())
+   904	#endif
+   905	#else
+   906	#define BPF_PROG_PACK_SIZE PAGE_SIZE
+   907	#endif
+   908	
 
-I tested this patch, the size improvement was only about one 
-ten-thousandth, and the compilation time had increased by about a quarter,
-and the kernel did not boot.
-
-Strangely, LTO has actually increased the compilation time 
-significantly, which seems contrary to its purpose.
-
-           +          +trim      +dce       +trim+dce
-no lto    5995384    5858720    5841024    5299032
-lto       5990040    5854544    5839992    5289576
-shrink    8.9‱     7.1‱     1.7‱     17.8‱
-
-
-           +          +trim      +dce       +trim+dce
-no lto    34.616     33.03      36.093     32.211
-lto       46.881     45.324     47.247     43.246
-increase  26.20%     27.10%     23.60%     25.50%
-
-
-
-> The patch below makes it build, but it still requires disabling
-> CONFIG_THUMB2_KERNEL, which totally defeats the purpose of shrinking
-> the kernel as it adds some 40% size overhead in the vmlinux.
-> There are probably also runtime bugs that get introduced by this.
-> 
->       Arnd
-> > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index de78ceb821df..7ebfda4839e8 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -2,6 +2,8 @@
->   config ARM
->   	bool
->   	default y
-> +	select ARCH_SUPPORTS_LTO_CLANG
-> +	select ARCH_SUPPORTS_LTO_CLANG_THIN
->   	select ARCH_32BIT_OFF_T
->   	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES && FRAME_POINTER && !ARM_UNWIND
->   	select ARCH_HAS_BINFMT_FLAT
-> diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
-> index 726ecabcef09..f2ddce451ab9 100644
-> --- a/arch/arm/boot/compressed/Makefile
-> +++ b/arch/arm/boot/compressed/Makefile
-> @@ -9,6 +9,8 @@ OBJS		=
->   
->   HEAD	= head.o
->   OBJS	+= misc.o decompress.o
-> +CFLAGS_REMOVE_misc.o += $(CC_FLAGS_LTO)
-> +CFLAGS_REMOVE_decompress.o += $(CC_FLAGS_LTO)
-
-Wow, I've encountered this issue before and didn't think to solve it in 
-this way. You really have a thorough understanding of these parameters. 
-On a side note, if CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is enabled, but 
-only a few rodata sections are removed and no functions are eliminated, 
-are there any compiler or linker options that can control this behavior?
-thanks.
-
->   ifeq ($(CONFIG_DEBUG_UNCOMPRESS),y)
->   OBJS	+= debug.o
->   AFLAGS_head.o += -DDEBUG
-> diff --git a/arch/arm/mm/flush.c b/arch/arm/mm/flush.c
-> index d19d140a10c7..aee9e13023a8 100644
-> --- a/arch/arm/mm/flush.c
-> +++ b/arch/arm/mm/flush.c
-> @@ -38,15 +38,14 @@ EXPORT_SYMBOL(arm_heavy_mb);
->   static void flush_pfn_alias(unsigned long pfn, unsigned long vaddr)
->   {
->   	unsigned long to = FLUSH_ALIAS_START + (CACHE_COLOUR(vaddr) << PAGE_SHIFT);
-> -	const int zero = 0;
->   
->   	set_top_pte(to, pfn_pte(pfn, PAGE_KERNEL));
->   
-> -	asm(	"mcrr	p15, 0, %1, %0, c14\n"
-> -	"	mcr	p15, 0, %2, c7, c10, 4"
-> +	asm("mcrr	p15, 0, %1, %0, c14"
->   	    :
-> -	    : "r" (to), "r" (to + PAGE_SIZE - 1), "r" (zero)
-> +	    : "r" (to), "r" (to + PAGE_SIZE - 1)
->   	    : "cc");
-> +	dsb();
->   }
->   
->   static void flush_icache_alias(unsigned long pfn, unsigned long vaddr, unsigned long len)
-> @@ -68,11 +67,11 @@ void flush_cache_mm(struct mm_struct *mm)
->   	}
->   
->   	if (cache_is_vipt_aliasing()) {
-> -		asm(	"mcr	p15, 0, %0, c7, c14, 0\n"
-> -		"	mcr	p15, 0, %0, c7, c10, 4"
-> +		asm("mcr	p15, 0, %0, c7, c14, 0"
->   		    :
->   		    : "r" (0)
->   		    : "cc");
-> +		dsb();
->   	}
->   }
->   
-> @@ -84,11 +83,11 @@ void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned
->   	}
->   
->   	if (cache_is_vipt_aliasing()) {
-> -		asm(	"mcr	p15, 0, %0, c7, c14, 0\n"
-> -		"	mcr	p15, 0, %0, c7, c10, 4"
-> +		asm("mcr	p15, 0, %0, c7, c14, 0"
->   		    :
->   		    : "r" (0)
->   		    : "cc");
-> +		dsb();
->   	}
->   
->   	if (vma->vm_flags & VM_EXEC)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
