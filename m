@@ -1,196 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2FE1E86E;
-	Sat,  9 Mar 2024 08:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142CC3BB4F
+	for <llvm@lists.linux.dev>; Sat,  9 Mar 2024 13:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709973744; cv=none; b=FWcaKNKbaWeahIv7g0NIy6KoFjLi93IpTtpSdZO8ysEn5nkZGLsMhYjWBbbytsYq761NH7/LkwUktxfkUDSaMjAR8AZjuj1ZSEvLbK5mNP9cmw2PB9fMKlK8VyUwxFZv1aVkE2Sv3ZLEChcOK7c0iXsoIyUFBoc8LbzFNPj36JY=
+	t=1709990672; cv=none; b=iu2GJc1N3fvyMEMmkMVdXkgwmW/UOjnVmZbengzmHAW4EgsDJUlSlaPUIaB98n1fk2LHXowopLT5i/k8lI4tQg2brcj5w9/s6t7Gk262xKtrEhh+45mJKj9Z/hd4Aj+FkjMrB2FhIOXfKDjbwEHjyhvnHQAl72jjGdLx1LoNKRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709973744; c=relaxed/simple;
-	bh=zLslTB2C4vD2h36/xKytq+0k+Er1N7kDMZcnibQdvQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VieqmQ1XRKbGQ6bQQe32txQbNqXguUjeHuKfmFtQ668ReqExKyeJuym8WIdJh5LpFPScKO/opAf9EJ55Zk04e5bW7/hoaZ/mgvcDZNZzIPXTYZk/+JOgQGhS0+h9GheltbyaEKr36qCCZZbfls1MEwxLLjhmVJKCZ/niY70zmCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aaxnLmsb; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aaxnLmsb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709973742; x=1741509742;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zLslTB2C4vD2h36/xKytq+0k+Er1N7kDMZcnibQdvQE=;
-  b=aaxnLmsbvEbC62hlMD9fvSPNlFtQI+zUXYGkIaUrgxt1JIuPDN9f1xEe
-   3K+3A9pPhbsyWS1SBupUsJ9zCfAbUGbV3f78r/x1Vx+uFaMyWEkRVGco2
-   IutOx0EPOFf6j7IvqhRlkDQtA0O9oMCYdwUdvwyi8obj2uqE6yqfTqJvr
-   VEpCq+MjP/KbX+vbhZZNV08bsW/UWKH+VuJET26OUPA/lHyB0GwbbvITf
-   3ktlIjs88ReB5bK5AWTmW+I+0rTCxYGWhF/I5XqauxspFyRNI8A7lJgK1
-   Jh6GE5PzK5C6kKOMx1Lq48eqNzc4ArnfaGDsI+Npxs/Gz3JJKs3D6n2+g
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11007"; a="27170676"
-X-IronPort-AV: E=Sophos;i="6.07,112,1708416000"; 
-   d="scan'208";a="27170676"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2024 00:42:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,112,1708416000"; 
-   d="scan'208";a="11119587"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 09 Mar 2024 00:42:20 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1risHZ-0007AZ-1V;
-	Sat, 09 Mar 2024 08:42:17 +0000
-Date: Sat, 9 Mar 2024 16:42:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH net-next v1 1/2] net: mirror skb frag ref/unref
- helpers
-Message-ID: <202403091653.Zy7QbzaX-lkp@intel.com>
-References: <20240306235922.282781-2-almasrymina@google.com>
+	s=arc-20240116; t=1709990672; c=relaxed/simple;
+	bh=DZAXdDJegZdcErY4U3Wlr5RwaMFdtP3+j0WDzDiIPzc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=NsE4kpq1DqZ7oeFqFSUqsA0SxkvyLTXWySuD6cMjEU316S6oFBtFU4abHnSM4Bj53agNhYbumULuFMKmwDGI2uSvlNy8sbmuWjko+pvZBHHOqXFZ1ichgYcGVDTdthk1QXfAMf01uB2URqNg3974Z3CmJozftk6pgS30hjnvK9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4TsNz50hyKz3F0D3;
+	Sat,  9 Mar 2024 21:23:45 +0800 (CST)
+Received: from dggpemd100004.china.huawei.com (unknown [7.185.36.20])
+	by mail.maildlp.com (Postfix) with ESMTPS id A42571A016C;
+	Sat,  9 Mar 2024 21:24:26 +0800 (CST)
+Received: from [10.67.109.211] (10.67.109.211) by
+ dggpemd100004.china.huawei.com (7.185.36.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Sat, 9 Mar 2024 21:24:26 +0800
+Message-ID: <346e15e5-49e9-4a7f-b163-c3316225baab@huawei.com>
+Date: Sat, 9 Mar 2024 21:24:26 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240306235922.282781-2-almasrymina@google.com>
-
-Hi Mina,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mina-Almasry/net-mirror-skb-frag-ref-unref-helpers/20240307-080123
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240306235922.282781-2-almasrymina%40google.com
-patch subject: [RFC PATCH net-next v1 1/2] net: mirror skb frag ref/unref helpers
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240309/202403091653.Zy7QbzaX-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240309/202403091653.Zy7QbzaX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403091653.Zy7QbzaX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:41:
-   In file included from include/linux/kvm_para.h:5:
-   In file included from include/uapi/linux/kvm_para.h:37:
-   In file included from arch/s390/include/asm/kvm_para.h:25:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
->> include/linux/skbuff.h:3490:11: error: use of undeclared identifier 'page'
-    3490 |         get_page(page);
-         |                  ^
-   13 warnings and 1 error generated.
-   make[3]: *** [scripts/Makefile.build:116: arch/s390/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1199: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:240: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2] arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Fangrui
+ Song <maskray@google.com>
+CC: Russell King <linux@armlinux.org.uk>, Andrew Davis <afd@ti.com>, Andrew
+ Morton <akpm@linux-foundation.org>, "Kirill A. Shutemov"
+	<kirill.shutemov@linux.intel.com>, Geert Uytterhoeven
+	<geert+renesas@glider.be>, Jonathan Corbet <corbet@lwn.net>, Mike Rapoport
+	<rppt@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Gleixner
+	<tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
+	<llvm@lists.linux.dev>
+References: <20240307151231.654025-1-liuyuntao12@huawei.com>
+ <58cc1053-7208-4b22-99cb-210fdf700569@app.fastmail.com>
+ <42892794-7668-4eb0-8d2f-c78ca0daf370@huawei.com>
+ <2a90581c-f1df-4d6b-8f0b-8e7cbf150ed9@app.fastmail.com>
+From: "liuyuntao (F)" <liuyuntao12@huawei.com>
+In-Reply-To: <2a90581c-f1df-4d6b-8f0b-8e7cbf150ed9@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemd100004.china.huawei.com (7.185.36.20)
 
 
-vim +/page +3490 include/linux/skbuff.h
 
-  3481	
-  3482	static inline void napi_frag_ref(skb_frag_t *frag, bool recycle)
-  3483	{
-  3484	#ifdef CONFIG_PAGE_POOL
-  3485		struct page *page = skb_frag_page(frag);
-  3486	
-  3487		if (recycle && napi_pp_get_page(page))
-  3488			return;
-  3489	#endif
-> 3490		get_page(page);
-  3491	}
-  3492	
+On 2024/3/9 16:20, Arnd Bergmann wrote:
+> On Sat, Mar 9, 2024, at 07:14, liuyuntao (F) wrote:
+>> On 2024/3/8 21:15, Arnd Bergmann wrote:
+>>> On Thu, Mar 7, 2024, at 16:12, Yuntao Liu wrote:
+>>
+>> Thanks for the tests, CONFIG_LD_DEAD_CODE_DATA_ELIMINATION and
+>> CONFIG_TRIM_UNUSED_KSYMS do indeed result in a significant improvement.
+>> I found that arm32 still doesn't support CONFIG_LTO_CLANG. I've done
+>> some work on it, but without success. I'd like to learn more about the
+>> CONFIG_LTO_CLANG patch. Do you have any relevant links?
+> 
+> I did not try to get it to boot and gave up when I did not see
+> any size improvement. I think there were previous attempts to
+> do it elsewhere, which I did not try to find.
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I tested this patch, the size improvement was only about one 
+ten-thousandth, and the compilation time had increased by about a quarter,
+and the kernel did not boot.
+
+Strangely, LTO has actually increased the compilation time 
+significantly, which seems contrary to its purpose.
+
+           +          +trim      +dce       +trim+dce
+no lto    5995384    5858720    5841024    5299032
+lto       5990040    5854544    5839992    5289576
+shrink    8.9‱     7.1‱     1.7‱     17.8‱
+
+
+           +          +trim      +dce       +trim+dce
+no lto    34.616     33.03      36.093     32.211
+lto       46.881     45.324     47.247     43.246
+increase  26.20%     27.10%     23.60%     25.50%
+
+
+
+> The patch below makes it build, but it still requires disabling
+> CONFIG_THUMB2_KERNEL, which totally defeats the purpose of shrinking
+> the kernel as it adds some 40% size overhead in the vmlinux.
+> There are probably also runtime bugs that get introduced by this.
+> 
+>       Arnd
+> > diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index de78ceb821df..7ebfda4839e8 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -2,6 +2,8 @@
+>   config ARM
+>   	bool
+>   	default y
+> +	select ARCH_SUPPORTS_LTO_CLANG
+> +	select ARCH_SUPPORTS_LTO_CLANG_THIN
+>   	select ARCH_32BIT_OFF_T
+>   	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES && FRAME_POINTER && !ARM_UNWIND
+>   	select ARCH_HAS_BINFMT_FLAT
+> diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
+> index 726ecabcef09..f2ddce451ab9 100644
+> --- a/arch/arm/boot/compressed/Makefile
+> +++ b/arch/arm/boot/compressed/Makefile
+> @@ -9,6 +9,8 @@ OBJS		=
+>   
+>   HEAD	= head.o
+>   OBJS	+= misc.o decompress.o
+> +CFLAGS_REMOVE_misc.o += $(CC_FLAGS_LTO)
+> +CFLAGS_REMOVE_decompress.o += $(CC_FLAGS_LTO)
+
+Wow, I've encountered this issue before and didn't think to solve it in 
+this way. You really have a thorough understanding of these parameters. 
+On a side note, if CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is enabled, but 
+only a few rodata sections are removed and no functions are eliminated, 
+are there any compiler or linker options that can control this behavior?
+thanks.
+
+>   ifeq ($(CONFIG_DEBUG_UNCOMPRESS),y)
+>   OBJS	+= debug.o
+>   AFLAGS_head.o += -DDEBUG
+> diff --git a/arch/arm/mm/flush.c b/arch/arm/mm/flush.c
+> index d19d140a10c7..aee9e13023a8 100644
+> --- a/arch/arm/mm/flush.c
+> +++ b/arch/arm/mm/flush.c
+> @@ -38,15 +38,14 @@ EXPORT_SYMBOL(arm_heavy_mb);
+>   static void flush_pfn_alias(unsigned long pfn, unsigned long vaddr)
+>   {
+>   	unsigned long to = FLUSH_ALIAS_START + (CACHE_COLOUR(vaddr) << PAGE_SHIFT);
+> -	const int zero = 0;
+>   
+>   	set_top_pte(to, pfn_pte(pfn, PAGE_KERNEL));
+>   
+> -	asm(	"mcrr	p15, 0, %1, %0, c14\n"
+> -	"	mcr	p15, 0, %2, c7, c10, 4"
+> +	asm("mcrr	p15, 0, %1, %0, c14"
+>   	    :
+> -	    : "r" (to), "r" (to + PAGE_SIZE - 1), "r" (zero)
+> +	    : "r" (to), "r" (to + PAGE_SIZE - 1)
+>   	    : "cc");
+> +	dsb();
+>   }
+>   
+>   static void flush_icache_alias(unsigned long pfn, unsigned long vaddr, unsigned long len)
+> @@ -68,11 +67,11 @@ void flush_cache_mm(struct mm_struct *mm)
+>   	}
+>   
+>   	if (cache_is_vipt_aliasing()) {
+> -		asm(	"mcr	p15, 0, %0, c7, c14, 0\n"
+> -		"	mcr	p15, 0, %0, c7, c10, 4"
+> +		asm("mcr	p15, 0, %0, c7, c14, 0"
+>   		    :
+>   		    : "r" (0)
+>   		    : "cc");
+> +		dsb();
+>   	}
+>   }
+>   
+> @@ -84,11 +83,11 @@ void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned
+>   	}
+>   
+>   	if (cache_is_vipt_aliasing()) {
+> -		asm(	"mcr	p15, 0, %0, c7, c14, 0\n"
+> -		"	mcr	p15, 0, %0, c7, c10, 4"
+> +		asm("mcr	p15, 0, %0, c7, c14, 0"
+>   		    :
+>   		    : "r" (0)
+>   		    : "cc");
+> +		dsb();
+>   	}
+>   
+>   	if (vma->vm_flags & VM_EXEC)
