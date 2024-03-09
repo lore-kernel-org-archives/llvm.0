@@ -1,55 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37810FC1F;
-	Sat,  9 Mar 2024 18:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2A924A12;
+	Sat,  9 Mar 2024 18:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710007660; cv=none; b=Ux9EntpMO0b7F/L4SDMJHT5/BN6HrRceap7etI9WsLx9rJhvbTXv4mUDpNF9Bob918CoVPHcGU+IBAAtQ0fEyTGqhBP6hLkPp2qGTZxWCVFxjFZpfFMKKodY0dR2jamC8HbJpQFq/UaBKVjlDDowa9qXJaehu9huLvYGG2xLHgw=
+	t=1710008319; cv=none; b=WF3chlbX1HyT5rUACtXMeGux+KH39+nkWpRFl7LnCY78KW+Zm4d6qPbEcR/NidwU7tbcGPV4bWpYoQdpuejZJBlGNTNK8WkF7rghczpo3+5P9KPm/eOr3bG828OT1ZpYBs3et2/Gp28yV6IsziNh8TruOkD8NbkjaQYz1SPmv30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710007660; c=relaxed/simple;
-	bh=jVkS2ad8fPYMwamszZ+6w37dEvmyPSb42Wn52yxBG/g=;
+	s=arc-20240116; t=1710008319; c=relaxed/simple;
+	bh=qTGhDy+vIDlsIBOvVoJcmH8QuQopBreaGm6kLFiyf5w=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=n2Y2CD4Ie3PbPUrFb2+XS3dtJpy0MrNnQVkrcu7sgCUrY49dGFZdL163+XXm48BQJQtE9ZxWQHQ6dXfl4y+YNLl4EKEQG9gEfYKNEnKI8uwndSvmvwo/DcPzpSRS5VfgZ4FT6k9LUZyfrkiX2HMdjUqIlG8sY24R/rIOLl4IYaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bAWfAIUU; arc=none smtp.client-ip=198.175.65.10
+	 Content-Disposition; b=t2r8AiUJ9vg6om0gpXkV+rRz/YJ1Op5aCvtFvYqk0sZ8D41SCzUnSovDjxkt3eRGKaGJLTddbODCCogIsL456P+L/PrkJGVSjlrIqNmAby9+XWZXRAG1HC8t8/plesHqeil6meOifmOeVB27qofK9M+DCeEseMxetj9eBeHSuSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Px0JF3h3; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bAWfAIUU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Px0JF3h3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710007658; x=1741543658;
+  t=1710008317; x=1741544317;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jVkS2ad8fPYMwamszZ+6w37dEvmyPSb42Wn52yxBG/g=;
-  b=bAWfAIUUoE1m8fHs9aC1nPVBnHzkYduAasj4y6MmNG/3nePq23q5enIE
-   cHyIfdHZGDCuVIl+6gpR4XDPTfYVwrWDSyKQ7BvL1Zq4iWrAVnTu3/CJ3
-   E2YW1nOjsSosvjyGhGx9y/d1tSZilIrsTipjy8gCQaVOt02LmNlGLEhMo
-   5GisZMmWEeAzDKhN055WIhRUz6vctQNpco1nTHToy2xltsAU4qnQY/Zib
-   D7V23ZLCrmYzxdcCADIrVCzJ/4te/VF68Xcbui6fqFRMn1/7TofuBvdRB
-   UC8KCpLTwmar2+lV07OBHMsHe9Y10CeR8ARUu1umleYwHDFOxcH3OCYQ6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11008"; a="22173838"
+  bh=qTGhDy+vIDlsIBOvVoJcmH8QuQopBreaGm6kLFiyf5w=;
+  b=Px0JF3h3IQXWn5OOrQf3Eqf019p+p4h17MIdthJshRbQmLfYAL9OANIp
+   52CpwEZ2PIpWG1IpMdJH5C3ThxRhXpk440IkAAZKG02j2DoKH6ud7Vu7R
+   tB7zZi+XaJ+I5aUKNTeV5LRplMHbjyCfzaKUcRH0nHxvBbQvHhTF0RDDS
+   wXFHDdFf0TpU1RNZG8FlK+tJJzbVkg5rCVk3eFZggMAI0V9O+d+2gmRLF
+   EZVyaQxjNJKNSmKxAFgTkx1p5Wcv6t4vEM0llB/VKzgAK447L6yvkmCqv
+   lJpvzTbFqFyydXMHLOMEplcoVQcTEOhMupiGa3/htmkyaLI8jZkMdo3dW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11008"; a="4895575"
 X-IronPort-AV: E=Sophos;i="6.07,113,1708416000"; 
-   d="scan'208";a="22173838"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2024 10:07:37 -0800
+   d="scan'208";a="4895575"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2024 10:18:36 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,113,1708416000"; 
-   d="scan'208";a="10852233"
+   d="scan'208";a="33917428"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Mar 2024 10:07:35 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 09 Mar 2024 10:18:35 -0800
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rj16a-0007ZJ-2y;
-	Sat, 09 Mar 2024 18:07:32 +0000
-Date: Sun, 10 Mar 2024 02:06:41 +0800
+	id 1rj1HF-0007Zh-0M;
+	Sat, 09 Mar 2024 18:18:33 +0000
+Date: Sun, 10 Mar 2024 02:18:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 136/137]
- fs/bcachefs/btree_trans_commit.c:999:19: warning: shift count is negative
-Message-ID: <202403100245.i6zMVKd9-lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:pr/277 1/1] drivers/power/supply/macsmc_power.c:520:56:
+ error: unexpected ';' before '}'
+Message-ID: <202403100254.Jj0p94ja-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,62 +58,79 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   d7b003a90209bd1fc2e539148dcf9eb64ae3ca89
-commit: b62187885a0702d5233b59b91b19672f44ffab40 [136/137] bcachefs: map_bit()
-config: i386-buildonly-randconfig-002-20240309 (https://download.01.org/0day-ci/archive/20240310/202403100245.i6zMVKd9-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240310/202403100245.i6zMVKd9-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux pr/277
+head:   aeba5500b9346eeb8a6aed58c087fdbd931c6532
+commit: aeba5500b9346eeb8a6aed58c087fdbd931c6532 [1/1] power: supply: macsmc_power: Report available charge_behaviours
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240310/202403100254.Jj0p94ja-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240310/202403100254.Jj0p94ja-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403100245.i6zMVKd9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403100254.Jj0p94ja-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/bcachefs/btree_trans_commit.c:999:19: warning: shift count is negative [-Wshift-count-negative]
-     999 |         invalid_flags |= map_bit(~flags, BCH_TRANS_COMMIT_no_journal_res, BKEY_INVALID_WRITE);
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/util.h:770:2: note: expanded from macro 'map_bit'
-     770 |         signed_shift((_src) & _src_mask, ilog2(_dst_mask) - ilog2(_src_mask));  \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/util.h:766:10: note: expanded from macro 'signed_shift'
-     766 |          : (_w) >> (_s))
-         |                 ^  ~~~~
-   fs/bcachefs/btree_trans_commit.c:1000:19: warning: shift count is negative [-Wshift-count-negative]
-    1000 |         invalid_flags |= map_bit(~flags, BCH_TRANS_COMMIT_no_journal_res, BKEY_INVALID_COMMIT);
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/util.h:770:2: note: expanded from macro 'map_bit'
-     770 |         signed_shift((_src) & _src_mask, ilog2(_dst_mask) - ilog2(_src_mask));  \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/util.h:766:10: note: expanded from macro 'signed_shift'
-     766 |          : (_w) >> (_s))
-         |                 ^  ~~~~
-   2 warnings generated.
+   In file included from drivers/power/supply/macsmc_power.c:8:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/power/supply/macsmc_power.c:520:56: error: unexpected ';' before '}'
+     520 |                                 | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
+         |                                                                                    ^
+>> drivers/power/supply/macsmc_power.c:518:3: error: field designator 'charge_behaviours' does not refer to any field in type 'const struct power_supply_desc'
+     518 |         .charge_behaviours      = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     519 |                                 | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE)
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     520 |                                 | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 warnings and 2 errors generated.
 
 
-vim +999 fs/bcachefs/btree_trans_commit.c
+vim +520 drivers/power/supply/macsmc_power.c
 
-   981	
-   982	int __bch2_trans_commit(struct btree_trans *trans, unsigned flags)
-   983	{
-   984		struct btree_insert_entry *errored_at = NULL;
-   985		struct bch_fs *c = trans->c;
-   986		int ret = 0;
-   987	
-   988		if (!trans->nr_updates &&
-   989		    !trans->journal_entries_u64s)
-   990			goto out_reset;
-   991	
-   992		memset(&trans->fs_usage_delta, 0, sizeof(trans->fs_usage_delta));
-   993	
-   994		ret = bch2_trans_commit_run_triggers(trans);
-   995		if (ret)
-   996			goto out_reset;
-   997	
-   998		enum bkey_invalid_flags invalid_flags = 0;
- > 999		invalid_flags |= map_bit(~flags, BCH_TRANS_COMMIT_no_journal_res, BKEY_INVALID_WRITE);
+   509	
+   510	static const struct power_supply_desc macsmc_battery_desc = {
+   511		.name			= "macsmc-battery",
+   512		.type			= POWER_SUPPLY_TYPE_BATTERY,
+   513		.get_property		= macsmc_battery_get_property,
+   514		.set_property		= macsmc_battery_set_property,
+   515		.property_is_writeable	= macsmc_battery_property_is_writeable,
+   516		.properties		= macsmc_battery_props,
+   517		.num_properties		= ARRAY_SIZE(macsmc_battery_props),
+ > 518		.charge_behaviours	= BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
+   519					| BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE)
+ > 520					| BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
+   521	};
+   522	
 
 -- 
 0-DAY CI Kernel Test Service
