@@ -1,131 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7872A3B28F;
-	Sun, 10 Mar 2024 22:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE64B3D978
+	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 23:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710109214; cv=none; b=k0YHJIaYl5IqCB3kfSNugU3qCvc67WKZmPd+9OLPgiI4rtyjTfO48h3TfS0xevo4ApfiwmYCIIIKfVdFTKTNz+ntdVdp+WXYBUbKSLeRynHmEu+rZjW49f0q5mK71vOEGw2U/JGO+SnIuFGtOQTZhZQJPTxAKzB+j2bUtK3geNE=
+	t=1710111888; cv=none; b=PLBlmj4vL9I01d/7EHMDk3mZOLgX4TqUgf0RMVMUoRP8DHGxUwaE+YiUzrGE4yNwyCgqdZgNyDuOlJTybi5vYAeLYh5DlTf1+YF3HRh0rMjELDJTV54TlZvMKSLi9A88wOVPow0gGv+yekg4EyaPTJYF2EScFaoU1vV3aCreUls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710109214; c=relaxed/simple;
-	bh=FLbz7HIi7QLSAoZujvzf700uURich5QOhe14vam5h/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kYVIA8zkwyYmk1ncnfl+27YNV4Tjk5SGmrgiYhnEJvrwHOXsXR1o6lkOCZlOvn/jfiR+6g3yEm6EmVKy7LdZLxmYIyFYoo3A1F4xK263LB3G1qCMB/fLGzKsfsuIkBb9dAm9IQY/8Wodzqj3ESGUHONohHHAQSVrWO9YciA0B2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h8ENAQKK; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710111888; c=relaxed/simple;
+	bh=3deoi1dz/9rrMHhHol7hX3O1aGEGYFwkoUwtYX7HpsQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fQeERwV+AUer9DT7qmn9/YgOmyl7T20OJPTdy5pVhErOZ+DmsAKFXoAmG4pYzfeRjz6qlCyqPQnzarTWuu8Oo2EgxNlNN+aydxOOpl57MqFbhElw7SIfPhjVnR91wUiXze3/pOerucqQtt7HwWUhmyC0t8H9t5JHvmvDfoJDuSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=FdFFelsP; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h8ENAQKK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710109212; x=1741645212;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FLbz7HIi7QLSAoZujvzf700uURich5QOhe14vam5h/U=;
-  b=h8ENAQKKZheDCjEKH07TqxI/GS4lfAXWGM1g3f5VkaFcUkNUep+mYEjh
-   Td/jSVKSiRGdnXbMd6flEJ1/ztNCn29+v7LF7/mR0BO6xNZU/4gr7Om11
-   JJKDyn2izjkjtwO9y+QfXANkYhFXW8DIO+7I3Zv3XMS9fKnAtwKa/z8UO
-   gBDrGiQEJKWp7Nookyc9qImaafZb7U/nTayDHUmCDXJz3bu327fTWuNm6
-   G2FMHMxVtvY+MOq4ina6IS6pYYsTZ2/SbLNlyCEeWUGdCkEImzdAj6caE
-   N/8XjmjcvnXDZDf5wsS7kZsnhYgybG9Nm1Mu74zNkQWm6aYgIf8U3HKuu
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="16167502"
-X-IronPort-AV: E=Sophos;i="6.07,115,1708416000"; 
-   d="scan'208";a="16167502"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2024 15:20:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,115,1708416000"; 
-   d="scan'208";a="11422102"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 10 Mar 2024 15:20:10 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjRWZ-0008eZ-1L;
-	Sun, 10 Mar 2024 22:20:07 +0000
-Date: Mon, 11 Mar 2024 06:19:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Airlie <airlied@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [drm-misc:drm-misc-next 1/1]
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c:843:6: error: variable 'out' set
- but not used
-Message-ID: <202403110614.LaW3UiNG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FdFFelsP"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42ALJuM1022407;
+	Sun, 10 Mar 2024 23:04:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-11-20;
+ bh=FKQZhHRbg04CeOY97HhsLHc+b14tooDJProa0dZcdi0=;
+ b=FdFFelsPvYJNUz9MIWCWblkI5PetwBAfuHvJHudLpFeiCbepSmNM5iDThCu0BZULsiPj
+ GGbCapbyKXa7ZluNHF1dQQL7+Ump2dB5wXLp+gJyk2ZPCTEhSqNErL3fX0wTnJtaVWvg
+ dtxaCpoBxtPNAuhu+iPpRo0dFvi0jCUWZj3ueW0VYnmAKct9FrB4caimnpvGD6mHHnx+
+ 5fgVsJ7zTHKMG1U06aZqXYvifIgnLu1vqZKntlmpK/rbA2i+bYdQhy2laMBNWSFvje9w
+ VEKP+han/mNgF0ra2H6Q3HbWaEHmLibPEhdIFDyQBPK9Ra3kWziRliDnYsuCkJEbP45+ ww== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wrepcsutf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 10 Mar 2024 23:04:31 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 42AJ0OX6004954;
+	Sun, 10 Mar 2024 23:04:30 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3wre750ne1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 10 Mar 2024 23:04:30 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42AN4TSA006839;
+	Sun, 10 Mar 2024 23:04:29 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3wre750ndq-1;
+	Sun, 10 Mar 2024 23:04:29 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        James Bottomley <JBottomley@Parallels.com>,
+        Krishna Gudipati <kgudipat@brocade.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] [v2] scsi: bfa: fix function pointer type mismatch for hcb_qe->cbfn
+Date: Sun, 10 Mar 2024 19:04:17 -0400
+Message-ID: <171010474751.3838281.8712464657263840713.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20240222124433.2046570-1-arnd@kernel.org>
+References: <20240222124433.2046570-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-10_14,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 adultscore=0
+ mlxscore=0 phishscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403100187
+X-Proofpoint-ORIG-GUID: oHMrMV1ectl8yYs5raoshDwvzWqfMMkn
+X-Proofpoint-GUID: oHMrMV1ectl8yYs5raoshDwvzWqfMMkn
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   b219865715e419435ad49dc2300fe3f85c79d3f6
-commit: d6eb77731c45caf6ee7b18d907e9bc44be760e8c [1/1] Merge drm/drm-next into drm-misc-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240311/202403110614.LaW3UiNG-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403110614.LaW3UiNG-lkp@intel.com/reproduce)
+On Thu, 22 Feb 2024 13:44:06 +0100, Arnd Bergmann wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403110614.LaW3UiNG-lkp@intel.com/
+> Some callback functions used here take a boolean argument, others
+> take a status argument. This breaks KCFI type checking, so clang
+> now warns about the function pointer cast:
+> 
+> drivers/scsi/bfa/bfad_bsg.c:2138:29: error: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+> 
+> Assuming the code is actually correct here and the callers always match
+> the argument types of the callee, rework this to replace the explicit
+> cast with a union of the two pointer types. This does not change the
+> behavior of the code, so if something is actually broken here, a larger
+> rework may be necessary.
+> 
+> [...]
 
-All errors (new ones prefixed by >>):
+Applied to 6.9/scsi-queue, thanks!
 
->> drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c:843:6: error: variable 'out' set but not used [-Werror,-Wunused-but-set-variable]
-     843 |         u64 out = dumper->iova + A6XX_CD_DATA_OFFSET;
-         |             ^
-   1 error generated.
-
-
-vim +/out +843 drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-
-64d6255650d4e0 Connor Abbott 2024-01-25  834  
-1707add815519d Jordan Crouse 2018-11-02  835  /* Read a shader / debug block from the HLSQ aperture with the crashdumper */
-1707add815519d Jordan Crouse 2018-11-02  836  static void a6xx_get_shader_block(struct msm_gpu *gpu,
-d6852b4b2d0140 Jordan Crouse 2018-11-02  837  		struct a6xx_gpu_state *a6xx_state,
-1707add815519d Jordan Crouse 2018-11-02  838  		const struct a6xx_shader_block *block,
-1707add815519d Jordan Crouse 2018-11-02  839  		struct a6xx_gpu_state_obj *obj,
-1707add815519d Jordan Crouse 2018-11-02  840  		struct a6xx_crashdumper *dumper)
-1707add815519d Jordan Crouse 2018-11-02  841  {
-1707add815519d Jordan Crouse 2018-11-02  842  	u64 *in = dumper->ptr;
-64d6255650d4e0 Connor Abbott 2024-01-25 @843  	u64 out = dumper->iova + A6XX_CD_DATA_OFFSET;
-1707add815519d Jordan Crouse 2018-11-02  844  	size_t datasize = block->size * A6XX_NUM_SHADER_BANKS * sizeof(u32);
-1707add815519d Jordan Crouse 2018-11-02  845  	int i;
-1707add815519d Jordan Crouse 2018-11-02  846  
-1707add815519d Jordan Crouse 2018-11-02  847  	if (WARN_ON(datasize > A6XX_CD_DATA_SIZE))
-1707add815519d Jordan Crouse 2018-11-02  848  		return;
-1707add815519d Jordan Crouse 2018-11-02  849  
-1707add815519d Jordan Crouse 2018-11-02  850  	for (i = 0; i < A6XX_NUM_SHADER_BANKS; i++) {
-1707add815519d Jordan Crouse 2018-11-02  851  		in += CRASHDUMP_WRITE(in, REG_A6XX_HLSQ_DBG_READ_SEL,
-1707add815519d Jordan Crouse 2018-11-02  852  			(block->type << 8) | i);
-1707add815519d Jordan Crouse 2018-11-02  853  
-1707add815519d Jordan Crouse 2018-11-02  854  		in += CRASHDUMP_READ(in, REG_A6XX_HLSQ_DBG_AHB_READ_APERTURE,
-1707add815519d Jordan Crouse 2018-11-02  855  			block->size, dumper->iova + A6XX_CD_DATA_OFFSET);
-64d6255650d4e0 Connor Abbott 2024-01-25  856  
-64d6255650d4e0 Connor Abbott 2024-01-25  857  		out += block->size * sizeof(u32);
-1707add815519d Jordan Crouse 2018-11-02  858  	}
-1707add815519d Jordan Crouse 2018-11-02  859  
-1707add815519d Jordan Crouse 2018-11-02  860  	CRASHDUMP_FINI(in);
-1707add815519d Jordan Crouse 2018-11-02  861  
-1707add815519d Jordan Crouse 2018-11-02  862  	if (a6xx_crashdumper_run(gpu, dumper))
-1707add815519d Jordan Crouse 2018-11-02  863  		return;
-1707add815519d Jordan Crouse 2018-11-02  864  
-1707add815519d Jordan Crouse 2018-11-02  865  	obj->handle = block;
-d6852b4b2d0140 Jordan Crouse 2018-11-02  866  	obj->data = state_kmemdup(a6xx_state, dumper->ptr + A6XX_CD_DATA_OFFSET,
-d6852b4b2d0140 Jordan Crouse 2018-11-02  867  		datasize);
-1707add815519d Jordan Crouse 2018-11-02  868  }
-1707add815519d Jordan Crouse 2018-11-02  869  
-
-:::::: The code at line 843 was first introduced by commit
-:::::: 64d6255650d4e0ff816cd303a43685f65c5a0dbb drm/msm: More fully implement devcoredump for a7xx
-
-:::::: TO: Connor Abbott <cwabbott0@gmail.com>
-:::::: CC: Rob Clark <robdclark@chromium.org>
+[1/2] scsi: bfa: fix function pointer type mismatch for hcb_qe->cbfn
+      https://git.kernel.org/mkp/scsi/c/b69600231f75
+[2/2] scsi: bfa: fix function pointer type mismatch for state machines
+      https://git.kernel.org/mkp/scsi/c/37126399da15
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Martin K. Petersen	Oracle Linux Engineering
