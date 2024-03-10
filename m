@@ -1,57 +1,57 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7983F200C8
-	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F74208C1
+	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036349; cv=none; b=iibaq9xuECvgjNuMI1aajEtryvlXpAZ4O3e2JtRsXgdQVlMEk4pv+NrUHK7ev9MFM4l07TwzN02qLLNRNG2Z0+McqVPHfq+D3Kq1S/pLaukCvZI+m48+m4XLkNHVgIjyD8z1gvtqZKfmE+O5Ond1+4MbkTLN3KJ0TRgA+GApJqE=
+	t=1710036352; cv=none; b=ehxmylTseLhD6gS4wQQ6NqSRs0+CecqWpEJX4f67FYv84gRvN2xn/q0Tozu6WGtz1t8vnfdjkqiwzUmbRjn01C8gH6EGWYSjaETOHuQPO7VSUH09vTHSkCHg7rV3WttV980yVCYD22/umTCgn4yqLo0ZZ0te571dOEWLPwY8wlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036349; c=relaxed/simple;
-	bh=I32YjdeuPxEte3yHw53IzkVFz3QD1fvyYmVpmCiJgX0=;
+	s=arc-20240116; t=1710036352; c=relaxed/simple;
+	bh=gXS4/PmUcr/u98E5bD8fZ0t4D/xMUtOLNVIZOZ/mooI=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=VRc4M+7Kod025CgGoUX7XMokkTzKErvlZgJUz5IDdx60A1Yz9gMW9HcPVBWrfw6NtuxB2BEWtS77BghFlR7p/9kHBsVxy8nj/MjkE43NDg0f6WrDfe0EfSTrtH79MusVQrs1lJailoIvxYkgJVJ/GqyZTnh24hRLGN4j6Kr9OZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ivInQJWR; arc=none smtp.client-ip=209.85.128.202
+	 To:Content-Type; b=C2iE2ireC4WgMQ8YQZuNbaxoOMo+TOed2/BDKDq1KThFM8ZZIRaIloCBeILXkuR+R0r37PU/VGYs/Lkh4c/wiIUnXvIrV4TOhQXjvstxOAwNsdyOf3mMG9RaaHs+MxuiUSnAWl1l30oFuCNjP3nT2kZ7ULEOe4bQsDSADOOUVSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ILEbnA2v; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ivInQJWR"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60a0151f194so40238097b3.1
-        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ILEbnA2v"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dced704f17cso5578995276.1
+        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036347; x=1710641147; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1710036349; x=1710641149; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JkunXUX2uPJsD4ImBjWANLyZP2gzb7/4b4n3BxJNzzE=;
-        b=ivInQJWRs8e7i4KkOmqvNicykY6s4fGrpnA6WU/WsqQrGmF3jm1gmE5R0Lus3qzfaZ
-         6ghAvQlbKmrb+qXayh2iOK6UdzeMLqYfufJ8/PmScAU3nue6tsYLKTwtr83PlgHU3Wsx
-         hXS4WIFw78TWcjisG9aOQ1GmyngLToQwpGbwv75cbpST87+BVlAq45RUhassGcy1pZ66
-         2vuym2vbXyn/HDoF5QOMceJfrixGo8o2JW1MPOJ565snFkLGHT4SwzYA6Fb+af3Q79RZ
-         GmT6yaDcyqEYbcx0y3hr+8ltq1d4vPKUyDVdZGMuKsob711VH05kuQZvruWuQZb0bARR
-         wGkg==
+        bh=vgONc26lvm/9ZOmPonAKLBWVK7kvQvvNgc4EWpL/eBk=;
+        b=ILEbnA2vUL2crMhObgktRtlQ9uTPRggheuqN37dsnd8Aqmo0tefjSjNawDDmay1V+p
+         6b+FQ9mN89WwEDh5uedo/1VpoG7KQ3uf0IlWft1xCxyG95ZXc/9kGPAstnicJ6uGbMJt
+         oKje5bQ+5qHnH3JPFBzgHc0x7jyVFzM7EPZCO1nGn0w06cB9ym6MQJzSGterXr/TEx+x
+         fNHu4sRjrxT/9/RgrFyM0uwHv3dsOrWe7ZCWNjZzVcgXTPxyfawv8d/7v3P4m7h8JGSj
+         qO3JzoaAHPu4QJ4bGlkehbpB37tNFu8NhWGpuPGqTmN9g2dbEXvy3+KcyaORin/dhMow
+         jKQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036347; x=1710641147;
+        d=1e100.net; s=20230601; t=1710036349; x=1710641149;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JkunXUX2uPJsD4ImBjWANLyZP2gzb7/4b4n3BxJNzzE=;
-        b=lmDu5kgjFBRqI1CtD1UhbNQNObnWEMmjfpjtpjxd7J9ULzYpgLBlWk/Tht+48REDfP
-         WBMMmqJkoAb5LamV7DAi/K9JhpfVIci/UEPFeiralAKcPJZGm7qnLj3ozmnpaf0QdfGk
-         +vBdWWriNuFBoCnQykE0aRndxkJVD5G7p11IGPb2iO8BlECNj/XYxowxP9h5eRe9mhgw
-         wEAuXddvNcAVW9lai1KxXn9PC7CHYPIFe0d/ewWnQhVxxzTWAJKIN6J1dDb1n7XwR+01
-         XnIrOPMZEXSFplpXIm8LdRUlV7GjY2qN+6nThmAorzol9ksjngcY3JUX3rTu9CWhKa9U
-         mLUg==
-X-Forwarded-Encrypted: i=1; AJvYcCXBykwjPACD+zsLz3oFYEoJnd6bWabT9Lb5y3E/cJkTbtbAqiqD5npHCSSUxofHDn/uEkhR56TKj4LpqTiq4LgSGPkXTw==
-X-Gm-Message-State: AOJu0YxEPyR3BqeAJydaPIC0l1MIsdxninwiXZDkdGyVygz2JdTuChxh
-	vxcH3p60ciMxv6qI7T+hJPYpnBL6VPANBXZ4XGGPlPa7JvFdENytHGXBkMh5YxDJr1KKLROaP4u
-	Y2W76Hg==
-X-Google-Smtp-Source: AGHT+IHC63LoVrlmn41wG0ObqneUHLqshrWIHBHCNg+aleXCyzso595+j1kkp1p9OAmoHd0xeF3N4e9YCjv3
+        bh=vgONc26lvm/9ZOmPonAKLBWVK7kvQvvNgc4EWpL/eBk=;
+        b=fNEptg9eNY/iy7yUhD3EADrkqmc3A92nZw6PXSaOtX+VlVKkjSI1ra6CU9HCPwjcJX
+         0J2IU1Fwhv6ZnoMWmaom8DvIS1Qe2t15aXjAi3Mi5F1VfiD9Vs6PpTOVhH2/2TDP45So
+         aRX0LtujubXNFT/I38YKdqXRAH+aNXRoOQOYZo2cf0Q2HCjOF+JkW+hdXkd3P0LdWi+v
+         eaH2Tr58tQAD4nfCOPp1gsVCCCoNM4PRqdFI54N/KnWHpxT3VmmtpwW9DZTkhaUFEP40
+         7CEErjT9TQ3m12pouHJzdEzUVYuar1MdN74T9nYGT7UuSF6FOwgnEwpzrD2XZfhGtlp6
+         f2Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCVS+N/YP40prJICCSevFhdQCvDytt7VEfyBGqgLYXLTU1bzCkEcDNOSYRsY8K+NGTNeIfU3rRThg3VCGJCbz1iOAt1jeQ==
+X-Gm-Message-State: AOJu0Yzs3/+U+Zi1xjedn3zWzqVmFLQUK4UZ3LVH5LGOBtTmmC/EENl4
+	hp39MxPJft769ioc6Omec3sdpz8NWmii3a2bWrbRGGZ9CEpUE612V5t2LXVQx7BLQHVJFh0/BBD
+	e8OmNWA==
+X-Google-Smtp-Source: AGHT+IEHSaymlJ72bm2wFBwRFlyvHmM501SMsBRHMdMGbeCTQVSAZx2WeXRxeWUBMJJSsrdAYYWs4TJGUV9K
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a81:83d1:0:b0:609:f088:cf9c with SMTP id
- t200-20020a8183d1000000b00609f088cf9cmr962327ywf.1.1710036346612; Sat, 09 Mar
- 2024 18:05:46 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:05:01 -0800
+ (user=irogers job=sendgmr) by 2002:a25:ab6f:0:b0:dcd:3a37:65 with SMTP id
+ u102-20020a25ab6f000000b00dcd3a370065mr144117ybi.7.1710036348960; Sat, 09 Mar
+ 2024 18:05:48 -0800 (PST)
+Date: Sat,  9 Mar 2024 18:05:02 -0800
 In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-7-irogers@google.com>
+Message-Id: <20240310020509.647319-8-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240310020509.647319-1-irogers@google.com>
 X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 06/13] perf debug: Add missing linux/types.h include
+Subject: [PATCH v1 07/13] perf cacheline: Add missing linux/types.h include
 From: Ian Rogers <irogers@google.com>
 To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -93,27 +93,27 @@ To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-u64 is used in this header for eprintf_time and so linux/types.h is
-necessary. Add to avoid compilation errors that aren't currently seen
-due to transitive dependencies.
+u64 is used in this header for cl_address and cl_offset, so
+linux/types.h is necessary. Add to avoid compilation errors that
+aren't currently seen due to transitive dependencies.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/debug.h | 1 +
+ tools/perf/util/cacheline.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/debug.h b/tools/perf/util/debug.h
-index 35a7a5ae762e..4160e633311d 100644
---- a/tools/perf/util/debug.h
-+++ b/tools/perf/util/debug.h
-@@ -7,6 +7,7 @@
- #include <stdbool.h>
- #include <stdio.h>
+diff --git a/tools/perf/util/cacheline.h b/tools/perf/util/cacheline.h
+index fe6d5b60a031..50b77129e1a4 100644
+--- a/tools/perf/util/cacheline.h
++++ b/tools/perf/util/cacheline.h
+@@ -3,6 +3,7 @@
+ #define PERF_CACHELINE_H
+ 
  #include <linux/compiler.h>
 +#include <linux/types.h>
  
- extern int verbose;
- extern int debug_kmaps;
+ int __pure cacheline_size(void);
+ 
 -- 
 2.44.0.278.ge034bb2e1d-goog
 
