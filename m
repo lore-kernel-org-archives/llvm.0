@@ -1,57 +1,57 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F74208C1
-	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6038A2C6A9
+	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036352; cv=none; b=ehxmylTseLhD6gS4wQQ6NqSRs0+CecqWpEJX4f67FYv84gRvN2xn/q0Tozu6WGtz1t8vnfdjkqiwzUmbRjn01C8gH6EGWYSjaETOHuQPO7VSUH09vTHSkCHg7rV3WttV980yVCYD22/umTCgn4yqLo0ZZ0te571dOEWLPwY8wlY=
+	t=1710036354; cv=none; b=G6elUnEsSCC9zvDv3wnOhLCQ41xF1Ch44PFhCOYJucsonk8/cNLkkX96lAh4YCXKvBIUhGeWWDJEycg/nfL3dBhlfRnn9d06DevyqvSWERzTliatwEyFXGRJtWOD2xjyET45kNgbzL2oauGOqYNt3pFKyp7pSV4CALnbwT/mA9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036352; c=relaxed/simple;
-	bh=gXS4/PmUcr/u98E5bD8fZ0t4D/xMUtOLNVIZOZ/mooI=;
+	s=arc-20240116; t=1710036354; c=relaxed/simple;
+	bh=nyI9dgaoU2HMw/TgIDnIDYrLQif8D0L3I6qaHvxp6Ug=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=C2iE2ireC4WgMQ8YQZuNbaxoOMo+TOed2/BDKDq1KThFM8ZZIRaIloCBeILXkuR+R0r37PU/VGYs/Lkh4c/wiIUnXvIrV4TOhQXjvstxOAwNsdyOf3mMG9RaaHs+MxuiUSnAWl1l30oFuCNjP3nT2kZ7ULEOe4bQsDSADOOUVSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ILEbnA2v; arc=none smtp.client-ip=209.85.219.201
+	 To:Content-Type; b=s5T2jCP5y4z3koDbB3DpKXqkfXuh2Bcx0kJAVSbXq65v5xULlilq1GE/7vL8WFJW1bbKjK9Iq6Lut11LIxrNmTUh3vH3Ti/xvkFTxjL5rcNyCH08W8SAkS8MYZ2jdJInWgu+iV+vTWl8vXHNvnv2HWAO3Iv4OG/vQf+gEQbtqYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PJqe+1Dh; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ILEbnA2v"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dced704f17cso5578995276.1
-        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PJqe+1Dh"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-609ea26233dso55972207b3.0
+        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036349; x=1710641149; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1710036351; x=1710641151; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vgONc26lvm/9ZOmPonAKLBWVK7kvQvvNgc4EWpL/eBk=;
-        b=ILEbnA2vUL2crMhObgktRtlQ9uTPRggheuqN37dsnd8Aqmo0tefjSjNawDDmay1V+p
-         6b+FQ9mN89WwEDh5uedo/1VpoG7KQ3uf0IlWft1xCxyG95ZXc/9kGPAstnicJ6uGbMJt
-         oKje5bQ+5qHnH3JPFBzgHc0x7jyVFzM7EPZCO1nGn0w06cB9ym6MQJzSGterXr/TEx+x
-         fNHu4sRjrxT/9/RgrFyM0uwHv3dsOrWe7ZCWNjZzVcgXTPxyfawv8d/7v3P4m7h8JGSj
-         qO3JzoaAHPu4QJ4bGlkehbpB37tNFu8NhWGpuPGqTmN9g2dbEXvy3+KcyaORin/dhMow
-         jKQA==
+        bh=/s3J+Sp6Nwm5vYKq4/rEI+V8C3zBszpK/wcDil3Uhsk=;
+        b=PJqe+1DhJOOMMHYvQQkdZKKRFgPDZUKZN7IF9ezL6QM0Ff0Nl4+HYvClk360vb5oon
+         n5QfGxlqxGFkpKz1foJHhZhKDMmvwuQ2h3CUOzrJP6dI/R3L2cUh6QP5NA5+kOyXmXm7
+         0b+C+5hbC3hv+RfxSwRke4gxoQGKOcuJb/Z15z6dREOMp4+J+cXCUiMjxQYdnuBNca29
+         l+8eRHjx6W1B7D1C8J3egoD+NqzMTeksK+HPOXl5r6BSuY3BCa5DZE6XhS5f68aOJ+RE
+         t429C0l2zq0TSoeWm+3TOQJY3lSaTeZO/+8Ea88k7v92ROE9Rm7+5uaknIChGu7ar/mn
+         1wYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036349; x=1710641149;
+        d=1e100.net; s=20230601; t=1710036351; x=1710641151;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vgONc26lvm/9ZOmPonAKLBWVK7kvQvvNgc4EWpL/eBk=;
-        b=fNEptg9eNY/iy7yUhD3EADrkqmc3A92nZw6PXSaOtX+VlVKkjSI1ra6CU9HCPwjcJX
-         0J2IU1Fwhv6ZnoMWmaom8DvIS1Qe2t15aXjAi3Mi5F1VfiD9Vs6PpTOVhH2/2TDP45So
-         aRX0LtujubXNFT/I38YKdqXRAH+aNXRoOQOYZo2cf0Q2HCjOF+JkW+hdXkd3P0LdWi+v
-         eaH2Tr58tQAD4nfCOPp1gsVCCCoNM4PRqdFI54N/KnWHpxT3VmmtpwW9DZTkhaUFEP40
-         7CEErjT9TQ3m12pouHJzdEzUVYuar1MdN74T9nYGT7UuSF6FOwgnEwpzrD2XZfhGtlp6
-         f2Pw==
-X-Forwarded-Encrypted: i=1; AJvYcCVS+N/YP40prJICCSevFhdQCvDytt7VEfyBGqgLYXLTU1bzCkEcDNOSYRsY8K+NGTNeIfU3rRThg3VCGJCbz1iOAt1jeQ==
-X-Gm-Message-State: AOJu0Yzs3/+U+Zi1xjedn3zWzqVmFLQUK4UZ3LVH5LGOBtTmmC/EENl4
-	hp39MxPJft769ioc6Omec3sdpz8NWmii3a2bWrbRGGZ9CEpUE612V5t2LXVQx7BLQHVJFh0/BBD
-	e8OmNWA==
-X-Google-Smtp-Source: AGHT+IEHSaymlJ72bm2wFBwRFlyvHmM501SMsBRHMdMGbeCTQVSAZx2WeXRxeWUBMJJSsrdAYYWs4TJGUV9K
+        bh=/s3J+Sp6Nwm5vYKq4/rEI+V8C3zBszpK/wcDil3Uhsk=;
+        b=afS9idGQ41lfEKeI5g3XDOQuVy89EYCWtFWVrDRZdQZb+VhJMNRPCp8VBB3SwknUl6
+         Hlv5Xhh+7ywhGpSJTkFSKzwPNVmGedyh0nQlMLrp6w6TGom02yxvlTvND28vSeeQj1WN
+         r/M5d2APqKIRQZ/Ng0ONJciQDQfqKxp4bnkg/ygwzG95IyAGFYXZXJPe2ZCe/UqEjfNd
+         tCxnXHmSrSKrGSEf7VhCBKQ0HJr1N9VWyi+IGlNKhYkccWyFwI5lKHG4g9ELdmLOWNUh
+         5o3ctlE3oAR+TVCpzu33r/Ec4yb3G98W7Kvqsak6QxMFZTWsnDenJJAzA+2iAKwkwtF6
+         aFHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVfPoLEfPlzgFpR8L3iHqH1AWdi8c9/YPbhXE8cmRLKT4WivplmO6unnLkR9g2SS2NrZxJpvbmWvRSmNLcf8tgRChkNw==
+X-Gm-Message-State: AOJu0YwxNtAbbXI1AFfPzdJHXd08/djEpmJUrgXOrPPMzJ2cU6HfPmxk
+	siSl3ii+o5CX3+GKpyieB1Kcrfr67ck0E400QCmZhAzcgrIPR874BJeYsRXBij3k8bHrL67L6gm
+	wCT52VA==
+X-Google-Smtp-Source: AGHT+IHPD3AdhB6c0T/TfiXMF4uI00y32OTKxm5DEXBOiPnGnfJTzAmtckpif5kyd4Qr/BOAcbdh5KWG2LgR
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a25:ab6f:0:b0:dcd:3a37:65 with SMTP id
- u102-20020a25ab6f000000b00dcd3a370065mr144117ybi.7.1710036348960; Sat, 09 Mar
- 2024 18:05:48 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:05:02 -0800
+ (user=irogers job=sendgmr) by 2002:a0d:dd04:0:b0:60a:25ce:c165 with SMTP id
+ g4-20020a0ddd04000000b0060a25cec165mr362319ywe.6.1710036351589; Sat, 09 Mar
+ 2024 18:05:51 -0800 (PST)
+Date: Sat,  9 Mar 2024 18:05:03 -0800
 In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-8-irogers@google.com>
+Message-Id: <20240310020509.647319-9-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240310020509.647319-1-irogers@google.com>
 X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 07/13] perf cacheline: Add missing linux/types.h include
+Subject: [PATCH v1 08/13] perf arm-spe: Add missing linux/types.h include
 From: Ian Rogers <irogers@google.com>
 To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -93,26 +93,69 @@ To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-u64 is used in this header for cl_address and cl_offset, so
-linux/types.h is necessary. Add to avoid compilation errors that
-aren't currently seen due to transitive dependencies.
+u64 is used for various structs in arm-spe-decoder.h, while uint64_t
+is used in arm-spe-pkt-decoder.h. Avoid transitive dependencies
+bringing in linux/types.h and directly depend upon it in
+arm-spe-decoder.h. Fix arm-spe-decoder.c to use uint64_t, as the
+header file does.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/cacheline.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/arm-spe-decoder/arm-spe-decoder.h     | 1 +
+ tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c | 8 ++++----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/cacheline.h b/tools/perf/util/cacheline.h
-index fe6d5b60a031..50b77129e1a4 100644
---- a/tools/perf/util/cacheline.h
-+++ b/tools/perf/util/cacheline.h
-@@ -3,6 +3,7 @@
- #define PERF_CACHELINE_H
- 
- #include <linux/compiler.h>
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+index 1443c28545a9..da5c5816c948 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+@@ -10,6 +10,7 @@
+ #include <stdbool.h>
+ #include <stddef.h>
+ #include <stdint.h>
 +#include <linux/types.h>
  
- int __pure cacheline_size(void);
+ #include "arm-spe-pkt-decoder.h"
+ 
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
+index a454c6737563..e035f49f28ad 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
+@@ -292,7 +292,7 @@ static int arm_spe_pkt_out_string(int *err, char **buf_p, size_t *blen,
+ static int arm_spe_pkt_desc_event(const struct arm_spe_pkt *packet,
+ 				  char *buf, size_t buf_len)
+ {
+-	u64 payload = packet->payload;
++	uint64_t payload = packet->payload;
+ 	int err = 0;
+ 
+ 	arm_spe_pkt_out_string(&err, &buf, &buf_len, "EV");
+@@ -332,7 +332,7 @@ static int arm_spe_pkt_desc_event(const struct arm_spe_pkt *packet,
+ static int arm_spe_pkt_desc_op_type(const struct arm_spe_pkt *packet,
+ 				    char *buf, size_t buf_len)
+ {
+-	u64 payload = packet->payload;
++	uint64_t payload = packet->payload;
+ 	int err = 0;
+ 
+ 	switch (packet->index) {
+@@ -429,7 +429,7 @@ static int arm_spe_pkt_desc_addr(const struct arm_spe_pkt *packet,
+ {
+ 	int ns, el, idx = packet->index;
+ 	int ch, pat;
+-	u64 payload = packet->payload;
++	uint64_t payload = packet->payload;
+ 	int err = 0;
+ 	static const char *idx_name[] = {"PC", "TGT", "VA", "PA", "PBT"};
+ 
+@@ -469,7 +469,7 @@ static int arm_spe_pkt_desc_addr(const struct arm_spe_pkt *packet,
+ static int arm_spe_pkt_desc_counter(const struct arm_spe_pkt *packet,
+ 				    char *buf, size_t buf_len)
+ {
+-	u64 payload = packet->payload;
++	uint64_t payload = packet->payload;
+ 	const char *name = arm_spe_pkt_name(packet->type);
+ 	int err = 0;
  
 -- 
 2.44.0.278.ge034bb2e1d-goog
