@@ -1,57 +1,57 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381FA1C6AD
-	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7983F200C8
+	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036348; cv=none; b=BXgqpwW3ULAI5R9nZrocJuxekHfM1hr2hwdyjVqnwCfF4Nyv/dGYZ8QZAzpf0tyyeICoX9cy54wlpPeixH9Eh0djN9tFxT9CMFHrOMGnDA3rur1A0OwohI26zuR7r0QATfqL7vmpaWXvzjEoutTNChX7ngis2VVRnH5bSO4nVps=
+	t=1710036349; cv=none; b=iibaq9xuECvgjNuMI1aajEtryvlXpAZ4O3e2JtRsXgdQVlMEk4pv+NrUHK7ev9MFM4l07TwzN02qLLNRNG2Z0+McqVPHfq+D3Kq1S/pLaukCvZI+m48+m4XLkNHVgIjyD8z1gvtqZKfmE+O5Ond1+4MbkTLN3KJ0TRgA+GApJqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036348; c=relaxed/simple;
-	bh=6Ap0HyfNfUIjggJWxJHCU3eDXgcXlw9rod9BkywTOBU=;
+	s=arc-20240116; t=1710036349; c=relaxed/simple;
+	bh=I32YjdeuPxEte3yHw53IzkVFz3QD1fvyYmVpmCiJgX0=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=jmg4SAqbLrox/rYJK4dktMM5geA3dVcvsicQSewt0wj7a/5ctTKXnBQK3mv3o+cGddxuy/4twdyFL+jgEIJR5kyBt34SWGfIzF7hM+/RiefiaP0aqjJyC0LywkO21ynKD6so8KoPcQn+0NBFRDGnCUih72xlyAiu7/yL7+iwpPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BEwUfTjS; arc=none smtp.client-ip=209.85.128.201
+	 To:Content-Type; b=VRc4M+7Kod025CgGoUX7XMokkTzKErvlZgJUz5IDdx60A1Yz9gMW9HcPVBWrfw6NtuxB2BEWtS77BghFlR7p/9kHBsVxy8nj/MjkE43NDg0f6WrDfe0EfSTrtH79MusVQrs1lJailoIvxYkgJVJ/GqyZTnh24hRLGN4j6Kr9OZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ivInQJWR; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BEwUfTjS"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-608e4171382so45598967b3.3
-        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ivInQJWR"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60a0151f194so40238097b3.1
+        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036344; x=1710641144; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1710036347; x=1710641147; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LWN/JVLNlztmw39JaEsdXVzONxn2KraPuSeDAn+uvDI=;
-        b=BEwUfTjSzwgnK7T1/Zq7dRWs17M9fvQuh9c7A9DM7u9uN+58G6y41D0FpDpqoMtExW
-         IWgowSRg7BtXVQXrWSagjvCKdo1NVLVJpze53/ouU1u68i82ZSTAqg+4Op7fvBlMITHo
-         oKC7GZX4uBtYyJ1NImpYmzEv+2GmzL8FT9P1/3TG3tC7/ejVqiumeola0E/1MVUh/5Q5
-         PP5Tfk0WHsxyNnv5xrnJDcj4YxlVxhRYGGUwpfWCi/Gzh3EhEgiU/VP89pNTCUIVG8r4
-         hX+FDEG1KkbB74JYWo4dCXBKwI7Gjcgwm1qA7pIjH6Af7dMcJyNViybO8/uPLXev8sP3
-         An/w==
+        bh=JkunXUX2uPJsD4ImBjWANLyZP2gzb7/4b4n3BxJNzzE=;
+        b=ivInQJWRs8e7i4KkOmqvNicykY6s4fGrpnA6WU/WsqQrGmF3jm1gmE5R0Lus3qzfaZ
+         6ghAvQlbKmrb+qXayh2iOK6UdzeMLqYfufJ8/PmScAU3nue6tsYLKTwtr83PlgHU3Wsx
+         hXS4WIFw78TWcjisG9aOQ1GmyngLToQwpGbwv75cbpST87+BVlAq45RUhassGcy1pZ66
+         2vuym2vbXyn/HDoF5QOMceJfrixGo8o2JW1MPOJ565snFkLGHT4SwzYA6Fb+af3Q79RZ
+         GmT6yaDcyqEYbcx0y3hr+8ltq1d4vPKUyDVdZGMuKsob711VH05kuQZvruWuQZb0bARR
+         wGkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036344; x=1710641144;
+        d=1e100.net; s=20230601; t=1710036347; x=1710641147;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LWN/JVLNlztmw39JaEsdXVzONxn2KraPuSeDAn+uvDI=;
-        b=XvkW9DnK7kZyPOcoFt1NPV16B3WJgjmwglxMbAnOmp0YLIWj1C7xgo1QswTkbzSjG6
-         hXvTk+qMzKR3hDxuQ5pCktOJqHoI7EraCCJ7JPB2dxxMuvxBO0c9ACnq9SCDZ89dA3xC
-         EnG1fuY1EQyV61csmw6qPv1rQuBWz0G+9LL8j2VDpA4vWH1F6JK4N3WI9NPrtSMCE4nq
-         IZGEB/qi2dqHR/7w7si7PQOlCn6ANmB6qG+UwJ+lMbWdNu4O19y+fcwdA/BVWNGkhLqc
-         DkfjiL7f7UGmKET3gGxjHF8qZUJ+PzefJaAyA33xC5SHqngdCDGwMjHB4tAB6OtAapU+
-         T4Rg==
-X-Forwarded-Encrypted: i=1; AJvYcCV1ktW+6kOuWCwRxH3qydqgWp/YMpyLtsvVWTivobRkrcU6yCMnvAQeiQH1Bk0TxbjncZ2TiF1zIvTUdqpQvhucwHvajw==
-X-Gm-Message-State: AOJu0Yx9a4Xg/HdEgr9RbmNAWf2dV2qcnKpLTXfXf/n6Zu91nwKghKO8
-	2CvHNhOCNh2Jxk5pR7OE6QXXHpq7Ys7m7x6RP5CvBbGFGyDhGx9dmi80UQnh4kjow94TGydV0p8
-	BgsPRbQ==
-X-Google-Smtp-Source: AGHT+IGdHS2QsdL4lo4wwM/5ksoTAkI5r0dtMhbFMCM7lkSFe3H0TlXafv3xzq/LQr021fLnWjD7VJ9M/wIG
+        bh=JkunXUX2uPJsD4ImBjWANLyZP2gzb7/4b4n3BxJNzzE=;
+        b=lmDu5kgjFBRqI1CtD1UhbNQNObnWEMmjfpjtpjxd7J9ULzYpgLBlWk/Tht+48REDfP
+         WBMMmqJkoAb5LamV7DAi/K9JhpfVIci/UEPFeiralAKcPJZGm7qnLj3ozmnpaf0QdfGk
+         +vBdWWriNuFBoCnQykE0aRndxkJVD5G7p11IGPb2iO8BlECNj/XYxowxP9h5eRe9mhgw
+         wEAuXddvNcAVW9lai1KxXn9PC7CHYPIFe0d/ewWnQhVxxzTWAJKIN6J1dDb1n7XwR+01
+         XnIrOPMZEXSFplpXIm8LdRUlV7GjY2qN+6nThmAorzol9ksjngcY3JUX3rTu9CWhKa9U
+         mLUg==
+X-Forwarded-Encrypted: i=1; AJvYcCXBykwjPACD+zsLz3oFYEoJnd6bWabT9Lb5y3E/cJkTbtbAqiqD5npHCSSUxofHDn/uEkhR56TKj4LpqTiq4LgSGPkXTw==
+X-Gm-Message-State: AOJu0YxEPyR3BqeAJydaPIC0l1MIsdxninwiXZDkdGyVygz2JdTuChxh
+	vxcH3p60ciMxv6qI7T+hJPYpnBL6VPANBXZ4XGGPlPa7JvFdENytHGXBkMh5YxDJr1KKLROaP4u
+	Y2W76Hg==
+X-Google-Smtp-Source: AGHT+IHC63LoVrlmn41wG0ObqneUHLqshrWIHBHCNg+aleXCyzso595+j1kkp1p9OAmoHd0xeF3N4e9YCjv3
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a81:a04e:0:b0:5e6:1e40:e2e3 with SMTP id
- x75-20020a81a04e000000b005e61e40e2e3mr729292ywg.5.1710036344368; Sat, 09 Mar
- 2024 18:05:44 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:05:00 -0800
+ (user=irogers job=sendgmr) by 2002:a81:83d1:0:b0:609:f088:cf9c with SMTP id
+ t200-20020a8183d1000000b00609f088cf9cmr962327ywf.1.1710036346612; Sat, 09 Mar
+ 2024 18:05:46 -0800 (PST)
+Date: Sat,  9 Mar 2024 18:05:01 -0800
 In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-6-irogers@google.com>
+Message-Id: <20240310020509.647319-7-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240310020509.647319-1-irogers@google.com>
 X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 05/13] perf expr: Tidy up header guard
+Subject: [PATCH v1 06/13] perf debug: Add missing linux/types.h include
 From: Ian Rogers <irogers@google.com>
 To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -93,33 +93,27 @@ To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Make the header guard reflect the name of the file and add a comment
-to the terminating endif.
+u64 is used in this header for eprintf_time and so linux/types.h is
+necessary. Add to avoid compilation errors that aren't currently seen
+due to transitive dependencies.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/expr.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/util/debug.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/expr.h b/tools/perf/util/expr.h
-index d4166b3eb654..cd53ee7989fd 100644
---- a/tools/perf/util/expr.h
-+++ b/tools/perf/util/expr.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef PARSE_CTX_H
--#define PARSE_CTX_H 1
-+#ifndef __PERF_EXPR_H
-+#define __PERF_EXPR_H 1
- 
+diff --git a/tools/perf/util/debug.h b/tools/perf/util/debug.h
+index 35a7a5ae762e..4160e633311d 100644
+--- a/tools/perf/util/debug.h
++++ b/tools/perf/util/debug.h
+@@ -7,6 +7,7 @@
  #include <stdbool.h>
+ #include <stdio.h>
+ #include <linux/compiler.h>
++#include <linux/types.h>
  
-@@ -59,4 +59,4 @@ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx
- double expr__has_event(const struct expr_parse_ctx *ctx, bool compute_ids, const char *id);
- double expr__strcmp_cpuid_str(const struct expr_parse_ctx *ctx, bool compute_ids, const char *id);
- 
--#endif
-+#endif /* __PERF_EXPR_H */
+ extern int verbose;
+ extern int debug_kmaps;
 -- 
 2.44.0.278.ge034bb2e1d-goog
 
