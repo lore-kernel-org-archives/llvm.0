@@ -1,57 +1,57 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E40BC150
-	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EE1FC0F
+	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036342; cv=none; b=iwEgbXMh21iQ8RD48v2rlSv0QvVUpsx8vm4w0pScVI6jKFcx1l1rRxOjgm6Dyy7iDGfQJHx7rcwbfRlXCBeLUAu4NjjE3LreTy/yN1U5Ks9ZqkXOOhLQEQ0Uy2C8Bdz6vbUXzPHHI8gWZszLyEK9UiibeV+pZe4ZOr8TlzuhSfo=
+	t=1710036344; cv=none; b=OT8ewoBwaVStpAtL4HceaTQq93/drhdytA1/WStZvPAJI2kSjwfA6ehlLdB+eIacdWcos83UO41o0gZ+2Ust9NjHIaryVrK8Dl7dI22W12FJbcVmm/3uecglpq7bZ7Uf75ZRNDIRYXxXP5SPTpl0URVGEdbV2zPXOHbx9fHwqck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036342; c=relaxed/simple;
-	bh=RGHR+QiLceocR0H7Go2J+IFsQikYIqGpUdA5u3bRq6I=;
+	s=arc-20240116; t=1710036344; c=relaxed/simple;
+	bh=xr9hx9bRTXredcOnZvT9aTZmO8EItvyRPuWwawu0cX0=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=ewEwTIGjWawV8bpfINtTvhJpi6JS3Lf7aMl/xTbsWBmQJGa774zYY+c3Gxy5WYeIEWOk8nzoL+K+bOO9vWpeVoOhZ4u1cLBBiSpPv5XrecSCmQ0ueyv/9pzseYcU6L95U2F5nxF8SFWxZ46PW5Y/pfJCAe+7H+Lgi2UGSRn8dic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qKR/5PgV; arc=none smtp.client-ip=209.85.128.202
+	 To:Content-Type; b=Y0LCT7BFOxOZR5P/oa97ZVbmu1c4kh79XFExGeE+JRtJYkZIAxlhp11qv8N5OqDXi2DsODkgyexK75WJ+4qPDRhR8mc5CqnWHydLW16af0O72XeVULDTy9+ifoKYso8DX/eaCteYfJ/Hz6xzuVc4cv8HAmhozkG/AaeMB24reb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S39n+xc4; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qKR/5PgV"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60a20c33f06so4760807b3.2
-        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S39n+xc4"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60a0151f194so40237237b3.1
+        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:05:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036339; x=1710641139; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1710036342; x=1710641142; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lEogdjVExxayJMRv1u0mjZw+1C1F2zoHt9ebGCOCyUE=;
-        b=qKR/5PgVfae5s6C/HC5zp0kanv3Ul6HGIE9Aadat8gwlQhHVanNXSBq7v2VogHl3Ij
-         VtUATYKJhm0xTQ+wYbNippbpgVgHMJDaduDiaqD6WD6RoeAx34HSG+wuvqjcN7aJtpow
-         +/3EWwHotzOv/uApKCiQ/ws6DhIZLZ5iU+C2ewk5A5w+kYnr2JwvAkS5Hd6yVBDgFilH
-         nxqZTtDVdyeh63ZWPMvR53bdvg3QZwH87qTDHuYUv0EI4IrpOxF4OBrN04gX+ZY8p/tK
-         v6MEa8SrXAwFsdU4oV9x67YEIrSSehhDwr7te4KRVc+pkZmRjYCIuEh8CuCnMS8+oUc3
-         cDig==
+        bh=4OaMyUQu371uaOuekdLYCxktVf9TU0U4kdxUUW/XeAo=;
+        b=S39n+xc4T+dUuiL+35dROMxfQIrnQT1kYTDyjFYJTXMF09JhVSmb7f47ptKpXup+k1
+         vOnEaL7H9hOYpHq+TJsRFzuNOpII4V/Phpp1hFzcn/kogp5yta+DV87mJ+1f5UL3xoQy
+         cWGueBqC0qGI56KpnMkLSPhj5PQa5c/NedBKBtCFp4U8qXSw+ZJ+GGGmfCPFCOBHd7QV
+         6GSdMEclUXuUXyTFgOzXKpw4O+CF7FEokDeahpGL0ARASs4JwRVxvRpeVLeNleC8fW/Q
+         zSJN/+uQNUgI74deyjsO/3KnO5xJtyliRw4HAiKZWYi6ca5cn3xdbpBtio9WAY806myn
+         0BQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036339; x=1710641139;
+        d=1e100.net; s=20230601; t=1710036342; x=1710641142;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lEogdjVExxayJMRv1u0mjZw+1C1F2zoHt9ebGCOCyUE=;
-        b=ZGSz4m2aleUbvuGixBTnhoVrwDZ5Jl55UzzDVcgC1j/a2ljGGRH//J6mQCXV+sc3vw
-         LwYCPOLc/YO3FBd8yS0FvgEXU1UfBKckWqO7gnJ+4YcQ19FMv+2dv6BD75L3gIZ6aHjE
-         kuA65km8dhrDyrH2tiQYBS0RJscv12AbZ67RMacTBEWL8/8ABD620OF5jPI3wy0rWoWo
-         +ahywh475i6fq85YDkf2jF0PTj8xZ3oReqjP/fuhCoBxITQruUoXFbHYb8bk5npWQEab
-         pZ5ozClC+GAS/Iq/WlpvGYcD7da1/iHa+46zQx0pXZQrcnKnRf0KnuSfHsTpnUQBKpFK
-         9YOg==
-X-Forwarded-Encrypted: i=1; AJvYcCX76ytCyN4gBlL0UdUDi88pIg3UdryYezzmGkpFPwb9nkxhlmIRzJWmsmdDpaI7zJ02m2IjW4odzxKbNE1/HUWGfZvNsA==
-X-Gm-Message-State: AOJu0YzgsjvGUWOnaB4y7CRshco7o9xs8ZUBY2XiqQb8J8o4zzrL+hLp
-	rajn5BGT7DQo0KrBU+s/G5snx23yIOZeLx0QIm+FPECfeZT5OpwKOxSD83QNJnJ900ykNO7Iv7s
-	S+/oe3g==
-X-Google-Smtp-Source: AGHT+IEyM3cHgr9ZVgnZoKCZ0SYCN/4S3200GAqNBDyFBPz9iTsTIsAdJdgR5M7Dk98A1ko/gir8jVGY1z12
+        bh=4OaMyUQu371uaOuekdLYCxktVf9TU0U4kdxUUW/XeAo=;
+        b=fzWsMrca+rRGNvxxC3U891bRx44a3KjOVmR/5r3WbLxAk2Sbi+aSzNoiaTyYBqLuXu
+         eHCz/pIOWA02xwE0Y9fZVG//Sz9faAS85fB16UslZdsRQ4GJt6FHBC8T4KeegLcX0KII
+         aPhHrKCTINNG1h67e0s95uj/EQqekOs7qp9vj1x3I/wyx+bDpTQUiW8YIYCHOJ2usGit
+         6SRnAaXZZL4kK2Ywy4zY66WkmqKrTq+llQibv8s/QNZ46tlfiJrahtXHa1ECmEZlGLd3
+         Cil++6KWpHh/Lzp0jsMnHRskMuJHqPHRm0qgYwzu4sjG4FntZBl3VO1UfDJ0agcWiqes
+         TiQw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5QgdJyQ8sDzfAhzBoTjrqU6gfS9In+oFMquiftfthJ//6eDLl0dxF9vX6TPGH2vD2OGUDPPBbhyL3cL0DypKw3Qk5vw==
+X-Gm-Message-State: AOJu0YzgJG7WNqfrrMHpCFObSZwFEnSVySkHNiQLeExw/p3/MW+BVEb6
+	P0QSHHWNn1AZpwz3WTYoRcFFUPFJcBq6JshFD7PBh/cUORUzkWWw7mZ6LJWdI3eV6I3Jv2sLUFi
+	oVFev9w==
+X-Google-Smtp-Source: AGHT+IGxAKGLHfU5lr4cLxfntoHY/lII821Bv6GcWrrnRg5nZbXZHQCblMErp4nOuwdOu0LpnsGeX3qwWfLp
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a0d:e84c:0:b0:609:d325:5826 with SMTP id
- r73-20020a0de84c000000b00609d3255826mr678752ywe.7.1710036339213; Sat, 09 Mar
- 2024 18:05:39 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:04:58 -0800
+ (user=irogers job=sendgmr) by 2002:a05:6902:1889:b0:dc6:dfc6:4207 with SMTP
+ id cj9-20020a056902188900b00dc6dfc64207mr903918ybb.10.1710036341778; Sat, 09
+ Mar 2024 18:05:41 -0800 (PST)
+Date: Sat,  9 Mar 2024 18:04:59 -0800
 In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-4-irogers@google.com>
+Message-Id: <20240310020509.647319-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240310020509.647319-1-irogers@google.com>
 X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 03/13] libperf xyarray: Use correct stddef.h include
+Subject: [PATCH v1 04/13] perf expr: Add missing stdbool.h include
 From: Ian Rogers <irogers@google.com>
 To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -93,27 +93,28 @@ To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-sys/types.h may not define both NULL and size_t used in this
-file. Change the dependency to the correct stddef.h one.
+bool is used in this header and so stdbool.h is necessary. Add to
+avoid compilation errors that aren't currently seen due to transitive
+dependencies.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/include/internal/xyarray.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/expr.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/lib/perf/include/internal/xyarray.h b/tools/lib/perf/include/internal/xyarray.h
-index f10af3da7b21..947804fb8c85 100644
---- a/tools/lib/perf/include/internal/xyarray.h
-+++ b/tools/lib/perf/include/internal/xyarray.h
-@@ -3,7 +3,7 @@
- #define __LIBPERF_INTERNAL_XYARRAY_H
+diff --git a/tools/perf/util/expr.h b/tools/perf/util/expr.h
+index c0cec29ddc29..d4166b3eb654 100644
+--- a/tools/perf/util/expr.h
++++ b/tools/perf/util/expr.h
+@@ -2,6 +2,8 @@
+ #ifndef PARSE_CTX_H
+ #define PARSE_CTX_H 1
  
- #include <linux/compiler.h>
--#include <sys/types.h>
-+#include <stddef.h>
++#include <stdbool.h>
++
+ struct hashmap;
+ struct metric_ref;
  
- struct xyarray {
- 	size_t row_size;
 -- 
 2.44.0.278.ge034bb2e1d-goog
 
