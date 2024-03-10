@@ -1,319 +1,195 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FDA3A8F3
-	for <llvm@lists.linux.dev>; Sun, 10 Mar 2024 02:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C1817F6;
+	Sun, 10 Mar 2024 04:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710036368; cv=none; b=aLIwuOa9JoFGl58KEK6OsAqpehkuIJGkdrpg+berxUjqN/Z3mMOF5j6T0saxETJ2iGR/4M3WwDLnFc7Vm4xWmG8vJ9mxmTGk6K6jkl7mnF/1vOLlgydAfInzoLgQJIo6u60rjBQowjuw6AzRX4lVKFIse6Q+11Bm5nHLJwGMoM4=
+	t=1710045180; cv=none; b=VXCr29qXx4yRydtfiToPs7E9d5lZgY61i2hH1YmUYnN/2THJ8/Fr/TPnyB35dXm69R9tQ1/UbI9Nwn1Sq13Qxnd/mdjX7fOuHTJsh2ah5Eac6SYB5+ZutdeJiX69Ucx6prblbye8WNfcSfZxk6Zp2sDBDwC0Jk96EyTidy/sq28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710036368; c=relaxed/simple;
-	bh=qvu80I2tuIwczv3ewDN5Kf8bkfHfC9IP72lON4Zzmek=;
-	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Cc:Content-Type; b=cTJtAJUokLnlVSnb+DDBhyLuyO3ZC5IBuD/j7cXva6tpFKTg7PdVOwz4ByZo4UUlSGgeKaI0/A2bXQ1v9Jx9AhuTf4Q8wgE1prlBfqHS261JkKdrMvzPMx1g70PQSBcI+eJcHpUjxMaL+ZGJbArabHV3oTe5497JP7nPjir6fxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Sqv56wnK; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1710045180; c=relaxed/simple;
+	bh=MxMzs3gIoduqB+ybuEcZEvsE+ovO/hQQW+HW50OwvdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=itjRSHA9N58G2XCS4SCBqJ4dySLuP9lBwrL4JXgrB/qNSEZadMPUOh5TRvFdJvgYqKYN+tXHT2YuP+u6qQZF2/sDSuiNiLmlQP/fei5kQ9823/n7UyUm0X8ha5YcN6doMZ2H35sWdAXMsIt3Drwr3Kq+aChBw770VU1KzjYyT+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WKftb+iA; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Sqv56wnK"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc693399655so6232150276.1
-        for <llvm@lists.linux.dev>; Sat, 09 Mar 2024 18:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710036365; x=1710641165; darn=lists.linux.dev;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z2TI3BR52BOETJMkXQVYiCvqxjFYb61EnnuV6r2EGgU=;
-        b=Sqv56wnKC1DIssJmgu8aLvSLca7jzu1RD06pai5VftaZKKxLCnBkUw5FhlcemiO2YW
-         X0zkLtp+YZheuY9t9aOTb1+ZRM71EgY50Tb0WkIFLJ0KbNN6PrvHY6PEA60zNnU0YAO7
-         QtAkowKBKUojprcr38X0p2da9VNcAolblOkCEAOYLZfYdLE0lVpVrm47HL37eABenk8U
-         6dE8zvlYJSPRRjwsJnw30VBQRt/EAa51LNKNR9jB/Bzp5i0HCmUTNrJw0cxPlVbANhSE
-         UNXb4OH3QQd2KIuxQsjqiRokxWnnOYWSIxK9x3e4erz9mewTh3bKTh1GTOxTRKcxYtsy
-         yF+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710036365; x=1710641165;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z2TI3BR52BOETJMkXQVYiCvqxjFYb61EnnuV6r2EGgU=;
-        b=Hf5nCJzeqaPSK9I571/7+5Nf7j+9zxgqF+V2bKAgdZspoATi0mITLjb1UfSDoffEWa
-         YU1W2KiqGdMo6vvPiPvyMdiwee+Mg5p7kKlgqoXcTbx1OZdpoXNVptUc5PeGYIE8Kv8W
-         eA/j6mbcBl/yrKKMSBU3XOpbT/oL3PpXanunptGtdfXXIIYv7c68yVPEto5nw6lE2P9b
-         434HXo/L6oLosJjoq0kUZBssZ5PhNgZT4celxYiYPrrfdHtN62KAkKdDNKc4AK8c0weN
-         bvtnniUOE9qAaGG46KvQZSpaqTa+PIP8flbnBDppE3/a4yFjVvl65eR41FWvC7ynV3V1
-         DN0A==
-X-Forwarded-Encrypted: i=1; AJvYcCVpPvfsTWdMyjpF1tIAnEUcDpz5T2j7nTlh0sZA9y76PFBPR7MUxicDLTUKQ2LeQgdgx61efNt9Srt55/EkzBO5K6bPig==
-X-Gm-Message-State: AOJu0Yzhvjd/WArFSk3MPaa8fK1yoSTsLGuUUM5V02hFteXapAh/N6IE
-	vAM8glCo0voFFQzYZJM1wP+45U3Y5eG8+4FnEXpuOaMX6wLUM7wdteHGK65eOsjqCHLyYK7kUwv
-	DPzOsIg==
-X-Google-Smtp-Source: AGHT+IHg84e8jFIAgnoZrRiN8Pu+L19uE2B6rig+tSx4eREFwobOlwuHge4FvzAmOSQKYE9pLZGbcXyYmOgE
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a63d:1b65:e810:3ad3])
- (user=irogers job=sendgmr) by 2002:a05:6902:18c9:b0:dc6:fec4:1c26 with SMTP
- id ck9-20020a05690218c900b00dc6fec41c26mr897542ybb.1.1710036365375; Sat, 09
- Mar 2024 18:06:05 -0800 (PST)
-Date: Sat,  9 Mar 2024 18:05:08 -0800
-In-Reply-To: <20240310020509.647319-1-irogers@google.com>
-Message-Id: <20240310020509.647319-14-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WKftb+iA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710045179; x=1741581179;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MxMzs3gIoduqB+ybuEcZEvsE+ovO/hQQW+HW50OwvdE=;
+  b=WKftb+iAgRq4qinyVofUy5F8SOJYo4St2IdrnhCdpf56XKRtigrcUs8D
+   bjxNNBMqIvp/zrqqDabXdJ9XPZDVjKg9rLZtDvn667Ymc+AvSMngNtZ1I
+   87z/wwGB5feVJUnpW08NCXwUEoFb9jwT79z5GVM0pHbNgjtHHYVfHfY8z
+   4C7gmHf6KC2cIoijaxVGOJHgNb4A1tSWeENX5xXMyoxxVn0R+QizZHIy0
+   zQ5IBUO6ckXiWTpOmaGA2oQDU6OI5w3fjHtOE2aH7ZZSC/8Pi4QKhty0l
+   wpep+muOiQCEeL0nor5ax5LnoEEHyel3gA8RsVQkiluGYgjQeT+M8hu1y
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11008"; a="4654532"
+X-IronPort-AV: E=Sophos;i="6.07,113,1708416000"; 
+   d="scan'208";a="4654532"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2024 20:32:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,113,1708416000"; 
+   d="scan'208";a="15338519"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 09 Mar 2024 20:32:52 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rjArh-0007up-33;
+	Sun, 10 Mar 2024 04:32:49 +0000
+Date: Sun, 10 Mar 2024 12:32:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/session_data 44/48] kernel/trace/bpf_trace.c:3551:5:
+ warning: 'CONFIG_FPROBE' is not defined, evaluates to 0
+Message-ID: <202403101235.eTOM4gMc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20240310020509.647319-1-irogers@google.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH v1 13/13] tools headers: Rename noinline to __noinline
-From: Ian Rogers <irogers@google.com>
-To: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	David Laight <David.Laight@ACULAB.COM>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
-	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
-	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
-	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
-	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
-	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Christopher Di Bella <cjdb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-An issue was reported with clang and llvm libc where the noinline
-attribute [1] was being expanded due to the #define in
-linux/compiler.h (now in compiler_attributes.h). The expansion caused
-the __attribute__ to appear twice and break the build. To avoid this
-conflict, rename noinline to __noinline which is more consistent with
-other compiler attributes.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/session_data
+head:   2de3435b691fe601ea42cb119ba482bd6762d173
+commit: 0e436b2093a4fbc9f843e2ce395344d748f5ff20 [44/48] bpf: Add bpf_wrapper_is_return kfunc for multi uprobe
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240310/202403101235.eTOM4gMc-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240310/202403101235.eTOM4gMc-lkp@intel.com/reproduce)
 
-[1] https://clang.llvm.org/docs/AttributeReference.html#noinline
-Reported-by: Christopher Di Bella <cjdb@google.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403101235.eTOM4gMc-lkp@intel.com/
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/include/linux/compiler_attributes.h |  4 ++--
- tools/perf/arch/x86/tests/bp-modify.c     |  4 ++--
- tools/perf/bench/find-bit-bench.c         |  2 +-
- tools/perf/tests/bp_account.c             |  2 +-
- tools/perf/tests/bp_signal.c              |  2 +-
- tools/perf/tests/bp_signal_overflow.c     |  2 +-
- tools/perf/tests/dwarf-unwind.c           | 12 ++++++------
- tools/perf/tests/workloads/leafloop.c     |  8 ++++----
- tools/perf/tests/workloads/thloop.c       |  4 ++--
- 9 files changed, 20 insertions(+), 20 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/tools/include/linux/compiler_attributes.h b/tools/include/linux/compiler_attributes.h
-index 9bfaec783e48..1ff3d85f5af3 100644
---- a/tools/include/linux/compiler_attributes.h
-+++ b/tools/include/linux/compiler_attributes.h
-@@ -267,12 +267,12 @@
- # define __flatten			__attribute__((flatten))
- 
- /*
-- * Note the missing underscores.
-+ * Note, the kernel version is missing the underscores.
-  *
-  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noinline-function-attribute
-  * clang: mentioned
-  */
--#define   noinline                      __attribute__((__noinline__))
-+#define   __noinline                      __attribute__((__noinline__))
- 
- /*
-  * Optional: only supported since gcc >= 8
-diff --git a/tools/perf/arch/x86/tests/bp-modify.c b/tools/perf/arch/x86/tests/bp-modify.c
-index 0924ccd9e36d..65493ff7a76f 100644
---- a/tools/perf/arch/x86/tests/bp-modify.c
-+++ b/tools/perf/arch/x86/tests/bp-modify.c
-@@ -15,13 +15,13 @@
- #include "tests/tests.h"
- #include "arch-tests.h"
- 
--static noinline int bp_1(void)
-+static __noinline int bp_1(void)
- {
- 	pr_debug("in %s\n", __func__);
- 	return 0;
- }
- 
--static noinline int bp_2(void)
-+static __noinline int bp_2(void)
- {
- 	pr_debug("in %s\n", __func__);
- 	return 0;
-diff --git a/tools/perf/bench/find-bit-bench.c b/tools/perf/bench/find-bit-bench.c
-index 7e25b0e413f6..dd97a51649bc 100644
---- a/tools/perf/bench/find-bit-bench.c
-+++ b/tools/perf/bench/find-bit-bench.c
-@@ -31,7 +31,7 @@ static const char *const bench_usage[] = {
- static unsigned int accumulator;
- static unsigned int use_of_val;
- 
--static noinline void workload(int val)
-+static __noinline void workload(int val)
- {
- 	use_of_val += val;
- 	accumulator++;
-diff --git a/tools/perf/tests/bp_account.c b/tools/perf/tests/bp_account.c
-index 6f921db33cf9..459f61752a71 100644
---- a/tools/perf/tests/bp_account.c
-+++ b/tools/perf/tests/bp_account.c
-@@ -34,7 +34,7 @@
- 
- static volatile long the_var;
- 
--static noinline int test_function(void)
-+static __noinline int test_function(void)
- {
- 	return 0;
- }
-diff --git a/tools/perf/tests/bp_signal.c b/tools/perf/tests/bp_signal.c
-index 1f2908f02389..484a7e7f96ee 100644
---- a/tools/perf/tests/bp_signal.c
-+++ b/tools/perf/tests/bp_signal.c
-@@ -59,7 +59,7 @@ static void __test_function(volatile long *ptr)
- }
- #endif
- 
--static noinline int test_function(void)
-+static __noinline int test_function(void)
- {
- 	__test_function(&the_var);
- 	the_var++;
-diff --git a/tools/perf/tests/bp_signal_overflow.c b/tools/perf/tests/bp_signal_overflow.c
-index 4e897c2cf26b..9436bf2973f8 100644
---- a/tools/perf/tests/bp_signal_overflow.c
-+++ b/tools/perf/tests/bp_signal_overflow.c
-@@ -30,7 +30,7 @@
- 
- static int overflows;
- 
--static noinline int test_function(void)
-+static __noinline int test_function(void)
- {
- 	return time(NULL);
- }
-diff --git a/tools/perf/tests/dwarf-unwind.c b/tools/perf/tests/dwarf-unwind.c
-index d01aa931fe81..a669c69a9242 100644
---- a/tools/perf/tests/dwarf-unwind.c
-+++ b/tools/perf/tests/dwarf-unwind.c
-@@ -109,7 +109,7 @@ static int unwind_entry(struct unwind_entry *entry, void *arg)
- 	return strcmp((const char *) symbol, funcs[idx]);
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__thread(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__thread(struct thread *thread)
- {
- 	struct perf_sample sample;
- 	unsigned long cnt = 0;
-@@ -140,7 +140,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__thread(struct thread *thr
- 
- static int global_unwind_retval = -INT_MAX;
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__compare(void *p1, void *p2)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__compare(void *p1, void *p2)
- {
- 	/* Any possible value should be 'thread' */
- 	struct thread *thread = *(struct thread **)p1;
-@@ -159,7 +159,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__compare(void *p1, void *p
- 	return p1 - p2;
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_3(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__krava_3(struct thread *thread)
- {
- 	struct thread *array[2] = {thread, thread};
- 	void *fp = &bsearch;
-@@ -178,7 +178,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_3(struct thread *th
- 	return global_unwind_retval;
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_2(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__krava_2(struct thread *thread)
- {
- 	int ret;
- 
-@@ -187,7 +187,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_2(struct thread *th
- 	return ret;
- }
- 
--NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_1(struct thread *thread)
-+NO_TAIL_CALL_ATTRIBUTE __noinline int test_dwarf_unwind__krava_1(struct thread *thread)
- {
- 	int ret;
- 
-@@ -196,7 +196,7 @@ NO_TAIL_CALL_ATTRIBUTE noinline int test_dwarf_unwind__krava_1(struct thread *th
- 	return ret;
- }
- 
--noinline int test__dwarf_unwind(struct test_suite *test __maybe_unused,
-+__noinline int test__dwarf_unwind(struct test_suite *test __maybe_unused,
- 				int subtest __maybe_unused)
- {
- 	struct machine *machine;
-diff --git a/tools/perf/tests/workloads/leafloop.c b/tools/perf/tests/workloads/leafloop.c
-index 1bf5cc97649b..89d2cec2f461 100644
---- a/tools/perf/tests/workloads/leafloop.c
-+++ b/tools/perf/tests/workloads/leafloop.c
-@@ -4,18 +4,18 @@
- #include "../tests.h"
- 
- /* We want to check these symbols in perf script */
--noinline void leaf(volatile int b);
--noinline void parent(volatile int b);
-+__noinline void leaf(volatile int b);
-+__noinline void parent(volatile int b);
- 
- static volatile int a;
- 
--noinline void leaf(volatile int b)
-+__noinline void leaf(volatile int b)
- {
- 	for (;;)
- 		a += b;
- }
- 
--noinline void parent(volatile int b)
-+__noinline void parent(volatile int b)
- {
- 	leaf(b);
- }
-diff --git a/tools/perf/tests/workloads/thloop.c b/tools/perf/tests/workloads/thloop.c
-index 457b29f91c3e..e252efb76203 100644
---- a/tools/perf/tests/workloads/thloop.c
-+++ b/tools/perf/tests/workloads/thloop.c
-@@ -9,14 +9,14 @@
- static volatile sig_atomic_t done;
- 
- /* We want to check this symbol in perf report */
--noinline void test_loop(void);
-+__noinline void test_loop(void);
- 
- static void sighandler(int sig __maybe_unused)
- {
- 	done = 1;
- }
- 
--noinline void test_loop(void)
-+__noinline void test_loop(void)
- {
- 	while (!done);
- }
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from kernel/trace/bpf_trace.c:9:
+   In file included from include/linux/bpf_verifier.h:9:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from kernel/trace/bpf_trace.c:9:
+   In file included from include/linux/bpf_verifier.h:9:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   kernel/trace/bpf_trace.c:357:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     357 |         .arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:403:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     403 |         .arg1_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:458:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     458 |         .arg1_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:460:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     460 |         .arg3_type      = ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   kernel/trace/bpf_trace.c:502:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     502 |         .arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:504:35: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     504 |         .arg4_type      = ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   kernel/trace/bpf_trace.c:519:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     519 |         .arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:543:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     543 |         .arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:707:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     707 |         .arg4_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:1033:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+    1033 |         .arg3_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:1716:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+    1716 |         .arg4_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:1941:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+    1941 |         .arg4_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+   kernel/trace/bpf_trace.c:1996:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+    1996 |         .arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
+>> kernel/trace/bpf_trace.c:3551:5: warning: 'CONFIG_FPROBE' is not defined, evaluates to 0 [-Wundef]
+    3551 | #if CONFIG_FPROBE || CONFIG_UPROBES
+         |     ^
+   51 warnings generated.
+--
+>> kernel/trace/bpf_trace.c:3551:5: warning: 'CONFIG_FPROBE' is not defined, evaluates to 0 [-Wundef]
+    3551 | #if CONFIG_FPROBE || CONFIG_UPROBES
+         |     ^
+   1 warning generated.
+
+
+vim +/CONFIG_FPROBE +3551 kernel/trace/bpf_trace.c
+
+  3550	
+> 3551	#if CONFIG_FPROBE || CONFIG_UPROBES
+  3552	__bpf_kfunc_start_defs();
+  3553	
+
 -- 
-2.44.0.278.ge034bb2e1d-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
