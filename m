@@ -1,148 +1,167 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBAF4C631
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 17:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A731B5465B
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 18:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710179685; cv=none; b=XXbzWR8TH3fmgb0HS4kiOFK7cGQV0PqcvYQiVMhwETJjCFdzNQnHYokFrHzl4eYZr034DJB1WT/iR7R6WLUJGmWiuYVoWbOl3AsekQOv5iQbei0RItKcU2Nte2pjP0dxjRs79qaDkHLKoprCzpMe4iYTyQdK1+m4fboClbIHLUA=
+	t=1710183287; cv=none; b=Xrh38alalEc709JVXw5hL9P/grnJU1hINoDw0/SjLx3FSLe/jK2kC+7JK5xj8QM8NlJ/jcHhL1kkaY3pWRuJ6yyRDsQPjFbKXZ1T6jqF+a683xJTSspMbjvKRFU/vtLAV/Gg3t/cV+slq/JrfiJdq1n3kQfc4G+4RIquWO/V1kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710179685; c=relaxed/simple;
-	bh=BQzSLPqPmRNY3f4OGi1qZV6xc7n2Vd7CQK7C55WEBNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zyt2gakVHMO0TSUXB7WHbSppd4Mt9hJG5vjQMitYek6VHBI2JyfBY5GEPRQNvNwCNlMsFD5XJ3h3b5/3tw8P5t5s/m/aN/2acEc/8VhroGo9EEo73ZRYhiNaynQdp/BRHMY/w8sOX9eB64dts9AB/GaoSx+7+CfE2Xep7y3WIDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=a+iMSDGM; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vVairj1w; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=a+iMSDGM; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vVairj1w; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1710183287; c=relaxed/simple;
+	bh=sg1d/ANVhdMJVWpfU8bbvkMp+uD3nzj9x9rv9aGU7ss=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Li38A0c2drftaohUuBo0Cn5IK1kaqyw6w1HVMs0UJsSD9mA2PbhZ98qjTI6vq1KB/VOo2TC6j5WVdG6jNFoQMw2D56HIRLDN8HjrkZBg+km/yX5TFSLB40QHhNpj2+DC/DZWa+o3/5XtLquCnZX00S0ktzQP6lsQPpGR8A/4R78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SiZDPWUN; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="a+iMSDGM";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vVairj1w";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="a+iMSDGM";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vVairj1w"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CBA3234F22;
-	Mon, 11 Mar 2024 17:54:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1710179681; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PQYXUbvbtW2whG6gczcLXf9OVJOGW4gwzkH+ZHqJFn8=;
-	b=a+iMSDGMRQNnmhZeMtpbU+L+RuDGPxrQlVH5xax8Hevk7luRSh5UeQ2RwbiCAGtsCKmUJQ
-	Qe6wMUFT5GmjgisnGumrvJ6gR2hKUU3qJqxktrR6vNHgm5MPY8Pjp5eBLH8k++Vj9/4Ugm
-	skiGdWXYOBGoIWIWkNEXCIS5798hFcg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1710179681;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PQYXUbvbtW2whG6gczcLXf9OVJOGW4gwzkH+ZHqJFn8=;
-	b=vVairj1wW/0sAKo/rr7Mtd/YQnM5pThBYbI0PZgjVuXsTJNOPv9RPb+G5aLakfOAx4UGfA
-	+sC9VUjhx1AVOQCA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1710179681; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PQYXUbvbtW2whG6gczcLXf9OVJOGW4gwzkH+ZHqJFn8=;
-	b=a+iMSDGMRQNnmhZeMtpbU+L+RuDGPxrQlVH5xax8Hevk7luRSh5UeQ2RwbiCAGtsCKmUJQ
-	Qe6wMUFT5GmjgisnGumrvJ6gR2hKUU3qJqxktrR6vNHgm5MPY8Pjp5eBLH8k++Vj9/4Ugm
-	skiGdWXYOBGoIWIWkNEXCIS5798hFcg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1710179681;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PQYXUbvbtW2whG6gczcLXf9OVJOGW4gwzkH+ZHqJFn8=;
-	b=vVairj1wW/0sAKo/rr7Mtd/YQnM5pThBYbI0PZgjVuXsTJNOPv9RPb+G5aLakfOAx4UGfA
-	+sC9VUjhx1AVOQCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B5A30136BA;
-	Mon, 11 Mar 2024 17:54:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id s89NLGFF72UmMgAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 11 Mar 2024 17:54:41 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 182C2A0807; Mon, 11 Mar 2024 18:54:41 +0100 (CET)
-Date: Mon, 11 Mar 2024 18:54:41 +0100
-From: Jan Kara <jack@suse.cz>
-To: syzbot <syzbot+352d78bd60c8e9d6ecdc@syzkaller.appspotmail.com>
-Cc: adilger.kernel@dilger.ca, axboe@kernel.dk, brauner@kernel.org,
-	elic@nvidia.com, jack@suse.cz, jasowang@redhat.com,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, mst@redhat.com,
-	nathan@kernel.org, ndesaulniers@google.com, parav@nvidia.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
-Subject: Re: [syzbot] [ext4?] possible deadlock in ext4_xattr_inode_iget (2)
-Message-ID: <20240311175441.o3ppno62leqgo2lw@quack3>
-References: <0000000000005b767405ffd4e4ec@google.com>
- <00000000000044b90e061326b102@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SiZDPWUN"
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-366248b78d9so14585ab.1
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 11:54:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710183284; x=1710788084; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9EWPj2I4xpYoZRjyOYAm/kocZbdOlLT2RiNEmzadKaY=;
+        b=SiZDPWUNPRhFDU3cXawgtmEezCGqAbTPyxKsorFYsCayP1nbUHqyYMNQYP2omdTdhB
+         mfFsE2sl6o2BY+nxB2iK2aNWY64sA0DoozliJ4AB7jldB1B5JqWULMpPDSa17dG9b23i
+         mR85JYCMpmGySpD3/Z+lXyLbzWMs89N1yHIesw/+xCGSS6/HJq81mKbw1R0bvnNWIwUC
+         H0Ugy4sKyH0c+0ytMj0L3HGo0EJmmIqJnC7Qq01Vg9En0fZXXroJWX7Qv7PI4juP4jGU
+         Izu1Rqagy+mRQC/LRD4sDOEPkvZO7UkDBmFyA0euHd+y5modWW7VMRaBCXmjwDzxK8rZ
+         C+jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710183284; x=1710788084;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9EWPj2I4xpYoZRjyOYAm/kocZbdOlLT2RiNEmzadKaY=;
+        b=YBOVAFewZPD5DrzOcAax9p5y3X9OpIhN12cjqS302EeOJni6a7H0EAwVR/IpUZqEWd
+         +xRzX1wJ74RVYJWZkcY0hGpKei0TJ3pNVLOpC6vKBZAfLESWxHsXLPbwOrModleJ0Avn
+         GaQgU87DcHJlSQvBeRE5Jr+jdN8qj4AcPa49+FUCA5dRF/EusBgT9Kgl/O675IhOZ32i
+         uh9Z4GJx6hRm4FDBq+P88W2339mHMsxPqsIjII3m2zpmmo/QSJ59GNEvG0159HwO31ee
+         GAQB3utgeEidGfDUOS2ixWM4fxJJ5exKrwHYq9WXrHEE+6q0I12hYLzEBBROv7tXZvZn
+         Ertw==
+X-Forwarded-Encrypted: i=1; AJvYcCWkDTLLguteYq/S4wL9RmX+tUzfYviB+84kyuB3TtzpuMpndgZ1tkK4iRrMQvMYbAGX9QXXE7mVW4Q4kOjz1qMVZjwG+w==
+X-Gm-Message-State: AOJu0Yyjdnip7euFIA152scchfAClriKt71UlthS6qTXsTBS2g/X9DFA
+	2qKGZa9Ll++4/6vNtyu1XihtVuzMunTy+6+E1VmCajlSvhAqhaAyrp5nH1ZxBwYw5kaU6aFcDBu
+	4/6tcwipfCWEf9U7HRS0CaDIKCk/+FC2oK7c0
+X-Google-Smtp-Source: AGHT+IF9Y1AJY3TwC+yrKD+SLGX6DGVejGuk9zVLbhhSZF+Z1op/fddC1zPHT7AUjYPqnvQvkBSi2u31QCO6TEveBME=
+X-Received: by 2002:a05:6e02:1648:b0:366:444b:82d6 with SMTP id
+ v8-20020a056e02164800b00366444b82d6mr6714ilu.15.1710183283551; Mon, 11 Mar
+ 2024 11:54:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000044b90e061326b102@google.com>
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Level: *
-X-Spam-Score: 1.68
-X-Spamd-Result: default: False [1.68 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.02)[52.34%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=56c2c781bb4ee18];
-	 TAGGED_RCPT(0.00)[352d78bd60c8e9d6ecdc];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCPT_COUNT_TWELVE(0.00)[18];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 SUBJECT_HAS_QUESTION(0.00)[]
-X-Spam-Flag: NO
+References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-3-irogers@google.com>
+ <CAEf4BzYiH6xRRLFBdUAkjn0uJP=safZod4=1EmEwTTH9PDmVvQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzYiH6xRRLFBdUAkjn0uJP=safZod4=1EmEwTTH9PDmVvQ@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 11 Mar 2024 11:54:32 -0700
+Message-ID: <CAP-5=fUQY=ho1OSk-wosw8=7Sjp8MB_kngggP00BXs+nVNj7Pg@mail.gmail.com>
+Subject: Re: [PATCH v1 02/13] libbpf: Make __printf define conditional
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
+	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
+	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
+	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
+	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
+	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
+	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri 08-03-24 06:06:04, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
-> 
-> commit 6f861765464f43a71462d52026fbddfc858239a5
-> Author: Jan Kara <jack@suse.cz>
-> Date:   Wed Nov 1 17:43:10 2023 +0000
-> 
->     fs: Block writes to mounted block devices
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14f08e0a180000
-> start commit:   610a9b8f49fb Linux 6.7-rc8
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=56c2c781bb4ee18
-> dashboard link: https://syzkaller.appspot.com/bug?extid=352d78bd60c8e9d6ecdc
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15a4d65ee80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1715ad7ee80000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
- 
-Makes sense.
+On Mon, Mar 11, 2024 at 10:49=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sat, Mar 9, 2024 at 6:05=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+> >
+> > libbpf depends upon linux/err.h which has a linux/compiler.h
+> > dependency. In the kernel includes, as opposed to the tools version,
+> > linux/compiler.h includes linux/compiler_attributes.h which defines
+> > __printf. As the libbpf.c __printf definition isn't guarded by an
+> > ifndef, this leads to a duplicate definition compilation error when
+> > trying to update the tools/include/linux/compiler.h. Fix this by
+> > adding the missing ifndef.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index afd09571c482..2152360b4b18 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -66,7 +66,9 @@
+> >   */
+> >  #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+> >
+> > -#define __printf(a, b) __attribute__((format(printf, a, b)))
+> > +#ifndef __printf
+> > +# define __printf(a, b)        __attribute__((format(printf, a, b)))
+>
+> styling nit: don't add spaces between # and define, please
+>
+> overall LGTM
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
+> Two questions, though.
+>
+> 1. It seems like just dropping #define __printf in libbpf.c compiles
+> fine (I checked both building libbpf directly, and BPF selftest, and
+> perf, and bpftool directly, all of them built fine). So we can
+> probably just drop this. I'll need to add __printf on Github, but
+> that's fine.
+>
+> 2. Logistics. Which tree should this patch go through? Can I land it
+> in bpf-next or it's too much inconvenience for you?
 
-#syz fix: fs: Block writes to mounted block devices
+Thanks Andrii,
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+dropping the #define (1) sgtm but the current compiler.h will fail to
+build libbpf.c without the later compiler.h update in this series.
+This causes another logistic issue for your point 2. Presumably if
+this patch goes through bpf-next, the first patch "tools bpf:
+Synchronize bpf.h with kernel uapi version" should also go through the
+bpf-next.
+
+Thanks,
+Ian
+
+
+> > +#endif
+> >
+> >  static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
+> >  static bool prog_is_subprog(const struct bpf_object *obj, const struct=
+ bpf_program *prog);
+> > --
+> > 2.44.0.278.ge034bb2e1d-goog
+> >
