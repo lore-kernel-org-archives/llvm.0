@@ -1,136 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4745641C7F;
-	Mon, 11 Mar 2024 15:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FD44437A
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 15:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710171050; cv=none; b=b2AdkPQLBrfUSq7BG9EVZsoVOdlBEx/SxhVXHApz556NsuU4m37FiK8yjFinWpK9hw34+Pf0MsAJLxZZbUbiRhTs//HqdEI0uD0Xtq7KsCqx7iInkzQzpsl5XK6YD6caa3fO37PtGMjZon/TE2Byzyepa+mqzpb+bTR3kGcK03o=
+	t=1710171209; cv=none; b=QCkPZMyaE9KPlxrZym/A/nZGQX6eZRFUWpxWaUvLdJCOIiOeIVw07STix58C+2EVeNKqHzvMjxm+VQ4JWDzEvHp1ctZeiw7EJwo9073oc+dKdotlABPHHv9hLqKeHBWHc3myu9cILtx5mxUNtum8agpZzNzDa12Crc93b1xHBEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710171050; c=relaxed/simple;
-	bh=s4fiVm6+6Tws3hnjP0MD6ORSuQ9Fl2z1TbmyD5aBwAI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HRxZ1152+vwmC3j9Y/r3ucLHgucilz0s7BKh/4kZyaUThGMc9QAJXjk+CS5xsiTduOyG6gV3WJSAEB1X8OQW0Vphh1WP/sg81kARmpumqL52VtT2BRl9JnZjd7Bd7vMW7eUAI1CswuknC5+HTt4G2sx/iZWckiP6tdtwUdn/bQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UnZXcPDM; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710171209; c=relaxed/simple;
+	bh=BgmEJ3rVgpfdYftpb1oT1hFKBsa+dHuEMI7KFS3YKKE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fybh6qJ3ethfKNW7mUPhERF2gCSZ2AnK2kBwsRANCv5VhRPuaDhvKCjqcgAHuyX5jjfaqu5raz9knugyfOTIg3733zkrYwN8obYk4JVQsf31368wNZ/eU4oVLBjigwKTU1t9WxGI6O9PUO/ZSmv8NzEh2wC9BuL8w54lpoqkG8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CxuJm6kz; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UnZXcPDM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710171048; x=1741707048;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s4fiVm6+6Tws3hnjP0MD6ORSuQ9Fl2z1TbmyD5aBwAI=;
-  b=UnZXcPDM+kk2XZ2Oa9dXPKjmHruDK1AGvzf2MUdnDX7o2gKdt+0ehNB2
-   EsKquOGtQO9UDJ0YqLw87FYywcdhzbCCETgcPv011ulSKJ+k0w8KUIsD3
-   xB8uOV1cplJ7CLdHS+QjjxUfLftAUQGOQ208QeXvhBUk8C3x/9tB4bQ6X
-   V3PQU+XbWiKhd+R1AdzXBhRmBkhDG32c9+dDSF5d1mSywqPrnENKoh3U3
-   KJ45XAq3iZC+VzLTD9jtwSaT+CcPNizn/1KSF4Hpuuc+X0/FOODLPi1LX
-   efs7fe96qn6IZCAS20XRpSRe9TNR0M7PmxNfV5GDNpvtBDr34zYrzShq8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="8655529"
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="8655529"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 08:30:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,117,1708416000"; 
-   d="scan'208";a="42116764"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 11 Mar 2024 08:30:46 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjhbv-0009Cp-2x;
-	Mon, 11 Mar 2024 15:30:43 +0000
-Date: Mon, 11 Mar 2024 23:30:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 143/145] fs/bcachefs/fs-ioctl.c:504:5:
- warning: ignoring return value of function declared with
- 'warn_unused_result' attribute
-Message-ID: <202403112348.VdoxraGn-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CxuJm6kz"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33e94de1f34so743588f8f.0
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 08:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710171205; x=1710776005; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BgmEJ3rVgpfdYftpb1oT1hFKBsa+dHuEMI7KFS3YKKE=;
+        b=CxuJm6kz4S4sSTvMWwj6DQ+1CgAe7iocd+zMY2of5r99tuTb7xKBs/VGqeEPUI9h+g
+         HXlj3RB0249ev89uf5iaYu4pT2Thf0ABYpYLrBvOj4lGWHXaA8gR9rzAaVIf2UPiUtYy
+         S0uXpjEnPjAigVSXPJLhvW6jkdCeSt1nDr3Z8AIAwZ26ta0GrmqUAcYnZFh3uOOTE7BU
+         ykXW3/qNrFbrxKGUO8PPj/B67RJXrAhS2fIoVlGEW37DvWFQz0V7Pk9pqvUh1htmn4Rv
+         EGBfkITSayIrZh0nSe+dhNdm/wGj/tDaHwCFbjxHqgc18lUmxvcImQ+DxEfeblegWW1W
+         i6fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710171205; x=1710776005;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BgmEJ3rVgpfdYftpb1oT1hFKBsa+dHuEMI7KFS3YKKE=;
+        b=YE/K8LTrs6r5bE53GwIwPyZibRjmE8L1sjLkYpTfSxw3K7IY1/Nr4pvRWb3U3itrD3
+         +qrm3cIU2FLUMunxvtEpetJbpVhjuYylXEs0CchsNKI9L8bXT0FxrZYLSIBmJPHiigkP
+         lvE0YiJYE2TBKAGa/GW+YlJZZcqP1QZ4Wx3GmmzanmWlfNSIw6RM6MucyzdwHOwoDTcc
+         02+8eBXZpQqUYdTM3VhOdYVPABm6dIQ1UrXC1xqjDv5KMIHt0PcAOwmFLwe+NoOKKcPW
+         sqNHwNnj2kwukogU+VKEfmYUfGkxXckhbv12C0Pr66O0TfZhIHGDYTU7X58xuIx4+Atn
+         2b3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVe6MLD26MfRzCstOlGe5k/OBcvrwB8Bx9bZWbKwFXhlBDcFszxwgoz7XYaiNugN4UPulZ91RXOTLX1NbJOThvw6SzMRw==
+X-Gm-Message-State: AOJu0Yw/u/UWKa0x4rjWxhgBvOK8fXgn97xUHazt8QSRe8UTZzf/39l8
+	qgLuRJhrUawEL6YZh8qGrKFQ0AA1jkjyAs9sf1Az7GQjtwVAcXhNcmqoFMEU0WOrBx9/wUaTQKP
+	7mah+/f88IvSPaDiJ9TNn8Odkb+L93zQKe+IV
+X-Google-Smtp-Source: AGHT+IE/th4Pg/GBs04QnTLC4gySgD/Ced3Hwsh9xlJGW37qnBqN80Ztb15KeaRy40uSPOSKwYSAYx2WXmVslFbnrPM=
+X-Received: by 2002:a5d:6751:0:b0:33e:1f2b:8cc5 with SMTP id
+ l17-20020a5d6751000000b0033e1f2b8cc5mr6816452wrw.0.1710171205375; Mon, 11 Mar
+ 2024 08:33:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-14-irogers@google.com>
+ <CANiq72=rgXk6oz65wb57ZP+jmSoD-a4SSVzU6s6SZLubV3cvBw@mail.gmail.com>
+In-Reply-To: <CANiq72=rgXk6oz65wb57ZP+jmSoD-a4SSVzU6s6SZLubV3cvBw@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 11 Mar 2024 08:33:10 -0700
+Message-ID: <CAKwvOdkMYnYO2hyJEFj-M_iur6BneEZjPHvsodZAGw=b7PmmzA@mail.gmail.com>
+Subject: Re: [PATCH v1 13/13] tools headers: Rename noinline to __noinline
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Ian Rogers <irogers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Liam Howlett <liam.howlett@oracle.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
+	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
+	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
+	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
+	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
+	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
+	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, Christopher Di Bella <cjdb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   964337312db426db662cde052d6a56c96657f7fb
-commit: 57c6ac42e14b4593a73133062c2d7b63a0d6d776 [143/145] bcachefs: new subvol ioctls
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240311/202403112348.VdoxraGn-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403112348.VdoxraGn-lkp@intel.com/reproduce)
+On Sun, Mar 10, 2024 at 4:25=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Sun, Mar 10, 2024 at 3:06=E2=80=AFAM Ian Rogers <irogers@google.com> w=
+rote:
+> >
+> > [1] https://clang.llvm.org/docs/AttributeReference.html#noinline
+> > Reported-by: Christopher Di Bella <cjdb@google.com>
+>
+> Out of curiosity, was this due to the `[[gnu::noinline]]` or similar
+> in e.g. `src/string/memset_explicit.h`?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403112348.VdoxraGn-lkp@intel.com/
+Yes, and in src/__support/threads/linux/thread.cpp's definition of
+start_thread().
 
-All warnings (new ones prefixed by >>):
+Thanks for the patch!
 
-   In file included from fs/bcachefs/fs-ioctl.c:4:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/fs-ioctl.c:504:5: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-     504 |                   copy_to_user_errcode(&user_arg->buf, path.data, path.nr);
-         |                   ^~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings generated.
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
-
-vim +/warn_unused_result +504 fs/bcachefs/fs-ioctl.c
-
-   492	
-   493	static long bch2_ioctl_subvolume_path(struct bch_fs *c, struct file *file,
-   494					      struct bch_ioctl_subvolume_path __user *user_arg)
-   495	{
-   496		struct bch_ioctl_subvolume_path arg;
-   497		darray_char path = {};
-   498	
-   499		int ret = copy_from_user_errcode(&arg, user_arg, sizeof(arg)) ?:
-   500			  bch2_subvol_to_path_checked(c, file->f_path.mnt, arg.subvolid, &path);
-   501			  (path.nr > arg.buflen ? -ERANGE : 0) ?:
-   502			  (arg.buflen = path.nr, 0) ?:
-   503			  copy_to_user_errcode(user_arg, &arg, sizeof(arg)) ?:
- > 504			  copy_to_user_errcode(&user_arg->buf, path.data, path.nr);
-   505	
-   506		darray_exit(&path);
-   507		return ret;
-   508	}
-   509	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
