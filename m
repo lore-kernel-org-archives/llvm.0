@@ -1,98 +1,80 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5409817561
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 09:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC29818659
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 09:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710149959; cv=none; b=eB/YRhSr+h76Qf+h3mLVKmg3Uudggoc+GiB3vb5i0/NNpsKK2/ceuUVntxTaIOm3F89GysOzvKapHzRZ2ohTazi04HKoJyb352/CO4hpTrpYOJDUBdqA0FZFyMulmqEHIicvz+1wkjwb+6WJCanhFOYNFPtKgZrYC1h5ZbVw6Mw=
+	t=1710149961; cv=none; b=T5SObqp7OJLg2nJgHMut1dPPLzBwUse1uzwZz+2Qmy0ACQHvFFweUWJuyjSKlZYWwi/b8V3WOJHdgMRMhN7eAVP0fgCxt8P+vcu7oSHbNn/IpMXyWqO6tQlBwy7r+maGAyAUKbW89K3ZG6lCJ7tatP3pFtocrt31EwNUg0ruSFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710149959; c=relaxed/simple;
-	bh=MYutdIjb/N7Yx3CRS+y5HbEnA1UZT5yZzKO7IjnGQik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GqF6PQ/Qdc4L1zwx+eHT3rzTpv3ABuB4Fyj7B0YIZoM8JNErHY8btx2VduIh/Au7h+wslOILAQuXDGKMqa6swzXYGI4zUe0irNo/JGFaQt8sn3jHYb2ZaO/IgS8CfW+bWCUp2Ku5UuvAo+BxDCqEucedN5Zo/Es1OfCF+RESrmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4TtWrM5qnXzwPQM;
-	Mon, 11 Mar 2024 17:36:51 +0800 (CST)
-Received: from dggpemd100004.china.huawei.com (unknown [7.185.36.20])
-	by mail.maildlp.com (Postfix) with ESMTPS id AC1AC14044F;
-	Mon, 11 Mar 2024 17:39:14 +0800 (CST)
-Received: from [10.67.109.211] (10.67.109.211) by
- dggpemd100004.china.huawei.com (7.185.36.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Mon, 11 Mar 2024 17:39:14 +0800
-Message-ID: <79b87ef0-77c4-45a9-aae2-1754f1b407fe@huawei.com>
-Date: Mon, 11 Mar 2024 17:39:14 +0800
+	s=arc-20240116; t=1710149961; c=relaxed/simple;
+	bh=VwK3dR3kU+8FFqRcu4bOh78ZHsjymZtoQbK+TYTYwgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=seuVqPyplY+htQLz8EV8G5mk3ALvnuheZAq4mlNqiQq+K/O6ORnJDEdaHtv0HpuqqtTAoMo8OlZTtZnSgZ4Il/R6TrZMtE/lC4RqS+vdrMOUkSQumPH5FO7/gfcjhO/URe8FetAAejNMJIMWlyJYCu8MHu4Dmup+quED5nwT9mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=UZ0P4Az1; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="UZ0P4Az1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=uleLxUZP0z3JKB/D6daaot+Oq/NjX/J1iFMN0XKrvo4=; b=UZ0P4Az1JYP/RhKZLlC2Jryd5p
+	BvQroATEPiXsbGQkVFqe0anDGTp4rF7Z8eivjjwM7cFehVaei7/Zx/HDTWBMi4BGMPL7RyHNzsIIv
+	euLDiDdPM6k2UjRu81TZUZ2ZxcJQmVQ38fxNdsa12ILSYYEXvq8CNmLuM/jyxGJf5XoYcQ148hndG
+	fJHOcnB9zlsz9WUo1Iy++oieL+PKpxR8Wi//bt27FyFVjiQ384fCjR4Kotd+T7AtIwrQj5JrvBtYg
+	RAwu969jqrWIpECJStQI25AEv5FXDjdggePaRCpYiwVbTwF1F1sfR6IKqCqNo9WWIOv0s/nEotihd
+	Nyw2DKKg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54866)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rjc7b-00053s-1v;
+	Mon, 11 Mar 2024 09:39:03 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rjc7Z-0002Vd-HD; Mon, 11 Mar 2024 09:39:01 +0000
+Date: Mon, 11 Mar 2024 09:39:01 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 2/9] ARM: tlbflush: Make TLB flushes into static
+ inlines
+Message-ID: <Ze7RNalwiZbceFxX@shell.armlinux.org.uk>
+References: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
+ <20240311-arm32-cfi-v3-2-224a0f0a45c2@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2] arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Content-Language: en-US
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-CC: Arnd Bergmann <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Fangrui
- Song <maskray@google.com>, Russell King <linux@armlinux.org.uk>, Andrew Davis
-	<afd@ti.com>, Andrew Morton <akpm@linux-foundation.org>, "Kirill A. Shutemov"
-	<kirill.shutemov@linux.intel.com>, Geert Uytterhoeven
-	<geert+renesas@glider.be>, Jonathan Corbet <corbet@lwn.net>, Mike Rapoport
-	<rppt@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Gleixner
-	<tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
-	<llvm@lists.linux.dev>
-References: <20240307151231.654025-1-liuyuntao12@huawei.com>
- <58cc1053-7208-4b22-99cb-210fdf700569@app.fastmail.com>
- <42892794-7668-4eb0-8d2f-c78ca0daf370@huawei.com>
- <2a90581c-f1df-4d6b-8f0b-8e7cbf150ed9@app.fastmail.com>
- <346e15e5-49e9-4a7f-b163-c3316225baab@huawei.com>
- <CAMuHMdXKk9S9voKVPvO+xvn1zFW3FnKyVHQGDkC7b9Ynkcnvmw@mail.gmail.com>
-From: "liuyuntao (F)" <liuyuntao12@huawei.com>
-In-Reply-To: <CAMuHMdXKk9S9voKVPvO+xvn1zFW3FnKyVHQGDkC7b9Ynkcnvmw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemd100004.china.huawei.com (7.185.36.20)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240311-arm32-cfi-v3-2-224a0f0a45c2@linaro.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
+On Mon, Mar 11, 2024 at 10:15:39AM +0100, Linus Walleij wrote:
+> Instead of just using defines to define the TLB flush functions,
+> use static inlines.
+> 
+> This has the upside that we can tag those as __nocfi so we can
+> execute a CFI-enabled kernel.
 
+Why? This seems to be brain dead.
 
-On 2024/3/11 17:14, Geert Uytterhoeven wrote:
-> Hi Yuntao,
-> 
-> On Sat, Mar 9, 2024 at 2:24 PM liuyuntao (F) <liuyuntao12@huawei.com> wrote:
->> On 2024/3/9 16:20, Arnd Bergmann wrote:
->>> On Sat, Mar 9, 2024, at 07:14, liuyuntao (F) wrote:
->>>> On 2024/3/8 21:15, Arnd Bergmann wrote:
->>>>> On Thu, Mar 7, 2024, at 16:12, Yuntao Liu wrote:
->>>>
->>>> Thanks for the tests, CONFIG_LD_DEAD_CODE_DATA_ELIMINATION and
->>>> CONFIG_TRIM_UNUSED_KSYMS do indeed result in a significant improvement.
->>>> I found that arm32 still doesn't support CONFIG_LTO_CLANG. I've done
->>>> some work on it, but without success. I'd like to learn more about the
->>>> CONFIG_LTO_CLANG patch. Do you have any relevant links?
->>>
->>> I did not try to get it to boot and gave up when I did not see
->>> any size improvement. I think there were previous attempts to
->>> do it elsewhere, which I did not try to find.
->>>
->>
->> I tested this patch, the size improvement was only about one
->> ten-thousandth, and the compilation time had increased by about a quarter,
->> and the kernel did not boot.
->>
->> Strangely, LTO has actually increased the compilation time
->> significantly, which seems contrary to its purpose.
-> 
-> The purpose of LTO is to reduce code size. Doing so requires more
-> processing, hence the total build time increases.
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
+Why can't CLANG cope with directly calling e.g.
+cpu_tlb.flush_user_range? Why does it need a static function to do
+exactly the same as the macro does?
 
-Thanks, Geert, I got it.
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
