@@ -1,147 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD301F519
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 04:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C1BDDB0;
+	Mon, 11 Mar 2024 06:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710132024; cv=none; b=E7FRhejwUPgpg12QHhKeOiWMJSx2b2KKOpYp3yCSwpxwcrPVFOINHMXAifdqs0J+PBTDgJV00ABn08QsYaGI8rx7enmXEdEaV2F15TkmI0JpKX8ynn7jTm/UJpN8oC315O6DTDO6rHJMMe9NWJOgMBJwqa+8H4gkIoOa8NvoYTY=
+	t=1710139373; cv=none; b=uSX2XwIE+9EtRbbW9WFtmRZO8tu61cxwLhK6SyPcXz/ZdjCIG3Nnf7pTGZyvUzSx66gbf+wvziLGsMKXrMuSoERoLFG/mzkVshCxsMdng2hbK98axX+sIKkFHbnFscmy5aOCIfBQxHs8V6qtKbJheMTOiisF+KYnfI8ZX2vXurY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710132024; c=relaxed/simple;
-	bh=E9w+52Kny3d4x/n8QfvRAt3qgQ4D6IYeSqB73jmzkkc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=k/knmQRAH2vnlZLfpjaUNY/1p5K5BY1B61//G03JX3iC5TO5IGzZB55/5EV72HutLIaGGj5esob8Pw+//oMpAwlyyh0XZvVvCSDwio7oaxynIwSwf/S91VIGjxJHvfP4AvPPpNb3wziLR7ah3IpD9NKTGtg+F4e5bAz+2e1icfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C6jQkBDA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710139373; c=relaxed/simple;
+	bh=X5qz9Wi4uBq7D4n7eDIWIgGHVZWH2iYo30BLX+iEMuQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MORGhZgVGeaZm4Jkpao5CUTF2yg0F4jUEsmgjpCrZZVg1Z8WxkJ7rHl8yM9NnA4nFgfgK+NgnH8qwqvZ3M1iL/W3/+Lz1T0qLXTxPjs3LJ9FDObtgMvWAbsiRhjJAcpPfumC4+yhaSAdQafS9ElLmeuiUqc5nOZuYE+yClamFss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qeTDraVT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C6jQkBDA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710132019;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qtQ1rQLUiUSAgt4cYr1yXRbPGe/LciUADF7A6//odIA=;
-	b=C6jQkBDAxmthRMrWCt3rL+V629pYEzAGL2R3UiF6jfPm+wNCEoSwiCVmWNEt5md0/3OZbE
-	9Okicoo27IBf8vFQgquXwBX10coBDt+U9fMpi1k2bH/X47Wq1v6DccLtuhXZUV+tUbMPDX
-	hkEW+WWUn/Mu19NNbYd2XAOZ6EKbHT0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-263-8gL8BxWPMyuy-i5hu79a9g-1; Mon, 11 Mar 2024 00:40:17 -0400
-X-MC-Unique: 8gL8BxWPMyuy-i5hu79a9g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B14788007AF
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 04:40:17 +0000 (UTC)
-Received: from [172.64.5.48] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6E1AE1C060A4;
-	Mon, 11 Mar 2024 04:40:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.8.0-rc7, mainline.kernel.org-clang, 137e0ec0)
-Date: Mon, 11 Mar 2024 04:40:17 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qeTDraVT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F26B7C43390;
+	Mon, 11 Mar 2024 06:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710139373;
+	bh=X5qz9Wi4uBq7D4n7eDIWIgGHVZWH2iYo30BLX+iEMuQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qeTDraVTTf+ACqxXrDDimzU8Nh4CnUfoK1WZtlJ18mfUvkUo+uqgqSNOssx4EzQM7
+	 aJ4BAYMvZCZwVs5xe4bozsdcmZpU9wl+C0Uc8JDHaZpT4Nju8nprGzuz7amcOOfNBc
+	 /1Nf5vgxgBx8J90D494O08kzbcx/AfrukIxD6e9lah7bBY4n83RjgQsK1g5/N5mX4i
+	 iuQbGBbWpS02De89jKpMR+nWrql9OCpYlVno9PEaljteUeWyEPMXwkitLVdH4U/Wja
+	 jieVZofB2Kfo8kvWxwh2b5AjxqqS0J9jhd/QRRrybwVDgShnx0/w2qAWzBi1hDG/4c
+	 I7L09zckSfldA==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-512f54fc2dbso3445136e87.1;
+        Sun, 10 Mar 2024 23:42:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXdGagRVqzU6uX0UiOY3QaBV1hzcX2Q+08Sj3m88STjYGXm0YyOCcbP/M/GFkfQ0U8URBspC2rdhmfTUqiMHJO3QcvmOyhDQR5Z8khEdzKz6Yp8bJPB18+FFyToNsVod85/rjo=
+X-Gm-Message-State: AOJu0YxKcZEcozaTmzQ3qi6gijagckr+VfEX/Ry0IEBYhDtex11BwTCq
+	yQePBhQaDYkkPE6fkzf2Q0WXO3oRXoRA8wJRtJuK7WUQ9cCxMxzUWzALfKvKuNHlU6ucmhcRx2t
+	4PPX//5DNBRVF5x3Kh7jlCkXpSpo=
+X-Google-Smtp-Source: AGHT+IFRvN4GnmkKCHuiRRRDivtgUw11BSzhv9eBjtFFiLCjPwtxoIH9/kVamdN69E8+WDuN3wpWoUEIthHheticPz8=
+X-Received: by 2002:a05:6512:1091:b0:513:aef9:a7d8 with SMTP id
+ j17-20020a056512109100b00513aef9a7d8mr546945lfg.47.1710139371237; Sun, 10 Mar
+ 2024 23:42:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <65015.124031100401800117@us-mta-263.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <202403092219.dhgcuz2G-lkp@intel.com> <CAADnVQJ+6mFs56fu+KEvumQ5uqM-oLpYx0hGxLJfE9XUCtEWEA@mail.gmail.com>
+ <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com> <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
+In-Reply-To: <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Sun, 10 Mar 2024 23:42:39 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
+Message-ID: <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
+Subject: Re: [bpf-next:master 5/7] kernel/bpf/core.c:900:5: warning:
+ '__pte_index_size' is not defined, evaluates to 0
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Puranjay Mohan <puranjay12@gmail.com>, kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
+	Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Sun, Mar 10, 2024 at 7:43=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sun, Mar 10, 2024 at 3:05=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.=
+com> wrote:
+> >
+> > Hi Alexei,
+> >
+> > On Sat, Mar 9, 2024 at 5:38=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > Puranjay,
+> > >
+> > > Looks like I have to drop this patch for now,
+> > > since PMD_SIZE is not a constant on all archs
+> > > that can be evaluated by a preprocessor.
+> > >
+> > > We need to find a different way.
+> > >
+> >
+> > How about we define it like:
+> > -#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
+> > +/*
+> > + * PMD_SIZE is really big for some archs. It doesn't make sense to
+> > + * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE t=
+o
+> > + * 2MiB * num_possible_nodes().
+> > + */
+> > +#define BPF_PROG_PACK_SIZE ((PMD_SIZE <=3D (1 << 21)) ? (PMD_SIZE *
+> > num_possible_nodes())  \
+> > +
+> >                              : ((1 << 21) * num_possible_nodes()))
+> >
+> > So, it will be computed at runtime. This adds more performance
+> > overhead but this is called very infrequently
+> > so shouldn't matter.
+> >
+> > Or we can hardcode it as `2MB * num_possible_nodes()` because
+> > PMD size in most architectures will be 2MB or larger but never smaller.
+>
+> I think hard coding is cleaner and less surprising.
+> I'd like to hear what Song thinks about it.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Agreed. Let's just hard code it to 2MiB * num_possible_nodes().
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/133606
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Reboot test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+Song
