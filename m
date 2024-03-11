@@ -1,111 +1,131 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D83C53B8;
-	Mon, 11 Mar 2024 02:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1B31876;
+	Mon, 11 Mar 2024 03:43:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710124991; cv=none; b=J0UlmGdgYm1bdlrF6dOEHpu5agVIuUMvY97Ro3ZRV52q2v4rF2svjYS1gWvDyamdd4Nn31cSeVfARpjjXrEyY6rBlzySp65koqmgrl+k1TBipHqF4uygT6OikNE6eQqfZgZ5NIc73fes83BDmRnUHcoImp9vQL7ZfcaZWshYnUE=
+	t=1710128595; cv=none; b=qMwvrxB8mpOSG/zUP8kRR6Cj60XTc4c7K1K/Z9KZ1EfWAiWaDPZjBifr5R2LdjZWYJ/8jWr7szfprJT5Q+Yap/CKUfuB46ezoLLOu0N38fiwI9rIkLasHyywCdq7oFUbafPVdvgxUa9kYVlCN+AotiukDOLeUh2Rb6P5ycmKS74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710124991; c=relaxed/simple;
-	bh=OKTSETOaIf+cDllksWoXnbkZa2TuIPIonIMCuioza3Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KRDuy8CQ9oefonxGpqrMWWZaUw4IjhN2jjsesB3w+E/WVEyDONozWYKWhZHGMotDurv3y5IRZ3Y1kmxOgIeJqAGUPqZo5Q948AXCXdyWIqN3NurGFhV3++oCdGTpLf7wCSMY84IZJqiH8ZKfRtzZVSQ8gnNJ+F3tpCZr4haIY4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hwHh9Q+t; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710128595; c=relaxed/simple;
+	bh=vm8YFdCx4B+nlC0XzJGTq5TZGTrHoQtmxvmVS/3+xps=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FDV/YceTjQiPHazu+4aYyK3TwQgdPMKwMBFRttksaevtw33vzpSl4P6jirh02y3ueZRkgCksrG0g2mc/4Fowxvwxf8wIgkXuCqbx2GOWfpRCyq7/OJxEc81N7JKyIcl7aBL4kDE/mfsuBb+hSrIFn4uYJ3KuZu4crvcsf4paez4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EKVgNjsg; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hwHh9Q+t"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4132600824bso3825065e9.2;
-        Sun, 10 Mar 2024 19:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710124988; x=1710729788; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kszp2/sHdBYHQM3bCGYoHt7aaVrOE/U3KZlolmgyyrM=;
-        b=hwHh9Q+tAiWoBiDqxCmLOcGS25NG4ZBvRUXNetxpAtkZSq0kB2ZzqyDgcP387DjW65
-         le/hH56L2T6CYvVJtHHS4hbjyhB+B9jExopzb8FfIxYPk9WafZ7IxIIAlEdIdtl2/8g7
-         d9CROsTN2UF/pZ+Xfh4jDUBeaNRO4+HrSOl0e9kMW2bKUEvWDwP0SuekZIopmgmEenm3
-         uQdEDoIA5YPIbHTFn7KVRYnMk+JlE3ADH6AiLFdlqT/+EwOs5HWmnetps4fiZSqB+f6m
-         +UaUL3oP4qDFK60RIV9qXfPkxZH64dYurerjRUTPHXSKldvGz8n4XWlchDOTWABkHQ5a
-         tPIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710124988; x=1710729788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kszp2/sHdBYHQM3bCGYoHt7aaVrOE/U3KZlolmgyyrM=;
-        b=eisdGDTFr8al07hE88zuHVltiaAtRGZESnqLTHytsNrFEXuVRjvpHiVoc+3YyIqKQh
-         Cj2vCFcAcyf2EvvRzv/ZUsA5r4c20yUy9i6CuzO7ujAv24AaU9H2o+9R4YO8PPKx9nbw
-         cjU10zugpV/qvVYg9e7G2gaP8ko3htL45+U90wK3F5nVdi0w+AQ/3Iqf8uPrO3SLbcrm
-         Nl7Ask0JJjBRsBc1AWTwO42XeJQOm5wUnpc8VvdkKK0O3QGoylbLRcPiQ6yLsHzsEjWS
-         U9Ko9FX6iDhGLQ36rNTEta9+/rCnx33Ldua7K0FQym5P2tuU7V0NHoTHLwy+gvjdXbOc
-         A2og==
-X-Forwarded-Encrypted: i=1; AJvYcCUP3gyo5x4QQTDzfwe4saC1/RJrwkgZXz3CnotEppT3GAMEwqVfnEkaa8wDgoC1lYu8AMyGELQpRCSvxHUkYUeMAIZ0qB6R3yTYN9U+bssaOziiCmfcLcrgVCqeLmuavCo+ayE=
-X-Gm-Message-State: AOJu0YxStdkbuR/qmCeJqWI7qLFPCSTjgIxS1cOi9Xv6LEKFwNusQgTw
-	PyH5VoT5qz5jY+X0Xavign+sH6zkcWtCmKxF/ncRq9L7TMDpF12cfmTJbdpHoo53DPUjtc7WtA9
-	Z3tKX9P5YrWKrovb0VYBg3Mm6yOI=
-X-Google-Smtp-Source: AGHT+IHB1HlCfT26qC9N0aUQ9OmjLBXn3TJesDmw3rjbXRDqU54RdYkSuC4D1f4Y0dJ2cnaEulbkjOI2HJX3V+Jo2e0=
-X-Received: by 2002:adf:e40b:0:b0:33e:733b:cd11 with SMTP id
- g11-20020adfe40b000000b0033e733bcd11mr3432241wrm.53.1710124987487; Sun, 10
- Mar 2024 19:43:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EKVgNjsg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710128593; x=1741664593;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vm8YFdCx4B+nlC0XzJGTq5TZGTrHoQtmxvmVS/3+xps=;
+  b=EKVgNjsgDI7TfGBKXVGOYazZ3z3xzswmsw5XHngwnuShKPnVCQHdrQj5
+   5/Q/vfegJuKqBKnX9J/K3nOHIS1mL6unwqj2Oyi5d9Q0K8GGz70evhFBS
+   7TIlxBT5pTOgeI+8ov30Nd6Bm9Wpc3MTz+VW+tLmj7gcFOG8aeTDk4uwa
+   tIVLHPJ0nRO+rVIjuK3z+PMKTOGifG2uaMCE4xtMFbCSg5W5jON1Asi8j
+   iUL8SOOnW0Jw9mDoqPWctBABvpiWmXNb25/ikHbAFAkz1zy750+07UBXt
+   ssnPz9t+aWni1M6NfORW/kUclC88kRbIk/kHXghhQyqrDYkssb5kmX3De
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="16213440"
+X-IronPort-AV: E=Sophos;i="6.07,115,1708416000"; 
+   d="scan'208";a="16213440"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2024 20:43:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,115,1708416000"; 
+   d="scan'208";a="48491219"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 10 Mar 2024 20:43:12 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rjWZB-0008rz-0p;
+	Mon, 11 Mar 2024 03:43:09 +0000
+Date: Mon, 11 Mar 2024 11:42:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:iowait.2 4/4] kernel/sched/core.c:9046:60: warning:
+ shift count >= width of type
+Message-ID: <202403111109.Kjqr5COu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202403092219.dhgcuz2G-lkp@intel.com> <CAADnVQJ+6mFs56fu+KEvumQ5uqM-oLpYx0hGxLJfE9XUCtEWEA@mail.gmail.com>
- <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com>
-In-Reply-To: <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 10 Mar 2024 19:42:56 -0700
-Message-ID: <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
-Subject: Re: [bpf-next:master 5/7] kernel/bpf/core.c:900:5: warning:
- '__pte_index_size' is not defined, evaluates to 0
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, Song Liu <song@kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
-	Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Mar 10, 2024 at 3:05=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.co=
-m> wrote:
->
-> Hi Alexei,
->
-> On Sat, Mar 9, 2024 at 5:38=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > Puranjay,
-> >
-> > Looks like I have to drop this patch for now,
-> > since PMD_SIZE is not a constant on all archs
-> > that can be evaluated by a preprocessor.
-> >
-> > We need to find a different way.
-> >
->
-> How about we define it like:
-> -#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
-> +/*
-> + * PMD_SIZE is really big for some archs. It doesn't make sense to
-> + * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE to
-> + * 2MiB * num_possible_nodes().
-> + */
-> +#define BPF_PROG_PACK_SIZE ((PMD_SIZE <=3D (1 << 21)) ? (PMD_SIZE *
-> num_possible_nodes())  \
-> +
->                              : ((1 << 21) * num_possible_nodes()))
->
-> So, it will be computed at runtime. This adds more performance
-> overhead but this is called very infrequently
-> so shouldn't matter.
->
-> Or we can hardcode it as `2MB * num_possible_nodes()` because
-> PMD size in most architectures will be 2MB or larger but never smaller.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git iowait.2
+head:   9e65871d5161d7b24778fd9b232edb2d076cd26b
+commit: 9e65871d5161d7b24778fd9b232edb2d076cd26b [4/4] sched/core: split iowait state into two states
+config: arm-imxrt_defconfig (https://download.01.org/0day-ci/archive/20240311/202403111109.Kjqr5COu-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403111109.Kjqr5COu-lkp@intel.com/reproduce)
 
-I think hard coding is cleaner and less surprising.
-I'd like to hear what Song thinks about it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403111109.Kjqr5COu-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> kernel/sched/core.c:9046:60: warning: shift count >= width of type [-Wshift-count-overflow]
+    9046 |         int token = current->in_iowait + (current->in_iowait_acct << 32);
+         |                                                                   ^  ~~
+   kernel/sched/core.c:3714:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
+    3714 | static inline bool rq_has_pinned_tasks(struct rq *rq)
+         |                    ^~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:5879:20: warning: unused function 'sched_tick_start' [-Wunused-function]
+    5879 | static inline void sched_tick_start(int cpu) { }
+         |                    ^~~~~~~~~~~~~~~~
+   kernel/sched/core.c:5880:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
+    5880 | static inline void sched_tick_stop(int cpu) { }
+         |                    ^~~~~~~~~~~~~~~
+   kernel/sched/core.c:6587:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
+    6587 | static inline void sched_core_cpu_starting(unsigned int cpu) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:6588:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
+    6588 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:6589:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
+    6589 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   8 warnings generated.
+
+
+vim +9046 kernel/sched/core.c
+
+  9035	
+  9036	/*
+  9037	 * Returns a token which is comprised of the two bits of iowait wait state -
+  9038	 * one is whether we're making ourselves as in iowait for cpufreq reasons,
+  9039	 * and the other is if the task should be accounted as such.
+  9040	 */
+  9041	long io_schedule_prepare(void)
+  9042	{
+  9043	#ifdef CONFIG_64BIT
+  9044		long token = current->in_iowait + ((long) current->in_iowait_acct << 32);
+  9045	#else
+> 9046		int token = current->in_iowait + (current->in_iowait_acct << 32);
+  9047	#endif
+  9048		current->in_iowait = 1;
+  9049		current->in_iowait_acct = 1;
+  9050		blk_flush_plug(current->plug, true);
+  9051		return token;
+  9052	}
+  9053	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
