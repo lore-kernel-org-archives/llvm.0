@@ -1,60 +1,60 @@
 Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A0A17557
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 09:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8653A1755B
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 09:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710148551; cv=none; b=FGRSX8IIW7mwMdtgpvYj3Vl3risEheFLsTuu6TD1h7Z4iwpMdMxH8+Oe7BgOpVYO6sRrRVwmUaJmNd7nIJIaNwhKVPKaCe/QrOU9nh28y8jyp7EZO+LUvhBnmmFPjky8pgkXMn+FX7ddOPwt511E6cq+SJvY8+jjroLrYArz8dQ=
+	t=1710148552; cv=none; b=Mx3YIXysOaUOliArRR//2QNQDXeiLfXcl5m7ziwc8H3vWRwgjXjPtmodqB9xpiWYMUXHPwenvQaVJbTsvjKNK9q4dxJ/ECjSEWNDpZ3x0xPtntRZm8LXWgUwHbeBSYqCMLIeqhe0MENHC4MsZWHH4MSqVes86NuezEaVRt4RkYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710148551; c=relaxed/simple;
-	bh=+6Aq4tI7NATXLTxD3OjZObQWjA81Hf0PFu/KNy4tl7g=;
+	s=arc-20240116; t=1710148552; c=relaxed/simple;
+	bh=amin5G4OUB2TOd8qhHcFmiCbc8Lio6xBnelTIHekVoY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Sy1cl8LpWzgxVYg4Ha1JfrqCvakYtjgvY0Ie+J5r0062UMITfywGhhOHOkYFLBrR+b61Gd/j6k+6hNeFK4Js+ASDQaiXXNvfL2hYx7Kjvw7G+qtJMzNOoowJMUCGbBkJyneaxx/Hp/qhuocDSQHOLbEcHgaVBBJSozgjMm57ZwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nLze9orp; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:To:Cc; b=tsRNn9j88BZ0Jb9DW4orIjhkCY7jtyEdetLQ9+qv/utWdcPMiAmbZz4O8CCegKtiwx29XPm+5lG6p20c2wlXC2POAVi9me3nmNza9zBkUcUSYtelXclnFkORvrAj5AAN7daONHR5aupfA3sxXDrodu1RX1RhXkQqA9tb/aKmjag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z0/yHUNc; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nLze9orp"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a449c5411e1so527748166b.1
-        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 02:15:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z0/yHUNc"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a44cdb2d3a6so568932866b.2
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 02:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710148548; x=1710753348; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1710148549; x=1710753349; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VdBurprtbHQ0vf8zuRQqqoRGQBp+uV6pNFNeBm4lwRE=;
-        b=nLze9orpbI52mndtFo7iOafYC4U3j/SUBmVwzHSe3JWj4FX4j5FCLZOd5LKDdI1Wbl
-         4RbYtxqiDyBfvQZuZTXXxnSavKjPl2BPdD+zxZ9DdCtwVKsCtzDaCGI+HFuNAuqYpj6i
-         M6v96SSwbl4xqhpHmGghaF/nvY2huP12J95TlWohTiKY6LAhC/w0ABYUZEAqNs4Pv/ca
-         qh8ZXFvRL6WKNY+vOpGfFiJ7PaeUayBY/OCfdAnohiPwx8S91Bqbuq9ZskVRuhCBusgF
-         wzDa/4BZNHCYxm59By4j+cUFCFqqC9isR98UdChRI5nuMK/mgSAK5nhwxxoHDdbdSSLg
-         oOFQ==
+        bh=hqBogdja5tMMOO5wTCklLeqAnS4o63/YOLSFeJQB8FQ=;
+        b=Z0/yHUNcX9q59B3Gc4EKZh8pn1DpcOajFasxpNzM6Pvj1Ga249Aw1FoI5kHBQmSxEz
+         5NbB+0EicLWTHZjMs0tG4Z1bCeDFEoctqunBYwaww6O/h1FX87Z4Yav9zMEtLU5Iz/NI
+         rQlJCj7j7LWK/jr4UPszRKYpySt+zkqc9j4VrpdwXUqeW2ECiw24Xot97QRogPlU5Tof
+         ezAI8UjnRAwhiAIe0SqUl7xFrfJilqpZRjf89JgCn2FDM35gv9YnJiQH2shQ61ldpO3n
+         QvmP9+4wDOAMoUZ1CyDNHZobv06kp/F0czelX4Vn+oaOlKDq5YlYm/tw7REKqeIm0G3U
+         hZYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710148548; x=1710753348;
+        d=1e100.net; s=20230601; t=1710148549; x=1710753349;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VdBurprtbHQ0vf8zuRQqqoRGQBp+uV6pNFNeBm4lwRE=;
-        b=amw9oTu4fEkfcVLz5dDGsn5VOQnccVUDo4GF31uReyaDsiu0iaZoEMpIE9D2iuZB5T
-         QLVkaw7X5/zRstUyOSBXYBhe7KnAF3kBxGEb0v1HBeYf+AMWTjQDhVlVfdJya5jFv+Mn
-         5ZoleUInwUHT6GCKg1cN5qFGriK8AaggC6iSMW63TcBJ9k/kDDbSXKPmWMYNUk5Uq83K
-         8Mq2NeEh80NOmpgNdOUXgIM1j134JOPhgeS9X7JncGkLXgP3xI1ZpP6/R0omvNAJFKax
-         N/wozrWwzR7hZ3kxT348Xqm+WbWVTg27TQU00vyhIJCaqPTFEavWHB7XDGwx3h/1dlhM
-         U/fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVf8q3/mj02aJKlmpNYbunnfd7N4PRHxwrbbaaKAdDIdPX3Rq9PGWDSVZOxHuVV7CSXX9LIgPB84SaMYeTBYGrel7t2aA==
-X-Gm-Message-State: AOJu0Yzo6+oTftj3BrPL3XYXBeSpV/AK7/cNLGdAN4pi3Z1OUgyyyYYg
-	UlZ/9B7DQmWro2IoTlHaacKu+uKgX+RGxLIzeHrr0cma8yJkmOD6ENZiiFiqxYU=
-X-Google-Smtp-Source: AGHT+IGCKVRCMNm4d7RaSP2AIHUR6qOcRrq2AW65Wn2VjdPU4Vxx7Xtxb1FBgRbUXJM6bi+wUUzI9A==
-X-Received: by 2002:a17:907:a706:b0:a3e:b263:d769 with SMTP id vw6-20020a170907a70600b00a3eb263d769mr4089359ejc.4.1710148547853;
-        Mon, 11 Mar 2024 02:15:47 -0700 (PDT)
+        bh=hqBogdja5tMMOO5wTCklLeqAnS4o63/YOLSFeJQB8FQ=;
+        b=NzPsmOWlmCErz8WKSQq2Y23sTPkKhJW/Zj0XJvX0x/gLyAGKQ2c/0yCx0QIy98mbpd
+         MQd3c+YiQnFssXuvWLyM8GiNpXRBz1yK/jE2oq+hWHf/Wr/+Nu/KC3mmWNe0Ou65SHkp
+         W1FfYHyaKT6yo4m10A8mXw9J28K8ZOlwy1c7CNGlsOHjuR2mbjVp6JRbHyoznTPJvyCe
+         fmDPOCwvyrjcKNVXDSS1kiWmmU1/crEyLmNjux2yoOeJeVzVq0BXhjWMZHkqW9GdDfIc
+         KUYI/yMbm4ts4+zUy9kHU3oWBVz/6bkE9oXkXA7Og06/UH62Pt9j7gS5emz3YHwS/CAD
+         epVw==
+X-Forwarded-Encrypted: i=1; AJvYcCW8G7pCyHmk2YkjhxJkEFztU9anUypmuaF3cGbDMO5gR5v5YPxQdHK8IdfN+JO46J+mWPKkG5Rzehqk28S0olFmHKJjUw==
+X-Gm-Message-State: AOJu0YxPIWx8afxwYw//CoxF8beGwfjlTBQIC0LXvymdKkT9dNasOP9Q
+	jipZZTCtbgVoxupfj+PGQVeVPapBqUFo9+wGVIAACyi47D3K1Wv+klF+HGEaM8Q=
+X-Google-Smtp-Source: AGHT+IEP1SSz9yPrDJnqOEruTPOynch6dZWKvcAjOUpOIrdb62bA7bA/LhoylzwSep0OofKyhGJhog==
+X-Received: by 2002:a17:906:b14b:b0:a3e:d2ea:ff5e with SMTP id bt11-20020a170906b14b00b00a3ed2eaff5emr3888747ejb.58.1710148549011;
+        Mon, 11 Mar 2024 02:15:49 -0700 (PDT)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id js23-20020a170906ca9700b00a4617f1ccf3sm1601256ejb.169.2024.03.11.02.15.46
+        by smtp.gmail.com with ESMTPSA id js23-20020a170906ca9700b00a4617f1ccf3sm1601256ejb.169.2024.03.11.02.15.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 02:15:47 -0700 (PDT)
+        Mon, 11 Mar 2024 02:15:48 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 11 Mar 2024 10:15:43 +0100
-Subject: [PATCH v3 6/9] ARM: turn CPU cache flush functions into static
+Date: Mon, 11 Mar 2024 10:15:44 +0100
+Subject: [PATCH v3 7/9] ARM: page: Turn highpage accesses into static
  inlines
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240311-arm32-cfi-v3-6-224a0f0a45c2@linaro.org>
+Message-Id: <20240311-arm32-cfi-v3-7-224a0f0a45c2@linaro.org>
 References: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
 In-Reply-To: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -76,140 +76,95 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.12.4
 
-The members of the vector table struct cpu_cache_fns cpu_cache
-are called directly using defines, but this is really confusing
-for KCFI. Wrap the calls in static inlines and tag them with
-__nocfi so things start to work.
+Clearing and copying pages in highmem uses either the cpu_user
+vtable or the __glue() assembler stubs to call into per-CPU
+versions of these functions.
 
-Conversely a similar approach is used for the __glue() helpers
-which define their way into an assembly ENTRY(symbol) for respective
-CPU variant. We wrap these into static inlines and prefix them
-with __nocfi as well. (This happens on !MULTI_CACHE systems.)
-For this case we also need to invoke the __glue() macro to
-provide a proper function prototype for the inner function.
+This is all really confusing for KCFI so wrap these into static
+inlines and prefix each inline function with __nocfi.
+
+__cpu_clear_user_highpage() and __cpu_copy_user_highpage() are
+exported in arch/arm/mm/proc-syms.c which causes a problem with
+using static inlines, but it turns out that these exports are
+completely unused, so we can just delete them.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/include/asm/cacheflush.h | 45 +++++++++++++++++++++++++++++++--------
- arch/arm/mm/dma.h                 | 28 ++++++++++++++++++------
- 2 files changed, 58 insertions(+), 15 deletions(-)
+ arch/arm/include/asm/page.h | 36 +++++++++++++++++++++++++++++-------
+ arch/arm/mm/proc-syms.c     |  7 +------
+ 2 files changed, 30 insertions(+), 13 deletions(-)
 
-diff --git a/arch/arm/include/asm/cacheflush.h b/arch/arm/include/asm/cacheflush.h
-index 1075534b0a2e..76fb665162a4 100644
---- a/arch/arm/include/asm/cacheflush.h
-+++ b/arch/arm/include/asm/cacheflush.h
-@@ -122,14 +122,38 @@ struct cpu_cache_fns {
+diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
+index 119aa85d1feb..8bf297228627 100644
+--- a/arch/arm/include/asm/page.h
++++ b/arch/arm/include/asm/page.h
+@@ -138,17 +138,39 @@ void xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr);
+ #ifdef MULTI_USER
+ extern struct cpu_user_fns cpu_user;
  
- extern struct cpu_cache_fns cpu_cache;
- 
--#define __cpuc_flush_icache_all		cpu_cache.flush_icache_all
--#define __cpuc_flush_kern_all		cpu_cache.flush_kern_all
--#define __cpuc_flush_kern_louis		cpu_cache.flush_kern_louis
--#define __cpuc_flush_user_all		cpu_cache.flush_user_all
--#define __cpuc_flush_user_range		cpu_cache.flush_user_range
--#define __cpuc_coherent_kern_range	cpu_cache.coherent_kern_range
--#define __cpuc_coherent_user_range	cpu_cache.coherent_user_range
--#define __cpuc_flush_dcache_area	cpu_cache.flush_kern_dcache_area
-+static inline void __nocfi __cpuc_flush_icache_all(void)
+-#define __cpu_clear_user_highpage	cpu_user.cpu_clear_user_highpage
+-#define __cpu_copy_user_highpage	cpu_user.cpu_copy_user_highpage
++static inline void __nocfi __cpu_clear_user_highpage(struct page *page,
++						     unsigned long vaddr)
 +{
-+	cpu_cache.flush_icache_all();
++	cpu_user.cpu_clear_user_highpage(page, vaddr);
 +}
-+static inline void __nocfi __cpuc_flush_kern_all(void)
++
++static inline void __nocfi __cpu_copy_user_highpage(struct page *to,
++			struct page *from, unsigned long vaddr,
++			struct vm_area_struct *vma)
 +{
-+	cpu_cache.flush_icache_all();
-+}
-+static inline void __nocfi __cpuc_flush_kern_louis(void)
-+{
-+	cpu_cache.flush_kern_louis();
-+}
-+static inline void __nocfi __cpuc_flush_user_all(void)
-+{
-+	cpu_cache.flush_user_all();
-+}
-+static inline void __nocfi __cpuc_flush_user_range(unsigned long start, unsigned long end, unsigned int flags)
-+{
-+	cpu_cache.flush_user_range(start, end, flags);
-+}
-+static inline void __nocfi __cpuc_coherent_kern_range(unsigned long start, unsigned long end)
-+{
-+	cpu_cache.coherent_kern_range(start, end);
-+}
-+static inline int __nocfi __cpuc_coherent_user_range(unsigned long start, unsigned long end)
-+{
-+	return cpu_cache.coherent_user_range(start, end);
-+}
-+static inline void __nocfi __cpuc_flush_dcache_area(void *kaddr, size_t sz)
-+{
-+	cpu_cache.flush_kern_dcache_area(kaddr, sz);
-+}
- 
- /*
-  * These are private to the dma-mapping API.  Do not use directly.
-@@ -137,7 +161,10 @@ extern struct cpu_cache_fns cpu_cache;
-  * is visible to DMA, or data written by DMA to system memory is
-  * visible to the CPU.
-  */
--#define dmac_flush_range		cpu_cache.dma_flush_range
-+static inline void __nocfi dmac_flush_range(const void *start, const void *end)
-+{
-+	cpu_cache.dma_flush_range(start, end);
++	cpu_user.cpu_copy_user_highpage(to, from, vaddr, vma);
 +}
  
  #else
  
-diff --git a/arch/arm/mm/dma.h b/arch/arm/mm/dma.h
-index aaef64b7f177..251b8a9fffc1 100644
---- a/arch/arm/mm/dma.h
-+++ b/arch/arm/mm/dma.h
-@@ -5,8 +5,6 @@
- #include <asm/glue-cache.h>
- 
- #ifndef MULTI_CACHE
--#define dmac_map_area			__glue(_CACHE,_dma_map_area)
--#define dmac_unmap_area 		__glue(_CACHE,_dma_unmap_area)
- 
- /*
-  * These are private to the dma-mapping API.  Do not use directly.
-@@ -14,8 +12,20 @@
-  * is visible to DMA, or data written by DMA to system memory is
-  * visible to the CPU.
-  */
--extern void dmac_map_area(const void *, size_t, int);
--extern void dmac_unmap_area(const void *, size_t, int);
-+
+-#define __cpu_clear_user_highpage	__glue(_USER,_clear_user_highpage)
+-#define __cpu_copy_user_highpage	__glue(_USER,_copy_user_highpage)
 +/* These turn into function declarations for each per-CPU glue function */
-+void __glue(_CACHE,_dma_map_area)(const void *, size_t, int);
-+void __glue(_CACHE,_dma_unmap_area)(const void *, size_t, int);
++void __glue(_USER,_clear_user_highpage)(struct page *page, unsigned long vaddr);
++void __glue(_USER,_copy_user_highpage)(struct page *to, struct page *from,
++		unsigned long vaddr, struct vm_area_struct *vma);
 +
-+static inline void __nocfi dmac_map_area(const void *start, size_t sz, int flags)
++static inline void __nocfi __cpu_clear_user_highpage(struct page *page,
++						     unsigned long vaddr)
 +{
-+	__glue(_CACHE,_dma_map_area)(start, sz, flags);
++	__glue(_USER,_clear_user_highpage)(page, vaddr);
 +}
 +
-+static inline void __nocfi dmac_unmap_area(const void *start, size_t sz, int flags)
++static inline void __nocfi __cpu_copy_user_highpage(struct page *to,
++			struct page *from, unsigned long vaddr,
++			struct vm_area_struct *vma)
 +{
-+	__glue(_CACHE,_dma_unmap_area)(start, sz, flags);
++	__glue(_USER,_copy_user_highpage)(to, from, vaddr, vma);
 +}
  
- #else
- 
-@@ -25,8 +35,14 @@ extern void dmac_unmap_area(const void *, size_t, int);
-  * is visible to DMA, or data written by DMA to system memory is
-  * visible to the CPU.
-  */
--#define dmac_map_area			cpu_cache.dma_map_area
--#define dmac_unmap_area 		cpu_cache.dma_unmap_area
-+static inline void __nocfi dmac_map_area(const void *start, size_t sz, int flags)
-+{
-+	cpu_cache.dma_map_area(start, sz, flags);
-+}
-+static inline void __nocfi dmac_unmap_area(const void *start, size_t sz, int flags)
-+{
-+	cpu_cache.dma_unmap_area(start, sz, flags);
-+}
- 
+-extern void __cpu_clear_user_highpage(struct page *page, unsigned long vaddr);
+-extern void __cpu_copy_user_highpage(struct page *to, struct page *from,
+-			unsigned long vaddr, struct vm_area_struct *vma);
  #endif
  
+ #define clear_user_highpage(page,vaddr)		\
+diff --git a/arch/arm/mm/proc-syms.c b/arch/arm/mm/proc-syms.c
+index e21249548e9f..c93fec38d9f4 100644
+--- a/arch/arm/mm/proc-syms.c
++++ b/arch/arm/mm/proc-syms.c
+@@ -31,14 +31,9 @@ EXPORT_SYMBOL(__cpuc_flush_dcache_area);
+ EXPORT_SYMBOL(cpu_cache);
+ #endif
+ 
+-#ifdef CONFIG_MMU
+-#ifndef MULTI_USER
+-EXPORT_SYMBOL(__cpu_clear_user_highpage);
+-EXPORT_SYMBOL(__cpu_copy_user_highpage);
+-#else
++#if defined(CONFIG_MMU) && defined(MULTI_USER)
+ EXPORT_SYMBOL(cpu_user);
+ #endif
+-#endif
+ 
+ /*
+  * No module should need to touch the TLB (and currently
 
 -- 
 2.34.1
