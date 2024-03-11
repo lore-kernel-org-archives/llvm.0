@@ -1,56 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9903FB95;
-	Mon, 11 Mar 2024 14:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E006446BA;
+	Mon, 11 Mar 2024 14:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710166608; cv=none; b=a4xY+fCqd7nXRKsfg0z+9h5oqul6abky03lJ34IE3XNAd+/7caSbrCH6kvCGlYRGEqNlF1/pBBN3TlSET6KSAs/wMmxolT9ZD7eDMS0xXG3nhT4p+GiRZm9e/Qrh3LQB0wEaph/4lPRJAUWgHC6Yvp5ZGTQUPynUZcrkz1KGqNA=
+	t=1710168530; cv=none; b=R6oYkYRqZxQJMzSQe+DKbJmY3y+7NvFDkjpA5/HsB89InDdAdMHJSIT4ByJOTD/cQU0kE1G/h68bfKpJnpnCaFWqKUXd1Vy7ouJAJ61DvaiiTLjAsE7G3S5cJ6O+oXnWwLvLayLPr5eHPRmEclfwFeblAGEduPhkF+mSElqHUHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710166608; c=relaxed/simple;
-	bh=WSGPC7C5T3gv/BeIbBQR0oTEGkTo2Yp2Jlxul6f5iYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C0vZgDxe/CTGqJlCYy5A03xScySZNsyi18K/xNgvjx9PVjfl6eJ+NcdW1P0YzoKgyXX3kU642kQc6H6AfC6Np4UgTxRtIZ5lBtm1hHni+4EPcb+0byGC5T6Gbrlqday19D5FpKi8NHSurv0apZ0qdNFp+I8q0TTY1CjlwrDOV2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U9brIOvB; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1710168530; c=relaxed/simple;
+	bh=WY/B4tigr6kfxJevqcCORbVn53bZk2oqNNgyUUl8cBw=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bZ1dwQu3hDmwC/lDzS3ioGYxR8FhfPJt9AtlBAVRCc41I5T6XwuV39GqdlrwAFU9qYcN1BXK4/Pp7MOdvwizrrWSazyPnX0WA/Su8JE5DGpcs9xHhpJ+DfzMXWwBh95xWnLrMKWocwLtTngG7DoJEJDRhshQYueZDxY0qnt4G/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mfO+wUi2; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U9brIOvB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mfO+wUi2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710166607; x=1741702607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WSGPC7C5T3gv/BeIbBQR0oTEGkTo2Yp2Jlxul6f5iYs=;
-  b=U9brIOvBiOYviBe4k6h4cWULejE0MC2pEcoBTzpscNgdtvEH24BRH3eR
-   F6VKNr1A325BiHHmYOoCiUZgxEjHB5iv8quHbGcsetRxZ0/fugZ/W4dda
-   o8MgNVKUqi7OPqAdAInGyv6OZay3WaVKj7NVXooDXC2MhW9u+zuw9qhvr
-   Hzq1Ee2RrMKVKOe6PrixibCN4zF7myI2zhSSvI3mSwT4T4rGXXzNrvsCV
-   v0HfC7yvZ3DFmwebn/8S0l01H5C+v81RSu93nncJIPOcpHg3Y5S9YC4vF
-   iMyplZAYJUrd1ycU6npJc74pwLfWDVaW4ceaQ8bKakUjVqsDsNVk4Dxw4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="4755613"
+  t=1710168528; x=1741704528;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=WY/B4tigr6kfxJevqcCORbVn53bZk2oqNNgyUUl8cBw=;
+  b=mfO+wUi2togtoooviaDHIASsThAiKfwJXGLfldZXaDaJ4xi2a32dqbdV
+   6G1ejiFdkLJQiB0qz7GcEjpJ7GYchLVj/oVyW+wq/9aPEF7N9Z69g5Fvn
+   TLs38v54NNta/OYHNY/2U3oUbc1f2gdm5G8+5dxRSzkozYCXMxlsxUxqb
+   v19GcIyPPhq1t+936uHYmmfWXR+srTTwwdPQ2hYMt3v2xnVAPGmPUyAxo
+   uX/8PPMOF5Ucc2meSHaqby7ytKyfwQWfBjJwSZuc4W+WEbwaYIPEFRfJt
+   OKxuXCQo1G+Gocwe4LprmvzTl4m6ueAEF1KLAhQLVWCFNMGjpKnos8UOS
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="5435748"
 X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="4755613"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 07:16:46 -0700
+   d="scan'208";a="5435748"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 07:48:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="11758068"
+   d="scan'208";a="15837776"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 11 Mar 2024 07:16:45 -0700
+  by orviesa004.jf.intel.com with ESMTP; 11 Mar 2024 07:48:46 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rjgSI-0009AX-28;
-	Mon, 11 Mar 2024 14:16:42 +0000
-Date: Mon, 11 Mar 2024 22:16:27 +0800
+	id 1rjgxH-0009BR-0V;
+	Mon, 11 Mar 2024 14:48:43 +0000
+Date: Mon, 11 Mar 2024 22:48:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH vhost v2 1/4] virtio: find_vqs: pass struct instead of
- multi parameters
-Message-ID: <202403112253.omPqb1A5-lkp@intel.com>
-References: <20240311072113.67673-2-xuanzhuo@linux.alibaba.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: drivers/platform/surface/surface_hotplug.c:79:39: warning:
+ arithmetic between different enumeration types ('enum shps_dsm_fn' and 'enum
+ shps_irq_type')
+Message-ID: <202403112223.TISyWjra-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,82 +57,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240311072113.67673-2-xuanzhuo@linux.alibaba.com>
 
-Hi Xuan,
+CC: linux-kernel@vger.kernel.org
+TO: Sunil V L <sunilvl@ventanamicro.com>
+CC: Palmer Dabbelt <palmer@rivosinc.com>
+CC: Andrew Jones <ajones@ventanamicro.com>
+CC: Conor Dooley <conor.dooley@microchip.com>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on remoteproc/rproc-next]
-[also build test ERROR on s390/features linus/master v6.8 next-20240308]
-[cannot apply to uml/next uml/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/virtio-find_vqs-pass-struct-instead-of-multi-parameters/20240311-152448
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
-patch link:    https://lore.kernel.org/r/20240311072113.67673-2-xuanzhuo%40linux.alibaba.com
-patch subject: [PATCH vhost v2 1/4] virtio: find_vqs: pass struct instead of multi parameters
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240311/202403112253.omPqb1A5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403112253.omPqb1A5-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e8f897f4afef0031fe618a8e94127a0934896aba
+commit: a91a9ffbd3a55a0ae1bb75e2b6e85b2a03f64e8f RISC-V: Add support to build the ACPI core
+date:   9 months ago
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20240311/202403112223.TISyWjra-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403112223.TISyWjra-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403112253.omPqb1A5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403112223.TISyWjra-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/virtio/virtio_pci_modern.c:761:15: error: read-only variable is not assignable
-           cfg.names[0] = avq->name;
-           ~~~~~~~~~~~~ ^
-   1 error generated.
+   In file included from drivers/platform/surface/surface_hotplug.c:18:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2105:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/surface/surface_hotplug.c:79:39: warning: arithmetic between different enumeration types ('enum shps_dsm_fn' and 'enum shps_irq_type') [-Wenum-enum-conversion]
+      79 |         return SHPS_DSM_FN_IRQ_BASE_PRESENCE + type;
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~
+   6 warnings generated.
 
 
-vim +761 drivers/virtio/virtio_pci_modern.c
+vim +79 drivers/platform/surface/surface_hotplug.c
 
-   735	
-   736	static int vp_modern_create_avq(struct virtio_device *vdev)
-   737	{
-   738		struct virtio_pci_device *vp_dev = to_vp_device(vdev);
-   739		vq_callback_t *callbacks[] = { NULL };
-   740		struct virtio_vq_config cfg = {};
-   741		struct virtio_pci_admin_vq *avq;
-   742		struct virtqueue *vq;
-   743		const char *names[1];
-   744		u16 admin_q_num;
-   745	
-   746		cfg.nvqs = 1;
-   747		cfg.callbacks = callbacks;
-   748		cfg.names = names;
-   749	
-   750		if (!virtio_has_feature(vdev, VIRTIO_F_ADMIN_VQ))
-   751			return 0;
-   752	
-   753		admin_q_num = vp_modern_avq_num(&vp_dev->mdev);
-   754		if (!admin_q_num)
-   755			return -EINVAL;
-   756	
-   757		avq = &vp_dev->admin_vq;
-   758		avq->vq_index = vp_modern_avq_index(&vp_dev->mdev);
-   759		sprintf(avq->name, "avq.%u", avq->vq_index);
-   760	
- > 761		cfg.names[0] = avq->name;
-   762		cfg.cfg_idx = 0;
-   763		vq = vp_dev->setup_vq(vp_dev, &vp_dev->admin_vq.info, avq->vq_index,
-   764				      &cfg, VIRTIO_MSI_NO_VECTOR);
-   765		if (IS_ERR(vq)) {
-   766			dev_err(&vdev->dev, "failed to setup admin virtqueue, err=%ld",
-   767				PTR_ERR(vq));
-   768			return PTR_ERR(vq);
-   769		}
-   770	
-   771		vp_modern_set_queue_enable(&vp_dev->mdev, avq->info.vq->index, true);
-   772		return 0;
-   773	}
-   774	
+bd69bcce4aa089 Maximilian Luz 2021-02-05  76  
+bd69bcce4aa089 Maximilian Luz 2021-02-05  77  static enum shps_dsm_fn shps_dsm_fn_for_irq(enum shps_irq_type type)
+bd69bcce4aa089 Maximilian Luz 2021-02-05  78  {
+bd69bcce4aa089 Maximilian Luz 2021-02-05 @79  	return SHPS_DSM_FN_IRQ_BASE_PRESENCE + type;
+bd69bcce4aa089 Maximilian Luz 2021-02-05  80  }
+bd69bcce4aa089 Maximilian Luz 2021-02-05  81  
+
+:::::: The code at line 79 was first introduced by commit
+:::::: bd69bcce4aa089435e2891222236b1cb20395bec platform/surface: Add Surface Hot-Plug driver
+
+:::::: TO: Maximilian Luz <luzmaximilian@gmail.com>
+:::::: CC: Hans de Goede <hdegoede@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
