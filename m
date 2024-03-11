@@ -1,149 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB25938DE1;
-	Mon, 11 Mar 2024 09:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA32E2BB0A
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 10:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710150946; cv=none; b=bUvXAwN47e2x2HPS/RVbu7yWgS0Ywn6IP2cXE0s2GibIAtGZRVF2CQNtULV6O2iem0BBMu/2k3BjuM9jX7a6nsu77KtEElrUQaRThgZavsjw0VTAr6vvdFMYFEOx7Llim/+MSJXqO1clDKuge2enBoZZaXgbEvcFw+Cbd6lqaUY=
+	t=1710151434; cv=none; b=nqwsT7uh/zM+YkFwTEVdu0I+yKX7a4Iu6E2uSTH495go0qqF4/fut6pG2qD08KxCh2+jxSToTxtjMjwaVXktt25kabj23pbn4Hfrkv/PV0+PnNvua2gKr/hANN7zqKcwmMf+EDi0YRfiLFIkczYz2NN8on5TNYKPiUYGogiF88M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710150946; c=relaxed/simple;
-	bh=IRziA5u5KOYYRrfULdeIlofdRRWKz9z9ZrW0q4Jm2PA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hICezRe3hjRyKcr8PzLYCk+2H6MRycW/ofYRUeZSmvURSVQX8KiPavIzL7js3HQzOp4jsq2/Bv09mf2T1/+Vr/20qeo/QlprVaNwhDBnft8aRXn7p151neNOIxrNRVf8Z+MfHpu00RdSu/46MaLSQ5dJmDESkEBkZOLIjMWGSKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jOXux6/v; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710151434; c=relaxed/simple;
+	bh=VINzm/Vwcoa2/nF6nA7LPtWX9rDZ2TAoIoiOS4jeeCI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QA8vrVJSbvnEH3aW2ne/iavnBdjmX+xqMuWKqPB8OApOIj10uO2oxqp4qucpzOF3R1XAi4qpY9QQEDaVXmcykNrAcTOZGVK0BbQq0A5tIKO8F7Ogpg8LYOALSP9zz3xxTKfw1q1+U/CQUDUzo1H6CvR+z5UfntiF7YtDc0RM0YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rerct3nJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jOXux6/v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710150945; x=1741686945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IRziA5u5KOYYRrfULdeIlofdRRWKz9z9ZrW0q4Jm2PA=;
-  b=jOXux6/v15WvCDpBHdmsKrx8nHr7rJcXkjoQ6M6Pb7xRfr0q4poeGxND
-   sH48PPbbylTZsDFUITfu7n9nBW6pYUFs3v6RqBSs48dTbcNeZm7QmxwL1
-   CBNBAiKlW7YDpGIZ6j/ZfQp65blmFpCGLw7aj7TzTo8oUooAUoLzxWmch
-   FH8NRwOsx+Kh/WXdALZ14ZGLa7lmKS6xShflUPAFlZTVrR0OXCM5JrFrW
-   s9s/IypFIewsoEIMHS9wttx9+87Bzs9OntPU/IVys9T3mTxmEFVfGEG79
-   CPQyRUDmftPFgjm+VbiPlBUIZb5wnfys779cOWZ+y2Yj2LUi2ddGkP6ZC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="4940540"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="4940540"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 02:55:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="11539618"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 11 Mar 2024 02:55:41 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjcNe-00093P-1H;
-	Mon, 11 Mar 2024 09:55:38 +0000
-Date: Mon, 11 Mar 2024 17:54:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Navneet Singh <navneet.singh@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ira Weiny <ira.weiny@intel.com>
-Subject: [weiny2:dcd-2024-03-10 7/26] drivers/cxl/core/hdm.c:445:3: error:
- expected expression
-Message-ID: <202403111726.SaRLpSrS-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rerct3nJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 750E4C43390
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 10:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710151433;
+	bh=VINzm/Vwcoa2/nF6nA7LPtWX9rDZ2TAoIoiOS4jeeCI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rerct3nJGTcCss5LpdBU0UxkUeOR49WUw4BNFtlVF8RU483fqC6vEYlp46GVkx6Oa
+	 vjjFzzmNZc0ycfqG1NtyeTprsMTHZrK1Ckkfy0J6v9brrVMr9sqPZDmhCIP9DZTFyx
+	 GSG6X8lO0Wvn3NpK4FPMKmeuexJ52HE8MxcTw1WVutRhbmHBkhIWyL6T3wxdh87FuP
+	 D+GgKksH11mfiWuISA+VB4yPX+kxjEBSlCdPTpZww/CRaKQ0XVZ0zf6IW+gfr6JXl9
+	 1IlXmAdbtAH4s63g9a6DCrPA6s3nKS1sOeX78x2jo64Qsg0H25Tk5jNcpktNhO0qd9
+	 ids+l+kS+mY6g==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5101cd91017so6813284e87.2
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 03:03:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWWdZ3KfYLxCC2CUGt4UMUDAPuotwvAR4+lhLJDbOcMl2gNki90zKnbvKiP0ZQfwqAUmUMptcBcxmykQMjCnFmtivs08w==
+X-Gm-Message-State: AOJu0YyUjW1FH82VbSaxz9a4KbFa3KafU1dmpUeC+GxsMBOBPF4SVxeU
+	PBh8F3qjU/0xzCVeKsFTJbSr/3hUITvbe/Z9D1kza3FPQqLyHcYubF3S/7zINSU+bLpUbwKxOzq
+	E5IC5zvV5k2NEWTkfBHPI6sBqvsQ=
+X-Google-Smtp-Source: AGHT+IG0O5uSf+/sFBbtjRhlYB+pT8E3SiMj6cKhI4su44o5o9fL7RMg/k2ms50Ov5e63iNuoswyZOMOXhGOpmYFe9E=
+X-Received: by 2002:a05:6512:709:b0:513:343d:11da with SMTP id
+ b9-20020a056512070900b00513343d11damr3680486lfs.24.1710151431541; Mon, 11 Mar
+ 2024 03:03:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
+ <20240311-arm32-cfi-v3-2-224a0f0a45c2@linaro.org> <Ze7RNalwiZbceFxX@shell.armlinux.org.uk>
+In-Reply-To: <Ze7RNalwiZbceFxX@shell.armlinux.org.uk>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 11 Mar 2024 11:03:39 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHNK+peQUjO4dRnQmLDF+4of0F7cOTSoMPKucMT6NiGDw@mail.gmail.com>
+Message-ID: <CAMj1kXHNK+peQUjO4dRnQmLDF+4of0F7cOTSoMPKucMT6NiGDw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/9] ARM: tlbflush: Make TLB flushes into static inlines
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/weiny2/linux-kernel.git dcd-2024-03-10
-head:   0dd99bd79b33de8f6e293c9a2373ca321dad33c7
-commit: 97663934fa1a6024e94de32c480cece7039db3a1 [7/26] cxl/port: Add Dynamic Capacity mode support to endpoint decoders
-config: i386-buildonly-randconfig-001-20240311 (https://download.01.org/0day-ci/archive/20240311/202403111726.SaRLpSrS-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403111726.SaRLpSrS-lkp@intel.com/reproduce)
+On Mon, 11 Mar 2024 at 10:39, Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Mon, Mar 11, 2024 at 10:15:39AM +0100, Linus Walleij wrote:
+> > Instead of just using defines to define the TLB flush functions,
+> > use static inlines.
+> >
+> > This has the upside that we can tag those as __nocfi so we can
+> > execute a CFI-enabled kernel.
+>
+> Why? This seems to be brain dead.
+>
+> Why can't CLANG cope with directly calling e.g.
+> cpu_tlb.flush_user_range? Why does it need a static function to do
+> exactly the same as the macro does?
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403111726.SaRLpSrS-lkp@intel.com/
+I had the same question, so I played around a bit with the code.
 
-All errors (new ones prefixed by >>):
+What I think would be better is if we could add the __nocfi annotation
+to the type, i.e.,
 
->> drivers/cxl/core/hdm.c:445:3: error: expected expression
-     445 |                 int rc;
-         |                 ^
->> drivers/cxl/core/hdm.c:447:3: error: use of undeclared identifier 'rc'
-     447 |                 rc = dc_mode_to_region_index(mode);
-         |                 ^
-   drivers/cxl/core/hdm.c:448:7: error: use of undeclared identifier 'rc'
-     448 |                 if (rc < 0)
-         |                     ^
-   drivers/cxl/core/hdm.c:449:11: error: use of undeclared identifier 'rc'
-     449 |                         return rc;
-         |                                ^
-   drivers/cxl/core/hdm.c:451:36: error: use of undeclared identifier 'rc'
-     451 |                 if (resource_size(&cxlds->dc_res[rc]) == 0) {
-         |                                                  ^
-   5 errors generated.
+--- a/arch/arm/include/asm/tlbflush.h
++++ b/arch/arm/include/asm/tlbflush.h
+@@ -205,8 +205,8 @@
+ #include <linux/sched.h>
 
+ struct cpu_tlb_fns {
+-       void (*flush_user_range)(unsigned long, unsigned long, ...);
+-       void (*flush_kern_range)(unsigned long, unsigned long);
++       void (__nocfi *flush_user_range)(unsigned long, unsigned long, ...);
++       void (__nocfi *flush_kern_range)(unsigned long, unsigned long);
+        unsigned long tlb_flags;
+ };
 
-vim +445 drivers/cxl/core/hdm.c
+This works for some function attributes (e.g., __efiapi is used like
+this), but the attribute specifier to which __nocfi resolves does not
+appear to be usable in the same manner.
 
-   415	
-   416	int cxl_dpa_set_mode(struct cxl_endpoint_decoder *cxled,
-   417			     enum cxl_decoder_mode mode)
-   418	{
-   419		struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
-   420		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-   421		struct device *dev = &cxled->cxld.dev;
-   422	
-   423		guard(rwsem_write)(&cxl_dpa_rwsem);
-   424		if (cxled->cxld.flags & CXL_DECODER_F_ENABLE)
-   425			return -EBUSY;
-   426	
-   427		/*
-   428		 * Check that the mode is supported by the current partition
-   429		 * configuration
-   430		 */
-   431		switch (mode) {
-   432		case CXL_DECODER_RAM:
-   433			if (!resource_size(&cxlds->ram_res)) {
-   434				dev_dbg(dev, "no available ram capacity\n");
-   435				return -ENXIO;
-   436			}
-   437			break;
-   438		case CXL_DECODER_PMEM:
-   439			if (!resource_size(&cxlds->pmem_res)) {
-   440				dev_dbg(dev, "no available pmem capacity\n");
-   441				return -ENXIO;
-   442			}
-   443			break;
-   444		case CXL_DECODER_DC0 ... CXL_DECODER_DC7:
- > 445			int rc;
-   446	
- > 447			rc = dc_mode_to_region_index(mode);
-   448			if (rc < 0)
-   449				return rc;
-   450	
-   451			if (resource_size(&cxlds->dc_res[rc]) == 0) {
-   452				dev_dbg(dev, "no available dynamic capacity\n");
-   453				return -ENXIO;
-   454			}
-   455			break;
-   456		default:
-   457			dev_dbg(dev, "unsupported mode: %d\n", mode);
-   458			return -EINVAL;
-   459		}
-   460	
-   461		cxled->mode = mode;
-   462		return 0;
-   463	}
-   464	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best would be to annotate the asm code using
+SYM_TYPED_FUNC_START/_END, so that the CFI machinery is invoked at the
+call site to validate the function type of the destination.
