@@ -1,157 +1,105 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A03953807;
-	Mon, 11 Mar 2024 16:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5315633CCC
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 16:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710174197; cv=none; b=lHz2ekXbu3RbZ5VPxa2IIW4KIH0qUEsh+D5aZ0a+qA+AKJ3+T9ZlzuqHjE1y36jKX6Mqz2CVURwiF2Fy+RFnE2HVGcG4cfjOrjIVURcoIzgOcCqRLpXhhT/PIaRTjheARVlvVfy6hPVKu1tVhppBoykwcyo83JgqvaynZXz30D0=
+	t=1710174868; cv=none; b=I+3uuGsgLSOAOouTbufhyX+3njPNomwdBAO+bbZtlH3vtfxmIXDFLF6UlFQXdIi6H1T9XT9FPw4ebvV8xIywzRtEsrZ2FB6Tejr4iP7k/vn7F+gHYn6mUKb2DQVOHJZ2lMrZN//t4evkKn1d8u4eCt0oi1otJlwrXCNqeio0RQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710174197; c=relaxed/simple;
-	bh=LeTUeB66NNu07Tu8xsCZA3P+skWgHcjg+bPmt2EoaRU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cQvvSIONxislLP9wHHCdJfgNCyMkcGV2IIVvZTG7WE49sOEhFl0caKFuzEHDuIuQMfSPloFohWMN/mUKtfQuJ5AAhhTBcET1gNOTI7kOmd97fQytfsjahGWgzxuWu8iO7qUgDyvObl+vb8hniXIbtUXmOc9rMS6v2pFhaOanLy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XrShw5xI; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=cWWnh340; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XrShw5xI; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=cWWnh340; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XrShw5xI";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="cWWnh340";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XrShw5xI";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="cWWnh340"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8BB7534E6C;
-	Mon, 11 Mar 2024 16:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1710174193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IOg3na/OLp5fyJbplID3ln+wXJxKBoSEVF2V/6Zion4=;
-	b=XrShw5xIa+HdMtPCyG18NvKeWQ1ySMJ9R9fV3fHVOO2Gu3V7pNbPVg/YtxqcrRAQHyzJyZ
-	39GaK6hw0+6OM1Xrbj79/xRxsvpAOgrpLnHMK6OVQbtwWm12ijEFjO4BmZ+o3xz6bd/NBc
-	IkQCHS98lEJAMxUzeQocjETlluIfGFE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1710174193;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IOg3na/OLp5fyJbplID3ln+wXJxKBoSEVF2V/6Zion4=;
-	b=cWWnh340wwD0aWr9/7TYO3K0HNnBZt9D3rWeDbA+7emmjzOxpCiw7wb3D8hpuhZEdDtijo
-	Xh6PdV1nDvHfApDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1710174193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IOg3na/OLp5fyJbplID3ln+wXJxKBoSEVF2V/6Zion4=;
-	b=XrShw5xIa+HdMtPCyG18NvKeWQ1ySMJ9R9fV3fHVOO2Gu3V7pNbPVg/YtxqcrRAQHyzJyZ
-	39GaK6hw0+6OM1Xrbj79/xRxsvpAOgrpLnHMK6OVQbtwWm12ijEFjO4BmZ+o3xz6bd/NBc
-	IkQCHS98lEJAMxUzeQocjETlluIfGFE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1710174193;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IOg3na/OLp5fyJbplID3ln+wXJxKBoSEVF2V/6Zion4=;
-	b=cWWnh340wwD0aWr9/7TYO3K0HNnBZt9D3rWeDbA+7emmjzOxpCiw7wb3D8hpuhZEdDtijo
-	Xh6PdV1nDvHfApDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7C185136BA;
-	Mon, 11 Mar 2024 16:23:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ZcVHHvEv72UVFQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 11 Mar 2024 16:23:13 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 1BE05A0807; Mon, 11 Mar 2024 17:23:13 +0100 (CET)
-Date: Mon, 11 Mar 2024 17:23:13 +0100
-From: Jan Kara <jack@suse.cz>
-To: syzbot <syzbot+b4084c18420f9fad0b4f@syzkaller.appspotmail.com>
-Cc: almaz.alexandrovich@paragon-software.com, axboe@kernel.dk,
-	brauner@kernel.org, jack@suse.cz, kari.argillander@gmail.com,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-	trix@redhat.com
-Subject: Re: [syzbot] [ntfs3?] KASAN: slab-out-of-bounds Read in ntfs_iget5
-Message-ID: <20240311162313.yjwhfp7xxjynksih@quack3>
-References: <0000000000000149eb05dd3de8cc@google.com>
- <000000000000a9c150061340dbc9@google.com>
+	s=arc-20240116; t=1710174868; c=relaxed/simple;
+	bh=WixOqrZR+rJh/Fbz+wWrf8dVTfQslX0GeSZNmY4xbK4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=sgNdPA3bpwooKtZGLXUbTSNmXqj4NYWytNwjZUQIDTva+meTuCLnUzYVjFXodSXztS8aGozb4Svzws0v8wD6dL/4xi0A8goC6joZMPAl0oCS+EX+RbAjtZQ+SBGuR4Vd2G0MmRBSNWppn6rjs9aVJF+K2z5V6ENDfoIxYYUhL7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86AC2FEC;
+	Mon, 11 Mar 2024 09:35:02 -0700 (PDT)
+Received: from [192.168.1.100] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D3233F762;
+	Mon, 11 Mar 2024 09:34:12 -0700 (PDT)
+Message-ID: <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+Date: Mon, 11 Mar 2024 16:34:10 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000a9c150061340dbc9@google.com>
-X-Spam-Level: *
-X-Spamd-Bar: +
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=XrShw5xI;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=cWWnh340
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [1.48 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_RATELIMIT(0.00)[to_ip_from(RLeyet8kb1p6pwtwqxkq31mbep)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.cz:+];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-0.01)[50.68%];
-	 SUBJECT_HAS_QUESTION(0.00)[];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 FROM_HAS_DN(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=755695d26ad09807];
-	 TAGGED_RCPT(0.00)[b4084c18420f9fad0b4f];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[14];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email,suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[paragon-software.com,kernel.dk,kernel.org,suse.cz,gmail.com,vger.kernel.org,lists.linux.dev,google.com,googlegroups.com,redhat.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: 1.48
-X-Rspamd-Queue-Id: 8BB7534E6C
-X-Spam-Flag: NO
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>
+References: <20240310020509.647319-1-irogers@google.com>
+ <20240310020509.647319-13-irogers@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Kees Cook <keescook@chromium.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+ David Laight <David.Laight@ACULAB.COM>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>,
+ Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>,
+ Nick Forrington <nick.forrington@arm.com>, Leo Yan <leo.yan@linux.dev>,
+ German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>,
+ John Garry <john.g.garry@oracle.com>, Sean Christopherson
+ <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
+ Fuad Tabba <tabba@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Chao Peng <chao.p.peng@linux.intel.com>, Haibo Xu <haibo1.xu@intel.com>,
+ Peter Xu <peterx@redhat.com>, Vishal Annapurve <vannapurve@google.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <20240310020509.647319-13-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat 09-03-24 13:19:04, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
-> 
-> commit 6f861765464f43a71462d52026fbddfc858239a5
-> Author: Jan Kara <jack@suse.cz>
-> Date:   Wed Nov 1 17:43:10 2023 +0000
-> 
->     fs: Block writes to mounted block devices
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1649668e180000
-> start commit:   3800a713b607 Merge tag 'mm-hotfixes-stable-2022-09-26' of ..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=755695d26ad09807
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b4084c18420f9fad0b4f
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ccc59c880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10928774880000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
- 
-#syz fix: fs: Block writes to mounted block devices
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+On 10/03/2024 02:05, Ian Rogers wrote:
+> compiler.h - synced from include/linux/compiler.h, guards were
+>  added to definitions to avoid redefinition of macros
+>  in libc. ftrace, CONFIG_OBJTOOL and kentry logic was removed as
+>  redundant.
+> 
+
+Hi Ian,
+
+This commit breaks the Arm build (and cross compilation for Arm on x86):
+
+  $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+
+Something like this, but I won't paste the whole output because it's huge:
+
+tools/include/linux/ring_buffer.h: In function ‘ring_buffer_read_head’:
+
+tools/include/asm/../../arch/arm64/include/asm/barrier.h:72:35: error:
+‘__u8_alias_t’ undeclared (first use in this function)
+   72 |                         : "=r" (*(__u8_alias_t *)__u.__c)
+       \
+      |                                   ^~~~~~~~~~~~
+tools/include/linux/ring_buffer.h:59:16: note: in expansion of macro
+‘smp_load_acquire’
+   59 |         return smp_load_acquire(&base->data_head);
+      |                ^~~~~~~~~~~~~~~~
+
+Thanks
+James
