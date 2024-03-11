@@ -1,107 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C1BDDB0;
-	Mon, 11 Mar 2024 06:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0362E20DE5
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 09:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710139373; cv=none; b=uSX2XwIE+9EtRbbW9WFtmRZO8tu61cxwLhK6SyPcXz/ZdjCIG3Nnf7pTGZyvUzSx66gbf+wvziLGsMKXrMuSoERoLFG/mzkVshCxsMdng2hbK98axX+sIKkFHbnFscmy5aOCIfBQxHs8V6qtKbJheMTOiisF+KYnfI8ZX2vXurY=
+	t=1710148508; cv=none; b=OQ5xDbq0+4YYOEhpIxxerv0z8N/n2GaB2kMaxOy/gTje5m9GGMbcRmybkSmlwMi4PBzAv27mNecT+IdnL5GPWRtTKBbjYNuK4AIb4JmwVr8BGZLRr01/xsBkvJzi5na3Ahn7qa7C2IIyhRc7MzkWy4Skli2/6U4Nu63QKpuo/0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710139373; c=relaxed/simple;
-	bh=X5qz9Wi4uBq7D4n7eDIWIgGHVZWH2iYo30BLX+iEMuQ=;
+	s=arc-20240116; t=1710148508; c=relaxed/simple;
+	bh=QO/GNzNkf2YcryLx1EP1noGR45Eqf4Z0zlwExKfufq0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MORGhZgVGeaZm4Jkpao5CUTF2yg0F4jUEsmgjpCrZZVg1Z8WxkJ7rHl8yM9NnA4nFgfgK+NgnH8qwqvZ3M1iL/W3/+Lz1T0qLXTxPjs3LJ9FDObtgMvWAbsiRhjJAcpPfumC4+yhaSAdQafS9ElLmeuiUqc5nOZuYE+yClamFss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qeTDraVT; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qeTDraVT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F26B7C43390;
-	Mon, 11 Mar 2024 06:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710139373;
-	bh=X5qz9Wi4uBq7D4n7eDIWIgGHVZWH2iYo30BLX+iEMuQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qeTDraVTTf+ACqxXrDDimzU8Nh4CnUfoK1WZtlJ18mfUvkUo+uqgqSNOssx4EzQM7
-	 aJ4BAYMvZCZwVs5xe4bozsdcmZpU9wl+C0Uc8JDHaZpT4Nju8nprGzuz7amcOOfNBc
-	 /1Nf5vgxgBx8J90D494O08kzbcx/AfrukIxD6e9lah7bBY4n83RjgQsK1g5/N5mX4i
-	 iuQbGBbWpS02De89jKpMR+nWrql9OCpYlVno9PEaljteUeWyEPMXwkitLVdH4U/Wja
-	 jieVZofB2Kfo8kvWxwh2b5AjxqqS0J9jhd/QRRrybwVDgShnx0/w2qAWzBi1hDG/4c
-	 I7L09zckSfldA==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-512f54fc2dbso3445136e87.1;
-        Sun, 10 Mar 2024 23:42:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXdGagRVqzU6uX0UiOY3QaBV1hzcX2Q+08Sj3m88STjYGXm0YyOCcbP/M/GFkfQ0U8URBspC2rdhmfTUqiMHJO3QcvmOyhDQR5Z8khEdzKz6Yp8bJPB18+FFyToNsVod85/rjo=
-X-Gm-Message-State: AOJu0YxKcZEcozaTmzQ3qi6gijagckr+VfEX/Ry0IEBYhDtex11BwTCq
-	yQePBhQaDYkkPE6fkzf2Q0WXO3oRXoRA8wJRtJuK7WUQ9cCxMxzUWzALfKvKuNHlU6ucmhcRx2t
-	4PPX//5DNBRVF5x3Kh7jlCkXpSpo=
-X-Google-Smtp-Source: AGHT+IFRvN4GnmkKCHuiRRRDivtgUw11BSzhv9eBjtFFiLCjPwtxoIH9/kVamdN69E8+WDuN3wpWoUEIthHheticPz8=
-X-Received: by 2002:a05:6512:1091:b0:513:aef9:a7d8 with SMTP id
- j17-20020a056512109100b00513aef9a7d8mr546945lfg.47.1710139371237; Sun, 10 Mar
- 2024 23:42:51 -0700 (PDT)
+	 To:Cc:Content-Type; b=HtACpdCZx6B2qi3DDDK+tObsGRdlbIwhSWClI5Dsp730ATBKpGGaxY9FsLkB1cikHMhvcdMj/GKDfe8ZH7YcsdLbOuXWpOcvZywKOTGvP/C0iysiAJfJea37G4AX03SLiO48UIsHk+vC39uHpqoV517ALVP61woGSUKFnr4Piak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc745927098so3611209276.3
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 02:15:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710148504; x=1710753304;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Afomj2qqE2Ncus3hWAy0Jm8sIwQF0kbqpG+NUNMGeg4=;
+        b=hc0CpxgWwXUOjZhDf0p6Br0FcN9fJCxsjNeKmqzpHRj4QIL+fxant4V1gx8JhHc8jr
+         VMu1A3JHA3D+WXQQ7obg7QVw+GM4JHPPD6d5ugVxdjL0Vn5cjX6m0Ii4+1S6BqFKHnUY
+         YG+4K97wLR6agc3xLV7LCN0Xpc0NIo/QygZfGnj59o7JBk5XawLVrgB1doKsO1Vuu6Uz
+         ChPaGuFVGoNZKDMOks33xTQt+aPYnKus9hdrWezINUahDuODeXJO9ZME71JMO30xh7oL
+         ugtGrELgRwPP9Cnhxwr9upAh+huuJJDkTweRIRcTfJpw571Z3iNnvHN4FQvNfYWC925e
+         aUHA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOfVdyh0haXyZ+pqRHuhBVD08Cz3Nzt0tcOiTw3NuYhuEPrv+FODi0/TzlGhGIzem5PVsswc/wEcH6vRaeiEYwqXm61w==
+X-Gm-Message-State: AOJu0YxxkWOg82OAfZEGkIRuof5MAuR9PQv4Omnbogez1Maefe41Er1i
+	I4DKqW5SoJ5eWr/KfFqSxxIp4OCIja4ol9lb/Ut7i2ELGc7ZjZ/oNDsLU5vPq2M=
+X-Google-Smtp-Source: AGHT+IE35d+QINOW44bXRd5Oo/LdgRFB3lfWFGKjF53PpLOTdtfmm3HCqA+k9Y2tjzD67hhoqNJQQw==
+X-Received: by 2002:a25:c7c9:0:b0:dc7:5157:d43d with SMTP id w192-20020a25c7c9000000b00dc75157d43dmr4049942ybe.42.1710148503911;
+        Mon, 11 Mar 2024 02:15:03 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id h17-20020a25b191000000b00dcdb0f80b69sm1080483ybj.48.2024.03.11.02.15.03
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 02:15:03 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-609fc742044so35366207b3.1
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 02:15:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVd7OXyFLkPoYYjefeLrfHLZGW0T6YIOceSVrQkwmNSW204jzLn9w6sABbchCvdy10097p0GXh9J+D6dE9IYyfEgc8Dkg==
+X-Received: by 2002:a25:9d85:0:b0:dcf:5be3:3ed4 with SMTP id
+ v5-20020a259d85000000b00dcf5be33ed4mr3877372ybp.17.1710148502987; Mon, 11 Mar
+ 2024 02:15:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202403092219.dhgcuz2G-lkp@intel.com> <CAADnVQJ+6mFs56fu+KEvumQ5uqM-oLpYx0hGxLJfE9XUCtEWEA@mail.gmail.com>
- <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com> <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
-In-Reply-To: <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Sun, 10 Mar 2024 23:42:39 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
-Message-ID: <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
-Subject: Re: [bpf-next:master 5/7] kernel/bpf/core.c:900:5: warning:
- '__pte_index_size' is not defined, evaluates to 0
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Puranjay Mohan <puranjay12@gmail.com>, kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
-	Alexei Starovoitov <ast@kernel.org>
+References: <20240307151231.654025-1-liuyuntao12@huawei.com>
+ <58cc1053-7208-4b22-99cb-210fdf700569@app.fastmail.com> <42892794-7668-4eb0-8d2f-c78ca0daf370@huawei.com>
+ <2a90581c-f1df-4d6b-8f0b-8e7cbf150ed9@app.fastmail.com> <346e15e5-49e9-4a7f-b163-c3316225baab@huawei.com>
+In-Reply-To: <346e15e5-49e9-4a7f-b163-c3316225baab@huawei.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 11 Mar 2024 10:14:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXKk9S9voKVPvO+xvn1zFW3FnKyVHQGDkC7b9Ynkcnvmw@mail.gmail.com>
+Message-ID: <CAMuHMdXKk9S9voKVPvO+xvn1zFW3FnKyVHQGDkC7b9Ynkcnvmw@mail.gmail.com>
+Subject: Re: [PATCH-next v2] arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+To: "liuyuntao (F)" <liuyuntao12@huawei.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Fangrui Song <maskray@google.com>, Russell King <linux@armlinux.org.uk>, Andrew Davis <afd@ti.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Jonathan Corbet <corbet@lwn.net>, 
+	Mike Rapoport <rppt@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 10, 2024 at 7:43=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sun, Mar 10, 2024 at 3:05=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.=
-com> wrote:
-> >
-> > Hi Alexei,
-> >
-> > On Sat, Mar 9, 2024 at 5:38=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > Puranjay,
-> > >
-> > > Looks like I have to drop this patch for now,
-> > > since PMD_SIZE is not a constant on all archs
-> > > that can be evaluated by a preprocessor.
-> > >
-> > > We need to find a different way.
-> > >
-> >
-> > How about we define it like:
-> > -#define BPF_PROG_PACK_SIZE (PMD_SIZE * num_possible_nodes())
-> > +/*
-> > + * PMD_SIZE is really big for some archs. It doesn't make sense to
-> > + * reserve too much memory in one allocation. Cap BPF_PROG_PACK_SIZE t=
-o
-> > + * 2MiB * num_possible_nodes().
-> > + */
-> > +#define BPF_PROG_PACK_SIZE ((PMD_SIZE <=3D (1 << 21)) ? (PMD_SIZE *
-> > num_possible_nodes())  \
-> > +
-> >                              : ((1 << 21) * num_possible_nodes()))
-> >
-> > So, it will be computed at runtime. This adds more performance
-> > overhead but this is called very infrequently
-> > so shouldn't matter.
-> >
-> > Or we can hardcode it as `2MB * num_possible_nodes()` because
-> > PMD size in most architectures will be 2MB or larger but never smaller.
->
-> I think hard coding is cleaner and less surprising.
-> I'd like to hear what Song thinks about it.
+Hi Yuntao,
 
-Agreed. Let's just hard code it to 2MiB * num_possible_nodes().
+On Sat, Mar 9, 2024 at 2:24=E2=80=AFPM liuyuntao (F) <liuyuntao12@huawei.co=
+m> wrote:
+> On 2024/3/9 16:20, Arnd Bergmann wrote:
+> > On Sat, Mar 9, 2024, at 07:14, liuyuntao (F) wrote:
+> >> On 2024/3/8 21:15, Arnd Bergmann wrote:
+> >>> On Thu, Mar 7, 2024, at 16:12, Yuntao Liu wrote:
+> >>
+> >> Thanks for the tests, CONFIG_LD_DEAD_CODE_DATA_ELIMINATION and
+> >> CONFIG_TRIM_UNUSED_KSYMS do indeed result in a significant improvement=
+.
+> >> I found that arm32 still doesn't support CONFIG_LTO_CLANG. I've done
+> >> some work on it, but without success. I'd like to learn more about the
+> >> CONFIG_LTO_CLANG patch. Do you have any relevant links?
+> >
+> > I did not try to get it to boot and gave up when I did not see
+> > any size improvement. I think there were previous attempts to
+> > do it elsewhere, which I did not try to find.
+> >
+>
+> I tested this patch, the size improvement was only about one
+> ten-thousandth, and the compilation time had increased by about a quarter=
+,
+> and the kernel did not boot.
+>
+> Strangely, LTO has actually increased the compilation time
+> significantly, which seems contrary to its purpose.
 
-Thanks,
-Song
+The purpose of LTO is to reduce code size. Doing so requires more
+processing, hence the total build time increases.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
