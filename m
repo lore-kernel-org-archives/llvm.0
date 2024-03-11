@@ -1,95 +1,118 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F299352F82
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 19:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3B054F95;
+	Mon, 11 Mar 2024 19:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710186668; cv=none; b=etBdEnSHpWg0oUm9Ray/MjDGmCemTRvciEa02oBy/y5xCapS//vfVuwhoUYQ97qzHwbhR3/u4bpflFBV4uwRXMK1lwr8JMbtz+6L1nL+sVqdGiDMIC3OOMFo0tYtHJZTwUUAEr4szRpwdkyChVoSfc2KtK4T2gyvwn0D0yiGu0w=
+	t=1710187116; cv=none; b=fLSpYwdj/WQusaKWQB/JT0czjoqa80F6iJy7iheGBPXtOTHsp8PHLa+XpUnOJH7M6/HGyTRhx6E+J/o6PJ5ZFZrWYfAmquNlfDB9pkvyNYWurNe+vD3EJzpX/wmgqPUfBQLO82aem3vbqPr5GIvTdv3b4X5Hwxbr0O3WqyD0Fz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710186668; c=relaxed/simple;
-	bh=Rk+yR5unQIY4XylpeSSJoC2LTlqJA9Q258wTaNmoT/o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kBTvijN7WmxRFiPzTMQozrZT2PMnyvJaL0mxurryWe2gv2RANtGKsJV9eO8oB1p7Og48+iKilWiVxdQjiNoyNUPv8hUJPagpImzosApBA++JfPVtFyNQUtWG/h122CIsjN4gHjARJkBJ/EpjxVimsu0aGA4/+56Ryo5sNuslWnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=It90D7bg; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1710187116; c=relaxed/simple;
+	bh=ssNflA7VlumiRNbQACID7MitO221/D8PNzUcKbsa064=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YYg0LoFrXRxkF7Vuq/T270Z52crJxSNj8Ik0gRidkSQPCWt+WGF31U8Mdg7sIFjKqqNof2lt1zY4TNCFm8/rNtIAPrIhj2tYJsvA6c0ngH/H5tZI8kXcWvRb+9VBqVSoriLOs1HG8X05mNChHx5Ju72jdeeMLLGvk/06hoyekRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ga4H7MB+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="It90D7bg"
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dcc6fc978ddso3705205276.0
-        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 12:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710186663; x=1710791463; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rk+yR5unQIY4XylpeSSJoC2LTlqJA9Q258wTaNmoT/o=;
-        b=It90D7bgSN4jF2lyVBIghpYhiGgU3anP/z1XIY9jXaeoO0rkd5GX3Y0RfS987UOIMF
-         7Dbe8uK3Mn/Rv3hODgu+uAaIP+3B7vK+bNah52zurjkAH3Qn9Cij3IF0VfZTh1RWGUrs
-         /bcrqbayCw4KY2GNIPNmipANpQAckP8o7QcK46+MUncWuZIZU4c4L4ZlG5MOAsKZkdl+
-         cDAYDJHFJVR5ng3tzNagcMKTruk1plh8OVXozphJH1uPMRrTvRuvb5nwXM6f61kTdS61
-         vYHUKpgSrbD7nOxpj0TPg9dieZ6VrZUOptaiNI26RDQeAyCGP/RVzvwv3Ym0JGeK8O1F
-         Cj6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710186663; x=1710791463;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rk+yR5unQIY4XylpeSSJoC2LTlqJA9Q258wTaNmoT/o=;
-        b=wkCtFP30UjU9oYe0e+lQM8PdqXogyYP3ET5LZgYl+PdSwHH9LmtT3Oa85aBJ6FXMFl
-         MLhaxukcaLpXXBZM93gBYQQ0nvdmhEE7Gs79VKkXKP0Xf/dZnzmT5D53twI0PQ7Gatsb
-         vNWmLPvweeRjxQAkvII6Y21fDsYZsMRtf31RQ2jqg9WxlPjlofIDfSOkjfDT7CidcVRs
-         1TO7fTJjF6Bw/nzrFzYCoRNVCcud+F+OYtJXYYYm4Pz4EGy1dJqHKv0PYEbauEg3TAcl
-         TDcls4meAWBV1deStbYGUBISL3OlUa81rCEqgnXBz3V9w2g2yDdIXB49NOqG5wXsOF8T
-         IIhA==
-X-Forwarded-Encrypted: i=1; AJvYcCWfgGq8EAvp295iP0VC3RPj3V2vdlWWlabkdgJSiHwmPtf5RiaFr+f8vBW9Vj2nTKgACmENL27rM++Q2AK7yH4jdFqqCw==
-X-Gm-Message-State: AOJu0Yyiu7HcLdapfnMOJZH5zTw5CV5G6j4two+RilUfkBXM7nxAmWuz
-	dlQlJZu1+ThKy6P4ZeyyITAxyoD6klGNo9Pi6/+AHAo39qfXeCDv1H62pEW1e24kP88bWEGP3vY
-	7ydqpE3l28v3QZHW+sEFhQrmf2oK5DQzJKicZEQ==
-X-Google-Smtp-Source: AGHT+IEPshGtL6B1pVPxasTXmlinkxfEj+Hq0lnn3l8pgEEiZwPylH+0kiULHKKbYyN/aw1XGsoEut+OPV+s4dh/jj8=
-X-Received: by 2002:a25:41c1:0:b0:dc6:daa4:e808 with SMTP id
- o184-20020a2541c1000000b00dc6daa4e808mr6044247yba.12.1710186662977; Mon, 11
- Mar 2024 12:51:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ga4H7MB+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4714C433C7;
+	Mon, 11 Mar 2024 19:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710187116;
+	bh=ssNflA7VlumiRNbQACID7MitO221/D8PNzUcKbsa064=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ga4H7MB+n/UszT8fQQAyc+ZafKIC/IoT6PXlcO0UCBq+eoH1GEx/oe+cfs1WzM6E9
+	 7K1BfFeslSgIgq+An2+bRA5NGTjQKD6ZQ/35nUX7WLO6/RPlWpltiwgpApdKgojNzN
+	 uuhd/WghRDZC6KRkaajxhi08GN82/2o+tXriQTHiASR22+uFQB6FF6pn6odXas/cli
+	 AIMcBBvCG8omT6PVIcLfdRKpmjjIRCtQ9vxnBaFxs/QmBNTQjYCq+Ny5NOopW57PhH
+	 165aUX0uYO/MZqnp8tvTXi5BZurCChOZXOknCyHEWc6QxvvUwycAdIIEKxlPWZSIU7
+	 yws3clDWr5pMQ==
+Date: Mon, 11 Mar 2024 16:58:33 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: James Clark <james.clark@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Liam Howlett <liam.howlett@oracle.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Will Deacon <will@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	David Laight <David.Laight@aculab.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Shunsuke Mie <mie@igel.co.jp>, Yafang Shao <laoar.shao@gmail.com>,
+	Kui-Feng Lee <kuifeng@meta.com>,
+	Nick Forrington <nick.forrington@arm.com>,
+	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>,
+	Rob Herring <robh@kernel.org>, John Garry <john.g.garry@oracle.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Chao Peng <chao.p.peng@linux.intel.com>,
+	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>,
+	Vishal Annapurve <vannapurve@google.com>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
+Message-ID: <Ze9iaape_1Du4oAa@x1>
+References: <20240310020509.647319-1-irogers@google.com>
+ <20240310020509.647319-13-irogers@google.com>
+ <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+ <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
- <20240311-arm32-cfi-v3-2-224a0f0a45c2@linaro.org> <Ze7RNalwiZbceFxX@shell.armlinux.org.uk>
- <CAMj1kXHNK+peQUjO4dRnQmLDF+4of0F7cOTSoMPKucMT6NiGDw@mail.gmail.com> <CABCJKuf6CWw5Ff955H5qD1Nva-j3WJZ-5A7Rb1TyBwCaEd3E2A@mail.gmail.com>
-In-Reply-To: <CABCJKuf6CWw5Ff955H5qD1Nva-j3WJZ-5A7Rb1TyBwCaEd3E2A@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 11 Mar 2024 20:50:51 +0100
-Message-ID: <CACRpkdbjjbRP5cED+qX5PGpvjvBEK9AxnGekVab=7WMrAPe+pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/9] ARM: tlbflush: Make TLB flushes into static inlines
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>, "Russell King (Oracle)" <linux@armlinux.org.uk>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
 
-On Mon, Mar 11, 2024 at 4:35=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
-> On Mon, Mar 11, 2024 at 3:04=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> =
-wrote:
->>
-> > This works for some function attributes (e.g., __efiapi is used like
-> > this), but the attribute specifier to which __nocfi resolves does not
-> > appear to be usable in the same manner.
-> >
-> > Best would be to annotate the asm code using
-> > SYM_TYPED_FUNC_START/_END, so that the CFI machinery is invoked at the
-> > call site to validate the function type of the destination.
->
-> Agreed, ideally we would annotate indirectly called assembly functions
-> with CFI types and avoid __nocfi wrappers.
+On Mon, Mar 11, 2024 at 12:24:24PM -0700, Ian Rogers wrote:
+> 5) headers we have just so we can use shell scripts to scrape
+> constants for beautifying things in perf trace
 
-I'm taking a stab at SYM_TYPED_FUNC_* for ARM, as we don't have them
-yet.
+> (5) feels like the headers should be alongside the shell scripts to
+> avoid polluting tools/include.
+> Not that I propose fixing any of this here.
 
-Yours,
-Linus Walleij
+Yeah, 5 is why we have things used just for scrapping in
+tools/perf/trace/beauty/include/, that now has just socket.h, used by
+
+⬢[acme@toolbox perf-tools-next]$ tools/perf/trace/beauty/socket.sh | head
+static const char *socket_ipproto[] = {
+	[0] = "IP",
+	[1] = "ICMP",
+	[2] = "IGMP",
+	[4] = "IPIP",
+	[6] = "TCP",
+	[8] = "EGP",
+	[12] = "PUP",
+	[17] = "UDP",
+	[22] = "IDP",
+⬢[acme@toolbox perf-tools-next]$
+
+I'll see if I get a series moving things that are just for scrapping to
+that directory, then test on the container build images I have.
+
+- Arnaldo
