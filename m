@@ -1,102 +1,188 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FD056B6A
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 21:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007F556B90
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 22:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710193058; cv=none; b=AooxBTpy6PRVKsqtfaV2qgnr6V/7etPzt9ILJo8oBwmSBwIvR5SODKyt19OSwIj0A3cIxPlkeVv3jgR82E82u9p5tbiDLv9EVYNYgY0f8u26RVZ3BZwocxoWbrrWuSwg4Ed5/5ouiLSf4XaKRHjexJxPvWWJAhbOhlI8oMLHNcE=
+	t=1710194622; cv=none; b=nhWsN+Ki6cN4d60PR6swu1Ikg0/4O8Z/wBfB6cDekUKsqMoRD+4kh/hO4vTrpZUADxwgrJaHonk7etWNkjkhLjLctoHKMTh0mmPYYmUrGpiKAXM3EFjcCvkMHGaOUElq1UV/I0fv5VPsTKob7lElshfR3fHYChCAjgcrfLtc34A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710193058; c=relaxed/simple;
-	bh=N853XvEibZN47TE1cWdHT0pEPEBWvZU8jqjFxo3kbrk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QwTK3U4l1onP63ZZS3fKOFSf9bOgOHrISp34sFOpjZfBCGotW76s/bPv3TRf8is1y1WDg61W6J/FdvpsKsZxL3IeP7pNc/1H6CYeR/AkHzhSdWAFY5IvI5WhOWTcAnhu0knwxGliPRi3dnWxckXOcryH8TJVvBn8/REqz7/sLZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PCAl29bM; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1710194622; c=relaxed/simple;
+	bh=XctTF/eZhqBg9wOa9pYdN6uOqK/W/3CpD9zlSVlkuz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kdS07pdxuIrhyIO6iRi+9PHex8XEbE8orDT/oP+nWdAwTCYxfVAPMrlZVNynKDujLSJy2Ke0EumTvNhLpL607RChJMNff/fwOWs9NDoJQRS2JZrpaO69z+8iJcSf4bSSx+iFT7XzWDAcfDEiNhxk+AJJ+2VqsuPKh2pU9EV2/Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=T7C1pB1u; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PCAl29bM"
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-7dba8bc7d7cso1924706241.0
-        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 14:37:36 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T7C1pB1u"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e55731af5cso2409943b3a.0
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 15:03:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710193055; x=1710797855; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N853XvEibZN47TE1cWdHT0pEPEBWvZU8jqjFxo3kbrk=;
-        b=PCAl29bMpG/M9OZ4hANY2E0kHSRqLNm3W8n+lrxb8XW4QG0E7wmyHJ9lFLr77TTQWp
-         bnowHsn3UUhrpwvCEW3fUemdSZ8BKKnG1A4hPyf76KIQYdOwaUEz93vY5oyQyGH5+Wax
-         2G+tvEbKK2nsHFc0GzmAXpTOacLbQrhiFABn8VFccj7BPB2K80jY5miDWoH0v94LTYzT
-         yyAv72kF6QSx1hIFp7OFfcSbIREqbDd8OGSzEgl5cE9y9RWp3E+rW+tIoX/oP4wWs34k
-         aM2L5c0btYy8wBjscaVH4k6UwGbET7z7XFG1ZZgYLJ1N4mNG0x4/H35VTwS332qb1L3m
-         tFRQ==
+        d=chromium.org; s=google; t=1710194620; x=1710799420; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X3s7HtVBnE3ACtPsCnNNAAYCoRWSvkfV8hOdKZg+3iU=;
+        b=T7C1pB1uzjVArqTS6dBf1x+P4k0UNzx6eBSGGt1PoTPji7ahSj8CK2flomzNLNAtny
+         onQwZyJUfcPYjkFeCyJ7CJ+LK2/LMah7gEvew1agqXV6S/un63nyBKc1VwH2i37N14UH
+         H7U0APm8pLlgPf4HB7wt/73LHZ0yvSWLlnthg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710193055; x=1710797855;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N853XvEibZN47TE1cWdHT0pEPEBWvZU8jqjFxo3kbrk=;
-        b=jzehHTEUZ6gFPlMpppLGZeul5clY6pi1dzQi2a+ufNGGRiaxGCobZ1KvgSbGW0paEE
-         HWOOIYb6UxUkd9fiDyBxIv59TPoz63hjAyS6eLYvc/Vzkei6xOPXdWnKttSePALsjV87
-         W2I46WYwqsQSoHW9nf027L1OUI4739qRTUjcfFjzXea7Quf7pz9nR8qZON5RB/sc1gbD
-         A8zHCOxfadMfJ3x1JKCAx3rTkUF14wip4ISkULwwSvAW8hTMENz6hpmN3fCiGHUAYC+V
-         zmmou6QDn3Xquh9P+zcNuyRFxIiAxdXy/crYfdNYMsR2079lLhgFglaa6I3+r0cWDsYu
-         5KOg==
-X-Forwarded-Encrypted: i=1; AJvYcCWYI1UGy97lgQALtj1bcJb/O6JRMiAdH8qOmRxfl7KjLv2nOWWUeYHinQHSgvrkKE5SMQuyHujIxRna5XwYlQJ9wgoXmg==
-X-Gm-Message-State: AOJu0Yx+6dZP94t63JPMYvQKcFNWh0XbLuYw6zNpSZ7y8QFQgfyh+hx7
-	SBfE7vt4PEPzbHCtPPj6AQEn3FdEQsk+xtdM5dK40zgiu0cB48Gy6OiHh1ObuanIpIOaxJpK1Jw
-	H5Vo2ZokXhILLQMGxs08LxkaUixvH3KtMz8+2
-X-Google-Smtp-Source: AGHT+IEO714s0RPucD+/UcnMHJ8QdLvtwi6hMYTW/m+TdpnEAamg13qMDQWImYMakWSE57Url1wc6pMZx9ZIWmy2W0I=
-X-Received: by 2002:a67:f718:0:b0:473:799:9764 with SMTP id
- m24-20020a67f718000000b0047307999764mr5696799vso.14.1710193055495; Mon, 11
- Mar 2024 14:37:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710194620; x=1710799420;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X3s7HtVBnE3ACtPsCnNNAAYCoRWSvkfV8hOdKZg+3iU=;
+        b=nEGn4pjcOslSKEw7Ti6hH8SvbJvjiMG0B4XcyOKoiQZj67n3lFl7EJwWcQxvaGJ2Hy
+         36XViInkko7XbxfW4m+BbEybGjBvGHINskVlv3T+qUG37DHggLLSXXb0Ro3nwzzfG9Xa
+         a74Y4OXqHSyXrFtnEEwo9nwd4zRuVn882dme57NK+P6xp4B8T+FY763O/HAmhZ8c7NW0
+         8ETSdQ/hoz0tD9KleHcMClzHbdySZb3ZnKnRgnFb/FjvPBMSp0x5fdAQawSW6fF2IJHf
+         T0NvJ4CTfxnjtyvvqfMzptBFf3vLEoewGuDGsjr6cEPrNizARQh9E/E2sZLSbhb2Wr3T
+         0N8w==
+X-Forwarded-Encrypted: i=1; AJvYcCW1eoZDFHGVvc3+tw/uXyDOcAIgDjgsRN/Hof43J99hDPZmD71dVICL4wXE8Z1fEM7/ovUck/WSAMxsBfu52zzfXBi2iw==
+X-Gm-Message-State: AOJu0YzCP4qSuba+7AswRUpEKOCgwacpcir3IzVpDKIc8Blx3gPc6UQ5
+	955MFszX5SzUyHGP9gRkSyvnk6CO+d9SjPZSXzDM3WYjwfsiYMkEb5c1MrACJQ==
+X-Google-Smtp-Source: AGHT+IE1s483Lf5q0Xlj6V4BBPg6RSuGNl+/ruvaU98QZ+YvNM90WIASjVUCv7mzQ2fpw9LyH86oYg==
+X-Received: by 2002:a05:6a21:918b:b0:1a1:6735:b8be with SMTP id tp11-20020a056a21918b00b001a16735b8bemr5610060pzb.41.1710194620230;
+        Mon, 11 Mar 2024 15:03:40 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t123-20020a628181000000b006e657c72cf8sm5212215pfd.148.2024.03.11.15.03.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Mar 2024 15:03:39 -0700 (PDT)
+Date: Mon, 11 Mar 2024 15:03:39 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 9/9] ARM: KCFI: Allow permissive CFI mode
+Message-ID: <202403111502.5351F8D7@keescook>
+References: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
+ <20240311-arm32-cfi-v3-9-224a0f0a45c2@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
- <20240311-arm32-cfi-v3-2-224a0f0a45c2@linaro.org> <Ze7RNalwiZbceFxX@shell.armlinux.org.uk>
- <CAMj1kXHNK+peQUjO4dRnQmLDF+4of0F7cOTSoMPKucMT6NiGDw@mail.gmail.com>
- <CABCJKuf6CWw5Ff955H5qD1Nva-j3WJZ-5A7Rb1TyBwCaEd3E2A@mail.gmail.com> <CACRpkdbjjbRP5cED+qX5PGpvjvBEK9AxnGekVab=7WMrAPe+pQ@mail.gmail.com>
-In-Reply-To: <CACRpkdbjjbRP5cED+qX5PGpvjvBEK9AxnGekVab=7WMrAPe+pQ@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 11 Mar 2024 21:36:58 +0000
-Message-ID: <CABCJKuf7xmCBs8UrpEbeRtQnofuq2Pp4M=RGT4TUw1+HsvS_CA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/9] ARM: tlbflush: Make TLB flushes into static inlines
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, "Russell King (Oracle)" <linux@armlinux.org.uk>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240311-arm32-cfi-v3-9-224a0f0a45c2@linaro.org>
 
-On Mon, Mar 11, 2024 at 7:51=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> On Mon, Mar 11, 2024 at 4:35=E2=80=AFPM Sami Tolvanen <samitolvanen@googl=
-e.com> wrote:
-> > On Mon, Mar 11, 2024 at 3:04=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org=
-> wrote:
-> >>
-> > > This works for some function attributes (e.g., __efiapi is used like
-> > > this), but the attribute specifier to which __nocfi resolves does not
-> > > appear to be usable in the same manner.
-> > >
-> > > Best would be to annotate the asm code using
-> > > SYM_TYPED_FUNC_START/_END, so that the CFI machinery is invoked at th=
-e
-> > > call site to validate the function type of the destination.
-> >
-> > Agreed, ideally we would annotate indirectly called assembly functions
-> > with CFI types and avoid __nocfi wrappers.
->
-> I'm taking a stab at SYM_TYPED_FUNC_* for ARM, as we don't have them
-> yet.
+On Mon, Mar 11, 2024 at 10:15:46AM +0100, Linus Walleij wrote:
+> This registers a breakpoint handler for the new breakpoint type
+> (0x03) inserted by LLVM CLANG for CFI breakpoints.
+> 
+> If we are in permissive mode, just print a backtrace and continue.
+> 
+> Example with CONFIG_CFI_PERMISSIVE enabled:
+> 
+> > echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
+> lkdtm: Performing direct entry CFI_FORWARD_PROTO
+> lkdtm: Calling matched prototype ...
+> lkdtm: Calling mismatched prototype ...
+> CFI failure at lkdtm_indirect_call+0x40/0x4c (target: 0x0; expected type: 0x00000000)
+> WARNING: CPU: 1 PID: 112 at lkdtm_indirect_call+0x40/0x4c
+> CPU: 1 PID: 112 Comm: sh Not tainted 6.8.0-rc1+ #150
+> Hardware name: ARM-Versatile Express
+> (...)
+> lkdtm: FAIL: survived mismatched prototype function call!
+> lkdtm: Unexpected! This kernel (6.8.0-rc1+ armv7l) was built with CONFIG_CFI_CLANG=y
+> 
+> As you can see the LKDTM test fails, but I expect that this would be
+> expected behaviour in the permissive mode.
+> 
+> We are currently not implementing target and type for the CFI
+> breakpoint as this requires additional operand bundling compiler
+> extensions.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  arch/arm/include/asm/hw_breakpoint.h |  1 +
+>  arch/arm/kernel/hw_breakpoint.c      | 30 ++++++++++++++++++++++++++++++
+>  2 files changed, 31 insertions(+)
+> 
+> diff --git a/arch/arm/include/asm/hw_breakpoint.h b/arch/arm/include/asm/hw_breakpoint.h
+> index 62358d3ca0a8..e7f9961c53b2 100644
+> --- a/arch/arm/include/asm/hw_breakpoint.h
+> +++ b/arch/arm/include/asm/hw_breakpoint.h
+> @@ -84,6 +84,7 @@ static inline void decode_ctrl_reg(u32 reg,
+>  #define ARM_DSCR_MOE(x)			((x >> 2) & 0xf)
+>  #define ARM_ENTRY_BREAKPOINT		0x1
+>  #define ARM_ENTRY_ASYNC_WATCHPOINT	0x2
+> +#define ARM_ENTRY_CFI_BREAKPOINT	0x3
+>  #define ARM_ENTRY_SYNC_WATCHPOINT	0xa
+>  
+>  /* DSCR monitor/halting bits. */
+> diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
+> index dc0fb7a81371..61a984b83bfe 100644
+> --- a/arch/arm/kernel/hw_breakpoint.c
+> +++ b/arch/arm/kernel/hw_breakpoint.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/hw_breakpoint.h>
+>  #include <linux/smp.h>
+> +#include <linux/cfi.h>
+>  #include <linux/cpu_pm.h>
+>  #include <linux/coresight.h>
+>  
+> @@ -903,6 +904,32 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
+>  	watchpoint_single_step_handler(addr);
+>  }
+>  
+> +#ifdef CONFIG_CFI_CLANG
+> +static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
+> +{
+> +	/* TODO: implementing target and type requires compiler work */
+> +	unsigned long target = 0;
+> +	u32 type = 0;
+> +
+> +	switch (report_cfi_failure(regs, instruction_pointer(regs), &target, type)) {
+> +	case BUG_TRAP_TYPE_BUG:
+> +		die("Oops - CFI", regs, 0);
+> +		break;
+> +	case BUG_TRAP_TYPE_WARN:
+> +		/* Skip the breaking instruction */
+> +		instruction_pointer(regs) += 4;
+> +		break;
 
-Does the default implementation in include/linux/cfi_types.h not work
-on arm for some reason?
+This looks much better; thanks!
 
-Sami
+> +	default:
+> +		pr_crit("Unknown CFI error\n");
+> +		break;
+
+For something like CFI, I think it would be better to fail closed. i.e.:
+
+		die("Unknown CFI error", regs, 0);
+
+> +	}
+> +}
+> +#else
+> +static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
+> +{
+> +}
+> +#endif
+> +
+>  /*
+>   * Called from either the Data Abort Handler [watchpoint] or the
+>   * Prefetch Abort Handler [breakpoint] with interrupts disabled.
+> @@ -932,6 +959,9 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
+>  	case ARM_ENTRY_SYNC_WATCHPOINT:
+>  		watchpoint_handler(addr, fsr, regs);
+>  		break;
+> +	case ARM_ENTRY_CFI_BREAKPOINT:
+> +		hw_breakpoint_cfi_handler(regs);
+> +		break;
+>  	default:
+>  		ret = 1; /* Unhandled fault. */
+>  	}
+> 
+> -- 
+> 2.34.1
+> 
+
+-- 
+Kees Cook
