@@ -1,84 +1,141 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8F63D986;
-	Mon, 11 Mar 2024 12:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9903FB95;
+	Mon, 11 Mar 2024 14:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710160303; cv=none; b=Wlb1x6V+WmOPe+j7oVhLPFTLJcLwHDk0l78gmiQB8Y+icKnsb4gNVkFOcsIzekPL1pUzk68XnwXwwOwR9HpC/0MAyWcMaiHNhHop72zgt5jpLzm7QaoPxlxFCmxU8mv+TtuOemtmcNC/M4hhUvYHKGVBJ3RKcpRxhJj3C4QuRrc=
+	t=1710166608; cv=none; b=a4xY+fCqd7nXRKsfg0z+9h5oqul6abky03lJ34IE3XNAd+/7caSbrCH6kvCGlYRGEqNlF1/pBBN3TlSET6KSAs/wMmxolT9ZD7eDMS0xXG3nhT4p+GiRZm9e/Qrh3LQB0wEaph/4lPRJAUWgHC6Yvp5ZGTQUPynUZcrkz1KGqNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710160303; c=relaxed/simple;
-	bh=EdM448FB9/iYoKH61bfb5XVsEpexHAoeqRr6pU6j+XQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ntOas9rcDEQYeKH4mx2FvWzJ2W+eV6U+DCzHSIK02VjkZT/hBcev5Cb6YqGLeSBxqxnxohaHvsGyPlgMKyvROzg7rNeIAzqQAraJTi9qNLRaxi3HWUZtnYxe0bb+Fb/+gHFp5EOmy2mMnz+CJRlZ0f8Po7PBY7Stq2O6mPBU2r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=daVEEwyj; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710166608; c=relaxed/simple;
+	bh=WSGPC7C5T3gv/BeIbBQR0oTEGkTo2Yp2Jlxul6f5iYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C0vZgDxe/CTGqJlCYy5A03xScySZNsyi18K/xNgvjx9PVjfl6eJ+NcdW1P0YzoKgyXX3kU642kQc6H6AfC6Np4UgTxRtIZ5lBtm1hHni+4EPcb+0byGC5T6Gbrlqday19D5FpKi8NHSurv0apZ0qdNFp+I8q0TTY1CjlwrDOV2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U9brIOvB; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="daVEEwyj"
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2d09cf00214so44611651fa.0;
-        Mon, 11 Mar 2024 05:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710160300; x=1710765100; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EdM448FB9/iYoKH61bfb5XVsEpexHAoeqRr6pU6j+XQ=;
-        b=daVEEwyj3G+i0/2V3KQsAQy6WUx54QzendD7IjLG74EJY094qhpSNAhB68LBSnJtH1
-         jQffknvdWbnVFm9UdwgqE/BpF9ltGy+2mz42hi20nAAW79Z6QBUlSSxjWTuOfMEdzV3q
-         KpRN/alIMNHtD+wApITmTll7DkqNW19Wqv6IBlAzTcSSCno6SX0qGdWULl7Qgrh8Uhsp
-         DhwABsA5UftClp103KFQ47lLc2jsGWtWrWf04Kr3pYrdqNqEOut6qbrch83Zfd7NxKRh
-         9D42UMur/V77qEHTJMxjdF4dtdUZGArfnBetHXVT3G4wv5QDUShh5TqqKmhdtmAko6la
-         IXCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710160300; x=1710765100;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EdM448FB9/iYoKH61bfb5XVsEpexHAoeqRr6pU6j+XQ=;
-        b=bkiKW5Ae8hI9D5DVr+uHPOc8ntHe1zlIWw23zPVnpViJHEAPhlx475Soqc6ZG7hQ3d
-         s2+VnfV3wUFcmkQFgQDxcmv9C0hDmEdDLHpqd1pue6vOv85bK3g7/TIS1dwAVLfz2LYL
-         rWU73TDROZfZkqmYriRhZCdH+BcyNX0X7RJFjuTZxEF+bbTyWB/yUBnM8TZO36FII1b+
-         TFbgAXd0jv3YRhwb2WrCoDawumVl831PpFCSGHbxC7O90S9W3CkwKGK5RrvHNS54FsnM
-         ocX5M6CDrlU9dhhr6yfZ/pfbW5A1UyK8qfE2psaO9au22+1cZrlZLmqsd+4039X+LVoA
-         8pLA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEKKNQOVn67dkXG1ua58DmrxVeFUdG6+KCI1J66p3eOi/oYQcY8B0Xg3yeo1x264Mx9gAjuOBZI88n0MhcOa0zYtLKbO/ZqYbaQOt4babPvjbfu5EK/dzji4ymM2XhsZXMNLA=
-X-Gm-Message-State: AOJu0Yw+6wyHoOpAZH2VESxhO+ajNuF+eMIjBEApgzi2zz+Pqfvj0OLh
-	WhLSDxSJnP5tyynWS+HSFifH+A6KHWb+7hq1d1AELnSTscuU1DFodODVahjqffguABOi9gj46vl
-	l/neaGyWkkoRnaetRyOi9O5OUVxrPv+nGN6MpdVDh
-X-Google-Smtp-Source: AGHT+IGgH3xPWXYHquog9/cefkErcywJeZkFQJJaBl7g2wjM4WpGFZ4qZU1tNDeWqR2UhqFIsDhApBvfggDck69EADk=
-X-Received: by 2002:ac2:4d0f:0:b0:513:a161:2c7d with SMTP id
- r15-20020ac24d0f000000b00513a1612c7dmr2859243lfi.64.1710160299639; Mon, 11
- Mar 2024 05:31:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U9brIOvB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710166607; x=1741702607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WSGPC7C5T3gv/BeIbBQR0oTEGkTo2Yp2Jlxul6f5iYs=;
+  b=U9brIOvBiOYviBe4k6h4cWULejE0MC2pEcoBTzpscNgdtvEH24BRH3eR
+   F6VKNr1A325BiHHmYOoCiUZgxEjHB5iv8quHbGcsetRxZ0/fugZ/W4dda
+   o8MgNVKUqi7OPqAdAInGyv6OZay3WaVKj7NVXooDXC2MhW9u+zuw9qhvr
+   Hzq1Ee2RrMKVKOe6PrixibCN4zF7myI2zhSSvI3mSwT4T4rGXXzNrvsCV
+   v0HfC7yvZ3DFmwebn/8S0l01H5C+v81RSu93nncJIPOcpHg3Y5S9YC4vF
+   iMyplZAYJUrd1ycU6npJc74pwLfWDVaW4ceaQ8bKakUjVqsDsNVk4Dxw4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="4755613"
+X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
+   d="scan'208";a="4755613"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 07:16:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
+   d="scan'208";a="11758068"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 11 Mar 2024 07:16:45 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rjgSI-0009AX-28;
+	Mon, 11 Mar 2024 14:16:42 +0000
+Date: Mon, 11 Mar 2024 22:16:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH vhost v2 1/4] virtio: find_vqs: pass struct instead of
+ multi parameters
+Message-ID: <202403112253.omPqb1A5-lkp@intel.com>
+References: <20240311072113.67673-2-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202403092219.dhgcuz2G-lkp@intel.com> <CAADnVQJ+6mFs56fu+KEvumQ5uqM-oLpYx0hGxLJfE9XUCtEWEA@mail.gmail.com>
- <CANk7y0gT8bvKuhJvxG1yLTxdRycMKNEBtgEv_PsCA56Nv74cDg@mail.gmail.com>
- <CAADnVQLXFWDDV8xGLVRNd9JXaqOMfCO3ZGtuQUg8CZjrwLjxrA@mail.gmail.com> <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
-In-Reply-To: <CAPhsuW4=OPS+MgbsnsJM=pJCj64vg2xEG4MUq3hufWBkNDr-1w@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Mon, 11 Mar 2024 13:31:28 +0100
-Message-ID: <CANk7y0jWEx4Ziym=6dNZ7kZFgj=MfKdaS5qYJZPnx_DHCc0GsQ@mail.gmail.com>
-Subject: Re: [bpf-next:master 5/7] kernel/bpf/core.c:900:5: warning:
- '__pte_index_size' is not defined, evaluates to 0
-To: Song Liu <song@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, kernel test robot <lkp@intel.com>, 
-	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240311072113.67673-2-xuanzhuo@linux.alibaba.com>
 
-> > I think hard coding is cleaner and less surprising.
-> > I'd like to hear what Song thinks about it.
->
-> Agreed. Let's just hard code it to 2MiB * num_possible_nodes().
->
-> Thanks,
-> Song
+Hi Xuan,
 
-Here it is: https://lore.kernel.org/all/20240311122722.86232-1-puranjay12@gmail.com/
+kernel test robot noticed the following build errors:
 
-Thanks,
-Puranjay
+[auto build test ERROR on remoteproc/rproc-next]
+[also build test ERROR on s390/features linus/master v6.8 next-20240308]
+[cannot apply to uml/next uml/fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/virtio-find_vqs-pass-struct-instead-of-multi-parameters/20240311-152448
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
+patch link:    https://lore.kernel.org/r/20240311072113.67673-2-xuanzhuo%40linux.alibaba.com
+patch subject: [PATCH vhost v2 1/4] virtio: find_vqs: pass struct instead of multi parameters
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240311/202403112253.omPqb1A5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403112253.omPqb1A5-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403112253.omPqb1A5-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/virtio/virtio_pci_modern.c:761:15: error: read-only variable is not assignable
+           cfg.names[0] = avq->name;
+           ~~~~~~~~~~~~ ^
+   1 error generated.
+
+
+vim +761 drivers/virtio/virtio_pci_modern.c
+
+   735	
+   736	static int vp_modern_create_avq(struct virtio_device *vdev)
+   737	{
+   738		struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+   739		vq_callback_t *callbacks[] = { NULL };
+   740		struct virtio_vq_config cfg = {};
+   741		struct virtio_pci_admin_vq *avq;
+   742		struct virtqueue *vq;
+   743		const char *names[1];
+   744		u16 admin_q_num;
+   745	
+   746		cfg.nvqs = 1;
+   747		cfg.callbacks = callbacks;
+   748		cfg.names = names;
+   749	
+   750		if (!virtio_has_feature(vdev, VIRTIO_F_ADMIN_VQ))
+   751			return 0;
+   752	
+   753		admin_q_num = vp_modern_avq_num(&vp_dev->mdev);
+   754		if (!admin_q_num)
+   755			return -EINVAL;
+   756	
+   757		avq = &vp_dev->admin_vq;
+   758		avq->vq_index = vp_modern_avq_index(&vp_dev->mdev);
+   759		sprintf(avq->name, "avq.%u", avq->vq_index);
+   760	
+ > 761		cfg.names[0] = avq->name;
+   762		cfg.cfg_idx = 0;
+   763		vq = vp_dev->setup_vq(vp_dev, &vp_dev->admin_vq.info, avq->vq_index,
+   764				      &cfg, VIRTIO_MSI_NO_VECTOR);
+   765		if (IS_ERR(vq)) {
+   766			dev_err(&vdev->dev, "failed to setup admin virtqueue, err=%ld",
+   767				PTR_ERR(vq));
+   768			return PTR_ERR(vq);
+   769		}
+   770	
+   771		vp_modern_set_queue_enable(&vp_dev->mdev, avq->info.vq->index, true);
+   772		return 0;
+   773	}
+   774	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
