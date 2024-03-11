@@ -1,151 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from wfout2-smtp.messagingengine.com (wfout2-smtp.messagingengine.com [64.147.123.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB283C467;
-	Mon, 11 Mar 2024 10:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F00D3BBCF
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 11:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710153525; cv=none; b=eEmpPw8O9RpIL1JVahhOvWnXftmX2C6KXQlzpNOfKo5x5OgaLtDPygDC/7ISoCd2nAomtedGFaIgBCGeiuc2YUTICUEMnw+UHn21JfOSjE6jDzidcyUc46hH5pwb/b7PR3Sn4ZHjoAuAs+29eh5+2XO7F4Rfvn8Th9gGVITghJw=
+	t=1710157384; cv=none; b=d8mGuHGu0R1ujEu3I3z2D+THi9bp8yhKV9XHTjXfj95hR0aT21XRLJ5czNMrCpw2rbcOqbN1pMr40zGH6zHEs9Oh4l82+Pr537l+gJ/roZQ87Ok2dvl4Pl4PyhYe2SE3UyoK+FJJo14v0e2CltPhQyoXJaeqccBJsjBoQXzGec4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710153525; c=relaxed/simple;
-	bh=W3gGk27wjmYtwUjQ1SGRwd+igJ1d8Lr8QkzZmlSXBU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=glMutBKlCrp8AVtv7KBXacdKmDY0GIJasHJ+69ARwToWY7udZhtR2p+CQFXl4O3VBT+0EVc0er9BiV02EXRjxy/g3tBFLw6RlzqUBnNnP1w4cnpP4DGIoPQTix1b6SD8HgrArAViUS1uwqZ6QxzpDyq95Oo9xsiDLGLIyzg4ekI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SdduMavW; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710157384; c=relaxed/simple;
+	bh=dUSSVd4bpD7Wuj2qhYTInbXUYg3ivnsEF0eKLdqsxz4=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=LRvseevqvLB3euzMA5MiFWFIF07+pYjb1qdG1y1yj8bglRgjY7c/QkgKWLzReS4mT+USi9Z+RaxKpOpEoXO8Ha0k13khijnN8UAoKuT+qsR4OwixwUJ5BiF8NuzT9vN3S1XVvjrOMJ8potX0I87oqNO2LFit+cSjAt+XijspTeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=lYvI4ilx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CBmUmFXC; arc=none smtp.client-ip=64.147.123.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SdduMavW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710153523; x=1741689523;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=W3gGk27wjmYtwUjQ1SGRwd+igJ1d8Lr8QkzZmlSXBU4=;
-  b=SdduMavWcEC6JbDwCIA96NbbDDu0jZ52/BE8lptfOMYIh4QY2E0pG5Uk
-   FOQInUe8Ad03smZ/aGRXxYVKTIVn92mp5gpriW743vQ3qw6Z5L9d4TlV9
-   R558qdI/ZW+M4IuCvRx1ispeIuIaIZRQyFfN9cZTYrIFjtyDyp7HIghSr
-   LMP6xXa9DNHIKDvlK92yqUrSntvWgu6238EQHvIhZQFGTLXka6LS5s19O
-   yJ04DU8n6auctSUdtar+BfTv7Nzm+2wXCZpXSdUAXXgw8nvD7N3OxvJzr
-   C3XFs4xALIToFy4UbZb/1VLZM32OJuacL/SvoZhSZFm8zH1fNx3tlp7Hg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="15537862"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="15537862"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 03:38:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="11695028"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 11 Mar 2024 03:38:42 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rjd3H-00094k-0z;
-	Mon, 11 Mar 2024 10:38:39 +0000
-Date: Mon, 11 Mar 2024 18:38:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Navneet Singh <navneet.singh@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ira Weiny <ira.weiny@intel.com>
-Subject: [weiny2:dcd-2024-03-10 7/26] drivers/cxl/core/hdm.c:445:3: warning:
- label followed by a declaration is a C23 extension
-Message-ID: <202403111859.6reDudoo-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="lYvI4ilx";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CBmUmFXC"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.west.internal (Postfix) with ESMTP id 0E0C11C00098;
+	Mon, 11 Mar 2024 07:42:59 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 11 Mar 2024 07:43:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1710157379;
+	 x=1710243779; bh=ek5xhz1iNDGVCreLe4BeP1Rp355S8inPd2lUjGag3sQ=; b=
+	lYvI4ilxMDHu3f8uLA/epJDnCCDPz+/FsOwHvgEzR7DpDP3TJhuuT+KR0I1GWUFa
+	HU+PinzyoxuHns8sMbIWnUSJbnWuybz6tpb3ibWECvzIWuQLK8XN4FmMBBpS0bLB
+	xVMuotpKB6MCCQobK1MmMO3Wg/UyOHSPzIp+8oGbZ3beJta/ZJyn9xw7by/MY7HA
+	u/Vj1nCv1T+qIeig5QA9WivYEB5yndDSrgGxdK2ZtGNcMX+0F0lHhk7e8bTUbw3Z
+	trsfVTwHn4M6qRFxsFi1pZ/HSjiLxJV36r7q8FP2BwSKyQp7UWtIs9/4fDfVhutG
+	5kwxeld6pJvCvpO/flVdYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1710157379; x=
+	1710243779; bh=ek5xhz1iNDGVCreLe4BeP1Rp355S8inPd2lUjGag3sQ=; b=C
+	BmUmFXCIcSfZoH0CldL2Jyba7Zkzdxo7VH3a3m1+2XCwcyLmUL1AQfDUwDW8u0uQ
+	20HhBSDAg0muWHYU8c6Z7AbU5jS7ifk/egO8fFl0LKlObAyYNfJRN6U4bRZwTclI
+	tbtyzkaNGXoGejASOTW56O4ay2WR6SegjBgRHCaouGYI9cUQv99m8U1tyzAruFNU
+	9POAoOXPlQMfwhnhP4WKLpvw21J5n0NwA4qJAeZ8RPv8SxLmqkuM5uax5WquaDhM
+	qNO2vx8NJjJW5ViPdKcqar/okRyMKr69vtxb8jbXGBO475S2sgBXJRc9D8rtXOFw
+	QHVRnSQxhCiK99WD7ok5Q==
+X-ME-Sender: <xms:Qu7uZSTdHjnpaOh7DchdMURwDJXvGQfMCAkgP4kkqZVyMTJmglixhw>
+    <xme:Qu7uZXyc-Gm0qgx0JGQKQFuHn_P53o9eW-7TGxzAEg0XeRUKdYzLo3rg4aL015G4I
+    ixzeOhBXkM50vFLWnU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjedugdefudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
+    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Qu7uZf1gIj2FJDuy544F3jtBsu_Qth4W_Jh_-ipEphFZz6JUjNVujg>
+    <xmx:Qu7uZeAF5v4tX6wVWgpehmnjRN1Jk0pFZtTYtAyE0AK4leCNKXr8mA>
+    <xmx:Qu7uZbiE-xc7Y821oNFfr4Ze0eLlg6Q4ZHwpBZS4rOUOqHjcL2uNxg>
+    <xmx:Q-7uZaSgF_RydoV_4eSDB8Uh_zb76rDYUZ9Zck3FU5oSl46PDAr3KC9sxe8>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id BDFDBB6008D; Mon, 11 Mar 2024 07:42:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-Id: <d3a7a06c-e82f-4e5e-9ceb-6c659a228bbe@app.fastmail.com>
+In-Reply-To: 
+ <CAMuHMdXKk9S9voKVPvO+xvn1zFW3FnKyVHQGDkC7b9Ynkcnvmw@mail.gmail.com>
+References: <20240307151231.654025-1-liuyuntao12@huawei.com>
+ <58cc1053-7208-4b22-99cb-210fdf700569@app.fastmail.com>
+ <42892794-7668-4eb0-8d2f-c78ca0daf370@huawei.com>
+ <2a90581c-f1df-4d6b-8f0b-8e7cbf150ed9@app.fastmail.com>
+ <346e15e5-49e9-4a7f-b163-c3316225baab@huawei.com>
+ <CAMuHMdXKk9S9voKVPvO+xvn1zFW3FnKyVHQGDkC7b9Ynkcnvmw@mail.gmail.com>
+Date: Mon, 11 Mar 2024 12:41:48 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Yuntao Liu" <liuyuntao12@huawei.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ "Ard Biesheuvel" <ardb@kernel.org>, "Fangrui Song" <maskray@google.com>,
+ "Russell King" <linux@armlinux.org.uk>, "Andrew Davis" <afd@ti.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Mike Rapoport" <rppt@kernel.org>,
+ "Rob Herring" <robh@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH-next v2] arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/weiny2/linux-kernel.git dcd-2024-03-10
-head:   0dd99bd79b33de8f6e293c9a2373ca321dad33c7
-commit: 97663934fa1a6024e94de32c480cece7039db3a1 [7/26] cxl/port: Add Dynamic Capacity mode support to endpoint decoders
-config: arm-randconfig-001-20240311 (https://download.01.org/0day-ci/archive/20240311/202403111859.6reDudoo-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240311/202403111859.6reDudoo-lkp@intel.com/reproduce)
+On Mon, Mar 11, 2024, at 10:14, Geert Uytterhoeven wrote:
+> On Sat, Mar 9, 2024 at 2:24=E2=80=AFPM liuyuntao (F) <liuyuntao12@huaw=
+ei.com> wrote:
+>> On 2024/3/9 16:20, Arnd Bergmann wrote:
+>>
+>> I tested this patch, the size improvement was only about one
+>> ten-thousandth, and the compilation time had increased by about a qua=
+rter,
+>> and the kernel did not boot.
+>>
+>> Strangely, LTO has actually increased the compilation time
+>> significantly, which seems contrary to its purpose.
+>
+> The purpose of LTO is to reduce code size. Doing so requires more
+> processing, hence the total build time increases.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403111859.6reDudoo-lkp@intel.com/
+I think llvm treats it purely as a performance optimization of
+the resulting binary, allowing cross-unit inlining and constant
+folding, but I don't think it actually tries or succeeds to make
+the output smaller. I do remember seeing size improvements with
+LTO using gcc in the past, but this never made it into the
+mainline kernel. The last time someone tried to add it was 2022[1],
+not sure why there was no follow-up.
 
-All warnings (new ones prefixed by >>):
+     Arnd
 
-   In file included from drivers/cxl/core/hdm.c:7:
-   In file included from drivers/cxl/cxlmem.h:11:
-   In file included from drivers/cxl/cxl.h:7:
-   In file included from include/linux/libnvdimm.h:14:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/cxl/core/hdm.c:445:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     445 |                 int rc;
-         |                 ^
-   2 warnings generated.
-
-
-vim +445 drivers/cxl/core/hdm.c
-
-   415	
-   416	int cxl_dpa_set_mode(struct cxl_endpoint_decoder *cxled,
-   417			     enum cxl_decoder_mode mode)
-   418	{
-   419		struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
-   420		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-   421		struct device *dev = &cxled->cxld.dev;
-   422	
-   423		guard(rwsem_write)(&cxl_dpa_rwsem);
-   424		if (cxled->cxld.flags & CXL_DECODER_F_ENABLE)
-   425			return -EBUSY;
-   426	
-   427		/*
-   428		 * Check that the mode is supported by the current partition
-   429		 * configuration
-   430		 */
-   431		switch (mode) {
-   432		case CXL_DECODER_RAM:
-   433			if (!resource_size(&cxlds->ram_res)) {
-   434				dev_dbg(dev, "no available ram capacity\n");
-   435				return -ENXIO;
-   436			}
-   437			break;
-   438		case CXL_DECODER_PMEM:
-   439			if (!resource_size(&cxlds->pmem_res)) {
-   440				dev_dbg(dev, "no available pmem capacity\n");
-   441				return -ENXIO;
-   442			}
-   443			break;
-   444		case CXL_DECODER_DC0 ... CXL_DECODER_DC7:
- > 445			int rc;
-   446	
-   447			rc = dc_mode_to_region_index(mode);
-   448			if (rc < 0)
-   449				return rc;
-   450	
-   451			if (resource_size(&cxlds->dc_res[rc]) == 0) {
-   452				dev_dbg(dev, "no available dynamic capacity\n");
-   453				return -ENXIO;
-   454			}
-   455			break;
-   456		default:
-   457			dev_dbg(dev, "unsupported mode: %d\n", mode);
-   458			return -EINVAL;
-   459		}
-   460	
-   461		cxled->mode = mode;
-   462		return 0;
-   463	}
-   464	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1] https://lore.kernel.org/lkml/20221114114344.18650-1-jirislaby@kernel=
+.org/
