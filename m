@@ -1,136 +1,168 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8858540847;
-	Mon, 11 Mar 2024 19:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6421754F83
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 19:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710184238; cv=none; b=Lq6+fIesyV6G/jbKNotbZgyGUVULkZfrLkQTz9VMXhKuqSRBusdL9xlmIAWKWkGlSAB5LZ9Zlkt4tOZcblyvx57OPwro+1zmvvEqgla6IqFHoVocz89W4eeEE5Z0ONn8j3U9b2ajUmYvLXd+Sm0UKn/MbsfqsDJp+jmVcFEVy0w=
+	t=1710185078; cv=none; b=ITOwknhiJOji57yty9TIod++gq5UKKE5qOgEqgMrdB/58HXt7viRc8C9d1klyFQBEXpst4gH/fDRw+M7QnqJJHM/ywYBZFmg/YukWhVGf1Z6E1gSAFO0J5/7QML0w7Uva72SQaVZowNe9XCnKqdOPb2LeznMkERwLPmmsKH4FkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710184238; c=relaxed/simple;
-	bh=VsEHveQZFFBF7KGgLhMD1cwewwydOONh0arOy0629Eo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F9V24GSG5WblfyUm/6Eb+La3ViHP+sJRDY4tcO+R6m91ugLDYRdGX30jOdF6692CidnyXfXDVMQcvv+3uq89F7r+cPBStDMGrsmWJIxKmSPG0J0QL5t6QGFowM5VK8ClTU+zlkSrfiS74y+Jdr7XkhaDXtIiKc0TlMPRsFjpk38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=d3qp6/WZ; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1710185078; c=relaxed/simple;
+	bh=DgLWHcwduAxqjCigbUNUqTye02EDECmbNSNBeiAjWj8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PoMh343jWjCFNF7jJfLdGkNS+ipgI2fN0lDe/FfDxwIVCopFhE2QRffBxxI1BqXbMVny49nCTdwZ+ZBc76Dje9RxhcPRwBxooTmRHW3n/x/Qrm5VJRreikTOl1ZvRmuN2ilW03IfKQ2BQ5F30I3foNufDBGsVJtM28zKQ1MouNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sP443cpI; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="d3qp6/WZ"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 218B8FF803;
-	Mon, 11 Mar 2024 19:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1710184232;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E31McDAacylKlEbTy3S6AVH7WHxyqIAf3sUm0he+cT4=;
-	b=d3qp6/WZGVBJqQdRusTqvxoxDZFtxU/VTqX1ThxN/HmLpFMzmFFEefkuk+MuUX9IFVbVoc
-	bIfbC0MMrljHJi8tDCChpwGBXmUT8bE3tNPjoF0JnNBf0+qFoP7YipwS46PD4MM5CBG/SL
-	T74vKXOKTEkF6joFVlwOlRC6/2pdW8k+T+QNzsXyLkMf0mqe9MmcNTFHazhNeK1/PqykRG
-	DiuIybZBLrW5OzL3L+oYPAvOgJNLupOxQ+jMwo9MdTowwQ0D34g9jeiRCulHucn43W0x3w
-	wQaEs8GE9gn7Ze7g/BeXcksXzuZ0aoXvjeimm20I3BTU9VmY80v5VocNdb8Jdw==
-Message-ID: <64395770-84d4-4b6d-a7ff-d5623564daf3@gtucker.io>
-Date: Mon, 11 Mar 2024 20:10:31 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sP443cpI"
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-366248b78d9so17635ab.1
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 12:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710185075; x=1710789875; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PPemlJM4Xz0k98wRrCIdoRJ/9LZG6WhrdONiHPBnMmw=;
+        b=sP443cpIWgttBHixa8nX8Z0VRd360HOurB/WPOi72sY6w+Ar+9T8iw/JE65rYP2MFA
+         rREaSEMxuzAW5OTZh+WiOJFCaCeNTu02Dawnygi9Jd7nrgqxFxXteRBPqKVeSNIcFZEz
+         GkCikQiNF4seDMe58XoMGNtppBvf3B8vjMJfRilj3FPaoeI3Eg/FRc0yDBwKKQhslpeV
+         SNJpXlEq7CZ6+MYK7SoH/6bN/7qhjHshl5v5TJCzCwLeel5ayCBDYc/gW9wo4gbbMZVI
+         GNvql8QwbjQr9rgSUFevxmbVTtQekU8gK1ONWOL/Rz0KLBEIZsbzrIPPKy4itzUmsDg6
+         BGEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710185075; x=1710789875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PPemlJM4Xz0k98wRrCIdoRJ/9LZG6WhrdONiHPBnMmw=;
+        b=dhWW3U7vmwHHvsOybfkCVV7j/TOwjrP3H3hm9mTnVsDEMKQ21e5tQHZrOKuYes754M
+         4D3L4mAHAYWwY5GQLysIUXvhUgT9CFvFN0b7p/PT1Gdhtq5DIkNJUs9E1+tWlEmdn0bW
+         /Nuc70pfhf1w4u8MM6juzR1vLk1ZcMFIFTpQuPD/IbcugDq9MoGtPiz5gQXpeefvFH9L
+         4QmgMi676mjedus8IP110kVPU1Mcmo2+nv6v7AL0r0/XuUFehz9eoaV/ysdJx8rgC2nJ
+         MXIejVFZZrHjAC8OKKo2YCWqG1ZZ7zUDf2To5hu+9L7sBxWb5ieNhdtf2PE/lUgkuRGI
+         qqJg==
+X-Forwarded-Encrypted: i=1; AJvYcCWfk3rLYgOGoK9KOeJmdpFx9wURQBYl1TZj/e5xhjk53OwF2rbVHPHwZ6CtihYj+8ahyljORwZQTU+KV/EUZSNDzLRb1g==
+X-Gm-Message-State: AOJu0YyUeZk9GWIlmRaKeE/u+k0asA/8JQ0OHvx8JDysWpFt8sjljO9N
+	arTYMriZWNOcjB8rlTqMbk9Fg8nC4vfCQAefvPRWRg30mXhqacRKhzFFHF7Wod4+ViQ+dbaWdS3
+	UjyevOsb1tG7Y2+oqV8QnOBHn7cFbH52oWJ5X
+X-Google-Smtp-Source: AGHT+IHK6kjYuN+av2sRfyJ8pA7jWQvyzS6EkNDyOpNIDK07iRRVV0vswER0vA5L4Tl9BTd3XE1V8lLoEXKubRDEp18=
+X-Received: by 2002:a05:6e02:1a43:b0:366:27e0:3425 with SMTP id
+ u3-20020a056e021a4300b0036627e03425mr10947ilv.19.1710185075344; Mon, 11 Mar
+ 2024 12:24:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Migration to Debian Bookworm and compiler updates for KernelCI
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
- Denys Fedoryshchenko <denys.f@collabora.com>
-Cc: kernelci@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
- clang-built-linux <llvm@lists.linux.dev>, Miguel Ojeda <ojeda@kernel.org>
-References: <42c7f5a3e07c274c2a9d2e45a973c6306b2ba74f.camel@collabora.com>
- <20240307170516.GA1780841@dev-arch.thelio-3990X>
-From: Guillaume Tucker <gtucker@gtucker.io>
-In-Reply-To: <20240307170516.GA1780841@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: gtucker@gtucker.io
+References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-13-irogers@google.com>
+ <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+In-Reply-To: <1ab20914-b6d2-fe39-7b14-c1ccebaa34f6@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 11 Mar 2024 12:24:24 -0700
+Message-ID: <CAP-5=fWZVrpRufO4w-S4EcSi9STXcTAN2ERLwTSN7yrSSA-otQ@mail.gmail.com>
+Subject: Re: [PATCH v1 12/13] tools headers: Sync compiler.h headers
+To: James Clark <james.clark@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Liam Howlett <liam.howlett@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
+	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
+	Nick Forrington <nick.forrington@arm.com>, Leo Yan <leo.yan@linux.dev>, 
+	German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
+	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
+	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
+	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Mon, Mar 11, 2024 at 9:34=E2=80=AFAM James Clark <james.clark@arm.com> w=
+rote:
+>
+>
+>
+> On 10/03/2024 02:05, Ian Rogers wrote:
+> > compiler.h - synced from include/linux/compiler.h, guards were
+> >  added to definitions to avoid redefinition of macros
+> >  in libc. ftrace, CONFIG_OBJTOOL and kentry logic was removed as
+> >  redundant.
+> >
+>
+> Hi Ian,
+>
+> This commit breaks the Arm build (and cross compilation for Arm on x86):
+>
+>   $ make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu-
+>
+> Something like this, but I won't paste the whole output because it's huge=
+:
+>
+> tools/include/linux/ring_buffer.h: In function =E2=80=98ring_buffer_read_=
+head=E2=80=99:
+>
+> tools/include/asm/../../arch/arm64/include/asm/barrier.h:72:35: error:
+> =E2=80=98__u8_alias_t=E2=80=99 undeclared (first use in this function)
+>    72 |                         : "=3Dr" (*(__u8_alias_t *)__u.__c)
+>        \
+>       |                                   ^~~~~~~~~~~~
+> tools/include/linux/ring_buffer.h:59:16: note: in expansion of macro
+> =E2=80=98smp_load_acquire=E2=80=99
+>    59 |         return smp_load_acquire(&base->data_head);
+>       |                ^~~~~~~~~~~~~~~~
 
-On 07/03/2024 6:05 pm, Nathan Chancellor wrote:
-> Hi Denys,
-> 
-> On Thu, Mar 07, 2024 at 01:02:26PM +0200, Denys Fedoryshchenko wrote:
->> Hello,
->>
->> I'm reaching out on behalf of the KernelCI project team to discuss our
->> current compiler setup and planned migration to Debian Bookworm.
->>
->> As you may know, our compiler images are currently based on Debian
->> Bullseye, which is approaching its end of life in July 2024. We have
->> been testing using gcc-10, which has presented us with some recent
->> challenges, notably a significant bug that results in false positive
->> compilation errors (specifically, the -Werror memcpy issue in
->> security.c). This situation has prompted us to consider an urgent
->> migration to Debian Bookworm. Additionally, the migration is
->> necessitated by our requirement to upgrade to a newer Python version to
->> support KernelCI v2 development efforts.
->>
->> However, before we proceed, we have a couple of pending questions that
->> we hope to get clarity on:
->>
->> 1) We've noticed that the minimal available version of clang on
->> https://apt.llvm.org/bookworm/dists/ is 15, whereas our current minimal
->> requirement for the Linux kernel compilation is clang-13.0.1
->> (https://www.kernel.org/doc/html/next/process/changes.html). How
->> critical is it to continue providing compile tests for clang-13 (and
->> potentially clang-14)? This information would be vital for us in
->> planning our compiler support strategy moving forward.
-> 
-> Coverage of the minimum version of a particular toolchain for building
-> the kernel is important but I would not describe it as critical.
-> 
-> While apt.llvm.org's Bookworm distribution does not have clang-13 and
-> clang-14, the Bullseye distribution of clang-13 and clang-14 does work
-> on Bookworm, I personally do that for my Debian development containers:
-> 
-> https://github.com/nathanchance/env/blob/12927502f12ec63f50a460f842c9d0a70a82c629/podman/dev/debian/setup-env.sh#L54-L64
-> 
-> Have you explored using the kernel.org GCC and LLVM toolchains instead
-> of the ones in Debian?
-> 
-> https://mirrors.edge.kernel.org/pub/tools/crosstool/
-> https://mirrors.edge.kernel.org/pub/tools/llvm/
-> 
-> That would potentially give you more flexibility with distribution
-> upgrades and stable/deterministic compiler versions around that. I
-> maintain the LLVM ones, which are optimized at build time to be quicker
-> than the Debian one's, so that would save you build minutes over time.
+Sorry for this James, I was rushing. I'll address the issues in v2 but
+the one you highlight above doesn't look like a fun/simple issue to
+resolve :-( Tbh, I'm not sure how much value tools/include has in its
+current set up. It is weird the include order in perf prefers
+tools/include/linux over tools/include/uapi. Current tools/include
+seems to be trying to do a few different things:
 
-Ah nice, Arnd suggested a while ago that we used his GCC
-cross-compiler toolchains in KernelCI but it got stuck at a
-slightly lower priority than everything else for core developers.
-It has always been considered a nice thing to do one day, and I
-guess there may be additional reasons to pick it up now with the
-need for a wider GCC version coverage and LLVM/Clang too.
+1) provide headers like list.h so programs in tools can have linux
+style lists, etc.
+2) stuff that (1) drags in .. do we really want the asm barrier code
+from arm? A sane user space program would be better using stdatomic.h,
+plus that'd give the user space program an ability to get compiled on
+to weirder targets like wasm. Plus we end up with weird type conflicts
+like bool coming from linux/types.h rather than stdbool.h.
+3) copies of kernel uapi headers that may be more up-to-date that
+those in your system, thereby exposing constants that things like
+libbpf depend upon.
+4) headers with the same name as and that resemble kernel headers but
+are really a reimplementation, like tools/include/linux/string.h
+5) headers we have just so we can use shell scripts to scrape
+constants for beautifying things in perf trace
 
-Out of interest, is there going to be some Rust toolchains there
-as well?  Having all the reference toolchains to build the kernel
-in a single location would be great I think.  Of course Rust
-support is still a moving target, so maybe it's still a bit too
-early right now - just wondering.
+For (1) and (2) it seems a separate library would be cleaner than
+having the code in tools/include.
+(3) feels like a legit use-case, so we should hold onto
+tools/include/uapi, but do we want the asm directories?
+(4) sounds like it should be in a library, perhaps with (1) and (2).
+(5) feels like the headers should be alongside the shell scripts to
+avoid polluting tools/include.
+Not that I propose fixing any of this here.
 
-Then in addition to the tarballs, one thing that was discussed
-with Linaro in the very early days of tuxmake was to have a
-reference set of Docker image with the toolchains already
-installed - to save everyone creating their own like in Nathan's
-GitHub link.  Has anyone done that already?
+Thanks,
+Ian
 
-I started looking into it while I was writing my tutorial to
-build a kernel last month but didn't find anything, so it's kind
-of going up on my TODO list now.  It would greatly help unify
-kernel builds across CI systems in particular and improve
-reproducibility.  The TuxBuild / tuxmake Docker images were
-forked from the KernelCI ones so that's already something that
-could be reunited at some point.
-
-Cheers,
-Guillaume
+> Thanks
+> James
