@@ -1,119 +1,125 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FD44437A
-	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 15:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D0F41C7F
+	for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 15:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710171209; cv=none; b=QCkPZMyaE9KPlxrZym/A/nZGQX6eZRFUWpxWaUvLdJCOIiOeIVw07STix58C+2EVeNKqHzvMjxm+VQ4JWDzEvHp1ctZeiw7EJwo9073oc+dKdotlABPHHv9hLqKeHBWHc3myu9cILtx5mxUNtum8agpZzNzDa12Crc93b1xHBEg=
+	t=1710171324; cv=none; b=jEAnwsRzbVvUYzz6KPFTJsH0GW4agGBlBMhwSFePoZGqVM5g2s04K6LXG3WZYb62BqlO6Y5RUHPI6jRV0wik/2/xpDkfLrylMqdRM327lhPZfTPgRiQ0Kz7Z4bSGuxQGvBCj0Bm75+vNZpz4/VgMpdjalcZaYmu3qI/J5xYDdrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710171209; c=relaxed/simple;
-	bh=BgmEJ3rVgpfdYftpb1oT1hFKBsa+dHuEMI7KFS3YKKE=;
+	s=arc-20240116; t=1710171324; c=relaxed/simple;
+	bh=yKZsPRglr0ZQ1yZL1/IqHRaa49+uMoiCC9xWSQW9lNc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fybh6qJ3ethfKNW7mUPhERF2gCSZ2AnK2kBwsRANCv5VhRPuaDhvKCjqcgAHuyX5jjfaqu5raz9knugyfOTIg3733zkrYwN8obYk4JVQsf31368wNZ/eU4oVLBjigwKTU1t9WxGI6O9PUO/ZSmv8NzEh2wC9BuL8w54lpoqkG8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CxuJm6kz; arc=none smtp.client-ip=209.85.221.41
+	 To:Cc:Content-Type; b=JZ9JMKx5FZUCvCCiaQVIMyheXkpoNOJVsZ1B2HISz/KdZ68832OOL+jFtiVq29FUVXHf7sfUhCL3uUAxHDHV4cX02tchVT3k9ygCyo5IVTGSkKOoiGF/FI0Jj3JrOHNLaSeA74UUPiBLn+DT9JaS1s9Ya++bon4x9/G34EJ5XbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IPKqqpLo; arc=none smtp.client-ip=209.85.161.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CxuJm6kz"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33e94de1f34so743588f8f.0
-        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 08:33:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IPKqqpLo"
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a1f24cc010so860226eaf.1
+        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 08:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710171205; x=1710776005; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1710171322; x=1710776122; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BgmEJ3rVgpfdYftpb1oT1hFKBsa+dHuEMI7KFS3YKKE=;
-        b=CxuJm6kz4S4sSTvMWwj6DQ+1CgAe7iocd+zMY2of5r99tuTb7xKBs/VGqeEPUI9h+g
-         HXlj3RB0249ev89uf5iaYu4pT2Thf0ABYpYLrBvOj4lGWHXaA8gR9rzAaVIf2UPiUtYy
-         S0uXpjEnPjAigVSXPJLhvW6jkdCeSt1nDr3Z8AIAwZ26ta0GrmqUAcYnZFh3uOOTE7BU
-         ykXW3/qNrFbrxKGUO8PPj/B67RJXrAhS2fIoVlGEW37DvWFQz0V7Pk9pqvUh1htmn4Rv
-         EGBfkITSayIrZh0nSe+dhNdm/wGj/tDaHwCFbjxHqgc18lUmxvcImQ+DxEfeblegWW1W
-         i6fw==
+        bh=tK2Wb65W8iaksfA8u2I5qSZ+Jq94YjuxrhXdJ1n7aDk=;
+        b=IPKqqpLoyRXTtyA2itvZtG38YAMpTyZy5zAgpR4kQUDmkYE2G2QDGS93CWMNQYykdW
+         krXc15vZTPvY8ledK+pyrK5SzRDFC8TNMcdEHIwTtdstlU19OIVjDrJ6joFYD6ytspjE
+         svMk9+CNKe8BTZhH02XLDFHC1XY/jWd0kJoR8zbHOS8kaS1qkufeHLPU6DC7KKBtOAO2
+         mfGEs/DOF0LchiuUVDbJqD0j6BaG0emH/M9HycIyq4iwO2djGvnseo9xvgidK9tkQyRM
+         UzIbgLqSe8evIE+UMfCxdijC7HOHfff/pwFQBDJe4TONUHJgSVcC2LZSt60i/30+xoGi
+         5ofA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710171205; x=1710776005;
+        d=1e100.net; s=20230601; t=1710171322; x=1710776122;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BgmEJ3rVgpfdYftpb1oT1hFKBsa+dHuEMI7KFS3YKKE=;
-        b=YE/K8LTrs6r5bE53GwIwPyZibRjmE8L1sjLkYpTfSxw3K7IY1/Nr4pvRWb3U3itrD3
-         +qrm3cIU2FLUMunxvtEpetJbpVhjuYylXEs0CchsNKI9L8bXT0FxrZYLSIBmJPHiigkP
-         lvE0YiJYE2TBKAGa/GW+YlJZZcqP1QZ4Wx3GmmzanmWlfNSIw6RM6MucyzdwHOwoDTcc
-         02+8eBXZpQqUYdTM3VhOdYVPABm6dIQ1UrXC1xqjDv5KMIHt0PcAOwmFLwe+NoOKKcPW
-         sqNHwNnj2kwukogU+VKEfmYUfGkxXckhbv12C0Pr66O0TfZhIHGDYTU7X58xuIx4+Atn
-         2b3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVe6MLD26MfRzCstOlGe5k/OBcvrwB8Bx9bZWbKwFXhlBDcFszxwgoz7XYaiNugN4UPulZ91RXOTLX1NbJOThvw6SzMRw==
-X-Gm-Message-State: AOJu0Yw/u/UWKa0x4rjWxhgBvOK8fXgn97xUHazt8QSRe8UTZzf/39l8
-	qgLuRJhrUawEL6YZh8qGrKFQ0AA1jkjyAs9sf1Az7GQjtwVAcXhNcmqoFMEU0WOrBx9/wUaTQKP
-	7mah+/f88IvSPaDiJ9TNn8Odkb+L93zQKe+IV
-X-Google-Smtp-Source: AGHT+IE/th4Pg/GBs04QnTLC4gySgD/Ced3Hwsh9xlJGW37qnBqN80Ztb15KeaRy40uSPOSKwYSAYx2WXmVslFbnrPM=
-X-Received: by 2002:a5d:6751:0:b0:33e:1f2b:8cc5 with SMTP id
- l17-20020a5d6751000000b0033e1f2b8cc5mr6816452wrw.0.1710171205375; Mon, 11 Mar
- 2024 08:33:25 -0700 (PDT)
+        bh=tK2Wb65W8iaksfA8u2I5qSZ+Jq94YjuxrhXdJ1n7aDk=;
+        b=BvzK7bf56f6QXiRx9wL4SgfxgkDzaie0qy8WwQrozUlKPyH1sLgyIiRoOXKq5x0Pdc
+         2k8i7pM3qz1E9YaXO5c8Ijvt8pAU8it1CNR4pJbhIAIO/75XhPH7LpXOC0Hh8OyHmxda
+         a89facxqe4jHfGrp56VqLFrAVfgo7LwH1OyV8XtsxJEbez4keMBgAAa8ikfRad7EOo2S
+         NrapSWeSojFu6legC4qlYURzvkUi+U5fTLcM0OsPcE5RuFijLzvlVkoUFmrPzeNjgJjC
+         DKIbEI9PznjB0TokfVArDgjMO9WhtlCgAdI8zzE8r7WTjxAnP8/Pn2GY9f/FeJ7dWquh
+         KrGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWIpy9w5QCQ3rrhzFm624DNyltOHrpNvHqYJY1J6OJLPSQIm0Z3+J3lnvE5y8VNX2/sfsRmOkJjtaxAgzfFdK4PnrqbfQ==
+X-Gm-Message-State: AOJu0YxoWrsHFI0ICdUOAu7EG3QLNDZuVAlUmI/t39wQiMEdmAJFTdn4
+	4BAmZJ1zL2fcJRab5iyRjxFiI+IN4mrenhx+C/J0+z4ZPeEr+uWfQw+nLZNSd1pxzvM7Z+wlma3
+	oNkQk3QbtxNdq2rh081hCYkLlejFcontdJk39
+X-Google-Smtp-Source: AGHT+IEIubRui/XU6YMndbo7JLmvQK+Rbcj1zFggb5dwn5HyKdCMWYgbSkR2C9UJAFOKL3ziJ+M+3N4cCaS5MeiBMbA=
+X-Received: by 2002:a4a:9d50:0:b0:5a1:d715:483d with SMTP id
+ f16-20020a4a9d50000000b005a1d715483dmr5257022ook.7.1710171321776; Mon, 11 Mar
+ 2024 08:35:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240310020509.647319-1-irogers@google.com> <20240310020509.647319-14-irogers@google.com>
- <CANiq72=rgXk6oz65wb57ZP+jmSoD-a4SSVzU6s6SZLubV3cvBw@mail.gmail.com>
-In-Reply-To: <CANiq72=rgXk6oz65wb57ZP+jmSoD-a4SSVzU6s6SZLubV3cvBw@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 11 Mar 2024 08:33:10 -0700
-Message-ID: <CAKwvOdkMYnYO2hyJEFj-M_iur6BneEZjPHvsodZAGw=b7PmmzA@mail.gmail.com>
-Subject: Re: [PATCH v1 13/13] tools headers: Rename noinline to __noinline
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Ian Rogers <irogers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Liam Howlett <liam.howlett@oracle.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	David Laight <David.Laight@aculab.com>, "Michael S. Tsirkin" <mst@redhat.com>, Shunsuke Mie <mie@igel.co.jp>, 
-	Yafang Shao <laoar.shao@gmail.com>, Kui-Feng Lee <kuifeng@meta.com>, 
-	James Clark <james.clark@arm.com>, Nick Forrington <nick.forrington@arm.com>, 
-	Leo Yan <leo.yan@linux.dev>, German Gomez <german.gomez@arm.com>, Rob Herring <robh@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Sean Christopherson <seanjc@google.com>, 
-	Anup Patel <anup@brainfault.org>, Fuad Tabba <tabba@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Haibo Xu <haibo1.xu@intel.com>, Peter Xu <peterx@redhat.com>, 
-	Vishal Annapurve <vannapurve@google.com>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, Christopher Di Bella <cjdb@google.com>
+References: <20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org>
+ <20240311-arm32-cfi-v3-2-224a0f0a45c2@linaro.org> <Ze7RNalwiZbceFxX@shell.armlinux.org.uk>
+ <CAMj1kXHNK+peQUjO4dRnQmLDF+4of0F7cOTSoMPKucMT6NiGDw@mail.gmail.com>
+In-Reply-To: <CAMj1kXHNK+peQUjO4dRnQmLDF+4of0F7cOTSoMPKucMT6NiGDw@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 11 Mar 2024 08:34:43 -0700
+Message-ID: <CABCJKuf6CWw5Ff955H5qD1Nva-j3WJZ-5A7Rb1TyBwCaEd3E2A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/9] ARM: tlbflush: Make TLB flushes into static inlines
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, Linus Walleij <linus.walleij@linaro.org>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 10, 2024 at 4:25=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Mon, Mar 11, 2024 at 3:04=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wr=
+ote:
 >
-> On Sun, Mar 10, 2024 at 3:06=E2=80=AFAM Ian Rogers <irogers@google.com> w=
-rote:
+> On Mon, 11 Mar 2024 at 10:39, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
 > >
-> > [1] https://clang.llvm.org/docs/AttributeReference.html#noinline
-> > Reported-by: Christopher Di Bella <cjdb@google.com>
+> > On Mon, Mar 11, 2024 at 10:15:39AM +0100, Linus Walleij wrote:
+> > > Instead of just using defines to define the TLB flush functions,
+> > > use static inlines.
+> > >
+> > > This has the upside that we can tag those as __nocfi so we can
+> > > execute a CFI-enabled kernel.
+> >
+> > Why? This seems to be brain dead.
+> >
+> > Why can't CLANG cope with directly calling e.g.
+> > cpu_tlb.flush_user_range? Why does it need a static function to do
+> > exactly the same as the macro does?
+> >
 >
-> Out of curiosity, was this due to the `[[gnu::noinline]]` or similar
-> in e.g. `src/string/memset_explicit.h`?
+> I had the same question, so I played around a bit with the code.
+>
+> What I think would be better is if we could add the __nocfi annotation
+> to the type, i.e.,
+>
+> --- a/arch/arm/include/asm/tlbflush.h
+> +++ b/arch/arm/include/asm/tlbflush.h
+> @@ -205,8 +205,8 @@
+>  #include <linux/sched.h>
+>
+>  struct cpu_tlb_fns {
+> -       void (*flush_user_range)(unsigned long, unsigned long, ...);
+> -       void (*flush_kern_range)(unsigned long, unsigned long);
+> +       void (__nocfi *flush_user_range)(unsigned long, unsigned long, ..=
+.);
+> +       void (__nocfi *flush_kern_range)(unsigned long, unsigned long);
+>         unsigned long tlb_flags;
+>  };
+>
+> This works for some function attributes (e.g., __efiapi is used like
+> this), but the attribute specifier to which __nocfi resolves does not
+> appear to be usable in the same manner.
+>
+> Best would be to annotate the asm code using
+> SYM_TYPED_FUNC_START/_END, so that the CFI machinery is invoked at the
+> call site to validate the function type of the destination.
 
-Yes, and in src/__support/threads/linux/thread.cpp's definition of
-start_thread().
+Agreed, ideally we would annotate indirectly called assembly functions
+with CFI types and avoid __nocfi wrappers.
 
-Thanks for the patch!
-
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-
---=20
-Thanks,
-~Nick Desaulniers
+Sami
