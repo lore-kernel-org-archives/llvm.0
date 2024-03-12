@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D433FE3F;
-	Tue, 12 Mar 2024 22:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA3646556;
+	Tue, 12 Mar 2024 23:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710282747; cv=none; b=gh6gD9tcrMDnCvrPQWolmV2z4dxAfT0cTRmkPpRS9HQ1LKnfqSS0mTawXzkVwOsWzH6W0LYFmPEnBgIQWb4S1fUgalOICyYbvkmI/X2wsLKZbC7MseNaKx00QREU9/TpP92eTPPfGwmS9+R/w+yb9ydFWVpuErRC5aXDSzL9MTQ=
+	t=1710285869; cv=none; b=tX5PBmFWcvFSEKnbwqmmiAVfPPnQfKDdmXfeMy+TLrUGf+La4StC5r49imPNnhzYYPRANyaXxNnuYowhU9TwtE1H7QveGo93ZiR0z8Zbxfc8j2Dd0jtww5oi1J1zEPBEGaygylupLzsY2o93XQQ2Ayp7ncJz6xZpt/zT7q+LMKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710282747; c=relaxed/simple;
-	bh=yy6CrV/ltgpCr7krPvApgacgSUlnOgGyW+PsB7Y3Lys=;
+	s=arc-20240116; t=1710285869; c=relaxed/simple;
+	bh=bVz6/tW2fQOIBFFrv5Bm2bT3SqRIIUyQ5B9R5ZlCGRg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ds5n0T2iM5VtEbWhxH9dg4k2houtwywNJ9gizVTKzpmLWt6YrMQfAFzLx79lYp5wg+zS88B1EaDQ3sFLc45TiopGVFTbT9ZPZq0I6SMbMXJ2q+Zinrp3V1NScX8Zzr8H2rAb4etYqzOqc8FinWsyV+jn227V+U8nXiTZHqfxB04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N9NdAIEe; arc=none smtp.client-ip=192.198.163.7
+	 Content-Disposition; b=YiIKAY61AjdDKyj9S4IgFA9pIZ3pePJ/eJv5zS1MsCWJ40I2j9BBfZZWjmKlVOTh/v39uVqIWPNoL9MnrWIY4tLXhme5DQ70VY2cgSVrCchtyJwFtzfGDbwAtayaG2dRkIkzzzshwtZclpTCSol4VIEQy7qBB/S1qUY3bkuvr6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZoQrbI9k; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N9NdAIEe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZoQrbI9k"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710282746; x=1741818746;
+  t=1710285867; x=1741821867;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=yy6CrV/ltgpCr7krPvApgacgSUlnOgGyW+PsB7Y3Lys=;
-  b=N9NdAIEeb5h9IyOL4FNkt1XOZz5Qwzpo04cbi5XFPgXqo/HrHdij10RQ
-   6BX3OfyqkitSga3TkaRr5Qk8Za3b46Ag6ysRQsjx/bSeEH2pbkkjhV8n2
-   jUziI3PHSBOHyfqABBrKRD15F8qR3uR9FlrXtqtLwr50u2Ot6Jo/tgpPX
-   6INkMytClYM521ZptNmQoXuJgi4TOLUcNZxcTmRMP99hYnxWSVj/XZJTv
-   Ad4cBkrZG1GFmbvOyWZtWQyg1XnzrrZdvGqm7fmOrU6R+iIkb1HxDtO5A
-   KLhsC04cpXjZxZbH+D3XSq78YfWTSqG4ermT/vhnqLg5ts6N1lKLd2jKo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="30460770"
+  bh=bVz6/tW2fQOIBFFrv5Bm2bT3SqRIIUyQ5B9R5ZlCGRg=;
+  b=ZoQrbI9kA8U6Y5Stc7T0xPHDTxAiD8bd2QYulqKU45nP8kdhUAlZZv5X
+   ZEkVAjbiddFIIIb1NWJox+LpyDqU8qn1A2tW8FHgfZ4EbvtW/XHDm8vnB
+   KkoHc/TZ0/qKStd0cOVWLg3MU8uGgymtzF0ayq79IN8OFGaokEn2NbtCZ
+   kHbq/hWzYLTUF5rbmIWvK0kYgDTrpHuU3tME0d4/1tjMEwNQ1fD1rsa7I
+   uyEGiXeUKLIkTnFSupm0QprvQHb7q65iEnTb1ep7+/BBSBKOfZVe7WDPL
+   Qpelj5VWRqR4WUjchBKL/iS2UJv/Wgsmy964RdapRJJDcSvyK2uAHvdOL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="4893653"
 X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="30460770"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 15:32:25 -0700
+   d="scan'208";a="4893653"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 16:24:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="16339579"
+   d="scan'208";a="11599129"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 12 Mar 2024 15:32:23 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 12 Mar 2024 16:24:24 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rkAfU-000Bjd-1z;
-	Tue, 12 Mar 2024 22:32:20 +0000
-Date: Wed, 13 Mar 2024 06:31:52 +0800
+	id 1rkBTq-000Bml-2J;
+	Tue, 12 Mar 2024 23:24:22 +0000
+Date: Wed, 13 Mar 2024 07:24:21 +0800
 From: kernel test robot <lkp@intel.com>
 To: Randy Dunlap <rdunlap@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Johannes Berg <johannes@sipsolutions.net>,
 	Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org
 Subject: [wireless-next:main 6/6] drivers/ssb/main.c:1149:2: warning: label
- at end of compound statement is a C23 extension
-Message-ID: <202403130633.muvbu9ev-lkp@intel.com>
+ at end of compound statement is a C2x extension
+Message-ID: <202403130717.TWm17FiD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,88 +65,21 @@ Content-Transfer-Encoding: 8bit
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
 head:   e27b02e23a701e5761f1d6028643e1203a1c56de
 commit: e27b02e23a701e5761f1d6028643e1203a1c56de [6/6] ssb: drop use of non-existing CONFIG_SSB_DEBUG symbol
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240313/202403130633.muvbu9ev-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240313/202403130633.muvbu9ev-lkp@intel.com/reproduce)
+config: i386-buildonly-randconfig-004-20240313 (https://download.01.org/0day-ci/archive/20240313/202403130717.TWm17FiD-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240313/202403130717.TWm17FiD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403130633.muvbu9ev-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403130717.TWm17FiD-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/ssb/main.c:11:
-   In file included from drivers/ssb/ssb_private.h:8:
-   In file included from include/linux/ssb/ssb.h:9:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/ssb/main.c:11:
-   In file included from drivers/ssb/ssb_private.h:8:
-   In file included from include/linux/ssb/ssb.h:9:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/ssb/main.c:11:
-   In file included from drivers/ssb/ssb_private.h:8:
-   In file included from include/linux/ssb/ssb.h:9:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/ssb/main.c:11:
-   In file included from drivers/ssb/ssb_private.h:8:
-   In file included from include/linux/ssb/ssb.h:9:
-   In file included from include/linux/pci.h:2688:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/ssb/main.c:1149:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+>> drivers/ssb/main.c:1149:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
     1149 |         }
          |         ^
-   8 warnings generated.
+   1 warning generated.
 
 
 vim +1149 drivers/ssb/main.c
