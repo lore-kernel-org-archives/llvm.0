@@ -1,112 +1,56 @@
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506951842
-	for <llvm@lists.linux.dev>; Tue, 12 Mar 2024 01:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C16883D;
+	Tue, 12 Mar 2024 01:39:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710206316; cv=none; b=hh6pBrnHRvplkUkH54vaVdG2o7WsR3ERYKNwQqOG3wsyKYq8jmVo+j0ibMBFbMK5SSJp3UzezdBKhO6WmXrL+cKSfy8jA9gxYdQKZ2PL5e7RrCve5A471C2P/m5qG5urdUxjpQaGgSyipSTrfJdhsdMtHot0WA06NY3vhNj0xuo=
+	t=1710207549; cv=none; b=tZGWK60iA1WjYXgL3WkcVUUARfQytu2yCORtkAfgRqe7mlayG/Lhnj1uWZbdRTytiyJI5zrIZTCdrOMacFPRsOBVf0tIXTh6R6qCwGQ9cuDPekH/KaKaPkaWMtlq/ZhW8B44fyaQfXe7sK9NrUy8519jTHsYHZC/J7aDfKqQI30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710206316; c=relaxed/simple;
-	bh=LlDPdGUSuEysW+0IelyZlJYvm8m/D/jWNozdLA6bZqs=;
+	s=arc-20240116; t=1710207549; c=relaxed/simple;
+	bh=iRyZ1FEKxHpPxBPHzNqd5wGFZU/xj8FRL0JPXhhO870=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QCEfuUdGFanmhuuWw1Sg93ufVKdfmttCwOrMqptz/qOysEjA4jeaw/STPPS9QRLTS7lhZTzXgwGfglD5AMDfq0lmvUfi4F8P4IIleFCQQM8BAc/eKE4iJQE6mUEYni1iYqoXc6bZS7HfUznpkZ4UwaA6uI895eTRd/3xEYrezXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ZnYa+WrW; arc=none smtp.client-ip=209.85.167.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Disposition; b=UFsARm7/NiaKxTm03SdEarcU4PsDZipuQDJx0yHyb0Iv4UJ/4NmqfHSLHvDMBK3MgkE8N7LNOiQdVFZjVccu2rOtiwWHrKZJ+xyf5ttBF9e0JXyZxeCrIOmLASrkGGMjS/Y5xgOEOAMgmVeXV3yQUiiPTNIy8DrA9DoNtZtcAjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W+K7qJUb; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZnYa+WrW"
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3c20cd7ab33so2016391b6e.1
-        for <llvm@lists.linux.dev>; Mon, 11 Mar 2024 18:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1710206313; x=1710811113; darn=lists.linux.dev;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nTIpAV28U7eYXX05YBdvGn20WGUMvQJYSHzcZsEDIko=;
-        b=ZnYa+WrWK4hOwoMpNxZ6tQaSAcocu0dsvzZCkNTtaidLd31xxKmYd8C6kVHw2bdo+D
-         HrKyTovueJP7yxQF76s+nnCcwqxeYpudxbvPzqhNRhTyNz7wXqAnWoNnTiVbDwrX0mp+
-         3cYtinBcKXzba+r3wgVLKJfElAf6v3GDz+ZZ4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710206313; x=1710811113;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nTIpAV28U7eYXX05YBdvGn20WGUMvQJYSHzcZsEDIko=;
-        b=TNurTPbxtpfzJ6LrIl104ofpj4u8P4HefOxxpj9TzF7ZEhXg0ecEeEN+oVDX4lm7Je
-         I/otKstRJKss1RrmT8/oHyGvMGFmnobgNio0kqzle2Q+HUPVsZkh+4A5dmU0CkLBshxn
-         Xx6MeLlcIfh8aRZZGWmgRvZjkQ2IwW2jpJE/akhjdaGenKzr6thIS6+1y/RrlYCh+WeS
-         JoovtfPimNXyBrIPMptPQ2k+QaDojfBqTtwvC1Wk8rANi0AhCIjWKtYErkeKYehImelF
-         RDGTv2VqaP8qmp4Aqz7LLICdOw8S9gBgbZMhumgP6jja/X8szGeiVO3uwRZD3r1SHAWk
-         v30A==
-X-Forwarded-Encrypted: i=1; AJvYcCWSL5HJcXjVnNa5HMWdU9QRWZl7HczVVutxmIVbJ/2nOwenpNWdTUb/V4T/rV0XtZkL1h4poHquWm2GP5SOglxnMEzmmw==
-X-Gm-Message-State: AOJu0YwPTYy4g0lUCqhwvsMa1B3iBGt/oITNNlZgsk1KU92ccQJR2P07
-	DMQhAvLeOJrLKl48FPxSzUYexYnZ8bP1EROwEp2QUg/Rc6AxE4th9lTpt4ZUWA==
-X-Google-Smtp-Source: AGHT+IGzVl6Hp0fjBHz0qBTtwn48IpDLsoA4Yvw1Z+s08Ei6LRIAszyO3WXfBrBCy3XKxyEAzJNiOA==
-X-Received: by 2002:a05:6808:3098:b0:3c2:3fd3:35f with SMTP id bl24-20020a056808309800b003c23fd3035fmr8984816oib.25.1710206313167;
-        Mon, 11 Mar 2024 18:18:33 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i15-20020aa787cf000000b006e508b6a13dsm4968801pfo.58.2024.03.11.18.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 18:18:32 -0700 (PDT)
-Date: Mon, 11 Mar 2024 18:18:31 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	Fangrui Song <maskray@google.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Guixiong Wei <guixiongwei@gmail.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Jingzi Meng <mengjingzi@iie.ac.cn>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	kernel test robot <lkp@intel.com>, linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
-	llvm@lists.linux.dev, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Marco Elver <elver@google.com>, Mark Rutland <mark.rutland@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Wajdeczko <michal.wajdeczko@intel.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Nicolas Schier <n.schier@avm.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>,
-	Sachin Sant <sachinp@linux.ibm.com>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	syzkaller <syzkaller@googlegroups.com>,
-	Tanzir Hasan <tanzirh@google.com>,
-	Tycho Andersen <tandersen@netflix.com>,
-	Vasiliy Kovalev <kovalev@altlinux.org>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [GIT PULL] hardening updates for v6.9-rc1
-Message-ID: <202403111702.828C918E55@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W+K7qJUb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710207548; x=1741743548;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iRyZ1FEKxHpPxBPHzNqd5wGFZU/xj8FRL0JPXhhO870=;
+  b=W+K7qJUbph9m+aC53syN6LIi6A81rljXzKm0K6ojdujhM6w8/s1+zEJe
+   n9fumV7oqf2BptwMKV42ZUYT3bCoIjIqgSibJdmWaRAJgNPsCyV9+hznu
+   8BEP21TqhqpLCqU9cIp2aqhtfIY6FusQ8lfnQ/yniGAFEYDhgUShM7bKK
+   bL3mn0YXtYqlXdpF8QmKmn/PSzO7pIh1Ycd9AO0z8eeiBLYFXMHz3EAfU
+   WeHRYQWKxNRY68AR50/TmZxUiWyAkEMBhsZHsljZJd9fmkeKjnmepEzqm
+   1kuI4FrCmoIrhZdrYi05KRFDINHmCaAbP/PC1FlU2SmuZD2cfIdZ+AxFt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11010"; a="5019432"
+X-IronPort-AV: E=Sophos;i="6.07,118,1708416000"; 
+   d="scan'208";a="5019432"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 18:39:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,118,1708416000"; 
+   d="scan'208";a="42350029"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 11 Mar 2024 18:39:05 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rjr6d-0009co-0f;
+	Tue, 12 Mar 2024 01:39:03 +0000
+Date: Tue, 12 Mar 2024 09:38:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [mips-linux:mips-next 47/56] arch/mips/ralink/timer.c:136:48: error:
+ array has incomplete element type 'const struct of_device_id'
+Message-ID: <202403120926.hoXbeGnb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -116,263 +60,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git mips-next
+head:   732932220078f6312f3ef57c17523d3d7f995655
+commit: 5804be0618486f8979208e323188e44f8013a6a3 [47/56] MIPS: ralink: Remove unused of_gpio.h
+config: mips-rt305x_defconfig (https://download.01.org/0day-ci/archive/20240312/202403120926.hoXbeGnb-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240312/202403120926.hoXbeGnb-lkp@intel.com/reproduce)
 
-Please pull these kernel hardening updates for v6.9-rc1. As is pretty
-normal for this tree, there are changes all over the place, especially
-for small fixes, selftest improvements, and improved macro usability.
-Some header changes ended up landing via this tree as they depended on
-the string header cleanups. Also, a notable set of changes is the work
-for the reintroduction of the UBSAN signed integer overflow sanitizer
-so that we can continue to make improvements on the compiler side to
-make this sanitizer a more viable future security hardening option.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403120926.hoXbeGnb-lkp@intel.com/
 
-Everything has been in -next for a while, but there are a couple small
-merge conflicts to deal with:
+Note: the mips-linux/mips-next HEAD 732932220078f6312f3ef57c17523d3d7f995655 builds fine.
+      It only hurts bisectability.
 
-kbuild tree:
-	https://lore.kernel.org/linux-next/20240226165811.56f71171@canb.auug.org.au/
+All errors (new ones prefixed by >>):
 
-bcachefs tree:
-	https://lore.kernel.org/linux-next/20240301154351.1d097566@canb.auug.org.au/
+>> arch/mips/ralink/timer.c:136:48: error: array has incomplete element type 'const struct of_device_id'
+     136 | static const struct of_device_id rt_timer_match[] = {
+         |                                                ^
+   include/linux/device/driver.h:106:15: note: forward declaration of 'struct of_device_id'
+     106 |         const struct of_device_id       *of_match_table;
+         |                      ^
+   1 error generated.
 
-Later in the merge window I intend to send some macro adjustment
-collateral changes, but since they're mechanical, I figured it would be
-simpler to wait for the end of -rc1.
 
-Thanks!
+vim +136 arch/mips/ralink/timer.c
 
--Kees
+80ecbd245791fe John Crispin 2013-08-08  135  
+80ecbd245791fe John Crispin 2013-08-08 @136  static const struct of_device_id rt_timer_match[] = {
+80ecbd245791fe John Crispin 2013-08-08  137  	{ .compatible = "ralink,rt2880-timer" },
+80ecbd245791fe John Crispin 2013-08-08  138  	{},
+80ecbd245791fe John Crispin 2013-08-08  139  };
+80ecbd245791fe John Crispin 2013-08-08  140  
 
-The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
+:::::: The code at line 136 was first introduced by commit
+:::::: 80ecbd245791fec5da4baa88c7273ec7f9ae7782 MIPS: ralink: Add support for periodic timer irq
 
-  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.9-rc1
-
-for you to fetch changes up to 3fe1eb4dd2e4b872ffb7b9b081b34ffcfa934ba7:
-
-  selftests/powerpc: Fix load_unaligned_zeropad build failure (2024-03-05 10:29:15 -0800)
-
-----------------------------------------------------------------
-hardening updates for v6.9-rc1
-
-- string.h and related header cleanups (Tanzir Hasan, Andy Shevchenko)
-
-- VMCI memcpy() usage and struct_size() cleanups (Vasiliy Kovalev, Harshit
-  Mogalapalli)
-
-- selftests/powerpc: Fix load_unaligned_zeropad build failure (Michael
-  Ellerman)
-
-- hardened Kconfig fragment updates (Marco Elver, Lukas Bulwahn)
-
-- Handle tail call optimization better in LKDTM (Douglas Anderson)
-
-- Use long form types in overflow.h (Andy Shevchenko)
-
-- Add flags param to string_get_size() (Andy Shevchenko)
-
-- Add Coccinelle script for potential struct_size() use (Jacob Keller)
-
-- Fix objtool corner case under KCFI (Josh Poimboeuf)
-
-- Drop 13 year old backward compat CAP_SYS_ADMIN check (Jingzi Meng)
-
-- Add str_plural() helper (Michal Wajdeczko, Kees Cook)
-
-- Ignore relocations in .notes section
-
-- Add comments to explain how __is_constexpr() works
-
-- Fix m68k stack alignment expectations in stackinit Kunit test
-
-- Convert string selftests to KUnit
-
-- Add KUnit tests for fortified string functions
-
-- Improve reporting during fortified string warnings
-
-- Allow non-type arg to type_max() and type_min()
-
-- Allow strscpy() to be called with only 2 arguments
-
-- Add binary mode to leaking_addresses scanner
-
-- Various small cleanups to leaking_addresses scanner
-
-- Adding wrapping_*() arithmetic helper
-
-- Annotate initial signed integer wrap-around in refcount_t
-
-- Add explicit UBSAN section to MAINTAINERS
-
-- Fix UBSAN self-test warnings
-
-- Simplify UBSAN build via removal of CONFIG_UBSAN_SANITIZE_ALL
-
-- Reintroduce UBSAN's signed overflow sanitizer
-
-----------------------------------------------------------------
-Andy Shevchenko (4):
-      kernel.h: Move upper_*_bits() and lower_*_bits() to wordpart.h
-      kernel.h: Move lib/cmdline.c prototypes to string.h
-      overflow: Use POD in check_shl_overflow()
-      lib/string_helpers: Add flags param to string_get_size()
-
-Douglas Anderson (3):
-      lkdtm: Make lkdtm_do_action() return to avoid tail call optimization
-      lkdtm/bugs: Adjust lkdtm_HUNG_TASK() to avoid tail call optimization
-      lkdtm/bugs: In lkdtm_HUNG_TASK() use BUG(), not BUG_ON(1)
-
-Harshit Mogalapalli (2):
-      VMCI: Use struct_size() in kmalloc()
-      VMCI: Fix memcpy() run-time warning in dg_dispatch_as_host()
-
-Jacob Keller (1):
-      coccinelle: semantic patch to check for potential struct_size calls
-
-Jingzi Meng (1):
-      cap_syslog: remove CAP_SYS_ADMIN when dmesg_restrict
-
-Josh Poimboeuf (1):
-      objtool: Fix UNWIND_HINT_{SAVE,RESTORE} across basic blocks
-
-Kees Cook (31):
-      MAINTAINERS: Add UBSAN section
-      ubsan: Use Clang's -fsanitize-trap=undefined option
-      ubsan: Silence W=1 warnings in self-test
-      ubsan: Remove CONFIG_UBSAN_SANITIZE_ALL
-      ubsan: Reintroduce signed overflow sanitizer
-      string: Redefine strscpy_pad() as a macro
-      string: Allow 2-argument strscpy()
-      string: Allow 2-argument strscpy_pad()
-      um: Convert strscpy() usage to 2-argument style
-      overflow: Adjust check_*_overflow() kern-doc to reflect results
-      overflow: Introduce wrapping_add(), wrapping_sub(), and wrapping_mul()
-      overflow: Introduce wrapping_assign_add() and wrapping_assign_sub()
-      coccinelle: Add rules to find str_plural() replacements
-      refcount: Annotated intentional signed integer wrap-around
-      fortify: Split reporting and avoid passing string pointer
-      fortify: Allow KUnit test to build without FORTIFY
-      fortify: Provide KUnit counters for failure testing
-      fortify: Add KUnit tests for runtime overflows
-      fortify: Improve buffer overflow reporting
-      MAINTAINERS: Update LEAKING_ADDRESSES details
-      leaking_addresses: Use File::Temp for /tmp files
-      leaking_addresses: Ignore input device status lines
-      leaking_addresses: Provide mechanism to scan binary files
-      sparc: vdso: Disable UBSAN instrumentation
-      lib: stackinit: Adjust target string to 8 bytes for m68k
-      x86, relocs: Ignore relocations in .notes section
-      overflow: Allow non-type arg to type_max() and type_min()
-      compiler.h: Explain how __is_constexpr() works
-      sh: Fix build with CONFIG_UBSAN=y
-      string: Convert selftest to KUnit
-      string: Convert helpers selftest to KUnit
-
-Lukas Bulwahn (2):
-      hardening: drop obsolete UBSAN_SANITIZE_ALL from config fragment
-      hardening: drop obsolete DRM_LEGACY from config fragment
-
-Marco Elver (1):
-      hardening: Enable KFENCE in the hardening config
-
-Michael Ellerman (1):
-      selftests/powerpc: Fix load_unaligned_zeropad build failure
-
-Michal Wajdeczko (1):
-      lib/string_choices: Add str_plural() helper
-
-Tanzir Hasan (2):
-      kernel.h: removed REPEAT_BYTE from kernel.h
-      lib/string: shrink lib/string.i via IWYU
-
-Vasiliy Kovalev (1):
-      VMCI: Fix possible memcpy() run-time warning in vmci_datagram_invoke_guest_handler()
-
- Documentation/dev-tools/ubsan.rst                  |  28 +-
- MAINTAINERS                                        |  26 +-
- arch/arm/Kconfig                                   |   2 +-
- arch/arm/boot/compressed/misc.c                    |   2 +-
- arch/arm/boot/compressed/misc.h                    |   2 +-
- arch/arm/include/asm/word-at-a-time.h              |   3 +-
- arch/arm64/Kconfig                                 |   2 +-
- arch/arm64/include/asm/word-at-a-time.h            |   3 +-
- arch/mips/Kconfig                                  |   2 +-
- arch/parisc/Kconfig                                |   2 +-
- arch/powerpc/Kconfig                               |   2 +-
- arch/powerpc/include/asm/word-at-a-time.h          |   4 +-
- arch/riscv/Kconfig                                 |   2 +-
- arch/riscv/include/asm/word-at-a-time.h            |   3 +-
- arch/s390/Kconfig                                  |   2 +-
- arch/s390/include/asm/word-at-a-time.h             |   3 +-
- arch/sh/boot/compressed/Makefile                   |   1 +
- arch/sh/include/asm/word-at-a-time.h               |   2 +
- arch/sparc/vdso/Makefile                           |   1 +
- arch/um/drivers/net_kern.c                         |   2 +-
- arch/um/drivers/vector_kern.c                      |   2 +-
- arch/um/drivers/vector_user.c                      |   4 +-
- arch/um/include/shared/user.h                      |   3 +-
- arch/um/os-Linux/drivers/ethertap_user.c           |   2 +-
- arch/um/os-Linux/drivers/tuntap_user.c             |   2 +-
- arch/um/os-Linux/umid.c                            |   6 +-
- arch/x86/Kconfig                                   |   2 +-
- arch/x86/boot/compressed/misc.c                    |   2 +-
- arch/x86/include/asm/word-at-a-time.h              |   3 +-
- arch/x86/kvm/mmu/mmu.c                             |   1 +
- arch/x86/tools/relocs.c                            |   8 +
- drivers/misc/lkdtm/bugs.c                          |   3 +-
- drivers/misc/lkdtm/core.c                          |  22 +-
- drivers/misc/vmw_vmci/vmci_datagram.c              |  10 +-
- fs/namei.c                                         |   2 +-
- include/asm-generic/word-at-a-time.h               |   3 +-
- include/linux/compiler.h                           |  39 ++
- include/linux/compiler_types.h                     |   9 +-
- include/linux/fortify-string.h                     | 122 ++--
- include/linux/kernel.h                             |  44 +-
- include/linux/overflow.h                           | 115 +++-
- include/linux/refcount.h                           |   9 +-
- include/linux/string.h                             |  86 ++-
- include/linux/string_choices.h                     |  11 +
- include/linux/string_helpers.h                     |  10 +-
- include/linux/wordpart.h                           |  42 ++
- kernel/configs/hardening.config                    |   7 +-
- kernel/printk/printk.c                             |  11 -
- lib/Kconfig.debug                                  |  14 +-
- lib/Kconfig.ubsan                                  |  28 +-
- lib/Makefile                                       |   7 +-
- lib/fortify_kunit.c                                | 662 ++++++++++++++++++++-
- lib/overflow_kunit.c                               |  67 ++-
- lib/stackinit_kunit.c                              |  19 +-
- lib/string.c                                       |  23 +-
- lib/string_helpers.c                               |  89 ++-
- ...est-string_helpers.c => string_helpers_kunit.c} | 255 ++++----
- lib/string_kunit.c                                 | 199 +++++++
- lib/test_string.c                                  | 257 --------
- lib/test_ubsan.c                                   |  41 +-
- lib/ubsan.c                                        |  68 +++
- lib/ubsan.h                                        |   4 +
- scripts/Makefile.lib                               |   5 +-
- scripts/Makefile.ubsan                             |   5 +-
- scripts/coccinelle/api/string_choices.cocci        |  41 ++
- scripts/coccinelle/misc/struct_size.cocci          |  74 +++
- scripts/leaking_addresses.pl                       |  90 ++-
- tools/objtool/check.c                              |  12 +
- tools/objtool/noreturns.h                          |   2 +-
- .../selftests/powerpc/primitives/linux/bitops.h    |   0
- .../selftests/powerpc/primitives/linux/wordpart.h  |   1 +
- 71 files changed, 1949 insertions(+), 688 deletions(-)
- create mode 100644 include/linux/wordpart.h
- rename lib/{test-string_helpers.c => string_helpers_kunit.c} (67%)
- create mode 100644 lib/string_kunit.c
- delete mode 100644 lib/test_string.c
- create mode 100644 scripts/coccinelle/api/string_choices.cocci
- create mode 100644 scripts/coccinelle/misc/struct_size.cocci
- create mode 100644 tools/testing/selftests/powerpc/primitives/linux/bitops.h
- create mode 120000 tools/testing/selftests/powerpc/primitives/linux/wordpart.h
+:::::: TO: John Crispin <blogic@openwrt.org>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
