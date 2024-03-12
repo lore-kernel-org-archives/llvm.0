@@ -1,189 +1,212 @@
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2055.outbound.protection.outlook.com [40.107.8.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40787E58A;
-	Tue, 12 Mar 2024 16:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710261859; cv=fail; b=eN6sfYsibz1ZCmNU91fhQgs6y3WrgVcnsK9X3zMDpsa3P0p+Ke6KPu/D7ULgxvnMdHosaiwU3OaN5erGs1kPcpHdgkFroAmgY35lz7utj6uul4uQNji1Z69oE+Vmn3u9iTiDB+BVCJODEgxrV1A0wluMVe4HsiPV0sQkP8BcxyQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710261859; c=relaxed/simple;
-	bh=fdCYEQ/qak1jITBUH6W04N8tkUe7l1zWRL+gj0ipfz0=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=UaUnhmBsfPhy5vH5V64wWVwPWhRPLSWDPCIDiWMFK1lDuDAgjk6E29m34pPDrzo+Ra278pH+aeFK6FrFV7IaMJfb4m+WY2KUeAxmqdFhG6GLep6f6LH2r2bsAHQJOI5Q/ZzyrQx6YKg/Mzb6800EUa1bZ7FmdVgpmiH1+vtslbY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=PCZExCsa; arc=fail smtp.client-ip=40.107.8.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CBA137C28;
+	Tue, 12 Mar 2024 17:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710262979; cv=none; b=thYteKcjCs8FQw2pendeNsdZGw302bF8xATCf2qBCut+TXM3xfY8HyuVaTzS1Xm9n4btMYwiraFPZV9alDi/G/t+ydFae3Bb1GG+kiIuQlyNeiggD2PbUUbgKA38f4IxxB6cjgvkyQVB885D9q7BGiHK5m9GsCXXTYtzcAayX5I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710262979; c=relaxed/simple;
+	bh=B+SpcROVBiUtQvIC6OHcD4CKKEuvaOSaijrQvK7xPSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SH3n15lXH4XmFFQBCpkZ3bricCGYs2JlS/+EfUBzCddU1pa8UhA7Clwt3fDbI1XTiY6nQsgvW+mQAUkEhJQPikyef2RJVbPZbFc2OZaD25ROE8psX9EbsLzR3pLcjSxVLSCY6DfaJjttQhCQUApgXNQoo+fc4rbwdcwo94SSnKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E6u3qq0i; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="PCZExCsa"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P8gGw6FodY39HAV43twXqqvh6Tq8J4AE9+P1D3ulgyiHn0tkMNMZxssv2w6tF11yn7aTmzxIAfbDhledt3wuKf1hwdqlTO+/TWSHPQl4RBYAs1CxQ13rxWlxQ1hgfW4ICyP6FutEosidIrACSJ1Pjjj7mNkZwg1PY+Bp+D31VTR4ckIGqKEWP6nRAP9rtA3xMC0N5t0U+GYWylkpwn4KmredTO5RrW5h4E6mU4PltmQ11EgC5pw1zYGpulCJFdpLKyMUnUlxwG/87SbhjI+/nZcGZilVtv8hq/tNzAw4LE70nyC/R0Z6GHbjQbZ/8RaspN/KPkoEBGKxhK/2IB29Sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2ctfdcvbs/vSl1z/UjHtToVphqFUjzald75UOxdKEqc=;
- b=NqSGZa/9t+/fZnZVhAlC8R30kGORihYggTOFl1K8ReNKHVh2eX0Oaf0xjm7EotvQRPq42H3lysX7Mk7T4eop8JfSo2sDttsIWH9R1n1SDyhrFhT0PyUR0JnSvLcmHDs496L5dDaS8/hVEWSNOPBHTebmTaKibFDECROR6btODNgxYqVXmquR0m2rm0zRU8WhNLVzKk/vD1atJimRXZmv12VPXCf9XxVp4ggO//1G/N0dRkum3hzOOiKUqanElubqQS/QWrH74Ak2vIfnlW9Xyef/Wlysxz20pUPfYJbpYU7zOLeHmEG6p9gtjnpo4PLY8DJQqI82cGfGYWkkOBJnuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2ctfdcvbs/vSl1z/UjHtToVphqFUjzald75UOxdKEqc=;
- b=PCZExCsaJWkKH11CPtNdmO4NPmEpP9u5Fg+2Vihnap5UF9DPSLws+IW/QcYCJAaswJPPZqhb7MUi/3VH+3XKXKZUEUh02FdvGRDt8gAiDRBojixqwnistp9pKAhzAFx6QCe/oCG6ESxBzvq+uN8sksMtezGQunRMs/X/7VjLUhYH+TRlQ0MbgNnfiQV7C30iVYnWEAMkjkFh45GFPLVo/UvXtP9A/+PACarRSEpqCLHshu4YvR+EtYw91aMj3DpN2fYTMT2GvkUUTtXrOtHu/eLBdU63HaGmrcp3ZAzrgPuzQQJVFScSo57Tf1kekFGykjz0OyBX2nsiuzBWWbHYeQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by AS8PR10MB6891.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5b3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.36; Tue, 12 Mar
- 2024 16:44:13 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8d16:7fbb:4964:94fe]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8d16:7fbb:4964:94fe%3]) with mapi id 15.20.7362.035; Tue, 12 Mar 2024
- 16:44:13 +0000
-Message-ID: <7208ae2f-04bc-4571-bd7c-f75d7cb82816@siemens.com>
-Date: Tue, 12 Mar 2024 17:44:11 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: Migration to Debian Bookworm and compiler updates for KernelCI
-Content-Language: en-US
-To: Chris Paterson <Chris.Paterson2@renesas.com>,
- Denys Fedoryshchenko <denys.f@collabora.com>,
- "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>,
- Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
- Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- clang-built-linux <llvm@lists.linux.dev>,
- "cip-dev@lists.cip-project.org" <cip-dev@lists.cip-project.org>
-References: <42c7f5a3e07c274c2a9d2e45a973c6306b2ba74f.camel@collabora.com>
- <TYWPR01MB11862CF20936D7CD75B2BDF87B72B2@TYWPR01MB11862.jpnprd01.prod.outlook.com>
-From: Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <TYWPR01MB11862CF20936D7CD75B2BDF87B72B2@TYWPR01MB11862.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0099.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a9::17) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E6u3qq0i"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710262978; x=1741798978;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B+SpcROVBiUtQvIC6OHcD4CKKEuvaOSaijrQvK7xPSE=;
+  b=E6u3qq0ioL67hq1aa20IBAUboVLad2Hz8jaSEcWxtaxVhZ7JjyLB7G7L
+   cxgcjxSqtl2GKvFy4l8sWUr7J4aQkfQ0KK2VWCAHrVfekFcevDqgeg5cR
+   0l4wa6VRAob+J3vxBTtddMh7fxL6sTE+mQ0MdiCfNy88SA61XtpoSDnxU
+   8v1N43FASxM1hNojAZpAQX1Ufkjra42Mm+RWY+IJKjgPOUfzQfMOo7gqI
+   zcPjVabw/eSv6J6GAthog75n/sPRtlw+0rASEJ2Y6yYJWUyHbqxtMEXIT
+   TmjVT9g+SagGRFXgXUxoPaK3LhO4jRcZPR+Gvk77kliIbs/p45oy/A8QO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="16430426"
+X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
+   d="scan'208";a="16430426"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 10:02:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
+   d="scan'208";a="34769611"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 12 Mar 2024 10:02:54 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rk5We-000Aov-14;
+	Tue, 12 Mar 2024 17:02:52 +0000
+Date: Wed, 13 Mar 2024 01:02:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:kdevops 23/26] fs/nfs/nfs4xdr.c:2304:2: error: call to
+ undeclared function 'encode_get_dir_delegation'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202403130012.qgPeEf1V-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|AS8PR10MB6891:EE_
-X-MS-Office365-Filtering-Correlation-Id: 57100ffb-6ac3-4e46-3048-08dc42b3a609
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	r3xp0KH9y8O2nQbxtBfg4QbqPjKbkBln1lE8UeiSAHDCjcx70t3rKfe2FzizK1GR3uqc5wxB26kQ9HcJLhgFmun4n5ftqz42H8kJPfe2qxEo+uR4qqOavw3CJWUXb9rgcO/A2XxU6a9PUW7lzWMuSs8MmKttezcXbb8gogWg0fXxRytyrJw9dw/NRvlCkTneMNawlq08ohlaLgfHYQncN40Xnj16bGK5MnrhEeuNtX9JG4ZAyxH0sITFtMlydRhwDARaprhIaWSWXnesY6QFSN1XxPoBs+KlF8PdHqw1HYItV089ebs3gPAfnX/pe5NyilLSgth+zg/Jp7c4I6uWVhO0uaObqoUAxDsi8jsf/Xrmx/KuTR6WHs4QSBmpCMcmZmkm5QhRc69L4ONyjBHbCZzppEwkLhX7bJwgXXfEKD58IX/SQEO0vP4Ot/3hPWF0Us4SflKk5vbHqU5Bp2xSfjmYytOOh3W+OpKtEb32Uh/JQw1gbHjElg46qSEoXkMtVpBFddHuyMqjcqptGvJ1A23WA+9dJo7ojI98KTEOBV+bTpDp0dKxj4U9hnhAwPh9jmXnCrF04w4xkjf1jo6PmvWrMRkesTAwR/eIQyF5BpY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MElXUEs5Vm5Kb2VOdzNXQStDOWg5VXV6QW9RWTRHTFYrRWgvV3N4TkVzZTBH?=
- =?utf-8?B?Q2l3dmx3Kzg3bmxlTSszVXkxL0dRa3NyRmJvOHVFMzBLRC9Gd1QwaFVNc0tl?=
- =?utf-8?B?U3RvNFJlcnNxQkRiUGRUYlgzMWhyY1dHYkF6SXAzaStyZ3NXaFdqbXJlNmRm?=
- =?utf-8?B?UkUvSGYvdm41M1hqZisxTlRGOXIzM0FIRHpHdFJhQjJsQnJMOUhjSE0zR3VX?=
- =?utf-8?B?aUtWRWlyWDRralBzK0U2Nk1JSDVJazZZb3FmMi9Ic2RYN3JXSHlaMjBvSktj?=
- =?utf-8?B?QXpMNnErdWVXVDBPeHFLNUdKbVdlaWxseURKNkZTR0dMSjhZSjgzVVJLV25M?=
- =?utf-8?B?MGw1SVNDcWYxNkxMVWJWMEVkblNYUk5jMjFUTEgreWRMWkpUOEhmTWFINmY2?=
- =?utf-8?B?QXEzODVHMmoxUzlWVTJ0c2pkWjBQWkJaOFdlUUxkMDBQOFNzaTY0d2xZZGtu?=
- =?utf-8?B?SDlEV3Rwc3A5NktCOVdESFZ6RVlseHBpUy94Z3lwRE9sZ2UzbmNRUGpPaEo0?=
- =?utf-8?B?RnQ2S0UyYVg5YUxjQW5ZeVRwVjJVWi8yZzVyd0dWdWdTaklZUEJUbFpDSXRy?=
- =?utf-8?B?YUk0dXRtRUNQQzFlSmdndlFNUjlLbG44ZTZTdWxEbzBCZEdzMkRTNjVQR2ha?=
- =?utf-8?B?S0NmQ3dnOCtlL1ZoNlQvOUxHWlZRWkludUJ4M2pObWhoTThYUTNRajNaeTJs?=
- =?utf-8?B?bTFHcFBxRVdaKzRndFhQSDdGNGNLaUM3dVYxT1RJanRWWS9BYnRrZXRzYWMr?=
- =?utf-8?B?MXN4R0pCQldDcURrcTRmWThFN0hkR2VJQ09jb2F1UElsNkpOR0p5ajlhdDZF?=
- =?utf-8?B?ZjJuS3E1cG5naUFRNnFjaGdFbyt2K08xTXI2VGUyMHN2Z3RHa1RidE9BN0J5?=
- =?utf-8?B?QTB4blRXRVFXeHN1dkMzTDQ3NVJmK0cyaWUycHJlSzQ2bmV0L3E1TWJ3Z2FF?=
- =?utf-8?B?ZzY4cUl1S2U1aGFVYmF2czhtOVJEK3dUdngwZldPcThzNXE5SVdTVlcvMWpJ?=
- =?utf-8?B?M2pjTDNrVWlycUVjRDBJRE1RV3pwemRXN0JhS3EyaUIzSTRCWDBhK2orU3FV?=
- =?utf-8?B?bUkvLzBpR1ZNbDNvYklnWVd1UzVKL1A4N0RFU1NNMmJ2S3dNQTVlWUNoK2pU?=
- =?utf-8?B?SVNhbDRaVDJCMGoyWUxVbVd0WlpIK0dGSXgzSGdWeHlySjZFU2VxTzdqMEM2?=
- =?utf-8?B?WFNtd2NLRzg3NXE4N2QxNVV5L3JnS0twYlZxRExCMzRWSUk5NWxESXRuMlI2?=
- =?utf-8?B?Z0NrSXdndEFta0t5dnNmQ1NuSXA2K0kvRllzSFBzN3VWd2x5akpVSkxtY2Mx?=
- =?utf-8?B?dHlTRHdwYWZYUXBjN1pYQk45RDVPMXMrdllXWEpuVlJGWHFnUVZGVzhOR001?=
- =?utf-8?B?U3R0Nmo5dFp5VUpMTVpYKytVTDVTL3Vjc3Y4emhVbHFIc0hOSGV2VW1ZMmFk?=
- =?utf-8?B?eTlMQml2TUk5eDB1a2x1ckh1Z29VcnNaZDlMTXNQQjFmeWdGR2VLTGVhbXN6?=
- =?utf-8?B?NWZqMnFyWG42VVRNekEzWU85ZjNIOWJlWVNhZUFaTnlncjJZZXd2eUhmendX?=
- =?utf-8?B?TzJjWGtyODFyMFgyRVZwTEdmUWpXUnBqYkl4cldlWGtrdXpUYWhVYVh5RXZn?=
- =?utf-8?B?Z1BWN3h1eHJuN2hGM2ppWnpVQ1E1RkhIMEQwelZCT0FGMHVyTEhsVHUzKzZu?=
- =?utf-8?B?dXlPVitzeVhqdHoxTDFQb2c2V2Q3bmJlbW1LOFhZNllWb0RZWFk4cDhKL1hn?=
- =?utf-8?B?d0NFTjl6VkZmMXZKekF3aVJKRjVSUGZrT1AyRkRDZmRWSlVwbWxrS1A5QnhV?=
- =?utf-8?B?OGcyM2paNVdmNlI4MVB0SS9YNWFqc1NGNU1XeTVVUDVlWG5tUHRQOUhBbW1M?=
- =?utf-8?B?dUwxeGZOTVphTEw0OTE1dEJyb2h2dzFtM0JVZEtYQWEyT0p3NTY4OGk5QUwr?=
- =?utf-8?B?cEtVS2RnMThwWkN2Q2FpN3pQR1lJU1pWS0hpVHNiekhuY0VUVjdXM3p4QXE4?=
- =?utf-8?B?QzB5VEdtUWxUV3lhU3VYZTN3Zy9GLzRqOXV3UjJWVHhhaDRlbnJrU0U2SXpq?=
- =?utf-8?B?QW1qWkUwREtzVDNieGRWNjdWcGhFcmZFWmdpNDBxN2V1bUNxc0IvOUYxM0pr?=
- =?utf-8?B?YVpweU5ZbExuZWg5OU5WNE0yclJaVUFvR0xOelBVWjRoaUZFOEE4QTNBLzhF?=
- =?utf-8?B?S0E9PQ==?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57100ffb-6ac3-4e46-3048-08dc42b3a609
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2024 16:44:13.2783
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FUiKiVon6B0b/XRsC9Y1kFUPi2+pjff+f1hLEb+9jlkxfy576J8RQ75RNskE/LclkPqadnwQZGUEGMIjxRlmUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB6891
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 12.03.24 17:13, Chris Paterson wrote:
-> + CIP people 
-> (sorry for the delay)
-> 
->> From: Denys Fedoryshchenko <denys.f@collabora.com>
->> Sent: Thursday, March 7, 2024 11:02 AM
->>
->> Hello,
->>
->> I'm reaching out on behalf of the KernelCI project team to discuss our
->> current compiler setup and planned migration to Debian Bookworm.
->>
->> As you may know, our compiler images are currently based on Debian
->> Bullseye, which is approaching its end of life in July 2024. We have
->> been testing using gcc-10, which has presented us with some recent
->> challenges, notably a significant bug that results in false positive
->> compilation errors (specifically, the -Werror memcpy issue in
->> security.c). This situation has prompted us to consider an urgent
->> migration to Debian Bookworm. Additionally, the migration is
->> necessitated by our requirement to upgrade to a newer Python version to
->> support KernelCI v2 development efforts.
->>
->> However, before we proceed, we have a couple of pending questions that
->> we hope to get clarity on:
->>
->> 1) We've noticed that the minimal available version of clang on
->> https://apt.llvm.org/bookworm/dists/ is 15, whereas our current minimal
->> requirement for the Linux kernel compilation is clang-13.0.1
->> (https://www.kernel.org/doc/html/next/process/changes.html). How
->> critical is it to continue providing compile tests for clang-13 (and
->> potentially clang-14)? This information would be vital for us in
->> planning our compiler support strategy moving forward.
->>
->> 2) We are also considering migrating to gcc-12 and would like to
->> inquire if the CIP (Civil Infrastructure Platform) could provide their
->> endorsement for this move. Should there be any reservations about
->> transitioning to gcc-12, we would greatly appreciate development
->> support in building gcc-10 for Bookworm. In the interim, we would like
->> to inquire if it's acceptable to continue using our current gcc-10
->> images based on Bullseye until such a migration is feasible.
-> 
-> Jan, Iwamatsu-san, Arisu-san,
-> Do you have any comments here?
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   794e11b83f62df1c9e75c3411254f60df074a261
+commit: d37041e8bb417db3d3403e6a0cf5d899651e6e59 [23/26] nfs: create a new GDD_LOOKUP procedure
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240313/202403130012.qgPeEf1V-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240313/202403130012.qgPeEf1V-lkp@intel.com/reproduce)
 
-My 2 cents: I'm not aware of compilation issues of our 4.4..6.1-cip
-kernels with gcc-12 from bookworm. In different projects than CIP (e.g.
-xenomai-images), we are also using bookworm as basis to build down to
-4.4-cip, and that was not causing problems so far.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403130012.qgPeEf1V-lkp@intel.com/
 
-Jan
+All errors (new ones prefixed by >>):
+
+   In file included from fs/nfs/nfs4xdr.c:40:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/nfs/nfs4xdr.c:49:
+   In file included from include/linux/sunrpc/clnt.h:19:
+   In file included from include/linux/sunrpc/msg_prot.h:205:
+   In file included from include/linux/inet.h:42:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from fs/nfs/nfs4xdr.c:49:
+   In file included from include/linux/sunrpc/clnt.h:19:
+   In file included from include/linux/sunrpc/msg_prot.h:205:
+   In file included from include/linux/inet.h:42:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from fs/nfs/nfs4xdr.c:49:
+   In file included from include/linux/sunrpc/clnt.h:19:
+   In file included from include/linux/sunrpc/msg_prot.h:205:
+   In file included from include/linux/inet.h:42:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> fs/nfs/nfs4xdr.c:2304:2: error: call to undeclared function 'encode_get_dir_delegation'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2304 |         encode_get_dir_delegation(xdr, &hdr);
+         |         ^
+>> fs/nfs/nfs4xdr.c:6466:11: error: call to undeclared function 'decode_get_dir_delegation'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    6466 |         status = decode_get_dir_delegation(xdr, res);
+         |                  ^
+   17 warnings and 2 errors generated.
+
+
+vim +/encode_get_dir_delegation +2304 fs/nfs/nfs4xdr.c
+
+  2289	
+  2290	/*
+  2291	 * Encode GDD_LOOKUP request
+  2292	 */
+  2293	static void nfs4_xdr_enc_gdd_lookup(struct rpc_rqst *req, struct xdr_stream *xdr,
+  2294					    const void *data)
+  2295	{
+  2296		const struct nfs4_lookup_arg *args = data;
+  2297		struct compound_hdr hdr = {
+  2298			.minorversion = nfs4_xdr_minorversion(&args->seq_args),
+  2299		};
+  2300	
+  2301		encode_compound_hdr(xdr, req, &hdr);
+  2302		encode_sequence(xdr, &args->seq_args, &hdr);
+  2303		encode_putfh(xdr, args->dir_fh, &hdr);
+> 2304		encode_get_dir_delegation(xdr, &hdr);
+  2305		encode_lookup(xdr, args->name, &hdr);
+  2306		encode_getfh(xdr, &hdr);
+  2307		encode_getfattr(xdr, args->bitmask, &hdr);
+  2308		encode_nops(&hdr);
+  2309	}
+  2310	
 
 -- 
-Siemens AG, Technology
-Linux Expert Center
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
