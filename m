@@ -1,189 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143743D6D;
-	Wed, 13 Mar 2024 07:03:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1801919452
+	for <llvm@lists.linux.dev>; Wed, 13 Mar 2024 07:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710313422; cv=none; b=FOGFnrvKpjfiNPdjZ1jwvab9vs4ij9jkcK9hrdy9G3ZemMQ5tWcSIUqg5/nGXu/UqUjIysQAuTNt9jJl01lfupAkuKa7OmKphSNwz1Ji5zz8o2zZXmQnagnsA9Ab3Fdc3x7uVcX1acMk3Zo8eo8aDNKxciJFPLndCNVqbXxqhR0=
+	t=1710315619; cv=none; b=gWR3htzQs9kRs9JMEW0w+3M9Ql+1ZsMNlwZ2FOfB1idpVB1LYkMd8s6cn0C6qrIRfSdjoZScoyKjELzwZeLuB139COej0YEp9zVuOexpgq7mSiV1v8PL0RSosZFSSv54ZFLg0ZNBYfu7yK/TvOhpGnzdzOc/Y47AYPjlmsMUPSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710313422; c=relaxed/simple;
-	bh=TM4llEmWvt3Eqj4ka9xxYANerkoKCQkq7CdMxuEFzkY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=poVJaio8sYkzF21PSnvrMOvGv6yLvwpFIXEXovwSRQcjFMN2kcJjOoKaEaWukucsU21w0DI1ocpQ0xJFyQ1zgO6IxEgAVkU+7pyXXXSG2DGZy0lqA0yFLOdJQhlknNP97PfJ5nPJ6B6H3cAIweKwV4IcgFrHDEWgRARDQdGkjG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e9T5B7vH; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710315619; c=relaxed/simple;
+	bh=hvnnGeIRsR451jsq6EWDDv+B1Frf+fv5R/ChN/r9MPY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=K2RvXGc2YqxnODvVk9AGmRWsMJDrq5fOkqji0AMVIOJ0gXio/K2ZWccl00kr7g9EKnugIA6eJHXF0inlaB9FVc1EbWekLPKb8hvdT0qYO/5LspoAuuQedqC0W/fJww2srbMIK8IzgRUBX8zEwVVr2uuVo6Z5z3xgCiandyNRg8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SRR8xkq0; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e9T5B7vH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710313420; x=1741849420;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TM4llEmWvt3Eqj4ka9xxYANerkoKCQkq7CdMxuEFzkY=;
-  b=e9T5B7vHFp6L61n7cJrOGGqbUUhrHzgjoBzEM9SRkZCYoz/+DVGeqd5/
-   U62o7YHQVDupvG9Q+WRD23KUH5+mTIMN3OrCd7aR7Y6AkfYN0Tgeh4+Sg
-   x5/9N6fvyi0s+wZYvgJ8Ywq+/VDeX6xnUz0wlbM6BE+aH50aom5WPsWl3
-   532lwTpxzrSVfdWS6fHUKrZdHDCP5lmZqMtVtS+Wy1ev9pzrxt7UxZn/4
-   4IpCQ8fIEX1wbqzvnzS5309Ms1KPlIIehUcF4p/lZlwWnliguy8Hw/J3Y
-   cgi6OdYawNGT5mvKb3XBsWrdZAiTf3pajtM/hoQ9sly6yMKVkhhkOpCu2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="30496298"
-X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="30496298"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 00:03:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="12265334"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 13 Mar 2024 00:03:38 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rkIeF-000C8B-1B;
-	Wed, 13 Mar 2024 07:03:35 +0000
-Date: Wed, 13 Mar 2024 15:03:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/WFAMNAE-next20240312 1/1]
- lib/crc64-rocksoft.c:69:13: error: no member named 'tfm' in 'struct
- shash_desc'
-Message-ID: <202403131436.V9IBdFAo-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SRR8xkq0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710315617;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SAaMF40ZMX23mdJ+/kjnz1KDHRdi/+xcNiw4R0oGwzE=;
+	b=SRR8xkq0dQODBhQzAA+ngD80BUhTlPDNEvVZ8+RFMNABLHDBN7vV2zUea3zzttLyjK8iC3
+	tJxWj7KMxUOY8Qm2P4h/WA8k9XG9RX3yHfjCKDTnjgrrdt01QTpxXSbRyfCGtOlC/pt4kV
+	Z3qml6h3VgJohO4KegRCCUcmeQnnZ3s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-384-EX560D_2MqKpcLlO0Yqogw-1; Wed, 13 Mar 2024 03:40:14 -0400
+X-MC-Unique: EX560D_2MqKpcLlO0Yqogw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F97887A9F4;
+	Wed, 13 Mar 2024 07:40:14 +0000 (UTC)
+Received: from [172.64.4.48] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 35BAF40C6CB2;
+	Wed, 13 Mar 2024 07:40:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 15 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, 1f440397)
+Date: Wed, 13 Mar 2024 07:40:14 -0000
+To: llvm@lists.linux.dev, shinichiro.kawasaki@wdc.com, yizhan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <34827.124031303401400552@us-mta-384.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/WFAMNAE-next20240312
-head:   33ee4d07d6d337670a64f9d41e14e7579cfa9015
-commit: 33ee4d07d6d337670a64f9d41e14e7579cfa9015 [1/1] treewide: avoid -Wfamnae warnings
-config: i386-buildonly-randconfig-003-20240313 (https://download.01.org/0day-ci/archive/20240313/202403131436.V9IBdFAo-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240313/202403131436.V9IBdFAo-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403131436.V9IBdFAo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from lib/crc64-rocksoft.c:8:
-   include/crypto/hash.h:155:2: error: expected member name or ';' after declaration specifiers
-     155 |         struct_group_tagged(shash_desc_hdr, hdr,
-         |         ^
-   include/linux/stddef.h:81:2: note: expanded from macro 'struct_group_tagged'
-      81 |         __struct_group(TAG, NAME, /* no attrs */, MEMBERS)
-         |         ^
-   include/uapi/linux/stddef.h:28:20: note: expanded from macro '__struct_group'
-      28 |                 struct { MEMBERS } ATTRS; \
-         |                                  ^
-   In file included from lib/crc64-rocksoft.c:8:
-   include/crypto/hash.h:155:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     155 |         struct_group_tagged(shash_desc_hdr, hdr,
-         |         ^
-     156 |                             struct crypto_shash *tfm;
-     157 |                             __aligned(ARCH_SLAB_MINALIGN));
-         |                             int
-   include/linux/stddef.h:81:2: note: expanded from macro 'struct_group_tagged'
-      81 |         __struct_group(TAG, NAME, /* no attrs */, MEMBERS)
-         |         ^
-   include/uapi/linux/stddef.h:28:20: note: expanded from macro '__struct_group'
-      28 |                 struct { MEMBERS } ATTRS; \
-         |                                  ^
-   In file included from lib/crc64-rocksoft.c:8:
-   include/crypto/hash.h:155:2: warning: expected ';' at end of declaration list
-   include/linux/stddef.h:81:2: note: expanded from macro 'struct_group_tagged'
-      81 |         __struct_group(TAG, NAME, /* no attrs */, MEMBERS)
-         |         ^
-   include/uapi/linux/stddef.h:28:20: note: expanded from macro '__struct_group'
-      28 |                 struct { MEMBERS } ATTRS; \
-         |                                  ^
-   In file included from lib/crc64-rocksoft.c:8:
-   include/crypto/hash.h:155:2: error: expected member name or ';' after declaration specifiers
-   include/linux/stddef.h:81:2: note: expanded from macro 'struct_group_tagged'
-      81 |         __struct_group(TAG, NAME, /* no attrs */, MEMBERS)
-         |         ^
-   include/uapi/linux/stddef.h:29:24: note: expanded from macro '__struct_group'
-      29 |                 struct TAG { MEMBERS } ATTRS NAME; \
-         |                                      ^
-   In file included from lib/crc64-rocksoft.c:8:
-   include/crypto/hash.h:155:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     155 |         struct_group_tagged(shash_desc_hdr, hdr,
-         |         ^
-     156 |                             struct crypto_shash *tfm;
-     157 |                             __aligned(ARCH_SLAB_MINALIGN));
-         |                             int
-   include/linux/stddef.h:81:2: note: expanded from macro 'struct_group_tagged'
-      81 |         __struct_group(TAG, NAME, /* no attrs */, MEMBERS)
-         |         ^
-   include/uapi/linux/stddef.h:29:24: note: expanded from macro '__struct_group'
-      29 |                 struct TAG { MEMBERS } ATTRS NAME; \
-         |                                      ^
-   In file included from lib/crc64-rocksoft.c:8:
-   include/crypto/hash.h:155:2: warning: expected ';' at end of declaration list
-   include/linux/stddef.h:81:2: note: expanded from macro 'struct_group_tagged'
-      81 |         __struct_group(TAG, NAME, /* no attrs */, MEMBERS)
-         |         ^
-   include/uapi/linux/stddef.h:29:24: note: expanded from macro '__struct_group'
-      29 |                 struct TAG { MEMBERS } ATTRS NAME; \
-         |                                      ^
-   In file included from lib/crc64-rocksoft.c:8:
-   include/crypto/hash.h:158:8: error: flexible array member '__ctx' not allowed in otherwise empty struct
-     158 |         void *__ctx[];
-         |               ^
-   include/crypto/hash.h:891:35: error: no member named 'tfm' in 'struct shash_desc'
-     891 |         struct crypto_shash *tfm = desc->tfm;
-         |                                    ~~~~  ^
-   include/crypto/hash.h:951:49: error: no member named 'tfm' in 'struct shash_desc'
-     951 |                          sizeof(*desc) + crypto_shash_descsize(desc->tfm));
-         |                                                                ~~~~  ^
->> lib/crc64-rocksoft.c:69:13: error: no member named 'tfm' in 'struct shash_desc'
-      69 |         desc.shash.tfm = rcu_dereference(crc64_rocksoft_tfm);
-         |         ~~~~~~~~~~ ^
-   2 warnings and 8 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +69 lib/crc64-rocksoft.c
+Kernel information:
+    Commit message: Merge tag 'docs-6.9' of git://git.lwn.net/linux
 
-f3813f4b287e48 Keith Busch 2022-03-03  56  
-f3813f4b287e48 Keith Busch 2022-03-03  57  u64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len)
-f3813f4b287e48 Keith Busch 2022-03-03  58  {
-f3813f4b287e48 Keith Busch 2022-03-03  59  	struct {
-f3813f4b287e48 Keith Busch 2022-03-03  60  		struct shash_desc shash;
-f3813f4b287e48 Keith Busch 2022-03-03  61  		u64 crc;
-f3813f4b287e48 Keith Busch 2022-03-03  62  	} desc;
-f3813f4b287e48 Keith Busch 2022-03-03  63  	int err;
-f3813f4b287e48 Keith Busch 2022-03-03  64  
-f3813f4b287e48 Keith Busch 2022-03-03  65  	if (static_branch_unlikely(&crc64_rocksoft_fallback))
-f3813f4b287e48 Keith Busch 2022-03-03  66  		return crc64_rocksoft_generic(crc, buffer, len);
-f3813f4b287e48 Keith Busch 2022-03-03  67  
-f3813f4b287e48 Keith Busch 2022-03-03  68  	rcu_read_lock();
-f3813f4b287e48 Keith Busch 2022-03-03 @69  	desc.shash.tfm = rcu_dereference(crc64_rocksoft_tfm);
-f3813f4b287e48 Keith Busch 2022-03-03  70  	desc.crc = crc;
-f3813f4b287e48 Keith Busch 2022-03-03  71  	err = crypto_shash_update(&desc.shash, buffer, len);
-f3813f4b287e48 Keith Busch 2022-03-03  72  	rcu_read_unlock();
-f3813f4b287e48 Keith Busch 2022-03-03  73  
-f3813f4b287e48 Keith Busch 2022-03-03  74  	BUG_ON(err);
-f3813f4b287e48 Keith Busch 2022-03-03  75  
-f3813f4b287e48 Keith Busch 2022-03-03  76  	return desc.crc;
-f3813f4b287e48 Keith Busch 2022-03-03  77  }
-f3813f4b287e48 Keith Busch 2022-03-03  78  EXPORT_SYMBOL_GPL(crc64_rocksoft_update);
-f3813f4b287e48 Keith Busch 2022-03-03  79  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/134213
 
-:::::: The code at line 69 was first introduced by commit
-:::::: f3813f4b287e480b1fcd62ca798d8556644b8278 crypto: add rocksoft 64b crc guard tag framework
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11639957
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+          x86_64 - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11639996
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
 
-:::::: TO: Keith Busch <kbusch@kernel.org>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: kselftests upstream - net: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1463
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Storage - blktests - nvme-tcp - upstream
+       s390x - Storage - swraid scsi_raid
+       s390x - stress: stress-ng - cpu-cache
+       s390x - stress: stress-ng - memory
+       s390x - Reboot test
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Storage - blktests - nvme-tcp - upstream
+      x86_64 - Storage - swraid scsi_raid
+      x86_64 - stress: stress-ng - cpu-cache
+      x86_64 - stress: stress-ng - memory
+      x86_64 - Reboot test
+      x86_64 - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
