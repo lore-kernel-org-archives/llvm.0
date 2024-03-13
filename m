@@ -1,43 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D381448E9;
-	Wed, 13 Mar 2024 17:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A268160EDB;
+	Wed, 13 Mar 2024 18:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710352585; cv=none; b=pp1Bn0u9ayovq9+DIxld7MlUqeiiPLM4Qn/30TpaeCMpLjsajsk23kMwB05aeYmV3+1h4ZnF4EPhXPosxEvScWBARbk7n7MxCuAIuMOyivy5TtaL+kumVsmwxYSFEBMSMsFM2QqkiGTE/+SGyKAXvu84EX6AaKnt2Tui5N824iA=
+	t=1710354245; cv=none; b=F0Oyf91PlxTHNfrVub5bD//bncncTD79uUuP8syar0tbMrwI5WaSXjAG0E4G4QLFRoSUTW00dbvx/Z4Q9GmCBk9NzBfbqoAHkkezlCeKG6h9g91iXgILliqq+vvLr5k1fm6d0qmOKgzJww3O7ws1bWQ9MEkyW8aYIgauJTm8zGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710352585; c=relaxed/simple;
-	bh=GclcN5yJ/san/KwDM/BTLBHQQTbcAlYxCJf6t3MGcu8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oKdJxa6SvkDDVWjDMmD6TgRJ39/Q5oKXLYM4+0iC4faILdxJ3nJMl0x82sYMM0qMIOkRpHI1RIvt47pZuafHJn4auLbPXB0SzVvgjseP27NlwSISIXSPTGFLmYiYEIZWgO1aExqQJrkBZNgmaT+lnssat5uKc8bwYgE+1gRZ7Yw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p1qHGv6O; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710354245; c=relaxed/simple;
+	bh=NvYMxVkpcZOvB4LxRGQW3x8Rkz2TMeaR9EC1qF1oAds=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Q2lfjwfWhj2lsRqRkxoOlt5kTXNT+V5fmXkTm1tS1YqIw2sWQQcQbT1bYgj1o7ittY19WhwauZwk2j/9b70fXHs8+ElNHyzzAZ+Fs/2hTxAGbG8DsSxBXHFtWzZbOM9sJZH/XkNFbX/ri1uZuu8pbzbdcMbLaYZdeHXis/wKhag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tq7Ovxvu; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p1qHGv6O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCF3C433F1;
-	Wed, 13 Mar 2024 17:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710352584;
-	bh=GclcN5yJ/san/KwDM/BTLBHQQTbcAlYxCJf6t3MGcu8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p1qHGv6OdpaTj01cnKKkQ2LKv6ymGHD/Wb518B1ZS5PAQJCUgjTybV+B+Ko1Kz2Za
-	 q+8nAY6nVpUHiWXAQGdwYHu364Gf95nohMiulEu8pvIYJ8I0Hul75wZSi25ORRncVZ
-	 Qs3QEtNnsBTYZKfUG8HY5XSDdWOJgfCjQteGC2ub3nzlxMVJUz65p37ZV6Bm1UVaiT
-	 b1DuR9C/6hEeFCBAeJqWj3nbyq7g9CENxsP1giD56bIh5ilfoSu8T6YOOGpNU/Mrf4
-	 j75JfzVgNGx0/n5USaFLKnbkzyuPz0wsLUfqtYITg9FB1b8qQ2LAyZ7YT1OwH6RnMB
-	 VADWYtJVdh0wQ==
-Date: Wed, 13 Mar 2024 10:56:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Denys Fedoryshchenko <denys.f@collabora.com>, kernelci@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: Migration to Debian Bookworm and compiler updates for KernelCI
-Message-ID: <20240313175622.GA3091999@dev-arch.thelio-3990X>
-References: <42c7f5a3e07c274c2a9d2e45a973c6306b2ba74f.camel@collabora.com>
- <20240307170516.GA1780841@dev-arch.thelio-3990X>
- <64395770-84d4-4b6d-a7ff-d5623564daf3@gtucker.io>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tq7Ovxvu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710354244; x=1741890244;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NvYMxVkpcZOvB4LxRGQW3x8Rkz2TMeaR9EC1qF1oAds=;
+  b=Tq7OvxvuqgiQzcuD27kebgatYNu98OXklPfx5UDj335by+F81D4BjMx6
+   PCHiVWOA7ETUMhOxBXoeFhgPP0aJoQlNj/RZxPyaxtck8nGC/isqVNh7M
+   DDIslUTFAz3euboyUw8UHePnvAVtEw8aHJtqGxQHWr3DDjeB8sAbKid/B
+   cV4ACS9hi38y1PQP6ssHyUwRNjQk9aKry1lBjCCp/LFXbZ4+0iTZP/Kaz
+   mdhTCOH8+ROe6eaVSvNVK3b2d/DhHiUFtZkds+8u9JfkC3KNJvAr5T0ET
+   7/z5r9FMOiC5+ym3ptzJ9+jxn8IObD8e6SmRPbi9+iBwfJuOoH48WtOs7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11012"; a="5312891"
+X-IronPort-AV: E=Sophos;i="6.07,123,1708416000"; 
+   d="scan'208";a="5312891"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 11:24:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,123,1708416000"; 
+   d="scan'208";a="12594943"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 13 Mar 2024 11:24:00 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rkTGf-000Cf5-2V;
+	Wed, 13 Mar 2024 18:23:57 +0000
+Date: Thu, 14 Mar 2024 02:23:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:test 1/1] drivers/mtd/maps/physmap-core.c:527:52:
+ warning: format specifies type 'unsigned int' but the argument has type
+ 'void *'
+Message-ID: <202403140230.q9kERt7l-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,101 +58,152 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <64395770-84d4-4b6d-a7ff-d5623564daf3@gtucker.io>
 
-On Mon, Mar 11, 2024 at 08:10:31PM +0100, Guillaume Tucker wrote:
-> Hello,
-> 
-> On 07/03/2024 6:05 pm, Nathan Chancellor wrote:
-> > Hi Denys,
-> > 
-> > On Thu, Mar 07, 2024 at 01:02:26PM +0200, Denys Fedoryshchenko wrote:
-> > > Hello,
-> > > 
-> > > I'm reaching out on behalf of the KernelCI project team to discuss our
-> > > current compiler setup and planned migration to Debian Bookworm.
-> > > 
-> > > As you may know, our compiler images are currently based on Debian
-> > > Bullseye, which is approaching its end of life in July 2024. We have
-> > > been testing using gcc-10, which has presented us with some recent
-> > > challenges, notably a significant bug that results in false positive
-> > > compilation errors (specifically, the -Werror memcpy issue in
-> > > security.c). This situation has prompted us to consider an urgent
-> > > migration to Debian Bookworm. Additionally, the migration is
-> > > necessitated by our requirement to upgrade to a newer Python version to
-> > > support KernelCI v2 development efforts.
-> > > 
-> > > However, before we proceed, we have a couple of pending questions that
-> > > we hope to get clarity on:
-> > > 
-> > > 1) We've noticed that the minimal available version of clang on
-> > > https://apt.llvm.org/bookworm/dists/ is 15, whereas our current minimal
-> > > requirement for the Linux kernel compilation is clang-13.0.1
-> > > (https://www.kernel.org/doc/html/next/process/changes.html). How
-> > > critical is it to continue providing compile tests for clang-13 (and
-> > > potentially clang-14)? This information would be vital for us in
-> > > planning our compiler support strategy moving forward.
-> > 
-> > Coverage of the minimum version of a particular toolchain for building
-> > the kernel is important but I would not describe it as critical.
-> > 
-> > While apt.llvm.org's Bookworm distribution does not have clang-13 and
-> > clang-14, the Bullseye distribution of clang-13 and clang-14 does work
-> > on Bookworm, I personally do that for my Debian development containers:
-> > 
-> > https://github.com/nathanchance/env/blob/12927502f12ec63f50a460f842c9d0a70a82c629/podman/dev/debian/setup-env.sh#L54-L64
-> > 
-> > Have you explored using the kernel.org GCC and LLVM toolchains instead
-> > of the ones in Debian?
-> > 
-> > https://mirrors.edge.kernel.org/pub/tools/crosstool/
-> > https://mirrors.edge.kernel.org/pub/tools/llvm/
-> > 
-> > That would potentially give you more flexibility with distribution
-> > upgrades and stable/deterministic compiler versions around that. I
-> > maintain the LLVM ones, which are optimized at build time to be quicker
-> > than the Debian one's, so that would save you build minutes over time.
-> 
-> Ah nice, Arnd suggested a while ago that we used his GCC
-> cross-compiler toolchains in KernelCI but it got stuck at a
-> slightly lower priority than everything else for core developers.
-> It has always been considered a nice thing to do one day, and I
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git test
+head:   0d7231b62906aa3562554714aa708ac0b452c0a5
+commit: 0d7231b62906aa3562554714aa708ac0b452c0a5 [1/1] CFI debug code
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240314/202403140230.q9kERt7l-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240314/202403140230.q9kERt7l-lkp@intel.com/reproduce)
 
-Heh, story of my life :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403140230.q9kERt7l-lkp@intel.com/
 
-> guess there may be additional reasons to pick it up now with the
-> need for a wider GCC version coverage and LLVM/Clang too.
-> 
-> Out of interest, is there going to be some Rust toolchains there
-> as well?  Having all the reference toolchains to build the kernel
-> in a single location would be great I think.  Of course Rust
-> support is still a moving target, so maybe it's still a bit too
-> early right now - just wondering.
+All warnings (new ones prefixed by >>):
 
-As Miguel mentioned, we are talking about providing a combo LLVM + Rust
-tarball to help make it more accessible to more people.
+   In file included from drivers/mtd/maps/physmap-core.c:35:
+   include/linux/mtd/map.h:413:43: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
+           pr_info("%s map->virt=%08x\n", __func__, map->virt);
+                                 ~~~~               ^~~~~~~~~
+   include/linux/printk.h:528:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+>> drivers/mtd/maps/physmap-core.c:527:52: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
+                   dev_notice(&dev->dev, "remapped to %08x-%08x\n", info->maps[i].virt,
+                                                      ~~~~          ^~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:148:71: note: expanded from macro 'dev_notice'
+           dev_printk_index_wrap(_dev_notice, KERN_NOTICE, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                        ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/mtd/maps/physmap-core.c:528:7: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
+                              info->maps[i].virt + info->maps[i].size - 1);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:148:71: note: expanded from macro 'dev_notice'
+           dev_printk_index_wrap(_dev_notice, KERN_NOTICE, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                        ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   3 warnings generated.
 
-> Then in addition to the tarballs, one thing that was discussed
-> with Linaro in the very early days of tuxmake was to have a
-> reference set of Docker image with the toolchains already
-> installed - to save everyone creating their own like in Nathan's
-> GitHub link.  Has anyone done that already?
-> 
-> I started looking into it while I was writing my tutorial to
-> build a kernel last month but didn't find anything, so it's kind
-> of going up on my TODO list now.  It would greatly help unify
-> kernel builds across CI systems in particular and improve
-> reproducibility.  The TuxBuild / tuxmake Docker images were
-> forked from the KernelCI ones so that's already something that
-> could be reunited at some point.
 
-I am not aware of that. As far as I can tell, the TuxMake images are
-only lightly customized for TuxMake itself, so it is possible they are
-already usable by other entities (I maintain my own containers for other
-reasons). They recently added images for my kernel.org LLVM builds as
-well:
+vim +527 drivers/mtd/maps/physmap-core.c
 
-https://gitlab.com/Linaro/tuxmake/-/commit/dca69b3e2f007cc31ab08200ad59593b7eaa5f40
+   445	
+   446	static int physmap_flash_probe(struct platform_device *dev)
+   447	{
+   448		struct physmap_flash_info *info;
+   449		int err = 0;
+   450		int i;
+   451	
+   452		if (!dev->dev.of_node && !dev_get_platdata(&dev->dev))
+   453			return -EINVAL;
+   454	
+   455		info = devm_kzalloc(&dev->dev, sizeof(*info), GFP_KERNEL);
+   456		if (!info)
+   457			return -ENOMEM;
+   458	
+   459		while (platform_get_resource(dev, IORESOURCE_MEM, info->nmaps))
+   460			info->nmaps++;
+   461	
+   462		if (!info->nmaps)
+   463			return -ENODEV;
+   464	
+   465		info->maps = devm_kzalloc(&dev->dev,
+   466					  sizeof(*info->maps) * info->nmaps,
+   467					  GFP_KERNEL);
+   468		if (!info->maps)
+   469			return -ENOMEM;
+   470	
+   471		info->mtds = devm_kzalloc(&dev->dev,
+   472					  sizeof(*info->mtds) * info->nmaps,
+   473					  GFP_KERNEL);
+   474		if (!info->mtds)
+   475			return -ENOMEM;
+   476	
+   477		platform_set_drvdata(dev, info);
+   478	
+   479		info->gpios = devm_gpiod_get_array_optional(&dev->dev, "addr",
+   480							    GPIOD_OUT_LOW);
+   481		if (IS_ERR(info->gpios))
+   482			return PTR_ERR(info->gpios);
+   483	
+   484		if (info->gpios && info->nmaps > 1) {
+   485			dev_err(&dev->dev, "addr-gpios only supported for nmaps == 1\n");
+   486			return -EINVAL;
+   487		}
+   488	
+   489		pm_runtime_enable(&dev->dev);
+   490		pm_runtime_get_sync(&dev->dev);
+   491	
+   492		if (dev->dev.of_node) {
+   493			pr_info("%s: call physmap_flash_of_init()\n", __func__);
+   494			err = physmap_flash_of_init(dev);
+   495		} else
+   496			err = physmap_flash_pdata_init(dev);
+   497	
+   498		if (err) {
+   499			pm_runtime_put(&dev->dev);
+   500			pm_runtime_disable(&dev->dev);
+   501			return err;
+   502		}
+   503	
+   504		for (i = 0; i < info->nmaps; i++) {
+   505			struct resource *res;
+   506	
+   507			info->maps[i].virt = devm_platform_get_and_ioremap_resource(dev, i, &res);
+   508			if (IS_ERR(info->maps[i].virt)) {
+   509				err = PTR_ERR(info->maps[i].virt);
+   510				goto err_out;
+   511			}
+   512	
+   513			dev_notice(&dev->dev, "physmap platform flash device: %pR\n",
+   514				   res);
+   515	
+   516			if (!info->maps[i].name)
+   517				info->maps[i].name = dev_name(&dev->dev);
+   518	
+   519			if (!info->maps[i].phys)
+   520				info->maps[i].phys = res->start;
+   521	
+   522			info->win_order = get_bitmask_order(resource_size(res)) - 1;
+   523			info->maps[i].size = BIT(info->win_order +
+   524						 (info->gpios ?
+   525						  info->gpios->ndescs : 0));
+   526	
+ > 527			dev_notice(&dev->dev, "remapped to %08x-%08x\n", info->maps[i].virt,
+   528				   info->maps[i].virt + info->maps[i].size - 1);
+   529	
+   530			info->maps[i].map_priv_1 = (unsigned long)dev;
+   531	
+   532			if (info->gpios) {
+   533				pr_info("%s: gpios map init\n", __func__);
+   534				err = physmap_addr_gpios_map_init(&info->maps[i]);
+   535				if (err)
+   536					goto err_out;
+   537			}
+   538	
 
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
