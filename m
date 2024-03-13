@@ -1,141 +1,208 @@
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29E2383BD
-	for <llvm@lists.linux.dev>; Wed, 13 Mar 2024 10:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.77.166.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E6E225AD
+	for <llvm@lists.linux.dev>; Wed, 13 Mar 2024 10:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710326419; cv=none; b=Cp3JUB3x7/mRTmG2DOPHkn6VbUxSRBMKBiXLa+bEJWBNkK9+6+WGGo6gTqbxA2Ab9ujY2mCc4BRu886aT7lYtELbeSVvQJKIbMzZeMXgPOXrHB55vGP1iOecV8z3H5D96D2u13+drfgI3y3mCjTxxw3zmkf4vJ/j8nQa92beXiU=
+	t=1710326479; cv=none; b=oFmbWtTt+zdoxkuJ4ymbhc6M8/0+tK0hwtWjs8PFzI5p8Zu/MY+Yk0BxFLKaFPB4lRZtW2AS7xrQbKrFWdXlZlCLQl9SJRc8OkrjKVh2uqQ5rIwjrAXHJmBjx8qGQlx16bd7IyJ1EypDdMDtwG2kc+Op+EieoPUkhhCxQ8PNtVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710326419; c=relaxed/simple;
-	bh=DWfzBi/hY8b2ekN9IriDT2CRKZhaspCa2KsynZL8fDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DfHfwSC1qUwC+1Dat1TTSsT46gKNLX1wqwfdFBLjmwxOu0U9pGJrL+i76u+j4n963NSpUbvFoc1W38AClw/OOfDDv08wk/MkGD1V3qteIYDlkzkkNduYNimoxeqN5iAUjzNec1ivFHVlqU39SaMY6HLfn93+3q1X1q1k4Jsx/Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ens-lyon.org; spf=pass smtp.mailfrom=bounce.ens-lyon.org; arc=none smtp.client-ip=140.77.166.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ens-lyon.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bounce.ens-lyon.org
-Received: from localhost (localhost [127.0.0.1])
-	by sonata.ens-lyon.org (Postfix) with ESMTP id B175DA01B6;
-	Wed, 13 Mar 2024 11:40:15 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-	by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 67qlf_VEHszX; Wed, 13 Mar 2024 11:40:15 +0100 (CET)
-Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
+	s=arc-20240116; t=1710326479; c=relaxed/simple;
+	bh=vsDC8bnZCdixymy4YkI6IruJC5s1XbCLgBblcGivMCY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=iAQDNXng9v30TEChsnKbhQI8Cudied3tqcT9zIXUXMTJUgktCx8wLcSUsaUKBHo4tlEJncRevwIZGnup58ckxYcRMvsYr2J4D+bpCDyGlRAs+LmrBsnRb44bdQgF0N45BTK+RF48vYzC480nbqLETQnPAMEzdtXvSBQQqqqxNqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FT3Jb1In; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FT3Jb1In"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710326476;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=p8dY+Q+lVp5/jCrKOh0kgmwMgUrn2pms+bsCAacizcY=;
+	b=FT3Jb1InSpM7kYrOYvkMVShDziYfpRGsBWckhszfwxJfMT7JsJs8XX2PKI4pI8gaa/f/82
+	U4KdSrgSLNA7NKs/6TTLHTKIr6oVrMdRBariiZ6PVCM43DNqQc1o56No1qcTfPiWDpBRTD
+	SHQ781/DaCWcDtZ26dN8m7Onzwsh26s=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-695-xwp65pPqMyqJz6k7JrLjUw-1; Wed,
+ 13 Mar 2024 06:41:15 -0400
+X-MC-Unique: xwp65pPqMyqJz6k7JrLjUw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by sonata.ens-lyon.org (Postfix) with ESMTPSA id C630EA01AB;
-	Wed, 13 Mar 2024 11:40:14 +0100 (CET)
-Received: from samy by begin with local (Exim 4.97)
-	(envelope-from <samuel.thibault@ens-lyon.org>)
-	id 1rkM1u-000000009Kn-1rvr;
-	Wed, 13 Mar 2024 11:40:14 +0100
-Date: Wed, 13 Mar 2024 11:40:14 +0100
-From: Samuel Thibault <samuel.thibault@ens-lyon.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: William Hubbs <w.d.hubbs@gmail.com>,
-	Chris Brannon <chris@the-brannons.com>,
-	Kirk Reiser <kirk@reisers.ca>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, speakup@linux-speakup.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] speakup: devsynth: remove c23 label
-Message-ID: <20240313104014.thhiz2pektmqun4b@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	William Hubbs <w.d.hubbs@gmail.com>,
-	Chris Brannon <chris@the-brannons.com>,
-	Kirk Reiser <kirk@reisers.ca>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, speakup@linux-speakup.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240313100413.875280-1-arnd@kernel.org>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACA2A293248B;
+	Wed, 13 Mar 2024 10:41:14 +0000 (UTC)
+Received: from [172.64.4.48] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6493E492BC6;
+	Wed, 13 Mar 2024 10:41:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 15 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, b0546776)
+Date: Wed, 13 Mar 2024 10:41:14 -0000
+To: shinichiro.kawasaki@wdc.com, yizhan@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240313100413.875280-1-arnd@kernel.org>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Message-Id: <53383.124031306411500328@us-mta-695.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi, we tested your kernel and here are the results:
 
-I have already sent a fix to greg.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-("speakup: Fix warning for label at end of compound statement")
 
-Samuel
+Kernel information:
+    Commit message: Merge tag 'printk-for-6.9' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/printk/linux
 
-Arnd Bergmann, le mer. 13 mars 2024 11:04:03 +0100, a ecrit:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang-16 and higher warn about a c23 C extension that is also a GNU extension:
-> 
-> drivers/accessibility/speakup/devsynth.c:111:3: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
-> 
-> clang-15 just produces an error here:
-> 
-> drivers/accessibility/speakup/devsynth.c:111:3: error: expected statement
-> 
-> This is apparently the only such warning in the kernel tree at the moment,
-> so just convert it into standard C code using the equivalent 'continue'
-> keyword.
-> 
-> Fixes: 807977260ae4 ("speakup: Add /dev/synthu device")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/accessibility/speakup/devsynth.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/accessibility/speakup/devsynth.c b/drivers/accessibility/speakup/devsynth.c
-> index da4d0f6aa5bf..76b5e942dc1b 100644
-> --- a/drivers/accessibility/speakup/devsynth.c
-> +++ b/drivers/accessibility/speakup/devsynth.c
-> @@ -68,7 +68,7 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
->  			case 7: /* 0xfe */
->  			case 1: /* 0x80 */
->  				/* Invalid, drop */
-> -				goto drop;
-> +				continue;
->  
->  			case 0:
->  				/* ASCII, copy */
-> @@ -96,7 +96,7 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
->  					if ((c & 0xc0) != 0x80)	{
->  						/* Invalid, drop the head */
->  						want = 1;
-> -						goto drop;
-> +						continue;
->  					}
->  					value = (value << 6) | (c & 0x3f);
->  					in++;
-> @@ -107,7 +107,6 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
->  				want = 1;
->  				break;
->  			}
-> -drop:
->  		}
->  
->  		count -= bytes;
-> -- 
-> 2.39.2
-> 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/134272
 
--- 
-Samuel
----
-Pour une évaluation indépendante, transparente et rigoureuse !
-Je soutiens la Commission d'Évaluation de l'Inria.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11642715
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+          x86_64 - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11642834
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Storage - blktests - nvme-tcp - upstream
+       s390x - Storage - swraid scsi_raid
+       s390x - stress: stress-ng - cpu-cache
+       s390x - stress: stress-ng - memory
+       s390x - Reboot test
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Storage - blktests - nvme-tcp - upstream
+      x86_64 - Storage - swraid scsi_raid
+      x86_64 - stress: stress-ng - cpu-cache
+      x86_64 - stress: stress-ng - memory
+      x86_64 - Reboot test
+      x86_64 - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
