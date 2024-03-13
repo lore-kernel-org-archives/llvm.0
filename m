@@ -1,106 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424B7125CF;
-	Wed, 13 Mar 2024 10:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29E2383BD
+	for <llvm@lists.linux.dev>; Wed, 13 Mar 2024 10:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.77.166.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710324260; cv=none; b=i4SWM8C6EcxDFfFgdWHG394DiRC7zEXoL5mShv2JJPDCCrgyq1S0xNcNG6Z418WkMVGatOXR72SDtUV2lMGuPFMkFjjgkDhJkdCzGxtxI/+rk/rMsHVR2bwkvOKyaXGiGnHcAQv0Dy0MwO0jdVvcSWknc4umQQOFa0hcuVCpgQs=
+	t=1710326419; cv=none; b=Cp3JUB3x7/mRTmG2DOPHkn6VbUxSRBMKBiXLa+bEJWBNkK9+6+WGGo6gTqbxA2Ab9ujY2mCc4BRu886aT7lYtELbeSVvQJKIbMzZeMXgPOXrHB55vGP1iOecV8z3H5D96D2u13+drfgI3y3mCjTxxw3zmkf4vJ/j8nQa92beXiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710324260; c=relaxed/simple;
-	bh=s2Xi/Ss3yhJ3DH+e0boShl6sVUgNgQ6/KO0wp7CwR+U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HYf1nD7XuhcLqr96/VKu7ZawAyoEwLf/yur/JNGGtCUmAg6MBSiGl3nh0Xdqc6jgBAM3At3A8M7wNhwj5XEYDVPsLSgLc+YDQt+S4ppZ9ocGJNBhyhnZTs3I6jYycN0zwnlLhqmfI2LdqKtksabz/HyeGjWMSpDsCYcCgRJw5eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2QzWLmD; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2QzWLmD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1529FC433F1;
-	Wed, 13 Mar 2024 10:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710324259;
-	bh=s2Xi/Ss3yhJ3DH+e0boShl6sVUgNgQ6/KO0wp7CwR+U=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Q2QzWLmDqq+tuKW5dGk50mrqXuXJT+m+HkBoOKyDQF5XMzyDqHCUNlZZRD/hEX479
-	 4raJgiCuiPjLBKiCLtjydYzEqT+2+GK32Qqj7WSUit3gubZk5EcqChleZ4/02Fbha6
-	 uuqiXmXhgvm0U+BdCmSsHa5mYosUZYkWR5RXBMyWuSBGAjEOwkSpLThr99uDnv80t2
-	 5v3N5evK3cr8YYtFs6z8eoZ6luraXyCF/aaZG5ET2cU3TcM8DcmB/fnFLCNoE2m1Vt
-	 YJ4hm+JPp154B7LawBomQ4VyVTjw25n8+49XDZMsXEABSazzCBjeZGx/JJ8R79n36V
-	 7tKLYD8De2B5g==
-From: Arnd Bergmann <arnd@kernel.org>
-To: William Hubbs <w.d.hubbs@gmail.com>,
+	s=arc-20240116; t=1710326419; c=relaxed/simple;
+	bh=DWfzBi/hY8b2ekN9IriDT2CRKZhaspCa2KsynZL8fDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DfHfwSC1qUwC+1Dat1TTSsT46gKNLX1wqwfdFBLjmwxOu0U9pGJrL+i76u+j4n963NSpUbvFoc1W38AClw/OOfDDv08wk/MkGD1V3qteIYDlkzkkNduYNimoxeqN5iAUjzNec1ivFHVlqU39SaMY6HLfn93+3q1X1q1k4Jsx/Ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ens-lyon.org; spf=pass smtp.mailfrom=bounce.ens-lyon.org; arc=none smtp.client-ip=140.77.166.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ens-lyon.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bounce.ens-lyon.org
+Received: from localhost (localhost [127.0.0.1])
+	by sonata.ens-lyon.org (Postfix) with ESMTP id B175DA01B6;
+	Wed, 13 Mar 2024 11:40:15 +0100 (CET)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+	by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 67qlf_VEHszX; Wed, 13 Mar 2024 11:40:15 +0100 (CET)
+Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by sonata.ens-lyon.org (Postfix) with ESMTPSA id C630EA01AB;
+	Wed, 13 Mar 2024 11:40:14 +0100 (CET)
+Received: from samy by begin with local (Exim 4.97)
+	(envelope-from <samuel.thibault@ens-lyon.org>)
+	id 1rkM1u-000000009Kn-1rvr;
+	Wed, 13 Mar 2024 11:40:14 +0100
+Date: Wed, 13 Mar 2024 11:40:14 +0100
+From: Samuel Thibault <samuel.thibault@ens-lyon.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: William Hubbs <w.d.hubbs@gmail.com>,
 	Chris Brannon <chris@the-brannons.com>,
 	Kirk Reiser <kirk@reisers.ca>,
-	Samuel Thibault <samuel.thibault@ens-lyon.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	speakup@linux-speakup.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] speakup: devsynth: remove c23 label
-Date: Wed, 13 Mar 2024 11:04:03 +0100
-Message-Id: <20240313100413.875280-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	Justin Stitt <justinstitt@google.com>, speakup@linux-speakup.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] speakup: devsynth: remove c23 label
+Message-ID: <20240313104014.thhiz2pektmqun4b@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	William Hubbs <w.d.hubbs@gmail.com>,
+	Chris Brannon <chris@the-brannons.com>,
+	Kirk Reiser <kirk@reisers.ca>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, speakup@linux-speakup.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240313100413.875280-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240313100413.875280-1-arnd@kernel.org>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello,
 
-clang-16 and higher warn about a c23 C extension that is also a GNU extension:
+I have already sent a fix to greg.
 
-drivers/accessibility/speakup/devsynth.c:111:3: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
+("speakup: Fix warning for label at end of compound statement")
 
-clang-15 just produces an error here:
+Samuel
 
-drivers/accessibility/speakup/devsynth.c:111:3: error: expected statement
+Arnd Bergmann, le mer. 13 mars 2024 11:04:03 +0100, a ecrit:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang-16 and higher warn about a c23 C extension that is also a GNU extension:
+> 
+> drivers/accessibility/speakup/devsynth.c:111:3: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
+> 
+> clang-15 just produces an error here:
+> 
+> drivers/accessibility/speakup/devsynth.c:111:3: error: expected statement
+> 
+> This is apparently the only such warning in the kernel tree at the moment,
+> so just convert it into standard C code using the equivalent 'continue'
+> keyword.
+> 
+> Fixes: 807977260ae4 ("speakup: Add /dev/synthu device")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/accessibility/speakup/devsynth.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/accessibility/speakup/devsynth.c b/drivers/accessibility/speakup/devsynth.c
+> index da4d0f6aa5bf..76b5e942dc1b 100644
+> --- a/drivers/accessibility/speakup/devsynth.c
+> +++ b/drivers/accessibility/speakup/devsynth.c
+> @@ -68,7 +68,7 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
+>  			case 7: /* 0xfe */
+>  			case 1: /* 0x80 */
+>  				/* Invalid, drop */
+> -				goto drop;
+> +				continue;
+>  
+>  			case 0:
+>  				/* ASCII, copy */
+> @@ -96,7 +96,7 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
+>  					if ((c & 0xc0) != 0x80)	{
+>  						/* Invalid, drop the head */
+>  						want = 1;
+> -						goto drop;
+> +						continue;
+>  					}
+>  					value = (value << 6) | (c & 0x3f);
+>  					in++;
+> @@ -107,7 +107,6 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
+>  				want = 1;
+>  				break;
+>  			}
+> -drop:
+>  		}
+>  
+>  		count -= bytes;
+> -- 
+> 2.39.2
+> 
 
-This is apparently the only such warning in the kernel tree at the moment,
-so just convert it into standard C code using the equivalent 'continue'
-keyword.
-
-Fixes: 807977260ae4 ("speakup: Add /dev/synthu device")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/accessibility/speakup/devsynth.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/accessibility/speakup/devsynth.c b/drivers/accessibility/speakup/devsynth.c
-index da4d0f6aa5bf..76b5e942dc1b 100644
---- a/drivers/accessibility/speakup/devsynth.c
-+++ b/drivers/accessibility/speakup/devsynth.c
-@@ -68,7 +68,7 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
- 			case 7: /* 0xfe */
- 			case 1: /* 0x80 */
- 				/* Invalid, drop */
--				goto drop;
-+				continue;
- 
- 			case 0:
- 				/* ASCII, copy */
-@@ -96,7 +96,7 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
- 					if ((c & 0xc0) != 0x80)	{
- 						/* Invalid, drop the head */
- 						want = 1;
--						goto drop;
-+						continue;
- 					}
- 					value = (value << 6) | (c & 0x3f);
- 					in++;
-@@ -107,7 +107,6 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
- 				want = 1;
- 				break;
- 			}
--drop:
- 		}
- 
- 		count -= bytes;
 -- 
-2.39.2
-
+Samuel
+---
+Pour une évaluation indépendante, transparente et rigoureuse !
+Je soutiens la Commission d'Évaluation de l'Inria.
