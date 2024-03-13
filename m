@@ -1,86 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC62950A6C;
-	Wed, 13 Mar 2024 17:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2D356440;
+	Wed, 13 Mar 2024 17:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710350503; cv=none; b=BunFUkTnldBA4bwmGGLS4jnmgCOREFPZzjWAxCG/KcnQvLemnng7zNWnPBXcRENLvAb9yHC46gf/fUsi0QzoIkWxZkaaEtpzQnXaSonpBcO26xmUuqSI/P+LtKykXIoyI4jQacKUsvi1DucRkCKNP6ixhc35MK5Lm4NmJOehgwk=
+	t=1710351823; cv=none; b=tc3NGzYjA2dtHPEdjI9WEazkMujE1SXTGsTYu1/zzJn52MJPdlC7H2IhowxXCywJvgGEHlBtnSxNGIort7p/IGk5qNMXhUyr38GuX2ofHhvoLQNn8qu7W7Vmygk97EF3xHSZic+aYn/DSO4OtyWVKzxcTNlnu6kSZR+9kwJnVnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710350503; c=relaxed/simple;
-	bh=2+HrNPQNNrVW2SJnqA5HjU8yBIrVF6D+riwSfpUrNxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lllLrNmlIhNwbQeCPfBLYhD6EZpw3xwwSgYeqMLMcdmRTbV26ZBmeLzH/tdbPQy1/tQJ/8ozHhzK0LfSZYOD/gHOEs1BxqhpKNZ87yQzTkjPS27Hq9uIAtyfGCh4xaubiRuT2/xLriDDTGhh+G9epb6bcKzXW3dygh0D6aPaJnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnNlYLBO; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnNlYLBO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB54FC433F1;
-	Wed, 13 Mar 2024 17:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710350503;
-	bh=2+HrNPQNNrVW2SJnqA5HjU8yBIrVF6D+riwSfpUrNxw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nnNlYLBOEBemLClK28M3tirohPxrI8276u9bgKJNFG7AT4s1MUEOQIyZgoGzSD12+
-	 ZvZR4ab6rf/N/GYcd2cEyziyM5H1Nr3IgUNtc5XE310ejJK2Rvpg1N24u5EWuRN/g/
-	 T2Dt7Scnc0QZf2f5qhWSa3pBA3lec6w1jaPeTCj6QwyNVmtgrNgfMG/TAOAq02Qs2D
-	 2n6NvKzuuH/k/Wmf+9ao4Azr0QhIA3vts5c0bYjjTMPOnJCBtYrAPT4KATDTb1YeMt
-	 pCTL2EvdQykyihCSponjrJmQyX8TqE8zopRYMDCeHS7Enzt/Dcovtpo+O1XCio1eAo
-	 j6VkmEIRpYMRw==
-Date: Wed, 13 Mar 2024 10:21:41 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Qiang Zhang <qiang4.zhang@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Stable@vger.kernel.org
-Subject: Re: [PATCH] memtest: use {READ,WRITE}_ONCE in memory scanning
-Message-ID: <20240313172141.GB3064248@dev-arch.thelio-3990X>
-References: <20240312080422.691222-1-qiang4.zhang@intel.com>
+	s=arc-20240116; t=1710351823; c=relaxed/simple;
+	bh=lEfOSkBx/BgBbYhtTXBfO/JgZ5df4DjqaraiwmcYBiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tSkbY++hg93qpvY0r5yIQINEkvJ8PUBB/VU450GcJYuU7JmCNamTmIIDvuwPcqFr5MyBfrJvR0XwN9MZff9n/PFEEO+N9NngA1XR28TY2bJ44uro0I6bDe2N/rAF0nhD0E6XZCdoUdwKSLxOhMRYmzWorQnPxNqXihMdO9E2Imc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D370C433C7;
+	Wed, 13 Mar 2024 17:43:41 +0000 (UTC)
+Date: Wed, 13 Mar 2024 13:45:50 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ kernel test robot <lkp@intel.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH] tracing: Use strcmp() in __assign_str() WARN_ON() check
+Message-ID: <20240313134550.68a11319@gandalf.local.home>
+In-Reply-To: <20240313165903.GA3021536@dev-arch.thelio-3990X>
+References: <20240312113002.00031668@gandalf.local.home>
+	<20240313165903.GA3021536@dev-arch.thelio-3990X>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240312080422.691222-1-qiang4.zhang@intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 12, 2024 at 04:04:23PM +0800, Qiang Zhang wrote:
-> memtest failed to find bad memory when compiled with clang. So use
-> {WRITE,READ}_ONCE  to access memory to avoid compiler over optimization.
+On Wed, 13 Mar 2024 09:59:03 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-This commit message is severely lacking in details in my opinion,
-especially for a patch marked for stable. Did a kernel or LLVM change
-cause this (i.e., has this always been an issue or is it a recent
-regression)? What is the transformation that LLVM does to break the test
-and why is using READ_ONCE() or WRITE_ONCE() sufficient to resolve it?
-
-> Cc: <Stable@vger.kernel.org>
-> Signed-off-by: Qiang Zhang <qiang4.zhang@intel.com>
-> ---
->  mm/memtest.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202402292111.KIdExylU-lkp@intel.com/
+> > Fixes: 433e1d88a3be ("tracing: Add warning if string in __assign_str() does not match __string()")  
 > 
-> diff --git a/mm/memtest.c b/mm/memtest.c
-> index 32f3e9dda837..c2c609c39119 100644
-> --- a/mm/memtest.c
-> +++ b/mm/memtest.c
-> @@ -51,10 +51,10 @@ static void __init memtest(u64 pattern, phys_addr_t start_phys, phys_addr_t size
->  	last_bad = 0;
->  
->  	for (p = start; p < end; p++)
-> -		*p = pattern;
-> +		WRITE_ONCE(*p, pattern);
->  
->  	for (p = start; p < end; p++, start_phys_aligned += incr) {
-> -		if (*p == pattern)
-> +		if (READ_ONCE(*p) == pattern)
->  			continue;
->  		if (start_phys_aligned == last_bad + incr) {
->  			last_bad += incr;
-> -- 
-> 2.39.2
+> Is this change destined for 6.9 or 6.10? I applied it to current
+> trace/core (eb1533d156d3) along with 51270d573a8d but the warning is
+> still present. I even tried
 > 
+>     __builtin_choose_expr(__is_constexpr((src)),
+>                          strcmp((src), __data_offsets.dst##_ptr_),
+>                          (src) != __data_offsets.dst##_ptr_));
+> 
+> but not even that silenced the warning. I think we will still need a
+> diag directive to fully silence this warning.
+
+Yes, you said that the warning is still there, but the bug it shows should
+not be.
+
+I believe that's because clang still evaluates the (src) != ... even when
+the source is a contast and it warns about it. But if src is a constant, we
+do not want to do the !=, we want to do the slower strcmp().
+
+Let me test to make sure that when src is a string "like this" that it does
+the strcmp(). Otherwise, we may have to always do the strcmp(), which I
+really would like to avoid.
+
+BTW, I triggered another bug with strcmp():
+
+  https://lore.kernel.org/all/20240313093454.3909afe7@gandalf.local.home/
+
+-- Steve
