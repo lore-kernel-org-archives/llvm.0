@@ -1,189 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381DA3F9E8
-	for <llvm@lists.linux.dev>; Wed, 13 Mar 2024 12:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612413DBBA;
+	Wed, 13 Mar 2024 12:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710331824; cv=none; b=l9yKQvCEqECgUbR7RvJt3z4D3TmHPthQRWswmEN/pnauEpWRu8K5kX92k5CBpcR5rFMpRifpSgF1oviEXXQy1Ii7XLOaHCps36F429O1vOL1Z7x/5VpfZ/dKvI4K4FRTwwpM6EdDBpDcB8x+hXBRmHzeLhKJ/ps/GqurpKnNrzM=
+	t=1710332211; cv=none; b=s5dRCX0up2ui5Z0Ra/5Iq8+zJP1sysQhsMkoCQ7UfI9DdKDm0kCNhPJGVC5MnPrjZAjY5PmwjX5zGyfjQl28+RvxETZQERMulOPkwlieVf+VjjAkZ549ABvgtKX9J9dWqJ3tmzq/mGDQ9gjqfjQlPOr0HxbpOHFrUO51VbIwoV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710331824; c=relaxed/simple;
-	bh=YU+kuTbed9+Bbmf4RFHN9bPZZoD7q8RR8Eeq46gsWpY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HDT0DHnTEMMTK4sMbZ4OMMC6iKzrfFFlTwBUennGIT6x6Jr0NqftLgOwzUtmX2bPEhosscpe78uaZZB6QN2UKpN+eqUmaqxTJSgdPdUsTURyEJPl6WGcE+K2GD2EpEq06l9EmBDE/ZoQnqoE1+2MjkzMDOkk2I4vqoXM5atGuJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HmOUEu1t; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710332211; c=relaxed/simple;
+	bh=VUfzBGMO/FlpXxechvzdStq1VKd2cPkNETRA+bXOgzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dORU1en1LKs1w0saPVwIdUzrKG69QoeOhRFv6XVrl1RgY6xpdWLV1ceBSLqZVF41jFETZ/ZNMRGFo7FOVVcnRg9nCfNhcgs4WsSNROImamMSXtYgQlfbf4j4cyDNvjRIdAiKHBUe927gOpy5vScIxXsTIvoAWdeb1PPNOoAq1Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kd8mYBRq; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HmOUEu1t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710331820;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wRTf4vE/g5L1S3VTdEa3NIx4i0nAZ/xmB0ovri0NG90=;
-	b=HmOUEu1tQfeu8h0kw5kGbbAQp55m1XZYvjqbdpNLacWVYkEtSTkhbhVq9o9g8rOxJPzc4H
-	5Wj6WDW+heKWsZ6Z1PmLt6F0S04uPs8HoS5yTln8lqGBqWk9QHJEgMOQcZ+4TMMgKl1zWY
-	VcK9uUe54By5r8hAt94WMc2cByND4DU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-93-i_pBfeoTMouBP85imkMtQw-1; Wed,
- 13 Mar 2024 08:10:15 -0400
-X-MC-Unique: i_pBfeoTMouBP85imkMtQw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B2B31C00D0F;
-	Wed, 13 Mar 2024 12:10:15 +0000 (UTC)
-Received: from [172.64.4.48] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 987EE492BD0;
-	Wed, 13 Mar 2024 12:10:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 204): Test report for master
- (6.8.0, mainline.kernel.org-clang, cc4a875c)
-Date: Wed, 13 Mar 2024 12:10:14 -0000
-To: llvm@lists.linux.dev, shinichiro.kawasaki@wdc.com, yizhan@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kd8mYBRq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710332209; x=1741868209;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VUfzBGMO/FlpXxechvzdStq1VKd2cPkNETRA+bXOgzo=;
+  b=Kd8mYBRql1jP1ibG9t4kT6arxI+l+aMbyVgqjsCbisMh7eamQvh2VcZ2
+   HhMVENc43xF0uHJLpOWwnMI3GFRUqFcx01yYAsglFG030o9Pp1kmZuG8o
+   oUJFGZzQOA07hnjc3TA5LLOrctYbZ9rbvSDL3Adybsv8VAb7im/yWZisz
+   J3qupJdQESfH5xQgRxC6b8MHuC4DhbVJ7xekGdzkZSSl3KN/gGwYkHJr6
+   PrtUEYDRtoSPjZdFknEp/ImXgBbVXQvARNFO/Bpe1ilwOzk4hQmZAAWW9
+   ahBLSxEJ+y3Y6IrjKgRNk9zmTBObac+OoIYo2fTI3N1vGkX5pJU4nSsnk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="4956466"
+X-IronPort-AV: E=Sophos;i="6.07,122,1708416000"; 
+   d="scan'208";a="4956466"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 05:16:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,122,1708416000"; 
+   d="scan'208";a="12354421"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 13 Mar 2024 05:16:47 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rkNXJ-000CM7-0L;
+	Wed, 13 Mar 2024 12:16:45 +0000
+Date: Wed, 13 Mar 2024 20:16:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Geoffrey D. Bennett" <g@b4.vu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [geoffreybennett-scarlett-gen2:vocaster 14/15]
+ sound/usb/mixer_scarlett2.c:3680:6: warning: variable 'err' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202403132042.rQDVoEIP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <29450.124031308101501169@us-mta-93.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/geoffreybennett/scarlett-gen2.git vocaster
+head:   b78687f7243142a4466f63c0aee9742b44ee395d
+commit: 33d7f6dc965ab09522361ec99745a0685e4b8272 [14/15] ALSA: scarlett2: Add autogain target controls
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240313/202403132042.rQDVoEIP-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240313/202403132042.rQDVoEIP-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403132042.rQDVoEIP-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'lsm-pr-20240312' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/pcmoore/lsm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/134269
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk - upstream
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11642246
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
+>> sound/usb/mixer_scarlett2.c:3680:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (private->autogain_updated) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/usb/mixer_scarlett2.c:3690:9: note: uninitialized use occurs here
+           return err;
+                  ^~~
+   sound/usb/mixer_scarlett2.c:3680:2: note: remove the 'if' if its condition is always true
+           if (private->autogain_updated) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/usb/mixer_scarlett2.c:3671:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Storage - blktests - nvme-tcp - upstream
-       s390x - Storage - swraid scsi_raid
-       s390x - stress: stress-ng - cpu-cache
-       s390x - stress: stress-ng - memory
-       s390x - Reboot test
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
+vim +3680 sound/usb/mixer_scarlett2.c
 
+  3664	
+  3665	static int scarlett2_ag_target_ctl_get(
+  3666		struct snd_kcontrol *kctl, struct snd_ctl_elem_value *ucontrol)
+  3667	{
+  3668		struct usb_mixer_elem_info *elem = kctl->private_data;
+  3669		struct usb_mixer_interface *mixer = elem->head.mixer;
+  3670		struct scarlett2_data *private = mixer->private_data;
+  3671		int err;
+  3672	
+  3673		mutex_lock(&private->data_mutex);
+  3674	
+  3675		if (private->hwdep_in_use) {
+  3676			err = -EBUSY;
+  3677			goto unlock;
+  3678		}
+  3679	
+> 3680		if (private->autogain_updated) {
+  3681			err = scarlett2_update_autogain(mixer);
+  3682			if (err < 0)
+  3683				goto unlock;
+  3684		}
+  3685	
+  3686		ucontrol->value.integer.value[0] = private->ag_targets[elem->control];
+  3687	
+  3688	unlock:
+  3689		mutex_unlock(&private->data_mutex);
+  3690		return err;
+  3691	}
+  3692	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
