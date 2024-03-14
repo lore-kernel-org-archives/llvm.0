@@ -1,108 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D536B50243;
-	Wed, 13 Mar 2024 20:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F186127;
+	Thu, 14 Mar 2024 05:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710360732; cv=none; b=FGWrJ/NsQcU6ZWaYW9SGc7yv7DMvRodnYIjpk3NE8AOJqLpobO6mrvnz/AsJ6KtY7vDePwMX50eYkpcXtOthF1reNQ5yYxwM2j5J4/Af814KnqjjsUbMSZnWuNfyTdZrpgr/gVXHxCAYfv4TB8fdMw3aiyfmxwFakyXsmJduABQ=
+	t=1710393082; cv=none; b=naB92ErQ6UcBzDeiKW0nGhaSMWghyc79lPKd0XqjnzmiaAGVzS0TpE6/Tq5Pm1Km/cbORLL+giKlBDMi9tMUBmzLWHpeiA9uI/P3qPR55Bu6jiBP2pAFk/yp2KtrnD52c4VFmRdMDmSrTf13M1MPNwXhSb+XapgymYiPtyNkEvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710360732; c=relaxed/simple;
-	bh=DoSvdQHEHpaTFMIhARnfPiNgrJvH1Ozx282n9iN1Boc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UEHvMzLk1OQ2fg/YnN4zkndK7c946d5l8oWAJoOCxBPdb6crhL0mbMN0ClYZygJwu6/nzCeRa+Po+7mvXNWlD1JUv0lORfKIrDCfrSzGj8Inx8qfCV9pHrywRTRgu3g5VubLJ4GlZ+2cw3ApmxIK6vPmNwN8V+RKbao17Pa+THM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8C4C433C7;
-	Wed, 13 Mar 2024 20:12:11 +0000 (UTC)
-Date: Wed, 13 Mar 2024 16:14:20 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- kernel test robot <lkp@intel.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH] tracing: Use strcmp() in __assign_str() WARN_ON() check
-Message-ID: <20240313161420.3b668558@gandalf.local.home>
-In-Reply-To: <20240313134550.68a11319@gandalf.local.home>
-References: <20240312113002.00031668@gandalf.local.home>
-	<20240313165903.GA3021536@dev-arch.thelio-3990X>
-	<20240313134550.68a11319@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1710393082; c=relaxed/simple;
+	bh=eFIIaDvGeSy97RMlXiCtc1y+OnxCy/G5Uv7zgYTQOSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=S7Mvqtel8uS6XXp7b2K2p06rrjKh6Qavac41s1YJKJqnyusnZocpSw27o6hsi+5eftdMt/4Pfcvz0L4pouEP+4gig0q3uP3XGBA86OF5AF6qwFIz2E4jtE7amjobW74oiWrhTX+BBg0hB7Sdx0uW4Q46HMAJVEmXExA7TQTv80g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i96Hi6uu; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i96Hi6uu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710393081; x=1741929081;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eFIIaDvGeSy97RMlXiCtc1y+OnxCy/G5Uv7zgYTQOSk=;
+  b=i96Hi6uuN7xJmLvyfGhPmDj//QUCh0lw6qXS1JSOn7gwasY8ywfwvcZY
+   Ukws3fJ+zT5gv9zZDMgO/xL9iHwoisumYZDYhij2r8+IP6oY/C2HkTSdl
+   /jj8nbdc/h8p2Mm8x7MNUaJpTzp3w6t2neH871Hgcay2n9jF9qhyNfKRE
+   FfH8NpENpGyEwe/+fxDg17kgkATR57bj426FqCiAjrV6l2IKOgFGuiTqb
+   MOO0w6aBZXXsfKAlIrNKHwxgjzitLB/inQOpBhsLQB099xeUYnLAYIR7U
+   V38cAb6ThnM9SxXZ2IR+Emd1kyroVeFjrnxo7mstFzq5f8UeDAT3xuArQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11012"; a="5064516"
+X-IronPort-AV: E=Sophos;i="6.07,124,1708416000"; 
+   d="scan'208";a="5064516"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 22:11:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,124,1708416000"; 
+   d="scan'208";a="16764487"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 13 Mar 2024 22:11:18 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rkdN5-000D7n-2B;
+	Thu, 14 Mar 2024 05:11:15 +0000
+Date: Thu, 14 Mar 2024 13:10:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:kdevops 16/31] fs/nfsd/nfs4proc.c:3688:14: error: invalid
+ application of 'sizeof' to an incomplete type 'const struct
+ nfsd4_operation[]'
+Message-ID: <202403141324.JtdnkHMT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 13 Mar 2024 13:45:50 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   1e8c308042a0c8ec86148101dbde9c6383fad5b7
+commit: 9f66eba1a281d2ab4c921c06fe8a57b881851c3c [16/31] nfsd: wire up GET_DIR_DELEGATION handling
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240314/202403141324.JtdnkHMT-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240314/202403141324.JtdnkHMT-lkp@intel.com/reproduce)
 
-> Let me test to make sure that when src is a string "like this" that it does
-> the strcmp(). Otherwise, we may have to always do the strcmp(), which I
-> really would like to avoid.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403141324.JtdnkHMT-lkp@intel.com/
 
-I added the below patch and enabled sched_switch and it triggered the
-warning (expected if it went the strcmp() path). I then changed it to be:
+All errors (new ones prefixed by >>):
 
-#define __assign_str(dst, src)						\
-	do {								\
-		char *__str__ = __get_str(dst);				\
-		int __len__ = __get_dynamic_array_len(dst) - 1;		\
-		WARN_ON_ONCE(__builtin_constant_p(src) ?		\
-			     strcmp((src), __data_offsets.dst##_ptr_) :	\
--			     (src) != __data_offsets.dst##_ptr_);	\
-+			     (src) == __data_offsets.dst##_ptr_);	\
-		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
-		       EVENT_NULL_STR, __len__);			\
-		__str__[__len__] = '\0';				\
-	} while (0)
+   fs/nfsd/nfs4proc.c:3517:14: error: use of undeclared identifier 'nfsd4_get_dir_delegation'
+    3517 |                 .op_func = nfsd4_get_dir_delegation,
+         |                            ^
+>> fs/nfsd/nfs4proc.c:3688:14: error: invalid application of 'sizeof' to an incomplete type 'const struct nfsd4_operation[]'
+    3688 |         if (opnum < ARRAY_SIZE(nfsd4_ops))
+         |                     ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   fs/nfsd/nfs4proc.c:3209:37: warning: tentative array definition assumed to have one element
+    3209 | static const struct nfsd4_operation nfsd4_ops[] = {
+         |                                     ^
+   1 warning and 2 errors generated.
 
-And the sched_switch did not trigger (expected). So it seems that it should
-not be a problem.
 
-Note, I only tested this with gcc and not clang.
+vim +3688 fs/nfsd/nfs4proc.c
 
-But I guess there's also the case where we have:
+07d1f8020738ba J. Bruce Fields 2014-03-06  3685  
+f1c7f79b6ab4f7 Adrian Bunk     2008-08-08  3686  static const char *nfsd4_op_name(unsigned opnum)
+b001a1b6aa9609 Benny Halevy    2008-07-02  3687  {
+b001a1b6aa9609 Benny Halevy    2008-07-02 @3688  	if (opnum < ARRAY_SIZE(nfsd4_ops))
+b001a1b6aa9609 Benny Halevy    2008-07-02  3689  		return nfsd4_ops[opnum].op_name;
+b001a1b6aa9609 Benny Halevy    2008-07-02  3690  	return "unknown_operation";
+b001a1b6aa9609 Benny Halevy    2008-07-02  3691  }
+b001a1b6aa9609 Benny Halevy    2008-07-02  3692  
 
-	__assign_str(str, field ? field : "NULL")
+:::::: The code at line 3688 was first introduced by commit
+:::::: b001a1b6aa960949a24c2cdc28257dfcc9428d74 nfsd: dprint operation names
 
-But hopefully that's not an issue.
+:::::: TO: Benny Halevy <bhalevy@panasas.com>
+:::::: CC: J. Bruce Fields <bfields@citi.umich.edu>
 
--- Steve
-
-diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-index dbb01b4b7451..eaacd0c4e899 100644
---- a/include/trace/events/sched.h
-+++ b/include/trace/events/sched.h
-@@ -236,6 +236,7 @@ TRACE_EVENT(sched_switch,
- 		__array(	char,	next_comm,	TASK_COMM_LEN	)
- 		__field(	pid_t,	next_pid			)
- 		__field(	int,	next_prio			)
-+		__string( test, "this")
- 	),
- 
- 	TP_fast_assign(
-@@ -246,6 +247,7 @@ TRACE_EVENT(sched_switch,
- 		memcpy(__entry->prev_comm, prev->comm, TASK_COMM_LEN);
- 		__entry->next_pid	= next->pid;
- 		__entry->next_prio	= next->prio;
-+		__assign_str(test, "this");
- 		/* XXX SCHED_DEADLINE */
- 	),
- 
-diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
-index 83da83a0c14f..cf301c723fd0 100644
---- a/include/trace/stages/stage6_event_callback.h
-+++ b/include/trace/stages/stage6_event_callback.h
-@@ -36,7 +36,7 @@
- 		char *__str__ = __get_str(dst);				\
- 		int __len__ = __get_dynamic_array_len(dst) - 1;		\
- 		WARN_ON_ONCE(__builtin_constant_p(src) ?		\
--			     strcmp((src), __data_offsets.dst##_ptr_) :	\
-+			     !strcmp((src), __data_offsets.dst##_ptr_) :	\
- 			     (src) != __data_offsets.dst##_ptr_);	\
- 		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
- 		       EVENT_NULL_STR, __len__);			\
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
