@@ -1,223 +1,207 @@
-Received: from zg8tmtu5ljg5lje1ms4xmtka.icoremail.net (zg8tmtu5ljg5lje1ms4xmtka.icoremail.net [159.89.151.119])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA5139AF0
-	for <llvm@lists.linux.dev>; Thu, 14 Mar 2024 05:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.89.151.119
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C1CDDCA;
+	Thu, 14 Mar 2024 06:26:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710395995; cv=none; b=RiMhz4a5WVbrPA5P6SLPRufT4zpyy7wIe2/nxNPez4+qppMdYxfLsTYwCk82r03UcTu56fQc6tOOklGyVSaaST3VMS3PzT1ZGgdZ4Fvl4SGmezjcz63mMTPUt7trKfgqRF6w9JbuIlUmq9aqNOX2YkbvtvjUzHEyoXfc8o3Et14=
+	t=1710397587; cv=none; b=rNNhYo8Yd3EZVaiifoNw3zoJXS0/XaVU/+H+AHdyc0nWcddGxr/LYIsklfzBlkT4bICgaYrNLS2T02HXnE5pGbzCdPYGTMr2/I3eoTnZoWTgPDlAmiSA9fRZsMQ/tsqdEs8wwedDBT9xQWtK3AB4H8Ow+cHhPklsnA5ICdXf/g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710395995; c=relaxed/simple;
-	bh=1B4t1nZ+bMa1THF1ZkPv7BtvBPdoV1xxKH8iSMbROto=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q5iHCcXA6v9X2G0yJe4U1Sgnws6OvFYOXXTcUWXGHffml73/CPnJTfYIQEHZmMQYJdsMtXEKmX29m8c6OqeD9ClvV5YrtukSiDTQNlhKaL+qVxTbAqBrbEBZJWCjdb6fVb2aJ0gke0c8fuOdku0roMwW+wZayTlis+uYkosHuAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=159.89.151.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app2 (Coremail) with SMTP id HwEQrAC36cUgkvJl3uCpAA--.17451S2;
-	Thu, 14 Mar 2024 13:58:56 +0800 (CST)
-Received: from [172.19.193.108] (unknown [10.12.190.56])
-	by gateway (Coremail) with SMTP id _____wCXkL8ckvJl0hP9AA--.49473S2;
-	Thu, 14 Mar 2024 13:58:53 +0800 (CST)
-Message-ID: <421183dd-73d4-43b1-bfb3-f7c7db7d82cb@hust.edu.cn>
-Date: Thu, 14 Mar 2024 13:58:51 +0800
+	s=arc-20240116; t=1710397587; c=relaxed/simple;
+	bh=mZwZ50bVBOhjmPhgBk8fElRcUd5UbUZwTh3xhQBAgL8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HpQfoFVCSsVOnqyvFDyV5p9oAL7zZEu2Z86EAULCsliMaocVo55mH4+V0UPZnT1Vcey2J26+8RnSOQNoYs3zV4rTAZ8YkpVtek+s7cHQhtGNBhRpBDw+bgf/UHmwGM4TGlwj4qoNPsVF7nVf/YsvYUVUa8W6eOO8OwB/zGOIO7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CHR30cEu; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CHR30cEu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710397586; x=1741933586;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mZwZ50bVBOhjmPhgBk8fElRcUd5UbUZwTh3xhQBAgL8=;
+  b=CHR30cEuzlmuVN8hFzM4v9ChTY5VHvSDNindhJ40sTXK3pFUg14BtlUw
+   hDOgmg8glUtVMxdorKlrWi1PcX81krCVZClLW3xaL2Gi6KOdbv80HNTew
+   W56Jlj7BVB86Z0sw6Y9EC1N2DTQRs9N+T6dM0PM7inseWkhZCmVjyf6KH
+   Ib+YZ0S7a5mq3Ma0izZ9dYS0qX6wlJtSkhP65/Whq75b7zN2pKFcRULcW
+   Gil2+3DyAt9iIIptkSX+YPM9eJ+4s5jYKbrmzK73tu3z22WAP5gbaCpEm
+   JpGVISjsrN80BtPqTcDuowz7ku9pr/EOJDvi4crmAL/WQGquGlSvEAuHz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11012"; a="15840534"
+X-IronPort-AV: E=Sophos;i="6.07,124,1708416000"; 
+   d="scan'208";a="15840534"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 23:26:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,124,1708416000"; 
+   d="scan'208";a="16659291"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 13 Mar 2024 23:26:19 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rkeXh-000DAZ-0J;
+	Thu, 14 Mar 2024 06:26:17 +0000
+Date: Thu, 14 Mar 2024 14:25:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Umang Jain <umang.jain@ideasonboard.com>, linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	willl will <will@willwhang.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	tomi.valkeinen@ideasonboard.com,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Mehdi Djait <mehdi.djait@bootlin.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] media: i2c: Add imx283 camera sensor driver
+Message-ID: <202403141412.K2tNvCOL-lkp@intel.com>
+References: <20240313070705.91140-3-umang.jain@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs/zh_CN: Add dev-tools/ubsan Chinese translation
-To: Yanteng Si <siyanteng@loongson.cn>, Alex Shi <alexs@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Vegard Nossum <vegard.nossum@oracle.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240302140058.1527765-1-dzm91@hust.edu.cn>
- <26730f76-871d-4a6d-8b16-ea3e52ef5357@loongson.cn>
-From: Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <26730f76-871d-4a6d-8b16-ea3e52ef5357@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrAC36cUgkvJl3uCpAA--.17451S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF1rCr1kGF15ArW7tw4UXFb_yoW7Kw15pr
-	n5KFWxGrW8JryrJr1UKF15JFyjyr18A3ZrJrn2qF1jqF1qkr1Yqr12qryqgr9rWrW8AFy7
-	JFnFgF42vr12k3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBjb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8x
-	CEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0U
-	Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VACjcxG62k0Y48FwI0_Gr1j6F4UJwAv7VCjz4
-	8v1sIEY20_GFW3Jr1UJwAv7VCY1x0262k0Y48FwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr
-	1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jSeHDUUUUU=
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240313070705.91140-3-umang.jain@ideasonboard.com>
 
-ping?
+Hi Umang,
 
-On 2024/3/6 17:15, Yanteng Si wrote:
->
-> 在 2024/3/2 22:00, Dongliang Mu 写道:
->> Translate dev-tools/ubsan.rst into Chinese, add it into
->> zh_CN/dev-tools/index.rst.
->>
->> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
->
-> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
->
->
-> Thanks,
->
-> Yanteng
->
->> ---
->>   .../translations/zh_CN/dev-tools/index.rst    |  2 +-
->>   .../translations/zh_CN/dev-tools/ubsan.rst    | 91 +++++++++++++++++++
->>   2 files changed, 92 insertions(+), 1 deletion(-)
->>   create mode 100644 
->> Documentation/translations/zh_CN/dev-tools/ubsan.rst
->>
->> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst 
->> b/Documentation/translations/zh_CN/dev-tools/index.rst
->> index c2db3e566b1b..c4463f0750f0 100644
->> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
->> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
->> @@ -22,13 +22,13 @@ 
->> Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->>      sparse
->>      gcov
->>      kasan
->> +   ubsan
->>      gdb-kernel-debugging
->>
->>   Todolist:
->>
->>    - coccinelle
->>    - kcov
->> - - ubsan
->>    - kmemleak
->>    - kcsan
->>    - kfence
->> diff --git a/Documentation/translations/zh_CN/dev-tools/ubsan.rst 
->> b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
->> new file mode 100644
->> index 000000000000..2487696b3772
->> --- /dev/null
->> +++ b/Documentation/translations/zh_CN/dev-tools/ubsan.rst
->> @@ -0,0 +1,91 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +.. include:: ../disclaimer-zh_CN.rst
->> +
->> +:Original: Documentation/dev-tools/ubsan.rst
->> +:Translator: Dongliang Mu <dzm91@hust.edu.cn>
->> +
->> +未定义行为消毒剂 - UBSAN
->> +====================================
->> +
->> +UBSAN是一种动态未定义行为检查工具。
->> +
->> +UBSAN使用编译时插桩捕捉未定义行为。编译器在可能导致未定义行为的操作前插入特定 
->>
->> +检测代码。如果检查失败，即检测到未定义行为，__ubsan_handle_* 
->> 函数将被调用打印
->> +错误信息。
->> +
->> +GCC自4.9.x [1_] （详见 ``-fsanitize=undefined`` 
->> 选项及其子选项）版本后引入这
->> +一特性。GCC 5.x 版本实现了更多检查器 [2_]。
->> +
->> +报告样例
->> +--------------
->> +
->> +::
->> +
->> + 
->> ================================================================================
->> +     UBSAN: Undefined behaviour in ../include/linux/bitops.h:110:33
->> +     shift exponent 32 is to large for 32-bit type 'unsigned int'
->> +     CPU: 0 PID: 0 Comm: swapper Not tainted 4.4.0-rc1+ #26
->> +      0000000000000000 ffffffff82403cc8 ffffffff815e6cd6 
->> 0000000000000001
->> +      ffffffff82403cf8 ffffffff82403ce0 ffffffff8163a5ed 
->> 0000000000000020
->> +      ffffffff82403d78 ffffffff8163ac2b ffffffff815f0001 
->> 0000000000000002
->> +     Call Trace:
->> +      [<ffffffff815e6cd6>] dump_stack+0x45/0x5f
->> +      [<ffffffff8163a5ed>] ubsan_epilogue+0xd/0x40
->> +      [<ffffffff8163ac2b>] 
->> __ubsan_handle_shift_out_of_bounds+0xeb/0x130
->> +      [<ffffffff815f0001>] ? radix_tree_gang_lookup_slot+0x51/0x150
->> +      [<ffffffff8173c586>] _mix_pool_bytes+0x1e6/0x480
->> +      [<ffffffff83105653>] ? dmi_walk_early+0x48/0x5c
->> +      [<ffffffff8173c881>] add_device_randomness+0x61/0x130
->> +      [<ffffffff83105b35>] ? dmi_save_one_device+0xaa/0xaa
->> +      [<ffffffff83105653>] dmi_walk_early+0x48/0x5c
->> +      [<ffffffff831066ae>] dmi_scan_machine+0x278/0x4b4
->> +      [<ffffffff8111d58a>] ? vprintk_default+0x1a/0x20
->> +      [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
->> +      [<ffffffff830b2240>] setup_arch+0x405/0xc2c
->> +      [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
->> +      [<ffffffff830ae053>] start_kernel+0x83/0x49a
->> +      [<ffffffff830ad120>] ? early_idt_handler_array+0x120/0x120
->> +      [<ffffffff830ad386>] x86_64_start_reservations+0x2a/0x2c
->> +      [<ffffffff830ad4f3>] x86_64_start_kernel+0x16b/0x17a
->> + 
->> ================================================================================
->> +
->> +用法
->> +-----
->> +
->> +使用如下内核配置启用UBSAN::
->> +
->> +    CONFIG_UBSAN=y
->> +
->> +使用如下内核配置检查整个内核::
->> +
->> +        CONFIG_UBSAN_SANITIZE_ALL=y
->> +
->> +为了在特定文件或目录启动代码插桩，需要在相应的内核Makefile中添加一行类似内容: 
->>
->> +
->> +- 单文件（如main.o）::
->> +
->> +    UBSAN_SANITIZE_main.o := y
->> +
->> +- 一个目录中的所有文件::
->> +
->> +    UBSAN_SANITIZE := y
->> +
->> +即使设置了``CONFIG_UBSAN_SANITIZE_ALL=y``，为了避免文件被插桩，可使用::
->> +
->> +  UBSAN_SANITIZE_main.o := n
->> +
->> +与::
->> +
->> +  UBSAN_SANITIZE := n
->> +
->> +未对齐的内存访问检测可通过开启独立选项 - CONFIG_UBSAN_ALIGNMENT 检测。
->> +该选项在支持未对齐访问的架构上(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y) 
->>
->> +默认为关闭。该选项仍可通过内核配置启用，但它将产生大量的UBSAN报告。
->> +
->> +参考文献
->> +----------
->> +
->> +.. _1: 
->> https://gcc.gnu.org/onlinedocs/gcc-4.9.0/gcc/Debugging-Options.html
->> +.. _2: https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
->> +.. _3: https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
->> -- 
->> 2.39.2
->>
->>
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linuxtv-media-stage/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Umang-Jain/media-dt-bindings-media-Add-bindings-for-IMX283/20240313-151107
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20240313070705.91140-3-umang.jain%40ideasonboard.com
+patch subject: [PATCH v3 2/2] media: i2c: Add imx283 camera sensor driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240314/202403141412.K2tNvCOL-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 503c55e17037436dcd45ac69dea8967e67e3f5e8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240314/202403141412.K2tNvCOL-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403141412.K2tNvCOL-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hte/hte-tegra194-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/vdpa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/brcm_u-boot.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/tplink_safeloader.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_pruss.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vhost/vringh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/greybus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/gb-es2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rpmsg/rpmsg_char.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-ast-cf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/counter/ftm-quaddec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/snd-pcm-dmaengine.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/drivers/snd-pcmtest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/pci/hda/snd-hda-cirrus-scodec-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/soc-topology-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-ab8500-codec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-sigmadsp.o
+WARNING: modpost: sound/soc/codecs/snd-soc-tlv320adc3xxx: section mismatch in reference: adc3xxx_i2c_driver+0x8 (section: .data) -> adc3xxx_i2c_remove (section: .exit.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/fsl/imx-pcm-dma.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/mxs/snd-soc-mxs-pcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-sdw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/qdsp6/snd-q6dsp-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-atom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-byt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-bdw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8m.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8ulp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/imx-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mtk-adsp-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8195/snd-sof-mt8195.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8186/snd-sof-mt8186.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-utils.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-acpi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-of.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/ac97_bus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy-fb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_cmp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_nbyte.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_u32.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_meta.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_text.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_canid.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ipip.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/esp4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/xfrm4_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tunnel4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_algo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_user.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ah6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/xfrm6_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/sit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ip6_udp_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/key/af_key.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/atm/mpoa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/6lowpan/6lowpan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/6lowpan/ieee802154_6lowpan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/ieee802154_socket.o
+>> ERROR: modpost: "__hexagon_udivdi3" [drivers/media/i2c/imx283.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
