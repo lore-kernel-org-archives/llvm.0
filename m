@@ -1,216 +1,166 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436FB7441D
-	for <llvm@lists.linux.dev>; Thu, 14 Mar 2024 17:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F155C61C;
+	Thu, 14 Mar 2024 21:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710438482; cv=none; b=r4mWVYCjm9IStYjV/IA5CXOesxqwzZcg7l6f4jrW6AHcj55/WeutuZDYoysWoKu8Ac76egsrYra5AdjYe5dqRHA4HyaVy//heDftZvVA6XvTbLb3kaM93H+wspQX+E/EW6dfEjLZ4POxHwIJoweYieNtF/bOl70ZDWssHKzNed8=
+	t=1710450053; cv=none; b=ob8ac6TZOOKYXiXkTH3rspt+c/ZjLLGkyM/x2vSjCmMP9TflF8+gvTc5mjx1K1u0K736ab1jBCy7gp1BVYi63eLQ4l1rZW2rTdFJ8GAUXUEdEvO9XhZDlzcsSy1lpCu3C+RoYBB3AWRsJi18YFjBYLXMlhSP/cH5kQ1u8koFm8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710438482; c=relaxed/simple;
-	bh=q1LPenCDNdcBSutkq0Nq6yhy0rl+ccCriK1caPK76QY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eiIZB/qgofHFmSH8kMCRmQf7KODjN46MKQ7oYfEh0NcTN9HUfTZVbIgtKgvfFl7foqX40AkNxm5+7PsCvk1CBst9MDA5q4qxLFypp1L1BsvkziMouQrftXsdzYfC9QjeM234l4mnLHdLtjVDILqSzlqSyEU2MwL9VoAR6n9HgOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hOojqDmn; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1710450053; c=relaxed/simple;
+	bh=NLNh7zP2xa/u7v8yFQNbepClPmGY2IXg7oe0UqaMlw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=f4slrCIvMr7UcT8TQlJGWx21hgs2WcDlvDtOtkU/y/LQlOuf49lC6KJCQqzbP2orJM/wgGNOY387vM92fLHanGhfJ7Q+v5i0CY4Z2PFW1KhYbTplC/7CeBRAlttVSUMlNMAvna7C5FEatcvLhRWN1ixOZHo6BHhZ08dfCKWP2bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bk3cVo5L; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hOojqDmn"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-412f81fd561so6695e9.1
-        for <llvm@lists.linux.dev>; Thu, 14 Mar 2024 10:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710438478; x=1711043278; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m+JV3A7zu6nIaIvNDYv5nSo/ckyKnBKjeigqrs00bqQ=;
-        b=hOojqDmnDQ+gBiJmeXLlaSQhbdkax+0ka4WBlh51j4ED7m6XpMnYNKBWUKqTDu6HZX
-         9tKyanamRwOrjCOvgWt1yAjQa/T1I4jDVgWKSAYFcoJ6eI23eMksHYEDYKc8k0BGtN72
-         2yuwfcQ5EhPPIU43Foy8JDQ8MhHAhJb9+HvhdGnPKYG2i2ecj4/bjLGHmoNeToi/pW8L
-         6Jw4qa8B3Xt3ItlAUaGnP8iN6+3HjB6rl5mtbO/NNgVpSIn8vh0PshyLvtktAY2pLBVu
-         d0ffLcJLiBxmZc1/m8BYNbNbKBLR/gK0bG4LgS+fSiWT6jF2Kq2yZgSizVO3LLLlPCcw
-         5rGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710438478; x=1711043278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m+JV3A7zu6nIaIvNDYv5nSo/ckyKnBKjeigqrs00bqQ=;
-        b=hYW1fiBO8kq3b/6wr066iFWH1NNimQOv0atxZI3DgRb7N0xJ9aTCjl2XMWq3ah1EBK
-         sVGJVDZalO5NE8e+ctPgjmszuJH7kkX9VTTHaIOCcRL9dJ2qw0ZQ/4xpbT54ZD2z2THS
-         8KVuJzQS2q596Voth0expHPYcdmvGRAhOoo7v8tUeGbstiXBUgeqZvM1dKYBYqDWps8Q
-         lWW+tA9uQq95lAk7FMsMinJc+Gy7H6fIHeyuybK/tSJvf02SkIJ/5EGJvXW4JVnMDPTL
-         cy40Q5D43xvuaAoxrwO76f5J6jU22lImV9FwzRDfoV4g61RVDjSnc5Hq6uAmSY/huTGB
-         QsHw==
-X-Forwarded-Encrypted: i=1; AJvYcCV6UdVZUqJ5Q/lRyNaPOZdODBGcywP3vlZC4pzDJtOtnyqk5Yfnp+jsGEjDFSHpmZeFonCGzqiPzLRUwIWKamRG9QaYJA==
-X-Gm-Message-State: AOJu0YxZFxknZoDGIxV4ZKmZqiTn3kWCUkZo6MBNqIy0mr299hwLvTPF
-	4sILPYCs200kqNB+mQaqA3zgI6oXCBwwSOt1EPjtpKckRSn09l3gIusW8r/LWRCL+8Omp+yRQv6
-	lbjIg1YW+iKVl+g9tozN7wh3/nM4d1NXjWSeS
-X-Google-Smtp-Source: AGHT+IFy6M2yyJA6TzxA06WYq5+dmaqNGCrUNNAyVyYq9H61p5PnHUB1XMymcdTXwvLETVxn8dg6XzlydAlcDssbeb0=
-X-Received: by 2002:a05:600c:1e03:b0:413:ef8f:751a with SMTP id
- ay3-20020a05600c1e0300b00413ef8f751amr219687wmb.2.1710438478385; Thu, 14 Mar
- 2024 10:47:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bk3cVo5L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710450051; x=1741986051;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NLNh7zP2xa/u7v8yFQNbepClPmGY2IXg7oe0UqaMlw8=;
+  b=bk3cVo5LEcGCP/ck2bERRQCmuJUTC3sCQhVUXGJezt0mBKkGqeIeoQxz
+   D8c9pPfr8ZfT4rxl+FBYSE7I5tuujpRO1ryyAl9jfe91pD8qYegbG+Uqm
+   5gINv4H2ZpQzEzFrw8nP6qYf0M5o8PnTqlGobw+EzNK0zgvw2iO1KLhKF
+   MRqrkNNYPOLy/WXYB98o1HvSGowLf7R8mm8//roO+xxytTiRKwsYT3/qw
+   xtjntNfgEri3m7A39pXmhLK/LuFqY4HF4OkhIf603CqeMP5wQDRawRXBj
+   XmDkMIewSYn75ZBS1UYdJ4Tzo6KB4vCNm8hgY33lzundssjKuK3scUazA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="5235247"
+X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
+   d="scan'208";a="5235247"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 14:00:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
+   d="scan'208";a="43451811"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 14 Mar 2024 14:00:44 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rksBu-000DnF-0e;
+	Thu, 14 Mar 2024 21:00:42 +0000
+Date: Fri, 15 Mar 2024 05:00:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dorcas Anono Litunya <anonolitunya@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [hverkuil-media-tree:outreachy-vivid 51/53]
+ drivers/media/test-drivers/vivid/vivid-ctrls.c:1094:57: warning: variable
+ 'dev' is uninitialized when used within its own initialization
+Message-ID: <202403150440.BSFRkvlO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240314141516.31747-1-liuhailong@oppo.com>
-In-Reply-To: <20240314141516.31747-1-liuhailong@oppo.com>
-From: Yu Zhao <yuzhao@google.com>
-Date: Thu, 14 Mar 2024 13:47:20 -0400
-Message-ID: <CAOUHufbsqd2s=a_mdMZEu2bXGFLF=+mVidNvJYMHmCH5Je9+Mg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "mm: skip CMA pages when they are not available"
-To: liuhailong@oppo.com
-Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com, 
-	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com, 
-	Charan Teja Kalla <quic_charante@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Mar 14, 2024 at 10:15=E2=80=AFAM <liuhailong@oppo.com> wrote:
->
-> From: "Hailong.Liu" <liuhailong@oppo.com>
->
-> This reverts commit 5da226dbfce3a2f44978c2c7cf88166e69a6788b.
->
-> patch may cause system not responding. if cma pages is large in lru_list
-> and system is in lowmemory, many tasks would enter direct reclaim and was=
-te
-> cpu time to isolate and return. Test this patch on android-5.15 device
-> and tasks call stack as below.
->
-> Task name: UsbFfs-worker [affinity: 0xff] pid: 3374 cpu: 7 prio: 120 star=
-t: ffffff8897a35c80
-> state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc01eaa0000
-> Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
-> Stack:
-> [<ffffffd32ee7d910>] __switch_to+0x180
-> [<ffffffd3302022fc>] __schedule+0x4dc
-> [<ffffffd330201e08>] preempt_schedule+0x5c
-> [<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
-> [<ffffffd32f14906c>] shrink_inactive_list+0x1d0
-> [<ffffffd32f143998>] shrink_lruvec+0x1bc
-> [<ffffffd32f147c0c>] shrink_node_memcgs+0x184
-> [<ffffffd32f147414>] shrink_node+0x2d0
-> [<ffffffd32f146d38>] shrink_zones+0x14c
-> [<ffffffd32f142e84>] do_try_to_free_pages+0xe8
-> [<ffffffd32f142b08>] try_to_free_pages+0x2e0
-> [<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
-> [<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
-> [<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
-> [<ffffffd32f19a220>] __vmalloc_area_node+0x188
-> [<ffffffd32f19a540>] __vmalloc_node+0x148
-> [<ffffffd32f19a60c>] vmalloc+0x4c
-> [<ffffffd32f910218>] ffs_epfile_io+0x258
-> [<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
-> [<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
-> [<ffffffd32f28129c>] __io_submit_one+0x1c0
-> [<ffffffd32f280e38>] io_submit_one+0x88
-> [<ffffffd32f280c88>] __do_sys_io_submit+0x178
-> [<ffffffd32f27eac0>] __arm64_sys_io_submit+0x20
-> [<ffffffd32eeabb74>] el0_svc_common.llvm.9961749221945255377+0xd0
-> [<ffffffd32eeaba34>] do_el0_svc+0x28
-> [<ffffffd32ff21be8>] el0_svc+0x14
-> [<ffffffd32ff21b70>] el0_sync_handler+0x88
-> [<ffffffd32ee128b8>] el0_sync+0x1b8
->
-> Task name: kthreadd [affinity: 0xff] pid: 2 cpu: 7 prio: 120 start: fffff=
-f87808c0000
-> state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc008078000
-> Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
-> Stack:
-> [<ffffffd32ee7d910>] __switch_to+0x180
-> [<ffffffd3302022fc>] __schedule+0x4dc
-> [<ffffffd330201e08>] preempt_schedule+0x5c
-> [<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
-> [<ffffffd32f149168>] shrink_inactive_list+0x2cc
-> [<ffffffd32f143998>] shrink_lruvec+0x1bc
-> [<ffffffd32f147c0c>] shrink_node_memcgs+0x184
-> [<ffffffd32f147414>] shrink_node+0x2d0
-> [<ffffffd32f146d38>] shrink_zones+0x14c
-> [<ffffffd32f142e84>] do_try_to_free_pages+0xe8
-> [<ffffffd32f142b08>] try_to_free_pages+0x2e0
-> [<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
-> [<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
-> [<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
-> [<ffffffd32f19a220>] __vmalloc_area_node+0x188
-> [<ffffffd32f19a044>] __vmalloc_node_range+0x88
-> [<ffffffd32f0fb430>] scs_alloc+0x1b8
-> [<ffffffd32f0fb62c>] scs_prepare+0x20
-> [<ffffffd32ef2ce04>] dup_task_struct+0xd4
-> [<ffffffd32ef2a77c>] copy_process+0x144
-> [<ffffffd32ef2bae4>] kernel_clone+0xb4
-> [<ffffffd32ef2c040>] kernel_thread+0x5c
-> [<ffffffd32ef618d0>] kthreadd+0x184
->
-> without this patch, the tasks will reclaim cma pages and wakeup
-> oom-killer or not spin on cpus.
->
-> Signed-off-by: Hailong.Liu <liuhailong@oppo.com>
-> ---
->  mm/vmscan.c | 22 +---------------------
->  1 file changed, 1 insertion(+), 21 deletions(-)
->
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 2fe4a11d63f4..197ddf62019f 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -2261,25 +2261,6 @@ static __always_inline void update_lru_sizes(struc=
-t lruvec *lruvec,
->
->  }
->
-> -#ifdef CONFIG_CMA
-> -/*
-> - * It is waste of effort to scan and reclaim CMA pages if it is not avai=
-lable
-> - * for current allocation context. Kswapd can not be enrolled as it can =
-not
-> - * distinguish this scenario by using sc->gfp_mask =3D GFP_KERNEL
-> - */
-> -static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> -{
-> -       return !current_is_kswapd() &&
-> -                       gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABL=
-E &&
-> -                       get_pageblock_migratetype(&folio->page) =3D=3D MI=
-GRATE_CMA;
-> -}
-> -#else
-> -static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> -{
-> -       return false;
-> -}
-> -#endif
-> -
+tree:   git://linuxtv.org/hverkuil/media_tree.git outreachy-vivid
+head:   4964cefc537c29dc9946430b8334a6de73a937b4
+commit: a9ce0ed91ef0b798d3e8cefb238e33b2ea9a597d [51/53] media: vivid: Remove loop video ctrl
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240315/202403150440.BSFRkvlO-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240315/202403150440.BSFRkvlO-lkp@intel.com/reproduce)
 
-NAK.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403150440.BSFRkvlO-lkp@intel.com/
 
-+Charan Teja Kalla -- This can cause build errors when CONFIG_LRU_GEN=3Dy.
+All warnings (new ones prefixed by >>):
 
-If you plan to post a v2, please include a reproducer. Thanks.
+>> drivers/media/test-drivers/vivid/vivid-ctrls.c:1094:57: warning: variable 'dev' is uninitialized when used within its own initialization [-Wuninitialized]
+                           struct vivid_dev *dev = vivid_output_is_connected_to(dev);
+                                             ~~~                                ^~~
+   1 warning generated.
 
 
+vim +/dev +1094 drivers/media/test-drivers/vivid/vivid-ctrls.c
 
->  /*
->   * Isolating page from the lruvec to fill in @dst list by nr_to_scan tim=
-es.
->   *
-> @@ -2326,8 +2307,7 @@ static unsigned long isolate_lru_folios(unsigned lo=
-ng nr_to_scan,
->                 nr_pages =3D folio_nr_pages(folio);
->                 total_scan +=3D nr_pages;
->
-> -               if (folio_zonenum(folio) > sc->reclaim_idx ||
-> -                               skip_cma(folio, sc)) {
-> +               if (folio_zonenum(folio) > sc->reclaim_idx) {
->                         nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
->                         move_to =3D &folios_skipped;
->                         goto move;
-> --
-> 2.34.1
->
->
+  1056	
+  1057	static int vivid_vid_out_s_ctrl(struct v4l2_ctrl *ctrl)
+  1058	{
+  1059		struct vivid_dev *dev = container_of(ctrl->handler, struct vivid_dev, ctrl_hdl_vid_out);
+  1060		struct v4l2_bt_timings *bt = &dev->dv_timings_out.bt;
+  1061		u32 display_present = 0;
+  1062		unsigned int i, j, bus_idx;
+  1063	
+  1064		switch (ctrl->id) {
+  1065		case VIVID_CID_HAS_CROP_OUT:
+  1066			dev->has_crop_out = ctrl->val;
+  1067			vivid_update_format_out(dev);
+  1068			break;
+  1069		case VIVID_CID_HAS_COMPOSE_OUT:
+  1070			dev->has_compose_out = ctrl->val;
+  1071			vivid_update_format_out(dev);
+  1072			break;
+  1073		case VIVID_CID_HAS_SCALER_OUT:
+  1074			dev->has_scaler_out = ctrl->val;
+  1075			vivid_update_format_out(dev);
+  1076			break;
+  1077		case V4L2_CID_DV_TX_MODE:
+  1078			dev->dvi_d_out = ctrl->val == V4L2_DV_TX_MODE_DVI_D;
+  1079			if (!vivid_is_hdmi_out(dev))
+  1080				break;
+  1081			if (!dev->dvi_d_out && (bt->flags & V4L2_DV_FL_IS_CE_VIDEO)) {
+  1082				if (bt->width == 720 && bt->height <= 576)
+  1083					dev->colorspace_out = V4L2_COLORSPACE_SMPTE170M;
+  1084				else
+  1085					dev->colorspace_out = V4L2_COLORSPACE_REC709;
+  1086				dev->quantization_out = V4L2_QUANTIZATION_DEFAULT;
+  1087			} else {
+  1088				dev->colorspace_out = V4L2_COLORSPACE_SRGB;
+  1089				dev->quantization_out = dev->dvi_d_out ?
+  1090						V4L2_QUANTIZATION_LIM_RANGE :
+  1091						V4L2_QUANTIZATION_DEFAULT;
+  1092			}
+  1093			if (vivid_output_is_connected_to(dev)) {
+> 1094				struct vivid_dev *dev = vivid_output_is_connected_to(dev);
+  1095	
+  1096				vivid_send_source_change(dev, HDMI);
+  1097			}
+  1098			break;
+  1099		case VIVID_CID_DISPLAY_PRESENT:
+  1100			if (dev->output_type[dev->output] != HDMI)
+  1101				break;
+  1102	
+  1103			dev->display_present[dev->output] = ctrl->val;
+  1104			for (i = 0, j = 0; i < dev->num_outputs; i++)
+  1105				if (dev->output_type[i] == HDMI)
+  1106					display_present |=
+  1107						dev->display_present[i] << j++;
+  1108	
+  1109			__v4l2_ctrl_s_ctrl(dev->ctrl_tx_rxsense, display_present);
+  1110	
+  1111			if (dev->edid_blocks) {
+  1112				__v4l2_ctrl_s_ctrl(dev->ctrl_tx_edid_present,
+  1113						   display_present);
+  1114				__v4l2_ctrl_s_ctrl(dev->ctrl_tx_hotplug,
+  1115						   display_present);
+  1116			}
+  1117	
+  1118			bus_idx = dev->cec_output2bus_map[dev->output];
+  1119			if (!dev->cec_tx_adap[bus_idx])
+  1120				break;
+  1121	
+  1122			if (ctrl->val && dev->edid_blocks)
+  1123				cec_s_phys_addr(dev->cec_tx_adap[bus_idx],
+  1124						dev->cec_tx_adap[bus_idx]->phys_addr,
+  1125						false);
+  1126			else
+  1127				cec_phys_addr_invalidate(dev->cec_tx_adap[bus_idx]);
+  1128	
+  1129			break;
+  1130		}
+  1131		return 0;
+  1132	}
+  1133	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
