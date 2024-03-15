@@ -1,200 +1,259 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C19016419;
-	Fri, 15 Mar 2024 08:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1E81427E
+	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 08:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710490989; cv=none; b=YzzBw9sxiQ32FxwvXKewrV3Wp9Uv7Qd4cyEJPl9g09N9nRKKoZYkoY16yvs5dYH0rvpZeg0WMkVH0tLECSIRXb9e++oWUYmmitz2elSWXwPSng3UHCD1zlT26FUi9q9EHIbo2KyLULmeJdyBcIvJaI0C+IzOQnUMezX5tR2Cbnw=
+	t=1710492395; cv=none; b=oG5C6YBoGi+iyOXJWZjIdKTyGUar5dmYdks5PooMKTObfVd96lqGwBE6sV6aYuqWSAZov/fmmnO9Vfq+b58JECnfI0G06Xwxn5Nt3RwCMrSGjcpfeJ4kd7YY18X/irH4CwnoSm+8it4IV6nUJAg0hUL6JN09g8Wbal8pWuZ2Vz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710490989; c=relaxed/simple;
-	bh=yXZH8RAtGsBHoBi0Ar7G6PRNfK452YQsTJc6LoedWUk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DhxsuUd7F587pcBUyijNHdXgHSz7Pt5LbqQVRT0ruVEOFnoC2xpkkm7leK4qsLPHxZFpkRhjG3jeyoSMH8d8VYMeHTWOxDNruzE4lZLyPUjUBp7q9Fvb6YMS8bDrUjmQ6yWPBm6IrCFCRImAM3y2keFPHTJCO3bYJetNNQjiosY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EERxz13A; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710492395; c=relaxed/simple;
+	bh=HQWoXy2zl52Rs5VYt0a2sm98N3ZHCmAPNtENx3yf2kM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oh56eDaXH5u30GVCuxB+uj7GpF0MYjlgopePJGhBE/360QPEnbCfC5SIrGlRhwt/9LDjQNNH0cJrJLzbDd6cD8Ui6iXPJCyEZoypfd0zPmYXwcqf6mwec5SN5691/uEXr3XrDWfvX1MGzoh9iQggQL4VJYzuoGwZ1EDqtQFV0YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TEoyBab7; arc=none smtp.client-ip=209.85.222.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EERxz13A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710490987; x=1742026987;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yXZH8RAtGsBHoBi0Ar7G6PRNfK452YQsTJc6LoedWUk=;
-  b=EERxz13Afk63SPAyA65wPgepjjG0FgWSYHXcQeJCtgC7Of1Cdg7a90Rb
-   nAbrjwjD4tpx2eNZTJFKVFqaNbkMg5kq5HRvNuNMgGBFguEvwvAvcn+/u
-   4HeURDNejnnr1GkY455+BuOtVdD6FDemcvnSGIby0ssAoy5aBK1L5sWBm
-   +tYL+XfLr2nXIlkvddXbb2Oh0Fq227yMuB4UFgtvjGV/iaJg2gyz/zKFH
-   rncapwNy/FFzsvCEKnfIjkYcU4pulQ/W9fWYbilpEOdriqitOR0KmbWka
-   y758ZWeTTVdeSekEPrUbTFU5SNrjaF3SBmMyts5B/kAB/fsfCZpzUEzjs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="15896612"
-X-IronPort-AV: E=Sophos;i="6.07,127,1708416000"; 
-   d="scan'208";a="15896612"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 01:23:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,127,1708416000"; 
-   d="scan'208";a="13217521"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 15 Mar 2024 01:23:01 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rl2qA-000EFx-1q;
-	Fri, 15 Mar 2024 08:22:58 +0000
-Date: Fri, 15 Mar 2024 16:22:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joshua Yeong <joshua.yeong@starfivetech.com>, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, geert+renesas@glider.be,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, conor.dooley@microchip.com,
-	alexghiti@rivosinc.com, evan@rivosinc.com, ajones@ventanamicro.com,
-	heiko@sntech.de, guoren@kernel.org, uwu@icenowy.me,
-	jszhang@kernel.org, conor@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	leyfoon.tan@starfivetech.com, jeeheng.sia@starfivetech.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 3/4] cache: Add StarLink-500 cache management for
- StarFive  JH8100 RISC-V core
-Message-ID: <202403151625.boKDjHGr-lkp@intel.com>
-References: <20240314061205.26143-4-joshua.yeong@starfivetech.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TEoyBab7"
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-7dadba3284cso814680241.2
+        for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 01:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710492392; x=1711097192; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yns1vOt24BA/xyIkQadDD594v6dr/yXOSU3+VyMFSoo=;
+        b=TEoyBab7+UIpRZAZmffovbe6Ycigf16uEJIgKZb87vCWnlkfzzcK21VeJ+FMssm4kE
+         xyGl5YJ80x6OoyI2eYrDWJHO6qrHbjgILuJ7QXjwwX8rp5MWN/hXEiAgzlNt9wBoqH7b
+         XnzPlj1w93Pain8MYOgxugOs2hm8UzQtw1DRbgmZfZku0gS9lwl/e12AzD9rk6FmGiTx
+         b/yLtV1YwBhAJi6fPBQi3xnPnqR0KLYDJ/dFnOI+Am8DN2AA/7l6StUCJURBvhFqY46P
+         GIiJJmX3qX0b7tA05pIwdsaEnUT/+IxElDjR0Ui/SUqH4NQDuokdgHtrriZFr4DrCqPA
+         yQZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710492392; x=1711097192;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yns1vOt24BA/xyIkQadDD594v6dr/yXOSU3+VyMFSoo=;
+        b=V6072WkdylXYLdLtJCXgPDCHxIWeGxWRvfW/BoHU3r868Q289UQTKKRx4NVjmdHbam
+         GVxiL9lR+L1wQSAzsNF02ZDK/h+o0Lwt3qO9wfSB9MPqPKJyTkUz6IYPxUb5d7yO2+gM
+         y8ge7u0nrdj0d17jN+BSWSKdQVtDW4jYHS+NP9vnFPLqGPn+t9vqiDgwVF2cR8c0Vxr/
+         obhqeu1hO1saw/GObuoDcHQO966/nJUe2+43jwyZVt+se83Ut96mvW7EfcHY8dw+ewpk
+         sN5DdWOPiCisMuiKdh87MiivXakLGjpoCwgQYkoojYK4c6F6rn446cozGGVO4qrqehfz
+         dJMg==
+X-Forwarded-Encrypted: i=1; AJvYcCXGhIdfSQvCrrUtgCMNaGY1NJvZvvw8HvEmjM249S2Ft5eETeYKysl2xJa7TP2VI4geOrjFR7r0UfgmhFzSlyOp+XE7YQ==
+X-Gm-Message-State: AOJu0YyMXM1D5Y8HBWJgpn5upD0L7R9NQ7aGBLiC6BuIZ6KyRwm9UtAl
+	pmUC9lgWX4pMKWwCbMCZoyYcstJI7PsCsSKyMiq1ZB+WTrdCpFGFyTEVmrCcFyzDEwJE1GXMhHG
+	noQOtdHoNOqbBqtRgapumPogTL80=
+X-Google-Smtp-Source: AGHT+IGchSgz0yaVThLdBrhKFjUeUGbp4jB/K86ZCto5s63G5RGWY7hEUwnlgS6GpWmAXrH0GLqbu3WKiuwbiz6D7u0=
+X-Received: by 2002:a05:6102:1349:b0:475:48c9:c4ed with SMTP id
+ j9-20020a056102134900b0047548c9c4edmr4533644vsl.29.1710492392070; Fri, 15 Mar
+ 2024 01:46:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240314061205.26143-4-joshua.yeong@starfivetech.com>
+References: <20240314141516.31747-1-liuhailong@oppo.com> <20240315081803.2223-1-liuhailong@oppo.com>
+In-Reply-To: <20240315081803.2223-1-liuhailong@oppo.com>
+From: Barry Song <21cnbao@gmail.com>
+Date: Fri, 15 Mar 2024 21:46:20 +1300
+Message-ID: <CAGsJ_4yMXE_4YuMTczF6u4YYp_TWksi+byszD09E2PT5pK8zfA@mail.gmail.com>
+Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not available"
+To: liuhailong@oppo.com
+Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com, 
+	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com, 
+	quic_charante@quicinc.com, yuzhao@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Joshua,
+On Fri, Mar 15, 2024 at 9:18=E2=80=AFPM <liuhailong@oppo.com> wrote:
+>
+> From: "Hailong.Liu" <liuhailong@oppo.com>
+>
+> This reverts
+> commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not eli=
+gible")
+> commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
 
-kernel test robot noticed the following build warnings:
+Reverting these changes seems inappropriate since the original patches
+did improve most cases.
+While doing direct reclamation without MOVABLE flags, scanning cma
+folio doesn't help at all.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.8 next-20240314]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Yeong/riscv-asm-vendorid_list-Add-StarFive-Technology-to-vendors-list/20240314-165125
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240314061205.26143-4-joshua.yeong%40starfivetech.com
-patch subject: [PATCH 3/4] cache: Add StarLink-500 cache management for StarFive  JH8100 RISC-V core
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240315/202403151625.boKDjHGr-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240315/202403151625.boKDjHGr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403151625.boKDjHGr-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/cache/starlink500_cache.c:11:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/riscv/include/asm/cacheflush.h:9:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/cache/starlink500_cache.c:59:6: warning: no previous prototype for function 'starfive_sl500_dma_cache_wback' [-Wmissing-prototypes]
-      59 | void starfive_sl500_dma_cache_wback(phys_addr_t paddr, unsigned long size)
-         |      ^
-   drivers/cache/starlink500_cache.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      59 | void starfive_sl500_dma_cache_wback(phys_addr_t paddr, unsigned long size)
-         | ^
-         | static 
->> drivers/cache/starlink500_cache.c:74:6: warning: no previous prototype for function 'starfive_sl500_dma_cache_invalidate' [-Wmissing-prototypes]
-      74 | void starfive_sl500_dma_cache_invalidate(phys_addr_t paddr, unsigned long size)
-         |      ^
-   drivers/cache/starlink500_cache.c:74:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      74 | void starfive_sl500_dma_cache_invalidate(phys_addr_t paddr, unsigned long size)
-         | ^
-         | static 
->> drivers/cache/starlink500_cache.c:89:6: warning: no previous prototype for function 'starfive_sl500_dma_cache_wback_inv' [-Wmissing-prototypes]
-      89 | void starfive_sl500_dma_cache_wback_inv(phys_addr_t paddr, unsigned long size)
-         |      ^
-   drivers/cache/starlink500_cache.c:89:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      89 | void starfive_sl500_dma_cache_wback_inv(phys_addr_t paddr, unsigned long size)
-         | ^
-         | static 
-   8 warnings generated.
+>
+> skip_cma may cause system not responding. if cma pages is large in lru_li=
+st
+> and system is in lowmemory, many tasks would direct reclaim and waste
+> cpu time to isolate_lru_pages and return.
+>
+> Test this patch on android-5.15 8G device
+> reproducer:
+> - cma_declare_contiguous 3G pages
+> - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
+>   only.
+> - run a memleak process in userspace
 
 
-vim +/starfive_sl500_dma_cache_wback +59 drivers/cache/starlink500_cache.c
+I assume that scanning cma folio provides additional opportunities to recla=
+im
+anonymous memory, even though it is ineffective for allocating NON-MOVABLE
+folios. Consequently, we alleviate pressure for future allocations of anony=
+mous
+folios. Moreover, setting swappiness=3D0 is a rare scenario. Instead of ent=
+irely
+removing the mechanism, could we detect such corner cases and handle them
+differently.
 
-    58	
-  > 59	void starfive_sl500_dma_cache_wback(phys_addr_t paddr, unsigned long size)
-    60	{
-    61		writeq(FIELD_PREP(STARFIVE_SL500_ADDRESS_RANGE_MASK, paddr),
-    62		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_START_ADDR);
-    63		writeq(FIELD_PREP(STARFIVE_SL500_ADDRESS_RANGE_MASK, paddr + size),
-    64		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_END_ADDR);
-    65	
-    66		mb();
-    67		writeq(FIELD_PREP(STARFIVE_SL500_FLUSH_CTL_MODE_MASK,
-    68		       STARFIVE_SL500_FLUSH_CTL_CLEAN_SHARED),
-    69		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_CTL);
-    70	
-    71		starfive_sl500_cmo_flush_complete();
-    72	}
-    73	
-  > 74	void starfive_sl500_dma_cache_invalidate(phys_addr_t paddr, unsigned long size)
-    75	{
-    76		writeq(FIELD_PREP(STARFIVE_SL500_ADDRESS_RANGE_MASK, paddr),
-    77		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_START_ADDR);
-    78		writeq(FIELD_PREP(STARFIVE_SL500_ADDRESS_RANGE_MASK, paddr + size),
-    79		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_END_ADDR);
-    80	
-    81		mb();
-    82		writeq(FIELD_PREP(STARFIVE_SL500_FLUSH_CTL_MODE_MASK,
-    83		       STARFIVE_SL500_FLUSH_CTL_MAKE_INVALIDATE),
-    84		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_CTL);
-    85	
-    86		starfive_sl500_cmo_flush_complete();
-    87	}
-    88	
-  > 89	void starfive_sl500_dma_cache_wback_inv(phys_addr_t paddr, unsigned long size)
-    90	{
-    91		writeq(FIELD_PREP(STARFIVE_SL500_ADDRESS_RANGE_MASK, paddr),
-    92		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_START_ADDR);
-    93		writeq(FIELD_PREP(STARFIVE_SL500_ADDRESS_RANGE_MASK, paddr + size),
-    94		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_END_ADDR);
-    95	
-    96		mb();
-    97		writeq(FIELD_PREP(STARFIVE_SL500_FLUSH_CTL_MODE_MASK,
-    98		       STARFIVE_SL500_FLUSH_CTL_CLEAN_INVALIDATE),
-    99		       starfive_sl500_cache_priv.base_addr + STARFIVE_SL500_CMO_FLUSH_CTL);
-   100	
-   101		starfive_sl500_cmo_flush_complete();
-   102	}
-   103	
+Otherwise, I don't see any chance of this being acknowledged.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> trace the trace_mm_vmscan_lru_isolate which get
+> [ 1178.059160] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 tota=
+l_scan: 24385 skipped: 24382
+> [ 1178.059699] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 tota=
+l_scan: 24412 skipped: 24401
+> [ 1178.061747] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 tota=
+l_scan: 24412 skipped: 24401
+> From the log, tasks is waste time to scan lru list and call stack as belo=
+w.
+>
+> Task name: UsbFfs-worker [affinity: 0xff] pid: 3374 cpu: 7 prio: 120 star=
+t: ffffff8897a35c80
+> state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc01eaa0000
+> Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
+> Stack:
+> [<ffffffd32ee7d910>] __switch_to+0x180
+> [<ffffffd3302022fc>] __schedule+0x4dc
+> [<ffffffd330201e08>] preempt_schedule+0x5c
+> [<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
+> [<ffffffd32f14906c>] shrink_inactive_list+0x1d0
+> [<ffffffd32f143998>] shrink_lruvec+0x1bc
+> [<ffffffd32f147c0c>] shrink_node_memcgs+0x184
+> [<ffffffd32f147414>] shrink_node+0x2d0
+> [<ffffffd32f146d38>] shrink_zones+0x14c
+> [<ffffffd32f142e84>] do_try_to_free_pages+0xe8
+> [<ffffffd32f142b08>] try_to_free_pages+0x2e0
+> [<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
+> [<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
+> [<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
+> [<ffffffd32f19a220>] __vmalloc_area_node+0x188
+> [<ffffffd32f19a540>] __vmalloc_node+0x148
+> [<ffffffd32f19a60c>] vmalloc+0x4c
+> [<ffffffd32f910218>] ffs_epfile_io+0x258
+> [<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
+> [<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
+> [<ffffffd32f28129c>] __io_submit_one+0x1c0
+> [<ffffffd32f280e38>] io_submit_one+0x88
+> [<ffffffd32f280c88>] __do_sys_io_submit+0x178
+> [<ffffffd32f27eac0>] __arm64_sys_io_submit+0x20
+> [<ffffffd32eeabb74>] el0_svc_common.llvm.9961749221945255377+0xd0
+> [<ffffffd32eeaba34>] do_el0_svc+0x28
+> [<ffffffd32ff21be8>] el0_svc+0x14
+> [<ffffffd32ff21b70>] el0_sync_handler+0x88
+> [<ffffffd32ee128b8>] el0_sync+0x1b8
+>
+> Task name: kthreadd [affinity: 0xff] pid: 2 cpu: 7 prio: 120 start: fffff=
+f87808c0000
+> state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc008078000
+> Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
+> Stack:
+> [<ffffffd32ee7d910>] __switch_to+0x180
+> [<ffffffd3302022fc>] __schedule+0x4dc
+> [<ffffffd330201e08>] preempt_schedule+0x5c
+> [<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
+> [<ffffffd32f149168>] shrink_inactive_list+0x2cc
+> [<ffffffd32f143998>] shrink_lruvec+0x1bc
+> [<ffffffd32f147c0c>] shrink_node_memcgs+0x184
+> [<ffffffd32f147414>] shrink_node+0x2d0
+> [<ffffffd32f146d38>] shrink_zones+0x14c
+> [<ffffffd32f142e84>] do_try_to_free_pages+0xe8
+> [<ffffffd32f142b08>] try_to_free_pages+0x2e0
+> [<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
+> [<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
+> [<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
+> [<ffffffd32f19a220>] __vmalloc_area_node+0x188
+> [<ffffffd32f19a044>] __vmalloc_node_range+0x88
+> [<ffffffd32f0fb430>] scs_alloc+0x1b8
+> [<ffffffd32f0fb62c>] scs_prepare+0x20
+> [<ffffffd32ef2ce04>] dup_task_struct+0xd4
+> [<ffffffd32ef2a77c>] copy_process+0x144
+> [<ffffffd32ef2bae4>] kernel_clone+0xb4
+> [<ffffffd32ef2c040>] kernel_thread+0x5c
+> [<ffffffd32ef618d0>] kthreadd+0x184
+>
+> Signed-off-by: Hailong.Liu <liuhailong@oppo.com>
+> ---
+>  mm/vmscan.c | 24 ++----------------------
+>  1 file changed, 2 insertions(+), 22 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 6f13394b112e..29306c29309f 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2261,25 +2261,6 @@ static __always_inline void update_lru_sizes(struc=
+t lruvec *lruvec,
+>
+>  }
+>
+> -#ifdef CONFIG_CMA
+> -/*
+> - * It is waste of effort to scan and reclaim CMA pages if it is not avai=
+lable
+> - * for current allocation context. Kswapd can not be enrolled as it can =
+not
+> - * distinguish this scenario by using sc->gfp_mask =3D GFP_KERNEL
+> - */
+> -static bool skip_cma(struct folio *folio, struct scan_control *sc)
+> -{
+> -       return !current_is_kswapd() &&
+> -                       gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABL=
+E &&
+> -                       get_pageblock_migratetype(&folio->page) =3D=3D MI=
+GRATE_CMA;
+> -}
+> -#else
+> -static bool skip_cma(struct folio *folio, struct scan_control *sc)
+> -{
+> -       return false;
+> -}
+> -#endif
+> -
+>  /*
+>   * Isolating page from the lruvec to fill in @dst list by nr_to_scan tim=
+es.
+>   *
+> @@ -2326,8 +2307,7 @@ static unsigned long isolate_lru_folios(unsigned lo=
+ng nr_to_scan,
+>                 nr_pages =3D folio_nr_pages(folio);
+>                 total_scan +=3D nr_pages;
+>
+> -               if (folio_zonenum(folio) > sc->reclaim_idx ||
+> -                               skip_cma(folio, sc)) {
+> +               if (folio_zonenum(folio) > sc->reclaim_idx) {
+>                         nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+>                         move_to =3D &folios_skipped;
+>                         goto move;
+> @@ -4945,7 +4925,7 @@ static bool sort_folio(struct lruvec *lruvec, struc=
+t folio *folio, struct scan_c
+>         }
+>
+>         /* ineligible */
+> -       if (zone > sc->reclaim_idx || skip_cma(folio, sc)) {
+> +       if (zone > sc->reclaim_idx) {
+>                 gen =3D folio_inc_gen(lruvec, folio, false);
+>                 list_move_tail(&folio->lru, &lrugen->folios[gen][type][zo=
+ne]);
+>                 return true;
+> --
+> Changes in v2:
+> - add reproducer
+> - fix build error on v6.6-rc7
+>
+>
+
+Thanks
+Barry
