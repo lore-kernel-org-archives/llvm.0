@@ -1,259 +1,196 @@
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1E81427E
-	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 08:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A918A17C76;
+	Fri, 15 Mar 2024 10:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710492395; cv=none; b=oG5C6YBoGi+iyOXJWZjIdKTyGUar5dmYdks5PooMKTObfVd96lqGwBE6sV6aYuqWSAZov/fmmnO9Vfq+b58JECnfI0G06Xwxn5Nt3RwCMrSGjcpfeJ4kd7YY18X/irH4CwnoSm+8it4IV6nUJAg0hUL6JN09g8Wbal8pWuZ2Vz0=
+	t=1710496812; cv=none; b=H10/X8ydz1FLfYXiLiJnBAoXzOCWBN+x2GCfwYTWxf5Ys53NGuz10fsoJTJK2zwr/nJkqO6b1Wkcbir25gA7Z5Ui56ROIn/O11rfsCI5oTIgZWuAxXM8J9qkUKr0Tf6ylQ48fZLQD8kJfwlcgN5ZDhCj4NRQMTOTi6Sy+We8I7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710492395; c=relaxed/simple;
-	bh=HQWoXy2zl52Rs5VYt0a2sm98N3ZHCmAPNtENx3yf2kM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oh56eDaXH5u30GVCuxB+uj7GpF0MYjlgopePJGhBE/360QPEnbCfC5SIrGlRhwt/9LDjQNNH0cJrJLzbDd6cD8Ui6iXPJCyEZoypfd0zPmYXwcqf6mwec5SN5691/uEXr3XrDWfvX1MGzoh9iQggQL4VJYzuoGwZ1EDqtQFV0YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TEoyBab7; arc=none smtp.client-ip=209.85.222.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1710496812; c=relaxed/simple;
+	bh=TgsPBTRp6nSShb4vL2Mx+LcNmJuRLjnumD5YkOFdYI4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RotQDMrDeg4pVvB8f5BU1NAzHuTHpDVrJYlRh55+eV9hFnPqOblkoCQ5X+xRo+HpMwtBqLc4meSVWoaJndO5MAJemGwnKo7fCxijGStSvJJFQY4Q8qyolIl79QgNyHejVf4vSt+dTBlgYofwXGnOoZ3lmklc8Bdt7S8GtNwBTaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aHE/gDLL; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TEoyBab7"
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-7dadba3284cso814680241.2
-        for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 01:46:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710492392; x=1711097192; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yns1vOt24BA/xyIkQadDD594v6dr/yXOSU3+VyMFSoo=;
-        b=TEoyBab7+UIpRZAZmffovbe6Ycigf16uEJIgKZb87vCWnlkfzzcK21VeJ+FMssm4kE
-         xyGl5YJ80x6OoyI2eYrDWJHO6qrHbjgILuJ7QXjwwX8rp5MWN/hXEiAgzlNt9wBoqH7b
-         XnzPlj1w93Pain8MYOgxugOs2hm8UzQtw1DRbgmZfZku0gS9lwl/e12AzD9rk6FmGiTx
-         b/yLtV1YwBhAJi6fPBQi3xnPnqR0KLYDJ/dFnOI+Am8DN2AA/7l6StUCJURBvhFqY46P
-         GIiJJmX3qX0b7tA05pIwdsaEnUT/+IxElDjR0Ui/SUqH4NQDuokdgHtrriZFr4DrCqPA
-         yQZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710492392; x=1711097192;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yns1vOt24BA/xyIkQadDD594v6dr/yXOSU3+VyMFSoo=;
-        b=V6072WkdylXYLdLtJCXgPDCHxIWeGxWRvfW/BoHU3r868Q289UQTKKRx4NVjmdHbam
-         GVxiL9lR+L1wQSAzsNF02ZDK/h+o0Lwt3qO9wfSB9MPqPKJyTkUz6IYPxUb5d7yO2+gM
-         y8ge7u0nrdj0d17jN+BSWSKdQVtDW4jYHS+NP9vnFPLqGPn+t9vqiDgwVF2cR8c0Vxr/
-         obhqeu1hO1saw/GObuoDcHQO966/nJUe2+43jwyZVt+se83Ut96mvW7EfcHY8dw+ewpk
-         sN5DdWOPiCisMuiKdh87MiivXakLGjpoCwgQYkoojYK4c6F6rn446cozGGVO4qrqehfz
-         dJMg==
-X-Forwarded-Encrypted: i=1; AJvYcCXGhIdfSQvCrrUtgCMNaGY1NJvZvvw8HvEmjM249S2Ft5eETeYKysl2xJa7TP2VI4geOrjFR7r0UfgmhFzSlyOp+XE7YQ==
-X-Gm-Message-State: AOJu0YyMXM1D5Y8HBWJgpn5upD0L7R9NQ7aGBLiC6BuIZ6KyRwm9UtAl
-	pmUC9lgWX4pMKWwCbMCZoyYcstJI7PsCsSKyMiq1ZB+WTrdCpFGFyTEVmrCcFyzDEwJE1GXMhHG
-	noQOtdHoNOqbBqtRgapumPogTL80=
-X-Google-Smtp-Source: AGHT+IGchSgz0yaVThLdBrhKFjUeUGbp4jB/K86ZCto5s63G5RGWY7hEUwnlgS6GpWmAXrH0GLqbu3WKiuwbiz6D7u0=
-X-Received: by 2002:a05:6102:1349:b0:475:48c9:c4ed with SMTP id
- j9-20020a056102134900b0047548c9c4edmr4533644vsl.29.1710492392070; Fri, 15 Mar
- 2024 01:46:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aHE/gDLL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710496810; x=1742032810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TgsPBTRp6nSShb4vL2Mx+LcNmJuRLjnumD5YkOFdYI4=;
+  b=aHE/gDLLvk6BwdJO4fxRh5EkU8dnCvZ+ijuPFikmmA0muHdhnaxeo7CV
+   LL1UhxSfAoH3wzzZ6G+H0LoHzQjipPw48Ju50z1xE2vTMq97NcxAnrRsQ
+   PB2ad/bo56jBFuXetAFDNKwN9fpT+oFLPUHSTW3ingSV4SvAvPpuYp0/9
+   0nJxhq71g1Rlb98edfVgxu2qGawXuhDXenlSdetQTkhgj0U8F0TaiulXE
+   dDafyfQiABOjbLIZmZIuCt7S3FTbdOYm6YWD6+UYyvLeXfOlZZfHJi6LT
+   f0hgxlIg2HJy9BwsWkFYHqAfoWFV7L4JhD2eqz50FNn4FKVKy1+O8vpZ+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="16081056"
+X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
+   d="scan'208";a="16081056"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 03:00:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
+   d="scan'208";a="35749372"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 15 Mar 2024 03:00:04 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rl4M6-000EJx-0R;
+	Fri, 15 Mar 2024 10:00:02 +0000
+Date: Fri, 15 Mar 2024 17:59:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vignesh Balasubramanian <vigbalas@amd.com>,
+	linux-kernel@vger.kernel.org, linux-toolchains@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mpe@ellerman.id.au,
+	npiggin@gmail.com, christophe.leroy@csgroup.eu,
+	aneesh.kumar@kernel.org, naveen.n.rao@linux.ibm.com,
+	ebiederm@xmission.com, keescook@chromium.org, x86@kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, bpetkov@amd.com,
+	jinisusan.george@amd.com, matz@suse.de, binutils@sourceware.org,
+	jhb@freebsd.org, felix.willgerodt@intel.com,
+	Vignesh Balasubramanian <vigbalas@amd.com>
+Subject: Re: [PATCH 1/1] x86/elf: Add a new .note section containing
+ Xfeatures information to x86 core files
+Message-ID: <202403151742.VEz04MqR-lkp@intel.com>
+References: <20240314112359.50713-2-vigbalas@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240314141516.31747-1-liuhailong@oppo.com> <20240315081803.2223-1-liuhailong@oppo.com>
-In-Reply-To: <20240315081803.2223-1-liuhailong@oppo.com>
-From: Barry Song <21cnbao@gmail.com>
-Date: Fri, 15 Mar 2024 21:46:20 +1300
-Message-ID: <CAGsJ_4yMXE_4YuMTczF6u4YYp_TWksi+byszD09E2PT5pK8zfA@mail.gmail.com>
-Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not available"
-To: liuhailong@oppo.com
-Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com, 
-	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com, 
-	quic_charante@quicinc.com, yuzhao@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240314112359.50713-2-vigbalas@amd.com>
 
-On Fri, Mar 15, 2024 at 9:18=E2=80=AFPM <liuhailong@oppo.com> wrote:
->
-> From: "Hailong.Liu" <liuhailong@oppo.com>
->
-> This reverts
-> commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not eli=
-gible")
-> commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
+Hi Vignesh,
 
-Reverting these changes seems inappropriate since the original patches
-did improve most cases.
-While doing direct reclamation without MOVABLE flags, scanning cma
-folio doesn't help at all.
+kernel test robot noticed the following build errors:
 
->
-> skip_cma may cause system not responding. if cma pages is large in lru_li=
-st
-> and system is in lowmemory, many tasks would direct reclaim and waste
-> cpu time to isolate_lru_pages and return.
->
-> Test this patch on android-5.15 8G device
-> reproducer:
-> - cma_declare_contiguous 3G pages
-> - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
->   only.
-> - run a memleak process in userspace
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.8 next-20240315]
+[cannot apply to kees/for-next/execve tip/x86/core powerpc/next powerpc/fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vignesh-Balasubramanian/x86-elf-Add-a-new-note-section-containing-Xfeatures-information-to-x86-core-files/20240314-192650
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240314112359.50713-2-vigbalas%40amd.com
+patch subject: [PATCH 1/1] x86/elf: Add a new .note section containing Xfeatures information to x86 core files
+config: i386-buildonly-randconfig-001-20240315 (https://download.01.org/0day-ci/archive/20240315/202403151742.VEz04MqR-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240315/202403151742.VEz04MqR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403151742.VEz04MqR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/fpu/xstate.c:1858:8: error: call to undeclared function 'dump_emit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1858 |                 if (!dump_emit(cprm, &xc, sizeof(struct xfeat_component)))
+         |                      ^
+   arch/x86/kernel/fpu/xstate.c:1869:8: error: call to undeclared function 'dump_emit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1869 |                 if (!dump_emit(cprm, &xc, sizeof(struct xfeat_component)))
+         |                      ^
+   arch/x86/kernel/fpu/xstate.c:1899:7: error: call to undeclared function 'dump_emit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1899 |         if (!dump_emit(cprm, &en, sizeof(en)))
+         |              ^
+>> arch/x86/kernel/fpu/xstate.c:1903:7: error: call to undeclared function 'dump_align'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1903 |         if (!dump_align(cprm, 4))
+         |              ^
+   4 errors generated.
 
 
-I assume that scanning cma folio provides additional opportunities to recla=
-im
-anonymous memory, even though it is ineffective for allocating NON-MOVABLE
-folios. Consequently, we alleviate pressure for future allocations of anony=
-mous
-folios. Moreover, setting swappiness=3D0 is a rare scenario. Instead of ent=
-irely
-removing the mechanism, could we detect such corner cases and handle them
-differently.
+vim +/dump_emit +1858 arch/x86/kernel/fpu/xstate.c
 
-Otherwise, I don't see any chance of this being acknowledged.
+  1846	
+  1847		struct xfeat_component xc;
+  1848		int num_records = 0;
+  1849		int i;
+  1850	
+  1851		/* XFEATURE_FPU and XFEATURE_SSE, both are fixed legacy states. */
+  1852		for (i = 0; i < FIRST_EXTENDED_XFEATURE; i++) {
+  1853			xc.xfeat_type = i;
+  1854			xc.xfeat_sz = xstate_sizes[i];
+  1855			xc.xfeat_off = xstate_offsets[i];
+  1856			xc.xfeat_flags = xstate_flags[i];
+  1857	
+> 1858			if (!dump_emit(cprm, &xc, sizeof(struct xfeat_component)))
+  1859				return 0;
+  1860			num_records++;
+  1861		}
+  1862	
+  1863		for_each_extended_xfeature(i, fpu_user_cfg.max_features) {
+  1864			xc.xfeat_type = i;
+  1865			xc.xfeat_sz = xstate_sizes[i];
+  1866			xc.xfeat_off = xstate_offsets[i];
+  1867			xc.xfeat_flags = xstate_flags[i];
+  1868	
+  1869			if (!dump_emit(cprm, &xc, sizeof(struct xfeat_component)))
+  1870				return 0;
+  1871			num_records++;
+  1872		}
+  1873	
+  1874		return num_records;
+  1875	}
+  1876	
+  1877	static int get_xsave_desc_size(void)
+  1878	{
+  1879		/* XFEATURE_FP and XFEATURE_SSE, both are fixed legacy states */
+  1880		int xfeatures_count = 2;
+  1881		int i;
+  1882	
+  1883		for_each_extended_xfeature(i, fpu_user_cfg.max_features)
+  1884			xfeatures_count++;
+  1885	
+  1886		return xfeatures_count * (sizeof(struct xfeat_component));
+  1887	}
+  1888	
+  1889	int elf_coredump_extra_notes_write(struct coredump_params *cprm)
+  1890	{
+  1891		const char *owner_name = "LINUX";
+  1892		int num_records = 0;
+  1893		struct elf_note en;
+  1894	
+  1895		en.n_namesz = strlen(owner_name) + 1;
+  1896		en.n_descsz = get_xsave_desc_size();
+  1897		en.n_type = NT_X86_XSAVE_LAYOUT;
+  1898	
+  1899		if (!dump_emit(cprm, &en, sizeof(en)))
+  1900			return 1;
+  1901		if (!dump_emit(cprm, owner_name, en.n_namesz))
+  1902			return 1;
+> 1903		if (!dump_align(cprm, 4))
+  1904			return 1;
+  1905	
+  1906		num_records = dump_xsave_layout_desc(cprm);
+  1907		if (!num_records) {
+  1908			pr_warn("Error adding XSTATE layout ELF note. XSTATE buffer in the core file will be unparseable.");
+  1909			return 1;
+  1910		}
+  1911	
+  1912		/* Total size should be equal to the number of records */
+  1913		if ((sizeof(struct xfeat_component) * num_records) != en.n_descsz) {
+  1914			pr_warn("Error adding XSTATE layout ELF note. The size of the .note section does not match with the total size of the records.");
+  1915			return 1;
+  1916		}
+  1917	
+  1918		if (!dump_align(cprm, 4))
+  1919			return 1;
+  1920	
+  1921		return 0;
+  1922	}
+  1923	
 
->
-> trace the trace_mm_vmscan_lru_isolate which get
-> [ 1178.059160] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 tota=
-l_scan: 24385 skipped: 24382
-> [ 1178.059699] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 tota=
-l_scan: 24412 skipped: 24401
-> [ 1178.061747] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 tota=
-l_scan: 24412 skipped: 24401
-> From the log, tasks is waste time to scan lru list and call stack as belo=
-w.
->
-> Task name: UsbFfs-worker [affinity: 0xff] pid: 3374 cpu: 7 prio: 120 star=
-t: ffffff8897a35c80
-> state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc01eaa0000
-> Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
-> Stack:
-> [<ffffffd32ee7d910>] __switch_to+0x180
-> [<ffffffd3302022fc>] __schedule+0x4dc
-> [<ffffffd330201e08>] preempt_schedule+0x5c
-> [<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
-> [<ffffffd32f14906c>] shrink_inactive_list+0x1d0
-> [<ffffffd32f143998>] shrink_lruvec+0x1bc
-> [<ffffffd32f147c0c>] shrink_node_memcgs+0x184
-> [<ffffffd32f147414>] shrink_node+0x2d0
-> [<ffffffd32f146d38>] shrink_zones+0x14c
-> [<ffffffd32f142e84>] do_try_to_free_pages+0xe8
-> [<ffffffd32f142b08>] try_to_free_pages+0x2e0
-> [<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
-> [<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
-> [<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
-> [<ffffffd32f19a220>] __vmalloc_area_node+0x188
-> [<ffffffd32f19a540>] __vmalloc_node+0x148
-> [<ffffffd32f19a60c>] vmalloc+0x4c
-> [<ffffffd32f910218>] ffs_epfile_io+0x258
-> [<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
-> [<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
-> [<ffffffd32f28129c>] __io_submit_one+0x1c0
-> [<ffffffd32f280e38>] io_submit_one+0x88
-> [<ffffffd32f280c88>] __do_sys_io_submit+0x178
-> [<ffffffd32f27eac0>] __arm64_sys_io_submit+0x20
-> [<ffffffd32eeabb74>] el0_svc_common.llvm.9961749221945255377+0xd0
-> [<ffffffd32eeaba34>] do_el0_svc+0x28
-> [<ffffffd32ff21be8>] el0_svc+0x14
-> [<ffffffd32ff21b70>] el0_sync_handler+0x88
-> [<ffffffd32ee128b8>] el0_sync+0x1b8
->
-> Task name: kthreadd [affinity: 0xff] pid: 2 cpu: 7 prio: 120 start: fffff=
-f87808c0000
-> state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc008078000
-> Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
-> Stack:
-> [<ffffffd32ee7d910>] __switch_to+0x180
-> [<ffffffd3302022fc>] __schedule+0x4dc
-> [<ffffffd330201e08>] preempt_schedule+0x5c
-> [<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
-> [<ffffffd32f149168>] shrink_inactive_list+0x2cc
-> [<ffffffd32f143998>] shrink_lruvec+0x1bc
-> [<ffffffd32f147c0c>] shrink_node_memcgs+0x184
-> [<ffffffd32f147414>] shrink_node+0x2d0
-> [<ffffffd32f146d38>] shrink_zones+0x14c
-> [<ffffffd32f142e84>] do_try_to_free_pages+0xe8
-> [<ffffffd32f142b08>] try_to_free_pages+0x2e0
-> [<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
-> [<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
-> [<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
-> [<ffffffd32f19a220>] __vmalloc_area_node+0x188
-> [<ffffffd32f19a044>] __vmalloc_node_range+0x88
-> [<ffffffd32f0fb430>] scs_alloc+0x1b8
-> [<ffffffd32f0fb62c>] scs_prepare+0x20
-> [<ffffffd32ef2ce04>] dup_task_struct+0xd4
-> [<ffffffd32ef2a77c>] copy_process+0x144
-> [<ffffffd32ef2bae4>] kernel_clone+0xb4
-> [<ffffffd32ef2c040>] kernel_thread+0x5c
-> [<ffffffd32ef618d0>] kthreadd+0x184
->
-> Signed-off-by: Hailong.Liu <liuhailong@oppo.com>
-> ---
->  mm/vmscan.c | 24 ++----------------------
->  1 file changed, 2 insertions(+), 22 deletions(-)
->
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 6f13394b112e..29306c29309f 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -2261,25 +2261,6 @@ static __always_inline void update_lru_sizes(struc=
-t lruvec *lruvec,
->
->  }
->
-> -#ifdef CONFIG_CMA
-> -/*
-> - * It is waste of effort to scan and reclaim CMA pages if it is not avai=
-lable
-> - * for current allocation context. Kswapd can not be enrolled as it can =
-not
-> - * distinguish this scenario by using sc->gfp_mask =3D GFP_KERNEL
-> - */
-> -static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> -{
-> -       return !current_is_kswapd() &&
-> -                       gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABL=
-E &&
-> -                       get_pageblock_migratetype(&folio->page) =3D=3D MI=
-GRATE_CMA;
-> -}
-> -#else
-> -static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> -{
-> -       return false;
-> -}
-> -#endif
-> -
->  /*
->   * Isolating page from the lruvec to fill in @dst list by nr_to_scan tim=
-es.
->   *
-> @@ -2326,8 +2307,7 @@ static unsigned long isolate_lru_folios(unsigned lo=
-ng nr_to_scan,
->                 nr_pages =3D folio_nr_pages(folio);
->                 total_scan +=3D nr_pages;
->
-> -               if (folio_zonenum(folio) > sc->reclaim_idx ||
-> -                               skip_cma(folio, sc)) {
-> +               if (folio_zonenum(folio) > sc->reclaim_idx) {
->                         nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
->                         move_to =3D &folios_skipped;
->                         goto move;
-> @@ -4945,7 +4925,7 @@ static bool sort_folio(struct lruvec *lruvec, struc=
-t folio *folio, struct scan_c
->         }
->
->         /* ineligible */
-> -       if (zone > sc->reclaim_idx || skip_cma(folio, sc)) {
-> +       if (zone > sc->reclaim_idx) {
->                 gen =3D folio_inc_gen(lruvec, folio, false);
->                 list_move_tail(&folio->lru, &lrugen->folios[gen][type][zo=
-ne]);
->                 return true;
-> --
-> Changes in v2:
-> - add reproducer
-> - fix build error on v6.6-rc7
->
->
-
-Thanks
-Barry
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
