@@ -1,205 +1,214 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8C6FC01
-	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 06:11:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710483081; cv=none; b=HNqARRgG/G6IIgcYJ/LBUJkIMIIgnx8+0KTJEiA9sIVqv3+R/BCWqOB8P8mfAJ8LGCwcMs7/t/y+4FFcy/GYEggKgzvl1MCZqSxJWVU7wTIIdH675u32Uvfk1F3X4Sgq3O4+wIqwqrslviO8z/py7JH4rTKaULl9LCzRFo6ykDk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710483081; c=relaxed/simple;
-	bh=T8UiGsiQ7J8YQB68/6fsNNMy8Q7hj0noCtKuM7IQUwc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=o78wQzZ/LnLqG0e7Qy7ETfSvuTbUAJ636RMkhln7IVLWp7ZtT8OkneLDcrSXA8LE9rdDzYgekwnK8qZp7cEfKg4RrQmCrrL4YT2CxgyV4MigtNAdSqY/qhvGhnWLNCy00YdGD0wPp+CBTdpKFlH0mPRFNuZaUB24DWVfu2Ijvqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NSs4+xgA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D66812E68
+	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 06:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710483872; cv=fail; b=Das5wveCqT0SFG8W6gG3CX4RTaCvddxIy+Xkz/s5+rUjqiDjpV/gc0PJPcaK0Wf5SAtFAKc65ExziVu/NbEJES0Vasf5DM13jA4qsDwYlCzeKtHRq9Oi8QYb9zgJfS3yIsbjM+wpS/IhrzCS0sGoP9KYWw3g9UvvxPBq8XCKzQc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710483872; c=relaxed/simple;
+	bh=YieE4CvAt1sqdVA2smdq/6mVWGm0pFlgrJVFg5o12Zw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=SnuE/WGM8/T6zEu8pTi8yM0MQzpkHATjYN3aj+NnWLE6qNbZQyA+zjyaknG63opLvv/Ykr6rOlqnB3JPlJu9MQM0P/p2EKfhXKCj+b0wIIq0Ox9zVygzHbttzOYsfOuJy4jHOQyZQF68dQsihjTA7xUXEAmMjT1h+Wws6LMJs4c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LptHZTyX; arc=fail smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NSs4+xgA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710483078;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MwvMdC+YFE8qNc9QGg2lMZHpaNsarKlj6iX73cpfoSU=;
-	b=NSs4+xgAexgtomiLrIDuVOX6GqTm8PogdpVqwbcgRS8QgbYqdYgFirbIrrvfOe5tMyl7yN
-	dSjoG2SHdDbh9N6FQH85Zwq75QWyFICcEloskwUVGqcL0RRdLrm2FjidVqrXGqthz3drWK
-	oYctoNKUmSVyUUNwDBCmfS8abDM0Cjg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-547-tMElGrHZP8OMR-MzaLAYNw-1; Fri, 15 Mar 2024 02:11:14 -0400
-X-MC-Unique: tMElGrHZP8OMR-MzaLAYNw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E18CB185A783;
-	Fri, 15 Mar 2024 06:11:13 +0000 (UTC)
-Received: from [172.64.4.48] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 978C0492BC6;
-	Fri, 15 Mar 2024 06:11:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 22 of 204): Test report for master
- (6.8.0, mainline.kernel.org-clang, 1bbeaf83)
-Date: Fri, 15 Mar 2024 06:11:13 -0000
-To: llvm@lists.linux.dev, shinichiro.kawasaki@wdc.com, yizhan@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LptHZTyX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710483871; x=1742019871;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=YieE4CvAt1sqdVA2smdq/6mVWGm0pFlgrJVFg5o12Zw=;
+  b=LptHZTyXWbN7uPBAEwasMS5TVGemh/+h5pPA2Gb4muyQwoYKkPiQ+DX4
+   3z9uq4cBWFr8GBjufI/S98ADRJQ8TOdGL+bTWdPLfbBfFsDIjrGStYRAL
+   bIW5uch8YXIrmXGbO2HUMvfuNadDYEpk1KXm25Fw70sv55OFrNFYLOJ29
+   3D+ZshNVWMLicweNnihmws8ZuwXFJGj3hDwUVkgxHYTi9JFcPq/VJarPd
+   bf98WcSHsXxBKA9mw8Np353JAaXCgSlyfbiBKknaLBkJsKzTh+3BJmZ9+
+   pzE5o3FaMVZrREHpT+NPCBMy/+WiPhBRJ3vrCX5OLR4/dZYHIdbrpDA5K
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="9175270"
+X-IronPort-AV: E=Sophos;i="6.07,127,1708416000"; 
+   d="scan'208";a="9175270"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 23:24:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,127,1708416000"; 
+   d="scan'208";a="50019089"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Mar 2024 23:24:29 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 14 Mar 2024 23:24:28 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Thu, 14 Mar 2024 23:24:28 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 14 Mar 2024 23:24:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GvdRW4CTABvDw1FRchx3SqJGLpPviL83WjEMdXwz4483l7z3Bqyvs4mHuzS0ltFE6Oh99Dq9d2Ysqoj/yHhTg+IkGPTlQr1M/HTJn7c5cwv3E5t9D5KOtSLFdLi7ezKfxp0S/j11o4sFB3G60r//mwSs7rZolpJ+ub4PrK5QEVVmr+ZDGZ6Htn/yMMRUtZOxNiqdTmFiyYEBdX5JHOvyRgtPtEjwfn5yLPasH1Rpla+d4pyjgEp+zcRwZx/MmWtTV0oyfg4SGDpUv55UNd+qu/KGR0sypw/QTL1LEggy9nX0/MBGZpBPNOJgS0CEFt4tFz8AIZbVM0DG5MZfyFkXaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5bBkYTbBSoQ7lFLV7xpGPfeFTyHl8I7fSX/XSexeAqI=;
+ b=ABEbcyJe/vTLnstczLqrZLhQ6pZ6ex02HsTFjyvZaAjAEjCX1aTmPhsgnhWHjdSxVhUv81cc6gQR1qBXgvhRQR2vZzdj7WOFrXCPooM8FlHqO2KBTJqXJ5SOXMP3KnD9eZ/Zz94t3o4GN6OHusohalQP/x8+CTcKwoekCtPqQfQTqgrAmWyeHWqtJax+aYUoBFx+a6eyu3Xq5quQo1Een58Q5eXq1yPj+RtaTdi+M6xu0duIfNKjk2dGcWGh6Y/dqn5aJL/NY/ZuDjYvfEmzKjgZoRUTmJN5vzFDdtGDk++X78BOFdp3/bx0grr8u/1pxxSwfLoaK60fMXYoP1rVmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM4PR11MB6020.namprd11.prod.outlook.com (2603:10b6:8:61::19) by
+ PH8PR11MB7117.namprd11.prod.outlook.com (2603:10b6:510:217::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.17; Fri, 15 Mar
+ 2024 06:24:12 +0000
+Received: from DM4PR11MB6020.namprd11.prod.outlook.com
+ ([fe80::7ab1:eed9:f084:6889]) by DM4PR11MB6020.namprd11.prod.outlook.com
+ ([fe80::7ab1:eed9:f084:6889%4]) with mapi id 15.20.7386.015; Fri, 15 Mar 2024
+ 06:24:11 +0000
+From: "Zhang, Qiang4" <qiang4.zhang@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+CC: Andrew Morton <akpm@linux-foundation.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+	<justinstitt@google.com>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "Stable@vger.kernel.org"
+	<Stable@vger.kernel.org>, "Zhang, Qiang4" <qiang4.zhang@intel.com>
+Subject: RE: [PATCH] memtest: use {READ,WRITE}_ONCE in memory scanning
+Thread-Topic: [PATCH] memtest: use {READ,WRITE}_ONCE in memory scanning
+Thread-Index: AQHadFQSJGEbnIyyQ0G1fVC+polJ+bE17SuAgAJYgTA=
+Date: Fri, 15 Mar 2024 06:24:11 +0000
+Message-ID: <DM4PR11MB6020ECE5592459BB33281A16DF282@DM4PR11MB6020.namprd11.prod.outlook.com>
+References: <20240312080422.691222-1-qiang4.zhang@intel.com>
+ <20240313172141.GB3064248@dev-arch.thelio-3990X>
+In-Reply-To: <20240313172141.GB3064248@dev-arch.thelio-3990X>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR11MB6020:EE_|PH8PR11MB7117:EE_
+x-ms-office365-filtering-correlation-id: d1c3e526-1d83-48e3-787e-08dc44b8877a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tns3mobdxzK8NQf3MrzMB3J467bnKBQfVjO7akh+jsFNcTTLkyzs0dYgqWBeTNPCxdNKqU1m8RwZvNXERr6DnptNdg7Cxk/qZOqbbLT2CD4BIeCXzdbhrR1pSLwOwpmRbcAIoEhjVOCTf7oYCKdTG5gvsBK6fwc68eKwz2VnNveo8fwIW2D+n2qs/9ypU3ESJKvMoFFokzYbjh8/a5p+4m0w3PNWO04XiKtP/mk4ShLlCTVv4WPwvI3ATb+hmSeWLiRev2O9llOIWNHukBlqmlORRWxrMAAaJbORT9QTsAcUavde+Dfu5k03AeLku76fmQTch3Yy3taYhiyK0Dpt8PM3euWMe9zuhA0IDbgv6L7lvR7jRURmscnazIDzsTwuNCYgUw7cI8l2NovR+5u6lByDxOZtCtzPxFTIszqGxhR6HtdzVsqILUaNTF2hSzMbQYns+50TktggFgtA3nY4auRhTV+ET3b0AZV8qd9iWRJ4kndste9ZDyuN3/zJ0To6Ql1ufrlMG56Jp/QNjEQgcZs++SQeTybUql8motOVXJA924/0kkDamElXkyuPbDqGAgYzImsVC25BqvpmtwId+mfEi7+fPUoZfW4+qPJvXPmKMPZ7IA2WDHQwKnWo0aY7ygC19WuQkzrKss7RtvhhbGNHOuugTCU7wmstWntNx8bqbdiRwbkOljxRQN4qmaHeRQUVGzCKJALmhPxiGDibsS/AasK6JvUgomAQrgKWwYU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6020.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?l3YOA1FWR4LPdfXH5QCObAt0Tg1jCNIP8+ss/J9DqHzjKr0d6s81Dwe7U+5F?=
+ =?us-ascii?Q?yLGR/Y995A3tj66XJLrpNRylyOJZ6Q2iYL6dXtzh38Tvs4Qm2C5Yn5BMzDk9?=
+ =?us-ascii?Q?U2tSeOwyp4v1bF4HqNlwGe4uIvh3YAl4Iv6DZ8ovDvWQaAP50nyZOTbJtYmS?=
+ =?us-ascii?Q?JmN0UNx7GYVElV9XSvMrIUDJLEZw+A40PygBqZfQxzoFk3GW/UdtiL/SqzDL?=
+ =?us-ascii?Q?7F2B2nU9giJOlRodOXFT/gcgvlU+VJcd+q8I6fkjR1EBKxNPY6YC+cDigfgy?=
+ =?us-ascii?Q?78uLO6YutldFW2x+Cg0RnM3r/MNx6HphRnJmnut1VSQOU+HSPfcQNtWVcLqt?=
+ =?us-ascii?Q?WZjp0qN/38i1rZwvrc67ctQh8e4ZTNiX+pCLUVwau+HMigvuDWkUS9zzCoeI?=
+ =?us-ascii?Q?88D6wY/rpeLV7OFmdG21qQki/FaYQ/3s1ClyXXxLzhOUq+Xyf9/Mv1FpyDz1?=
+ =?us-ascii?Q?Oaaev3mNOdJFr5gmVBJSsvna0RPcaScAfvYATqNJoTYLJ5a6Mi0L81WUTZru?=
+ =?us-ascii?Q?nVmQWyMAObhAEFppxJtUenz80uBR2QKhYtluybglyT4Ab6+MLuPyjp88dPJ+?=
+ =?us-ascii?Q?RCOQE+m4WvBrIqgDsbot0ctyfG5Ts8hXLf3+RKeMOeMsOPRxZ1btNY7OMtV2?=
+ =?us-ascii?Q?JLTw5uqW7U2/oS/vF3Hgz+6Tqr5ojX8cG3Ra750/LdEcXwibaJOuPDgTLUlN?=
+ =?us-ascii?Q?VW1s4ZpETl7HkafTGgI3B+HK+Xguo4rKj4ecXxn9RT9e8AJ7Yh5KIXniTk1i?=
+ =?us-ascii?Q?eAk1ahQNNqP7Xr007WvsPit5jmHslT7BM2AYULUMeZ/3+/sa/QSZ5fmZAUTd?=
+ =?us-ascii?Q?gFm3GJEa6u8hyOZz3DWEx2t5J/xZG6FBPxfKg7KRAtBkHkpc7F8agGBAofWF?=
+ =?us-ascii?Q?gicsuMxILW3e96oGzShfMadGmDTmvOFSPghAcPiMCEODSJoHNIz/DrVtyxFH?=
+ =?us-ascii?Q?46UvIB1HIYl/UTpdsGrxuagcp+7WOIq7u9Y3xPclQEZ8+neXp+A0QLJKG04r?=
+ =?us-ascii?Q?G259QM1RH42Cj0Lgwt6ea3dFOI3/fVTjucUklpQJ+N/gY9I01XEQSQJKPhoj?=
+ =?us-ascii?Q?4fLxDfzqfYOxQImEpPM00LL9xcl+PRzOeamk004voFn9vwFN95ufipDETSwU?=
+ =?us-ascii?Q?JLoU9tG6PQI62KyO0LqbuQdCDYuYBW8moPs1Kt3p64TCEYzS6e/sYXuKztXT?=
+ =?us-ascii?Q?KqFj3sn4TitaCvo6at9TW/wWgfqb4ljUAz6QxfCXsiDJ0GtqFPxmMGFCnA1N?=
+ =?us-ascii?Q?9hfw243+zlNkXkbqN0OxmBrzkTRfTlgtoyKVEZk5eqLjTD7bWYztFdLtNekd?=
+ =?us-ascii?Q?51VvMiUjgUdlV7TYw+ld+/VBGk+2TDZEzktsyk8br3aMBLFWxCm3iHah+dkj?=
+ =?us-ascii?Q?UH/eD5f61J7R55i9yLgtpmvF23QubeNKmiQaa6bRLwsQwrmsfOSJN/j3EF2B?=
+ =?us-ascii?Q?+l25j92evlYFe835VbyUEN9k1FJqMVSBnpFd3h5bHqBjnKgRZPQz3p40+KCo?=
+ =?us-ascii?Q?UZlUf1rkhUCEYZC+fg6Ym0+JeF+qI0j6BxUem1RQURMUjs64AvGJOg9wUb79?=
+ =?us-ascii?Q?m4/GdH8pmJqrz7O0vy1w4+jIb75vnlK4QaYc9ro0?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <94271.124031502111400166@us-mta-547.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6020.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1c3e526-1d83-48e3-787e-08dc44b8877a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2024 06:24:11.7091
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IPiWdCoSuhCgshJ+uY60LQfZ3uOiqvmgXNifBHSwiZ8pUEu/wUeNA53u0SJg3MyaVeqeJcTC76PzPST+RlH7Nw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7117
+X-OriginatorOrg: intel.com
 
-Hi, we tested your kernel and here are the results:
+Hi, Nathan
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Sorry for the incomplete commit message.=20
 
+I have tried to compile with gcc and clang-{11,13,14} on Debian 12.  On my =
+test environment, hypervisor emulates a range of bad memory where writes ar=
+e ignored and reads always returns all ones.
+Memtest compiled with all clang-{11,13,14} can't find the bad memory withou=
+t this patch. But gcc works fine. So it seems not a regression in clang.
+I don't have expertise in compilers. But I think {READ,WRITE}_ONCE can forc=
+e the compiler to treat the iterating pointer as volatile.
 
-Kernel information:
-    Commit message: Merge tag 'perf-tools-for-v6.9-2024-03-13' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools
+Welcome more comments !=20
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/134950
+BR
+Qiang
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk - upstream
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11682163
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-          x86_64 - Storage - blktests - blk - upstream
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11682110
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
+-----Original Message-----
+From: Nathan Chancellor <nathan@kernel.org>=20
+Sent: Thursday, March 14, 2024 1:22 AM
+To: Zhang, Qiang4 <qiang4.zhang@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>; Nick Desaulniers <ndesaulnie=
+rs@google.com>; Bill Wendling <morbo@google.com>; Justin Stitt <justinstitt=
+@google.com>; linux-mm@kvack.org; linux-kernel@vger.kernel.org; llvm@lists.=
+linux.dev; Stable@vger.kernel.org
+Subject: Re: [PATCH] memtest: use {READ,WRITE}_ONCE in memory scanning
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: makedumpfile not found when building kdump initramfs
-            URL: https://bugzilla.redhat.com/2269640
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                  x86_64 - kdump - sysrq-c
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+On Tue, Mar 12, 2024 at 04:04:23PM +0800, Qiang Zhang wrote:
+> memtest failed to find bad memory when compiled with clang. So use=20
+> {WRITE,READ}_ONCE  to access memory to avoid compiler over optimization.
 
+This commit message is severely lacking in details in my opinion, especiall=
+y for a patch marked for stable. Did a kernel or LLVM change cause this (i.=
+e., has this always been an issue or is it a recent regression)? What is th=
+e transformation that LLVM does to break the test and why is using READ_ONC=
+E() or WRITE_ONCE() sufficient to resolve it?
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     aarch64 - Reboot test
-     ppc64le - Memory function: memfd_create
-     ppc64le - kdump - file-load
-     ppc64le - Reboot test
-       s390x - Storage - blktests - nvme-tcp - upstream
-       s390x - Storage - swraid scsi_raid
-       s390x - stress: stress-ng - cpu-cache
-       s390x - stress: stress-ng - memory
-       s390x - Reboot test
-       s390x - Memory function: memfd_create
-       s390x - kdump - file-load
-       s390x - Reboot test
-      x86_64 - Storage - blktests - nvme-tcp - upstream
-      x86_64 - Storage - swraid scsi_raid
-      x86_64 - stress: stress-ng - cpu-cache
-      x86_64 - stress: stress-ng - memory
-      x86_64 - Reboot test
-      x86_64 - Memory function: memfd_create
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-      x86_64 (debug) - Memory function: memfd_create
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> Cc: <Stable@vger.kernel.org>
+> Signed-off-by: Qiang Zhang <qiang4.zhang@intel.com>
+> ---
+>  mm/memtest.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/mm/memtest.c b/mm/memtest.c index=20
+> 32f3e9dda837..c2c609c39119 100644
+> --- a/mm/memtest.c
+> +++ b/mm/memtest.c
+> @@ -51,10 +51,10 @@ static void __init memtest(u64 pattern, phys_addr_t s=
+tart_phys, phys_addr_t size
+>  	last_bad =3D 0;
+> =20
+>  	for (p =3D start; p < end; p++)
+> -		*p =3D pattern;
+> +		WRITE_ONCE(*p, pattern);
+> =20
+>  	for (p =3D start; p < end; p++, start_phys_aligned +=3D incr) {
+> -		if (*p =3D=3D pattern)
+> +		if (READ_ONCE(*p) =3D=3D pattern)
+>  			continue;
+>  		if (start_phys_aligned =3D=3D last_bad + incr) {
+>  			last_bad +=3D incr;
+> --
+> 2.39.2
+>=20
