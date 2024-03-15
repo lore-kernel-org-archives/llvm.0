@@ -1,225 +1,247 @@
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2130.outbound.protection.outlook.com [40.107.117.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07AB314016
-	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 07:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710488710; cv=none; b=nGhiJvN/a5r8zVt8rVoGFrXN+KDRdh2Sh+hY3E712RSGH1//Cgja0NywLUDFbRJxLewIN8070TnRIoGsaXY9Rua18m4VzSKucGwBKhfQNkCevZ49xzhRA8z9A6fRKK6ASqg+BcCcgyKgJFCsdgE2986ZHlRLEhiSGzRW/2fQ83k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710488710; c=relaxed/simple;
-	bh=pUShuejhJicdxU5bYPaGs3d04Yvt05w78zdLWyB13IA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=RXssxBIPxk/nfGM61AuoQbcwXN/j6VZFXfJINa+QMNOMXs/CvW7ti5EQamQVfW7khun3XSoAGTu6jUp3UlbqQfXRmAhq8EQ5lVa7OO1DfsO+Z4sb+8xXOHEFVy9C8zq4/Zok3/zetgEjpYSDXBar5H4kEHtTEe4yqzmCe4/B+Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
-Received: from dlp.unisoc.com ([10.29.3.86])
-	by SHSQR01.spreadtrum.com with ESMTP id 42F7fgY5000390;
-	Fri, 15 Mar 2024 15:41:42 +0800 (+08)
-	(envelope-from zhaoyang.huang@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4Twx462Y8Vz2L6W18;
-	Fri, 15 Mar 2024 15:40:22 +0800 (CST)
-Received: from BJMBX01.spreadtrum.com (10.0.64.7) by BJMBX02.spreadtrum.com
- (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Fri, 15 Mar
- 2024 15:41:40 +0800
-Received: from BJMBX01.spreadtrum.com ([fe80::54e:9a:129d:fac7]) by
- BJMBX01.spreadtrum.com ([fe80::54e:9a:129d:fac7%16]) with mapi id
- 15.00.1497.023; Fri, 15 Mar 2024 15:41:40 +0800
-From: =?utf-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?=
-	<zhaoyang.huang@unisoc.com>
-To: Yu Zhao <yuzhao@google.com>, "liuhailong@oppo.com" <liuhailong@oppo.com>
-CC: "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com"
-	<ndesaulniers@google.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>,
-        "surenb@google.com" <surenb@google.com>,
-        "Charan Teja
- Kalla" <quic_charante@quicinc.com>,
-        =?utf-8?B?5bq357qq5ruoIChTdGV2ZSBLYW5nKQ==?= <Steve.Kang@unisoc.com>
-Subject: reply: [PATCH] Revert "mm: skip CMA pages when they are not
- available"
-Thread-Topic: reply: [PATCH] Revert "mm: skip CMA pages when they are not
- available"
-Thread-Index: AQHadqw3sVlAcXr2r0+8CjaNX3IUeA==
-Date: Fri, 15 Mar 2024 07:41:39 +0000
-Message-ID: <1710488498897.75752@unisoc.com>
-References: <20240314141516.31747-1-liuhailong@oppo.com>,<CAOUHufbsqd2s=a_mdMZEu2bXGFLF=+mVidNvJYMHmCH5Je9+Mg@mail.gmail.com>
-In-Reply-To: <CAOUHufbsqd2s=a_mdMZEu2bXGFLF=+mVidNvJYMHmCH5Je9+Mg@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-transport-fromentityheader: Hosted
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B966171AB
+	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 08:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.130
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710490702; cv=fail; b=pjKrrwhtH6Xbh/y3RKOW8VXSQ+liOSob8oaWBeSkBqkbQJN+jWbk/WhTgCYIGoYN6oUWX5QROgvpxzJHOJwIkbXBCHJzjE+c1tq9t5S8zHnXUsuSMo156dRo04wEiu9uh6KrcsBUlxAp293Hn2SecrOT5LhijjhCEewq4+KxqpI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710490702; c=relaxed/simple;
+	bh=HQXAcvUjvVaI4nbm7YONQRFgmGnt51dXibAO0Oqec6k=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E2EUVvueX7ENK9CeH5sIVX/Jhv9oOxNBFk7k82Y/9eGqD6LsofbEVzLzStpDTzsgJMyeM8wPTpj8tk5yvDXkXtQuCnAQJNCvStq2RosshFvKMJloT/E9ADRolJjmCk21L6RscYAMXqCMK4KvLYBd0v1CVVrfJ4RtLPM1v3V/PAc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com; spf=pass smtp.mailfrom=oppo.com; dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b=Wu/A1eRF; arc=fail smtp.client-ip=40.107.117.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oppo.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b="Wu/A1eRF"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NYBsrmqH3U4xYncwxcgw8uzIWQEALiT0MhDA3e6tVzlvyL23LZTMVnhgj0UQ6pi0lscgLNich+bWQre9rYw9U53dedKjW3Pf8qVkV8EhlZH/FHyq+NWUZi7dEJW30mTtvoV1DiTsXMwnlGwc/n0/X5xYDfb3+JWrrERv0ytXxcEYqzquwUEXZ8PjbPgJYcTWo5d1W/VRhONjCFlplScyaRkg8duv85YWEqj9ruBjz0QuHJYrRoFaecgioFcRsA2EXzJlwTJKjT76QtKBIbsRaQO7eBGFaMdpXk5HFDNiATwRjfOl3Z57M7gxVctwyiyJEUoVhEqqrLB87ZHZPbICVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oSMQ+co08OZP1j4maPyd8Gzb5mLhE6B+G1tb7W0PLYg=;
+ b=PZDdnWNCdxW68AYMb1NacV1/B1vQ106Cc/GBtlLTCgToo00U4n4EvtGtdBj4IsRKSveApgPgMbUG4jHynBQdzY2rxPNLm+D/wnSRIdjGlIF/yzPZ02zJi7D6mnWoGNbjQIRinVEDOdI2uctD/RMTXSLr4e61ohUDItAmuAsVyL8V+7MNsfyn/YYVM6i1lsyh2WB3QwSzrcI/Iw4QVS6SrZoRLx6rvurUSmBpuFPqXE7VcW2NZ+ci73M78KhnBFa2Df3ImPEs5uYAtji+PozGCqdA17Ib2HeW6aqd9ZHMDGdzDHF22+vnV0jYu/b3bUsXKCdK2fIzEH3zKgDBL5CP1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 58.252.5.68) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=oppo.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=oppo.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oSMQ+co08OZP1j4maPyd8Gzb5mLhE6B+G1tb7W0PLYg=;
+ b=Wu/A1eRFcAYik9s3+xthcM4oqU3oAhui1lDrSB4tr+iH3zRMSJEQAEnLP4Ef9Uf7A2aKb5AqtTlfI3f3vL67EeZS+1En966PKe49yiRYrXt4SO7eP5K2IfY/Tnbk1dCX0WvLeJf2YVmbgh9KCklWv7kYXXVDXdT+v4N2iHyOLrs=
+Received: from PS2PR01CA0050.apcprd01.prod.exchangelabs.com
+ (2603:1096:300:57::14) by SEYPR02MB6268.apcprd02.prod.outlook.com
+ (2603:1096:101:d1::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.19; Fri, 15 Mar
+ 2024 08:18:17 +0000
+Received: from HK3PEPF00000221.apcprd03.prod.outlook.com
+ (2603:1096:300:57:cafe::fa) by PS2PR01CA0050.outlook.office365.com
+ (2603:1096:300:57::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.20 via Frontend
+ Transport; Fri, 15 Mar 2024 08:18:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 58.252.5.68)
+ smtp.mailfrom=oppo.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=oppo.com;
+Received-SPF: Pass (protection.outlook.com: domain of oppo.com designates
+ 58.252.5.68 as permitted sender) receiver=protection.outlook.com;
+ client-ip=58.252.5.68; helo=mail.oppo.com; pr=C
+Received: from mail.oppo.com (58.252.5.68) by
+ HK3PEPF00000221.mail.protection.outlook.com (10.167.8.43) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7386.12 via Frontend Transport; Fri, 15 Mar 2024 08:18:16 +0000
+Received: from PH80250894.adc.com (172.16.40.118) by mailappw30.adc.com
+ (172.16.56.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 15 Mar
+ 2024 16:18:12 +0800
+From: <liuhailong@oppo.com>
+To: <akpm@linux-foundation.org>
+CC: <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<surenb@google.com>, <zhaoyang.huang@unisoc.com>,
+	<quic_charante@quicinc.com>, <yuzhao@google.com>, Hailong.Liu
+	<liuhailong@oppo.com>
+Subject: [PATCH v2] Revert "mm: skip CMA pages when they are not available"
+Date: Fri, 15 Mar 2024 16:18:03 +0800
+Message-ID: <20240315081803.2223-1-liuhailong@oppo.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240314141516.31747-1-liuhailong@oppo.com>
+References: <20240314141516.31747-1-liuhailong@oppo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MAIL:SHSQR01.spreadtrum.com 42F7fgY5000390
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: mailappw30.adc.com (172.16.56.197) To mailappw30.adc.com
+ (172.16.56.197)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK3PEPF00000221:EE_|SEYPR02MB6268:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37714070-c11a-430d-f806-08dc44c87785
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	lE/7HgiZ1CZ6thGpta3dc4DbpPflis2+ARATZOjgWUxxAf+6VuJqfrlhmLb2tMTOPmDlqpKm3kEW/Nj0VEyIGu5budE1PcMKrS49md3QTU+mPf+npmxVtVZn7wpCGtAHTSO1+aIvSTbloPMcjYtgRGD74ZnS0oW7lZLThBD5u/AnspxqnJzXiOMIMw5EgctCIwRmSxNtQHzINEsT0xyuIE9TFZRQeeBM7LfMLzUaPWqtC2sb+63wAUxr1GC2hzavP+S2RI0MMSPpAciU1ca+vmO9l5UkaVSwsQoX2t9nvNnMsFfrBhZdGSY55fPYkYANYax2lxXzhaRdG5Hd1Kw/XY6eV+YxIWfvXAaigpFICAsTIWMddwQa80ACuva64SwBxEWQJ81qXY1SuH8DBdPX7Pouz62FmCUZk6Fg6LQPWChg1PDFs5lCMQISd2ysRLA6ubszZv/5p5pbShnXi3PPHuIl/qEuI84QZD6MvFB+zMz81ep0O5rxlunFwi/0e9Q8myN5mvUw84kx4UEz4ou60X5ZynZ8OLSQqlsN60TvNFQReCDxhS8HrB0BdZgtj0So+ZtTE/lO6vSTvw6Km4kuRT55P1azmCj0uztaLngKMIra121BqaBSiOK8h1mAX3UfETCkrPz/NquQG6K3+d0k4Bn0ztzpAnkz2+4AdEsZKEc79cFdBe2eLBmKK+nf0fVaaOwcCyuwBDXYDTGOFbkPWihMFa6tY0Ty92SEd82eqyX/Ix5JJl32iiIbHq9bhsfF
+X-Forefront-Antispam-Report:
+	CIP:58.252.5.68;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.oppo.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(82310400014)(36860700004);DIR:OUT;SFP:1102;
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2024 08:18:16.7465
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37714070-c11a-430d-f806-08dc44c87785
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f1905eb1-c353-41c5-9516-62b4a54b5ee6;Ip=[58.252.5.68];Helo=[mail.oppo.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	HK3PEPF00000221.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB6268
 
-CgpPbiBUaHUsIE1hciAxNCwgMjAyNCBhdCAxMDoxNeKAr0FNIDxsaXVoYWlsb25nQG9wcG8uY29t
-PiB3cm90ZToKPgo+IEZyb206ICJIYWlsb25nLkxpdSIgPGxpdWhhaWxvbmdAb3Bwby5jb20+Cj4K
-PiBUaGlzIHJldmVydHMgY29tbWl0IDVkYTIyNmRiZmNlM2EyZjQ0OTc4YzJjN2NmODgxNjZlNjlh
-Njc4OGIuCj4KPiBwYXRjaCBtYXkgY2F1c2Ugc3lzdGVtIG5vdCByZXNwb25kaW5nLiBpZiBjbWEg
-cGFnZXMgaXMgbGFyZ2UgaW4gbHJ1X2xpc3QKPiBhbmQgc3lzdGVtIGlzIGluIGxvd21lbW9yeSwg
-bWFueSB0YXNrcyB3b3VsZCBlbnRlciBkaXJlY3QgcmVjbGFpbSBhbmQgd2FzdGUKPiBjcHUgdGlt
-ZSB0byBpc29sYXRlIGFuZCByZXR1cm4uIFRlc3QgdGhpcyBwYXRjaCBvbiBhbmRyb2lkLTUuMTUg
-ZGV2aWNlCj4gYW5kIHRhc2tzIGNhbGwgc3RhY2sgYXMgYmVsb3cuCj4KPiBUYXNrIG5hbWU6IFVz
-YkZmcy13b3JrZXIgW2FmZmluaXR5OiAweGZmXSBwaWQ6IDMzNzQgY3B1OiA3IHByaW86IDEyMCBz
-dGFydDogZmZmZmZmODg5N2EzNWM4MAo+IHN0YXRlOiAweDBbUl0gZXhpdF9zdGF0ZTogMHgwIHN0
-YWNrIGJhc2U6IDB4ZmZmZmZmYzAxZWFhMDAwMAo+IExhc3RfZW5xdWV1ZWRfdHM6ICAgICAgIDAu
-MDAwMDAwMDAwIExhc3Rfc2xlZXBfdHM6ICAgICAgIDAuMDAwMDAwMDAwCj4gU3RhY2s6Cj4gWzxm
-ZmZmZmZkMzJlZTdkOTEwPl0gX19zd2l0Y2hfdG8rMHgxODAKPiBbPGZmZmZmZmQzMzAyMDIyZmM+
-XSBfX3NjaGVkdWxlKzB4NGRjCj4gWzxmZmZmZmZkMzMwMjAxZTA4Pl0gcHJlZW1wdF9zY2hlZHVs
-ZSsweDVjCj4gWzxmZmZmZmZkMzMwMjBhNGQwPl0gX3Jhd19zcGluX3VubG9ja19pcnErMHg1NAo+
-IFs8ZmZmZmZmZDMyZjE0OTA2Yz5dIHNocmlua19pbmFjdGl2ZV9saXN0KzB4MWQwCj4gWzxmZmZm
-ZmZkMzJmMTQzOTk4Pl0gc2hyaW5rX2xydXZlYysweDFiYwo+IFs8ZmZmZmZmZDMyZjE0N2MwYz5d
-IHNocmlua19ub2RlX21lbWNncysweDE4NAo+IFs8ZmZmZmZmZDMyZjE0NzQxND5dIHNocmlua19u
-b2RlKzB4MmQwCj4gWzxmZmZmZmZkMzJmMTQ2ZDM4Pl0gc2hyaW5rX3pvbmVzKzB4MTRjCj4gWzxm
-ZmZmZmZkMzJmMTQyZTg0Pl0gZG9fdHJ5X3RvX2ZyZWVfcGFnZXMrMHhlOAo+IFs8ZmZmZmZmZDMy
-ZjE0MmIwOD5dIHRyeV90b19mcmVlX3BhZ2VzKzB4MmUwCj4gWzxmZmZmZmZkMzJmMWE4ZTQ0Pl0g
-X19hbGxvY19wYWdlc19kaXJlY3RfcmVjbGFpbSsweDg0Cj4gWzxmZmZmZmZkMzJmMWEyZDU4Pl0g
-X19hbGxvY19wYWdlc19zbG93cGF0aCsweDRkMAo+IFs8ZmZmZmZmZDMyZjFhMjNiYz5dIF9fYWxs
-b2NfcGFnZXNfbm9kZW1hc2tbanRdKzB4MTI0Cj4gWzxmZmZmZmZkMzJmMTlhMjIwPl0gX192bWFs
-bG9jX2FyZWFfbm9kZSsweDE4OAo+IFs8ZmZmZmZmZDMyZjE5YTU0MD5dIF9fdm1hbGxvY19ub2Rl
-KzB4MTQ4Cj4gWzxmZmZmZmZkMzJmMTlhNjBjPl0gdm1hbGxvYysweDRjCj4gWzxmZmZmZmZkMzJm
-OTEwMjE4Pl0gZmZzX2VwZmlsZV9pbysweDI1OAo+IFs8ZmZmZmZmZDMzMDAzMzc4MD5dIGtyZXRw
-cm9iZV90cmFtcG9saW5lW2p0XSsweDAKPiBbPGZmZmZmZmQzMzAwMzM3ODA+XSBrcmV0cHJvYmVf
-dHJhbXBvbGluZVtqdF0rMHgwCj4gWzxmZmZmZmZkMzJmMjgxMjljPl0gX19pb19zdWJtaXRfb25l
-KzB4MWMwCj4gWzxmZmZmZmZkMzJmMjgwZTM4Pl0gaW9fc3VibWl0X29uZSsweDg4Cj4gWzxmZmZm
-ZmZkMzJmMjgwYzg4Pl0gX19kb19zeXNfaW9fc3VibWl0KzB4MTc4Cj4gWzxmZmZmZmZkMzJmMjdl
-YWMwPl0gX19hcm02NF9zeXNfaW9fc3VibWl0KzB4MjAKPiBbPGZmZmZmZmQzMmVlYWJiNzQ+XSBl
-bDBfc3ZjX2NvbW1vbi5sbHZtLjk5NjE3NDkyMjE5NDUyNTUzNzcrMHhkMAo+IFs8ZmZmZmZmZDMy
-ZWVhYmEzND5dIGRvX2VsMF9zdmMrMHgyOAo+IFs8ZmZmZmZmZDMyZmYyMWJlOD5dIGVsMF9zdmMr
-MHgxNAo+IFs8ZmZmZmZmZDMyZmYyMWI3MD5dIGVsMF9zeW5jX2hhbmRsZXIrMHg4OAo+IFs8ZmZm
-ZmZmZDMyZWUxMjhiOD5dIGVsMF9zeW5jKzB4MWI4Cj4KPiBUYXNrIG5hbWU6IGt0aHJlYWRkIFth
-ZmZpbml0eTogMHhmZl0gcGlkOiAyIGNwdTogNyBwcmlvOiAxMjAgc3RhcnQ6IGZmZmZmZjg3ODA4
-YzAwMDAKPiBzdGF0ZTogMHgwW1JdIGV4aXRfc3RhdGU6IDB4MCBzdGFjayBiYXNlOiAweGZmZmZm
-ZmMwMDgwNzgwMDAKPiBMYXN0X2VucXVldWVkX3RzOiAgICAgICAwLjAwMDAwMDAwMCBMYXN0X3Ns
-ZWVwX3RzOiAgICAgICAwLjAwMDAwMDAwMAo+IFN0YWNrOgo+IFs8ZmZmZmZmZDMyZWU3ZDkxMD5d
-IF9fc3dpdGNoX3RvKzB4MTgwCj4gWzxmZmZmZmZkMzMwMjAyMmZjPl0gX19zY2hlZHVsZSsweDRk
-Ywo+IFs8ZmZmZmZmZDMzMDIwMWUwOD5dIHByZWVtcHRfc2NoZWR1bGUrMHg1Ywo+IFs8ZmZmZmZm
-ZDMzMDIwYTRkMD5dIF9yYXdfc3Bpbl91bmxvY2tfaXJxKzB4NTQKPiBbPGZmZmZmZmQzMmYxNDkx
-Njg+XSBzaHJpbmtfaW5hY3RpdmVfbGlzdCsweDJjYwo+IFs8ZmZmZmZmZDMyZjE0Mzk5OD5dIHNo
-cmlua19scnV2ZWMrMHgxYmMKPiBbPGZmZmZmZmQzMmYxNDdjMGM+XSBzaHJpbmtfbm9kZV9tZW1j
-Z3MrMHgxODQKPiBbPGZmZmZmZmQzMmYxNDc0MTQ+XSBzaHJpbmtfbm9kZSsweDJkMAo+IFs8ZmZm
-ZmZmZDMyZjE0NmQzOD5dIHNocmlua196b25lcysweDE0Ywo+IFs8ZmZmZmZmZDMyZjE0MmU4ND5d
-IGRvX3RyeV90b19mcmVlX3BhZ2VzKzB4ZTgKPiBbPGZmZmZmZmQzMmYxNDJiMDg+XSB0cnlfdG9f
-ZnJlZV9wYWdlcysweDJlMAo+IFs8ZmZmZmZmZDMyZjFhOGU0ND5dIF9fYWxsb2NfcGFnZXNfZGly
-ZWN0X3JlY2xhaW0rMHg4NAo+IFs8ZmZmZmZmZDMyZjFhMmQ1OD5dIF9fYWxsb2NfcGFnZXNfc2xv
-d3BhdGgrMHg0ZDAKPiBbPGZmZmZmZmQzMmYxYTIzYmM+XSBfX2FsbG9jX3BhZ2VzX25vZGVtYXNr
-W2p0XSsweDEyNAo+IFs8ZmZmZmZmZDMyZjE5YTIyMD5dIF9fdm1hbGxvY19hcmVhX25vZGUrMHgx
-ODgKPiBbPGZmZmZmZmQzMmYxOWEwNDQ+XSBfX3ZtYWxsb2Nfbm9kZV9yYW5nZSsweDg4Cj4gWzxm
-ZmZmZmZkMzJmMGZiNDMwPl0gc2NzX2FsbG9jKzB4MWI4Cj4gWzxmZmZmZmZkMzJmMGZiNjJjPl0g
-c2NzX3ByZXBhcmUrMHgyMAo+IFs8ZmZmZmZmZDMyZWYyY2UwND5dIGR1cF90YXNrX3N0cnVjdCsw
-eGQ0Cj4gWzxmZmZmZmZkMzJlZjJhNzdjPl0gY29weV9wcm9jZXNzKzB4MTQ0Cj4gWzxmZmZmZmZk
-MzJlZjJiYWU0Pl0ga2VybmVsX2Nsb25lKzB4YjQKPiBbPGZmZmZmZmQzMmVmMmMwNDA+XSBrZXJu
-ZWxfdGhyZWFkKzB4NWMKPiBbPGZmZmZmZmQzMmVmNjE4ZDA+XSBrdGhyZWFkZCsweDE4NAo+Cj4g
-d2l0aG91dCB0aGlzIHBhdGNoLCB0aGUgdGFza3Mgd2lsbCByZWNsYWltIGNtYSBwYWdlcyBhbmQg
-d2FrZXVwCj4gb29tLWtpbGxlciBvciBub3Qgc3BpbiBvbiBjcHVzLgo+Cj4gU2lnbmVkLW9mZi1i
-eTogSGFpbG9uZy5MaXUgPGxpdWhhaWxvbmdAb3Bwby5jb20+Cj4gLS0tCj4gIG1tL3Ztc2Nhbi5j
-IHwgMjIgKy0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
-b24oKyksIDIxIGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL21tL3Ztc2Nhbi5jIGIvbW0v
-dm1zY2FuLmMKPiBpbmRleCAyZmU0YTExZDYzZjQuLjE5N2RkZjYyMDE5ZiAxMDA2NDQKPiAtLS0g
-YS9tbS92bXNjYW4uYwo+ICsrKyBiL21tL3Ztc2Nhbi5jCj4gQEAgLTIyNjEsMjUgKzIyNjEsNiBA
-QCBzdGF0aWMgX19hbHdheXNfaW5saW5lIHZvaWQgdXBkYXRlX2xydV9zaXplcyhzdHJ1Y3QgbHJ1
-dmVjICpscnV2ZWMsCj4KPiAgfQo+Cj4gLSNpZmRlZiBDT05GSUdfQ01BCj4gLS8qCj4gLSAqIEl0
-IGlzIHdhc3RlIG9mIGVmZm9ydCB0byBzY2FuIGFuZCByZWNsYWltIENNQSBwYWdlcyBpZiBpdCBp
-cyBub3QgYXZhaWxhYmxlCj4gLSAqIGZvciBjdXJyZW50IGFsbG9jYXRpb24gY29udGV4dC4gS3N3
-YXBkIGNhbiBub3QgYmUgZW5yb2xsZWQgYXMgaXQgY2FuIG5vdAo+IC0gKiBkaXN0aW5ndWlzaCB0
-aGlzIHNjZW5hcmlvIGJ5IHVzaW5nIHNjLT5nZnBfbWFzayA9IEdGUF9LRVJORUwKPiAtICovCj4g
-LXN0YXRpYyBib29sIHNraXBfY21hKHN0cnVjdCBmb2xpbyAqZm9saW8sIHN0cnVjdCBzY2FuX2Nv
-bnRyb2wgKnNjKQo+IC17Cj4gLSAgICAgICByZXR1cm4gIWN1cnJlbnRfaXNfa3N3YXBkKCkgJiYK
-PiAtICAgICAgICAgICAgICAgICAgICAgICBnZnBfbWlncmF0ZXR5cGUoc2MtPmdmcF9tYXNrKSAh
-PSBNSUdSQVRFX01PVkFCTEUgJiYKPiAtICAgICAgICAgICAgICAgICAgICAgICBnZXRfcGFnZWJs
-b2NrX21pZ3JhdGV0eXBlKCZmb2xpby0+cGFnZSkgPT0gTUlHUkFURV9DTUE7Cj4gLX0KPiAtI2Vs
-c2UKPiAtc3RhdGljIGJvb2wgc2tpcF9jbWEoc3RydWN0IGZvbGlvICpmb2xpbywgc3RydWN0IHNj
-YW5fY29udHJvbCAqc2MpCj4gLXsKPiAtICAgICAgIHJldHVybiBmYWxzZTsKPiAtfQo+IC0jZW5k
-aWYKPiAtCgo+TkFLLgoKPitDaGFyYW4gVGVqYSBLYWxsYSAtLSBUaGlzIGNhbiBjYXVzZSBidWls
-ZCBlcnJvcnMgd2hlbiBDT05GSUdfTFJVX0dFTj15LgoKPklmIHlvdSBwbGFuIHRvIHBvc3QgYSB2
-MiwgcGxlYXNlIGluY2x1ZGUgYSByZXByb2R1Y2VyLiBUaGFua3MuCgpDb3VsZCB5b3UgcGxlYXNl
-IHJldGVzdCB0aGUgY2FzZSB3aXRoIGJlbGxvdyBwYXRjaCwgd2hpY2ggaGFzIG5vdCBiZWVuIGlu
-IHRoZSBhb3NwIHlldC4KCkZyb206IFpoYW95YW5nIEh1YW5nIDx6aGFveWFuZy5odWFuZ0B1bmlz
-b2MuY29tPgoKQWNjb3JkaW5nIHRvIGN1cnJlbnQgQ01BIHV0aWxpemF0aW9uIHBvbGljeSwgYW4g
-YWxsb2NfcGFnZXMoR0ZQX1VTRVIpCmNvdWxkICdzdGVhbCcgVU5NT1ZBQkxFICYgUkVDTEFJTUFC
-TEUgcGFnZSBibG9ja3MgdmlhIHRoZSBoZWxwIG9mCkNNQShwYXNzIHpvbmVfd2F0ZXJtYXJrX29r
-IGJ5IGNvdW50aW5nIENNQSBpbiBidXQgdXNlIFUmUiBpbiBybXF1ZXVlKSwKd2hpY2ggY291bGQg
-bGVhZCB0byBmb2xsb3dpbmcgYWxsb2NfcGFnZXMoR0ZQX0tFUk5FTCkgZmFpbC4KU29sdmluZyB0
-aGlzIGJ5IGludHJvZHVjaW5nIHNlY29uZCB3YXRlcm1hcmsgY2hlY2tpbmcgZm9yIEdGUF9NT1ZB
-QkxFLAp3aGljaCBjb3VsZCBoYXZlIHRoZSBhbGxvY2F0aW9uIHVzZSBDTUEgd2hlbiBwcm9wZXIu
-CgotLSBGcmVlX3BhZ2VzKDMwTUIpCnwKfAotLSBXTUFSS19MT1coMjVNQikKfAotLSBGcmVlX0NN
-QSgxMk1CKQp8CnwKLS0KClNpZ25lZC1vZmYtYnk6IFpoYW95YW5nIEh1YW5nIDx6aGFveWFuZy5o
-dWFuZ0B1bmlzb2MuY29tPgotLS0KdjY6IHVwZGF0ZSBjb21tZW50cwotLS0KLS0tCiBtbS9wYWdl
-X2FsbG9jLmMgfCA0NCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0t
-LQogMSBmaWxlIGNoYW5nZWQsIDQwIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCgpkaWZm
-IC0tZ2l0IGEvbW0vcGFnZV9hbGxvYy5jIGIvbW0vcGFnZV9hbGxvYy5jCmluZGV4IDQ1MjQ1OTgz
-NmI3MS4uNWExNDZhYTdjMGFhIDEwMDY0NAotLS0gYS9tbS9wYWdlX2FsbG9jLmMKKysrIGIvbW0v
-cGFnZV9hbGxvYy5jCkBAIC0yMDc4LDYgKzIwNzgsNDMgQEAgX19ybXF1ZXVlX2ZhbGxiYWNrKHN0
-cnVjdCB6b25lICp6b25lLCBpbnQgb3JkZXIsIGludCBzdGFydF9taWdyYXRldHlwZSwKCiB9Cgor
-I2lmZGVmIENPTkZJR19DTUEKKy8qCisgKiBHRlBfTU9WQUJMRSBhbGxvY2F0aW9uIGNvdWxkIGRy
-YWluIFVOTU9WQUJMRSAmIFJFQ0xBSU1BQkxFIHBhZ2UgYmxvY2tzIHZpYQorICogdGhlIGhlbHAg
-b2YgQ01BIHdoaWNoIG1ha2VzIEdGUF9LRVJORUwgZmFpbGVkLiBDaGVja2luZyBpZiB6b25lX3dh
-dGVybWFya19vaworICogYWdhaW4gd2l0aG91dCBBTExPQ19DTUEgdG8gc2VlIGlmIHRvIHVzZSBD
-TUEgZmlyc3QuCisgKi8KK3N0YXRpYyBib29sIHVzZV9jbWFfZmlyc3Qoc3RydWN0IHpvbmUgKnpv
-bmUsIHVuc2lnbmVkIGludCBvcmRlciwgdW5zaWduZWQgaW50IGFsbG9jX2ZsYWdzKQoreworICAg
-ICAgIHVuc2lnbmVkIGxvbmcgd2F0ZXJtYXJrOworICAgICAgIGJvb2wgY21hX2ZpcnN0ID0gZmFs
-c2U7CisKKyAgICAgICB3YXRlcm1hcmsgPSB3bWFya19wYWdlcyh6b25lLCBhbGxvY19mbGFncyAm
-IEFMTE9DX1dNQVJLX01BU0spOworICAgICAgIC8qIGNoZWNrIGlmIEdGUF9NT1ZBQkxFIHBhc3Mg
-cHJldmlvdXMgem9uZV93YXRlcm1hcmtfb2sgdmlhIHRoZSBoZWxwIG9mIENNQSAqLworICAgICAg
-IGlmICh6b25lX3dhdGVybWFya19vayh6b25lLCBvcmRlciwgd2F0ZXJtYXJrLCAwLCBhbGxvY19m
-bGFncyAmICh+QUxMT0NfQ01BKSkpIHsKKyAgICAgICAgICAgICAgIC8qCisgICAgICAgICAgICAg
-ICAgKiBCYWxhbmNlIG1vdmFibGUgYWxsb2NhdGlvbnMgYmV0d2VlbiByZWd1bGFyIGFuZCBDTUEg
-YXJlYXMgYnkKKyAgICAgICAgICAgICAgICAqIGFsbG9jYXRpbmcgZnJvbSBDTUEgd2hlbiBvdmVy
-IGhhbGYgb2YgdGhlIHpvbmUncyBmcmVlIG1lbW9yeQorICAgICAgICAgICAgICAgICogaXMgaW4g
-dGhlIENNQSBhcmVhLgorICAgICAgICAgICAgICAgICovCisgICAgICAgICAgICAgICBjbWFfZmly
-c3QgPSAoem9uZV9wYWdlX3N0YXRlKHpvbmUsIE5SX0ZSRUVfQ01BX1BBR0VTKSA+CisgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgem9uZV9wYWdlX3N0YXRlKHpvbmUsIE5SX0ZSRUVfUEFH
-RVMpIC8gMik7CisgICAgICAgfSBlbHNlIHsKKyAgICAgICAgICAgICAgIC8qCisgICAgICAgICAg
-ICAgICAgKiB3YXRlcm1hcmsgZmFpbGVkIG1lYW5zIFVOTU9WQUJMRSAmIFJFQ0xBSU1CTEUgaXMg
-bm90IGVub3VnaAorICAgICAgICAgICAgICAgICogbm93LCB3ZSBzaG91bGQgdXNlIGNtYSBmaXJz
-dCB0byBrZWVwIHRoZW0gc3RheSBhcm91bmQgdGhlCisgICAgICAgICAgICAgICAgKiBjb3JyZXNw
-b25kaW5nIHdhdGVybWFyaworICAgICAgICAgICAgICAgICovCisgICAgICAgICAgICAgICBjbWFf
-Zmlyc3QgPSB0cnVlOworICAgICAgIH0KKyAgICAgICByZXR1cm4gY21hX2ZpcnN0OworfQorI2Vs
-c2UKK3N0YXRpYyBib29sIHVzZV9jbWFfZmlyc3Qoc3RydWN0IHpvbmUgKnpvbmUsIHVuc2lnbmVk
-IGludCBvcmRlciwgdW5zaWduZWQgaW50IGFsbG9jX2ZsYWdzKQoreworICAgICAgIHJldHVybiBm
-YWxzZTsKK30KKyNlbmRpZgogLyoKICAqIERvIHRoZSBoYXJkIHdvcmsgb2YgcmVtb3ZpbmcgYW4g
-ZWxlbWVudCBmcm9tIHRoZSBidWRkeSBhbGxvY2F0b3IuCiAgKiBDYWxsIG1lIHdpdGggdGhlIHpv
-bmUtPmxvY2sgYWxyZWFkeSBoZWxkLgpAQCAtMjA5MSwxMiArMjEyOCwxMSBAQCBfX3JtcXVldWUo
-c3RydWN0IHpvbmUgKnpvbmUsIHVuc2lnbmVkIGludCBvcmRlciwgaW50IG1pZ3JhdGV0eXBlLAog
-ICAgICAgIGlmIChJU19FTkFCTEVEKENPTkZJR19DTUEpKSB7CiAgICAgICAgICAgICAgICAvKgog
-ICAgICAgICAgICAgICAgICogQmFsYW5jZSBtb3ZhYmxlIGFsbG9jYXRpb25zIGJldHdlZW4gcmVn
-dWxhciBhbmQgQ01BIGFyZWFzIGJ5Ci0gICAgICAgICAgICAgICAgKiBhbGxvY2F0aW5nIGZyb20g
-Q01BIHdoZW4gb3ZlciBoYWxmIG9mIHRoZSB6b25lJ3MgZnJlZSBtZW1vcnkKLSAgICAgICAgICAg
-ICAgICAqIGlzIGluIHRoZSBDTUEgYXJlYS4KKyAgICAgICAgICAgICAgICAqIGFsbG9jYXRpbmcg
-ZnJvbSBDTUEgYmFzZSBvbiBqdWRnaW5nIHpvbmVfd2F0ZXJtYXJrX29rIGFnYWluCisgICAgICAg
-ICAgICAgICAgKiB0byBzZWUgaWYgdGhlIGxhdGVzdCBjaGVjayBnb3QgcGFzcyB2aWEgdGhlIGhl
-bHAgb2YgQ01BCiAgICAgICAgICAgICAgICAgKi8KICAgICAgICAgICAgICAgIGlmIChhbGxvY19m
-bGFncyAmIEFMTE9DX0NNQSAmJgotICAgICAgICAgICAgICAgICAgIHpvbmVfcGFnZV9zdGF0ZSh6
-b25lLCBOUl9GUkVFX0NNQV9QQUdFUykgPgotICAgICAgICAgICAgICAgICAgIHpvbmVfcGFnZV9z
-dGF0ZSh6b25lLCBOUl9GUkVFX1BBR0VTKSAvIDIpIHsKKyAgICAgICAgICAgICAgICAgICAgICAg
-dXNlX2NtYV9maXJzdCh6b25lLCBvcmRlciwgYWxsb2NfZmxhZ3MpKSB7CiAgICAgICAgICAgICAg
-ICAgICAgICAgIHBhZ2UgPSBfX3JtcXVldWVfY21hX2ZhbGxiYWNrKHpvbmUsIG9yZGVyKTsKICAg
-ICAgICAgICAgICAgICAgICAgICAgaWYgKHBhZ2UpCiAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgcmV0dXJuIHBhZ2U7Ci0tCgoKPiAgLyoKPiAgICogSXNvbGF0aW5nIHBhZ2UgZnJvbSB0
-aGUgbHJ1dmVjIHRvIGZpbGwgaW4gQGRzdCBsaXN0IGJ5IG5yX3RvX3NjYW4gdGltZXMuCj4gICAq
-Cj4gQEAgLTIzMjYsOCArMjMwNyw3IEBAIHN0YXRpYyB1bnNpZ25lZCBsb25nIGlzb2xhdGVfbHJ1
-X2ZvbGlvcyh1bnNpZ25lZCBsb25nIG5yX3RvX3NjYW4sCj4gICAgICAgICAgICAgICAgIG5yX3Bh
-Z2VzID0gZm9saW9fbnJfcGFnZXMoZm9saW8pOwo+ICAgICAgICAgICAgICAgICB0b3RhbF9zY2Fu
-ICs9IG5yX3BhZ2VzOwo+Cj4gLSAgICAgICAgICAgICAgIGlmIChmb2xpb196b25lbnVtKGZvbGlv
-KSA+IHNjLT5yZWNsYWltX2lkeCB8fAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-c2tpcF9jbWEoZm9saW8sIHNjKSkgewo+ICsgICAgICAgICAgICAgICBpZiAoZm9saW9fem9uZW51
-bShmb2xpbykgPiBzYy0+cmVjbGFpbV9pZHgpIHsKPiAgICAgICAgICAgICAgICAgICAgICAgICBu
-cl9za2lwcGVkW2ZvbGlvX3pvbmVudW0oZm9saW8pXSArPSBucl9wYWdlczsKPiAgICAgICAgICAg
-ICAgICAgICAgICAgICBtb3ZlX3RvID0gJmZvbGlvc19za2lwcGVkOwo+ICAgICAgICAgICAgICAg
-ICAgICAgICAgIGdvdG8gbW92ZTsKPiAtLQo+IDIuMzQuMQo+Cj4K
+From: "Hailong.Liu" <liuhailong@oppo.com>
+
+This reverts
+commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not eligible")
+commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
+
+skip_cma may cause system not responding. if cma pages is large in lru_list
+and system is in lowmemory, many tasks would direct reclaim and waste
+cpu time to isolate_lru_pages and return.
+
+Test this patch on android-5.15 8G device
+reproducer:
+- cma_declare_contiguous 3G pages
+- set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
+  only.
+- run a memleak process in userspace
+
+trace the trace_mm_vmscan_lru_isolate which get
+[ 1178.059160] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 total_scan: 24385 skipped: 24382
+[ 1178.059699] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 total_scan: 24412 skipped: 24401
+[ 1178.061747] 2825  3405 I UsbFfs-worker   : isolate_lru_pages:1895 total_scan: 24412 skipped: 24401
+From the log, tasks is waste time to scan lru list and call stack as below.
+
+Task name: UsbFfs-worker [affinity: 0xff] pid: 3374 cpu: 7 prio: 120 start: ffffff8897a35c80
+state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc01eaa0000
+Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
+Stack:
+[<ffffffd32ee7d910>] __switch_to+0x180
+[<ffffffd3302022fc>] __schedule+0x4dc
+[<ffffffd330201e08>] preempt_schedule+0x5c
+[<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
+[<ffffffd32f14906c>] shrink_inactive_list+0x1d0
+[<ffffffd32f143998>] shrink_lruvec+0x1bc
+[<ffffffd32f147c0c>] shrink_node_memcgs+0x184
+[<ffffffd32f147414>] shrink_node+0x2d0
+[<ffffffd32f146d38>] shrink_zones+0x14c
+[<ffffffd32f142e84>] do_try_to_free_pages+0xe8
+[<ffffffd32f142b08>] try_to_free_pages+0x2e0
+[<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
+[<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
+[<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
+[<ffffffd32f19a220>] __vmalloc_area_node+0x188
+[<ffffffd32f19a540>] __vmalloc_node+0x148
+[<ffffffd32f19a60c>] vmalloc+0x4c
+[<ffffffd32f910218>] ffs_epfile_io+0x258
+[<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
+[<ffffffd330033780>] kretprobe_trampoline[jt]+0x0
+[<ffffffd32f28129c>] __io_submit_one+0x1c0
+[<ffffffd32f280e38>] io_submit_one+0x88
+[<ffffffd32f280c88>] __do_sys_io_submit+0x178
+[<ffffffd32f27eac0>] __arm64_sys_io_submit+0x20
+[<ffffffd32eeabb74>] el0_svc_common.llvm.9961749221945255377+0xd0
+[<ffffffd32eeaba34>] do_el0_svc+0x28
+[<ffffffd32ff21be8>] el0_svc+0x14
+[<ffffffd32ff21b70>] el0_sync_handler+0x88
+[<ffffffd32ee128b8>] el0_sync+0x1b8
+
+Task name: kthreadd [affinity: 0xff] pid: 2 cpu: 7 prio: 120 start: ffffff87808c0000
+state: 0x0[R] exit_state: 0x0 stack base: 0xffffffc008078000
+Last_enqueued_ts:       0.000000000 Last_sleep_ts:       0.000000000
+Stack:
+[<ffffffd32ee7d910>] __switch_to+0x180
+[<ffffffd3302022fc>] __schedule+0x4dc
+[<ffffffd330201e08>] preempt_schedule+0x5c
+[<ffffffd33020a4d0>] _raw_spin_unlock_irq+0x54
+[<ffffffd32f149168>] shrink_inactive_list+0x2cc
+[<ffffffd32f143998>] shrink_lruvec+0x1bc
+[<ffffffd32f147c0c>] shrink_node_memcgs+0x184
+[<ffffffd32f147414>] shrink_node+0x2d0
+[<ffffffd32f146d38>] shrink_zones+0x14c
+[<ffffffd32f142e84>] do_try_to_free_pages+0xe8
+[<ffffffd32f142b08>] try_to_free_pages+0x2e0
+[<ffffffd32f1a8e44>] __alloc_pages_direct_reclaim+0x84
+[<ffffffd32f1a2d58>] __alloc_pages_slowpath+0x4d0
+[<ffffffd32f1a23bc>] __alloc_pages_nodemask[jt]+0x124
+[<ffffffd32f19a220>] __vmalloc_area_node+0x188
+[<ffffffd32f19a044>] __vmalloc_node_range+0x88
+[<ffffffd32f0fb430>] scs_alloc+0x1b8
+[<ffffffd32f0fb62c>] scs_prepare+0x20
+[<ffffffd32ef2ce04>] dup_task_struct+0xd4
+[<ffffffd32ef2a77c>] copy_process+0x144
+[<ffffffd32ef2bae4>] kernel_clone+0xb4
+[<ffffffd32ef2c040>] kernel_thread+0x5c
+[<ffffffd32ef618d0>] kthreadd+0x184
+
+Signed-off-by: Hailong.Liu <liuhailong@oppo.com>
+---
+ mm/vmscan.c | 24 ++----------------------
+ 1 file changed, 2 insertions(+), 22 deletions(-)
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 6f13394b112e..29306c29309f 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2261,25 +2261,6 @@ static __always_inline void update_lru_sizes(struct lruvec *lruvec,
+
+ }
+
+-#ifdef CONFIG_CMA
+-/*
+- * It is waste of effort to scan and reclaim CMA pages if it is not available
+- * for current allocation context. Kswapd can not be enrolled as it can not
+- * distinguish this scenario by using sc->gfp_mask = GFP_KERNEL
+- */
+-static bool skip_cma(struct folio *folio, struct scan_control *sc)
+-{
+-	return !current_is_kswapd() &&
+-			gfp_migratetype(sc->gfp_mask) != MIGRATE_MOVABLE &&
+-			get_pageblock_migratetype(&folio->page) == MIGRATE_CMA;
+-}
+-#else
+-static bool skip_cma(struct folio *folio, struct scan_control *sc)
+-{
+-	return false;
+-}
+-#endif
+-
+ /*
+  * Isolating page from the lruvec to fill in @dst list by nr_to_scan times.
+  *
+@@ -2326,8 +2307,7 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
+ 		nr_pages = folio_nr_pages(folio);
+ 		total_scan += nr_pages;
+
+-		if (folio_zonenum(folio) > sc->reclaim_idx ||
+-				skip_cma(folio, sc)) {
++		if (folio_zonenum(folio) > sc->reclaim_idx) {
+ 			nr_skipped[folio_zonenum(folio)] += nr_pages;
+ 			move_to = &folios_skipped;
+ 			goto move;
+@@ -4945,7 +4925,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, struct scan_c
+ 	}
+
+ 	/* ineligible */
+-	if (zone > sc->reclaim_idx || skip_cma(folio, sc)) {
++	if (zone > sc->reclaim_idx) {
+ 		gen = folio_inc_gen(lruvec, folio, false);
+ 		list_move_tail(&folio->lru, &lrugen->folios[gen][type][zone]);
+ 		return true;
+--
+Changes in v2:
+- add reproducer
+- fix build error on v6.6-rc7
+
