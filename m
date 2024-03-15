@@ -1,166 +1,225 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F155C61C;
-	Thu, 14 Mar 2024 21:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94061870
+	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 00:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710450053; cv=none; b=ob8ac6TZOOKYXiXkTH3rspt+c/ZjLLGkyM/x2vSjCmMP9TflF8+gvTc5mjx1K1u0K736ab1jBCy7gp1BVYi63eLQ4l1rZW2rTdFJ8GAUXUEdEvO9XhZDlzcsSy1lpCu3C+RoYBB3AWRsJi18YFjBYLXMlhSP/cH5kQ1u8koFm8s=
+	t=1710463224; cv=none; b=qsoVRcbTwy7Q2woenzFBsks47wJJZN1SDNgLIWI84aha4TyCkX1Ej+WmUwi+w7WP3UkhTLHHLZUhwpp7jPU6mCCq2HemQQa2U5+MqEXAHhUGsfXHIzBU7C3khgAzF5N1u9SPcYkNjJGNp1LLg5TSk/ZCvblFSt2w51RtI/HdFg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710450053; c=relaxed/simple;
-	bh=NLNh7zP2xa/u7v8yFQNbepClPmGY2IXg7oe0UqaMlw8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=f4slrCIvMr7UcT8TQlJGWx21hgs2WcDlvDtOtkU/y/LQlOuf49lC6KJCQqzbP2orJM/wgGNOY387vM92fLHanGhfJ7Q+v5i0CY4Z2PFW1KhYbTplC/7CeBRAlttVSUMlNMAvna7C5FEatcvLhRWN1ixOZHo6BHhZ08dfCKWP2bA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bk3cVo5L; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710463224; c=relaxed/simple;
+	bh=NoSccAl9xGPK+oHiLgoTLVloq9O0AL5byWeM8LEUYNg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MOFDNNDhe5Oj96lx6BUDEM/Do/6YRdoR2OTmEE2UZMjHOBm6JXqkCWdgmox7Z/VM2KYnysM6sZO109pnEeyKB33SFcR6ilkMW0wSIrwAB/7SOsPEj/1pf+8JpSSIpfTa2DB/18AonlMJDvqHOJxE3v2NOL0lAh8JIK9zTFscb/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JiSPVemR; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bk3cVo5L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710450051; x=1741986051;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NLNh7zP2xa/u7v8yFQNbepClPmGY2IXg7oe0UqaMlw8=;
-  b=bk3cVo5LEcGCP/ck2bERRQCmuJUTC3sCQhVUXGJezt0mBKkGqeIeoQxz
-   D8c9pPfr8ZfT4rxl+FBYSE7I5tuujpRO1ryyAl9jfe91pD8qYegbG+Uqm
-   5gINv4H2ZpQzEzFrw8nP6qYf0M5o8PnTqlGobw+EzNK0zgvw2iO1KLhKF
-   MRqrkNNYPOLy/WXYB98o1HvSGowLf7R8mm8//roO+xxytTiRKwsYT3/qw
-   xtjntNfgEri3m7A39pXmhLK/LuFqY4HF4OkhIf603CqeMP5wQDRawRXBj
-   XmDkMIewSYn75ZBS1UYdJ4Tzo6KB4vCNm8hgY33lzundssjKuK3scUazA
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="5235247"
-X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
-   d="scan'208";a="5235247"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 14:00:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
-   d="scan'208";a="43451811"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Mar 2024 14:00:44 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rksBu-000DnF-0e;
-	Thu, 14 Mar 2024 21:00:42 +0000
-Date: Fri, 15 Mar 2024 05:00:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dorcas Anono Litunya <anonolitunya@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [hverkuil-media-tree:outreachy-vivid 51/53]
- drivers/media/test-drivers/vivid/vivid-ctrls.c:1094:57: warning: variable
- 'dev' is uninitialized when used within its own initialization
-Message-ID: <202403150440.BSFRkvlO-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JiSPVemR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710463220;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rD9PMe8yU5eMdaSane7c32I3yk5uyzvTEeoSSwBr95c=;
+	b=JiSPVemRnlGhJyEftPSazXhKooUJ7DKJq4lpg9U0XEEylbUTfPS3NXamN2UYcJ87jgJs/v
+	lDZTyao/y+KjqRicK88+H5lmOE+ocILRmtEB6OPSGKofL6Oyc1ER0vJf75UT0ovPDVgvLS
+	vVpiLHtPgMkCEzo/rFowS6o/4NuJeRc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-575-sXI0p-rONR2N34jpn06A1Q-1; Thu,
+ 14 Mar 2024 20:40:16 -0400
+X-MC-Unique: sXI0p-rONR2N34jpn06A1Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16D4D1C41A13;
+	Fri, 15 Mar 2024 00:40:16 +0000 (UTC)
+Received: from [172.64.4.48] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1F9F240C6DB3;
+	Fri, 15 Mar 2024 00:40:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 22 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, fe46a7dd)
+Date: Fri, 15 Mar 2024 00:40:15 -0000
+To: llvm@lists.linux.dev, bhe@redhat.com, shinichiro.kawasaki@wdc.com,
+ yizhan@redhat.com, xiawu@redhat.com, yiyan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <91457.124031420401600235@us-mta-575.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git outreachy-vivid
-head:   4964cefc537c29dc9946430b8334a6de73a937b4
-commit: a9ce0ed91ef0b798d3e8cefb238e33b2ea9a597d [51/53] media: vivid: Remove loop video ctrl
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240315/202403150440.BSFRkvlO-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240315/202403150440.BSFRkvlO-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403150440.BSFRkvlO-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/test-drivers/vivid/vivid-ctrls.c:1094:57: warning: variable 'dev' is uninitialized when used within its own initialization [-Wuninitialized]
-                           struct vivid_dev *dev = vivid_output_is_connected_to(dev);
-                                             ~~~                                ^~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/dev +1094 drivers/media/test-drivers/vivid/vivid-ctrls.c
+Kernel information:
+    Commit message: Merge tag 'sound-6.9-rc1' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/tiwai/sound
 
-  1056	
-  1057	static int vivid_vid_out_s_ctrl(struct v4l2_ctrl *ctrl)
-  1058	{
-  1059		struct vivid_dev *dev = container_of(ctrl->handler, struct vivid_dev, ctrl_hdl_vid_out);
-  1060		struct v4l2_bt_timings *bt = &dev->dv_timings_out.bt;
-  1061		u32 display_present = 0;
-  1062		unsigned int i, j, bus_idx;
-  1063	
-  1064		switch (ctrl->id) {
-  1065		case VIVID_CID_HAS_CROP_OUT:
-  1066			dev->has_crop_out = ctrl->val;
-  1067			vivid_update_format_out(dev);
-  1068			break;
-  1069		case VIVID_CID_HAS_COMPOSE_OUT:
-  1070			dev->has_compose_out = ctrl->val;
-  1071			vivid_update_format_out(dev);
-  1072			break;
-  1073		case VIVID_CID_HAS_SCALER_OUT:
-  1074			dev->has_scaler_out = ctrl->val;
-  1075			vivid_update_format_out(dev);
-  1076			break;
-  1077		case V4L2_CID_DV_TX_MODE:
-  1078			dev->dvi_d_out = ctrl->val == V4L2_DV_TX_MODE_DVI_D;
-  1079			if (!vivid_is_hdmi_out(dev))
-  1080				break;
-  1081			if (!dev->dvi_d_out && (bt->flags & V4L2_DV_FL_IS_CE_VIDEO)) {
-  1082				if (bt->width == 720 && bt->height <= 576)
-  1083					dev->colorspace_out = V4L2_COLORSPACE_SMPTE170M;
-  1084				else
-  1085					dev->colorspace_out = V4L2_COLORSPACE_REC709;
-  1086				dev->quantization_out = V4L2_QUANTIZATION_DEFAULT;
-  1087			} else {
-  1088				dev->colorspace_out = V4L2_COLORSPACE_SRGB;
-  1089				dev->quantization_out = dev->dvi_d_out ?
-  1090						V4L2_QUANTIZATION_LIM_RANGE :
-  1091						V4L2_QUANTIZATION_DEFAULT;
-  1092			}
-  1093			if (vivid_output_is_connected_to(dev)) {
-> 1094				struct vivid_dev *dev = vivid_output_is_connected_to(dev);
-  1095	
-  1096				vivid_send_source_change(dev, HDMI);
-  1097			}
-  1098			break;
-  1099		case VIVID_CID_DISPLAY_PRESENT:
-  1100			if (dev->output_type[dev->output] != HDMI)
-  1101				break;
-  1102	
-  1103			dev->display_present[dev->output] = ctrl->val;
-  1104			for (i = 0, j = 0; i < dev->num_outputs; i++)
-  1105				if (dev->output_type[i] == HDMI)
-  1106					display_present |=
-  1107						dev->display_present[i] << j++;
-  1108	
-  1109			__v4l2_ctrl_s_ctrl(dev->ctrl_tx_rxsense, display_present);
-  1110	
-  1111			if (dev->edid_blocks) {
-  1112				__v4l2_ctrl_s_ctrl(dev->ctrl_tx_edid_present,
-  1113						   display_present);
-  1114				__v4l2_ctrl_s_ctrl(dev->ctrl_tx_hotplug,
-  1115						   display_present);
-  1116			}
-  1117	
-  1118			bus_idx = dev->cec_output2bus_map[dev->output];
-  1119			if (!dev->cec_tx_adap[bus_idx])
-  1120				break;
-  1121	
-  1122			if (ctrl->val && dev->edid_blocks)
-  1123				cec_s_phys_addr(dev->cec_tx_adap[bus_idx],
-  1124						dev->cec_tx_adap[bus_idx]->phys_addr,
-  1125						false);
-  1126			else
-  1127				cec_phys_addr_invalidate(dev->cec_tx_adap[bus_idx]);
-  1128	
-  1129			break;
-  1130		}
-  1131		return 0;
-  1132	}
-  1133	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/134891
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11677907
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kdump-sysrq-c
+         ppc64le - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11678073
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kdump-sysrq-c
+           s390x - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11678086
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+           s390x - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11678112
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kdump-sysrq-c
+          x86_64 - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11677961
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+          x86_64 - kdump - sysrq-c
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11677991
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kdump-sysrq-c
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
+=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
+system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
+s=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
+            Affected tests:
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
+                 ppc64le - Boot test
+                 ppc64le - Reboot test
+                   s390x - Boot test
+                   s390x - Reboot test
+                  x86_64 - Boot test
+                  x86_64 - Reboot test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Reboot test
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     aarch64 - Reboot test
+     ppc64le - Memory function: memfd_create
+     ppc64le - kdump - file-load
+     ppc64le - Reboot test
+       s390x - Storage - blktests - nvme-tcp - upstream
+       s390x - Storage - swraid scsi_raid
+       s390x - stress: stress-ng - cpu-cache
+       s390x - stress: stress-ng - memory
+       s390x - Reboot test
+       s390x - Memory function: memfd_create
+       s390x - kdump - file-load
+       s390x - Reboot test
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Storage - blktests - nvme-tcp - upstream
+      x86_64 - Storage - swraid scsi_raid
+      x86_64 - stress: stress-ng - cpu-cache
+      x86_64 - stress: stress-ng - memory
+      x86_64 - Reboot test
+      x86_64 - Memory function: memfd_create
+      x86_64 - kdump - file-load
+      x86_64 - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
