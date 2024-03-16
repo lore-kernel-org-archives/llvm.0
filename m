@@ -1,118 +1,156 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFB759B6C
-	for <llvm@lists.linux.dev>; Fri, 15 Mar 2024 23:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E803B4C9A;
+	Sat, 16 Mar 2024 01:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710546291; cv=none; b=FtFkwJ7KqOiZvTnO39jtHPG/1ZsTQ+T5B4Dd91l2Ry/pFiHXuqmM+ODsX/dDGNBrzcNBf+2OmjMvJXc9IrFjFnqmjwep06iXf9MG4Cuau6R3qI5SuHQ60FW635y/NV1YhimPYeoTgkov0kB707tkb7gy+z8qIqYOy0vttxy2/fA=
+	t=1710552873; cv=none; b=abkoJyBHMoY8LFTbWDq2qVGYB57zyyU6rCejPX2pAlKM6M8juqsAgHcTE94uMMjEFZGaqO7BLBoKdI89T8f32AApCdbAlkE7Ycp1uDkBy47YvBpEtP4a0jeNyqstgTU0X/RGSAw+RfHFuf5zwXv800bkJj2EuOwPT++29Ifta08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710546291; c=relaxed/simple;
-	bh=UP/vv0P23On/QzgGKCR3QJOcuR1vItgINWra9wRRCdQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=mfX1f/tfNQL2A5jHuasvyGi4X67LySD0HxcVf3gSv+aT+5EWHSIe+HdXcN1+jhmusndl0CHyWdPztpB4x6vor9b+R6eCG0BGPpZn1ew+qhDbNRxZK8Pn2t8qWWR+V/1VCRJ9dVyJkVjvyKhlJJOdRfMNz1pUsE5S+WI5DzKrIM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bpkLH16S; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ceUaHtTA; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1710552873; c=relaxed/simple;
+	bh=SvLDBwOUqZV+K+QOlz7a+pCZMB7+vQLqmYBJsWljF7M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i5wP56RsWC8WNvWx1I/yTrnNNutxpWi4nOMj3hq3Mxc9yCiFzn79lrYGEvT0B+GGnFoZCWkRPDgYV0HjLEt5gmgjKTw1L6Wwx8o7hytjaAPe2gfoa7VWvYiVzR+hFyl3pdpUinI/OspqnTPppVWfYMHriZ80pSpwLAhS547t4Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZBh24sYr; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bpkLH16S";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ceUaHtTA"
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1710546286;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UP/vv0P23On/QzgGKCR3QJOcuR1vItgINWra9wRRCdQ=;
-	b=bpkLH16STURVE77ulmGqn2pCSQjlaU84IlC8Sf/xXloGqJGl9JawtRkgfLqTUj85ovH2P6
-	hlgO+WRlcfyTOIGLCOaRuAyCaxFKsGZWD8yhl716gt+i1uSx2a7cCWmkHMK3gHU9dsSMn8
-	QkNnKL0LELQjtEPWZbbe1ERcuqscjZEixJIpP1cdyHg02/OgCb76hmZrVXKQsDvXRW/tiq
-	wPVVv736oq8qdjNwbGEPFNg94lyiqbiZIQYDg1xiczXzjz/4X6vWC3MEIdjf8IjdmWpOgo
-	7NrZmp5OuAO+UYuEidQ466JJn4s8dzfvCWMstC/dOhQMroIT51w5f0V9r15OaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1710546286;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UP/vv0P23On/QzgGKCR3QJOcuR1vItgINWra9wRRCdQ=;
-	b=ceUaHtTADsLgNSlJzbgHxkvjzP6iI1RqJIlSXh180ZO45Ht6krTS0MxsM8c38BfcEDinIx
-	kufqNJUumv2vBNAg==
-To: Adam Dunlap <acdunlap@google.com>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, "Peter
- Zijlstra (Intel)" <peterz@infradead.org>, Arjan van de Ven
- <arjan@linux.intel.com>, Wei Liu <wei.liu@kernel.org>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Jacob Xu
- <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, Kevin Loughlin
- <kevinloughlin@google.com>, Peter Gonda <pgonda@google.com>, Ard
- Biesheuvel <ardb@kernel.org>
-Cc: Adam Dunlap <acdunlap@google.com>
-Subject: Re: [PATCH v3] x86/asm: Force native_apic_mem_read to use mov
-In-Reply-To: <20240206223620.1833276-1-acdunlap@google.com>
-References: <20240206223620.1833276-1-acdunlap@google.com>
-Date: Sat, 16 Mar 2024 00:44:45 +0100
-Message-ID: <87frwrjc0i.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZBh24sYr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710552870; x=1742088870;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SvLDBwOUqZV+K+QOlz7a+pCZMB7+vQLqmYBJsWljF7M=;
+  b=ZBh24sYrev59uPoisFfrW+UbjKHQctZ6/BDLIyek68sHqGGVvkFaD3fK
+   x7NegEOuifjOZnlzCPf8UrCsE3NzriWpWlVcD6gmDQbqGaHz6BSOwV2wC
+   kzigv2lX2Z3DjNIldcS01F90GvJ2jwwuhAOP7gtdAEaY6NWBFBZjBD6hb
+   zv9vVUw53EzJTAutH7zwcPX61P+tbyFiUAy/H+El1V4RTx28rH7+6q5Wo
+   EASYrsFaOe/m0GBst3DkbEoVYHGc4UIJCzrFkaBso32+5FyLSzxhg6UW4
+   7BFuXitZ1h3Gp7dHvrJBPSwsmyCRhFwmcRSQtRfWIr/HQS9iMVw65NcEU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11014"; a="5298749"
+X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
+   d="scan'208";a="5298749"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 18:34:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,129,1708416000"; 
+   d="scan'208";a="12928860"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 15 Mar 2024 18:34:27 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rlIwL-000Ewf-0T;
+	Sat, 16 Mar 2024 01:34:25 +0000
+Date: Sat, 16 Mar 2024 09:34:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Saurav Kashyap <skashyap@marvell.com>, martin.petersen@oracle.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
+	Saurav Kashyap <skashyap@marvell.com>,
+	Nilesh Javali <njavali@marvell.com>
+Subject: Re: [PATCH 2/3] qedf: Wait for stag work during unload.
+Message-ID: <202403160959.uNobO4UE-lkp@intel.com>
+References: <20240315100600.19568-3-skashyap@marvell.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240315100600.19568-3-skashyap@marvell.com>
 
-On Tue, Feb 06 2024 at 14:36, Adam Dunlap wrote:
+Hi Saurav,
 
-Can you please use foo() as notation for functions all over the place
-including the subject line, which also wants s/mov/the MOV instruction/
-and use MOV instead of mov.
+kernel test robot noticed the following build warnings:
 
-> When done from a virtual machine, instructions that touch APIC memory
-> must be emulated. By convention, MMIO access are typically performed via
-> io.h helpers such as 'readl()' or 'writeq()' to simplify instruction
-> emulation/decoding (ex: in KVM hosts and SEV guests) [0].
->
-> Currently, native_apic_mem_read does not follow this convention,
-> allowing the compiler to emit instructions other than the mov generated
-> by readl(). In particular, when compiled with clang and run as a SEV-ES
-> or SEV-SNP guest, the compiler would emit a testl instruction which is
-> not supported by the SEV-ES emulator, causing a boot failure in that
-> environment. It is likely the same problem would happen in a TDX guest
-> as that uses the same instruction emulator as SEV-ES.
->
-> To make sure all emulators can emulate APIC memory reads via mov, use
-> the readl function in native_apic_mem_read. It is expected that any
-> emulator would support mov in any addressing mode it is the most generic
-> and is what is ususally emitted currently.
->
-> The testl instruction is emitted when native_apic_mem_read
-> is inlined into __xapic_wait_icr_idle. The emulator comes from
-> insn_decode_mmio in arch/x86/lib/insn-eval.c. It would not be worth it
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next linus/master v6.8 next-20240315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-s/It would/It's/
+url:    https://github.com/intel-lab-lkp/linux/commits/Saurav-Kashyap/qedf-Don-t-process-stag-work-during-unload-and-recovery/20240315-180830
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20240315100600.19568-3-skashyap%40marvell.com
+patch subject: [PATCH 2/3] qedf: Wait for stag work during unload.
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240316/202403160959.uNobO4UE-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240316/202403160959.uNobO4UE-lkp@intel.com/reproduce)
 
-Either it's a fact or not.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403160959.uNobO4UE-lkp@intel.com/
 
-> to extend insn_decode_mmio to support more instructions since, in
-> theory, the compiler could choose to output nearly any instruction for
-> such reads which would bloat the emulator beyond reason.
->
-> An alterative to this approach would be to use inline assembly instead
-> of the readl helper, as that is what native_apic_mem_write does. I
-> consider using readl to be cleaner since it is documented to be a simple
-> wrapper and inline assembly is less readable. native_apic_mem_write
-> cannot be trivially updated to use writel since it appears to use custom
-> asm to workaround for a processor-specific bug.
+All warnings (new ones prefixed by >>):
 
-How is this paragraph relevant?
+>> drivers/scsi/qedf/qedf_main.c:923:37: warning: variable 'qedf' is uninitialized when used here [-Wuninitialized]
+     923 |                 clear_bit(QEDF_STAG_IN_PROGRESS, &qedf->flags);
+         |                                                   ^~~~
+   drivers/scsi/qedf/qedf_main.c:919:23: note: initialize the variable 'qedf' to silence this warning
+     919 |         struct qedf_ctx *qedf;
+         |                              ^
+         |                               = NULL
+   1 warning generated.
 
-> [0] https://lore.kernel.org/all/20220405232939.73860-12-kirill.shutemov@linux.intel.com/
->
-> Signed-off-by: Adam Dunlap <acdunlap@google.com>
-> Tested-by: Kevin Loughlin <kevinloughlin@google.com>
 
-Other than the above nit picks:
+vim +/qedf +923 drivers/scsi/qedf/qedf_main.c
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+   915	
+   916	/* Performs soft reset of qedf_ctx by simulating a link down/up */
+   917	void qedf_ctx_soft_reset(struct fc_lport *lport)
+   918	{
+   919		struct qedf_ctx *qedf;
+   920		struct qed_link_output if_link;
+   921	
+   922		if (lport->vport) {
+ > 923			clear_bit(QEDF_STAG_IN_PROGRESS, &qedf->flags);
+   924			printk_ratelimited("Cannot issue host reset on NPIV port.\n");
+   925			return;
+   926		}
+   927	
+   928		qedf = lport_priv(lport);
+   929	
+   930		qedf->flogi_pending = 0;
+   931		/* For host reset, essentially do a soft link up/down */
+   932		atomic_set(&qedf->link_state, QEDF_LINK_DOWN);
+   933		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC,
+   934			  "Queuing link down work.\n");
+   935		queue_delayed_work(qedf->link_update_wq, &qedf->link_update,
+   936		    0);
+   937	
+   938		if (qedf_wait_for_upload(qedf) == false) {
+   939			QEDF_ERR(&qedf->dbg_ctx, "Could not upload all sessions.\n");
+   940			WARN_ON(atomic_read(&qedf->num_offloads));
+   941		}
+   942	
+   943		/* Before setting link up query physical link state */
+   944		qed_ops->common->get_link(qedf->cdev, &if_link);
+   945		/* Bail if the physical link is not up */
+   946		if (!if_link.link_up) {
+   947			QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC,
+   948				  "Physical link is not up.\n");
+   949			clear_bit(QEDF_STAG_IN_PROGRESS, &qedf->flags);
+   950			return;
+   951		}
+   952		/* Flush and wait to make sure link down is processed */
+   953		flush_delayed_work(&qedf->link_update);
+   954		msleep(500);
+   955	
+   956		atomic_set(&qedf->link_state, QEDF_LINK_UP);
+   957		qedf->vlan_id  = 0;
+   958		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC,
+   959			  "Queue link up work.\n");
+   960		queue_delayed_work(qedf->link_update_wq, &qedf->link_update,
+   961		    0);
+   962		clear_bit(QEDF_STAG_IN_PROGRESS, &qedf->flags);
+   963	}
+   964	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
