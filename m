@@ -1,212 +1,256 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E93510940
-	for <llvm@lists.linux.dev>; Sat, 16 Mar 2024 09:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326A21094E;
+	Sat, 16 Mar 2024 10:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710582092; cv=none; b=oV0Cv70wIssYLA3CNxXSejJ5Sm7wqIe5c7w8insB2P8OXL1tA1JUdhnFU4dh1c/XvxEMjuzaB5j3tKbtcqWRXqFQ6gNOl1No5yO3Ydq7Py6Ky1EyvAWoDbzT2kX6QZ5LxJpNeJXRR89pVez8IFZtH3QTLlDDJVxSrptj5o2lLNI=
+	t=1710585348; cv=none; b=sL1bclHQDnP3WsSfnonwPbqdRZVC+IoqZvnimg8vRFm0ROZeKc7xXGubQBNq57DcdOritMu6b2dP5Rr9mClfQrWn2yeM+tbUQc52PwhzgAC9fqdzWpqCKXWxW5zzIexWY3SFJM2ygNx5GIX1/ZtKxEOuL46QuR10af3UrLOvGlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710582092; c=relaxed/simple;
-	bh=lBWEsjgRmRA05wFZ69iNiHI6ad91v20i6jbZc8FBUbM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BZB6I2iL9v5LNldR6RhNFirINGSZVNiovJ+kTCwX33R4i6ecisILLEtdSysQ+wMl9a4RNhZvvY93dLJmdfH2q/Dah0HOT39U0ua7FnJpnrq87d+AG04eAWb5KitWPU+U1fVi8BbZgBScfMR2xjcHX3mQScYm6+k9Y1RY1yk5iYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C5qlkhv9; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710585348; c=relaxed/simple;
+	bh=K0REUZyDWv7v8IVD7tyHBmVQR0asv36y0akj2o6aV0k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LMqVkkcO3fDhm4B+pAv2AuoVXCDEeXXmkLQZvmrUR+y2zuzsc8ijNCyzBBvyDyOfDAjMWg0Cxi500RoREV4p7C9CYQRDX2/zjt/3Y6wa+OjWnbttW4I3nNlGdASm4TO2R5P/v5HKdgqSvghdk65eg+CQn2Uhv5KGWWJI6uCViGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WvQtQsqx; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C5qlkhv9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710582088;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PI5GWmyF/CMdBmmeFpJMWcDYi6dsDkFmV3FA2zGmN50=;
-	b=C5qlkhv9HN3UJ2g6fxTNtsYbPuTxiIftGYCJ5QDkngU2fz4xaT1/l5osHpH8QpWtfUZ8BQ
-	Bnh47DpgG1E4oeiRz+J6vVFSVJKb9h06i/Ev5z+VPDsDXIIFPzN94q2jQJophmG6px/TWv
-	jgc5xhkv/QnCiHTNHiefMK6uMcTWADE=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-197-HpuxENZlMfGrXPfyYTpZpQ-1; Sat,
- 16 Mar 2024 05:41:25 -0400
-X-MC-Unique: HpuxENZlMfGrXPfyYTpZpQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34DC01C05151;
-	Sat, 16 Mar 2024 09:41:25 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C5B81200AFA5;
-	Sat, 16 Mar 2024 09:41:24 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 22 of 204): Test report for master
- (6.8.0, mainline.kernel.org-clang, 82affc97)
-Date: Sat, 16 Mar 2024 09:41:24 -0000
-To: yizhan@redhat.com, llvm@lists.linux.dev, shinichiro.kawasaki@wdc.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WvQtQsqx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710585345; x=1742121345;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K0REUZyDWv7v8IVD7tyHBmVQR0asv36y0akj2o6aV0k=;
+  b=WvQtQsqxgQ3mVmdeV7kDstqar6bkzMNryPBTEDa+AUeEr4ZzZa646+/+
+   8gygYBbdXIsDVokcO3frj1j2dKQuUoWsPaMkwAeoy+jTyyn3ED8EYN4w1
+   qiId4OMeXDQdVBjRTslRImHJ4QPqNRd4Y33KAXXlQ73c4k4RmBo1lVpNe
+   l7P0haUNw/L7f+JYD5mFU98/QlHgkBv5+Pw1+1kvKRLX+U1OmHcvWGnqN
+   mGq0SwxCg2hoMUnxPpikzRoIsCwZpq2gaWla7tJwtfFUU0ySr4pMSDI6p
+   nGk4UVEVvm+2rsAIEJl+zyx3yNr75ZaXlGx4Hoi0Ps1MDfmC7/U9uGEuZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11014"; a="5590390"
+X-IronPort-AV: E=Sophos;i="6.07,130,1708416000"; 
+   d="scan'208";a="5590390"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2024 03:35:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,130,1708416000"; 
+   d="scan'208";a="17413214"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 16 Mar 2024 03:35:43 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rlRO8-000FKQ-2i;
+	Sat, 16 Mar 2024 10:35:40 +0000
+Date: Sat, 16 Mar 2024 18:34:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v15 12/21] security: add security_bdev_setintegrity()
+ hook
+Message-ID: <202403161836.fYVwHSId-lkp@intel.com>
+References: <1710560151-28904-13-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <93709.124031605412500249@us-mta-197.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1710560151-28904-13-git-send-email-wufan@linux.microsoft.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Fan,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master next-20240315]
+[cannot apply to device-mapper-dm/for-next lwn/docs-next v6.8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Fan-Wu/security-add-ipe-lsm/20240316-114235
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/1710560151-28904-13-git-send-email-wufan%40linux.microsoft.com
+patch subject: [RFC PATCH v15 12/21] security: add security_bdev_setintegrity() hook
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240316/202403161836.fYVwHSId-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240316/202403161836.fYVwHSId-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403161836.fYVwHSId-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from mm/filemap.c:15:
+   In file included from include/linux/dax.h:6:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/filemap.c:25:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:62:
+>> include/linux/security.h:1506:32: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                   ^
+         |                                                                   int
+>> include/linux/security.h:1506:30: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                 ^
+   In file included from mm/filemap.c:26:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     158 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     159 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+   4 warnings and 1 error generated.
+--
+   In file included from mm/oom_kill.c:21:
+   In file included from include/linux/oom.h:11:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/oom_kill.c:31:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:62:
+>> include/linux/security.h:1506:32: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                   ^
+         |                                                                   int
+>> include/linux/security.h:1506:30: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                 ^
+   2 warnings and 1 error generated.
+--
+   In file included from mm/page-writeback.c:20:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page-writeback.c:35:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:62:
+>> include/linux/security.h:1506:32: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                   ^
+         |                                                                   int
+>> include/linux/security.h:1506:30: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                 ^
+   In file included from mm/page-writeback.c:40:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   4 warnings and 1 error generated.
+--
+   In file included from mm/vmscan.c:15:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vmscan.c:30:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vmscan.c:53:
+   In file included from include/linux/shmem_fs.h:11:
+   In file included from include/linux/fs_parser.h:11:
+   In file included from include/linux/fs_context.h:14:
+>> include/linux/security.h:1506:32: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                   ^
+         |                                                                   int
+>> include/linux/security.h:1506:30: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                 ^
+   mm/vmscan.c:381:51: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     381 |                         size += zone_page_state(zone, NR_ZONE_LRU_BASE + lru);
+         |                                                       ~~~~~~~~~~~~~~~~ ^ ~~~
+   mm/vmscan.c:1694:4: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    1694 |                         __count_zid_vm_events(PGSCAN_SKIP, zid, nr_skipped[zid]);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/vmscan.c:2201:51: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2201 |         inactive = lruvec_page_state(lruvec, NR_LRU_BASE + inactive_lru);
+         |                                              ~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   mm/vmscan.c:2202:49: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2202 |         active = lruvec_page_state(lruvec, NR_LRU_BASE + active_lru);
+         |                                            ~~~~~~~~~~~ ^ ~~~~~~~~~~
+   mm/vmscan.c:6207:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    6207 |                 __count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   9 warnings and 1 error generated.
+--
+   In file included from mm/workingset.c:8:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/workingset.c:9:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/workingset.c:11:
+   In file included from include/linux/shmem_fs.h:11:
+   In file included from include/linux/fs_parser.h:11:
+   In file included from include/linux/fs_context.h:14:
+>> include/linux/security.h:1506:32: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                   ^
+         |                                                                   int
+>> include/linux/security.h:1506:30: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+    1506 |                                              enum lsm_intgr_type, type,
+         |                                                                 ^
+   4 warnings and 1 error generated.
 
 
-Kernel information:
-    Commit message: Revert "KVM: arm64: Snapshot all non-zero RES0/RES1 sys=
-reg fields for later checking"
+vim +/int +1506 include/linux/security.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/135272
+  1504	
+  1505	static inline int security_bdev_setintegrity(struct block_device *bdev,
+> 1506						     enum lsm_intgr_type, type,
+  1507						     const void *value, size_t size)
+  1508	{
+  1509		return 0;
+  1510	}
+  1511	
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk - upstream
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11694810
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-          x86_64 - Storage - blktests - blk - upstream
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11694876
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Reboot test
-        Issue: [rawhide] avc:  denied  { read write } for  pid=3D12364 comm=
-=3D"plymouthd" name=3D"kmsg" dev=3D"devtmpfs" ino=3D10 scontext=3Dsystem_u:=
-system_r:plymouthd_t:s0 tcontext=3Dsystem_u:object_r:kmsg_device_t:s0 tclas=
-s=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2256442
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-                 ppc64le - Boot test
-                 ppc64le - Reboot test
-                   s390x - Boot test
-                   s390x - Reboot test
-                  x86_64 - Boot test
-                  x86_64 - Reboot test
-        Issue: makedumpfile not found when building kdump initramfs
-            URL: https://bugzilla.redhat.com/2269640
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                  x86_64 - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     aarch64 - Reboot test
-     ppc64le - Memory function: memfd_create
-     ppc64le - kdump - file-load
-     ppc64le - Reboot test
-       s390x - Storage - blktests - nvme-tcp - upstream
-       s390x - Storage - swraid scsi_raid
-       s390x - stress: stress-ng - cpu-cache
-       s390x - stress: stress-ng - memory
-       s390x - Reboot test
-       s390x - Memory function: memfd_create
-       s390x - kdump - file-load
-       s390x - Reboot test
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - Storage - blktests - nvme-tcp - upstream
-      x86_64 - Storage - swraid scsi_raid
-      x86_64 - stress: stress-ng - cpu-cache
-      x86_64 - stress: stress-ng - memory
-      x86_64 - Reboot test
-      x86_64 - Memory function: memfd_create
-      x86_64 - kdump - file-load
-      x86_64 - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
