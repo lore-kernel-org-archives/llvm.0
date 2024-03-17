@@ -1,209 +1,239 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6943233
-	for <llvm@lists.linux.dev>; Sun, 17 Mar 2024 03:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4B4EAC5
+	for <llvm@lists.linux.dev>; Sun, 17 Mar 2024 05:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710644486; cv=none; b=HPOdQ+IKdDJI+5dDWtiTeUFv2TIwTbCxiZWi4fy1Y6MKc7zc56wEbYW2t25c1ItrRjoW+H6CBr24AV8hEzZpW2Ph6pu85cp422uNKf1ExhGeajOHcKcQ59z55y95djl+OSEQG1bq0Q2qscSr7IMbWGhEF5G8/rY/vw1UkBm7G9s=
+	t=1710654476; cv=none; b=g4GrPnLGVF1UKvEEzunjyOCArlT8HTMZwPwHZh9fBoKwKUSKdVxIh3tQptcGFG/G9tBftdH63V9B5My0L4JLI+ETMCXnuYMp2FsK5dGqJuszJSW0zvy2NCrjfUx52BYBxB2xucDfET7P7JGYWVufiic9kTiXUDO1M+j+LOSr8G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710644486; c=relaxed/simple;
-	bh=NTPFj0m8vIZiL748oSUyycBcUBQBBtMy/ED8JO7Ni6Q=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WLoqd++YwWsM5n5DO2FQjElPBU+EnMYKblmN9OjRmkbslsXNnWFLkf8//kM9TpEIwosRTHoy6D4gfW778+qrZodqbVmerAF00ESNAvc/lkhAjEi/53nc18FtgavnfHQvFe/265RTxHVbWT+cy/Pcbo6YhpqwuCKDZ0qpvV4NBKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d+BHJ000; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710654476; c=relaxed/simple;
+	bh=jCwVDtdjVLnS0p3Xc6iBZtal0EfLjsLMmpXpfH0mMsM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rWY35xhf+luC217Qk31KlhJj51YpbIO193DtGfkIM8T8iMgiShrliR9ZvNKwv/CNtaJQ5aQd8dSq5BkE49C4q7DdxEzeCedCaMEw9FiWlrUbhwv99ybUZQv8VXGhUbyENo21wORJa/xnctYhGj/oAjJEtEDCAYKQOxMinuRy6eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=klpuFFkH; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d+BHJ000"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710644483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Dz+CM3C3/ho6ed765sWS/vqNhjdb7eo+aEx0emaj6TU=;
-	b=d+BHJ000FFWu2N6mU2JZ+9SOSyueKJxEjfrb6OQhpt/xeVu2HEeff04pj6PKvJc9GRaghE
-	ItK9spN+WdM0VkEgyCDYP6id6ftXQmTKU3CSZkFqg3D4nx+8RnjCBsxNZ0WX1stnVc3MNc
-	gzqfL1NislkRj95lrljVCegVyYt5Wvo=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-365-Gj1kDj_jMgmqVyD7UWynMA-1; Sat,
- 16 Mar 2024 23:01:17 -0400
-X-MC-Unique: Gj1kDj_jMgmqVyD7UWynMA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 91D661C04B4F;
-	Sun, 17 Mar 2024 03:01:17 +0000 (UTC)
-Received: from [172.64.11.40] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 35FE5492BC6;
-	Sun, 17 Mar 2024 03:01:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 25 of 204): Test report for master
- (6.8.0, mainline.kernel.org-clang, 4438a810)
-Date: Sun, 17 Mar 2024 03:01:17 -0000
-To: shinichiro.kawasaki@wdc.com, yizhan@redhat.com, bhe@redhat.com,
- yiyan@redhat.com, xiawu@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="klpuFFkH"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-42a029c8e76so25286101cf.2
+        for <llvm@lists.linux.dev>; Sat, 16 Mar 2024 22:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710654473; x=1711259273; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZjI0CmTAb9rBKNzvuDpGMzLCdPan9spH7TYPxSq//7M=;
+        b=klpuFFkHk1R5E+iaI+mmbPyoYWdRdXFACalOTvA2iqB53RY3UoNhg7olNqLhsTst0e
+         bVbI+ey9aRAeyxkqHRYoeJM8dPpRveyk4Zw1nFomJwhlA0atk5l72i9b3xcjFCfI6eWF
+         CAf57U/77REW/pJSzPglC6DxmYuymDQQvGXmR5kbvoFxgmqB46IHYboj5KhBPyll0Jr6
+         i8OQCrDkQvgb3z3x8M0PPuUGapBYwZkmMl8KwsWBd4DrVVSx3CO65NpsniqfnC9OGjHs
+         IsTH1mg7LXb4qFLhgTnKqS1JhXgAFZ0dV7LfCpmKrLSmR7IKGw2vYBxGLZjpqT0vJR1W
+         rI8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710654473; x=1711259273;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZjI0CmTAb9rBKNzvuDpGMzLCdPan9spH7TYPxSq//7M=;
+        b=YdAxJocplRCgNX3bNIAiRJAt+wQBotMvz2cHkZcQcafBAvG4Iccs35H25+scUslM3L
+         nVyBH5uKzvlJ66FoxxGHDkhTjPJv8NTsDyH1/UOEwhdmLYq4gXGEapqOXEhRj6FeEHd0
+         Gfg8S81A5RQTugFTFT3jg3yp50ZRc9la37OUU1PsZLK0pOdx0VoEvheiOpjvcTalgSCe
+         ZUl1gmtaAJzniFEzy0sQ5EJztWBmZm7bUq4axBCPgXorsBhY1TsZbRZxtIe7GXD62OGW
+         mo3B+G97XXdxqe6yobuacxWNpJme1W4982fbDJ7dgQQ+TEp+dwkRGnKpNCHgLa5551sO
+         dQcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXdKT7uILmCq4/STi+jrq7IK64t9/bRpFYiFt+qf3POpulPZXRYpZ/2obqFjflJg0aWeqFM1YticP7M+VNhF1kAzKhyNg==
+X-Gm-Message-State: AOJu0Yxexr3mRPOgvZtD6BCdkJrUZKLjX1j4R8Xd/TXlA+P8TtPs8ehF
+	hKwF1T8wPRx+gpfITFZO2lF6pLV1tmJfZg7o9OfqvWUGLyQ1EFZ4ioSsHOX9sCMvGjpSG0PqpiU
+	21AqfmfPFBKaYozBp3GMHGp76uOY=
+X-Google-Smtp-Source: AGHT+IF3n6ILrbIcqyw7Dk9ldN+JFXuDe2uBcHpys1fbj9TlKl6rn+Ktc0cERNyAszqG9dMbRhcxpRA2dK4IuomqNow=
+X-Received: by 2002:a05:622a:1cf:b0:42e:eb29:91ba with SMTP id
+ t15-20020a05622a01cf00b0042eeb2991bamr11260429qtw.63.1710654473492; Sat, 16
+ Mar 2024 22:47:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <00586.124031623011700541@us-mta-365.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20240314141516.31747-1-liuhailong@oppo.com> <20240315081803.2223-1-liuhailong@oppo.com>
+ <CAGsJ_4yMXE_4YuMTczF6u4YYp_TWksi+byszD09E2PT5pK8zfA@mail.gmail.com> <ba894762-d3ea-4773-b54c-ce063e1065e5@oppo.com>
+In-Reply-To: <ba894762-d3ea-4773-b54c-ce063e1065e5@oppo.com>
+From: Barry Song <21cnbao@gmail.com>
+Date: Sun, 17 Mar 2024 18:47:42 +1300
+Message-ID: <CAGsJ_4wD-NiquhnhK_6TGEF4reTGO9pVNGyYBnYZ1inVFc40WQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not available"
+To: =?UTF-8?B?5YiY5rW36b6ZKExhb0xpdSk=?= <liuhailong@oppo.com>
+Cc: "akpm@linux-foundation.org" <akpm@linux-foundation.org>, "nathan@kernel.org" <nathan@kernel.org>, 
+	"ndesaulniers@google.com" <ndesaulniers@google.com>, "trix@redhat.com" <trix@redhat.com>, 
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "surenb@google.com" <surenb@google.com>, 
+	"zhaoyang.huang@unisoc.com" <zhaoyang.huang@unisoc.com>, 
+	"quic_charante@quicinc.com" <quic_charante@quicinc.com>, "yuzhao@google.com" <yuzhao@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Fri, Mar 15, 2024 at 11:44=E2=80=AFPM =E5=88=98=E6=B5=B7=E9=BE=99(LaoLiu=
+) <liuhailong@oppo.com> wrote:
+>
+> On 2024/3/15 16:46, Barry Song wrote:
+> > On Fri, Mar 15, 2024 at 9:18=E2=80=AFPM <liuhailong@oppo.com> wrote:
+> >>
+> >> From: "Hailong.Liu" <liuhailong@oppo.com>
+> >>
+> >> This reverts
+> >> commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not =
+eligible")
+> >> commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
+> >
+> > Reverting these changes seems inappropriate since the original patches
+> > did improve most cases.
+> > While doing direct reclamation without MOVABLE flags, scanning cma
+> > folio doesn't help at all.
+> >
+>
+> Absolutely, but without this patch  it give chance to reclaim cma pages t=
+o freelist,
+> other tasks without this flag would work normally without holding too muc=
+h time
+> on lru lock and lru size decrease=E3=80=82 it also trigger memory psi eve=
+nt to allow
+> admin do something to release memory.
+>
+> >>
+> >> skip_cma may cause system not responding. if cma pages is large in lru=
+_list
+> >> and system is in lowmemory, many tasks would direct reclaim and waste
+> >> cpu time to isolate_lru_pages and return.
+> >>
+> >> Test this patch on android-5.15 8G device
+> >> reproducer:
+> >> - cma_declare_contiguous 3G pages
+> >> - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
+> >>   only.
+> >> - run a memleak process in userspace
+> >
+> >
+> > I assume that scanning cma folio provides additional opportunities to r=
+eclaim
+> > anonymous memory, even though it is ineffective for allocating NON-MOVA=
+BLE
+> > folios. Consequently, we alleviate pressure for future allocations of a=
+nonymous
+> > folios. Moreover, setting swappiness=3D0 is a rare scenario. Instead of=
+ entirely
+> > removing the mechanism, could we detect such corner cases and handle th=
+em
+> > differently.
+> >
+> > Otherwise, I don't see any chance of this being acknowledged.
+>
+> It happens in internal aging test. open camera and record 8K video which =
+use
+> more than 2Gib dmabuf pages. without this patch the devices would kill ca=
+mera process,
+> but the system hang with it.
+>
+> In fact, in my opinion the issue of this patch increase the scanning lru =
+time
+> and reclaim nothing. Do you have a better solution ?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+rather than aggressively reverting the original patch which might help lots=
+ of
+cases, could we just detect the corner cases and fix them , for example, by
+something as the belows,
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 96147c4536e4..2f75ad9870c1 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -147,6 +147,9 @@ struct scan_control {
+        /* Always discard instead of demoting to lower tier memory */
+        unsigned int no_demotion:1;
+
++       /* no skipping cma */
++       unsigned int no_skip_cma:1;
++
+        /* Allocation order */
+        s8 order;
+
+@@ -1595,7 +1598,7 @@ static __always_inline void
+update_lru_sizes(struct lruvec *lruvec,
+  */
+ static bool skip_cma(struct folio *folio, struct scan_control *sc)
+ {
+-       return !current_is_kswapd() &&
++       return !current_is_kswapd() && !sc->no_skip_cma &&
+                        gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABLE =
+&&
+                        folio_migratetype(folio) =3D=3D MIGRATE_CMA;
+ }
+@@ -1636,7 +1639,7 @@ static unsigned long isolate_lru_folios(unsigned
+long nr_to_scan,
+        unsigned long nr_taken =3D 0;
+        unsigned long nr_zone_taken[MAX_NR_ZONES] =3D { 0 };
+        unsigned long nr_skipped[MAX_NR_ZONES] =3D { 0, };
+-       unsigned long skipped =3D 0;
++       unsigned long skipped =3D 0, skipped_cma =3D 0;
+        unsigned long scan, total_scan, nr_pages;
+        LIST_HEAD(folios_skipped);
+
+@@ -1645,6 +1648,7 @@ static unsigned long isolate_lru_folios(unsigned
+long nr_to_scan,
+        while (scan < nr_to_scan && !list_empty(src)) {
+                struct list_head *move_to =3D src;
+                struct folio *folio;
++               bool cma =3D false;
+
+                folio =3D lru_to_folio(src);
+                prefetchw_prev_lru_folio(folio, src, flags);
+@@ -1652,10 +1656,11 @@ static unsigned long
+isolate_lru_folios(unsigned long nr_to_scan,
+                nr_pages =3D folio_nr_pages(folio);
+                total_scan +=3D nr_pages;
+
+-               if (folio_zonenum(folio) > sc->reclaim_idx ||
+-                               skip_cma(folio, sc)) {
++               cma =3D skip_cma(folio, sc);
++               if (folio_zonenum(folio) > sc->reclaim_idx || cma) {
+                        nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+                        move_to =3D &folios_skipped;
++                       skipped_cma +=3D nr_pages;
+                        goto move;
+                }
+
+@@ -1716,6 +1721,16 @@ static unsigned long
+isolate_lru_folios(unsigned long nr_to_scan,
+        *nr_scanned =3D total_scan;
+        trace_mm_vmscan_lru_isolate(sc->reclaim_idx, sc->order, nr_to_scan,
+                                    total_scan, skipped, nr_taken, lru);
++
++       /*
++        * If the majority of folios are skipped due to contiguous
+memory allocator (CMA),
++        * the least recently used (LRU) list might become overloaded
+with CMA folios.
++        * This could result in numerous idle loops for non-movable
+allocations. On the
++        * other hand, reclaiming CMA folios can alleviate the strain
+on other processes
++        * that require anonymous pages.
++        */
++       sc->no_skip_cma =3D skipped_cma > total_scan / 2 ? 1 : 0;
++
+        update_lru_sizes(lruvec, lru, nr_zone_taken);
+        return nr_taken;
+ }
 
 
-Kernel information:
-    Commit message: Merge tag 'firewire-updates-6.9' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/ieee1394/linux1394
+This is merely a proof of concept (PoC), and I haven't even built it
+yet. Additionally, LRU_GEN remains
+unchanged. It will also need similar changes.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/135360
+>
+> Brs,
+> Hailong.
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         ppc64le - kdump - sysrq-c
-                   Issue: [upstream] readpage_elf: Attempt to read non-exis=
-tent page at 0x4000000000000000
-                          https://gitlab.com/cki-project/kernel-ark/-/issue=
-s/132
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11700199
-         ppc64le - kdump - file-load
-                   Issue: [upstream] readpage_elf: Attempt to read non-exis=
-tent page at 0x4000000000000000
-                          https://gitlab.com/cki-project/kernel-ark/-/issue=
-s/132
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11700200
-
-    Note: Any of these might not be a regression and/or we might have mista=
-kenly thought this issue to be fixed.
-          If it is not a regression, please ask the test maintainer to reop=
-en the issue and untag the regression from this execution.
-
-    Unrecognized or new issues:
-           s390x - Storage - blktests - blk - upstream
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11700146
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-          x86_64 - Storage - blktests - blk - upstream
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11700212
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - Filesystem - Loopdev Sanity
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-                   s390x - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Storage - blktests - nvme-tcp - upstream
-       s390x - Storage - swraid scsi_raid
-       s390x - stress: stress-ng - cpu-cache
-       s390x - stress: stress-ng - memory
-       s390x - Reboot test
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - Storage - blktests - nvme-tcp - upstream
-      x86_64 - Storage - swraid scsi_raid
-      x86_64 - stress: stress-ng - cpu-cache
-      x86_64 - stress: stress-ng - memory
-      x86_64 - Reboot test
-      x86_64 - Memory function: memfd_create
-      x86_64 - Networking vnic: ipvlan/basic
-      x86_64 - Libkcapi AF_ALG test
-      x86_64 - Hardware - pciutils: sanity smoke test
-      x86_64 - Storage - dm/common
-      x86_64 - kdump - kexec_boot
-      x86_64 - kdump - kexec-file-load
-      x86_64 - kselftests upstream - net
-      x86_64 - kselftests upstream - bpf
-      x86_64 - kselftests upstream - bpf_test_progs
-      x86_64 - Reboot test
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks
+Barry
