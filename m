@@ -1,54 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E31F1BC39;
-	Sun, 17 Mar 2024 13:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA661CD3F;
+	Sun, 17 Mar 2024 19:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710682405; cv=none; b=jf+2br90Scksp1X7pa63YcnwGdL6FKAIHYxci0dTQVyN6haBYvG3+YPgFksoNbjbbeTlSfAJN3cIK/+yxM50cIg/VbUnvqBMwoHNeKzpz9w2VRtN7MUHlH8daLWSnxGmr54xg7DzkA6KH3uZ+lgi55VgdLKCOeDZFJqlBhV8qek=
+	t=1710702101; cv=none; b=uh/Sg05z+aZsEUaPhmrqmo72RXwBmhR22rsbCdHWeX3opxJ2YTScLMqiC2NjbN1Vk69qHa3tYzLVZ/XprQWJg9+PaU43GY4E8bPjvVCNJWVmBiz4wycSA2NIP71XVpw5s2/wffEWkaaV1lOwPIAmPPnPiiumNeXoplzGRxGWa4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710682405; c=relaxed/simple;
-	bh=8fzstakgs0HABoECQQDMrQESwdcwjjajOaiiJng+FeU=;
+	s=arc-20240116; t=1710702101; c=relaxed/simple;
+	bh=x8IPk8CIB7VYXxDL8OlU4hKspTjRTG8gzgPSweIhh5Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Fh/S9/m4NSaub5B5nfFhZUsv+Fr6IRMR5qkNmLTvTyqe9/z7IZRb1LhWjVkfSI5diEXWG8TbVJ82CINcOBl4pXdUmccbG/SZP7QAF3h17Bnz8ZZ5+MEh/7ntlP/+B+tW36QB7QBNA4dHTu11HL3FhASZrbhtw0oGtRCgKkQaxSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CWiSfbUc; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=p+P6N/Fo3Dpny06ZZrizlW7c2f9TgmURdYmtlIuCCEn5Y22inhzS90/Mh9Fcg7q1iu/3wwpYbt0Pmd1tjmitv8mE8XKBnGcfEJAnE+en/eI4oJ9NXyDMXZdXQ1J8IeKJ3+SSNR8fGqv7q+fwjmcagLvU+kS0wsy78VmqoJ1vgyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=azaEUYiu; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CWiSfbUc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="azaEUYiu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710682403; x=1742218403;
+  t=1710702099; x=1742238099;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8fzstakgs0HABoECQQDMrQESwdcwjjajOaiiJng+FeU=;
-  b=CWiSfbUcRcz0gdgXVOR5yi1eOgd4L1mIuK7+ZnBTcxTRk5wP03XqRY9W
-   eaN8lI7mqVSlHPTgFRJWU+2506YtmXTFibF8AJ7M/f6sPAdvB2PCgC2C0
-   kc2Gurj9ExqcfNKo/CgsdIfnDzEMcxgYLrC6beeZTDt6JktFVtU66CD2C
-   vTcwq06WqWrzhHjQhTe4fJZq6eYL8E8yauLhjnp5vAVT8jYJHPYTcmBJl
-   pJNRqYbdPdK5/h76ToVEuQiubBMhRDsTai6bhp5zRUdP53c2tCqNA7+it
-   RvVXlEliLQN9RGX25mNj2GfjwQuzQ6/CQCh4E7WEQifqdDDfw2fzkN3AE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11015"; a="5706654"
-X-IronPort-AV: E=Sophos;i="6.07,132,1708416000"; 
-   d="scan'208";a="5706654"
+  bh=x8IPk8CIB7VYXxDL8OlU4hKspTjRTG8gzgPSweIhh5Q=;
+  b=azaEUYiuCms9niBd3y5zKVc/sNW/haZXK3iVpBkXhdUcNEtDqJp7wuLM
+   vsZAmVgy9IzS0R1d1J0/JLrOQWpXkTSMrLs/67wi4pLNZWfzOB9Zo/LYl
+   y60fNF3VevLRGoKEa+ekwBcpz2AZu0JANxWErnC829hPlxEiBoik6Xam0
+   J2PbDHFhHh4LaYAA5xUEi80qytI/wmgGVDR1Q1Ld1M/sgGuoNEnr2aym+
+   NU/dAuRsC38a4GMEwRjp6kfNQRMo2ajtBVUZIIkWUaakpbkGVwLfD+25e
+   X1J8xQVP+v/Geb1La4B4Bsxd03+L/LEwybc7C34fxBYk+HRNfrW5BKgEY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="5365058"
+X-IronPort-AV: E=Sophos;i="6.07,133,1708416000"; 
+   d="scan'208";a="5365058"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2024 06:33:20 -0700
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2024 12:01:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,132,1708416000"; 
-   d="scan'208";a="17907734"
+X-IronPort-AV: E=Sophos;i="6.07,133,1708416000"; 
+   d="scan'208";a="17958568"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Mar 2024 06:33:19 -0700
+  by orviesa003.jf.intel.com with ESMTP; 17 Mar 2024 12:01:34 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rlqdY-000GFR-1q;
-	Sun, 17 Mar 2024 13:33:16 +0000
-Date: Sun, 17 Mar 2024 21:33:03 +0800
+	id 1rlvlD-000GQl-2c;
+	Sun, 17 Mar 2024 19:01:31 +0000
+Date: Mon, 18 Mar 2024 03:00:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Super User <yoonjin67@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:pr/279 1/1] include/drm/ane.h:9:10: fatal error:
- 'uapi/drm/ane_accel.h' file not found
-Message-ID: <202403172149.MlUrvhye-lkp@intel.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:wip 4/4] fs/f2fs/data.c:615:41: error: no member named
+ 'zone_wait' in 'struct f2fs_bio_info'
+Message-ID: <202403180242.0P5yxfgD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,23 +59,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux pr/279
-head:   15d2163ed4a2934b567a1cb2c59678ba1190b35c
-commit: 15d2163ed4a2934b567a1cb2c59678ba1190b35c [1/1] Asahi-test
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240317/202403172149.MlUrvhye-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git wip
+head:   5d1d1ce6987e9ad0cf26ca1071a94aadbb5c2a83
+commit: 5d1d1ce6987e9ad0cf26ca1071a94aadbb5c2a83 [4/4] f2fs: zone: don't block IO if there is remained open zone
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240318/202403180242.0P5yxfgD-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240317/202403172149.MlUrvhye-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240318/202403180242.0P5yxfgD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403172149.MlUrvhye-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403180242.0P5yxfgD-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/accel/ane/ane_drv.c:5:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from fs/f2fs/data.c:9:
+   In file included from include/linux/f2fs_fs.h:11:
+   In file included from include/linux/pagemap.h:8:
    In file included from include/linux/mm.h:2188:
    include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -99,84 +100,57 @@ All errors (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      537 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/accel/ane/ane_drv.c:5:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/accel/ane/ane_drv.c:5:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/accel/ane/ane_drv.c:5:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/accel/ane/ane_drv.c:17:
->> include/drm/ane.h:9:10: fatal error: 'uapi/drm/ane_accel.h' file not found
-       9 | #include <uapi/drm/ane_accel.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   17 warnings and 1 error generated.
+>> fs/f2fs/data.c:615:41: error: no member named 'zone_wait' in 'struct f2fs_bio_info'
+     615 |                         init_completion(&sbi->write_io[i][j].zone_wait);
+         |                                          ~~~~~~~~~~~~~~~~~~~ ^
+>> fs/f2fs/data.c:616:24: error: no member named 'zone_pending_bio' in 'struct f2fs_bio_info'
+     616 |                         sbi->write_io[i][j].zone_pending_bio = NULL;
+         |                         ~~~~~~~~~~~~~~~~~~~ ^
+   5 warnings and 2 errors generated.
 
 
-vim +9 include/drm/ane.h
+vim +615 fs/f2fs/data.c
 
-2c41c680415e50 drivers/accel/ane/src/headers/ane.h Yunjin Lee 2024-03-14   8  
-2c41c680415e50 drivers/accel/ane/src/headers/ane.h Yunjin Lee 2024-03-14  @9  #include <uapi/drm/ane_accel.h>
-2c41c680415e50 drivers/accel/ane/src/headers/ane.h Yunjin Lee 2024-03-14  10  
+0fd785eb931d25 Chao Yu     2016-01-18  591  
+908ea6541661d7 Yufen Yu    2022-05-25  592  int f2fs_init_write_merge_io(struct f2fs_sb_info *sbi)
+908ea6541661d7 Yufen Yu    2022-05-25  593  {
+908ea6541661d7 Yufen Yu    2022-05-25  594  	int i;
+908ea6541661d7 Yufen Yu    2022-05-25  595  
+908ea6541661d7 Yufen Yu    2022-05-25  596  	for (i = 0; i < NR_PAGE_TYPE; i++) {
+908ea6541661d7 Yufen Yu    2022-05-25  597  		int n = (i == META) ? 1 : NR_TEMP_TYPE;
+908ea6541661d7 Yufen Yu    2022-05-25  598  		int j;
+908ea6541661d7 Yufen Yu    2022-05-25  599  
+908ea6541661d7 Yufen Yu    2022-05-25  600  		sbi->write_io[i] = f2fs_kmalloc(sbi,
+908ea6541661d7 Yufen Yu    2022-05-25  601  				array_size(n, sizeof(struct f2fs_bio_info)),
+908ea6541661d7 Yufen Yu    2022-05-25  602  				GFP_KERNEL);
+908ea6541661d7 Yufen Yu    2022-05-25  603  		if (!sbi->write_io[i])
+908ea6541661d7 Yufen Yu    2022-05-25  604  			return -ENOMEM;
+908ea6541661d7 Yufen Yu    2022-05-25  605  
+908ea6541661d7 Yufen Yu    2022-05-25  606  		for (j = HOT; j < n; j++) {
+908ea6541661d7 Yufen Yu    2022-05-25  607  			init_f2fs_rwsem(&sbi->write_io[i][j].io_rwsem);
+908ea6541661d7 Yufen Yu    2022-05-25  608  			sbi->write_io[i][j].sbi = sbi;
+908ea6541661d7 Yufen Yu    2022-05-25  609  			sbi->write_io[i][j].bio = NULL;
+908ea6541661d7 Yufen Yu    2022-05-25  610  			spin_lock_init(&sbi->write_io[i][j].io_lock);
+908ea6541661d7 Yufen Yu    2022-05-25  611  			INIT_LIST_HEAD(&sbi->write_io[i][j].io_list);
+908ea6541661d7 Yufen Yu    2022-05-25  612  			INIT_LIST_HEAD(&sbi->write_io[i][j].bio_list);
+908ea6541661d7 Yufen Yu    2022-05-25  613  			init_f2fs_rwsem(&sbi->write_io[i][j].bio_list_lock);
+e067dc3c6b9c41 Daeho Jeong 2023-05-03  614  #ifdef CONFIG_BLK_DEV_ZONED
+e067dc3c6b9c41 Daeho Jeong 2023-05-03 @615  			init_completion(&sbi->write_io[i][j].zone_wait);
+e067dc3c6b9c41 Daeho Jeong 2023-05-03 @616  			sbi->write_io[i][j].zone_pending_bio = NULL;
+e067dc3c6b9c41 Daeho Jeong 2023-05-03  617  			sbi->write_io[i][j].bi_private = NULL;
+e067dc3c6b9c41 Daeho Jeong 2023-05-03  618  #endif
+908ea6541661d7 Yufen Yu    2022-05-25  619  		}
+908ea6541661d7 Yufen Yu    2022-05-25  620  	}
+908ea6541661d7 Yufen Yu    2022-05-25  621  
+908ea6541661d7 Yufen Yu    2022-05-25  622  	return 0;
+908ea6541661d7 Yufen Yu    2022-05-25  623  }
+908ea6541661d7 Yufen Yu    2022-05-25  624  
 
-:::::: The code at line 9 was first introduced by commit
-:::::: 2c41c680415e5069f2f5bfc47d83ffdd7fa1f8ca ANE Branch
+:::::: The code at line 615 was first introduced by commit
+:::::: e067dc3c6b9c419bac43c6a0be2d85f44681f863 f2fs: maintain six open zones for zoned devices
 
-:::::: TO: Yunjin Lee <yoonjin67@gmail.com>
-:::::: CC: Yunjin Lee <yoonjin67@gmail.com>
+:::::: TO: Daeho Jeong <daehojeong@google.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
