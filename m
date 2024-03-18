@@ -1,55 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA661CD3F;
-	Sun, 17 Mar 2024 19:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5D57E5;
+	Mon, 18 Mar 2024 00:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710702101; cv=none; b=uh/Sg05z+aZsEUaPhmrqmo72RXwBmhR22rsbCdHWeX3opxJ2YTScLMqiC2NjbN1Vk69qHa3tYzLVZ/XprQWJg9+PaU43GY4E8bPjvVCNJWVmBiz4wycSA2NIP71XVpw5s2/wffEWkaaV1lOwPIAmPPnPiiumNeXoplzGRxGWa4E=
+	t=1710720780; cv=none; b=HeVwOR5StUljQ8zJchg291ScaEN0apUSyjFrUMfK9YWA4O7jv8pSPRu7OLYk/2LYD/VGWZ8apoiyEomoZMdqHzu8i3df1MpNkZvX2nlAHG7X49lzw6fqr38VKhUJ5GBfWCtdGQ7n6Z6DksLG3nBHhNYo+JaUsLcFOl0Jm4KUPpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710702101; c=relaxed/simple;
-	bh=x8IPk8CIB7VYXxDL8OlU4hKspTjRTG8gzgPSweIhh5Q=;
+	s=arc-20240116; t=1710720780; c=relaxed/simple;
+	bh=Cs0OKod9yH/HM6P8pMomhUKUlQ3g5N4neRzvIUY9Un8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p+P6N/Fo3Dpny06ZZrizlW7c2f9TgmURdYmtlIuCCEn5Y22inhzS90/Mh9Fcg7q1iu/3wwpYbt0Pmd1tjmitv8mE8XKBnGcfEJAnE+en/eI4oJ9NXyDMXZdXQ1J8IeKJ3+SSNR8fGqv7q+fwjmcagLvU+kS0wsy78VmqoJ1vgyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=azaEUYiu; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=U3DV6tDlXwGEJdeILYgg29/jifaQOIPZ6VAZHtcNZFsUj6MIpRJg5d0mAoI7fwsUqyvel0q8iP7+dba5P/Y1fFZeORKNp0HLHvqS/jyPmBoAMUNtNQHTqQzG9lpe668lmpTW6KgFeCtQnPAjiqNvyPVKXOYrJiOHRI1pm3+TAco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aqA5Ga57; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="azaEUYiu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aqA5Ga57"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710702099; x=1742238099;
+  t=1710720778; x=1742256778;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=x8IPk8CIB7VYXxDL8OlU4hKspTjRTG8gzgPSweIhh5Q=;
-  b=azaEUYiuCms9niBd3y5zKVc/sNW/haZXK3iVpBkXhdUcNEtDqJp7wuLM
-   vsZAmVgy9IzS0R1d1J0/JLrOQWpXkTSMrLs/67wi4pLNZWfzOB9Zo/LYl
-   y60fNF3VevLRGoKEa+ekwBcpz2AZu0JANxWErnC829hPlxEiBoik6Xam0
-   J2PbDHFhHh4LaYAA5xUEi80qytI/wmgGVDR1Q1Ld1M/sgGuoNEnr2aym+
-   NU/dAuRsC38a4GMEwRjp6kfNQRMo2ajtBVUZIIkWUaakpbkGVwLfD+25e
-   X1J8xQVP+v/Geb1La4B4Bsxd03+L/LEwybc7C34fxBYk+HRNfrW5BKgEY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="5365058"
+  bh=Cs0OKod9yH/HM6P8pMomhUKUlQ3g5N4neRzvIUY9Un8=;
+  b=aqA5Ga57DkZZKj5Uzqt25UH6Agnn/asfAxUhjaqvN+4jpzoHhYNIFwmg
+   /ICgE0/UREV++A/BdgKxkcfPpnl3GtSh/UrV+xKmEaAr5lHgIR3jZWFqd
+   uM33+1zSenTAZtluGgCN6vPjre+IYOBAtkWgx3BPLH2UjNK4NBYIz3MJP
+   upnipciBzvOJOW6/9FLoYaqxIru0u2Opy7cxHsewkWPKQLtlqUdNmkdVm
+   NGYEWddesOXYu9q3kEwEFAtJDdAIc7C6l4OCNblXkq2y30nCBQ/AeDbM5
+   Qepva+tQVLv7MQtCUDt9PE39DJOhcBJtDiuF/lBUjxBOhYhkOlG5NzhvL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11016"; a="27999270"
 X-IronPort-AV: E=Sophos;i="6.07,133,1708416000"; 
-   d="scan'208";a="5365058"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2024 12:01:36 -0700
+   d="scan'208";a="27999270"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2024 17:12:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,133,1708416000"; 
-   d="scan'208";a="17958568"
+   d="scan'208";a="17775568"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Mar 2024 12:01:34 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 17 Mar 2024 17:12:55 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rlvlD-000GQl-2c;
-	Sun, 17 Mar 2024 19:01:31 +0000
-Date: Mon, 18 Mar 2024 03:00:48 +0800
+	id 1rm0cX-000GXT-0m;
+	Mon, 18 Mar 2024 00:12:53 +0000
+Date: Mon, 18 Mar 2024 08:12:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+To: Hector Martin <marcan@marcan.st>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [chao:wip 4/4] fs/f2fs/data.c:615:41: error: no member named
- 'zone_wait' in 'struct f2fs_bio_info'
-Message-ID: <202403180242.0P5yxfgD-lkp@intel.com>
+	Janne Grunau <j@jannau.net>
+Subject: [asahilinux:pr/279 461/930]
+ drivers/pci/controller/pcie-apple.c:468:19: error: call to undeclared
+ function 'FIELD_PREP'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202403180821.wFeXhgVk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,98 +61,81 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git wip
-head:   5d1d1ce6987e9ad0cf26ca1071a94aadbb5c2a83
-commit: 5d1d1ce6987e9ad0cf26ca1071a94aadbb5c2a83 [4/4] f2fs: zone: don't block IO if there is remained open zone
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240318/202403180242.0P5yxfgD-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240318/202403180242.0P5yxfgD-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux pr/279
+head:   15d2163ed4a2934b567a1cb2c59678ba1190b35c
+commit: 14e757895aac48640f68ee98fd5f198a2251442c [461/930] PCIE: apple: Add T602x PCIe support
+config: powerpc-randconfig-001-20240317 (https://download.01.org/0day-ci/archive/20240318/202403180821.wFeXhgVk-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240318/202403180821.wFeXhgVk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403180242.0P5yxfgD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403180821.wFeXhgVk-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/f2fs/data.c:9:
-   In file included from include/linux/f2fs_fs.h:11:
-   In file included from include/linux/pagemap.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/f2fs/data.c:615:41: error: no member named 'zone_wait' in 'struct f2fs_bio_info'
-     615 |                         init_completion(&sbi->write_io[i][j].zone_wait);
-         |                                          ~~~~~~~~~~~~~~~~~~~ ^
->> fs/f2fs/data.c:616:24: error: no member named 'zone_pending_bio' in 'struct f2fs_bio_info'
-     616 |                         sbi->write_io[i][j].zone_pending_bio = NULL;
-         |                         ~~~~~~~~~~~~~~~~~~~ ^
-   5 warnings and 2 errors generated.
+>> drivers/pci/controller/pcie-apple.c:468:19: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
+                                          ^
+   1 error generated.
 
 
-vim +615 fs/f2fs/data.c
+vim +/FIELD_PREP +468 drivers/pci/controller/pcie-apple.c
 
-0fd785eb931d25 Chao Yu     2016-01-18  591  
-908ea6541661d7 Yufen Yu    2022-05-25  592  int f2fs_init_write_merge_io(struct f2fs_sb_info *sbi)
-908ea6541661d7 Yufen Yu    2022-05-25  593  {
-908ea6541661d7 Yufen Yu    2022-05-25  594  	int i;
-908ea6541661d7 Yufen Yu    2022-05-25  595  
-908ea6541661d7 Yufen Yu    2022-05-25  596  	for (i = 0; i < NR_PAGE_TYPE; i++) {
-908ea6541661d7 Yufen Yu    2022-05-25  597  		int n = (i == META) ? 1 : NR_TEMP_TYPE;
-908ea6541661d7 Yufen Yu    2022-05-25  598  		int j;
-908ea6541661d7 Yufen Yu    2022-05-25  599  
-908ea6541661d7 Yufen Yu    2022-05-25  600  		sbi->write_io[i] = f2fs_kmalloc(sbi,
-908ea6541661d7 Yufen Yu    2022-05-25  601  				array_size(n, sizeof(struct f2fs_bio_info)),
-908ea6541661d7 Yufen Yu    2022-05-25  602  				GFP_KERNEL);
-908ea6541661d7 Yufen Yu    2022-05-25  603  		if (!sbi->write_io[i])
-908ea6541661d7 Yufen Yu    2022-05-25  604  			return -ENOMEM;
-908ea6541661d7 Yufen Yu    2022-05-25  605  
-908ea6541661d7 Yufen Yu    2022-05-25  606  		for (j = HOT; j < n; j++) {
-908ea6541661d7 Yufen Yu    2022-05-25  607  			init_f2fs_rwsem(&sbi->write_io[i][j].io_rwsem);
-908ea6541661d7 Yufen Yu    2022-05-25  608  			sbi->write_io[i][j].sbi = sbi;
-908ea6541661d7 Yufen Yu    2022-05-25  609  			sbi->write_io[i][j].bio = NULL;
-908ea6541661d7 Yufen Yu    2022-05-25  610  			spin_lock_init(&sbi->write_io[i][j].io_lock);
-908ea6541661d7 Yufen Yu    2022-05-25  611  			INIT_LIST_HEAD(&sbi->write_io[i][j].io_list);
-908ea6541661d7 Yufen Yu    2022-05-25  612  			INIT_LIST_HEAD(&sbi->write_io[i][j].bio_list);
-908ea6541661d7 Yufen Yu    2022-05-25  613  			init_f2fs_rwsem(&sbi->write_io[i][j].bio_list_lock);
-e067dc3c6b9c41 Daeho Jeong 2023-05-03  614  #ifdef CONFIG_BLK_DEV_ZONED
-e067dc3c6b9c41 Daeho Jeong 2023-05-03 @615  			init_completion(&sbi->write_io[i][j].zone_wait);
-e067dc3c6b9c41 Daeho Jeong 2023-05-03 @616  			sbi->write_io[i][j].zone_pending_bio = NULL;
-e067dc3c6b9c41 Daeho Jeong 2023-05-03  617  			sbi->write_io[i][j].bi_private = NULL;
-e067dc3c6b9c41 Daeho Jeong 2023-05-03  618  #endif
-908ea6541661d7 Yufen Yu    2022-05-25  619  		}
-908ea6541661d7 Yufen Yu    2022-05-25  620  	}
-908ea6541661d7 Yufen Yu    2022-05-25  621  
-908ea6541661d7 Yufen Yu    2022-05-25  622  	return 0;
-908ea6541661d7 Yufen Yu    2022-05-25  623  }
-908ea6541661d7 Yufen Yu    2022-05-25  624  
-
-:::::: The code at line 615 was first introduced by commit
-:::::: e067dc3c6b9c419bac43c6a0be2d85f44681f863 f2fs: maintain six open zones for zoned devices
-
-:::::: TO: Daeho Jeong <daehojeong@google.com>
-:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
+   430	
+   431	static int apple_pcie_port_setup_irq(struct apple_pcie_port *port)
+   432	{
+   433		struct fwnode_handle *fwnode = &port->np->fwnode;
+   434		struct apple_pcie *pcie = port->pcie;
+   435		unsigned int irq;
+   436	
+   437		/* FIXME: consider moving each interrupt under each port */
+   438		irq = irq_of_parse_and_map(to_of_node(dev_fwnode(port->pcie->dev)),
+   439					   port->idx);
+   440		if (!irq)
+   441			return -ENXIO;
+   442	
+   443		port->domain = irq_domain_create_linear(fwnode, 32,
+   444							&apple_port_irq_domain_ops,
+   445							port);
+   446		if (!port->domain)
+   447			return -ENOMEM;
+   448	
+   449		/* Disable all interrupts */
+   450		writel_relaxed(~0, port->base + PORT_INTMSK);
+   451		writel_relaxed(~0, port->base + PORT_INTSTAT);
+   452		writel_relaxed(~0, port->base + PORT_LINKCMDSTS);
+   453	
+   454		irq_set_chained_handler_and_data(irq, apple_port_irq_handler, port);
+   455	
+   456		/* Configure MSI base address */
+   457		BUG_ON(upper_32_bits(DOORBELL_ADDR));
+   458		writel_relaxed(lower_32_bits(DOORBELL_ADDR),
+   459			       port->base + pcie->hw->port_msiaddr);
+   460		if (pcie->hw->port_msiaddr_hi)
+   461			writel_relaxed(0, port->base + pcie->hw->port_msiaddr_hi);
+   462	
+   463		/* Enable MSIs, shared between all ports */
+   464		if (pcie->hw->port_msimap) {
+   465			int i;
+   466	
+   467			for (i = 0; i < pcie->nvecs; i++) {
+ > 468				writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
+   469					       PORT_MSIMAP_ENABLE,
+   470					       port->base + pcie->hw->port_msimap + 4 * i);
+   471			}
+   472	
+   473			writel_relaxed(PORT_MSICFG_EN, port->base + PORT_MSICFG);
+   474		} else {
+   475			writel_relaxed(0, port->base + PORT_MSIBASE);
+   476			writel_relaxed((ilog2(pcie->nvecs) << PORT_MSICFG_L2MSINUM_SHIFT) |
+   477				PORT_MSICFG_EN, port->base + PORT_MSICFG);
+   478		}
+   479	
+   480		return 0;
+   481	}
+   482	
 
 -- 
 0-DAY CI Kernel Test Service
