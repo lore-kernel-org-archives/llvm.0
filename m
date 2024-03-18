@@ -1,172 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEFF5A790;
-	Mon, 18 Mar 2024 22:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8429D5CDCF
+	for <llvm@lists.linux.dev>; Mon, 18 Mar 2024 23:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710801799; cv=none; b=Zk+UdDjRHkxMM3ftitr8uLjXJM7TIE8uC4pC4Du+Ym9N/UPXkfUBZRO8Lo4pci5UqyD8GFBsm9uxaE4jUupMDyjwBBUWzxPQ+apjw00HucKH/bdEYB2yGpD5Vn0F1l27gw9jn4w0155fxfq8LSf3Dgj5to0dlAghLBEPF0YOvrc=
+	t=1710803436; cv=none; b=Hg0xuF0bcMXFue+MbV4tRYPGA78hq0DBhZYTXDaU6cSt2ePyXZsB9/lQINRh9xHMtdcb0xYK+19I/vIRYVt1RXTYizToC+5IveOAqDCqLvczLXOKprBpBock437tXLRKkg0sA08fZ4MnVuJcsc9eGH8lzUiOPm14zQgVtCw6ZVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710801799; c=relaxed/simple;
-	bh=ZB4Y0Im1Pmve8oPKTWzkIF5OjzBbiD9cY5nLcjTuxb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HIJSVLie8/5aYbweMvnn5FVKs1uva+d6oexF6KUaoFVToIyEzXgAfrCt9i396Hb9gWz44mlas01jWYiFe3H8RKEppEId9OozwJ4zHy8mE2bvD4EQ2OEY29V1hmbhRVwkLgfccKgR0jb4MJD1sOZQ2vA1OPml/VY4jPwyrZN922w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YKmD6XZv; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710803436; c=relaxed/simple;
+	bh=3QfwHntJQMgvU6AuyLnxDRBkYhBLtNLtAuixY4b/WFE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=O5WGc5Zk5OqCSyvoF5LYd7VmOGSqOSpNQ/86I5z/INtlE/cqDsp3Ym6m33CVkeQNUJTkGLDGC9Zm4eSqLZNDarpW+DNy5Leekc3kYepAOHmrys+qs56jkoZKmD5LbT/aK2W3e39V4Sv+7f4BF2LffwP/M/KKGWLqYRj7OAgfhkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--acdunlap.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tZOiQmY5; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--acdunlap.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YKmD6XZv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710801798; x=1742337798;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZB4Y0Im1Pmve8oPKTWzkIF5OjzBbiD9cY5nLcjTuxb4=;
-  b=YKmD6XZv1kPIX8brBv0Dznzv/7a1RNA4wMQC4K3OuM0arldt2y3mXPcy
-   lbnUPfmnoDLv9hCEOtk2zIZKsQL+hxTWoxuE0xWqeY3DthPmXk7IvZFQb
-   vd/Qo42bInn1dMWXEaOezBm2Zsokl2g7EqlB5dZQ5DYr4oPk7YsQCK3gT
-   tZzAGTiOCvJ1Rd57Dl2l/of49YdcvOHJA1O6fFCtK3aiD+Omn/cbxtJK8
-   y3YBFZ7zK/D8W1sD+a+qCliN0eJo7JVQJVdl0G9D53iK2CSr4tcJ24anU
-   2SipMQEa3kC/6heckv9xwAWlTuNypKDX3FzVGdifRvLoOjv73XYAiWvxS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="16791058"
-X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
-   d="scan'208";a="16791058"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 15:43:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
-   d="scan'208";a="13588597"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 18 Mar 2024 15:43:16 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rmLhJ-000HIF-1D;
-	Mon, 18 Mar 2024 22:43:13 +0000
-Date: Tue, 19 Mar 2024 06:42:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [lunn:v6.8.0-net-next-mv88e6xxx-leds-v4 3/8]
- drivers/net/ethernet/intel/igc/igc_leds.c:254:12: error: no member named
- 'hw_control_trigger' in 'struct led_classdev'
-Message-ID: <202403190652.ruPDEFGw-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tZOiQmY5"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60ccc3cfa39so86793817b3.2
+        for <llvm@lists.linux.dev>; Mon, 18 Mar 2024 16:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710803432; x=1711408232; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=101Rc15yJZ5dhEo4PySV2SOSqW3Lu8UuBq5uPa6A6n4=;
+        b=tZOiQmY5wzmjUOb5xJS94MHVQDttRMgXAfanMKAzkLEyuKHQ8WGPwWAHm9AOqCl5As
+         rNhfEiDNprgT9YMHXg0aDI4hrnjJqY4y32mRZiBjxiNeFeT39bdIs4z25V7S8QqruNlM
+         AOlDIAKx+8x2sZbME2TAst+Pg+jsWc70A8Hk6a2Ft+D4IewSfI/iQqQ5PjiNa0k1T0BZ
+         /7E9mxwy42eyx2JJaiFIxkjvYJncLuUQptDqNfqh/4JR0NOh7ki+ah0g3yL6jsW4mBGY
+         vhGBpPAbP8zVuI4QL4WpcJWIhGsd6bMUcyWJUxPllkEFSEq4zZFnrMU/BmvLR0vPFyBx
+         e5cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710803432; x=1711408232;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=101Rc15yJZ5dhEo4PySV2SOSqW3Lu8UuBq5uPa6A6n4=;
+        b=ssg2fwqR005Noh6zMPwJTkGAaocLXyD611EvcRQybaGJ6HAKCDAt3xC/FKiWKblSJu
+         dRQJbhbnTW1xgiIg5zfjIAfuYgrkhz+ql0GBHO6Dfm48/JncDzCXzHTnf2qeGJbBbtDt
+         RhfUns1CHvjD+mTFW6+JjpP8ygjQPrXDn9HNShaKXaiPx+Pbh3oTzWkFmK9ggw4sdb/q
+         2MZv6UFtAlHBW6LJmXtQXWrO/b0eA8NPSaw/TwoHVvCANxXc0V0gLmYsucVAlguAvdKI
+         pMI9NBWT/MSEW4nWX1XAShMDlF4I0IrER+gWChB3u+Jk0tqQ6LL3cG8Lqbfo7CMnQTKk
+         A0Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCXdK5U73KoshHy0u8eon4wSqzkx2I9JCcELYOWdBBDiPUmPaWwCgut1oPKssaHyjSSvf0ZL70CRC1YS3Oni7QbmYWICKw==
+X-Gm-Message-State: AOJu0YwoUiHQHLzAFCe8i25O2zP9134A33rzP8Wc+2DJiNjQq7EFxaaR
+	RREkLCiiBXeJEKhM+e2ZPSARw9q3Nxb4hex7LtT5zZVyfINLhr1XCVVN2zChT+SUvaab4qlggsx
+	Ma6ZFOJj4GQ==
+X-Google-Smtp-Source: AGHT+IH++3SMmZzNlMzKHz9FwHgWagIFoME8NVVi0QvZI89J+nCx6d7zWk0UM9APt0/6zAQC/gddneHi6BEO1w==
+X-Received: from anticipation.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4517])
+ (user=acdunlap job=sendgmr) by 2002:a0d:d5cd:0:b0:60a:267c:87bc with SMTP id
+ x196-20020a0dd5cd000000b0060a267c87bcmr259907ywd.6.1710803432480; Mon, 18 Mar
+ 2024 16:10:32 -0700 (PDT)
+Date: Mon, 18 Mar 2024 16:09:27 -0700
+In-Reply-To: <87frwrjc0i.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+References: <87frwrjc0i.ffs@tglx>
+X-Mailer: git-send-email 2.44.0.291.gc1ea87d7ee-goog
+Message-ID: <20240318230927.2191933-1-acdunlap@google.com>
+Subject: [PATCH v4] x86/asm: Force native_apic_mem_read() to use the MOV instruction
+From: Adam Dunlap <acdunlap@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Arjan van de Ven <arjan@linux.intel.com>, Wei Liu <wei.liu@kernel.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
+	Kevin Loughlin <kevinloughlin@google.com>, Peter Gonda <pgonda@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>
+Cc: Adam Dunlap <acdunlap@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Andrew,
+When done from a virtual machine, instructions that touch APIC memory
+must be emulated. By convention, MMIO access are typically performed via
+io.h helpers such as 'readl()' or 'writeq()' to simplify instruction
+emulation/decoding (ex: in KVM hosts and SEV guests) [0].
 
-First bad commit (maybe != root cause):
+Currently, native_apic_mem_read() does not follow this convention,
+allowing the compiler to emit instructions other than the MOV
+instruction generated by readl(). In particular, when compiled with
+clang and run as a SEV-ES or SEV-SNP guest, the compiler would emit a
+TESTL instruction which is not supported by the SEV-ES emulator, causing
+a boot failure in that environment. It is likely the same problem would
+happen in a TDX guest as that uses the same instruction emulator as
+SEV-ES.
 
-tree:   https://github.com/lunn/linux.git v6.8.0-net-next-mv88e6xxx-leds-v4
-head:   c85ce1c8e3761fc366533410f0318b01314ba819
-commit: c4ae49b10529d66ed1aa9bf7c6e10ef95dfe7f75 [3/8] net: Add helpers for netdev LEDs
-config: powerpc64-randconfig-001-20240318 (https://download.01.org/0day-ci/archive/20240319/202403190652.ruPDEFGw-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240319/202403190652.ruPDEFGw-lkp@intel.com/reproduce)
+To make sure all emulators can emulate APIC memory reads via MOV, use
+the readl() function in native_apic_mem_read(). It is expected that any
+emulator would support MOV in any addressing mode it is the most generic
+and is what is ususally emitted currently.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403190652.ruPDEFGw-lkp@intel.com/
+The TESTL instruction is emitted when native_apic_mem_read() is inlined
+into apic_mem_wait_icr_idle(). The emulator comes from insn_decode_mmio
+in arch/x86/lib/insn-eval.c. It's not worth it to extend
+insn_decode_mmio to support more instructions since, in theory, the
+compiler could choose to output nearly any instruction for such reads
+which would bloat the emulator beyond reason.
 
-All errors (new ones prefixed by >>):
+[0] https://lore.kernel.org/all/20220405232939.73860-12-kirill.shutemov@linux.intel.com/
 
-   In file included from drivers/net/ethernet/intel/igc/igc_leds.c:6:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/intel/igc/igc_leds.c:254:12: error: no member named 'hw_control_trigger' in 'struct led_classdev'
-     254 |         led_cdev->hw_control_trigger = "netdev";
-         |         ~~~~~~~~  ^
->> drivers/net/ethernet/intel/igc/igc_leds.c:255:12: error: no member named 'hw_control_is_supported' in 'struct led_classdev'
-     255 |         led_cdev->hw_control_is_supported = igc_led_hw_control_is_supported;
-         |         ~~~~~~~~  ^
->> drivers/net/ethernet/intel/igc/igc_leds.c:256:12: error: no member named 'hw_control_set' in 'struct led_classdev'
-     256 |         led_cdev->hw_control_set = igc_led_hw_control_set;
-         |         ~~~~~~~~  ^
->> drivers/net/ethernet/intel/igc/igc_leds.c:257:12: error: no member named 'hw_control_get' in 'struct led_classdev'
-     257 |         led_cdev->hw_control_get = igc_led_hw_control_get;
-         |         ~~~~~~~~  ^
->> drivers/net/ethernet/intel/igc/igc_leds.c:258:12: error: no member named 'hw_control_get_device' in 'struct led_classdev'
-     258 |         led_cdev->hw_control_get_device = igc_led_hw_control_get_device;
-         |         ~~~~~~~~  ^
-   5 warnings and 5 errors generated.
+Signed-off-by: Adam Dunlap <acdunlap@google.com>
+Tested-by: Kevin Loughlin <kevinloughlin@google.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for LEDS_TRIGGER_NETDEV
-   Depends on [n]: NEW_LEDS [=y] && LEDS_TRIGGERS [=n] && NET [=y]
-   Selected by [y]:
-   - NETDEV_LEDS [=y] && NET [=y] && LEDS_CLASS [=y]
+---
 
+An alterative to this approach would be to use inline assembly instead
+of the readl() helper, as that is what native_apic_mem_write() does. I
+consider using readl() to be cleaner since it is documented to be a simple
+wrapper and inline assembly is less readable. native_apic_mem_write()
+cannot be trivially updated to use writel since it appears to use custom
+asm to workaround for a processor-specific bug.
 
-vim +254 drivers/net/ethernet/intel/igc/igc_leds.c
+Patch changelog:
+V1 -> V2: Replaced asm with readl function which does the same thing
+V2 -> V3: Updated commit message to show more motivation and
+justification
+V3 -> V4: Fixed nits in commit message
 
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  238  
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  239  static void igc_setup_ldev(struct igc_led_classdev *ldev,
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  240  			   struct net_device *netdev, int index)
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  241  {
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  242  	struct igc_adapter *adapter = netdev_priv(netdev);
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  243  	struct led_classdev *led_cdev = &ldev->led;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  244  	char led_name[LED_MAX_NAME_SIZE];
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  245  
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  246  	ldev->netdev = netdev;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  247  	ldev->index = index;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  248  
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  249  	igc_led_get_name(adapter, index, led_name, LED_MAX_NAME_SIZE);
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  250  	led_cdev->name = led_name;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  251  	led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  252  	led_cdev->max_brightness = 1;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  253  	led_cdev->brightness_set_blocking = igc_led_brightness_set_blocking;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13 @254  	led_cdev->hw_control_trigger = "netdev";
-ea578703b03d5d Kurt Kanzenbach 2024-02-13 @255  	led_cdev->hw_control_is_supported = igc_led_hw_control_is_supported;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13 @256  	led_cdev->hw_control_set = igc_led_hw_control_set;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13 @257  	led_cdev->hw_control_get = igc_led_hw_control_get;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13 @258  	led_cdev->hw_control_get_device = igc_led_hw_control_get_device;
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  259  
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  260  	devm_led_classdev_register(&netdev->dev, led_cdev);
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  261  }
-ea578703b03d5d Kurt Kanzenbach 2024-02-13  262  
+Link to v2 discussion: https://lore.kernel.org/all/20220908170456.3177635-1-acdunlap@google.com/
 
-:::::: The code at line 254 was first introduced by commit
-:::::: ea578703b03d5d651b091c39f717dc829155b520 igc: Add support for LEDs on i225/i226
+ arch/x86/include/asm/apic.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-:::::: TO: Kurt Kanzenbach <kurt@linutronix.de>
-:::::: CC: Paolo Abeni <pabeni@redhat.com>
-
+diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+index 9d159b771dc8..dddd3fc195ef 100644
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -13,6 +13,7 @@
+ #include <asm/mpspec.h>
+ #include <asm/msr.h>
+ #include <asm/hardirq.h>
++#include <asm/io.h>
+ 
+ #define ARCH_APICTIMER_STOPS_ON_C3	1
+ 
+@@ -96,7 +97,7 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
+ 
+ static inline u32 native_apic_mem_read(u32 reg)
+ {
+-	return *((volatile u32 *)(APIC_BASE + reg));
++	return readl((void __iomem *)(APIC_BASE + reg));
+ }
+ 
+ static inline void native_apic_mem_eoi(void)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0.594.gd9cf4e227d-goog
+
