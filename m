@@ -1,110 +1,203 @@
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750EA2C1AE
-	for <llvm@lists.linux.dev>; Mon, 18 Mar 2024 09:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1AA2C19E
+	for <llvm@lists.linux.dev>; Mon, 18 Mar 2024 09:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710753968; cv=none; b=ozextTnvcTaVjEB3UUz43ONX1GULgN0f4mp7CN5/fg4947MD+k72iQsQ/wqYNNN+Jmw4PK9xmbGCJl+FL29hMA8KRv4z/f4/bw4Cw1LPuO5zn6ii7rNx0KiEnZ4BPg7Dc0ulExLrluezx7sm5Wwq2amw5IEn/KsBxpz5ER2Cgwc=
+	t=1710754283; cv=none; b=PgInUvJfSnmNHb7aI68XGRGtCoqgEljdVCiy5Z2ggmw6NgsNqd+B9P2T/Cd0P1AELulZqXbfb1hIJPfV3e2gf/F9tRdcS7CwfozibnNw39Em4+AVWveKj93RII+rkkfHi0wW1X5egtoOGcfSQdRZuIGbf/zVQlbBUZD1WBudnQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710753968; c=relaxed/simple;
-	bh=8y4vSdVUZCk+aPZhva5pLco3uG5l2lCYnp2HRRGYbkg=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=SPjZdz/Wj924JZIPnEJusMAFFCktB29QJA5hxMiO6wLDA4jlVACxSvBTpS87vilZHpSosnKOMTWjjI2fAnO9m+eAYBPR2bcGF4YI7HacBXcTje9O7EnNO1R3gzP3rVztNMy3dNTIDmJfCQi821aQXWkboovAU3FBHy3/sK5PuTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y1YkOZMl; arc=none smtp.client-ip=209.85.221.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1710754283; c=relaxed/simple;
+	bh=2kLWXbsgkjPeJV0F6B2b4V4pnIEhOFtD8+Si/kx8A/w=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=LvtxIyU4lNCejqf1IpskxlR2Pn5A0HQFoUQB4u7lnArm68UxP+U1vFXa6fflrkAENzm3K2d+Gzy/UVEuSxUtybquiO3PlEx1wydCESKm9RPaEvbxyLBxqPKmvaJO5TRBsA6AqCYxBL3Y7v+0wmnQgrVI+1NhjRC+ue499AbGt28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AZ3CAsV/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y1YkOZMl"
-Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-4d43c633fecso876531e0c.3
-        for <llvm@lists.linux.dev>; Mon, 18 Mar 2024 02:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710753965; x=1711358765; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dr558Gtc+rRfkIYnJ72l9uUtS+S0kUdV5Cm0VXr/mqc=;
-        b=Y1YkOZMlR5PlZQ5481FdEdwXisdVBEPuQ4HTIHsNDY6oKHIEnfs7eIU34/xRvUCkIr
-         zBpoMNrd4blXwcxz9/yqEyWEcBwtWNJ0h+HiuYO3NlEYe17sY/Lju/an0Vam66Oc37eg
-         aqOa5hu2Hp2TumpZyNwr4rN5X2CYMjU7CXiJ8mGOsdi8SAGYpyHMnccpx8MAURNpv06+
-         N6w7BaJcNaaGn1ZkGZBs/8KaBj6W53hVuIckMeAtgQ7QBylBgZvbTUZg9d9WS3KXGOr4
-         g50/Cp0xe61ZvNHwWUbBBZUi0RtSeuMJJeFHDLP9Qpk6//kiHDLz3JygzLcszjwfASmm
-         xwIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710753965; x=1711358765;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dr558Gtc+rRfkIYnJ72l9uUtS+S0kUdV5Cm0VXr/mqc=;
-        b=ENkBSak576hQ6uTGXY7bhSsXQtHmCRQT9CzULEDqi8CSLLEp1jkuf9+4UV30ncEJRr
-         q4zcYPVry+DZXM0p5rlDsVu68kE7G64aHwC/jeUq7mBhW6SiONhdJ1SRz23bRIsjnIkq
-         8nPfIpAD3l9cuj7aEf5w2BiLoKQ1R8z2BQUA2MB556rOX9oUgAhLSalIfzJaAoUHtoTc
-         3vbyZNiYEdCJ2A/uJ6UAkRFYgzEEt/+FIP5Ghk/7NSQ1Lq0E/6TH2vFA5KUOlIqqP87T
-         Pq1GkYsf2t/LAxYE1Jbky2ZO00iMALHH9MJiMC+j6nVu9vbkGVvIyIJlDNCq+JORi91S
-         Yd2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXZQjFYgPKPXTNe/UdpuI6949FXSfj5l0tIreAx3ufMrE0L+aow1eMQP5VNv8L+cFxgTdzuIply3KD8nHiM2QEW/ukXCw==
-X-Gm-Message-State: AOJu0Yy0FYy3Ux4412Vpsm4xvnykNlNaZbOrLo7phIdkfma4uhvtmd0S
-	j1L7PoQG/3Dm6kxY0MkwWy+zTKd0+tc15iTd1iBpoFuF6hRZjYVLnd8/q/BcpRkKFqn2+yFeZ9f
-	FaOf5F0PiHNvyL16hZjk6Ov1f8ncXEcv+IOKnea985CMjhJU3nRM=
-X-Google-Smtp-Source: AGHT+IFDDQIlK3lVhoDg3KpbK/eh3Hhxm8PIDTagoTjsDxY8wbny4dXn7KvLQWqbF5dW8Rr0jLCdFvvcFrJRC5YENVg=
-X-Received: by 2002:a1f:724c:0:b0:4ca:615e:1b61 with SMTP id
- n73-20020a1f724c000000b004ca615e1b61mr7860598vkc.10.1710753965337; Mon, 18
- Mar 2024 02:26:05 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AZ3CAsV/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710754280;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ekB6gW1R5NmgIyvrPq7d+aQQSVbJj7YOhiTNgE12lxc=;
+	b=AZ3CAsV/CJKgVCRkB0OpHDvOShgaNS99MlFTmDbLjhDW4ApsWWrm+cg+pjl6S/0JE/VkbR
+	nf84JvW76YqINGWr2tR5y+5haBkW+6MJ33fhIwufO99t2RRb2vhTBpRLrKnlQB/B5RuN+M
+	L6ht8dzSvyuFa6h9hCO89bqrunuu+9Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-643-e9qcL40gMoeO9UAhnSpRWg-1; Mon, 18 Mar 2024 05:31:17 -0400
+X-MC-Unique: e9qcL40gMoeO9UAhnSpRWg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08EF98A5DC2;
+	Mon, 18 Mar 2024 09:31:17 +0000 (UTC)
+Received: from [172.64.11.40] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B2DF33C20;
+	Mon, 18 Mar 2024 09:31:16 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 25 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, 906a93be)
+Date: Mon, 18 Mar 2024 09:31:16 -0000
+To: shinichiro.kawasaki@wdc.com, yizhan@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 18 Mar 2024 14:55:54 +0530
-Message-ID: <CA+G9fYs=OTKAZS6g1P1Ewadfr0qoe6LgOVSohqkXmFXotEODdg@mail.gmail.com>
-Subject: net/sunrpc/sched.c: error: result of comparison against a string
- literal is unspecified (use an explicit string comparison function instead)
-To: Netdev <netdev@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org
-Cc: "David S. Miller" <davem@davemloft.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Trond Myklebust <trond.myklebust@hammerspace.com>, Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <97194.124031805311700339@us-mta-643.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following build warnings / errors noticed on x86 kselftests build with
-clang nightly  / clang-17 on Linux  next tag next-20240318.
+Hi, we tested your kernel and here are the results:
 
-This build config is generated from kselftest merge configs [1].
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build log:
------------
-In file included from net/sunrpc/sched.c:31:
-In file included from include/trace/events/sunrpc.h:2524:
-In file included from include/trace/define_trace.h:102:
-In file included from include/trace/trace_events.h:419:
-include/trace/events/sunrpc.h:707:4: error: result of comparison
-against a string literal is unspecified (use an explicit string
-comparison function instead) [-Werror,-Wstring-compare]
-  667 |                         __assign_str(progname,
-      |                         ~~~~~~~~~~~~~~~~~~~~~~
-  668 |                                      task->tk_client->cl_program->name);
-      |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  669 |                         __entry->version = task->tk_client->cl_vers;
-      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  670 |                         __assign_str(procedure,
-task->tk_msg.rpc_proc->p_name);
-      |
-
-[1] steps to reproduce:
------------
-tuxmake --runtime podman --target-arch x86_64 --toolchain
-clang-nightly --kconfig
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2dqIWv3Qq5qYmJfnmKfkSg9fvN0/config
-LLVM=1 LLVM_IAS=1 debugkernel cpupower headers kernel kselftest
-modules
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Links:
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2dqIWv3Qq5qYmJfnmKfkSg9fvN0/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240318/testrun/23069554/suite/build/test/clang-nightly-lkftconfig-kselftest/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240318/testrun/23069554/suite/build/test/clang-nightly-lkftconfig-kselftest/details/
+Kernel information:
+    Commit message: Merge tag 'efi-fixes-for-v6.9-1' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/efi/efi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/135456
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+           s390x - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11703172
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+          x86_64 - Storage - blktests - blk - upstream
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11703211
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: makedumpfile failed when dumping vmcore
+            URL: https://bugzilla.redhat.com/2269991
+            Affected tests:
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+                   s390x - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Storage - blktests - nvme-tcp - upstream
+       s390x - Storage - swraid scsi_raid
+       s390x - stress: stress-ng - cpu-cache
+       s390x - stress: stress-ng - memory
+       s390x - Reboot test
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Storage - blktests - nvme-tcp - upstream
+      x86_64 - Storage - swraid scsi_raid
+      x86_64 - stress: stress-ng - cpu-cache
+      x86_64 - stress: stress-ng - memory
+      x86_64 - Reboot test
+      x86_64 - Memory function: memfd_create
+      x86_64 - Networking vnic: ipvlan/basic
+      x86_64 - Libkcapi AF_ALG test
+      x86_64 - Hardware - pciutils: sanity smoke test
+      x86_64 - Storage - dm/common
+      x86_64 - kdump - kexec_boot
+      x86_64 - kdump - kexec-file-load
+      x86_64 - kselftests upstream - net
+      x86_64 - kselftests upstream - bpf
+      x86_64 - kselftests upstream - bpf_test_progs
+      x86_64 - Reboot test
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
