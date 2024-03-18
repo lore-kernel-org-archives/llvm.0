@@ -1,56 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C364EB39;
-	Mon, 18 Mar 2024 15:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4FC524BD;
+	Mon, 18 Mar 2024 15:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710774015; cv=none; b=mRPHawHGEINvv6g8M8Er3Ctt61Ai07RykTNsRXYZy+E9AuoKh6Has7z7RG734FpgOs7TflJ6Vr/8j+N14HrAI2p6wq7CHjeC8hkbZCdK1v+2CzzQc/+gqOz5aZfLvJ9HaA8jYlKi17mGLKSuJWZ4f52zZLF57RPmb6Jv8STCDbI=
+	t=1710776584; cv=none; b=uegpGwZG+iwiA5YO1Zc0D0FZwjneWlUnjXFw0GzCTEanQQDnzGDYZTkp6KnIwgz8qyPV7CxOLHRZ8WAbpRyEjPuteobM7zuwtL+KTbb2075bY2H504/G2Wv3/JY9OPFeSDFD85sG5i26k5uHIJ6VcQ3sWPJObgK09diAaXsMWtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710774015; c=relaxed/simple;
-	bh=PC104PBOwXuviVlws1W/LwILT5gKE6sViJcHCXyEwlw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fzIPHvzJe7creIN70jKuE3dxrEmAhkJeubqSwFevTdt/YdgHD/HK3KfokHlm4RGdCFdoGNXnjCKgUZDF46ijGRZ7JPIhkT5ut9+42/4e0Ri36NxudVS5ZvYn7CeTUmJrd+nTCCyIwswjF+NWPUo8a34BusDFbDD6ZXpEjqaCL2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UYacY3uT; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710776584; c=relaxed/simple;
+	bh=qhMgOtaICUkeTtfPcfP/CSjZBvXls4O81TYsjiRoEvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MKVIf6fXhcqmosQBu4qN5b47art7EimJQ3a3CTZOS2LW2tMsCL2vYSMdmnmXmOeBD2lB6tXj0KFepau5CTv9pa+Xfy7lYveFRE9ki0HwFoblmYkk+hklHgFKM/A+mXzCwUP1FQS7XBI9/1mFAgrckK9gs2OwLMAgBNAQU8rHFn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q4vsvdxA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UYacY3uT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710774013; x=1742310013;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PC104PBOwXuviVlws1W/LwILT5gKE6sViJcHCXyEwlw=;
-  b=UYacY3uT/UrgdBcigYB2oJn+un/1bgywAVQgrdXBDewqte9Vgg4ZWrwf
-   Vbt57aJgYNQxcjuHKFjFhR5PDmHW8O2fS4b4DODJ5FK9pMdqY/sDPT0Qa
-   KBpkYdSIIdETtXN7Uwl69jGAvcgPJluqN4BpZplDA4PAgJXCnpIwLnDFw
-   NvLew9S3C2zOr60QdxxGfc7AM+lDLSRJ6mBb+2+6p3dKFZ5NJ9wvaknbq
-   1GGOMPTR7jBk33u+EUbMV9bxwgYY2rZYEXabFAMPysSthIaQB33NHVr5K
-   GCJWEEP+yrZ88gC08Sb0jQv/lEnrn7poQ1xXAltK/JJ4+aeuz/qflhN1y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="5527367"
-X-IronPort-AV: E=Sophos;i="6.07,134,1708416000"; 
-   d="scan'208";a="5527367"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 08:00:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,134,1708416000"; 
-   d="scan'208";a="36619807"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 18 Mar 2024 08:00:04 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rmET4-000H25-2E;
-	Mon, 18 Mar 2024 15:00:02 +0000
-Date: Mon, 18 Mar 2024 22:59:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [drm-misc:for-linux-next-fixes 1/1] ld.lld: error: undefined symbol:
- __drm_dev_dbg
-Message-ID: <202403182236.BEDkBjub-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q4vsvdxA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80050C433F1;
+	Mon, 18 Mar 2024 15:43:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710776584;
+	bh=qhMgOtaICUkeTtfPcfP/CSjZBvXls4O81TYsjiRoEvQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q4vsvdxAU2l9z+ABU4RNeEHXMVDq+x6oeTzCY4PBlnTBwWbudF9cqa3JqwhJrZjiq
+	 cqasOHoiPvZRptYizIAOrw7xVPey3bDT7Tyjy5Ykrz9fRs5sgAoZMVCNcovf0uDzjk
+	 kp+PK/zTi4ecEIlvmiopxrMmztkLm/kriYVibp8QpGpN9ElLgrfgs7fOjH84T4MUH7
+	 L0ZgdVRhj4ay96G30DD5vPXI2AX36Y7E4HU/K8f656bzaZ4qQwmjksSBEvpbUazver
+	 GJcoyshDydV88jViUQBbX9r2PJZ+Jk80X5qdyUhKv21BctkaLQv3rDdgnfrem301EG
+	 Gk1NfGnFxDM8Q==
+Date: Mon, 18 Mar 2024 08:43:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Netdev <netdev@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	open list <linux-kernel@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Eric Dumazet <edumazet@google.com>, rostedt@goodmis.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: net/sunrpc/sched.c: error: result of comparison against a string
+ literal is unspecified (use an explicit string comparison function instead)
+Message-ID: <20240318154300.GA816320@dev-arch.thelio-3990X>
+References: <CA+G9fYs=OTKAZS6g1P1Ewadfr0qoe6LgOVSohqkXmFXotEODdg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,107 +49,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CA+G9fYs=OTKAZS6g1P1Ewadfr0qoe6LgOVSohqkXmFXotEODdg@mail.gmail.com>
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next-fixes
-head:   e3f18b0dd1db242791afbc3bd173026163ce0ccc
-commit: e3f18b0dd1db242791afbc3bd173026163ce0ccc [1/1] drm/bridge: Select DRM_KMS_HELPER for DRM_PANEL_BRIDGE
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240318/202403182236.BEDkBjub-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240318/202403182236.BEDkBjub-lkp@intel.com/reproduce)
+Hi Naresh,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403182236.BEDkBjub-lkp@intel.com/
+On Mon, Mar 18, 2024 at 02:55:54PM +0530, Naresh Kamboju wrote:
+> The following build warnings / errors noticed on x86 kselftests build with
+> clang nightly  / clang-17 on Linux  next tag next-20240318.
+> 
+> This build config is generated from kselftest merge configs [1].
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Build log:
+> -----------
+> In file included from net/sunrpc/sched.c:31:
+> In file included from include/trace/events/sunrpc.h:2524:
+> In file included from include/trace/define_trace.h:102:
+> In file included from include/trace/trace_events.h:419:
+> include/trace/events/sunrpc.h:707:4: error: result of comparison
+> against a string literal is unspecified (use an explicit string
+> comparison function instead) [-Werror,-Wstring-compare]
+>   667 |                         __assign_str(progname,
+>       |                         ~~~~~~~~~~~~~~~~~~~~~~
+>   668 |                                      task->tk_client->cl_program->name);
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   669 |                         __entry->version = task->tk_client->cl_vers;
+>       |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   670 |                         __assign_str(procedure,
+> task->tk_msg.rpc_proc->p_name);
+>       |
 
-All errors (new ones prefixed by >>):
+Thanks for the report. This is caused by commit 433e1d88a3be ("tracing:
+Add warning if string in __assign_str() does not match __string()") from
+the tracing tree, not a change on the netdev side (although I have left
+them on CC for this reply so they are aware of that).
 
->> ld.lld: error: undefined symbol: __drm_dev_dbg
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_check_modeset) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_check_modeset) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_check_modeset) in archive vmlinux.a
-   >>> referenced 52 more times
---
->> ld.lld: error: undefined symbol: drm_dev_has_vblank
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_check_modeset) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_commit_modeset_disables) in archive vmlinux.a
-   >>> referenced by drm_atomic_state_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_state_helper.o:(__drm_atomic_helper_crtc_reset) in archive vmlinux.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: drm_atomic_set_crtc_for_connector
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(handle_conflicting_encoders) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_disable_all) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: drm_atomic_set_mode_prop_for_crtc
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(handle_conflicting_encoders) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_disable_all) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: drm_connector_list_iter_end
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(handle_conflicting_encoders) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_duplicate_state) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_duplicate_state) in archive vmlinux.a
-   >>> referenced 25 more times
---
->> ld.lld: error: undefined symbol: drm_mode_copy
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(mode_fixup) in archive vmlinux.a
-   >>> referenced by drm_crtc_helper.c
-   >>>               drivers/gpu/drm/drm_crtc_helper.o:(drm_crtc_helper_set_mode) in archive vmlinux.a
-   >>> referenced by drm_crtc_helper.c
-   >>>               drivers/gpu/drm/drm_crtc_helper.o:(drm_crtc_helper_set_mode) in archive vmlinux.a
-   >>> referenced 2 more times
---
->> ld.lld: error: undefined symbol: drm_atomic_bridge_chain_check
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(mode_fixup) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: drm_mode_get_hv_timing
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_check_plane_state) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: drm_atomic_normalize_zpos
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_check) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: drm_calc_timestamping_constants
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_calc_timestamping_constants) in archive vmlinux.a
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_commit_modeset_disables) in archive vmlinux.a
-   >>> referenced by drm_crtc_helper.c
-   >>>               drivers/gpu/drm/drm_crtc_helper.o:(drm_crtc_helper_set_mode) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: drm_atomic_bridge_chain_post_disable
-   >>> referenced by drm_atomic_helper.c
-   >>>               drivers/gpu/drm/drm_atomic_helper.o:(drm_atomic_helper_commit_modeset_disables) in archive vmlinux.a
-..
+To resolve it, [1] needs to be applied then the following diff can be
+applied on top of that to fully clear it up (as __builtin_constant_p()
+does not influence diagnostics in the front end, so the warning still
+triggers on the else branch when it will really use strcmp(), as Steve
+tested at [2]).
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_KMS_HELPER
-   Depends on [m]: HAS_IOMEM [=y] && DRM [=m]
-   Selected by [y]:
-   - DRM_PANEL_BRIDGE [=y] && HAS_IOMEM [=y] && DRM_BRIDGE [=y]
-   Selected by [m]:
-   - DRM [=m] && HAS_IOMEM [=y] && (AGP [=n] || AGP [=n]=n) && !EMULATED_CMPXCHG && HAS_DMA [=y] && DRM_FBDEV_EMULATION [=y]
-   - DRM_RADEON [=m] && HAS_IOMEM [=y] && DRM [=m] && PCI [=y] && MMU [=y] && (AGP [=n] || !AGP [=n])
-   - DRM_NOUVEAU [=m] && HAS_IOMEM [=y] && DRM [=m] && PCI [=y] && MMU [=y]
-   - DRM_SUN4I [=m] && HAS_IOMEM [=y] && DRM [=m] && COMMON_CLK [=y] && (ARCH_SUNXI [=y] || COMPILE_TEST [=n])
-   - DRM_VIRTIO_GPU [=m] && HAS_IOMEM [=y] && DRM [=m] && VIRTIO_MENU [=y] && MMU [=y]
-   - DRM_DW_HDMI [=m] && HAS_IOMEM [=y] && DRM [=m] && DRM_BRIDGE [=y]
+[1]: https://lore.kernel.org/20240312113002.00031668@gandalf.local.home/
+[2]: https://lore.kernel.org/20240313161420.3b668558@gandalf.local.home/
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
+index 83da83a0c14f..dbd27adb1b83 100644
+--- a/include/trace/stages/stage6_event_callback.h
++++ b/include/trace/stages/stage6_event_callback.h
+@@ -35,9 +35,14 @@
+ 	do {								\
+ 		char *__str__ = __get_str(dst);				\
+ 		int __len__ = __get_dynamic_array_len(dst) - 1;		\
++		__diag_push();						\
++		__diag_ignore(clang, 13, "-Wstring-compare",		\
++			      "__builtin_constant_p() ensures strcmp()"	\
++			      "will be used for string literals");	\
+ 		WARN_ON_ONCE(__builtin_constant_p(src) ?		\
+ 			     strcmp((src), __data_offsets.dst##_ptr_) :	\
+ 			     (src) != __data_offsets.dst##_ptr_);	\
++		__diag_pop();						\
+ 		memcpy(__str__, __data_offsets.dst##_ptr_ ? :		\
+ 		       EVENT_NULL_STR, __len__);			\
+ 		__str__[__len__] = '\0';				\
