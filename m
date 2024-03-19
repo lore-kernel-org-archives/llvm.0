@@ -1,140 +1,100 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14CA5A782
-	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 13:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AAD657D2;
+	Tue, 19 Mar 2024 16:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710855647; cv=none; b=jAiG53o+nWNtoYycLLfl3/qCIj/+Gn9+Dij2HCNKTbN00EzTBxqch3lt0+aRjn2H3a/hEuR4o7Xk73/TSjBQ3A4a1/YQzlkNHWRrGhXvgENbAE1aED6mHHHmCUNwBH2r1vmLDaoQ8uTLkYRCYhzRKLmyyqDpADyt8f3EUtxPZOw=
+	t=1710864481; cv=none; b=fjP5J4xltmpUgSXH/alSrTvw3yy9IJUhydqxvx8Y+sSMbmRGJn/pgGOVYFo73RST6ZclohSGgrkZNCWcrp9qcQIC9EQTpiRSfNZHphRcf58r4DwWqsuZHd6xL3SZecc/FHG4id8KP5MxtZKU6DPIDtwhyj7PgLk02keFtFozZAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710855647; c=relaxed/simple;
-	bh=63oP/O63tle25p4dXnRwpLxRWoEsPPqahgfFN+0CMCE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LPK1SDzzmQwPRiIyJyMjKXXMr7YkcYBSZvU169YRIlecPdvrASSmOeACAh06op5Fe+lJZjjoS9/rnop8b6hgjUBMml6RFFsn4lPyZbJvrwhpO69BlSaN+OVfCu+8BcMYsfw89OTekNoQvgTGEWcM25NWmoL414bBHJM3MjMeIXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=HNys9iGe; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=HNys9iGe; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1710864481; c=relaxed/simple;
+	bh=o/PKCSwUsZmuWmeVx/z89aLoA51oNzjLUoOwlNrR4Q4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BKC7MiosAxwsuQYq9JtrUlkQzTNP9AY77ntRisUR4BqOb44mIJVWczdsw94iIYbpjPrvWSJ/YQSK6sVExpdQovveU55F703otgop8P280vxpbRbecwSv7wo1Ie6Vcl1+xmvZRhyYDKVurCDs7+xIG80j6Sp7JyNpKN6WeJuZySs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aT7MUnOa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="HNys9iGe";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="HNys9iGe"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1F5495D714;
-	Tue, 19 Mar 2024 13:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1710855643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gPnsq29Wc/buvWIEmuCObK4jFQyJYrkPVaoqmvReZ3g=;
-	b=HNys9iGe2SR/wFIjkvSlF8NHw/ARy1KUUGVVXmmib3rYzIqtQMQgy7Tc/LDPFq57vSrfqP
-	4AePwczBpK/GQevULP+7L6FytLrElZJcjZUf6qUhw9mMAKz3hd4FPqV6z+1qIRh4/AONiG
-	IeKogcEvtKvKAtvAoXV+EkA8cw09sEc=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1710855643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gPnsq29Wc/buvWIEmuCObK4jFQyJYrkPVaoqmvReZ3g=;
-	b=HNys9iGe2SR/wFIjkvSlF8NHw/ARy1KUUGVVXmmib3rYzIqtQMQgy7Tc/LDPFq57vSrfqP
-	4AePwczBpK/GQevULP+7L6FytLrElZJcjZUf6qUhw9mMAKz3hd4FPqV6z+1qIRh4/AONiG
-	IeKogcEvtKvKAtvAoXV+EkA8cw09sEc=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C4F0C136A5;
-	Tue, 19 Mar 2024 13:40:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id AIUdLdqV+WWraQAAD6G6ig
-	(envelope-from <mhocko@suse.com>); Tue, 19 Mar 2024 13:40:42 +0000
-Date: Tue, 19 Mar 2024 14:40:34 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: Barry Song <21cnbao@gmail.com>
-Cc: liuhailong@oppo.com, akpm@linux-foundation.org, nathan@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	surenb@google.com, zhaoyang.huang@unisoc.com,
-	quic_charante@quicinc.com, yuzhao@google.com
-Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not
- available"
-Message-ID: <ZfmV0uEMgZ2Dzdnm@tiehlicka>
-References: <20240314141516.31747-1-liuhailong@oppo.com>
- <20240315081803.2223-1-liuhailong@oppo.com>
- <ZflTCY-Oaxm0U70u@tiehlicka>
- <CAGsJ_4w0EHuAwvSFuqUsMO-bLjJwCmN_qjL6NuA043-4rgfgsQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aT7MUnOa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFD1C433F1;
+	Tue, 19 Mar 2024 16:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710864480;
+	bh=o/PKCSwUsZmuWmeVx/z89aLoA51oNzjLUoOwlNrR4Q4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=aT7MUnOatlsU3iLFb7x1PFqJgBginmUC4r8wAuI4JKGyjf5QUTcKtSmnaZFHhKFUB
+	 7vSTm+NrH/l0L7AYy9oLfOHy1g1FoKKuU1NqBluqPThoXZa/0LKVumIUZnl9GJURRv
+	 S0u4FmRxKF5+QjMMePm/WjrNz7bEKTp1KjNnAdec3k+pRBItr+B8sDCSrqDnVTq3PE
+	 w8G+WQM/7grQkHMfrEAkfLLHJpBL/5ph7g3NGo1N9vyUzJ2gFHK3r3XeV6Z4+i3ta1
+	 ilsZSOnrLDiqQ8+sDFz5CrWusvcc9yDVtfAzQlCkIneJqPtbYHSigV4f5cBelqdKcO
+	 gIy/iSgk+j0Qw==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] tracing: Fully silence instance of -Wstring-compare
+Date: Tue, 19 Mar 2024 09:07:51 -0700
+Message-Id: <20240319-tracing-fully-silence-wstring-compare-v1-0-81adb44403f5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGsJ_4w0EHuAwvSFuqUsMO-bLjJwCmN_qjL6NuA043-4rgfgsQ@mail.gmail.com>
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -0.82
-X-Spamd-Result: default: False [-0.82 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCPT_COUNT_TWELVE(0.00)[13];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
-	 FREEMAIL_TO(0.00)[gmail.com];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.02)[54.42%]
-X-Spam-Flag: NO
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFe4+WUC/x2NzQ6CMBAGX4Xs2U1oNSH6KsZDLV9xk1rILv4Qw
+ rtTPc4cZlYyqMDo0qykeIvJWCq4Q0PxEcoAlr4y+daf2qM786whShk4vXJe2CSjRPDHZv3ZOD6
+ noGB0Dj71rrv7QLU1KZJ8/5/rbdt2MTfEmXcAAAA=
+To: rostedt@goodmis.org, mhiramat@kernel.org
+Cc: mathieu.desnoyers@efficios.com, ndesaulniers@google.com, 
+ morbo@google.com, justinstitt@google.com, linux-kernel@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1503; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=o/PKCSwUsZmuWmeVx/z89aLoA51oNzjLUoOwlNrR4Q4=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKk/d8St4s5M47fmk5Y1C/YxPHX/grao2pZTr+Uj+eP01
+ CzOf5DvKGVhEONikBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABM5GcHwv3id0tkgheCbM09E
+ zom5p8B6Qkz9Pus9yVxDxq2lbDr/gxl+MT/cP819qvZs9okvt4ibCG7j5PF6yZoauOSuvvnz0mc
+ zGQA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue 19-03-24 19:09:18, Barry Song wrote:
-> On Tue, Mar 19, 2024 at 4:56 PM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Fri 15-03-24 16:18:03, liuhailong@oppo.com wrote:
-> > > From: "Hailong.Liu" <liuhailong@oppo.com>
-> > >
-> > > This reverts
-> > > commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not eligible")
-> > > commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
-> > >
-> > > skip_cma may cause system not responding. if cma pages is large in lru_list
-> > > and system is in lowmemory, many tasks would direct reclaim and waste
-> > > cpu time to isolate_lru_pages and return.
-> > >
-> > > Test this patch on android-5.15 8G device
-> > > reproducer:
-> > > - cma_declare_contiguous 3G pages
-> > > - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
-> > >   only.
-> > > - run a memleak process in userspace
-> >
-> > Does this represent a sane configuration? CMA memory is unusable for
-> > kernel allocations and memleak process is also hard to reclaim due to
-> > swap suppression. Isn't such a system doomed to struggle to reclaim any
-> > memory? Btw. how does the same setup behave with the regular LRU
-> > implementation? My guess would be that it would struggle as well.
-> 
-> I assume the regular LRU implementation you are talking about is the LRU
-> without skip_cma()?
+Hi all,
 
-No, I mean standard LRU reclaim implementation rather than MGLRU.
+This series fully resolves the new instance of -Wstring-compare from
+within the __assign_str() macro. The first patch resolves a build
+failure with GCC that would be seen with just the second patch applied.
+The second patch actually hides the warning.
 
+NOTE: This is based on trace/for-next, which does not contain the
+minimum LLVM version bump that occurred later in the current merge
+window, so this uses
+
+  __diag_ignore(clang, 11, ...
+
+instead of
+
+  __diag_ignore(clang, 13, ...
+
+which will be required when this is merged into Linus's tree. If you can
+base this series on a tree that has the merge commit e5eb28f6d1af ("Merge
+tag 'mm-nonmm-stable-2024-03-14-09-36' of
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm") in it, then that
+change can be done at application time, rather than merge time (or I can
+send a v2). It would be really nice for this to make the merge window so
+that this warning does not proliferate into other trees that base on
+-rc1.
+
+---
+Nathan Chancellor (2):
+      compiler_types: Ensure __diag_clang() is always available
+      tracing: Ignore -Wstring-compare with diagnostic macros
+
+ include/linux/compiler_types.h               | 4 ++++
+ include/trace/stages/stage6_event_callback.h | 5 +++++
+ 2 files changed, 9 insertions(+)
+---
+base-commit: 7604256cecef34a82333d9f78262d3180f4eb525
+change-id: 20240319-tracing-fully-silence-wstring-compare-e71e2fd17b2a
+
+Best regards,
 -- 
-Michal Hocko
-SUSE Labs
+Nathan Chancellor <nathan@kernel.org>
+
