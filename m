@@ -1,130 +1,174 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D4B54BE2
-	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 08:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7D853379
+	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 09:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710838542; cv=none; b=s8ICaaGGDnvVUHnMG39s3DNqp9UAbD0nPHiBF9oVI5Oe2bA108ue6o3lhWyImSCqTQZndhkBhzYlTj0Fkx4y8S/XFByO4Kl7E1gYexsuT9QYbu7x0tb7DiAvRcRBCojVGftPVL+ONl7ippBzIC0m8elk/s52CZI+613HMOUvnCQ=
+	t=1710841282; cv=none; b=cbdjHxutnDjfhwSYs6yeL/Coftc3uVQR9t0eHnkZRNjIknhUwl4uYOR74Fcgf8W6f6dbCRsto5zfaP5bu8w8/QWD9YDlBFUohp8VSj3ZW4UsESBBcaoaSm8qZZOzFhwXQVah/LBBl7hRn2ndbU8aIGTDFYX5YiqpLJoj08HBLMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710838542; c=relaxed/simple;
-	bh=Uznf1KwgK9s2Mcf/Bly2P4ZSBE9X2zZg7VY56gZtXNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XRTJQDVpYqaohcaEInUENHPUTOaX/6wUfn3zpF3MG5i7JN7obE/HyxIBCbeI7VnmlZkY4FySIZ/W3BSHggVoIVfVco5+5i1Cx7WhlNUYUTn7iOktN4VjZzmqaASHvV7PDbRpKgJK+P8x3DP3EdioiCBYSzIjZjMcLrwoRsV5gzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=tZ+bL052; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=lH0K/9oM; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1710841282; c=relaxed/simple;
+	bh=71y6U/yEd0p518ZH06ou59ARHvePglL3ChXz44SZ97o=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RTcLuhxftHXG6ioQ8mKsbPZBYnlLXFuC02iwRP+5ypITMNHv7eO8DTHdHlhyRYIhMBda6zMW4WS77aHp+m3l0U0AFImffOQT2JPojcxjUxXy60Rgj4hygPCJxQB665DKwJmb72eNMtOWvlZVKU+KCnJReIC3U9TXwXFMne6bQFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JCk2shnC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="tZ+bL052";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="lH0K/9oM"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JCk2shnC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710841279;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/YYxC+DqP0kVUXLsnki3NJZELMzLte6MUFMgBrZo6F8=;
+	b=JCk2shnC4JMPIVojojVdId2rzXyvhI6kJC/m8TKnklxwka93g3BNcTZlX+ZXIrvADySLe8
+	bofujwJSOiatRX6Nm0Ih99uL1UXRj498K+5dwx2h2MXquWYKDOE0gFKBErxtIRar3bbxt8
+	sexk5q8dDSoEZgJXZ8FVh3Z9B/rhSfQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-219-unKBHnliMyyXCUstRoYFhA-1; Tue, 19 Mar 2024 05:41:18 -0400
+X-MC-Unique: unKBHnliMyyXCUstRoYFhA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 1C0473758D;
-	Tue, 19 Mar 2024 08:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1710838539; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=evAYXOFBXt4csSBHICmFoB7rcjRm+TO2+pNemXSDrBk=;
-	b=tZ+bL052w7tmINzoF2vUse5Q+bwsa4dPUXomKo8GVdZk08Q5zdbRHWPvjUp8kxSrRWbz+n
-	2GAE/DIbTPQewF7HHZym+DbQ/GuWgimCKgGOlABQ/rObzxpce9NG2QMdytcSvVcqTw74KC
-	25ltxQ97LeGXFBYzUtExuSfF3sB/A/k=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1710838538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=evAYXOFBXt4csSBHICmFoB7rcjRm+TO2+pNemXSDrBk=;
-	b=lH0K/9oM59893VPS0KVZsBsOgPPFMEgrQINcSXqg4z8Tamf9M1sIkrysFFx/9s4wr+GM0X
-	35fcExSEsNk7LmjT9z9MiaI3aX82RD9wFj4pT3Zemzu+hAc/wNmyVlZ7MlfC2+IpFua/mk
-	YoK9EQ9o1T7uc5tocENqYRudRWP/vug=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F23CF136A5;
-	Tue, 19 Mar 2024 08:55:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id PscXOAlT+WV5CAAAD6G6ig
-	(envelope-from <mhocko@suse.com>); Tue, 19 Mar 2024 08:55:37 +0000
-Date: Tue, 19 Mar 2024 09:55:37 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: liuhailong@oppo.com
-Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com,
-	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com,
-	quic_charante@quicinc.com, yuzhao@google.com
-Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not
- available"
-Message-ID: <ZflTCY-Oaxm0U70u@tiehlicka>
-References: <20240314141516.31747-1-liuhailong@oppo.com>
- <20240315081803.2223-1-liuhailong@oppo.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C26C08007A2
+	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 09:41:17 +0000 (UTC)
+Received: from [172.64.3.54] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7F08A492BC8;
+	Tue, 19 Mar 2024 09:41:17 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, b3603fcb)
+Date: Tue, 19 Mar 2024 09:41:17 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240315081803.2223-1-liuhailong@oppo.com>
-X-Spam-Score: -1.36
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-1.36 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	 FROM_HAS_DN(0.00)[];
-	 RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 TO_DN_NONE(0.00)[];
-	 NEURAL_HAM_SHORT(-0.20)[-0.999];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 DKIM_TRACE(0.00)[suse.com:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_TWELVE(0.00)[12];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[oppo.com:email,suse.com:dkim];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.35)[76.32%];
-	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b="lH0K/9oM"
-X-Rspamd-Queue-Id: 1C0473758D
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Message-Id: <10538.124031905411800103@us-mta-219.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri 15-03-24 16:18:03, liuhailong@oppo.com wrote:
-> From: "Hailong.Liu" <liuhailong@oppo.com>
-> 
-> This reverts
-> commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not eligible")
-> commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
-> 
-> skip_cma may cause system not responding. if cma pages is large in lru_list
-> and system is in lowmemory, many tasks would direct reclaim and waste
-> cpu time to isolate_lru_pages and return.
-> 
-> Test this patch on android-5.15 8G device
-> reproducer:
-> - cma_declare_contiguous 3G pages
-> - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
->   only.
-> - run a memleak process in userspace
+Hi, we tested your kernel and here are the results:
 
-Does this represent a sane configuration? CMA memory is unusable for
-kernel allocations and memleak process is also hard to reclaim due to
-swap suppression. Isn't such a system doomed to struggle to reclaim any
-memory? Btw. how does the same setup behave with the regular LRU
-implementation? My guess would be that it would struggle as well.
--- 
-Michal Hocko
-SUSE Labs
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'dlm-6.9' of git://git.kernel.org/pub/scm/lin=
+ux/kernel/git/teigland/linux-dlm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/135706
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: makedumpfile failed when dumping vmcore
+            URL: https://bugzilla.redhat.com/2269991
+            Affected tests:
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+
+
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
