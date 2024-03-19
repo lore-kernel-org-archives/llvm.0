@@ -1,250 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0B72566;
-	Tue, 19 Mar 2024 00:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC62F5B1EE
+	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 03:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710807985; cv=none; b=AEmWNVdVLBgTnV7Ho75HORO41yot5uhQmAko/naAxLIukyDby8PMS14NfEuYt8gNPAZJTTL9Sxh2v8UtfyZK/Gurxi7oH6uPIZ8N9zUPnN3uhJsB5BU0l4ew3crPqPevqfLR721CXAX37Hw9MdDW+3J8mHZDEGkdN8DRSi+HyeI=
+	t=1710819086; cv=none; b=sGiDqdQ0tdcxPHNugMZrHGQ9vR50s5IdCLHWiNtUZhnY26CgPzPnu5U+N2y8Z9+TNwE/eFcf8/iWAionUaYHVFsEwXCLyTcenFCDSrytD7djBXQws3Q9jO4a23HcyYfjgMUD/+ZxGydRACCALQhkZedYJzmYvw1jDFH4myaDts4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710807985; c=relaxed/simple;
-	bh=LLIv+pugsr/ev0LduqYltbP1hJ6nxTnyLZiG33er3Xk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oOrTNTHzK0Ayoj/7IDYpBRkUkr2V0Or+bw8uhSqNCD/cSj6LtVY82NlDHIK+QcFic8lPc+ZxBv1ZmV6pp/YNNHDmoaei07GxRgTmo/BsXR9vffc0WjvhcTK8h2CeqM8UO3xUU3/NZSOOk57FrrsP0jBOHHH8IyYTfowHN9w3Pc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GTE80Hf8; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710819086; c=relaxed/simple;
+	bh=v6hqsOay3E3YqETBdBLlmgxKHDfHTLCTzhqTfhaeh2w=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Wd9WxspcDq4nbDUZgDOkIT+NvqWca6fOdU/tqXNDIAUZ54tg/TQk4zdmdzzumMMLFuLQ4jP9uTfsbIbtFUV5O3C3W01Vby4Q3XCgFsbXq8ZxlgEehUXgpwIF9Q2SHM5WFCEmc/gx537js03JSKjDuy5SOyzVkYzsPnVI7hRSF0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eb0hCPJ+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GTE80Hf8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710807982; x=1742343982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LLIv+pugsr/ev0LduqYltbP1hJ6nxTnyLZiG33er3Xk=;
-  b=GTE80Hf80IMKcoGUcDpOlP43rSENJgXJiyq70XWz3YSzyZfWzl3g3j3A
-   EV2bwxmBYt+2ox/aV8aExdJCXPofuuihIOjxpI0trynWBZCHkPoXsUox2
-   YF+Nz/Sc2CaBbQM4wqWBtIw8GZBDicCrTk25nRjUSTIzZHyY7i9rFPeR/
-   RyADVIJZPJR3nS45yisT+UpzWP3ZoigZjUdHS67wqK3PYjQzEhqKYx1SE
-   vCoJf8FS5zHi4ULwzLjCO5BmkzR23scKHFs45T835cSJLwmb7zxG3aoik
-   i045ODMMjWdeyTmU51uOZ/xpIzp5h2WodC5zgdASMlJqoR9a0BOpoXktt
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="5530488"
-X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
-   d="scan'208";a="5530488"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 17:26:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
-   d="scan'208";a="18104690"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 18 Mar 2024 17:26:17 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rmNJ1-000HKt-0X;
-	Tue, 19 Mar 2024 00:26:15 +0000
-Date: Tue, 19 Mar 2024 08:25:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
-Message-ID: <202403190800.h8cSGROp-lkp@intel.com>
-References: <20240318112140.385244-3-radu.sabau@analog.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eb0hCPJ+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710819083;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tTZxvLLUr+P2xsO7IKU5vEtiFpZZBof4nUSFcOFxouk=;
+	b=eb0hCPJ+lGt4udPSeXpm0zQx/KvSTb8dyWKK1x8s99wKHWCjpB6kclUxYKUMhn8dO0/MZZ
+	UvwVxag2ZMLdwmoegSxs+9nUhilvKlGeoJMTxzYFTdJzRzclVbHsLdqSg3xxeEIWi3VjhH
+	xz9J/s50+kdbgglhJ7q/gPKa/cREAMk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-171-7NN03FTsOmCWsDpzVhaMgg-1; Mon, 18 Mar 2024 23:31:21 -0400
+X-MC-Unique: 7NN03FTsOmCWsDpzVhaMgg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B44448007A2
+	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 03:31:21 +0000 (UTC)
+Received: from [172.64.3.54] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6F1171C060A4;
+	Tue, 19 Mar 2024 03:31:21 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, 0a7b0ace)
+Date: Tue, 19 Mar 2024 03:31:21 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240318112140.385244-3-radu.sabau@analog.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <60176.124031823312200197@us-mta-171.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Radu,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on robh/for-next linus/master v6.8 next-20240318]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Sabau/dt-bindings-hwmon-pmbus-adp1050-add-bindings/20240318-202619
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20240318112140.385244-3-radu.sabau%40analog.com
-patch subject: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240319/202403190800.h8cSGROp-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240319/202403190800.h8cSGROp-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'vfs-6.9-rc1.fixes' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/vfs/vfs
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403190800.h8cSGROp-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/135617
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/pmbus/adp1050.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/adp1050.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/adp1050.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/hwmon/pmbus/adp1050.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:20:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/pmbus/adp1050.c:47:60: error: too few arguments to function call, expected at least 3, have 2
-      47 |                 dev_err_probe(&client->dev, "Device can't be unlocked.\n");
-         |                 ~~~~~~~~~~~~~                                            ^
-   include/linux/dev_printk.h:277:20: note: 'dev_err_probe' declared here
-     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                    ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/adp1050.c:53:63: error: too few arguments to function call, expected at least 3, have 2
-      53 |                 dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
-         |                 ~~~~~~~~~~~~~                                               ^
-   include/linux/dev_printk.h:277:20: note: 'dev_err_probe' declared here
-     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                    ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   7 warnings and 2 errors generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+        Issue: makedumpfile failed when dumping vmcore
+            URL: https://bugzilla.redhat.com/2269991
+            Affected tests:
+                 ppc64le - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                   s390x - machineinfo
+                   s390x - Boot test
+                   s390x - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - nvme-tcp - upstream
+                   s390x - Storage - swraid scsi_raid
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Reboot test
+                   s390x - POSIX pjd-fstest suites
+                   s390x - Filesystem - Loopdev Sanity
+                   s390x - AMTU (Abstract Machine Test Utility)
+                   s390x - Networking cki netfilter test
+                   s390x - Networking vnic: ipvlan/basic
+                   s390x - Libkcapi AF_ALG test
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                 aarch64 - Storage - blktests - blk - upstream
+                   s390x - Storage - blktests - blk - upstream
+                  x86_64 - Storage - blktests - blk - upstream
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+                  x86_64 - stress: stress-ng - memory
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Hardware - Firmware test suite
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - cifsv3.11
 
 
-vim +47 drivers/hwmon/pmbus/adp1050.c
+Tests that were not ran because of internal issues:=20
+     aarch64 - Memory function: memfd_create
+     ppc64le - Memory function: memfd_create
+       s390x - Memory function: memfd_create
+      x86_64 - Memory function: memfd_create
+      x86_64 (debug) - Memory function: memfd_create
 
-    32	
-    33	static int adp1050_probe(struct i2c_client *client)
-    34	{
-    35		u32 vin_scale_monitor, iin_scale_monitor;
-    36		int ret;
-    37	
-    38		if (!i2c_check_functionality(client->adapter,
-    39					     I2C_FUNC_SMBUS_WRITE_WORD_DATA))
-    40			return -ENODEV;
-    41	
-    42		/* Unlock CHIP's password in order to be able to read/write to it's
-    43		 * VIN_SCALE and IIN_SCALE registers.
-    44		*/
-    45		ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
-    46		if (ret < 0) {
-  > 47			dev_err_probe(&client->dev, "Device can't be unlocked.\n");
-    48			return ret;
-    49		}
-    50	
-    51		ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
-    52		if (ret < 0) {
-    53			dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
-    54			return ret;
-    55		}
-    56	
-    57		/* If adi,vin-scale-monitor isn't set or is set to 0 means that the
-    58		 * VIN monitor isn't used, therefore 0 is used as scale in order
-    59		 * for the readings to return 0.
-    60		*/
-    61		if (device_property_read_u32(&client->dev, "adi,vin-scale-monitor",
-    62					     &vin_scale_monitor))
-    63			vin_scale_monitor = 0;
-    64	
-    65		/* If adi,iin-scale-monitor isn't set or is set to 0 means that the
-    66		 * IIN monitor isn't used, therefore 0 is used as scale in order
-    67		 * for the readings to return 0.
-    68		*/
-    69		if (device_property_read_u32(&client->dev, "adi,iin-scale-monitor",
-    70					     &iin_scale_monitor))
-    71			iin_scale_monitor = 0;
-    72	
-    73		ret = i2c_smbus_write_word_data(client, ADP1050_VIN_SCALE_MONITOR,
-    74						vin_scale_monitor);
-    75		if (ret < 0)
-    76			return ret;
-    77	
-    78		ret = i2c_smbus_write_word_data(client, ADP1050_IIN_SCALE_MONITOR,
-    79						iin_scale_monitor);
-    80		if (ret < 0)
-    81			return ret;
-    82	
-    83		return pmbus_do_probe(client, &adp1050_info);
-    84	}
-    85	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
