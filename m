@@ -1,116 +1,144 @@
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6AD7BAFB
-	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 11:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6087E792
+	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 11:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710846572; cv=none; b=OBS1+YCQjGYvedV6pTa1RYxEVHLH2VlGNBu1zVIlUeE2wku/DjytGPIAEOnDMfMTzALnNr2o78h4MH3xhstWZeSX5kY3PUv10QeFcmQYwhw5ZReYdIEHY3jjz1j9kkMNGm1qgdqgBzvhanGKrf1ui+cylhR+z8P4f1SFoqRBFxs=
+	t=1710847683; cv=none; b=UC2lfyxTv5fKtoxr/2LhIlqY2rnzWWjO2QF0fv13XqRc14LCI2e91y8NtE+HbZC7wGAYobhT65Ra68jkH7kS0CFProST58YKTZB/fXfLmkzip0yTfAt09ih0ZzyuX+UE7HWPGQJvuh1zWgrA8R/anAklzEEx3ZXEVth+iF+VGaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710846572; c=relaxed/simple;
-	bh=sBX9q9flXe4rDLLTikiy0lqMwDNq3tx8cV3867WS+2o=;
+	s=arc-20240116; t=1710847683; c=relaxed/simple;
+	bh=twPAGHLRBfsKsVkZnbEjvZL3s7zbC0tncAHC1XaK5dk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bD1iLRDEedmq9zMvilggI1hj5KImh5IHUrwJ/x6R1UYkVKdo+jI0EF3bWS2luqTqlo9cwgjNxjrpw0GT3OHs2hLjuiHYndZY+Y9cJiW93YIZmkdtmpOvnC45vS3cy0y2s9SloT/qj0ViQ47gVk0MW3dncmXTt4uoRpwLuQ7s4Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hg7OjSSK; arc=none smtp.client-ip=209.85.222.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=Hcftx417ig2JjhZs5L0v1DgGs66xIwuhAKkZEFTFyiqoEE0PKtDKRew1arQAheCJIq8vFuGOj/qYuLRFBanJUC8kTQ/n1Bbcdb9lBZpFVtILbLnF8Pwc9H7QEwFLfOZvOI9LIsU2KDdI6nSYD+F7RwOjD5ELFQ6y5DMHeBi18zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aLNOkz4c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hg7OjSSK"
-Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-7dacc916452so1201133241.0
-        for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 04:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710846569; x=1711451369; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iFFMom5/ZZ+nxNfevDyTk4uvoxRGCKNnKvOL6LWtnZw=;
-        b=hg7OjSSK8+tFJNVqNv/8hcw2ws6/fILNsLbvhsYyr4VV+t978FAWRlNRWf4fsl4q10
-         7KROpHo+AgAOUHigw2JLCPe/WdthAMizTWzOTlrMUKxiAgnM7JE6w4FVcWoTtpxdWJUe
-         y04eUZOdk739+bPO31XIDAwrddkePKj6qruFqbkK/EuewA7UZbwziHblw2GQ7bkkxpz4
-         y5D+0rMJ5iTw6syjOuMtfDc5vSQyyNRbxU+NJT9Np4NCT/QzvUethHm75sRuadB/9kt6
-         D2Jinc5wAMDZwZZbM2O/RQGsOzdSZZ7QQK51m+PvBBPavzT4YB8FQrZBMEKehIpr7xav
-         89TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710846569; x=1711451369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iFFMom5/ZZ+nxNfevDyTk4uvoxRGCKNnKvOL6LWtnZw=;
-        b=DG4XjwytV62HfgY9M1z+bEdePdRQpdAx1QBCoFIBsfOHZOOzfy+q2IzNpwgt8Bab+Q
-         bxzEjM9XASDeXVHRh38YDSM/mtRgzrY5Hhxi/pxzCf4PzVfqRN3wMd6EfOcLOZu69Qz3
-         VMX3WHPZWs1/dfXdYGBx2HEWL12IP6qzZ0NXEpEyUMQHhmtld2V3yo52SnyoRANOAAXC
-         0D8yXxUC1nv/wv3t8bcaZPS26wUVzln86hRO6faEKiEZExbb0NPZMB1AfP2oQ+Y1MEOC
-         u69HGBj0nHdIlLxQRQr1fkAf60B8rc087OCRBLONWh3T2P3WqmOrsPflS8i8MBuYlaKt
-         j4RA==
-X-Forwarded-Encrypted: i=1; AJvYcCUQaXCfleP1TGdwem4U6f7PoSz7hBvASLRm2SOeI8AlgLCbAcDt0R3cKu0GGGsLCXTJOr08pbRBbb3GTvDGuaPkBm7rJQ==
-X-Gm-Message-State: AOJu0YxXSt0xOsqzGWtY3F0rV1/uhiWnI1bsm4WHhZUehPDZcWy5K+C7
-	3dNd5dg6yPGNafr63z1xpKmWKXYh6TCx5T23GtJl3EZRzg2SC8fwBnv4I9eRwPmH/8Q/lw/WnuW
-	PZbpAk62xzsYw/GKMCUgD1D5+yCk=
-X-Google-Smtp-Source: AGHT+IHM4xyglbb5pffkcPfzACI/wBLHk//vDjZGT4FoVpHhmkFKx2NL+9FyUklB5eUGBbhXcbX0g7MwXMxUrkqaoD8=
-X-Received: by 2002:a05:6102:3a0b:b0:474:cb65:d400 with SMTP id
- b11-20020a0561023a0b00b00474cb65d400mr1843847vsu.24.1710846569394; Tue, 19
- Mar 2024 04:09:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aLNOkz4c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26394C43394
+	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 11:28:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710847683;
+	bh=twPAGHLRBfsKsVkZnbEjvZL3s7zbC0tncAHC1XaK5dk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=aLNOkz4cvgP1n1ejCT2N6nMtG34TkOVZKmpeOHR1pQavuvfOYncHU15WkcRtF4aj2
+	 L7ZoZYCeFk4BS5E7LVKkqLcWHJmEs+Q1frc4y678/hHLB8RD/H/XlSa+th3+iKNpk1
+	 B1dm4zamjFPbsh+vs07bYijeuhGC4HfwFS/JScdSNrr2ou5xQzyzicUkMJjKEy0cxa
+	 RjzMD1dvoUJVNQJorw8mjoMvMkLaZY7byjGb7AulZSF+rG6WUE3q4kBv1VM8Twb+K0
+	 nFmJ7ned9qNAdzAfkybmHPpZpySbyfqC/s+Ia5w9YGLhPC3IC2fOFCWHdWxYHy3B/j
+	 DMv+/K5p0jNsw==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d47a92cfefso71294781fa.1
+        for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 04:28:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWuDnCnAJ/aIhrC24Nc0ez+fiunS9TM44kPjjFEk4Ueb6CSYvct7Jw6GbFcyrb/XeoThZkKP5R+ab1DPGhWagy5QEfCTQ==
+X-Gm-Message-State: AOJu0YzjTy0dXVd9mnjIG+xAoWgm23kXEuDgpbyUbtqpORNOugyMDyoo
+	hEcFNPoZinPfP/7Rl+swVlHV3DA58M8mzkSpBY3BhzU9s8Ra/jDgSVvT2BcX7Q/SLEp6AJkx86J
+	0TqgPVyFtHGkKUcgnegKiX5VAYt4=
+X-Google-Smtp-Source: AGHT+IFuJ71AXk5oIxu/Mg+E3aUBqrdsvOXSQqcuefNzr510oW03gHr6ZtrrRueXdvAf3Effm3UBjhILjS124+F3JCg=
+X-Received: by 2002:a2e:241a:0:b0:2d4:70e8:3630 with SMTP id
+ k26-20020a2e241a000000b002d470e83630mr9168960ljk.48.1710847681507; Tue, 19
+ Mar 2024 04:28:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240314141516.31747-1-liuhailong@oppo.com> <20240315081803.2223-1-liuhailong@oppo.com>
- <ZflTCY-Oaxm0U70u@tiehlicka>
-In-Reply-To: <ZflTCY-Oaxm0U70u@tiehlicka>
-From: Barry Song <21cnbao@gmail.com>
-Date: Tue, 19 Mar 2024 19:09:18 +0800
-Message-ID: <CAGsJ_4w0EHuAwvSFuqUsMO-bLjJwCmN_qjL6NuA043-4rgfgsQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not available"
-To: Michal Hocko <mhocko@suse.com>, liuhailong@oppo.com
-Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com, 
-	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com, 
-	quic_charante@quicinc.com, yuzhao@google.com
+References: <87frwrjc0i.ffs@tglx> <20240318230927.2191933-1-acdunlap@google.com>
+In-Reply-To: <20240318230927.2191933-1-acdunlap@google.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 19 Mar 2024 12:27:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF97CkB4PY8vcWv+WjAN5rv1yhYH-ECSc=-CLRrJmRepg@mail.gmail.com>
+Message-ID: <CAMj1kXF97CkB4PY8vcWv+WjAN5rv1yhYH-ECSc=-CLRrJmRepg@mail.gmail.com>
+Subject: Re: [PATCH v4] x86/asm: Force native_apic_mem_read() to use the MOV instruction
+To: Adam Dunlap <acdunlap@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Arjan van de Ven <arjan@linux.intel.com>, Wei Liu <wei.liu@kernel.org>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
+	Kevin Loughlin <kevinloughlin@google.com>, Peter Gonda <pgonda@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 19, 2024 at 4:56=E2=80=AFPM Michal Hocko <mhocko@suse.com> wrot=
-e:
+On Tue, 19 Mar 2024 at 00:10, Adam Dunlap <acdunlap@google.com> wrote:
 >
-> On Fri 15-03-24 16:18:03, liuhailong@oppo.com wrote:
-> > From: "Hailong.Liu" <liuhailong@oppo.com>
-> >
-> > This reverts
-> > commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not e=
-ligible")
-> > commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
-> >
-> > skip_cma may cause system not responding. if cma pages is large in lru_=
-list
-> > and system is in lowmemory, many tasks would direct reclaim and waste
-> > cpu time to isolate_lru_pages and return.
-> >
-> > Test this patch on android-5.15 8G device
-> > reproducer:
-> > - cma_declare_contiguous 3G pages
-> > - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
-> >   only.
-> > - run a memleak process in userspace
+> When done from a virtual machine, instructions that touch APIC memory
+> must be emulated. By convention, MMIO access are typically performed via
+> io.h helpers such as 'readl()' or 'writeq()' to simplify instruction
+> emulation/decoding (ex: in KVM hosts and SEV guests) [0].
 >
-> Does this represent a sane configuration? CMA memory is unusable for
-> kernel allocations and memleak process is also hard to reclaim due to
-> swap suppression. Isn't such a system doomed to struggle to reclaim any
-> memory? Btw. how does the same setup behave with the regular LRU
-> implementation? My guess would be that it would struggle as well.
+> Currently, native_apic_mem_read() does not follow this convention,
+> allowing the compiler to emit instructions other than the MOV
+> instruction generated by readl(). In particular, when compiled with
+> clang and run as a SEV-ES or SEV-SNP guest, the compiler would emit a
+> TESTL instruction which is not supported by the SEV-ES emulator, causing
+> a boot failure in that environment. It is likely the same problem would
+> happen in a TDX guest as that uses the same instruction emulator as
+> SEV-ES.
+>
+> To make sure all emulators can emulate APIC memory reads via MOV, use
+> the readl() function in native_apic_mem_read(). It is expected that any
+> emulator would support MOV in any addressing mode it is the most generic
+> and is what is ususally emitted currently.
+>
+> The TESTL instruction is emitted when native_apic_mem_read() is inlined
+> into apic_mem_wait_icr_idle(). The emulator comes from insn_decode_mmio
+> in arch/x86/lib/insn-eval.c. It's not worth it to extend
+> insn_decode_mmio to support more instructions since, in theory, the
+> compiler could choose to output nearly any instruction for such reads
+> which would bloat the emulator beyond reason.
+>
+> [0] https://lore.kernel.org/all/20220405232939.73860-12-kirill.shutemov@linux.intel.com/
+>
+> Signed-off-by: Adam Dunlap <acdunlap@google.com>
+> Tested-by: Kevin Loughlin <kevinloughlin@google.com>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: stable@vger.kernel.org
+>
 
-I assume the regular LRU implementation you are talking about is the LRU
-without skip_cma()?
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-I remember Hailong mentioned something like " it also trigger memory psi
-event to allow admin do something to release memory" and " without
-patch the devices would kill camera process".  So it seems the difference
-is if a killing will occur.
-
-Hailong, would you like to provide more detail?
-
+> ---
+>
+> An alterative to this approach would be to use inline assembly instead
+> of the readl() helper, as that is what native_apic_mem_write() does. I
+> consider using readl() to be cleaner since it is documented to be a simple
+> wrapper and inline assembly is less readable. native_apic_mem_write()
+> cannot be trivially updated to use writel since it appears to use custom
+> asm to workaround for a processor-specific bug.
+>
+> Patch changelog:
+> V1 -> V2: Replaced asm with readl function which does the same thing
+> V2 -> V3: Updated commit message to show more motivation and
+> justification
+> V3 -> V4: Fixed nits in commit message
+>
+> Link to v2 discussion: https://lore.kernel.org/all/20220908170456.3177635-1-acdunlap@google.com/
+>
+>  arch/x86/include/asm/apic.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+> index 9d159b771dc8..dddd3fc195ef 100644
+> --- a/arch/x86/include/asm/apic.h
+> +++ b/arch/x86/include/asm/apic.h
+> @@ -13,6 +13,7 @@
+>  #include <asm/mpspec.h>
+>  #include <asm/msr.h>
+>  #include <asm/hardirq.h>
+> +#include <asm/io.h>
+>
+>  #define ARCH_APICTIMER_STOPS_ON_C3     1
+>
+> @@ -96,7 +97,7 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
+>
+>  static inline u32 native_apic_mem_read(u32 reg)
+>  {
+> -       return *((volatile u32 *)(APIC_BASE + reg));
+> +       return readl((void __iomem *)(APIC_BASE + reg));
+>  }
+>
+>  static inline void native_apic_mem_eoi(void)
 > --
-> Michal Hocko
-> SUSE Labs
+> 2.43.0.594.gd9cf4e227d-goog
 >
