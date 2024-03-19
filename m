@@ -1,153 +1,250 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8429D5CDCF
-	for <llvm@lists.linux.dev>; Mon, 18 Mar 2024 23:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0B72566;
+	Tue, 19 Mar 2024 00:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710803436; cv=none; b=Hg0xuF0bcMXFue+MbV4tRYPGA78hq0DBhZYTXDaU6cSt2ePyXZsB9/lQINRh9xHMtdcb0xYK+19I/vIRYVt1RXTYizToC+5IveOAqDCqLvczLXOKprBpBock437tXLRKkg0sA08fZ4MnVuJcsc9eGH8lzUiOPm14zQgVtCw6ZVw=
+	t=1710807985; cv=none; b=AEmWNVdVLBgTnV7Ho75HORO41yot5uhQmAko/naAxLIukyDby8PMS14NfEuYt8gNPAZJTTL9Sxh2v8UtfyZK/Gurxi7oH6uPIZ8N9zUPnN3uhJsB5BU0l4ew3crPqPevqfLR721CXAX37Hw9MdDW+3J8mHZDEGkdN8DRSi+HyeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710803436; c=relaxed/simple;
-	bh=3QfwHntJQMgvU6AuyLnxDRBkYhBLtNLtAuixY4b/WFE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=O5WGc5Zk5OqCSyvoF5LYd7VmOGSqOSpNQ/86I5z/INtlE/cqDsp3Ym6m33CVkeQNUJTkGLDGC9Zm4eSqLZNDarpW+DNy5Leekc3kYepAOHmrys+qs56jkoZKmD5LbT/aK2W3e39V4Sv+7f4BF2LffwP/M/KKGWLqYRj7OAgfhkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--acdunlap.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tZOiQmY5; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--acdunlap.bounces.google.com
+	s=arc-20240116; t=1710807985; c=relaxed/simple;
+	bh=LLIv+pugsr/ev0LduqYltbP1hJ6nxTnyLZiG33er3Xk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oOrTNTHzK0Ayoj/7IDYpBRkUkr2V0Or+bw8uhSqNCD/cSj6LtVY82NlDHIK+QcFic8lPc+ZxBv1ZmV6pp/YNNHDmoaei07GxRgTmo/BsXR9vffc0WjvhcTK8h2CeqM8UO3xUU3/NZSOOk57FrrsP0jBOHHH8IyYTfowHN9w3Pc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GTE80Hf8; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tZOiQmY5"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60ccc3cfa39so86793817b3.2
-        for <llvm@lists.linux.dev>; Mon, 18 Mar 2024 16:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710803432; x=1711408232; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=101Rc15yJZ5dhEo4PySV2SOSqW3Lu8UuBq5uPa6A6n4=;
-        b=tZOiQmY5wzmjUOb5xJS94MHVQDttRMgXAfanMKAzkLEyuKHQ8WGPwWAHm9AOqCl5As
-         rNhfEiDNprgT9YMHXg0aDI4hrnjJqY4y32mRZiBjxiNeFeT39bdIs4z25V7S8QqruNlM
-         AOlDIAKx+8x2sZbME2TAst+Pg+jsWc70A8Hk6a2Ft+D4IewSfI/iQqQ5PjiNa0k1T0BZ
-         /7E9mxwy42eyx2JJaiFIxkjvYJncLuUQptDqNfqh/4JR0NOh7ki+ah0g3yL6jsW4mBGY
-         vhGBpPAbP8zVuI4QL4WpcJWIhGsd6bMUcyWJUxPllkEFSEq4zZFnrMU/BmvLR0vPFyBx
-         e5cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710803432; x=1711408232;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=101Rc15yJZ5dhEo4PySV2SOSqW3Lu8UuBq5uPa6A6n4=;
-        b=ssg2fwqR005Noh6zMPwJTkGAaocLXyD611EvcRQybaGJ6HAKCDAt3xC/FKiWKblSJu
-         dRQJbhbnTW1xgiIg5zfjIAfuYgrkhz+ql0GBHO6Dfm48/JncDzCXzHTnf2qeGJbBbtDt
-         RhfUns1CHvjD+mTFW6+JjpP8ygjQPrXDn9HNShaKXaiPx+Pbh3oTzWkFmK9ggw4sdb/q
-         2MZv6UFtAlHBW6LJmXtQXWrO/b0eA8NPSaw/TwoHVvCANxXc0V0gLmYsucVAlguAvdKI
-         pMI9NBWT/MSEW4nWX1XAShMDlF4I0IrER+gWChB3u+Jk0tqQ6LL3cG8Lqbfo7CMnQTKk
-         A0Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdK5U73KoshHy0u8eon4wSqzkx2I9JCcELYOWdBBDiPUmPaWwCgut1oPKssaHyjSSvf0ZL70CRC1YS3Oni7QbmYWICKw==
-X-Gm-Message-State: AOJu0YwoUiHQHLzAFCe8i25O2zP9134A33rzP8Wc+2DJiNjQq7EFxaaR
-	RREkLCiiBXeJEKhM+e2ZPSARw9q3Nxb4hex7LtT5zZVyfINLhr1XCVVN2zChT+SUvaab4qlggsx
-	Ma6ZFOJj4GQ==
-X-Google-Smtp-Source: AGHT+IH++3SMmZzNlMzKHz9FwHgWagIFoME8NVVi0QvZI89J+nCx6d7zWk0UM9APt0/6zAQC/gddneHi6BEO1w==
-X-Received: from anticipation.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4517])
- (user=acdunlap job=sendgmr) by 2002:a0d:d5cd:0:b0:60a:267c:87bc with SMTP id
- x196-20020a0dd5cd000000b0060a267c87bcmr259907ywd.6.1710803432480; Mon, 18 Mar
- 2024 16:10:32 -0700 (PDT)
-Date: Mon, 18 Mar 2024 16:09:27 -0700
-In-Reply-To: <87frwrjc0i.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GTE80Hf8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710807982; x=1742343982;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LLIv+pugsr/ev0LduqYltbP1hJ6nxTnyLZiG33er3Xk=;
+  b=GTE80Hf80IMKcoGUcDpOlP43rSENJgXJiyq70XWz3YSzyZfWzl3g3j3A
+   EV2bwxmBYt+2ox/aV8aExdJCXPofuuihIOjxpI0trynWBZCHkPoXsUox2
+   YF+Nz/Sc2CaBbQM4wqWBtIw8GZBDicCrTk25nRjUSTIzZHyY7i9rFPeR/
+   RyADVIJZPJR3nS45yisT+UpzWP3ZoigZjUdHS67wqK3PYjQzEhqKYx1SE
+   vCoJf8FS5zHi4ULwzLjCO5BmkzR23scKHFs45T835cSJLwmb7zxG3aoik
+   i045ODMMjWdeyTmU51uOZ/xpIzp5h2WodC5zgdASMlJqoR9a0BOpoXktt
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11017"; a="5530488"
+X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
+   d="scan'208";a="5530488"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2024 17:26:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,135,1708416000"; 
+   d="scan'208";a="18104690"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 18 Mar 2024 17:26:17 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rmNJ1-000HKt-0X;
+	Tue, 19 Mar 2024 00:26:15 +0000
+Date: Tue, 19 Mar 2024 08:25:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
+Message-ID: <202403190800.h8cSGROp-lkp@intel.com>
+References: <20240318112140.385244-3-radu.sabau@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <87frwrjc0i.ffs@tglx>
-X-Mailer: git-send-email 2.44.0.291.gc1ea87d7ee-goog
-Message-ID: <20240318230927.2191933-1-acdunlap@google.com>
-Subject: [PATCH v4] x86/asm: Force native_apic_mem_read() to use the MOV instruction
-From: Adam Dunlap <acdunlap@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Arjan van de Ven <arjan@linux.intel.com>, Wei Liu <wei.liu@kernel.org>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, 
-	Kevin Loughlin <kevinloughlin@google.com>, Peter Gonda <pgonda@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>
-Cc: Adam Dunlap <acdunlap@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240318112140.385244-3-radu.sabau@analog.com>
 
-When done from a virtual machine, instructions that touch APIC memory
-must be emulated. By convention, MMIO access are typically performed via
-io.h helpers such as 'readl()' or 'writeq()' to simplify instruction
-emulation/decoding (ex: in KVM hosts and SEV guests) [0].
+Hi Radu,
 
-Currently, native_apic_mem_read() does not follow this convention,
-allowing the compiler to emit instructions other than the MOV
-instruction generated by readl(). In particular, when compiled with
-clang and run as a SEV-ES or SEV-SNP guest, the compiler would emit a
-TESTL instruction which is not supported by the SEV-ES emulator, causing
-a boot failure in that environment. It is likely the same problem would
-happen in a TDX guest as that uses the same instruction emulator as
-SEV-ES.
+kernel test robot noticed the following build errors:
 
-To make sure all emulators can emulate APIC memory reads via MOV, use
-the readl() function in native_apic_mem_read(). It is expected that any
-emulator would support MOV in any addressing mode it is the most generic
-and is what is ususally emitted currently.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on robh/for-next linus/master v6.8 next-20240318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The TESTL instruction is emitted when native_apic_mem_read() is inlined
-into apic_mem_wait_icr_idle(). The emulator comes from insn_decode_mmio
-in arch/x86/lib/insn-eval.c. It's not worth it to extend
-insn_decode_mmio to support more instructions since, in theory, the
-compiler could choose to output nearly any instruction for such reads
-which would bloat the emulator beyond reason.
+url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Sabau/dt-bindings-hwmon-pmbus-adp1050-add-bindings/20240318-202619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240318112140.385244-3-radu.sabau%40analog.com
+patch subject: [PATCH 2/2] hwmon: pmbus: adp1050 : Add driver support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240319/202403190800.h8cSGROp-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240319/202403190800.h8cSGROp-lkp@intel.com/reproduce)
 
-[0] https://lore.kernel.org/all/20220405232939.73860-12-kirill.shutemov@linux.intel.com/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403190800.h8cSGROp-lkp@intel.com/
 
-Signed-off-by: Adam Dunlap <acdunlap@google.com>
-Tested-by: Kevin Loughlin <kevinloughlin@google.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
+All errors (new ones prefixed by >>):
 
----
+   In file included from drivers/hwmon/pmbus/adp1050.c:9:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/pmbus/adp1050.c:9:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/pmbus/adp1050.c:9:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/hwmon/pmbus/adp1050.c:9:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/pmbus/adp1050.c:47:60: error: too few arguments to function call, expected at least 3, have 2
+      47 |                 dev_err_probe(&client->dev, "Device can't be unlocked.\n");
+         |                 ~~~~~~~~~~~~~                                            ^
+   include/linux/dev_printk.h:277:20: note: 'dev_err_probe' declared here
+     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+         |                    ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/pmbus/adp1050.c:53:63: error: too few arguments to function call, expected at least 3, have 2
+      53 |                 dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
+         |                 ~~~~~~~~~~~~~                                               ^
+   include/linux/dev_printk.h:277:20: note: 'dev_err_probe' declared here
+     277 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
+         |                    ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   7 warnings and 2 errors generated.
 
-An alterative to this approach would be to use inline assembly instead
-of the readl() helper, as that is what native_apic_mem_write() does. I
-consider using readl() to be cleaner since it is documented to be a simple
-wrapper and inline assembly is less readable. native_apic_mem_write()
-cannot be trivially updated to use writel since it appears to use custom
-asm to workaround for a processor-specific bug.
 
-Patch changelog:
-V1 -> V2: Replaced asm with readl function which does the same thing
-V2 -> V3: Updated commit message to show more motivation and
-justification
-V3 -> V4: Fixed nits in commit message
+vim +47 drivers/hwmon/pmbus/adp1050.c
 
-Link to v2 discussion: https://lore.kernel.org/all/20220908170456.3177635-1-acdunlap@google.com/
+    32	
+    33	static int adp1050_probe(struct i2c_client *client)
+    34	{
+    35		u32 vin_scale_monitor, iin_scale_monitor;
+    36		int ret;
+    37	
+    38		if (!i2c_check_functionality(client->adapter,
+    39					     I2C_FUNC_SMBUS_WRITE_WORD_DATA))
+    40			return -ENODEV;
+    41	
+    42		/* Unlock CHIP's password in order to be able to read/write to it's
+    43		 * VIN_SCALE and IIN_SCALE registers.
+    44		*/
+    45		ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
+    46		if (ret < 0) {
+  > 47			dev_err_probe(&client->dev, "Device can't be unlocked.\n");
+    48			return ret;
+    49		}
+    50	
+    51		ret = i2c_smbus_write_word_data(client, ADP1050_CHIP_PASSWORD, 0xFFFF);
+    52		if (ret < 0) {
+    53			dev_err_probe(&client->dev, "Device couldn't be unlocked.\n");
+    54			return ret;
+    55		}
+    56	
+    57		/* If adi,vin-scale-monitor isn't set or is set to 0 means that the
+    58		 * VIN monitor isn't used, therefore 0 is used as scale in order
+    59		 * for the readings to return 0.
+    60		*/
+    61		if (device_property_read_u32(&client->dev, "adi,vin-scale-monitor",
+    62					     &vin_scale_monitor))
+    63			vin_scale_monitor = 0;
+    64	
+    65		/* If adi,iin-scale-monitor isn't set or is set to 0 means that the
+    66		 * IIN monitor isn't used, therefore 0 is used as scale in order
+    67		 * for the readings to return 0.
+    68		*/
+    69		if (device_property_read_u32(&client->dev, "adi,iin-scale-monitor",
+    70					     &iin_scale_monitor))
+    71			iin_scale_monitor = 0;
+    72	
+    73		ret = i2c_smbus_write_word_data(client, ADP1050_VIN_SCALE_MONITOR,
+    74						vin_scale_monitor);
+    75		if (ret < 0)
+    76			return ret;
+    77	
+    78		ret = i2c_smbus_write_word_data(client, ADP1050_IIN_SCALE_MONITOR,
+    79						iin_scale_monitor);
+    80		if (ret < 0)
+    81			return ret;
+    82	
+    83		return pmbus_do_probe(client, &adp1050_info);
+    84	}
+    85	
 
- arch/x86/include/asm/apic.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 9d159b771dc8..dddd3fc195ef 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -13,6 +13,7 @@
- #include <asm/mpspec.h>
- #include <asm/msr.h>
- #include <asm/hardirq.h>
-+#include <asm/io.h>
- 
- #define ARCH_APICTIMER_STOPS_ON_C3	1
- 
-@@ -96,7 +97,7 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
- 
- static inline u32 native_apic_mem_read(u32 reg)
- {
--	return *((volatile u32 *)(APIC_BASE + reg));
-+	return readl((void __iomem *)(APIC_BASE + reg));
- }
- 
- static inline void native_apic_mem_eoi(void)
 -- 
-2.43.0.594.gd9cf4e227d-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
