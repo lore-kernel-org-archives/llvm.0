@@ -1,174 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7D853379
-	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 09:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6AD7BAFB
+	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 11:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710841282; cv=none; b=cbdjHxutnDjfhwSYs6yeL/Coftc3uVQR9t0eHnkZRNjIknhUwl4uYOR74Fcgf8W6f6dbCRsto5zfaP5bu8w8/QWD9YDlBFUohp8VSj3ZW4UsESBBcaoaSm8qZZOzFhwXQVah/LBBl7hRn2ndbU8aIGTDFYX5YiqpLJoj08HBLMY=
+	t=1710846572; cv=none; b=OBS1+YCQjGYvedV6pTa1RYxEVHLH2VlGNBu1zVIlUeE2wku/DjytGPIAEOnDMfMTzALnNr2o78h4MH3xhstWZeSX5kY3PUv10QeFcmQYwhw5ZReYdIEHY3jjz1j9kkMNGm1qgdqgBzvhanGKrf1ui+cylhR+z8P4f1SFoqRBFxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710841282; c=relaxed/simple;
-	bh=71y6U/yEd0p518ZH06ou59ARHvePglL3ChXz44SZ97o=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RTcLuhxftHXG6ioQ8mKsbPZBYnlLXFuC02iwRP+5ypITMNHv7eO8DTHdHlhyRYIhMBda6zMW4WS77aHp+m3l0U0AFImffOQT2JPojcxjUxXy60Rgj4hygPCJxQB665DKwJmb72eNMtOWvlZVKU+KCnJReIC3U9TXwXFMne6bQFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JCk2shnC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710846572; c=relaxed/simple;
+	bh=sBX9q9flXe4rDLLTikiy0lqMwDNq3tx8cV3867WS+2o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bD1iLRDEedmq9zMvilggI1hj5KImh5IHUrwJ/x6R1UYkVKdo+jI0EF3bWS2luqTqlo9cwgjNxjrpw0GT3OHs2hLjuiHYndZY+Y9cJiW93YIZmkdtmpOvnC45vS3cy0y2s9SloT/qj0ViQ47gVk0MW3dncmXTt4uoRpwLuQ7s4Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hg7OjSSK; arc=none smtp.client-ip=209.85.222.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JCk2shnC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710841279;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/YYxC+DqP0kVUXLsnki3NJZELMzLte6MUFMgBrZo6F8=;
-	b=JCk2shnC4JMPIVojojVdId2rzXyvhI6kJC/m8TKnklxwka93g3BNcTZlX+ZXIrvADySLe8
-	bofujwJSOiatRX6Nm0Ih99uL1UXRj498K+5dwx2h2MXquWYKDOE0gFKBErxtIRar3bbxt8
-	sexk5q8dDSoEZgJXZ8FVh3Z9B/rhSfQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-219-unKBHnliMyyXCUstRoYFhA-1; Tue, 19 Mar 2024 05:41:18 -0400
-X-MC-Unique: unKBHnliMyyXCUstRoYFhA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C26C08007A2
-	for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 09:41:17 +0000 (UTC)
-Received: from [172.64.3.54] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7F08A492BC8;
-	Tue, 19 Mar 2024 09:41:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.8.0, mainline.kernel.org-clang, b3603fcb)
-Date: Tue, 19 Mar 2024 09:41:17 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hg7OjSSK"
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-7dacc916452so1201133241.0
+        for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 04:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710846569; x=1711451369; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iFFMom5/ZZ+nxNfevDyTk4uvoxRGCKNnKvOL6LWtnZw=;
+        b=hg7OjSSK8+tFJNVqNv/8hcw2ws6/fILNsLbvhsYyr4VV+t978FAWRlNRWf4fsl4q10
+         7KROpHo+AgAOUHigw2JLCPe/WdthAMizTWzOTlrMUKxiAgnM7JE6w4FVcWoTtpxdWJUe
+         y04eUZOdk739+bPO31XIDAwrddkePKj6qruFqbkK/EuewA7UZbwziHblw2GQ7bkkxpz4
+         y5D+0rMJ5iTw6syjOuMtfDc5vSQyyNRbxU+NJT9Np4NCT/QzvUethHm75sRuadB/9kt6
+         D2Jinc5wAMDZwZZbM2O/RQGsOzdSZZ7QQK51m+PvBBPavzT4YB8FQrZBMEKehIpr7xav
+         89TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710846569; x=1711451369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iFFMom5/ZZ+nxNfevDyTk4uvoxRGCKNnKvOL6LWtnZw=;
+        b=DG4XjwytV62HfgY9M1z+bEdePdRQpdAx1QBCoFIBsfOHZOOzfy+q2IzNpwgt8Bab+Q
+         bxzEjM9XASDeXVHRh38YDSM/mtRgzrY5Hhxi/pxzCf4PzVfqRN3wMd6EfOcLOZu69Qz3
+         VMX3WHPZWs1/dfXdYGBx2HEWL12IP6qzZ0NXEpEyUMQHhmtld2V3yo52SnyoRANOAAXC
+         0D8yXxUC1nv/wv3t8bcaZPS26wUVzln86hRO6faEKiEZExbb0NPZMB1AfP2oQ+Y1MEOC
+         u69HGBj0nHdIlLxQRQr1fkAf60B8rc087OCRBLONWh3T2P3WqmOrsPflS8i8MBuYlaKt
+         j4RA==
+X-Forwarded-Encrypted: i=1; AJvYcCUQaXCfleP1TGdwem4U6f7PoSz7hBvASLRm2SOeI8AlgLCbAcDt0R3cKu0GGGsLCXTJOr08pbRBbb3GTvDGuaPkBm7rJQ==
+X-Gm-Message-State: AOJu0YxXSt0xOsqzGWtY3F0rV1/uhiWnI1bsm4WHhZUehPDZcWy5K+C7
+	3dNd5dg6yPGNafr63z1xpKmWKXYh6TCx5T23GtJl3EZRzg2SC8fwBnv4I9eRwPmH/8Q/lw/WnuW
+	PZbpAk62xzsYw/GKMCUgD1D5+yCk=
+X-Google-Smtp-Source: AGHT+IHM4xyglbb5pffkcPfzACI/wBLHk//vDjZGT4FoVpHhmkFKx2NL+9FyUklB5eUGBbhXcbX0g7MwXMxUrkqaoD8=
+X-Received: by 2002:a05:6102:3a0b:b0:474:cb65:d400 with SMTP id
+ b11-20020a0561023a0b00b00474cb65d400mr1843847vsu.24.1710846569394; Tue, 19
+ Mar 2024 04:09:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <10538.124031905411800103@us-mta-219.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20240314141516.31747-1-liuhailong@oppo.com> <20240315081803.2223-1-liuhailong@oppo.com>
+ <ZflTCY-Oaxm0U70u@tiehlicka>
+In-Reply-To: <ZflTCY-Oaxm0U70u@tiehlicka>
+From: Barry Song <21cnbao@gmail.com>
+Date: Tue, 19 Mar 2024 19:09:18 +0800
+Message-ID: <CAGsJ_4w0EHuAwvSFuqUsMO-bLjJwCmN_qjL6NuA043-4rgfgsQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not available"
+To: Michal Hocko <mhocko@suse.com>, liuhailong@oppo.com
+Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com, 
+	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com, 
+	quic_charante@quicinc.com, yuzhao@google.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Tue, Mar 19, 2024 at 4:56=E2=80=AFPM Michal Hocko <mhocko@suse.com> wrot=
+e:
+>
+> On Fri 15-03-24 16:18:03, liuhailong@oppo.com wrote:
+> > From: "Hailong.Liu" <liuhailong@oppo.com>
+> >
+> > This reverts
+> > commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not e=
+ligible")
+> > commit 5da226dbfce3 ("mm: skip CMA pages when they are not available")
+> >
+> > skip_cma may cause system not responding. if cma pages is large in lru_=
+list
+> > and system is in lowmemory, many tasks would direct reclaim and waste
+> > cpu time to isolate_lru_pages and return.
+> >
+> > Test this patch on android-5.15 8G device
+> > reproducer:
+> > - cma_declare_contiguous 3G pages
+> > - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
+> >   only.
+> > - run a memleak process in userspace
+>
+> Does this represent a sane configuration? CMA memory is unusable for
+> kernel allocations and memleak process is also hard to reclaim due to
+> swap suppression. Isn't such a system doomed to struggle to reclaim any
+> memory? Btw. how does the same setup behave with the regular LRU
+> implementation? My guess would be that it would struggle as well.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I assume the regular LRU implementation you are talking about is the LRU
+without skip_cma()?
 
-Tested-by: CKI Project <cki-project@redhat.com>
+I remember Hailong mentioned something like " it also trigger memory psi
+event to allow admin do something to release memory" and " without
+patch the devices would kill camera process".  So it seems the difference
+is if a killing will occur.
 
-Kernel information:
-    Commit message: Merge tag 'dlm-6.9' of git://git.kernel.org/pub/scm/lin=
-ux/kernel/git/teigland/linux-dlm
+Hailong, would you like to provide more detail?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/135706
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
- __exclude_unnecessary_pages: Can't read the buffer of struct page
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: makedumpfile failed when dumping vmcore
-            URL: https://bugzilla.redhat.com/2269991
-            Affected tests:
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Hardware - Firmware test suite
-
-
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> --
+> Michal Hocko
+> SUSE Labs
+>
