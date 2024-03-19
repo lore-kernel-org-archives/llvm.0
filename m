@@ -1,86 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A4E3FBAF;
-	Tue, 19 Mar 2024 21:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8580A4F889;
+	Tue, 19 Mar 2024 22:12:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710883660; cv=none; b=YwdcXAbA5dy/F64weP0uF2onX+rbaJIsjbV2sC5Z9hLC34TeYmipQcvdHs8knadkKj1TzyoDVrwXC6CWlzVGZirg0WZ2wC4rm/zJHKm4Ouze4okonsSoa4Ip1vnKy34jh18xvazPhIT8weFoS2IA4E3puvoV3nVJXoRoNpRnlvI=
+	t=1710886367; cv=none; b=iAGwBgjduTKMxKV1c2UouhIs7918XxjPOURixzu8lPbe1470NgmKkdxioYNeht5f5mkgemoBK1uI29cpcMgqZETMT8oMps5StmMhUUM+egd/lqehdgLfEF7pbeYQ8ONYCCW52OGbC/ndIiMt3IpgsL68YYavTqrs883rKiXBH1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710883660; c=relaxed/simple;
-	bh=J4v9ZApewR4KTKdeCzuYPBqN731W4qTgXU6ViPQQrRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oGPW82fDMmH7/uRfbb+b6uZky5Du/atP7QmWMseVqqFsv5yGITohqlIeQRGZI50bIEc7HyZhkh9kxo7NdYME21VginBEtQIkqLLGnn4XQ2iZQ0JO8iCfmNtp/ZlBJO8oiWcLtVMsSsSoKd4KqpIXqwII8W8AmtM0SEmqDOHAeCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETLrkllJ; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETLrkllJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4590C433F1;
-	Tue, 19 Mar 2024 21:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710883659;
-	bh=J4v9ZApewR4KTKdeCzuYPBqN731W4qTgXU6ViPQQrRo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ETLrkllJMkEObpmvmNGtcL88GJEHAhQlDubQhs7HJdxnlzDAViZ17evutL6QGKaxW
-	 gbUUREPTX890MeUpaOrRTI73rs1I31whS9cfqon3hOZvrWRSaRjXFjKimTKB5hOc/p
-	 HA6ZdYEQ0n1iyglYWc3btbyzCAARo4uMvQKLAvmkL0PMJneZV/yM8QDCMAAxItlMoT
-	 dpAazCExgxV18UUOFrw6mT9wkYrvZvNSFVmF9MlrcRj6hIRZ1FcJqTylxEe/adyPrC
-	 IZ9jzg3602EuqluGYbjvuMpz2hqnmRiFZip95Na1sDdGJUjAjhyGb96KuUsIzAbSmb
-	 tBeuvsClUzpkg==
-Date: Tue, 19 Mar 2024 14:27:37 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Beau Belgrave <beaub@linux.microsoft.com>,
-	Huang Yiwei <quic_hyiwei@quicinc.com>,
-	John Garry <john.g.garry@oracle.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Thorsten Blum <thorsten.blum@toblux.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	linke li <lilinke99@qq.com>, llvm@lists.linux.dev
-Subject: Re: [GIT PULL v2] tracing: Updates for v6.9
-Message-ID: <20240319212737.GA2894766@dev-arch.thelio-3990X>
-References: <20240318113053.7f87ce7f@gandalf.local.home>
- <CAHk-=wjxX16kWd=uxG5wzqt=aXoYDf1BgWOKk+qVmAO0zh7sjA@mail.gmail.com>
- <20240319130653.0cfdaf6e@gandalf.local.home>
- <20240319131333.504c93fc@gandalf.local.home>
- <20240319210329.GA742040@dev-arch.thelio-3990X>
- <CAHk-=wjJH_k5+h=3TOvLsGN-FOBNfLh_Ln_bZRLQV-oe9Gc5tw@mail.gmail.com>
+	s=arc-20240116; t=1710886367; c=relaxed/simple;
+	bh=tPHeG/iPj62eX8v+YXuhixQuK4X+clWTh3PEscqnhhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ody1ax3qgYAQ5p7zTnDU1X74ila4lY1uELYY844MG2Tsosr1hJ+7/2Sj7C5+w2rSvpoJcY6StfMXXLi8mha5Y1PVTD9ljhixRAzzyXr+78EAgisQU7aHMKPZj7JsHEuimTCBY/mtT4vZM+46sZwqJJ5JEtlM4uePskjgaRxDl8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBD1C433F1;
+	Tue, 19 Mar 2024 22:12:46 +0000 (UTC)
+Date: Tue, 19 Mar 2024 18:15:09 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev, Linux Kernel Functional
+ Testing <lkft@linaro.org>
+Subject: Re: [PATCH 0/2] tracing: Fully silence instance of -Wstring-compare
+Message-ID: <20240319181509.25bacdc5@gandalf.local.home>
+In-Reply-To: <20240319-tracing-fully-silence-wstring-compare-v1-0-81adb44403f5@kernel.org>
+References: <20240319-tracing-fully-silence-wstring-compare-v1-0-81adb44403f5@kernel.org>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjJH_k5+h=3TOvLsGN-FOBNfLh_Ln_bZRLQV-oe9Gc5tw@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 19, 2024 at 02:22:27PM -0700, Linus Torvalds wrote:
-> On Tue, 19 Mar 2024 at 14:03, Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > For what it's worth, I applied that change and built ARCH=x86_64
-> > defconfig with LLVM 18.1.1 from [1] but it does not appear to help the
-> > instances of -Wstring-compare; in fact, it adds some additional warnings
-> > that I have not seen before. I have attached the full build log.
-> 
-> Hmm. I'm no longer seeing any problems with commit 24f5bb9f24ad
-> ("tracing: Just use strcmp() for testing __string() and __assign_str()
-> match").
-> 
-> But that's clang 17.0.6.
-> 
-> The patch that Steven sent out (and that I applied) is a bit different
-> from his "I'll change it to this" email, though. A couple of casts and
-> parentheses different.
-> 
-> So maybe current -git works for you?
+On Tue, 19 Mar 2024 09:07:51 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Ah, I did not notice your tree was updated, I was working off of
-b3603fcb79b1. Works for me here, thanks for letting me know.
+> Hi all,
+> 
+> This series fully resolves the new instance of -Wstring-compare from
+> within the __assign_str() macro. The first patch resolves a build
+> failure with GCC that would be seen with just the second patch applied.
+> The second patch actually hides the warning.
+> 
+> NOTE: This is based on trace/for-next, which does not contain the
+> minimum LLVM version bump that occurred later in the current merge
+> window, so this uses
+> 
+>   __diag_ignore(clang, 11, ...
+> 
+> instead of
+> 
+>   __diag_ignore(clang, 13, ...
+> 
+> which will be required when this is merged into Linus's tree. If you can
+> base this series on a tree that has the merge commit e5eb28f6d1af ("Merge
+> tag 'mm-nonmm-stable-2024-03-14-09-36' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm") in it, then that
+> change can be done at application time, rather than merge time (or I can
+> send a v2). It would be really nice for this to make the merge window so
+> that this warning does not proliferate into other trees that base on
+> -rc1.
+> 
 
-Cheers,
-Nathan
+I'm guessing this isn't needed with the last update.
+
+-- Steve
