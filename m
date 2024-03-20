@@ -1,55 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCA7182A1;
-	Wed, 20 Mar 2024 05:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842531642B;
+	Wed, 20 Mar 2024 08:05:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710913804; cv=none; b=cE2BVy7oUs4ePT+mEReHUdsLWQ3BCdJVCYxYT7MpDv/UVCJlVbeCW+1wG7ZDtAZWP2WiwNn/bV2g1rN6ArFjl8h+kWeTyJn2CIAaq44kRWr4U7OeTOf6kfOQMpq7Gxzrevt9yVxI99CwmSBoG8AUaV7/S97Tguih+UbVDSUY4n0=
+	t=1710921908; cv=none; b=SJg8hBoK5iURzK1KU2C8MJd7YzyqFcBCByecjgsfEnvGZz9KEt9D5rsSWwwysTQi3u5pGgGi/156o1f30Ktaz99HANwknnBDLd7t7Vp++2FqGjSIPrBkO6Vaqym3JKXSyxPB4xVRIXgMLFyEWhvpHJXChNuDFvFvsIJRcS+VXZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710913804; c=relaxed/simple;
-	bh=EYFmhq8QUBZm43CCsmyp66e5PhSdVUFJzUoaBjh+xnM=;
+	s=arc-20240116; t=1710921908; c=relaxed/simple;
+	bh=eG0kDS/mrAl5KHOwo943JMDevz0ZPRw28X5sAdBVHyc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=buYmgBIGLFQ/+23UsgsL+66Nklh7AiQpChcJbG6b3KsFHYc4PvE6sZB7klbpMxI5jCHXRK8B5wzDW2qneoJAJG3X/uQ0bD0+XhEvGMSMJw7IThF8SHQ/E4GLNqkTHk8m9Q59T0krQXrE3Jjf2PFo5nzXeSk8AoAp/2cbej6XKOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hp8fsBCB; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=U1PUgIJhOOZY29R2jNnQfKdOv7q4WX6nOxYQpp7rRpeHY2PT8ZRMI8PVUwuqy4DCkLTTNWgZ2RGy0XKqysmnw4/YsYYCf97PHKCa+Bhn9kYuKqwPSFeQQaWRf45s+D7fIBeeKS/RZv+iwtBMwDMuQr9NJysfcvgz6Ki+RUR5KV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=asjSYz4j; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hp8fsBCB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="asjSYz4j"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710913802; x=1742449802;
+  t=1710921906; x=1742457906;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EYFmhq8QUBZm43CCsmyp66e5PhSdVUFJzUoaBjh+xnM=;
-  b=hp8fsBCB6VyUdJyfyUQPMlMIJ1r8Pncz73WMWGeSYVjFnlqc3Srx5gbl
-   cD/VcHHjpaAEdGqmxlrcMb2/kbjA2nTvgsDnO8JMomcswqrxPnqUhAf4+
-   +cbjzd3m/tNiNwa4VHCwTg3IwzlYbE9YGeDg3V+Pr4VN0zePEYHnTUPim
-   +eeuXBdn0FJoDHxonaxaDUAGVoTCEBY7D5X6k/Zag2H5qwu4fxHDLfwhU
-   UwKrG18pcPA/VEiIQh0sqaGLbLPXy5WckOrGvV+9XlxbXBH2R9sGBv/ry
-   bIMPSqEegjMPVad9dfVJf0wd2ebmC4wlyboercJrSoS4nXrmqQFrLm6pM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="6028065"
+  bh=eG0kDS/mrAl5KHOwo943JMDevz0ZPRw28X5sAdBVHyc=;
+  b=asjSYz4jnrLIBeq2JzMfltdoTEH5Rh9WGjusF++blSRbUr7IU69o3yOX
+   CH1SjEod2HMk2dBcQWpQMefY1g0c57ZsxlEM/bcBpD7an05oDpUlNy3wg
+   9G/iJ0Nkno3zcM1bOc1H1jgv1ArT+1twoUEN9s9hTDk3W1nwhQzwr1tl0
+   hr6TAR/ToQhtJhXOhBUB1KxOaI+gQTmFwTqpEdP687mL0IW/PidhZW2B0
+   6ckO0fvGUonOulPVpL3ZmDLdVUd5OUCVeL0Kjo/IGorkGloy129ojWQbA
+   QCRtKsPrbURWM4LBLl393O32OfNWm3XGqevt7F7oLek8W3EBzyXvOrlcz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="16375776"
 X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="6028065"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2024 22:50:01 -0700
+   d="scan'208";a="16375776"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 01:05:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
-   d="scan'208";a="14463361"
+   d="scan'208";a="14083131"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 19 Mar 2024 22:50:00 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 20 Mar 2024 01:05:02 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rmopp-000INj-2P;
-	Wed, 20 Mar 2024 05:49:57 +0000
-Date: Wed, 20 Mar 2024 13:49:55 +0800
+	id 1rmqwW-000ISl-1B;
+	Wed, 20 Mar 2024 08:05:00 +0000
+Date: Wed, 20 Mar 2024 16:04:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linyunsheng:page_frag_cache_prototype 74/78]
- mm/page_frag_alloc.c:92:11: error: invalid application of 'typeof' to
- bit-field
-Message-ID: <202403201343.c6ZxdQkJ-lkp@intel.com>
+Subject: [alobakin:idpf-libie-new 50/65]
+ arch/mips/include/asm/r4kcache.h:245:1: error: pasting formed '"Unsupported
+ unroll count: "32', an invalid preprocessing token
+Message-ID: <202403201512.c7bd4E1H-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,112 +59,231 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/gestionlin/linux.git page_frag_cache_prototype
-head:   7315604eb1d087836123bc9670d2be420a42d37f
-commit: 6235640ae08dd66d5f64292e2ccedfcf7c564678 [74/78] mm/page_alloc: reuse existing bit field for pfmemalloc
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240320/202403201343.c6ZxdQkJ-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240320/202403201343.c6ZxdQkJ-lkp@intel.com/reproduce)
+tree:   https://github.com/alobakin/linux idpf-libie-new
+head:   3ec29f243914b957e581e1b00106eef6308d5680
+commit: 7292c0205ebac9ec5f4d2ef3076e39971beed8bd [50/65] unroll: add generic loop unroll helpers
+config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20240320/202403201512.c7bd4E1H-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240320/202403201512.c7bd4E1H-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403201343.c6ZxdQkJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403201512.c7bd4E1H-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/page_frag_alloc.c:17:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> mm/page_frag_alloc.c:92:11: error: invalid application of 'typeof' to bit-field
-      92 |         offset = ALIGN(nc->offset, -align_mask);
-         |                  ^
-   include/linux/align.h:8:22: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ^
-   include/uapi/linux/const.h:31:65: note: expanded from macro '__ALIGN_KERNEL'
-      31 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                                                           ^
->> mm/page_frag_alloc.c:92:11: error: invalid application of 'typeof' to bit-field
-   include/linux/align.h:8:22: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                 ^
-   include/uapi/linux/const.h:31:65: note: expanded from macro '__ALIGN_KERNEL'
-      31 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                                                           ^
-   5 warnings and 2 errors generated.
+   In file included from arch/mips/kernel/mips-mt.c:20:
+>> arch/mips/include/asm/r4kcache.h:245:1: error: pasting formed '"Unsupported unroll count: "32', an invalid preprocessing token
+   __BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 16, )
+   ^
+   arch/mips/include/asm/r4kcache.h:214:4: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                           ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:52: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                                                                    ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+>> arch/mips/include/asm/r4kcache.h:245:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:214:17: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                                        ^
+>> arch/mips/include/asm/r4kcache.h:245:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:214:17: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                                        ^
+>> arch/mips/include/asm/r4kcache.h:245:1: error: extraneous ')' before ';'
+   arch/mips/include/asm/r4kcache.h:214:4: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                           ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:3: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                   ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:439:4: note: expanded from macro '__compiletime_assert'
+                           __compiletime_error(msg);                       \
+                           ^
+   include/linux/compiler_attributes.h:151:71: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                                         ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+>> arch/mips/include/asm/r4kcache.h:245:1: error: pasting formed '"Unsupported unroll count: "32', an invalid preprocessing token
+   arch/mips/include/asm/r4kcache.h:224:3: note: expanded from macro '__BUILD_BLAST_CACHE'
+                   cache_unroll(32, kernel_cache, hitop, start, lsize);    \
+                   ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:52: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                                                                    ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+>> arch/mips/include/asm/r4kcache.h:245:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:224:16: note: expanded from macro '__BUILD_BLAST_CACHE'
+                   cache_unroll(32, kernel_cache, hitop, start, lsize);    \
+                                ^
+>> arch/mips/include/asm/r4kcache.h:245:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:224:16: note: expanded from macro '__BUILD_BLAST_CACHE'
+                   cache_unroll(32, kernel_cache, hitop, start, lsize);    \
+                                ^
+>> arch/mips/include/asm/r4kcache.h:245:1: error: extraneous ')' before ';'
+   arch/mips/include/asm/r4kcache.h:224:3: note: expanded from macro '__BUILD_BLAST_CACHE'
+                   cache_unroll(32, kernel_cache, hitop, start, lsize);    \
+                   ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:3: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                   ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:439:4: note: expanded from macro '__compiletime_assert'
+                           __compiletime_error(msg);                       \
+                           ^
+   include/linux/compiler_attributes.h:151:71: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                                         ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+>> arch/mips/include/asm/r4kcache.h:245:1: error: pasting formed '"Unsupported unroll count: "32', an invalid preprocessing token
+   arch/mips/include/asm/r4kcache.h:241:4: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                           ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:52: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                                                                    ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+>> arch/mips/include/asm/r4kcache.h:245:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:241:17: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                                        ^
+>> arch/mips/include/asm/r4kcache.h:245:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:241:17: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                                        ^
+>> arch/mips/include/asm/r4kcache.h:245:1: error: extraneous ')' before ';'
+   arch/mips/include/asm/r4kcache.h:241:4: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                           ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:3: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                   ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:439:4: note: expanded from macro '__compiletime_assert'
+                           __compiletime_error(msg);                       \
+                           ^
+   include/linux/compiler_attributes.h:151:71: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                                         ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+   arch/mips/include/asm/r4kcache.h:246:1: error: pasting formed '"Unsupported unroll count: "32', an invalid preprocessing token
+   __BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 16, )
+   ^
+   arch/mips/include/asm/r4kcache.h:214:4: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                           ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:52: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                                                                    ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+   arch/mips/include/asm/r4kcache.h:246:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:214:17: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                                        ^
+   arch/mips/include/asm/r4kcache.h:246:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:214:17: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                                        ^
+   arch/mips/include/asm/r4kcache.h:246:1: error: extraneous ')' before ';'
+   arch/mips/include/asm/r4kcache.h:214:4: note: expanded from macro '__BUILD_BLAST_CACHE'
+                           cache_unroll(32, kernel_cache, indexop,         \
+                           ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:3: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                   ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:439:4: note: expanded from macro '__compiletime_assert'
+                           __compiletime_error(msg);                       \
+                           ^
+   include/linux/compiler_attributes.h:151:71: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                                         ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+   arch/mips/include/asm/r4kcache.h:246:1: error: pasting formed '"Unsupported unroll count: "32', an invalid preprocessing token
+   arch/mips/include/asm/r4kcache.h:224:3: note: expanded from macro '__BUILD_BLAST_CACHE'
+                   cache_unroll(32, kernel_cache, hitop, start, lsize);    \
+                   ^
+   arch/mips/include/asm/r4kcache.h:197:2: note: expanded from macro 'cache_unroll'
+           unrolled_call(times, _cache_op, insn, op,                       \
+           ^
+   include/linux/unroll.h:82:52: note: expanded from macro 'unrolled_call'
+                   BUILD_BUG_ON_MSG(1, "Unsupported unroll count: " ##times);  \
+                                                                    ^
+   In file included from arch/mips/kernel/mips-mt.c:20:
+   arch/mips/include/asm/r4kcache.h:246:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:224:16: note: expanded from macro '__BUILD_BLAST_CACHE'
+                   cache_unroll(32, kernel_cache, hitop, start, lsize);    \
+                                ^
+   arch/mips/include/asm/r4kcache.h:246:1: error: expected ')'
+   arch/mips/include/asm/r4kcache.h:224:16: note: expanded from macro '__BUILD_BLAST_CACHE'
+                   cache_unroll(32, kernel_cache, hitop, start, lsize);    \
+                                ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/typeof +92 mm/page_frag_alloc.c
+vim +245 arch/mips/include/asm/r4kcache.h
 
-c8f66d331fd5a2 Yunsheng Lin 2023-12-01   91  
-c8f66d331fd5a2 Yunsheng Lin 2023-12-01  @92  	offset = ALIGN(nc->offset, -align_mask);
-c8f66d331fd5a2 Yunsheng Lin 2023-12-01   93  	if (unlikely(offset + fragsz > size)) {
-e66f049407d1fc Yunsheng Lin 2024-03-16   94  		page = virt_to_page(nc->va);
-e66f049407d1fc Yunsheng Lin 2024-03-16   95  
-e66f049407d1fc Yunsheng Lin 2024-03-16   96  		if (!page_ref_sub_and_test(page, nc->pagecnt_bias))
-e66f049407d1fc Yunsheng Lin 2024-03-16   97  			goto refill;
-e66f049407d1fc Yunsheng Lin 2024-03-16   98  
-e66f049407d1fc Yunsheng Lin 2024-03-16   99  		if (unlikely(nc->pfmemalloc)) {
-e66f049407d1fc Yunsheng Lin 2024-03-16  100  			free_unref_page(page, compound_order(page));
-e66f049407d1fc Yunsheng Lin 2024-03-16  101  			goto refill;
-e66f049407d1fc Yunsheng Lin 2024-03-16  102  		}
-e66f049407d1fc Yunsheng Lin 2024-03-16  103  
-e66f049407d1fc Yunsheng Lin 2024-03-16  104  		/* OK, page count is 0, we can safely set it */
-e66f049407d1fc Yunsheng Lin 2024-03-16  105  		set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
-e66f049407d1fc Yunsheng Lin 2024-03-16  106  
-e66f049407d1fc Yunsheng Lin 2024-03-16  107  		/* reset page count bias and offset to start of new frag */
-e66f049407d1fc Yunsheng Lin 2024-03-16  108  		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
-c8f66d331fd5a2 Yunsheng Lin 2023-12-01  109  		offset = 0;
-c8f66d331fd5a2 Yunsheng Lin 2023-12-01  110  		if (unlikely(fragsz > size)) {
-e66f049407d1fc Yunsheng Lin 2024-03-16  111  			/*
-e66f049407d1fc Yunsheng Lin 2024-03-16  112  			 * The caller is trying to allocate a fragment
-e66f049407d1fc Yunsheng Lin 2024-03-16  113  			 * with fragsz > PAGE_SIZE but the cache isn't big
-e66f049407d1fc Yunsheng Lin 2024-03-16  114  			 * enough to satisfy the request, this may
-e66f049407d1fc Yunsheng Lin 2024-03-16  115  			 * happen in low memory conditions.
-e66f049407d1fc Yunsheng Lin 2024-03-16  116  			 * We don't release the cache page because
-e66f049407d1fc Yunsheng Lin 2024-03-16  117  			 * it could make memory pressure worse
-e66f049407d1fc Yunsheng Lin 2024-03-16  118  			 * so we simply return NULL here.
-e66f049407d1fc Yunsheng Lin 2024-03-16  119  			 */
-e66f049407d1fc Yunsheng Lin 2024-03-16  120  			return NULL;
-e66f049407d1fc Yunsheng Lin 2024-03-16  121  		}
-e66f049407d1fc Yunsheng Lin 2024-03-16  122  	}
-e66f049407d1fc Yunsheng Lin 2024-03-16  123  
-e66f049407d1fc Yunsheng Lin 2024-03-16  124  	nc->pagecnt_bias--;
-c8f66d331fd5a2 Yunsheng Lin 2023-12-01  125  	nc->offset = offset + fragsz;
-e66f049407d1fc Yunsheng Lin 2024-03-16  126  
-e66f049407d1fc Yunsheng Lin 2024-03-16  127  	return nc->va + offset;
-e66f049407d1fc Yunsheng Lin 2024-03-16  128  }
-e66f049407d1fc Yunsheng Lin 2024-03-16  129  EXPORT_SYMBOL(__page_frag_alloc_align);
-e66f049407d1fc Yunsheng Lin 2024-03-16  130  
+76f072a46f179b include/asm-mips/r4kcache.h      Atsushi Nemoto 2006-01-29  244  
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14 @245  __BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 16, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  246  __BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 16, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  247  __BUILD_BLAST_CACHE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 16, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  248  __BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 32, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  249  __BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 32, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  250  __BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I_Loongson2, 32, loongson2_)
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  251  __BUILD_BLAST_CACHE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 32, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  252  __BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 64, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  253  __BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 64, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  254  __BUILD_BLAST_CACHE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 64, )
+18a8cd63c0d800 arch/mips/include/asm/r4kcache.h David Daney    2014-05-28  255  __BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 128, )
+18a8cd63c0d800 arch/mips/include/asm/r4kcache.h David Daney    2014-05-28  256  __BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 128, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  257  __BUILD_BLAST_CACHE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 128, )
+43a06847b9d277 arch/mips/include/asm/r4kcache.h Aaro Koskinen  2014-01-14  258  
 
-:::::: The code at line 92 was first introduced by commit
-:::::: c8f66d331fd5a2c000f5c5aebe181c9def4e1f3a mm/page_alloc: use initial zero offset for page_frag_alloc_align()
+:::::: The code at line 245 was first introduced by commit
+:::::: 43a06847b9d277e9f2c3bf8052b44b74e17526c7 MIPS: fix blast_icache32 on loongson2
 
-:::::: TO: Yunsheng Lin <linyunsheng@huawei.com>
-:::::: CC: Yunsheng Lin <linyunsheng@huawei.com>
+:::::: TO: Aaro Koskinen <aaro.koskinen@iki.fi>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
