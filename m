@@ -1,161 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CC95FBAA;
-	Tue, 19 Mar 2024 22:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81EB10FA
+	for <llvm@lists.linux.dev>; Wed, 20 Mar 2024 00:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710888955; cv=none; b=l+qc4lEkk3SFyfz3raUgP4V2Casmk1jw4fehP7D2uKRuEhhOruAwz/b5UictgfKRRHa8KZFRNYBg3xT9vFemCvDZ/262kn9qKrNfYV+EMA0OO03SLd6cE8c8erRoB/vWOf0zB4elR+y6UgpzjVsyfiuHkjvf1o1l++8uGqsYAsE=
+	t=1710894657; cv=none; b=rK/J+1E2GZm5hQAakBc8nErCoNqHbv449I311Cp5KDXTQdalhcB4I83zRgiNKicFdoOHoR1w+4Kl4PNCRTqdXfovAsdhNVGYF/o59FX0XN1x1ynCsulBRLW1vRoutPXpx6XPT2JDt9v8/KQ0YJDKiYUxNm7IJWIK7ruG71cB9MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710888955; c=relaxed/simple;
-	bh=LuebInQdwk5g8fC0FsQuDoIixz7qsK+Hyyiar7PaBtA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=q5r+/cEjb44AQhIC/Nv1HpHBCYvR7wcPv8jAyPJZyaN6A3pEJ2v65wsqP5/VbYHYD0MndJJ1PYiDiYWWcg5dsyJ2ZOXn9ZP3iVdU8VJd4ROp9KTneIgBVe3+GGHgI2Ud7Ad7RR/k8eMQB4p8A3Z9ywbFTNVBYsgJMNEYmXj2PAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PqkcFeHa; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1710894657; c=relaxed/simple;
+	bh=w6xT7TQIIw629OsLA2mpj4+Cm8CL0j6xp7UsXUzQdAU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QzFJ+sYDJPr8CpPfU3aq6N+ALyppFgGg7roIcqnjvHDXlGXlSadW115bTS85u41qaybh8qDRoe5gIRHS3tyS9l+k56f3CrAVcv2OV7jpdGOCTRi+KhA3iQH33d0FGvNnwRAKIfZqeBQt7seE2CFdfDkPzVcHYrCb2u6eFnNBUrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z7Uuaa2q; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PqkcFeHa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710888954; x=1742424954;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LuebInQdwk5g8fC0FsQuDoIixz7qsK+Hyyiar7PaBtA=;
-  b=PqkcFeHaHjx0IkEO9/BHZrV2xCfzZWRQuZ0vW4VnIUIXebwJ8FI5MIc0
-   i/s0LuPJ6gDhsc4gwgf+dCi2nUSnt6djU8G32ErAwFUaITDRjtp3g/Dpy
-   gBbUh/PdHUmkQiDFiROaVATTBt8zEimzGVXNKr8CjYDCeAjFu7hZ39HtT
-   sHcyCugoMMAQ9bcTRhNKIBKEJxlIKgdRDGeTnRmSw7pCdjYbb9VycrUGm
-   IgkGl1wbJbWmu6LYjlAHOeJ5FWVX8YLyhOrFNRzluKHhq4NmfTpignSfh
-   T7x1K++lE5yeXRwdDjvkGR2vA8XeOkqvHKVNKujnLzC5vu6XbGgwa7MfF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="5630078"
-X-IronPort-AV: E=Sophos;i="6.07,138,1708416000"; 
-   d="scan'208";a="5630078"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2024 15:55:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,138,1708416000"; 
-   d="scan'208";a="45049488"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Mar 2024 15:55:51 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rmiN3-000I91-0O;
-	Tue, 19 Mar 2024 22:55:49 +0000
-Date: Wed, 20 Mar 2024 06:55:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gregory.price@memverge.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gregory Price <gourry.memverge@gmail.com>
-Subject: [gmprice:sys_move_phys_pages_2024_3_14 2/3] <stdin>:1600:2: warning:
- syscall move_phys_pages not implemented
-Message-ID: <202403200633.JizLbI2C-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z7Uuaa2q"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56ba72fffd6so807032a12.1
+        for <llvm@lists.linux.dev>; Tue, 19 Mar 2024 17:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710894654; x=1711499454; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IZl/MC6G04dgdXWq6n8Jo9rFZ4kdECi4eDf/v32uMoM=;
+        b=z7Uuaa2qfcingz9PscqKz1BStrqLekPMJ/8DTsinIyg69XcgY7TyUtJ10STfgAurR/
+         e4ntkq9961RabKjBeXPtq+kwppKv5g8JV+5prBcBO2DMoIBmqiPxO8ZZy/MVk5Y8wDcK
+         nYT0sC/B8FDeNW3Rektt6UJpcI2wePuVPSqtV/kA56NLDwQQJB+BJTLFh49eG5RUKxhI
+         N4qcD5GnJLFDzQ41MEnV7X2Qzb2WY4z+BklxGd18hZjIApL2HWyd+RzWsSVwBJib4m/r
+         A/Xzal4oGx2OGgk1m3nTGiFvI8shD3oECslxY/8Uq0dMFSbTyoN9SeIq+htuitGtfaHD
+         R+ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710894654; x=1711499454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IZl/MC6G04dgdXWq6n8Jo9rFZ4kdECi4eDf/v32uMoM=;
+        b=gjTthkWwuSJAnBu+YMvUjPGoCUhI3Vu0UOr48p8pkqCuUnfapVyB8aaJUqm8u3lzDE
+         R0fLggJ2DmbV6x3gBQK7zbwCZ3a6eak4vxaekP8cr9Kb2ZCwf/R5mdZpn91q4QS4uyF5
+         iNOhrSxxHUqwGAm4XyC0GPlYE0+6alUKjtOIs7/cMgKkOOftY9c8vDLgL9tps0Mx/mO1
+         IGqneAOD4qKND8nEd7kfeTcirkDjiwRlls9/r7aTvWCqhGZkGxP1NxaJ8Z457SLm/ldx
+         lIRNl8dc2dCvq8qUU1C0xNg8uJhecDXcCVgaUaejs2O6oKsQw9fLuvQ6PQ1wgsMQ8R4N
+         lgaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWFfIP8ZvqfLRpqgiAk5O4EoIfuNH8sF76yXXUZ+G+h0ZRQ8YF0w+hXOm7uM5TxNh+XP0UVulacTrW9ViXdKZICtcYCNQ==
+X-Gm-Message-State: AOJu0Yx9KQ7auVLQQOYq4lNrUw/ZcuerDpGVfa50vlWhoaO8JhIIQ4jy
+	aXXwOLMdaZafkf4RrmGqapmmV7vqVamiceYNvSoZWC6JEJ1rsfp3Oq4HGJZqiqnTVNy61yNvlVi
+	AgwBAb3wlluMsM+XOg0LtHOsDcyHIKOFzXLr8
+X-Google-Smtp-Source: AGHT+IFVRbRtTK93+JswPYwn75sDfz6NqIQ9pLfPvYXf2GKGX5xRtCwHXsSI1NF/q7+RSh2ICglMKo8eb6X0v/DUYE8=
+X-Received: by 2002:a05:6402:5d1:b0:566:b09e:80c4 with SMTP id
+ n17-20020a05640205d100b00566b09e80c4mr242572edx.19.1710894654186; Tue, 19 Mar
+ 2024 17:30:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240319-tracing-fully-silence-wstring-compare-v1-0-81adb44403f5@kernel.org>
+ <20240319-tracing-fully-silence-wstring-compare-v1-2-81adb44403f5@kernel.org>
+In-Reply-To: <20240319-tracing-fully-silence-wstring-compare-v1-2-81adb44403f5@kernel.org>
+From: Justin Stitt <justinstitt@google.com>
+Date: Tue, 19 Mar 2024 17:30:41 -0700
+Message-ID: <CAFhGd8q_4QfjPwGhtfOA40ZGNF7_wf3V43rAvcb_qXQnz1TFOw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tracing: Ignore -Wstring-compare with diagnostic macros
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
+	ndesaulniers@google.com, morbo@google.com, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev, Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/gmprice/linux sys_move_phys_pages_2024_3_14
-head:   18bc4aaa72396bf7409348958ba2bb3fad2d88c1
-commit: 2727276faa0c537ef9df039aea1d6e7cb264e0db [2/3] mm/migrate: Create move_phys_pages syscall
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240320/202403200633.JizLbI2C-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240320/202403200633.JizLbI2C-lkp@intel.com/reproduce)
+On Tue, Mar 19, 2024 at 9:08=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Commit b1afefa62ca9 ("tracing: Use strcmp() in __assign_str() WARN_ON()
+> check") addressed a clang warning, -Wstring-compare, with the use of
+> __builtin_constant_p() to dispatch to strcmp() if the source string is a
+> string literal and a direct comparison if not. Unfortunately, even with
+> this change, the warning is still present because __builtin_constant_p()
+> is not evaluated at this stage of the pipeline, so clang still thinks
+> the else branch could occur for this situation:
+>
+>   include/trace/events/sunrpc.h:705:4: error: result of comparison agains=
+t a string literal is unspecified (use an explicit string comparison functi=
+on instead) [-Werror,-Wstring-compare]
+>   ...
+>   include/trace/stages/stage6_event_callback.h:40:15: note: expanded from=
+ macro '__assign_str'
+>      40 |                              (src) !=3D __data_offsets.dst##_pt=
+r_);       \
+>         |                                    ^
+>   ...
+>
+> Use the compiler diagnostic macros to disable this warning around the
+> WARN_ON_ONCE() expression since a string comparison function, strcmp(),
+> will always be used for the comparison of string literals.
+>
+> Fixes: b1afefa62ca9 ("tracing: Use strcmp() in __assign_str() WARN_ON() c=
+heck")
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://lore.kernel.org/all/CA+G9fYs=3DOTKAZS6g1P1Ewadfr0qoe6LgOV=
+SohqkXmFXotEODdg@mail.gmail.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  include/trace/stages/stage6_event_callback.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace=
+/stages/stage6_event_callback.h
+> index 83da83a0c14f..56a4eea5a48e 100644
+> --- a/include/trace/stages/stage6_event_callback.h
+> +++ b/include/trace/stages/stage6_event_callback.h
+> @@ -35,9 +35,14 @@
+>         do {                                                            \
+>                 char *__str__ =3D __get_str(dst);                        =
+ \
+>                 int __len__ =3D __get_dynamic_array_len(dst) - 1;        =
+ \
+> +               __diag_push();                                          \
+> +               __diag_ignore(clang, 11, "-Wstring-compare",            \
+> +                             "__builtin_constant_p() ensures strcmp()" \
+> +                             "will be used for string literals");      \
+>                 WARN_ON_ONCE(__builtin_constant_p(src) ?                \
+>                              strcmp((src), __data_offsets.dst##_ptr_) : \
+>                              (src) !=3D __data_offsets.dst##_ptr_);      =
+ \
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403200633.JizLbI2C-lkp@intel.com/
+What exactly is the point of the literal string comparison? Why
+doesn't strcmp do the trick?
 
-All warnings (new ones prefixed by >>):
-
->> <stdin>:1600:2: warning: syscall move_phys_pages not implemented [-W#warnings]
-    1600 | #warning syscall move_phys_pages not implemented
-         |  ^
-   1 warning generated.
---
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   13 warnings generated.
->> <stdin>:1600:2: warning: syscall move_phys_pages not implemented [-W#warnings]
-    1600 | #warning syscall move_phys_pages not implemented
-         |  ^
-   1 warning generated.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +               __diag_pop();                                           \
+>                 memcpy(__str__, __data_offsets.dst##_ptr_ ? :           \
+>                        EVENT_NULL_STR, __len__);                        \
+>                 __str__[__len__] =3D '\0';                               =
+ \
+>
+> --
+> 2.44.0
+>
