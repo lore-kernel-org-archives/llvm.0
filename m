@@ -1,181 +1,171 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E6F12E40
-	for <llvm@lists.linux.dev>; Wed, 20 Mar 2024 05:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCA7182A1;
+	Wed, 20 Mar 2024 05:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710912092; cv=none; b=HzKj/9sx0iqJ/u0V9vWP0Wymln+1fqVgQaKjHz/+j6AG8/HJZc1j+BFpKbaNPJ5iE2fk0XkSOjFNTAodhZ2oRGTMhnLt7tPl9+Uc7aikIH+t6T/x8o9FsKEQjnaA8X8gl1VLkgxbDKYq1EcobwKPSD9AOU5qzhmGcOw16/+JWg0=
+	t=1710913804; cv=none; b=cE2BVy7oUs4ePT+mEReHUdsLWQ3BCdJVCYxYT7MpDv/UVCJlVbeCW+1wG7ZDtAZWP2WiwNn/bV2g1rN6ArFjl8h+kWeTyJn2CIAaq44kRWr4U7OeTOf6kfOQMpq7Gxzrevt9yVxI99CwmSBoG8AUaV7/S97Tguih+UbVDSUY4n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710912092; c=relaxed/simple;
-	bh=yoQeqnNvn/641Ca4tpy6qxJKaD4JhY1rg0AsGrhbeRs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WTc/9O5oKoCin2T/CxnD7/lt8JiNfmzstPHymfzoWBW4CgJSHcxYi9IKo6Go3Y4uiy1DHMqyshSer5BXj+0WQbsVJAX4zFkp+LsG/m6jmg+V4Nu5M5y+DLYKN15dlohfS4xgXF6/vEKaclhQoyh6iKyFyB+jzy2MOO/4hHOfjp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HVP1pgR5; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1710913804; c=relaxed/simple;
+	bh=EYFmhq8QUBZm43CCsmyp66e5PhSdVUFJzUoaBjh+xnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=buYmgBIGLFQ/+23UsgsL+66Nklh7AiQpChcJbG6b3KsFHYc4PvE6sZB7klbpMxI5jCHXRK8B5wzDW2qneoJAJG3X/uQ0bD0+XhEvGMSMJw7IThF8SHQ/E4GLNqkTHk8m9Q59T0krQXrE3Jjf2PFo5nzXeSk8AoAp/2cbej6XKOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hp8fsBCB; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HVP1pgR5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710912089;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xoahU+uB1oVY87D+rGZ3f4ao1omhDCkelFIFVB82ePw=;
-	b=HVP1pgR5RFXoHB1F3O8fVlp4mHTv//7kM0GSaaVJMfNJJgoyHtOXwujzt0a17LX/l020GC
-	YUP+XMpq/pbgctjIspG/LltJEjvYfUH4YMCW4OA914hWHhugr0TnUNQigBQ+HbtoarsIkJ
-	Q+fyLUOzpwdOW6N6y3C5PbyeLwH0R4c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-57-3fz3ZuIVPXmqwoJ44HUssQ-1; Wed, 20 Mar 2024 01:21:21 -0400
-X-MC-Unique: 3fz3ZuIVPXmqwoJ44HUssQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 685228007A1
-	for <llvm@lists.linux.dev>; Wed, 20 Mar 2024 05:21:21 +0000 (UTC)
-Received: from [172.64.0.100] (unknown [10.30.33.131])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 22F9140C6DAD;
-	Wed, 20 Mar 2024 05:21:21 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.8.0, mainline.kernel.org-clang, 78c3925c)
-Date: Wed, 20 Mar 2024 05:21:21 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hp8fsBCB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710913802; x=1742449802;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EYFmhq8QUBZm43CCsmyp66e5PhSdVUFJzUoaBjh+xnM=;
+  b=hp8fsBCB6VyUdJyfyUQPMlMIJ1r8Pncz73WMWGeSYVjFnlqc3Srx5gbl
+   cD/VcHHjpaAEdGqmxlrcMb2/kbjA2nTvgsDnO8JMomcswqrxPnqUhAf4+
+   +cbjzd3m/tNiNwa4VHCwTg3IwzlYbE9YGeDg3V+Pr4VN0zePEYHnTUPim
+   +eeuXBdn0FJoDHxonaxaDUAGVoTCEBY7D5X6k/Zag2H5qwu4fxHDLfwhU
+   UwKrG18pcPA/VEiIQh0sqaGLbLPXy5WckOrGvV+9XlxbXBH2R9sGBv/ry
+   bIMPSqEegjMPVad9dfVJf0wd2ebmC4wlyboercJrSoS4nXrmqQFrLm6pM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11018"; a="6028065"
+X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
+   d="scan'208";a="6028065"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2024 22:50:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,139,1708416000"; 
+   d="scan'208";a="14463361"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 19 Mar 2024 22:50:00 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rmopp-000INj-2P;
+	Wed, 20 Mar 2024 05:49:57 +0000
+Date: Wed, 20 Mar 2024 13:49:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linyunsheng:page_frag_cache_prototype 74/78]
+ mm/page_frag_alloc.c:92:11: error: invalid application of 'typeof' to
+ bit-field
+Message-ID: <202403201343.c6ZxdQkJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <32587.124032001212100339@us-mta-57.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/gestionlin/linux.git page_frag_cache_prototype
+head:   7315604eb1d087836123bc9670d2be420a42d37f
+commit: 6235640ae08dd66d5f64292e2ccedfcf7c564678 [74/78] mm/page_alloc: reuse existing bit field for pfmemalloc
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240320/202403201343.c6ZxdQkJ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240320/202403201343.c6ZxdQkJ-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403201343.c6ZxdQkJ-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'soc-late-6.9' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/135967
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
- __exclude_unnecessary_pages: Can't read the buffer of struct page
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: makedumpfile failed when dumping vmcore
-            URL: https://bugzilla.redhat.com/2269991
-            Affected tests:
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                 aarch64 - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - blk - upstream
-                  x86_64 - Storage - blktests - blk - upstream
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-                   s390x - stress: stress-ng - memory
-                  x86_64 - stress: stress-ng - memory
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                   s390x - machineinfo
-                   s390x - Boot test
-                   s390x - Storage - blktests - blk - upstream
-                   s390x - Storage - blktests - nvme-tcp - upstream
-                   s390x - Storage - swraid scsi_raid
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Reboot test
-                   s390x - POSIX pjd-fstest suites
-                   s390x - AMTU (Abstract Machine Test Utility)
-                   s390x - Networking cki netfilter test
-                   s390x - Networking vnic: ipvlan/basic
-                   s390x - Libkcapi AF_ALG test
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
+   In file included from mm/page_frag_alloc.c:17:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> mm/page_frag_alloc.c:92:11: error: invalid application of 'typeof' to bit-field
+      92 |         offset = ALIGN(nc->offset, -align_mask);
+         |                  ^
+   include/linux/align.h:8:22: note: expanded from macro 'ALIGN'
+       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
+         |                                 ^
+   include/uapi/linux/const.h:31:65: note: expanded from macro '__ALIGN_KERNEL'
+      31 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
+         |                                                                           ^
+>> mm/page_frag_alloc.c:92:11: error: invalid application of 'typeof' to bit-field
+   include/linux/align.h:8:22: note: expanded from macro 'ALIGN'
+       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
+         |                                 ^
+   include/uapi/linux/const.h:31:65: note: expanded from macro '__ALIGN_KERNEL'
+      31 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
+         |                                                                           ^
+   5 warnings and 2 errors generated.
 
 
-Tests that were not ran because of internal issues:=20
-     aarch64 - Memory function: memfd_create
-     ppc64le - Memory function: memfd_create
-       s390x - Memory function: memfd_create
-      x86_64 - Memory function: memfd_create
-      x86_64 (debug) - Memory function: memfd_create
+vim +/typeof +92 mm/page_frag_alloc.c
 
+c8f66d331fd5a2 Yunsheng Lin 2023-12-01   91  
+c8f66d331fd5a2 Yunsheng Lin 2023-12-01  @92  	offset = ALIGN(nc->offset, -align_mask);
+c8f66d331fd5a2 Yunsheng Lin 2023-12-01   93  	if (unlikely(offset + fragsz > size)) {
+e66f049407d1fc Yunsheng Lin 2024-03-16   94  		page = virt_to_page(nc->va);
+e66f049407d1fc Yunsheng Lin 2024-03-16   95  
+e66f049407d1fc Yunsheng Lin 2024-03-16   96  		if (!page_ref_sub_and_test(page, nc->pagecnt_bias))
+e66f049407d1fc Yunsheng Lin 2024-03-16   97  			goto refill;
+e66f049407d1fc Yunsheng Lin 2024-03-16   98  
+e66f049407d1fc Yunsheng Lin 2024-03-16   99  		if (unlikely(nc->pfmemalloc)) {
+e66f049407d1fc Yunsheng Lin 2024-03-16  100  			free_unref_page(page, compound_order(page));
+e66f049407d1fc Yunsheng Lin 2024-03-16  101  			goto refill;
+e66f049407d1fc Yunsheng Lin 2024-03-16  102  		}
+e66f049407d1fc Yunsheng Lin 2024-03-16  103  
+e66f049407d1fc Yunsheng Lin 2024-03-16  104  		/* OK, page count is 0, we can safely set it */
+e66f049407d1fc Yunsheng Lin 2024-03-16  105  		set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
+e66f049407d1fc Yunsheng Lin 2024-03-16  106  
+e66f049407d1fc Yunsheng Lin 2024-03-16  107  		/* reset page count bias and offset to start of new frag */
+e66f049407d1fc Yunsheng Lin 2024-03-16  108  		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
+c8f66d331fd5a2 Yunsheng Lin 2023-12-01  109  		offset = 0;
+c8f66d331fd5a2 Yunsheng Lin 2023-12-01  110  		if (unlikely(fragsz > size)) {
+e66f049407d1fc Yunsheng Lin 2024-03-16  111  			/*
+e66f049407d1fc Yunsheng Lin 2024-03-16  112  			 * The caller is trying to allocate a fragment
+e66f049407d1fc Yunsheng Lin 2024-03-16  113  			 * with fragsz > PAGE_SIZE but the cache isn't big
+e66f049407d1fc Yunsheng Lin 2024-03-16  114  			 * enough to satisfy the request, this may
+e66f049407d1fc Yunsheng Lin 2024-03-16  115  			 * happen in low memory conditions.
+e66f049407d1fc Yunsheng Lin 2024-03-16  116  			 * We don't release the cache page because
+e66f049407d1fc Yunsheng Lin 2024-03-16  117  			 * it could make memory pressure worse
+e66f049407d1fc Yunsheng Lin 2024-03-16  118  			 * so we simply return NULL here.
+e66f049407d1fc Yunsheng Lin 2024-03-16  119  			 */
+e66f049407d1fc Yunsheng Lin 2024-03-16  120  			return NULL;
+e66f049407d1fc Yunsheng Lin 2024-03-16  121  		}
+e66f049407d1fc Yunsheng Lin 2024-03-16  122  	}
+e66f049407d1fc Yunsheng Lin 2024-03-16  123  
+e66f049407d1fc Yunsheng Lin 2024-03-16  124  	nc->pagecnt_bias--;
+c8f66d331fd5a2 Yunsheng Lin 2023-12-01  125  	nc->offset = offset + fragsz;
+e66f049407d1fc Yunsheng Lin 2024-03-16  126  
+e66f049407d1fc Yunsheng Lin 2024-03-16  127  	return nc->va + offset;
+e66f049407d1fc Yunsheng Lin 2024-03-16  128  }
+e66f049407d1fc Yunsheng Lin 2024-03-16  129  EXPORT_SYMBOL(__page_frag_alloc_align);
+e66f049407d1fc Yunsheng Lin 2024-03-16  130  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+:::::: The code at line 92 was first introduced by commit
+:::::: c8f66d331fd5a2c000f5c5aebe181c9def4e1f3a mm/page_alloc: use initial zero offset for page_frag_alloc_align()
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: TO: Yunsheng Lin <linyunsheng@huawei.com>
+:::::: CC: Yunsheng Lin <linyunsheng@huawei.com>
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
