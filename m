@@ -1,55 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C2C6AF88;
-	Wed, 20 Mar 2024 20:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DD485C45;
+	Wed, 20 Mar 2024 22:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710965487; cv=none; b=Oe2VUor6R1i1DYDvbQVuVfhxNKUv+0Gu3ca7FIflneaKXa+LcvYrC5JueJpeKXFBYctfS9J6iJW5yjECmUXEYXKtkuWSPzd/3sKPWji8sV4F4Fr0VAwZbsWuJzTkW27nyRvY/JN6YPheJAesGyfzI3Ih2ZuMBWoWkejcVY2J1ig=
+	t=1710972269; cv=none; b=gXI7sy35ly9l5x9o1vkkBl4y7EzJzBPwcBYImOiwkZUAGcOeMWwlmE+xuN0Ksf+iGEnI4zoLZsdwJdZDF+UfZIqCunNT4vGa2um9IIieDjCkOgt7kW+UATKrFzSdTONY4hFKmkvjsekpiFFqEze67GOstkOlHmOOdWd8H8BivIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710965487; c=relaxed/simple;
-	bh=pwa7U1Eqm6iQF1ZEvKGZJ8ZykOx4moiyXvldUWzIdTY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VweGNh2beRSJNGvkzBjl/P3jqHxTiTMQCX28MuzVGy854UpIFYJh+HWZ5GcA+Aww9GDJzV++rUXm2FsNYF1BJ7b1xM55e5PuIo+TgHRlylew9ITnjxCnEWSQr20c22uhXov6hfgb0e9Js6Ie1nMUsR7oK1H0cmF3MvpCw8QTELA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VdTW6oVp; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1710972269; c=relaxed/simple;
+	bh=egFLyHGzbjYYFCeTcvOV6/H26YCcOV4ChDIcFUP8cRk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pYhStk7oD+nfJRVhY8xxB4/yzk3HlCGha7/Sb1xpI6fjMtQxoEEIB5+iPwsT1HXGrHHaBZklkR78Urahokuzqoh8AmssASpWmTNbPo96rbZVaZWojJo+HRoMs47aGPeVZW65sheOYIwcFjgAD95IvO5ILns30Wf6tMa0oq/5O+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z/bVOnht; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VdTW6oVp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z/bVOnht"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710965484; x=1742501484;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pwa7U1Eqm6iQF1ZEvKGZJ8ZykOx4moiyXvldUWzIdTY=;
-  b=VdTW6oVpAH0nip5r0meF5s1tVKm+/5UnPeAWp6plqJBVPYuZoWD2JAMx
-   /64JF0qzWDrZooLAJqZVfH542KBPUVV97QWLpZoL1kvmIqpwW/dJ6fUL3
-   v0EEtT4efqGYXDRHorCtKZjxPeYEwBqpE1+xIy1BkAZxZlC7W0rA0k5FA
-   CwuEcHcSggqbS1dv860hfn7bgnGlPfbxUTXZRKiSUFHWsjeWTKaNoGn4K
-   ksd/aWV+jShG8XacXXotoXVhzCTHPDWjl8nWRZVjPqmL3p/ZdALmd4hzH
-   ief3D+EkMQIvxmJ3ZQr1xHCAJcvnjUH0DxiQyrO5/OQ/npdGxtUvjUux0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11019"; a="23419384"
+  t=1710972267; x=1742508267;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=egFLyHGzbjYYFCeTcvOV6/H26YCcOV4ChDIcFUP8cRk=;
+  b=Z/bVOnhth3QhrwDqNr+oJyr8OCTqzY8m98MDLK1KnwPaI5jYeh/5yiTv
+   XFhiEj9vW8XlMrEnA9E8Lkl3QY350a6wnBIfgzprKEAI7bbh1dX70YTKz
+   kWbyPJ9RvjcOOe+6l2GWq006Dd1Tetz0rT6NZlrcKdTTtTcomEire5h2T
+   5WXZe1Dx3ZDiD04qt5XqAwxv25zVbMrwTwOCyo+47roK7ZYkNohb+UfyE
+   AkP2Hb6kHA51S1ntC7dQZdDK75K1IF2AmUqKxNAMVwAksha2Vl/qXRHn8
+   ilH50TyCLM8B6hCBJkDF9f8SAMDODoT2yNFSCfDchI4b2V4M/fGngl2aJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11019"; a="16473490"
 X-IronPort-AV: E=Sophos;i="6.07,141,1708416000"; 
-   d="scan'208";a="23419384"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 13:11:24 -0700
+   d="scan'208";a="16473490"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2024 15:04:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,141,1708416000"; 
-   d="scan'208";a="14288154"
+   d="scan'208";a="18984015"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 20 Mar 2024 13:11:22 -0700
+  by orviesa004.jf.intel.com with ESMTP; 20 Mar 2024 15:04:24 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rn2HQ-000IuN-0Q;
-	Wed, 20 Mar 2024 20:11:20 +0000
-Date: Thu, 21 Mar 2024 04:10:28 +0800
+	id 1rn42o-000IwZ-1a;
+	Wed, 20 Mar 2024 22:04:22 +0000
+Date: Thu, 21 Mar 2024 06:03:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sam Edwards <cfsworks@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RESEND v2 RFC 3/5] i2c: mv64xxx: Refactor FSM
-Message-ID: <202403210350.eofnJoJU-lkp@intel.com>
-References: <65fa759e.5d0a0220.fe5f7.1fa2@mx.google.com>
+To: Navneet Singh <navneet.singh@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ira Weiny <ira.weiny@intel.com>
+Subject: [weiny2:dcd-2024-03-20 16/28] ERROR: modpost:
+ "cxl_ed_add_one_extent" [drivers/cxl/core/cxl_core.ko] undefined!
+Message-ID: <202403210550.kyOcfia8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,193 +58,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <65fa759e.5d0a0220.fe5f7.1fa2@mx.google.com>
 
-Hi Sam,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.8 next-20240320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sam-Edwards/i2c-mv64xxx-Clear-bus-errors-before-transfer/20240320-133733
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/65fa759e.5d0a0220.fe5f7.1fa2%40mx.google.com
-patch subject: [RESEND v2 RFC 3/5] i2c: mv64xxx: Refactor FSM
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240321/202403210350.eofnJoJU-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8f68022f8e6e54d1aeae4ed301f5a015963089b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240321/202403210350.eofnJoJU-lkp@intel.com/reproduce)
+tree:   https://github.com/weiny2/linux-kernel.git dcd-2024-03-20
+head:   8a3f02fa89dfa853c12a8bbd8abb2dd73a5d320d
+commit: 453539c929e1170cefe10a9baa215eef177863cf [16/28] cxl/region: Read existing extents on region creation
+config: i386-buildonly-randconfig-001-20240320 (https://download.01.org/0day-ci/archive/20240321/202403210550.kyOcfia8-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240321/202403210550.kyOcfia8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403210350.eofnJoJU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403210550.kyOcfia8-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from drivers/i2c/busses/i2c-mv64xxx.c:18:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/i2c/busses/i2c-mv64xxx.c:440:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
-     440 |         }
-         |         ^
-   2 warnings generated.
-
-
-vim +440 drivers/i2c/busses/i2c-mv64xxx.c
-
-1873c8bc09771f Sam Edwards    2024-03-19  306  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  307  static void
-^1da177e4c3f41 Linus Torvalds 2005-04-16  308  mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  309  {
-1873c8bc09771f Sam Edwards    2024-03-19  310  	enum mv64xxx_i2c_event event;
-1873c8bc09771f Sam Edwards    2024-03-19  311  	enum mv64xxx_i2c_state prev_state = drv_data->state;
-1873c8bc09771f Sam Edwards    2024-03-19  312  
-1873c8bc09771f Sam Edwards    2024-03-19  313  	drv_data->action = MV64XXX_I2C_ACTION_INVALID;
-1873c8bc09771f Sam Edwards    2024-03-19  314  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  315  	/*
-^1da177e4c3f41 Linus Torvalds 2005-04-16  316  	 * If state is idle, then this is likely the remnants of an old
-^1da177e4c3f41 Linus Torvalds 2005-04-16  317  	 * operation that driver has given up on or the user has killed.
-^1da177e4c3f41 Linus Torvalds 2005-04-16  318  	 * If so, issue the stop condition and go to idle.
-^1da177e4c3f41 Linus Torvalds 2005-04-16  319  	 */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  320  	if (drv_data->state == MV64XXX_I2C_STATE_IDLE) {
-^1da177e4c3f41 Linus Torvalds 2005-04-16  321  		drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  322  		return;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  323  	}
-^1da177e4c3f41 Linus Torvalds 2005-04-16  324  
-1873c8bc09771f Sam Edwards    2024-03-19  325  	/*
-1873c8bc09771f Sam Edwards    2024-03-19  326  	 * The FSM is broken into 3 parts:
-1873c8bc09771f Sam Edwards    2024-03-19  327  	 * 1) Decode `status` to determine the underlying hardware event
-1873c8bc09771f Sam Edwards    2024-03-19  328  	 * 2) Handle hardware event driven state transitions
-1873c8bc09771f Sam Edwards    2024-03-19  329  	 * 3) Perform internal state transitions and action emission
-1873c8bc09771f Sam Edwards    2024-03-19  330  	 */
-1873c8bc09771f Sam Edwards    2024-03-19  331  	event = mv64xxx_i2c_decode_status(drv_data, status);
-1873c8bc09771f Sam Edwards    2024-03-19  332  
-1873c8bc09771f Sam Edwards    2024-03-19  333  	/* Handle event; determine state transition */
-1873c8bc09771f Sam Edwards    2024-03-19  334  	switch (event) {
-1873c8bc09771f Sam Edwards    2024-03-19  335  	case MV64XXX_I2C_EVENT_STARTED:
-1873c8bc09771f Sam Edwards    2024-03-19  336  		drv_data->state = MV64XXX_I2C_STATE_SEND_ADDR_1;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  337  		break;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  338  
-1873c8bc09771f Sam Edwards    2024-03-19  339  	case MV64XXX_I2C_EVENT_ADDR_ACK:
-1873c8bc09771f Sam Edwards    2024-03-19  340  		if ((drv_data->state == MV64XXX_I2C_STATE_SEND_ADDR_1)
-1873c8bc09771f Sam Edwards    2024-03-19  341  		    && (drv_data->msg->flags & I2C_M_TEN))
-1873c8bc09771f Sam Edwards    2024-03-19  342  			drv_data->state = MV64XXX_I2C_STATE_SEND_ADDR_2;
-1873c8bc09771f Sam Edwards    2024-03-19  343  		else if (drv_data->msg->flags & I2C_M_RD)
-1873c8bc09771f Sam Edwards    2024-03-19  344  			drv_data->state = MV64XXX_I2C_STATE_READ;
-1873c8bc09771f Sam Edwards    2024-03-19  345  		else
-1873c8bc09771f Sam Edwards    2024-03-19  346  			drv_data->state = MV64XXX_I2C_STATE_WRITE;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  347  		break;
-1873c8bc09771f Sam Edwards    2024-03-19  348  
-1873c8bc09771f Sam Edwards    2024-03-19  349  	case MV64XXX_I2C_EVENT_ADDR_NO_ACK:
-1873c8bc09771f Sam Edwards    2024-03-19  350  	case MV64XXX_I2C_EVENT_WR_NO_ACK:
-1873c8bc09771f Sam Edwards    2024-03-19  351  		/* Doesn't seem to be a device at other end */
-e91c021c487110 Mark A. Greer  2005-12-18  352  		drv_data->state = MV64XXX_I2C_STATE_IDLE;
-1873c8bc09771f Sam Edwards    2024-03-19  353  		break;
-1873c8bc09771f Sam Edwards    2024-03-19  354  
-1873c8bc09771f Sam Edwards    2024-03-19  355  	case MV64XXX_I2C_EVENT_WR_ACK:
-1873c8bc09771f Sam Edwards    2024-03-19  356  		break;
-1873c8bc09771f Sam Edwards    2024-03-19  357  
-1873c8bc09771f Sam Edwards    2024-03-19  358  	case MV64XXX_I2C_EVENT_RD_ACKED:
-1873c8bc09771f Sam Edwards    2024-03-19  359  		BUG_ON(drv_data->bytes_left == 0);
-1873c8bc09771f Sam Edwards    2024-03-19  360  		break;
-1873c8bc09771f Sam Edwards    2024-03-19  361  
-1873c8bc09771f Sam Edwards    2024-03-19  362  	case MV64XXX_I2C_EVENT_RD_UNACKED:
-1873c8bc09771f Sam Edwards    2024-03-19  363  		BUG_ON(drv_data->bytes_left != 0);
-1873c8bc09771f Sam Edwards    2024-03-19  364  		break;
-1873c8bc09771f Sam Edwards    2024-03-19  365  
-1873c8bc09771f Sam Edwards    2024-03-19  366  	case MV64XXX_I2C_EVENT_INVALID:
-1873c8bc09771f Sam Edwards    2024-03-19  367  	default:
-1873c8bc09771f Sam Edwards    2024-03-19  368  		dev_err(&drv_data->adapter.dev,
-1873c8bc09771f Sam Edwards    2024-03-19  369  			"mv64xxx_i2c_fsm: Ctlr Error -- state: 0x%x, "
-1873c8bc09771f Sam Edwards    2024-03-19  370  			"status: 0x%x, event: 0x%x, addr: 0x%x, flags: 0x%x\n",
-1873c8bc09771f Sam Edwards    2024-03-19  371  			 drv_data->state, status, event, drv_data->msg->addr,
-1873c8bc09771f Sam Edwards    2024-03-19  372  			 drv_data->msg->flags);
-1873c8bc09771f Sam Edwards    2024-03-19  373  		drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
-1873c8bc09771f Sam Edwards    2024-03-19  374  		mv64xxx_i2c_hw_init(drv_data);
-1873c8bc09771f Sam Edwards    2024-03-19  375  		i2c_recover_bus(&drv_data->adapter);
-1873c8bc09771f Sam Edwards    2024-03-19  376  		drv_data->rc = -EAGAIN;
-1873c8bc09771f Sam Edwards    2024-03-19  377  		return;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  378  	}
-1873c8bc09771f Sam Edwards    2024-03-19  379  
-1873c8bc09771f Sam Edwards    2024-03-19  380  	/* Internal FSM transitions and action emission */
-1873c8bc09771f Sam Edwards    2024-03-19  381  	switch (drv_data->state) {
-1873c8bc09771f Sam Edwards    2024-03-19  382  	case MV64XXX_I2C_STATE_IDLE:
-1873c8bc09771f Sam Edwards    2024-03-19  383  		drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
-1873c8bc09771f Sam Edwards    2024-03-19  384  		drv_data->rc = -ENXIO;
-1873c8bc09771f Sam Edwards    2024-03-19  385  		break;
-1873c8bc09771f Sam Edwards    2024-03-19  386  
-1873c8bc09771f Sam Edwards    2024-03-19  387  	case MV64XXX_I2C_STATE_SEND_ADDR_1:
-1873c8bc09771f Sam Edwards    2024-03-19  388  		drv_data->action = MV64XXX_I2C_ACTION_SEND_ADDR_1;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  389  		break;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  390  
-1873c8bc09771f Sam Edwards    2024-03-19  391  	case MV64XXX_I2C_STATE_SEND_ADDR_2:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  392  		drv_data->action = MV64XXX_I2C_ACTION_SEND_ADDR_2;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  393  		break;
-1873c8bc09771f Sam Edwards    2024-03-19  394  
-1873c8bc09771f Sam Edwards    2024-03-19  395  	case MV64XXX_I2C_STATE_READ:
-^1da177e4c3f41 Linus Torvalds 2005-04-16  396  		if (drv_data->bytes_left == 0) {
-1873c8bc09771f Sam Edwards    2024-03-19  397  			if (prev_state == MV64XXX_I2C_STATE_READ)
-1873c8bc09771f Sam Edwards    2024-03-19  398  				drv_data->action = MV64XXX_I2C_ACTION_RCV_DATA_STOP;
-1873c8bc09771f Sam Edwards    2024-03-19  399  			else
-^1da177e4c3f41 Linus Torvalds 2005-04-16  400  				drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  401  			drv_data->state = MV64XXX_I2C_STATE_IDLE;
-1873c8bc09771f Sam Edwards    2024-03-19  402  		} else {
-1873c8bc09771f Sam Edwards    2024-03-19  403  			if (prev_state == MV64XXX_I2C_STATE_READ)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  404  				drv_data->action = MV64XXX_I2C_ACTION_RCV_DATA;
-1873c8bc09771f Sam Edwards    2024-03-19  405  			else
-1873c8bc09771f Sam Edwards    2024-03-19  406  				drv_data->action = MV64XXX_I2C_ACTION_CONTINUE;
-1873c8bc09771f Sam Edwards    2024-03-19  407  
-1873c8bc09771f Sam Edwards    2024-03-19  408  			/*
-1873c8bc09771f Sam Edwards    2024-03-19  409  			 * bytes_left counts the remaining read actions to send
-1873c8bc09771f Sam Edwards    2024-03-19  410  			 * to the hardware, not the remaining bytes to be
-1873c8bc09771f Sam Edwards    2024-03-19  411  			 * retrieved from the data register
-1873c8bc09771f Sam Edwards    2024-03-19  412  			 */
-1873c8bc09771f Sam Edwards    2024-03-19  413  			if (drv_data->aborting)
-1873c8bc09771f Sam Edwards    2024-03-19  414  				drv_data->bytes_left = 0;
-1873c8bc09771f Sam Edwards    2024-03-19  415  			else
-^1da177e4c3f41 Linus Torvalds 2005-04-16  416  				drv_data->bytes_left--;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  417  
-1873c8bc09771f Sam Edwards    2024-03-19  418  			if (drv_data->bytes_left == 0)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  419  				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_ACK;
-1873c8bc09771f Sam Edwards    2024-03-19  420  		}
-^1da177e4c3f41 Linus Torvalds 2005-04-16  421  		break;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  422  
-1873c8bc09771f Sam Edwards    2024-03-19  423  	case MV64XXX_I2C_STATE_WRITE:
-1873c8bc09771f Sam Edwards    2024-03-19  424  		if ((drv_data->bytes_left == 0)
-1873c8bc09771f Sam Edwards    2024-03-19  425  		    || (drv_data->aborting && (drv_data->byte_posn != 0))) {
-1873c8bc09771f Sam Edwards    2024-03-19  426  			if (drv_data->send_stop || drv_data->aborting) {
-^1da177e4c3f41 Linus Torvalds 2005-04-16  427  				drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  428  				drv_data->state = MV64XXX_I2C_STATE_IDLE;
-1873c8bc09771f Sam Edwards    2024-03-19  429  			} else {
-1873c8bc09771f Sam Edwards    2024-03-19  430  				drv_data->action = MV64XXX_I2C_ACTION_SEND_RESTART;
-1873c8bc09771f Sam Edwards    2024-03-19  431  				drv_data->state = MV64XXX_I2C_STATE_RESTART;
-1873c8bc09771f Sam Edwards    2024-03-19  432  			}
-1873c8bc09771f Sam Edwards    2024-03-19  433  		} else {
-1873c8bc09771f Sam Edwards    2024-03-19  434  			drv_data->action = MV64XXX_I2C_ACTION_SEND_DATA;
-1873c8bc09771f Sam Edwards    2024-03-19  435  			drv_data->bytes_left--;
-1873c8bc09771f Sam Edwards    2024-03-19  436  		}
-^1da177e4c3f41 Linus Torvalds 2005-04-16  437  		break;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  438  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  439  	default:
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @440  	}
-^1da177e4c3f41 Linus Torvalds 2005-04-16  441  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  442  
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_managed_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_mm_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_modes_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_plane_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_probe_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_rect_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sil-sii8620.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/bochs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/cirrus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/gm12u320.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/gud/gud.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/udl/udl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/misc/fastrpc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/core/cxl_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_port.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/firewire-uapi-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/core/usbcore.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/host/ohci-exynos.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/host/xhci-pci-renesas.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/class/usbtmc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/navman.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb-serial-simple.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/ezusb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/chipidea/ci_hdrc_msm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/vivaldi-fmap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ccgx-ucsi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/ts4800_wdt.o
+WARNING: modpost: drivers/mmc/host/davinci_mmc: section mismatch in reference: davinci_mmcsd_driver+0x8 (section: .data) -> davinci_mmcsd_remove (section: .exit.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/tmio_mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/renesas_sdhi_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_emmc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/blink/leds-bcm63138.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-aureal.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-betopff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-bigbenff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-chicony.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-dr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ezkey.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-vivaldi-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-google-hammer.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-holtek-kbd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-holtek-mouse.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kye.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-letsketch.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-maltron.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-mf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ntrig.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-razer.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-redragon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-samsung.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steelseries.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-viewsonic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-waltop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/chrome/cros_kunit_proto_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_powersave.o
+WARNING: modpost: drivers/memory/emif: section mismatch in reference: emif_driver+0x8 (section: .data) -> emif_remove (section: .exit.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm-ccn.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/cxl_pmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_u-boot-env.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mm-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mn-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/brcm_u-boot.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_mf624.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/fprobe/fprobe_example.o
+>> ERROR: modpost: "cxl_ed_add_one_extent" [drivers/cxl/core/cxl_core.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
