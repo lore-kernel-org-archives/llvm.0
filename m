@@ -1,147 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7D041E4E;
-	Thu, 21 Mar 2024 08:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84E6C2E6
+	for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 08:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711008180; cv=none; b=VIelFvE5X7mNf78a8AVJc9894RYYaM0AeFUJCGy4bjxqIWWtdlO6iuYH09lvcY2E/xkN66RAWOoxW8CUhTp4KGxW74g0dd/ybHewIuSyIgdoxkE8OoEpGrePrfcRYbev3V947z0+zECcWiT+fWPAuApizGuovS0P09zc/8kbIZs=
+	t=1711009971; cv=none; b=rKLKVIQnm7Ad4dR71Ytvws7nadsmEu4WWRHEGicuYRdjQsgUBPWxbWWYvXPo3yCRQhisyzFeNrYKfpj4ofbXgf8i4+ehvevSdFDfep+WgOJ7L1xbdbrhO56Nu/SfBbQf3E9ECr8bGqJuus3KEVx/BKQ41W2Jbga13QK4REBr5DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711008180; c=relaxed/simple;
-	bh=brgko2LcN+fOM1PcKsGiSggIxlN7xfWMZ83ESpgT/fA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G0udJ0nt89s2aMzp7KlLsube97sIUw/rHMW7RhxERdlBhChteE8TioxK5eELrvkFVEufhzFHA3EHo2HP6EuyYJt/lVB2YKhSG5T1Kp5HTCgaWf7SiRl9E+OmEKCCn6dIh40Xiah7iDYgDDsAM86E/xP0rMBptfMcR04ZHD8101c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lHJ8/Pvo; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lHJ8/Pvo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711008179; x=1742544179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=brgko2LcN+fOM1PcKsGiSggIxlN7xfWMZ83ESpgT/fA=;
-  b=lHJ8/PvokWt3k69FCRHY5+AREAWDRp4mMIf0vPP6bbbUFlzL+sz76F4Y
-   y4dbuilZX8FkUYof7QQFF7fuC20Oqzpv+D9+uxhSg1r8VWLY+ANZnFMIj
-   6c2qgvk9eQTdfFzkaxSsgeeErjClecyNlZ7a2xAxKYsPYbpMr5Aq+swk2
-   UYnhwn5gSvMeh2f5y/3XOisCUx5fEm3zuLNv7PiUxlggDj5wdJgQGmvgO
-   b0KXvqtJC8Ffw3nEoEZYVEmLtpB/KKUdZIyjMGFlCB9bMTZZ86RHO2vDv
-   980D0IbKj+QfFve+1XVMCjS2kzBlgBZ4s0PqCsku4zm6Y/xlgbWuZfscD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11019"; a="6189056"
-X-IronPort-AV: E=Sophos;i="6.07,142,1708416000"; 
-   d="scan'208";a="6189056"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 01:02:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,142,1708416000"; 
-   d="scan'208";a="19000084"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 21 Mar 2024 01:02:38 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rnDNk-000JFv-0z;
-	Thu, 21 Mar 2024 08:02:36 +0000
-Date: Thu, 21 Mar 2024 16:02:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
-Message-ID: <202403211543.wg8VXMiO-lkp@intel.com>
-References: <20240319175406.2940628-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1711009971; c=relaxed/simple;
+	bh=2SeI0KLkQK8keeZfc3uwhguEk/P0UYOP26RJRbCSQS8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QMpNyBdCw78otFYTtKhCFEyRKWUbyu5GR7jpPESi0uJVeYNvlFDR+Gd7fUZqJ6zUh+yKBm3f0hViT+tDq3CFBWp/rHipnwtk//+mWQUWywnZu0d/ufuZghsJyNsJjoDsy6JskDu/6TegwmLoiSqI0X0bGfeo1TFv2OecAVJoGwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-609f359b7b1so7568627b3.1
+        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 01:32:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711009968; x=1711614768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5mUmrGrAX3Duzs64PPgK1QzuxSOry2pd/+ceHDEcKUU=;
+        b=tOBXmRQXWm1spcUWATMJs6EwVpvM6h2sUQ4acCF4wjeVmm4jKinedlD6P9Crp3UMPu
+         l8u0Y55+eXHt401sqg6WqdiOsoP33FCLQYrNKoBV7ZP8Gpw4rQQHSZibNWek74xbS6cM
+         LhtH6Ig/DZ5pNptRZOgh3qhscG7SzDrbbPxEH6FOS7uV/qjYrrwFhQGpOhA+RXonwTxi
+         20mRPRwqOuXraLg8OFsJkppizax90RzmivVbhaSnCcCMndD8f1yzjM6ozfecIbT/gFwI
+         //TgebIlcyG7+zH8jxjYTZMKvA8t2mfs1kP6QBpD9bQmRHajjweYIJMGv56zuQOS9uOJ
+         2Ekw==
+X-Forwarded-Encrypted: i=1; AJvYcCXtZDdG6HrWg2hO1m2oQxg9Kigxvr+GOU76q6X4d+OMmFexHFkhsOuGhMXdubLJFTgJozGoZvu09QlDZmdxpF3dnKu7MA==
+X-Gm-Message-State: AOJu0Yy/PQl2+BmZ+WRXLufl/UKuVpxugbAjBqCFCp/NLLAqe3pE+JQj
+	+L6MkwRIokz8JCzQ0u5XIJX3CWPRTbsbvE6NTNDtgw6bIt//FABDLtdai4n6PSI=
+X-Google-Smtp-Source: AGHT+IHay+dNgh6QPL+kW21RN8XjcGUsJnZ2HDMjyMPxeEv0cKHjhUupjQxmMXiKd1uUxatNFjfBKA==
+X-Received: by 2002:a81:6f44:0:b0:60a:3ef4:29b4 with SMTP id k65-20020a816f44000000b0060a3ef429b4mr8195381ywc.38.1711009966206;
+        Thu, 21 Mar 2024 01:32:46 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id p186-20020a0de6c3000000b0060ccac7cae1sm3164271ywe.47.2024.03.21.01.32.45
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Mar 2024 01:32:45 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dcbef31a9dbso495125276.1
+        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 01:32:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVNYBKk6XEE3hyA22Mq1cZsCSpuuPXFjt9XXd2au7jDrXZD7CtPX2SS/K8bOLfdglYXMVyWaW8WpW/O5P2dcZx8CtGInw==
+X-Received: by 2002:a5b:ecc:0:b0:dc6:be64:cfd1 with SMTP id
+ a12-20020a5b0ecc000000b00dc6be64cfd1mr7256066ybs.36.1711009965385; Thu, 21
+ Mar 2024 01:32:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240319175406.2940628-1-yonghong.song@linux.dev>
+References: <20240320180333.151043-1-arnd@kernel.org>
+In-Reply-To: <20240320180333.151043-1-arnd@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 21 Mar 2024 09:32:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW41e+DSBKBgugTkjoLy6bXfji-KWmB_d9EstEv01eC6w@mail.gmail.com>
+Message-ID: <CAMuHMdW41e+DSBKBgugTkjoLy6bXfji-KWmB_d9EstEv01eC6w@mail.gmail.com>
+Subject: Re: [PATCH] powerpc: ps3: mark ps3_notification_device static for
+ stack usage
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Geoff Levand <geoff@infradead.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nathan Chancellor <nathan@kernel.org>, Paul Mackerras <paulus@ozlabs.org>, 
+	Geert Uytterhoeven <Geert.Uytterhoeven@sonycom.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Kevin Hao <haokexin@gmail.com>, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yonghong,
+Hi Arnd,
 
-kernel test robot noticed the following build warnings:
+On Wed, Mar 20, 2024 at 7:03=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The device is way too large to be on the stack, causing a warning for
+> an allmodconfig build with clang:
+>
+> arch/powerpc/platforms/ps3/device-init.c:771:12: error: stack frame size =
+(2064) exceeds limit (2048) in 'ps3_probe_thread' [-Werror,-Wframe-larger-t=
+han]
+>   771 | static int ps3_probe_thread(void *data)
+>
+> There is only a single thread that ever accesses this, so it's fine to
+> make it static, which avoids the warning.
+>
+> Fixes: b4cb2941f855 ("[POWERPC] PS3: Use the HVs storage device notificat=
+ion mechanism properly")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-[auto build test WARNING on bpf-next/master]
+Thanks for your patch!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yonghong-Song/bpf-Add-bpf_link-support-for-sk_msg-and-sk_skb-progs/20240320-015917
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240319175406.2940628-1-yonghong.song%40linux.dev
-patch subject: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and sk_skb progs
-config: x86_64-randconfig-011-20240321 (https://download.01.org/0day-ci/archive/20240321/202403211543.wg8VXMiO-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240321/202403211543.wg8VXMiO-lkp@intel.com/reproduce)
+> --- a/arch/powerpc/platforms/ps3/device-init.c
+> +++ b/arch/powerpc/platforms/ps3/device-init.c
+> @@ -770,7 +770,7 @@ static struct task_struct *probe_task;
+>
+>  static int ps3_probe_thread(void *data)
+>  {
+> -       struct ps3_notification_device dev;
+> +       static struct ps3_notification_device dev;
+>         int res;
+>         unsigned int irq;
+>         u64 lpar;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403211543.wg8VXMiO-lkp@intel.com/
+Making it static increases kernel size for everyone.  So I'd rather
+allocate it dynamically. The thread already allocates a buffer, which
+can be replaced at no cost by allocating a structure containing both
+the ps3_notification_device and the buffer.
 
-All warnings (new ones prefixed by >>):
+Gr{oetje,eeting}s,
 
-   net/core/skmsg.c:1279:9: error: call to undeclared function 'sock_map_prog_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1279 |                 (void)sock_map_prog_update(sk_link->map, NULL, link->prog,
-         |                       ^
-   net/core/skmsg.c:1281:3: error: call to undeclared function 'bpf_map_put_with_uref'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1281 |                 bpf_map_put_with_uref(sk_link->map);
-         |                 ^
-   net/core/skmsg.c:1316:8: error: call to undeclared function 'sock_map_prog_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1316 |         ret = sock_map_prog_update(sk_link->map, new_prog, old_prog,
-         |               ^
-   net/core/skmsg.c:1383:8: error: call to undeclared function 'bpf_map_get_with_uref'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1383 |         map = bpf_map_get_with_uref(attr->link_create.target_fd);
-         |               ^
-   net/core/skmsg.c:1383:6: error: incompatible integer to pointer conversion assigning to 'struct bpf_map *' from 'int' [-Wint-conversion]
-    1383 |         map = bpf_map_get_with_uref(attr->link_create.target_fd);
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/core/skmsg.c:1409:8: error: call to undeclared function 'sock_map_prog_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1409 |         ret = sock_map_prog_update(map, prog, NULL, attach_type);
-         |               ^
-   net/core/skmsg.c:1420:2: error: call to undeclared function 'bpf_map_put_with_uref'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1420 |         bpf_map_put_with_uref(map);
-         |         ^
->> net/core/skmsg.c:1371:5: warning: no previous prototype for function 'bpf_sk_msg_skb_link_create' [-Wmissing-prototypes]
-    1371 | int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
-         |     ^
-   net/core/skmsg.c:1371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1371 | int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
-         | ^
-         | static 
-   1 warning and 7 errors generated.
+                        Geert
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
-   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && DRM_I915_WERROR [=n]
-   Selected by [y]:
-   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && !COMPILE_TEST [=n]
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-
-vim +/bpf_sk_msg_skb_link_create +1371 net/core/skmsg.c
-
-  1370	
-> 1371	int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
-  1372	{
-  1373		struct bpf_link_primer link_primer;
-  1374		struct bpf_sk_msg_skb_link *sk_link;
-  1375		enum bpf_attach_type attach_type;
-  1376		enum bpf_link_type link_type;
-  1377		struct bpf_map *map;
-  1378		int ret;
-  1379	
-  1380		if (attr->link_create.flags)
-  1381			return -EINVAL;
-  1382	
-> 1383		map = bpf_map_get_with_uref(attr->link_create.target_fd);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
