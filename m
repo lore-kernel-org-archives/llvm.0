@@ -1,39 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6659D8565C;
-	Thu, 21 Mar 2024 15:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662B53A1DD;
+	Thu, 21 Mar 2024 15:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711033457; cv=none; b=FhFzz4EyoF+aTirL9luLBn2ycII3HAWHxYO8uMcQOLBoJ2m3dLs0WUrVA0YTLgThmPNI4CXQOgMjdOUJ+cuhAenDPq3um9RrV6GObdZnOW0CN6xyNLgACijMjNfrBFxViHe/DADepLuvKn852V0D6A60Ts3NgxNJJqzaGmbJaSM=
+	t=1711034006; cv=none; b=KP0k4OfMW0u/G5zl/JAtJoPvvVxCWqIIswClDnijB1Q94H+GaArA+TlMQVSp+mYVDSwbzX0Qrm6rkxjPuSnx2WimDsxZYPJIUkVu7f4q7vhL+hOri8icCqOhBZCVG0trihsgBNJvQTKkqkSpZWXDxtiSPQ2eiXdJ1Z+Jd39d7Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711033457; c=relaxed/simple;
-	bh=ZfR9GPQcw1be5kDF3GjeJkjm+W0b+OgIKcp3kCvASQM=;
+	s=arc-20240116; t=1711034006; c=relaxed/simple;
+	bh=Zf2Utwr6ymf8HcRwjRD2ylU4Hj4Efc7/vHlSOdqgPU0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WnVAGMU/5gmMYVUYkbKWAcstB9biWE3mBnEkjaBB6f6QSfW3Q7tQzQUebr1LmlKZ3vcfg2ZYqz7wMx1FfRRtfJYeus1LAv3eiffoasm8KPPDSIHypzH3H+OCYMTAAgaVZmK6fytZJlss4a7pcTAFbLzANwMA/4U7Tj7xyCgp2cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0iUR6HRc; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uqw5hl5PcZQJfDgf+KRMoOvfwrCjzqFYNwJxD5me2/7z4dAVuNbzTK+6TF3bm4Axl/3CxWRzsrlI9TVBtKukLJJ2bVyIeONBrcH/98bpN9dcoLAuPJnU4QK4hS92Cy+e+VWOMmdzKI5ySZGZKEt6AJMes0U5gyVXlLepyaaNRfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JNOZGJbA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0iUR6HRc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1FFCC433C7;
-	Thu, 21 Mar 2024 15:04:16 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JNOZGJbA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFD6C433C7;
+	Thu, 21 Mar 2024 15:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1711033457;
-	bh=ZfR9GPQcw1be5kDF3GjeJkjm+W0b+OgIKcp3kCvASQM=;
+	s=korg; t=1711034006;
+	bh=Zf2Utwr6ymf8HcRwjRD2ylU4Hj4Efc7/vHlSOdqgPU0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0iUR6HRcYeR3/A62y/tvnwEVRrPw9rNoSHsNwe2aOFi0atBVYKX9i1nyLsO7+bd6R
-	 FhCo6VE57tszNTdQtPNdH7R+cAAn4ckXZBLGMJe2dFDbwIm+S3k9w6JTvFP6DrOhEZ
-	 +dH7tbQ0Ic4G61xFrj8B48Alp4NfhKuIL7Tl9jd4=
-Date: Thu, 21 Mar 2024 16:04:13 +0100
+	b=JNOZGJbAVGegSQbXscqp3A9i5znUB9xh5fZ4I4ElpknstGceXdD6K44VrjKFm8Alm
+	 gh0Ahvi3czfnD2V6qh9RcpuV+wds5Os0Mst4ig1DqetkIF9jbo42h9yK4tLbdA2M3g
+	 jS4OLl/TtjErT7jLSJZP0NJ2AzDQ27TENo8wz3EQ=
+Date: Thu, 21 Mar 2024 16:13:22 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [GIT PULL] Char/Misc driver changes for 6.9-rc1
-Message-ID: <2024032107-upstart-dragonfly-e346@gregkh>
+Subject: [PATCH] speakup: Fix warning for label at end of compound statement
+Message-ID: <2024032108-thus-herbal-501b@gregkh>
 References: <Zfwv2y7P7BneKqMZ@kroah.com>
  <20240321134831.GA2762840@dev-arch.thelio-3990X>
+ <2024032107-upstart-dragonfly-e346@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,56 +43,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240321134831.GA2762840@dev-arch.thelio-3990X>
+In-Reply-To: <2024032107-upstart-dragonfly-e346@gregkh>
 
-On Thu, Mar 21, 2024 at 06:48:31AM -0700, Nathan Chancellor wrote:
-> On Thu, Mar 21, 2024 at 02:02:19PM +0100, Greg KH wrote:
-> > All of these have been in linux-next for a long time with no reported
-> > issue, other than a build warning with some older versions of gcc for a
-> > speakup driver, fix for that will come in a few days when I catch up
-> > with my pending patch queues.
-> ...
-> > Samuel Thibault (2):
-> >       speakup: Fix 8bit characters from direct synth
-> >       speakup: Add /dev/synthu device
-> 
-> That build warning actually happens with clang, not GCC as far as I am
-> aware, and it is actually a hard build error with older versions of
-> clang, as Arnd points out in his patch to fix this (although the warning
-> is a hard error with CONFIG_WERROR too, which causes allmodconfig to
-> break):
-> 
-> https://lore.kernel.org/20240313100413.875280-1-arnd@kernel.org/
-> 
-> Samuel's patch was even simpler:
-> 
-> https://lore.kernel.org/20240309203549.jj2l6epnznyjsrje@begin/
-> 
-> Why was one of these changes not applied before this was sent? I am
-> aware you were on vacation recently but you are now adding a known issue
-> to -rc1, which can proliferate to other maintainer's trees and makes
-> testing for us more difficult :/
+From: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
-You answered it yourself here, I'm supposed to still be on vacation and
-this came in while I was supposed to be ignoring emails, AND it works
-fine for me here, which is why I didn't queue it up to my tree for
-inclusion in this pull request.
+Label at end of compound statements is a C2x extension, so add an empty instruction.
 
-And sorry for the confusion with gcc/clang, I got that mixed up.
+Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 807977260ae4 ("speakup: Add /dev/synthu device")
+Closes: https://lore.kernel.org/oe-kbuild-all/202403090122.cpUNsozM-lkp@intel.com/
+Link: https://lore.kernel.org/r/20240309203549.jj2l6epnznyjsrje@begin
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+Linus,
 
-> -next has been broken for the entire
-> merge window over this, which is usually when there is a chance we can
-> get maybe a week of green builds...
+  Here's the fix for clang on top of the char-misc-next branch if you
+  pull from it, or I can integrate it in and send a new pull request,
+  your choice.
 
-Stuff will always slip up at times, given the low-stakes of this, I
-didn't think it was needed right now, again, because my local testing
-was just fine.  I can go add it to the queue or if it affects Linus's
-builds, he can take one of the above changes before I get a chance to
-get through my todo mbox:
+  thanks,
 
-	$ mdfrm -c ~/mail/todo/
-	1776 messages in /home/gregkh/mail/todo/
+  greg k-h
 
-thanks,
+ drivers/accessibility/speakup/devsynth.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-greg "I need a vacation from my vacation..." k-h
+diff --git a/drivers/accessibility/speakup/devsynth.c b/drivers/accessibility/speakup/devsynth.c
+index da4d0f6aa5bf..674204ee5a85 100644
+--- a/drivers/accessibility/speakup/devsynth.c
++++ b/drivers/accessibility/speakup/devsynth.c
+@@ -108,6 +108,7 @@ static ssize_t speakup_file_writeu(struct file *fp, const char __user *buffer,
+ 				break;
+ 			}
+ drop:
++			;
+ 		}
+ 
+ 		count -= bytes;
+-- 
+2.44.0
+
