@@ -1,88 +1,92 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF76E57B
-	for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 18:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60718625E;
+	Thu, 21 Mar 2024 18:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711044782; cv=none; b=ekGnqyDD+y3kmoPiptuA3xgYPUs5vvi68H3XnEakSdA5uwT8PsNefa/JY1saIxp7S9NoG1oOhHdhwaJlK3A0E+hXSeo98+AEvgJEwLJ+WxO4BCnD2Qsmr6d36bQ/y23y8qQ8NeGkLaoYiH4WAxyP8rO6eb/wed9QGHTiAZIhAUs=
+	t=1711045808; cv=none; b=j+qXe5b+OQNrHEl+mDkSOjwaEGPVHN33EQVUNJeWilQNLmuB9CeIgjpy9wiB46entvcYotEKAWUyL4WkMJT2LqlCboiGNAS/wAP8ThHrt8lDmMhBsgEKXZkljHpwUsxR4oy38Myg4hnbaeWtXbV48XS8Szmw8Epg5cZx9XaAGeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711044782; c=relaxed/simple;
-	bh=WXQ931QfJbmec5vuyVH/cqzWhVr3qlsdOAwdRqTWd+c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d3DMHC3ZHqs0Az9qoTsTGrS5piCJdAcmstbJYKFhKle7oUXjhEbH4LcVHtRGp/NKjaQfTBn0Uc5q1WiY6q74v5/V2d8mF3Sh+P7Au33fDTuG/eABaakt63VgsD0qJvdtAugE9Q+43JKby+SdwIrkdP9e0fwhrm7Iofup5cXXjug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=fj6hgFxQ; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1711045808; c=relaxed/simple;
+	bh=5UQdsWFzoch7R+MKt7H8VtFuUB4YUzJ8RXhJIzOFzG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ByxTwmoRGtLcVwe6CuplvGX6TgG3MZP9EHPVTPv/g7KCw+PEaJ9gendnDRMxdC6a9LLL9kyNMU7VxON6bmih+O2ALLYHUzjJES6xbplvsVqadH6X32f8UKTaq2zAU/VapfYJxWvRB1TCi5UVAIGBxoTU8zVr14cCIwEIVH+FdZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uqGNCgYd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="fj6hgFxQ"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46d0a8399aso402361466b.1
-        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 11:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1711044778; x=1711649578; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Q/wQDn+XrvGaKVfjTo2fVVoUWFJ48sLRKpaxsdz0AY=;
-        b=fj6hgFxQerQmXDHzmXvpr6djGZmVPRc6Xvo4P9BpRf+kz33x3XMJh7ZcT1t/c/UVTs
-         8QMjesxIGT1d7CG7J1LmDZg07ztnzmH7WP4gF+kYd+Dw3ZQy1hqLNuWhrxOE4nJUNd4I
-         kU+5bJnAZ7h1uWSjP1HyJOCZ7jmWO15uma7XE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711044778; x=1711649578;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Q/wQDn+XrvGaKVfjTo2fVVoUWFJ48sLRKpaxsdz0AY=;
-        b=ZwAanzxVS+PWZmHSXICEM57S6DiqxLCZHnMoIWjMqiOEOdN7utJR2jdp/jiYhQhHoy
-         TObOfWGxY0b/MSrYq25E6qmqfZ9tIZ3H3FcCY7nxZ9Gc+sx1U14tPoAT/J0rA6HtAUms
-         UunmylGtvm3rvRSI2Rmq08gkErUHUJinLva23EsNHAeJQhv2tdsD1uORPxoudd5U1I6s
-         NoH4EmJypgXHhPAbT10yDBGz0Q0NMeiBKLa1+7JmJE4v9BFq0jo+8Cyc/RHloNAnXbJe
-         BBl1/FwoVzTw0MdF3XIDr1Vw5wtwOKs9PtROpo+OP1VCDBRw2NDmAJ6BTWQjSuR1a4el
-         YlnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVlEaX4+SIP1YHd3lJkXvx9sGkU20flMrnIszHwTduh4Hf5LIBuJUT9K3ZOn9y8THuiig95ZjnvgLyXsL5Dn75pHJMilA==
-X-Gm-Message-State: AOJu0YxMUMFDjJhkPSf5LB43P2MGCYUVNlwjvqGZLjzi9jFlwJcNNTP3
-	x6CxKab/ZtZOKCAOFX4FRtotJ4+AQsMh0EndLcsayBDyLft+A8/Hc8AQ6cmdNQAp4v7SkOjlZj+
-	mUyAUCw==
-X-Google-Smtp-Source: AGHT+IHjF50V4qrhkU6rUpzQzLcKvPp4bOSAkuffvJFh2CQ5JeOyEYo24O1a0MXt6Xlqomw1w0ZY9w==
-X-Received: by 2002:a17:907:76c5:b0:a45:f9c5:3024 with SMTP id kf5-20020a17090776c500b00a45f9c53024mr2947557ejc.11.1711044778443;
-        Thu, 21 Mar 2024 11:12:58 -0700 (PDT)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
-        by smtp.gmail.com with ESMTPSA id u15-20020a1709064acf00b00a46cf8aea7bsm175082ejt.30.2024.03.21.11.12.57
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 11:12:58 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a470c79ef7cso186654866b.0
-        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 11:12:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXWPz4E84vhOk2Ca3HvQEKJJcZtcErciTRnNRNy2frg+9q0an9WVLUqAYcQ7scj3hDtt45m3AF4lJHtXuKnr/yz6MU/KA==
-X-Received: by 2002:a17:906:6d18:b0:a46:8846:5ab0 with SMTP id
- m24-20020a1709066d1800b00a4688465ab0mr225246ejr.2.1711044777393; Thu, 21 Mar
- 2024 11:12:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uqGNCgYd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03BEC433C7;
+	Thu, 21 Mar 2024 18:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711045808;
+	bh=5UQdsWFzoch7R+MKt7H8VtFuUB4YUzJ8RXhJIzOFzG8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uqGNCgYdn3LVnxrP9IbUP2/V/nsEaHMdJSg63lMybandToW0kPIucP6HS0TRySl3q
+	 IDmjlTiSZJe2aXCdof+UAHkcfH2/YvRw2QmYkGIPz4VOgBIM0i45/nrBcfHq8JVCS+
+	 CJozbzuKTrgIWUtlBFggvKnG8dw0WEbw8SvZO1Nqxea8KP/IE35RJqxRTyDXEQ/tY4
+	 0mqHCZkUY43FfjdxBNVwNqfJDfa9L0y7S/3YQAocxY9uf0x5dr5DebGllaaSgPMYGa
+	 zYSISaaiz2p9iujbpBHDCBNkbFEu9WjBsUXEY4U4cKw3xUDwLT1Gmcm9SD+gJNyEmV
+	 zY7NLlLNnoIyQ==
+Date: Thu, 21 Mar 2024 11:30:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [GIT PULL] Char/Misc driver changes for 6.9-rc1
+Message-ID: <20240321183006.GA2907026@dev-arch.thelio-3990X>
+References: <Zfwv2y7P7BneKqMZ@kroah.com>
+ <20240321134831.GA2762840@dev-arch.thelio-3990X>
+ <CAHk-=wgGhgkEngBBureLRLKe7mQ-sRhYngUQNvxEUqR9mmc60w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <Zfwv2y7P7BneKqMZ@kroah.com> <20240321134831.GA2762840@dev-arch.thelio-3990X>
- <CAHk-=wgGhgkEngBBureLRLKe7mQ-sRhYngUQNvxEUqR9mmc60w@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <CAHk-=wgGhgkEngBBureLRLKe7mQ-sRhYngUQNvxEUqR9mmc60w@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 21 Mar 2024 11:12:41 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whyOUaDohM3z5vqxjRdw-vo5sfE41VuOfckKq7=_yBJng@mail.gmail.com>
-Message-ID: <CAHk-=whyOUaDohM3z5vqxjRdw-vo5sfE41VuOfckKq7=_yBJng@mail.gmail.com>
-Subject: Re: [GIT PULL] Char/Misc driver changes for 6.9-rc1
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 21 Mar 2024 at 11:10, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
+On Thu, Mar 21, 2024 at 11:10:22AM -0700, Linus Torvalds wrote:
+> On Thu, 21 Mar 2024 at 06:48, Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > That build warning actually happens with clang, not GCC as far as I am
+> > aware, and it is actually a hard build error with older versions of
+> > clang
+> 
 > So the "labels without a statement" thing is not only a long-time gcc
 > behavior (admittedly due to a parsing bug), afaik it's becoming
 > "standard C" in C23.
 
-Actually, let me take that back. I think it's only a proposal (WG14
-N2508), I have no idea if it's actually going to be standard.
+Right, N2508 has been applied to the C23 draft [1] as far as I can tell
+and clang finished implementing it with [2], which was released in
+18.1.0.
 
-            Linus
+> Does clang have a flag to allow this?
+
+As far as I understand it, clang does not have separate flags to control
+the warnings that it emits for the various c23 extensions that it allows
+in older standard versions, just the big hammer of -Wc23-extensions.
+
+Since GCC does not appear emit warnings for newer C features that it
+allows even with older 'gnu' standard values by default (I think it does
+with '-pedantic'?), perhaps we should just disable -Wc23-extensions
+altogether? Not sure how big of a hammer this is, I think this type of
+warning is the only thing I have seen come from -Wc23-extensions...
+
+> Considering that gcc doesn't warn for it, and that it will become
+> official at some point anyway, I think this might be a thing that we
+> might be better off just accepting, rather than be in the situation
+> where people write code that compiles fine with gcc and don't notice
+> that clang will error out.
+> 
+> So yes, clang is being correct, but in this case it only causes problems.
+
+Agreed, it isn't the first time :/
+
+[1]: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3096.pdf
+[2]: https://github.com/llvm/llvm-project/commit/8bd06d5b65845e5e01dd899a2deb773580460b89
+
+Cheers,
+Nathan
