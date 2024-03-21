@@ -1,41 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E4D5810B;
-	Thu, 21 Mar 2024 13:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6659D8565C;
+	Thu, 21 Mar 2024 15:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711028914; cv=none; b=keeMpzrQrIVbbU97REyhXBnUwCm25unSt6zRqbEEV5hHdSA4uQdTO0vAxjDFsnacrQDfcho0KLezBcnRUHMGbGHz7xkZwhKSm3Ct1v03uv9X3BgTfvMQwvpiDALgvsV/8LBCOvnKe9JzWuVNpnPYV7WB+TKqbptEEiYCkmkg9NU=
+	t=1711033457; cv=none; b=FhFzz4EyoF+aTirL9luLBn2ycII3HAWHxYO8uMcQOLBoJ2m3dLs0WUrVA0YTLgThmPNI4CXQOgMjdOUJ+cuhAenDPq3um9RrV6GObdZnOW0CN6xyNLgACijMjNfrBFxViHe/DADepLuvKn852V0D6A60Ts3NgxNJJqzaGmbJaSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711028914; c=relaxed/simple;
-	bh=V5RBETxUeQ31LdNz29iy7Ib6LpbGMzdOR34CyxswrlE=;
+	s=arc-20240116; t=1711033457; c=relaxed/simple;
+	bh=ZfR9GPQcw1be5kDF3GjeJkjm+W0b+OgIKcp3kCvASQM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CjojKEk+72PVqOhtgYAPGJgVc2kVjzWhlHLoL4sRotmU+AAfg6T68x4tqch4LpWZ5+JROh6aTlGrHZ4oXiU0+WtCOICYpP/VzgIyX+B3ZMNKPacncK/Pb1FXZpSH8DBFHG4s8Bj60iHlClu63t0BhROPVFc566VFGFbSqCPkNT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kdT9JP84; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=WnVAGMU/5gmMYVUYkbKWAcstB9biWE3mBnEkjaBB6f6QSfW3Q7tQzQUebr1LmlKZ3vcfg2ZYqz7wMx1FfRRtfJYeus1LAv3eiffoasm8KPPDSIHypzH3H+OCYMTAAgaVZmK6fytZJlss4a7pcTAFbLzANwMA/4U7Tj7xyCgp2cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0iUR6HRc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kdT9JP84"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB20C433C7;
-	Thu, 21 Mar 2024 13:48:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711028914;
-	bh=V5RBETxUeQ31LdNz29iy7Ib6LpbGMzdOR34CyxswrlE=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0iUR6HRc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1FFCC433C7;
+	Thu, 21 Mar 2024 15:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711033457;
+	bh=ZfR9GPQcw1be5kDF3GjeJkjm+W0b+OgIKcp3kCvASQM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kdT9JP84vFIrStaRlOk5A2K3PDF+foU/KUGFhOs9c4FcKE5C1M0cMp90i9ZwflFYT
-	 wTlvdVBo0lCE96Zoy6hAG5TC5ewgj9QyM/VMoPGmtYOn+sKfvK/3ZbAgDa6aae047C
-	 +kPg5f7NGLjNvf9TYBIz0u0VVKhIj2t5v7EDPHOQbBWkioZqeABV8EaMtaRRRy6PHw
-	 w3jYf8pFkqGk6VIvcpRTMWte5j/EmUwpj1W9kHI5rFuQZJ6EMXA2TM7mL2txSqVJ/C
-	 45DzXfdFDLUVcFx17q408DfMVYEC48TQ7xgh3XD72+A8hHQVtqYlKuggRGpIzpl1wm
-	 62csEMK0inWxQ==
-Date: Thu, 21 Mar 2024 06:48:31 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg KH <gregkh@linuxfoundation.org>
+	b=0iUR6HRcYeR3/A62y/tvnwEVRrPw9rNoSHsNwe2aOFi0atBVYKX9i1nyLsO7+bd6R
+	 FhCo6VE57tszNTdQtPNdH7R+cAAn4ckXZBLGMJe2dFDbwIm+S3k9w6JTvFP6DrOhEZ
+	 +dH7tbQ0Ic4G61xFrj8B48Alp4NfhKuIL7Tl9jd4=
+Date: Thu, 21 Mar 2024 16:04:13 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
 Subject: Re: [GIT PULL] Char/Misc driver changes for 6.9-rc1
-Message-ID: <20240321134831.GA2762840@dev-arch.thelio-3990X>
+Message-ID: <2024032107-upstart-dragonfly-e346@gregkh>
 References: <Zfwv2y7P7BneKqMZ@kroah.com>
+ <20240321134831.GA2762840@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,36 +42,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zfwv2y7P7BneKqMZ@kroah.com>
+In-Reply-To: <20240321134831.GA2762840@dev-arch.thelio-3990X>
 
-On Thu, Mar 21, 2024 at 02:02:19PM +0100, Greg KH wrote:
-> All of these have been in linux-next for a long time with no reported
-> issue, other than a build warning with some older versions of gcc for a
-> speakup driver, fix for that will come in a few days when I catch up
-> with my pending patch queues.
-...
-> Samuel Thibault (2):
->       speakup: Fix 8bit characters from direct synth
->       speakup: Add /dev/synthu device
+On Thu, Mar 21, 2024 at 06:48:31AM -0700, Nathan Chancellor wrote:
+> On Thu, Mar 21, 2024 at 02:02:19PM +0100, Greg KH wrote:
+> > All of these have been in linux-next for a long time with no reported
+> > issue, other than a build warning with some older versions of gcc for a
+> > speakup driver, fix for that will come in a few days when I catch up
+> > with my pending patch queues.
+> ...
+> > Samuel Thibault (2):
+> >       speakup: Fix 8bit characters from direct synth
+> >       speakup: Add /dev/synthu device
+> 
+> That build warning actually happens with clang, not GCC as far as I am
+> aware, and it is actually a hard build error with older versions of
+> clang, as Arnd points out in his patch to fix this (although the warning
+> is a hard error with CONFIG_WERROR too, which causes allmodconfig to
+> break):
+> 
+> https://lore.kernel.org/20240313100413.875280-1-arnd@kernel.org/
+> 
+> Samuel's patch was even simpler:
+> 
+> https://lore.kernel.org/20240309203549.jj2l6epnznyjsrje@begin/
+> 
+> Why was one of these changes not applied before this was sent? I am
+> aware you were on vacation recently but you are now adding a known issue
+> to -rc1, which can proliferate to other maintainer's trees and makes
+> testing for us more difficult :/
 
-That build warning actually happens with clang, not GCC as far as I am
-aware, and it is actually a hard build error with older versions of
-clang, as Arnd points out in his patch to fix this (although the warning
-is a hard error with CONFIG_WERROR too, which causes allmodconfig to
-break):
+You answered it yourself here, I'm supposed to still be on vacation and
+this came in while I was supposed to be ignoring emails, AND it works
+fine for me here, which is why I didn't queue it up to my tree for
+inclusion in this pull request.
 
-https://lore.kernel.org/20240313100413.875280-1-arnd@kernel.org/
+And sorry for the confusion with gcc/clang, I got that mixed up.
 
-Samuel's patch was even simpler:
+> -next has been broken for the entire
+> merge window over this, which is usually when there is a chance we can
+> get maybe a week of green builds...
 
-https://lore.kernel.org/20240309203549.jj2l6epnznyjsrje@begin/
+Stuff will always slip up at times, given the low-stakes of this, I
+didn't think it was needed right now, again, because my local testing
+was just fine.  I can go add it to the queue or if it affects Linus's
+builds, he can take one of the above changes before I get a chance to
+get through my todo mbox:
 
-Why was one of these changes not applied before this was sent? I am
-aware you were on vacation recently but you are now adding a known issue
-to -rc1, which can proliferate to other maintainer's trees and makes
-testing for us more difficult :/ -next has been broken for the entire
-merge window over this, which is usually when there is a chance we can
-get maybe a week of green builds...
+	$ mdfrm -c ~/mail/todo/
+	1776 messages in /home/gregkh/mail/todo/
 
-Cheers,
-Nathan
+thanks,
+
+greg "I need a vacation from my vacation..." k-h
