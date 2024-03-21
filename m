@@ -1,59 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE3F85955
-	for <llvm@lists.linux.dev>; Wed, 20 Mar 2024 22:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C8B4EC3;
+	Thu, 21 Mar 2024 00:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710972705; cv=none; b=mSrkpPm8Y/1AIUAX76Geezv1GM5CIZb/n4IUtJAAswcirfwIRfHcB6BfWLckSS78aNCK/yVjf9sy9+RwxmNHxYOwJv0QyCnYvCey7Tv3hPDnw7WZMjSEew1lOH114A1aUsKFBeL59YhSIQgMklj0qPWBXjSd3gJZYo6sIqYygTI=
+	t=1710979462; cv=none; b=Mx+j/Ec9/c+yErfvSyya5se0RkvM6jegZBfaq4UfdFGUvyl2/PvLNPWY05NW7JuLTmUjf4VF5Tapna+wIZh5ieRaruGFO8Y98NHH1y9Qt3WmpQXGlQ2wZJEqp+LGGv1Vvp5g49PMqQ0/F5MDWnDXZks3rl3PgmPFn02NJGxc+Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710972705; c=relaxed/simple;
-	bh=//Ba2miybPBYG+4eMCLIAB1Kfbhy+ComJ9w5BrPqDF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RcXwUfCWTKO5v0Cp2zpKeww/czP/OJRBrYOIEeki23P4rgYUf6AT2dCsXoS1oJuKyOZdi4GDgQQIoIrvnt62YJn2T6+uL82a7lD/SaMbm/KJcwUmlWHaYwaSDjwCSVL5dLkAWBlXdlw3QYygJdkKQYtzYtB6kqn5Jj2+M/UZPPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oe1r8RVJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710979462; c=relaxed/simple;
+	bh=ipxsqMwMInyb4v842p8SuYV8PcroMNKWjBSmmFM49EM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LdifEZcr5xBA1O5rFB814fIY85TmhdTjWTvqw4Sp28GboI1zg+Uzpw2ugiJ1C9wSWuOZpzRXgGtghGROCmNg678Va8Tsx+i66HNMJUKmL8fV73NjDgiBXl2JG1cyZX8f+MtI1L1O//Zm/kufSj/6KnOhfEA0jSentYFYfUfzVxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HyiVzWJU; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oe1r8RVJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91280C433C7;
-	Wed, 20 Mar 2024 22:11:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710972704;
-	bh=//Ba2miybPBYG+4eMCLIAB1Kfbhy+ComJ9w5BrPqDF0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Oe1r8RVJIk36iKScz6njtR8qBLjU3wW8XmiVPfxj8nd5z98Etruf8HVdnd6tcEHuG
-	 SPHpczcrbikd8OV1PEHfa4X3hI+cKo8FaG8BKBYGzCE13gsU1NogRa5WMHqaFViJNk
-	 d/2BfwN0gtN1lZIUJDO9WoDBqoeB6sgmTLyVHzCYSTLZB2hp/VVz32LOmkQBg9N0Ss
-	 KZCW5p45ihov7j9RKPlgdXuzi1Q6BSgjMINgdeIHXSC7rYeJga2sPLvxm5SkTdZ6F1
-	 2jFF6zapXYOSfzYl/gBbS1YMDjYs5pc4YPi4+3L9sL5cuoegjiTcun8GdPXExztt8O
-	 7Lf+aeETxV7fg==
-Date: Wed, 20 Mar 2024 15:11:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev
-Cc: keescook@chromium.org
-Subject: New meeting link
-Message-ID: <20240320221142.GA162232@dev-arch.thelio-3990X>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HyiVzWJU"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=AuTy0DBYYdG/QKWrIh0uagTUXUFOgXWy8+vXQ7SNEJg=; b=HyiVzWJUKN7zEobwCSfi5HSpo8
+	+qncGtgXNEe8ND8EP7iESrJwebcnFQ7UO1NaP1y9w+ggyVBvnSTRIs00CKQaYz1qUrjQavuym+Q59
+	ErKVvwWvs9RGnWA16WZEpMfAWrbH/A9I99bRvzob1FvUmd7/y9seJi9FkoS+diObsYDI4molelB8i
+	TVJ/4N3YosCxpq6guZAnN8IxTbdoI5qRiegSVQuOsoo0hOukfbPQm2eiJYwu2iin6IoLpdeTOPVh4
+	7fK+ahU5aAULDrKaXfML1vgGvgSLoXAmCs2hti2cszJa8BcR8lywPlSJV/dxjq1QlJ2CYf5slz5xS
+	4Sf0bblw==;
+Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rn5uG-00000005TT9-33Nm;
+	Thu, 21 Mar 2024 00:03:41 +0000
+Message-ID: <5a40e58c-b38d-4bbd-8376-ebdc0c2cc47b@infradead.org>
+Date: Thu, 21 Mar 2024 09:03:29 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] powerpc: ps3: mark ps3_notification_device static for
+ stack usage
+Content-Language: en-US
+To: Arnd Bergmann <arnd@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nathan Chancellor <nathan@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
+ Geert Uytterhoeven <Geert.Uytterhoeven@sonycom.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kevin Hao <haokexin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240320180333.151043-1-arnd@kernel.org>
+From: Geoff Levand <geoff@infradead.org>
+In-Reply-To: <20240320180333.151043-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On 3/21/24 03:03, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The device is way too large to be on the stack, causing a warning for
+> an allmodconfig build with clang:
+> 
+> arch/powerpc/platforms/ps3/device-init.c:771:12: error: stack frame size (2064) exceeds limit (2048) in 'ps3_probe_thread' [-Werror,-Wframe-larger-than]
+>   771 | static int ps3_probe_thread(void *data)
+> 
+> There is only a single thread that ever accesses this, so it's fine to
+> make it static, which avoids the warning.
+> 
+> Fixes: b4cb2941f855 ("[POWERPC] PS3: Use the HVs storage device notification mechanism properly")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/powerpc/platforms/ps3/device-init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/platforms/ps3/device-init.c b/arch/powerpc/platforms/ps3/device-init.c
+> index 878bc160246e..ce99f06698a9 100644
+> --- a/arch/powerpc/platforms/ps3/device-init.c
+> +++ b/arch/powerpc/platforms/ps3/device-init.c
+> @@ -770,7 +770,7 @@ static struct task_struct *probe_task;
+>  
+>  static int ps3_probe_thread(void *data)
+>  {
+> -	struct ps3_notification_device dev;
+> +	static struct ps3_notification_device dev;
+>  	int res;
+>  	unsigned int irq;
+>  	u64 lpar;
 
-Starting with the April 3rd ClangBuiltLinux meeting, there is a new
-meeting link [1]. The old link [2] will no longer work. The
-ClangBuiltLinux project page [2] will be updated shortly [4]. I believe
-Kees added every one that was on the original invite but it should be
-easier for people outside of Google to join now and it can be added to
-your own calendar through the calendar link on the project page.
+Seems fine.
 
-[1]: https://meet.google.com/wrr-mxkn-hdo
-[2]: https://meet.google.com/yjf-jyqk-iaz
-[3]: https://ClangBuiltLinux.github.io
-[4]: https://github.com/ClangBuiltLinux/ClangBuiltLinux.github.io/pull/68
+Acked-by: Geoff Levand <geoff@infradead.org>
 
-Cheers,
-Nathan
