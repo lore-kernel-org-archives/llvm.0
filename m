@@ -1,61 +1,61 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17091332AD
-	for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 18:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF76E57B
+	for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 18:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711044644; cv=none; b=qE4h3TIrfhofTpDah3I+OgPXNNffWGBza3rwyNf5NAbu0CPJj1HKafCv7Oao9MR9h5CyAjMqj4DVopd/UDRUoanEdFw2dyx5lUnfCuvzo0G5OQq5beih6Y4YncqQ6tKyFSq16FTqgWHLDyB9XgrnLXtukESgheweUQ6/NllzzbI=
+	t=1711044782; cv=none; b=ekGnqyDD+y3kmoPiptuA3xgYPUs5vvi68H3XnEakSdA5uwT8PsNefa/JY1saIxp7S9NoG1oOhHdhwaJlK3A0E+hXSeo98+AEvgJEwLJ+WxO4BCnD2Qsmr6d36bQ/y23y8qQ8NeGkLaoYiH4WAxyP8rO6eb/wed9QGHTiAZIhAUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711044644; c=relaxed/simple;
-	bh=XgzMJ/XjredShNEfVbHnEUIphui6pHeLgNGgZLuPtKg=;
+	s=arc-20240116; t=1711044782; c=relaxed/simple;
+	bh=WXQ931QfJbmec5vuyVH/cqzWhVr3qlsdOAwdRqTWd+c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QdPKI+tTIBHV19lwt3s4TFe5ArT51jmnNNUUwlWeYRiQeOrhE03sXZ3iJNMJyec5swivEj0thnqiBVCHDXLl7jAp1o9iur7ldQ0cNu+hhNogbvoStoGY15yz3WVeyjdsa1E2JHC4E5HSL8KVNCtVJ8yctU01CeWhinwmjCHqatU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PHJzQCYt; arc=none smtp.client-ip=209.85.218.53
+	 To:Cc:Content-Type; b=d3DMHC3ZHqs0Az9qoTsTGrS5piCJdAcmstbJYKFhKle7oUXjhEbH4LcVHtRGp/NKjaQfTBn0Uc5q1WiY6q74v5/V2d8mF3Sh+P7Au33fDTuG/eABaakt63VgsD0qJvdtAugE9Q+43JKby+SdwIrkdP9e0fwhrm7Iofup5cXXjug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=fj6hgFxQ; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PHJzQCYt"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so181481966b.0
-        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 11:10:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="fj6hgFxQ"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46d0a8399aso402361466b.1
+        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 11:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1711044641; x=1711649441; darn=lists.linux.dev;
+        d=linux-foundation.org; s=google; t=1711044778; x=1711649578; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4emHCf80OrxsdWiLJNpRLTTX2dJ/UHkZ+YLYB2p4Nto=;
-        b=PHJzQCYtGF5bllKWlOUTFOzQRu1/2a/RJrT8kGFmWAF/BkR1AIdM8soBKpWFHMNFLr
-         GE2xiOn8zkZgI6IFnNfHxOFAYALlZNHMHofEQk7pNiI4LBuQkxCWleSeksOqFZniQirI
-         YXySuxZXqHY5axNBzO3vgp0ke1bwNqtxBftUY=
+        bh=6Q/wQDn+XrvGaKVfjTo2fVVoUWFJ48sLRKpaxsdz0AY=;
+        b=fj6hgFxQerQmXDHzmXvpr6djGZmVPRc6Xvo4P9BpRf+kz33x3XMJh7ZcT1t/c/UVTs
+         8QMjesxIGT1d7CG7J1LmDZg07ztnzmH7WP4gF+kYd+Dw3ZQy1hqLNuWhrxOE4nJUNd4I
+         kU+5bJnAZ7h1uWSjP1HyJOCZ7jmWO15uma7XE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711044641; x=1711649441;
+        d=1e100.net; s=20230601; t=1711044778; x=1711649578;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4emHCf80OrxsdWiLJNpRLTTX2dJ/UHkZ+YLYB2p4Nto=;
-        b=Ku/L34Bym7v5zseK4ZkPwOP2rebTfHG70KAJlvSfNcXQDL5EhAR+X6RgSHqQ+asRqM
-         tp0yIig82izyqesJBGpSvmf1cEROarHwiMJrdC8VcKST2aNKA8GHZDStBP8/emUuSVV0
-         qOhHOVVs8sVzynYpI2tXE1c6YiTO0umGWBDLmL8AwhTzsmAkobNrge3q+p3ERqrPbtld
-         ncVCyY2pUPxEPbl9ZePa/e0RkLcVr3DGNRVmCRbRaV8xXKOFONYkBK5x8i8E2y0VhcBd
-         NyPNk4Q9MlfxsAxsZ0eHRY7tzSey0q09MWYeA9XC5c61NedrJmyhlSE2A9h7KMRLz6lb
-         oDyw==
-X-Forwarded-Encrypted: i=1; AJvYcCX5KsrhYClM9t/UL5CpqxX/zTjFY0DedFr14YFRrfXTD5CYJKXN8chAMdW/zW9Hju1EU3s0Ycpj6+nSZdRnqpMWwDPdWA==
-X-Gm-Message-State: AOJu0YzVK7q9ysovBDBe+EoEHIm42SdS1UcpLh/9O0bc2aPDNImC+Mw+
-	HpaBMO1rpvKHp6uihC0HhrRB9gc+4RB1kSSsc58uKPrIyvN5KAUJYiXYr77Er2A0zfoVm0xlxMR
-	F17KL5A==
-X-Google-Smtp-Source: AGHT+IGgh3hingMsBqPqVi2FXAIOOEScGyuStY5NXeUhtfYh5vNpGy7x3RepgW3vyogdiwvqOFF2hQ==
-X-Received: by 2002:a17:906:5792:b0:a47:27cd:a2d6 with SMTP id k18-20020a170906579200b00a4727cda2d6mr31578ejq.36.1711044640625;
-        Thu, 21 Mar 2024 11:10:40 -0700 (PDT)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
-        by smtp.gmail.com with ESMTPSA id va15-20020a17090711cf00b00a46778db9e3sm164486ejb.164.2024.03.21.11.10.39
+        bh=6Q/wQDn+XrvGaKVfjTo2fVVoUWFJ48sLRKpaxsdz0AY=;
+        b=ZwAanzxVS+PWZmHSXICEM57S6DiqxLCZHnMoIWjMqiOEOdN7utJR2jdp/jiYhQhHoy
+         TObOfWGxY0b/MSrYq25E6qmqfZ9tIZ3H3FcCY7nxZ9Gc+sx1U14tPoAT/J0rA6HtAUms
+         UunmylGtvm3rvRSI2Rmq08gkErUHUJinLva23EsNHAeJQhv2tdsD1uORPxoudd5U1I6s
+         NoH4EmJypgXHhPAbT10yDBGz0Q0NMeiBKLa1+7JmJE4v9BFq0jo+8Cyc/RHloNAnXbJe
+         BBl1/FwoVzTw0MdF3XIDr1Vw5wtwOKs9PtROpo+OP1VCDBRw2NDmAJ6BTWQjSuR1a4el
+         YlnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVlEaX4+SIP1YHd3lJkXvx9sGkU20flMrnIszHwTduh4Hf5LIBuJUT9K3ZOn9y8THuiig95ZjnvgLyXsL5Dn75pHJMilA==
+X-Gm-Message-State: AOJu0YxMUMFDjJhkPSf5LB43P2MGCYUVNlwjvqGZLjzi9jFlwJcNNTP3
+	x6CxKab/ZtZOKCAOFX4FRtotJ4+AQsMh0EndLcsayBDyLft+A8/Hc8AQ6cmdNQAp4v7SkOjlZj+
+	mUyAUCw==
+X-Google-Smtp-Source: AGHT+IHjF50V4qrhkU6rUpzQzLcKvPp4bOSAkuffvJFh2CQ5JeOyEYo24O1a0MXt6Xlqomw1w0ZY9w==
+X-Received: by 2002:a17:907:76c5:b0:a45:f9c5:3024 with SMTP id kf5-20020a17090776c500b00a45f9c53024mr2947557ejc.11.1711044778443;
+        Thu, 21 Mar 2024 11:12:58 -0700 (PDT)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id u15-20020a1709064acf00b00a46cf8aea7bsm175082ejt.30.2024.03.21.11.12.57
         for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 11:10:39 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a466a27d30aso176353066b.1
-        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 11:10:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVyUi4tMtrMk9odmrB5zTzvluj7g4nalY+YZWnRil1yHXp0yjMGCU4SVddIzSO82dqstmW4f5iNv/abbHTH0hlTa/no0A==
-X-Received: by 2002:a17:906:3509:b0:a46:aa67:ab12 with SMTP id
- r9-20020a170906350900b00a46aa67ab12mr156355eja.9.1711044639518; Thu, 21 Mar
- 2024 11:10:39 -0700 (PDT)
+        Thu, 21 Mar 2024 11:12:58 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a470c79ef7cso186654866b.0
+        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 11:12:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXWPz4E84vhOk2Ca3HvQEKJJcZtcErciTRnNRNy2frg+9q0an9WVLUqAYcQ7scj3hDtt45m3AF4lJHtXuKnr/yz6MU/KA==
+X-Received: by 2002:a17:906:6d18:b0:a46:8846:5ab0 with SMTP id
+ m24-20020a1709066d1800b00a4688465ab0mr225246ejr.2.1711044777393; Thu, 21 Mar
+ 2024 11:12:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,35 +63,26 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <Zfwv2y7P7BneKqMZ@kroah.com> <20240321134831.GA2762840@dev-arch.thelio-3990X>
-In-Reply-To: <20240321134831.GA2762840@dev-arch.thelio-3990X>
+ <CAHk-=wgGhgkEngBBureLRLKe7mQ-sRhYngUQNvxEUqR9mmc60w@mail.gmail.com>
+In-Reply-To: <CAHk-=wgGhgkEngBBureLRLKe7mQ-sRhYngUQNvxEUqR9mmc60w@mail.gmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 21 Mar 2024 11:10:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgGhgkEngBBureLRLKe7mQ-sRhYngUQNvxEUqR9mmc60w@mail.gmail.com>
-Message-ID: <CAHk-=wgGhgkEngBBureLRLKe7mQ-sRhYngUQNvxEUqR9mmc60w@mail.gmail.com>
+Date: Thu, 21 Mar 2024 11:12:41 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whyOUaDohM3z5vqxjRdw-vo5sfE41VuOfckKq7=_yBJng@mail.gmail.com>
+Message-ID: <CAHk-=whyOUaDohM3z5vqxjRdw-vo5sfE41VuOfckKq7=_yBJng@mail.gmail.com>
 Subject: Re: [GIT PULL] Char/Misc driver changes for 6.9-rc1
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: Greg KH <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
 	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 21 Mar 2024 at 06:48, Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, 21 Mar 2024 at 11:10, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> That build warning actually happens with clang, not GCC as far as I am
-> aware, and it is actually a hard build error with older versions of
-> clang
+> So the "labels without a statement" thing is not only a long-time gcc
+> behavior (admittedly due to a parsing bug), afaik it's becoming
+> "standard C" in C23.
 
-So the "labels without a statement" thing is not only a long-time gcc
-behavior (admittedly due to a parsing bug), afaik it's becoming
-"standard C" in C23.
+Actually, let me take that back. I think it's only a proposal (WG14
+N2508), I have no idea if it's actually going to be standard.
 
-Does clang have a flag to allow this?
-
-Considering that gcc doesn't warn for it, and that it will become
-official at some point anyway, I think this might be a thing that we
-might be better off just accepting, rather than be in the situation
-where people write code that compiles fine with gcc and don't notice
-that clang will error out.
-
-So yes, clang is being correct, but in this case it only causes problems.
-
-              Linus
+            Linus
