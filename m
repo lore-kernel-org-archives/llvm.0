@@ -1,245 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D228B133435;
-	Thu, 21 Mar 2024 20:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F47965C
+	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 01:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711053246; cv=none; b=mBB2AYeRiumXKLlz5kE6H63g+FfNMq6hz+6MV58GoD54eVeSi8QSGCrTz9gwA4m53OIuj7slcc0H4OqV0jw+ZTpyrIMrWPoa/oygiiF1Azu9CeiPsXAn9fbvCCjaS66srnNjzU3SxUhxOZYY4U9Db2ze6TTXRD+0VnYS5sBA8CI=
+	t=1711070766; cv=none; b=ad9zJAsONhbwYSqoaZsO1rgOncP+bvcsNSA58AKSNh0946eDTdrzkKKMqBlJjS2qfarziAylHQbMP2jSvJzPD/e0iC7/Ysk+Kd4nh4gIeKATmQX/vY8RCPGlr8ZzWpXEj/5FyoBP+WpRHFgbvIvZlpuMdWD80NLXor/dh72Bgk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711053246; c=relaxed/simple;
-	bh=JyjuWrlusJPIuTZkCmNNJoCQdWAJnFwFOgSLqoDfN9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AL7fNv6iKq+YwJc9+h/0wE8vsE7IOCaej+UajYHZ6NS0SqpLnkSqVOJzm5TKVky6Wd0tXGEGt2UL08aVnNmD1bwchtaMc4CVCy1kNp6VonhT2uEjKAajUUT64vPJAim6Y7hiOIonC8C5BPvmiinYjdVIEta0T9JMCVQSogXTfs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mZGpI2f9; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711070766; c=relaxed/simple;
+	bh=sUVutNDgGpGxD172o8zGQS5BMUM10LcVdWVgTqQZdQA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XRN8QGdmUe74W1HRvAXCJRs7TUGc9iGWQVFp7WEXUVoonuwA76WvtOhYKYa3d2tHYpSRnOur4w8OBEbAQAbCQoBrStBZpP0hccDm3Znd/yi89aB+6AubKYGlpw4fRKLW1bOjB3OfLSmI3FmKiRru08htg6scrJdvLSQndkEeLdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UuzWCave; arc=none smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mZGpI2f9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711053245; x=1742589245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JyjuWrlusJPIuTZkCmNNJoCQdWAJnFwFOgSLqoDfN9s=;
-  b=mZGpI2f9NECbihRnXjuqBU3WT2bzhC36DDrN2DCb0GSTlwt5U+HNDGB/
-   C2yDyL/bRK60SVC1TRLC6PuHevw3z2aUGl/aIjpnlo3jqZ3vyUwUBVtoV
-   uBwaedLyYSfN3uxaFFD98OMwEL4nohZYKy+umvo4FWkJAw2tMd+lZvGhb
-   g2dbqSblpT855tC0gjSTMtvMDyZifZNn5XOJMHVNoLC1XxXGeKfGFj05i
-   Mnt6+ZiipDTNKrTThxI8NlCzlkQylfqAVnD4Ws7W+dZ5LZ0lUDqnKBIVd
-   cqDXZ72a0QadGS+Heskr8XY+l+BzFrhtisO2p+t7BfkPqQMeySm2u97ZR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="5930009"
-X-IronPort-AV: E=Sophos;i="6.07,143,1708416000"; 
-   d="scan'208";a="5930009"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 13:34:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,143,1708416000"; 
-   d="scan'208";a="52088864"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 Mar 2024 13:34:01 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rnP6s-000JlH-0p;
-	Thu, 21 Mar 2024 20:33:58 +0000
-Date: Fri, 22 Mar 2024 04:33:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
-Message-ID: <202403220430.affB6tuK-lkp@intel.com>
-References: <20240319175406.2940628-1-yonghong.song@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UuzWCave"
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-7e043f577c5so887288241.1
+        for <llvm@lists.linux.dev>; Thu, 21 Mar 2024 18:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711070764; x=1711675564; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DnrA7VCP2UghSQHIHzERUpi2aY63j1gM5buPqEdAsC0=;
+        b=UuzWCaveW57HMv+MsPkOnvwv/QvnyElgTd4I/e7y04k19b+cOxFtsyYk0W/uhKHhHQ
+         UzkQlnka+p+vafpFr80jHb3+qw7P3L3NP7ZZcrdEBk6OHap+2WrISEijkv6gAFZaoAjg
+         DgWGvg9roCnZVoaTYy8dcJFSsV+1CjzEteMGaXsr2WRj9ZSUukqCOdsCzH3q4lKo6GmS
+         RlXoairMQwKuJmS5+sTroN5pnuxTueEgNgL9WEgRG9eY3kFP0AN33v/HRPZjCwJMoIjT
+         mL1X58eJwJinktZoM3b7udK6Txh1ACdpgfKcxybouneo+kvpMudycrizRZ9beEJsB6V9
+         SVJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711070764; x=1711675564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DnrA7VCP2UghSQHIHzERUpi2aY63j1gM5buPqEdAsC0=;
+        b=uGB7SOFWNEHC/N63s4oduGfN9B7lHeXofEYxQGWxQrn9Wn34tjkmLC7kB+uIqskTii
+         MMfIKTI7Fy/p/JVs2Lt0C+jv5tWyrXfn4Vt/WcXJuTu686fOSeEdxORjNEPw/E+srhW9
+         b5nThzmJVhHyIn0uumUwgV7+/BD4gozp1taGffrxQV/FQQZvEFoSS4WNckMjMcAPui2D
+         9B5U/3b9efBRXRnLkC50vIkLdIN9S+O/tw0N3b73rDLe4A9puVJ4Bkm1p0IyRMJBrzMy
+         WJH3gpS9ymczJ+SfBGZeRkO0I+1KsdiWYqtxAQLg02jZzR1AiwI/H9Nzjxbg3ztSGpjQ
+         61mg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2yqIswMIvDjOux373kalNbKLVbdh50UIsQeUY1lqEyxJJJaYK/d0yDFPWL8I1zw2a1hUt4FneOhYGKQKrFlTG9HM/OQ==
+X-Gm-Message-State: AOJu0Yxd8nNx09Wv8MQmwwM+jGOqhedSOZda2irlmJ3T4xo5KbfFjmvP
+	pukdWhUd2PL9ex3QujFbC5GI/K50hXoAjJkem80wMcvm8jTBIL2CAFrkHxnVL3MswbI0XcUfQki
+	E2ZG807kOxz9XWxdMLpbW3Nt4ZAE=
+X-Google-Smtp-Source: AGHT+IEX3LGVYC4fhTEF6otGyeJAhOWJOQ4fPtLG/kizcg2xXDVzlPfBIxephr3HBjwl6XPh7D3ehuvyP21vvXMlokI=
+X-Received: by 2002:a05:6102:2c6:b0:476:70e3:98ba with SMTP id
+ h6-20020a05610202c600b0047670e398bamr383936vsh.9.1711070764109; Thu, 21 Mar
+ 2024 18:26:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240319175406.2940628-1-yonghong.song@linux.dev>
+References: <20240314141516.31747-1-liuhailong@oppo.com> <20240315081803.2223-1-liuhailong@oppo.com>
+ <ZflTCY-Oaxm0U70u@tiehlicka> <CAGsJ_4w0EHuAwvSFuqUsMO-bLjJwCmN_qjL6NuA043-4rgfgsQ@mail.gmail.com>
+ <fdc90410-5698-4cda-a7c2-952480c7e7e6@oppo.com>
+In-Reply-To: <fdc90410-5698-4cda-a7c2-952480c7e7e6@oppo.com>
+From: Barry Song <21cnbao@gmail.com>
+Date: Fri, 22 Mar 2024 14:25:52 +1300
+Message-ID: <CAGsJ_4xDTS9_NPzKnqZ1vJk2egLVCSSvCbub3oRX8k9MHQFXLg@mail.gmail.com>
+Subject: Re: [PATCH v2] Revert "mm: skip CMA pages when they are not available"
+To: =?UTF-8?B?5YiY5rW36b6ZKExhb0xpdSk=?= <liuhailong@oppo.com>
+Cc: Michal Hocko <mhocko@suse.com>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "nathan@kernel.org" <nathan@kernel.org>, 
+	"ndesaulniers@google.com" <ndesaulniers@google.com>, "trix@redhat.com" <trix@redhat.com>, 
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "surenb@google.com" <surenb@google.com>, 
+	"zhaoyang.huang@unisoc.com" <zhaoyang.huang@unisoc.com>, 
+	"quic_charante@quicinc.com" <quic_charante@quicinc.com>, "yuzhao@google.com" <yuzhao@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yonghong,
+On Wed, Mar 20, 2024 at 1:27=E2=80=AFAM =E5=88=98=E6=B5=B7=E9=BE=99(LaoLiu)=
+ <liuhailong@oppo.com> wrote:
+>
+> On 2024/3/19 19:09, Barry Song wrote:
+> > On Tue, Mar 19, 2024 at 4:56=E2=80=AFPM Michal Hocko <mhocko@suse.com> =
+wrote:
+> >>
+> >> On Fri 15-03-24 16:18:03, liuhailong@oppo.com wrote:
+> >>> From: "Hailong.Liu" <liuhailong@oppo.com>
+> >>>
+> >>> This reverts
+> >>> commit b7108d66318a ("Multi-gen LRU: skip CMA pages when they are not=
+ eligible")
+> >>> commit 5da226dbfce3 ("mm: skip CMA pages when they are not available"=
+)
+> >>>
+> >>> skip_cma may cause system not responding. if cma pages is large in lr=
+u_list
+> >>> and system is in lowmemory, many tasks would direct reclaim and waste
+> >>> cpu time to isolate_lru_pages and return.
+> >>>
+> >>> Test this patch on android-5.15 8G device
+> >>> reproducer:
+> >>> - cma_declare_contiguous 3G pages
+> >>> - set /proc/sys/vm/swappiness 0 to enable direct_reclaim reclaim file
+> >>>   only.
+> >>> - run a memleak process in userspace
+> >>
+> >> Does this represent a sane configuration? CMA memory is unusable for
+> >> kernel allocations and memleak process is also hard to reclaim due to
+> >> swap suppression. Isn't such a system doomed to struggle to reclaim an=
+y
+> >> memory?
+> Yes, All processes in the system are also hard to reclaim. and all proces=
+ses
+> enter direct reclaim. with this patch, much of process which should skip_=
+cma
+> would retry, scan, skipped in the process of isolsate_lru_pages. and syst=
+em
+> process will have high priority, some normal processes (like kswapd) are
+> preempted.
+>
+>
+> Btw. how does the same setup behave with the regular LRU
+> >> implementation? My guess would be that it would struggle as well.
+> >
+> > I assume the regular LRU implementation you are talking about is the LR=
+U
+> > without skip_cma()?
+> >
+> > I remember Hailong mentioned something like " it also trigger memory ps=
+i
+> > event to allow admin do something to release memory" and " without
+> > patch the devices would kill camera process".  So it seems the differen=
+ce
+> > is if a killing will occur.
+> >
+> > Hailong, would you like to provide more detail?
+>
+> psi_event triggered after psi_memstall_leave. much system processes
+> perform_reclaim scan and skipped and leave without reclaim any pages.
+> the process is fast, so lmkd (userspace lowmemory killer) could not work
+> as before.
 
-kernel test robot noticed the following build errors:
+Can you provide more details?
 
-[auto build test ERROR on bpf-next/master]
+Does PSI still give accurate reports when processes are stuck in an idle lo=
+op
+because most pages in the LRU list are in CMA? Also, in such a case, will
+the LMKD not receive CPU resources to execute?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yonghong-Song/bpf-Add-bpf_link-support-for-sk_msg-and-sk_skb-progs/20240320-015917
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240319175406.2940628-1-yonghong.song%40linux.dev
-patch subject: [PATCH bpf-next v2 1/6] bpf: Add bpf_link support for sk_msg and sk_skb progs
-config: x86_64-randconfig-011-20240321 (https://download.01.org/0day-ci/archive/20240322/202403220430.affB6tuK-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240322/202403220430.affB6tuK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403220430.affB6tuK-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/core/skmsg.c:1279:9: error: call to undeclared function 'sock_map_prog_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1279 |                 (void)sock_map_prog_update(sk_link->map, NULL, link->prog,
-         |                       ^
->> net/core/skmsg.c:1281:3: error: call to undeclared function 'bpf_map_put_with_uref'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1281 |                 bpf_map_put_with_uref(sk_link->map);
-         |                 ^
-   net/core/skmsg.c:1316:8: error: call to undeclared function 'sock_map_prog_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1316 |         ret = sock_map_prog_update(sk_link->map, new_prog, old_prog,
-         |               ^
->> net/core/skmsg.c:1383:8: error: call to undeclared function 'bpf_map_get_with_uref'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1383 |         map = bpf_map_get_with_uref(attr->link_create.target_fd);
-         |               ^
->> net/core/skmsg.c:1383:6: error: incompatible integer to pointer conversion assigning to 'struct bpf_map *' from 'int' [-Wint-conversion]
-    1383 |         map = bpf_map_get_with_uref(attr->link_create.target_fd);
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/core/skmsg.c:1409:8: error: call to undeclared function 'sock_map_prog_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1409 |         ret = sock_map_prog_update(map, prog, NULL, attach_type);
-         |               ^
-   net/core/skmsg.c:1420:2: error: call to undeclared function 'bpf_map_put_with_uref'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1420 |         bpf_map_put_with_uref(map);
-         |         ^
-   net/core/skmsg.c:1371:5: warning: no previous prototype for function 'bpf_sk_msg_skb_link_create' [-Wmissing-prototypes]
-    1371 | int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
-         |     ^
-   net/core/skmsg.c:1371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1371 | int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
-         | ^
-         | static 
-   1 warning and 7 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
-   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && DRM_I915_WERROR [=n]
-   Selected by [y]:
-   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=y] && EXPERT [=y] && !COMPILE_TEST [=n]
-
-
-vim +/sock_map_prog_update +1279 net/core/skmsg.c
-
-  1272	
-  1273	static void bpf_sk_msg_skb_link_release(struct bpf_link *link)
-  1274	{
-  1275		struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
-  1276	
-  1277		mutex_lock(&link_mutex);
-  1278		if (sk_link->map) {
-> 1279			(void)sock_map_prog_update(sk_link->map, NULL, link->prog,
-  1280						   sk_link->attach_type);
-> 1281			bpf_map_put_with_uref(sk_link->map);
-  1282			sk_link->map = NULL;
-  1283		}
-  1284		mutex_unlock(&link_mutex);
-  1285	}
-  1286	
-  1287	static int bpf_sk_msg_skb_link_detach(struct bpf_link *link)
-  1288	{
-  1289		bpf_sk_msg_skb_link_release(link);
-  1290		return 0;
-  1291	}
-  1292	
-  1293	static void bpf_sk_msg_skb_link_dealloc(struct bpf_link *link)
-  1294	{
-  1295		kfree(bpf_sk_msg_skb_link(link));
-  1296	}
-  1297	
-  1298	static int bpf_sk_msg_skb_link_update_prog(struct bpf_link *link,
-  1299						   struct bpf_prog *new_prog,
-  1300						   struct bpf_prog *old_prog)
-  1301	{
-  1302		const struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
-  1303		int ret = 0;
-  1304	
-  1305		mutex_lock(&link_mutex);
-  1306		if (old_prog && link->prog != old_prog) {
-  1307			ret = -EPERM;
-  1308			goto out;
-  1309		}
-  1310	
-  1311		if (link->prog->type != new_prog->type) {
-  1312			ret = -EINVAL;
-  1313			goto out;
-  1314		}
-  1315	
-  1316		ret = sock_map_prog_update(sk_link->map, new_prog, old_prog,
-  1317					   sk_link->attach_type);
-  1318		if (!ret)
-  1319			bpf_prog_inc(new_prog);
-  1320	
-  1321	out:
-  1322		mutex_unlock(&link_mutex);
-  1323		return ret;
-  1324	}
-  1325	
-  1326	static int bpf_sk_msg_skb_link_fill_info(const struct bpf_link *link,
-  1327						 struct bpf_link_info *info)
-  1328	{
-  1329		const struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
-  1330		u32 map_id = 0;
-  1331	
-  1332		mutex_lock(&link_mutex);
-  1333		if (sk_link->map)
-  1334			map_id = sk_link->map->id;
-  1335		mutex_unlock(&link_mutex);
-  1336	
-  1337		if (link->type == BPF_LINK_TYPE_SK_MSG) {
-  1338			info->skmsg.map_id = map_id;
-  1339			info->skmsg.attach_type = sk_link->attach_type;
-  1340		} else {
-  1341			info->skskb.map_id = map_id;
-  1342			info->skskb.attach_type = sk_link->attach_type;
-  1343		}
-  1344		return 0;
-  1345	}
-  1346	
-  1347	static void bpf_sk_msg_skb_link_show_fdinfo(const struct bpf_link *link,
-  1348						    struct seq_file *seq)
-  1349	{
-  1350		const struct bpf_sk_msg_skb_link *sk_link = bpf_sk_msg_skb_link(link);
-  1351		u32 map_id = 0;
-  1352	
-  1353		mutex_lock(&link_mutex);
-  1354		if (sk_link->map)
-  1355			map_id = sk_link->map->id;
-  1356		mutex_unlock(&link_mutex);
-  1357	
-  1358		seq_printf(seq, "map_id:\t%u\n", map_id);
-  1359		seq_printf(seq, "attach_type:\t%u (...)\n", sk_link->attach_type);
-  1360	}
-  1361	
-  1362	static const struct bpf_link_ops bpf_sk_msg_skb_link_ops = {
-  1363		.release = bpf_sk_msg_skb_link_release,
-  1364		.dealloc = bpf_sk_msg_skb_link_dealloc,
-  1365		.detach = bpf_sk_msg_skb_link_detach,
-  1366		.update_prog = bpf_sk_msg_skb_link_update_prog,
-  1367		.fill_link_info = bpf_sk_msg_skb_link_fill_info,
-  1368		.show_fdinfo = bpf_sk_msg_skb_link_show_fdinfo,
-  1369	};
-  1370	
-  1371	int bpf_sk_msg_skb_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
-  1372	{
-  1373		struct bpf_link_primer link_primer;
-  1374		struct bpf_sk_msg_skb_link *sk_link;
-  1375		enum bpf_attach_type attach_type;
-  1376		enum bpf_link_type link_type;
-  1377		struct bpf_map *map;
-  1378		int ret;
-  1379	
-  1380		if (attr->link_create.flags)
-  1381			return -EINVAL;
-  1382	
-> 1383		map = bpf_map_get_with_uref(attr->link_create.target_fd);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> >
+> >> --
+> >> Michal Hocko
+> >> SUSE Labs
+> >>
+>
