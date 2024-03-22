@@ -1,66 +1,66 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE5082D83
-	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 23:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F121982C63
+	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 23:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711150754; cv=none; b=NonDBPwj19DjpahlD6IvPxiimVjaAO0UisNB2TC17RKlTiryNuBbUjLE9rOqNI2weWIN3PbsqFyPrC0RUOEMQ6yLwoCBuke5skZsLuL+IIq3/RiIjKpjMU5iwI6JVtgGwl2y84eJzLluObs9q1AVXH+RHW+YaCRn4pevnZNjrXw=
+	t=1711150755; cv=none; b=cwaXGnhkpQbCSgRie7cG+MwBRzjcQcUSx8YiK3SX0DVqXGFGTBoa7UxGjPsdwfoys11kfaDb1lWXtGnMFHru97xjpfN8bYqNBxFfZL4zFGfZ2HLEvm30gR2+tOBQWF+EZphknMklkk5sBftRmo4IXkJn6Or1NX23RfewgfyxCt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711150754; c=relaxed/simple;
-	bh=/NBZoIhK1CtetohxAcHUpmJsAGut/+ZBo1KxCgXiFn0=;
+	s=arc-20240116; t=1711150755; c=relaxed/simple;
+	bh=qQ5oagRUQmpb8GABKAqxfq/Tg/yBhJf6ca7+7tUxq/A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aRH2mBmkL/SD6/q9w4zT4zTatNm7gc8SVrxuWv2k9uCGBo45QgZVtG4w8cBTyNXjuYLjlQbM2Az+uUd40tYMu1hXJOSFMpwNtxiAD8thoioJBN/4NwB+Kw1q1vPBTBzvve3xRogUEZquF5rj4VJKChpdLHST2C3WfaFZZMxDSxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FXY1CmCC; arc=none smtp.client-ip=209.85.222.169
+	 MIME-Version; b=CQhKln5RHcYqZp/e9XQbLsUEwsF/wB7islcXZmlVYgDWejEf8yWR8tt47p2jD01umcUUBwZxf5tR0Ky5myC4Wp3k7RnY4rwElOaolcSrNOLznjN2H1d/+Bv49LGIUV6qIU6Pq7eu5fZm3nsJYwM2/f/k8lO/6cCrWn6UkEAwV9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B8ZAJ3Jw; arc=none smtp.client-ip=209.85.221.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXY1CmCC"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-78a26aaefc8so176432585a.1
-        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 16:39:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B8ZAJ3Jw"
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-4d44beade3cso1164647e0c.1
+        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 16:39:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711150751; x=1711755551; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1711150753; x=1711755553; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=/F96a8YELf+Ur72xFbmW7ZJSVd3YYBPROndGsfciYiA=;
-        b=FXY1CmCCOsu4jMydwL8cRh4nJjI6RZxYzO19nctpZp+9cDLGBekV2gWRKrE6WaBzlE
-         /prAhEm8fPoMmRARnuzcwDkEYFvEaexTXbAjuCynjommRdLBzO/kpt1mtUKcL/UMfr/g
-         uNMH4Oa7+dzVLvw4XTu0PXDyV45J7SzavtR0sfJ8SaLldei8fgeEUq24NRcyw++8zFik
-         EgGPoU9WX4p+NI7E4dJyhvRE3UgfYlSaDT/w4GETSU3R7Wtrv1fwwTA6qTCQ5GUlLbmp
-         6Nc1Z9h8SJEuz5sJqWE7+96jnzF2FT0bQR/wSbdGaQQ63F3+pzVPD36CZlpDfgztRM5H
-         wLxg==
+        bh=QZ2rrwnnSPuoyWFM6/wbqSx+XEHGNK8//eAAMbn2SLU=;
+        b=B8ZAJ3JwNOwVPzQckhfEKmsLYhGNJkSBU/sNwsQaYmhxEYLDOFhGu8Gawy+XUEWXU0
+         MDe5dnruTAVs+UoadfbDd/Zga0RK8AP8s3EDCBTL3xGjMMOw7BOmQeEfycGWgyyBR2gR
+         I3KZFQGwzTt/f2WdP6MIHjSDUvJUNI5RMQmAgnkctT+ONXPd55sg2pohcnqSYeAtZiBC
+         XUqBVmgFQhilSN9NYM/45oDRKnpNSB58cMxE1LT4nXm4E7rEw9O28n1OTwVymDcCn96z
+         5l2Mj4Fk2OJ3RBi8316YR1f+xmDVvb2IpW+aYuQxEVHp6WnV5ZSVwv8gq9qlQGj8Sq35
+         95+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711150751; x=1711755551;
+        d=1e100.net; s=20230601; t=1711150753; x=1711755553;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/F96a8YELf+Ur72xFbmW7ZJSVd3YYBPROndGsfciYiA=;
-        b=LTJloYcPWRk2TMEzVYbBwlxWUaSI/dCme8lEsOj4+VoDGGeD66xcxTnRz+B4kwTUOR
-         4HeWkK16k99+ATZjDpn/S5k/V92T/RcRU501g4hokzw0X96jxuMy+lPGMv6yijkE6X6j
-         nXAtGaodLR28PGZXzpG3VvF3vJCrJq3PhePd5otmyww/dwvpW1dTSqKjD/WqVKnD2qsa
-         xtF5BXQkE/8vsQ7l03ULIrcHk9NnYj8JxiLw8tSPWtpLw1zGABN/y0tG30jigM6+PwlZ
-         ROYwY2MfScnlDRTCvXIu7hTdtQUx4/sjhyMDIaC1ox3P6VpK2tnBgAGBQRRHpKCkUCwa
-         PjjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXtmsHrhiSVxz5CbU5RW0oZlthpe2Apa53CzSY/6IH2PSVlJ2dBM6SmGnLJiWIJHNaaZVw2ty1qh81pPtYMJRbmPWlyZw==
-X-Gm-Message-State: AOJu0Yy0Plkz/VQdwXO1WiDyK0oPyE9KaigEe3nGR87Y865+hgORns0z
-	ks1Lq8dKxm9B7Rk5Jo8PD9Any4sM/c/AM8Rvnnh7/F5F+ZU6Pz0m
-X-Google-Smtp-Source: AGHT+IFnhi7P+k/MkZCWrllad1of00qh69/aWCRn2Ch4hXaX74mXDXtJDyquVhXLLDKOeEFx3KqBoA==
-X-Received: by 2002:a05:620a:40d3:b0:78a:3fb1:bade with SMTP id g19-20020a05620a40d300b0078a3fb1bademr1295433qko.1.1711150751298;
-        Fri, 22 Mar 2024 16:39:11 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id cz52-20020a05620a36f400b0078a43996ab7sm267608qkb.1.2024.03.22.16.39.10
+        bh=QZ2rrwnnSPuoyWFM6/wbqSx+XEHGNK8//eAAMbn2SLU=;
+        b=ZdV0fmlPJTqU2sysMbubj4dCqxgfDbzpv+w22O1Ttg+wOwg7mjvW2tm196E/ar/Lvu
+         tnJbuky6fT3mEv3LqS9KCprTnPtlgd4+GVq0+jE3mZ7JjZehLevqOPC7kdGXrGrv4QVa
+         VysiwdUhtwwJ12oISC8dVcS7lNVsswyuVR+SvOKckXZOwnYj0ge8+e09LxXJsU45rsi/
+         nPsIjApK0XYMypDHOxtfNYMlDRYObaisCCEqSnuwD1jqj8Xf9SHVG/LXaic6e+tGEcvf
+         fLQ96F+2iPQQonBAX1NpTOgVevUfB92i0d+ngO5su+B8rTJZtQjGRfpC8+QGXvGgn0dG
+         FqBg==
+X-Forwarded-Encrypted: i=1; AJvYcCXwPGZaW/7A1t8peGrAFcfpdUnRA3s62P+UEux5fpo6qkibTL5O3dj9RsvOtn8EQzXcPdmU7sZRJ7HOR61zk2NODS3C7w==
+X-Gm-Message-State: AOJu0Yy6moy4MuG0tA5BQ8l28FxtiyTXFq0IlSCDUIigpr55etuw12Kf
+	FqqT2gKv2C/C/cpVCo6QDxfDaO6mMDyIfqzgKZwuX9uF3/NA18fA
+X-Google-Smtp-Source: AGHT+IEaYQaJaeCZmztaSPVyvy8V/Vxeh4oBqEj4kwmvUweyQop95DXCqfqCPm+ZQJ2lS/7MtVUgAg==
+X-Received: by 2002:a05:6122:c9f:b0:4cb:fc25:7caa with SMTP id ba31-20020a0561220c9f00b004cbfc257caamr1351039vkb.14.1711150752858;
+        Fri, 22 Mar 2024 16:39:12 -0700 (PDT)
+Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id dd7-20020ad45807000000b0069675909982sm456994qvb.70.2024.03.22.16.39.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Mar 2024 16:39:10 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailauth.nyi.internal (Postfix) with ESMTP id E694E27C005B;
-	Fri, 22 Mar 2024 19:39:09 -0400 (EDT)
+        Fri, 22 Mar 2024 16:39:12 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 98CB91200032;
+	Fri, 22 Mar 2024 19:39:11 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 22 Mar 2024 19:39:09 -0400
-X-ME-Sender: <xms:nRb-ZYRx2_-58_-z6-x6S4sKXkjHp-GCdlJ3teS6u0_eGxEhEFihvA>
-    <xme:nRb-ZVwJEn5X_3CSF2VBVtDTWyJWMQOj41t5nU4Y3tVws8i5M3p0M0znwaIFaCWeJ
-    RuL49VwOqImuy1r3Q>
-X-ME-Received: <xmr:nRb-ZV38RkJQ6TRlO3PiWGx7flW84bXCLPP2yLPAhZeGxyNf_GQM_kKb9P0jLw>
+  by compute4.internal (MEProxy); Fri, 22 Mar 2024 19:39:11 -0400
+X-ME-Sender: <xms:nxb-ZXIx1aaow52e_WoDZFqnahY1bIzzv5Wxu7y5Bx3FCqaoacZKaw>
+    <xme:nxb-ZbKVQEyiu5t7Xp4_oUUScOcKEYzNSWnVzrOr-P_XBPKxvfNR9gvy-y3qaTfgd
+    B88TMJzA-sHCJuMcg>
+X-ME-Received: <xmr:nxb-ZfsAdtEQ6wxjKWrjG-mmoZH0kN4C1sOqF3vapgci3LBivqDLSJscBpEfvw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddtfedgudegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -71,14 +71,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddtfedgudegucetufdoteggod
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:nRb-ZcBtlI8Nx1uTVZ20QbfmnwHmh_PUZHvw3mBA8IwuxKJSFpfnIQ>
-    <xmx:nRb-ZRj_EGYVPZNkd1RT736QMkUg-qVTRaNTocfxpK8xNaNZvrYkVg>
-    <xmx:nRb-ZYrJcjVRZwzY0KBDqLp6P-pKhcf5ywqbm4nI0O16gmgmwapI6Q>
-    <xmx:nRb-ZUhdx8xp4T0whLRk9kcTd4nFRTE3UQe3vJyjzA_kfVUbwdWnRA>
-    <xmx:nRb-ZSBpBm8jvDtFtL4qCfbPT8guZsv0eGkZwMfREFkeARBMIPrlq2SrgRg>
+X-ME-Proxy: <xmx:nxb-ZQZZZwqym68B78NpzEjDSIBXxqsT776nMUbyvIA4DeAUsNkvmA>
+    <xmx:nxb-ZeYPyMmA5Ie9kuz4ke_eNCTGF5Hy17FOBYmquZHMlJ3KUlIaVw>
+    <xmx:nxb-ZUAFZkXd54Zn9rr1tBaLwxLqHc0ZCPVMAyTQnanW_yNTyHsHwQ>
+    <xmx:nxb-ZcZNxf4TI3OmNTLXqYypNReK-w3xMoiOqTqRfhqRIPvgjUNKZA>
+    <xmx:nxb-ZeaMRH_yJkm0MFOiCC5_cBsqDl8eAbpKk1x-uyep6Kc4A-NFFUh1PGAvdpkV>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Mar 2024 19:39:08 -0400 (EDT)
+ 22 Mar 2024 19:39:10 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -109,9 +109,9 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
 	"H. Peter Anvin" <hpa@zytor.com>,
 	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
 	linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org
-Subject: [WIP 2/3] rust: atomic: Add ARM64 fetch_add_relaxed()
-Date: Fri, 22 Mar 2024 16:38:37 -0700
-Message-ID: <20240322233838.868874-3-boqun.feng@gmail.com>
+Subject: [WIP 3/3] rust: atomic: Add fetch_sub_release()
+Date: Fri, 22 Mar 2024 16:38:38 -0700
+Message-ID: <20240322233838.868874-4-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240322233838.868874-1-boqun.feng@gmail.com>
 References: <20240322233838.868874-1-boqun.feng@gmail.com>
@@ -125,48 +125,60 @@ Content-Transfer-Encoding: 8bit
 
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- rust/kernel/sync/atomic/arch.rs       |  6 ++++++
- rust/kernel/sync/atomic/arch/arm64.rs | 26 ++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
- create mode 100644 rust/kernel/sync/atomic/arch/arm64.rs
+ rust/kernel/sync/atomic.rs            | 23 +++++++++++++++++++++++
+ rust/kernel/sync/atomic/arch/arm64.rs | 20 ++++++++++++++++++++
+ rust/kernel/sync/atomic/arch/x86.rs   |  5 +++++
+ 3 files changed, 48 insertions(+)
 
-diff --git a/rust/kernel/sync/atomic/arch.rs b/rust/kernel/sync/atomic/arch.rs
-index 3eb5a103a69a..fc280f229237 100644
---- a/rust/kernel/sync/atomic/arch.rs
-+++ b/rust/kernel/sync/atomic/arch.rs
-@@ -5,5 +5,11 @@
- #[cfg(CONFIG_X86)]
- pub(crate) use x86::*;
- 
-+#[cfg(CONFIG_ARM64)]
-+pub(crate) use arm64::*;
+diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
+index 280040705fb0..c3cae0d25e88 100644
+--- a/rust/kernel/sync/atomic.rs
++++ b/rust/kernel/sync/atomic.rs
+@@ -39,4 +39,27 @@ pub fn new(v: i32) -> Self {
+     pub fn fetch_add_relaxed(&self, i: i32) -> i32 {
+         arch::i32_fetch_add_relaxed(&self.0, i)
+     }
 +
- #[cfg(CONFIG_X86)]
- pub(crate) mod x86;
-+
-+#[cfg(CONFIG_ARM64)]
-+pub(crate) mod arm64;
++    /// Subs `i` to the atomic variable with RELEASE ordering.
++    ///
++    /// Returns the old value before the sub.
++    ///
++    /// # Example
++    ///
++    /// ```rust
++    /// use kernel::sync::atomic::AtomicI32;
++    ///
++    /// let a = AtomicI32::new(1);
++    /// let b = a.fetch_sub_release(1);
++    /// let c = a.fetch_sub_release(2);
++    /// let d = a.fetch_sub_release(3);
++    /// let e = a.fetch_sub_release(core::i32::MIN);
++    ///
++    /// assert_eq!(b, 1);
++    /// assert_eq!(c, 0);
++    /// assert_eq!(d, -2);
++    /// ```
++    pub fn fetch_sub_release(&self, i: i32) -> i32 {
++        arch::i32_fetch_sub_release(&self.0, i)
++    }
+ }
 diff --git a/rust/kernel/sync/atomic/arch/arm64.rs b/rust/kernel/sync/atomic/arch/arm64.rs
-new file mode 100644
-index 000000000000..438f37cf7df6
---- /dev/null
+index 438f37cf7df6..beea77ecdb20 100644
+--- a/rust/kernel/sync/atomic/arch/arm64.rs
 +++ b/rust/kernel/sync/atomic/arch/arm64.rs
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -24,3 +24,23 @@ pub(crate) fn i32_fetch_add_relaxed(v: &UnsafeCell<i32>, i: i32) -> i32 {
+ 
+     result
+ }
 +
-+//! ARM64 implementation for atomic and barrier primitives.
-+
-+use core::arch::asm;
-+use core::cell::UnsafeCell;
-+
-+pub(crate) fn i32_fetch_add_relaxed(v: &UnsafeCell<i32>, i: i32) -> i32 {
++pub(crate) fn i32_fetch_sub_release(v: &UnsafeCell<i32>, i: i32) -> i32 {
 +    let mut result;
 +    unsafe {
 +        asm!(
 +            "prfm    pstl1strm, [{v}]",
 +            "1: ldxr {result:w}, [{v}]",
-+            "add {val:w}, {result:w}, {i:w}",
-+            "stxr {tmp:w}, {val:w}, [{v}]",
++            "sub {val:w}, {result:w}, {i:w}",
++            "stlxr {tmp:w}, {val:w}, [{v}]",
 +            "cbnz {tmp:w}, 1b",
 +            result = out(reg) result,
 +            tmp = out(reg) _,
@@ -177,6 +189,19 @@ index 000000000000..438f37cf7df6
 +    }
 +
 +    result
++}
+diff --git a/rust/kernel/sync/atomic/arch/x86.rs b/rust/kernel/sync/atomic/arch/x86.rs
+index 2d715f740b22..7f764cde4576 100644
+--- a/rust/kernel/sync/atomic/arch/x86.rs
++++ b/rust/kernel/sync/atomic/arch/x86.rs
+@@ -41,3 +41,8 @@ pub(crate) fn i32_fetch_add_relaxed(v: &UnsafeCell<i32>, i: i32) -> i32 {
+     // SAFETY: `v.get()` points to a valid `i32`.
+     unsafe { i32_xadd(v.get(), i) }
+ }
++
++pub(crate) fn i32_fetch_sub_release(v: &UnsafeCell<i32>, i: i32) -> i32 {
++    // SAFETY: `v.get()` points to a valid `i32`.
++    unsafe { i32_xadd(v.get(), i.wrapping_neg()) }
 +}
 -- 
 2.44.0
