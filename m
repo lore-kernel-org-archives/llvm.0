@@ -1,223 +1,160 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0B83FB87;
-	Fri, 22 Mar 2024 08:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5D71B7EF
+	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 09:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711096518; cv=none; b=eRyvRm3Lycb7ApnXtvnIBjdesZVe7Opnefl2cWkj4NUEEdU7QIVpEgOM3Ur5C44um9ErReKVMzRQf9dVd4Jw/CtGMKrsi3K6kNJ0likACK3j3KuS8pSkreyT23GdLihKoH+kJ6TFoQ7P1pq5d6bXAfdrobhbBSXeXDFn7P/f0hQ=
+	t=1711099283; cv=none; b=UFI9EzYls4gdNzAuM65ZtBb1fM0CQxWNPZuS7UmGoIQwclPMHgj/XicXGAW7z1ACeTTb9uyxc7EqnaBItZyYbOC2gkkOhkj97WbBxhGKHesZyLtDs1/4pvK392HBZp031BsdMBrDjsdEQAniOlgNm5iG99+bw3Nd93Bh9d00C/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711096518; c=relaxed/simple;
-	bh=ubt8vwuXHMoPvm2FKiDUEHRj3q7PZZktUm1LKe+DoxQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lvc1Lv4sF1vhyT5ijFDp1g1LX+3ydRGLLNpIW/oC/DgERrxxWSgim50IQFi44oDCqCSUEC5JeHJbGA+ZipO3s7Adr/U36F5xH1NzT2VDSGb/D+WmH3H+JQ9bhTA1RILUqcK0YBWHbXnmKAvcifrPd3es64PGIMXTHJYKe/gJU4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JHtyBQH6; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1711099283; c=relaxed/simple;
+	bh=jyS0dRlWEXwaS2qTVh0qS/eGLhN50+m2w8Z7KwMGBvg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=c+MgToPV8rOwATnCQoZhaLZsUQYSHfVjHOkgc2ltH+lrAh0FxVoPmb7TqdCJAts5dNqvbyw7FO2Jpk02SVuk19Pg3bPwwi7r6bsemaNEY0lWpokK0kRqVmjpPD04nHkdhR8FOoyebeYHky5Kfdk70Lo6xhC3+phgmhur5jXwfHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ppm4aV2U; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JHtyBQH6"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=B+eEe2rJKYVCOSpsUyFR0aFEgGcdrU57l8z/qph+tmM=; b=JHtyBQH6EX7GceqkO4taJJgxTp
-	MHSM6Uqnw3YFlkvvhAiy3qbAR0vYz3MGRdxZmGg5/mdAUNTul1mWj09WvLulV1q1v69YEuYQIuXhn
-	P+4q733Age1NYD6hfFWEFc0t+KuF9HA90D8+TcIfO/d9koXu4navByN+ZmWwMcqPO/i01Opbj0EBy
-	WTuTwTFJ/dZm7bPQd8J/FD43zJbO6Y047A+sffZnE54IZNoZV5n9cCRmuC+yxOzAZwfnlJQq4pCoy
-	ym665tUf6yqhhjtVMcCNHOKjEijyCNM6tDQWevVoSRf1chQmYyScxbzC4JT3i+oeKd+PzlolBJwMN
-	7ds5xwDA==;
-Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rnaMZ-0000000EhCD-3xGY;
-	Fri, 22 Mar 2024 08:34:56 +0000
-Message-ID: <87f6365f-a40e-4606-baff-170cb8fc48f3@infradead.org>
-Date: Fri, 22 Mar 2024 17:34:45 +0900
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ppm4aV2U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711099279;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YFervft3XXf0KDztQKI6CIfhS0Yspn3JL3HUt5JNupQ=;
+	b=Ppm4aV2URo6b5l/CQCH4CaAkeFmGCl7J5aZ8Ngu2m1jIf7ujXnQaqqsOH6kf7sSd1Yo46L
+	9DBkPBp70HgtLWvjGvlWlJUMJlT2C5gvZr8jMTW36TA5R//aG1+DJTYMG8w5BVPxCSpkZ+
+	E76UbpXUNgK4cObBmI3OSTLGXNFRMk4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-446-l9M9EMtBNuSumesJX6F8Ww-1; Fri, 22 Mar 2024 05:21:16 -0400
+X-MC-Unique: l9M9EMtBNuSumesJX6F8Ww-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 09652185A781
+	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 09:21:16 +0000 (UTC)
+Received: from [172.64.11.27] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B8CDEC15773;
+	Fri, 22 Mar 2024 09:21:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, 661dc190)
+Date: Fri, 22 Mar 2024 09:21:15 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] powerpc: ps3: mark ps3_notification_device static for
- stack usage
-To: Geert Uytterhoeven <geert@linux-m68k.org>, Arnd Bergmann <arnd@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
- Nathan Chancellor <nathan@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
- Arnd Bergmann <arnd@arndb.de>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kevin Hao <haokexin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240320180333.151043-1-arnd@kernel.org>
- <CAMuHMdW41e+DSBKBgugTkjoLy6bXfji-KWmB_d9EstEv01eC6w@mail.gmail.com>
-Content-Language: en-US
-From: Geoff Levand <geoff@infradead.org>
-In-Reply-To: <CAMuHMdW41e+DSBKBgugTkjoLy6bXfji-KWmB_d9EstEv01eC6w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <32356.124032205211600355@us-mta-446.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/21/24 17:32, Geert Uytterhoeven wrote:
-> --- a/arch/powerpc/platforms/ps3/device-init.c
->> +++ b/arch/powerpc/platforms/ps3/device-init.c
->> @@ -770,7 +770,7 @@ static struct task_struct *probe_task;
->>
->>  static int ps3_probe_thread(void *data)
->>  {
->> -       struct ps3_notification_device dev;
->> +       static struct ps3_notification_device dev;
->>         int res;
->>         unsigned int irq;
->>         u64 lpar;
-> 
-> Making it static increases kernel size for everyone.  So I'd rather
-> allocate it dynamically. The thread already allocates a buffer, which
-> can be replaced at no cost by allocating a structure containing both
-> the ps3_notification_device and the buffer.
+Hi, we tested your kernel and here are the results:
 
-Here's what I came up with.  It builds for me without warnings.
-I haven't tested it yet.  A review would be appreciated.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/arch/powerpc/platforms/ps3/device-init.c b/arch/powerpc/platforms/ps3/device-init.c
-index 878bc160246e..9bb44a6ccdaf 100644
---- a/arch/powerpc/platforms/ps3/device-init.c
-+++ b/arch/powerpc/platforms/ps3/device-init.c
-@@ -770,37 +770,48 @@ static struct task_struct *probe_task;
- 
- static int ps3_probe_thread(void *data)
- {
--	struct ps3_notification_device dev;
-+	struct ps3_probe_thread_local {
-+		struct ps3_notification_device dev;
-+		union {
-+			char buf[512];
-+			struct ps3_notify_cmd notify_cmd;
-+			struct ps3_notify_event notify_event;
-+		};
-+	};
-+	struct ps3_probe_thread_local *local;
-+	struct ps3_notification_device *dev;
-+	struct ps3_notify_cmd *notify_cmd;
-+	struct ps3_notify_event *notify_event;
- 	int res;
- 	unsigned int irq;
- 	u64 lpar;
--	void *buf;
--	struct ps3_notify_cmd *notify_cmd;
--	struct ps3_notify_event *notify_event;
- 
- 	pr_debug(" -> %s:%u: kthread started\n", __func__, __LINE__);
- 
--	buf = kzalloc(512, GFP_KERNEL);
--	if (!buf)
-+	local = kzalloc(sizeof(local), GFP_KERNEL);
-+
-+	if (!local)
- 		return -ENOMEM;
- 
--	lpar = ps3_mm_phys_to_lpar(__pa(buf));
--	notify_cmd = buf;
--	notify_event = buf;
-+	dev = &local->dev;
-+	notify_cmd = &local->notify_cmd;
-+	notify_event = &local->notify_event;
-+
-+	lpar = ps3_mm_phys_to_lpar(__pa(&local->notify_cmd));
- 
- 	/* dummy system bus device */
--	dev.sbd.bus_id = (u64)data;
--	dev.sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
--	dev.sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
-+	dev->sbd.bus_id = (u64)data;
-+	dev->sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
-+	dev->sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
- 
--	res = lv1_open_device(dev.sbd.bus_id, dev.sbd.dev_id, 0);
-+	res = lv1_open_device(dev->sbd.bus_id, dev->sbd.dev_id, 0);
- 	if (res) {
- 		pr_err("%s:%u: lv1_open_device failed %s\n", __func__,
- 		       __LINE__, ps3_result(res));
- 		goto fail_free;
- 	}
- 
--	res = ps3_sb_event_receive_port_setup(&dev.sbd, PS3_BINDING_CPU_ANY,
-+	res = ps3_sb_event_receive_port_setup(&dev->sbd, PS3_BINDING_CPU_ANY,
- 					      &irq);
- 	if (res) {
- 		pr_err("%s:%u: ps3_sb_event_receive_port_setup failed %d\n",
-@@ -808,11 +819,11 @@ static int ps3_probe_thread(void *data)
- 	       goto fail_close_device;
- 	}
- 
--	spin_lock_init(&dev.lock);
--	rcuwait_init(&dev.wait);
-+	spin_lock_init(&dev->lock);
-+	rcuwait_init(&dev->wait);
- 
- 	res = request_irq(irq, ps3_notification_interrupt, 0,
--			  "ps3_notification", &dev);
-+			  "ps3_notification", &local->dev);
- 	if (res) {
- 		pr_err("%s:%u: request_irq failed %d\n", __func__, __LINE__,
- 		       res);
-@@ -823,7 +834,7 @@ static int ps3_probe_thread(void *data)
- 	notify_cmd->operation_code = 0; /* must be zero */
- 	notify_cmd->event_mask = 1UL << notify_region_probe;
- 
--	res = ps3_notification_read_write(&dev, lpar, 1);
-+	res = ps3_notification_read_write(&local->dev, lpar, 1);
- 	if (res)
- 		goto fail_free_irq;
- 
-@@ -834,36 +845,36 @@ static int ps3_probe_thread(void *data)
- 
- 		memset(notify_event, 0, sizeof(*notify_event));
- 
--		res = ps3_notification_read_write(&dev, lpar, 0);
-+		res = ps3_notification_read_write(&local->dev, lpar, 0);
- 		if (res)
- 			break;
- 
- 		pr_debug("%s:%u: notify event type 0x%llx bus id %llu dev id %llu"
- 			 " type %llu port %llu\n", __func__, __LINE__,
--			 notify_event->event_type, notify_event->bus_id,
--			 notify_event->dev_id, notify_event->dev_type,
--			 notify_event->dev_port);
-+			notify_event->event_type, notify_event->bus_id,
-+			notify_event->dev_id, notify_event->dev_type,
-+			notify_event->dev_port);
- 
- 		if (notify_event->event_type != notify_region_probe ||
--		    notify_event->bus_id != dev.sbd.bus_id) {
-+			notify_event->bus_id != dev->sbd.bus_id) {
- 			pr_warn("%s:%u: bad notify_event: event %llu, dev_id %llu, dev_type %llu\n",
- 				__func__, __LINE__, notify_event->event_type,
- 				notify_event->dev_id, notify_event->dev_type);
- 			continue;
- 		}
- 
--		ps3_find_and_add_device(dev.sbd.bus_id, notify_event->dev_id);
-+		ps3_find_and_add_device(dev->sbd.bus_id, notify_event->dev_id);
- 
- 	} while (!kthread_should_stop());
- 
- fail_free_irq:
--	free_irq(irq, &dev);
-+	free_irq(irq, &local->dev);
- fail_sb_event_receive_port_destroy:
--	ps3_sb_event_receive_port_destroy(&dev.sbd, irq);
-+	ps3_sb_event_receive_port_destroy(&dev->sbd, irq);
- fail_close_device:
--	lv1_close_device(dev.sbd.bus_id, dev.sbd.dev_id);
-+	lv1_close_device(dev->sbd.bus_id, dev->sbd.dev_id);
- fail_free:
--	kfree(buf);
-+	kfree(local);
- 
- 	probe_task = NULL;
- 
+Tested-by: CKI Project <cki-project@redhat.com>
 
+Kernel information:
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/136473
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                kselftest build - bpf [x86_64 (debug)]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
+                xfstests - nfsv4.2 [x86_64, x86_64 (debug)]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: makedumpfile failed when dumping vmcore
+            URL: https://bugzilla.redhat.com/2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [x86_64, x86_64 (debug), s390x, aarch64, =
+ppc64le]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
