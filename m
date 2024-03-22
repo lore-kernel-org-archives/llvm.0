@@ -1,95 +1,223 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244A110A25;
-	Fri, 22 Mar 2024 08:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0B83FB87;
+	Fri, 22 Mar 2024 08:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711094603; cv=none; b=ZmfnwOUtRDt0jTgrAbhJip5sCJsJRMnUqEbZoKYUkLCZqf9LGL6kN2BTtSdbZdymZ4ZDMQXgh26d3YBEwqViqd7U1m0pFpgNpt+Fm8bcNBJ0Z4WN68TL1uX1ICZz8GRDWRSWy4p8KKeX5pDgb3psPvH548dhFCIxXw03SUBacXM=
+	t=1711096518; cv=none; b=eRyvRm3Lycb7ApnXtvnIBjdesZVe7Opnefl2cWkj4NUEEdU7QIVpEgOM3Ur5C44um9ErReKVMzRQf9dVd4Jw/CtGMKrsi3K6kNJ0likACK3j3KuS8pSkreyT23GdLihKoH+kJ6TFoQ7P1pq5d6bXAfdrobhbBSXeXDFn7P/f0hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711094603; c=relaxed/simple;
-	bh=KtREvos/d5+aLyOdl8HCquwfkvZVafN4A82rG+GpL2A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JbX6KJ7YLgqbILiIpphZphHtvh7y7LWmgM7gExb4HXlWeC5bxuyaNf/8QCxaEhrUBVnV3zJjKNlIVj2oyYcmR0iTkXfQTs9CTBhpeSioQch/qJJ+vbyD1xaNwoAw6aIDU5sYBMtqAbVNcyIfxUSQRQTl5DA2/44CEThVBRRjcFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e8dM5SRM; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711096518; c=relaxed/simple;
+	bh=ubt8vwuXHMoPvm2FKiDUEHRj3q7PZZktUm1LKe+DoxQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lvc1Lv4sF1vhyT5ijFDp1g1LX+3ydRGLLNpIW/oC/DgERrxxWSgim50IQFi44oDCqCSUEC5JeHJbGA+ZipO3s7Adr/U36F5xH1NzT2VDSGb/D+WmH3H+JQ9bhTA1RILUqcK0YBWHbXnmKAvcifrPd3es64PGIMXTHJYKe/gJU4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JHtyBQH6; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e8dM5SRM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711094601; x=1742630601;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KtREvos/d5+aLyOdl8HCquwfkvZVafN4A82rG+GpL2A=;
-  b=e8dM5SRMs2OED8prvICJ3caPykHy7rauzZnajMLk7uTaenIOyHp6dcAk
-   zlh8zq1O7csNMXhsGDiDUZ84Nn8XOnT1uExCx4M22NHyCNq4kIuynMvWx
-   ZN+v9VVGcIs7cS861uQ3G4nuZYAIESigkimp7XWDMfx5myhQ1qTcKge5p
-   JGRdqda0MvMCHC6GG4c9Xa79SXXZwGUzVgYM4cZaDxHQ5eDtVUciMi4uR
-   abR0IlV1Ko/FqHIjiRkts85qHw2YCV3FVPhVhoeSkb+E3F1erT227496h
-   eWsysqsYXP02O5EQ38rbbc22aXvCKQdZCqkzph1fZx6iK38ZxfHbXVCto
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="5959704"
-X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="5959704"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 01:03:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
-   d="scan'208";a="19373642"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 22 Mar 2024 01:03:16 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rnZru-000K91-14;
-	Fri, 22 Mar 2024 08:03:14 +0000
-Date: Fri, 22 Mar 2024 16:02:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sudan Landge <sudanl@amazon.com>, tytso@mit.edu, Jason@zx2c4.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-	thomas.lendacky@amd.com, dan.j.williams@intel.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, graf@amazon.de,
-	dwmw@amazon.co.uk, bchalios@amazon.es, xmarcalx@amazon.co.uk
-Subject: Re: [PATCH v2 4/4] virt: vmgenid: add support for devicetree bindings
-Message-ID: <202403221537.Dais4vyo-lkp@intel.com>
-References: <20240321025105.53210-5-sudanl@amazon.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JHtyBQH6"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=B+eEe2rJKYVCOSpsUyFR0aFEgGcdrU57l8z/qph+tmM=; b=JHtyBQH6EX7GceqkO4taJJgxTp
+	MHSM6Uqnw3YFlkvvhAiy3qbAR0vYz3MGRdxZmGg5/mdAUNTul1mWj09WvLulV1q1v69YEuYQIuXhn
+	P+4q733Age1NYD6hfFWEFc0t+KuF9HA90D8+TcIfO/d9koXu4navByN+ZmWwMcqPO/i01Opbj0EBy
+	WTuTwTFJ/dZm7bPQd8J/FD43zJbO6Y047A+sffZnE54IZNoZV5n9cCRmuC+yxOzAZwfnlJQq4pCoy
+	ym665tUf6yqhhjtVMcCNHOKjEijyCNM6tDQWevVoSRf1chQmYyScxbzC4JT3i+oeKd+PzlolBJwMN
+	7ds5xwDA==;
+Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rnaMZ-0000000EhCD-3xGY;
+	Fri, 22 Mar 2024 08:34:56 +0000
+Message-ID: <87f6365f-a40e-4606-baff-170cb8fc48f3@infradead.org>
+Date: Fri, 22 Mar 2024 17:34:45 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240321025105.53210-5-sudanl@amazon.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] powerpc: ps3: mark ps3_notification_device static for
+ stack usage
+To: Geert Uytterhoeven <geert@linux-m68k.org>, Arnd Bergmann <arnd@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+ Nathan Chancellor <nathan@kernel.org>, Paul Mackerras <paulus@ozlabs.org>,
+ Arnd Bergmann <arnd@arndb.de>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kevin Hao <haokexin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240320180333.151043-1-arnd@kernel.org>
+ <CAMuHMdW41e+DSBKBgugTkjoLy6bXfji-KWmB_d9EstEv01eC6w@mail.gmail.com>
+Content-Language: en-US
+From: Geoff Levand <geoff@infradead.org>
+In-Reply-To: <CAMuHMdW41e+DSBKBgugTkjoLy6bXfji-KWmB_d9EstEv01eC6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Sudan,
+On 3/21/24 17:32, Geert Uytterhoeven wrote:
+> --- a/arch/powerpc/platforms/ps3/device-init.c
+>> +++ b/arch/powerpc/platforms/ps3/device-init.c
+>> @@ -770,7 +770,7 @@ static struct task_struct *probe_task;
+>>
+>>  static int ps3_probe_thread(void *data)
+>>  {
+>> -       struct ps3_notification_device dev;
+>> +       static struct ps3_notification_device dev;
+>>         int res;
+>>         unsigned int irq;
+>>         u64 lpar;
+> 
+> Making it static increases kernel size for everyone.  So I'd rather
+> allocate it dynamically. The thread already allocates a buffer, which
+> can be replaced at no cost by allocating a structure containing both
+> the ps3_notification_device and the buffer.
 
-kernel test robot noticed the following build errors:
+Here's what I came up with.  It builds for me without warnings.
+I haven't tested it yet.  A review would be appreciated.
 
-[auto build test ERROR on a4145ce1e7bc247fd6f2846e8699473448717b37]
+diff --git a/arch/powerpc/platforms/ps3/device-init.c b/arch/powerpc/platforms/ps3/device-init.c
+index 878bc160246e..9bb44a6ccdaf 100644
+--- a/arch/powerpc/platforms/ps3/device-init.c
++++ b/arch/powerpc/platforms/ps3/device-init.c
+@@ -770,37 +770,48 @@ static struct task_struct *probe_task;
+ 
+ static int ps3_probe_thread(void *data)
+ {
+-	struct ps3_notification_device dev;
++	struct ps3_probe_thread_local {
++		struct ps3_notification_device dev;
++		union {
++			char buf[512];
++			struct ps3_notify_cmd notify_cmd;
++			struct ps3_notify_event notify_event;
++		};
++	};
++	struct ps3_probe_thread_local *local;
++	struct ps3_notification_device *dev;
++	struct ps3_notify_cmd *notify_cmd;
++	struct ps3_notify_event *notify_event;
+ 	int res;
+ 	unsigned int irq;
+ 	u64 lpar;
+-	void *buf;
+-	struct ps3_notify_cmd *notify_cmd;
+-	struct ps3_notify_event *notify_event;
+ 
+ 	pr_debug(" -> %s:%u: kthread started\n", __func__, __LINE__);
+ 
+-	buf = kzalloc(512, GFP_KERNEL);
+-	if (!buf)
++	local = kzalloc(sizeof(local), GFP_KERNEL);
++
++	if (!local)
+ 		return -ENOMEM;
+ 
+-	lpar = ps3_mm_phys_to_lpar(__pa(buf));
+-	notify_cmd = buf;
+-	notify_event = buf;
++	dev = &local->dev;
++	notify_cmd = &local->notify_cmd;
++	notify_event = &local->notify_event;
++
++	lpar = ps3_mm_phys_to_lpar(__pa(&local->notify_cmd));
+ 
+ 	/* dummy system bus device */
+-	dev.sbd.bus_id = (u64)data;
+-	dev.sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
+-	dev.sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
++	dev->sbd.bus_id = (u64)data;
++	dev->sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
++	dev->sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
+ 
+-	res = lv1_open_device(dev.sbd.bus_id, dev.sbd.dev_id, 0);
++	res = lv1_open_device(dev->sbd.bus_id, dev->sbd.dev_id, 0);
+ 	if (res) {
+ 		pr_err("%s:%u: lv1_open_device failed %s\n", __func__,
+ 		       __LINE__, ps3_result(res));
+ 		goto fail_free;
+ 	}
+ 
+-	res = ps3_sb_event_receive_port_setup(&dev.sbd, PS3_BINDING_CPU_ANY,
++	res = ps3_sb_event_receive_port_setup(&dev->sbd, PS3_BINDING_CPU_ANY,
+ 					      &irq);
+ 	if (res) {
+ 		pr_err("%s:%u: ps3_sb_event_receive_port_setup failed %d\n",
+@@ -808,11 +819,11 @@ static int ps3_probe_thread(void *data)
+ 	       goto fail_close_device;
+ 	}
+ 
+-	spin_lock_init(&dev.lock);
+-	rcuwait_init(&dev.wait);
++	spin_lock_init(&dev->lock);
++	rcuwait_init(&dev->wait);
+ 
+ 	res = request_irq(irq, ps3_notification_interrupt, 0,
+-			  "ps3_notification", &dev);
++			  "ps3_notification", &local->dev);
+ 	if (res) {
+ 		pr_err("%s:%u: request_irq failed %d\n", __func__, __LINE__,
+ 		       res);
+@@ -823,7 +834,7 @@ static int ps3_probe_thread(void *data)
+ 	notify_cmd->operation_code = 0; /* must be zero */
+ 	notify_cmd->event_mask = 1UL << notify_region_probe;
+ 
+-	res = ps3_notification_read_write(&dev, lpar, 1);
++	res = ps3_notification_read_write(&local->dev, lpar, 1);
+ 	if (res)
+ 		goto fail_free_irq;
+ 
+@@ -834,36 +845,36 @@ static int ps3_probe_thread(void *data)
+ 
+ 		memset(notify_event, 0, sizeof(*notify_event));
+ 
+-		res = ps3_notification_read_write(&dev, lpar, 0);
++		res = ps3_notification_read_write(&local->dev, lpar, 0);
+ 		if (res)
+ 			break;
+ 
+ 		pr_debug("%s:%u: notify event type 0x%llx bus id %llu dev id %llu"
+ 			 " type %llu port %llu\n", __func__, __LINE__,
+-			 notify_event->event_type, notify_event->bus_id,
+-			 notify_event->dev_id, notify_event->dev_type,
+-			 notify_event->dev_port);
++			notify_event->event_type, notify_event->bus_id,
++			notify_event->dev_id, notify_event->dev_type,
++			notify_event->dev_port);
+ 
+ 		if (notify_event->event_type != notify_region_probe ||
+-		    notify_event->bus_id != dev.sbd.bus_id) {
++			notify_event->bus_id != dev->sbd.bus_id) {
+ 			pr_warn("%s:%u: bad notify_event: event %llu, dev_id %llu, dev_type %llu\n",
+ 				__func__, __LINE__, notify_event->event_type,
+ 				notify_event->dev_id, notify_event->dev_type);
+ 			continue;
+ 		}
+ 
+-		ps3_find_and_add_device(dev.sbd.bus_id, notify_event->dev_id);
++		ps3_find_and_add_device(dev->sbd.bus_id, notify_event->dev_id);
+ 
+ 	} while (!kthread_should_stop());
+ 
+ fail_free_irq:
+-	free_irq(irq, &dev);
++	free_irq(irq, &local->dev);
+ fail_sb_event_receive_port_destroy:
+-	ps3_sb_event_receive_port_destroy(&dev.sbd, irq);
++	ps3_sb_event_receive_port_destroy(&dev->sbd, irq);
+ fail_close_device:
+-	lv1_close_device(dev.sbd.bus_id, dev.sbd.dev_id);
++	lv1_close_device(dev->sbd.bus_id, dev->sbd.dev_id);
+ fail_free:
+-	kfree(buf);
++	kfree(local);
+ 
+ 	probe_task = NULL;
+ 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sudan-Landge/virt-vmgenid-rearrange-code-to-make-review-easier/20240321-105317
-base:   a4145ce1e7bc247fd6f2846e8699473448717b37
-patch link:    https://lore.kernel.org/r/20240321025105.53210-5-sudanl%40amazon.com
-patch subject: [PATCH v2 4/4] virt: vmgenid: add support for devicetree bindings
-config: s390-randconfig-002-20240322 (https://download.01.org/0day-ci/archive/20240322/202403221537.Dais4vyo-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240322/202403221537.Dais4vyo-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403221537.Dais4vyo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   s390x-linux-ld: drivers/virt/vmgenid.o: in function `vmgenid_add':
->> vmgenid.c:(.text+0xe8): undefined reference to `of_address_to_resource'
->> s390x-linux-ld: vmgenid.c:(.text+0x148): undefined reference to `of_iomap'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
