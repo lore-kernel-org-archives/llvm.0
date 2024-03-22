@@ -1,167 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B181A38FE
-	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 03:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E5015BB;
+	Fri, 22 Mar 2024 04:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711077085; cv=none; b=M6J5wlfZ6ArbduTI+hP3nfALMIK/I0AlRNHF/LNYpO1lg0mRqpM3jvn199c4BACG+FUXZlUI2mF6WqXNdSoQgF5o7NeDWc5HnNzD6ApHzLbLMq4tnS4ULsT8iw56t75hPt+TdxOuC5KZFDIf9wfkRUbD1qQI0SNW+wTwad4Gwyg=
+	t=1711082535; cv=none; b=Jtkbx9smj0mpG32RNRdV6c+EglUq6rPwYqMiWTkyojfMPuQj4sxgHkOcKF9USLZKvTbRctVSuJIi7gW7k21ZlgeqhxRO4npFrmkMd95q/CsYQApIghccsuG+gJ7vAsHRTomAf7Mlwk9mcHKLm7gylA34fTqUoftnAye8G7XGdtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711077085; c=relaxed/simple;
-	bh=LejGUefntM/7bII5iyQErLb6gy5Hpogtn6VGmn2eX0U=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=juMNJqrv/oQcq6H107aCKelN5IUvkg1AF0x0bY49QkEJPbvHmOZx5TGoWT5JcpB/4L/r9vhRRPvr9OL0Hvyg+9xIBnQbnS/OLhmCiIxZr4OhJWe+i2BFJ0RRVYaXjm4yGFN1/+ucIXveIAsQOcpV37d2xC3E3+4GMS9ThyvPPbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M5OplFRg; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1711082535; c=relaxed/simple;
+	bh=nJKMQMz089RFkjTj6aFfHEqaQAIthw1uF1M2pGy8gh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=b4Uj1izMAuTdtSGQDKfh6dfHDOzJ/1pLQmKsCLWqa8GceBLKdb/xlCx6Ia6z7974lNtD1wD/y8Kjkx1aeRkdILJa2J/lL7DWyLjx7tWRdfzGQeghLYMzIepgLy7YtDUpdQhsOeFV8G79cpOh4dm3Det9gowEtRtdf0tNQAjsvbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T9pXki2D; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M5OplFRg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711077082;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=j5JNq1hAwZ9ZXgi9HZR+tb311RABhkipqtFU1OACp6s=;
-	b=M5OplFRg0y22r2fUjKBVT7FJqzBy7aIX/Rj7bUy7JGiqVvaMytCSnHqiYNxDg48KWmQRg6
-	+sXJhQ9bNa9+fW9YRIGJnjpqI3hnjQGlHWelF8ZyP75ILnej7JyVqcKaGnbidH7TbYE7bD
-	QpbrGY8O3NUwmTqoE/nXDFSdV4hJnMk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-396-CADNs661N3unytQstxQPMg-1; Thu, 21 Mar 2024 23:11:20 -0400
-X-MC-Unique: CADNs661N3unytQstxQPMg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF68C101A526
-	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 03:11:19 +0000 (UTC)
-Received: from [172.64.11.27] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 79CEE492BD0;
-	Fri, 22 Mar 2024 03:11:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.8.0, mainline.kernel.org-clang, 2ac2b166)
-Date: Fri, 22 Mar 2024 03:11:19 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T9pXki2D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711082533; x=1742618533;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nJKMQMz089RFkjTj6aFfHEqaQAIthw1uF1M2pGy8gh8=;
+  b=T9pXki2Dc8/wx3LIadcIxN7OsDhPZGhnJsUjenZW0NQ0vZu1jKmhCjRk
+   972j6IeZ7mBZhJ+pxSLx7348xhD7Dxv3qPg7USFo+OjLQTPOovc8sIHfO
+   YGVd/2chu6LBqYJRbgCZ+xj9hqnrC5DiPfYTrX9bg00AlunmxwCVLta9X
+   kjm3RFMeRouB0hT0I7689tE0MTbsxbnknxzdoIbFmXLiIrfknp54ctjmP
+   yXPU/zkHpA1EbWLHLL7ZKA/uqvZSm97Qpohcg2rW8FZyxQOjXT/dLX7sP
+   zhtFYBtm2usYTaqdRMuqrfaU+oCvvjGcgATXHSOD3W5yk83uUmAh51NAi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="16751935"
+X-IronPort-AV: E=Sophos;i="6.07,144,1708416000"; 
+   d="scan'208";a="16751935"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 21:42:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,144,1708416000"; 
+   d="scan'208";a="19465957"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 21 Mar 2024 21:42:12 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rnWjJ-000K2H-2e;
+	Fri, 22 Mar 2024 04:42:09 +0000
+Date: Fri, 22 Mar 2024 12:41:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-remove-absolute-percpu 3/5]
+ arch/x86/kernel/cpu/common.c:762:22: error: call to undeclared function
+ 'per_cpu_offset'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202403221215.FeIdb2PC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <23117.124032123112000120@us-mta-396.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-remove-absolute-percpu
+head:   811d6eeae9abffb646afa9c418d4658e6d91cdd6
+commit: 82b7a620962b18edb7cb6eaca34fd0bd06073611 [3/5] x86/percpu: Get rid of absolute per-CPU variable placement
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240322/202403221215.FeIdb2PC-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240322/202403221215.FeIdb2PC-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403221215.FeIdb2PC-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'hwlock-v6.9' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/remoteproc/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/136409
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                kselftest build - bpf [x86_64 (debug)]
-        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
- __exclude_unnecessary_pages: Can't read the buffer of struct page
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
-            Affected tests:
-                kdump - file-load [ppc64le]
-                kdump - sysrq-c [ppc64le]
-        Issue: makedumpfile failed when dumping vmcore
-            URL: https://bugzilla.redhat.com/2269991
-            Affected tests:
-                kdump - file-load [ppc64le]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
-                xfstests - nfsv4.2 [x86_64, x86_64 (debug)]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> arch/x86/kernel/cpu/common.c:762:22: error: call to undeclared function 'per_cpu_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     762 |         wrmsrl(MSR_GS_BASE, per_cpu_offset(cpu));
+         |                             ^
+   1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [ppc64le, x86_64 (debug), s390x, aarch64,=
- x86_64]
+vim +/per_cpu_offset +762 arch/x86/kernel/cpu/common.c
 
+   733	
+   734	/**
+   735	 * switch_gdt_and_percpu_base - Switch to direct GDT and runtime per CPU base
+   736	 * @cpu:	The CPU number for which this is invoked
+   737	 *
+   738	 * Invoked during early boot to switch from early GDT and early per CPU to
+   739	 * the direct GDT and the runtime per CPU area. On 32-bit the percpu base
+   740	 * switch is implicit by loading the direct GDT. On 64bit this requires
+   741	 * to update GSBASE.
+   742	 */
+   743	void __init switch_gdt_and_percpu_base(int cpu)
+   744	{
+   745		load_direct_gdt(cpu);
+   746	
+   747	#ifdef CONFIG_X86_64
+   748		/*
+   749		 * No need to load %gs. It is already correct.
+   750		 *
+   751		 * Writing %gs on 64bit would zero GSBASE which would make any per
+   752		 * CPU operation up to the point of the wrmsrl() fault.
+   753		 *
+   754		 * Set GSBASE to the new offset. Until the wrmsrl() happens the
+   755		 * early mapping is still valid. That means the GSBASE update will
+   756		 * lose any prior per CPU data which was not copied over in
+   757		 * setup_per_cpu_areas().
+   758		 *
+   759		 * This works even with stackprotector enabled because the
+   760		 * per CPU stack canary is 0 in both per CPU areas.
+   761		 */
+ > 762		wrmsrl(MSR_GS_BASE, per_cpu_offset(cpu));
+   763	#else
+   764		/*
+   765		 * %fs is already set to __KERNEL_PERCPU, but after switching GDT
+   766		 * it is required to load FS again so that the 'hidden' part is
+   767		 * updated from the new GDT. Up to this point the early per CPU
+   768		 * translation is active. Any content of the early per CPU data
+   769		 * which was not copied over in setup_per_cpu_areas() is lost.
+   770		 */
+   771		loadsegment(fs, __KERNEL_PERCPU);
+   772	#endif
+   773	}
+   774	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
