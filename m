@@ -1,144 +1,126 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D3F482F6
-	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 14:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA2556B78
+	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 20:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711117940; cv=none; b=Vn2jWkZHyNEKTopzzlw1vyp8JwNXLdZSFQ2PBsMKa5eCsrYR19Z0gKfNROr8hK8dLAFDgDgyHfjVEzCb1OOByio2upH3jDkth2S9ClGiBJpxO9jq9MFe+cKZft4FkqlV+yzgk65M4V1+CqsBN0eXOJNpptAtzV+5OLeOLvDGHmE=
+	t=1711139083; cv=none; b=cezYr/ToEaMd3jwp9cEiak64X7wUcIDfmuHaNqKhYglJqWYtUGYz3EoXlykoDKAQCutNTJwwMb+YfQ3Xbi6rivT1+w22Sm3p9gBCd4x6WMUgAGZru8OpK4JOO1S9OTW5XoO6Qn5qqqh5fRNMa0DU8PyBuPaeDncT5YqJsgSbbDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711117940; c=relaxed/simple;
-	bh=69ZdVrReaf8DDgejMv4nU6fGqoatnYxGMkDl317L/q0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s6ekWneOo2tLH+d6qhME53L7zdSijLGKmZY8YJP5XskjmlW6bRtOvPJ5FGU0jjJMue7OIa7SxwSzOv/cnjZoAqqw0pUpRHTRZVsgDArQ41guaN2U9N75vHJZ380gWaabPI52vYUDwD93IR4f7JHRyplqxzHLavzw0D+gQz1AEGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tdJqvvSx; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1711139083; c=relaxed/simple;
+	bh=GOa+p5rfQcsXcyuHjZYb1wXBDRY1vtpAWNC7xXOLWT4=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=eki7kUqui3uD5RGyM061eoT69SLvNM0ho+CPJNxaiPJ84l09qpt/ZuJs23dW4nNzJPCsWQZJC2tZlvTeNaA6r4S+4nrFaArm5ALZOLz+ad4ebPqo+ZXPheSioPxksLH96ACVxNB9baHRSsIVCXZJjMTULJg+g0q1JLHrDVvuUbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kM/Mma5t; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZEqFDuPW; arc=none smtp.client-ip=64.147.123.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tdJqvvSx"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1df01161b39so16402105ad.3
-        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 07:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711117938; x=1711722738; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bsQoTDol9HPR9N3ln/StyK4/449TM2DZcvuKewqwWVs=;
-        b=tdJqvvSxHufhXo8Zlk8HBKbeezJ3upUZnxBg3muuyQVWRyo84WgPgomMjed/NGCn8Q
-         CwKqQu88YqCQ+bwv28BHCUGUFgHS4NvmvOOAg6LGdorxxJy1oCJnuoMfT70FIYjouMAX
-         pFFUCFS46fhWn7kj95gv3UZcp5wrxZD43+EigOyxhaJg6rdiy9q/znAuTUg0ejtkd+eD
-         vo1c3e6cSa+t5tmRouIZWIFQlYcRwT0+33pv1Oxw7TMgzx/qajY7h4RKDBJO8f64/+0E
-         uW6v3xplyt2J1vDoq5ZOMfIEDQ4mNsLn4p9opYvdhkCcX7wCgwc1nB/tI1fABFUA2d5D
-         GUfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711117938; x=1711722738;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bsQoTDol9HPR9N3ln/StyK4/449TM2DZcvuKewqwWVs=;
-        b=MyXDRSrUPGxfWSI+QurvUjiIvSYtnW3YnzGtgLvC7BguNZMax4ev1syCuumVWEbO86
-         +xvG/UpdBPV7R9vjf2XBpLWBf47DM8z7pzln2JDAxrHRCQLcN4uQtNEUWHokOoATh0YI
-         xDDmtrGoDSgAWVWCYFt4gBVlOJ9H9qheMKnv/d4tcfzfYY1JQlfdQ3yxCUNVNRQIAp0B
-         OjR+P96h3zFzJNohEBeMpx747WTSYrZfl2pFSa8XXBObb1nOy/1X5v7F9dHioFkbZt1b
-         ySK8yAERzLWo10UhMOfVo6xCdEFbevjHUpF81tREQ46q9ouDDZRVH9mPqynqBBVDTF80
-         dnCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUEmYwfjFjuNI7YaoKCsJojkCF+s5ygZ6n0sa+5RcZj2D+IIjA6Rlv7clPL5HKV+gVqc9CpQTaFPdGp4GtZYXtFO/0YKA==
-X-Gm-Message-State: AOJu0YwAPDvd1zqT23ZHMOjaHNu125gF10EI3HndI6xGD6dUoxnOaPAD
-	y8EMyCAg8H5ZFTcHSZAA/FQjtOwRxsPhur1gRfSOF43kbQcfc1Iq7gMT0D2qTw==
-X-Google-Smtp-Source: AGHT+IGjsRnNYOq/KugmVVWK06RZmJQVOgzrvCR0cZJUdpBKhV8wEEXZP7kz9AS2YSen6KzO7otn8Q==
-X-Received: by 2002:a17:903:1207:b0:1dd:2e6:b951 with SMTP id l7-20020a170903120700b001dd02e6b951mr3625855plh.12.1711117937731;
-        Fri, 22 Mar 2024 07:32:17 -0700 (PDT)
-Received: from thinkpad ([103.28.246.103])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170902650f00b001dd7a97a266sm1987075plk.282.2024.03.22.07.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Mar 2024 07:32:17 -0700 (PDT)
-Date: Fri, 22 Mar 2024 20:02:11 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>,
-	Zhang Jianhua <chris.zjh@huawei.com>, dmaengine@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] dmaengine: owl: fix register access functions
-Message-ID: <20240322143211.GA3333@thinkpad>
-References: <20240322132116.906475-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kM/Mma5t";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZEqFDuPW"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id CA69732000CC;
+	Fri, 22 Mar 2024 16:24:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 22 Mar 2024 16:24:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1711139078; x=1711225478; bh=v/zZxMEUwy
+	rsOu50oZW1RGy+/TjNPs8E2T2TvPN/4J4=; b=kM/Mma5taCEDtcFsIAKJ/4bAcV
+	8csomuDgZ/yXneFO//9V/Ul8XlY0Tg5NLKjpkVe4UjrbfUvt52G6qUu4LIsCX5oa
+	7U6y8K9eGoCTq1Y93ULqrt96Yrnr0XIbL4tVPN4CIXxZw78A2KYyuRKxb3n7MSqK
+	Xdkv+rwKuvgQh+nuXX0nKrfeEt392iw+sPOuXPA+KQs5D0JHLq6pqUQnXLXZ/Pp1
+	KfvXbHBoGgBtoD1S7RKrb9r8aXkHPQqdsQlAuZz3Ynsw5xlZVUUOiAlso1PZmxWT
+	fwew/FTqYbDBAmz6hwf8s/8wXvFE5Qc2LH8+n3pvBNopWG67JAvYXFHheeLQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1711139078; x=1711225478; bh=v/zZxMEUwyrsOu50oZW1RGy+/TjN
+	Ps8E2T2TvPN/4J4=; b=ZEqFDuPWXya0h9zVZrULnxwUduLk1b1Qmzy513+P3YBc
+	u54DZDez4AYp0gY6Fic83TtGzegqn+2SXJqiWMknWD9/pRB/f6vvpW1eVcuGvN/t
+	q1M0iuDfMDzWsmUWuLwTFpOxvNsm6M/dOygrMn/ALn9ifeyN6QpznZ5gXnM0Tk9u
+	X+rVmGTuIV0OD2NP7uQ3l366kO/osRgQsPu6Kc55focmKsfKv8afVPnqLutai5gX
+	yeUq081AQTdrl5GKLnO1/pwiuhDDN6IkXwjUI/kr4+lnyysbsa4PIXYxf52KsGIJ
+	khoGrYmuPvCwMwqltpWj2gY0gzE2TVVWNPQaH5LyHA==
+X-ME-Sender: <xms:Ben9ZaKQ8RKa-cyjhQ5WBzKAqA0HzQLdmh2pWGHC5HZSfTiPC5myAg>
+    <xme:Ben9ZSI9GjJS9WoBW3Y4aqD9Kb1n8V_0oggHhutp5oqr34uV8dVC4qwDoId0tBaud
+    Otfa46tg7F-T3SOG8o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddtvddgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Ben9Zavr0LbgFgqow4rwvEpoh68ikn2AQGu0i33BYyA2zhQnfzx-wQ>
+    <xmx:Ben9ZfZlN1uh0G5i0nlIVxxJNLivXNMJOPoNamxiMyjPJQyDkTXzgg>
+    <xmx:Ben9ZRYyPSuXjZiPRBHryv62QeMpaHzJrTMtGdXCkpmrERi9Awfi3Q>
+    <xmx:Ben9ZbCzPCX7E43sLRvVh_VpdJPl213YS8a8Uia44SF2TxwLI4MPAw>
+    <xmx:Bun9ZVrQz6bwZlrVA9Ej5knBJLz21Rdcu5IflN_yY3GU4-O-DaghBg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 520FDB6008D; Fri, 22 Mar 2024 16:24:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-332-gdeb4194079-fm-20240319.002-gdeb41940
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240322132116.906475-1-arnd@kernel.org>
+Message-Id: <7f854130-e92f-488f-9c56-a65f86b95567@app.fastmail.com>
+In-Reply-To: <87f6365f-a40e-4606-baff-170cb8fc48f3@infradead.org>
+References: <20240320180333.151043-1-arnd@kernel.org>
+ <CAMuHMdW41e+DSBKBgugTkjoLy6bXfji-KWmB_d9EstEv01eC6w@mail.gmail.com>
+ <87f6365f-a40e-4606-baff-170cb8fc48f3@infradead.org>
+Date: Fri, 22 Mar 2024 21:24:13 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Geoff Levand" <geoff@infradead.org>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: llvm@lists.linux.dev, "Kevin Hao" <haokexin@gmail.com>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+ "Bill Wendling" <morbo@google.com>
+Subject: Re: [PATCH] powerpc: ps3: mark ps3_notification_device static for stack usage
+Content-Type: text/plain
 
-On Fri, Mar 22, 2024 at 02:21:07PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When building with 'make W=1', clang notices that the computed register
-> values are never actually written back but instead the wrong variable
-> is set:
-> 
-> drivers/dma/owl-dma.c:244:6: error: variable 'regval' set but not used [-Werror,-Wunused-but-set-variable]
->   244 |         u32 regval;
->       |             ^
-> drivers/dma/owl-dma.c:268:6: error: variable 'regval' set but not used [-Werror,-Wunused-but-set-variable]
->   268 |         u32 regval;
->       |             ^
-> 
-> Change these to what was most likely intended.
-> 
+On Fri, Mar 22, 2024, at 09:34, Geoff Levand wrote:
+> On 3/21/24 17:32, Geert Uytterhoeven wrote:
+>> --- a/arch/powerpc/platforms/ps3/device-init.c
+>>> +++ b/arch/powerpc/platforms/ps3/device-init.c
+>>> @@ -770,7 +770,7 @@ static struct task_struct *probe_task;
+>>>
+>>>  static int ps3_probe_thread(void *data)
+>>>  {
+>>> -       struct ps3_notification_device dev;
+>>> +       static struct ps3_notification_device dev;
+>>>         int res;
+>>>         unsigned int irq;
+>>>         u64 lpar;
+>> 
+>> Making it static increases kernel size for everyone.  So I'd rather
+>> allocate it dynamically. The thread already allocates a buffer, which
+>> can be replaced at no cost by allocating a structure containing both
+>> the ps3_notification_device and the buffer.
 
-Wow... Thanks for spotting. Well thanks to Clang also ;)
+I didn't think it mattered much, given that you would rarely
+have a kernel with PS3 support along with other platforms.
 
-> Fixes: 47e20577c24d ("dmaengine: Add Actions Semi Owl family S900 DMA driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+I suppose it does increase the size for a PS3-only kernel
+as well, while your version makes it smaller.
 
-Cc: stable@vger.kernel.org # 4.19
+> Here's what I came up with.  It builds for me without warnings.
+> I haven't tested it yet.  A review would be appreciated.
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+It seems a little complicated but looks all correct to
+me and reduces both stack and .data size, so
 
-- Mani
-
-> ---
->  drivers/dma/owl-dma.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dma/owl-dma.c b/drivers/dma/owl-dma.c
-> index 4e76c4ec2d39..e001f4f7aa64 100644
-> --- a/drivers/dma/owl-dma.c
-> +++ b/drivers/dma/owl-dma.c
-> @@ -250,7 +250,7 @@ static void pchan_update(struct owl_dma_pchan *pchan, u32 reg,
->  	else
->  		regval &= ~val;
->  
-> -	writel(val, pchan->base + reg);
-> +	writel(regval, pchan->base + reg);
->  }
->  
->  static void pchan_writel(struct owl_dma_pchan *pchan, u32 reg, u32 data)
-> @@ -274,7 +274,7 @@ static void dma_update(struct owl_dma *od, u32 reg, u32 val, bool state)
->  	else
->  		regval &= ~val;
->  
-> -	writel(val, od->base + reg);
-> +	writel(regval, od->base + reg);
->  }
->  
->  static void dma_writel(struct owl_dma *od, u32 reg, u32 data)
-> -- 
-> 2.39.2
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Acked-by: Arnd Bergmann <arnd@arndb.de>
