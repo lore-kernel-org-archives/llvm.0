@@ -1,89 +1,76 @@
-Received: from wflow3-smtp.messagingengine.com (wflow3-smtp.messagingengine.com [64.147.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16AE482D1
-	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 13:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D3F482F6
+	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 14:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711114779; cv=none; b=SRqolVK7RuhQp2fBrFid2pHNPqhDKRbDnqrs1IP3bYH7lZ8MIzTqUsCQOhSiGSIgpgMgqCYgk3VzYJrQr/2t1EyeOYYJYBPM70QIaiT44t4qUAKwezfY1NOIoT0lO/CcTjv/OD6AlXBBTpyCY2D5s5WoZ3n0++e5lAnjTqG+wjE=
+	t=1711117940; cv=none; b=Vn2jWkZHyNEKTopzzlw1vyp8JwNXLdZSFQ2PBsMKa5eCsrYR19Z0gKfNROr8hK8dLAFDgDgyHfjVEzCb1OOByio2upH3jDkth2S9ClGiBJpxO9jq9MFe+cKZft4FkqlV+yzgk65M4V1+CqsBN0eXOJNpptAtzV+5OLeOLvDGHmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711114779; c=relaxed/simple;
-	bh=WTmXfI0M08pmpvv63nQvhaH1TNGPWtey9xubpmGccnc=;
+	s=arc-20240116; t=1711117940; c=relaxed/simple;
+	bh=69ZdVrReaf8DDgejMv4nU6fGqoatnYxGMkDl317L/q0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KhnOjW1ku34BVD/41E1OFDGAyIuq4aWyIxx5T/+XEn+nJkEiRXH+8bKoHp3diwxF/pWHZSeYOUktpw6Qfo876/GbAZ846C2B97yOoe7tG660VXLHWvqNUWRk8CE00a889QtQeWpwSEYaZ2YVsfTdxzIneX+FlxYSlfIwt1ZIpeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=k0ncReND; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DlJ/kagk; arc=none smtp.client-ip=64.147.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+	 Content-Type:Content-Disposition:In-Reply-To; b=s6ekWneOo2tLH+d6qhME53L7zdSijLGKmZY8YJP5XskjmlW6bRtOvPJ5FGU0jjJMue7OIa7SxwSzOv/cnjZoAqqw0pUpRHTRZVsgDArQ41guaN2U9N75vHJZ380gWaabPI52vYUDwD93IR4f7JHRyplqxzHLavzw0D+gQz1AEGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tdJqvvSx; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="k0ncReND";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DlJ/kagk"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailflow.west.internal (Postfix) with ESMTP id 8C2972CC00C8;
-	Fri, 22 Mar 2024 09:39:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 22 Mar 2024 09:39:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1711114773;
-	 x=1711118373; bh=XsXGuptKt13EJ/gv1xo+2KCLb6yaD1Leqmnh5HvA8so=; b=
-	k0ncReNDYOXBstPpIoz6beSva/3UwX13jbsVhdTSKIA1834wcDuyyKKFxF6AZzKJ
-	pHwpZ+tChYC9eaQaN2BhIV9DmbMNMD7+Aiob0H/LiJt5g+g1n1NdMqa1Eqv4rP5q
-	sfeqG/XsK1vAEJZ6gyuob297taaB7D1pDzh2tm6BC8dfeE8R+CcQWfiPn4O7TJb6
-	Tgnw53/v+CfN6vOSWbW1iMZLPweIk2/0qETiOYgueQY6OTADOkTl8tnQsJbjqs/p
-	0LWZC2ZSbc/Xte2kUcIir4GNMMM/MVk0D4jPRfK5XUtQ48R0GTdl4vBwnXQ1ln52
-	KrZwmZKj8/qkzB9CJdEYkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=i80c9496c.fm2; t=
-	1711114773; x=1711118373; bh=XsXGuptKt13EJ/gv1xo+2KCLb6yaD1Leqmn
-	h5HvA8so=; b=DlJ/kagkU1GsShBar6DPexYUIkGyob8Ht5T6E9Byo9h4iYGJQ3k
-	oFOEKSF8BEQn7j39eiX1K8XnbdcarP8SV4/Y6eIvMI0AICln3yQuUL2LMU9RQ8+I
-	T106wcfZ2bRnmhL2EO4gFU1QhkAxenIZp4vQl+PVqi+AYfH/JRKna20xih921kHI
-	JxTFNLFNn12AWPZvs07QAvX3W3aXw3peM8dzZHFXjB7OojPduGp4bUTpiEaYzAWu
-	tcn+/m5ty0nkUIkrq7KujkLzkd+4y4oosKxGJpDd2PurJGwUOYJb4BC4QQ4fERRo
-	zUxULPg6aVxcYIx2KcDmsglJBo3pxlb4uIw==
-X-ME-Sender: <xms:FIr9ZQ-7792OuQbiHP19zmLlzNhuO3Rb-5OBm5LcZLxM_cGLm4U90A>
-    <xme:FIr9ZYs77JwI57KUI3FoUwz6bBIW4vJvNYTveZOcSG4MM-mjstQ2g8x9HBiW5b09O
-    LJrOYfHJAR3B-SECZs>
-X-ME-Received: <xmr:FIr9ZWCUmHPvEA1o75nsLtxYr7ZYsK8i6K44f5jgaI5noQ8ujDTLsDWly4Q9WxCEfi9p3KIwqyInaU_qKSeZedQAJdzJWNo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddttddghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefpihhk
-    lhgrshcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugesrhgrgh
-    hnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeevteegtddvvdfhtdekgefhfeef
-    heetheekkeegfeejudeiudeuleegtdehkeekteenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhluhhnugesrhgr
-    ghhnrghtvggthhdrshgv
-X-ME-Proxy: <xmx:FIr9ZQfZqJoZ5ZaenkF5_H_6Xor2JNsdHOIARLfqu3UGfxA6-LSIzQ>
-    <xmx:FIr9ZVN2mO0I5b3FO1C99rwa_I0nXa6NlsPqGR8Ck5a26IPJ_tPH3A>
-    <xmx:FIr9ZamPo7PStVoFTVbxnjS5qQgM7Bv3eIhEXowe52bo5OpejOmWgQ>
-    <xmx:FIr9ZXuSH-A5s_f7mStL7bJ-CbEngTq2ZolTKNaWd0pv8aO_FGFxDw>
-    <xmx:FIr9ZbvNzgkVq4FvqEPH9NGAkCI-N5JecqUJlCo-URnQo3SkmBEF35Iu53Lewatt>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Mar 2024 09:39:31 -0400 (EDT)
-Date: Fri, 22 Mar 2024 14:39:27 +0100
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tdJqvvSx"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1df01161b39so16402105ad.3
+        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 07:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711117938; x=1711722738; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bsQoTDol9HPR9N3ln/StyK4/449TM2DZcvuKewqwWVs=;
+        b=tdJqvvSxHufhXo8Zlk8HBKbeezJ3upUZnxBg3muuyQVWRyo84WgPgomMjed/NGCn8Q
+         CwKqQu88YqCQ+bwv28BHCUGUFgHS4NvmvOOAg6LGdorxxJy1oCJnuoMfT70FIYjouMAX
+         pFFUCFS46fhWn7kj95gv3UZcp5wrxZD43+EigOyxhaJg6rdiy9q/znAuTUg0ejtkd+eD
+         vo1c3e6cSa+t5tmRouIZWIFQlYcRwT0+33pv1Oxw7TMgzx/qajY7h4RKDBJO8f64/+0E
+         uW6v3xplyt2J1vDoq5ZOMfIEDQ4mNsLn4p9opYvdhkCcX7wCgwc1nB/tI1fABFUA2d5D
+         GUfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711117938; x=1711722738;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bsQoTDol9HPR9N3ln/StyK4/449TM2DZcvuKewqwWVs=;
+        b=MyXDRSrUPGxfWSI+QurvUjiIvSYtnW3YnzGtgLvC7BguNZMax4ev1syCuumVWEbO86
+         +xvG/UpdBPV7R9vjf2XBpLWBf47DM8z7pzln2JDAxrHRCQLcN4uQtNEUWHokOoATh0YI
+         xDDmtrGoDSgAWVWCYFt4gBVlOJ9H9qheMKnv/d4tcfzfYY1JQlfdQ3yxCUNVNRQIAp0B
+         OjR+P96h3zFzJNohEBeMpx747WTSYrZfl2pFSa8XXBObb1nOy/1X5v7F9dHioFkbZt1b
+         ySK8yAERzLWo10UhMOfVo6xCdEFbevjHUpF81tREQ46q9ouDDZRVH9mPqynqBBVDTF80
+         dnCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUEmYwfjFjuNI7YaoKCsJojkCF+s5ygZ6n0sa+5RcZj2D+IIjA6Rlv7clPL5HKV+gVqc9CpQTaFPdGp4GtZYXtFO/0YKA==
+X-Gm-Message-State: AOJu0YwAPDvd1zqT23ZHMOjaHNu125gF10EI3HndI6xGD6dUoxnOaPAD
+	y8EMyCAg8H5ZFTcHSZAA/FQjtOwRxsPhur1gRfSOF43kbQcfc1Iq7gMT0D2qTw==
+X-Google-Smtp-Source: AGHT+IGjsRnNYOq/KugmVVWK06RZmJQVOgzrvCR0cZJUdpBKhV8wEEXZP7kz9AS2YSen6KzO7otn8Q==
+X-Received: by 2002:a17:903:1207:b0:1dd:2e6:b951 with SMTP id l7-20020a170903120700b001dd02e6b951mr3625855plh.12.1711117937731;
+        Fri, 22 Mar 2024 07:32:17 -0700 (PDT)
+Received: from thinkpad ([103.28.246.103])
+        by smtp.gmail.com with ESMTPSA id b15-20020a170902650f00b001dd7a97a266sm1987075plk.282.2024.03.22.07.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Mar 2024 07:32:17 -0700 (PDT)
+Date: Fri, 22 Mar 2024 20:02:11 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To: Arnd Bergmann <arnd@kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Jacopo Mondi <jacopo+renesas@jmondi.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-media@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Justin Stitt <justinstitt@google.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>,
+	Zhang Jianhua <chris.zjh@huawei.com>, dmaengine@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH] media: rcar-vin: work around -Wenum-compare-conditional
- warning
-Message-ID: <20240322133927.GG3438308@ragnatech.se>
-References: <20240322133353.908957-1-arnd@kernel.org>
+Subject: Re: [PATCH] dmaengine: owl: fix register access functions
+Message-ID: <20240322143211.GA3333@thinkpad>
+References: <20240322132116.906475-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -93,55 +80,65 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240322133353.908957-1-arnd@kernel.org>
+In-Reply-To: <20240322132116.906475-1-arnd@kernel.org>
 
-Hi Arnd,
-
-Thanks for your work.
-
-On 2024-03-22 14:33:46 +0100, Arnd Bergmann wrote:
+On Fri, Mar 22, 2024 at 02:21:07PM +0100, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> clang-19 warns about mixing two enum types here:
+> When building with 'make W=1', clang notices that the computed register
+> values are never actually written back but instead the wrong variable
+> is set:
 > 
-> drivers/media/platform/renesas/rcar-vin/rcar-vin.h:296:12: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
-> drivers/media/platform/renesas/rcar-vin/rcar-core.c:216:18: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
-> drivers/media/platform/renesas/rcar-vin/rcar-vin.h:296:12: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
-> drivers/media/platform/renesas/rcar-vin/rcar-vin.h:296:12: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
+> drivers/dma/owl-dma.c:244:6: error: variable 'regval' set but not used [-Werror,-Wunused-but-set-variable]
+>   244 |         u32 regval;
+>       |             ^
+> drivers/dma/owl-dma.c:268:6: error: variable 'regval' set but not used [-Werror,-Wunused-but-set-variable]
+>   268 |         u32 regval;
+>       |             ^
 > 
-> This one is intentional, and there is already a cast to work around another
-> warning, so address this by adding another cast.
+> Change these to what was most likely intended.
 > 
-> Fixes: 406bb586dec0 ("media: rcar-vin: Add r8a779a0 support")
+
+Wow... Thanks for spotting. Well thanks to Clang also ;)
+
+> Fixes: 47e20577c24d ("dmaengine: Add Actions Semi Owl family S900 DMA driver")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Cc: stable@vger.kernel.org # 4.19
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+- Mani
 
 > ---
-> There are only a couple of -Wenum-compare-conditional warnings in the tree,
-> so it seems best to just address them all instead of turning off the warning
-> globally.
-> ---
->  drivers/media/platform/renesas/rcar-vin/rcar-vin.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/dma/owl-dma.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-vin.h b/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-> index 792336dada44..997a66318a29 100644
-> --- a/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-> +++ b/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-> @@ -59,7 +59,7 @@ enum rvin_isp_id {
+> diff --git a/drivers/dma/owl-dma.c b/drivers/dma/owl-dma.c
+> index 4e76c4ec2d39..e001f4f7aa64 100644
+> --- a/drivers/dma/owl-dma.c
+> +++ b/drivers/dma/owl-dma.c
+> @@ -250,7 +250,7 @@ static void pchan_update(struct owl_dma_pchan *pchan, u32 reg,
+>  	else
+>  		regval &= ~val;
 >  
->  #define RVIN_REMOTES_MAX \
->  	(((unsigned int)RVIN_CSI_MAX) > ((unsigned int)RVIN_ISP_MAX) ? \
-> -	 RVIN_CSI_MAX : RVIN_ISP_MAX)
-> +	 (unsigned int)RVIN_CSI_MAX : (unsigned int)RVIN_ISP_MAX)
+> -	writel(val, pchan->base + reg);
+> +	writel(regval, pchan->base + reg);
+>  }
 >  
->  /**
->   * enum rvin_dma_state - DMA states
+>  static void pchan_writel(struct owl_dma_pchan *pchan, u32 reg, u32 data)
+> @@ -274,7 +274,7 @@ static void dma_update(struct owl_dma *od, u32 reg, u32 val, bool state)
+>  	else
+>  		regval &= ~val;
+>  
+> -	writel(val, od->base + reg);
+> +	writel(regval, od->base + reg);
+>  }
+>  
+>  static void dma_writel(struct owl_dma *od, u32 reg, u32 data)
 > -- 
 > 2.39.2
 > 
 
 -- 
-Kind Regards,
-Niklas Söderlund
+மணிவண்ணன் சதாசிவம்
