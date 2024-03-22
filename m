@@ -1,91 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEBE4644E;
-	Fri, 22 Mar 2024 13:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C173C45C04
+	for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 13:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711114440; cv=none; b=UPyGjtWuQ5+GPy4O14qjprV1GEIrHJNDAAq9tETjj0ZCg4ZTku2eGi3PUNuV3182hN/YLUar6oRIvkntNHnX6WPMOGB9ZN12zS20YBD0o6o1g3NyqFT5GrtPdyiztbxRQn9RxFdfCabCfq74mnYoSvSAddp2dvW6vijf+f3VtCM=
+	t=1711114604; cv=none; b=XjTQeKKezIFh7+9VdIOZMLgWOAE0vTTFOEECquUDoXwA3JYFr2NnKJcsiBhTNcDbSXN7mwj1qCEW2dzEGOFJC9yrw4wWZofKHOCIYaeAk4PTzdilNCWWrB/xIpxypcI4gHqS5KaUqmpWMkmLfps0R3TWKzK66raWk4nKghlipi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711114440; c=relaxed/simple;
-	bh=yE5wBVMHogIzvyyzaRHBTaXQJOP4Z2kLr8QtkZBlMWw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aurM9xdxTg5wYWhJed07z4F89SE+Qxx/D9teTEqbdHScneKLRFpUJsu8gpQRN6BBPonzdkqbOiz6VO5uBwlFXXb+bAi/tSL3nbFjRAH9PxACMFDwJBFzeY4s4Jb4JgGsSz/AqJ2rh7hB2rQ2joBXW36zy8a2/ypuHxG125XhIkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pQsu4f6/; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pQsu4f6/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10874C433F1;
-	Fri, 22 Mar 2024 13:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711114439;
-	bh=yE5wBVMHogIzvyyzaRHBTaXQJOP4Z2kLr8QtkZBlMWw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pQsu4f6/TGxgJUdcMFkAxMPrajaxaOyOog13LeTSk3cPTVDLMGblTTiDM/5+IUV6S
-	 KP3VzkDWC4PmSLknOWUl7P4JNkTZol4Z5InmQ2mTE/gkNkzrbOy6tsmWkg9Dn00okJ
-	 k1ZqcXjqBInIYf28SnleEBL2bnDYu/BIPMkB0GQjQbX93SH2iW1KCiOjTp4wS0beY1
-	 TiJFn3cMN+oZpbHkchAWoyGp4+iPvZpJiBY+iWXKiAjjqQIyU/67wgQx6FtZtfe8MA
-	 uZJ75XKEZOP9qOflsl2Uvti+1B17LZH1KaAucQi3VPYjkvtZte9gElSWq8eEUnGqGk
-	 3195zj7iZOAoQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jacopo Mondi <jacopo+renesas@jmondi.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-media@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] media: rcar-vin: work around -Wenum-compare-conditional warning
-Date: Fri, 22 Mar 2024 14:33:46 +0100
-Message-Id: <20240322133353.908957-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1711114604; c=relaxed/simple;
+	bh=qn+E2wYjJfNHPhIQlSnI5xtESAViWEOYAofY4YkCvnQ=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=LtWWetCsyrbCUq+i6dKgGLaRSlcV/oyQZ3fIugmYgPVu7ITQotWeBMaLOH9ca3sNOTCPjGw0sVpzTyAZjE/UfD17L3mx10JRDeWrk2tsUYJDeLRackpa3VFn3CrVth+nVpxynBdNSPK52TCtuIoVNAspkEuTWuAUdrZXG4DYqAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C978C1C0005;
+	Fri, 22 Mar 2024 13:36:29 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+	(envelope-from <peter@korsgaard.com>)
+	id 1rnf4P-005ytU-0d;
+	Fri, 22 Mar 2024 14:36:29 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>,  Andreas =?utf-8?Q?F=C3=A4rber?=
+ <afaerber@suse.de>,
+  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,  Nathan
+ Chancellor <nathan@kernel.org>,  Arnd Bergmann <arnd@arndb.de>,  Nick
+ Desaulniers <ndesaulniers@google.com>,  Bill Wendling <morbo@google.com>,
+  Justin Stitt <justinstitt@google.com>,  Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
+ <u.kleine-koenig@pengutronix.de>,  Randy Dunlap <rdunlap@infradead.org>,
+  Rob Herring <robh@kernel.org>,  Zhang Jianhua <chris.zjh@huawei.com>,
+  dmaengine@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+  linux-actions@lists.infradead.org,  linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev
+Subject: Re: [PATCH] dmaengine: owl: fix register access functions
+References: <20240322132116.906475-1-arnd@kernel.org>
+Date: Fri, 22 Mar 2024 14:36:29 +0100
+In-Reply-To: <20240322132116.906475-1-arnd@kernel.org> (Arnd Bergmann's
+	message of "Fri, 22 Mar 2024 14:21:07 +0100")
+Message-ID: <87o7b62xsy.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-GND-Sasl: peter@korsgaard.com
 
-From: Arnd Bergmann <arnd@arndb.de>
+>>>>> "Arnd" == Arnd Bergmann <arnd@kernel.org> writes:
 
-clang-19 warns about mixing two enum types here:
+ > From: Arnd Bergmann <arnd@arndb.de>
+ > When building with 'make W=1', clang notices that the computed register
+ > values are never actually written back but instead the wrong variable
+ > is set:
 
-drivers/media/platform/renesas/rcar-vin/rcar-vin.h:296:12: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
-drivers/media/platform/renesas/rcar-vin/rcar-core.c:216:18: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
-drivers/media/platform/renesas/rcar-vin/rcar-vin.h:296:12: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
-drivers/media/platform/renesas/rcar-vin/rcar-vin.h:296:12: error: conditional expression between different enumeration types ('enum rvin_csi_id' and 'enum rvin_isp_id') [-Werror,-Wenum-compare-conditional]
+ > drivers/dma/owl-dma.c:244:6: error: variable 'regval' set but not used [-Werror,-Wunused-but-set-variable]
+ >   244 |         u32 regval;
+ >       |             ^
+ > drivers/dma/owl-dma.c:268:6: error: variable 'regval' set but not used [-Werror,-Wunused-but-set-variable]
+ >   268 |         u32 regval;
+ >       |             ^
 
-This one is intentional, and there is already a cast to work around another
-warning, so address this by adding another cast.
+ > Change these to what was most likely intended.
 
-Fixes: 406bb586dec0 ("media: rcar-vin: Add r8a779a0 support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-There are only a couple of -Wenum-compare-conditional warnings in the tree,
-so it seems best to just address them all instead of turning off the warning
-globally.
----
- drivers/media/platform/renesas/rcar-vin/rcar-vin.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fixes: 47e20577c24d ("dmaengine: Add Actions Semi Owl family S900 DMA driver")
+ > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-vin.h b/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-index 792336dada44..997a66318a29 100644
---- a/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-+++ b/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-@@ -59,7 +59,7 @@ enum rvin_isp_id {
- 
- #define RVIN_REMOTES_MAX \
- 	(((unsigned int)RVIN_CSI_MAX) > ((unsigned int)RVIN_ISP_MAX) ? \
--	 RVIN_CSI_MAX : RVIN_ISP_MAX)
-+	 (unsigned int)RVIN_CSI_MAX : (unsigned int)RVIN_ISP_MAX)
- 
- /**
-  * enum rvin_dma_state - DMA states
+Good catch!
+
+Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
+
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
