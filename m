@@ -1,121 +1,55 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4E01E524
-	for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 14:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDEB1E522;
+	Sat, 23 Mar 2024 16:02:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711205720; cv=none; b=UQORYxh3l3YjaSRXLtVkJxP226Zk6Xjv+TciBWzv9SZ2Tn17ZcydMjp3NKbDEuDCmTFGvhTvOQ7HZWR5MVluv7OplpvF3M5dpdJf05+OoxdSlNS70ohYthnfZJKFOpHdtdEXuw/JyPIu0LvhUtbjNXs2/lMUVREOUAAw4Z+a7Pc=
+	t=1711209726; cv=none; b=DiWWtLiix2uaEyRPGGQF8nNl1w1eELOiFUC7iOfyO6LDBi+41U0lpR6VhYsCOZwCaBSrfHX4jyBLdBekKoP6eIFTRzRQlPeBqBtH87uLpYLR05leOqh8togA/dVURKVogAJZQkVpKdXbF6Sp0i7wXc1xC7apb4X3BwYTPQ1BpPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711205720; c=relaxed/simple;
-	bh=fQ82XO62lP17bp9mjIw1zlMFrpZjOT2ZJn2+KAtC9V0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cvgjGeuJfc3GrKnomKTHgYZjyyKZpja9fmES86sqeIgXVeF+NMoF/veqbM7IYO0C9wt/fUMu8LRlGacQEZWy7de1/BkG30Oe3oS/awoc/jDbePM0sStHUeHQ8gGdDCKDvswmV9Xl8NmPlje2Vo7Vq6meLwt/ySZDb17xVOOHMQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jugpfLi6; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711209726; c=relaxed/simple;
+	bh=iQcR/mhUY+V+ZFJXtvSOd7ReOc7NZrDpvtrRu1CoRyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UUSismV6Mx0DH/geDUpDp8OWHXAJDEOJGLNmnwSucLvfIxz6TCrfcwbf2f4KoBLl5V0JzGSK+3/4WR4jDQ2LGLSYShJLR00ib4dypYmdPFcPwShDfWXSomjv2mHEX5NcZJOFMHYBuVg72+qMmJvxtkktaWpe7mCzJpxDHF9SWG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y5Nkf5Cu; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jugpfLi6"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-430ccb3d65eso22748071cf.2
-        for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 07:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711205718; x=1711810518; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VRfoDMeQr45A3YPnCIYGOXROndTyGMuSPLDLPYakgoQ=;
-        b=jugpfLi6v4PyJbRmnKAdze/sjkpUlIYPCZrkMwCMzIGCR0guSE5hg3YGzwxwF+Z3kh
-         gZstwiMGocRRhJSUhee1H1S8Cbc3GWFujuDOMyWQnTbn39nRcaTyZgyuKn2BRs5pJE5y
-         cQw0wmk3YBzfcc0G1UeLgK7mlqzOy1q/K2NjHMJyb3cluI+UXsLzEy5x1u1ZO68e/EBm
-         PJL0/UO6zXByijuVdk+vyTbRy9JKDqhJxg9HRGz9QW8AT7p6zFORNXhzT7V12e3+cI54
-         0mrCMan7CMjRfvn1GaZz2W1NDOn4ML+BaIf4Orun0NwxmBiGe0vHFGchZxH+4CuPK+M/
-         Okiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711205718; x=1711810518;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VRfoDMeQr45A3YPnCIYGOXROndTyGMuSPLDLPYakgoQ=;
-        b=qZvqSKuUAWd7LRPTj3pm5PQonxvvdZDo8aCe+uWK+LXHiY7dwh/9k0jsAPgISFLaRW
-         39Wk0zkVWlE9aXLvcvfbY70KTarG6IGFfirzIo6qTZH90vBGl2GMsvPz64+XL4ZzUf/y
-         sLODWCLMYnUwaLIOA4AlmwU+5yFtGQY8+i4Z+campJQAO67YDGnX0XPnjat6v08gp9W5
-         ANFfxEUalQLqUfJDIY7mtz9ewmHzWQmLpyHLAhuIdg5v6IenGsjCo9oZ8LzF/8pdm1LD
-         UlTTQIIXYFZ67emGJkkjtpa5x0/0jWZXKp0/S5zqbliFRM7+rh9p7ohSxOXzG/Y095nr
-         6DiA==
-X-Forwarded-Encrypted: i=1; AJvYcCXbQUBL8Rhr5rOZpDE9KJONYppyR/53xwc5zc7k2OZkMdSycqsZhcHSdnFYzkzXhyTnMUmiX2fCHeY/PzkvNALYNvT1RA==
-X-Gm-Message-State: AOJu0Yz0coNBMmGHtIDggTbgKTYlx0wpn0ioqzWVOXlb24JTNrlQqyQ/
-	5yvcZY+GRPnTG/1ogt2SZyoP4gAQlYSKzzzhbTHOY4IovAd1LC6S
-X-Google-Smtp-Source: AGHT+IGOG5dTcaGFgWmVDZ1YjnIERFJGHFMnBnYOLUtIpJuvddeQMaprbzxm238UN7Y+D20JT0d1mw==
-X-Received: by 2002:a05:622a:1994:b0:431:3e65:3bd7 with SMTP id u20-20020a05622a199400b004313e653bd7mr2246075qtc.47.1711205717718;
-        Sat, 23 Mar 2024 07:55:17 -0700 (PDT)
-Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id r12-20020ac85e8c000000b00431236d1f56sm843488qtx.30.2024.03.23.07.55.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Mar 2024 07:55:17 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 551D41200032;
-	Sat, 23 Mar 2024 10:55:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 23 Mar 2024 10:55:16 -0400
-X-ME-Sender: <xms:Uu3-ZWTnCgmgIZMdOTBhp5Kw_GW8ZOrCASNQClDWdq_4dmRFtAnNgg>
-    <xme:Uu3-Zbx5rvUMmb3ZR_KNHiiYxy7hVUfH9BC3xFn7Gx9diFgdaarGEU5vrqvPZLENT
-    FwUVAROW44PCKVr5w>
-X-ME-Received: <xmr:Uu3-ZT0VWZUyTxAueX72iear-kEzjXl0DFrlqO991Mj-Dp0HSHOgj8UsLQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddtgedgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:Uu3-ZSBFIl-Mua8RJfYfx8US77VUGmTD1O-Mi-Uv5c9VekbR35s0qg>
-    <xmx:Uu3-ZfjydQF5XTgcPRaKdIuYKCBIpLaBSd18yMeeGF2eqxK48IQGbA>
-    <xmx:Uu3-ZerfCSVGnuP_IwjWyKOMYOwNSOrJGPjJl2-ZW7zArXVlf2Qjxw>
-    <xmx:Uu3-ZSgktm6VvoxNqFw-GhRG1fYIdaA1GTo9whVOjoHfy8MkoPS_pg>
-    <xmx:VO3-ZSNpnlFWpI2U9r5CRe8fV0ciE4clLZRmTUo6fk8wWASIBnULgZEl_vLjtU1d>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 23 Mar 2024 10:55:13 -0400 (EDT)
-Date: Sat, 23 Mar 2024 07:55:12 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-Message-ID: <Zf7tUL52AuutOSvL@Boquns-Mac-mini.home>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <Zf4fDJNBeRN5HOYo@boqun-archlinux>
- <03f629b6-1e4e-4689-9b69-db0b75577822@lunn.ch>
- <Zf7qGONJY33KdLCH@Boquns-Mac-mini.home>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y5Nkf5Cu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711209725; x=1742745725;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iQcR/mhUY+V+ZFJXtvSOd7ReOc7NZrDpvtrRu1CoRyc=;
+  b=Y5Nkf5Cusxjk69rR6s3dI25XScvkwqRBq8l0DLmS+/PBcapLyRbYERKW
+   AbFA3lbNvy/CsOP3DvhFX5te7ZgwreVQRFlwainiucrWdOi83D0b/eFh1
+   yL662ppiCzKc8ITJ+5ek5Ce17YBwMixFtdgi02f7yLVF0uMnYiBsBVib0
+   uSvgAmkdcyT9dW5924UTOlt1UpXERcgXs7nC50FytF/9Vuzi8h8nsNRze
+   2U2svDEK40OFp9GwKhdB/uH69pjrcGl9hw5zaniiVYI7XfOf5DOophmQA
+   aad/al9nPm5Kuzd2242Ao9JbyIf9C7DEs3LJO9ODFcqc1goQCup4P2PA4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11022"; a="6364990"
+X-IronPort-AV: E=Sophos;i="6.07,149,1708416000"; 
+   d="scan'208";a="6364990"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2024 09:02:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,149,1708416000"; 
+   d="scan'208";a="46190937"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 23 Mar 2024 09:02:03 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ro3om-000LH7-2Z;
+	Sat, 23 Mar 2024 16:02:00 +0000
+Date: Sun, 24 Mar 2024 00:01:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, zx2c4@kernel.org
+Subject: [crng-random:master 1/2] arch/x86/include/asm/archrandom.h:25:2:
+ error: call to undeclared function 'WARN_ON'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202403232301.ypsXWiIy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -124,77 +58,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zf7qGONJY33KdLCH@Boquns-Mac-mini.home>
 
-On Sat, Mar 23, 2024 at 07:41:28AM -0700, Boqun Feng wrote:
-> On Sat, Mar 23, 2024 at 03:29:11PM +0100, Andrew Lunn wrote:
-> > > There are also issues like where one Rust thread does a store(..,
-> > > RELEASE), and a C thread does a rcu_deference(), in practice, it
-> > > probably works but no one works out (and no one would work out) a model
-> > > to describe such an interaction.
-> > 
-> > Isn't that what Paul E. McKenney litmus tests are all about?
-> > 
-> 
-> Litmus tests (or herd, or any other memory model tools) works for either
-> LKMM or C++ memory model. But there is no model I'm aware of works for
-> the communication between two memory models. So for example:
-> 
-> 	Rust thread:
-> 
-> 	let mut foo: Box<Foo> = ...;
-> 	foo.a = 1;
-> 	let global_ptr: &AtomicPtr = ...;
-> 	global_ptr.store(foo.leak() as _, RELEASE);
-> 
-> 	
-> 	C thread:
-> 
-> 	rcu_read_lock();
-> 
-> 	foo = rcu_dereference(global_ptr);
-> 	if (foo) {
-> 		r1 = foo->a;
-> 	}
-> 	
-> 	rcu_read_unlock();
-> 
-> no tool or model yet to guarantee "r1" is 1, but yeah, in practice for
-> the case we care, it's probably guaranteed. But no tool or model means
-> challenging for code reasoning.
-> 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git master
+head:   6fba9af4a847c5ee67715bc6f7959e9ab6394275
+commit: c53d3006e1eda1e4fc2a0de9481331a23dbef5ef [1/2] x86/archrandom: WARN if RDRAND fails and don't retry
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240323/202403232301.ypsXWiIy-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240323/202403232301.ypsXWiIy-lkp@intel.com/reproduce)
 
-There are also cases where two similar APIs from C++ memory model and
-LKMM have different semantics, for example, a SeqCst atomic in C++
-memory model doesn't imply a full barrier, while a fully ordered LKMM
-atomic does:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403232301.ypsXWiIy-lkp@intel.com/
 
-	Rust:
+All errors (new ones prefixed by >>):
 
-	a.store(1, RELAXED);
-	x.fetch_add(1, SeqCst);
-	b.store(2, RELAXED);
+   In file included from arch/x86/kernel/cpu/rdrand.c:12:
+>> arch/x86/include/asm/archrandom.h:25:2: error: call to undeclared function 'WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      25 |         WARN_ON(!ok);
+         |         ^
+   1 error generated.
 
-	// ^ writes to a and b are not ordered.
 
-	C:
+vim +/WARN_ON +25 arch/x86/include/asm/archrandom.h
 
-	WRITE_ONCE(*a, 1);
-	atomic_fetch_add(x, 1);
-	WRITE_ONCE(*b, 2);
+    17	
+    18	static inline bool __must_check rdrand_long(unsigned long *v)
+    19	{
+    20		bool ok;
+    21		asm volatile("rdrand %[out]"
+    22			     CC_SET(c)
+    23			     : CC_OUT(c) (ok), [out] "=r" (*v));
+    24	#ifndef KASLR_COMPRESSED_BOOT
+  > 25		WARN_ON(!ok);
+    26	#endif
+    27		return ok;
+    28	}
+    29	
 
-	// ^ writes to a and b are ordered.
-
-So if you used to have two parts synchronizing each other with LKMM
-atomics, converting one side to Rust *and* using Rust atomics requires
-much caution.
-
-Regards,
-Boqun
-
-> Regards,
-> Boqun
-> 
-> > tools/memory-model/litmus-test
-> > 
-> > 	Andrew
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
