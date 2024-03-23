@@ -1,123 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5C5C129;
-	Sat, 23 Mar 2024 08:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9F01A38C9
+	for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 09:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711184217; cv=none; b=keTLOOn6aXwXemARfGGlnysMh4R9CFtwPBOHMhX2kUmEsDqYDoHV6pd0/quKm4o66mRro1ixpPE8uafF7EXmOyuV4ZJ+c1RA8wxAF/w7bDyqPDhBxm3BBEMvTdppDj4Y8xTcCB66amyEhS/OsjyMwlz7URDZd5Y6Wla+OYchVDg=
+	t=1711187910; cv=none; b=chltnmYl9DstBXQ7mDnaxbjt77y/djBbh/nR/MIWXjVDzeY9UJhgwRVepPRqVMtWYFT1yGGM2yVhvcXNHW2wxbnwMBlW3yfWE2mmDQeLnKCafu3uFnSHI2RSd0lpoQndJXz/V9DasTwgZEgLdVAhQS+YQ7Zik3nSIByU+Jn5StE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711184217; c=relaxed/simple;
-	bh=yghlkVlIZIPJklJIGF7udiZw66Cf95iANjgDkhz2KIE=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SKNh+Uq7qkwXwaldMkjI3uiGeyYH+CuUFa4qn4USFNKNocAwmp9NIvh/KLW3T0cjsn+c6WEem9EPzRcRWIBEt3pINgbz70VcGaL1yjLXfjh0w5sQlNGn+nVboqEm9XLvJCumKYYo5lMxM2bnzjeBF52V1vIB6E8HwzLdJZyto7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OpR1+M6s; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711187910; c=relaxed/simple;
+	bh=88XYaAUkw5+FIlN0k+w5zlI1HA5aU9i8sSo1I2tq1TI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HuBkk9s0Sv8IrUYxDYe1oRneitvT26jIv35xjg4kSWiaq548uZS7Sht6/WKm90iKPCQ6meLl1fKkYfpLjpcgFbNpDkFjUaIvjpQuhfXue8In5FREEEIVnkJcakJp36vEnLfiaRARK/CgG5U6QBrq95YKH6gyBuGDzircKa+FGgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SpQdXIYr; arc=none smtp.client-ip=209.85.222.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OpR1+M6s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711184215; x=1742720215;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=yghlkVlIZIPJklJIGF7udiZw66Cf95iANjgDkhz2KIE=;
-  b=OpR1+M6swQsyLcqvBx76AVHw6l5ZkwOeT4G095Hl55OSIJL6hj++41g8
-   Yh5+axJOFsLZxordo3y+CVTCVBpFSuiZPbVcWWnKf4LxjIWqgWyF5pCif
-   vVmkKAEfgmavC9w5p28NR4y1+Hb3B3E91Jgn5R0QK2iXuqEYt9Em5h9pW
-   fgo3vaydE9NmQnDRXbQxTbT1d3CGgxYnrLV9rUuDlYSqb/AunT5K7Osy+
-   NMBZGRUlGrK/XjCId6MorP1fa5fnXViRbC0VLsqwbnvM+7v/9GKRUIv/N
-   yrhCQ83st+nhWtAZzuydpvytR9mEom44jH25TdJ0fsvqHm5Y0RKg9yh3L
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11021"; a="10040461"
-X-IronPort-AV: E=Sophos;i="6.07,148,1708416000"; 
-   d="scan'208";a="10040461"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2024 01:56:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,148,1708416000"; 
-   d="scan'208";a="15235682"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 23 Mar 2024 01:56:52 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rnxBK-000L0R-2y;
-	Sat, 23 Mar 2024 08:56:50 +0000
-Date: Sat, 23 Mar 2024 16:56:45 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to
- !ENDBR: kprobe_emulate_jcc+0xe
-Message-ID: <202403231600.Vaj7L4lC-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SpQdXIYr"
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-7dfacd39b9eso2045473241.1
+        for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 02:58:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711187908; x=1711792708; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ByMFrWADWxfCqmgsuCZcbqeVUMaKvKom3ZFjR5jUOA4=;
+        b=SpQdXIYrW+ji9Z2eVvxXWGj+MJhAE7Lj36NqLX+dga4JZEohsxLD/OgPreoenNBgU9
+         tUg5hwDgpgBzIeDbu/LOQWV70ARU9Fet+D+iKmnFWrdNnlZ4Akf168m7xbQ4UuSb3gC/
+         5IMO4VBHITd86JN9Pl1mR8EK6DLbsayyZSKNzP2tLDLntATpvoe/SAfgxKOi2Y8g1v4k
+         WeBw6kqVAnGlqKBURej/TFv2/TJDftqZ0WHiGkC/mTODyuxxX73ES9fCy6AeVHKaBXcm
+         qYN1Ve8M62OPNYOCuRrJ4GVegxKL0ubtVIPrl4jq0gEfdjnpxySEiQc2ug+VogSj7AA5
+         PmYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711187908; x=1711792708;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ByMFrWADWxfCqmgsuCZcbqeVUMaKvKom3ZFjR5jUOA4=;
+        b=hsx2+Fu9ti7j8updkvK3IyXHjJl0AH9LrDodIxqfqIOmMN16Z06EW/PQFQvOfTFjUG
+         F8e4G2xaVq+RYaCjaIqs1uuVHjN86+xTDbiy+aLplMdtHUITrnU5UNNMD7+XLJ6zDSzu
+         8GqNymXcsv7RAPEOWB5Ncs4NAwHIFjmEy0oKBpOtbAInlymqakmenxrw83e1C8T6U3iS
+         c/uQhDmFB+xnh9oxQ/kOYWgpJszmBdbGMlJhh0uKY2Ay3x9Fjc1Jnsq6iSIDGu2mWeUv
+         cqctNMeM+ZBCHf8KhfNrxgU4Fnc/8BX4RAwreQwBh++7VJ5aeN0xXJ5lOqjQDhgMroeo
+         9CVw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4hVZlJ0YkqVbU/9I8kJtaxkji9yXtVFy3OIu1hS74ukKHb7LosljHO4KRdFdYNXCQh3iD9oMNQagSO1SLpmbTbFf8RQ==
+X-Gm-Message-State: AOJu0YwbTTu5D/fmODYWZOYo9hN9MLGxPYOEhPnyFtda9+/4WL5RdJqM
+	APwNlWsni6E9alqLM7PCbmZBsTysMDuwJRGfJDAQxeoZD6uyWbKYptvBotbIhu73amKtF13g5mK
+	Bw7M6pbUERfhxqqUOiJ2kiNMQu8DXCQ7Ns3XH
+X-Google-Smtp-Source: AGHT+IHAgBE9Mt9tCncQbdq3kL3/YyCXJsjych9A8TVxZPi3s8EhiSf04grenMGGPKfBQGLsBYx9mC23O4pppsMnfhE=
+X-Received: by 2002:a05:6122:2524:b0:4d8:7296:f52b with SMTP id
+ cl36-20020a056122252400b004d87296f52bmr612108vkb.5.1711187907683; Sat, 23 Mar
+ 2024 02:58:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240322233838.868874-1-boqun.feng@gmail.com> <20240322233838.868874-2-boqun.feng@gmail.com>
+ <068a5983-8216-48a5-9eb5-784a42026836@lunn.ch>
+In-Reply-To: <068a5983-8216-48a5-9eb5-784a42026836@lunn.ch>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Sat, 23 Mar 2024 10:58:16 +0100
+Message-ID: <CAH5fLggdVDccDwBa3z+3YfjKFLegh7ZvcSzfhnEbAGSk=THKrw@mail.gmail.com>
+Subject: Re: [WIP 1/3] rust: Introduce atomic module
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
+	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
+	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Jinghao Jia <jinghao7@illinois.edu>
-CC: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+On Sat, Mar 23, 2024 at 12:52=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote=
+:
+>
+> > +//! These primitives should have the same semantics as their C counter=
+parts, for precise definitions
+> > +//! of the semantics, please refer to tools/memory-model. Note that Li=
+nux Kernel Memory
+> > +//! (Consistency) Model is the only model for Rust development in kern=
+el right now, please avoid to
+> > +//! use Rust's own atomics.
+>
+> Is it possible to somehow poison rusts own atomics?  I would not be
+> too surprised if somebody with good Rust knowledge but new to the
+> kernel tries using Rusts atomics. Either getting the compiler to fail
+> the build, or it throws an Opps on first invocation would be good.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bfa8f18691ed2e978e4dd51190569c434f93e268
-commit: e4778a0ef322834718f8e42da3901eb99fef1208 x86/kprobes: Refactor can_{probe,boost} return type to bool
-date:   2 weeks ago
-config: x86_64-buildonly-randconfig-002-20240323 (https://download.01.org/0day-ci/archive/20240323/202403231600.Vaj7L4lC-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240323/202403231600.Vaj7L4lC-lkp@intel.com/reproduce)
+We could try to get a flag added to the Rust standard library that
+removes the core::sync::atomic module entirely, then pass that flag.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403231600.Vaj7L4lC-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !ENDBR: kprobe_emulate_jcc+0xe
-
-
-objdump-func vmlinux.o set_ftrace_ops_ro:
-0000 000000000005d390 <set_ftrace_ops_ro>:
-0000    5d390:	f3 0f 1e fa          	endbr64
-0004    5d394:	41 57                	push   %r15
-0006    5d396:	41 56                	push   %r14
-0008    5d398:	41 54                	push   %r12
-000a    5d39a:	53                   	push   %rbx
-000b    5d39b:	48 8b 1d 00 00 00 00 	mov    0x0(%rip),%rbx        # 5d3a2 <set_ftrace_ops_ro+0x12>	5d39e: R_X86_64_PC32	ftrace_ops_list-0x4
-0012    5d3a2:	e8 00 00 00 00       	call   5d3a7 <set_ftrace_ops_ro+0x17>	5d3a3: R_X86_64_PLT32	debug_lockdep_rcu_enabled-0x4
-0017    5d3a7:	49 c7 c6 00 00 00 00 	mov    $0x0,%r14	5d3aa: R_X86_64_32S	ftrace_list_end
-001e    5d3ae:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	5d3b1: R_X86_64_32S	ftrace_regs_caller
-0025    5d3b5:	48 f7 d8             	neg    %rax
-0028    5d3b8:	4c 8d 3c 05 00 00 00 00 	lea    0x0(,%rax,1),%r15	5d3bc: R_X86_64_32S	ftrace_regs_caller_end+0x1008
-0030    5d3c0:	49 c1 ef 0c          	shr    $0xc,%r15
-0034    5d3c4:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	5d3c7: R_X86_64_32S	ftrace_caller
-003b    5d3cb:	48 f7 d8             	neg    %rax
-003e    5d3ce:	4c 8d 24 05 00 00 00 00 	lea    0x0(,%rax,1),%r12	5d3d2: R_X86_64_32S	ftrace_caller_end+0x1008
-0046    5d3d6:	49 c1 ec 0c          	shr    $0xc,%r12
-004a    5d3da:	48 8b 43 10          	mov    0x10(%rbx),%rax
-004e    5d3de:	a9 00 08 00 00       	test   $0x800,%eax
-0053    5d3e3:	74 15                	je     5d3fa <set_ftrace_ops_ro+0x6a>
-0055    5d3e5:	a8 04                	test   $0x4,%al
-0057    5d3e7:	48 8b bb 60 01 00 00 	mov    0x160(%rbx),%rdi
-005e    5d3ee:	44 89 fe             	mov    %r15d,%esi
-0061    5d3f1:	41 0f 44 f4          	cmove  %r12d,%esi
-0065    5d3f5:	e8 00 00 00 00       	call   5d3fa <set_ftrace_ops_ro+0x6a>	5d3f6: R_X86_64_PLT32	set_memory_ro-0x4
-006a    5d3fa:	48 8b 5b 08          	mov    0x8(%rbx),%rbx
-006e    5d3fe:	e8 00 00 00 00       	call   5d403 <set_ftrace_ops_ro+0x73>	5d3ff: R_X86_64_PLT32	debug_lockdep_rcu_enabled-0x4
-0073    5d403:	48 85 db             	test   %rbx,%rbx
-0076    5d406:	74 05                	je     5d40d <set_ftrace_ops_ro+0x7d>
-0078    5d408:	4c 39 f3             	cmp    %r14,%rbx
-007b    5d40b:	75 cd                	jne    5d3da <set_ftrace_ops_ro+0x4a>
-007d    5d40d:	5b                   	pop    %rbx
-007e    5d40e:	41 5c                	pop    %r12
-0080    5d410:	41 5e                	pop    %r14
-0082    5d412:	41 5f                	pop    %r15
-0084    5d414:	c3                   	ret
-0085    5d415:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alice
