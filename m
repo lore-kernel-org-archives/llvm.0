@@ -1,54 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508D93B193;
-	Sat, 23 Mar 2024 21:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7654459B40;
+	Sat, 23 Mar 2024 21:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711227620; cv=none; b=WN3fd+nSOWgciC00HtqvkJLYmEiAAF+FHSWjJFkbsy76/yamJPCp+bA69QBQ+1PUKoZ5jTqJGr/UPWIvq4A8NLw0cMAaTFowPHKkItMBh5YppmwFnkWsDzsqsMfVmfNTYIsE2+23FIdeTL2X4b0YI7+XC9QcntR0roMYjn4q8Qk=
+	t=1711229421; cv=none; b=C3dBKbMbqV6y2nY7zIeRqTRJd0/ldUZ+Cxq5RBT9h5cuATWI+O5+I38Vx1+eksExjsht5jBTnHUm0XWoNoV7lbjU6Gw8e0HpC+wZmSTDvc/Z1IhakFBzZRKH0orQdmQ7oGZI0xqWgiT+u+GFsKcC/ib1iTT4SOriHk4eMOPf9EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711227620; c=relaxed/simple;
-	bh=3rodCko/SVG/4Fhy3FDjkfn5wkUL4KjdnIynqZUXtwA=;
+	s=arc-20240116; t=1711229421; c=relaxed/simple;
+	bh=qs37szhD33j51FDA574mpPbLAp/y5DVtH68K/we90lA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eHkVDQALhlX17yTS7a1khZpsAVRGLPS97350LWBYhQ9lYKxZwbvlJ88tR+t3YvsBKxo6DL9mR9PrB5O7TPPilZY2rT3qIgQvC2ShO2Bu7b1mRQxBjJAZawQu1DmZCKJgbVeRlbmdk93J4Rf0mvSMboBMd3N8efKsLBwxg5Tvskk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OAK28J22; arc=none smtp.client-ip=198.175.65.14
+	 Content-Disposition; b=ullHCqRr5YNn3XUj92HACXAV/jXuL9ljgAHt2KGsOh/tU9tNhIi0udcIcS70roG+awKxsHqew2gIm5ME5/SxxI4OPedJAjR/YqjHTJ1AgkU1CdLYHMxEEa53JQ5im+FRtpDWEgZ3JdR3cOifeEzY8RPLklV7YODTbYl2VAjmJaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S6baja4y; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OAK28J22"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S6baja4y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711227618; x=1742763618;
+  t=1711229419; x=1742765419;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3rodCko/SVG/4Fhy3FDjkfn5wkUL4KjdnIynqZUXtwA=;
-  b=OAK28J221+Niq9QPowz1upY775N7C9JLU3T37AGcchTgg8xqKq+Tpyl4
-   z53tzafwfN++AAva0oZhp6U4qKNjcO/OAXlCDEL88bCC8llcB96SJxtCL
-   6hu3t4y++GDf20/b+ukhfn8AgrUArJ8oBoTtUOF2x2tOUSpMQzG6k27oY
-   P80sB8GF6rTdBIf7PQQlwIFBVmwcuLHMKU/eRuxn+z03m/x66Nc4blpTd
-   B3AVnyd8YwAXaRKmXKY/u32AiSGKLUpANZendhRsgV9PHeuw5XJvqajYK
-   OHM5a6NnRTHLdzJjUXHdJUsYBLQP6TuKPmUzpKNpeL1cNYPJVnR+ejSKc
+  bh=qs37szhD33j51FDA574mpPbLAp/y5DVtH68K/we90lA=;
+  b=S6baja4y3b5XZIJhruZW7iaoHojakfP9+Cl2tNQ5REEq4hcf3a5HRxdW
+   trxReuW+rUN4QUAFsSUeQWEi4GhS5Tw9/cY9UEPYEXyPRqnOvw+8HtN7I
+   9ctijnFgOJtF6YkEBgaGfM0WnCvGjPIm5wUoxD02KoCJASTTXU4lqm9/O
+   CHgddenewEwWcY3oOkrV+uKoRQebcq8WJnDuQ/aYyoyKtZlT2fW8SHECQ
+   P+QVgB7GH8ed6j9Z20t2YY3ZUuAUBRtcp5MGvdAjXho0OSet8c0JmWvsI
+   J0ij3vXvKYBs+spVbW8XXCNhXQY0nbnmCCXm3vOcCYuacX0++hcOzLUgs
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11022"; a="10063054"
+X-IronPort-AV: E=McAfee;i="6600,9927,11022"; a="31696890"
 X-IronPort-AV: E=Sophos;i="6.07,150,1708416000"; 
-   d="scan'208";a="10063054"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2024 14:00:17 -0700
+   d="scan'208";a="31696890"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2024 14:30:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,150,1708416000"; 
-   d="scan'208";a="15128335"
+   d="scan'208";a="46228269"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 23 Mar 2024 14:00:16 -0700
+  by orviesa002.jf.intel.com with ESMTP; 23 Mar 2024 14:30:16 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ro8TN-000LSp-19;
-	Sat, 23 Mar 2024 21:00:13 +0000
-Date: Sun, 24 Mar 2024 04:59:39 +0800
+	id 1ro8wP-000LTr-2V;
+	Sat, 23 Mar 2024 21:30:13 +0000
+Date: Sun, 24 Mar 2024 05:30:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arnd-playground:to-build 17/87] drivers/base/bus.c:677:8: error:
- assigning to 'int' from incompatible type 'void'
-Message-ID: <202403240412.7ji9DY0F-lkp@intel.com>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: ERROR: modpost: "devm_drm_of_get_bridge"
+ [drivers/usb/typec/mux/ptn36502.ko] undefined!
+Message-ID: <202403240530.I9vYXdrE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,109 +60,126 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git to-build
-head:   467039adc3ec86566cc6403e5b1fbb9785d66df1
-commit: 578c86f00f746b9f504a03494a0e00d2d1082479 [17/87] [SUBMITTED 20240322] [v2] module: don't ignore sysfs_create_link() failures
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240324/202403240412.7ji9DY0F-lkp@intel.com/config)
+Hi Luca,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   484193fecd2b6349a6fd1554d306aec646ae1a6a
+commit: 8e99dc783648e5e663494434544bdc5160522de3 usb: typec: add support for PTN36502 redriver
+date:   5 months ago
+config: riscv-randconfig-001-20240323 (https://download.01.org/0day-ci/archive/20240324/202403240530.I9vYXdrE-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403240412.7ji9DY0F-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403240530.I9vYXdrE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403240412.7ji9DY0F-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403240530.I9vYXdrE-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/base/bus.c:677:8: error: assigning to 'int' from incompatible type 'void'
-     677 |         error = module_add_driver(drv->owner, drv);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +677 drivers/base/bus.c
-
-   637	
-   638	/**
-   639	 * bus_add_driver - Add a driver to the bus.
-   640	 * @drv: driver.
-   641	 */
-   642	int bus_add_driver(struct device_driver *drv)
-   643	{
-   644		struct subsys_private *sp = bus_to_subsys(drv->bus);
-   645		struct driver_private *priv;
-   646		int error = 0;
-   647	
-   648		if (!sp)
-   649			return -EINVAL;
-   650	
-   651		/*
-   652		 * Reference in sp is now incremented and will be dropped when
-   653		 * the driver is removed from the bus
-   654		 */
-   655		pr_debug("bus: '%s': add driver %s\n", sp->bus->name, drv->name);
-   656	
-   657		priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-   658		if (!priv) {
-   659			error = -ENOMEM;
-   660			goto out_put_bus;
-   661		}
-   662		klist_init(&priv->klist_devices, NULL, NULL);
-   663		priv->driver = drv;
-   664		drv->p = priv;
-   665		priv->kobj.kset = sp->drivers_kset;
-   666		error = kobject_init_and_add(&priv->kobj, &driver_ktype, NULL,
-   667					     "%s", drv->name);
-   668		if (error)
-   669			goto out_unregister;
-   670	
-   671		klist_add_tail(&priv->knode_bus, &sp->klist_drivers);
-   672		if (sp->drivers_autoprobe) {
-   673			error = driver_attach(drv);
-   674			if (error)
-   675				goto out_del_list;
-   676		}
- > 677		error = module_add_driver(drv->owner, drv);
-   678		if (error) {
-   679			printk(KERN_ERR "%s: failed to create module links for %s\n",
-   680				__func__, drv->name);
-   681			goto out_del_list;
-   682		}
-   683	
-   684		error = driver_create_file(drv, &driver_attr_uevent);
-   685		if (error) {
-   686			printk(KERN_ERR "%s: uevent attr (%s) failed\n",
-   687				__func__, drv->name);
-   688		}
-   689		error = driver_add_groups(drv, sp->bus->drv_groups);
-   690		if (error) {
-   691			/* How the hell do we get out of this pickle? Give up */
-   692			printk(KERN_ERR "%s: driver_add_groups(%s) failed\n",
-   693				__func__, drv->name);
-   694		}
-   695	
-   696		if (!drv->suppress_bind_attrs) {
-   697			error = add_bind_files(drv);
-   698			if (error) {
-   699				/* Ditto */
-   700				printk(KERN_ERR "%s: add_bind_files(%s) failed\n",
-   701					__func__, drv->name);
-   702			}
-   703		}
-   704	
-   705		return 0;
-   706	
-   707	out_del_list:
-   708		klist_del(&priv->knode_bus);
-   709	out_unregister:
-   710		kobject_put(&priv->kobj);
-   711		/* drv->p is freed in driver_release()  */
-   712		drv->p = NULL;
-   713	out_put_bus:
-   714		subsys_put(sp);
-   715		return error;
-   716	}
-   717	
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-total-media-in-hand-02.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-total-media-in-hand.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-trekstor.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-tt-1500.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-twinhan1027.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-twinhan-dtv-cab-ci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-vega-s9x.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-videomate-m1f.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-videomate-s350.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-videomate-tv-pvr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-videostrong-kii-pro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-wetek-hub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-wetek-play2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-winfast.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-winfast-usbii-deluxe.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-x96max.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-xbox-360.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-xbox-dvd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/keymaps/rc-zx-irdec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/of_mmc_spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/flash/leds-rt4505.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-a4tech.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-aureal.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-bigbenff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cherry.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-chicony.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cypress.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-dr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-evision.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ezkey.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-vivaldi-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-google-stadiaff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-holtek-kbd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-holtek-mouse.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-keytouch.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kye.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lg-g15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-dj.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-hidpp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-maltron.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-mf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-megaworld.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-monterey.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ortek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-prodikeys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-primax.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-redragon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sjoy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steam.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steelseries.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tmff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tivo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-uclogic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-waltop.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rpmsg/rpmsg_char.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/cxl_pmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/snd-pcm-dmaengine.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-sigmadsp.o
+WARNING: modpost: sound/soc/codecs/snd-soc-tlv320adc3xxx: section mismatch in reference: adc3xxx_i2c_driver+0x10 (section: .data) -> adc3xxx_i2c_remove (section: .exit.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netlink/netlink_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack_netlink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_defrag_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_reject_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_defrag_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_reject_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/packet/af_packet_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/nfc/nci/nci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/atm/atm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/atm/lec.o
+>> ERROR: modpost: "devm_drm_of_get_bridge" [drivers/usb/typec/mux/ptn36502.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
