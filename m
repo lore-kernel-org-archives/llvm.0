@@ -1,358 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA153209;
-	Sat, 23 Mar 2024 00:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005A27F
+	for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 00:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711153848; cv=none; b=b8ybri085M8W/UsOEHHmIdZjgYSVzE5/cQ+bdpAdO7rkWywQWHLwnrJDxV8qZ4FLzar3xh5GB6uLuBInf9dFHiOhaU5VA3mx/Wx4s00w7Qpx+cS4vX/nrukc3zNqUm10CK0qRa1j5E2tyJIOltcHGERwFTpfP/drYOKrE7ZGzsw=
+	t=1711154182; cv=none; b=XuLdcJcAOvhvZC3shYk7sQPp6epkWdqbBLi00CdFWq4hYNmoSLV1wDgkhfQUHzCoqxpwoehBOHQvKP1R+gv4bP5aZG7YBTPaES/Vojbxtp5hjBwB7Z0+JH6zOhBckhMh7F2+bvHG8wPLXdtMq2mBa1n4PCNntt5Hx2OIljUjg8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711153848; c=relaxed/simple;
-	bh=fvYbg/R9o3D49pUo0AKjKkNjgCrUFNBoKqPCTTEhlws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kyMZs7ERQhOZjCLg/pMFoKkr6yfAUBLtkNdZxRHgmvCXL/juNyiwWHwmRf6I4uL/WBNcAL4SQd53PK+nRfC6OBAGdjRlKT75BDMfP8JoUJQPjZuZh13hNUe9uqHGIBc4h4WbJxSHwhuj4bO1+ZdfANUvbp0cap3Tc82EFKNj9hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lR6BG7W1; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711154182; c=relaxed/simple;
+	bh=j7JyDQ2Yopzv+1fWqR18eqoGt0JNvJeLXCqR09mac8o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I+g24kn9PvOFLvbVdBsv1aQJtanI430i8MCaxRTR0vNHX2aG7sdINpa09prJdSAMkhJiw6eK2jyHy05ncpnKnOYFUoYwonEa4uSVI7DG4VHl8VezPxols2cbY8uEBDi22RDXvSE1LUobVqxr5eCsl02Sq5cUtUhvDelFfkC8Ef4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LcTqmUTB; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lR6BG7W1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711153844; x=1742689844;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fvYbg/R9o3D49pUo0AKjKkNjgCrUFNBoKqPCTTEhlws=;
-  b=lR6BG7W1lUQrlr62pxFQMAyV9/gby0uKswKvV5nuI0OgqcZsNjnKXA9k
-   qOd1rDViy0Wuk2ZxGgghS+yODUDWSZYTQfaG5DWYzEJjzA0DZFdt3N1ln
-   hL6dOaeFknJY14GJzeIua4KeNo+Zbz1z+c+JcBQ4LjG6GsSf2zoTtYAfQ
-   xYaJfYMAmgfibKnBXlJ/WdBTW/GMDYZK311UmMQG7vaPIcfL4KBhFW617
-   jm9vEFs8HZ70oJYpHAe5IlfCDMUAivfWebVmIAbJmc62Cws9SEzkhlj86
-   B2xYKiQ364nVPn8hgOmUnhCsSAxKq2ZcBrc1c4avAbCszd2LKGjDRIk7i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11021"; a="16765886"
-X-IronPort-AV: E=Sophos;i="6.07,147,1708416000"; 
-   d="scan'208";a="16765886"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 17:30:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,147,1708416000"; 
-   d="scan'208";a="19761066"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 22 Mar 2024 17:30:43 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rnpHU-000Kjt-1C;
-	Sat, 23 Mar 2024 00:30:40 +0000
-Date: Sat, 23 Mar 2024 08:29:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH vhost v4 3/6] virtio: find_vqs: pass struct instead of
- multi parameters
-Message-ID: <202403230820.okiEkuGQ-lkp@intel.com>
-References: <20240321101532.59272-4-xuanzhuo@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LcTqmUTB"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-513cf9bacf1so3660993e87.0
+        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 17:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1711154178; x=1711758978; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GNrld7J3rRC7RvH2KCmmyzFGDmF8jJ8gCeKdRT3S6xQ=;
+        b=LcTqmUTBThlq5bpVN9IBtrKguIOaVcBO7lDNlE5UCANALFGUAlERz1LtzzZdOujBQI
+         AM/LDeiVHDVt2bthM2Q3sdraTRDoCKPnbkY1f9gv6TuROsm8AvX66eb7WW3t66OLgG+D
+         7gFStQTgy4HA62ZZ96NPDNWWNs3bbeQXMI0w0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711154178; x=1711758978;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GNrld7J3rRC7RvH2KCmmyzFGDmF8jJ8gCeKdRT3S6xQ=;
+        b=nlskFfCAgCcr6Li+67a55iEK0h+3dVfER4BfXBWKOPoOZl+5KWGFJci5vi5jau7cDY
+         jTQehbeYPGfbKM4CejTfz8gQS1G4UOwUVuawsDgmXkF0dB5C4lJiJjlcViNB1M4OmRgy
+         SASRZB94EcXAuw1AuMul/vr51NA/luxHAGWt5+cgfdgDAW7EhHl4fgFN0ptugj79Hu7j
+         XuoT3m1qv6nEw0eeAobVM5wW5xchJlAigpkw3Bz8db2nN3EuXstZFpV9GQQx6ig6yAGg
+         +KNOYCYK4YLcRq4jFZYJqDpazFIKeMulQzHFJ2zcDZUtCQZ6SER7wHOU79N9QUkuvkNb
+         OHwA==
+X-Forwarded-Encrypted: i=1; AJvYcCWLYIOtua09gsLJKT8iAZB+WG1g1iM6VWtqqOUGVlI3LbCRZaWQvAGyQkfoIPHKF9RUAuFerUVWH3xMWHF9fZBpBR4JiA==
+X-Gm-Message-State: AOJu0YwYDo8zCbP2zThyQ56/3WQjzjpsAHc/rwK97KhbyyvGKl/I5q1+
+	gQsNV+wW81n9CsVDX9hy3GfIIWaw9Mgqowj01t/tnGW672/WJxvVovjKXDndZ29c/milsTYRoLa
+	tE4MtQA==
+X-Google-Smtp-Source: AGHT+IHoBAxcNi+XlDsoozH0adgQeoBRtKXWrTNTFoGFiSKRil3ud2Jt7BHkUdhEgVchUzm6ljXIRg==
+X-Received: by 2002:a19:5e1a:0:b0:515:9474:2fca with SMTP id s26-20020a195e1a000000b0051594742fcamr794065lfb.5.1711154178038;
+        Fri, 22 Mar 2024 17:36:18 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id v20-20020a197414000000b005158d350d78sm102542lfe.1.2024.03.22.17.36.17
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Mar 2024 17:36:17 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-513dd2d2415so2826040e87.3
+        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 17:36:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUkxqhph/G/idh5jIaqDvmCfyDD6rpfPeb2xfU8a0xwIekNdF62cSK+JDs56/m+oI4wZncD4QcXKCD+aSN6Sfv+of/kxw==
+X-Received: by 2002:a19:f806:0:b0:515:9d4a:d580 with SMTP id
+ a6-20020a19f806000000b005159d4ad580mr604299lff.26.1711154177346; Fri, 22 Mar
+ 2024 17:36:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240321101532.59272-4-xuanzhuo@linux.alibaba.com>
+References: <20240322233838.868874-1-boqun.feng@gmail.com> <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+ <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com> <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+In-Reply-To: <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 22 Mar 2024 17:36:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+Message-ID: <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Xuan,
+On Fri, 22 Mar 2024 at 17:21, Kent Overstreet <kent.overstreet@linux.dev> wrote:
+>
+> Besides that there's cross arch support to think about - it's hard to
+> imagine us ever ditching our own atomics.
 
-kernel test robot noticed the following build errors:
+Well, that's one of the advantages of using compiler builtins -
+projects that do want cross-architecture support, but that aren't
+actually maintaining their _own_ architecture support.
 
-[auto build test ERROR on remoteproc/rproc-next]
-[also build test ERROR on v6.8]
-[cannot apply to s390/features linus/master uml/next uml/fixes next-20240322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So I very much see the lure of compiler support for that kind of
+situation - to write portable code without having to know or care
+about architecture details.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/virtio_balloon-remove-the-dependence-where-names-is-null/20240321-182217
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
-patch link:    https://lore.kernel.org/r/20240321101532.59272-4-xuanzhuo%40linux.alibaba.com
-patch subject: [PATCH vhost v4 3/6] virtio: find_vqs: pass struct instead of multi parameters
-config: arm-randconfig-002-20240322 (https://download.01.org/0day-ci/archive/20240323/202403230820.okiEkuGQ-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240323/202403230820.okiEkuGQ-lkp@intel.com/reproduce)
+This is one reason I think the kernel is kind of odd and special -
+because in the kernel, we obviously very fundamentally have to care
+about the architecture details _anyway_, so then having the
+architecture also define things like atomics is just a pretty small
+(and relatively straightforward) detail.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403230820.okiEkuGQ-lkp@intel.com/
+The same argument goes for compiler builtins vs inline asm. In the
+kernel, we have to have people who are intimately familiar with the
+architecture _anyway_, so inline asms and architecture-specific header
+files aren't some big pain-point: they'd be needed _anyway_.
 
-All errors (new ones prefixed by >>):
+But in some random user level program, where all you want is an
+efficient way to do "find first bit"? Then using a compiler intrinsic
+makes a lot more sense.
 
-   In file included from drivers/virtio/virtio_vdpa.c:17:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/virtio/virtio_vdpa.c:216:36: error: no member named 'cfg_idx' in 'struct virtio_vq_config'
-     216 |         cb.callback = cfg->callbacks[cfg->cfg_idx] ? virtio_vdpa_virtqueue_cb : NULL;
-         |                                      ~~~  ^
-   1 warning and 1 error generated.
+> I was thinking about something more incremental - just an optional mode
+> where our atomics were C atomics underneath. It'd probably give the
+> compiler people a much more effective way to test their stuff than
+> anything they have now.
 
+I suspect it might be painful, and some compiler people would throw
+their hands up in horror, because the C++ atomics model is based
+fairly solidly on atomic types, and the kernel memory model is much
+more fluid.
 
-vim +216 drivers/virtio/virtio_vdpa.c
+Boqun already mentioned the "mixing access sizes", which is actually
+quite fundamental in the kernel, where we play lots of games with that
+(typically around locking, where you find patterns line unlock writing
+a zero to a single byte, even though the whole lock data structure is
+a word). And sometimes the access size games are very explicit (eg
+lib/lockref.c).
 
-  > 17	#include <linux/virtio.h>
-    18	#include <linux/vdpa.h>
-    19	#include <linux/virtio_config.h>
-    20	#include <linux/virtio_ring.h>
-    21	
-    22	#define MOD_VERSION  "0.1"
-    23	#define MOD_AUTHOR   "Jason Wang <jasowang@redhat.com>"
-    24	#define MOD_DESC     "vDPA bus driver for virtio devices"
-    25	#define MOD_LICENSE  "GPL v2"
-    26	
-    27	struct virtio_vdpa_device {
-    28		struct virtio_device vdev;
-    29		struct vdpa_device *vdpa;
-    30		u64 features;
-    31	
-    32		/* The lock to protect virtqueue list */
-    33		spinlock_t lock;
-    34		/* List of virtio_vdpa_vq_info */
-    35		struct list_head virtqueues;
-    36	};
-    37	
-    38	struct virtio_vdpa_vq_info {
-    39		/* the actual virtqueue */
-    40		struct virtqueue *vq;
-    41	
-    42		/* the list node for the virtqueues list */
-    43		struct list_head node;
-    44	};
-    45	
-    46	static inline struct virtio_vdpa_device *
-    47	to_virtio_vdpa_device(struct virtio_device *dev)
-    48	{
-    49		return container_of(dev, struct virtio_vdpa_device, vdev);
-    50	}
-    51	
-    52	static struct vdpa_device *vd_get_vdpa(struct virtio_device *vdev)
-    53	{
-    54		return to_virtio_vdpa_device(vdev)->vdpa;
-    55	}
-    56	
-    57	static void virtio_vdpa_get(struct virtio_device *vdev, unsigned int offset,
-    58				    void *buf, unsigned int len)
-    59	{
-    60		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-    61	
-    62		vdpa_get_config(vdpa, offset, buf, len);
-    63	}
-    64	
-    65	static void virtio_vdpa_set(struct virtio_device *vdev, unsigned int offset,
-    66				    const void *buf, unsigned int len)
-    67	{
-    68		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-    69	
-    70		vdpa_set_config(vdpa, offset, buf, len);
-    71	}
-    72	
-    73	static u32 virtio_vdpa_generation(struct virtio_device *vdev)
-    74	{
-    75		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-    76		const struct vdpa_config_ops *ops = vdpa->config;
-    77	
-    78		if (ops->get_generation)
-    79			return ops->get_generation(vdpa);
-    80	
-    81		return 0;
-    82	}
-    83	
-    84	static u8 virtio_vdpa_get_status(struct virtio_device *vdev)
-    85	{
-    86		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-    87		const struct vdpa_config_ops *ops = vdpa->config;
-    88	
-    89		return ops->get_status(vdpa);
-    90	}
-    91	
-    92	static void virtio_vdpa_set_status(struct virtio_device *vdev, u8 status)
-    93	{
-    94		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-    95	
-    96		return vdpa_set_status(vdpa, status);
-    97	}
-    98	
-    99	static void virtio_vdpa_reset(struct virtio_device *vdev)
-   100	{
-   101		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-   102	
-   103		vdpa_reset(vdpa, 0);
-   104	}
-   105	
-   106	static bool virtio_vdpa_notify(struct virtqueue *vq)
-   107	{
-   108		struct vdpa_device *vdpa = vd_get_vdpa(vq->vdev);
-   109		const struct vdpa_config_ops *ops = vdpa->config;
-   110	
-   111		ops->kick_vq(vdpa, vq->index);
-   112	
-   113		return true;
-   114	}
-   115	
-   116	static bool virtio_vdpa_notify_with_data(struct virtqueue *vq)
-   117	{
-   118		struct vdpa_device *vdpa = vd_get_vdpa(vq->vdev);
-   119		const struct vdpa_config_ops *ops = vdpa->config;
-   120		u32 data = vring_notification_data(vq);
-   121	
-   122		ops->kick_vq_with_data(vdpa, data);
-   123	
-   124		return true;
-   125	}
-   126	
-   127	static irqreturn_t virtio_vdpa_config_cb(void *private)
-   128	{
-   129		struct virtio_vdpa_device *vd_dev = private;
-   130	
-   131		virtio_config_changed(&vd_dev->vdev);
-   132	
-   133		return IRQ_HANDLED;
-   134	}
-   135	
-   136	static irqreturn_t virtio_vdpa_virtqueue_cb(void *private)
-   137	{
-   138		struct virtio_vdpa_vq_info *info = private;
-   139	
-   140		return vring_interrupt(0, info->vq);
-   141	}
-   142	
-   143	static struct virtqueue *
-   144	virtio_vdpa_setup_vq(struct virtio_device *vdev, unsigned int index,
-   145			     struct virtio_vq_config *cfg)
-   146	{
-   147		struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vdev);
-   148		struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-   149		struct device *dma_dev;
-   150		const struct vdpa_config_ops *ops = vdpa->config;
-   151		struct virtio_vdpa_vq_info *info;
-   152		bool (*notify)(struct virtqueue *vq) = virtio_vdpa_notify;
-   153		struct vdpa_callback cb;
-   154		struct virtqueue *vq;
-   155		u64 desc_addr, driver_addr, device_addr;
-   156		/* Assume split virtqueue, switch to packed if necessary */
-   157		struct vdpa_vq_state state = {0};
-   158		unsigned long flags;
-   159		u32 align, max_num, min_num = 1;
-   160		bool may_reduce_num = true;
-   161		int err;
-   162	
-   163		if (index >= vdpa->nvqs)
-   164			return ERR_PTR(-ENOENT);
-   165	
-   166		/* We cannot accept VIRTIO_F_NOTIFICATION_DATA without kick_vq_with_data */
-   167		if (__virtio_test_bit(vdev, VIRTIO_F_NOTIFICATION_DATA)) {
-   168			if (ops->kick_vq_with_data)
-   169				notify = virtio_vdpa_notify_with_data;
-   170			else
-   171				__virtio_clear_bit(vdev, VIRTIO_F_NOTIFICATION_DATA);
-   172		}
-   173	
-   174		/* Queue shouldn't already be set up. */
-   175		if (ops->get_vq_ready(vdpa, index))
-   176			return ERR_PTR(-ENOENT);
-   177	
-   178		/* Allocate and fill out our active queue description */
-   179		info = kmalloc(sizeof(*info), GFP_KERNEL);
-   180		if (!info)
-   181			return ERR_PTR(-ENOMEM);
-   182	
-   183		max_num = ops->get_vq_num_max(vdpa);
-   184		if (max_num == 0) {
-   185			err = -ENOENT;
-   186			goto error_new_virtqueue;
-   187		}
-   188	
-   189		if (ops->get_vq_num_min)
-   190			min_num = ops->get_vq_num_min(vdpa);
-   191	
-   192		may_reduce_num = (max_num == min_num) ? false : true;
-   193	
-   194		/* Create the vring */
-   195		align = ops->get_vq_align(vdpa);
-   196	
-   197		if (ops->get_vq_dma_dev)
-   198			dma_dev = ops->get_vq_dma_dev(vdpa, index);
-   199		else
-   200			dma_dev = vdpa_get_dma_dev(vdpa);
-   201		vq = vring_create_virtqueue_dma(index, max_num, align, vdev,
-   202						true, may_reduce_num,
-   203						cfg->ctx ? cfg->ctx[index] : false,
-   204						notify,
-   205						cfg->callbacks[index],
-   206						cfg->names[index],
-   207						dma_dev);
-   208		if (!vq) {
-   209			err = -ENOMEM;
-   210			goto error_new_virtqueue;
-   211		}
-   212	
-   213		vq->num_max = max_num;
-   214	
-   215		/* Setup virtqueue callback */
- > 216		cb.callback = cfg->callbacks[cfg->cfg_idx] ? virtio_vdpa_virtqueue_cb : NULL;
-   217		cb.private = info;
-   218		cb.trigger = NULL;
-   219		ops->set_vq_cb(vdpa, index, &cb);
-   220		ops->set_vq_num(vdpa, index, virtqueue_get_vring_size(vq));
-   221	
-   222		desc_addr = virtqueue_get_desc_addr(vq);
-   223		driver_addr = virtqueue_get_avail_addr(vq);
-   224		device_addr = virtqueue_get_used_addr(vq);
-   225	
-   226		if (ops->set_vq_address(vdpa, index,
-   227					desc_addr, driver_addr,
-   228					device_addr)) {
-   229			err = -EINVAL;
-   230			goto err_vq;
-   231		}
-   232	
-   233		/* reset virtqueue state index */
-   234		if (virtio_has_feature(vdev, VIRTIO_F_RING_PACKED)) {
-   235			struct vdpa_vq_state_packed *s = &state.packed;
-   236	
-   237			s->last_avail_counter = 1;
-   238			s->last_avail_idx = 0;
-   239			s->last_used_counter = 1;
-   240			s->last_used_idx = 0;
-   241		}
-   242		err = ops->set_vq_state(vdpa, index, &state);
-   243		if (err)
-   244			goto err_vq;
-   245	
-   246		ops->set_vq_ready(vdpa, index, 1);
-   247	
-   248		vq->priv = info;
-   249		info->vq = vq;
-   250	
-   251		spin_lock_irqsave(&vd_dev->lock, flags);
-   252		list_add(&info->node, &vd_dev->virtqueues);
-   253		spin_unlock_irqrestore(&vd_dev->lock, flags);
-   254	
-   255		return vq;
-   256	
-   257	err_vq:
-   258		vring_del_virtqueue(vq);
-   259	error_new_virtqueue:
-   260		ops->set_vq_ready(vdpa, index, 0);
-   261		/* VDPA driver should make sure vq is stopeed here */
-   262		WARN_ON(ops->get_vq_ready(vdpa, index));
-   263		kfree(info);
-   264		return ERR_PTR(err);
-   265	}
-   266	
+But it actually goes deeper than that. While we do have "atomic_t" etc
+for arithmetic atomics, and that probably would map fairly well to C++
+atomics, in other cases we simply base our atomics not on _types_, but
+on code.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+IOW, we do things like "cmpxchg()", and the target of that atomic
+access is just a regular data structure field.
+
+It's kind of like our "volatile" usage. If you read the C (and C++)
+standards, you'll find that you should use "volatile" on data types.
+That's almost *never* what the kernel does. The kernel uses "volatile"
+in _code_ (ie READ_ONCE() etc), and uses it by casting etc.
+
+Compiler people don't tend to really like those kinds of things.
+
+            Linus
