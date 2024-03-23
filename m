@@ -1,146 +1,136 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D315B182
-	for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 00:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761BA7F
+	for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 00:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711152219; cv=none; b=cUMNOPlmxsZzPs0isWKc5CLDd1NNIsTdd4Zy2P5OIjDX2D3eRGwEhY/Fcy2x+EZ8+m/eCwHt/DmNk+9thcpbIA3v8T7X7c79gdChg/BqBENayiSdGW3JP0KKt95f5JETmG/ENbx/I5jBolfuNpgr4jEXPuqGXbmhtpsdkA5fy0w=
+	t=1711152770; cv=none; b=GenJn+9pZ+ZLI8jyo3o+CceQG5KPFcY0rn8kcEjlTDQh3eGM9ThPZzVhqLGCdDe+u7Ce1O+AaT9PVe1zfwgrZoe1OwnJFst9h1qaLR/4QbFteG5O/pR+gwhdSusLAg9IN7AKz6otcEgBJIWSY6q8ZWuiIUhOg8VBaE9AEI/QDnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711152219; c=relaxed/simple;
-	bh=vW2bvOuQiEcRn8u7kI1XXOFFH3fIHb1PivHG6bJDI6Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=btzD8zPjjwDaoV+4oLVHjzorZSqkRIBXy5a/zxsolCoxlkRz64ddIckKfuEEbQx7hLINdUYnhRZH39/lJMkHLIf//4oY2Oo86v8WEg8NgXryO3MNOlVnWGn0BWO6bH7I6uJZ91UXTFaRFapsckoAkfqgAfRdMoc1Knffs0H5jm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxE3S7cy; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711152770; c=relaxed/simple;
+	bh=buaytYj6XnQEMslfX8wQQCXJQT/19Ph5hoNeBiv9PMs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GHBnNg0MEk8j3bEVvaY7oL3/8KNR9VYY+bg5+dJb/tP0z4jh70/ySFknDjRfrkgQS8YGqU0PqvyyQ4mpCp45UiZJl8OOPvTLZfcPLnNA8lvGdzvT4j28ymUflyaOHAkGZAetembReBwNJlzOOuDNVz5tXoWMV4xi+BuQn9r2tGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=a5/cvlnw; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxE3S7cy"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-429f53f0b0bso18486311cf.2
-        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 17:03:37 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="a5/cvlnw"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a471f77bf8eso244469766b.2
+        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 17:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711152217; x=1711757017; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eASLODvGo3GX2Oyfss7PQQhJkyATkdZhH8YczVO2EXo=;
-        b=PxE3S7cyIEpYZhHpfOKd4Sw81cd13js3Wd39O4IwfAgWC5Pm5sbhTNFakO9t9eO6fE
-         tXrsct9+ELKZ6q1ei9U+zgTa/IXLDl99RjS2wDxKrmsnMYv34ismg3hSa9t2OW3RDzNv
-         DiUFFBlL42HilV2Pdowtm/fxbTxMxaC1gBL2KhqYK1DKBw5f94TvZDlhswp128it5MBT
-         v29kpcm4ZwMtcWhe5kUHId2Xb/lfwSRdTeAbtWuO6FggmX+5+4TQ4ZELVpzWPQolnPaw
-         7AnSWSP2XhZdknEHLmFtSqYeSZ4DP7NaBzTexudHaVBBl9NtMuaFUI7EzyjFmr3kqWhx
-         IfBw==
+        d=linux-foundation.org; s=google; t=1711152767; x=1711757567; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/DcKs5LOC+9m7c+sQfRFSymnyXVGhlvaNbRKaUaILEw=;
+        b=a5/cvlnwSInVmmL5GYLP2ddpiduq08B7RMyufzVGO08ZWZw+nIsyYcyOItfa2nWIYj
+         /BBb6yIrBJpobGff4fcQplLeXecujCDeeVTuwKppZcJCSaYsVilz5UdLyZ8m2dwMvos2
+         LfrcyitqI/NE5lBqAOrwPxz973OoJ+YYJ8Qsk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711152217; x=1711757017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eASLODvGo3GX2Oyfss7PQQhJkyATkdZhH8YczVO2EXo=;
-        b=mHIG6gLw8xusrFonOwbD7z0WLHSg4EeL0Yk5zrp/W5V1X4dtrhQ+0pf11nfqhkEo6T
-         hwkUfHVq7yCeeJmeAXCDkPHcih99oLjtxL8yAHS0sLq9roRO1SQLEakttAYIcxysdVZN
-         HmzvKGhxmJY1YYO4HxFHD/elCV5K16QYQergkPlPTVJ+qtS7I4Yqw4gUhsByWoaDw97o
-         1/5XEK5TvpGwTB5yDE7Z+rCXTZnw+Lh6gOJS/EA08lXje94Xl3vd5dlB42jZ+ZCDx9yS
-         OMcvsdFyNuymyl4nnzTCUR9SRAWtshnzja2fTOAAcypK4D31ej3woddFVxACWrfXQ6B5
-         Wdbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSyGFbXkM/9SjlqALt4nFpBXKE+qrrwGlck8pwpHmw+5Xyl3czuKEeuMPddb5EJOJzmn/a1C9BFpikVW9raF3CDsk7cg==
-X-Gm-Message-State: AOJu0Yy8fgOjpD/MeeANDRVGCCB0lsX+Lf21UfFIT+jGlpYwEleEay9B
-	hJUs3ZIj+jgwlNwXbbaViE+8kiaTqJHVuqeVPbdr4K7TBBwwtLe5
-X-Google-Smtp-Source: AGHT+IHjbUwCnlotNrzEjDqfeNUUku72up8XO+hTXKKrIOT7ksYTxuCesrZTrHymVkrnW/ZbtgJbZw==
-X-Received: by 2002:a05:622a:14c:b0:431:24c5:9dd0 with SMTP id v12-20020a05622a014c00b0043124c59dd0mr1180573qtw.29.1711152216768;
-        Fri, 22 Mar 2024 17:03:36 -0700 (PDT)
-Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id d2-20020ac84e22000000b00430cacfe532sm298900qtw.79.2024.03.22.17.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Mar 2024 17:03:36 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 5901B1200043;
-	Fri, 22 Mar 2024 20:03:35 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 22 Mar 2024 20:03:35 -0400
-X-ME-Sender: <xms:VRz-ZdXHSIU4BX8chv0Purd_bpORS4xQiU2e-I_22sDXeCHAl3zz7A>
-    <xme:VRz-ZdmP2FluUVkk7NL3loKYAmaFWKJt4T_RRMVQXFswYXjPdNdXbiDiI4VzKRsqE
-    aDkFjicd6dBIz42IA>
-X-ME-Received: <xmr:VRz-ZZaN3pO-DfeAke7bo2B-AJmNKkOpZdAENuU93WMn_4fUTUWz5Y0y5FE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddtfedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:VRz-ZQV5IsiQ2dn-V_IQGJQATDKPlHAjJgfYEFoYHotrCsEZgm084Q>
-    <xmx:VRz-ZXnJR1Jp7C6bk3BVOlpG56qHQGcKCBa0606CC4yN6krT9hCAvw>
-    <xmx:VRz-ZdcaBrIS8ih1MvMKVVYUf0tqriGMYHRq4FXDoe2KQ3CA1FeuJg>
-    <xmx:VRz-ZREpiOuFz4uBcPFkFCWx-cJYtKQLdXD1nf4J0J3PTq_ExXwtcA>
-    <xmx:Vxz-ZYmpBDlpMIxq8k8Bo7f1tn1-uNRKAQtiRUINbv6m5It0_omvAqyN_AVWy9Ke>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Mar 2024 20:03:33 -0400 (EDT)
-Date: Fri, 22 Mar 2024 17:03:11 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org
-Subject: Re: [WIP 1/3] rust: Introduce atomic module
-Message-ID: <Zf4cP6lx7LHmt3dz@boqun-archlinux>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <20240322233838.868874-2-boqun.feng@gmail.com>
- <068a5983-8216-48a5-9eb5-784a42026836@lunn.ch>
+        d=1e100.net; s=20230601; t=1711152767; x=1711757567;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/DcKs5LOC+9m7c+sQfRFSymnyXVGhlvaNbRKaUaILEw=;
+        b=QKDzRtFgQIbRe8VW97KWUVh6TsvpnVwDvrRFDQbe0DETRmdeJu/PPykop8vG0suR5j
+         WtQ+6ElfpTLgXVqKbC1ArkIfVIxpJqVSw4pFM2SySNz5EqdvyaK0mQxJvIO6VP/TtTZr
+         LZoywA0t8QpaD4Iarsxho2FIBw8K8kIaeT3LBiPYb7/Gn60dWiil1Z807aOu1Tkie21+
+         J01psktNRkgJ7qeHPbqTwRC0gt/XYZR00GFef3xBuno7qo8J9QiWz4A7d6IhBVgSxy2o
+         ecihnbDhyXiBpQ40zQysmo6w3uFmmCeL9ATylm70xxva7T702V0sfZQ7DxE6232lCWHf
+         64oA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSy5031XQrsWES9GmPbhC4WFp0EonMGjkhNsTPPIM+pZP0jiLkjaO9q1o48mYkI4x5V7hyZB7XNwNEf9JDVsVilGWp8Q==
+X-Gm-Message-State: AOJu0YyALjAJiiczpVN7Qv+5W7GWW3ap/64UMlhR/wWMX/eVYgXAtKmm
+	+R8xhH2bwDnBglQGpwgZfyzKkkgoWxi2MnX4slIJpfkHD4OPc9JeVM53hvxXmwyWB46ZESceY5w
+	AxPM=
+X-Google-Smtp-Source: AGHT+IHx8eX+e/rG/6c36h0YqVPTGImFnz2nzNtpYyfGmn5LU5sHEFO/EitxDdfpzIFGp3fYnlsw6g==
+X-Received: by 2002:a17:906:5fd6:b0:a46:da87:26ea with SMTP id k22-20020a1709065fd600b00a46da8726eamr671996ejv.51.1711152766787;
+        Fri, 22 Mar 2024 17:12:46 -0700 (PDT)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
+        by smtp.gmail.com with ESMTPSA id e12-20020a170906504c00b00a46ab33f970sm332923ejk.163.2024.03.22.17.12.46
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Mar 2024 17:12:46 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a471f77bf8eso244469166b.2
+        for <llvm@lists.linux.dev>; Fri, 22 Mar 2024 17:12:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVOgbfjYLFJ1vvx71uN6jgI5l8tQoY4MPFYJRLvOqRwd+Vzit2Wi6GrBaP08A/PW/iE+1USYqsSfeqVCJi8/j/DZROoRw==
+X-Received: by 2002:a17:906:6b0b:b0:a46:7ee2:f834 with SMTP id
+ q11-20020a1709066b0b00b00a467ee2f834mr791117ejr.11.1711152766110; Fri, 22 Mar
+ 2024 17:12:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <068a5983-8216-48a5-9eb5-784a42026836@lunn.ch>
+References: <20240322233838.868874-1-boqun.feng@gmail.com> <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+In-Reply-To: <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 22 Mar 2024 17:12:29 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+Message-ID: <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Mar 23, 2024 at 12:52:08AM +0100, Andrew Lunn wrote:
-> > +//! These primitives should have the same semantics as their C counterparts, for precise definitions
-> > +//! of the semantics, please refer to tools/memory-model. Note that Linux Kernel Memory
-> > +//! (Consistency) Model is the only model for Rust development in kernel right now, please avoid to
-> > +//! use Rust's own atomics.
-> 
-> Is it possible to somehow poison rusts own atomics?  I would not be
+On Fri, 22 Mar 2024 at 16:57, Kent Overstreet <kent.overstreet@linux.dev> wrote:
+>
+> I wonder about that. The disadvantage of only supporting LKMM atomics is
+> that we'll be incompatible with third party code, and we don't want to
+> be rolling all of our own data structures forever.
 
-I can continue to look an elegant way, now since we compile our own
-`core` crate (where Rust atomic library locates), we can certain do a
-sed trick to exclude the atomic code from Rust. It's pretty hacky, but
-maybe others know how to teach linter to help.
+Honestly, having seen the shit-show that is language standards bodies
+and incomplete compiler support, I do not understand why people think
+that we wouldn't want to roll our own.
 
-Regards,
-Boqun
+The C++ memory model may be reliable in another decade. And then a
+decade after *that*, we can drop support for the pre-reliable
+compilers.
 
-> too surprised if somebody with good Rust knowledge but new to the
-> kernel tries using Rusts atomics. Either getting the compiler to fail
-> the build, or it throws an Opps on first invocation would be good.
-> 
->     Andrew
+People who think that compilers do things right just because they are
+automated simply don't know what they are talking about.
+
+It was just a couple of days ago that I was pointed at
+
+    https://github.com/llvm/llvm-project/issues/64188
+
+which is literally the compiler completely missing a C++ memory barrier.
+
+And when the compiler itself is fundamentally buggy, you're kind of
+screwed. When you roll your own, you can work around the bugs in
+compilers.
+
+And this is all doubly true when it is something that the kernel does,
+and very few other projects do. For example, we're often better off
+using inline asm over dubious builtins that have "native" compiler
+support for them, but little actual real coverage. It really is often
+a "ok, this builtin has actually been used for a decade, so it's
+hopefully stable now".
+
+We have years of examples of builtins either being completely broken
+(as in "immediate crash" broken), or simply generating crap code that
+is actively worse than using the inline asm.
+
+The memory ordering isn't going to be at all different. Moving it into
+the compiler doesn't solve problems. It creates them.
+
+                 Linus
