@@ -1,259 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F2247F7A;
-	Sat, 23 Mar 2024 17:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCB2FBE9
+	for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 17:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711214713; cv=none; b=AiFiG/w/vhGa14WeYqtUu6KcEpCj8FVzml0TID9N3NFGgQbEnZHYd8WXYfYWP3YSIdVUk/Sc3Z3V/jFdlrmSVPYQOCYGF7x0pEnCxCgiiHtQACwquUrmrfCD/TzrwLlNkoURQ8PX6wRPKPDvg57cH9vveE3YoYN68VHilevecHQ=
+	t=1711215533; cv=none; b=uB9NYxIvMdePpSV5j7/TOJmTMz5xmR12/30oHRftJOV/QUWPp8sdIs/X+DSEtVOuqnEBMlu/o9kQ7K/IxjS4VJcqAtnngbuuGKwV1zzYbIgOd2ukY3HI6vKqLD3hWSTlW+8jwfNYRQYpGHJFxU0Xy98PyuKwLrNngHJwuzHkQ/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711214713; c=relaxed/simple;
-	bh=hviwBbuUr8hjaMvZWjLfwOXvR7XIaZxob1bgRLPS9ig=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Px3/AqDZSR5C2wRqY5JMN9novEBQ6W4aV/fFifcfHlTN9g6n9MnQtkTkBh+xRGmwXPGtlFmG1REiNl3hu+TWkCUiqqeVzeXxgsoX0TxA7N2t50qlWJZB5QwI2H09bSwEDC1KOz6iFlVu7hJiyMy8Zn0PnbY/+9FG2BxsVB4SY4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Udm8pLac; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711215533; c=relaxed/simple;
+	bh=UQIiK8Z4s/l94svTjPP1GphXf2R1CeD3GtdYcZYyGe8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=eMn70sv7BMngOzXcgwl59Kct9IUJ11hbyKZjajssS217KB/7/pLMjWs/RpCBT4u9wWnaoruJhEmWsbX352hMcmUq/3Ku5Am4dOZ5ltTvMmpsJeqNirpZPiVpFi5ZjBwkxdy0LYAeOS3OLIbqsNfQCNUpL61Nn04VUUVD8NI1k2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XaUGgdef; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Udm8pLac"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711214712; x=1742750712;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hviwBbuUr8hjaMvZWjLfwOXvR7XIaZxob1bgRLPS9ig=;
-  b=Udm8pLac3CTA9dzN7B+sPDRZ22IxuatbzPjZqglPm/rLJL3U3wP461NZ
-   bIDyD1SYOx6srSZhhA85y4W3BqtT/+7Fdv1YPmZfux5HbJnam0V+7Xm2A
-   /hdXzCBksxhmRtbbdp79JyUt04e06JUH3rniaICbd2NApbGbLJzJsRiWR
-   ipZmbSnTxcj38RDxDScIjqAbKdWeIVAvpyi/dj09sK9DzGd8L/R70/bDQ
-   hZ3/ENiOsSnfvcmCtAm4bI6QriBfptgPrrilFlARzHmkuI5ECuLLhngC3
-   LYO7S4VGsVaV+SNAcjRkKVRuZbrCwJKc3Y8DAwmv4e5r4Xk6/BK/CcAoY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11022"; a="17395657"
-X-IronPort-AV: E=Sophos;i="6.07,149,1708416000"; 
-   d="scan'208";a="17395657"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2024 10:25:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,149,1708416000"; 
-   d="scan'208";a="52658717"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 23 Mar 2024 10:25:09 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ro57C-000LMX-25;
-	Sat, 23 Mar 2024 17:25:06 +0000
-Date: Sun, 24 Mar 2024 01:24:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Xu <peterx@redhat.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XaUGgdef"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711215530;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hIauagApnARH4T0nvgXygBukzfZfxhBo5aFzyNLrHzg=;
+	b=XaUGgdefhdpmNAx3AOyVJo2GYd/WAedmOorkSdl56PL8WJPoIyH90djLnC4IKWfvplGS6n
+	hH+ZVfqMBbaCleQrRPgvqCkb42oBwTojLnInGfeo10bT4dYeEe+oEwDlV/LaUVP5mOAsGC
+	/r1X9yOGx+W4W9N3GrDj54uSRJJjVv8=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-267-XnmppUrqMD-Fl9PJuzvIAw-1; Sat, 23 Mar 2024 13:38:47 -0400
+X-MC-Unique: XnmppUrqMD-Fl9PJuzvIAw-1
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3c22fa01f9dso174534b6e.0
+        for <llvm@lists.linux.dev>; Sat, 23 Mar 2024 10:38:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711215527; x=1711820327;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hIauagApnARH4T0nvgXygBukzfZfxhBo5aFzyNLrHzg=;
+        b=OgpL7YtaJD55tGEFsnNd/mvjnq3CwEEHsYbHyWSKRtw569xKN5cjZroK/7DLth09Ji
+         GGV1buHfVrPbd2U0KQnDOuOqGrnTmxbzU0SAPMEoZeme88K3yz+aNlYK3tXj6yhmyz/F
+         ez+ziUKj+SOpI7PWrhhJyexgM0UkVQTRt36db37+tK8Y4wyD/ZwnVvnfnslacBkJMfka
+         Fr0yjlAvOml5f7EAiwefXAlKWIlVZ9q6ZY9gl4zmG49df/tCg+ZeK0YTHpv5IEDZsjNs
+         L4kXKq3ErD+zxvE4i36e17m6oqr1FD+Q+wNmfdnm4/sdYsmmE0mGPXfTuKkvq8OJvO93
+         YDzQ==
+X-Gm-Message-State: AOJu0YygrLncJ6swwe0hKzctLo1q9/FnwzWRAjxIKtxRTbxzSu65rMUQ
+	ruPQbJBdyUGA+SIkpkojhY34X/zmoxbo+AGjC9J0dJ3XIVOQjLYUVK4R2Ur0ba7cf83l0efRTEU
+	y98U1pJZTf3ouVmWqoXsymKuPmEsi2YNf67mz7vQPEfZ9h/P4R68=
+X-Received: by 2002:aca:d05:0:b0:3c3:c090:59cd with SMTP id 5-20020aca0d05000000b003c3c09059cdmr2628148oin.0.1711215526684;
+        Sat, 23 Mar 2024 10:38:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGiVWsP3fTAlbJWgwYv+bI8uN+5fNa1oDVYu5Ny06AJ0joFwcEZjlU+wbLtW5FnYWSeHjMB3g==
+X-Received: by 2002:aca:d05:0:b0:3c3:c090:59cd with SMTP id 5-20020aca0d05000000b003c3c09059cdmr2628133oin.0.1711215526216;
+        Sat, 23 Mar 2024 10:38:46 -0700 (PDT)
+Received: from x1n ([99.254.121.117])
+        by smtp.gmail.com with ESMTPSA id jx12-20020a0562142b0c00b006961cc3f91asm2264494qvb.20.2024.03.23.10.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Mar 2024 10:38:45 -0700 (PDT)
+Date: Sat, 23 Mar 2024 13:38:44 -0400
+From: Peter Xu <peterx@redhat.com>
+To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Linux Memory Management List <linux-mm@kvack.org>,
 	Jason Gunthorpe <jgg@nvidia.com>
-Subject: [akpm-mm:mm-unstable 115/141] mm/gup.c:536:22: error: call to
+Subject: Re: [akpm-mm:mm-unstable 115/141] mm/gup.c:536:22: error: call to
  undeclared function 'pud_pfn'; ISO C99 and later do not support implicit
  function declarations
-Message-ID: <202403240112.kHKVSfCL-lkp@intel.com>
+Message-ID: <Zf8TpI3unIxZuPRn@x1n>
+References: <202403240112.kHKVSfCL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <202403240112.kHKVSfCL-lkp@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   af520f81c51001f7ccdf0579fc73df282b26292d
-commit: 529f3b89b7333564792458ca7be06f5bff258d23 [115/141] mm/gup: handle huge pud for follow_pud_mask()
-config: powerpc-tqm8xx_defconfig (https://download.01.org/0day-ci/archive/20240324/202403240112.kHKVSfCL-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403240112.kHKVSfCL-lkp@intel.com/reproduce)
+On Sun, Mar 24, 2024 at 01:24:25AM +0800, kernel test robot wrote:
+> >> mm/gup.c:536:22: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      536 |         unsigned long pfn = pud_pfn(pud);
+>          |                             ^
+>    mm/gup.c:536:22: note: did you mean 'pte_pfn'?
+>    arch/powerpc/include/asm/pgtable.h:60:29: note: 'pte_pfn' declared here
+>       60 | static inline unsigned long pte_pfn(pte_t pte)
+>          |                             ^
+>    9 warnings and 1 error generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403240112.kHKVSfCL-lkp@intel.com/
+Duplicated issue of:
 
-All errors (new ones prefixed by >>):
+https://lore.kernel.org/r/202403231529.HRev1zcD-lkp@intel.com/
 
-     209 | __do_insw
-         | ^
-   arch/powerpc/include/asm/io.h:610:56: note: expanded from macro '__do_insw'
-     610 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/gup.c:9:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:211:1: note: expanded from here
-     211 | __do_insl
-         | ^
-   arch/powerpc/include/asm/io.h:611:56: note: expanded from macro '__do_insl'
-     611 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-         |                                        ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/gup.c:9:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:213:1: note: expanded from here
-     213 | __do_outsb
-         | ^
-   arch/powerpc/include/asm/io.h:612:58: note: expanded from macro '__do_outsb'
-     612 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/gup.c:9:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
-     215 | __do_outsw
-         | ^
-   arch/powerpc/include/asm/io.h:613:58: note: expanded from macro '__do_outsw'
-     613 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/gup.c:9:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:672:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      54 |                  (p, b, c), pio, p)
-         |                  ~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:669:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-     669 |                 __do_##name al;                                 \
-         |                 ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
-     217 | __do_outsl
-         | ^
-   arch/powerpc/include/asm/io.h:614:58: note: expanded from macro '__do_outsl'
-     614 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-         |                                         ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/gup.c:19:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/gup.c:536:22: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     536 |         unsigned long pfn = pud_pfn(pud);
-         |                             ^
-   mm/gup.c:536:22: note: did you mean 'pte_pfn'?
-   arch/powerpc/include/asm/pgtable.h:60:29: note: 'pte_pfn' declared here
-      60 | static inline unsigned long pte_pfn(pte_t pte)
-         |                             ^
-   9 warnings and 1 error generated.
+Resolved by:
 
-
-vim +/pud_pfn +536 mm/gup.c
-
-   527	
-   528	#ifdef CONFIG_PGTABLE_HAS_HUGE_LEAVES
-   529	static struct page *follow_huge_pud(struct vm_area_struct *vma,
-   530					    unsigned long addr, pud_t *pudp,
-   531					    int flags, struct follow_page_context *ctx)
-   532	{
-   533		struct mm_struct *mm = vma->vm_mm;
-   534		struct page *page;
-   535		pud_t pud = *pudp;
- > 536		unsigned long pfn = pud_pfn(pud);
-   537		int ret;
-   538	
-   539		assert_spin_locked(pud_lockptr(mm, pudp));
-   540	
-   541		if ((flags & FOLL_WRITE) && !pud_write(pud))
-   542			return NULL;
-   543	
-   544		if (!pud_present(pud))
-   545			return NULL;
-   546	
-   547		pfn += (addr & ~PUD_MASK) >> PAGE_SHIFT;
-   548	
-   549		if (IS_ENABLED(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) &&
-   550		    pud_devmap(pud)) {
-   551			/*
-   552			 * device mapped pages can only be returned if the caller
-   553			 * will manage the page reference count.
-   554			 *
-   555			 * At least one of FOLL_GET | FOLL_PIN must be set, so
-   556			 * assert that here:
-   557			 */
-   558			if (!(flags & (FOLL_GET | FOLL_PIN)))
-   559				return ERR_PTR(-EEXIST);
-   560	
-   561			if (flags & FOLL_TOUCH)
-   562				touch_pud(vma, addr, pudp, flags & FOLL_WRITE);
-   563	
-   564			ctx->pgmap = get_dev_pagemap(pfn, ctx->pgmap);
-   565			if (!ctx->pgmap)
-   566				return ERR_PTR(-EFAULT);
-   567		}
-   568	
-   569		page = pfn_to_page(pfn);
-   570	
-   571		if (!pud_devmap(pud) && !pud_write(pud) &&
-   572		    gup_must_unshare(vma, flags, page))
-   573			return ERR_PTR(-EMLINK);
-   574	
-   575		ret = try_grab_page(page, flags);
-   576		if (ret)
-   577			page = ERR_PTR(ret);
-   578		else
-   579			ctx->page_mask = HPAGE_PUD_NR - 1;
-   580	
-   581		return page;
-   582	}
-   583	#else  /* CONFIG_PGTABLE_HAS_HUGE_LEAVES */
-   584	static struct page *follow_huge_pud(struct vm_area_struct *vma,
-   585					    unsigned long addr, pud_t *pudp,
-   586					    int flags, struct follow_page_context *ctx)
-   587	{
-   588		return NULL;
-   589	}
-   590	#endif	/* CONFIG_PGTABLE_HAS_HUGE_LEAVES */
-   591	
+https://lore.kernel.org/r/20240323151643.1047281-1-peterx@redhat.com
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Peter Xu
+
