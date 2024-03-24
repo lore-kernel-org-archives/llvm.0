@@ -1,138 +1,99 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A84318EB3
-	for <llvm@lists.linux.dev>; Sun, 24 Mar 2024 17:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6F26BFDD;
+	Sun, 24 Mar 2024 22:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711301839; cv=none; b=ZGqCp3LgJGpMv16JUQ9uhtEOrim8gpETlnSLuRlATb6fe8ZCN+RvNYFU3IP9DnSkBDg6MESM0+a9AINEgwwnQDN7eYGlq+jof9WbjCYIU+7jmWRksuYUt8uqDhjgYaNwFDzyGyBX7wCB4w7VAGsd3hRdfEhRTMNMliu9vaZmIg4=
+	t=1711320106; cv=none; b=SSRwb8/fCqcWZQyEbYLFpnS3jbs1i0XVG+Ckyok/TsZ6YTa7AQ3Sw9Bs3hT2xpaCnqMnm8UeaocF6Row9C0RMbZPOUXCO/MUL66YTRJedSR8mmoYKuV2d9M+8lskiVj3f35m/Jx06M0xui/3FryeX/CNQCMH85Fgsy+EPVDw0DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711301839; c=relaxed/simple;
-	bh=e8Wzt++tI0Y6lTciHZrwviD9JAPYs1UHfQ1N/92js8k=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=t/DcCGNQjP4Jbxzh0x99CMd+zMX35FCDQbog2yfHxov9zoOnkHBW0KrsPFtA4xMbDrcSdgYfvnSxCPiGu270meX9FnerEN8RSCgLKFnyqFmMXML88EFYOEF2ZLk2GU8bCWvSrRGasrIYo9dZXqZztpprmjP7OGPYVfA7PiDZDQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a7F9+AtQ; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711320106; c=relaxed/simple;
+	bh=Ks6Rh39f4C3jBfEt62E8rPS/XnqfajC+vnztZG15Mmg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dEUyQmZAUG0793BDp7s+2M/A30PNUp7pobZAIxrSNo5rNxY1QH07ncsE2sKmoKGYV9aHSYtuxOBwHyiD2B0hAjlieolFFNJkyGWA+sKKb5XB3fu7HjLGGv4DPt/iaDNR8QBvEaOT+oAmxNLKPo0q+zA3Qk5I0XbVxdgP49ebqqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uLV912Jf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a7F9+AtQ"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-789fb1f80f5so259885385a.3
-        for <llvm@lists.linux.dev>; Sun, 24 Mar 2024 10:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711301837; x=1711906637; darn=lists.linux.dev;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7A5SUwxxd4XjDHjkrEb2n2ZXL0/7LMjpgw75QRXKPIo=;
-        b=a7F9+AtQuUFiRro1ztGvggFKTvCZ68vnZk0g1t1wzI+mU7d+/gS+ran5C/lOsPDNbn
-         vvaMv5fPP3FA/ra8GSMvnNbnnXK0zoKbepwM/5jjxp64Bi1Wt+jF6pFVeMESRyCwe9Nt
-         SvkLdLgzzJJ03eicmp2SFfRr9pOmDXlYbbI1+RNZWZcuk3bRNaZoDHkePdkTKu61rz8V
-         3ClQFfADLDtSM33xRQw44Z4s4tc8B3nu1oumEY/WgS3sLezPNkU8BwEsO/Hyvh3gp+hL
-         JTvToDbwzk8gcNDTJYsM8e2aGuInkdm8PRpoeFTUl0LStf96WbsooVWABfLmnrF6k7Th
-         MHCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711301837; x=1711906637;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7A5SUwxxd4XjDHjkrEb2n2ZXL0/7LMjpgw75QRXKPIo=;
-        b=JL7EaS2pg6/VGffriCIpLYWfv9CCOvxJMmU376Rifyzmg0tzfO1hgCLaoUV9u6SfH6
-         W7XCZOMYt8DUysxI80CekSE3ntPJ9wIRx9hdCM0Y+0IlosNZOapc99FyHJbGQxWZB+yD
-         83dUqwYqQHQhzSJeEPp57a/QOGa4ETGRSxOenpdYN06LDTqiS+6gL3avoeqmqD/UenTs
-         zDeCSjR/OX1EmhOU4IeOvgbyGrOEZbdGIMYUzsrw4Lt0f64q0EBfdVvGroJSiWYzf5Ux
-         BL9N0wFHMVVw6FYJj8DuWh9mHJ7S6nPcv1V5N3o8id7ldaoZg+HXYZNEtDCB2Ve6asF6
-         vvdA==
-X-Forwarded-Encrypted: i=1; AJvYcCWcit5nKMFGZU7aV2cMOWmbDIP3nzIUtFLJHxAE/KW97YUWZ6jra+5HKi8PsF3IqUGk/MZ+vNGK0xG86223Qn85MsOPKA==
-X-Gm-Message-State: AOJu0YwMvTB8rp9gfYWM1eSarS6Oed33TnxKgIA1zWRb2zEBvvJFuRZU
-	VtyppwCYHWdbSLpuhyMXaSwq/Os8WFSdOc/C9k/u7bWQNUWZ07UH
-X-Google-Smtp-Source: AGHT+IFjpSfbEmAjCyadZ4oh3c1hlZvr8OuU2bvWGAJwDmJef8K4HA0yJIlXQ6FGAqvDYB9qnUMuMw==
-X-Received: by 2002:a05:620a:5d8a:b0:78a:1e39:2674 with SMTP id xx10-20020a05620a5d8a00b0078a1e392674mr5391270qkn.39.1711301837071;
-        Sun, 24 Mar 2024 10:37:17 -0700 (PDT)
-Received: from smtpclient.apple ([63.115.34.165])
-        by smtp.gmail.com with ESMTPSA id vq12-20020a05620a558c00b00789ea123bd5sm1491096qkn.59.2024.03.24.10.37.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 24 Mar 2024 10:37:16 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uLV912Jf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F2C8C433C7;
+	Sun, 24 Mar 2024 22:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711320106;
+	bh=Ks6Rh39f4C3jBfEt62E8rPS/XnqfajC+vnztZG15Mmg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uLV912JffiSPOBaVfJA03ilsXPXcg5DuMUm1P2JQNrgWb1yvtj2u7LAW+IsK3qQ8G
+	 phkftbn6KCJRNmzzyqbDoo4+f6cNb5jufFH+06B8GD/8voCY/WvC1wEPp0CNPCE2EH
+	 651MCIRcygdgsE5nWxkUatoMCImcJcudUyX8lcAchrEuB0+29lfKEsZQ6buBleKIsV
+	 0dkv1p6GbxErZnDV+YvHy6WZZnMg74GeNf0TQbPNVqNydZt/JAsh5o2iRC24Z4GjCx
+	 GuFzDwCdERTa+wv0J8SKzquMgTLVtlj2JbDhqa3NbMcFncZR1sMayWBsgtK7Fnizg6
+	 0HJ99nco3Z8vw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Ian Rogers <irogers@google.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	James Clark <james.clark@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev,
+	Namhyung Kim <namhyung@kernel.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.8 414/715] perf srcline: Add missed addr2line closes
+Date: Sun, 24 Mar 2024 18:29:53 -0400
+Message-ID: <20240324223455.1342824-415-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240324223455.1342824-1-sashal@kernel.org>
+References: <20240324223455.1342824-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-From: comex <comexk@gmail.com>
-In-Reply-To: <174272a1-e21f-4d85-94ab-f0457bd1c93b@rowland.harvard.edu>
-Date: Sun, 24 Mar 2024 13:37:03 -0400
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Kent Overstreet <kent.overstreet@linux.dev>,
- Boqun Feng <boqun.feng@gmail.com>,
- rust-for-linux <rust-for-linux@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org,
- llvm@lists.linux.dev,
- Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@samsung.com>,
- Alice Ryhl <aliceryhl@google.com>,
- Andrea Parri <parri.andrea@gmail.com>,
- Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Nicholas Piggin <npiggin@gmail.com>,
- David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>,
- Luc Maranget <luc.maranget@inria.fr>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Akira Yokosawa <akiyks@gmail.com>,
- Daniel Lustig <dlustig@nvidia.com>,
- Joel Fernandes <joel@joelfernandes.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- kent.overstreet@gmail.com,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Marco Elver <elver@google.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- linux-arm-kernel@lists.infradead.org,
- linux-fsdevel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3088DF9A-6507-423B-8F0A-100B78DE1A26@gmail.com>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <C85BE4F4-5847-45B4-A973-76B184B35EDE@gmail.com>
- <174272a1-e21f-4d85-94ab-f0457bd1c93b@rowland.harvard.edu>
-To: Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
+From: Ian Rogers <irogers@google.com>
 
+[ Upstream commit c7ba9d18ae47924a6ea6a47ca139779f58eb83c0 ]
 
-> On Mar 24, 2024, at 11:22=E2=80=AFAM, Alan Stern =
-<stern@rowland.harvard.edu> wrote:
->=20
-> I don't know if this is what you meant by "in a weak memory model, the=20=
+The child_process for addr2line sets in and out to -1 so that pipes
+get created. It is the caller's responsibility to close the pipes,
+finish_command doesn't do it. Add the missed closes.
 
-> escape can =E2=80=98time travel'".  Regardless, it seems very clear =
-that any=20
-> compiler which swaps L1 and L2 in f() has a genuine bug.
+Fixes: b3801e791231 ("perf srcline: Simplify addr2line subprocess")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Ravi Bangoria <ravi.bangoria@amd.com>
+Cc: James Clark <james.clark@arm.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: John Garry <john.g.garry@oracle.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: llvm@lists.linux.dev
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/r/20240201001504.1348511-8-irogers@google.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/srcline.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yes, that=E2=80=99s what I meant.  Clang thinks it=E2=80=99s valid to =
-swap L1 and L2.  Though, for it to actually happen, they would have to =
-be in a loop, since the problematic optimization is =E2=80=9Cloop-invarian=
-t code motion".  Here=E2=80=99s a modified version of your f() that =
-shows the optimization in action:
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index 034b496df2978..7addc34afcf5d 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -399,6 +399,8 @@ static void addr2line_subprocess_cleanup(struct child_process *a2l)
+ 		kill(a2l->pid, SIGKILL);
+ 		finish_command(a2l); /* ignore result, we don't care */
+ 		a2l->pid = -1;
++		close(a2l->in);
++		close(a2l->out);
+ 	}
+ 
+ 	free(a2l);
+-- 
+2.43.0
 
-https://godbolt.org/z/bdaTjjvMs
-
-Anyway, my point is just that using LKMM doesn=E2=80=99t save you from =
-the bug.=
