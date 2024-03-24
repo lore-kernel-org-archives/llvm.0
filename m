@@ -1,57 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2C817C8;
-	Sun, 24 Mar 2024 03:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1646A28E7;
+	Sun, 24 Mar 2024 11:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711250430; cv=none; b=k/wNu615KU+A8dLbKWfhpL2qPzFCazQQLHj5jKtIisMW8UWwS+w0sjTjdwO4Rp4cfd7zrJWAAssxHmR/nmUu5YGnJABIKr7ZLgWiGd1Ya1zj84/K/A3GCMOmEdWO0x+VWv3HRe3XGTjYcID0s2qEyUVaPi+HOf6tadJK3Tm8mPM=
+	t=1711279598; cv=none; b=VCX1SrCoO8d0zDx/FZ8vZcCYyg812LjpQng4niKR+kCyHLT+Fk9r08ZLXFhwwxCOAJgWTNd498i6enWqhfA11xeFSqV0lb9+obo9m6AJK9gEZc1Iubmcm6o0F8UwMHz7/i+wt1B7O1aYaxpEsNroVwfW7jbJbWYME5WeaNRo4p4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711250430; c=relaxed/simple;
-	bh=EhbRsGvqN0jROuWy97R+D3RnYNFRvQyqA2GmT1EXg1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MdwsA/Q960IwyAT+2mWmqn9DkzFD+hwQnKYaFhQ/I6F/kLVnlASKkvwAG1L1UEgq7Ar4dz4QpekdVjrlDPvj/PVhoBnZhZRv1QyUKSWtP2jlECCOYQ8GSQPUCLmgOfs6ab+oN0qMgoikc5R0pivGqJXB3kI3u37RMnsW2cVGWrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FvrIiU3w; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1711279598; c=relaxed/simple;
+	bh=CExg+la76sIR1qkpm2KxEgcLr3rpl4q2ho2HMwdpUjg=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rOaybdkI3fvaW9vzInpMvg3LzooUxojo52sPOKomzme4rGsXQpr6QbCY82ke+eZanIsG2UyOwtBo3Qj5G5xDCI8bAz6U9Q06Xdh3WW0Jp+KB/LjUNa1pj1CXXh5+T+cK2TAQ6GPFIazxA9t4UScXTkhonFS9ybAWFAshJ5XHHfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aM3tQjzM; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FvrIiU3w"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aM3tQjzM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711250428; x=1742786428;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EhbRsGvqN0jROuWy97R+D3RnYNFRvQyqA2GmT1EXg1A=;
-  b=FvrIiU3wTcdSzcrwSHmirKbZYetvpx9CiDZAvBJkkHfgmrMA2CcFrrdh
-   fXAL4JlppUVk472Zt4ouMZIXj4fS3tIY8qtuyeEjTbEcubAKqcBgNhrbK
-   WUq9CxdlXMDbI06UU6/IKo+tQJzCauWItew32tzHC6cU71/EJnWUyKvUy
-   3qulp+TLE7ajsbWCcE4VwipjTKPZH8i/KUpgieXH5BTK7UpaTBRjOgkaE
-   bkjcVA/NMaYBAg8urGdq9egUkt0moyGzmjGaRduCrzCTm2p9sAPi4KBTo
-   NBhCx6Iyvv015lXHzw7m0jXMwz16ofstnCf7+QnurbkP6tTrraAHii+Zw
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11022"; a="6129138"
-X-IronPort-AV: E=Sophos;i="6.07,150,1708416000"; 
-   d="scan'208";a="6129138"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2024 20:20:27 -0700
+  t=1711279596; x=1742815596;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=CExg+la76sIR1qkpm2KxEgcLr3rpl4q2ho2HMwdpUjg=;
+  b=aM3tQjzMRIlTp62CL+pLgvI33XcHhLkZBUgejB9P8EnpnxkAlWWLIt/1
+   Q+EU81/l7kLmextuUHjaaCJdvfXdCK4D15jdau103CrB18aaGn7iNG1FM
+   pkeC+hqenp0ULIXIL2KBlAZyXlsKgwj5v2TQpvL4eo3h9d+Bu6109wInt
+   Y4cxclK6P+dyJlKbebZafnPwih+t/xIokZe0HftPch0h0b5eu8CdXBVfH
+   BX0Apt9ZuoCsvj81BzX8s5MfvVZppu+Ghrxyr7OM2Mz8HTlnVdLx2uRV9
+   dlfhlq3LmnsdStGhA3T5LsDIloS7I0KqMSNdriXtmFbzoRStHB2T0s5Hh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11022"; a="6111248"
+X-IronPort-AV: E=Sophos;i="6.07,151,1708416000"; 
+   d="scan'208";a="6111248"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2024 04:26:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,150,1708416000"; 
-   d="scan'208";a="46269540"
+X-IronPort-AV: E=Sophos;i="6.07,151,1708416000"; 
+   d="scan'208";a="20012031"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 23 Mar 2024 20:20:25 -0700
+  by orviesa003.jf.intel.com with ESMTP; 24 Mar 2024 04:26:33 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1roEPG-000LdL-2f;
-	Sun, 24 Mar 2024 03:20:22 +0000
-Date: Sun, 24 Mar 2024 11:19:28 +0800
+	id 1roLzi-000Lnr-10;
+	Sun, 24 Mar 2024 11:26:30 +0000
+Date: Sun, 24 Mar 2024 19:26:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: include/linux/framer/framer.h:184:16: warning: no previous prototype
- for function 'framer_get'
-Message-ID: <202403241110.hfJqeJRu-lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to
+ !ENDBR: hpet_clkevt_set_state_shutdown+0x2e
+Message-ID: <202403241953.HelI1OMA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,80 +57,67 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+CC: linux-kernel@vger.kernel.org
+TO: Mark Rutland <mark.rutland@arm.com>
+CC: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+CC: Florent Revest <revest@chromium.org>
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   70293240c5ce675a67bfc48f419b093023b862b3
-commit: 54762918ca856028d33d1d56d017a4d7706c6196 net: wan: fsl_qmc_hdlc: Add framer support
-date:   13 days ago
-config: powerpc-randconfig-003-20240324 (https://download.01.org/0day-ci/archive/20240324/202403241110.hfJqeJRu-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403241110.hfJqeJRu-lkp@intel.com/reproduce)
+commit: fee86a4ed536f4e521f3a4530242e152dd2a466b ftrace: selftest: remove broken trace_direct_tramp
+date:   1 year ago
+config: x86_64-buildonly-randconfig-006-20240324 (https://download.01.org/0day-ci/archive/20240324/202403241953.HelI1OMA-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403241953.HelI1OMA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403241110.hfJqeJRu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403241953.HelI1OMA-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/wan/fsl_qmc_hdlc.c:14:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/net/wan/fsl_qmc_hdlc.c:17:
->> include/linux/framer/framer.h:184:16: warning: no previous prototype for function 'framer_get' [-Wmissing-prototypes]
-     184 | struct framer *framer_get(struct device *dev, const char *con_id)
-         |                ^
-   include/linux/framer/framer.h:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     184 | struct framer *framer_get(struct device *dev, const char *con_id)
-         | ^
-         | static 
->> include/linux/framer/framer.h:189:6: warning: no previous prototype for function 'framer_put' [-Wmissing-prototypes]
-     189 | void framer_put(struct device *dev, struct framer *framer)
-         |      ^
-   include/linux/framer/framer.h:189:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     189 | void framer_put(struct device *dev, struct framer *framer)
-         | ^
-         | static 
-   drivers/net/wan/fsl_qmc_hdlc.c:783:25: error: use of undeclared identifier 'qmc_hdlc_driver'; did you mean 'qmc_hdlc_probe'?
-     783 | MODULE_DEVICE_TABLE(of, qmc_hdlc_driver);
-         |                         ^~~~~~~~~~~~~~~
-         |                         qmc_hdlc_probe
-   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
-     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |               ^
-   drivers/net/wan/fsl_qmc_hdlc.c:694:12: note: 'qmc_hdlc_probe' declared here
-     694 | static int qmc_hdlc_probe(struct platform_device *pdev)
-         |            ^
-   3 warnings and 1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
+>> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !ENDBR: hpet_clkevt_set_state_shutdown+0x2e
 
 
-vim +/framer_get +184 include/linux/framer/framer.h
-
-82c944d05b1a24 Herve Codina 2023-11-28  183  
-82c944d05b1a24 Herve Codina 2023-11-28 @184  struct framer *framer_get(struct device *dev, const char *con_id)
-82c944d05b1a24 Herve Codina 2023-11-28  185  {
-82c944d05b1a24 Herve Codina 2023-11-28  186  	return ERR_PTR(-ENOSYS);
-82c944d05b1a24 Herve Codina 2023-11-28  187  }
-82c944d05b1a24 Herve Codina 2023-11-28  188  
-82c944d05b1a24 Herve Codina 2023-11-28 @189  void framer_put(struct device *dev, struct framer *framer)
-82c944d05b1a24 Herve Codina 2023-11-28  190  {
-82c944d05b1a24 Herve Codina 2023-11-28  191  }
-82c944d05b1a24 Herve Codina 2023-11-28  192  
-
-:::::: The code at line 184 was first introduced by commit
-:::::: 82c944d05b1a24c76948ee9d6bb1d7de1ebb8b3a net: wan: Add framer framework support
-
-:::::: TO: Herve Codina <herve.codina@bootlin.com>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+objdump-func vmlinux.o set_ftrace_ops_ro:
+0000 0000000000072760 <set_ftrace_ops_ro>:
+0000    72760:	f3 0f 1e fa          	endbr64
+0004    72764:	41 57                	push   %r15
+0006    72766:	41 56                	push   %r14
+0008    72768:	41 54                	push   %r12
+000a    7276a:	53                   	push   %rbx
+000b    7276b:	48 8b 1d 00 00 00 00 	mov    0x0(%rip),%rbx        # 72772 <set_ftrace_ops_ro+0x12>	7276e: R_X86_64_PC32	ftrace_ops_list-0x4
+0012    72772:	e8 00 00 00 00       	call   72777 <set_ftrace_ops_ro+0x17>	72773: R_X86_64_PLT32	debug_lockdep_rcu_enabled-0x4
+0017    72777:	49 c7 c6 00 00 00 00 	mov    $0x0,%r14	7277a: R_X86_64_32S	ftrace_list_end
+001e    7277e:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	72781: R_X86_64_32S	ftrace_regs_caller
+0025    72785:	48 f7 d8             	neg    %rax
+0028    72788:	4c 8d 3c 05 00 00 00 00 	lea    0x0(,%rax,1),%r15	7278c: R_X86_64_32S	ftrace_regs_caller_end+0x1008
+0030    72790:	49 c1 ef 0c          	shr    $0xc,%r15
+0034    72794:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	72797: R_X86_64_32S	ftrace_caller
+003b    7279b:	48 f7 d8             	neg    %rax
+003e    7279e:	4c 8d 24 05 00 00 00 00 	lea    0x0(,%rax,1),%r12	727a2: R_X86_64_32S	ftrace_caller_end+0x1008
+0046    727a6:	49 c1 ec 0c          	shr    $0xc,%r12
+004a    727aa:	48 8b 43 10          	mov    0x10(%rbx),%rax
+004e    727ae:	a9 00 08 00 00       	test   $0x800,%eax
+0053    727b3:	74 15                	je     727ca <set_ftrace_ops_ro+0x6a>
+0055    727b5:	a8 04                	test   $0x4,%al
+0057    727b7:	48 8b bb 90 01 00 00 	mov    0x190(%rbx),%rdi
+005e    727be:	44 89 fe             	mov    %r15d,%esi
+0061    727c1:	41 0f 44 f4          	cmove  %r12d,%esi
+0065    727c5:	e8 00 00 00 00       	call   727ca <set_ftrace_ops_ro+0x6a>	727c6: R_X86_64_PLT32	set_memory_ro-0x4
+006a    727ca:	48 8b 5b 08          	mov    0x8(%rbx),%rbx
+006e    727ce:	e8 00 00 00 00       	call   727d3 <set_ftrace_ops_ro+0x73>	727cf: R_X86_64_PLT32	debug_lockdep_rcu_enabled-0x4
+0073    727d3:	48 85 db             	test   %rbx,%rbx
+0076    727d6:	74 05                	je     727dd <set_ftrace_ops_ro+0x7d>
+0078    727d8:	4c 39 f3             	cmp    %r14,%rbx
+007b    727db:	75 cd                	jne    727aa <set_ftrace_ops_ro+0x4a>
+007d    727dd:	5b                   	pop    %rbx
+007e    727de:	41 5c                	pop    %r12
+0080    727e0:	41 5e                	pop    %r14
+0082    727e2:	41 5f                	pop    %r15
+0084    727e4:	c3                   	ret
+0085    727e5:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
 
 -- 
 0-DAY CI Kernel Test Service
