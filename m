@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E42121485D;
-	Sun, 24 Mar 2024 23:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AD512B149;
+	Sun, 24 Mar 2024 22:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711321740; cv=none; b=pV/WVetzKlzuBNWidZVaVHSu30Fiee5B3eaC9V0/yCh2CpswzAKDNI7zeNC7LhtV3Whz0SvtRBw2dWlgus77Aw/GpLCbWDxeIqN2UTlMhbIJiG8PKYf/2LpjZlXF+fm6au/1E7ag3GhikjQk3I8pytvghMQoaDaKJCviNLdpPnQ=
+	t=1711320960; cv=none; b=soUwGek/ITaPcd45Z4D26iC7xJG3Ilc6WKF9PjAQwZ+APC7Ovdx6J9d5XbDE08AdDVBkowh7p39SQYKWXOJfMUhj7GcITWkRkLooQ8ovw1RWsFcoZHbWdtfrb3/wfkNLT031S32Isr8dBKFeMGB4OnEuDi8jOZOGrGY7TDezk7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711321740; c=relaxed/simple;
-	bh=gFwAlKTfqXWNZTGG/o2AQGLpEbs15X5IP2Rzpw4hAEE=;
+	s=arc-20240116; t=1711320960; c=relaxed/simple;
+	bh=T3a0S8GHT7cG9hx4OybyIirFOKGjhTGdg1Ua7OZ6jOc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nPk0bezjARdTPT6X8GKNPZoFnzN6gJ9RKcOoyNFVhSZppdP2zYQsPSQHq+wZenKjuQ1asuZ4pOiX9Or3WnYIuqYxbiC/Bd3ILYITtRaC0Uz4HHcxsXqjlIWV6vLv48rRLwRIqtw3Ip3UZMVs8Gg+kZ56g3uYxel5kYm2HhtGYaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZU/mGRb; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=DYvlHwHuJ3bydbt1+QUIsIStNa5m920BQYrbE6/UE0h2IGsj/7Co+3t1/3r7vXx2TgAI4ZoKct9SbTjZFa5OhXEeB+y9vx78CBMOiNSzLRnxJCQ0eobJpTkdUlihgcZmdy49Dc3c6bbg/aDL9qQg+8DXyUe/x5/9lWN4b6y/kUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JVIIpM4w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZU/mGRb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BD8C433C7;
-	Sun, 24 Mar 2024 23:08:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JVIIpM4w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3039DC433F1;
+	Sun, 24 Mar 2024 22:55:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711321739;
-	bh=gFwAlKTfqXWNZTGG/o2AQGLpEbs15X5IP2Rzpw4hAEE=;
+	s=k20201202; t=1711320959;
+	bh=T3a0S8GHT7cG9hx4OybyIirFOKGjhTGdg1Ua7OZ6jOc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OZU/mGRb7AH2o1/5dWl8pT2fOuQBmV1t0yZv5WX18JTmN753sMfJbujq07F7+0L2z
-	 jb8O26eaMXg9F+KgIImKbYnVlJUlDsf1yOXXiNtHh3OwmOTDoDzu5J4JgUdq8YD/Aq
-	 gVMUiRxHRZMxEFYFviI6pBqkzMM9JH3IzXkc3k1FDODdxcziiC2FzeDxmaqbWgtWVf
-	 i509lDQYr6UJry3y9djiocVRg8Hyglt8gUnF5g9yc+KN03nfgTA0U5MRi7YO53ybCV
-	 TAAPyN+YTkRGOou7kr0hN4vUU8Ud4IKERck5UuFfjl4bobAcBFS6qSOcfsi28ExDN2
-	 iskygwZIH+3bw==
+	b=JVIIpM4wPaqWhC3ySWdGxawrCMnTH9u1XgxQDfnnl4EajJtAqRT/fOe73ChU9cw3q
+	 fdNubMNCY5pXkikWmZWvX72U+rQE20cZu+nnrDSD7w8TAVyDJ+bnvtQmCLwtpo9GD2
+	 22C9KxNdWIdBukhDz81ymRcnb0Mrc9dyH5ed8s+/8oqIqfPe+tcnPG/zZEYPP0+M+/
+	 fOF5KTgT0zI6FSnj8h2YoXW7+fQLskTnReHaqf32w1IFsS6WPTjpIOD4tcuCR5oVf0
+	 B3wqOQWaY8cergo8qaRJlzH8AYIU89qw4y6+nZhlCUZ3KErOh/a5hEyszBP/w9jOOr
+	 iD2YQ0fKU8Prg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -40,12 +40,12 @@ Cc: Stephen Boyd <swboyd@chromium.org>,
 	llvm@lists.linux.dev,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 467/638] arm64: ftrace: Don't forbid CALL_OPS+CC_OPTIMIZE_FOR_SIZE with Clang
-Date: Sun, 24 Mar 2024 18:58:24 -0400
-Message-ID: <20240324230116.1348576-468-sashal@kernel.org>
+Subject: [PATCH 6.7 522/713] arm64: ftrace: Don't forbid CALL_OPS+CC_OPTIMIZE_FOR_SIZE with Clang
+Date: Sun, 24 Mar 2024 18:44:08 -0400
+Message-ID: <20240324224720.1345309-523-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240324230116.1348576-1-sashal@kernel.org>
-References: <20240324230116.1348576-1-sashal@kernel.org>
+In-Reply-To: <20240324224720.1345309-1-sashal@kernel.org>
+References: <20240324224720.1345309-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -88,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b5df38c2a0067..f9777ce2ccb2d 100644
+index 456e8680e16ea..77dfbc8ab2d3b 100644
 --- a/arch/arm64/Kconfig
 +++ b/arch/arm64/Kconfig
 @@ -196,7 +196,7 @@ config ARM64
