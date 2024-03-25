@@ -1,165 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2D112836B
-	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 10:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC5717D23E
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 10:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711361480; cv=none; b=lCH4sSFNFhqKHwoOVRZ/ZercFueSkEeZ/ymVM3pjJB+ia6HBCDby8nytmEtZOxu/6TfvLYqe+1nal2541EDgZ+dcuofKBa2pDxiPnPKReVPjbkaQ926Tiw7JSIskJrlBh1Dqm3tk4ueD0N52J7QB4+0By0Fa1H8CxyAjVFfD8cE=
+	t=1711363501; cv=none; b=lol9DxDbvPP9K2/71SQ/SYgMCxeAmgN6lujHBpZzzpSdwiXXwNxPREV6yNZqaXLWpaxWjrWy34ee5cJ8cxaqzoSffbrjP873+ruU/OyhBpfYGE01q0NWlP/dC7lq/sy6r5k+41zMhQL+tepVhUwDHztnWOakWV1cA08FQXDPFds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711361480; c=relaxed/simple;
-	bh=5eYPD+ROH+C8eMQOQ+/GUmTsikISIaSHFRhxD4/QNaY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=twMnX0UAqrPQPJhBSi4THEdCBczTU9cpxcvZxyQZVnriNhehzrYcqY18FmqeohCV0Q4V3bQ9hsy4zEw1PWv/beoKBfvu8Tv2qcCgmQLAHy4TAwkLEtfedIW35IlFDt2kwGmYXmOgop06ogbI8e6rzXnnAzz+pM0TCKxw6Of0yAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FtGXhJsW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FtGXhJsW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711361477;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=S6oq2hhHgRk/nAy0hNBYn1RWpycgp23dKELeqZkAJtA=;
-	b=FtGXhJsWGiyfDpPrsQPu1fNGHZbL2VYnll8SdoUkw1X+pTb46Lm/9V96m5/uHCgkMcbwTT
-	ehF6hO25s5kOceQUiF2zQAUBi4uW+MmDnFbMbEcNl02X4Wz6yOLKVEQPdjyKudHXRRiCbZ
-	8wCfpwtugMYk0E/XkUTIDYv/gKQ/9KY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-253-v3HUhGoQPgqJv7e8JXwJIw-1; Mon, 25 Mar 2024 06:11:16 -0400
-X-MC-Unique: v3HUhGoQPgqJv7e8JXwJIw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB953891E69
-	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 10:11:15 +0000 (UTC)
-Received: from [172.64.11.27] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 72733C3E621;
-	Mon, 25 Mar 2024 10:11:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.9.0-rc1, mainline.kernel.org-clang, 4cece764)
-Date: Mon, 25 Mar 2024 10:11:15 -0000
-To: llvm@lists.linux.dev
+	s=arc-20240116; t=1711363501; c=relaxed/simple;
+	bh=HVlViT7fg37ArzDR5okosyV0TQroP4C7gOqT9V4q2f0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LJVgG1cja4QnpRC+43Tf3ug6jce0R7PXmitvWr8upEsksCGCbGoAMRLoH4HTE92+Ct0wLJ40FoMz4Nn6rTOG0AHm5FTsg9jCaOyLcPuG67SI9sr7DBzuMXUxYcgh6a3O4OmtYpjBOAGYPMXy19Z8pUNo6PYKz6RzrBhlyeJpqKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C15E01FB;
+	Mon, 25 Mar 2024 03:45:31 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.16.150])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AFF8B3F67D;
+	Mon, 25 Mar 2024 03:44:51 -0700 (PDT)
+Date: Mon, 25 Mar 2024 10:44:45 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?us-ascii?Q?Bj=22orn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <ZgFVnar3nS4F8eIX@FVFF77S0Q05N>
+References: <20240322233838.868874-1-boqun.feng@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <32917.124032506111600145@us-mta-253.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240322233838.868874-1-boqun.feng@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Mar 22, 2024 at 04:38:35PM -0700, Boqun Feng wrote:
+> Hi,
+> 
+> Since I see more and more Rust code is comming in, I feel like this
+> should be sent sooner rather than later, so here is a WIP to open the
+> discussion and get feedback.
+> 
+> One of the most important questions we need to answer is: which
+> memory (ordering) model we should use when developing Rust in Linux
+> kernel, given Rust has its own memory ordering model[1]. I had some
+> discussion with Rust language community to understand their position
+> on this:
+> 
+> 	https://github.com/rust-lang/unsafe-code-guidelines/issues/348#issuecomment-1218407557
+> 	https://github.com/rust-lang/unsafe-code-guidelines/issues/476#issue-2001382992
+> 
+> My takeaway from these discussions, along with other offline discussion
+> is that supporting two memory models is challenging for both correctness
+> reasoning (some one needs to provide a model) and implementation (one
+> model needs to be aware of the other model). So that's not wise to do
+> (at least at the beginning). So the most reasonable option to me is:
+> 
+> 	we only use LKMM for Rust code in kernel (i.e. avoid using
+> 	Rust's own atomic).
+> 
+> Because kernel developers are more familiar with LKMM and when Rust code
+> interacts with C code, it has to use the model that C code uses.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I think that makes sense; if nothing else it's consistent with how we handle
+the C atomics today.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+> And this patchset is the result of that option. I introduced an atomic
+> library to wrap and implement LKMM atomics (of course, given it's a WIP,
+> so it's unfinished). Things to notice:
+> 
+> * I know I could use Rust macro to generate the whole set of atomics,
+>   but I choose not to in the beginning, as I want to make it easier to
+>   review.
+> 
+> * Very likely, we will only have AtomicI32, AtomicI64 and AtomicUsize
+>   (i.e no atomic for bool, u8, u16, etc), with limited support for
+>   atomic load and store on 8/16 bits.
+> 
+> * I choose to re-implement atomics in Rust `asm` because we are still
+>   figuring out how we can make it easy and maintainable for Rust to call
+>   a C function _inlinely_ (Gary makes some progress [2]). Otherwise,
+>   atomic primitives would be function calls, and that can be performance
+>   bottleneck in a few cases.
 
-Kernel information:
-    Commit message: Linux 6.9-rc1
+I don't think we want to maintain two copies of each architecture's atomics.
+This gets painful very quickly (e.g. as arm64's atomics get patched between
+LL/SC and LSE forms).
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/136958
+Can we start off with out-of-line atomics, and see where the bottlenecks are?
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                kselftest build - bpf [x86_64 (debug)]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
-                xfstests - nfsv4.2 [x86_64, x86_64 (debug)]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
- __exclude_unnecessary_pages: Can't read the buffer of struct page
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
-            Affected tests:
-                kdump - file-load [ppc64le]
-                kdump - sysrq-c [ppc64le]
-        Issue: makedumpfile failed when dumping vmcore
-            URL: https://bugzilla.redhat.com/2269991
-            Affected tests:
-                kdump - file-load [ppc64le]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+It's relatively easy to do that today, at least for the atomic*_*() APIs:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=atomics/outlined&id=e0a77bfa63e7416d610769aa4ab62bc06993ce56
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [x86_64, s390x, ppc64le, aarch64, x86_64 =
-(debug)]
+... which IIUC covers the "AtomicI32, AtomicI64 and AtomicUsize" cases you
+mention above.
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Mark.
