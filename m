@@ -1,109 +1,101 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id D8C5829BC59
-	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 03:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FB6158DAA;
+	Mon, 25 Mar 2024 09:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711338114; cv=none; b=Fhu6mAVO0yRM/q0Y/AOrUHrgSmrPoMPRhtIznTFzUjkQV1gMOMBVPaOcpaSloNBe8JvgABMlifhyih044v6CJGwwBz+hCQEQXRECGWLhfUsJB3Cb5bpDC/cZBYlRSnsbsmXmaByhfit2w/IuQOgRLBPJtkGR32kPbt0VOTdBs+Y=
+	t=1711358422; cv=none; b=kZ6N7SRPQKM3DiwgXpRTKv4NzE+8XjejHeO50IU+AfvR0onHDKhSznFBzerYw9g6WcjqYdUlUYlImJNefmfl5SxFNxOZkwIvNbPIx4li/sq9zuvI1NnTbEUE6CR8J3bIeRab7lfxp6NgHN2YNvSwu2CbBNInf2KaCWJyt4JL1+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711338114; c=relaxed/simple;
-	bh=KGBViHtyWl4RTc5Yv34/CbkultLm1irMrCSdjeeHfsM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uZ/OmoKdJf/rdrfllSc+c8k4dQkJGPAoj4Xo39V1sYeje6dysxFFV9R4sPeXb/otiU1K8mcoSpaUx7qud5ep0twTmlWU3zw/i18mxxZ0srejcqVsOyR6/lEFRWUUBVnww4dJbsjIrhxK81EWjTty9dtiH09is72K5veiruU32RI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 4E0ED6026BC81;
-	Mon, 25 Mar 2024 11:41:22 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: arnaud.pouliquen@foss.st.com,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: Su Hui <suhui@nfschina.com>,
-	alsa-devel@alsa-project.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH] ASoC: sti: uniperif: fix the undefined bitwise shift behavior problem
-Date: Mon, 25 Mar 2024 11:40:33 +0800
-Message-Id: <20240325034032.1031885-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1711358422; c=relaxed/simple;
+	bh=KRFUKWB3oSqUgHNFa1Hjw7+UHdiQcMzSoFOclAEk0Kc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nf+WBeJx9mPOH5FhzjzXQ3fbmyE837eND+ZUlRS32PnsJqG36jLTXSwIV8/N6LpLlikO6/KipCfFFPY3msWMKKmg2HP9eqmWd6yR4VUFFvhL48R/b5CecIe1pKiSd9b7oKVT74nk4KkT787+/6S/iA/pd5HCr8GEAki571FnZlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lW80a0Nu; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lW80a0Nu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711358421; x=1742894421;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KRFUKWB3oSqUgHNFa1Hjw7+UHdiQcMzSoFOclAEk0Kc=;
+  b=lW80a0NupQ2OKInIFCBF3W70izOG3Dbp26DuuhOLEFRnV4+eF040eiRd
+   XXwZ1Ztisi5WgD2PQ6ZknH7bhxcHb0YmKe2KoZlZ26B9m0icuSCY9gucn
+   km0bEmsRCrp9joulCt2iEBk9fKa+MyX3Szbo4zFhwvYRgebs0PEQXEaDR
+   TO2UCcC8wDZQ7AEwBMC4/TUbUa9Up8HXXKWOgrLNpmNscxjqtZ6KpGicW
+   qTQDDnehxJsT/9euLqinM25actdZbIs5maeJ/c8D9NvKrrz0frYP/TREq
+   VrqlVIXn/0i0aze0u9uzxmwTuxa9lyOqzAsrqMajSbo8hx4s/ZE++ULC9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6532834"
+X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
+   d="scan'208";a="6532834"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 02:20:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="914837406"
+X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
+   d="scan'208";a="914837406"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 02:20:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rogV6-0000000Fvdm-2sRS;
+	Mon, 25 Mar 2024 11:20:16 +0200
+Date: Mon, 25 Mar 2024 11:20:16 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Herve Codina <herve.codina@bootlin.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: include/linux/framer/framer.h:184:16: warning: no previous
+ prototype for function 'framer_get'
+Message-ID: <ZgFB0C5KilzltDKz@smile.fi.intel.com>
+References: <202403241110.hfJqeJRu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202403241110.hfJqeJRu-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Clang static checker(scan-build):
-sound/soc/sti/uniperif_player.c:1115:12: warning:
-The result of the left shift is undefined because the right operand is
-negative [core.UndefinedBinaryOperatorResult]
+On Sun, Mar 24, 2024 at 11:19:28AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   70293240c5ce675a67bfc48f419b093023b862b3
+> commit: 54762918ca856028d33d1d56d017a4d7706c6196 net: wan: fsl_qmc_hdlc: Add framer support
+> date:   13 days ago
+> config: powerpc-randconfig-003-20240324 (https://download.01.org/0day-ci/archive/20240324/202403241110.hfJqeJRu-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403241110.hfJqeJRu-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202403241110.hfJqeJRu-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
 
-When UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip) equals to -1, the result of
-SET_UNIPERIF_CONFIG_BACK_STALL_REQ_DISABLE(ip) is undefined.
+> 82c944d05b1a24 Herve Codina 2023-11-28  183  
+> 82c944d05b1a24 Herve Codina 2023-11-28 @184  struct framer *framer_get(struct device *dev, const char *con_id)
+> 82c944d05b1a24 Herve Codina 2023-11-28  185  {
+> 82c944d05b1a24 Herve Codina 2023-11-28  186  	return ERR_PTR(-ENOSYS);
+> 82c944d05b1a24 Herve Codina 2023-11-28  187  }
+> 82c944d05b1a24 Herve Codina 2023-11-28  188  
+> 82c944d05b1a24 Herve Codina 2023-11-28 @189  void framer_put(struct device *dev, struct framer *framer)
+> 82c944d05b1a24 Herve Codina 2023-11-28  190  {
+> 82c944d05b1a24 Herve Codina 2023-11-28  191  }
+> 82c944d05b1a24 Herve Codina 2023-11-28  192  
 
-Here are some results of using different compilers.
-		1UL >> -1	1UL << -1
-gcc 10.2.1	0x2		0
-gcc 11.4.0	0		0x8000000000000000
-clang 14.0.0	0x64b8a45d72a0	0x64b8a45d72a0
-clang 17.0.0	0x556c43b0f2a0	0x556c43b0f2a0
+Yeah, stubs in the headers should be static inline.
 
-Add some macros to ensure that when right opreand is negative or other
-invalid values, the results of bitwise shift is zero.
-
-Fixes: e1ecace6a685 ("ASoC: sti: Add uniperipheral header file")
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- sound/soc/sti/uniperif.h | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/sound/soc/sti/uniperif.h b/sound/soc/sti/uniperif.h
-index 2a5de328501c..1cbff01fbff0 100644
---- a/sound/soc/sti/uniperif.h
-+++ b/sound/soc/sti/uniperif.h
-@@ -12,17 +12,28 @@
- 
- #include <sound/dmaengine_pcm.h>
- 
-+#define SR_SHIFT(a, b)		({unsigned long __a = (a); \
-+				unsigned int __b = (b); \
-+				__b < BITS_PER_LONG ? \
-+				__a >> __b : 0; })
-+
-+#define SL_SHIFT(a, b)		({unsigned long __a = (a); \
-+				unsigned int __b = (b); \
-+				__b < BITS_PER_LONG ? \
-+				__a << __b : 0; })
-+
- /*
-  * Register access macros
-  */
- 
- #define GET_UNIPERIF_REG(ip, offset, shift, mask) \
--	((readl_relaxed(ip->base + offset) >> shift) & mask)
-+	(SR_SHIFT(readl_relaxed(ip->base + offset), shift) & mask)
- #define SET_UNIPERIF_REG(ip, offset, shift, mask, value) \
- 	writel_relaxed(((readl_relaxed(ip->base + offset) & \
--	~(mask << shift)) | (((value) & mask) << shift)), ip->base + offset)
-+	~SL_SHIFT(mask, shift)) | SL_SHIFT(((value) & mask), shift)),\
-+	ip->base + offset)
- #define SET_UNIPERIF_BIT_REG(ip, offset, shift, mask, value) \
--	writel_relaxed((((value) & mask) << shift), ip->base + offset)
-+	writel_relaxed(SL_SHIFT(((value) & mask), shift), ip->base + offset)
- 
- /*
-  * UNIPERIF_SOFT_RST reg
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 
