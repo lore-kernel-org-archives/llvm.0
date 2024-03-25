@@ -1,134 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CCD19F50F;
-	Mon, 25 Mar 2024 00:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D57C2072E7
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 02:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711327664; cv=none; b=fZlqf08iHxK5xd3vLF7+wNB20tXe0cJ4acgTHr+YdIhzzekdCC065hye2M/0fja4hrew8i5szrcYMN2zFBqhxh/SUOT+PDIBjjI/zJlVsk0CTIlyS+fGyWNYYfGcEij4mScs9D5MA6zeX3i9m9OweF/VuahpRWv3p+SN6JHU6wg=
+	t=1711335089; cv=none; b=Den6irLCFqtKZKMaVj4K+hwgJBIZwCZWV7parvqYgbFoV3GFHYsuSEB5NOcRkMeroTASHxv9FXEefhjBYhivl8CwVUtszVT+my8PJCsh9Q81rgEVmjYbI285Ze8jtmHewqq0tti5hOBdL/5urZnX+wfxd1XF2uYBIfZWGorp0tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711327664; c=relaxed/simple;
-	bh=o6p3yrMtviZtfUJ3VVhVVm6R/oHw+uO31hrKIhWbyjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LglB3TVlaskM9dGtJRV+CivgP6sQm2udj9n0NXehwfU9LZUSecFVpXWg/9Vg290cXKTYDdEy/4nM91SeZUVs6dgRHWjdjNDCXwiQeXUxvCK+CpiVE1LXCIJVCNl2UkxPTuQ1sz8hqMlo2ZwAmYkIgPMYghByAIz0vFm6md9wTCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OMan77If; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711335089; c=relaxed/simple;
+	bh=TP9cf6QiCivHYJVvHQumBBGqG5p/rxlZD5cUEZ/HWPk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XLCpAgVnxsz9qkIU9FY2CyeKKe5MVTdlbe1jl3WA6cLrGY/9l1dqvMyWipPeO6fXwZsUzvqM9itGFk4JuFqI4k1M4yU+//mNn+LB32eeuFfEAipJc8vdxGuNn4eijRpSrCZv4mKOX+nndb8ImnAjM/3WIyGwCR/RbJmtg0NC5qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IHcVdedj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OMan77If"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711327663; x=1742863663;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o6p3yrMtviZtfUJ3VVhVVm6R/oHw+uO31hrKIhWbyjo=;
-  b=OMan77IfDc6lSx/H3K6E2X1cZnNChj9hduoT3FgtU8LPVY1kMoaFJiJt
-   e3/163+BPzWr1w5J6XeoQYoEL4IE9rUpGZIkA8S+Y0t6bg/pezzRqfPpv
-   xuoXfRWJXmogAf7YYaHyHvNJpsRiDIs7puBusvjsp+ovvCoijG2Oqc30J
-   A2Ehre2Ea+93gf1GxKpsmCpnqfVjPrWDoxr7Med01CZLRhL4iBOzBXEIQ
-   LjkIDA3TvPzPqFCxP6htsBNAu3Ve9J0crFlLLgafBxg/dHaUh/Reb8x8G
-   KAeMjEJGpqp3oC8NsI6UEIQOVtg+wF+otiQ1eYeCPOvXrO5U2olFlyD7O
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="10082510"
-X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
-   d="scan'208";a="10082510"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2024 17:47:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
-   d="scan'208";a="15505460"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 24 Mar 2024 17:47:38 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1roYUy-000M5p-1u;
-	Mon, 25 Mar 2024 00:47:36 +0000
-Date: Mon, 25 Mar 2024 08:47:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
-	Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: [cel:nfsd-5.15.y 1/391] include/linux/fsnotify.h:235:52: error: too
- few arguments to function call, expected 6, have 5
-Message-ID: <202403250847.mkfBiQLx-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IHcVdedj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711335084;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QBpvWeGNho5cqgWnry49DtR+8sRcXMMMzgkyaXgPuvU=;
+	b=IHcVdedjgRiSyOeR8K4M8jVfOSdNmeAyBXYNAoMYElONqwRY2U/hdR0nziFVmChQ+OV6lL
+	i4TCh7c6k8J9puocnqGMElGZVYTAL8da9sAS5GQRLdCFqERWnJqVjORHaxCjeLvHlqxDkM
+	UEOobw7eDQ3yd75kD/pKRwEhs3+FvoM=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-178-wGDarazkPQCrFPVty-ejBA-1; Sun,
+ 24 Mar 2024 22:51:21 -0400
+X-MC-Unique: wGDarazkPQCrFPVty-ejBA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D53281C02CA2
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 02:51:20 +0000 (UTC)
+Received: from [172.64.11.27] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F2B3B1C060A4;
+	Mon, 25 Mar 2024 02:51:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.8.0, mainline.kernel.org-clang, 5e74df2f)
+Date: Mon, 25 Mar 2024 02:51:19 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <84171.124032422512100203@us-mta-178.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-5.15.y
-head:   00f016a743ef8a7ac9a13c48499a67614a0077ed
-commit: af7130545d85312d5caf9c37e308db100ac172ac [1/391] fsnotify: pass data_type to fsnotify_name()
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240325/202403250847.mkfBiQLx-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240325/202403250847.mkfBiQLx-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403250847.mkfBiQLx-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Note: the cel/nfsd-5.15.y HEAD 00f016a743ef8a7ac9a13c48499a67614a0077ed builds fine.
-      It only hurts bisectability.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-All errors (new ones prefixed by >>):
+Kernel information:
+    Commit message: Merge tag 'x86-urgent-2024-03-24' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
-   In file included from fs/kernfs/file.c:14:
-   In file included from include/linux/pagemap.h:8:
-   In file included from include/linux/mm.h:1608:
-   include/linux/vmstat.h:450:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     450 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from fs/kernfs/file.c:16:
->> include/linux/fsnotify.h:235:52: error: too few arguments to function call, expected 6, have 5
-     235 |         fsnotify_name(dir, mask, inode, &dentry->d_name, 0);
-         |         ~~~~~~~~~~~~~                                     ^
-   include/linux/fsnotify.h:29:19: note: 'fsnotify_name' declared here
-      29 | static inline int fsnotify_name(__u32 mask, const void *data, int data_type,
-         |                   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      30 |                                 struct inode *dir, const struct qstr *name,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      31 |                                 u32 cookie)
-         |                                 ~~~~~~~~~~
-   fs/kernfs/file.c:128:15: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     128 |                 return NULL + !*ppos;
-         |                        ~~~~ ^
-   2 warnings and 1 error generated.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/136951
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                kselftest build - bpf [x86_64 (debug)]
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
+                xfstests - nfsv4.2 [x86_64, x86_64 (debug)]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: makedumpfile failed when dumping vmcore
+            URL: https://bugzilla.redhat.com/2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
 
-vim +235 include/linux/fsnotify.h
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [x86_64 (debug), x86_64, aarch64, s390x, =
+ppc64le]
 
-ece95912db94d9 Jan Kara       2008-02-06  218  
-3d7b7272ce9deb Amir Goldstein 2022-01-20  219  /*
-3d7b7272ce9deb Amir Goldstein 2022-01-20  220   * fsnotify_delete - @dentry was unlinked and unhashed
-3d7b7272ce9deb Amir Goldstein 2022-01-20  221   *
-3d7b7272ce9deb Amir Goldstein 2022-01-20  222   * Caller must make sure that dentry->d_name is stable.
-3d7b7272ce9deb Amir Goldstein 2022-01-20  223   *
-3d7b7272ce9deb Amir Goldstein 2022-01-20  224   * Note: unlike fsnotify_unlink(), we have to pass also the unlinked inode
-3d7b7272ce9deb Amir Goldstein 2022-01-20  225   * as this may be called after d_delete() and old_dentry may be negative.
-3d7b7272ce9deb Amir Goldstein 2022-01-20  226   */
-3d7b7272ce9deb Amir Goldstein 2022-01-20  227  static inline void fsnotify_delete(struct inode *dir, struct inode *inode,
-3d7b7272ce9deb Amir Goldstein 2022-01-20  228  				   struct dentry *dentry)
-3d7b7272ce9deb Amir Goldstein 2022-01-20  229  {
-3d7b7272ce9deb Amir Goldstein 2022-01-20  230  	__u32 mask = FS_DELETE;
-3d7b7272ce9deb Amir Goldstein 2022-01-20  231  
-3d7b7272ce9deb Amir Goldstein 2022-01-20  232  	if (S_ISDIR(inode->i_mode))
-3d7b7272ce9deb Amir Goldstein 2022-01-20  233  		mask |= FS_ISDIR;
-3d7b7272ce9deb Amir Goldstein 2022-01-20  234  
-3d7b7272ce9deb Amir Goldstein 2022-01-20 @235  	fsnotify_name(dir, mask, inode, &dentry->d_name, 0);
-3d7b7272ce9deb Amir Goldstein 2022-01-20  236  }
-3d7b7272ce9deb Amir Goldstein 2022-01-20  237  
 
-:::::: The code at line 235 was first introduced by commit
-:::::: 3d7b7272ce9deb7157670f584274f37d8b12f81f fsnotify: invalidate dcache before IN_DELETE event
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-:::::: TO: Amir Goldstein <amir73il@gmail.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
