@@ -1,234 +1,115 @@
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F8B1BDCF
-	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 12:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.148.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711370694; cv=fail; b=bLgpS1EbTBLPPRFnl1Mzuj3/lfPz4oeQStQuewncZ/suj8ZVSmqAKsBKt+EO4L5bVhNprd56rpLJN3pDFjmAahNhUE7YZlMZm5JX9jS+DnapJupEGPHr+I4yGTMTW2s76KdvXE5hmbTnTZ6nQkdRZ5DiKoq1E1e3xsgp8wVpnmg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711370694; c=relaxed/simple;
-	bh=mM2jqFPzzVLqCXMdSpX/YoMyaANeZe078MDPCVl3GtY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=juZWVzT4fazLZtELyrnVy704a11PFHQ4tPYRx7ZZcrdcwamu8j6pOTVDjh9+HA2xFMS1L2jOjPJj1rMRcc1zlr6iIbiPypi71d6HAjR/x372BiY1KoAk+Z088Alqg9xebUJaGjDuOe59fFmjRbWo8WoTJKec9dP5TPyDR/8gs+4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=XTxu/E//; arc=fail smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E5E82C69;
+	Mon, 25 Mar 2024 12:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711371474; cv=none; b=qMlml1ZVKBTNJ9SsH8qb/flG1ETJAPJy1c4y/IvgqeiigCKQvGPnVNitLNP6olcLQ7fjExpItxzaPXX/q/CkVP6cfq5JLPLmw5ZhswchpX6DGq07x2qEnE36u4flMvzMa6Ie8M3EjgxDH7XiIcOyDz58LkCYDpHR6Gl8bVBswH8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711371474; c=relaxed/simple;
+	bh=CzBs56JhrKv4N4DRxQV2Un6CkUEhsdMILwao7XU7lB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lKRhAU/J33intyCmZccU0w2PF2QHpp5+GQxYCHyEe+pIK6+LuP5lLu7D2UPm+5cjLVdrWQYrTiQSQ6fClZAxsMf0PsIJOIrCBx2L3iG3ay4a5TLekduVzVrGFqMxQq0eea18LDiDvSQJbMPHB6o/YFggfEiFSDPpgtBqdmW2YDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jeLkD19W; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="XTxu/E//"
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42PBjrWL001608;
-	Mon, 25 Mar 2024 05:44:48 -0700
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2040.outbound.protection.outlook.com [104.47.73.40])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3x38pbr805-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Mar 2024 05:44:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PTtEi1zFrxkO3B9eGqMVnIor8c4KMN9qjMqe1Nf2YiRBGB2mCBT5OAtRcQHk7G/BFlokoyGiQ92ZKnoceAeKpbYpfPgC06L+R4b/AOJBCPNI7hjSZhG9p6//6v61xVYCj2aErxBCS//i7Pjsk8kSLy5Eix8L/clncbzN0EaZ4goSPMXENwzFDr98BVO3RfRCgEBXnLa57aO6eD1DSnJtaZoBFduiXYX9MObx949xYSmgIIpULik1zUYZjP+HOCJ2d9xDTDHNvapY8KI9xDlb8oGgmm6vyrVB6DRY4eU0dmGtz5RkXfq7ups7VAfrowr5pmOpiUbu9JYSoPL0n0mZlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mw4/dt0u5H1qRNWbp7Zi3g+c3c4Ar6HTDjyxK6JFkXs=;
- b=B663aqjquP0t2hCj8Zyr8585Ia5wXkoOM9ESbI/EY4ZZefB741Ga3HM/jArflb58S1Jnnv7PRRBitWo3UiWrQ25lWvXSdF/1qxvt3dvNqNPe3Ou5w1bljzhhrwxQ6T+UlOIzN/gQck0AVewW8Zw5MWltTGPUuc+/u7OwKajHNSiQZ1D0NxY+1AYR9hKh20vnzPvOsT+LaiKtC/CUKCjZsKBBBxouiP0oDXHzG0MpzN/orj56ox3ayPS2d2d/j15m9y9rX5La8b7YKm8rVEaKs8J7hmYhNHzaxcAxc6yBzsCpgxFNFtFn1bOWyMA9ENitLdHnWQPAO2YuPcu0fqLlAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mw4/dt0u5H1qRNWbp7Zi3g+c3c4Ar6HTDjyxK6JFkXs=;
- b=XTxu/E//C2GSYvrYobfDjsnwDTFplF5T2QP6MyPmYD87ISE9QVyAadIT6LTJgJn2sVgiI+L86R506TuQTBzf2oBM4ThJHk4vQyM10P5KyW6XqIAF2YUMy2CelpIYuNGsgo+g6uQ6G2I2SgHKjAmapv2XBFNa4kpwq5xP8UjKfrY=
-Received: from CO1PR18MB4666.namprd18.prod.outlook.com (2603:10b6:303:e5::24)
- by MN0PR18MB6094.namprd18.prod.outlook.com (2603:10b6:208:4a5::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.28; Mon, 25 Mar
- 2024 12:44:44 +0000
-Received: from CO1PR18MB4666.namprd18.prod.outlook.com
- ([fe80::5087:a566:c473:1fef]) by CO1PR18MB4666.namprd18.prod.outlook.com
- ([fe80::5087:a566:c473:1fef%7]) with mapi id 15.20.7409.031; Mon, 25 Mar 2024
- 12:44:44 +0000
-From: Subbaraya Sundeep Bhatta <sbhatta@marvell.com>
-To: Su Hui <suhui@nfschina.com>, Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Geethasowjanya Akula <gakula@marvell.com>,
-        Hariprasad Kelam
-	<hkelam@marvell.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org"
-	<kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com"
-	<ndesaulniers@google.com>,
-        "morbo@google.com" <morbo@google.com>,
-        "justinstitt@google.com" <justinstitt@google.com>
-CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: RE: [EXTERNAL] [PATCH 2/2] octeontx2-pf: remove unused variables
- req_hdr and rsp_hdr
-Thread-Topic: [EXTERNAL] [PATCH 2/2] octeontx2-pf: remove unused variables
- req_hdr and rsp_hdr
-Thread-Index: AQHafocf78zPvIoQlUeZgrhxSP5MI7FIZsYg
-Date: Mon, 25 Mar 2024 12:44:44 +0000
-Message-ID: 
- <CO1PR18MB466675E232FA99415D766F68A1362@CO1PR18MB4666.namprd18.prod.outlook.com>
-References: <20240325073549.823832-1-suhui@nfschina.com>
- <20240325073549.823832-2-suhui@nfschina.com>
-In-Reply-To: <20240325073549.823832-2-suhui@nfschina.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR18MB4666:EE_|MN0PR18MB6094:EE_
-x-ms-office365-filtering-correlation-id: c40ca516-c6da-4b72-913a-08dc4cc958cd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- 8WK896y5K7OwLc9ywROB95bFX2InDZc4K1O8IWjo+ugSao99GMAgyWTLe/7eAQXNaJ911Sis+uqjuEDtBCBcl887fgXDVpJXgdYPp3TBD5wPPaXuRjND+MpZMlFKYvb5JKEjrrsGiu3ZbW11PMtpVkD8fWW0+uNpTtLpzr4pmZTxxYOBDEQcnrzPg0ce4XhuX4FFvqiQjDT430wN1MqLT9mx13sJZ6K2rJY43UmnHiBb3rCpUltIbrTWXCKP3yCdaddKPlN7U13EeE8Xc81zSEB2G6wICBEuwyF/TkJpv9zf6kFoisZ6vaO4fLaKwwgMYKYgtQLJRGGPgDnhd5lVfsLk5pczCkBDzF5o9XXb3qGA6q5syXLS0b62eepijlTJM1ximW4uV7gUII7ex/tAAZHbmq6/E3Y//raPuvP3b0gbR7KJhU6aAVGX1Ie7zrwGUzCLeYfrEWmfq2+GKIxckNsYP4flPFdzrdCqbyEtZElmtsRibsNQXNEJrcLx981ThcTfM3eEHZEwkhWgsj3bYKEWdWFa3Tt4mYGQNtZ9ZNDxAoBO/Q02itjSQJ4Xwg9N1zQcYPMnmJsGv3EmjNbspgIzR/NZ6gbJvpHwG3T74a4ljAyRIjMOk1k7qs5E283XCbW+uJEKO7gIIdkSsm44cZOsR0sJck+QcBIgTDLtuCXu7H5m0x13266f509BSu5y6rAZALPwR3TDkcMNcAn/ePyMXJJpp5+SZsrX8v7jrXw=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR18MB4666.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015)(366007)(38070700009)(921011);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?I6SekxjjCyfpSx9/L1CZMNb11pj4fUKTT+/IkIubtA/QP01Gb1qSIH7UY2pW?=
- =?us-ascii?Q?Jvn6JuofNnNe1hmQo5dCJo3nOIrpdF4pu6uO235Llm5qKdCwYXJ6bknqqA0O?=
- =?us-ascii?Q?xhid/ZepJLKjK45gja0c9dIW+B6EyOIYT0rgRX72qJfFzfDMHnYjBi++KIEv?=
- =?us-ascii?Q?wY/brkOVnzACFV3iPNZkVcEA31LA4YGWQOtRUGWrnO1LFRBj82CHJgZcD/Ec?=
- =?us-ascii?Q?b4tNfEU/LD+7FqfdAqxe9hEoUG6XUyxfYZ+ruD5++/SeL11ZrYMLrpDBagWY?=
- =?us-ascii?Q?IO3lqQs3dESk60ETGJFVIoDO5bYi5rr50uYQ20Pa72qcrMPkz5gZSVcf5GOt?=
- =?us-ascii?Q?1YhPWCjF7tkvJKoKTRILc4zjcM1KEeKziYYGrfK6ASgJTG1sJe+45H1R4yZW?=
- =?us-ascii?Q?hN1G7m2hKI/pi4UwOWRrTJZ92ApFafg1StvN26Cgbj5Ks0C8M+Ul/nNhm+sM?=
- =?us-ascii?Q?1bcXG/esscefyeeKwgHzwMRTKDy36baOZkgOtMIvFFzA68LMFq/qWgagR70T?=
- =?us-ascii?Q?tM49hpR0H7Umdx2n0VH3wsBI+PHqalblfJWC6mCi4AktigFUUAJ6M0JyMz5q?=
- =?us-ascii?Q?vX3FIZ6xr88SzVJm4tZpHhCR+xwCtk8aNh0qkz3SWHuq0mnc0v2CcUdt2lfW?=
- =?us-ascii?Q?GeUboI/QR3lzr2Nny7lv+OZM2BoFAAw3vgoc4iRqiYNZTWv9lcowyPPdert6?=
- =?us-ascii?Q?qE7QgohJ3aPUH3RUzfaMMFbHdopO8GKb0SmUk5QCcyalOUOpg/Y9bc1FZ7on?=
- =?us-ascii?Q?JUPt0Chs5qZLY7FI5MHAjRD9WBCJYy1fPFecKOn/WDZdT5/YbgWN39BP61GC?=
- =?us-ascii?Q?Iv1T9slm1+mDiMo1SGglpW7HKQ6lZ08m5bZvkvDxYM1APwP9nb+A/EQYYkYu?=
- =?us-ascii?Q?7NVOO8muE9yySyoZMLtS/lojVloaD3TF/fdaUBshdA8nrjtFSVTa0x7LlNyn?=
- =?us-ascii?Q?J/MxRVm4/UB1IyONHi0mymtdUOvZwIZScPWqeXoJcvWNmZdmndTh+4UOlMSg?=
- =?us-ascii?Q?fQxp42qkqvRDfTDhYkBRzPUuTi/mSEwliK+EqQmQbxbadqhYXL2Nf7eWwPXS?=
- =?us-ascii?Q?K7PFvzmeftD3oi4rd0Ub87c6FRcL0BrSon1PKpYc/D4aIGWrTgAfT9fEGGUH?=
- =?us-ascii?Q?8amiyZplKir7CYXh9VxyNPrk+M6SfxP9XCNdoRsW1uKis267xAp8+iC+XE+O?=
- =?us-ascii?Q?Zn2Fb139KyapiL0PeDRk18lL+sbjPdQiIUp37EJnDpfxoC7suKPXcK65lB08?=
- =?us-ascii?Q?UZ00MWaLp1/+17S8i3n0Ift2iT3ECT9iE9B25gNaDCP1zMUDGQeh53HEB1nf?=
- =?us-ascii?Q?REIroaDCGSeREqmTtVMs/+3gC3Ll9kru1seQ2V2RwEQs4jmJN6+mQ4NyIOjS?=
- =?us-ascii?Q?xiZHudfxdSr7Qgnoyf/7BCiimjtd/unXu9kpGDbmgXx05uy4NMX1TlrXVR4K?=
- =?us-ascii?Q?XqtQKDxKdEZvyq96yjkXmolyMsgb1VqOVBdfodXAE4pTUn13XwXP6fRgDRSm?=
- =?us-ascii?Q?biAXDRFeB6K3qjh+mswE94Q0y4xTbkcyO2+phtyKK3HnSHnwHR2Ies9VvA?=
- =?us-ascii?Q?=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jeLkD19W"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711371471; x=1742907471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CzBs56JhrKv4N4DRxQV2Un6CkUEhsdMILwao7XU7lB0=;
+  b=jeLkD19W6dTzCRPsMlU8BOvGMlMBgeaonKURH4elqhj1H/zb7tuvFN0s
+   UNjUOZtxkr0H5Hr4QAdzXeQsJ+Y684pH0xRNsiskf+xbnFwFFGjqPMQ1A
+   QhRD71v4Y57+n0xSQYIrkC49tAznezBpygq2ZEZ8jjnFDRr1ZhD0oN8hn
+   0lhSnQPyVvUYWI3YtnVbs7wfGznZmaSajw5J4ASJtHUvqxP9afkNGDCqe
+   3hHIH3GwfWVCkHBmLCgDgFQTETXlE0QEykSaAIISgw21WKb9KJabAmrrZ
+   M+QRmT9pPFlF5H1gyGW2DKVyBw7I2+7VuCeuNf+ZY6L1o3c80AZgLQlld
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6553026"
+X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
+   d="scan'208";a="6553026"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 05:57:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="937070391"
+X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
+   d="scan'208";a="937070391"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2024 05:57:49 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+	id 795E513F; Mon, 25 Mar 2024 14:57:48 +0200 (EET)
+Date: Mon, 25 Mar 2024 14:57:48 +0200
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: "Jason A. Donenfeld" <zx2c4@kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Elena Reshetova <elena.reshetova@intel.com>, 
+	Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [crng-random:master 2/2] arch/x86/coco/core.c:189:2: error: call
+ to undeclared function 'memzero_explicit'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <wh7cqsco5vgkzixis7qfbvvsb6c2t7ms6ox2wiepo5rrk3y3c2@akvtfgu3dpgi>
+References: <202403240934.Nf4UUK5L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR18MB4666.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c40ca516-c6da-4b72-913a-08dc4cc958cd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2024 12:44:44.1300
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +ExFDZN/crwUVsOVhjcXPUxWWiDpitW8l+URUosXJFidjZ81It27Nuv1uWXeQcAi9UqRD4GRqPSIKrujLJLQjg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR18MB6094
-X-Proofpoint-GUID: qcN6x61j4SekXdjO-AfvbLUS4zgtGHiI
-X-Proofpoint-ORIG-GUID: qcN6x61j4SekXdjO-AfvbLUS4zgtGHiI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-25_08,2024-03-21_02,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202403240934.Nf4UUK5L-lkp@intel.com>
 
-Hi,
+On Sun, Mar 24, 2024 at 09:15:17AM +0800, kernel test robot wrote:
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git master
+> head:   6fba9af4a847c5ee67715bc6f7959e9ab6394275
+> commit: 6fba9af4a847c5ee67715bc6f7959e9ab6394275 [2/2] x86/coco: Require seeding RNG with RDRAND on CoCo systems
+> config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240324/202403240934.Nf4UUK5L-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403240934.Nf4UUK5L-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202403240934.Nf4UUK5L-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> arch/x86/coco/core.c:189:2: error: call to undeclared function 'memzero_explicit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      189 |         memzero_explicit(rng_seed, sizeof(rng_seed));
+>          |         ^
+>    1 error generated.
 
->-----Original Message-----
->From: Su Hui <suhui@nfschina.com>
->Sent: Monday, March 25, 2024 1:06 PM
->To: Sunil Kovvuri Goutham <sgoutham@marvell.com>; Geethasowjanya Akula
-><gakula@marvell.com>; Subbaraya Sundeep Bhatta <sbhatta@marvell.com>;
->Hariprasad Kelam <hkelam@marvell.com>; davem@davemloft.net;
->edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
->nathan@kernel.org; ndesaulniers@google.com; morbo@google.com;
->justinstitt@google.com
->Cc: Su Hui <suhui@nfschina.com>; netdev@vger.kernel.org; linux-
->kernel@vger.kernel.org; llvm@lists.linux.dev; kernel-janitors@vger.kernel.=
-org
->Subject: [PATCH 2/2] octeontx2-pf: remove unused variables
->req_hdr and rsp_hdr
->
->Clang static checker(scan-buid):
->drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:503:2: warning:
->Value stored to 'rsp_hdr' is never read [deadcode.DeadStores]
->
-Consider this also as a fix and add Fixes tag. Also please add "net" in sub=
-ject to
-easily identify whether this patch as net or net-next material.
+There's also issue with WARN_ON() in archrandom.h.
 
-Thanks,
-Sundeep
+Fixup for these two issues:
 
->Remove these unused variables to save some space.
->
->Signed-off-by: Su Hui <suhui@nfschina.com>
->---
-> drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 8 ++------
-> 1 file changed, 2 insertions(+), 6 deletions(-)
->
->diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->index 3f46d5e0fb2e..637b05c79c42 100644
->--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->@@ -450,7 +450,6 @@ static void otx2_pfvf_mbox_handler(struct
->work_struct *work)
-> 	struct mbox_msghdr *msg =3D NULL;
-> 	int offset, vf_idx, id, err;
-> 	struct otx2_mbox_dev *mdev;
->-	struct mbox_hdr *req_hdr;
-> 	struct otx2_mbox *mbox;
-> 	struct mbox *vf_mbox;
-> 	struct otx2_nic *pf;
->@@ -461,9 +460,8 @@ static void otx2_pfvf_mbox_handler(struct
->work_struct *work)
->
-> 	mbox =3D &pf->mbox_pfvf[0].mbox;
-> 	mdev =3D &mbox->dev[vf_idx];
->-	req_hdr =3D (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
->
->-	offset =3D ALIGN(sizeof(*req_hdr), MBOX_MSG_ALIGN);
->+	offset =3D ALIGN(sizeof(struct mbox_hdr), MBOX_MSG_ALIGN);
->
-> 	for (id =3D 0; id < vf_mbox->num_msgs; id++) {
-> 		msg =3D (struct mbox_msghdr *)(mdev->mbase + mbox->rx_start
->+
->@@ -494,7 +492,6 @@ static void otx2_pfvf_mbox_up_handler(struct
->work_struct *work)
-> 	struct otx2_nic *pf =3D vf_mbox->pfvf;
-> 	struct otx2_mbox_dev *mdev;
-> 	int offset, id, vf_idx =3D 0;
->-	struct mbox_hdr *rsp_hdr;
-> 	struct mbox_msghdr *msg;
-> 	struct otx2_mbox *mbox;
->
->@@ -502,8 +499,7 @@ static void otx2_pfvf_mbox_up_handler(struct
->work_struct *work)
-> 	mbox =3D &pf->mbox_pfvf[0].mbox_up;
-> 	mdev =3D &mbox->dev[vf_idx];
->
->-	rsp_hdr =3D (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
->-	offset =3D mbox->rx_start + ALIGN(sizeof(*rsp_hdr),
->MBOX_MSG_ALIGN);
->+	offset =3D mbox->rx_start + ALIGN(sizeof(struct mbox_hdr),
->MBOX_MSG_ALIGN);
->
-> 	for (id =3D 0; id < vf_mbox->up_num_msgs; id++) {
-> 		msg =3D mdev->mbase + offset;
->--
->2.30.2
-
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index 95e27dca9328..67edebb235e1 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -11,6 +11,7 @@
+ #include <linux/export.h>
+ #include <linux/cc_platform.h>
+ #include <linux/random.h>
++#include <linux/string.h>
+ 
+ #include <asm/archrandom.h>
+ #include <asm/coco.h>
+diff --git a/arch/x86/include/asm/archrandom.h b/arch/x86/include/asm/archrandom.h
+index 1cc01ecd5e75..3066b339d4ce 100644
+--- a/arch/x86/include/asm/archrandom.h
++++ b/arch/x86/include/asm/archrandom.h
+@@ -12,6 +12,7 @@
+ 
+ #include <asm/processor.h>
+ #include <asm/cpufeature.h>
++#include <asm/bug.h>
+ 
+ /* Unconditional execution of RDRAND and RDSEED */
+ 
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
