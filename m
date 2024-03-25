@@ -1,104 +1,127 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 8597C182DF
-	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 07:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB896183BBA
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 09:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711352181; cv=none; b=gk2KME8AL0PyHDlULs2qzA/uI27Un1yV/vmTB01tbvGRsq2jVdJMzsvbUOcznw6DFghkVnVTEhgcD1w3FddMv1vZYEZXZrrvOyMG3ct2bN4/9M3H3kpTJtN/BMIbNquZJ4b7rUhtl6+jsAbud3uLdEAkb+oVq1WxO4bPTnzZiRo=
+	t=1711359724; cv=none; b=rjXDxFjbATFriNEJ8phf1NM5AHki7QgOQLZkcJERApppEGav6Eb/jf3eqMbfl1M+BiJtLbg0nJvQiKOb8ohny3zvcTFY2bnALl4ie7YszUuetjgRW2xt62eS2lNUgtIhjvbcnJa7qsz+fwRpiC6Fyzm4YRQQo/o58/7IF523ZwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711352181; c=relaxed/simple;
-	bh=B3EMYWMj93nwUmYvmia6ouNwv5W/jt4RGyZlxKAL1wg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version; b=G0vHlqNf87BIoSrGuCxP/8LTfvkhaIi7tQdj2pNHvYl+5T6ImUbTJjdN2oSMa9uDvohGCbyVWy+Xhjw84nKPdpfpquTG41OibvysqU1f+ANPG/jQmaXq3IG9Ia94j1OLklC0lLu61z+RdgScbjXebhPbH9FhXdoicN5VyA/6JSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id D797C602E36DA;
-	Mon, 25 Mar 2024 15:36:08 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: sgoutham@marvell.com,
-	gakula@marvell.com,
-	sbhatta@marvell.com,
-	hkelam@marvell.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: Su Hui <suhui@nfschina.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH 2/2] octeontx2-pf: remove unused variables req_hdr and rsp_hdr
-Date: Mon, 25 Mar 2024 15:35:51 +0800
-Message-Id: <20240325073549.823832-2-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240325073549.823832-1-suhui@nfschina.com>
+	s=arc-20240116; t=1711359724; c=relaxed/simple;
+	bh=mgmBjav3rZynbJ1mYiMRayuXnORVSBOK5ibhz91RhOc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u1GSwbv5ldEfdNX9QOqoobDpb57i787URHvD1yMzg8DXVaOso/HXvvGZhuWP8r08q5GGSfSCGvIaYgJnP4I0DUGl9v7eqgDjFmXJEdTrhtHjbEYIathMFR/Qph8sH6Fcxlik1egbY8TigzY4yKyMvQFBuqZZ1a7uttMo3yEr93o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mdb8dOCP; arc=none smtp.client-ip=209.85.221.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mdb8dOCP"
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-4d8804a553dso395087e0c.1
+        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 02:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711359721; x=1711964521; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3DoSiXc8Yp8uuBDk6EiaF3on1eVJFgP2CMpJotYW4U=;
+        b=mdb8dOCPIpxRaC/LpC+e8BCvCkgY/6sU5s4dU16UsmPWVsVptWoJAxpkpK2RKwq1X1
+         yKlf02NihATgDeyjg1vsJsI2yU4sd4NO+NRThsjFxB5dNu3elG3GXEv1zKtFTlw4uz+v
+         sY+GEbFJVpW/YE2k2PI5SfHpGbJ2Rj6BZE2jX+D6HPuNFSpmUHKFd4NaqHSif7aT1uru
+         TRjBmKozZUhedvbrWp/JdJqp0ovnUc6HeTedWoUA8k40za82f267GURfCswWL9/HxHhk
+         JTM2gVCqID6CRhslPtmxVDZk70DlEN5glg6w+fzMWbHUVyw+yooRpUpjQzO8dOdlXzpt
+         miIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711359721; x=1711964521;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H3DoSiXc8Yp8uuBDk6EiaF3on1eVJFgP2CMpJotYW4U=;
+        b=TTklFFVkpaD/JFZ3evSdmOf4QcMWrK+dRIPJn1SlmpnoX2wZqjdlCHg2zJ2kkWXIwp
+         GV0NPPIf0iMAnuV8F50/OQOxqsj67EvCUrpajmookq8aCIC13HeWOG8FCIrUvYD3XkQ1
+         ERmuOAcpXo/3EJ98NnHyyhqy97oBtgglWxSJv9Zix6PUWI5eZ1um+/wfChSU5Iyg2Fy/
+         BK2hENW7WhU+jie7ghq+d10nUy3KZnZuk6I3oFZzlVhteGhWWhfWtfTzqviqgPemlRSi
+         tP5ecrUVXzCajf9SvgZ+6CatgVuR594AKiMzNK8TT4UCCVjhZRcENeyzxaxxE440JqGA
+         YSGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWFvCBfAkGEtJSn+hyy3qQdA2pc3u+QP5bEv3KH9NfXYR/+zaUzOtabzXTtf/Ky2LXP3orlggBfrP1pfQr02mPv+KAQFA==
+X-Gm-Message-State: AOJu0YxHRkoFGAGGDZDJQTj8CfwpZUkQgaYqyq9rt8ubhsHqACPXKpK9
+	G+3g1mG7WAKr6UbC8xpySJVghdXNNkoLO3RrOy/xspAKEaHUGBW1a5ERs7Ax0AVHdbpLVWxf8Cr
+	xpSiAx8tjYW18IwOsyZBwvJDL/fAGDbxjHlXMtg==
+X-Google-Smtp-Source: AGHT+IGsnuKrGIgppmDbZ5qB5PCahd/U7K9yFBI8vV7C0Q0Y/IrpHBMv5VHW+jQvIwvalqRtoeVjhf0a3ebzv0+7YqA=
+X-Received: by 2002:a05:6122:1815:b0:4d1:34a1:c892 with SMTP id
+ ay21-20020a056122181500b004d134a1c892mr4401327vkb.13.1711359721603; Mon, 25
+ Mar 2024 02:42:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240324231207.1351418-1-sashal@kernel.org>
+In-Reply-To: <20240324231207.1351418-1-sashal@kernel.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 25 Mar 2024 15:11:50 +0530
+Message-ID: <CA+G9fYuFh7K4XO+hVyJ59vWbfCaGpNf1ko9bUaZ0qV86wLbreQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/451] 6.1.83-rc1 review
+To: Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	torvalds@linux-foundation.org, akpm@linux-foundation.org, linux@roeck-us.net, 
+	shuah@kernel.org, patches@kernelci.org, lkft-triage@lists.linaro.org, 
+	florian.fainelli@broadcom.com, pavel@denx.de, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Clang static checker(scan-buid):
-drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:503:2: warning:
-Value stored to 'rsp_hdr' is never read [deadcode.DeadStores]
+On Mon, 25 Mar 2024 at 04:42, Sasha Levin <sashal@kernel.org> wrote:
+>
+>
+> This is the start of the stable review cycle for the 6.1.83 release.
+> There are 451 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Tue Mar 26 11:11:59 PM UTC 2024.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/patch/?id=linux-6.1.y&id2=v6.1.82
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> Thanks,
+> Sasha
 
-Remove these unused variables to save some space.
+The regression detected while building allmodconfig builds with clang-17
+failed on all the architectures. But gcc-12 builds passed.
 
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+> Andrii Nakryiko (5):
+>   libbpf: Fix faccessat() usage on Android
+>   libbpf: Add missing LIBBPF_API annotation to libbpf_set_memlock_rlim
+>     API
+>   selftests/bpf: Convert test_global_funcs test to test_loader framework
+>   selftests/bpf: Add global subprog context passing tests
+>   bpf: don't infer PTR_TO_CTX for programs with unnamed context type
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-index 3f46d5e0fb2e..637b05c79c42 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-@@ -450,7 +450,6 @@ static void otx2_pfvf_mbox_handler(struct work_struct *work)
- 	struct mbox_msghdr *msg = NULL;
- 	int offset, vf_idx, id, err;
- 	struct otx2_mbox_dev *mdev;
--	struct mbox_hdr *req_hdr;
- 	struct otx2_mbox *mbox;
- 	struct mbox *vf_mbox;
- 	struct otx2_nic *pf;
-@@ -461,9 +460,8 @@ static void otx2_pfvf_mbox_handler(struct work_struct *work)
- 
- 	mbox = &pf->mbox_pfvf[0].mbox;
- 	mdev = &mbox->dev[vf_idx];
--	req_hdr = (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
- 
--	offset = ALIGN(sizeof(*req_hdr), MBOX_MSG_ALIGN);
-+	offset = ALIGN(sizeof(struct mbox_hdr), MBOX_MSG_ALIGN);
- 
- 	for (id = 0; id < vf_mbox->num_msgs; id++) {
- 		msg = (struct mbox_msghdr *)(mdev->mbase + mbox->rx_start +
-@@ -494,7 +492,6 @@ static void otx2_pfvf_mbox_up_handler(struct work_struct *work)
- 	struct otx2_nic *pf = vf_mbox->pfvf;
- 	struct otx2_mbox_dev *mdev;
- 	int offset, id, vf_idx = 0;
--	struct mbox_hdr *rsp_hdr;
- 	struct mbox_msghdr *msg;
- 	struct otx2_mbox *mbox;
- 
-@@ -502,8 +499,7 @@ static void otx2_pfvf_mbox_up_handler(struct work_struct *work)
- 	mbox = &pf->mbox_pfvf[0].mbox_up;
- 	mdev = &mbox->dev[vf_idx];
- 
--	rsp_hdr = (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
--	offset = mbox->rx_start + ALIGN(sizeof(*rsp_hdr), MBOX_MSG_ALIGN);
-+	offset = mbox->rx_start + ALIGN(sizeof(struct mbox_hdr), MBOX_MSG_ALIGN);
- 
- 	for (id = 0; id < vf_mbox->up_num_msgs; id++) {
- 		msg = mdev->mbase + offset;
--- 
-2.30.2
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+Build error:
+------------
+kernel/bpf/btf.c:5140:10: error: expression which evaluates to zero
+treated as a null pointer constant of type 'const struct btf_member *'
+[-Werror,-Wnon-literal-null-conversion]
+ 5140 |                 return false;
+      |                        ^~~~~
+1 error generated.
+make[4]: *** [scripts/Makefile.build:250: kernel/bpf/btf.o] Error 1h
+
+Steps to reproduce:
+# tuxmake --runtime podman --target-arch arm64 --toolchain clang-17
+--kconfig allmodconfig LLVM=1 LLVM_IAS=1
+
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.82-451-ga5b0d68e1b0f/testrun/23155982/suite/build/test/clang-17-allmodconfig/log
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2eAPAL6GZr1JrCuFjUfBrCjccbe/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.82-451-ga5b0d68e1b0f/testrun/23155982/suite/build/test/clang-17-allmodconfig/history/
+
+--
+Linaro LKFT
+https://lkft.linaro.org
