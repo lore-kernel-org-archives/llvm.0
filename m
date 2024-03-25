@@ -1,101 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FB6158DAA;
-	Mon, 25 Mar 2024 09:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 8597C182DF
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 07:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711358422; cv=none; b=kZ6N7SRPQKM3DiwgXpRTKv4NzE+8XjejHeO50IU+AfvR0onHDKhSznFBzerYw9g6WcjqYdUlUYlImJNefmfl5SxFNxOZkwIvNbPIx4li/sq9zuvI1NnTbEUE6CR8J3bIeRab7lfxp6NgHN2YNvSwu2CbBNInf2KaCWJyt4JL1+E=
+	t=1711352181; cv=none; b=gk2KME8AL0PyHDlULs2qzA/uI27Un1yV/vmTB01tbvGRsq2jVdJMzsvbUOcznw6DFghkVnVTEhgcD1w3FddMv1vZYEZXZrrvOyMG3ct2bN4/9M3H3kpTJtN/BMIbNquZJ4b7rUhtl6+jsAbud3uLdEAkb+oVq1WxO4bPTnzZiRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711358422; c=relaxed/simple;
-	bh=KRFUKWB3oSqUgHNFa1Hjw7+UHdiQcMzSoFOclAEk0Kc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nf+WBeJx9mPOH5FhzjzXQ3fbmyE837eND+ZUlRS32PnsJqG36jLTXSwIV8/N6LpLlikO6/KipCfFFPY3msWMKKmg2HP9eqmWd6yR4VUFFvhL48R/b5CecIe1pKiSd9b7oKVT74nk4KkT787+/6S/iA/pd5HCr8GEAki571FnZlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lW80a0Nu; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lW80a0Nu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711358421; x=1742894421;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KRFUKWB3oSqUgHNFa1Hjw7+UHdiQcMzSoFOclAEk0Kc=;
-  b=lW80a0NupQ2OKInIFCBF3W70izOG3Dbp26DuuhOLEFRnV4+eF040eiRd
-   XXwZ1Ztisi5WgD2PQ6ZknH7bhxcHb0YmKe2KoZlZ26B9m0icuSCY9gucn
-   km0bEmsRCrp9joulCt2iEBk9fKa+MyX3Szbo4zFhwvYRgebs0PEQXEaDR
-   TO2UCcC8wDZQ7AEwBMC4/TUbUa9Up8HXXKWOgrLNpmNscxjqtZ6KpGicW
-   qTQDDnehxJsT/9euLqinM25actdZbIs5maeJ/c8D9NvKrrz0frYP/TREq
-   VrqlVIXn/0i0aze0u9uzxmwTuxa9lyOqzAsrqMajSbo8hx4s/ZE++ULC9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6532834"
-X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
-   d="scan'208";a="6532834"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 02:20:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="914837406"
-X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
-   d="scan'208";a="914837406"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 02:20:19 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rogV6-0000000Fvdm-2sRS;
-	Mon, 25 Mar 2024 11:20:16 +0200
-Date: Mon, 25 Mar 2024 11:20:16 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Herve Codina <herve.codina@bootlin.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: include/linux/framer/framer.h:184:16: warning: no previous
- prototype for function 'framer_get'
-Message-ID: <ZgFB0C5KilzltDKz@smile.fi.intel.com>
-References: <202403241110.hfJqeJRu-lkp@intel.com>
+	s=arc-20240116; t=1711352181; c=relaxed/simple;
+	bh=B3EMYWMj93nwUmYvmia6ouNwv5W/jt4RGyZlxKAL1wg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version; b=G0vHlqNf87BIoSrGuCxP/8LTfvkhaIi7tQdj2pNHvYl+5T6ImUbTJjdN2oSMa9uDvohGCbyVWy+Xhjw84nKPdpfpquTG41OibvysqU1f+ANPG/jQmaXq3IG9Ia94j1OLklC0lLu61z+RdgScbjXebhPbH9FhXdoicN5VyA/6JSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id D797C602E36DA;
+	Mon, 25 Mar 2024 15:36:08 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: sgoutham@marvell.com,
+	gakula@marvell.com,
+	sbhatta@marvell.com,
+	hkelam@marvell.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: Su Hui <suhui@nfschina.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH 2/2] octeontx2-pf: remove unused variables req_hdr and rsp_hdr
+Date: Mon, 25 Mar 2024 15:35:51 +0800
+Message-Id: <20240325073549.823832-2-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240325073549.823832-1-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202403241110.hfJqeJRu-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 24, 2024 at 11:19:28AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   70293240c5ce675a67bfc48f419b093023b862b3
-> commit: 54762918ca856028d33d1d56d017a4d7706c6196 net: wan: fsl_qmc_hdlc: Add framer support
-> date:   13 days ago
-> config: powerpc-randconfig-003-20240324 (https://download.01.org/0day-ci/archive/20240324/202403241110.hfJqeJRu-lkp@intel.com/config)
-> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403241110.hfJqeJRu-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202403241110.hfJqeJRu-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
+Clang static checker(scan-buid):
+drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:503:2: warning:
+Value stored to 'rsp_hdr' is never read [deadcode.DeadStores]
 
-> 82c944d05b1a24 Herve Codina 2023-11-28  183  
-> 82c944d05b1a24 Herve Codina 2023-11-28 @184  struct framer *framer_get(struct device *dev, const char *con_id)
-> 82c944d05b1a24 Herve Codina 2023-11-28  185  {
-> 82c944d05b1a24 Herve Codina 2023-11-28  186  	return ERR_PTR(-ENOSYS);
-> 82c944d05b1a24 Herve Codina 2023-11-28  187  }
-> 82c944d05b1a24 Herve Codina 2023-11-28  188  
-> 82c944d05b1a24 Herve Codina 2023-11-28 @189  void framer_put(struct device *dev, struct framer *framer)
-> 82c944d05b1a24 Herve Codina 2023-11-28  190  {
-> 82c944d05b1a24 Herve Codina 2023-11-28  191  }
-> 82c944d05b1a24 Herve Codina 2023-11-28  192  
+Remove these unused variables to save some space.
 
-Yeah, stubs in the headers should be static inline.
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index 3f46d5e0fb2e..637b05c79c42 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -450,7 +450,6 @@ static void otx2_pfvf_mbox_handler(struct work_struct *work)
+ 	struct mbox_msghdr *msg = NULL;
+ 	int offset, vf_idx, id, err;
+ 	struct otx2_mbox_dev *mdev;
+-	struct mbox_hdr *req_hdr;
+ 	struct otx2_mbox *mbox;
+ 	struct mbox *vf_mbox;
+ 	struct otx2_nic *pf;
+@@ -461,9 +460,8 @@ static void otx2_pfvf_mbox_handler(struct work_struct *work)
+ 
+ 	mbox = &pf->mbox_pfvf[0].mbox;
+ 	mdev = &mbox->dev[vf_idx];
+-	req_hdr = (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
+ 
+-	offset = ALIGN(sizeof(*req_hdr), MBOX_MSG_ALIGN);
++	offset = ALIGN(sizeof(struct mbox_hdr), MBOX_MSG_ALIGN);
+ 
+ 	for (id = 0; id < vf_mbox->num_msgs; id++) {
+ 		msg = (struct mbox_msghdr *)(mdev->mbase + mbox->rx_start +
+@@ -494,7 +492,6 @@ static void otx2_pfvf_mbox_up_handler(struct work_struct *work)
+ 	struct otx2_nic *pf = vf_mbox->pfvf;
+ 	struct otx2_mbox_dev *mdev;
+ 	int offset, id, vf_idx = 0;
+-	struct mbox_hdr *rsp_hdr;
+ 	struct mbox_msghdr *msg;
+ 	struct otx2_mbox *mbox;
+ 
+@@ -502,8 +499,7 @@ static void otx2_pfvf_mbox_up_handler(struct work_struct *work)
+ 	mbox = &pf->mbox_pfvf[0].mbox_up;
+ 	mdev = &mbox->dev[vf_idx];
+ 
+-	rsp_hdr = (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
+-	offset = mbox->rx_start + ALIGN(sizeof(*rsp_hdr), MBOX_MSG_ALIGN);
++	offset = mbox->rx_start + ALIGN(sizeof(struct mbox_hdr), MBOX_MSG_ALIGN);
+ 
+ 	for (id = 0; id < vf_mbox->up_num_msgs; id++) {
+ 		msg = mdev->mbase + offset;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 
