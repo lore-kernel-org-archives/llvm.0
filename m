@@ -1,35 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF311C2576;
-	Mon, 25 Mar 2024 04:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id D8C5829BC59
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 03:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711341755; cv=none; b=GcfYOtFPHZuiEN0TjCQMJWN/8wd+TPUOCtJyGCZPDZoYo/Wt/0KMmSaCrq6JT6KiQYXur+YRcZIlhOpJ/4jIXypKWAEKJnVeT0C6ZBeS4MgzWJhlbBLIkcU7cIcCG67iqXqz6ng30/0wxYZQRXY06588GHzIwgK67MczfdJz8Do=
+	t=1711338114; cv=none; b=Fhu6mAVO0yRM/q0Y/AOrUHrgSmrPoMPRhtIznTFzUjkQV1gMOMBVPaOcpaSloNBe8JvgABMlifhyih044v6CJGwwBz+hCQEQXRECGWLhfUsJB3Cb5bpDC/cZBYlRSnsbsmXmaByhfit2w/IuQOgRLBPJtkGR32kPbt0VOTdBs+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711341755; c=relaxed/simple;
-	bh=duVRPOkUwtqb9I+6o5VQiYAgtSlpWGf+X+0yQv8TjAs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=MWMKsXohZxFE3o8hOmpsPaH6/T+4BT8WFE0HdxtN//tN69grlx1Kwts9UlgyljFJCyAiKvFfWY4c/ho5oS67yhXvaenweWYbeuF80XOX8ELdAvLJrOp+EQfgdfgAzd3otFXyGo+npsE0MoHJWdHOSlm+cRRHLVmsoig5ErdjeMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iZ/b0NE+; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iZ/b0NE+"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B5273C43399;
-	Mon, 25 Mar 2024 04:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711341754;
-	bh=duVRPOkUwtqb9I+6o5VQiYAgtSlpWGf+X+0yQv8TjAs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=iZ/b0NE+i7+do8pgZkg46x1uBB/MQJfp/c/XhpH71z/wGKatNJQnfFVi4TsSrJUcx
-	 p9B9v3m0m2h+2n352ZneEdcJs25ZuYmCkptcEJJi14CEjUg6fZRWGQjsnzSbTTqpuQ
-	 jBLNyyJKgrClKH6Ar2Sk8/u0rVBaZT96gqSwdlSHBYKiJ8LneSrMklScm8Ww85dTEe
-	 eja5sWn2jN4CV4FDoeaf5TOJPL86Efy9rTKDI0W7hc3GLlwluHdA9GYm7yTBbMYg6F
-	 MrrxjzojsaA/BYbk4OYMb2sE8+b4REldcJ8JhTboSwFB0wiYQTm1AKpQdnuWO2wot9
-	 CNckLCoG3Oykg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F5E8D95071;
-	Mon, 25 Mar 2024 04:42:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1711338114; c=relaxed/simple;
+	bh=KGBViHtyWl4RTc5Yv34/CbkultLm1irMrCSdjeeHfsM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uZ/OmoKdJf/rdrfllSc+c8k4dQkJGPAoj4Xo39V1sYeje6dysxFFV9R4sPeXb/otiU1K8mcoSpaUx7qud5ep0twTmlWU3zw/i18mxxZ0srejcqVsOyR6/lEFRWUUBVnww4dJbsjIrhxK81EWjTty9dtiH09is72K5veiruU32RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 4E0ED6026BC81;
+	Mon, 25 Mar 2024 11:41:22 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: arnaud.pouliquen@foss.st.com,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: Su Hui <suhui@nfschina.com>,
+	alsa-devel@alsa-project.org,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH] ASoC: sti: uniperif: fix the undefined bitwise shift behavior problem
+Date: Mon, 25 Mar 2024 11:40:33 +0800
+Message-Id: <20240325034032.1031885-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,50 +43,67 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/11] Bump the minimum supported version of LLVM to 13.0.1
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <171134175464.18749.18342004135343709281.git-patchwork-notify@kernel.org>
-Date: Mon, 25 Mar 2024 04:42:34 +0000
-References: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
-In-Reply-To: <20240125-bump-min-llvm-ver-to-13-0-1-v1-0-f5ff9bda41c5@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-riscv@lists.infradead.org, akpm@linux-foundation.org,
- masahiroy@kernel.org, nicolas@fjasle.eu, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev, linux-kernel@vger.kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, linux@armlinux.org.uk,
- ardb@kernel.org, linux-arm-kernel@lists.infradead.org,
- catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
- mpe@ellerman.id.au, npiggin@gmail.com, aneesh.kumar@kernel.org,
- naveen.n.rao@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- conor@kernel.org, keescook@chromium.org, linux-hardening@vger.kernel.org
 
-Hello:
+Clang static checker(scan-build):
+sound/soc/sti/uniperif_player.c:1115:12: warning:
+The result of the left shift is undefined because the right operand is
+negative [core.UndefinedBinaryOperatorResult]
 
-This series was applied to riscv/linux.git (fixes)
-by Andrew Morton <akpm@linux-foundation.org>:
+When UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip) equals to -1, the result of
+SET_UNIPERIF_CONFIG_BACK_STALL_REQ_DISABLE(ip) is undefined.
 
-On Thu, 25 Jan 2024 15:55:06 -0700 you wrote:
-> Hi all,
-> 
-> This series bumps the minimum supported version of LLVM for building the
-> kernel to 13.0.1. The first patch does the bump and all subsequent
-> patches clean up all the various workarounds and checks for earlier
-> versions.
-> 
-> [...]
+Here are some results of using different compilers.
+		1UL >> -1	1UL << -1
+gcc 10.2.1	0x2		0
+gcc 11.4.0	0		0x8000000000000000
+clang 14.0.0	0x64b8a45d72a0	0x64b8a45d72a0
+clang 17.0.0	0x556c43b0f2a0	0x556c43b0f2a0
 
-Here is the summary with links:
-  - [07/11] riscv: Remove MCOUNT_NAME workaround
-    https://git.kernel.org/riscv/c/de5f3984664e
-  - [08/11] riscv: Kconfig: Remove version dependency from CONFIG_CLANG_SUPPORTS_DYNAMIC_FTRACE
-    https://git.kernel.org/riscv/c/a38d97181271
+Add some macros to ensure that when right opreand is negative or other
+invalid values, the results of bitwise shift is zero.
 
-You are awesome, thank you!
+Fixes: e1ecace6a685 ("ASoC: sti: Add uniperipheral header file")
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ sound/soc/sti/uniperif.h | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/sound/soc/sti/uniperif.h b/sound/soc/sti/uniperif.h
+index 2a5de328501c..1cbff01fbff0 100644
+--- a/sound/soc/sti/uniperif.h
++++ b/sound/soc/sti/uniperif.h
+@@ -12,17 +12,28 @@
+ 
+ #include <sound/dmaengine_pcm.h>
+ 
++#define SR_SHIFT(a, b)		({unsigned long __a = (a); \
++				unsigned int __b = (b); \
++				__b < BITS_PER_LONG ? \
++				__a >> __b : 0; })
++
++#define SL_SHIFT(a, b)		({unsigned long __a = (a); \
++				unsigned int __b = (b); \
++				__b < BITS_PER_LONG ? \
++				__a << __b : 0; })
++
+ /*
+  * Register access macros
+  */
+ 
+ #define GET_UNIPERIF_REG(ip, offset, shift, mask) \
+-	((readl_relaxed(ip->base + offset) >> shift) & mask)
++	(SR_SHIFT(readl_relaxed(ip->base + offset), shift) & mask)
+ #define SET_UNIPERIF_REG(ip, offset, shift, mask, value) \
+ 	writel_relaxed(((readl_relaxed(ip->base + offset) & \
+-	~(mask << shift)) | (((value) & mask) << shift)), ip->base + offset)
++	~SL_SHIFT(mask, shift)) | SL_SHIFT(((value) & mask), shift)),\
++	ip->base + offset)
+ #define SET_UNIPERIF_BIT_REG(ip, offset, shift, mask, value) \
+-	writel_relaxed((((value) & mask) << shift), ip->base + offset)
++	writel_relaxed(SL_SHIFT(((value) & mask), shift), ip->base + offset)
+ 
+ /*
+  * UNIPERIF_SOFT_RST reg
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
