@@ -1,56 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25BB6F533;
-	Mon, 25 Mar 2024 21:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F268D71B39
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 22:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711403730; cv=none; b=ji5cxPUeZ5Wm2LuQDMgrSVtbAqO2NzgVhzYycuUKH3PcdPsZHXl6io9qdUax5kXd0AF5mB8WmgioHdsX+J3qpv5BsTPGgknt+IStBiElMoE4bXVgm3QzfQNzsieo0lo0n7uyFfr41DNTFKZsJ9Lj+CWAeSCOO/gVDL4+4W5QYGo=
+	t=1711404570; cv=none; b=n3yWlliHI1NbCAzigE1BcAbEyPSI1nb21k39Z6JY5zYbXfOFCYCNlDJOhw7QOnFf3ZUGcPby3ewWfX11oQwTqqoLM6CizGL/X9Ck0R2bdeR3dMDjbgYRfHDK5ewfg1SezfqKFXoDwNnzHJu0U96PfgtmILLl4uNF98qDY4h8oN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711403730; c=relaxed/simple;
-	bh=qf0xlb0YitmtJyDHzU+vOqNZ6ABbCCbv4SXwGFEZvxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Kw3tHgqQUDhHNzpAUZGyxf9I1aJ4U6riX7T4JsS+yEGAQFK6rgQFFMlZHzJaezrqok0k0Mm3YFxu+aGxxVq4l3OLNijkakwBOU/gyjskFSTInzlQ8bjN7bx3sYZ/t0Y/zhuLeeFBG7QRfli343Ijd/ZSZZLUsets6W118AltbzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=btnpHIPn; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711404570; c=relaxed/simple;
+	bh=fW2hIWHhR41/L1F+bpZzRKnNxDSzchbJIxBCkq7SfGQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GHp+gm6xIIIRW4aCOuXIJ4vtBPP/uiOEOa5Rvr503Z+SX7Gj4hr1fXfsF49tNFitM1Lqy6Qx+2yg/q4b0fcnrjB5qJ0W8RWsClsVlMqJlfrjsET86P1d1dQhKLjaYIwn4jTvWqgS2//0X7kd6qO9x5Nyq/NdUbpstAr3paNcBng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b+sCf2Jf; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="btnpHIPn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711403729; x=1742939729;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qf0xlb0YitmtJyDHzU+vOqNZ6ABbCCbv4SXwGFEZvxQ=;
-  b=btnpHIPnWpPBXV8eBUvUTKylP41RPNn/FjcmUjOAuNHd8JHtgDx7sNIq
-   +rSr3XZor9z2PRPSH18EGKjaN/dmdLo/DKi8BnW8xlCcSdT5hhaLSYZEe
-   Q/jzlthbWNFVRwXSIYe9VYDNcf09jVVCy+7XpUa+JFNV9mQQ1SRoYge4F
-   KYPclxluHmvcxVdVkJiTf86lZTuILuPFK57wzyevqyihULfXKGrx823mv
-   hh/1zlsbVJXkgDg2VQ7D6jPDQB4dHTIVxcn9vbIpkM7QgF2bdFxtwnEUW
-   8iiNgX8oOWQZitnYslaC8LIm3UW2cfcQaVon8fbXogK5p3D5TWiE0oeXq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="17573711"
-X-IronPort-AV: E=Sophos;i="6.07,154,1708416000"; 
-   d="scan'208";a="17573711"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 14:55:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,154,1708416000"; 
-   d="scan'208";a="15838429"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Mar 2024 14:55:27 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rosHs-000Mqs-1U;
-	Mon, 25 Mar 2024 21:55:24 +0000
-Date: Tue, 26 Mar 2024 05:55:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:v2_20240223_louis_chauvet_add_multi_mode_support_for_omap_mcspi
- 2/3] drivers/spi/spi-omap2-mcspi.c:1265:7: warning: unused variable
- 'word_delay_is_zero'
-Message-ID: <202403260539.RrNU3f4c-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b+sCf2Jf"
+Date: Mon, 25 Mar 2024 18:09:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711404566;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=afGy8CRECdAELjgTa63PphAb8Je/7LgfWp/vpSHkqks=;
+	b=b+sCf2JfZ1bUx+SgaAuv492wBmpuur/6BjEMdbR9Z4ZCD4+uG7E/QItW3rmDr4vs7AeTLM
+	Xi1XoeDaJNa86zHWG0ZtX4cQdV1EpkxCGd1xKdkCh2oT+rvTG85ldwxSNrlBGl947PDi2s
+	eNzsKmqELeZnnjPlz9lpgr/m4xIcqSQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Philipp Stanner <pstanner@redhat.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <jyijwrrzzhlsrffj37xj4sskipxqbxfewydnb3yzgybjobj6tg@cbv5y7znhm3n>
+References: <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+ <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+ <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+ <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+ <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
+ <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+ <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
+ <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
+ <gewmacbbjxwsn4h54w2jfvbiq5iwr2zdm56pc3pv3rctxyd4lt@sqqa544ezmez>
+ <ZgHuioMM1cAWNDiX@boqun-archlinux>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,107 +68,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZgHuioMM1cAWNDiX@boqun-archlinux>
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v2_20240223_louis_chauvet_add_multi_mode_support_for_omap_mcspi
-head:   126a2dc2e634a8508e44feed1ef43cb4ebfb7ad7
-commit: f2da90939a500160e17327423c937cad99299bd7 [2/3] spi: omap2-mcspi: Add support for MULTI-mode
-config: x86_64-buildonly-randconfig-005-20240325 (https://download.01.org/0day-ci/archive/20240326/202403260539.RrNU3f4c-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240326/202403260539.RrNU3f4c-lkp@intel.com/reproduce)
+On Mon, Mar 25, 2024 at 02:37:14PM -0700, Boqun Feng wrote:
+> On Mon, Mar 25, 2024 at 05:14:41PM -0400, Kent Overstreet wrote:
+> > On Mon, Mar 25, 2024 at 12:44:34PM -0700, Linus Torvalds wrote:
+> > > On Mon, 25 Mar 2024 at 11:59, Kent Overstreet <kent.overstreet@linux.dev> wrote:
+> > > >
+> > > > To be fair, "volatile" dates from an era when we didn't have the haziest
+> > > > understanding of what a working memory model for C would look like or
+> > > > why we'd even want one.
+> > > 
+> > > I don't disagree, but I find it very depressing that now that we *do*
+> > > know about memory models etc, the C++ memory model basically doubled
+> > > down on the same "object" model.
+> > > 
+> > > > The way the kernel uses volatile in e.g. READ_ONCE() is fully in line
+> > > > with modern thinking, just done with the tools available at the time. A
+> > > > more modern version would be just
+> > > >
+> > > > __atomic_load_n(ptr, __ATOMIC_RELAXED)
+> 
+> Note that Rust does have something similiar:
+> 
+> 	https://doc.rust-lang.org/std/ptr/fn.read_volatile.html
+> 
+> 	pub unsafe fn read_volatile<T>(src: *const T) -> T
+> 
+> (and also write_volatile()). So they made a good design putting the
+> volatile on the accesses rather than the type. However, per the current
+> Rust memory model these two primitives will be UB when data races happen
+> :-(
+> 
+> I mean, sure, if I use read_volatile() on an enum (whose valid values
+> are only 0, 1, 2), and I get a value 3, and the compiler says "you have
+> a logic bug and I refuse to compile the program correctly", I'm OK. But
+> if I use read_volatile() to read something like a u32, and I know it's
+> racy so my program actually handle that, I don't know any sane compiler
+> would miss-compile, so I don't know why that has to be a UB.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403260539.RrNU3f4c-lkp@intel.com/
+Well, if T is too big to read/write atomically then you'll get torn
+reads, including potentially a bit representation that is not a valid T.
 
-All warnings (new ones prefixed by >>):
+Which is why the normal read_volatile<> or Volatile<> should disallow
+that.
 
-   drivers/spi/spi-omap2-mcspi.c:1280:3: warning: '/*' within block comment [-Wcomment]
-    1280 |                 /*
-         |                 ^
->> drivers/spi/spi-omap2-mcspi.c:1265:7: warning: unused variable 'word_delay_is_zero' [-Wunused-variable]
-    1265 |         bool word_delay_is_zero;
-         |              ^~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+> > where T is any type that fits in a machine word, and the only operations
+> > it supports are get(), set(), xchg() and cmpxchG().
+> > 
+> > You DO NOT want it to be possible to transparantly use Volatile<T> in
+> > place of a regular T - in exactly the same way as an atomic_t can't be
+> > used in place of a regular integer.
+> 
+> Yes, this is useful. But no it's not that useful, how could you use that
+> to read another CPU's stack during some debug functions in a way you
+> know it's racy?
 
+That's a pretty difficult thing to do, because you don't know the
+_layout_ of the other CPU's stack, and even if you do it's going to be
+changing underneath you without locking.
 
-vim +/word_delay_is_zero +1265 drivers/spi/spi-omap2-mcspi.c
+So the races thare are equivalent to a bad mem::transmute(), and that is
+very much UB.
 
-  1257	
-  1258	static int omap2_mcspi_prepare_message(struct spi_controller *ctlr,
-  1259					       struct spi_message *msg)
-  1260	{
-  1261		struct omap2_mcspi	*mcspi = spi_controller_get_devdata(ctlr);
-  1262		struct omap2_mcspi_regs	*ctx = &mcspi->ctx;
-  1263		struct omap2_mcspi_cs	*cs;
-  1264		struct spi_transfer	*tr;
-> 1265		bool word_delay_is_zero;
-  1266		u8 bits_per_word;
-  1267	
-  1268		/*
-  1269		 * The conditions are strict, it is mandatory to check each transfer of the list to see if
-  1270		 * multi-mode is applicable.
-  1271		 */
-  1272		mcspi->use_multi_mode = true;
-  1273		list_for_each_entry(tr, &msg->transfers, transfer_list) {
-  1274			if (!tr->bits_per_word)
-  1275				bits_per_word = msg->spi->bits_per_word;
-  1276			else
-  1277				bits_per_word = tr->bits_per_word;
-  1278	
-  1279		/* Only a single channel can have the FORCE bit enabled
-> 1280			/*
-  1281			 * Check if this transfer contains only one word;
-  1282			 */
-  1283			if (bits_per_word < 8 && tr->len == 1) {
-  1284				/* multi-mode is applicable, only one word (1..7 bits) */
-  1285			} else if (bits_per_word >= 8 && tr->len == bits_per_word / 8) {
-  1286				/* multi-mode is applicable, only one word (8..32 bits) */
-  1287			} else {
-  1288				/* multi-mode is not applicable: more than one word in the transfer */
-  1289				mcspi->use_multi_mode = false;
-  1290			}
-  1291	
-  1292			/* Check if transfer asks to change the CS status after the transfer */
-  1293			if (!tr->cs_change)
-  1294				mcspi->use_multi_mode = false;
-  1295	
-  1296			/*
-  1297			 * If at least one message is not compatible, switch back to single mode
-  1298			 *
-  1299			 * The bits_per_word of certain transfer can be different, but it will have no
-  1300			 * impact on the signal itself.
-  1301			 */
-  1302			if (!mcspi->use_multi_mode)
-  1303				break;
-  1304		}
-  1305	
-  1306		omap2_mcspi_set_mode(ctlr);
-  1307	
-  1308		/* In single mode only a single channel can have the FORCE bit enabled
-  1309		 * in its chconf0 register.
-  1310		 * Scan all channels and disable them except the current one.
-  1311		 * A FORCE can remain from a last transfer having cs_change enabled
-  1312		 *
-  1313		 * In multi mode all FORCE bits must be disabled.
-  1314		 */
-  1315		list_for_each_entry(cs, &ctx->cs, node) {
-  1316			if (msg->spi->controller_state == cs && !mcspi->use_multi_mode) {
-  1317				continue;
-  1318			}
-  1319	
-  1320			if ((cs->chconf0 & OMAP2_MCSPI_CHCONF_FORCE)) {
-  1321				cs->chconf0 &= ~OMAP2_MCSPI_CHCONF_FORCE;
-  1322				writel_relaxed(cs->chconf0,
-  1323						cs->base + OMAP2_MCSPI_CHCONF0);
-  1324				readl_relaxed(cs->base + OMAP2_MCSPI_CHCONF0);
-  1325			}
-  1326		}
-  1327	
-  1328		return 0;
-  1329	}
-  1330	
+For a more typical usage of volatile, consider a ringbuffer with one
+thread producing and another thread consuming. Then you've got head and
+tail pointers, each written by one thread and read by another.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You don't need any locking, just memory barriers and
+READ_ONCE()/WRITE_ONCE() to update the head and tail pointers. If you
+were writing this in Rust today the easy way would be an atomic integer,
+but that's not really correct - you're not doing atomic operations
+(locked arithmetic), just volatile reads and writes.
+
+Volatile<T> would be Send and Sync, just like atomic integers. You don't
+need locking if you're just working with single values that are small
+enough for the machine to read/write atomically.
