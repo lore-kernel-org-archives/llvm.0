@@ -1,127 +1,165 @@
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB896183BBA
-	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 09:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2D112836B
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 10:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711359724; cv=none; b=rjXDxFjbATFriNEJ8phf1NM5AHki7QgOQLZkcJERApppEGav6Eb/jf3eqMbfl1M+BiJtLbg0nJvQiKOb8ohny3zvcTFY2bnALl4ie7YszUuetjgRW2xt62eS2lNUgtIhjvbcnJa7qsz+fwRpiC6Fyzm4YRQQo/o58/7IF523ZwI=
+	t=1711361480; cv=none; b=lCH4sSFNFhqKHwoOVRZ/ZercFueSkEeZ/ymVM3pjJB+ia6HBCDby8nytmEtZOxu/6TfvLYqe+1nal2541EDgZ+dcuofKBa2pDxiPnPKReVPjbkaQ926Tiw7JSIskJrlBh1Dqm3tk4ueD0N52J7QB4+0By0Fa1H8CxyAjVFfD8cE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711359724; c=relaxed/simple;
-	bh=mgmBjav3rZynbJ1mYiMRayuXnORVSBOK5ibhz91RhOc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u1GSwbv5ldEfdNX9QOqoobDpb57i787URHvD1yMzg8DXVaOso/HXvvGZhuWP8r08q5GGSfSCGvIaYgJnP4I0DUGl9v7eqgDjFmXJEdTrhtHjbEYIathMFR/Qph8sH6Fcxlik1egbY8TigzY4yKyMvQFBuqZZ1a7uttMo3yEr93o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mdb8dOCP; arc=none smtp.client-ip=209.85.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1711361480; c=relaxed/simple;
+	bh=5eYPD+ROH+C8eMQOQ+/GUmTsikISIaSHFRhxD4/QNaY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=twMnX0UAqrPQPJhBSi4THEdCBczTU9cpxcvZxyQZVnriNhehzrYcqY18FmqeohCV0Q4V3bQ9hsy4zEw1PWv/beoKBfvu8Tv2qcCgmQLAHy4TAwkLEtfedIW35IlFDt2kwGmYXmOgop06ogbI8e6rzXnnAzz+pM0TCKxw6Of0yAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FtGXhJsW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mdb8dOCP"
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-4d8804a553dso395087e0c.1
-        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 02:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711359721; x=1711964521; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H3DoSiXc8Yp8uuBDk6EiaF3on1eVJFgP2CMpJotYW4U=;
-        b=mdb8dOCPIpxRaC/LpC+e8BCvCkgY/6sU5s4dU16UsmPWVsVptWoJAxpkpK2RKwq1X1
-         yKlf02NihATgDeyjg1vsJsI2yU4sd4NO+NRThsjFxB5dNu3elG3GXEv1zKtFTlw4uz+v
-         sY+GEbFJVpW/YE2k2PI5SfHpGbJ2Rj6BZE2jX+D6HPuNFSpmUHKFd4NaqHSif7aT1uru
-         TRjBmKozZUhedvbrWp/JdJqp0ovnUc6HeTedWoUA8k40za82f267GURfCswWL9/HxHhk
-         JTM2gVCqID6CRhslPtmxVDZk70DlEN5glg6w+fzMWbHUVyw+yooRpUpjQzO8dOdlXzpt
-         miIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711359721; x=1711964521;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H3DoSiXc8Yp8uuBDk6EiaF3on1eVJFgP2CMpJotYW4U=;
-        b=TTklFFVkpaD/JFZ3evSdmOf4QcMWrK+dRIPJn1SlmpnoX2wZqjdlCHg2zJ2kkWXIwp
-         GV0NPPIf0iMAnuV8F50/OQOxqsj67EvCUrpajmookq8aCIC13HeWOG8FCIrUvYD3XkQ1
-         ERmuOAcpXo/3EJ98NnHyyhqy97oBtgglWxSJv9Zix6PUWI5eZ1um+/wfChSU5Iyg2Fy/
-         BK2hENW7WhU+jie7ghq+d10nUy3KZnZuk6I3oFZzlVhteGhWWhfWtfTzqviqgPemlRSi
-         tP5ecrUVXzCajf9SvgZ+6CatgVuR594AKiMzNK8TT4UCCVjhZRcENeyzxaxxE440JqGA
-         YSGw==
-X-Forwarded-Encrypted: i=1; AJvYcCWFvCBfAkGEtJSn+hyy3qQdA2pc3u+QP5bEv3KH9NfXYR/+zaUzOtabzXTtf/Ky2LXP3orlggBfrP1pfQr02mPv+KAQFA==
-X-Gm-Message-State: AOJu0YxHRkoFGAGGDZDJQTj8CfwpZUkQgaYqyq9rt8ubhsHqACPXKpK9
-	G+3g1mG7WAKr6UbC8xpySJVghdXNNkoLO3RrOy/xspAKEaHUGBW1a5ERs7Ax0AVHdbpLVWxf8Cr
-	xpSiAx8tjYW18IwOsyZBwvJDL/fAGDbxjHlXMtg==
-X-Google-Smtp-Source: AGHT+IGsnuKrGIgppmDbZ5qB5PCahd/U7K9yFBI8vV7C0Q0Y/IrpHBMv5VHW+jQvIwvalqRtoeVjhf0a3ebzv0+7YqA=
-X-Received: by 2002:a05:6122:1815:b0:4d1:34a1:c892 with SMTP id
- ay21-20020a056122181500b004d134a1c892mr4401327vkb.13.1711359721603; Mon, 25
- Mar 2024 02:42:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FtGXhJsW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711361477;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=S6oq2hhHgRk/nAy0hNBYn1RWpycgp23dKELeqZkAJtA=;
+	b=FtGXhJsWGiyfDpPrsQPu1fNGHZbL2VYnll8SdoUkw1X+pTb46Lm/9V96m5/uHCgkMcbwTT
+	ehF6hO25s5kOceQUiF2zQAUBi4uW+MmDnFbMbEcNl02X4Wz6yOLKVEQPdjyKudHXRRiCbZ
+	8wCfpwtugMYk0E/XkUTIDYv/gKQ/9KY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-253-v3HUhGoQPgqJv7e8JXwJIw-1; Mon, 25 Mar 2024 06:11:16 -0400
+X-MC-Unique: v3HUhGoQPgqJv7e8JXwJIw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB953891E69
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 10:11:15 +0000 (UTC)
+Received: from [172.64.11.27] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 72733C3E621;
+	Mon, 25 Mar 2024 10:11:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.9.0-rc1, mainline.kernel.org-clang, 4cece764)
+Date: Mon, 25 Mar 2024 10:11:15 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240324231207.1351418-1-sashal@kernel.org>
-In-Reply-To: <20240324231207.1351418-1-sashal@kernel.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 25 Mar 2024 15:11:50 +0530
-Message-ID: <CA+G9fYuFh7K4XO+hVyJ59vWbfCaGpNf1ko9bUaZ0qV86wLbreQ@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/451] 6.1.83-rc1 review
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	torvalds@linux-foundation.org, akpm@linux-foundation.org, linux@roeck-us.net, 
-	shuah@kernel.org, patches@kernelci.org, lkft-triage@lists.linaro.org, 
-	florian.fainelli@broadcom.com, pavel@denx.de, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <32917.124032506111600145@us-mta-253.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 25 Mar 2024 at 04:42, Sasha Levin <sashal@kernel.org> wrote:
->
->
-> This is the start of the stable review cycle for the 6.1.83 release.
-> There are 451 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Tue Mar 26 11:11:59 PM UTC 2024.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/patch/?id=linux-6.1.y&id2=v6.1.82
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> Thanks,
-> Sasha
+Hi, we tested your kernel and here are the results:
 
-The regression detected while building allmodconfig builds with clang-17
-failed on all the architectures. But gcc-12 builds passed.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> Andrii Nakryiko (5):
->   libbpf: Fix faccessat() usage on Android
->   libbpf: Add missing LIBBPF_API annotation to libbpf_set_memlock_rlim
->     API
->   selftests/bpf: Convert test_global_funcs test to test_loader framework
->   selftests/bpf: Add global subprog context passing tests
->   bpf: don't infer PTR_TO_CTX for programs with unnamed context type
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Kernel information:
+    Commit message: Linux 6.9-rc1
 
-Build error:
-------------
-kernel/bpf/btf.c:5140:10: error: expression which evaluates to zero
-treated as a null pointer constant of type 'const struct btf_member *'
-[-Werror,-Wnon-literal-null-conversion]
- 5140 |                 return false;
-      |                        ^~~~~
-1 error generated.
-make[4]: *** [scripts/Makefile.build:250: kernel/bpf/btf.o] Error 1h
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/136958
 
-Steps to reproduce:
-# tuxmake --runtime podman --target-arch arm64 --toolchain clang-17
---kconfig allmodconfig LLVM=1 LLVM_IAS=1
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                kselftest build - bpf [x86_64 (debug)]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
+                xfstests - nfsv4.2 [x86_64, x86_64 (debug)]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: makedumpfile failed when dumping vmcore
+            URL: https://bugzilla.redhat.com/2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.82-451-ga5b0d68e1b0f/testrun/23155982/suite/build/test/clang-17-allmodconfig/log
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2eAPAL6GZr1JrCuFjUfBrCjccbe/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.82-451-ga5b0d68e1b0f/testrun/23155982/suite/build/test/clang-17-allmodconfig/history/
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [x86_64, s390x, ppc64le, aarch64, x86_64 =
+(debug)]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
