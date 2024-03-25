@@ -1,115 +1,170 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E5E82C69;
-	Mon, 25 Mar 2024 12:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD26513C81C
+	for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 13:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711371474; cv=none; b=qMlml1ZVKBTNJ9SsH8qb/flG1ETJAPJy1c4y/IvgqeiigCKQvGPnVNitLNP6olcLQ7fjExpItxzaPXX/q/CkVP6cfq5JLPLmw5ZhswchpX6DGq07x2qEnE36u4flMvzMa6Ie8M3EjgxDH7XiIcOyDz58LkCYDpHR6Gl8bVBswH8=
+	t=1711375029; cv=none; b=UNyz9iwcPfwrxH/A3I3so89ZmJRzrKo0LYimpt/mLJtGMcvIQA9GHEwf5I8z+KNzGZ6ILmJKdfZ/pZVvlHOvHwjrhCVLBWoWEAEEl+NZFpd4ZpK7la1JTtq0IW0R0d64xA27M/8l+wRZ+vVTGtFcOcxcD2MYJfeEyBS5hh9PBoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711371474; c=relaxed/simple;
-	bh=CzBs56JhrKv4N4DRxQV2Un6CkUEhsdMILwao7XU7lB0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lKRhAU/J33intyCmZccU0w2PF2QHpp5+GQxYCHyEe+pIK6+LuP5lLu7D2UPm+5cjLVdrWQYrTiQSQ6fClZAxsMf0PsIJOIrCBx2L3iG3ay4a5TLekduVzVrGFqMxQq0eea18LDiDvSQJbMPHB6o/YFggfEiFSDPpgtBqdmW2YDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jeLkD19W; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1711375029; c=relaxed/simple;
+	bh=Su0oRSDMDN6WKCvVoRZlpj1EX7RmBmcvnQ0SRJYHWr0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Tvz7HtP8vVo1H//O0sbQILBazig7mumTSNl4to6Zk+wE/ak4icJ12NI/OuCfoFo9/f0VwP/DdFlK7Ty2UfUg+DXkXUXABHPbfubptXM8kYOtCicmGm64J2zMNPF/f4t2tkt68e/3a0x5ALmRieINtcHnK0L0OcJQVw9gbS/ZjRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aEMugEbk; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jeLkD19W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711371471; x=1742907471;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CzBs56JhrKv4N4DRxQV2Un6CkUEhsdMILwao7XU7lB0=;
-  b=jeLkD19W6dTzCRPsMlU8BOvGMlMBgeaonKURH4elqhj1H/zb7tuvFN0s
-   UNjUOZtxkr0H5Hr4QAdzXeQsJ+Y684pH0xRNsiskf+xbnFwFFGjqPMQ1A
-   QhRD71v4Y57+n0xSQYIrkC49tAznezBpygq2ZEZ8jjnFDRr1ZhD0oN8hn
-   0lhSnQPyVvUYWI3YtnVbs7wfGznZmaSajw5J4ASJtHUvqxP9afkNGDCqe
-   3hHIH3GwfWVCkHBmLCgDgFQTETXlE0QEykSaAIISgw21WKb9KJabAmrrZ
-   M+QRmT9pPFlF5H1gyGW2DKVyBw7I2+7VuCeuNf+ZY6L1o3c80AZgLQlld
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6553026"
-X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="6553026"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 05:57:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="937070391"
-X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
-   d="scan'208";a="937070391"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2024 05:57:49 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-	id 795E513F; Mon, 25 Mar 2024 14:57:48 +0200 (EET)
-Date: Mon, 25 Mar 2024 14:57:48 +0200
-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: "Jason A. Donenfeld" <zx2c4@kernel.org>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Elena Reshetova <elena.reshetova@intel.com>, 
-	Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [crng-random:master 2/2] arch/x86/coco/core.c:189:2: error: call
- to undeclared function 'memzero_explicit'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <wh7cqsco5vgkzixis7qfbvvsb6c2t7ms6ox2wiepo5rrk3y3c2@akvtfgu3dpgi>
-References: <202403240934.Nf4UUK5L-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aEMugEbk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711375025;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Su0oRSDMDN6WKCvVoRZlpj1EX7RmBmcvnQ0SRJYHWr0=;
+	b=aEMugEbkulQEEQjmk1XhINUNj04ER4yYwKBpTJ4PkPSfJ/qe3yiAwW7KlDWlITElNrdQkL
+	Hqvt5+6Qnroinma8jGFgu4o9l6No0hV6CUTBUJilOZJjkHEkCXdjy/iaD/qHPDx+BKzehS
+	4Nh4i6eVRslN/GOYcf6jsMhre0yxdfg=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-614-Bw1EdaazNJalrTh9jsZn_g-1; Mon, 25 Mar 2024 09:57:04 -0400
+X-MC-Unique: Bw1EdaazNJalrTh9jsZn_g-1
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2d6c5548f93so5085921fa.0
+        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 06:57:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711375021; x=1711979821;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Su0oRSDMDN6WKCvVoRZlpj1EX7RmBmcvnQ0SRJYHWr0=;
+        b=nLNp+fBVGE22qWbveefyCwYEQdHl8/kw6fgyuXbIpyBa9ZTqQmxGH6ECqI8cXAnXfb
+         bMWnpzW93HU8vPHm4tfMM/O9ovWm/WmPVNjL01JfrjJCpjFUOSYQ9NyssOsCScOKilAR
+         RZd0gAEtsVEgNTYOGxvBjeYkQmfB+8Rlwd2qV1mQsAClGlFKncLjj96/IR4LmI/xBKU2
+         QVsm7zu4c/1D4y88C6rar+Dnj2Xx6A1vfvDLIRJss5nHJQiRVpQ0HbK+7GMoDWbtYVv3
+         fQhQPVIz01jpgP0dw1jryiJSatcWB/sBhBH/rLv05f5JBlCvfBokfGRmbzCmLSap/77n
+         GowA==
+X-Forwarded-Encrypted: i=1; AJvYcCXx8JlQGd8n0M6aK6fP/2oRx3k55YjIL8GCMQms1u/L3BGq/XG0VYAiDLVwPgfUqpACYBlqCOM9+l/0uKiFMiggt8B98A==
+X-Gm-Message-State: AOJu0YxEEi2n5DVczsskfAMNRoUtCjetN2Sk+YYYe8T94KbcPy5dUn9v
+	80EWs91bRBCIe/Sm53AXKxkscJ1XzXyAm2PrkY2K3zIjJf+rYJMO5KxAyx+f0mh4AiahPfkURhg
+	ZK2+uETqTcHpy3F55viSYFkpzq7i+fd5W7pK0gp44znQ+M1S6AKg=
+X-Received: by 2002:a2e:88d0:0:b0:2d4:78b4:e568 with SMTP id a16-20020a2e88d0000000b002d478b4e568mr4341990ljk.1.1711375021347;
+        Mon, 25 Mar 2024 06:57:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEsEsxChr4oIHfPIiuFPvTM+72aemZNo0G3gI+fLGhTYtrb+QS9VpjMdi/YbUXjC7EP1XZSIg==
+X-Received: by 2002:a2e:88d0:0:b0:2d4:78b4:e568 with SMTP id a16-20020a2e88d0000000b002d478b4e568mr4341961ljk.1.1711375020848;
+        Mon, 25 Mar 2024 06:57:00 -0700 (PDT)
+Received: from pstanner-thinkpadt14sgen1.remote.csb (nat-pool-muc-t.redhat.com. [149.14.88.26])
+        by smtp.gmail.com with ESMTPSA id n3-20020a05600c4f8300b00414887d9329sm4600055wmq.46.2024.03.25.06.56.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Mar 2024 06:57:00 -0700 (PDT)
+Message-ID: <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+From: Philipp Stanner <pstanner@redhat.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>, Kent Overstreet
+	 <kent.overstreet@linux.dev>
+Cc: Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ llvm@lists.linux.dev,  Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
+ <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary
+ Guo <gary@garyguo.net>, =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
+ Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan
+ Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>,
+ Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
+ Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>,
+ Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes
+ <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com,  Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland
+ <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Date: Mon, 25 Mar 2024 14:56:58 +0100
+In-Reply-To: <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+References: <20240322233838.868874-1-boqun.feng@gmail.com>
+	 <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+	 <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+	 <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+	 <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202403240934.Nf4UUK5L-lkp@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 24, 2024 at 09:15:17AM +0800, kernel test robot wrote:
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git master
-> head:   6fba9af4a847c5ee67715bc6f7959e9ab6394275
-> commit: 6fba9af4a847c5ee67715bc6f7959e9ab6394275 [2/2] x86/coco: Require seeding RNG with RDRAND on CoCo systems
-> config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240324/202403240934.Nf4UUK5L-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240324/202403240934.Nf4UUK5L-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202403240934.Nf4UUK5L-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/x86/coco/core.c:189:2: error: call to undeclared function 'memzero_explicit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      189 |         memzero_explicit(rng_seed, sizeof(rng_seed));
->          |         ^
->    1 error generated.
+On Fri, 2024-03-22 at 17:36 -0700, Linus Torvalds wrote:
+> On Fri, 22 Mar 2024 at 17:21, Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >=20
+> > Besides that there's cross arch support to think about - it's hard
+> > to
+> > imagine us ever ditching our own atomics.
+>=20
+> > [... SNIP ...]
+> >=20
+> > I was thinking about something more incremental - just an optional
+> > mode
+> > where our atomics were C atomics underneath. It'd probably give the
+> > compiler people a much more effective way to test their stuff than
+> > anything they have now.
+>=20
+> I suspect it might be painful, and some compiler people would throw
+> their hands up in horror, because the C++ atomics model is based
+> fairly solidly on atomic types, and the kernel memory model is much
+> more fluid.
+>=20
+> Boqun already mentioned the "mixing access sizes", which is actually
+> quite fundamental in the kernel, where we play lots of games with
+> that
+> (typically around locking, where you find patterns line unlock
+> writing
+> a zero to a single byte, even though the whole lock data structure is
+> a word). And sometimes the access size games are very explicit (eg
+> lib/lockref.c).
+>=20
+> But it actually goes deeper than that. While we do have "atomic_t"
+> etc
+> for arithmetic atomics, and that probably would map fairly well to
+> C++
+> atomics, in other cases we simply base our atomics not on _types_,
+> but
+> on code.
+>=20
+> IOW, we do things like "cmpxchg()", and the target of that atomic
+> access is just a regular data structure field.
+>=20
+> It's kind of like our "volatile" usage. If you read the C (and C++)
+> standards, you'll find that you should use "volatile" on data types.
+> That's almost *never* what the kernel does. The kernel uses
+> "volatile"
+> in _code_ (ie READ_ONCE() etc), and uses it by casting etc.
+>=20
+> Compiler people don't tend to really like those kinds of things.
 
-There's also issue with WARN_ON() in archrandom.h.
+Just for my understanding: Why don't they like it?
 
-Fixup for these two issues:
+I guess since compiler people have to support volatile pointers
+anyways, temporarily casting something to such a volatile pointer
+shouldn't be a problem either =E2=80=93 so they don't dislike it because it=
+'s
+more difficult to implement, but because it's more difficult to verify
+for correctness?
 
-diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index 95e27dca9328..67edebb235e1 100644
---- a/arch/x86/coco/core.c
-+++ b/arch/x86/coco/core.c
-@@ -11,6 +11,7 @@
- #include <linux/export.h>
- #include <linux/cc_platform.h>
- #include <linux/random.h>
-+#include <linux/string.h>
- 
- #include <asm/archrandom.h>
- #include <asm/coco.h>
-diff --git a/arch/x86/include/asm/archrandom.h b/arch/x86/include/asm/archrandom.h
-index 1cc01ecd5e75..3066b339d4ce 100644
---- a/arch/x86/include/asm/archrandom.h
-+++ b/arch/x86/include/asm/archrandom.h
-@@ -12,6 +12,7 @@
- 
- #include <asm/processor.h>
- #include <asm/cpufeature.h>
-+#include <asm/bug.h>
- 
- /* Unconditional execution of RDRAND and RDSEED */
- 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+
+P.
+
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Linus
+>=20
+
