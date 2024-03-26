@@ -1,93 +1,161 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB30013DDDF
-	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 22:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D3F13DB98;
+	Tue, 26 Mar 2024 22:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711492991; cv=none; b=bLK28pHihZdAROjjcZ1blzQ+5e927+1Zvo1j8l4KU6g5Ec1akJYh8flDLC32Zme9RF+sxAr0nmDCwr5OsNAlMd/KP1iGreJZLRXUspYRqg22lLcC+eRLQJR7A5LGgeGxqTImHZLxugU2uq7OsXT6PAtw2zAEvWagtkLME4eck6s=
+	t=1711493814; cv=none; b=udwDTPMM7PfdpnTffn53jBu+6xZ3AyVWDTB7X69ahrwlukwx5rBupaR0G/wn4IzDanltnL2OCUbcrWmMAPQ1Sjj4gXZ+H9yqfIhRMOyJnQPrRih/nrGcu4zrxXoA7VIV06IHWhqECs7srB9HrNGPEQ28W/O0Bx8nbZohJKqoOn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711492991; c=relaxed/simple;
-	bh=GuyTOe7sfsFDL6EEc8g8HvzuSNvtqY2y8Bzhmb6nCxI=;
+	s=arc-20240116; t=1711493814; c=relaxed/simple;
+	bh=uMrfzN4xjKjod6GbAc1xRQd4HusxFp38FVyEvv2mIkA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UYRPShfcU60oyxSd5q7iwRq4P/KAEmuAjQu9NyTw+qubX+x1SrCU1p5BYG5VBIu/58Y93sA4ZMWO/J2q4nxPX1Dt6gZSXGOWn6pPnIW0tuODyDu/up00ouVtDvZBUQ7/iwSmJHk5khznerFBDjcFmsUdLYFIeFwJVgHn6o7no5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=hS9m7+Y3; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=YhSOH7miMikczNbvupDBQB8krt3PujNZbg/lHgrQLQxMoeqii2Dapdq3IsiepmVw3I6OOApob7e9L7tFCLTuY8EVK7GI98vE9xN0ibZYHPtHFdWIybTeqLTBvLJKsYu4DloO/Xwb7S57symmdMFfKDCO5R1m+OhFW19y8Wvx7do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=knur54c4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="hS9m7+Y3"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C4DB7497;
-	Tue, 26 Mar 2024 23:42:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1711492950;
-	bh=GuyTOe7sfsFDL6EEc8g8HvzuSNvtqY2y8Bzhmb6nCxI=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="knur54c4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A308FC433C7;
+	Tue, 26 Mar 2024 22:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711493814;
+	bh=uMrfzN4xjKjod6GbAc1xRQd4HusxFp38FVyEvv2mIkA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hS9m7+Y387Lya0A9eZHtLKLH0rHZXo7KtngBEJ3GASXw3qRA8zl3/VjTi8FP7y2Ns
-	 1TWjH4pZK/ftMHkZ1I+e3m98Hu/8MZyA77PTrLTAJQUOwMseJL4Ym1IamjiL8No0Bd
-	 frXsA6Fzbhtq1gh718SEqCrz2hSTclbXdzWdab/M=
-Date: Wed, 27 Mar 2024 00:42:52 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: llvm@lists.linux.dev, Helge Deller <deller@gmx.de>,
-	Arnd Bergmann <arnd@arndb.de>,
+	b=knur54c4eVgsNUNQfgkHX+FMHtB4w0y37mRCWkmBDyM1xKXZ8MEnDqG3oeYUBuu5o
+	 ZJSsNnndctin55unNbYnFqDuPY4yxaB9fjSaUFtd6aJvxVkabOL6FjKAOY3kc0ldkD
+	 B7Cc+0gwSEiGtr8Rpeh8CAVGPnsM6LVJ6JfU+8iihJKDUdPiNL2sGhCNvNQ94Hajhn
+	 gMoUEyyaIlTyQilt1rew3rAhVOyzX+QKEQ22d8dDg2L8shl2SJQZ61jNbsP+q4KV5l
+	 YWTODMdkdknK/m/AgVZgJWtg0IvDbXsFrLKonIZleuQzP46MtfjcU2o29F2cHA3JJc
+	 OaxpvvvnTDRhg==
+Date: Tue, 26 Mar 2024 15:56:50 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jani Nikula <jani.nikula@intel.com>
+Cc: dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
 	Thomas Zimmermann <tzimmermann@suse.de>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
+	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+	Danilo Krummrich <dakr@redhat.com>, Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Hamza Mahfooz <hamza.mahfooz@amd.com>,
 	Javier Martinez Canillas <javierm@redhat.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/9] fbdev: shmobile: fix snprintf truncation
-Message-ID: <20240326224252.GB14986@pendragon.ideasonboard.com>
-References: <20240326223825.4084412-1-arnd@kernel.org>
- <20240326223825.4084412-2-arnd@kernel.org>
+	Sui Jingfeng <sui.jingfeng@linux.dev>, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RESEND v3 2/2] drm: Add CONFIG_DRM_WERROR
+Message-ID: <20240326225650.GA2784736@dev-arch.thelio-3990X>
+References: <cover.1709629403.git.jani.nikula@intel.com>
+ <afe5ed943414f7ec3044c1547503b9941686a867.1709629403.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240326223825.4084412-2-arnd@kernel.org>
+In-Reply-To: <afe5ed943414f7ec3044c1547503b9941686a867.1709629403.git.jani.nikula@intel.com>
 
-Hi Arnd,
-
-Thank you for the patch.
-
-On Tue, Mar 26, 2024 at 11:38:00PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Mar 05, 2024 at 11:07:36AM +0200, Jani Nikula wrote:
+> Add kconfig to enable -Werror subsystem wide. This is useful for
+> development and CI to keep the subsystem warning free, while avoiding
+> issues outside of the subsystem that kernel wide CONFIG_WERROR=y might
+> hit.
 > 
-> The name of the overlay does not fit into the fixed-length field:
+> v2: Don't depend on COMPILE_TEST
 > 
-> drivers/video/fbdev/sh_mobile_lcdcfb.c:1577:2: error: 'snprintf' will always be truncated; specified size is 16, but format string expands to at least 25
-> 
-> Make it short enough by changing the string.
-> 
-> Fixes: c5deac3c9b22 ("fbdev: sh_mobile_lcdc: Implement overlays support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
+> Reviewed-by: Hamza Mahfooz <hamza.mahfooz@amd.com> # v1
+> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
 > ---
->  drivers/video/fbdev/sh_mobile_lcdcfb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/gpu/drm/Kconfig  | 13 +++++++++++++
+>  drivers/gpu/drm/Makefile |  3 +++
+>  2 files changed, 16 insertions(+)
 > 
-> diff --git a/drivers/video/fbdev/sh_mobile_lcdcfb.c b/drivers/video/fbdev/sh_mobile_lcdcfb.c
-> index eb2297b37504..d35d2cf99998 100644
-> --- a/drivers/video/fbdev/sh_mobile_lcdcfb.c
-> +++ b/drivers/video/fbdev/sh_mobile_lcdcfb.c
-> @@ -1575,7 +1575,7 @@ sh_mobile_lcdc_overlay_fb_init(struct sh_mobile_lcdc_overlay *ovl)
->  	 */
->  	info->fix = sh_mobile_lcdc_overlay_fix;
->  	snprintf(info->fix.id, sizeof(info->fix.id),
-> -		 "SH Mobile LCDC Overlay %u", ovl->index);
-> +		 "SHMobile ovl %u", ovl->index);
->  	info->fix.smem_start = ovl->dma_handle;
->  	info->fix.smem_len = ovl->fb_size;
->  	info->fix.line_length = ovl->pitch;
+> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> index 6e853acf15da..c08e18108c2a 100644
+> --- a/drivers/gpu/drm/Kconfig
+> +++ b/drivers/gpu/drm/Kconfig
+> @@ -416,3 +416,16 @@ config DRM_LIB_RANDOM
+>  config DRM_PRIVACY_SCREEN
+>  	bool
+>  	default n
+> +
+> +config DRM_WERROR
+> +	bool "Compile the drm subsystem with warnings as errors"
+> +	depends on EXPERT
+> +	default n
+> +	help
+> +	  A kernel build should not cause any compiler warnings, and this
+> +	  enables the '-Werror' flag to enforce that rule in the drm subsystem.
+> +
+> +	  The drm subsystem enables more warnings than the kernel default, so
+> +	  this config option is disabled by default.
+> +
+> +	  If in doubt, say N.
 
--- 
-Regards,
+While I understand the desire for an easy switch that maintainers and
+developers can use to ensure that their changes are warning free for the
+drm subsystem specifically, I think subsystem specific configuration
+options like this are actively detrimental to developers and continuous
+integration systems that build test the entire kernel. For example, we
+turned off CONFIG_WERROR for our Hexagon builds because of warnings that
+appear with -Wextra that are legitimate but require treewide changes to
+resolve in a manner sufficient for Linus:
 
-Laurent Pinchart
+https://github.com/ClangBuiltLinux/linux/issues/1285
+https://lore.kernel.org/all/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.ibm.com/
+
+But now, due to CONFIG_DRM_WERROR getting enabled by all{mod,yes}config
+and -Wextra being unconditionally enabled for DRM, those warnings hard
+break the build despite CONFIG_WERROR=n...
+
+https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2eEBDGEqfmMZjGg3ZvDx2af2pde/build.log
+
+Same thing with PowerPC allmodconfig because we see -Wframe-larger-than
+that appears because allmodconfig enables CONFIG_KASAN or CONFIG_KCSAN
+usually:
+
+https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2eE2HDsODudQGqkMKAPQnId7pRd/build.log
+
+I don't know what the solution for this conflict is through. I guess it
+is just the nature of the kernel being a federation of independent
+subsystems that want to have their own policies. I suppose we can just
+set CONFIG_DRM_WERROR=n and be done with it but I would like to avoid
+this issue from spreading to other subsystems because it does not scale
+for folks like us who do many builds across many trees.
+
+It would be nice if there was something like CONFIG_WERROR_DIRS or
+something that could take a set of directories that should have -Werror
+enabled so that you could do something like
+
+  CONFIG_WERROR_DIRS="drivers/gpu/drm"
+
+and have -Werror automatically added to all commands within that
+directory like subdir-ccflags-y but it is explicitly opt in on the part
+of the developer/tester, rather than just happening to get enabled due
+to all{mod,yes}config. No idea if that is feasible or not though.
+
+> diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+> index ea456f057e8a..a73c04d2d7a3 100644
+> --- a/drivers/gpu/drm/Makefile
+> +++ b/drivers/gpu/drm/Makefile
+> @@ -30,6 +30,9 @@ subdir-ccflags-y += -Wno-sign-compare
+>  endif
+>  # --- end copy-paste
+>  
+> +# Enable -Werror in CI and development
+> +subdir-ccflags-$(CONFIG_DRM_WERROR) += -Werror
+> +
+>  drm-y := \
+>  	drm_aperture.o \
+>  	drm_atomic.o \
+> -- 
+> 2.39.2
+> 
