@@ -1,167 +1,215 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163E31386B4
-	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 14:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B8180C12;
+	Tue, 26 Mar 2024 14:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711463479; cv=none; b=jFQo35J9s+R0vhy+8mAu+BJEAl2oFratBKo+dXfG4rF460fq4pd24IjP8Zt86Hd2M1z6m6Dxb87mq08Qezegs/QmfpjjIO31ssVaTUWIR1HEdCaUVh1R3z9mkvh2EgtOXGt0lHGsiQah7qLHANodn2Qg03lf75oEmEEP6tETbGA=
+	t=1711463728; cv=none; b=aaD5Z8BgM3g97IsHi3P16od05bB90Ip9N3IjpBkoYzulv+Q2NCtHgtRYEue2Hww7yG5CzLjHzonREIZXebCC2TNCVlix0gNBO0N5DvF9J2+kezIVu3AnZfBZY85SlKkQtYRARNZzsZUs0vn533OdF8NWq7ySWFob+oSgQSFRJ14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711463479; c=relaxed/simple;
-	bh=KnuFM0m3swGffZlhghm4kB/dfwX3rjGeAbwEYflLnM0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VN9C4A/U4WWzU5KnTa8x8WzyPiCobAujqwhdyheFg/gOLj7dfMZ23TtcqAMTBDS256NIowNBUa0o7FldHwOTI/MdEv8Z09HnLTMwyongan8u0075XpgzfuOT3D1mC4UlWmzP/SQhr6gN6WXLN7CvW1mgcOGL817zSr5WMLjar6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aROiVbOG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1711463728; c=relaxed/simple;
+	bh=G4VayLkDEdgGiDy8YMVdGzeBmWHF8revmHJsqsrO5+0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kEDv20bmLDybonU8p/kRc+Fzj1tVqrlrhmNyPlh8EjOu1wS5lPZGHONwwvWt4VOrmf0vrUVXi1N2XvresZwMRuWR4y86FE2g1/CRtju9De320p4CbVMsbSBPdA5kc3PP6T76PZnzrZ7gH1NL/Ls9R8yP9ls8dhIKF1MUXSC5Qts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=DeikNxfH; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aROiVbOG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711463475;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NYNhhSBHTvggxzoQj3ERep2pAlFHZ0dOP7l+Tzc1rMY=;
-	b=aROiVbOG9skJlGzw7AmwzNTM2xZrgg8/ACsYzi1d9zno9jPx2qrRSBJvFQrBqNuP8i9gfl
-	6WHSj9YvfA0EloOEBxU7JVepZE9e187NBToj9DE8FLwcG2D0qakw/eT4dgI8IlxVmwfZpK
-	k6e2qiE2bBTPhNe3RqTnkYsIT6owYPw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-68-vMXETWXZPoOZwGH_th70rg-1; Tue, 26 Mar 2024 10:31:12 -0400
-X-MC-Unique: vMXETWXZPoOZwGH_th70rg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C65684B060
-	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 14:31:12 +0000 (UTC)
-Received: from [172.64.9.22] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C947AC017A0;
-	Tue, 26 Mar 2024 14:31:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 15 of 204): Test report for master
- (6.9.0-rc1, mainline.kernel.org-clang, 928a87ef)
-Date: Tue, 26 Mar 2024 14:31:11 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="DeikNxfH"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+	:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+	Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+	:List-Post:List-Owner:List-Archive;
+	bh=2SVrI5jZNwjEti7fw19FvDvELk09Rp4DU6fIvhzRuqc=; b=DeikNxfHevZv6bG0ypUdd4QEVo
+	I334M9MJfjVTwzjB5W/+c8j7w0EXJWHbvBnR4M20jaWqZAGybfZZCFgT41Ffgi4rE6fDMgxy4pov2
+	LTAXZCe3z1bBvFXmG4S3F2nIl28mm8ITnduc1F7kNlDOjYFAc0kgEVsbXraPezLVrZilvOqjMhGAP
+	+Ofb+xNOnl+1AF6+UgXzjpQ8YWdVRntupIBjCQkRFTFjLjifbKiCi2OXspZoPcxQ3whohfO+C+D1h
+	IFiRwDWQshQKeJ9vRvWYkBSkfLy563bks+Lvx1ePOQI7jtOHk1VpPB+LDkTqHgVyWEM4X3xievIHh
+	3DIV/WNA==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1rp7tX-00Ew6P-2G;
+	Tue, 26 Mar 2024 14:35:19 +0000
+Date: Tue, 26 Mar 2024 14:35:19 +0000
+From: "Dr. David Alan Gilbert" <dave@treblig.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>,
+	Philipp Stanner <pstanner@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <ZgLdJwx1Mld-MJeX@gallifrey>
+References: <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+ <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+ <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+ <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+ <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
+ <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+ <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
+ <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
+ <ZgIRXL5YM2AwBD0Y@gallifrey>
+ <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <82864.124032610311201109@us-mta-68.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-17-amd64 (x86_64)
+X-Uptime: 14:11:37 up 83 days, 17:01,  1 user,  load average: 0.15, 0.06, 0.01
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-Hi, we tested your kernel and here are the results:
+* Linus Torvalds (torvalds@linux-foundation.org) wrote:
+> On Mon, 25 Mar 2024 at 17:05, Dr. David Alan Gilbert <dave@treblig.org> wrote:
+> >
+> > Isn't one of the aims of the Rust/C++ idea that you can't forget to access
+> > a shared piece of data atomically?
+> 
+> If that is an aim, it's a really *bad* one.
+> 
+> Really.
+>
+> It very much should never have been an aim, and I hope it wasn't. I
+> think, and hope, that the source of the C++ and Rust bad decisions is
+> cluelessness, not active malice.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Oh that hit a nerve :-)
 
-Tested-by: CKI Project <cki-project@redhat.com>
+> Take Rust - one big point of Rust is the whole "safe" thing, but it's
+> very much not a straightjacket like Pascal was. There's a "safe" part
+> to Rust, but equally importantly, there's also the "unsafe" part to
+> Rust.
+> 
+> The safe part is the one that most programmers are supposed to use.
+> It's the one that allows you to not have to worry too much about
+> things. It's the part that makes it much harder to screw up.
+> 
+> But the *unsafe* part is what makes Rust powerful. It's the part that
+> works behind the curtain. It's the part that may be needed to make the
+> safe parts *work*.
+> 
+> And yes, an application programmer might never actually need to use
+> it, and in fact in many projects the rule might be that unsafe Rust is
+> simply never even an option - but that doesn't mean that the unsafe
+> parts don't exist.
+> 
+> Because those unsafe parts are needed to make it all work in reality.
+> 
+> And you should never EVER base your whole design around the "safe"
+> part. Then you get a language that is a straight-jacket.
+> 
+> So I'd very strongly argue that the core atomics should be done the
+> "unsafe" way - allow people to specify exactly when they want exactly
+> what access. Allow people to mix and match and have overlapping
+> partial aliases, because if you implement things like locking, you
+> *need* those partially aliasing accesses, and you need to make
+> overlapping atomics where sometimes you access only one part of the
+> field.
+> 
+> And yes, that will be unsafe, and it might even be unportable, but
+> it's exactly the kind of thing you need in order to avoid having to
+> use assembly language to do your locking.
+> 
+> And by all means, you should relegate that to the "unsafe corner" of
+> the language. And maybe don't talk about the unsafe sharp edges in the
+> first chapter of the book about the language.
+> 
+> But you should _start_ the design of your language memory model around
+> the unsafe "raw atomic access operations" model.
+> 
+> Then you can use those strictly more powerful operations, and you
+> create an object model *around* it.
+> 
+> So you create safe objects like just an atomic counter. In *that*
+> corner of the language, you have the "safe atomics" - they aren't the
+> fundamental implementation, but they are the safe wrappers *around*
+> the more powerful (but unsafe) core.
+> 
+> With that "atomic counter" you cannot forget to do atomic accesses,
+> because that safe corner of the world doesn't _have_ anything but the
+> safe atomic accesses for every time you use the object.
+> 
+> See? Having the capability to do powerful and maybe unsafe things does
+> not force people to expose and use all that power. You can - and
+> should - wrap the powerful model with safer and simpler interfaces.
 
-Kernel information:
-    Commit message: Merge tag 'gfs2-v6.8-fix' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/gfs2/linux-gfs2
+I'd agree it's important to get the primitives right; but 
+I'd argue that from a design point of view it's probably better to keep
+both in mind from early on; you need to create a safe interface which
+people can actually use most of the time, otherwise you're not getting
+any benefit; so yes get the bases right, but just keep a feel for how
+they'll get encapsulated so most of the more boring code can be safe.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/137145
+> This isn't something specific to atomics. Not even remotely. This is
+> quite fundamental. You often literally _cannot_ do interesting things
+> using only safe interfaces. You want safe memory allocations - but to
+> actually write the allocator itself, you want to have all those unsafe
+> escape methods - all those raw pointers with arbitrary arithmetic etc.
+> 
+> And if you don't have unsafe escapes, you end up doing what so many
+> languages did: the libraries are written in something more powerful
+> like C, because C literally can do things that other languages
+> *cannot* do.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
- list ends without a blank line; unexpected unindent
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1405
-            Affected tests:
-                kselftest build - bpf [x86_64 (debug)]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
- __exclude_unnecessary_pages: Can't read the buffer of struct page
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
-            Affected tests:
-                kdump - file-load [ppc64le]
-                kdump - sysrq-c [ppc64le]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: xfstests generic/245: cannot overwrite File exists
-            URL: https://www.spinics.net/lists/fstests/msg23667.html
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
-                xfstests - nfsv4.2 [x86_64, x86_64 (debug)]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
+Yeh that's fine, I'm not at all arguing against that; but it doesn't
+mean you shouldn't keep an eye on how the safe side should look; even in the
+kernel.
+Get it right and those unsafe escapes shouldn't be needed too commonly;
+get it wrong and you'll either have painful abstractions or end up with
+unsafes shotgunned all over the place.
 
+> Don't let people fool you with talk about Turing machines and similar
+> smoke-and-mirror garbage. It's a bedtime story for first-year CS
+> students. It's not true.
 
-Tests that were not ran because of internal issues:=20
-    Hardware - pciutils: sanity smoke test [x86_64]
-    kdump - kexec-file-load [x86_64]
-    kdump - kexec_boot [x86_64]
-    kselftests upstream - bpf [x86_64]
-    kselftests upstream - bpf_test_progs [x86_64]
-    kselftests upstream - net [x86_64]
-    Libkcapi AF_ALG test [x86_64]
-    Memory function: memfd_create [aarch64, ppc64le, x86_64, x86_64 (debug)=
-, s390x]
-    Networking vnic: ipvlan/basic [x86_64]
-    Reboot test [x86_64]
-    Storage - dm/common [x86_64]
+My infinitely long tape is still on back order.
 
+Dave
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> things. If your language doesn't have those unsafe escapes, your
+> language is inherently weaker, and inherently worse for it.
+> 
+>            Linus
+> 
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
