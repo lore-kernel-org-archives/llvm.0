@@ -1,238 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D61084D0D;
-	Tue, 26 Mar 2024 05:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B1C12AAC7
+	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 05:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711431593; cv=none; b=KPET7HneXTOWEBb8gGVJo+eY+00EvzQsj7EjWWar4AjlK9JDGaDLS/4zxuZ5W8F/WfPfLGi7BOv1XAT9kVNf8dWhud74Y1GLv1K5VFeO9ZswYzUFt2k8KNV1g2e75XH90H+Grp9Wy6S2UtwGYlGqD49bZO2TLxjoE3nVEzzer6Y=
+	t=1711432622; cv=none; b=QgQ5fDNx/UzVH9YROv8f2/eTw7efvSbBqjtV1nrp8k2g2R76zW43w3f8uPYEp4bsGyj5LGKuMGmWyEtFW+OS/HPEJvG2lrOZ2FrzPor4EFjGizH2C4cuO9lM0/FbvnNlqRquZ0akECgmpVR2k2QRQPUt6yhL1pAlQ9fSB//X/lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711431593; c=relaxed/simple;
-	bh=XGvHkcQPIL6hhQc/cPtfoqEf14slmDXuJQkkTHXwa94=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=b8Xoi0AgHHkWc23DWPPHQ6YeawRbylz37+SRQ4PTub7HlPKh5HfpgP8wt884rEKn6EkZzPxGPDkT9j9B/lz7xMSbF3s5PeZUSwruF3JzM8dbqgGAsX/BICiZ/p1lG4MYKmY1pXhW7if8yww8I5z+e7ZyahwC87lPBTBUiSdSbZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QkJdG5lp; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711432622; c=relaxed/simple;
+	bh=ND9Y2sxlabnYJnhIIV0KvAzdrK9FLJxwJWh3pj7SGmo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fX1F3euAITHf+EkpM+Bnb1c9uPIiatAam4jVRn92PTeDtfqNaz33+f88bB7N6HqwBb3jGC4JayNWq91YJaf+7BJ0jMQbJtgZ/tifAwPpDA35Z0FFpOfsNeq1RbuS2XuDBCR5ER1xo+hsqZ0BpU8SMx85KdacvGZKgNiA3bWe91w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=h5hgyvmo; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QkJdG5lp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711431591; x=1742967591;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XGvHkcQPIL6hhQc/cPtfoqEf14slmDXuJQkkTHXwa94=;
-  b=QkJdG5lpWVzHNhzupphuyTfJk/VpBi6235vUWsbKPY+A9I2tt3j9vshW
-   rubjkpTGSkanMXopJR8nhij0v3zVWbUyh8cJ6yuBWNOfUpyaiQmVGhvoE
-   7UUBMkJgyQI4ulpF5QfokHD6Kmr/JJxAho58mWCzgXq/qKz4lEbTy9Pkp
-   xcAItR31e6aYZC0hMBEpcygzWxQRoBGdsJ1ur4FBQYRoTd9kIzAe8k6be
-   EzWYdblBJ640Bg+C8rtNRXcGh0gVSgO3upvspvCxwQ+0+PEYIwDiSghuN
-   wsgJsbaiTbFJ/C+054DkS+Z1gkPPEgYh4u1pDsuoO7mBs4cK+hqcHMyS1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6328344"
-X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
-   d="scan'208";a="6328344"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 22:39:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
-   d="scan'208";a="53312936"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 25 Mar 2024 22:39:49 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rozXG-000N9K-2I;
-	Tue, 26 Mar 2024 05:39:46 +0000
-Date: Tue, 26 Mar 2024 13:39:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dave Hansen <dave.hansen@intel.com>
-Subject: [intel-tdx:guest-tdx-setup 6/22] arch/x86/hyperv/ivm.c:551:3: error:
- use of undeclared identifier 'result'
-Message-ID: <202403261339.HkOGq2eo-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="h5hgyvmo"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-60a5a11b59dso56830967b3.0
+        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 22:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umich.edu; s=google-2016-06-03; t=1711432620; x=1712037420; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PPkjY6tTJjq9XlGXu2wl3SzG0jXY288ke/okKd5Kw2o=;
+        b=h5hgyvmohEJAuUWqK7siG59VCgsxsdfjpM/g3bh7qcftB0M+imNinfeUfW5FC4A+QU
+         4QF7wusantN2obDXk57Sojq2iwpHcyvEr7MyvxAAuTZmpsqRyMf9NQPGNOh3qtCrXgnx
+         EzGk7hv2M4IbR8t5dHTS0HxrYzbl45vRxKGWYmgf1XOjcX/vaeay1Etebx/wvOXGQsra
+         jeH8YNwyMOXy54p6HmOo6Vh0DHRk7CKEDuk9r0yld4Ny7UKWykQOfyZp4SIXirXrENUl
+         r37SpN9NjuboCynmz+V1g9ncX+hgXaAorYwG+X9PLILLBzYR6uHb+0cqhkwNtjFZanZr
+         oFpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711432620; x=1712037420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PPkjY6tTJjq9XlGXu2wl3SzG0jXY288ke/okKd5Kw2o=;
+        b=gYHoPjkVnhyY2nTRLonGezy00HQCCWZrym84LuFjynvyS2qcfEGSpZxriscdnBCcie
+         JlbmSF7FwTTq0TJWT7D6Tdmdc4FeEhCEhHj9KWPwUhysxxgSESoBPZ3hc0+/CvDVKIaT
+         9qRBnbD4CjDjcUJO2EsW+I8zD/HTv8uvaeRP3p2AhekemWpvNYIw/JQLn7hfyqIjGhma
+         mtrpLFVA4N8x/F45giUvOMH9aa+r+3ooh4uuY/3UshvImKSDRoJsfj24c2NvAZx7l+LR
+         meKjVvBCmwYgASkI5O4eLTz8ydDSvqw0XAJ2cfd1OkaOXVKXfqx/UTsc8p6s7HszN3vg
+         dVhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUhsPUqQRvcO9L4R+VPkRVGDODFaNkZ5XGpXPuoKeu3chebUHLudpmbB+NGA8jT1+omIyu89xG5QMlE8OFiqq1SmCO54w==
+X-Gm-Message-State: AOJu0Ywnm9Nk2jf3JrbevnTtcvM28hWKvDDyLmMkfAU5TgnesjiQWj8t
+	4/xxOkV4n64qko1NnzthG+tKysBdMvcfynu6VWSizNWDMi0ZDFj+evn9W+AYHjXgJ7joQBWAw0s
+	YTG/K7Fzdu6tbSp9BLG7/iupouf8ozbD6FjmPSA==
+X-Google-Smtp-Source: AGHT+IEZ5qdBLVvKB5XTD+4JNcNopYd0Qw8YU24zs9LsT+BKNrCyfLvgj0YV5WuY7LflHPoWR30CvJt+jqecqoOosTk=
+X-Received: by 2002:a25:2fd2:0:b0:dc2:398b:fa08 with SMTP id
+ v201-20020a252fd2000000b00dc2398bfa08mr6083186ybv.31.1711432619981; Mon, 25
+ Mar 2024 22:56:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240322233838.868874-1-boqun.feng@gmail.com> <20240322233838.868874-2-boqun.feng@gmail.com>
+ <068a5983-8216-48a5-9eb5-784a42026836@lunn.ch> <CAH5fLggdVDccDwBa3z+3YfjKFLegh7ZvcSzfhnEbAGSk=THKrw@mail.gmail.com>
+ <497668ec-c2d5-4cb4-9c2d-8e6f7129a42e@lunn.ch>
+In-Reply-To: <497668ec-c2d5-4cb4-9c2d-8e6f7129a42e@lunn.ch>
+From: Trevor Gross <tmgross@umich.edu>
+Date: Tue, 26 Mar 2024 01:56:48 -0400
+Message-ID: <CALNs47uEE9f73mtoXtJ52wS4nCOjTVxUtyPfQexF1mzHg6W5JA@mail.gmail.com>
+Subject: Re: [WIP 1/3] rust: Introduce atomic module
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
+	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
+	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel/tdx.git guest-tdx-setup
-head:   966502605489000d7b7cdc8eebecdcd2b1bfe8a8
-commit: 1fc7ddf713cc79be07e23bb18e52ba6ddb9a7f3a [6/22] x86/mm: Make x86_platform.guest.enc_status_change_*() return errno
-config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240326/202403261339.HkOGq2eo-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240326/202403261339.HkOGq2eo-lkp@intel.com/reproduce)
+On Sat, Mar 23, 2024 at 10:10=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote=
+:
+> > > Is it possible to somehow poison rusts own atomics?  I would not be
+> > > too surprised if somebody with good Rust knowledge but new to the
+> > > kernel tries using Rusts atomics. Either getting the compiler to fail
+> > > the build, or it throws an Opps on first invocation would be good.
+> >
+> > We could try to get a flag added to the Rust standard library that
+> > removes the core::sync::atomic module entirely, then pass that flag.
+>
+> Just looking down the road a bit, are there other features in the
+> standard library which are not applicable to Linux kernel space?
+> Ideally we want a solution not just for atomics but a generic solution
+> which can disable a collection of features? Maybe one by one?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403261339.HkOGq2eo-lkp@intel.com/
+Clippy is an easy way to do this via the disallowed_* lints.
+disallowed_types [1] would be applicable here to forbid
+`core::atomic::Atomic*`.
 
-All errors (new ones prefixed by >>):
+I don't think KCI currently checks clippy, but we probably want that
+at some point.
 
->> arch/x86/hyperv/ivm.c:551:3: error: use of undeclared identifier 'result'
-     551 |                 result = false;
-         |                 ^
-   arch/x86/hyperv/ivm.c:587:3: error: use of undeclared identifier 'result'
-     587 |                 result = false;
-         |                 ^
->> arch/x86/hyperv/ivm.c:662:47: error: incompatible function pointer types assigning to 'int (*)(unsigned long, int, bool)' (aka 'int (*)(unsigned long, int, _Bool)') from 'bool (unsigned long, int, bool)' (aka '_Bool (unsigned long, int, _Bool)') [-Wincompatible-function-pointer-types]
-     662 |         x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
-         |                                                      ^ ~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+- Trevor
 
+[1]: https://rust-lang.github.io/rust-clippy/master/index.html#/disallowed_=
+types
 
-vim +/result +551 arch/x86/hyperv/ivm.c
-
-0f34d11234868d Michael Kelley        2024-01-15  530  
-810a521265023a Tianyu Lan            2021-10-25  531  /*
-812b0597fb4043 Michael Kelley        2023-03-26  532   * hv_vtom_set_host_visibility - Set specified memory visible to host.
-810a521265023a Tianyu Lan            2021-10-25  533   *
-810a521265023a Tianyu Lan            2021-10-25  534   * In Isolation VM, all guest memory is encrypted from host and guest
-810a521265023a Tianyu Lan            2021-10-25  535   * needs to set memory visible to host via hvcall before sharing memory
-810a521265023a Tianyu Lan            2021-10-25  536   * with host. This function works as wrap of hv_mark_gpa_visibility()
-810a521265023a Tianyu Lan            2021-10-25  537   * with memory base and size.
-810a521265023a Tianyu Lan            2021-10-25  538   */
-1fc7ddf713cc79 Kirill A. Shutemov    2023-09-21  539  static int hv_vtom_set_host_visibility(unsigned long kbuffer, int pagecount, bool enc)
-810a521265023a Tianyu Lan            2021-10-25  540  {
-812b0597fb4043 Michael Kelley        2023-03-26  541  	enum hv_mem_host_visibility visibility = enc ?
-812b0597fb4043 Michael Kelley        2023-03-26  542  			VMBUS_PAGE_NOT_VISIBLE : VMBUS_PAGE_VISIBLE_READ_WRITE;
-810a521265023a Tianyu Lan            2021-10-25  543  	u64 *pfn_array;
-9fef276f9f416a Michael Kelley        2024-01-15  544  	phys_addr_t paddr;
-9fef276f9f416a Michael Kelley        2024-01-15  545  	void *vaddr;
-810a521265023a Tianyu Lan            2021-10-25  546  	int ret = 0;
-810a521265023a Tianyu Lan            2021-10-25  547  	int i, pfn;
-810a521265023a Tianyu Lan            2021-10-25  548  
-810a521265023a Tianyu Lan            2021-10-25  549  	pfn_array = kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
-0f34d11234868d Michael Kelley        2024-01-15  550  	if (!pfn_array) {
-0f34d11234868d Michael Kelley        2024-01-15 @551  		result = false;
-0f34d11234868d Michael Kelley        2024-01-15  552  		goto err_set_memory_p;
-0f34d11234868d Michael Kelley        2024-01-15  553  	}
-810a521265023a Tianyu Lan            2021-10-25  554  
-810a521265023a Tianyu Lan            2021-10-25  555  	for (i = 0, pfn = 0; i < pagecount; i++) {
-9fef276f9f416a Michael Kelley        2024-01-15  556  		/*
-9fef276f9f416a Michael Kelley        2024-01-15  557  		 * Use slow_virt_to_phys() because the PRESENT bit has been
-9fef276f9f416a Michael Kelley        2024-01-15  558  		 * temporarily cleared in the PTEs.  slow_virt_to_phys() works
-9fef276f9f416a Michael Kelley        2024-01-15  559  		 * without the PRESENT bit while virt_to_hvpfn() or similar
-9fef276f9f416a Michael Kelley        2024-01-15  560  		 * does not.
-9fef276f9f416a Michael Kelley        2024-01-15  561  		 */
-9fef276f9f416a Michael Kelley        2024-01-15  562  		vaddr = (void *)kbuffer + (i * HV_HYP_PAGE_SIZE);
-9fef276f9f416a Michael Kelley        2024-01-15  563  		paddr = slow_virt_to_phys(vaddr);
-9fef276f9f416a Michael Kelley        2024-01-15  564  		pfn_array[pfn] = paddr >> HV_HYP_PAGE_SHIFT;
-810a521265023a Tianyu Lan            2021-10-25  565  		pfn++;
-810a521265023a Tianyu Lan            2021-10-25  566  
-810a521265023a Tianyu Lan            2021-10-25  567  		if (pfn == HV_MAX_MODIFY_GPA_REP_COUNT || i == pagecount - 1) {
-810a521265023a Tianyu Lan            2021-10-25  568  			ret = hv_mark_gpa_visibility(pfn, pfn_array,
-810a521265023a Tianyu Lan            2021-10-25  569  						     visibility);
-1fc7ddf713cc79 Kirill A. Shutemov    2023-09-21  570  			if (ret)
-810a521265023a Tianyu Lan            2021-10-25  571  				goto err_free_pfn_array;
-810a521265023a Tianyu Lan            2021-10-25  572  			pfn = 0;
-810a521265023a Tianyu Lan            2021-10-25  573  		}
-810a521265023a Tianyu Lan            2021-10-25  574  	}
-810a521265023a Tianyu Lan            2021-10-25  575  
-810a521265023a Tianyu Lan            2021-10-25  576  err_free_pfn_array:
-810a521265023a Tianyu Lan            2021-10-25  577  	kfree(pfn_array);
-0f34d11234868d Michael Kelley        2024-01-15  578  
-0f34d11234868d Michael Kelley        2024-01-15  579  err_set_memory_p:
-0f34d11234868d Michael Kelley        2024-01-15  580  	/*
-0f34d11234868d Michael Kelley        2024-01-15  581  	 * Set the PTE PRESENT bits again to revert what hv_vtom_clear_present()
-0f34d11234868d Michael Kelley        2024-01-15  582  	 * did. Do this even if there is an error earlier in this function in
-0f34d11234868d Michael Kelley        2024-01-15  583  	 * order to avoid leaving the memory range in a "broken" state. Setting
-0f34d11234868d Michael Kelley        2024-01-15  584  	 * the PRESENT bits shouldn't fail, but return an error if it does.
-0f34d11234868d Michael Kelley        2024-01-15  585  	 */
-0f34d11234868d Michael Kelley        2024-01-15  586  	if (set_memory_p(kbuffer, pagecount))
-0f34d11234868d Michael Kelley        2024-01-15  587  		result = false;
-0f34d11234868d Michael Kelley        2024-01-15  588  
-1fc7ddf713cc79 Kirill A. Shutemov    2023-09-21  589  	return ret;
-812b0597fb4043 Michael Kelley        2023-03-26  590  }
-812b0597fb4043 Michael Kelley        2023-03-26  591  
-812b0597fb4043 Michael Kelley        2023-03-26  592  static bool hv_vtom_tlb_flush_required(bool private)
-812b0597fb4043 Michael Kelley        2023-03-26  593  {
-0f34d11234868d Michael Kelley        2024-01-15  594  	/*
-0f34d11234868d Michael Kelley        2024-01-15  595  	 * Since hv_vtom_clear_present() marks the PTEs as "not present"
-0f34d11234868d Michael Kelley        2024-01-15  596  	 * and flushes the TLB, they can't be in the TLB. That makes the
-0f34d11234868d Michael Kelley        2024-01-15  597  	 * flush controlled by this function redundant, so return "false".
-0f34d11234868d Michael Kelley        2024-01-15  598  	 */
-0f34d11234868d Michael Kelley        2024-01-15  599  	return false;
-812b0597fb4043 Michael Kelley        2023-03-26  600  }
-812b0597fb4043 Michael Kelley        2023-03-26  601  
-812b0597fb4043 Michael Kelley        2023-03-26  602  static bool hv_vtom_cache_flush_required(void)
-812b0597fb4043 Michael Kelley        2023-03-26  603  {
-812b0597fb4043 Michael Kelley        2023-03-26  604  	return false;
-812b0597fb4043 Michael Kelley        2023-03-26  605  }
-812b0597fb4043 Michael Kelley        2023-03-26  606  
-812b0597fb4043 Michael Kelley        2023-03-26  607  static bool hv_is_private_mmio(u64 addr)
-812b0597fb4043 Michael Kelley        2023-03-26  608  {
-812b0597fb4043 Michael Kelley        2023-03-26  609  	/*
-812b0597fb4043 Michael Kelley        2023-03-26  610  	 * Hyper-V always provides a single IO-APIC in a guest VM.
-812b0597fb4043 Michael Kelley        2023-03-26  611  	 * When a paravisor is used, it is emulated by the paravisor
-812b0597fb4043 Michael Kelley        2023-03-26  612  	 * in the guest context and must be mapped private.
-812b0597fb4043 Michael Kelley        2023-03-26  613  	 */
-812b0597fb4043 Michael Kelley        2023-03-26  614  	if (addr >= HV_IOAPIC_BASE_ADDRESS &&
-812b0597fb4043 Michael Kelley        2023-03-26  615  	    addr < (HV_IOAPIC_BASE_ADDRESS + PAGE_SIZE))
-812b0597fb4043 Michael Kelley        2023-03-26  616  		return true;
-812b0597fb4043 Michael Kelley        2023-03-26  617  
-812b0597fb4043 Michael Kelley        2023-03-26  618  	/* Same with a vTPM */
-812b0597fb4043 Michael Kelley        2023-03-26  619  	if (addr >= VTPM_BASE_ADDRESS &&
-812b0597fb4043 Michael Kelley        2023-03-26  620  	    addr < (VTPM_BASE_ADDRESS + PAGE_SIZE))
-812b0597fb4043 Michael Kelley        2023-03-26  621  		return true;
-812b0597fb4043 Michael Kelley        2023-03-26  622  
-812b0597fb4043 Michael Kelley        2023-03-26  623  	return false;
-810a521265023a Tianyu Lan            2021-10-25  624  }
-846da38de0e822 Tianyu Lan            2021-12-13  625  
-812b0597fb4043 Michael Kelley        2023-03-26  626  void __init hv_vtom_init(void)
-812b0597fb4043 Michael Kelley        2023-03-26  627  {
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  628  	enum hv_isolation_type type = hv_get_isolation_type();
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  629  
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  630  	switch (type) {
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  631  	case HV_ISOLATION_TYPE_VBS:
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  632  		fallthrough;
-812b0597fb4043 Michael Kelley        2023-03-26  633  	/*
-812b0597fb4043 Michael Kelley        2023-03-26  634  	 * By design, a VM using vTOM doesn't see the SEV setting,
-812b0597fb4043 Michael Kelley        2023-03-26  635  	 * so SEV initialization is bypassed and sev_status isn't set.
-812b0597fb4043 Michael Kelley        2023-03-26  636  	 * Set it here to indicate a vTOM VM.
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  637  	 *
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  638  	 * Note: if CONFIG_AMD_MEM_ENCRYPT is not set, sev_status is
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  639  	 * defined as 0ULL, to which we can't assigned a value.
-812b0597fb4043 Michael Kelley        2023-03-26  640  	 */
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  641  #ifdef CONFIG_AMD_MEM_ENCRYPT
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  642  	case HV_ISOLATION_TYPE_SNP:
-812b0597fb4043 Michael Kelley        2023-03-26  643  		sev_status = MSR_AMD64_SNP_VTOM;
-da86eb96118407 Borislav Petkov (AMD  2023-05-08  644) 		cc_vendor = CC_VENDOR_AMD;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  645  		break;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  646  #endif
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  647  
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  648  	case HV_ISOLATION_TYPE_TDX:
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  649  		cc_vendor = CC_VENDOR_INTEL;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  650  		break;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  651  
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  652  	default:
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  653  		panic("hv_vtom_init: unsupported isolation type %d\n", type);
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  654  	}
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  655  
-812b0597fb4043 Michael Kelley        2023-03-26  656  	cc_set_mask(ms_hyperv.shared_gpa_boundary);
-812b0597fb4043 Michael Kelley        2023-03-26  657  	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
-812b0597fb4043 Michael Kelley        2023-03-26  658  
-812b0597fb4043 Michael Kelley        2023-03-26  659  	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
-812b0597fb4043 Michael Kelley        2023-03-26  660  	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
-812b0597fb4043 Michael Kelley        2023-03-26  661  	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
-0f34d11234868d Michael Kelley        2024-01-15 @662  	x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
-812b0597fb4043 Michael Kelley        2023-03-26  663  	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
-c957f1f3c498bc Juergen Gross         2023-05-02  664  
-c957f1f3c498bc Juergen Gross         2023-05-02  665  	/* Set WB as the default cache mode. */
-c957f1f3c498bc Juergen Gross         2023-05-02  666  	mtrr_overwrite_state(NULL, 0, MTRR_TYPE_WRBACK);
-812b0597fb4043 Michael Kelley        2023-03-26  667  }
-812b0597fb4043 Michael Kelley        2023-03-26  668  
-
-:::::: The code at line 551 was first introduced by commit
-:::::: 0f34d11234868dc979730a905717c15067a7d205 x86/hyperv: Make encrypted/decrypted changes safe for load_unaligned_zeropad()
-
-:::::: TO: Michael Kelley <mhklinux@outlook.com>
-:::::: CC: Wei Liu <wei.liu@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> And i assume somebody will try to use Rust in uboot/barebox. It
+> probably has similar requirements to the Linux kernel? But what about
+> Zephyr? Or VxWorks? Darwin?
+>
+>         Andrew
+>
