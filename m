@@ -1,90 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7964F20DF7;
-	Tue, 26 Mar 2024 14:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163E31386B4
+	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 14:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711463226; cv=none; b=RPjMtCw6ea0xHgxYYqiZld7GB3i3nQPHrlq/t9QRAUPLh68UEq7NNvDS8lJ5dqo0eMUs+yem54ISk/tpwZxsQ1eHuJo46GpKH7Ah2Z8XW+BA/pTorV142/UrHF2PzloPhToUc+hVR4lLm8+qayGeBhGkEjIfXmFydTnNZA6ZhlU=
+	t=1711463479; cv=none; b=jFQo35J9s+R0vhy+8mAu+BJEAl2oFratBKo+dXfG4rF460fq4pd24IjP8Zt86Hd2M1z6m6Dxb87mq08Qezegs/QmfpjjIO31ssVaTUWIR1HEdCaUVh1R3z9mkvh2EgtOXGt0lHGsiQah7qLHANodn2Qg03lf75oEmEEP6tETbGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711463226; c=relaxed/simple;
-	bh=qoEJASPCUxmcyaJydCy2VV6pZZWWMfCad+tM+6zcuU8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qGLavpmWKlFCUMIx3VuZNXmceC81faEZdUPcnaLrhm2eLVmYAMjs/TwKprLMZhAelc0jByAqb7RFVqiCCCD45J3d8dw7S8uo/nYjbCRHDf7x3MubqGR9wdPtzzPzucHQd/HAyR/rumhrUGveYvm61kmwf8c6ubJPpA7qf71sgps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qS4zhIih; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711463479; c=relaxed/simple;
+	bh=KnuFM0m3swGffZlhghm4kB/dfwX3rjGeAbwEYflLnM0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VN9C4A/U4WWzU5KnTa8x8WzyPiCobAujqwhdyheFg/gOLj7dfMZ23TtcqAMTBDS256NIowNBUa0o7FldHwOTI/MdEv8Z09HnLTMwyongan8u0075XpgzfuOT3D1mC4UlWmzP/SQhr6gN6WXLN7CvW1mgcOGL817zSr5WMLjar6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aROiVbOG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qS4zhIih"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A48C433C7;
-	Tue, 26 Mar 2024 14:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711463226;
-	bh=qoEJASPCUxmcyaJydCy2VV6pZZWWMfCad+tM+6zcuU8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qS4zhIih2hC+so417yzJNvaab4L7Oie30dt1x5IbaGQQ5ivzJIMiragYqFDaziYdl
-	 V1SXGkh0w0txXIID6rDnT+oHviOLxvy2ES03x3Re1TldyhA2AUZl4DY1p11OiO+BvB
-	 3H9UHTAvd4AB2y3gwJwUCIThH2dDUGxyY4VbzCCv9zYw1fsHxcOSawEhKzQccsTFae
-	 P3CmJ4NfnmaNNexMwOrcJapL9yoTi/KTS+c9d7Jb/wfdgln34YADG86H+eV2Xk7KPV
-	 TPPczJfDQ39U0SvXP+0o9wLjnGE42PTK1qxA3d26lcrhjCWfzFnhyRdEmUavG3+dE+
-	 99qucStc/c9zg==
-Date: Tue, 26 Mar 2024 14:27:00 +0000
-From: Simon Horman <horms@kernel.org>
-To: Su Hui <suhui@nfschina.com>
-Cc: sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-	hkelam@marvell.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
-	Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH net v2 2/2] octeontx2-pf: remove unused variables req_hdr
- and rsp_hdr
-Message-ID: <20240326142700.GX403975@kernel.org>
-References: <20240326061233.4133148-1-suhui@nfschina.com>
- <20240326061233.4133148-2-suhui@nfschina.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aROiVbOG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711463475;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NYNhhSBHTvggxzoQj3ERep2pAlFHZ0dOP7l+Tzc1rMY=;
+	b=aROiVbOG9skJlGzw7AmwzNTM2xZrgg8/ACsYzi1d9zno9jPx2qrRSBJvFQrBqNuP8i9gfl
+	6WHSj9YvfA0EloOEBxU7JVepZE9e187NBToj9DE8FLwcG2D0qakw/eT4dgI8IlxVmwfZpK
+	k6e2qiE2bBTPhNe3RqTnkYsIT6owYPw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-68-vMXETWXZPoOZwGH_th70rg-1; Tue, 26 Mar 2024 10:31:12 -0400
+X-MC-Unique: vMXETWXZPoOZwGH_th70rg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C65684B060
+	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 14:31:12 +0000 (UTC)
+Received: from [172.64.9.22] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C947AC017A0;
+	Tue, 26 Mar 2024 14:31:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 15 of 204): Test report for master
+ (6.9.0-rc1, mainline.kernel.org-clang, 928a87ef)
+Date: Tue, 26 Mar 2024 14:31:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240326061233.4133148-2-suhui@nfschina.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <82864.124032610311201109@us-mta-68.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-+ Dan Carpenter
+Hi, we tested your kernel and here are the results:
 
-On Tue, Mar 26, 2024 at 02:12:36PM +0800, Su Hui wrote:
-> Clang static checker(scan-buid):
-> drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:503:2: warning:
-> Value stored to 'rsp_hdr' is never read [deadcode.DeadStores]
-> 
-> Remove these unused variables to save some space.
-> 
-> Signed-off-by: Su Hui <suhui@nfschina.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Hi Su Hui,
+Tested-by: CKI Project <cki-project@redhat.com>
 
-as pointed out by Dan in his review of v1 of this patch, it is not a fix.
-This means that it should be targeted at the net-next rather than the net
-branch. As the granularity of patch handling on netdev is generally at the
-patchset level I believe that this means that you need to separately,
-in different email threads, repost:
+Kernel information:
+    Commit message: Merge tag 'gfs2-v6.8-fix' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/gfs2/linux-gfs2
 
-1. Patch 1/2 of this series, targeted at net
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/137145
 
-   [PATCH net v3] octeontx2-pf: check negative error code in otx2_open()
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                kselftest build - bpf [x86_64 (debug)]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: xfstests generic/245: cannot overwrite File exists
+            URL: https://www.spinics.net/lists/fstests/msg23667.html
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
+                xfstests - nfsv4.2 [x86_64, x86_64 (debug)]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
 
-2. Patch 2/2 of this series, targeted at net-next
 
-   [PATCH net-next v3] octeontx2-pf: remove unused variables req_hdr
+Tests that were not ran because of internal issues:=20
+    Hardware - pciutils: sanity smoke test [x86_64]
+    kdump - kexec-file-load [x86_64]
+    kdump - kexec_boot [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Libkcapi AF_ALG test [x86_64]
+    Memory function: memfd_create [aarch64, ppc64le, x86_64, x86_64 (debug)=
+, s390x]
+    Networking vnic: ipvlan/basic [x86_64]
+    Reboot test [x86_64]
+    Storage - dm/common [x86_64]
 
-Also, please be sure to wait 24 hours since the posting of this patch-set
-before reposting.
 
-Some more information can be found here:
-https://docs.kernel.org/process/maintainer-netdev.html
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-...
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-pw-bot: changes-requested
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
