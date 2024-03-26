@@ -1,121 +1,57 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAC312838E
-	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 02:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF1F86AC1
+	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 03:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711421478; cv=none; b=vBW9lcbXL6s/gU4gDlU8usGLVxCCX8+GCmNsn6xJgO3dHP13pX/UoHi4rQCLMLtKXqUQB/hqCbD8xE4LHs+Q8kFjlUsXVDXvfC6XRAm3+UqdS5ciBJLAFxySzCu5KFOlSkJqt19UfgNE++Fs9IyxFHjl/FKk5Q7XPRwR2J2kPRM=
+	t=1711423730; cv=none; b=cRmye+RqwMhARjAABOJh277T1hocC8RlMemaFHouUezGsX+WYm9hFYK0ge1e20wS16So5V51otftGVhxsdo+BmRB+Hp+E42FjxoUkPDNAPDCRTtmHEY1mNN1GcfZdyIb567oKOSBSjmx9TM2N1rYhyv9SwyyC1/DYWoP01XO06A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711421478; c=relaxed/simple;
-	bh=N5UUxAKoTPcBjWK+QOUVolTBhb8j694WCAv1Ly4a9d8=;
+	s=arc-20240116; t=1711423730; c=relaxed/simple;
+	bh=zbz8JSdX4HImrXyDSvkZNWHjmt/U+lnpC2qNDFF4hDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L5tMG7x0fHI0PfYHO0UTIpL4dweMwpCNmjLWypEVR0cVDiTJcmcfUXvYQL6ipBSEgpuLVdxHhSQHqYKhfx+DM7Kp33pLF0jFRW7di8NsjTUZyUimaWgWoHgCg98FzrcwnkL9RHisn7UHqFyQKhJata2X6f8z8O4KsJ3cLeQImSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAPYrKQO; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=d22Necv/EMbCiC2O78+/kDp2kos5IQJpAAnVe9JrkCDlb7wRm2fP3RWkruaObTB/pETgCuvDGsQ/5cmHuvVqSzfGw6LPubQe0tYcc7XGF+xcBRlry0p4pQ5moonuN7C+H93juMnyPsjKfUGUMndYdnJr5dhl4Tw3/N+c//Aq3gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iPRgLzgy; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAPYrKQO"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-78a26803f1aso366985985a.3
-        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 19:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711421476; x=1712026276; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fcNhvrzgAeTv+RtaHHdMdJGRePwYOV19cay72dN5zG0=;
-        b=TAPYrKQOZvY/DDkMK0YzEFIYThcC2wqUMAK09cfLRTUrI4x5qhcixfZqEVw3X9t1qC
-         rEqWG0kklx/SdwYFsA7+NtbOl1qJNVcFpXelmS2E1j53B+VlFqNk7LtbSTWjf4/noFF8
-         zrHFaATbW1pYvPh0ZhEy8OsWsEGdrwvyTZAiuEG/pvunDHi/o1kqz46HXYuHDelNE6mJ
-         n6Nffc9tnLNwdjmOqh7nsFszF28NColqORTC2JtQkqQdz0ZfBgPgxA09dK2oPnWsqN8I
-         la0Mfpw4yXzSouTRqf3IDaxAQJWqKEqEbDT+V2shHssf5oWtNEFksPw+dQqqzf5BhMYn
-         RAMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711421476; x=1712026276;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fcNhvrzgAeTv+RtaHHdMdJGRePwYOV19cay72dN5zG0=;
-        b=bmW05w1bmKoxSXUtKiT9kIiC9Sxgm4FGgnzW98V71zLxjuRUNAtVZVDGbqYjFipneU
-         29SguKHSWHD2hYWPCKm21E63MsK8Ob8I8WFKswnddGkULwd8fe5V+iZZlPGKbpTkq52o
-         zykslX9QqJVc4WPq858SckV+/GsvGOBBLZYn/5WY+outVRA+qQtVb2HsTMh3pcoKePzM
-         TdIyt8kZqy4fh2OzGdon8hPMUFxfCfGJhqDKPAR1tn9X+7S0pv9CIDRGXCxCnwYiGkCS
-         KY5+eYODbj1N+cBS+zxiMoik+UoRzEZWaZCX/LTE1dH9QzLBuVndxvnmt7XC2UEnfT+j
-         H3+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVc+Arwg8N+wRc9uxZpDcgGSVNr9qQ0Wbz+7TnNLpMmq0uVMz6IU++zZVMtBC6XEPrSFvwGgwFmwkWOLytgDoJTdhMW/Q==
-X-Gm-Message-State: AOJu0YxeRpqJUc01lGHykjDAVkblxSSuNIBF4e0uHyieGBVGeij6MGAt
-	q90H4Ce9/h75VG7/Sen3l6Oam5OCyp+8NDNrospcgCvxn3BmDDMA
-X-Google-Smtp-Source: AGHT+IFDSXtUV4AQwiSzsedITS1Ks+VU5H+aA+IrwzXY0yARA6zx4+/SmU8LSwuDkN0+4uIvx/tnYA==
-X-Received: by 2002:a05:620a:1d99:b0:78a:45b9:c96f with SMTP id pj25-20020a05620a1d9900b0078a45b9c96fmr8386956qkn.59.1711421476022;
-        Mon, 25 Mar 2024 19:51:16 -0700 (PDT)
-Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id f23-20020ae9ea17000000b00789e800c204sm2642313qkg.62.2024.03.25.19.51.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 19:51:15 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 6C02F1200032;
-	Mon, 25 Mar 2024 22:51:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 25 Mar 2024 22:51:14 -0400
-X-ME-Sender: <xms:ITgCZq0KMEEsDawHXZdKnL8n4WUCu3oJXr-g9e8bQ51FudtBKjmfDA>
-    <xme:ITgCZtEVfhDHXly_ppW_xP0-FeKwM-fdfQ-EUyNRzOxFgEuCgU2crtIt7c8Mn_sx3
-    UbnWWtNEBsZqgIboQ>
-X-ME-Received: <xmr:ITgCZi5oVZ8ki9DHasrqwtZTEfQuziED9fPOcZhFon2BnRtBiS1axksDFw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduvddgheduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpedvudfgheeikeehiedugfdugfegjeegvdelteeffeejfefgkeduteekgfev
-    keeitdenucffohhmrghinhepthhrvggslhhighdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
-    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:ITgCZr0bQsaUqYUNd0feuVjVTTA008glsjcyqMC3K9VCveZqZ7ViQw>
-    <xmx:ITgCZtFhkYNIORHDvgCfcXQZdxGp48exRrJ-Dky0Ak6tT5Vi9Ega4w>
-    <xmx:ITgCZk8IW44RemklT6gJdGIXTGObj6V8Ru7piiqQbosIXr3uEBZVLA>
-    <xmx:ITgCZikVqwPyizH1Xengv-x1mKi2OOHJfx1tpfj87r72bZIGR3ihvw>
-    <xmx:IjgCZpAbMxss07kt1nC5b-UgIevPlKplkZZEdun6Pl8MpEEgIA_B-LEV6sqVb7xO>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Mar 2024 22:51:12 -0400 (EDT)
-Date: Mon, 25 Mar 2024 19:51:11 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iPRgLzgy"
+Date: Mon, 25 Mar 2024 23:28:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711423726;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zbz8JSdX4HImrXyDSvkZNWHjmt/U+lnpC2qNDFF4hDk=;
+	b=iPRgLzgyqe8KY1dSoWPYlt/aLh26NUBnBpny3uA+K8hQM6biRkS8YxVymU+AB0tgmAfTHH
+	VbEu5miz1s3JErGsWakBsX2Unnpvso/q0bxFyUZTzY70FSuse4dOSVWy2xyabsWKBeP95k
+	xdeHD23g82UYYfGhnWk/GMILpw/WhTE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
 To: "Dr. David Alan Gilbert" <dave@treblig.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Philipp Stanner <pstanner@redhat.com>,	rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org,	linux-arch@vger.kernel.org,
- llvm@lists.linux.dev,	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Philipp Stanner <pstanner@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-fsdevel@vger.kernel.org
 Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-Message-ID: <ZgI4H8AMc3TAlEag@Boquns-Mac-mini.home>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+Message-ID: <iobxouxkp3yf5vna7fy2bfvwknhghmzevty645xpbdjwefxxrj@3ac4ewjezv3l>
+References: <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
  <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
  <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
  <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
@@ -123,6 +59,8 @@ References: <20240322233838.868874-1-boqun.feng@gmail.com>
  <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
  <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
  <ZgIRXL5YM2AwBD0Y@gallifrey>
+ <vevxfv67ureybf7sjwfxzdvl4tt62khyn2gfzn7o74ke2m554s@xxddzz6nurbn>
+ <ZgImcq2vRcDZtF6z@gallifrey>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -131,59 +69,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZgIRXL5YM2AwBD0Y@gallifrey>
+In-Reply-To: <ZgImcq2vRcDZtF6z@gallifrey>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Mar 26, 2024 at 12:05:48AM +0000, Dr. David Alan Gilbert wrote:
-> * Linus Torvalds (torvalds@linux-foundation.org) wrote:
-> 
-> <snip>
-> 
-> > IOW, the whole access size problem that Boqun described is
-> > *inherently* tied to the fact that the C++ and Rust memory model is
-> > badly designed from the wrong principles.
-> > 
-> > Instead of designing it as a "this is an atomic object that you can do
-> > these operations on", it should have been "this is an atomic access,
-> > and you can use this simple object model to have the compiler generate
-> > the accesses for you".
-> 
-> Isn't one of the aims of the Rust/C++ idea that you can't forget to access
-> a shared piece of data atomically?
-> 
-> If you want to have 'atomic accesses' explicitly, how do you tell the compiler
-> what you can use them on, and when it should stop you mixing them with
-> normal accesses on the same object?
-> 
+On Tue, Mar 26, 2024 at 01:35:46AM +0000, Dr. David Alan Gilbert wrote:
+> OK, so that's essentially the opposite worry of what I was saying; I was
+> worrying about people forgetting to use an atomic access to a shared
+> variable; I think you're worrying about people forgetting to mark
+> a variable shared and since the accesses are the same nothing shouts?
 
-Well, you can just wrap it in your own atomic types, can't you?
+In biological evolution, novel useful traits are generally not
+accessible via a single mutation; many neutral mutations are required
+first.
 
-If the atomic primitives that a language provides is access-based, users
-can create their own atomic types or language can provide via standard
-library, but mixed usage is still allowed when it makes sense (debug
-functionality, low level concurrent code that utilizes races, etc.) But
-if the atomic primitives that a language provides is type-based, then
-you're limited to what you can do. It might be totally fine as Linus
-pointed out, if you just write a portable library, and don't want to
-care about architectural details. But that's not the case in Linux
-kernel.
+Evolution is able to proceed quickly because there are a great many
+neutral mutations (that is, evolution quickly searches all possible
+paths to find accessible positive mutations), and because negative
+mutations are culled quickly - often before the first cell division.
 
-Regards,
-Boqun
+(The most common mutation being the addition or deletion of a base pair;
+but amino acids are coded for by groups of three base pairs, so that
+shifts everything on the chromosone after the mutation so that it codes
+for completely different amino acids. That cell won't live to divide
+again).
 
-> Dave
-> 
-> > This is why I claim that LKMM is fundamentally better. It didn't start
-> > out from a bass-ackwards starting point of marking objects "atomic".
-> > 
-> > And yes, the LKMM is a bit awkward, because we don't have the
-> > shorthands, so you have to write out "atomic_read()" and friends.
-> > 
-> > Tough. It's better to be correct than to be simple.
-> > 
-> >              Linus
-> > 
-> -- 
->  -----Open up your eyes, open up your mind, open up your code -------   
-> / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-> \        dave @ treblig.org |                               | In Hex /
->  \ _________________________|_____ http://www.treblig.org   |_______/
+Actual genetic diseases that significantly impair fitness are quite
+rare, and if they weren't we'd have a major problem.
+
+Programming at scale is million monkeys stuff - we're all hammering on
+our keyboards at random, the good programs survive and the bad programs
+are forgotten.
+
+Similarly to biological evolution, we want most edits to a program to
+result in a program that either still works, or fails immediately -
+fails to compile, or is caught immediately by basic testing.
+
+If edits can result in latent undefined behaviour or programs that
+_mostly_ work, and then explode in unpredictable ways weeks/months/years
+later - that's a huge problem. In the worst case, those bugs/negative
+mutations accumulate faster than they can be culled.
+
+Thank god we have source control.
+
+Places where we're working with extremely loose synchronization - no
+locking, raw memory barriers - are the worst kind of hand grenade, they
+result in bugs that are impossible to cull quickly.
+
+In kernel programming, we're always walking around with live hand
+grenades.
+
+So what do we do?
+
+We slow down, we take every step slowly and intentionally while telling
+everyone not to bump us because we're holding a live hand grenade - raw
+atomics, raw unlocked variables, memory barriers, they all get special
+care and extra comments.
+
+And we all have fuck-tons of code we need to be able to understand,
+review, debug and maintain, so we always try to write our code in a
+style where the if it's wrong, we'll see that _locally_, without having
+to go through and remember how _everything_ out of the possibly
+thousands of relevant lines work.
+
+I'm personally responsible for over 100k LOC of highly intricate code
+with high consequences for failure, and regularly have to debug issues
+arising somewhere in north of a million LOC - and when something goes
+wrong I have to be able to fully debug it _quickly_.
+
+What C++ does is like taking those hand grenades, with the pin already
+out - and leaving one under the couch cushions, another in the
+silverware drawer, another in the laundry basket - and expecting you to
+remember where you put them.
+
+Going back to the C++ example, the really fatal thing with how they do
+it is how a change in one line of code can completely change the
+semantics of a bunch of different code, and no human reviewer can be
+expected to catch bugs that might introduce and the compiler certainly
+won't.
+
+Now imagine multiple people working on the same code, at different
+times.
+
+Now imagine patches getting mixed up, reordered, one of them getting
+lost, merge conflicts - i.e. shit that happens all the time, and what
+happens if you're using C++ style atomics.
+
+Terrifying stuff.
