@@ -1,123 +1,105 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B1C12AAC7
-	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 05:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 3B91412AAFE
+	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 06:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711432622; cv=none; b=QgQ5fDNx/UzVH9YROv8f2/eTw7efvSbBqjtV1nrp8k2g2R76zW43w3f8uPYEp4bsGyj5LGKuMGmWyEtFW+OS/HPEJvG2lrOZ2FrzPor4EFjGizH2C4cuO9lM0/FbvnNlqRquZ0akECgmpVR2k2QRQPUt6yhL1pAlQ9fSB//X/lI=
+	t=1711433594; cv=none; b=dWEqgxqVHCWh+zAvVeXIrxnFTx6tzbUR+wxJVk5mm7QW8apcf62tl1p8o4uXBvOn6tDR9rWhiWkZQAq89G2uZUfjTkx2Fa+hRkZVwDsrCVT76M7QwuX7G3Ks1TLXLVrsuoMu+19JbmKdWKZP9wP1DveuwB7olQUD4AXX9P+jS9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711432622; c=relaxed/simple;
-	bh=ND9Y2sxlabnYJnhIIV0KvAzdrK9FLJxwJWh3pj7SGmo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fX1F3euAITHf+EkpM+Bnb1c9uPIiatAam4jVRn92PTeDtfqNaz33+f88bB7N6HqwBb3jGC4JayNWq91YJaf+7BJ0jMQbJtgZ/tifAwPpDA35Z0FFpOfsNeq1RbuS2XuDBCR5ER1xo+hsqZ0BpU8SMx85KdacvGZKgNiA3bWe91w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=h5hgyvmo; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="h5hgyvmo"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-60a5a11b59dso56830967b3.0
-        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 22:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03; t=1711432620; x=1712037420; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PPkjY6tTJjq9XlGXu2wl3SzG0jXY288ke/okKd5Kw2o=;
-        b=h5hgyvmohEJAuUWqK7siG59VCgsxsdfjpM/g3bh7qcftB0M+imNinfeUfW5FC4A+QU
-         4QF7wusantN2obDXk57Sojq2iwpHcyvEr7MyvxAAuTZmpsqRyMf9NQPGNOh3qtCrXgnx
-         EzGk7hv2M4IbR8t5dHTS0HxrYzbl45vRxKGWYmgf1XOjcX/vaeay1Etebx/wvOXGQsra
-         jeH8YNwyMOXy54p6HmOo6Vh0DHRk7CKEDuk9r0yld4Ny7UKWykQOfyZp4SIXirXrENUl
-         r37SpN9NjuboCynmz+V1g9ncX+hgXaAorYwG+X9PLILLBzYR6uHb+0cqhkwNtjFZanZr
-         oFpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711432620; x=1712037420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PPkjY6tTJjq9XlGXu2wl3SzG0jXY288ke/okKd5Kw2o=;
-        b=gYHoPjkVnhyY2nTRLonGezy00HQCCWZrym84LuFjynvyS2qcfEGSpZxriscdnBCcie
-         JlbmSF7FwTTq0TJWT7D6Tdmdc4FeEhCEhHj9KWPwUhysxxgSESoBPZ3hc0+/CvDVKIaT
-         9qRBnbD4CjDjcUJO2EsW+I8zD/HTv8uvaeRP3p2AhekemWpvNYIw/JQLn7hfyqIjGhma
-         mtrpLFVA4N8x/F45giUvOMH9aa+r+3ooh4uuY/3UshvImKSDRoJsfj24c2NvAZx7l+LR
-         meKjVvBCmwYgASkI5O4eLTz8ydDSvqw0XAJ2cfd1OkaOXVKXfqx/UTsc8p6s7HszN3vg
-         dVhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhsPUqQRvcO9L4R+VPkRVGDODFaNkZ5XGpXPuoKeu3chebUHLudpmbB+NGA8jT1+omIyu89xG5QMlE8OFiqq1SmCO54w==
-X-Gm-Message-State: AOJu0Ywnm9Nk2jf3JrbevnTtcvM28hWKvDDyLmMkfAU5TgnesjiQWj8t
-	4/xxOkV4n64qko1NnzthG+tKysBdMvcfynu6VWSizNWDMi0ZDFj+evn9W+AYHjXgJ7joQBWAw0s
-	YTG/K7Fzdu6tbSp9BLG7/iupouf8ozbD6FjmPSA==
-X-Google-Smtp-Source: AGHT+IEZ5qdBLVvKB5XTD+4JNcNopYd0Qw8YU24zs9LsT+BKNrCyfLvgj0YV5WuY7LflHPoWR30CvJt+jqecqoOosTk=
-X-Received: by 2002:a25:2fd2:0:b0:dc2:398b:fa08 with SMTP id
- v201-20020a252fd2000000b00dc2398bfa08mr6083186ybv.31.1711432619981; Mon, 25
- Mar 2024 22:56:59 -0700 (PDT)
+	s=arc-20240116; t=1711433594; c=relaxed/simple;
+	bh=NdKLQ7JamUzG1z9KVDouidvoQOk9dDTvpTFBpz+UgxY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version; b=NCzOTC36AdS8AGUzbzFYaaH/MbotslXGI7K4K//g5eIctWJc9l5kQz0uH3yAV4QzPezRogRSlKktwoDGotAXQF+nSYiM6GMNv0S2ityaVKQGRKV/gJo1MX5IS/4/ea24JTlXGlHKb5Hp3iGWyv05ZOInaGugahY+/rm2cnhf5dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id DDADD6070B0AA;
+	Tue, 26 Mar 2024 14:13:07 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: sgoutham@marvell.com,
+	gakula@marvell.com,
+	sbhatta@marvell.com,
+	hkelam@marvell.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: Su Hui <suhui@nfschina.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH net v2 2/2] octeontx2-pf: remove unused variables req_hdr and rsp_hdr
+Date: Tue, 26 Mar 2024 14:12:36 +0800
+Message-Id: <20240326061233.4133148-2-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240326061233.4133148-1-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240322233838.868874-1-boqun.feng@gmail.com> <20240322233838.868874-2-boqun.feng@gmail.com>
- <068a5983-8216-48a5-9eb5-784a42026836@lunn.ch> <CAH5fLggdVDccDwBa3z+3YfjKFLegh7ZvcSzfhnEbAGSk=THKrw@mail.gmail.com>
- <497668ec-c2d5-4cb4-9c2d-8e6f7129a42e@lunn.ch>
-In-Reply-To: <497668ec-c2d5-4cb4-9c2d-8e6f7129a42e@lunn.ch>
-From: Trevor Gross <tmgross@umich.edu>
-Date: Tue, 26 Mar 2024 01:56:48 -0400
-Message-ID: <CALNs47uEE9f73mtoXtJ52wS4nCOjTVxUtyPfQexF1mzHg6W5JA@mail.gmail.com>
-Subject: Re: [WIP 1/3] rust: Introduce atomic module
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
-	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
-	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
-	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 23, 2024 at 10:10=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote=
-:
-> > > Is it possible to somehow poison rusts own atomics?  I would not be
-> > > too surprised if somebody with good Rust knowledge but new to the
-> > > kernel tries using Rusts atomics. Either getting the compiler to fail
-> > > the build, or it throws an Opps on first invocation would be good.
-> >
-> > We could try to get a flag added to the Rust standard library that
-> > removes the core::sync::atomic module entirely, then pass that flag.
->
-> Just looking down the road a bit, are there other features in the
-> standard library which are not applicable to Linux kernel space?
-> Ideally we want a solution not just for atomics but a generic solution
-> which can disable a collection of features? Maybe one by one?
+Clang static checker(scan-buid):
+drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:503:2: warning:
+Value stored to 'rsp_hdr' is never read [deadcode.DeadStores]
 
-Clippy is an easy way to do this via the disallowed_* lints.
-disallowed_types [1] would be applicable here to forbid
-`core::atomic::Atomic*`.
+Remove these unused variables to save some space.
 
-I don't think KCI currently checks clippy, but we probably want that
-at some point.
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+v2: add "net" in subject
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-- Trevor
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index 3f46d5e0fb2e..637b05c79c42 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -450,7 +450,6 @@ static void otx2_pfvf_mbox_handler(struct work_struct *work)
+ 	struct mbox_msghdr *msg = NULL;
+ 	int offset, vf_idx, id, err;
+ 	struct otx2_mbox_dev *mdev;
+-	struct mbox_hdr *req_hdr;
+ 	struct otx2_mbox *mbox;
+ 	struct mbox *vf_mbox;
+ 	struct otx2_nic *pf;
+@@ -461,9 +460,8 @@ static void otx2_pfvf_mbox_handler(struct work_struct *work)
+ 
+ 	mbox = &pf->mbox_pfvf[0].mbox;
+ 	mdev = &mbox->dev[vf_idx];
+-	req_hdr = (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
+ 
+-	offset = ALIGN(sizeof(*req_hdr), MBOX_MSG_ALIGN);
++	offset = ALIGN(sizeof(struct mbox_hdr), MBOX_MSG_ALIGN);
+ 
+ 	for (id = 0; id < vf_mbox->num_msgs; id++) {
+ 		msg = (struct mbox_msghdr *)(mdev->mbase + mbox->rx_start +
+@@ -494,7 +492,6 @@ static void otx2_pfvf_mbox_up_handler(struct work_struct *work)
+ 	struct otx2_nic *pf = vf_mbox->pfvf;
+ 	struct otx2_mbox_dev *mdev;
+ 	int offset, id, vf_idx = 0;
+-	struct mbox_hdr *rsp_hdr;
+ 	struct mbox_msghdr *msg;
+ 	struct otx2_mbox *mbox;
+ 
+@@ -502,8 +499,7 @@ static void otx2_pfvf_mbox_up_handler(struct work_struct *work)
+ 	mbox = &pf->mbox_pfvf[0].mbox_up;
+ 	mdev = &mbox->dev[vf_idx];
+ 
+-	rsp_hdr = (struct mbox_hdr *)(mdev->mbase + mbox->rx_start);
+-	offset = mbox->rx_start + ALIGN(sizeof(*rsp_hdr), MBOX_MSG_ALIGN);
++	offset = mbox->rx_start + ALIGN(sizeof(struct mbox_hdr), MBOX_MSG_ALIGN);
+ 
+ 	for (id = 0; id < vf_mbox->up_num_msgs; id++) {
+ 		msg = mdev->mbase + offset;
+-- 
+2.30.2
 
-[1]: https://rust-lang.github.io/rust-clippy/master/index.html#/disallowed_=
-types
-
-> And i assume somebody will try to use Rust in uboot/barebox. It
-> probably has similar requirements to the Linux kernel? But what about
-> Zephyr? Or VxWorks? Darwin?
->
->         Andrew
->
