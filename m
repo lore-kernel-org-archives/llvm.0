@@ -1,132 +1,126 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E190813C91A
-	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 15:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA4013C8E1
+	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 16:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711467438; cv=none; b=iYiinth1QUuac3bN6i0hP3u8VgLsk3Sx/SKvLuy1OWmPzs0plZ5wPeviAn0TStAp90qbFZ9GJN5d8Buw7zrCtQxmSUk79ad4EROEXBBkzN1UmbBc2pI9wfk8S7JWlR7uPf/EAkjl2o8GbkloseUqJ1V1gPchQ4XJ+YhKjq07e4s=
+	t=1711468955; cv=none; b=jN8usJTrs5fHo9xrnrODADltz3eJ3Qko2i5ELqwDBnoihZjtqNXkcme/MgDJ4xP5LUgWmYrNeOWanJjaAYaKbDMp2hw5i5d3zoiAjdUGlI3Pc30DrWafD5VriafPYPxhQIsViHbREl8vZLLlZx0QYJ+2GuMmj1vB2L2ZikHxQ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711467438; c=relaxed/simple;
-	bh=lP5dS6Tq+FiqxKpTrDMAZkxw9jBHYyu9IhEQCNtnP0M=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=fQYoo96S9qOBb8Ch0v4U1nnkrsaamYucktCgigCCK8h7zhZBqTAcG2qf8uFs1Thlsp/UVQYwkMcy7STu8i6O0zbMqGgrokdeNQiBxfVc/oqJ9sZ7AZ0mBrPm7nwu/WYHSstNP/CqiGeDqv/45PdWRlfha4DcHgNUuIATUccoI1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0RGAs9mE; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1711468955; c=relaxed/simple;
+	bh=WEETTdtmXnNUUxdJnrKz4FTNJRHDYO+nDraQbw59R0o=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=Ayu50rvq4WbvWG7QiytbZiE6SjmFlwK3ni9nJGhatI4WILECUUbksLhke6S+hcp0jcio1JWe6KXCUTi8bEA9A9wjb4oUQZGHpfUZE8ZIyxPEu+r/vZa0VxWL50V4iLJVQO/8OY4IBAv3dOfwn70yvYTOq/S2YndVWlMbEQzcUPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=mjCT9fo6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=R8Az+nHD; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0RGAs9mE"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60a0b18e52dso64713707b3.1
-        for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 08:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711467436; x=1712072236; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BMvO/gDA6wsc5/QrzpIMGz8r1v8np9pO9kTN8mjpmmc=;
-        b=0RGAs9mE6hAXc3GniVHM3P6eU5ch0hdf9cTkIzhR9wt18QaKMkQ8eWqgxo4eH1Hl0j
-         5FccgKumyN01ISm2NZpEUU5y6eVl1fy4UfsdR89wtdSs+NSlcDeNTaZNVdRIDuE74CoH
-         tMXGy7z5JK1UxnybjlAN4Rfc4q2P9Btyk5frp98kg1VlgiSRVIbDPyG+5LZrWHmxLydc
-         GQqJJdN6DEl7nkBZ664FjnBeb67fAB5EhCu5wmOQqtOaJ0D5OGN10DByTdt9FFlCjDKW
-         aLoyPhgIhwXivKUBiCPaI5HJVAfV7Y4ZDvNmrAZwn6r37H8SJ4Vv196c01WU3sksU5rC
-         m6tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711467436; x=1712072236;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BMvO/gDA6wsc5/QrzpIMGz8r1v8np9pO9kTN8mjpmmc=;
-        b=LvCGbVv4fp/Mkx51T4hM74RMqtKSqq/dzsnkREuz5Qvy3KE+mClt4WSAfTb83FjoDG
-         V1Y05fi/ZiOjSjVFIhpbJ1lxhy55FYK2MvYE9WKbJSDuJ/82t0y8TZTCpWk+uJJhp52R
-         xUu8lfakDqVnHN2/iLWReJIf1nZbbcgGZMVjQ/IbT0+jyWaQ64y5Asz5bEbACW53ZcRG
-         PGd/KVznhVF6BDrxzowSwSVBoFKGNTNYMGH7KZAg012Myz0isyZ+3/UkeGTpSZhzrIbe
-         PQBXBNpOK85NaqjxSlFYLMy1Wbh7uWsx6XNqH1KIpbBY9i1MZfuyc8egfH5zBzQN7vKd
-         L3TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVjtwKSCZyWSSmsHmUNYQ/W1CsHJM1s/8Z2/XaW8WNPojqjF6tTruba+bz7qNOHmgBI8RHsftaJRcYn+WAZ7b2K6SMp7Q==
-X-Gm-Message-State: AOJu0YxlDudn+RsrT93ewbv7M1SjVjp7c+nkEbmSnaT3PUIMOr2Y4FeJ
-	UOcMHZTc3WLKzhHSgwYb7fNgJO3MjhAMXaPzuPPji0fr1gsaxWP1DuOm9H26Qwtg1m0hWMGhRAS
-	d9Sz8uhYd9F7wxxEs2ePh4W/7vQ==
-X-Google-Smtp-Source: AGHT+IEtAbrfT0KePjTSZM1C/n453rH7UBsGCdgk9CYCpbgWc5d2/+acGD9f2ceoAz0WcEi0b/jf/PyVJ9b+Z7F1JRs=
-X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a81:f10c:0:b0:60a:1844:74ef with SMTP
- id h12-20020a81f10c000000b0060a184474efmr351393ywm.1.1711467435797; Tue, 26
- Mar 2024 08:37:15 -0700 (PDT)
-Date: Tue, 26 Mar 2024 15:37:13 +0000
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="mjCT9fo6";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="R8Az+nHD"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id E88BB114008C;
+	Tue, 26 Mar 2024 12:02:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 26 Mar 2024 12:02:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1711468952;
+	 x=1711555352; bh=uZQNPynhKPF46EB/VI6vYwBBa1dqaara1pLLBIisxc8=; b=
+	mjCT9fo6BpB7CSjlxicGaG/bS9hBLKCK3w6UShjKUvJktIIjba0cHRBKQAimrc5Q
+	Emv6TmTcP0KOyBxUFeKu7CE83/rb1jMarfYe0oIwxsWa65ehQ8LTpZFtTFQDVOuo
+	wDBcHV1cN4ZnimtBxcgqh0RhCjGYsF9Sg7tKIvkfjgc7IZqiG3+oiX4kjl3YqZt9
+	ORsRs+LHyp48c1UEPbHS/AnyUCJHWBWmNbxtsAZU3yrh917L6a7wt6A2JfqnKE5w
+	MnJ3d9DHRmb2vQE3TEOK9phybyGejur466HXU1Ve6Tylxan1k7JO4XG+f+63cVut
+	Zsmng4dpx0203Bo+/PR1Kw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1711468952; x=
+	1711555352; bh=uZQNPynhKPF46EB/VI6vYwBBa1dqaara1pLLBIisxc8=; b=R
+	8Az+nHDQmgC0yNbisHXJ3de+Z7rjacbhC5d6IM8Pa/bXUI0Sd3iTpgvvmFOrS0XU
+	4gp2B6BhmcXpSUScqla22drDVDBJr5u4AMhja1b/rJqrH8uSG13hPOlwPt734Oaq
+	1XWClBMuivbPZ3QXR0XzJJOoTtjwk9co108Jbaw8+MmyDuhT27H5bCmwCTCvz3BI
+	zGV8mMLxna7ZeEakS/YOIZlGq8uaP9w7g4X/+kc+WLgzXsz7Az25CW8GngrZ6roY
+	tC4sy+dQ2y4+Zy3CqE0dr/pgKcc5/+UFr424G3twWiW+OTXI10K0dYngGx3w5Rlg
+	6RzWNHNFxT8Ms9gzRhQLw==
+X-ME-Sender: <xms:mPECZmlxNndyoYvxX8n8aZ8p-SODnrkhPolr7FnGtnOaDXgFEmFSsA>
+    <xme:mPECZt271I6AHIkNXTxfSLwq6bbyzElUmhfR_acKZVgknUhqzx8HjaNoVUFTfyUrM
+    Os5coHg9CEiyXGBIxU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddufedgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:mPECZkrjeL7nPoJNmijVdb-ahSvhcg_bE8hgRozi4GcjyMeD6uj5KQ>
+    <xmx:mPECZqmuyK4ZJG0f6NfE0gTIEWVqFYcNmZ6yW5uATjejt6Zt_qvF-Q>
+    <xmx:mPECZk34bYanMNteHxGz8LdvyuGNWD--R_2OSUu9BfTL_8dTOR_-gQ>
+    <xmx:mPECZhuDyjdOTdo5KtUM54qOIaombyJlL0JbTmzdK79dXiL-pAqLCg>
+    <xmx:mPECZl78g8uWX-GHxDXztR0_nDoF-pERrigkFb2Ez_-UbX0ZndJ7MQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id E4F75B6008D; Tue, 26 Mar 2024 12:02:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2790; i=samitolvanen@google.com;
- h=from:subject; bh=lP5dS6Tq+FiqxKpTrDMAZkxw9jBHYyu9IhEQCNtnP0M=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBmAuuoWZIuWrE47I8B1b5TKFB+Qw8KjT+kih/KH
- WHMg9Yk0QmJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCZgLrqAAKCRBMtfaEi7xW
- 7ufGC/9qxcoSs09RThvb6flQlJcD7unRQHlOjzVZnI0+k7IpZsx+Qp+lQQ7b9jXAKWtV0jW2CAU
- 9qJ9Vcp7kM/YgrwWARkIImRpSz0oVBGPHwBPGlNv+gOHsGJiIEzT5PfwOBOQZ6+iFkIVrmcU+qV
- pzbIsGIH5AljMJExPewedP4DT8Q7MY2rGE4ty+mwF2fztac+Ir7zOF2zM5HoPlN2RW+zG0FGjl+
- bhi6cJQWnZ7b2zna7Ya8yAEnhqYIxby/AuhuCZYMcrajA/GrpHR4AYMYjoNiW6T8hG2oBSg1DMK
- mCIz2odn4rCrRrwGMaSOOGSDHufTvQDJiCwrynP1aBU+rtWYdimt/+rEiKSEEaaL1RPSTFOPXG3
- EAjsgQls7qrb6Shyu7ZX2zoxeGTFkRcQdFe0aNBWMeUOPw74ZJxGLnMps3YWo1DLQMes6eW39fh oxbbqx/2PvPAFL6HaHT87bJDNA0sS88ZWTCEFibxu5bZhNsG5fdqEv1kEkOKLAWPHOyTM=
-X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
-Message-ID: <20240326153712.1839482-2-samitolvanen@google.com>
-Subject: [PATCH] riscv: Mark __se_sys_* functions __used
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Kees Cook <keescook@chromium.org>, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Sami Tolvanen <samitolvanen@google.com>, Linux Kernel Functional Testing <lkft@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <e1ec2f8c-c1e9-4459-a6d4-c14ca57404fe@app.fastmail.com>
+In-Reply-To: <ddd9519fa51f95eb14a6dd3f2a4b7d67ae7e47a9.camel@nvidia.com>
+References: <20240326144741.3094687-1-arnd@kernel.org>
+ <20240326145140.3257163-5-arnd@kernel.org>
+ <ddd9519fa51f95eb14a6dd3f2a4b7d67ae7e47a9.camel@nvidia.com>
+Date: Tue, 26 Mar 2024 17:02:11 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Timur Tabi" <ttabi@nvidia.com>, "Masahiro Yamada" <masahiroy@kernel.org>,
+ "kherbst@redhat.com" <kherbst@redhat.com>,
+ "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+ "Arnd Bergmann" <arnd@kernel.org>, "Lyude Paul" <lyude@redhat.com>,
+ "bskeggs@redhat.com" <bskeggs@redhat.com>, "Dave Airlie" <airlied@gmail.com>,
+ "Danilo Krummrich" <dakr@redhat.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Daniel Vetter" <daniel@ffwll.ch>
+Cc: "Justin Stitt" <justinstitt@google.com>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "Bill Wendling" <morbo@google.com>,
+ "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+ "Nicolas Schier" <nicolas@fjasle.eu>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH 06/12] nouveau: fix function cast warning
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Clang doesn't think ___se_sys_* functions used even though they are
-aliased to __se_sys_*, resulting in -Wunused-function warnings when
-building rv32. For example:
+On Tue, Mar 26, 2024, at 16:20, Timur Tabi wrote:
+> On Tue, 2024-03-26 at 15:51 +0100, Arnd Bergmann wrote:
+>> Calling a function through an incompatible pointer type causes breaks
+>> kcfi, so clang warns about the assignment:
+>>=20
+>
+> ...
+>
+>> +static void of_fini(void *p)
+>> +{
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return kfree(p);
+>> +}
+>> +
+>
+> I don't know anything about kfci, but shouldn't this just be "kfree(p)=
+",
+> without the "return"?
 
-   mm/oom_kill.c:1195:1: warning: unused function '___se_sys_process_mrelease' [-Wunused-function]
-    1195 | SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:221:36: note: expanded from macro 'SYSCALL_DEFINE2'
-     221 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:231:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     231 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/syscall_wrapper.h:81:2: note: expanded from macro '__SYSCALL_DEFINEx'
-      81 |         __SYSCALL_SE_DEFINEx(x, sys, name, __VA_ARGS__)                         \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/syscall_wrapper.h:40:14: note: expanded from macro '__SYSCALL_SE_DEFINEx'
-      40 |         static long ___se_##prefix##name(__MAP(x,__SC_LONG,__VA_ARGS__))
-         |                     ^~~~~~~~~~~~~~~~~~~~
-   <scratch space>:30:1: note: expanded from here
-      30 | ___se_sys_process_mrelease
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+You are right, fixed this up locally now, waiting for more
+comments before I resend patches from my series.
 
-Mark the functions __used explicitly to fix the Clang warnings.
+I think it works because of a gcc extension, but isn't
+valid C otherwise, and I did not mean to rely on this.
 
-Fixes: a9ad73295cc1 ("riscv: Fix syscall wrapper for >word-size arguments")
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- arch/riscv/include/asm/syscall_wrapper.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/include/asm/syscall_wrapper.h b/arch/riscv/include/asm/syscall_wrapper.h
-index 980094c2e976..ac80216549ff 100644
---- a/arch/riscv/include/asm/syscall_wrapper.h
-+++ b/arch/riscv/include/asm/syscall_wrapper.h
-@@ -36,7 +36,8 @@ asmlinkage long __riscv_sys_ni_syscall(const struct pt_regs *);
- 					ulong)						\
- 			__attribute__((alias(__stringify(___se_##prefix##name))));	\
- 	__diag_pop();									\
--	static long noinline ___se_##prefix##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
-+	static long noinline ___se_##prefix##name(__MAP(x,__SC_LONG,__VA_ARGS__))	\
-+			__used;								\
- 	static long ___se_##prefix##name(__MAP(x,__SC_LONG,__VA_ARGS__))
- 
- #define SC_RISCV_REGS_TO_ARGS(x, ...) \
-
-base-commit: 4cece764965020c22cff7665b18a012006359095
--- 
-2.44.0.396.g6e790dbe36-goog
-
+     Arnd
