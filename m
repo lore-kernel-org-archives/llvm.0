@@ -1,65 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BBFF3838C;
-	Tue, 26 Mar 2024 11:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A7271758;
+	Tue, 26 Mar 2024 11:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711451583; cv=none; b=TZxl7LsFSdjyzwDTSHctZj3yEeknHy1rHkPLvI6JrVjGPUv0+SNmYSWzSSTT3OURc/4sFnUxQlkn+F4GTAouDNeapw8cd8atAaY6Z6wylPr6Agp9PKx1L2LvYKgSXCmoAS1fWVQswowYeq/TiOJHEMjfCr4a/SX/s9Pk0J8U1KQ=
+	t=1711452902; cv=none; b=k9YfBHWbrrtRIe/cCTrm2KocdofM5Q2UVY/BCbSrOLtHpDFX44VAIxfyhEDIFuwL3T83GH+ZCw1RH5hHUdqr1tYUFTENlLTxJGVhE7uMmtxaLPXrxhOUbmDGdj0VOSs2q1r+85JPweyR6KHOrmiwBGIanV+D39FsvjoWbnj/ZMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711451583; c=relaxed/simple;
-	bh=K/jjWGwDddPYSsUMpDxNJxL3gxVe+J5waRLRWI3JsoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d0ufR97AHd0VwyLENA7Qo7jLBSR7WAR4xq3IJ6/pP7iKAgyFMxyK67jJZNc+xsnWX8GVI8WnVSozeR7UNRn29XluF5wW+x71JInlicqQzesvgldf/rgLANIa7cjkQ+aAsMZbzHJg6x35woyII2dnXDl0f1lQcmcWcH/M7oVFyQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WiSRK5vm; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1711452902; c=relaxed/simple;
+	bh=9OYizbJxqDIuT86ZEA0pyUhFnnWBD/UBwFMaFIh81aA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fNGThfOwCnwsXbdZphDse9PSbNwge61YV7oFa++DDr9QGilW62Vwa6CNw/at7uwwLFdmJIfFn4AO7u3XAOCHQ3f4T6zF7v7698iTul74zD+dRqXLHGzuc1TYM9sEmQSHuFVUQYTzeIopDZcXV8FNFs0UUwjxY0Js2OvvUqqUeXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IzQj4fI0; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WiSRK5vm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IzQj4fI0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711451581; x=1742987581;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K/jjWGwDddPYSsUMpDxNJxL3gxVe+J5waRLRWI3JsoY=;
-  b=WiSRK5vmtAdaT3qNsQx3T4PpBBegE0rfZxYnGKQZVGvi/hBv6CT69t54
-   zbpkrXpPUDMh4i9ooSAJ4mpuXDFR+NBxAs9gKVNQzc7gmf8hDTvun/bjy
-   whu4X0b1P5+d4R4KHGGj1GFt9FssOLdosMO1JYYUrKrMVPtkzGsLxPZCJ
-   /BX2dX1RVuuEbgYw+w+UGnhCvQjmvLibKjvzyRrixvOF+UynulkIwnna1
-   2GpBhvC8yUjQ7YyZzeLY3jwkGxNrE/dX6Xuj9429tHqa+Po4YZX0UR1IG
-   14GlR32k0pxrTEbiRsukdk7zpi5ySonBVdJgwZrjwkujfq9myl/RpO616
-   w==;
-X-CSE-ConnectionGUID: Z93bJ/NTTimvhcaEitOUQQ==
-X-CSE-MsgGUID: 7Xd7fOSySqeWfPtH2LOoIQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6327396"
+  t=1711452899; x=1742988899;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9OYizbJxqDIuT86ZEA0pyUhFnnWBD/UBwFMaFIh81aA=;
+  b=IzQj4fI0QCcKz34tG8UQJHRiUF9s3VCtDAN44BaNY+w3Gzz3/9cg6RP+
+   RYjM3GlEkvBCJ2WzIX5Z4MyTcMEYj7Lm5hEHORKa7PrcjKp5OTlGtgoWW
+   Tx70OPoQtG52l+ioZefENOu7ffeyxgAhxm+yOGfhfrolOyx6ejNdCNkVb
+   dYb1g8oaV10QQ2c8571UZh31QHiTfgG8MILh5MuVybJQvav1kKXq7EWHF
+   ORDxnf+20aZjgGtN950P5TfBi6MYM6ku4Qxcu/KI3/n1W3HjipJGVSD5z
+   km1Qh2OMY0sipvMB9MPfQF9kUJ+LGpBlEFfDH1NbTRiQacDnuC7DlTyLK
+   g==;
+X-CSE-ConnectionGUID: f42CZYqBR22QCJLpzzB9sA==
+X-CSE-MsgGUID: Ss7w+SqhS8S9SA7SXBL+aQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6685268"
 X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="6327396"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 04:12:58 -0700
+   d="scan'208";a="6685268"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 04:34:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="15903463"
+   d="scan'208";a="20589328"
 Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Mar 2024 04:12:55 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 26 Mar 2024 04:34:56 -0700
 Received: from kbuild by b21307750695 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rp4jd-000NK8-27;
-	Tue, 26 Mar 2024 11:12:53 +0000
-Date: Tue, 26 Mar 2024 19:11:56 +0800
+	id 1rp54w-000NL4-0R;
+	Tue, 26 Mar 2024 11:34:54 +0000
+Date: Tue, 26 Mar 2024 19:34:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>
+To: Damien Le Moal <dlemoal@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Joanne Koong <joannelkoong@gmail.com>,
-	Jianguo Wu <wujianguo106@163.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: Re: [PATCH v1 net 1/8] tcp: Fix bind() regression for v6-only
- wildcard and v4-mapped-v6 non-wildcard addresses.
-Message-ID: <202403261821.5fkObY55-lkp@intel.com>
-References: <20240325181923.48769-2-kuniyu@amazon.com>
+	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: [pci:enumeration 28/28] drivers/mfd/intel-lpss-pci.c:57:42: error:
+ use of undeclared identifier 'PCI_IRQ_LEGACY'; did you mean '__WQ_LEGACY'?
+Message-ID: <202403261944.ObfbvQQV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,56 +60,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240325181923.48769-2-kuniyu@amazon.com>
 
-Hi Kuniyuki,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Fix-bind-regression-for-v6-only-wildcard-and-v4-mapped-v6-non-wildcard-addresses/20240326-024257
-base:   net/main
-patch link:    https://lore.kernel.org/r/20240325181923.48769-2-kuniyu%40amazon.com
-patch subject: [PATCH v1 net 1/8] tcp: Fix bind() regression for v6-only wildcard and v4-mapped-v6 non-wildcard addresses.
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240326/202403261821.5fkObY55-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git enumeration
+head:   8694697a54096ae97eb38bf4144f2d96c64c68f2
+commit: 8694697a54096ae97eb38bf4144f2d96c64c68f2 [28/28] PCI: Remove PCI_IRQ_LEGACY
+config: i386-randconfig-013-20240326 (https://download.01.org/0day-ci/archive/20240326/202403261944.ObfbvQQV-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240326/202403261821.5fkObY55-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240326/202403261944.ObfbvQQV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403261821.5fkObY55-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403261944.ObfbvQQV-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/ipv4/inet_connection_sock.c:207:59: error: no member named 'skc_v6_rcv_saddr' in 'struct sock_common'; did you mean 'skc_rcv_saddr'?
-     207 |             (sk->sk_family == AF_INET || ipv6_addr_v4mapped(&sk->sk_v6_rcv_saddr)))
-         |                                                                  ^
-   include/net/sock.h:375:37: note: expanded from macro 'sk_v6_rcv_saddr'
-     375 | #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
-         |                                     ^
-   include/net/sock.h:155:11: note: 'skc_rcv_saddr' declared here
-     155 |                         __be32  skc_rcv_saddr;
-         |                                 ^
+>> drivers/mfd/intel-lpss-pci.c:57:42: error: use of undeclared identifier 'PCI_IRQ_LEGACY'; did you mean '__WQ_LEGACY'?
+      57 |         ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_LEGACY);
+         |                                                 ^~~~~~~~~~~~~~
+         |                                                 __WQ_LEGACY
+   include/linux/workqueue.h:400:2: note: '__WQ_LEGACY' declared here
+     400 |         __WQ_LEGACY             = 1 << 18, /* internal: create*_workqueue() */
+         |         ^
    1 error generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ACPI_WMI
+   Depends on [n]: X86_PLATFORM_DEVICES [=n] && ACPI [=y]
+   Selected by [m]:
+   - DRM_XE [=m] && HAS_IOMEM [=y] && DRM [=m] && PCI [=y] && MMU [=y] && (m && MODULES [=y] || y && KUNIT [=y]=y) && X86 [=y] && ACPI [=y]
 
-vim +207 net/ipv4/inet_connection_sock.c
 
-   201	
-   202	static bool __inet_bhash2_conflict(const struct sock *sk, struct sock *sk2,
-   203					   kuid_t sk_uid, bool relax,
-   204					   bool reuseport_cb_ok, bool reuseport_ok)
-   205	{
-   206		if (ipv6_only_sock(sk2) &&
- > 207		    (sk->sk_family == AF_INET || ipv6_addr_v4mapped(&sk->sk_v6_rcv_saddr)))
-   208			return false;
-   209	
-   210		return inet_bind_conflict(sk, sk2, sk_uid, relax,
-   211					  reuseport_cb_ok, reuseport_ok);
-   212	}
-   213	
+vim +57 drivers/mfd/intel-lpss-pci.c
+
+e6b142060b2401 Hans de Goede        2021-12-03  44  
+4b45efe8526359 Andy Shevchenko      2015-07-27  45  static int intel_lpss_pci_probe(struct pci_dev *pdev,
+4b45efe8526359 Andy Shevchenko      2015-07-27  46  				const struct pci_device_id *id)
+4b45efe8526359 Andy Shevchenko      2015-07-27  47  {
+9ffe4c1089f6c3 Andy Shevchenko      2023-11-24  48  	const struct intel_lpss_platform_info *data = (void *)id->driver_data;
+ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  49  	const struct pci_device_id *quirk_pci_info;
+4b45efe8526359 Andy Shevchenko      2015-07-27  50  	struct intel_lpss_platform_info *info;
+4b45efe8526359 Andy Shevchenko      2015-07-27  51  	int ret;
+4b45efe8526359 Andy Shevchenko      2015-07-27  52  
+4b45efe8526359 Andy Shevchenko      2015-07-27  53  	ret = pcim_enable_device(pdev);
+4b45efe8526359 Andy Shevchenko      2015-07-27  54  	if (ret)
+4b45efe8526359 Andy Shevchenko      2015-07-27  55  		return ret;
+4b45efe8526359 Andy Shevchenko      2015-07-27  56  
+6978c7d2dd81e0 Andy Shevchenko      2023-11-06 @57  	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_LEGACY);
+0c679fffd67605 Andy Shevchenko      2023-11-30  58  	if (ret < 0)
+6978c7d2dd81e0 Andy Shevchenko      2023-11-06  59  		return ret;
+6978c7d2dd81e0 Andy Shevchenko      2023-11-06  60  
+9ffe4c1089f6c3 Andy Shevchenko      2023-11-24  61  	info = devm_kmemdup(&pdev->dev, data, sizeof(*info), GFP_KERNEL);
+4b45efe8526359 Andy Shevchenko      2015-07-27  62  	if (!info)
+4b45efe8526359 Andy Shevchenko      2015-07-27  63  		return -ENOMEM;
+4b45efe8526359 Andy Shevchenko      2015-07-27  64  
+3b6dba220e67ed Andy Shevchenko      2023-11-24  65  	/* No need to check mem and irq here as intel_lpss_probe() does it for us */
+6978c7d2dd81e0 Andy Shevchenko      2023-11-06  66  	info->mem = pci_resource_n(pdev, 0);
+6978c7d2dd81e0 Andy Shevchenko      2023-11-06  67  	info->irq = pci_irq_vector(pdev, 0);
+4b45efe8526359 Andy Shevchenko      2015-07-27  68  
+ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  69  	quirk_pci_info = pci_match_id(quirk_ids, pdev);
+ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  70  	if (quirk_pci_info)
+ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  71  		info->quirks = quirk_pci_info->driver_data;
+e6b142060b2401 Hans de Goede        2021-12-03  72  
+76380a607ba0b2 Kai-Heng Feng        2019-07-05  73  	pdev->d3cold_delay = 0;
+76380a607ba0b2 Kai-Heng Feng        2019-07-05  74  
+4b45efe8526359 Andy Shevchenko      2015-07-27  75  	/* Probably it is enough to set this for iDMA capable devices only */
+4b45efe8526359 Andy Shevchenko      2015-07-27  76  	pci_set_master(pdev);
+85a9419a254e23 Andy Shevchenko      2016-11-15  77  	pci_try_set_mwi(pdev);
+4b45efe8526359 Andy Shevchenko      2015-07-27  78  
+4b45efe8526359 Andy Shevchenko      2015-07-27  79  	ret = intel_lpss_probe(&pdev->dev, info);
+4b45efe8526359 Andy Shevchenko      2015-07-27  80  	if (ret)
+4b45efe8526359 Andy Shevchenko      2015-07-27  81  		return ret;
+4b45efe8526359 Andy Shevchenko      2015-07-27  82  
+4b45efe8526359 Andy Shevchenko      2015-07-27  83  	pm_runtime_put(&pdev->dev);
+4b45efe8526359 Andy Shevchenko      2015-07-27  84  	pm_runtime_allow(&pdev->dev);
+4b45efe8526359 Andy Shevchenko      2015-07-27  85  
+4b45efe8526359 Andy Shevchenko      2015-07-27  86  	return 0;
+4b45efe8526359 Andy Shevchenko      2015-07-27  87  }
+4b45efe8526359 Andy Shevchenko      2015-07-27  88  
+
+:::::: The code at line 57 was first introduced by commit
+:::::: 6978c7d2dd81e0a3f9d30d1fbdb013a5ae5fabaf mfd: intel-lpss: Use PCI APIs instead of dereferencing
+
+:::::: TO: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+:::::: CC: Lee Jones <lee@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
