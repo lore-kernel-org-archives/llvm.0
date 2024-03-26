@@ -1,57 +1,57 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A7271758;
-	Tue, 26 Mar 2024 11:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92D114A8E;
+	Tue, 26 Mar 2024 12:48:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711452902; cv=none; b=k9YfBHWbrrtRIe/cCTrm2KocdofM5Q2UVY/BCbSrOLtHpDFX44VAIxfyhEDIFuwL3T83GH+ZCw1RH5hHUdqr1tYUFTENlLTxJGVhE7uMmtxaLPXrxhOUbmDGdj0VOSs2q1r+85JPweyR6KHOrmiwBGIanV+D39FsvjoWbnj/ZMs=
+	t=1711457331; cv=none; b=IG+UfU5yw+wC32Z1U1NOHYBg3wacgwILVf36pXdczM1HZUE8e7/YNkDzv3WfrS+VUdANuVB4rdJwobCTf5Bwo2yaI1JZiLXDHciC/NCxdZAOOjbqUQmbZS3DWWQPttW7UQ7QG65rgmhhKkNHDgE4G/64LUEbsm2YFf4YtLOvh2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711452902; c=relaxed/simple;
-	bh=9OYizbJxqDIuT86ZEA0pyUhFnnWBD/UBwFMaFIh81aA=;
+	s=arc-20240116; t=1711457331; c=relaxed/simple;
+	bh=Dr9hGW7mELqha3sQU/lIQzs+oDEEd5tWENG0/RZrfnI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fNGThfOwCnwsXbdZphDse9PSbNwge61YV7oFa++DDr9QGilW62Vwa6CNw/at7uwwLFdmJIfFn4AO7u3XAOCHQ3f4T6zF7v7698iTul74zD+dRqXLHGzuc1TYM9sEmQSHuFVUQYTzeIopDZcXV8FNFs0UUwjxY0Js2OvvUqqUeXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IzQj4fI0; arc=none smtp.client-ip=192.198.163.15
+	 Content-Disposition; b=Ty5CpBUWq+Lv2W7T0o72qbAxu2FHz9NDQ5i+kqxCOcmDbLkYWmDhhbGCIRDSl0PjGSz051gFLSgu3r6leMKEyXvyXRNv2D0CZnjiwkdnh5A6fHNeGNMnUMoU9aTYaH0hdoxvDhwawuAUvOu0a5PuPyoUv6Cu1yQD9pS30i5HxIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TILCkjzy; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IzQj4fI0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TILCkjzy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711452899; x=1742988899;
+  t=1711457329; x=1742993329;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9OYizbJxqDIuT86ZEA0pyUhFnnWBD/UBwFMaFIh81aA=;
-  b=IzQj4fI0QCcKz34tG8UQJHRiUF9s3VCtDAN44BaNY+w3Gzz3/9cg6RP+
-   RYjM3GlEkvBCJ2WzIX5Z4MyTcMEYj7Lm5hEHORKa7PrcjKp5OTlGtgoWW
-   Tx70OPoQtG52l+ioZefENOu7ffeyxgAhxm+yOGfhfrolOyx6ejNdCNkVb
-   dYb1g8oaV10QQ2c8571UZh31QHiTfgG8MILh5MuVybJQvav1kKXq7EWHF
-   ORDxnf+20aZjgGtN950P5TfBi6MYM6ku4Qxcu/KI3/n1W3HjipJGVSD5z
-   km1Qh2OMY0sipvMB9MPfQF9kUJ+LGpBlEFfDH1NbTRiQacDnuC7DlTyLK
-   g==;
-X-CSE-ConnectionGUID: f42CZYqBR22QCJLpzzB9sA==
-X-CSE-MsgGUID: Ss7w+SqhS8S9SA7SXBL+aQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6685268"
+  bh=Dr9hGW7mELqha3sQU/lIQzs+oDEEd5tWENG0/RZrfnI=;
+  b=TILCkjzyk3yn3yealn2KAL3d3k7p2OV+0zqv5CQLlAbKK2dAbXGiGNq7
+   u5jUGyTC5bXyZljVhint9/hJgY3OmgH/I7X6u1BxF5bXJWU2IVRPHlYDo
+   ZJJNLYIDqHHVQ1w2Pqk7U7eOHBX56ipzN4PyZGz1/AdnTCDJQwIAEERL6
+   fY+q+pt9qWGwJfW9bgpc64SYMbJnhvaeVcLyI4ldhpWDa0obL20Lj6di6
+   eHu6OqBGxYlk2wk7ubjy+0fV0xqorPhO00frgOD5IiCecJ4A9HDCFXykw
+   dASTVdigH5zC0u90XvgcFFrcS/LE5+uI+mvJF0VePaNTiYKXd9LBJT/in
+   Q==;
+X-CSE-ConnectionGUID: zG4Spa+qQzec1q5Zmw7iUg==
+X-CSE-MsgGUID: BvzDlhufTVyjBID6S/OFLQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6693732"
 X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="6685268"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 04:34:58 -0700
+   d="scan'208";a="6693732"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 05:48:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="20589328"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 26 Mar 2024 04:34:56 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
+   d="scan'208";a="20651451"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 26 Mar 2024 05:48:47 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rp54w-000NL4-0R;
-	Tue, 26 Mar 2024 11:34:54 +0000
-Date: Tue, 26 Mar 2024 19:34:05 +0800
+	id 1rp6EO-00002y-1F;
+	Tue, 26 Mar 2024 12:48:44 +0000
+Date: Tue, 26 Mar 2024 20:47:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Damien Le Moal <dlemoal@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
-Subject: [pci:enumeration 28/28] drivers/mfd/intel-lpss-pci.c:57:42: error:
- use of undeclared identifier 'PCI_IRQ_LEGACY'; did you mean '__WQ_LEGACY'?
-Message-ID: <202403261944.ObfbvQQV-lkp@intel.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jarkko-tpmdd:kprobes-v5 2/2] arch/riscv/kernel/execmem.c:8:56:
+ warning: omitting the parameter name in a function definition is a C23
+ extension
+Message-ID: <202403262047.2aEUWTDa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,89 +61,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git enumeration
-head:   8694697a54096ae97eb38bf4144f2d96c64c68f2
-commit: 8694697a54096ae97eb38bf4144f2d96c64c68f2 [28/28] PCI: Remove PCI_IRQ_LEGACY
-config: i386-randconfig-013-20240326 (https://download.01.org/0day-ci/archive/20240326/202403261944.ObfbvQQV-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240326/202403261944.ObfbvQQV-lkp@intel.com/reproduce)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git kprobes-v5
+head:   551464954a1ec4f0b14974861e113ac93287da99
+commit: 551464954a1ec4f0b14974861e113ac93287da99 [2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20240326/202403262047.2aEUWTDa-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240326/202403262047.2aEUWTDa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403261944.ObfbvQQV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403262047.2aEUWTDa-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/mfd/intel-lpss-pci.c:57:42: error: use of undeclared identifier 'PCI_IRQ_LEGACY'; did you mean '__WQ_LEGACY'?
-      57 |         ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_LEGACY);
-         |                                                 ^~~~~~~~~~~~~~
-         |                                                 __WQ_LEGACY
-   include/linux/workqueue.h:400:2: note: '__WQ_LEGACY' declared here
-     400 |         __WQ_LEGACY             = 1 << 18, /* internal: create*_workqueue() */
-         |         ^
-   1 error generated.
+   In file included from arch/riscv/kernel/execmem.c:3:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/riscv/kernel/execmem.c:8:56: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+       8 | void *alloc_execmem(unsigned long size, gfp_t /* gfp */)
+         |                                                        ^
+   6 warnings generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ACPI_WMI
-   Depends on [n]: X86_PLATFORM_DEVICES [=n] && ACPI [=y]
-   Selected by [m]:
-   - DRM_XE [=m] && HAS_IOMEM [=y] && DRM [=m] && PCI [=y] && MMU [=y] && (m && MODULES [=y] || y && KUNIT [=y]=y) && X86 [=y] && ACPI [=y]
 
+vim +8 arch/riscv/kernel/execmem.c
 
-vim +57 drivers/mfd/intel-lpss-pci.c
-
-e6b142060b2401 Hans de Goede        2021-12-03  44  
-4b45efe8526359 Andy Shevchenko      2015-07-27  45  static int intel_lpss_pci_probe(struct pci_dev *pdev,
-4b45efe8526359 Andy Shevchenko      2015-07-27  46  				const struct pci_device_id *id)
-4b45efe8526359 Andy Shevchenko      2015-07-27  47  {
-9ffe4c1089f6c3 Andy Shevchenko      2023-11-24  48  	const struct intel_lpss_platform_info *data = (void *)id->driver_data;
-ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  49  	const struct pci_device_id *quirk_pci_info;
-4b45efe8526359 Andy Shevchenko      2015-07-27  50  	struct intel_lpss_platform_info *info;
-4b45efe8526359 Andy Shevchenko      2015-07-27  51  	int ret;
-4b45efe8526359 Andy Shevchenko      2015-07-27  52  
-4b45efe8526359 Andy Shevchenko      2015-07-27  53  	ret = pcim_enable_device(pdev);
-4b45efe8526359 Andy Shevchenko      2015-07-27  54  	if (ret)
-4b45efe8526359 Andy Shevchenko      2015-07-27  55  		return ret;
-4b45efe8526359 Andy Shevchenko      2015-07-27  56  
-6978c7d2dd81e0 Andy Shevchenko      2023-11-06 @57  	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_LEGACY);
-0c679fffd67605 Andy Shevchenko      2023-11-30  58  	if (ret < 0)
-6978c7d2dd81e0 Andy Shevchenko      2023-11-06  59  		return ret;
-6978c7d2dd81e0 Andy Shevchenko      2023-11-06  60  
-9ffe4c1089f6c3 Andy Shevchenko      2023-11-24  61  	info = devm_kmemdup(&pdev->dev, data, sizeof(*info), GFP_KERNEL);
-4b45efe8526359 Andy Shevchenko      2015-07-27  62  	if (!info)
-4b45efe8526359 Andy Shevchenko      2015-07-27  63  		return -ENOMEM;
-4b45efe8526359 Andy Shevchenko      2015-07-27  64  
-3b6dba220e67ed Andy Shevchenko      2023-11-24  65  	/* No need to check mem and irq here as intel_lpss_probe() does it for us */
-6978c7d2dd81e0 Andy Shevchenko      2023-11-06  66  	info->mem = pci_resource_n(pdev, 0);
-6978c7d2dd81e0 Andy Shevchenko      2023-11-06  67  	info->irq = pci_irq_vector(pdev, 0);
-4b45efe8526359 Andy Shevchenko      2015-07-27  68  
-ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  69  	quirk_pci_info = pci_match_id(quirk_ids, pdev);
-ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  70  	if (quirk_pci_info)
-ac9538f6007e1c Aleksandrs Vinarskis 2023-12-21  71  		info->quirks = quirk_pci_info->driver_data;
-e6b142060b2401 Hans de Goede        2021-12-03  72  
-76380a607ba0b2 Kai-Heng Feng        2019-07-05  73  	pdev->d3cold_delay = 0;
-76380a607ba0b2 Kai-Heng Feng        2019-07-05  74  
-4b45efe8526359 Andy Shevchenko      2015-07-27  75  	/* Probably it is enough to set this for iDMA capable devices only */
-4b45efe8526359 Andy Shevchenko      2015-07-27  76  	pci_set_master(pdev);
-85a9419a254e23 Andy Shevchenko      2016-11-15  77  	pci_try_set_mwi(pdev);
-4b45efe8526359 Andy Shevchenko      2015-07-27  78  
-4b45efe8526359 Andy Shevchenko      2015-07-27  79  	ret = intel_lpss_probe(&pdev->dev, info);
-4b45efe8526359 Andy Shevchenko      2015-07-27  80  	if (ret)
-4b45efe8526359 Andy Shevchenko      2015-07-27  81  		return ret;
-4b45efe8526359 Andy Shevchenko      2015-07-27  82  
-4b45efe8526359 Andy Shevchenko      2015-07-27  83  	pm_runtime_put(&pdev->dev);
-4b45efe8526359 Andy Shevchenko      2015-07-27  84  	pm_runtime_allow(&pdev->dev);
-4b45efe8526359 Andy Shevchenko      2015-07-27  85  
-4b45efe8526359 Andy Shevchenko      2015-07-27  86  	return 0;
-4b45efe8526359 Andy Shevchenko      2015-07-27  87  }
-4b45efe8526359 Andy Shevchenko      2015-07-27  88  
-
-:::::: The code at line 57 was first introduced by commit
-:::::: 6978c7d2dd81e0a3f9d30d1fbdb013a5ae5fabaf mfd: intel-lpss: Use PCI APIs instead of dereferencing
-
-:::::: TO: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-:::::: CC: Lee Jones <lee@kernel.org>
+     7	
+   > 8	void *alloc_execmem(unsigned long size, gfp_t /* gfp */)
+     9	{
+    10		return __vmalloc_node_range(size, 1, MODULES_VADDR,
+    11					    MODULES_END, GFP_KERNEL,
+    12					    PAGE_KERNEL, 0, NUMA_NO_NODE,
+    13					    __builtin_return_address(0));
+    14	}
+    15	
 
 -- 
 0-DAY CI Kernel Test Service
