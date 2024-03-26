@@ -1,193 +1,238 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8234F129A7C
-	for <llvm@lists.linux.dev>; Tue, 26 Mar 2024 03:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D61084D0D;
+	Tue, 26 Mar 2024 05:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711424972; cv=none; b=jSFLpFwlfi8EOnevKdss7mbDx6PIsh69EH3fRiEaVEdhVjNGtpPcBU9qGDsJMfmNfFpcU7vrNy5c2W4FSIYrQitGppPmjPgliLXdUIFBbjqiZflPkHCv0nwX705SMUKnxE5+nkvM5BYYGfbE6QZDaT46ApdEJcFRm6ZUBRg11+s=
+	t=1711431593; cv=none; b=KPET7HneXTOWEBb8gGVJo+eY+00EvzQsj7EjWWar4AjlK9JDGaDLS/4zxuZ5W8F/WfPfLGi7BOv1XAT9kVNf8dWhud74Y1GLv1K5VFeO9ZswYzUFt2k8KNV1g2e75XH90H+Grp9Wy6S2UtwGYlGqD49bZO2TLxjoE3nVEzzer6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711424972; c=relaxed/simple;
-	bh=WOA0jjSHA8PSWAbj27+clOuIsbbUO3Vmsfst/KpUulY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nebdtXkbbUOu/bOvz0j82JmGM1eO+3d5XZJKgjIWjnisMSjjZv2IhrvZhnuoDikCL5R/fs1DHmYiapntWNMbfymjHTUsixf4pbKhFlc2mKVmrHT0YcCgUPjZQpx1cgFlji1USdPT73wwr26uPNwh/wK/zcCycm67EA10hTI4Jn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=E6NNE5JT; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1711431593; c=relaxed/simple;
+	bh=XGvHkcQPIL6hhQc/cPtfoqEf14slmDXuJQkkTHXwa94=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=b8Xoi0AgHHkWc23DWPPHQ6YeawRbylz37+SRQ4PTub7HlPKh5HfpgP8wt884rEKn6EkZzPxGPDkT9j9B/lz7xMSbF3s5PeZUSwruF3JzM8dbqgGAsX/BICiZ/p1lG4MYKmY1pXhW7if8yww8I5z+e7ZyahwC87lPBTBUiSdSbZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QkJdG5lp; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="E6NNE5JT"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-56c0d1bddc1so2090191a12.3
-        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 20:49:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1711424969; x=1712029769; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VIHIysdOPquKQ4BdUP2bPIlHtyK3i5gWkh5V6JlSRrw=;
-        b=E6NNE5JT8hJoW7hPfD6VMYKa1ZBYnhfIT2u7s67isxyUSlxXPEzqz75+SVRwbsWrKm
-         0r1HoX1JzQH/6hm4gQ9U/k0nUa5ZHu+ok+kIdmv0ip0SqQc0wVtX0F2aXqo29fAIUIpr
-         hgjStpsI6AKUwU174GdHiWgD9ZaM7QYKv9BLE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711424969; x=1712029769;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VIHIysdOPquKQ4BdUP2bPIlHtyK3i5gWkh5V6JlSRrw=;
-        b=eBWAAx4VmAoaeXoEkEIxNvyyuKvfILiI5C/Mhdw7nFsV+JHcd+be1XDVx98ldABHSQ
-         U0fJt21bsa5C7ujjm3xClosxtbhLqG6oNTzZq4BpOOHDh1uSxJ/SBOp2pp2Jw6CDo5au
-         2czy2VDCwUCPjeDwiVOALqowhwGOYV4VqbImKlLTLvLUDNVjUWKfCUxzDhXUGyChfVNW
-         MiNAuk6CsKSNADzbICF1OI6pyGFRp41Kcg6wVCd2X1LmAv9oLAWVpJp4db2PBdYa2kt8
-         r47TYxuGnMKHkxlCKZSoy2ImHryzfy+zJbhWiZZW7I1ZYIunOIfM8NnNcOKCA+GH6YZB
-         IwlA==
-X-Forwarded-Encrypted: i=1; AJvYcCWLDuq6ZJ1nsYLG7ObRXIJlGOr+nmBDQEaWf7CP6VoVu61KH8P6VkBVkW/NzfOmwORDfQT24VszRfuqSM1QFk/M2dcHBA==
-X-Gm-Message-State: AOJu0Yy+Afe2hjZSWlHSlO/pF8cDN7+j1u+ubVkHhbxwl0MDZ+hQK9kc
-	skfqvFW0x+7fBpQ/fWKDpWiI+Sn/lT/ElYVOVcGjrMC9PpUQV3NVWH62h4lJ/qg/BaO+LHUuSs4
-	xJe+SCg==
-X-Google-Smtp-Source: AGHT+IEJyzkK26uZjRhWiqBFK/MApIR9ruTM0VlclTVI/6sFhYK5Kri0QposiAIQWIRwlLWcfaOd+Q==
-X-Received: by 2002:a50:8703:0:b0:56b:9f35:65f9 with SMTP id i3-20020a508703000000b0056b9f3565f9mr7178592edb.0.1711424968729;
-        Mon, 25 Mar 2024 20:49:28 -0700 (PDT)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
-        by smtp.gmail.com with ESMTPSA id n6-20020a056402434600b0056c148fd6f2sm1563300edc.2.2024.03.25.20.49.28
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 20:49:28 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a4df5bd63fbso6670566b.2
-        for <llvm@lists.linux.dev>; Mon, 25 Mar 2024 20:49:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUKhO9e8PzZvijxvCu0JzUjne/89AV/9wwbseJJ0DvTQD9NoSqe4QeZOupkyTmvfRyaYTPH0v3n5uDD2IB8su6wZAYfIg==
-X-Received: by 2002:a17:907:9722:b0:a47:48b0:922e with SMTP id
- jg34-20020a170907972200b00a4748b0922emr6654391ejc.23.1711424968017; Mon, 25
- Mar 2024 20:49:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QkJdG5lp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711431591; x=1742967591;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XGvHkcQPIL6hhQc/cPtfoqEf14slmDXuJQkkTHXwa94=;
+  b=QkJdG5lpWVzHNhzupphuyTfJk/VpBi6235vUWsbKPY+A9I2tt3j9vshW
+   rubjkpTGSkanMXopJR8nhij0v3zVWbUyh8cJ6yuBWNOfUpyaiQmVGhvoE
+   7UUBMkJgyQI4ulpF5QfokHD6Kmr/JJxAho58mWCzgXq/qKz4lEbTy9Pkp
+   xcAItR31e6aYZC0hMBEpcygzWxQRoBGdsJ1ur4FBQYRoTd9kIzAe8k6be
+   EzWYdblBJ640Bg+C8rtNRXcGh0gVSgO3upvspvCxwQ+0+PEYIwDiSghuN
+   wsgJsbaiTbFJ/C+054DkS+Z1gkPPEgYh4u1pDsuoO7mBs4cK+hqcHMyS1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="6328344"
+X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
+   d="scan'208";a="6328344"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 22:39:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,155,1708416000"; 
+   d="scan'208";a="53312936"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 25 Mar 2024 22:39:49 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rozXG-000N9K-2I;
+	Tue, 26 Mar 2024 05:39:46 +0000
+Date: Tue, 26 Mar 2024 13:39:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dave Hansen <dave.hansen@intel.com>
+Subject: [intel-tdx:guest-tdx-setup 6/22] arch/x86/hyperv/ivm.c:551:3: error:
+ use of undeclared identifier 'result'
+Message-ID: <202403261339.HkOGq2eo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240322233838.868874-1-boqun.feng@gmail.com> <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
- <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com> <ZgIRXL5YM2AwBD0Y@gallifrey>
-In-Reply-To: <ZgIRXL5YM2AwBD0Y@gallifrey>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 25 Mar 2024 20:49:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
-Message-ID: <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-To: "Dr. David Alan Gilbert" <dave@treblig.org>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>, Philipp Stanner <pstanner@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 25 Mar 2024 at 17:05, Dr. David Alan Gilbert <dave@treblig.org> wrote:
->
-> Isn't one of the aims of the Rust/C++ idea that you can't forget to access
-> a shared piece of data atomically?
+tree:   https://github.com/intel/tdx.git guest-tdx-setup
+head:   966502605489000d7b7cdc8eebecdcd2b1bfe8a8
+commit: 1fc7ddf713cc79be07e23bb18e52ba6ddb9a7f3a [6/22] x86/mm: Make x86_platform.guest.enc_status_change_*() return errno
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240326/202403261339.HkOGq2eo-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240326/202403261339.HkOGq2eo-lkp@intel.com/reproduce)
 
-If that is an aim, it's a really *bad* one.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403261339.HkOGq2eo-lkp@intel.com/
 
-Really.
+All errors (new ones prefixed by >>):
 
-It very much should never have been an aim, and I hope it wasn't. I
-think, and hope, that the source of the C++ and Rust bad decisions is
-cluelessness, not active malice.
+>> arch/x86/hyperv/ivm.c:551:3: error: use of undeclared identifier 'result'
+     551 |                 result = false;
+         |                 ^
+   arch/x86/hyperv/ivm.c:587:3: error: use of undeclared identifier 'result'
+     587 |                 result = false;
+         |                 ^
+>> arch/x86/hyperv/ivm.c:662:47: error: incompatible function pointer types assigning to 'int (*)(unsigned long, int, bool)' (aka 'int (*)(unsigned long, int, _Bool)') from 'bool (unsigned long, int, bool)' (aka '_Bool (unsigned long, int, _Bool)') [-Wincompatible-function-pointer-types]
+     662 |         x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
+         |                                                      ^ ~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
-Take Rust - one big point of Rust is the whole "safe" thing, but it's
-very much not a straightjacket like Pascal was. There's a "safe" part
-to Rust, but equally importantly, there's also the "unsafe" part to
-Rust.
 
-The safe part is the one that most programmers are supposed to use.
-It's the one that allows you to not have to worry too much about
-things. It's the part that makes it much harder to screw up.
+vim +/result +551 arch/x86/hyperv/ivm.c
 
-But the *unsafe* part is what makes Rust powerful. It's the part that
-works behind the curtain. It's the part that may be needed to make the
-safe parts *work*.
+0f34d11234868d Michael Kelley        2024-01-15  530  
+810a521265023a Tianyu Lan            2021-10-25  531  /*
+812b0597fb4043 Michael Kelley        2023-03-26  532   * hv_vtom_set_host_visibility - Set specified memory visible to host.
+810a521265023a Tianyu Lan            2021-10-25  533   *
+810a521265023a Tianyu Lan            2021-10-25  534   * In Isolation VM, all guest memory is encrypted from host and guest
+810a521265023a Tianyu Lan            2021-10-25  535   * needs to set memory visible to host via hvcall before sharing memory
+810a521265023a Tianyu Lan            2021-10-25  536   * with host. This function works as wrap of hv_mark_gpa_visibility()
+810a521265023a Tianyu Lan            2021-10-25  537   * with memory base and size.
+810a521265023a Tianyu Lan            2021-10-25  538   */
+1fc7ddf713cc79 Kirill A. Shutemov    2023-09-21  539  static int hv_vtom_set_host_visibility(unsigned long kbuffer, int pagecount, bool enc)
+810a521265023a Tianyu Lan            2021-10-25  540  {
+812b0597fb4043 Michael Kelley        2023-03-26  541  	enum hv_mem_host_visibility visibility = enc ?
+812b0597fb4043 Michael Kelley        2023-03-26  542  			VMBUS_PAGE_NOT_VISIBLE : VMBUS_PAGE_VISIBLE_READ_WRITE;
+810a521265023a Tianyu Lan            2021-10-25  543  	u64 *pfn_array;
+9fef276f9f416a Michael Kelley        2024-01-15  544  	phys_addr_t paddr;
+9fef276f9f416a Michael Kelley        2024-01-15  545  	void *vaddr;
+810a521265023a Tianyu Lan            2021-10-25  546  	int ret = 0;
+810a521265023a Tianyu Lan            2021-10-25  547  	int i, pfn;
+810a521265023a Tianyu Lan            2021-10-25  548  
+810a521265023a Tianyu Lan            2021-10-25  549  	pfn_array = kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
+0f34d11234868d Michael Kelley        2024-01-15  550  	if (!pfn_array) {
+0f34d11234868d Michael Kelley        2024-01-15 @551  		result = false;
+0f34d11234868d Michael Kelley        2024-01-15  552  		goto err_set_memory_p;
+0f34d11234868d Michael Kelley        2024-01-15  553  	}
+810a521265023a Tianyu Lan            2021-10-25  554  
+810a521265023a Tianyu Lan            2021-10-25  555  	for (i = 0, pfn = 0; i < pagecount; i++) {
+9fef276f9f416a Michael Kelley        2024-01-15  556  		/*
+9fef276f9f416a Michael Kelley        2024-01-15  557  		 * Use slow_virt_to_phys() because the PRESENT bit has been
+9fef276f9f416a Michael Kelley        2024-01-15  558  		 * temporarily cleared in the PTEs.  slow_virt_to_phys() works
+9fef276f9f416a Michael Kelley        2024-01-15  559  		 * without the PRESENT bit while virt_to_hvpfn() or similar
+9fef276f9f416a Michael Kelley        2024-01-15  560  		 * does not.
+9fef276f9f416a Michael Kelley        2024-01-15  561  		 */
+9fef276f9f416a Michael Kelley        2024-01-15  562  		vaddr = (void *)kbuffer + (i * HV_HYP_PAGE_SIZE);
+9fef276f9f416a Michael Kelley        2024-01-15  563  		paddr = slow_virt_to_phys(vaddr);
+9fef276f9f416a Michael Kelley        2024-01-15  564  		pfn_array[pfn] = paddr >> HV_HYP_PAGE_SHIFT;
+810a521265023a Tianyu Lan            2021-10-25  565  		pfn++;
+810a521265023a Tianyu Lan            2021-10-25  566  
+810a521265023a Tianyu Lan            2021-10-25  567  		if (pfn == HV_MAX_MODIFY_GPA_REP_COUNT || i == pagecount - 1) {
+810a521265023a Tianyu Lan            2021-10-25  568  			ret = hv_mark_gpa_visibility(pfn, pfn_array,
+810a521265023a Tianyu Lan            2021-10-25  569  						     visibility);
+1fc7ddf713cc79 Kirill A. Shutemov    2023-09-21  570  			if (ret)
+810a521265023a Tianyu Lan            2021-10-25  571  				goto err_free_pfn_array;
+810a521265023a Tianyu Lan            2021-10-25  572  			pfn = 0;
+810a521265023a Tianyu Lan            2021-10-25  573  		}
+810a521265023a Tianyu Lan            2021-10-25  574  	}
+810a521265023a Tianyu Lan            2021-10-25  575  
+810a521265023a Tianyu Lan            2021-10-25  576  err_free_pfn_array:
+810a521265023a Tianyu Lan            2021-10-25  577  	kfree(pfn_array);
+0f34d11234868d Michael Kelley        2024-01-15  578  
+0f34d11234868d Michael Kelley        2024-01-15  579  err_set_memory_p:
+0f34d11234868d Michael Kelley        2024-01-15  580  	/*
+0f34d11234868d Michael Kelley        2024-01-15  581  	 * Set the PTE PRESENT bits again to revert what hv_vtom_clear_present()
+0f34d11234868d Michael Kelley        2024-01-15  582  	 * did. Do this even if there is an error earlier in this function in
+0f34d11234868d Michael Kelley        2024-01-15  583  	 * order to avoid leaving the memory range in a "broken" state. Setting
+0f34d11234868d Michael Kelley        2024-01-15  584  	 * the PRESENT bits shouldn't fail, but return an error if it does.
+0f34d11234868d Michael Kelley        2024-01-15  585  	 */
+0f34d11234868d Michael Kelley        2024-01-15  586  	if (set_memory_p(kbuffer, pagecount))
+0f34d11234868d Michael Kelley        2024-01-15  587  		result = false;
+0f34d11234868d Michael Kelley        2024-01-15  588  
+1fc7ddf713cc79 Kirill A. Shutemov    2023-09-21  589  	return ret;
+812b0597fb4043 Michael Kelley        2023-03-26  590  }
+812b0597fb4043 Michael Kelley        2023-03-26  591  
+812b0597fb4043 Michael Kelley        2023-03-26  592  static bool hv_vtom_tlb_flush_required(bool private)
+812b0597fb4043 Michael Kelley        2023-03-26  593  {
+0f34d11234868d Michael Kelley        2024-01-15  594  	/*
+0f34d11234868d Michael Kelley        2024-01-15  595  	 * Since hv_vtom_clear_present() marks the PTEs as "not present"
+0f34d11234868d Michael Kelley        2024-01-15  596  	 * and flushes the TLB, they can't be in the TLB. That makes the
+0f34d11234868d Michael Kelley        2024-01-15  597  	 * flush controlled by this function redundant, so return "false".
+0f34d11234868d Michael Kelley        2024-01-15  598  	 */
+0f34d11234868d Michael Kelley        2024-01-15  599  	return false;
+812b0597fb4043 Michael Kelley        2023-03-26  600  }
+812b0597fb4043 Michael Kelley        2023-03-26  601  
+812b0597fb4043 Michael Kelley        2023-03-26  602  static bool hv_vtom_cache_flush_required(void)
+812b0597fb4043 Michael Kelley        2023-03-26  603  {
+812b0597fb4043 Michael Kelley        2023-03-26  604  	return false;
+812b0597fb4043 Michael Kelley        2023-03-26  605  }
+812b0597fb4043 Michael Kelley        2023-03-26  606  
+812b0597fb4043 Michael Kelley        2023-03-26  607  static bool hv_is_private_mmio(u64 addr)
+812b0597fb4043 Michael Kelley        2023-03-26  608  {
+812b0597fb4043 Michael Kelley        2023-03-26  609  	/*
+812b0597fb4043 Michael Kelley        2023-03-26  610  	 * Hyper-V always provides a single IO-APIC in a guest VM.
+812b0597fb4043 Michael Kelley        2023-03-26  611  	 * When a paravisor is used, it is emulated by the paravisor
+812b0597fb4043 Michael Kelley        2023-03-26  612  	 * in the guest context and must be mapped private.
+812b0597fb4043 Michael Kelley        2023-03-26  613  	 */
+812b0597fb4043 Michael Kelley        2023-03-26  614  	if (addr >= HV_IOAPIC_BASE_ADDRESS &&
+812b0597fb4043 Michael Kelley        2023-03-26  615  	    addr < (HV_IOAPIC_BASE_ADDRESS + PAGE_SIZE))
+812b0597fb4043 Michael Kelley        2023-03-26  616  		return true;
+812b0597fb4043 Michael Kelley        2023-03-26  617  
+812b0597fb4043 Michael Kelley        2023-03-26  618  	/* Same with a vTPM */
+812b0597fb4043 Michael Kelley        2023-03-26  619  	if (addr >= VTPM_BASE_ADDRESS &&
+812b0597fb4043 Michael Kelley        2023-03-26  620  	    addr < (VTPM_BASE_ADDRESS + PAGE_SIZE))
+812b0597fb4043 Michael Kelley        2023-03-26  621  		return true;
+812b0597fb4043 Michael Kelley        2023-03-26  622  
+812b0597fb4043 Michael Kelley        2023-03-26  623  	return false;
+810a521265023a Tianyu Lan            2021-10-25  624  }
+846da38de0e822 Tianyu Lan            2021-12-13  625  
+812b0597fb4043 Michael Kelley        2023-03-26  626  void __init hv_vtom_init(void)
+812b0597fb4043 Michael Kelley        2023-03-26  627  {
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  628  	enum hv_isolation_type type = hv_get_isolation_type();
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  629  
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  630  	switch (type) {
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  631  	case HV_ISOLATION_TYPE_VBS:
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  632  		fallthrough;
+812b0597fb4043 Michael Kelley        2023-03-26  633  	/*
+812b0597fb4043 Michael Kelley        2023-03-26  634  	 * By design, a VM using vTOM doesn't see the SEV setting,
+812b0597fb4043 Michael Kelley        2023-03-26  635  	 * so SEV initialization is bypassed and sev_status isn't set.
+812b0597fb4043 Michael Kelley        2023-03-26  636  	 * Set it here to indicate a vTOM VM.
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  637  	 *
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  638  	 * Note: if CONFIG_AMD_MEM_ENCRYPT is not set, sev_status is
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  639  	 * defined as 0ULL, to which we can't assigned a value.
+812b0597fb4043 Michael Kelley        2023-03-26  640  	 */
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  641  #ifdef CONFIG_AMD_MEM_ENCRYPT
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  642  	case HV_ISOLATION_TYPE_SNP:
+812b0597fb4043 Michael Kelley        2023-03-26  643  		sev_status = MSR_AMD64_SNP_VTOM;
+da86eb96118407 Borislav Petkov (AMD  2023-05-08  644) 		cc_vendor = CC_VENDOR_AMD;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  645  		break;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  646  #endif
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  647  
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  648  	case HV_ISOLATION_TYPE_TDX:
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  649  		cc_vendor = CC_VENDOR_INTEL;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  650  		break;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  651  
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  652  	default:
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  653  		panic("hv_vtom_init: unsupported isolation type %d\n", type);
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  654  	}
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  655  
+812b0597fb4043 Michael Kelley        2023-03-26  656  	cc_set_mask(ms_hyperv.shared_gpa_boundary);
+812b0597fb4043 Michael Kelley        2023-03-26  657  	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
+812b0597fb4043 Michael Kelley        2023-03-26  658  
+812b0597fb4043 Michael Kelley        2023-03-26  659  	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
+812b0597fb4043 Michael Kelley        2023-03-26  660  	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
+812b0597fb4043 Michael Kelley        2023-03-26  661  	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
+0f34d11234868d Michael Kelley        2024-01-15 @662  	x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
+812b0597fb4043 Michael Kelley        2023-03-26  663  	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
+c957f1f3c498bc Juergen Gross         2023-05-02  664  
+c957f1f3c498bc Juergen Gross         2023-05-02  665  	/* Set WB as the default cache mode. */
+c957f1f3c498bc Juergen Gross         2023-05-02  666  	mtrr_overwrite_state(NULL, 0, MTRR_TYPE_WRBACK);
+812b0597fb4043 Michael Kelley        2023-03-26  667  }
+812b0597fb4043 Michael Kelley        2023-03-26  668  
 
-And yes, an application programmer might never actually need to use
-it, and in fact in many projects the rule might be that unsafe Rust is
-simply never even an option - but that doesn't mean that the unsafe
-parts don't exist.
+:::::: The code at line 551 was first introduced by commit
+:::::: 0f34d11234868dc979730a905717c15067a7d205 x86/hyperv: Make encrypted/decrypted changes safe for load_unaligned_zeropad()
 
-Because those unsafe parts are needed to make it all work in reality.
+:::::: TO: Michael Kelley <mhklinux@outlook.com>
+:::::: CC: Wei Liu <wei.liu@kernel.org>
 
-And you should never EVER base your whole design around the "safe"
-part. Then you get a language that is a straight-jacket.
-
-So I'd very strongly argue that the core atomics should be done the
-"unsafe" way - allow people to specify exactly when they want exactly
-what access. Allow people to mix and match and have overlapping
-partial aliases, because if you implement things like locking, you
-*need* those partially aliasing accesses, and you need to make
-overlapping atomics where sometimes you access only one part of the
-field.
-
-And yes, that will be unsafe, and it might even be unportable, but
-it's exactly the kind of thing you need in order to avoid having to
-use assembly language to do your locking.
-
-And by all means, you should relegate that to the "unsafe corner" of
-the language. And maybe don't talk about the unsafe sharp edges in the
-first chapter of the book about the language.
-
-But you should _start_ the design of your language memory model around
-the unsafe "raw atomic access operations" model.
-
-Then you can use those strictly more powerful operations, and you
-create an object model *around* it.
-
-So you create safe objects like just an atomic counter. In *that*
-corner of the language, you have the "safe atomics" - they aren't the
-fundamental implementation, but they are the safe wrappers *around*
-the more powerful (but unsafe) core.
-
-With that "atomic counter" you cannot forget to do atomic accesses,
-because that safe corner of the world doesn't _have_ anything but the
-safe atomic accesses for every time you use the object.
-
-See? Having the capability to do powerful and maybe unsafe things does
-not force people to expose and use all that power. You can - and
-should - wrap the powerful model with safer and simpler interfaces.
-
-This isn't something specific to atomics. Not even remotely. This is
-quite fundamental. You often literally _cannot_ do interesting things
-using only safe interfaces. You want safe memory allocations - but to
-actually write the allocator itself, you want to have all those unsafe
-escape methods - all those raw pointers with arbitrary arithmetic etc.
-
-And if you don't have unsafe escapes, you end up doing what so many
-languages did: the libraries are written in something more powerful
-like C, because C literally can do things that other languages
-*cannot* do.
-
-Don't let people fool you with talk about Turing machines and similar
-smoke-and-mirror garbage. It's a bedtime story for first-year CS
-students. It's not true.
-
-Not all languages are created equal. Not all languages can do the same
-things. If your language doesn't have those unsafe escapes, your
-language is inherently weaker, and inherently worse for it.
-
-           Linus
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
