@@ -1,159 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392092D045
-	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 08:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F702C6AD;
+	Wed, 27 Mar 2024 08:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711526482; cv=none; b=cnLXE7V/oT6GlB/A/UGkusPlWDyZjLg91VWFyKXlj17Ts44cIwVe/8Yhrm1WJtJPfFfgW63CTeyhcM5Gh3NghR2j8Xj/kbssJsJTm7Bo/BMlHUAIqWxL+LXjy79N1hd5nbjnFrNW1Gi9ay9VLigpT4q/0x/MmPlyM7eVciCpja4=
+	t=1711527254; cv=none; b=RUCkH3KopeOUOCu5N0FNvXvJ1ckoJ9emaKoALtjTm8RW1J6gcQfL9hCqeHL2JJgqzt2XMBzSjUHfM9zVYosV2rCBx2Zage1x025dSnQQ7O6VgE6lK5wnSrr1OlBCSQroTQB6eTmGmiDXQuSqkLmMXh6H09tqRfxEiizPbFlyaqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711526482; c=relaxed/simple;
-	bh=GucQb4cLBgLnk1QG1F+L4Qynfl5w2SWCeBiPx1JgM5s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=h/wxlhOYuP7MpHwyB/aWLpJ0IO8TddVsl4LUMOp1Ax2k+qZAqePbFWbOWbDg32oc0oI7TcnG7Ki2dm1JhMCb9MjdU6xkkzzYJf8kYqq2bx9qU2ppw8+fN18Z+x7S5hG11TN+P9FoXBv/KvHu73QDd7PBvoOFxB8IdrIO6EVdGhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kk/lQS6b; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711527254; c=relaxed/simple;
+	bh=CqkMA+lMjZOPJlgF/DafLECzWQuIokS7odHaJiZI3A0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N/Sda/iI8kEnBcG6fA+HnlV1yFsqwFjoGFY+ldbB3gddgssCAWOuJctuAEQyofE0AbSjxu6XZgdIsn5HODtL9bt3sJQuPNxDskv2D3r8p8jnSOGPcezV5Y+PapVUNIaQBj3OTFONQ1cNe4JzlCrswuoVj4GWuP2ErmcACOjmGB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=Mawn47hY; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kk/lQS6b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711526479; x=1743062479;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=GucQb4cLBgLnk1QG1F+L4Qynfl5w2SWCeBiPx1JgM5s=;
-  b=kk/lQS6b+2azRqEv1dq49LpZXL4EgjnxTV3x7FFp1KFgOpmWvh7uzx7D
-   88Ccu2WIk1epHEwo8fH0k5Nx5zkgluXF6c59v/zQO31JL68v1vH0C+LcQ
-   2FvfrOmzfwqqTZlQL079KxcODQweXDHaKDgb6XNz/wKZyopxTkcSLK77m
-   DWQxouJqmjqeputYTCbHKRvcg3OEcB6QJpEVr6aQRriN/CQkPLGL7cGn0
-   PDHQjRDzDarGHi+l2IrX4G5LfRBZNDr0m588Uz5k+kuGajS+D7B/jI9E5
-   BDGyzHO9ZCzD2Y2f8yecwgrU/RX1NeJFuPiOIQdfiI0uY56MapDY5lvo/
-   A==;
-X-CSE-ConnectionGUID: H77fNkVVS2+z3JUz4SWTzQ==
-X-CSE-MsgGUID: LM96ceFNRHyehIWAm9wgEw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="6725554"
-X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
-   d="scan'208";a="6725554"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 00:59:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
-   d="scan'208";a="16863269"
-Received: from mmazilu-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.56.43])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 00:59:05 -0700
-From: Jani Nikula <jani.nikula@intel.com>
-To: Maxime Ripard <mripard@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, David Airlie <airlied@gmail.com>, Daniel
- Vetter <daniel@ffwll.ch>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, Alex Deucher <alexander.deucher@amd.com>, Christian
- =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>, "Pan, Xinhui"
- <Xinhui.Pan@amd.com>,
- Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, Danilo
- Krummrich <dakr@redhat.com>, Rob Clark <robdclark@gmail.com>, Abhinav
- Kumar <quic_abhinavk@quicinc.com>, Dmitry Baryshkov
- <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>, Marijn Suijten
- <marijn.suijten@somainline.org>, Hamza Mahfooz <hamza.mahfooz@amd.com>,
- Javier Martinez Canillas <javierm@redhat.com>, Sui Jingfeng
- <sui.jingfeng@linux.dev>, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [RESEND v3 2/2] drm: Add CONFIG_DRM_WERROR
-In-Reply-To: <20240327-cherubic-steel-tiger-e1c36a@houat>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <cover.1709629403.git.jani.nikula@intel.com>
- <afe5ed943414f7ec3044c1547503b9941686a867.1709629403.git.jani.nikula@intel.com>
- <20240326225650.GA2784736@dev-arch.thelio-3990X>
- <20240327-cherubic-steel-tiger-e1c36a@houat>
-Date: Wed, 27 Mar 2024 09:59:01 +0200
-Message-ID: <87a5mkgl6i.fsf@intel.com>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="Mawn47hY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1711527233; x=1712132033; i=deller@gmx.de;
+	bh=yURPtcVZg1YfdN89pi22a9VWPyDqYm49v3p+PFgem9s=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=Mawn47hY0h8XnZ2+IUYHSyJBveDvW8QSaxq9Rovw7VzjxJh3zpK1rttvbRj+T5Up
+	 RbaBssZrbQcsVyCQ2nfRBjcjl3ZhJ572P7aH0mgpK12bGNNi9ZsN2lXNsg7bTr1ce
+	 Sty7Crp3EfQJ3fnKiCwKIVP8HXU5abpU4CmSMGMvWQLkFS+UZi70wTnjRYlQEjnHj
+	 0LJjqj1BozFti8muJAJpi3IGDug+XkBMcX52Vlk7CknOhBgAiYOkM1+8zqRJ++e/j
+	 7z9ACiUOFZapk9NHlQHJuI9ossDguWIOW6z6wINAjWugGtPz7qi+bp+LvH5qQ0KmU
+	 Yvfi07VOXmWglAj0Vw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.55] ([89.244.187.174]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MybGX-1snOV21dkb-00yz9Q; Wed, 27
+ Mar 2024 09:13:53 +0100
+Message-ID: <a9bdefa3-2162-4ca1-a020-95e4e9d1ecdf@gmx.de>
+Date: Wed, 27 Mar 2024 09:13:51 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] fbdev: shmobile: fix snprintf truncation
+To: Arnd Bergmann <arnd@kernel.org>, llvm@lists.linux.dev,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+References: <20240326223825.4084412-1-arnd@kernel.org>
+ <20240326223825.4084412-2-arnd@kernel.org>
+Content-Language: en-US
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+In-Reply-To: <20240326223825.4084412-2-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9l8Ajuf8MU+eu7I7//8FmwZ6ItRejn74X3wHKuGH1DnsTKG9g28
+ d7T6Ams4vxLTSh+ZI6MjAxCYWTjTH1cdbcjgLxrPK7QtSNGF+in5moOFeLYAHsFYjuKU9YV
+ ZJYPp1nASoImLtIP94azdyPa0QhR2WqHAsZRFfZ1MlY3cf3OubbwWWcpKUBoAsW4AXXOsK6
+ +s1l9HlTYT3OG4Cn4ervQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:7LvRfy1nIfA=;CBa9xFAMCzAR6YbKkRNV0nxjc6X
+ nYq7Sa6RRrfq4q93XOxT+A5gpbKMMJEXefTZKQJJPymMAJK0UATQxkWncQa3c3ul3a5cDSq/D
+ 47XpSpftyADDAdObbIA1yrarc5NEfr9tvBW8sMuGjTG7wpuLP4/C/TOYFE4F2z/mcGh2IRWu2
+ yYGAp8rI470OvTy2gdVJxy2iXrj8jcfmPSj/bo1VJrjY2CAYlQ9kxWMSkjt99Nu43sr+hU7ac
+ 1vw3NRRakQDq9C6y3SX1muKsGMUvfBWDf20myW7jSY8Dau9uz02ICfzwaU0HSdhPkgcetrsIl
+ LCRiQFHkfjp4uhJPEkZigB86XA2Q2Yh8NybEQeitTf67igSbVDXx0ys/qr9afEydXX+wCC7Ow
+ 2TvgZGnlCyPg/MyRAGBUoZ+2UT/5enUM3fiwW11e0+VLHzXsXPby7U9yI0i1ate7LewzSbHpf
+ xcPruFRP/Dx3McPsOkeJUlbgtvj8PVQaBhdpzIuD0qHdlzBh0kQkAxYEbIhrZ7WLU1pMDO0IE
+ K7+9oAuEG6j3K9uUuraoy0DpB7kj8ASwi/zxpIiPy6+4SE65ojEJS0nAGZ/8j+G9BEGRvQYQy
+ OcjjWrT8kpp07mtoGNKRGAZDdzqCz3UVgwGFjiUo3tiGG/DHvHilraRUy46TdwbZLmzBjjVw7
+ ds+f+0Rl/iVuq2THmihcjwdYu8T73Sro2SiMLxeFrXtBhKmINPKK3zNO4rYsmwvPD6tJEZuOX
+ pry5J8Pwhh7ncbrlFKfrg1YntZWexpbMe7j8fuCruXxGNuGFUPURUWxZ0cCeXIjYObthR4a9X
+ olBak6nfX2vx3BNuJAa6GX/zoCMAwA1BOx863fjvZhbro=
 
-On Wed, 27 Mar 2024, Maxime Ripard <mripard@kernel.org> wrote:
-> Hi,
+On 3/26/24 23:38, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> On Tue, Mar 26, 2024 at 03:56:50PM -0700, Nathan Chancellor wrote:
->> On Tue, Mar 05, 2024 at 11:07:36AM +0200, Jani Nikula wrote:
->> > Add kconfig to enable -Werror subsystem wide. This is useful for
->> > development and CI to keep the subsystem warning free, while avoiding
->> > issues outside of the subsystem that kernel wide CONFIG_WERROR=y might
->> > hit.
->> > 
->> > v2: Don't depend on COMPILE_TEST
->> > 
->> > Reviewed-by: Hamza Mahfooz <hamza.mahfooz@amd.com> # v1
->> > Signed-off-by: Jani Nikula <jani.nikula@intel.com>
->> > ---
->> >  drivers/gpu/drm/Kconfig  | 13 +++++++++++++
->> >  drivers/gpu/drm/Makefile |  3 +++
->> >  2 files changed, 16 insertions(+)
->> > 
->> > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
->> > index 6e853acf15da..c08e18108c2a 100644
->> > --- a/drivers/gpu/drm/Kconfig
->> > +++ b/drivers/gpu/drm/Kconfig
->> > @@ -416,3 +416,16 @@ config DRM_LIB_RANDOM
->> >  config DRM_PRIVACY_SCREEN
->> >  	bool
->> >  	default n
->> > +
->> > +config DRM_WERROR
->> > +	bool "Compile the drm subsystem with warnings as errors"
->> > +	depends on EXPERT
->> > +	default n
->> > +	help
->> > +	  A kernel build should not cause any compiler warnings, and this
->> > +	  enables the '-Werror' flag to enforce that rule in the drm subsystem.
->> > +
->> > +	  The drm subsystem enables more warnings than the kernel default, so
->> > +	  this config option is disabled by default.
->> > +
->> > +	  If in doubt, say N.
->> 
->> While I understand the desire for an easy switch that maintainers and
->> developers can use to ensure that their changes are warning free for the
->> drm subsystem specifically, I think subsystem specific configuration
->> options like this are actively detrimental to developers and continuous
->> integration systems that build test the entire kernel. For example, we
->> turned off CONFIG_WERROR for our Hexagon builds because of warnings that
->> appear with -Wextra that are legitimate but require treewide changes to
->> resolve in a manner sufficient for Linus:
->> 
->> https://github.com/ClangBuiltLinux/linux/issues/1285
->> https://lore.kernel.org/all/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
->> https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.ibm.com/
->> 
->> But now, due to CONFIG_DRM_WERROR getting enabled by all{mod,yes}config
->> and -Wextra being unconditionally enabled for DRM, those warnings hard
->> break the build despite CONFIG_WERROR=n...
+> The name of the overlay does not fit into the fixed-length field:
 >
-> Would making DRM_WERROR depends on WERROR address your concerns?
-
-But then what would be the point of having DRM_WERROR at all? For me the
-point is, "werror in drm, ignore the rest, they're someone else's
-problem".
-
-An alternative would be to "depends on !COMPILE_TEST" that we have in
-i915, but then some folks want to have COMPILE_TEST in drm, because some
-drivers are otherwise hard for people to build.
-
-Nathan, we do want to fix any issues switfly. Are you hitting specific
-build problems?
-
-
-BR,
-Jani.
-
-
-
+> drivers/video/fbdev/sh_mobile_lcdcfb.c:1577:2: error: 'snprintf' will al=
+ways be truncated; specified size is 16, but format string expands to at l=
+east 25
 >
-> Maxime
+> Make it short enough by changing the string.
+>
+> Fixes: c5deac3c9b22 ("fbdev: sh_mobile_lcdc: Implement overlays support"=
+)
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
--- 
-Jani Nikula, Intel
+applied to fbdev git tree.
+
+Thanks!
+Helge
+
+
+> ---
+>   drivers/video/fbdev/sh_mobile_lcdcfb.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/video/fbdev/sh_mobile_lcdcfb.c b/drivers/video/fbde=
+v/sh_mobile_lcdcfb.c
+> index eb2297b37504..d35d2cf99998 100644
+> --- a/drivers/video/fbdev/sh_mobile_lcdcfb.c
+> +++ b/drivers/video/fbdev/sh_mobile_lcdcfb.c
+> @@ -1575,7 +1575,7 @@ sh_mobile_lcdc_overlay_fb_init(struct sh_mobile_lc=
+dc_overlay *ovl)
+>   	 */
+>   	info->fix =3D sh_mobile_lcdc_overlay_fix;
+>   	snprintf(info->fix.id, sizeof(info->fix.id),
+> -		 "SH Mobile LCDC Overlay %u", ovl->index);
+> +		 "SHMobile ovl %u", ovl->index);
+>   	info->fix.smem_start =3D ovl->dma_handle;
+>   	info->fix.smem_len =3D ovl->fb_size;
+>   	info->fix.line_length =3D ovl->pitch;
+
