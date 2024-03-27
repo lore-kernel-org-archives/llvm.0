@@ -1,145 +1,279 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A7F1534E9
-	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 20:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C94241760;
+	Wed, 27 Mar 2024 21:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711572367; cv=none; b=SQTb8f59hACRx2wlMQtVFZqcF3x1pskdkQmGZ23Jxy++mP9ijiSiDPIXd9ZfIjepkJYp1AvhRRcB/SnQlwa956OL2hWxUMPcqjj22hst3xD8hgXfwCilctyhQlrrKbn0TkFiKBgPicQn89DBdaBdQ7fkojPEPEaVCj28vhoXh9I=
+	t=1711573246; cv=none; b=k1wrwOIFRRXN2yAbtNInZc5efVYkmm3Dt+ClvY1ZhqxQG6pMsiHUkQBMjDK0ybucRBzdZFM/kt/CZSjIURqXOLuCvTnZU5MRlLcHaFyZW8d2rXJJqMZT9Ukbt/mkbFe0X7CNA4Erc4tTFzSQBQWrzdiI0qyhP5FaTvXgOLC2mOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711572367; c=relaxed/simple;
-	bh=RuCWKtbRzqJIEwrREMPn1YstKGaBmUG9LovdmLij8Z8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E28PgP9N55TvsEBY543TPuW1muo9nIi/3AfyXEy36TdtTv/snir+lIAg5zcSvV+lfRUGJDc6DJVdhmNIerivgbCPGWMMuUkjLXXxWUz2rg2XktGcHMPUYqszNuliAowm2YDkLM1LeqA224gABvI7acIBJ5eXf0GHFZxXJSmgs2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XZ/Btlcs; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1711573246; c=relaxed/simple;
+	bh=DILcLNoZMqAuKsYiRUGTjQP8xjU8ZF97HNeHjd8jYyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vd4DToVvYVSc2f4yecAcPG89VokUBylgSpj6q2uUWcNIk58IA5Pm5wklpDxdFgrMKaug1qgsD9VXdUBWTGUxa4dXCfgoMqIOrbH+57PKaW485DS1bHwvCV5jySZN4+13PN6a0491S1Nsr8YhKlTpGi5KccyImpkgBsifd0JYK1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F5+O28P7; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XZ/Btlcs"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56a2bb1d84eso495775a12.1
-        for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 13:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1711572363; x=1712177163; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MmaskrdbVq30uGRTY87iYuCKuy48OuaJH0qBlabGSIs=;
-        b=XZ/BtlcswYQo5yMQnoVcGC8KtJjcDEPmNiJx/New6YevCmUzfln0MyQK1JDaHJ2IYY
-         7zTqWStLA5m673hbTboFad0DbZoD6y//93MVQmcrKqscyIUVk2RpKyHOpcixTyZQJ+ZV
-         MeURtT5oabJa/WkdHqtWQjNnAqPHCOp/nEOtE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711572363; x=1712177163;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MmaskrdbVq30uGRTY87iYuCKuy48OuaJH0qBlabGSIs=;
-        b=Nu1QjY0gVZjLzX6v0rs/uQhcgDy77CvrQbvWNknEnfr4cRk2OXgZQkbGj0m0sXU0Po
-         Mt2VY60vvBGzbgYbXWQyt0hWm4d+7A/OUMJoXNM5HRojWuKg6BG7tib34BiiYXZ6uBsB
-         PumqvB5bFsHEfc5psw16XB5eGQ0x/t2jIXZPofZS8/3cqxist0Ou8E+HY4Xc8WhBijFu
-         NabwJ02baeQd7fx8EfFukumH7T6RzanmhC3e0GkIYRqP5+V9Rc1cwwW2JUamLlwKCgKp
-         imTj2Einh3Q/BdmVw6C1yI2dg3TstXxSEBGXQadl7Hf4k5U1QyFaUApQfaLGrrOkimhH
-         RYjw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCis33rCR8GiHuAAx1klqjUS2sB0+umjbD2EbMV+DcHiBcJyL650bNLZQeFajtMjcvPwrpPZWhkmfINs+KRnrVV/B1tg==
-X-Gm-Message-State: AOJu0Yw3ckdxXLfT1a2TnBC3/jZNFDj2Y44uzlHYWMFergInXfie4cGZ
-	oJfy6gzz5BZVTcIQUSdrNVk53srl0dbxYKpAkBPa2x5piqXZWQaFMYI8ujloWvy6T9zFD2QYsj6
-	6RI/bzQ==
-X-Google-Smtp-Source: AGHT+IHKK9Vyv4mIgxkOcznAKT8lxLBO+GvKasrbxKf8HuOPnnag3T+SrnOyXvsbl+Kft0Dnm6FMEg==
-X-Received: by 2002:a50:d714:0:b0:566:624a:9e3f with SMTP id t20-20020a50d714000000b00566624a9e3fmr430061edi.3.1711572363651;
-        Wed, 27 Mar 2024 13:46:03 -0700 (PDT)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id g28-20020a056402321c00b0056c1c2b851esm11865eda.0.2024.03.27.13.46.03
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 13:46:03 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a46d0a8399aso227288966b.1
-        for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 13:46:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV2/lidODgnfXnD1GF3OrTwRZc5V25XZjveTbXPnFR4eoo6gd2KX4RiysNx/6jLr5SDDIAKqg3uQgtG0uGH2Wvhvi+JLw==
-X-Received: by 2002:a17:906:ca59:b0:a45:40e4:8c8 with SMTP id
- jx25-20020a170906ca5900b00a4540e408c8mr355615ejb.16.1711572362918; Wed, 27
- Mar 2024 13:46:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F5+O28P7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711573244; x=1743109244;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DILcLNoZMqAuKsYiRUGTjQP8xjU8ZF97HNeHjd8jYyU=;
+  b=F5+O28P79M8FihQ9UrQX9GT6NZhEc5+zYFqFrv+pxqwuetVMtMgNgRg2
+   g34UDAY80PdX9DBXpvO1FP8TfKBzZOfw4fYkFdYmxKgZ2EGDWuQTYAi9h
+   bYepMetEwWqrNc2n4lHWyj7oNrP5LzDG5Bv1l9ed1fejUCXHh1kYKQGSE
+   oNI7tXJakzlVeptrUqXYJUB5kk+udxWaYVJmxrGz+6ERpJvxzgv2fKFrX
+   xMGKTh0LC0CduatpR5Xs2yMDewE33OgBri0+tZ7QyfJrpVufWB0h4GMtn
+   f9J0+DaaMLtqNakg9TCQqsGdSXft0nDhZTozGtlwWiP3CxlIgGNvLogvR
+   Q==;
+X-CSE-ConnectionGUID: uRBWtXY8S2S+Z5K3OXQpxA==
+X-CSE-MsgGUID: yS6IQ/wXSnq25lsAI+qs7A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="24196230"
+X-IronPort-AV: E=Sophos;i="6.07,160,1708416000"; 
+   d="scan'208";a="24196230"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 14:00:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,160,1708416000"; 
+   d="scan'208";a="47630938"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 27 Mar 2024 14:00:41 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpaNy-0001Tq-2U;
+	Wed, 27 Mar 2024 21:00:38 +0000
+Date: Thu, 28 Mar 2024 04:59:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>, linux-nvme@lists.infradead.org,
+	linux-block@vger.kernel.org, Hannes Reinecke <hare@kernel.org>
+Subject: Re: [PATCH 1/2] block: track per-node I/O latency
+Message-ID: <202403280412.Ojp0tGKt-lkp@intel.com>
+References: <20240326153529.75989-2-hare@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
- <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
- <ZgIRXL5YM2AwBD0Y@gallifrey> <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
- <160DB953-1588-418E-A490-381009CD8DE0@gmail.com> <qyjrex54hbhvhw4gmn7b6l2hr45o56bwt6fazfalykwcp5zzkx@vwt7k3d6kdwt>
- <CAHk-=wgQy+FRKjO_BvZgZN56w6-+jDO8p-Mt=X=zM70CG=CVBQ@mail.gmail.com> <bjorlxatlpzjlh6dfulham3u4mqsfqt7ir5wtayacaoefr2r7x@lmfcqzcobl3f>
-In-Reply-To: <bjorlxatlpzjlh6dfulham3u4mqsfqt7ir5wtayacaoefr2r7x@lmfcqzcobl3f>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 27 Mar 2024 13:45:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiSiNtf4Z=Bvfs=sGJn6SYCZ=F7hvWwsQiOX4=V0Bgp_Q@mail.gmail.com>
-Message-ID: <CAHk-=wiSiNtf4Z=Bvfs=sGJn6SYCZ=F7hvWwsQiOX4=V0Bgp_Q@mail.gmail.com>
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: comex <comexk@gmail.com>, "Dr. David Alan Gilbert" <dave@treblig.org>, 
-	Philipp Stanner <pstanner@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	rust-for-linux <rust-for-linux@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Marco Elver <elver@google.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240326153529.75989-2-hare@kernel.org>
 
-On Wed, 27 Mar 2024 at 12:41, Kent Overstreet <kent.overstreet@linux.dev> wrote:
->
-> _But_: the lack of any aliasing guarantees means that writing through
-> any pointer can invalidate practically anything, and this is a real
-> problem.
+Hi Hannes,
 
-It's actually much less of a problem than you make it out to be.
+kernel test robot noticed the following build warnings:
 
-A lot of common aliasing information is statically visible (offsets
-off the same struct pointer etc).
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on linus/master v6.9-rc1 next-20240327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The big problems tend to be
+url:    https://github.com/intel-lab-lkp/linux/commits/Hannes-Reinecke/block-track-per-node-I-O-latency/20240326-234521
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20240326153529.75989-2-hare%40kernel.org
+patch subject: [PATCH 1/2] block: track per-node I/O latency
+config: arm-randconfig-001-20240327 (https://download.01.org/0day-ci/archive/20240328/202403280412.Ojp0tGKt-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 23de3862dce582ce91c1aa914467d982cb1a73b4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403280412.Ojp0tGKt-lkp@intel.com/reproduce)
 
- (a) old in-order hardware that really wants the compiler to schedule
-memory operations
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403280412.Ojp0tGKt-lkp@intel.com/
 
- (b) vectorization and HPC
+All warnings (new ones prefixed by >>):
 
-and honestly, (a) is irrelevant, and (b) is where 'restrict' and
-actual real vector extensions come in. In fact, the type-based
-aliasing often doesn't help (because you have arrays of the same FP
-types), and so you really just need to tell the compiler that your
-arrays are disjoint.
+   In file included from drivers/scsi/aic7xxx/aic79xx_pci.c:44:
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm.h:46:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/scsi/aic7xxx/aic79xx_pci.c:44:
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm.h:57:
+   In file included from include/scsi/scsi_cmnd.h:7:
+   In file included from include/linux/t10-pi.h:6:
+   include/linux/blk-mq.h:1240:15: error: unknown type name 'in'
+    1240 | static inline in blk_nodelat_enable(struct request_queue *q) { return 0; }
+         |               ^
+>> include/linux/blk-mq.h:1242:5: warning: no previous prototype for function 'blk_nodelat_latency' [-Wmissing-prototypes]
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         |     ^
+   include/linux/blk-mq.h:1242:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         | ^
+         | static 
+   include/linux/blk-mq.h:1243:15: error: unknown type name 'in'
+    1243 | static inline in blk_nodelat_init(struct gendisk *disk) { return -ENOTSUPP; }
+         |               ^
+   2 warnings and 2 errors generated.
+--
+   In file included from drivers/scsi/aic7xxx/aic79xx_core.c:43:
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm.h:46:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/scsi/aic7xxx/aic79xx_core.c:43:
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm.h:57:
+   In file included from include/scsi/scsi_cmnd.h:7:
+   In file included from include/linux/t10-pi.h:6:
+   include/linux/blk-mq.h:1240:15: error: unknown type name 'in'
+    1240 | static inline in blk_nodelat_enable(struct request_queue *q) { return 0; }
+         |               ^
+>> include/linux/blk-mq.h:1242:5: warning: no previous prototype for function 'blk_nodelat_latency' [-Wmissing-prototypes]
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         |     ^
+   include/linux/blk-mq.h:1242:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         | ^
+         | static 
+   include/linux/blk-mq.h:1243:15: error: unknown type name 'in'
+    1243 | static inline in blk_nodelat_init(struct gendisk *disk) { return -ENOTSUPP; }
+         |               ^
+   drivers/scsi/aic7xxx/aic79xx_core.c:5694:13: warning: variable 'data_addr' set but not used [-Wunused-but-set-variable]
+    5694 |                         uint64_t data_addr;
+         |                                  ^
+   3 warnings and 2 errors generated.
+--
+   In file included from drivers/scsi/aic7xxx/aic7xxx_core.c:43:
+   In file included from drivers/scsi/aic7xxx/aic7xxx_osm.h:63:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/scsi/aic7xxx/aic7xxx_core.c:43:
+   In file included from drivers/scsi/aic7xxx/aic7xxx_osm.h:74:
+   In file included from include/scsi/scsi_cmnd.h:7:
+   In file included from include/linux/t10-pi.h:6:
+   include/linux/blk-mq.h:1240:15: error: unknown type name 'in'
+    1240 | static inline in blk_nodelat_enable(struct request_queue *q) { return 0; }
+         |               ^
+>> include/linux/blk-mq.h:1242:5: warning: no previous prototype for function 'blk_nodelat_latency' [-Wmissing-prototypes]
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         |     ^
+   include/linux/blk-mq.h:1242:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         | ^
+         | static 
+   include/linux/blk-mq.h:1243:15: error: unknown type name 'in'
+    1243 | static inline in blk_nodelat_init(struct gendisk *disk) { return -ENOTSUPP; }
+         |               ^
+   drivers/scsi/aic7xxx/aic7xxx_core.c:4171:13: warning: variable 'data_addr' set but not used [-Wunused-but-set-variable]
+    4171 |                         uint32_t data_addr;
+         |                                  ^
+   3 warnings and 2 errors generated.
+--
+   In file included from drivers/scsi/aic7xxx/aic7xxx_osm.c:123:
+   In file included from drivers/scsi/aic7xxx/aic7xxx_osm.h:63:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/scsi/aic7xxx/aic7xxx_osm.c:123:
+   In file included from drivers/scsi/aic7xxx/aic7xxx_osm.h:74:
+   In file included from include/scsi/scsi_cmnd.h:7:
+   In file included from include/linux/t10-pi.h:6:
+   include/linux/blk-mq.h:1240:15: error: unknown type name 'in'
+    1240 | static inline in blk_nodelat_enable(struct request_queue *q) { return 0; }
+         |               ^
+>> include/linux/blk-mq.h:1242:5: warning: no previous prototype for function 'blk_nodelat_latency' [-Wmissing-prototypes]
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         |     ^
+   include/linux/blk-mq.h:1242:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         | ^
+         | static 
+   include/linux/blk-mq.h:1243:15: error: unknown type name 'in'
+    1243 | static inline in blk_nodelat_init(struct gendisk *disk) { return -ENOTSUPP; }
+         |               ^
+   drivers/scsi/aic7xxx/aic7xxx_osm.c:1435:24: warning: bitwise operation between different enumeration types ('ahc_feature' and 'ahc_flag') [-Wenum-enum-conversion]
+    1435 |             && (ahc->features & AHC_SCB_BTT) == 0) {
+         |                 ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   3 warnings and 2 errors generated.
+--
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm_pci.c:42:
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm.h:46:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm_pci.c:42:
+   In file included from drivers/scsi/aic7xxx/aic79xx_osm.h:57:
+   In file included from include/scsi/scsi_cmnd.h:7:
+   In file included from include/linux/t10-pi.h:6:
+   include/linux/blk-mq.h:1240:15: error: unknown type name 'in'
+    1240 | static inline in blk_nodelat_enable(struct request_queue *q) { return 0; }
+         |               ^
+>> include/linux/blk-mq.h:1242:5: warning: no previous prototype for function 'blk_nodelat_latency' [-Wmissing-prototypes]
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         |     ^
+   include/linux/blk-mq.h:1242:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1242 | u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
+         | ^
+         | static 
+   include/linux/blk-mq.h:1243:15: error: unknown type name 'in'
+    1243 | static inline in blk_nodelat_init(struct gendisk *disk) { return -ENOTSUPP; }
+         |               ^
+   drivers/scsi/aic7xxx/aic79xx_osm_pci.c:177:25: warning: shift count >= width of type [-Wshift-count-overflow]
+     177 |                     dma_set_mask(dev, DMA_BIT_MASK(64)) == 0)
+         |                                       ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   3 warnings and 2 errors generated.
 
-Yes, yes, possible aliasing means that the compiler won't generate
-nice-looking code in many situations and will end up reloading values
-from memory etc.
 
-AND NONE OF THAT MATTERS IN REALITY.
+vim +/blk_nodelat_latency +1242 include/linux/blk-mq.h
 
-Performance issues to a close approximation come from cache misses and
-branch mispredicts. The aliasing issue just isn't the horrendous issue
-people claim it is. It's most *definitely* not worth the absolute
-garbage that is C type-based aliasing.
+  1233	
+  1234	#ifdef CONFIG_BLK_NODE_LATENCY
+  1235	int blk_nodelat_enable(struct request_queue *q);
+  1236	void blk_nodelat_disable(struct request_queue *q);
+  1237	u64 blk_nodelat_latency(struct request_queue *q, int node);
+  1238	int blk_nodelat_init(struct gendisk *disk);
+  1239	#else
+> 1240	static inline in blk_nodelat_enable(struct request_queue *q) { return 0; }
+  1241	static inline void blk_nodelat_disable(struct request_queue *q) {}
+> 1242	u64 blk_nodelat_latency(struct request_queue *q, int node) { return 0; }
 
-And yes, I do think it might be nice to have a nicer 'restrict' model,
-because yes, I look at the generated asm and I see the silly code
-generation too. But describing aliasing sanely in general is just hard
-(both for humans _and_ for some sane machine interface), and it's very
-very seldom worth the pain.
-
-            Linus
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
