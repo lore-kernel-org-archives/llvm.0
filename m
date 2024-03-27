@@ -1,98 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE66A12837D;
-	Wed, 27 Mar 2024 11:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ED812E1CE;
+	Wed, 27 Mar 2024 12:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711539747; cv=none; b=r+icKGmGhUFMLGmNW9SdcMcmiFHGo1E6niCcLlz1XywkXcUCBaC+wrv98QI6CTS5sVp7LPIRp5kaxg7O78G3Pf2hwckG5UiYdi+sLDI7dWimG/CqMrnbbH22UDRxMDxa7jtnZ6I15X+Maf88LGn7yfOy+kpGGswLOWg9+yjCGRY=
+	t=1711541232; cv=none; b=sTcvoF4mBuY1c/vd28/NCklpz1Nr3zWSwWyvN82seOdVHmPugdrZAz4iTdz/SUSZYgBv39CujejFQTPpO9JJzWeJXoQF3UejpGES1MoR2WqxzID74mNdnvMmC2dXaDi6B/MhD5uZbuXqzKPF0zBJJqmZPJ+yN9WqUX1HDFZLCOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711539747; c=relaxed/simple;
-	bh=PWzDEl5oi1sC/iz5WVqfL6+HJghndDKJjDp+YkqGS9o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ap8UtVHiy30HpYUkzsOjFFyN+j11/Df9APfsAah6bgdQHq3FHqznBaLKnWdxuJFWJCkmXYugSPKOiSzVmGFKsAPlSTZ3uTdxHLVRKcsPlu+bqj+7PXk2+iNxt1aK/LBJ32kU0vfcGlNZPth5mQg6hCWQ6mfVFPduOycCIPZfXYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A8f05f/k; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711541232; c=relaxed/simple;
+	bh=CoSnL3qPQEJOccnboM8Yx9diAo3ePi4BoTAGB2yAXic=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qRvhJ01oDNgKEgPwGMjXO58pajDUqiGYtastNjJ19fuvzklDn1PVFWr5INHU/fj+5nnHLen+YGGalq8eNUnyf3Eo9xEGjucTPq22QbCju5hlgShn6HqH775HCptwEMI5DenNQHRv9130n9OU66j9gj558G8p0s6yvoKtbCPFF30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kusuduHC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A8f05f/k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711539746; x=1743075746;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PWzDEl5oi1sC/iz5WVqfL6+HJghndDKJjDp+YkqGS9o=;
-  b=A8f05f/kJ1j38RsThe3qJ9g46iBV/3AfsQcpk5vIf2+0H135x7KVEPkk
-   4Vw3pJX9Ms4v7gD0Dq3s33nhELcFEJv3QHTEIt/bVSLlpBECQWZXl3HIR
-   zhSE+OvXv2qU37kSPZ3KWtq0pUiNlsjsXtHXPxmccoB+wR7JajI+FUhIN
-   PksuY5PNSTQRjkdRIyGpSfhspN6kp46L+mOppNlfZgze7UQpQXj4QWFnC
-   4dhlaMsDU5G1i+m/ekhBcpErurFIq/YnW9oGIyasd7J3OtnyLqpxdGWuX
-   rKXKut1I5Eee85bkpmhmFAc/Rdwph2Le2bSyqzuk7H2IHSYFMc8ze13IW
-   A==;
-X-CSE-ConnectionGUID: ua4PLu2nTYmQSB479nwR5g==
-X-CSE-MsgGUID: GO+FOFy3QTqObeRBhjcf6A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="6571291"
-X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
-   d="scan'208";a="6571291"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 04:42:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,158,1708416000"; 
-   d="scan'208";a="47283635"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 27 Mar 2024 04:42:24 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rpRfh-00010w-1m;
-	Wed, 27 Mar 2024 11:42:21 +0000
-Date: Wed, 27 Mar 2024 19:42:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 1915/2169]
- sound/soc/codecs/rk3308_codec.c:956:34: warning: unused variable
- 'rk3308_codec_of_match'
-Message-ID: <202403271905.BYbGJiPi-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kusuduHC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369F2C433F1;
+	Wed, 27 Mar 2024 12:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711541232;
+	bh=CoSnL3qPQEJOccnboM8Yx9diAo3ePi4BoTAGB2yAXic=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kusuduHCFxJ2UTor5ojALVKldcK3CkkUOAGYBHYYY5APRWeU5S2a0qni1b11ZM9VQ
+	 arBY6xHXhA9nZlPabBJhR9QTNMbRFLAu0oZcY+S6Zn5qbjOHxAmRTWN4aoB/tQPkp/
+	 /N5RQBgCNwNBcHjjmRi/qHLg7gTG8+Yb1mjb3OPj+dARjNoT0tYNpIgceiVMhz19Jx
+	 cgTM9SHzReK+iOLkgoqBs59PWHbZiCUAOaDDqJojmXWoZg8gy6k+M0nLKBn+Ovt6GC
+	 VMJLplhH/QjcbpglpVlnNpqQxkjovhRVAy1iZfocGPLuFUO8vt8lcGJPnpSmUM/GLK
+	 7SX1tdzRbbJyA==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	nathan@kernel.org
+Cc: Alex Deucher <alexander.deucher@amd.com>,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: FAILED: Patch "drm/amd/display: Increase frame-larger-than for all display_mode_vba files" failed to apply to 6.8-stable tree
+Date: Wed, 27 Mar 2024 08:07:10 -0400
+Message-ID: <20240327120710.2825195-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Patchwork-Hint: ignore
+X-stable: review
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   26074e1be23143b2388cacb36166766c235feb7c
-commit: 4ed0915f5bc4bcc81bca783a5b984f3d81e9764e [1915/2169] ASoC: codecs: Add RK3308 internal audio codec driver
-config: i386-buildonly-randconfig-005-20240327 (https://download.01.org/0day-ci/archive/20240327/202403271905.BYbGJiPi-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240327/202403271905.BYbGJiPi-lkp@intel.com/reproduce)
+The patch below does not apply to the 6.8-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403271905.BYbGJiPi-lkp@intel.com/
+Thanks,
+Sasha
 
-All warnings (new ones prefixed by >>):
+------------------ original commit in Linus's tree ------------------
 
->> sound/soc/codecs/rk3308_codec.c:956:34: warning: unused variable 'rk3308_codec_of_match' [-Wunused-const-variable]
-     956 | static const struct of_device_id rk3308_codec_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+From 321036db915bc647d04750337eb002022c912857 Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 5 Feb 2024 14:54:05 -0700
+Subject: [PATCH] drm/amd/display: Increase frame-larger-than for all
+ display_mode_vba files
 
+After a recent change in LLVM, allmodconfig (which has CONFIG_KCSAN=y
+and CONFIG_WERROR=y enabled) has a few new instances of
+-Wframe-larger-than for the mode support and system configuration
+functions:
 
-vim +/rk3308_codec_of_match +956 sound/soc/codecs/rk3308_codec.c
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v2.c:3393:6: error: stack frame size (2144) exceeds limit (2048) in 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+   3393 | void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        |      ^
+  1 error generated.
 
-   955	
- > 956	static const struct of_device_id rk3308_codec_of_match[] = {
-   957		{ .compatible = "rockchip,rk3308-codec", },
-   958		{},
-   959	};
-   960	MODULE_DEVICE_TABLE(of, rk3308_codec_of_match);
-   961	
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.c:3520:6: error: stack frame size (2192) exceeds limit (2048) in 'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+   3520 | void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        |      ^
+  1 error generated.
 
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:3286:6: error: stack frame size (2128) exceeds limit (2048) in 'dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+   3286 | void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        |      ^
+  1 error generated.
+
+Without the sanitizers enabled, there are no warnings.
+
+This was the catalyst for commit 6740ec97bcdb ("drm/amd/display:
+Increase frame warning limit with KASAN or KCSAN in dml2") and that same
+change was made to dml in commit 5b750b22530f ("drm/amd/display:
+Increase frame warning limit with KASAN or KCSAN in dml") but the
+frame_warn_flag variable was not applied to all files. Do so now to
+clear up the warnings and make all these files consistent.
+
+Cc: stable@vger.kernel.org
+Closes: https://github.com/ClangBuiltLinux/linux/issue/1990
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+---
+ drivers/gpu/drm/amd/display/dc/dml/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+index 6042a5a6a44f8..59ade76ffb18d 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+@@ -72,11 +72,11 @@ CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_lib.o := $(dml_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_vba.o := $(dml_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml/dcn10/dcn10_fpu.o := $(dml_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/dcn20_fpu.o := $(dml_ccflags)
+-CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags)
++CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags) $(frame_warn_flag)
+ CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20.o := $(dml_ccflags)
+-CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20v2.o := $(dml_ccflags)
++CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20v2.o := $(dml_ccflags) $(frame_warn_flag)
+ CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20v2.o := $(dml_ccflags)
+-CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_mode_vba_21.o := $(dml_ccflags)
++CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_mode_vba_21.o := $(dml_ccflags) $(frame_warn_flag)
+ CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_rq_dlg_calc_21.o := $(dml_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_mode_vba_30.o := $(dml_ccflags) $(frame_warn_flag)
+ CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_rq_dlg_calc_30.o := $(dml_ccflags)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
+
+
+
