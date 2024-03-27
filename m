@@ -1,201 +1,274 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F034E129E9A
-	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 16:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4337D14C590;
+	Wed, 27 Mar 2024 16:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711556188; cv=none; b=JrFNMiP8Y9yyg/nwg8J7s41Teg/g8gfJMr7oW50BJ0OtWnu252SN4xPaI9VOHdveFuARF5SshV3AfZBzxXp1WdO0aftzyKpKw7wHHG89j5PoqdKCPA8RragN02ZAjvVsg3ejHrn/mWfOGedGZZIhgrLPCwHuLXo/Du9LZ2EoHAU=
+	t=1711557215; cv=none; b=skS0GIgfYMZJASvjAha7T7Sxmng3xxUrQRVPr+TKuBx2JoSPubIPsEMjzTzT+EuAFXXnPvoU3S/wZhv8zfU02fgCsvbBv/0PNWjM3r8T4GnvE07MKXQ44T4tI/+qJFROdm2sGUmzdfuyrTNi0LH5t6gcfac94FExyf3SiM3jju4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711556188; c=relaxed/simple;
-	bh=kfVdwdCf7B9X7O5+oO8Vigvx4JOZ1iSnjiYAU8Orp7A=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=tn8fGV1sg2bUsLjQezhhkTAScRKl+cn/zHLhvvUXly7rkpn/JuyPal/17W05Omolwk/XxkwoFZqC12PumBARXUZzaCUgil2sxgoL2Y8nzQAna5owDhU2SM//MIe4aex3sllktgLG+FMysGZjvgVBIDXRDRjYBVoAgWewuwz0+aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kdZsVHFV; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711557215; c=relaxed/simple;
+	bh=JJGwdu5+tvYciOZj7QulorQIGULSYG5NgjT2ZUaXCGo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gEY8vPNxhE7Vu5uJqFlgQLxhttoREzVCXr821bvs1uERiqiH1oyXbqrwmzTD2lkBgagCwYNTB2jiliQSe+1QysJi+UCQPv029ee6YXtJgwIXdqX0u400coZhXKemyLN/TwOBhh0p0xLhUn/blZgVatHOB7EN2JtdMwA/Z8OjvOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCFcREkH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kdZsVHFV"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-29b7164eef6so23481a91.2
-        for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 09:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711556186; x=1712160986; darn=lists.linux.dev;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OSCcPL9ReYBC3ieN7sRSJkCjHUDGGaoDNVjenjFddiw=;
-        b=kdZsVHFV18vv7/uc9A09HEdtF4rLxAhI1tzqGeQgrBg/6LJyXDXMjaJBxd9KcSBDom
-         a9NPsUJqL+DtmaoD2RdmixfNr7mkekMlxXdg5PcM/4yU79ujlB6Ngatf/N7WqhCDOCUs
-         Bdzw3nVCBd8/WKByKh7cT+B41EJuZ6xHGWBkYHG29D4XctchU5Zohlb7WaqwiUCHGw3G
-         8436AIKVlw12sPcu3TxgG3Hd70R2a0Tn5vIBUZFixhWMX2/77aAswnr0YpZIJ+oSpyPQ
-         SKc9hWF7C4a3urApfiTn8iXGY6UxeffnOK/AKIM47IBH6k1Jl4V92CVz8XbIJXzQJGRe
-         s4eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711556186; x=1712160986;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OSCcPL9ReYBC3ieN7sRSJkCjHUDGGaoDNVjenjFddiw=;
-        b=UIytrRwJAd9XcfbbVOqPLhmN4eenAfBxhselxOk7Jx71bg4uxXB7sUHzyVQ6MtIBk0
-         oMy47N4CPCPbocYHPY6XDMywdczygpirUdRA2QgYL6CXlLCUVsODHbS16+0IjwvznLjh
-         Wqu7OQxlkg5n8wEdyArmcVl8zd3CYeXDSQoimTkTKazou2Ec8sw6o1cnJAyKIGnp2Hu3
-         udmLcN4Ap/eYWhJnT3rcjnD1/nbO2EUnJ/KR5BlslyAD2U2QBAIrcbaxT/9psRqqAS0h
-         eoUBASiIDRzCjpHcRR0syWprEtJ9XkKp4LfoXcwHkbAihqq3918+mAkuSKw0yMngVmFx
-         9UOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7OO3X8IIwOMY92NbzpNAhTcaT5DYvVFNJu7E33JkLvf03EI4uqusXm8/U74o7o78rEdbERSXrqwCciwDWvCVBo3qviQ==
-X-Gm-Message-State: AOJu0YwmqYjpo6DsVAyh+nSJXyIyi4F2EI38/kZMTrtxZRDqp7zo3c90
-	xAAIHjf926N/FI95+hnxlj+vE46GNsxV3WBhbhdcF+LnBAmYls92DkcuniPD7xc=
-X-Google-Smtp-Source: AGHT+IFb5IqfgxBvySBVcYNKgghJ48Dnwn4nEVJk9rDb4Sdzmwo0ZtCk8BBaNaurYYvMG+RdbrIyPw==
-X-Received: by 2002:a17:90b:4a44:b0:29c:7845:cba with SMTP id lb4-20020a17090b4a4400b0029c78450cbamr100758pjb.36.1711556186202;
-        Wed, 27 Mar 2024 09:16:26 -0700 (PDT)
-Received: from smtpclient.apple ([2601:647:4d7e:dba0:5840:a196:2bf3:3600])
-        by smtp.gmail.com with ESMTPSA id sl13-20020a17090b2e0d00b0029951d04dc4sm1903536pjb.54.2024.03.27.09.16.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Mar 2024 09:16:25 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCFcREkH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67878C433F1;
+	Wed, 27 Mar 2024 16:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711557214;
+	bh=JJGwdu5+tvYciOZj7QulorQIGULSYG5NgjT2ZUaXCGo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZCFcREkHBHdBwZObWwSP8/tuuajCavkjusAk5Vu3ZFbGx91YtVFEZoK1GGODkfSss
+	 zOfGYzOfRD8f18G93URkH4EhsCteBdGLEOYvMooFGlwHAa3qrFzMaFJompR6KcTbvN
+	 nuoeyK8w2o/h++AWHV0OaUamKOSgKhgIRlpvzrL9Yp6A0ehowBGHSLjtKZEcYRPsZD
+	 LeDMW+uYziCpDUHIFjWXEZjbkgpzRmq4DMexH0WoYlOo90zJb82FlUcN5wx3nm9xGb
+	 mrzElA5p64o1EAYwj8YWQpL+xeH6TACmXm7ESngxzaEX/QzKUFJ8lXSoOYoB3bwPH8
+	 2+iZbmSRiLSlw==
+Date: Wed, 27 Mar 2024 09:33:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jani Nikula <jani.nikula@intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
+	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+	Danilo Krummrich <dakr@redhat.com>, Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Hamza Mahfooz <hamza.mahfooz@amd.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Sui Jingfeng <sui.jingfeng@linux.dev>, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RESEND v3 2/2] drm: Add CONFIG_DRM_WERROR
+Message-ID: <20240327163331.GB1153323@dev-arch.thelio-3990X>
+References: <cover.1709629403.git.jani.nikula@intel.com>
+ <afe5ed943414f7ec3044c1547503b9941686a867.1709629403.git.jani.nikula@intel.com>
+ <20240326225650.GA2784736@dev-arch.thelio-3990X>
+ <20240327-cherubic-steel-tiger-e1c36a@houat>
+ <87a5mkgl6i.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-From: comex <comexk@gmail.com>
-In-Reply-To: <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
-Date: Wed, 27 Mar 2024 09:16:09 -0700
-Cc: "Dr. David Alan Gilbert" <dave@treblig.org>,
- Kent Overstreet <kent.overstreet@linux.dev>,
- Philipp Stanner <pstanner@redhat.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- rust-for-linux <rust-for-linux@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org,
- llvm@lists.linux.dev,
- Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@samsung.com>,
- Alice Ryhl <aliceryhl@google.com>,
- Alan Stern <stern@rowland.harvard.edu>,
- Andrea Parri <parri.andrea@gmail.com>,
- Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Nicholas Piggin <npiggin@gmail.com>,
- David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>,
- Luc Maranget <luc.maranget@inria.fr>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Akira Yokosawa <akiyks@gmail.com>,
- Daniel Lustig <dlustig@nvidia.com>,
- Joel Fernandes <joel@joelfernandes.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- kent.overstreet@gmail.com,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Marco Elver <elver@google.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- linux-arm-kernel@lists.infradead.org,
- linux-fsdevel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <160DB953-1588-418E-A490-381009CD8DE0@gmail.com>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
- <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
- <ZgIRXL5YM2AwBD0Y@gallifrey>
- <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a5mkgl6i.fsf@intel.com>
 
-On Mar 25, 2024, at 8:49=E2=80=AFPM, Linus Torvalds =
-<torvalds@linux-foundation.org> wrote:
+On Wed, Mar 27, 2024 at 09:59:01AM +0200, Jani Nikula wrote:
+> On Wed, 27 Mar 2024, Maxime Ripard <mripard@kernel.org> wrote:
+> > On Tue, Mar 26, 2024 at 03:56:50PM -0700, Nathan Chancellor wrote:
+> >> On Tue, Mar 05, 2024 at 11:07:36AM +0200, Jani Nikula wrote:
+> >> > Add kconfig to enable -Werror subsystem wide. This is useful for
+> >> > development and CI to keep the subsystem warning free, while avoiding
+> >> > issues outside of the subsystem that kernel wide CONFIG_WERROR=y might
+> >> > hit.
+> >> > 
+> >> > v2: Don't depend on COMPILE_TEST
+> >> > 
+> >> > Reviewed-by: Hamza Mahfooz <hamza.mahfooz@amd.com> # v1
+> >> > Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+> >> > ---
+> >> >  drivers/gpu/drm/Kconfig  | 13 +++++++++++++
+> >> >  drivers/gpu/drm/Makefile |  3 +++
+> >> >  2 files changed, 16 insertions(+)
+> >> > 
+> >> > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> >> > index 6e853acf15da..c08e18108c2a 100644
+> >> > --- a/drivers/gpu/drm/Kconfig
+> >> > +++ b/drivers/gpu/drm/Kconfig
+> >> > @@ -416,3 +416,16 @@ config DRM_LIB_RANDOM
+> >> >  config DRM_PRIVACY_SCREEN
+> >> >  	bool
+> >> >  	default n
+> >> > +
+> >> > +config DRM_WERROR
+> >> > +	bool "Compile the drm subsystem with warnings as errors"
+> >> > +	depends on EXPERT
+> >> > +	default n
+> >> > +	help
+> >> > +	  A kernel build should not cause any compiler warnings, and this
+> >> > +	  enables the '-Werror' flag to enforce that rule in the drm subsystem.
+> >> > +
+> >> > +	  The drm subsystem enables more warnings than the kernel default, so
+> >> > +	  this config option is disabled by default.
+> >> > +
+> >> > +	  If in doubt, say N.
+> >> 
+> >> While I understand the desire for an easy switch that maintainers and
+> >> developers can use to ensure that their changes are warning free for the
+> >> drm subsystem specifically, I think subsystem specific configuration
+> >> options like this are actively detrimental to developers and continuous
+> >> integration systems that build test the entire kernel. For example, we
+> >> turned off CONFIG_WERROR for our Hexagon builds because of warnings that
+> >> appear with -Wextra that are legitimate but require treewide changes to
+> >> resolve in a manner sufficient for Linus:
+> >> 
+> >> https://github.com/ClangBuiltLinux/linux/issues/1285
+> >> https://lore.kernel.org/all/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+> >> https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.ibm.com/
+> >> 
+> >> But now, due to CONFIG_DRM_WERROR getting enabled by all{mod,yes}config
+> >> and -Wextra being unconditionally enabled for DRM, those warnings hard
+> >> break the build despite CONFIG_WERROR=n...
+> >
+> > Would making DRM_WERROR depends on WERROR address your concerns?
+> 
+> But then what would be the point of having DRM_WERROR at all? For me the
+> point is, "werror in drm, ignore the rest, they're someone else's
+> problem".
 
-> But you should _start_ the design of your language memory model around
-> the unsafe "raw atomic access operations" model.
->=20
-> Then you can use those strictly more powerful operations, and you
-> create an object model *around* it.
+Right, I do think this is a valid view point and one I am sympathetic
+to, especially since it is in the pursuit of increased code quality. I
+do not want to disrupt that.
 
-To some extent Rust does this already, unlike C++.
+> An alternative would be to "depends on !COMPILE_TEST" that we have in
+> i915, but then some folks want to have COMPILE_TEST in drm, because some
+> drivers are otherwise hard for people to build.
 
-C++ allows atomics to be implemented using locks.  Partly for this =
-reason,
-`std::atomic<T>` is documented as not necessarily having the same
-representation as `T` [1].  C++ also has strict aliasing, so even if =
-those types
-do have the same representation, you still can't cast `T *` to
-`std::atomic<T> *`.
+Right. I think it is unfortunate how (at least in my opinion)
+CONFIG_COMPILE_TEST has two meanings: genuinely just compile testing or
+"allmodconfig". For the first case, we would want CONFIG_DRM_WERROR=y
+but for the second case, it would be nice for CONFIG_DRM_WERROR to
+default to off (because CONFIG_WERROR is enabled) but allow developers
+to turn it on explicitly.
 
-But Rust atomics are lower-level.  First, they are guaranteed lock-free =
-[2].
-Second, they are documented as having "the same in-memory representation =
-as the
-underlying" type [3].  (They also usually have the same alignment, =
-except on
-x86 where u64 is only 4-byte aligned but AtomicU64 of course needs to be =
-8-byte
-aligned.)  Meanwhile, Rust intentionally lacks strict aliasing.
+Another lofty/wistful idea to solve this would be to implement something
+similar to compiler diagnostic groups for Kconfig, where there would be
+a hierarchy like
 
-Combined, this means it's perfectly legal in Rust to cast e.g. `&mut =
-u32` to
-`&AtomicU32` and perform atomic accesses on it.  Or the same with =
-u64/AtomicU64
-if you know the pointer is validly aligned.  This is by design; the =
-Atomic
-types' methods are considered the official way to perform atomic =
-operations on
-arbitrary memory, making it unnecessary to also stabilize 'lower-level'
-intrinsics.
+  CONFIG_WERROR
+    CONFIG_DRM_WERROR
+    CONFIG_SUBSYSTEM_A_WERROR
+    CONFIG_SUBSYSTEM_B_WERROR
 
-That said, there *are* currently some holes in Rust's atomics model, =
-based on
-the fact that it's mostly inherited from C++.  =46rom the documentation:
+where the value of CONFIG_WERROR is the same value for all
+subconfigurations under it but they could still be enabled individually
+without any additional dependencies (ala something like '-Wno-unused
+-Wunused-variable'), which would allow my use case of CONFIG_WERROR=n
+removing all instances of -Werror to continue to work but allow other
+developers and CI systems to just set their specific -Werror
+configuration and be done with it. I don't think something like that
+exists but maybe I don't know Kconfig as well as I think I do :)
 
-> Since C++ does not support mixing atomic and non-atomic accesses, or
-> non-synchronized different-sized accesses to the same data, Rust does =
-not
-> support those operations either. Note that both of those restrictions =
-only
-> apply if the accesses are non-synchronized.
-https://doc.rust-lang.org/std/sync/atomic/index.html
+> Nathan, we do want to fix any issues switfly. Are you hitting specific
+> build problems?
 
-There are some open issues around this:
+Yes, I see three distinct set of problems from our CI as a direct result
+of this series. I already covered two in the prior mail but I'll be a
+little more expansive below.
 
-- "How can we allow read-read races between atomic and non-atomic =
-accesses?"
-  https://github.com/rust-lang/unsafe-code-guidelines/issues/483
+1. Instances of -Wunused-but-set-variable from variables that only have
+   unary operations applied to them. Clang can warn in this case where
+   GCC cannot: https://godbolt.org/z/d368q3coP
 
-  > [..] I do think we should allow such code. However, then we have to =
-change
-  > the way we document our atomics [..]
+      int main(void)
+      {
+          int a = 0;
+          a++;
+          return 0;
+      }
 
-- "What about: mixed-size atomic accesses"
-  https://github.com/rust-lang/unsafe-code-guidelines/issues/345"
+   which shows up in a few drm drivers. Most have a patch on the mailing
+   list that has not been applied.
 
-  > Apparently the x86 manual says you "should" not do this [..] It is =
-unclear
-  > what "should" means (or what anything else here really means, =
-operationally
-  > speaking...)
+     drivers/gpu/drm/qxl/qxl_cmd.c:424:6: error: variable 'count' set but not used [-Werror,-Wunused-but-set-variable]
+       424 |         int count = 0;
+           |             ^
+     https://lore.kernel.org/all/20230408165023.2706235-1-trix@redhat.com/ (almost a year old)
 
-[1] https://eel.is/c++draft/atomics#types.generic.general-3
-[2] https://doc.rust-lang.org/std/sync/atomic/index.html#portability
-[3] =
-https://doc.rust-lang.org/nightly/std/sync/atomic/struct.AtomicU64.html
+     drivers/gpu/drm/qxl/qxl_ioctl.c:148:14: error: variable 'num_relocs' set but not used [-Werror,-Wunused-but-set-variable]
+       148 |         int i, ret, num_relocs;
+           |                     ^
+     https://lore.kernel.org/all/20240307104119.1980621-1-colin.i.king@gmail.com/
 
+     drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c:843:6: error: variable 'out' set but not used [-Werror,-Wunused-but-set-variable]
+       843 |         u64 out = dumper->iova + A6XX_CD_DATA_OFFSET;
+           |             ^
+     https://lore.kernel.org/all/20240326212324.185832-1-ojeda@kernel.org/ (recent patch)
+
+     drivers/gpu/drm/panthor/panthor_sched.c:2048:6: error: variable 'csg_mod_mask' set but not used [-Werror,-Wunused-but-set-variable]
+      2048 |         u32 csg_mod_mask = 0, free_csg_slots = 0;
+           |             ^
+     No patch, new driver, not reported yet it seems.
+
+2. High stack usage in AMDGPU files for ARCH=powerpc allmodconfig. This
+   might be a compiler issue but until now, there have been more
+   important fires.
+
+     drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1096:12: error: stack frame size (2064) exceeds limit (2048) in 'vcn_v3_0_start' [-Werror,-Wframe-larger-than]
+      1096 | static int vcn_v3_0_start(struct amdgpu_device *adev)
+           |            ^
+
+     drivers/gpu/drm/amd/amdgpu/vcn_v4_0_5.c:955:12: error: stack frame size (2112) exceeds limit (2048) in 'vcn_v4_0_5_start' [-Werror,-Wframe-larger-than]
+       955 | static int vcn_v4_0_5_start(struct amdgpu_device *adev)
+           |            ^
+
+     drivers/gpu/drm/amd/amdgpu/vcn_v5_0_0.c:713:12: error: stack frame size (2992) exceeds limit (2048) in 'vcn_v5_0_0_start' [-Werror,-Wframe-larger-than]
+       713 | static int vcn_v5_0_0_start(struct amdgpu_device *adev)
+           |            ^
+
+   Taking a brief look at it while writing this email, it appears
+   related to CONFIG_UBSAN_BOUNDS, as none of the warnings appear when
+   that is disabled on top of allmodconfig. I suspect that the sanitizer
+   instrumentation and inlining might be messing something up here, it
+   has happened with other sanitizers like KASAN and KCSAN in the past.
+   Without CONFIG_UBSAN_BOUNDS, the stack usage of these functions does
+   not seem too bad:
+
+     drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1096:12: warning: stack frame size (816) exceeds limit (512) in 'vcn_v3_0_start' [-Wframe-larger-than]
+     drivers/gpu/drm/amd/amdgpu/vcn_v4_0_5.c:955:12: warning: stack frame size (800) exceeds limit (512) in 'vcn_v4_0_5_start' [-Wframe-larger-than]
+     drivers/gpu/drm/amd/amdgpu/vcn_v5_0_0.c:713:12: warning: stack frame size (1040) exceeds limit (512) in 'vcn_v5_0_0_start' [-Wframe-larger-than]
+
+3. -Wnull-pointer-arithmetic from IO port accessors on architectures
+   that do not have them (such as hexagon and s390). For example:
+
+     In file included from drivers/gpu/drm/virtio/virtgpu_plane.c:26:
+     In file included from include/drm/drm_atomic_helper.h:31:
+     In file included from include/drm/drm_crtc.h:32:
+     In file included from include/drm/drm_modes.h:33:
+     In file included from include/drm/drm_connector.h:32:
+     In file included from include/drm/drm_util.h:35:
+     In file included from include/linux/interrupt.h:11:
+     In file included from include/linux/hardirq.h:11:
+     In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+     In file included from include/asm-generic/hardirq.h:17:
+     In file included from include/linux/irq.h:20:
+     In file included from include/linux/io.h:13:
+     In file included from arch/hexagon/include/asm/io.h:328:
+     include/asm-generic/io.h:584:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+       584 |         __raw_writeb(value, PCI_IOBASE + addr);
+           |                             ~~~~~~~~~~ ^
+     include/asm-generic/io.h:594:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+       594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+           |                                                       ~~~~~~~~~~ ^
+     include/asm-generic/io.h:604:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+       604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+           |                                                       ~~~~~~~~~~ ^
+
+   These warnings are numerous throughout drivers/gpu/drm/ because this
+   warning is enabled with -Wextra. Again, this is not exactly your
+   problem and it should eventually be fixed by [1] (it appears that
+   Niklas is working on a new version at [2]) but it is exacerbated by
+   the default combo of W=1 + -Werror for DRM with allmodconfig now,
+   even with CONFIG_WERROR=n.
+
+Hopefully that helps clear things up. I am more than happy to send
+patches or work towards solutions that satisfies everyone (or at least a
+majority/consensus). Wider testing with clang never hurts as well but I
+understand increasing build matrices is not always an easy sell.
+
+[1]: https://lore.kernel.org/all/20230522105049.1467313-45-schnelle@linux.ibm.com/
+[2]: https://git.kernel.org/niks/l/has_ioport_v6
+
+Cheers,
+Nathan
