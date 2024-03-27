@@ -1,141 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7370A63BF;
-	Wed, 27 Mar 2024 07:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20CB2C6AD
+	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 07:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711524920; cv=none; b=G7KEjBXuHKXd1Z15ltdjMdEoEJpVFFcud6EZJzfQF/7Xror/ZcpCpicy6wISARthatq2XglywQJxZwGykywv9ZI762l2ekLxEiO1Mhu6flqmlFQnNSS5RfKzYdKgY5Z+R1G0aR8W6rwGT+UFigytabQIyKxThSHG0Gv2U94MLIo=
+	t=1711525234; cv=none; b=F1DghidFii0ktbQtobIyJL0dymykmN0GWJaf6Yekmh4RLShi1qqaYH0auejuTCMrU+5elTj+8rUFnyv7w4YwRAgubRtr2Xj+cuJyCYeXdU5s23sx4lB5+X34tRiRhURkTA9csd34lYCVJjK/5XtYSP1FahIH1pEsKNUgqqTbjsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711524920; c=relaxed/simple;
-	bh=UAnVQGoAPsJj0RTqwPv7GtRQmnVPP2+uQrat1icIzbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S5Fm8iSgjoy+P7Z7C1gyHOR1IncBW1mI5W7T7dmeR2/U4l04Xc0AOvnlYm++kvSkQxRqG5kBQA6+UWADP7wKK3I5RyGcNnF0oHahrjHMw6pUJ/kyMtNjNNjuc/bGIzIhCe3nbg6cuCzzeUCQfXhfwUMQl7wqQrBKhtaZrhPny7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a/htAbI+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711525234; c=relaxed/simple;
+	bh=nn2BDOr2BCIekUSUO9oL3jzqNlqdrqYPxziN82NCkrs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DbK1nbOPzagAkZ/BMChx1Q8jUM+1DdIKdatj0QTMNr+nJbjZt72LD/GSclVPxTKKjKtwFqDL3gwgTEsm4wvKynYQMhaFuCbHbAwfTxYTS/RoByrGNa1MZOuIjIvTl6dIgEXsaatrIMt0YKR2FeFp6s3eCmK39bVf9hjfEoRThS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=d6Ekj9b6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=g6A4UAyx; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=d6Ekj9b6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=g6A4UAyx; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a/htAbI+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B3B9C433C7;
-	Wed, 27 Mar 2024 07:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711524920;
-	bh=UAnVQGoAPsJj0RTqwPv7GtRQmnVPP2+uQrat1icIzbA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a/htAbI+I9fi192jRanzq4ewTfJ71ORvjAZMdlVaJHl+ZdjybyU0gLpnJ7XZvVsnV
-	 IQUjDedjbFoXa/OXJd33V43rqqzBhkQLMGxjLI1fdGuq/St2cXZ501YV1nNN83gCNx
-	 DsFmt60c+GP+d76744vkr5x2B7Abmg/KNbGgjvo7lCPA7P8ZTG4VP3pmCBtbkayaw5
-	 020ZryIHuCXqJwZrZ1ELopjWASpPV/mEBxUwgJ98SunLBGjnexZNnLz2Wm3BZ8bsST
-	 +EjhU+9PByDHMC4+Ubbzr5lN5L196BZ3ZJ5h7BH0pzEFJ8Yg3jQHDAiXS6Av7pplMI
-	 1Bspmjlr0OKxw==
-Date: Wed, 27 Mar 2024 08:34:59 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org, 
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Alex Deucher <alexander.deucher@amd.com>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>, 
-	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, 
-	Danilo Krummrich <dakr@redhat.com>, Rob Clark <robdclark@gmail.com>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Sean Paul <sean@poorly.run>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	Hamza Mahfooz <hamza.mahfooz@amd.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	Sui Jingfeng <sui.jingfeng@linux.dev>, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RESEND v3 2/2] drm: Add CONFIG_DRM_WERROR
-Message-ID: <20240327-cherubic-steel-tiger-e1c36a@houat>
-References: <cover.1709629403.git.jani.nikula@intel.com>
- <afe5ed943414f7ec3044c1547503b9941686a867.1709629403.git.jani.nikula@intel.com>
- <20240326225650.GA2784736@dev-arch.thelio-3990X>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="d6Ekj9b6";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="g6A4UAyx";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="d6Ekj9b6";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="g6A4UAyx"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B8A8D60010;
+	Wed, 27 Mar 2024 07:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711525226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=thcqS+vw6Usq7MYZ7czl11khcu2wqBEm+Lcfikv4tgs=;
+	b=d6Ekj9b6oB4yrYj3hmvCy7RpYniA8W6bBY7viSSwSp33vzrqUqFLbNrNqEUZoQGRmj0D/Y
+	qqh88zp/T2M+7NAIZiuiVSfI0jp5OVb7RR6h/o+o8yR+2iN9nc36P586HPDDaySFeFoh3c
+	mQSH+iosB44feCz9zRfOFMSz4fUiSZs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711525226;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=thcqS+vw6Usq7MYZ7czl11khcu2wqBEm+Lcfikv4tgs=;
+	b=g6A4UAyxG5rVoaC7eyoPyfcwedap2u1OoO4C1B1XWk9zUzJ+xwvwlit02AOLHnfZptL851
+	6O+Cmw3MCK0KBtDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711525226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=thcqS+vw6Usq7MYZ7czl11khcu2wqBEm+Lcfikv4tgs=;
+	b=d6Ekj9b6oB4yrYj3hmvCy7RpYniA8W6bBY7viSSwSp33vzrqUqFLbNrNqEUZoQGRmj0D/Y
+	qqh88zp/T2M+7NAIZiuiVSfI0jp5OVb7RR6h/o+o8yR+2iN9nc36P586HPDDaySFeFoh3c
+	mQSH+iosB44feCz9zRfOFMSz4fUiSZs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711525226;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=thcqS+vw6Usq7MYZ7czl11khcu2wqBEm+Lcfikv4tgs=;
+	b=g6A4UAyxG5rVoaC7eyoPyfcwedap2u1OoO4C1B1XWk9zUzJ+xwvwlit02AOLHnfZptL851
+	6O+Cmw3MCK0KBtDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 245101369F;
+	Wed, 27 Mar 2024 07:40:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 6TiVNmjNA2aZfQAAD6G6ig
+	(envelope-from <hare@suse.de>); Wed, 27 Mar 2024 07:40:24 +0000
+Message-ID: <65576638-2d23-4916-8e2a-84f949d360c1@suse.de>
+Date: Wed, 27 Mar 2024 08:40:23 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="mgxbjg53disbplak"
-Content-Disposition: inline
-In-Reply-To: <20240326225650.GA2784736@dev-arch.thelio-3990X>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7/9] scsi: mylex: fix sysfs buffer lengths
+Content-Language: en-US
+To: Arnd Bergmann <arnd@kernel.org>, llvm@lists.linux.dev,
+ Hannes Reinecke <hare@kernel.org>, "James E.J. Bottomley"
+ <jejb@linux.ibm.com>, "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240326223825.4084412-1-arnd@kernel.org>
+ <20240326223825.4084412-8-arnd@kernel.org>
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20240326223825.4084412-8-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=d6Ekj9b6;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=g6A4UAyx
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-5.50 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 XM_UA_NO_VERSION(0.01)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DWL_DNSWL_LOW(-1.00)[suse.de:dkim];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.de:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_TWELVE(0.00)[12];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCVD_TLS_ALL(0.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[]
+X-Spam-Score: -5.50
+X-Rspamd-Queue-Id: B8A8D60010
+X-Spam-Flag: NO
 
+On 3/26/24 23:38, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The myrb and myrs drivers use an odd way of implementing their sysfs files,
+> calling snprintf() with a fixed length of 32 bytes to print into a page
+> sized buffer. One of the strings is actually longer than 32 bytes, which
+> clang can warn about:
+> 
+> drivers/scsi/myrb.c:1906:10: error: 'snprintf' will always be truncated; specified size is 32, but format string expands to at least 34 [-Werror,-Wformat-truncation]
+> drivers/scsi/myrs.c:1089:10: error: 'snprintf' will always be truncated; specified size is 32, but format string expands to at least 34 [-Werror,-Wformat-truncation]
+> 
+> These could all be plain sprintf() without a length as the buffer is
+> always long enough. On the other hand, sysfs files should not be overly
+> long either, so just double the length to make sure the longest strings
+> don't get truncated here.
+> 
+> Fixes: 77266186397c ("scsi: myrs: Add Mylex RAID controller (SCSI interface)")
+> Fixes: 081ff398c56c ("scsi: myrb: Add Mylex RAID controller (block interface)")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   drivers/scsi/myrb.c | 20 ++++++++++----------
+>   drivers/scsi/myrs.c | 24 ++++++++++++------------
+>   2 files changed, 22 insertions(+), 22 deletions(-)
+> 
+Yeah, counting is hard ...
 
---mgxbjg53disbplak
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Hi,
+Cheers,
 
-On Tue, Mar 26, 2024 at 03:56:50PM -0700, Nathan Chancellor wrote:
-> On Tue, Mar 05, 2024 at 11:07:36AM +0200, Jani Nikula wrote:
-> > Add kconfig to enable -Werror subsystem wide. This is useful for
-> > development and CI to keep the subsystem warning free, while avoiding
-> > issues outside of the subsystem that kernel wide CONFIG_WERROR=3Dy might
-> > hit.
-> >=20
-> > v2: Don't depend on COMPILE_TEST
-> >=20
-> > Reviewed-by: Hamza Mahfooz <hamza.mahfooz@amd.com> # v1
-> > Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-> > ---
-> >  drivers/gpu/drm/Kconfig  | 13 +++++++++++++
-> >  drivers/gpu/drm/Makefile |  3 +++
-> >  2 files changed, 16 insertions(+)
-> >=20
-> > diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> > index 6e853acf15da..c08e18108c2a 100644
-> > --- a/drivers/gpu/drm/Kconfig
-> > +++ b/drivers/gpu/drm/Kconfig
-> > @@ -416,3 +416,16 @@ config DRM_LIB_RANDOM
-> >  config DRM_PRIVACY_SCREEN
-> >  	bool
-> >  	default n
-> > +
-> > +config DRM_WERROR
-> > +	bool "Compile the drm subsystem with warnings as errors"
-> > +	depends on EXPERT
-> > +	default n
-> > +	help
-> > +	  A kernel build should not cause any compiler warnings, and this
-> > +	  enables the '-Werror' flag to enforce that rule in the drm subsyste=
-m.
-> > +
-> > +	  The drm subsystem enables more warnings than the kernel default, so
-> > +	  this config option is disabled by default.
-> > +
-> > +	  If in doubt, say N.
->=20
-> While I understand the desire for an easy switch that maintainers and
-> developers can use to ensure that their changes are warning free for the
-> drm subsystem specifically, I think subsystem specific configuration
-> options like this are actively detrimental to developers and continuous
-> integration systems that build test the entire kernel. For example, we
-> turned off CONFIG_WERROR for our Hexagon builds because of warnings that
-> appear with -Wextra that are legitimate but require treewide changes to
-> resolve in a manner sufficient for Linus:
->=20
-> https://github.com/ClangBuiltLinux/linux/issues/1285
-> https://lore.kernel.org/all/CAHk-=3Dwg80je=3DK7madF4e7WrRNp37e3qh6y10Svhd=
-c7O8SZ_-8g@mail.gmail.com/
-> https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.ibm.c=
-om/
->=20
-> But now, due to CONFIG_DRM_WERROR getting enabled by all{mod,yes}config
-> and -Wextra being unconditionally enabled for DRM, those warnings hard
-> break the build despite CONFIG_WERROR=3Dn...
+Hannes
+-- 
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
 
-Would making DRM_WERROR depends on WERROR address your concerns?
-
-Maxime
-
---mgxbjg53disbplak
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCZgPMGgAKCRAnX84Zoj2+
-dm2VAYD0C0iPhwCfV3xv4SSkbtN9nFs9jV4NjQQ6zTlBlc6/yhRfoG3Qx7oPSDSw
-PlDu5QgBf2FY0fdhs/iLrFuZMb+2LXNQ+6O2O7LckkP0xVDonEHOndNRemaf021C
-WrRpUZAUdg==
-=2uXh
------END PGP SIGNATURE-----
-
---mgxbjg53disbplak--
