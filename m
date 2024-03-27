@@ -1,57 +1,57 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3422137915
-	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 21:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7B21E52C
+	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 22:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711576592; cv=none; b=U5aoRnSxFOj30NTqyCS0LcZesn2GJmSwAU7aj+fu7Okjzg6zD991HsBocXkCAex9KNloHJmhiEn2mZRY5uBn8dWEOeUVKEMDwH3/kf6TlxaoE393X63YMtCYUOqNi6MuQijCaM39fkpq5TLyCTY2GI2qC+zCyFFNTHp3SwvNq5M=
+	t=1711576978; cv=none; b=VVR/VODt0mkjF0i7+rkGqsWr5qOe9Knrn4pCpDYCm2TYMzjgY3tlFyoS/FQdZ+E7qybzpW3PABHbUEAFE5As94B5p4y6kIXLeHPvOPjThp3sIoNL7rXwLSE/OxovcYNu6zTtJ+DaMDqL6CkxEPmBqh2E6ALYVlcMtGgmxL8WoLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711576592; c=relaxed/simple;
-	bh=f5xsXA8uoaoP6TMv4Mkq2g98eO/qBSM7LLZjWvgKBes=;
+	s=arc-20240116; t=1711576978; c=relaxed/simple;
+	bh=qCrAxiwO3Y3xJfB5K5VP4H9pbMMbTuTp4N5vA4Mo5GU=;
 	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=R3eAn7iCghyURLHrv4LB8jNEwP0gG0Kq/hSH3fj5dS/u16iZdZ7vjd9Uu5L99mAwDtKvgpgp/lGfwnhYLb479Vb2Vrg8wx6pe93O+NOJHbRnJArokgcG/TQrf5xBsVO995JvMs4oWcT/EpV05w8f8BRrTIjfTws6RU0XCh2FFyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BbBIMweu; arc=none smtp.client-ip=209.85.210.182
+	 Message-Id:References:To; b=Vdo/6rJn0qqPqI+J0oq8ekaU7J/cef4GYkBIQvD585CATBD4d4iQGCnwdB4nUP71CoCMEEon20lK0yhV/oAq0pys2+NFU/sZCt1pD8dZf0lt8sNTgTuRW9ijQ0/yLTIsWkfz/hupAlcQJcLZDYU/xmg0Cv/yC8GBu7f2LltNShE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NlaF6RMv; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BbBIMweu"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e6ca2ac094so362462b3a.0
-        for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 14:56:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NlaF6RMv"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e0bec01232so3068715ad.3
+        for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 15:02:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711576590; x=1712181390; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1711576976; x=1712181776; darn=lists.linux.dev;
         h=to:references:message-id:content-transfer-encoding:cc:date
          :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9nK7oGytjkYckNrpr1HYOqjdMAjgZf6eYRbl5oXGuqE=;
-        b=BbBIMweukvFLVEIjoQq7pMI8AkQaG6cA5KRnGV8rdmIGPBvTKQNqYeGbxj2vp2Qt8O
-         3NG/fFM89wRCfyFobgD9zJek7+I3/gwaCSbi3BVyjn4ztpf1gfv2EaAmcCW16BN52i+F
-         mT+VCBpIDJSLNgNX3Ki1rVZ2Qw53OH2HuCL4Ao8XBfj8HfbQHesUp8VgE/Rnx7r1n1mE
-         3PPtkQEqo9FIG77U81HjUqWHLAwlgP3VsHNUe3MGKwI/RT6lydoNWCXSLnWkKK+TCOUq
-         8ONJ9K/L75lej52szQnAYgk6CI4VeBIis0M6ASIzXNOgfRF5LNg3OLgkapLDzpSYCOqA
-         tsSg==
+        bh=XxkaKw+rfpAE85eGdYCUsNCxHsvss1V9iaOZ0vj/Dtk=;
+        b=NlaF6RMvOpx+6pTzbhvEHcOvUgLVezQ28p+WhcAbBNceCs5EbY21WrFt3ownOcZ3Ui
+         TszKWxmBTwwwH81MdTkA39ZXIjub0LQFW6bQR1VGv2tQj7S+p7kNrmsZdkTW7o+A5FNm
+         dsi+KQmIWktoNJ1H3QGKpo3zxGzAe2sKix4Rlx/Dh1TA6yE6itZUa3oLlXLwsL8mC2D4
+         zPEdMo3qvS75UpDVCmKzpJG7a2LweG7O4o9Dlbc1D+fCSOulcOaOsx62P7Zpq/w6HjCL
+         4D8N4mLs4fgDGg9WSwRGo4Ifs9BsjLkGdJUWVYHjCa507ceVuSci6EJAWYIlznAk+2Jp
+         XuLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711576590; x=1712181390;
+        d=1e100.net; s=20230601; t=1711576976; x=1712181776;
         h=to:references:message-id:content-transfer-encoding:cc:date
          :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9nK7oGytjkYckNrpr1HYOqjdMAjgZf6eYRbl5oXGuqE=;
-        b=k0wOR3iYIrVFhLkTfv8kAllmKIqJGn00rQz7Cd9lE6tuNlD0tcKyBuvjcqTgxfOvHA
-         cpsM937OJP6+j+3bJYcKtFW3thMNE9OgiNCcGthy20ddb5a8vtNnWc2Iz87mD218AQ/x
-         2AAuCI9kzQTPKS3hG3vj+7+5jE6/04li25DDKAgVHnCtZA8XVdKssqMHC1+dtxgAEBfH
-         GPoCjqkhiNVIKBWHE4PN8AjdjUhgk7HS5/Hw+MlvVjqPBY9JPr/9ncQf636Jd/Pmnu0e
-         QVNZnoMw2Xv4Sz3+A4OWZXmB5KK5u4rpJVPnLhsnyiLpkx0GLR5XzTeO+BU+AY2GUCmo
-         Dlqw==
-X-Forwarded-Encrypted: i=1; AJvYcCWtpM77AIs/PNJLy6EOSoO8pqiC5OZC6zhVaMDBg+oBWnNZkQXHqI6KknnA2z/SCjqfEgycPAN3ccNTt070GVVtr173Xg==
-X-Gm-Message-State: AOJu0Yz7f7HZOjR7pZg4ATdFFnij9E/HC/k7/1g6fCMKNLhH2PNF1gYo
-	QBXmZJWSTOt7ZrRsP3Nfl6eb/HApbLTQhslO9baj8itIPETdx8L3
-X-Google-Smtp-Source: AGHT+IGdMR9pJlgf4CvRTiRkOkrpDFtL+V/Uc4Lolo4AeOU6/H/PL2BKoUiaYbvFxC9xrMHCeaCtlQ==
-X-Received: by 2002:a05:6a00:18a9:b0:6ea:ad01:3550 with SMTP id x41-20020a056a0018a900b006eaad013550mr1304630pfh.18.1711576589327;
-        Wed, 27 Mar 2024 14:56:29 -0700 (PDT)
+        bh=XxkaKw+rfpAE85eGdYCUsNCxHsvss1V9iaOZ0vj/Dtk=;
+        b=FP3NTv3Zh7t6livVlw/SBXyoI4iNuzY5CG8+OYadZBS97uFMXHNIvmlQRl3ZKx8KtL
+         ptBNnNP8S3qbSqaJw2kpLKUWDBE7cVBcm8ooX5re1ljs+LYdLfkIMl9RuhS8dAftC/j3
+         stG2Dt55mvST/dFjs6aPVxNBhGHbpIAVwgIdCuyufBJwuEM5pOu8fNIOoJk7b7DcS4lf
+         BfNfV04hR/VdKBsRkjfqmgd4CSa6a55KU1i2GhuYJRBG6tlxTDY6vuIVXktDWQLHES5c
+         YpqZAxeDHtgkV8fxg6xhrMjhWE4Rs/pwvut0Iy9d7RkFp+855UwY4NKkfMSlpKKFMSqy
+         cThw==
+X-Forwarded-Encrypted: i=1; AJvYcCWofYARX+5AkZ6wQXF1pnEQcURAqFxw3k2WYRNmXVATSGNF9ug1v6LVs+BCLLxyZc3x75xTstdIJ+TSaCSCjue+tkdnHw==
+X-Gm-Message-State: AOJu0Yy2kVeSAgk8E5FS9GcmKK9UpDW4hWmRpYGib41HTYCVROFfX5f4
+	yBycaj6gDkiduODlMGbXGaFPupHt9ac+RaL0BBWkWFTKbOKV0Q+9
+X-Google-Smtp-Source: AGHT+IFaDb6HlSC3POSY7TW5AUU1z57wmA9MdM0r0RpaOuimMWYaaCvmMKDgxeih3R65FO4kDbGvfA==
+X-Received: by 2002:a17:902:dad1:b0:1e1:1791:3681 with SMTP id q17-20020a170902dad100b001e117913681mr1131591plx.61.1711576976035;
+        Wed, 27 Mar 2024 15:02:56 -0700 (PDT)
 Received: from smtpclient.apple ([2601:647:4d7e:dba0:5840:a196:2bf3:3600])
-        by smtp.gmail.com with ESMTPSA id bm20-20020a056a00321400b006e740d23674sm21510pfb.140.2024.03.27.14.56.25
+        by smtp.gmail.com with ESMTPSA id n18-20020a170903111200b001db5fc51d71sm9469plh.160.2024.03.27.15.02.51
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Mar 2024 14:56:28 -0700 (PDT)
+        Wed, 27 Mar 2024 15:02:55 -0700 (PDT)
 Content-Type: text/plain;
 	charset=utf-8
 Precedence: bulk
@@ -62,8 +62,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
 Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
 From: comex <comexk@gmail.com>
-In-Reply-To: <ZgSNvzTkR4CY7kQC@boqun-archlinux>
-Date: Wed, 27 Mar 2024 14:56:13 -0700
+In-Reply-To: <5246D3E2-E503-40BA-9A72-1876BCF1186B@gmail.com>
+Date: Wed, 27 Mar 2024 15:02:41 -0700
 Cc: Kent Overstreet <kent.overstreet@linux.dev>,
  Linus Torvalds <torvalds@linux-foundation.org>,
  "Dr. David Alan Gilbert" <dave@treblig.org>,
@@ -108,7 +108,7 @@ Cc: Kent Overstreet <kent.overstreet@linux.dev>,
  linux-arm-kernel@lists.infradead.org,
  linux-fsdevel@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <5246D3E2-E503-40BA-9A72-1876BCF1186B@gmail.com>
+Message-Id: <041BE680-1715-4C9A-BBEE-7547108F04BD@gmail.com>
 References: <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
  <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
  <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
@@ -120,45 +120,34 @@ References: <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
  <CAHk-=wgQy+FRKjO_BvZgZN56w6-+jDO8p-Mt=X=zM70CG=CVBQ@mail.gmail.com>
  <bjorlxatlpzjlh6dfulham3u4mqsfqt7ir5wtayacaoefr2r7x@lmfcqzcobl3f>
  <ZgSNvzTkR4CY7kQC@boqun-archlinux>
+ <5246D3E2-E503-40BA-9A72-1876BCF1186B@gmail.com>
 To: Boqun Feng <boqun.feng@gmail.com>
 X-Mailer: Apple Mail (2.3774.500.171.1.1)
 
 
 
-> On Mar 27, 2024, at 2:21=E2=80=AFPM, Boqun Feng <boqun.feng@gmail.com> =
-wrote:
+> On Mar 27, 2024, at 2:56=E2=80=AFPM, comex <comexk@gmail.com> wrote:
 >=20
-> I don't know whether I'm 100% correct on this, but Rust has =
-references,
-> so things like "you have a unique reference to a part of memory, no =
-one
-> would touch it in the meanwhile" are represented by `&mut`, to get a
-> `&mut` from a raw pointer, you need unsafe, where programmers can
-> provide the reasoning of the safety of the accesses. More like =
-"pointers
-> can alias anyone but references cannot" to me.
+> Right.  When I said =E2=80=9Cstrict aliasing=E2=80=9D I meant =
+type-based aliasing rules, which is what GCC calls =E2=80=9Cstrict =
+aliasing".  But Rust does have stricter aliasing rules than C in a =
+different way.  Both mutable and immutable references are annotated with =
+LLVM `noalias` by default, equivalent to C `restrict`.
 
-Right.  When I said =E2=80=9Cstrict aliasing=E2=80=9D I meant type-based =
-aliasing rules, which is what GCC calls =E2=80=9Cstrict aliasing".  But =
-Rust does have stricter aliasing rules than C in a different way.  Both =
-mutable and immutable references are annotated with LLVM `noalias` by =
-default, equivalent to C `restrict`. For mutable references it=E2=80=99s =
-justified because those references should be unique.  For immutable =
-references it's justified because the memory behind the reference =
-shouldn=E2=80=99t be mutated at all.  (There=E2=80=99s an exception for =
-types with =E2=80=98interior mutability=E2=80=99, where =E2=80=98immutable=
-' references actually can be used for mutation.)
+=E2=80=A6oops, this should say =E2=80=9Creference-typed function =
+parameters=E2=80=9D.
 
-The hope has always been that this gives Rust better overall =
-optimizability than C or C++ and makes up for the losses from the lack =
-of type-based aliasing rules.  If there=E2=80=99s any empirical data to =
-justify or refute this, I=E2=80=99m not aware of it.  But that=E2=80=99s =
-the hope, and by this point Rust is committed to the approach.
-
-(Why only function parameters?  Mainly because of limitations of what =
-LLVM IR can express.  =46rom the perspective of the work-in-progress =
-Rust memory model spec, function parameters are special in *some* ways, =
-but many of the optimizations could apply to all uses of references.  =
-That's just not currently implemented.)
+> On Mar 27, 2024, at 2:49=E2=80=AFPM, Kent Overstreet =
+<kent.overstreet@linux.dev> wrote:
+>=20
+> That's not really a workable rule because in practice every data
+> structure has unsafe Rust underneath. Strict aliasing would mean that
+> unsafe Rust very much has to follow the aliasing rules too.
 
 
+There have indeed been a lot of issues where some innocent-seeming piece =
+of unsafe Rust turns out to violate the reference aliasing rules.  Miri =
+helps (it=E2=80=99s a tool that can detect violations at runtime), and =
+there have been attempts to loosen the rules where possible.  But it is =
+definitely a case where Rust=E2=80=99s UB rules are more subtle than one =
+would like.  At least it only applies to unsafe code.=
