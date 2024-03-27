@@ -1,112 +1,102 @@
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 9F36317554
-	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 01:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B118520323;
+	Wed, 27 Mar 2024 02:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711502129; cv=none; b=skPVucqedgAyNReB0Osx6KqTusPV63tdOG9WPjQ/Wx7SRFHenFswPQs+Tl38ZE5rW+R4GPDl6JBSlXKgmxildLIwPbo0T2e+7frIkot2wZVaez0u7QtoL8H6zN3VfMpeLTCoABvPVl7NobvWN6x/SrTdTnt+R0ESmwnO3YE45X4=
+	t=1711505114; cv=none; b=R0u45c0Mxc9opbX7LC/d86WcgdeTO5wb2BTXem1D4Mhjmdb2S7qMqmBDPuQwWnVDngyl61hQLyPe8lUah6L1KpGOC3HtAWabJx1HtxLMn68+gjR/Ce7Yrc+BnwNZ4AudH3OPBHycjNsOkTs4lgcxDHSrJQda+0D0LVWyRy7X/wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711502129; c=relaxed/simple;
-	bh=vlAURbsX5wpvGXqFwL0Rpdj7KYf37DTQ2Jtnu3oSU2o=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
-	 Content-Type; b=qzeraIgIb0n4b9XKNIv4l3LA7pFzCn8Ui/P2G9e7LRIpODHPG7aMJt74+XP62HRNrWk9Xy+IUFhoj3ZAETYbbnWjKRje3oa+DLD4uIrV+GN99t8thQT5ehA0J1d4gHOdnPi5tnZc0vM6ec0Cw1hQc8dbBi4mSKnJ7FXtUrCFysU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 3E1AC6019C949;
-	Wed, 27 Mar 2024 09:15:19 +0800 (CST)
-Message-ID: <a9bc4138-df79-112a-6470-90c86ba5bc95@nfschina.com>
-Date: Wed, 27 Mar 2024 09:15:18 +0800
+	s=arc-20240116; t=1711505114; c=relaxed/simple;
+	bh=zJ2pdkDq99TejjCYP2yDGfYTfThv2UjMMpR7iK6l/Pw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VBk4GGlvuGjPyuk/ys3o2rrFzL54TmVrwyYOcz1lWvbQPTao6V5Oz+ZsPTIy8VhzoZCS/aecvCq76SSafNkvZsinFyH16HrZ7s/azn9q6ukFW9NYeGj1dA49v58Hfmkdadv6uIIRgCibbjD1sRyYZIeG2hcf0+hpWyzlgwIA/rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I1v5vlVo; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1v5vlVo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711505113; x=1743041113;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zJ2pdkDq99TejjCYP2yDGfYTfThv2UjMMpR7iK6l/Pw=;
+  b=I1v5vlVoiZQ2irq2d2ANtpIr7zd6Zso1SoMIaIbJUrafcVGQ7CJZQD/0
+   iwehYxPgxezWCfxlLQfcpw1iagnym4iGJdJMz+ImChN4Hc9dujJ0ab6SY
+   rHT/j1S1GD3lyjjiV8lKe1AA2jxyw3KxI2g4LL4MrKd5oLCoLyD7XoZ1O
+   1gFCOLRFn5m8azefv6o3RYDJV5UD+hbIRAz/9+AfGhv081m7w7cpSm2Hv
+   Zn8lpe55QAUztsDOS2Iij3k27vc4+1oN+jaUpZ2i8DkpbkgVz3ppF04dx
+   H74ZoylEmsPL8TKaa3TMJrQdEyGItfqxKBFEkMcbycT06IpNu/wfLEVQn
+   A==;
+X-CSE-ConnectionGUID: BI8e8Bb6QwWN4YsKxg+tmw==
+X-CSE-MsgGUID: 9sHRZL9CTpWV0X+LkG772A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="18017508"
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="18017508"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 19:05:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="39245073"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 26 Mar 2024 19:05:09 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpIf5-0000dq-2W;
+	Wed, 27 Mar 2024 02:05:07 +0000
+Date: Wed, 27 Mar 2024 10:05:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-renesas-soc@vger.kernel.org
+Subject: [geert-renesas-drivers:master 23/30]
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3548:3: error: use of undeclared
+ identifier 'sas_ata_sdev_attr_group'
+Message-ID: <202403271050.wRQduzP2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] ASoC: sti: uniperif: fix the undefined bitwise shift
- behavior problem
-Content-Language: en-US
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: arnaud.pouliquen@foss.st.com, lgirdwood@gmail.com, broonie@kernel.org,
- perex@perex.cz, tiwai@suse.com, nathan@kernel.org, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, alsa-devel@alsa-project.org,
- linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-In-Reply-To: <e70c65b0-2e0d-613f-4f05-bda61377fc01@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is a kindly resend email.
-Sorry for the error style of last email :(
-On 2024/3/26 13:30, Su Hui wrote:
-> Hi,
-> On 2024/3/25 22:25, Dan Carpenter wrote:
->> On Mon, Mar 25, 2024 at 11:40:33AM +0800, Su Hui wrote:
->>> --- a/sound/soc/sti/uniperif.h
->>> +++ b/sound/soc/sti/uniperif.h
->>> @@ -12,17 +12,28 @@
->>>   
->>>   #include <sound/dmaengine_pcm.h>
->>>   
->>> +#define SR_SHIFT(a, b)		({unsigned long __a = (a); \
->>> +				unsigned int __b = (b); \
->>> +				__b < BITS_PER_LONG ? \
->>> +				__a >> __b : 0; })
->> The code definitely looks buggy, but how do you know your solution is
->> correct without testing it?
-> I only test some cases like SR_SHIFT(1, -1),SR_SHIFT(8,1), it seems have a right result.
-> Oh, maybe I understand it. When 'a' is a negative value like '(int)-1', SR_SHIFT(a, b) will
-> have some bugs.
->> I don't like this solution at all.  This is basically a really
->> complicated way of writing "if (b != -1)".  Instead of checking for -1,
->> the better solution is to just stop passing -1.  If you review that
->> file, every time it uses "-1" that's either dead code or a bug...
-> Agreed，some are dead codes which can be removed, but what should we do with the
-> following error codes like this one?
-> sound/soc/sti/uniperif.h
->   415 #define UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip) \
->   416         ((ip)->ver < SND_ST_UNIPERIF_VERSION_UNI_PLR_TOP_1_0 ? 7 : -1)
->   ...
->   423 #define SET_UNIPERIF_CONFIG_BACK_STALL_REQ_DISABLE(ip) \
->   424         SET_UNIPERIF_REG(ip, \
->   425                 UNIPERIF_CONFIG_OFFSET(ip), \
->   426                 UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip), \
->                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> How about this solution? If the condition is false, just skip it.
->
-> @@ -412,8 +412,7 @@
->                  UNIPERIF_CONFIG_REPEAT_CHL_STS_MASK(ip), 1)
->   
->   /* BACK_STALL_REQ */
-> -#define UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip) \
-> -       ((ip)->ver < SND_ST_UNIPERIF_VERSION_UNI_PLR_TOP_1_0 ? 7 : -1)
-> +#define UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip) 7
->   #define UNIPERIF_CONFIG_BACK_STALL_REQ_MASK(ip) 0x1
->   #define GET_UNIPERIF_CONFIG_BACK_STALL_REQ(ip) \
->          GET_UNIPERIF_REG(ip, \
-> @@ -421,10 +420,11 @@
->                  UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip), \
->                  UNIPERIF_CONFIG_BACK_STALL_REQ_MASK(ip))
->   #define SET_UNIPERIF_CONFIG_BACK_STALL_REQ_DISABLE(ip) \
-> +       ((ip)->ver < SND_ST_UNIPERIF_VERSION_UNI_PLR_TOP_1_0 ? -1 : \
->          SET_UNIPERIF_REG(ip, \
->                  UNIPERIF_CONFIG_OFFSET(ip), \
->                  UNIPERIF_CONFIG_BACK_STALL_REQ_SHIFT(ip), \
-> -               UNIPERIF_CONFIG_BACK_STALL_REQ_MASK(ip), 0)
-> +               UNIPERIF_CONFIG_BACK_STALL_REQ_MASK(ip), 0))
->   #define SET_UNIPERIF_CONFIG_BACK_STALL_REQ_ENABLE(ip) \
->
-> Maybe should print some error log here.
-> I'm not sure about the safety of skipping SET_UNIPERIF_REG when the condition is false,
->
-> Would it be better to make the result of undefined shift equal to zero?
->
-> regards,
-> Su Hui
->   
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git master
+head:   5e36d764b5dfcddd54895d9b6dc392eaaba17d6a
+commit: 61d4f86ef0002b12ed52d2dc7a08c23b53798766 [23/30] Revert "scsi: libsas: Define NCQ Priority sysfs attributes for SATA devices"
+config: i386-buildonly-randconfig-003-20240327 (https://download.01.org/0day-ci/archive/20240327/202403271050.wRQduzP2-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240327/202403271050.wRQduzP2-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403271050.wRQduzP2-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3548:3: error: use of undeclared identifier 'sas_ata_sdev_attr_group'
+    3548 |         &sas_ata_sdev_attr_group,
+         |          ^
+   1 error generated.
+
+
+vim +/sas_ata_sdev_attr_group +3548 drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+
+62ac8ccbb819e3 Bart Van Assche 2021-10-12  3546  
+a23971e8ff0c43 Igor Pylypiv    2024-03-07  3547  static const struct attribute_group *sdev_groups_v2_hw[] = {
+a23971e8ff0c43 Igor Pylypiv    2024-03-07 @3548  	&sas_ata_sdev_attr_group,
+a23971e8ff0c43 Igor Pylypiv    2024-03-07  3549  	NULL
+a23971e8ff0c43 Igor Pylypiv    2024-03-07  3550  };
+a23971e8ff0c43 Igor Pylypiv    2024-03-07  3551  
+
+:::::: The code at line 3548 was first introduced by commit
+:::::: a23971e8ff0c43d47e1772b62c2916ff0b768fca scsi: hisi_sas: Add libsas SATA sysfs attributes group
+
+:::::: TO: Igor Pylypiv <ipylypiv@google.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
