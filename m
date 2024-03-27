@@ -1,96 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F78512EBCB;
-	Wed, 27 Mar 2024 17:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629891514E2
+	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 18:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711560051; cv=none; b=JMnerh7PW5kZ5bQbIO7yFyZmwAqyTr41VnGRoHdZu2Q1/90iiY0bI6ahqTnNmuc9S+BqBS3IgY0OHOPbmQU7YrW9uDSXXXAoCv6zhk8MQjBkW70OlQfJwx4k/kT2tYDPs70l+EgVZSIOqjuMmgqBTVLmixe2oj2jUeSk3Bi6w0Y=
+	t=1711565461; cv=none; b=as0z3MSe861GP3yM2FYg80bV+RiPSRljizN/nP/yQZDk6ubJFoJE2facZAioAizP/Vjxh/GjwRErDeDbGvzWG5sBqbmajgP/8HiERQTgRBExe6l/fJzlgKVJFa/JkmKHm78kwCI1/r59QRzT1bQdLKoJvhg76/faXmyD5Vq3NAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711560051; c=relaxed/simple;
-	bh=a6Udgf42vnEB6zwutozKuZVR31bDOnmw+Hx2Bu4TQks=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VYP1aNKd3oT4WDM22M2hFp7UpKsgKTpz2FyxP6WvpyFHvTTI9TIC4LY2PJm71dOYytPK/EewwnpMAFXou1AdUQjapROXmQQRGQsedWFkt1Zxe6KwLlmmE7Z2CBXoy2qFKPZc0k9UExy8ZRzPm1W050SsZk2Et3vJfMX4YF6sjt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q576/TIX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711565461; c=relaxed/simple;
+	bh=y09bZO3s4B3d+j/TM9H4q7XelPEtm2A9MOJKZskWiUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z6FoLJcFRH3YmWa2NjEBxDwGY+cYSfbrpqjA7CiboWoX5nr0XTu2vRUVPton+2wMmPJzDkGo4cIx/BekA1HCZYf3tWNOwkvoN1/77DsbunDlZ91Ch9qCzJ0wJeMkbbwu3EPIimTDShCaT8RCZ9mhOM1M/tiCa7ISFpRPZ24ejOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=J+QxylvG; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q576/TIX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F14C433F1;
-	Wed, 27 Mar 2024 17:20:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711560050;
-	bh=a6Udgf42vnEB6zwutozKuZVR31bDOnmw+Hx2Bu4TQks=;
-	h=From:Date:Subject:To:Cc:From;
-	b=q576/TIXTO3JUdh4xlDOcDue+1lD9EMifI3kCEYsWFSkhRSOkqYKV2bNFZfkLtHee
-	 5vx6E9Oze9g9FRwSGJUt7DcKcYtCIKDBCcEjgAgQmkQDir3p/o6pHrssR+YaT84FXf
-	 BbQAEGLTRfiI+DPQHGIzcVruyiGGb5mCbAhl9wh73B+tADD1kKjHozpsfBaxP3GYKU
-	 021UiDq/d7jQJd3SVZskaszm9zoF7fGDUfI8SUeOG9YAsk337MtwqZFH3Sahxw7OoC
-	 DHbKZiKEgP5wMSrbhbp7lJJUcGq7cpLZZMYV6PCPN5+gbqfOp8CNt+AZ47dMOUUUyV
-	 t44Qde8rMBAnA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 27 Mar 2024 10:20:36 -0700
-Subject: [PATCH] Documentation/llvm: Note s390 LLVM=1 support with LLVM
- 18.1.0 and newer
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="J+QxylvG"
+Date: Wed, 27 Mar 2024 14:50:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711565457;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y09bZO3s4B3d+j/TM9H4q7XelPEtm2A9MOJKZskWiUA=;
+	b=J+QxylvGe+QUAC4rKslSPaaxSYEQP3cf7gNLve1SEYbPfgmA7CwRURnaHGjh5p5JfcK31p
+	1vK9oRQxya417owqBEe+YnvUkm5JhxHTKK4jogYGU2YzTpjIXacfdr0pOFPKHUuXran9tX
+	iSGtM4qV++0E5TJXAzvqfoG+yBb5TyU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: comex <comexk@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	"Dr. David Alan Gilbert" <dave@treblig.org>, Philipp Stanner <pstanner@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux <rust-for-linux@vger.kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
+	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
+	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Marco Elver <elver@google.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <qyjrex54hbhvhw4gmn7b6l2hr45o56bwt6fazfalykwcp5zzkx@vwt7k3d6kdwt>
+References: <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+ <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+ <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+ <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
+ <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+ <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
+ <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
+ <ZgIRXL5YM2AwBD0Y@gallifrey>
+ <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
+ <160DB953-1588-418E-A490-381009CD8DE0@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240327-llvm-docs-s390-llvm-1-v1-1-56ad95d2bc27@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGNVBGYC/yXMTQqAIBBA4avErBtQC6WuEi0kpxroDwciEO+e1
- PJbvJdAKDIJ9FWCSDcLn0eBriuYVn8shByKwSjTqsY43LZ7x3BOgtJ06qdGqztvjQ6+tQ5Ke0W
- a+fm+w5jzCz/L8gJnAAAA
-To: masahiroy@kernel.org
-Cc: ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
- nicolas@fjasle.eu, corbet@lwn.net, llvm@lists.linux.dev, 
- linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1412; i=nathan@kernel.org;
- h=from:subject:message-id; bh=a6Udgf42vnEB6zwutozKuZVR31bDOnmw+Hx2Bu4TQks=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGksoUV/57nNtpi9ebP9u+8Le3UvioiKNbxTYYu+4D39t
- b7AfXm2jlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRXQsY/udN3+KzfSNDt1lr
- tarvGwWJ41PZmoJ6Qs/7T3zruXGfyzqG//X/hLfsmBL0ZaX8cYtNR+f4FdZ6enTryyxfqu57qO1
- wPzsA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <160DB953-1588-418E-A490-381009CD8DE0@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-As of the first s390 pull request during the 6.9 merge window,
-commit 691632f0e869 ("Merge tag 's390-6.9-1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux"), s390 can be
-built with LLVM=1 when using LLVM 18.1.0, which is the first version
-that has SystemZ support implemented in ld.lld and llvm-objcopy.
+On Wed, Mar 27, 2024 at 09:16:09AM -0700, comex wrote:
+> Meanwhile, Rust intentionally lacks strict aliasing.
 
-Update the supported architectures table in the Kbuild LLVM
-documentation to note this explicitly to make it more discoverable by
-users and other developers. Additionally, this brings s390 in line with
-the rest of the architectures in the table, which all support LLVM=1.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- Documentation/kbuild/llvm.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-index b1d97fafddcf..bb5c44f8bd1c 100644
---- a/Documentation/kbuild/llvm.rst
-+++ b/Documentation/kbuild/llvm.rst
-@@ -178,7 +178,7 @@ yet. Bug reports are always welcome at the issue tracker below!
-      - ``LLVM=1``
-    * - s390
-      - Maintained
--     - ``CC=clang``
-+     - ``LLVM=1`` (LLVM >= 18.1.0), ``CC=clang`` (LLVM < 18.1.0)
-    * - um (User Mode)
-      - Maintained
-      - ``LLVM=1``
-
----
-base-commit: 4cece764965020c22cff7665b18a012006359095
-change-id: 20240327-llvm-docs-s390-llvm-1-619a621da467
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+I wasn't aware of this. Given that unrestricted pointers are a real
+impediment to compiler optimization, I thought that with Rust we were
+finally starting to nail down a concrete enough memory model to tackle
+this safely. But I guess not?
