@@ -1,127 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E632A13BC25;
-	Wed, 27 Mar 2024 15:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A9812A157
+	for <llvm@lists.linux.dev>; Wed, 27 Mar 2024 15:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711552576; cv=none; b=lU6Ly4AfGGz8YQbEHvkvwzZi4jc5ZDVV/rftP9Fbjq4DjV2h8bWQmEpGM+otDY4uv1Gynt3ie8N1HekB+4MofZIOpyC1ncsgPtN/1Y+DoBfcneON8RnNSa7Qy2HDm6HHsH5kaY8rOoOVeRPkbcSFSJBryyFJG3D19eIFWFjhw4k=
+	t=1711553695; cv=none; b=feE3EWea2sSctiX4ahyCgn5GoKXKjoREEPUJ6iJTCrZU/4SjarwHbUjLet9CMa6DDdixnB7HDTAp9nsOIEbQUMcsSvEgJdnOpTyOXymrk6CtMjZ8scMVSKk6wjBe3pDJLelCSKq5Z83rgVFB/2xHAI2tyvnZRI3EespGLRttrVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711552576; c=relaxed/simple;
-	bh=3mjqSFARTqJWeXDaQOm2tUVu0IHBSuFehHS5Hx4/O2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BrUtkw5g/i1HTzLEqUKP1aJZSAXlsje9N4JGEa96dHiVe1DI4JE3+pr9CK/26Qoclrr0W27MMMUHWwXZlDksnWHFmYf9cva6iKfWpD33AmRwLwiTgFuyKgCj3pFinLejdc2Kjxc3AUEYUhpSALUAFbfKwSba36su5WQjQwh5iSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xjdniq+W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711553695; c=relaxed/simple;
+	bh=lUHWRBpXKfmP0a3SvWBrN/BSuWtzBTXtGgk7O5R0Pz8=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=IKckvJZvS1Hxc4/6vB9kkUUFitoPtKgTv+dehR3/KOMcKiGjFeoTWQfMl8Cz8hxSdKz4cXdac8taqa2+p2hCE+f9OOI8VDjpqHJMN9Rqpr7WfVRb4APShi/COUw3bqfRAiUtCtDj+dGgkScBsHyaV83OxShOxC64iKKu2LAGQQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JnmygjQ3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=L5St7XrR; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xjdniq+W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE84C433C7;
-	Wed, 27 Mar 2024 15:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711552575;
-	bh=3mjqSFARTqJWeXDaQOm2tUVu0IHBSuFehHS5Hx4/O2g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xjdniq+WJyCdYl8RowcIqwQ+T6OKOC/ulCvVN9gyybhgXcn86gpxQbusTXDQ3EY2U
-	 l0sJhJymwqZsW+4//00COrtoR+EQjGupyH9/kRDW3LY7ec+/vvm6oWrP3oYHh2EbRu
-	 8ovFliBkwALW0cngJy36sVFunwwca1mC+J7VLbtJhZM7CBHzBYinh2Fd4/W9trBrc3
-	 1EOJlqIqKEyrWRpt0yogqJlSghIRJ4E8Tptj0GFagIY6OIR4AGTkzQ6kNs+Mo+voGh
-	 3jb9txE1vb4iHsWrcRZT44FWAqVPD3+QW+QVADCgWLWJOuPWpNpf5eBwTz0gGWOrbO
-	 R3dmQRj6Ct5eA==
-Date: Wed, 27 Mar 2024 08:16:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: FAILED: Patch "powerpc: xor_vmx: Add '-mhard-float' to CFLAGS"
- failed to apply to 5.10-stable tree
-Message-ID: <20240327151613.GA1153323@dev-arch.thelio-3990X>
-References: <20240327122007.2835763-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JnmygjQ3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="L5St7XrR"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 4EE5A1380090;
+	Wed, 27 Mar 2024 11:34:52 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 27 Mar 2024 11:34:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1711553692; x=1711640092; bh=gJ7Xh4n4V5
+	9XATJeqHFzpnTJe2/5ypdcmW4oC7ig2Jw=; b=JnmygjQ3q8nH17VFO7y4ypXObv
+	H5QudRFgGDXD3iPOWTOhnrfraaE2jEe2ZuERyQqkAvzguzWvrw9Xbrl0BgYPsuM1
+	GQ91t4Eis0L2+PN6k9VKMgJbLNAEAnTipnubkg4/slYpNAUjCl+7dl3rILjuauvY
+	aYFmTGt9RAfZ5TxlObNwaJ+oNo8mE5Z20aV/t6095L8EmaBbAODemR5brQFz0I/m
+	fuM0RyeEluV2vMB/1pEl0KkawNa/6R5bW15G4adjuaejW5wrxm8e4nDLNXKnA27p
+	mnrmYFcBXYCaLlIpAzZ6XvBjrkwnGXvILz+PNvwuHH/zrAULDefFEz5MxgAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1711553692; x=1711640092; bh=gJ7Xh4n4V59XATJeqHFzpnTJe2/5
+	ypdcmW4oC7ig2Jw=; b=L5St7XrR3/MAPQEbqvRF4QviegIL+Af8tRM+ibhX+Aae
+	E8zvBhoh6gXO0RvQC22z/HNJk0FQWX9oin4ojBOoC43Iif/1ukDnl7LtyhzQe/O7
+	WVmcp2VK6YD4xl8NARuAKzSaeCa01c5F4RffS1sQeaHJ9lGp/CPWI6d4lgHwzBmd
+	i6tYyXQtIEvPGQzUOhKL5jfH44+kvvAA2DsBR2jzM1LiIrFRBvuUERZuU+fmuqta
+	0T/1W/EkmLWLaeSkC0IG3JOGUbQIijCPQRq3t1CPyFBv+2H6eO79zC97SXw1SDbH
+	2q9WhEDNMb0UjKsxgbNa+Wb/wiOnjmuOw+ITwsaFkg==
+X-ME-Sender: <xms:mzwEZu78CN3xb6AsalWwSx4P7qfguZ-yv_lPNT-uYwb7STNBkAP1Uw>
+    <xme:mzwEZtKOeM70KUmof9Q-MtZ1_K8bRjZu_8gkqVVkOaDajHM8x87vxc2pZrw7qr1j7
+    KMh3oJk2VhR0tMLne0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduiedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:mzwEZvIa0ddXl7H1YeHdrSnPfbrS8lvG4dT2BrK5nfhSj4O6_NpDqQ>
+    <xmx:mzwEZjXbnqlH0QatGBlS6dFGkxorexklKNvm0yv3OwPZ5AOc7vVdrw>
+    <xmx:mzwEZpg8SyT9WSa8Ms_UCnN7MkzF4THhZf2o4VbSH6enMQBuAemUFQ>
+    <xmx:mzwEZm_aX6I356Aj0Po9_lJmRoa91EnBg2JiPYlouwvd42KNhHzBQw>
+    <xmx:nDwEZl4kWE5_OcwQPWec-d7QUMWV-jF7kzVebwQYJFkfSPeQ_ERQCg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7F4F4B60098; Wed, 27 Mar 2024 11:34:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="YKLJLOt2Iod++WF+"
-Content-Disposition: inline
-In-Reply-To: <20240327122007.2835763-1-sashal@kernel.org>
+Message-Id: <6242198a-8559-4465-918a-36442ea03e32@app.fastmail.com>
+In-Reply-To: 
+ <CO1PR18MB4666DF3B7684D340C3A3646DA1342@CO1PR18MB4666.namprd18.prod.outlook.com>
+References: <20240326223825.4084412-1-arnd@kernel.org>
+ <20240326223825.4084412-4-arnd@kernel.org>
+ <CO1PR18MB4666DF3B7684D340C3A3646DA1342@CO1PR18MB4666.namprd18.prod.outlook.com>
+Date: Wed, 27 Mar 2024 16:34:31 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Subbaraya Sundeep Bhatta" <sbhatta@marvell.com>,
+ "Arnd Bergmann" <arnd@kernel.org>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+ "Ariel Elior" <aelior@marvell.com>, "Manish Chopra" <manishc@marvell.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Simon Horman" <horms@kernel.org>,
+ "Konstantin Khorenko" <khorenko@virtuozzo.com>,
+ "Sudarsana Reddy Kalluru" <sudarsana.kalluru@cavium.com>,
+ Netdev <netdev@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXTERNAL] [PATCH 3/9] qed: avoid truncating work queue length
+Content-Type: text/plain
 
+On Wed, Mar 27, 2024, at 15:04, Subbaraya Sundeep Bhatta wrote:
 
---YKLJLOt2Iod++WF+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>>-		snprintf(name, NAME_SIZE, "slowpath-%02x:%02x.%02x",
+>>-			 cdev->pdev->bus->number,
+>>-			 PCI_SLOT(cdev->pdev->devfn), hwfn->abs_pf_id);
+>>+		hwfn->slowpath_wq = alloc_workqueue("slowpath-
+>>%02x:%02x.%02x",
+>>+					 0, 0, cdev->pdev->bus->number,
+>>+					 PCI_SLOT(cdev->pdev->devfn),
+>>+					 hwfn->abs_pf_id);
+>
+> Confused. This should be alloc_workqueue("slowpath-%02x:%02x.%02x",  
+> cdev->pdev->bus->number, PCI_SLOT(cdev->pdev->devfn), hwfn->abs_pf_id, 
+> 0, 0);
+> Right?
 
-On Wed, Mar 27, 2024 at 08:20:07AM -0400, Sasha Levin wrote:
-> The patch below does not apply to the 5.10-stable tree.
-> If someone wants it applied there, or to any other stable or longterm
-> tree, then please email the backport, including the original git commit
-> id to <stable@vger.kernel.org>.
-...
-> ------------------ original commit in Linus's tree ------------------
-> 
-> From 35f20786c481d5ced9283ff42de5c69b65e5ed13 Mon Sep 17 00:00:00 2001
-> From: Nathan Chancellor <nathan@kernel.org>
-> Date: Sat, 27 Jan 2024 11:07:43 -0700
-> Subject: [PATCH] powerpc: xor_vmx: Add '-mhard-float' to CFLAGS
+I still think my version is the right one here, see the
+prototype:
 
-I have attached a backport that will work for 5.15 and earlier. I think
-you worked around this conflict in 5.15 by taking 04e85bbf71c9 but I am
-not sure that is a smart idea. I think it might just be better to drop
-that dependency and apply this version in 5.15.
+__printf(1, 4) struct workqueue_struct *
+alloc_workqueue(const char *fmt, unsigned int flags, int max_active, ...);
 
-Cheers,
-Nathan
+so the first argument in the format, while the printf arguments
+start after the flags and max_active arguments that are still both
+set to zero.
 
---YKLJLOt2Iod++WF+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-powerpc-xor_vmx-Add-mhard-float-to-CFLAGS.patch"
-
-From c6cb80d94871cbb4ff151f7eb2586cadeb364ef7 Mon Sep 17 00:00:00 2001
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Sat, 27 Jan 2024 11:07:43 -0700
-Subject: [PATCH 4.19 to 5.15] powerpc: xor_vmx: Add '-mhard-float' to CFLAGS
-
-commit 35f20786c481d5ced9283ff42de5c69b65e5ed13 upstream.
-
-arch/powerpc/lib/xor_vmx.o is built with '-msoft-float' (from the main
-powerpc Makefile) and '-maltivec' (from its CFLAGS), which causes an
-error when building with clang after a recent change in main:
-
-  error: option '-msoft-float' cannot be specified with '-maltivec'
-  make[6]: *** [scripts/Makefile.build:243: arch/powerpc/lib/xor_vmx.o] Error 1
-
-Explicitly add '-mhard-float' before '-maltivec' in xor_vmx.o's CFLAGS
-to override the previous inclusion of '-msoft-float' (as the last option
-wins), which matches how other areas of the kernel use '-maltivec', such
-as AMDGPU.
-
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1986
-Link: https://github.com/llvm/llvm-project/commit/4792f912b232141ecba4cbae538873be3c28556c
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://msgid.link/20240127-ppc-xor_vmx-drop-msoft-float-v1-1-f24140e81376@kernel.org
-[nathan: Fixed conflicts due to lack of 04e85bbf71c9 in older trees]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/powerpc/lib/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
-index 321cab5c3ea0..bd5012aa94e3 100644
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -67,6 +67,6 @@ obj-$(CONFIG_PPC_LIB_RHEAP) += rheap.o
- obj-$(CONFIG_FTR_FIXUP_SELFTEST) += feature-fixups-test.o
- 
- obj-$(CONFIG_ALTIVEC)	+= xor_vmx.o xor_vmx_glue.o
--CFLAGS_xor_vmx.o += -maltivec $(call cc-option,-mabi=altivec)
-+CFLAGS_xor_vmx.o += -mhard-float -maltivec $(call cc-option,-mabi=altivec)
- 
- obj-$(CONFIG_PPC64) += $(obj64-y)
--- 
-2.44.0
-
-
---YKLJLOt2Iod++WF+--
+      Arnd
