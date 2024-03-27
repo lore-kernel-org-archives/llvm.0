@@ -1,41 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82451411E1;
-	Wed, 27 Mar 2024 12:26:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1981A437A;
+	Wed, 27 Mar 2024 12:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711542402; cv=none; b=XBC8kNyPRlwwkLTjfX3WakFETr5PxaLYcKNUTsbzpSP6BEN3TMMIthGW+FrJMf0jUOrITn0TUzHAnZ4N1Ch/VPnE9ICV7hFBg/dSEyoi8GTAr8e1FyIO+pf6hZSNOjH054/cyWImLR0x0YVy/yXRIi3NkaiucFBkeAmjoum1G0E=
+	t=1711542467; cv=none; b=kcoikKUgQG26O69mXKjhpxMNEuSxfjZ5SU5sBrd/eDkiGbV8LLkHIa59P7ViKwARhwHWk+i0nY8onW1ifdWrBfajqLhAiOAMblHGX5YcKn+oogGN9/55yG7rBW9Nz+rcy0sVPpwybKuSXHilPq6DMD+FeWp1j010nbvhzjNJScI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711542402; c=relaxed/simple;
-	bh=pEtsKa8gK5hqjqregu5jZida+iQIstpz2eDtMNBXCSw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hwHoJt/Vz+5id6NhVnqUQzUOchodFtp4ghaiMqdFUla8gH6BBa0H0uTdH9d0DSDFpAJYTMN5yurGlKzJGLX5dz76c2GPv22RYJVNVKsCl8eZW5gNS24xQ4l1fqukCQFmgwo6LzPiclbaJTtl1pfK/wfwLx7kL7VOUafH/fuhNMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkvKGWKc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711542467; c=relaxed/simple;
+	bh=11wqF5Qf94rl14vnsEmmzG689BeSZ1U3gUQoMWuYmCY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Io1xmiD9hMI2+WEHuBUba5cVGPrz2NHlF7IvRqGJxR/i2c5+/8FQ/D/MNCSwwJBVjjw+FT61JD2mwnjhs90Sme+UQR5abWKazOujDlMTVz+Kfix4fFBBPVvYfGxnqpqOCudNFKIudY7ODWjp+qwKMEuKx3wNTWH4kZOvzedOWMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMJ9LMZu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkvKGWKc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D62C433F1;
-	Wed, 27 Mar 2024 12:26:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMJ9LMZu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF85C433C7;
+	Wed, 27 Mar 2024 12:27:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711542402;
-	bh=pEtsKa8gK5hqjqregu5jZida+iQIstpz2eDtMNBXCSw=;
+	s=k20201202; t=1711542466;
+	bh=11wqF5Qf94rl14vnsEmmzG689BeSZ1U3gUQoMWuYmCY=;
 	h=From:To:Cc:Subject:Date:From;
-	b=SkvKGWKc9uAlAStUs6S8oFSdYAWBiofDWfVMJECdZA4NTF14YlWpJrCVp/WQ9prc+
-	 duY35QVS5zFN4+gyuNxjfZqdricSn5tfKJ2gkVutDCFbvU/zpj4WAOWEH7CkTbtRhP
-	 iKTCvbaGuFUOy1Ad2Sq6fwukZEivf+WtEXKgXaZyKBAvwr1YdDazAzbH3VcOvI3AhU
-	 bpRk6M4b7TMSo0HZYZVmQtSf9+Qev8pwcCDxUlR45i2Zwi0gielAeWYFRdK/nE3Pcv
-	 N7BFmeQYPPthWNFmkWBcH87nXiuPfurByrBxxLMBhKumjYfZ7/+vtLi5F9AjthD1zv
-	 ubIae3TVrDZKw==
+	b=YMJ9LMZu3hPMkOdqCKtnaxAf0KbF1/rmTpXh4qURLQ6+pnrVIKS/8v+hCwCww9J2I
+	 SHJVJTNYQy8Cbvz+eOUUeGPuS9VplYa0OHWeBZY5qgSykaR6XHLLWuFQmio+5F9Bb9
+	 b5SaJAOs91UqhMdYPiybafv/IQ4bCW0+k7MgKg9HhK0e5LBRLk5x/tyJjErTkV6KyA
+	 Wu+i13kC8i6Al3o66eO1zoTHseFe4yVVbnudc4JVJkMrAd6zGDDexNGB/S5HLKrIvU
+	 ZCiW89hzEvUzGYaNpdZnKm7Nq2WeoXgf6Zt1tCISTrm1dNFR0j5uGsdeDqE2ML+bpv
+	 rKKuE/c4bUGag==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	nathan@kernel.org
-Cc: Alex Deucher <alexander.deucher@amd.com>,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+	linuxppc-dev@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: FAILED: Patch "drm/amd/display: Increase frame-larger-than for all display_mode_vba files" failed to apply to 4.19-stable tree
-Date: Wed, 27 Mar 2024 08:26:40 -0400
-Message-ID: <20240327122640.2841265-1-sashal@kernel.org>
+Subject: FAILED: Patch "powerpc: xor_vmx: Add '-mhard-float' to CFLAGS" failed to apply to 4.19-stable tree
+Date: Wed, 27 Mar 2024 08:27:44 -0400
+Message-ID: <20240327122744.2842179-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,68 +56,46 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 321036db915bc647d04750337eb002022c912857 Mon Sep 17 00:00:00 2001
+From 35f20786c481d5ced9283ff42de5c69b65e5ed13 Mon Sep 17 00:00:00 2001
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 5 Feb 2024 14:54:05 -0700
-Subject: [PATCH] drm/amd/display: Increase frame-larger-than for all
- display_mode_vba files
+Date: Sat, 27 Jan 2024 11:07:43 -0700
+Subject: [PATCH] powerpc: xor_vmx: Add '-mhard-float' to CFLAGS
 
-After a recent change in LLVM, allmodconfig (which has CONFIG_KCSAN=y
-and CONFIG_WERROR=y enabled) has a few new instances of
--Wframe-larger-than for the mode support and system configuration
-functions:
+arch/powerpc/lib/xor_vmx.o is built with '-msoft-float' (from the main
+powerpc Makefile) and '-maltivec' (from its CFLAGS), which causes an
+error when building with clang after a recent change in main:
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v2.c:3393:6: error: stack frame size (2144) exceeds limit (2048) in 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-   3393 | void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        |      ^
-  1 error generated.
+  error: option '-msoft-float' cannot be specified with '-maltivec'
+  make[6]: *** [scripts/Makefile.build:243: arch/powerpc/lib/xor_vmx.o] Error 1
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.c:3520:6: error: stack frame size (2192) exceeds limit (2048) in 'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-   3520 | void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        |      ^
-  1 error generated.
-
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:3286:6: error: stack frame size (2128) exceeds limit (2048) in 'dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-   3286 | void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-        |      ^
-  1 error generated.
-
-Without the sanitizers enabled, there are no warnings.
-
-This was the catalyst for commit 6740ec97bcdb ("drm/amd/display:
-Increase frame warning limit with KASAN or KCSAN in dml2") and that same
-change was made to dml in commit 5b750b22530f ("drm/amd/display:
-Increase frame warning limit with KASAN or KCSAN in dml") but the
-frame_warn_flag variable was not applied to all files. Do so now to
-clear up the warnings and make all these files consistent.
+Explicitly add '-mhard-float' before '-maltivec' in xor_vmx.o's CFLAGS
+to override the previous inclusion of '-msoft-float' (as the last option
+wins), which matches how other areas of the kernel use '-maltivec', such
+as AMDGPU.
 
 Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issue/1990
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1986
+Link: https://github.com/llvm/llvm-project/commit/4792f912b232141ecba4cbae538873be3c28556c
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://msgid.link/20240127-ppc-xor_vmx-drop-msoft-float-v1-1-f24140e81376@kernel.org
 ---
- drivers/gpu/drm/amd/display/dc/dml/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/powerpc/lib/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-index 6042a5a6a44f8..59ade76ffb18d 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-@@ -72,11 +72,11 @@ CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_lib.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_vba.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn10/dcn10_fpu.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/dcn20_fpu.o := $(dml_ccflags)
--CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags)
-+CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20.o := $(dml_ccflags)
--CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20v2.o := $(dml_ccflags)
-+CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20v2.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20v2.o := $(dml_ccflags)
--CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_mode_vba_21.o := $(dml_ccflags)
-+CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_mode_vba_21.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn21/display_rq_dlg_calc_21.o := $(dml_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_mode_vba_30.o := $(dml_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_rq_dlg_calc_30.o := $(dml_ccflags)
+diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
+index 6eac63e79a899..0ab65eeb93ee3 100644
+--- a/arch/powerpc/lib/Makefile
++++ b/arch/powerpc/lib/Makefile
+@@ -76,7 +76,7 @@ obj-$(CONFIG_PPC_LIB_RHEAP) += rheap.o
+ obj-$(CONFIG_FTR_FIXUP_SELFTEST) += feature-fixups-test.o
+ 
+ obj-$(CONFIG_ALTIVEC)	+= xor_vmx.o xor_vmx_glue.o
+-CFLAGS_xor_vmx.o += -maltivec $(call cc-option,-mabi=altivec)
++CFLAGS_xor_vmx.o += -mhard-float -maltivec $(call cc-option,-mabi=altivec)
+ # Enable <altivec.h>
+ CFLAGS_xor_vmx.o += -isystem $(shell $(CC) -print-file-name=include)
+ 
 -- 
 2.43.0
 
