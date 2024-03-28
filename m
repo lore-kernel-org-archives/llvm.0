@@ -1,113 +1,151 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FE320DC4
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0014F20E
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711665571; cv=none; b=UqeJFteLsWFQUumYERZHzUsQ/auWDuwD1uobzEeDWPKln7w3cs3tgg7arqSxACgXoSJd9Da/mJUvksg/XiySaLfY1JtAV/P/C5csO7xIn27+1PmCIjdQUkHXTZ8BrOKFdWRGDI+3gd+UUivFfDfyE+jIVcGbqhW6033fROZr9Ls=
+	t=1711666431; cv=none; b=XsFm1kHkiMNtkEVzuXnfDtUvh8dlZSSM589V+tDBrZit29cmuE5zJiaaXVGzZPceWfslxm55ICYNazCBvYyBi0g0XxDvM+HSHkZMDj/uPL/vEYeoyna00JJ91FdIY/aoY738U0NOoElD4ZuaVl8wOC8e3L5q8BxmYPHxkLzK4K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711665571; c=relaxed/simple;
-	bh=SItJvabCDnAcEk1FDDPnUYg29uH0ygr0YwnH/xLN6Lg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bSEANzzWJoRLF2RHsL1HXcuKLtFFJJ3NAuEOujZvhvmmUir9aSaUnhSEJUJS3/Dt9U5ExuODxtfh5SxoAa1B30QzZwpOVKJ83Dvviu8Np6HH1h4GNPVrbtDYHv+fkt7cByb5bdPX8nwX8Ah4w4EbbwOJ5Hij/2zK8F7tR4itJHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=foF0Bzvm; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1711666431; c=relaxed/simple;
+	bh=m2sHr69UQ23/+yNNagVCVSd+tL9gNcumuplvgXMM3eE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hTFag5MzTXrx3Z3juj6KBCgaNHvDouFmu3KSBKdPSWjvZkXtNUtx8hvNnrJ4p64pDoqrLTqTXffISDPq9Mcw5U8n0JS1r2D+oBEHesuUDi9FKloR39/9Qxh42e5X4mqybxXKDgJoboLaimWlboXLz1xE2KsO0Dfi5YaiaTfjGMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VMvBfV2p; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="foF0Bzvm"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4149521d76aso10042985e9.3
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:39:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VMvBfV2p"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56899d9bf52so1954742a12.2
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711665568; x=1712270368; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DxAkMuGKIXRo2hx02pxk/kvCrTlB4fgMbIxtUPHcx7A=;
-        b=foF0Bzvmx4X+6qGDHA3Eq3ggIks8cvBdx8rdFazUrAPS5iSO+zcYeX1wYm07Ayy8hK
-         U3iVHIUjjeQMtTXhIefBiocd+oQl/rzAfSIEcgrhccmH+lpyYjFB4jS+Ntsk2QfiLxwC
-         kqMJuW2BVQhckm/fz5gmyDSNPHLq+gfBp2Xy/xBf4VprAB5YdUYzr3Ay9u2dWXy+SQog
-         l500vIY2MMiCiggYphwsIstSnRxbQ0qqC74hBKLjczAaiVrpZrCnctaZMZihapP6rB7M
-         Ioyz1Z+2Nq1/hlaPLKqzKAavT0V9gSqH3CkcxJHyqDK+kh9qeHKgCd/StUT3XdO6s+ke
-         peZw==
+        d=google.com; s=20230601; t=1711666428; x=1712271228; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TEbIDW7kbPaE87dBPORDU/rsnpNPLPoHlh1VVnWn9NA=;
+        b=VMvBfV2pi4iPLYzdqdGwTC1ePF6ORLzB9d51B+833WVSm1iFLW9buSMY289xFjd0XC
+         Z/B2HEojVOixPWYl45gTVZZWn2yavFgrtKZcGclM1fC8L9ePxZ0vsKdJV+uW+tgMiJ4w
+         so7ZKQyHckgfWPe5Pk4ca9NX4djJpNrWxhIs5QA3R5noGtknNR2VDM14JWyivi3VqnuQ
+         TXxdUh6GS0KGuRYz0qO4612xGwEO0Uq3weB+rJzgnJVWX2CJQ62BCj925tSJQ9vx+vSg
+         W/TmVRATiwOzL19irTbBRJLgqsX1Z9dDO/sQ1KXtfuq4Cl+i3ClE/CfznjMnddNADMe0
+         daoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711665568; x=1712270368;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DxAkMuGKIXRo2hx02pxk/kvCrTlB4fgMbIxtUPHcx7A=;
-        b=WP7P983NyOEAiB05UJyObs/2Bic9Lb8Q9fRMQ3yijX4NPHTKXLINByB5kHj0cF1GDQ
-         t5jEofhqChxIuN+dJMaNfOoTICyW59Dse87+pi0SS+Nvh9g5gn3ZeQEwsSlSqqL/BJ33
-         uH+aQW9ZncRuM+wEHbhgt+oTStpAu2T0CR5VywhB793voFmRjb9hXxlLs/g0Ijuo6HpW
-         QGv+Hqr0yV4qDqmJn4OPdatkeFzfW1X6dhhMSAMsu7VM10dC8Kh1FRqShShUQBcMq3xy
-         Pydf0yoAauol3aNy6lGrtGyQYBb8CJgwjesKmytFxDHbrugnhjEn0FUh4RXn5tAjX21h
-         /J/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUyWg95CtBczv6M0aYlFW/7YOKSg5orRixsXPkmLALTeYfjfm0MuYur/wZV6XpV7Set9GIlp/m9Hadndjgi8ckRoJOT4Q==
-X-Gm-Message-State: AOJu0YxgCi/XH23/KhN0wyfByIhBiX17zOhocR9834/+cn/10+YtQo1b
-	bSHhrqA3teCOCgmrVJ2PHUKPwBjDen8qFN/mey9tlKxXQTAI9eu7
-X-Google-Smtp-Source: AGHT+IGtuupE/qp9ctW5zpvMpCcAD6pw+81arQy9Ewg8HbRTEXTfNfS1uS63GnRpo9iBoBdI63Whow==
-X-Received: by 2002:a05:600c:4f85:b0:414:8a28:6c88 with SMTP id n5-20020a05600c4f8500b004148a286c88mr433614wmq.14.1711665568247;
-        Thu, 28 Mar 2024 15:39:28 -0700 (PDT)
-Received: from [172.27.34.173] ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id u8-20020a05600c19c800b0041478393b8fsm6625632wmq.42.2024.03.28.15.39.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Mar 2024 15:39:28 -0700 (PDT)
-Message-ID: <d8381c87-6123-4df0-97d3-ea8d0e17c6bb@gmail.com>
-Date: Fri, 29 Mar 2024 00:39:23 +0200
+        d=1e100.net; s=20230601; t=1711666428; x=1712271228;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TEbIDW7kbPaE87dBPORDU/rsnpNPLPoHlh1VVnWn9NA=;
+        b=B6MFLbQrJoq6s52YUkthg7rwX6YzGkJ3nLnuH4imMTsvQdvtc/qqFFgrpu+jUYtFN7
+         gpONFX5petV9QkjVymJTNhGq08pALiXN2EYiAFGI1z1RuXbUyXxrWtokbkuzBPYT4YcZ
+         Waong3tyCgReo5bSG0VBgP+Fv0EtPKKhxK1O3rkCIWvqz3yr+e13c41FjAComE97W+ew
+         buovinxzWeS7mxV6lGrohAM5plLZwGvkwNEE70Vy0jVAr6RxBtXE5j5W/QqK/sKKAaTU
+         ZuGe+mBiiMgiYa9ACr5safMFN0LwFKvsDMdfM8NlxY8ENIj+21Gx7u2E4tP6h050wzNX
+         3RPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXymhHvlWaDi20gIq8kW0Nlelk4WuJh4oo2j9QKVn21fZWHlnjXx1IJ5pljTznK09j57b62duIKtfXpCdwOF6Tfiaty+w==
+X-Gm-Message-State: AOJu0Yzke3z3CCJEZb17B6jQkYmaK7kQobI6tPXBvQ2Jplhoknw+atDb
+	02oSmHO8Zkz94F5OuRl8DzTh+Ur//AxJHBSa0YbClHblk67cbDIbqaynEbL20CwfuSR4cwIeYKU
+	aa8QA53w7nFQwhmPfoJuSy8ikPQFzA+RkpXst
+X-Google-Smtp-Source: AGHT+IHSOF7Jz1HlwWi9ZnZS4sDGFwM0sUVO6wKPz80s3bzKUakcomIa558eS7Mlmg+NfUj6hjAXDu38td4y54TNQ6s=
+X-Received: by 2002:a05:6402:254a:b0:56b:e089:56ed with SMTP id
+ l10-20020a056402254a00b0056be08956edmr540944edb.39.1711666427673; Thu, 28 Mar
+ 2024 15:53:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/9] mlx5: stop warning for 64KB pages
-To: Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
- Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Maxim Mikityanskiy <maxtram95@gmail.com>,
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Gal Pressman <gal@nvidia.com>,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
- Tariq Toukan <tariqt@nvidia.com>
-References: <20240328143051.1069575-1-arnd@kernel.org>
- <20240328143051.1069575-9-arnd@kernel.org>
-Content-Language: en-US
-From: Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20240328143051.1069575-9-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-3-arnd@kernel.org>
+In-Reply-To: <20240328143051.1069575-3-arnd@kernel.org>
+From: Justin Stitt <justinstitt@google.com>
+Date: Thu, 28 Mar 2024 15:53:35 -0700
+Message-ID: <CAFhGd8rCzhqK18KLtLVLWyWHtQzJsHCkkkQQyLbmw83K6ExKkw@mail.gmail.com>
+Subject: Re: [PATCH 2/9] libceph: avoid clang out-of-range warning
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>, 
+	Ilya Dryomov <idryomov@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Jeff Layton <jlayton@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Milind Changire <mchangir@redhat.com>, Patrick Donnelly <pdonnell@redhat.com>, 
+	Christian Brauner <brauner@kernel.org>, ceph-devel@vger.kernel.org, netdev@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 28/03/2024 16:30, Arnd Bergmann wrote:
+On Thu, Mar 28, 2024 at 7:31=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
 > From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When building with 64KB pages, clang points out that xsk->chunk_size
-> can never be PAGE_SIZE:
-> 
-> drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->          if (xsk->chunk_size > PAGE_SIZE ||
->              ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-> 
-> In older versions of this code, using PAGE_SIZE was the only
-> possibility, so this would have never worked on 64KB page kernels,
-> but the patch apparently did not address this case completely.
-> 
-> As Maxim Mikityanskiy suggested, 64KB chunks are really not all that
-> useful, so just shut up the warning by adding a cast.
-> 
-> Fixes: 282c0c798f8e ("net/mlx5e: Allow XSK frames smaller than a page")
-> Link: https://lore.kernel.org/netdev/20211013150232.2942146-1-arnd@kernel.org/
-> Link: https://lore.kernel.org/lkml/a7b27541-0ebb-4f2d-bd06-270a4d404613@app.fastmail.com/
+>
+> clang-14 points out that on 64-bit architectures, a u32
+> is never larger than constant based on SIZE_MAX:
+>
+> net/ceph/osdmap.c:1425:10: error: result of comparison of constant 461168=
+6018427387891 with expression of type 'u32' (aka 'unsigned int') is always =
+false [-Werror,-Wtautological-constant-out-of-range-compare]
+>         if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
+>             ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> net/ceph/osdmap.c:1608:10: error: result of comparison of constant 230584=
+3009213693945 with expression of type 'u32' (aka 'unsigned int') is always =
+false [-Werror,-Wtautological-constant-out-of-range-compare]
+>         if (len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
+>             ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> The code is correct anyway, so just shut up that warning.
+
+OK.
+
+>
+> Fixes: 6f428df47dae ("libceph: pg_upmap[_items] infrastructure")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks for your patch.
+Reviewed-by: Justin Stitt <justinstitt@google.com>
 
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-
+> ---
+>  fs/ceph/snap.c    | 2 +-
+>  net/ceph/osdmap.c | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/ceph/snap.c b/fs/ceph/snap.c
+> index c65f2b202b2b..521507ea8260 100644
+> --- a/fs/ceph/snap.c
+> +++ b/fs/ceph/snap.c
+> @@ -374,7 +374,7 @@ static int build_snap_context(struct ceph_mds_client =
+*mdsc,
+>
+>         /* alloc new snap context */
+>         err =3D -ENOMEM;
+> -       if (num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
+> +       if ((size_t)num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
+>                 goto fail;
+>         snapc =3D ceph_create_snap_context(num, GFP_NOFS);
+>         if (!snapc)
+> diff --git a/net/ceph/osdmap.c b/net/ceph/osdmap.c
+> index 295098873861..8e7cb2fde6f1 100644
+> --- a/net/ceph/osdmap.c
+> +++ b/net/ceph/osdmap.c
+> @@ -1438,7 +1438,7 @@ static struct ceph_pg_mapping *__decode_pg_temp(voi=
+d **p, void *end,
+>         ceph_decode_32_safe(p, end, len, e_inval);
+>         if (len =3D=3D 0 && incremental)
+>                 return NULL;    /* new_pg_temp: [] to remove */
+> -       if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
+> +       if ((size_t)len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
+>                 return ERR_PTR(-EINVAL);
+>
+>         ceph_decode_need(p, end, len * sizeof(u32), e_inval);
+> @@ -1621,7 +1621,7 @@ static struct ceph_pg_mapping *__decode_pg_upmap_it=
+ems(void **p, void *end,
+>         u32 len, i;
+>
+>         ceph_decode_32_safe(p, end, len, e_inval);
+> -       if (len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
+> +       if ((size_t)len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
+>                 return ERR_PTR(-EINVAL);
+>
+>         ceph_decode_need(p, end, 2 * len * sizeof(u32), e_inval);
+> --
+> 2.39.2
+>
