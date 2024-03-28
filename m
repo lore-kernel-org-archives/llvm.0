@@ -1,107 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9B712BEA0;
-	Thu, 28 Mar 2024 14:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009C054BCB
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 14:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711636336; cv=none; b=r6jlSDlIp2kjm3+3yyYrk5/Kfj30PKkooy1wya/QS20+16jt8vfjedyH7VWaJpfQoVv3g7COtmnvmTfDX0qMYUakvL5LbiZUdaykOdPWrNdWxOwlM6C89qrBwTAXSixSWTbCXZM9Pe35DsBeItRa91KyIz6l8ZSuar3xvCfKVCo=
+	t=1711636698; cv=none; b=iNwiBC8sz9gUvlJjE4eL8vX9SJJuhbA1Cadh4fpRshf2X1a7TZx2DybADV8eQJhE4eNl2g/+qVYZiAt1Xil7STOyTFpsbN0axTMR92fMZgo6VyVuW6m8OaCewCSa6XTsSes2L0Txa2+QUlKp3Eu4zUTgXNA7EJ8Dad2l/suMfqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711636336; c=relaxed/simple;
-	bh=oOMLQx+gPaXHH5Tk6o+DNZIrvqEEtpFNuWMdgsGdvoY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=R2V28Mqe7RAhA0iJzGNNSU4GZEsZRo0w7C0YVELohycv94O7Scvj5KAXj9p0VoatgeNpat9PDsJdAEQABWRonMJUTgl0j6KGbsO3iazTruqC1wwTXAI8Jtv0nV6ZQTUd7/uvWQ8sfGAvTaYTuNoIcJa1kAcs7XFy6Kps1Cy/MNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rwlsvkhH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711636698; c=relaxed/simple;
+	bh=Je2UAtEY68if5uMZucjTLmJZ569unNwJAEX8q4vFPRs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SfkV2MQ6IpYAPHMO3+COFNLw4Rmv3e8IFXVtGYOwpGHp/5M8rv+O2DhzANkEvtnQNCbdaz81UTUHmwGK9hruh/cQcvICbpmV4ixXuj7QMa9IqKYqP70jQNbN/vZQty9TxezxWBsgoLP+poCequWehcXwCTn02Nsvin6NLx/yPWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nGHC4ODB; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rwlsvkhH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBF9C433C7;
-	Thu, 28 Mar 2024 14:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711636336;
-	bh=oOMLQx+gPaXHH5Tk6o+DNZIrvqEEtpFNuWMdgsGdvoY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rwlsvkhHCsWSQWHVw/27w1M7pS1Z3C3fvOkjQZto5XbtiZvBzheadtKt4qSt9CO53
-	 BRkZ1E9up6qBgTfor+rcxdIc0tpi08tqJfhHIhvDMK2F9Uzd/A44Xm5N1CZ4AtzNOw
-	 M31LEk8eYkBTzX6NzeKe8UsHOGHu8oSP48s0psUqL7RdUe32N+QrfOvA+wzOxn/z6x
-	 bGGtaUBNb3NdDlOlch3dTNKM8l8KiK4VVMjjnnVnLeXTYPetOdxgDP5WwxSLNecWsh
-	 TLngdvzP4KMTHREfE0HPuRvpbwwU8jiF0Jk67qcQrAliZbIH+7w3RMZduND8EqkBUz
-	 V3dj+E+ST0j6w==
-From: Arnd Bergmann <arnd@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Maxim Mikityanskiy <maxtram95@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Gal Pressman <gal@nvidia.com>,
-	netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 8/9] mlx5: stop warning for 64KB pages
-Date: Thu, 28 Mar 2024 15:30:46 +0100
-Message-Id: <20240328143051.1069575-9-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240328143051.1069575-1-arnd@kernel.org>
-References: <20240328143051.1069575-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGHC4ODB"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56c2cfdd728so11818a12.1
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 07:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711636695; x=1712241495; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mBDqCwUo0BszO/p4vM05OTn+yRfN49/fU9/chw4uLSk=;
+        b=nGHC4ODBSKjkM6snQs+er/S7GVTja1fnpc2BwIpp4BvvN9CTaqbi1mYFanTC0PJgTN
+         jxN+R8vbKc48wVpdfUiyLuUCB+0BKvavuzvL2S2vRo5q8tW+FGVZd6vgyuXfMYtfqSHx
+         gLO9uw2HlY2Xp1PjfHcpBA8py/EtVZJZerUP9pFbm9mwazi/5s8S2+5VqmhGwW6i7Rwa
+         13DrOhXYskl0LUVvdX+9/NoErgluxE3KhzGGienYFfwg3/ULjCnecu9E5qnTg3MWo+cT
+         xlSG8aItibylrvTR4Fh9SRNdiZBpgFPV8lGSQHp6bZHEp2O/MGnzRvtfjMT5/7wAEt0G
+         dJMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711636695; x=1712241495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mBDqCwUo0BszO/p4vM05OTn+yRfN49/fU9/chw4uLSk=;
+        b=LDC2TCh59rQ2KNZEMzdRcPmn7OR5TwHshjybpDwJ0HtrdYsHD+xzzM+oZxY4RrvzL4
+         ++8Yx8nMAkv0ix9gzhQWI68+fdRzDwGE5bQdOalyXyLzOO5Vt8rv7UU5nDx117cguwlA
+         iTgg0hd2k9rQKI9CWKohvXbeOs23/1YpCaqK0YAkphOK/wepJxGR+XYIXW4ahWzOb05X
+         Hp+nQazxTIzDGLJ1izeXZjRR1TKNZg1QOSljndbm9qwRtzrkHbE3t9A0VFU3fc8GmtuB
+         GJKHH3A8YZ56ML5Hklw6cehkxrxsEPJfOqyxI+5foTgyTzdMcrL+oRwcZ6MmGWPbucqI
+         WR2w==
+X-Forwarded-Encrypted: i=1; AJvYcCWnKcDyrDC13FnRjmfuRpV6S8qo2gb/HOd4/KciSuik2PK1M3smWtOuNo8fCw63KagCYGkgjJghAlW0uIMmp6384hAKnA==
+X-Gm-Message-State: AOJu0Yy5Zmhexy6GxuCNEBlKSe9n8BXcKy0wNng5Fy62a9byl6Jflksc
+	7cJrz+wOuYrYLmPt1doDV9KbVDnIAl221HPnMICB9Wyv7fU6XRxyulFNsd8diEtkMPElCkZnwnv
+	Jfsy4mr0ejssK1t3FqOXkc9f1zlSc3KcDAyvm
+X-Google-Smtp-Source: AGHT+IFpCb+hAEMXqJRx+znyNHc29XT0UrNVUxB6VWgzCxHc/S/gsBG3CXhdt+RzMQsIPrDbBmYFcfOf8JEENWeNtM0=
+X-Received: by 2002:a50:bb21:0:b0:56c:18df:f9e1 with SMTP id
+ y30-20020a50bb21000000b0056c18dff9e1mr142319ede.5.1711636695048; Thu, 28 Mar
+ 2024 07:38:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-6-arnd@kernel.org>
+In-Reply-To: <20240328143051.1069575-6-arnd@kernel.org>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 28 Mar 2024 15:38:03 +0100
+Message-ID: <CANn89i+3FuKc1RsYaciNe3uQMZuJBjSmvC_ueuQ=NaFVzEnyuA@mail.gmail.com>
+Subject: Re: [PATCH 5/9] ipv4: tcp_output: avoid warning about NET_ADD_STATS
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Dmitry Safonov <0x7f454c46@gmail.com>, 
+	Neal Cardwell <ncardwell@google.com>, "mfreemon@cloudflare.com" <mfreemon@cloudflare.com>, 
+	Yan Zhai <yan@cloudflare.com>, netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Mar 28, 2024 at 3:31=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Clang warns about a range check in percpu_add_op() being impossible
+> to hit for an u8 variable:
+>
+> net/ipv4/tcp_output.c:188:3: error: result of comparison of constant -1 w=
+ith expression of type 'u8' (aka 'unsigned char') is always false [-Werror,=
+-Wtautological-constant-out-of-range-compare]
+>                 NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPACKCOMPRESSED,
+>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/net/ip.h:291:41: note: expanded from macro 'NET_ADD_STATS'
+>  #define NET_ADD_STATS(net, field, adnd) SNMP_ADD_STATS((net)->mib.net_st=
+atistics, field, adnd)
+>                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~~~~~~~
+> include/net/snmp.h:143:4: note: expanded from macro 'SNMP_ADD_STATS'
+>                         this_cpu_add(mib->mibs[field], addend)
+>                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/percpu-defs.h:509:33: note: expanded from macro 'this_cpu_a=
+dd'
+>  #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, =
+pcp, val)
+>                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~
+> note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=3D=
+0 to see all)
+> <scratch space>:187:1: note: expanded from here
+> this_cpu_add_8
+> ^
+> arch/x86/include/asm/percpu.h:326:35: note: expanded from macro 'this_cpu=
+_add_8'
+>  #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatil=
+e, (pcp), val)
+>                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~
+> arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_a=
+dd_op'
+>                               ((val) =3D=3D 1 || (val) =3D=3D -1)) ?     =
+       \
+>                                              ~~~~~ ^  ~~
+>
 
-When building with 64KB pages, clang points out that xsk->chunk_size
-can never be PAGE_SIZE:
+This seems like a bug in the macro or the compiler, because val is not
+a constant ?
 
-drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (xsk->chunk_size > PAGE_SIZE ||
-            ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+__builtin_constant_p(val) should return false ???
 
-In older versions of this code, using PAGE_SIZE was the only
-possibility, so this would have never worked on 64KB page kernels,
-but the patch apparently did not address this case completely.
++#define percpu_add_op(size, qual, var, val)                            \
++do {                                                                   \
++       const int pao_ID__ =3D (__builtin_constant_p(val) &&              \
++                             ((val) =3D=3D 1 || (val) =3D=3D -1)) ?       =
+     \
++                               (int)(val) : 0;                         \
++       if (0) {                                                        \
++               typeof(var) pao_tmp__;                                  \
++               pao_tmp__ =3D (val);                                      \
++               (void)pao_tmp__;                                        \
++       }                                                               \
++       if (pao_ID__ =3D=3D 1)                                             =
+ \
++               percpu_unary_op(size, qual, "inc", var);                \
++       else if (pao_ID__ =3D=3D -1)                                       =
+ \
++               percpu_unary_op(size, qual, "dec", var);                \
++       else                                                            \
++               percpu_to_op(size, qual, "add", var, val);              \
++} while (0)
++
 
-As Maxim Mikityanskiy suggested, 64KB chunks are really not all that
-useful, so just shut up the warning by adding a cast.
 
-Fixes: 282c0c798f8e ("net/mlx5e: Allow XSK frames smaller than a page")
-Link: https://lore.kernel.org/netdev/20211013150232.2942146-1-arnd@kernel.org/
-Link: https://lore.kernel.org/lkml/a7b27541-0ebb-4f2d-bd06-270a4d404613@app.fastmail.com/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-index 06592b9f0424..9240cfe25d10 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-@@ -28,8 +28,10 @@ bool mlx5e_validate_xsk_param(struct mlx5e_params *params,
- 			      struct mlx5e_xsk_param *xsk,
- 			      struct mlx5_core_dev *mdev)
- {
--	/* AF_XDP doesn't support frames larger than PAGE_SIZE. */
--	if (xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5E_MIN_XSK_CHUNK_SIZE) {
-+	/* AF_XDP doesn't support frames larger than PAGE_SIZE,
-+	 * and xsk->chunk_size is limited to 65535 bytes.
-+	 */
-+	if ((size_t)xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5E_MIN_XSK_CHUNK_SIZE) {
- 		mlx5_core_err(mdev, "XSK chunk size %u out of bounds [%u, %lu]\n", xsk->chunk_size,
- 			      MLX5E_MIN_XSK_CHUNK_SIZE, PAGE_SIZE);
- 		return false;
--- 
-2.39.2
-
+> Avoid this warning with a cast to a signed 'int'.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  net/ipv4/tcp_output.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index e3167ad96567..dbe54fceee08 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -183,7 +183,7 @@ static inline void tcp_event_ack_sent(struct sock *sk=
+, u32 rcv_nxt)
+>
+>         if (unlikely(tp->compressed_ack)) {
+>                 NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPACKCOMPRESSED,
+> -                             tp->compressed_ack);
+> +                             (int)tp->compressed_ack);
+>                 tp->compressed_ack =3D 0;
+>                 if (hrtimer_try_to_cancel(&tp->compressed_ack_timer) =3D=
+=3D 1)
+>                         __sock_put(sk);
+> --
+> 2.39.2
+>
