@@ -1,109 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C384136E29
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 18:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CE07E115;
+	Thu, 28 Mar 2024 18:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711650997; cv=none; b=Q9Kv1INwXBfJegf2ow8VTCixEnIKVl8vxyd25lPAcuyV2lCsNYyAxUEwFxxtyfUZ+4Z4cis5rp/kMXqShkzB4ci16EnCq/KlBqW5l2woOGje+Gvp5yLNuoOFX+h1hY+1DAvghyQkSvjt6/D5hE8SMok5XqGfoOuMY3PGtJkhul0=
+	t=1711651818; cv=none; b=OAnU+bCjRA4XGujFd4RCxOc2AoiABIuJljW5JodM20Mad9PO8JcA2vijyiZbtYs0x5+k8vYqAITbN8w82LKv/zdaMBj7ySeNWC0QZFvh7lKkCXy9NNkjuxQtDH5hNzoeE9bVnuJeL2kUXSh9hTgT/FAFduA7vJCIrnVKjm+taok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711650997; c=relaxed/simple;
-	bh=Sp5jvlLKNP32D8rGHjbzJDshNB/ON9laKdFiq1xs/3c=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=HieyJNh+y3J6WUhvVB1dBPKS1g25T2FonfCvY9NRBV+9Dz69gBhJxA0TwDZo7FqMtYiIllfORtuzT8M6TSB8www81RMRGNX6XfYMvQ4P14s3ZYRpZSRlu7X7Ayq/HDO5JiXMYHk/V5BaOOuIHTjgFEb9onFpN5GJoh2WzPVjovg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gzyroN7l; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1711651818; c=relaxed/simple;
+	bh=F/HJwyzJf8Uss0XAVW7YuuqoQ7rS2WoYp45boQWDGm8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=dhwx7bQDHORoG5cyPTw31fNNdmGw18ltOCtXS7fvrSdSNpG9qwnCrsfeEjqIOix9hvZ8sVI1tVoyEMkQIvEGpPMTmV340kvtDuf9Prp1sr9jsF43olm2wepn/tYfG9HYaDwcrKD+0QT3JHVCj2Q4nHcKlDIkHTm7F2y4rQvVK2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=K5LV5K59; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gzyroN7l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711650995;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JEF8L6USQ1hLDps3RdI620BNw20PF30fu98tAKwws1U=;
-	b=gzyroN7lcmrZy0D6ksaFzcFcsw6gZxLY5dW5By6f+sL5S9gAPo2nT8LPX/IhF8FW7sMWB0
-	dBeFrKQ8Tw89/MQreh+sLeoipDb9dZ9C5m1C8PpiPOiBvo90M3gRXhOzdEZvfDBT17XaLZ
-	uK9bwZMxpK6LrQkMUMl98mQdhSKb8wk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-197-02DqlTmTObS6YAizG9d5GQ-1; Thu, 28 Mar 2024 14:36:29 -0400
-X-MC-Unique: 02DqlTmTObS6YAizG9d5GQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0899785A58C;
-	Thu, 28 Mar 2024 18:36:29 +0000 (UTC)
-Received: from file1-rdu.file-001.prod.rdu2.dc.redhat.com (unknown [10.11.5.21])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id ED25C1121312;
-	Thu, 28 Mar 2024 18:36:28 +0000 (UTC)
-Received: by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix, from userid 12668)
-	id D729B30BFEC2; Thu, 28 Mar 2024 18:36:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-	by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix) with ESMTP id D355E3FB53;
-	Thu, 28 Mar 2024 19:36:28 +0100 (CET)
-Date: Thu, 28 Mar 2024 19:36:28 +0100 (CET)
-From: Mikulas Patocka <mpatocka@redhat.com>
-To: Arnd Bergmann <arnd@kernel.org>
-cc: linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>, 
-    Mike Snitzer <snitzer@kernel.org>, dm-devel@lists.linux.dev, 
-    Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    Eric Biggers <ebiggers@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/9] dm integrity: fix out-of-range warning
-In-Reply-To: <20240328143051.1069575-2-arnd@kernel.org>
-Message-ID: <3573cc6-9a74-4eab-92aa-e66afe18cbf@redhat.com>
-References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-2-arnd@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="K5LV5K59"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CDEC433C7;
+	Thu, 28 Mar 2024 18:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1711651818;
+	bh=F/HJwyzJf8Uss0XAVW7YuuqoQ7rS2WoYp45boQWDGm8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=K5LV5K59HTaPTHPaJcC4ecFQSBf/oze43b5ftafjrU72Xj7wpMsQi280aAjHgoZW4
+	 Z5GQuBTFbWstEpa3fqgWc67NWYcF5OoNpHO42A99VouIGVmZ54R5a3pyqByTbP6xGL
+	 oXCV4NMgOpspOce8nJxmjNUruKoOZe8tbS5U+YEc=
+Date: Thu, 28 Mar 2024 11:50:17 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+ Linux Regressions <regressions@lists.linux.dev>,
+ lkft-triage@lists.linaro.org, clang-built-linux <llvm@lists.linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ willy@infradead.org, David Hildenbrand <david@redhat.com>
+Subject: Re: next: x86_64 defconfig with clang-17 failed
+Message-Id: <20240328115017.5c585e5709b0444c31811714@linux-foundation.org>
+In-Reply-To: <CA+G9fYvbFMMCmk91vzVXcS5T2Ezkwg8tQDgt_TfF-8Q=c0B0PQ@mail.gmail.com>
+References: <CA+G9fYvbFMMCmk91vzVXcS5T2Ezkwg8tQDgt_TfF-8Q=c0B0PQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Content-Transfer-Encoding: 7bit
 
+On Thu, 28 Mar 2024 19:05:51 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 
+> While building x86_64 defconfig with clang-17 the following build warnings /
+> errors noticed on Linux next-20240328 tag.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Build error:
+> ---------
+> mm/memory.c:5094:25: error: variable 'pte' is uninitialized when used
+> here [-Werror,-Wuninitialized]
+>  5094 |                         writable = pte_write(pte);
+>       |                                              ^~~
+> mm/memory.c:5083:3: note: variable 'pte' is declared here
+>  5083 |                 pte_t pte, old_pte;
+>       |                 ^
 
-On Thu, 28 Mar 2024, Arnd Bergmann wrote:
-
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Depending on the value of CONFIG_HZ, clang compares about a pointless
-> comparison:
-> 
-> drivers/md/dm-integrity.c:4085:12: error: result of comparison of constant 42949672950 with expression of type 'unsigned int' is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->                         if (val >= (uint64_t)UINT_MAX * 1000 / HZ) {
-> 
-> As the check remains useful for other configurations, shut up the
-> warning by adding a second type cast to uint64_t.
-> 
-> Fixes: 468dfca38b1a ("dm integrity: add a bitmap mode")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
-
-> ---
->  drivers/md/dm-integrity.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
-> index 37b9f8f1ae1a..7f3dc8ee6ab8 100644
-> --- a/drivers/md/dm-integrity.c
-> +++ b/drivers/md/dm-integrity.c
-> @@ -4221,7 +4221,7 @@ static int dm_integrity_ctr(struct dm_target *ti, unsigned int argc, char **argv
->  		} else if (sscanf(opt_string, "sectors_per_bit:%llu%c", &llval, &dummy) == 1) {
->  			log2_sectors_per_bitmap_bit = !llval ? 0 : __ilog2_u64(llval);
->  		} else if (sscanf(opt_string, "bitmap_flush_interval:%u%c", &val, &dummy) == 1) {
-> -			if (val >= (uint64_t)UINT_MAX * 1000 / HZ) {
-> +			if ((uint64_t)val >= (uint64_t)UINT_MAX * 1000 / HZ) {
->  				r = -EINVAL;
->  				ti->error = "Invalid bitmap_flush_interval argument";
->  				goto bad;
-> -- 
-> 2.39.2
-> 
+Thanks.  Presumably ptent was intended, but this may not have had
+adequate runtime testing.  I'll drop the two-patch series "support
+multi-size THP numa balancing".
 
