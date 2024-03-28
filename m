@@ -1,97 +1,107 @@
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8305F87C
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 13:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FA483CC7;
+	Thu, 28 Mar 2024 14:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711632965; cv=none; b=U8xVCD6XnWQqHPm22d6knC6oeYpcGbAFKfk1kgZpnb6NaEG6ms5BhSEN05dwoIge4h2qpS22f/hU14TeavLf8Iv28yoQ+P0qJH+6Ui562qWIyT2vw62Ojoyt8iNyhXo2Y+lWInokhUAz7Ir2KuS51ZHP2Nu8iJZ1dMWh5pwmM1o=
+	t=1711634825; cv=none; b=vAPG5QLEg6MGZs5l8wxVTUyu+cgAKZNoMwHWkadTwk55dSehLxMREtY5JtsYZvwTT8nKyUYnJt42nl2Ef53kAM3B4FRuwwk1p5BxzvH0V8obSe3qBtW0LPaQjRT6N/9b4VoK0f0NQHC0EI6rWrSTMcHCJ+HyM8oxbi+PgLr3Ro8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711632965; c=relaxed/simple;
-	bh=qPSo9SyuNPKLPGiduEGiKIv2kZsIHdaIyrrQp+mxrXo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=iw+9LmTwaskDoLLTjDjTbwUv2paCFQDYipVfVVJAqfCUW59Iz4tgZ8pH4QnYQOFaS/F2G+GERQ1P48qJMs30CBT8pszfr8UXngHDioSP7vqOL4MOJJCpF2zc/nkAEmIBklPyYGq3saYunHQ4ZAWaAxbtJeTdIw92EFlwiRNNlH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UzUOUr1S; arc=none smtp.client-ip=209.85.222.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1711634825; c=relaxed/simple;
+	bh=HUhSot9xyrF+JN4xyg5gUpvdtcrLnfShBlIudVAw+0o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CuIGV2NHWIQu2LUneFJy2B9oD/OlokeM3e2Xi6iUm2vOKYxvFr57ZCxP7nhlu+kwQ4MoHdc8dQa0WpW1NCaCj3syejL5dNYaweGdnw7RO1uCahn9BILxlJidIjoKQ9VjNisfJWJ4SSlUiUoVWbyr/E45Avt4FRxg5Cd3GvDEfTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A7bAq59Z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UzUOUr1S"
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-7e074f8ac06so220946241.1
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 06:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711632963; x=1712237763; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HuxlR8CvEOXqyHj+Qq7Cj7wAF1B8kiKsrY6NRMdaszA=;
-        b=UzUOUr1SbtNUNNYXadZcQ/yIySybro2gtwTkbqz9sDCiLYDeudopKkeP8wAGnlZU+M
-         4KX/lalu1IADSL5gsS6EwicMByCVEfAZqKNyGWbpTkxK6i9XJ46NkpDPd8rHUfPea8x6
-         6WRoj945DeqfIKyzpSTsOeURY77koTT7s55+5DdExZdU9fymJva7H8bx7/8cqhNGK1kr
-         Ioj+9R37Uobftod6EJWPulPi0XRqXu8163508JJJjqlfJxAUEZqKhV7Hnci5DmQWrcr0
-         HfJMUxUz2vlUMUQ2oc/+LXHisiWdLA11O46Ku3GhhjMUf4SpxfaCXxs7C4Lv2WHcjYgo
-         exgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711632963; x=1712237763;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HuxlR8CvEOXqyHj+Qq7Cj7wAF1B8kiKsrY6NRMdaszA=;
-        b=fngoJEKHE9MciWFNsQGvqclSWEgQa20qiYEFp9SuEOitFuqzNbm6jRpr0bgxWu1y2A
-         KWxugOWZHmTvLXTgRd/OUGNk30vW1ZQ4WasOswaWo25NJPuOhMOZqfYqAW7T9blRJ7dC
-         ArMUMEDKWToZUwf4LikCq3ClJgZxQjQ03qxRW6IJwDrCopjB8xfKvYkqG/tY5S7BMGWK
-         7axGl1gKblVfPb9wWJ5eZsVm/A3Ist7vcZikqsKuCJ1jaQlJx9xnB8Tsxc0QUFhi3PMm
-         ED6/dXdlxdyLHUPBvLbu24q5eDAPNAG7qyPVUftH0WofhGNl/EwSYpRKdIVBk9fZVsy1
-         xyJw==
-X-Forwarded-Encrypted: i=1; AJvYcCUO5LW/CK2BRvB7Io8n1KGrdK3pAs50EHfJ7kUWVmbMgmYJ5mPhYzqr3LHgHVgULa3v3yWX0C6ACl9cvBpafWsXi3EoOw==
-X-Gm-Message-State: AOJu0Ywxi97xbHiiADDP0N1pb30wpMvVKRS8gXB2GPF2WQ+TZOYGu9oS
-	2yOEbudo34hmkNgJ0pl0gF9R0jOhZD2dGMwItD9p43dHrW4CHC6uVAbLn20OuJo5oY2naCLrYxQ
-	LKrXumV2sENAcEPgvHXorFJrntlBfyZEhUSWYtA==
-X-Google-Smtp-Source: AGHT+IHu7K7lWRnHw3NgjJmNDEaFubXFArdguKWXHksy1hC4QSKCDsGBXOPEsK+90ZnaUJkZYzR6GUfytoXhOk105Yo=
-X-Received: by 2002:a05:6122:1698:b0:4d8:9541:41a0 with SMTP id
- 24-20020a056122169800b004d8954141a0mr3518206vkl.12.1711632962732; Thu, 28 Mar
- 2024 06:36:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A7bAq59Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C684BC433F1;
+	Thu, 28 Mar 2024 14:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711634824;
+	bh=HUhSot9xyrF+JN4xyg5gUpvdtcrLnfShBlIudVAw+0o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=A7bAq59ZDijbhGoewi2fyU5yAVKEd6Ep8RA8WtnD2HrGJ/8zDtz2VujzucjrXWi43
+	 DieD6Vj1woddVF3DyIj9WZEB7WSEkWbkfgvwNkhFIcEry9hUBLmUIFVCy2KF2pdTEs
+	 VihwIQtCAQ7X4TJ8+F8dtl7DVdVsIA3qL/8Yk44yUZrScpEPby3ubQQz6PsH6iH+KP
+	 g/UZoVijAAB0Uk1jqELSCyzK0MEaBNs9yfGDP+3bv+PRPNxAgldy8b6IrGe764SVaY
+	 i+CwDFJkuWexuwlXfx7KpKsPz5+0e1VOFWpVTtkbaQkLeQvlRCeR2YN0EvQe6jukrY
+	 368+rWxdAZ3Pg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Franziska Naepelt <franziska.naepelt@googlemail.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	Erick Archer <erick.archer@gmx.com>,
+	linux-staging@lists.linux.dev,
+	llvm@lists.linux.dev
+Subject: [PATCH 09/11] staging: rtl8723bs: convert strncpy to strscpy
+Date: Thu, 28 Mar 2024 15:04:53 +0100
+Message-Id: <20240328140512.4148825-10-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240328140512.4148825-1-arnd@kernel.org>
+References: <20240328140512.4148825-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 28 Mar 2024 19:05:51 +0530
-Message-ID: <CA+G9fYvbFMMCmk91vzVXcS5T2Ezkwg8tQDgt_TfF-8Q=c0B0PQ@mail.gmail.com>
-Subject: next: x86_64 defconfig with clang-17 failed
-To: open list <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	Linux Regressions <regressions@lists.linux.dev>, lkft-triage@lists.linaro.org, 
-	clang-built-linux <llvm@lists.linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	willy@infradead.org, David Hildenbrand <david@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-While building x86_64 defconfig with clang-17 the following build warnings /
-errors noticed on Linux next-20240328 tag.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+gcc-9 complains about a possibly unterminated string in the strncpy() destination:
 
-Build error:
----------
-mm/memory.c:5094:25: error: variable 'pte' is uninitialized when used
-here [-Werror,-Wuninitialized]
- 5094 |                         writable = pte_write(pte);
-      |                                              ^~~
-mm/memory.c:5083:3: note: variable 'pte' is declared here
- 5083 |                 pte_t pte, old_pte;
-      |                 ^
-1 error generated.
+In function 'rtw_cfg80211_add_monitor_if',
+    inlined from 'cfg80211_rtw_add_virtual_intf' at drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:2209:9:
+drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:2146:2: error: 'strncpy' specified bound 16 equals destination size [-Werror=stringop-truncation]
+ 2146 |  strncpy(mon_ndev->name, name, IFNAMSIZ);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-steps to reproduce:
-----------
-# tuxmake --runtime podman --target-arch x86_64 --toolchain clang-17
---kconfig x86_64_defconfig LLVM=1 LLVM_IAS=1
+This one is a false-positive because of the explicit termination in the following
+line, and recent versions of clang and gcc no longer warn about this.
 
+Interestingly, the other strncpy() in this file is missing a termination but
+does not produce a warning, possibly because of the type confusion and the
+cast between u8 and char.
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240328/testrun/23230289/suite/build/test/clang-17-x86_64_defconfig/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240328/testrun/23230289/suite/build/test/clang-17-x86_64_defconfig/details/
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2eIseG3mebbz7v0HESNW2YOTmiu/
+Change both strncpy() instances to strscpy(), which avoids the warning as well
+as the possibly missing termination. No additional padding is needed here.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
+index 65a450fcdce7..98bc5520e77d 100644
+--- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
++++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
+@@ -884,7 +884,7 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
+ 		goto addkey_end;
+ 	}
+ 
+-	strncpy((char *)param->u.crypt.alg, alg_name, IEEE_CRYPT_ALG_NAME_LEN);
++	strscpy(param->u.crypt.alg, alg_name, IEEE_CRYPT_ALG_NAME_LEN);
+ 
+ 	if (!mac_addr || is_broadcast_ether_addr(mac_addr))
+ 		param->u.crypt.set_tx = 0; /* for wpa/wpa2 group key */
+@@ -2143,8 +2143,7 @@ static int rtw_cfg80211_add_monitor_if(struct adapter *padapter, char *name, str
+ 	}
+ 
+ 	mon_ndev->type = ARPHRD_IEEE80211_RADIOTAP;
+-	strncpy(mon_ndev->name, name, IFNAMSIZ);
+-	mon_ndev->name[IFNAMSIZ - 1] = 0;
++	strscpy(mon_ndev->name, name, IFNAMSIZ);
+ 	mon_ndev->needs_free_netdev = true;
+ 	mon_ndev->priv_destructor = rtw_ndev_destructor;
+ 
+-- 
+2.39.2
+
