@@ -1,174 +1,129 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009C054BCB
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 14:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED1612DDB2
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 14:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711636698; cv=none; b=iNwiBC8sz9gUvlJjE4eL8vX9SJJuhbA1Cadh4fpRshf2X1a7TZx2DybADV8eQJhE4eNl2g/+qVYZiAt1Xil7STOyTFpsbN0axTMR92fMZgo6VyVuW6m8OaCewCSa6XTsSes2L0Txa2+QUlKp3Eu4zUTgXNA7EJ8Dad2l/suMfqw=
+	t=1711637641; cv=none; b=fEdhRq+DQ2F52toxYtbJPQLQlVMlCxCcEbQo3+656B8nioVMXVguJNGrXJCNk85YAVckhI9Fkwuc41BVMqobicGCX40HzTmLNsZcaiFEKsJ4B7tFXymxsa2ZonU9GgDxmmXshFAv/NVU+iTnmgTy5LCUewppQq8bXej0aKu64TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711636698; c=relaxed/simple;
-	bh=Je2UAtEY68if5uMZucjTLmJZ569unNwJAEX8q4vFPRs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SfkV2MQ6IpYAPHMO3+COFNLw4Rmv3e8IFXVtGYOwpGHp/5M8rv+O2DhzANkEvtnQNCbdaz81UTUHmwGK9hruh/cQcvICbpmV4ixXuj7QMa9IqKYqP70jQNbN/vZQty9TxezxWBsgoLP+poCequWehcXwCTn02Nsvin6NLx/yPWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nGHC4ODB; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1711637641; c=relaxed/simple;
+	bh=iZIfvRAXPiN1hUOqhcrIgulJC/h0qg4G0zbfy7UTFog=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kvGWTMetdUOlhLh/2FsAt633gMZEkJLcINo1dwfQ2UswLce9RSu1P5fBwVJun5jWrsnyNoMa8edC/L6stjgJJz5K4T8Tso+Bw6QzrnKVn7a5SNhrxQRUL39GiLdcX/Ac7Yrn7+8zHKiWD1BkaUkS0rdEl4Fo8bp8S7FCd5QV/Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ieee.org; spf=pass smtp.mailfrom=ieee.org; dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b=HlMNb2X+; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ieee.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ieee.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGHC4ODB"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56c2cfdd728so11818a12.1
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 07:38:16 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b="HlMNb2X+"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-695df25699fso7541416d6.2
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 07:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711636695; x=1712241495; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mBDqCwUo0BszO/p4vM05OTn+yRfN49/fU9/chw4uLSk=;
-        b=nGHC4ODBSKjkM6snQs+er/S7GVTja1fnpc2BwIpp4BvvN9CTaqbi1mYFanTC0PJgTN
-         jxN+R8vbKc48wVpdfUiyLuUCB+0BKvavuzvL2S2vRo5q8tW+FGVZd6vgyuXfMYtfqSHx
-         gLO9uw2HlY2Xp1PjfHcpBA8py/EtVZJZerUP9pFbm9mwazi/5s8S2+5VqmhGwW6i7Rwa
-         13DrOhXYskl0LUVvdX+9/NoErgluxE3KhzGGienYFfwg3/ULjCnecu9E5qnTg3MWo+cT
-         xlSG8aItibylrvTR4Fh9SRNdiZBpgFPV8lGSQHp6bZHEp2O/MGnzRvtfjMT5/7wAEt0G
-         dJMw==
+        d=ieee.org; s=google; t=1711637638; x=1712242438; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ch1rSN60qRNe5jZReHI5Y78NslDtRUbpHN7Kv6Yk4Rs=;
+        b=HlMNb2X+mKxgwfUicU3F0Li53AF8/WQfDOYVbwZsmrHMWl2ganLo8YCPkxfc5O1Px7
+         U3Kj/AbEn24Iw/5BLawIIt/M5jMgqcD0A/BA1G/lgmQZFPPiCtnbaMEpMiHGYLSiJpN4
+         lC6rgRmspSJH4mqJz+QkNCMSQXsY+cMhpEMhs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711636695; x=1712241495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mBDqCwUo0BszO/p4vM05OTn+yRfN49/fU9/chw4uLSk=;
-        b=LDC2TCh59rQ2KNZEMzdRcPmn7OR5TwHshjybpDwJ0HtrdYsHD+xzzM+oZxY4RrvzL4
-         ++8Yx8nMAkv0ix9gzhQWI68+fdRzDwGE5bQdOalyXyLzOO5Vt8rv7UU5nDx117cguwlA
-         iTgg0hd2k9rQKI9CWKohvXbeOs23/1YpCaqK0YAkphOK/wepJxGR+XYIXW4ahWzOb05X
-         Hp+nQazxTIzDGLJ1izeXZjRR1TKNZg1QOSljndbm9qwRtzrkHbE3t9A0VFU3fc8GmtuB
-         GJKHH3A8YZ56ML5Hklw6cehkxrxsEPJfOqyxI+5foTgyTzdMcrL+oRwcZ6MmGWPbucqI
-         WR2w==
-X-Forwarded-Encrypted: i=1; AJvYcCWnKcDyrDC13FnRjmfuRpV6S8qo2gb/HOd4/KciSuik2PK1M3smWtOuNo8fCw63KagCYGkgjJghAlW0uIMmp6384hAKnA==
-X-Gm-Message-State: AOJu0Yy5Zmhexy6GxuCNEBlKSe9n8BXcKy0wNng5Fy62a9byl6Jflksc
-	7cJrz+wOuYrYLmPt1doDV9KbVDnIAl221HPnMICB9Wyv7fU6XRxyulFNsd8diEtkMPElCkZnwnv
-	Jfsy4mr0ejssK1t3FqOXkc9f1zlSc3KcDAyvm
-X-Google-Smtp-Source: AGHT+IFpCb+hAEMXqJRx+znyNHc29XT0UrNVUxB6VWgzCxHc/S/gsBG3CXhdt+RzMQsIPrDbBmYFcfOf8JEENWeNtM0=
-X-Received: by 2002:a50:bb21:0:b0:56c:18df:f9e1 with SMTP id
- y30-20020a50bb21000000b0056c18dff9e1mr142319ede.5.1711636695048; Thu, 28 Mar
- 2024 07:38:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711637638; x=1712242438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ch1rSN60qRNe5jZReHI5Y78NslDtRUbpHN7Kv6Yk4Rs=;
+        b=vMIlpYgG7+mKKe1cef36T/9W2Yirmd3HCmjahL3PnO6tHv8FLvYH+wZHdrJwF/tO51
+         /OWnjJjcxUVQqTvQA+xJFeXKB0YNLrsiEcY1+Xackv0G64gb0xyrPL6cQZyqjaSFGy0m
+         aa8kK8oWKUffr10p4tSd2cJVlxbrVXxatP6yb82yYHBkffp1Wlz5R/pFiRnloFZ4iAzq
+         jfG5aQjyIy3gcmsyNcbXdbH7VvMK5Zuo4zCSVq+PnuWL0wl0PeOTdG98Z4nxUK87QGfC
+         AYGx2r5KQEi1RPoFhzUhkWnrPw6RuBFjB3fa52aeM2NAlbs0e9zc9LFGlekM3LddEG1S
+         YkbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXpkdnk/TlpHJmqtblP2lFKe7834jahkK2urp53zDQsYCuWvldMsdRXCx9SXiYU5QPHxSsG/2VpgJ7s3054TmHR/3evCw==
+X-Gm-Message-State: AOJu0YzygmnHnVkPJzx9mDcIdNks7twMRbQkSBXLkyhPMDPpR8+ZJwvk
+	65dJ9WuVr5ncQvzIs3YwF7RYcf+wnuStauYpvPxILV0K3mJE+ZwYayF3AWCOFg==
+X-Google-Smtp-Source: AGHT+IEnRGCY/sQi9y+ccYFEbyJVObyHWpdhYti3ZYxnNsR7GFx/Tq+iuzOTlBR8697MpFQbDAmQmg==
+X-Received: by 2002:ad4:5507:0:b0:696:990b:dfeb with SMTP id pz7-20020ad45507000000b00696990bdfebmr2685430qvb.16.1711637638145;
+        Thu, 28 Mar 2024 07:53:58 -0700 (PDT)
+Received: from [172.22.22.28] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
+        by smtp.googlemail.com with ESMTPSA id jf11-20020a0562142a4b00b006987272f5cbsm399690qvb.71.2024.03.28.07.53.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Mar 2024 07:53:57 -0700 (PDT)
+Message-ID: <b8e848fe-96d8-4f75-a2e9-2ed5c11a2fd7@ieee.org>
+Date: Thu, 28 Mar 2024 09:53:55 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-6-arnd@kernel.org>
-In-Reply-To: <20240328143051.1069575-6-arnd@kernel.org>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 28 Mar 2024 15:38:03 +0100
-Message-ID: <CANn89i+3FuKc1RsYaciNe3uQMZuJBjSmvC_ueuQ=NaFVzEnyuA@mail.gmail.com>
-Subject: Re: [PATCH 5/9] ipv4: tcp_output: avoid warning about NET_ADD_STATS
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Dmitry Safonov <0x7f454c46@gmail.com>, 
-	Neal Cardwell <ncardwell@google.com>, "mfreemon@cloudflare.com" <mfreemon@cloudflare.com>, 
-	Yan Zhai <yan@cloudflare.com>, netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/9] rbd: avoid out-of-range warning
+Content-Language: en-US
+To: Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+ Ilya Dryomov <idryomov@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+ Nathan Chancellor <nathan@kernel.org>, Alex Elder <elder@inktank.com>,
+ Josh Durgin <josh.durgin@inktank.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Dongsheng Yang <dongsheng.yang@easystack.cn>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Hannes Reinecke <hare@suse.de>, Christian Brauner <brauner@kernel.org>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ "Ricardo B. Marliere" <ricardo@marliere.net>,
+ Jinjie Ruan <ruanjinjie@huawei.com>, Alex Elder <elder@linaro.org>,
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, llvm@lists.linux.dev
+References: <20240328143051.1069575-1-arnd@kernel.org>
+ <20240328143051.1069575-4-arnd@kernel.org>
+From: Alex Elder <elder@ieee.org>
+In-Reply-To: <20240328143051.1069575-4-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 28, 2024 at 3:31=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
+On 3/28/24 9:30 AM, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
->
-> Clang warns about a range check in percpu_add_op() being impossible
-> to hit for an u8 variable:
->
-> net/ipv4/tcp_output.c:188:3: error: result of comparison of constant -1 w=
-ith expression of type 'u8' (aka 'unsigned char') is always false [-Werror,=
--Wtautological-constant-out-of-range-compare]
->                 NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPACKCOMPRESSED,
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/net/ip.h:291:41: note: expanded from macro 'NET_ADD_STATS'
->  #define NET_ADD_STATS(net, field, adnd) SNMP_ADD_STATS((net)->mib.net_st=
-atistics, field, adnd)
->                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
-> include/net/snmp.h:143:4: note: expanded from macro 'SNMP_ADD_STATS'
->                         this_cpu_add(mib->mibs[field], addend)
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/percpu-defs.h:509:33: note: expanded from macro 'this_cpu_a=
-dd'
->  #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, =
-pcp, val)
->                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~
-> note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=3D=
-0 to see all)
-> <scratch space>:187:1: note: expanded from here
-> this_cpu_add_8
-> ^
-> arch/x86/include/asm/percpu.h:326:35: note: expanded from macro 'this_cpu=
-_add_8'
->  #define this_cpu_add_8(pcp, val)                percpu_add_op(8, volatil=
-e, (pcp), val)
->                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~
-> arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_a=
-dd_op'
->                               ((val) =3D=3D 1 || (val) =3D=3D -1)) ?     =
-       \
->                                              ~~~~~ ^  ~~
->
+> 
+> clang-14 points out that the range check is always true on 64-bit
+> architectures since a u32 is not greater than the allowed size:
+> 
+> drivers/block/rbd.c:6079:17: error: result of comparison of constant 2305843009213693948 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+w
+>              ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> This is harmless, so just change the type of the temporary to size_t
+> to shut up that warning.
 
-This seems like a bug in the macro or the compiler, because val is not
-a constant ?
+This fixes the warning, but then the now size_t value is passed
+to ceph_decode_32_safe(), which implies a different type conversion.
+That too is not harmful, but...
 
-__builtin_constant_p(val) should return false ???
+Could we just cast the value in the comparison instead?
 
-+#define percpu_add_op(size, qual, var, val)                            \
-+do {                                                                   \
-+       const int pao_ID__ =3D (__builtin_constant_p(val) &&              \
-+                             ((val) =3D=3D 1 || (val) =3D=3D -1)) ?       =
-     \
-+                               (int)(val) : 0;                         \
-+       if (0) {                                                        \
-+               typeof(var) pao_tmp__;                                  \
-+               pao_tmp__ =3D (val);                                      \
-+               (void)pao_tmp__;                                        \
-+       }                                                               \
-+       if (pao_ID__ =3D=3D 1)                                             =
- \
-+               percpu_unary_op(size, qual, "inc", var);                \
-+       else if (pao_ID__ =3D=3D -1)                                       =
- \
-+               percpu_unary_op(size, qual, "dec", var);                \
-+       else                                                            \
-+               percpu_to_op(size, qual, "add", var, val);              \
-+} while (0)
-+
+   if ((size_t)snap_count > (SIZE_MAX - sizeof (struct ceph_snap_context))
 
+You could drop the space between sizeof and ( while
+you're at it (I always used the space back then).
 
+					-Alex
 
-> Avoid this warning with a cast to a signed 'int'.
->
+> 
+> Fixes: bb23e37acb2a ("rbd: refactor rbd_header_from_disk()")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  net/ipv4/tcp_output.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index e3167ad96567..dbe54fceee08 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-> @@ -183,7 +183,7 @@ static inline void tcp_event_ack_sent(struct sock *sk=
-, u32 rcv_nxt)
->
->         if (unlikely(tp->compressed_ack)) {
->                 NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPACKCOMPRESSED,
-> -                             tp->compressed_ack);
-> +                             (int)tp->compressed_ack);
->                 tp->compressed_ack =3D 0;
->                 if (hrtimer_try_to_cancel(&tp->compressed_ack_timer) =3D=
-=3D 1)
->                         __sock_put(sk);
-> --
-> 2.39.2
->
+>   drivers/block/rbd.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+> index 26ff5cd2bf0a..cb25ee513ada 100644
+> --- a/drivers/block/rbd.c
+> +++ b/drivers/block/rbd.c
+> @@ -6062,7 +6062,7 @@ static int rbd_dev_v2_snap_context(struct rbd_device *rbd_dev,
+>   	void *p;
+>   	void *end;
+>   	u64 seq;
+> -	u32 snap_count;
+> +	size_t snap_count;
+>   	struct ceph_snap_context *snapc;
+>   	u32 i;
+>   
+
