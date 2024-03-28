@@ -1,186 +1,184 @@
-Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FEE3BBEB
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 16:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7F93BBC1;
+	Thu, 28 Mar 2024 17:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711643999; cv=none; b=YeSpjW72iBDeEA4hjLBh1YdVFcAXu+CxZlvhH64v0e/dQvKaxmOXOpB2SYjuTqzT2mxp5c2b/A2vWl8AQ5Y+fs1PnQ8H5LZkiqzZ612MyWkqJ/g8nKU3CacHvSVtdyS6gg8NPCZCBDajK1O+MAlrhlf4pZLH3wiUOpGf81pkKbw=
+	t=1711645703; cv=none; b=Ko9hmDRTI0cw4ZLH64W+jWYSz87yq9hIAsjc5ulLCGvFUcaFlopyIw7MPzkn9OzZq0/KHMQWVgRAbw9JZLjiaHp0FehNbrP156JT5vw8HG87WC2HZQkPsPMBaeuT5eonf1xx7Q4eQFvDKDGMMQZKiijEduLHffIoPOMPW6SQ5KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711643999; c=relaxed/simple;
-	bh=wb/qSsrG9p00H2YgbJ23G128MXHEa52O+6iF8sj5TtY=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=q3uZ5aI0oJ9iKIfdZtPn7UWcyHVkubWh4vEu8mNYyqPSURkIJ57Uxsmc0ogcIYqkrewMP84G65TSq9MNzW0PxBm1l6SHL9zXJArdI/Ih0zFvdU863RS+bOjkdGcSd/06Mz0AV4ahH0dnlVDvmwOP790N2pjshueyWUZ15igNmYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gg0BjxU8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=P252tgkR; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1711645703; c=relaxed/simple;
+	bh=UCnU67HeXYoqYdj4S5dBKZ2Q4xHzdK3/OCAHu2KUfBI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EQOzDEg/Tbylz/gXhPcSgQ1Fc87Khc172Hn2d75d6TZ1y02ih2Lxe6teguUnZjlj2ZvkxxTlQwVtI5Bwevx4WrHmkNLUuxI2N/zwo61Dteb9iGcOUZzVcxanFK+PfeTNBAxGWGXupj1z0f4KJ9KRoc2VITfA9RRsNqIKRflJmT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=INiZVCt5; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gg0BjxU8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="P252tgkR"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 19D5E1140163;
-	Thu, 28 Mar 2024 12:39:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 28 Mar 2024 12:39:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1711643997;
-	 x=1711730397; bh=aUszvSWxiA8AwwpnjADcGdmlaqvcxRRc2keJGjADuiU=; b=
-	gg0BjxU8PF7wrDeOt6Y5eATYhX9zfvEDFJryGM3FP7AW4kzWeWUpBA3JHkR31B1S
-	o+rfhUCKwSa3OF46LOGI9ZEv9LpOAuctp4lhvmve/dYt0byJqTMau9JGOrvEpJNn
-	BhqYzMiX28wGv8kRplwNab3ZmxW077ysB+UgrO2/TeNtvmjNl9Aaqcm+Pjw9hMmJ
-	ewTxMwnmaF93R8ybTZYBPIF/CS224Q6fgMHYHQItyc7lqGz4S2BioMqm8kxfZcRX
-	aOy65p2eXBBPXlKRh+YonNkl9ZBrCiWiewZq+gwfahCbHmZBo7S0deYHYRqll2O3
-	v6htgafYrusq6SSbapwc5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1711643997; x=
-	1711730397; bh=aUszvSWxiA8AwwpnjADcGdmlaqvcxRRc2keJGjADuiU=; b=P
-	252tgkRJqRLht28QLlqUwvcrHXIU5eVMmvtXPt4OY0VLSMjif5s5Uy7LblkJscpB
-	pnzdzLn9jYb0iIoJjtFi3+G72Bw5s9PiVxpPv/sPvbfZO2ba939EwqIysGjLigsr
-	tBBN4TFt/1FrScYofwBU+nnUtCg7bPRT9BV5+hge1VyCtPrf2+0Iv9QXLqleYy8O
-	LNJ8ygqSqdk5fZTWfFKJWyCtwhAM6rP97yfZsQk434BK8CoysODn9F+QOLc5yDiD
-	Ifhz6MnXfNMokqfn1dIP4eCF1xoJH+S/r0WdznRkKVz9uRPHsc4YRSfVIGo/QjH7
-	zzx+Df5kndBtLaDByuISQ==
-X-ME-Sender: <xms:XJ0FZh_qGSFOV6xuzvQjQYgjiuNbHX_scIdkv4_aKCt1GnNS8gxcwg>
-    <xme:XJ0FZlul6l4MgvQnW8S8TxKPExyXlIufw6n7BtXUTksesfcRAD_THHm78MEePYIin
-    BsPQ0ibIA35qSjL6bs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduledgledtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeelfefgueeviefgudduueefueffkeelleeijeelkefgudfgueelledtuddu
-    ieegvdenucffohhmrghinhepghhouggsohhlthdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:XJ0FZvCBvIuhQGbw6wfmrNS_mOA1m9wAwTnp16NiHEkRhrR-S7YuqQ>
-    <xmx:XJ0FZldfJAr9PnAVtMDXWsMRg3Ohlu2mqn6cBs6YxP8vboVblKtUtg>
-    <xmx:XJ0FZmOGnJHZWmYnJHn87hCccqcF8HAmrpPl0u6Mp1LeSsmgOBkAOQ>
-    <xmx:XJ0FZnnGjN49gJA-VQJ5K6DAWlhfQTcJ_IUrdWtisP4JaboD3Y5rcA>
-    <xmx:XZ0FZrxA9XI3f_xAV6-xNT6gLwiSkQ4SSB7b_dlue5OM1q4-ITlQFA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 9F1EAB6008D; Thu, 28 Mar 2024 12:39:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="INiZVCt5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711645702; x=1743181702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UCnU67HeXYoqYdj4S5dBKZ2Q4xHzdK3/OCAHu2KUfBI=;
+  b=INiZVCt5LfR0h69oeusbs2DDIcsG9YS/SaKXO6DrZ77ZivgjQ1dV3qmL
+   aC34HYaaDVCRzkVcwTY1BGqCjioKrq25r1ajQh3Q3wT+fXCiL4FMhM7lD
+   Q3aI8CfCZEdg/bj2QjW9nDV2Dm8/91ZLWm8TnWhrZ2BCfVa7Pj6qO5AzR
+   dy+XuKePpriX73LUDdHHOxm02896aTKrUev4ayNFse7MjY3YomttSchxj
+   DNt2LpXmxhN+ysSa7RO3Gq4mEYNl/hpVuml3wEQiEvBE+VDpRqCF6fCXw
+   KDsDPpFyglTYGYqeQLtmNWW6X6fgM3cjzuu4Tt1KZWx8K906UWtGCqCUa
+   Q==;
+X-CSE-ConnectionGUID: 0J+Ei/J+Ryu/8j0pMkwXKQ==
+X-CSE-MsgGUID: oqcVYIRIRNWNnuXmJA4RHg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="7417535"
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="7417535"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 10:08:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="39865448"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 28 Mar 2024 10:08:17 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rptEc-0002NC-2v;
+	Thu, 28 Mar 2024 17:08:14 +0000
+Date: Fri, 29 Mar 2024 01:07:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mina Almasry <almasrymina@google.com>,
+	Ayush Sawal <ayush.sawal@chelsio.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Mirko Lindner <mlindner@marvell.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Boris Pismenny <borisp@nvidia.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Dragos Tatulea <dtatulea@nvidia.com>
+Subject: Re: [PATCH net-next v2 2/3] net: mirror skb frag ref/unref helpers
+Message-ID: <202403290006.WfusvToB-lkp@intel.com>
+References: <20240327214523.2182174-3-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <62cf1c3c-29b7-48cc-9d52-cd47a6c07aa4@app.fastmail.com>
-In-Reply-To: 
- <CANn89i+3FuKc1RsYaciNe3uQMZuJBjSmvC_ueuQ=NaFVzEnyuA@mail.gmail.com>
-References: <20240328143051.1069575-1-arnd@kernel.org>
- <20240328143051.1069575-6-arnd@kernel.org>
- <CANn89i+3FuKc1RsYaciNe3uQMZuJBjSmvC_ueuQ=NaFVzEnyuA@mail.gmail.com>
-Date: Thu, 28 Mar 2024 17:39:36 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Eric Dumazet" <edumazet@google.com>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
- "David Ahern" <dsahern@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Dmitry Safonov" <0x7f454c46@gmail.com>,
- "Neal Cardwell" <ncardwell@google.com>,
- "mfreemon@cloudflare.com" <mfreemon@cloudflare.com>,
- "Yan Zhai" <yan@cloudflare.com>, Netdev <netdev@vger.kernel.org>,
- llvm@lists.linux.dev
-Subject: Re: [PATCH 5/9] ipv4: tcp_output: avoid warning about NET_ADD_STATS
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240327214523.2182174-3-almasrymina@google.com>
 
-On Thu, Mar 28, 2024, at 15:38, Eric Dumazet wrote:
-> On Thu, Mar 28, 2024 at 3:31=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
-> wrote:
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'perc=
-pu_add_op'
->>                               ((val) =3D=3D 1 || (val) =3D=3D -1)) ? =
-           \
->>                                              ~~~~~ ^  ~~
->>
->
-> This seems like a bug in the macro or the compiler, because val is not
-> a constant ?
->
-> __builtin_constant_p(val) should return false ???
->
-> +#define percpu_add_op(size, qual, var, val)                          =
-  \
-> +do {                                                                 =
-  \
-> +       const int pao_ID__ =3D (__builtin_constant_p(val) &&          =
-    \
-> +                             ((val) =3D=3D 1 || (val) =3D=3D -1)) ?  =
-          \
-> +                               (int)(val) : 0;                       =
-  \
+Hi Mina,
 
-It looks like gcc does the same thing, with the broader and
-still disabled -Wtype-limits, see: https://godbolt.org/z/3EPTGx68n
+kernel test robot noticed the following build errors:
 
-As far as I can tell, it does not matter that the comparison
-against -1 is never actually evaluated, since the warning
-is already printed before it simplifies the condition.
+[auto build test ERROR on net-next/main]
 
-This is the only such warning I got from percpu, but
-I guess we could also add the cast inside of the macro,
-such as
+url:    https://github.com/intel-lab-lkp/linux/commits/Mina-Almasry/net-make-napi_frag_unref-reuse-skb_page_unref/20240328-054816
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240327214523.2182174-3-almasrymina%40google.com
+patch subject: [PATCH net-next v2 2/3] net: mirror skb frag ref/unref helpers
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240329/202403290006.WfusvToB-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403290006.WfusvToB-lkp@intel.com/reproduce)
 
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu=
-.h
-index 44958ebaf626..5923d786e67a 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -181,12 +181,14 @@ do {                                              =
-                        \
-  */
- #define percpu_add_op(size, qual, var, val)                            \
- do {                                                                   \
--       const int pao_ID__ =3D (__builtin_constant_p(val) &&            =
-  \
--                             ((val) =3D=3D 1 || (val) =3D=3D -1)) ?    =
-        \
--                               (int)(val) : 0;                         \
-+       __auto_type __val =3D (val);                                    =
-  \
-+       const int pao_ID__ =3D (__builtin_constant_p(__val) &&          =
-  \
-+                             ((__val) =3D=3D (typeof(__val))1 ||       =
-    \
-+                              (__val) =3D=3D (typeof(__val))-1)) ?     =
-    \
-+                               (int)(__val) : 0;                       \
-        if (0) {                                                        \
-                typeof(var) pao_tmp__;                                  \
--               pao_tmp__ =3D (val);                                    =
-  \
-+               pao_tmp__ =3D (__val);                                  =
-  \
-                (void)pao_tmp__;                                        \
-        }                                                               \
-        if (pao_ID__ =3D=3D 1)                                          =
-    \
-@@ -194,7 +196,7 @@ do {                                                =
-                        \
-        else if (pao_ID__ =3D=3D -1)                                    =
-    \
-                percpu_unary_op(size, qual, "dec", var);                \
-        else                                                            \
--               percpu_to_op(size, qual, "add", var, val);              \
-+               percpu_to_op(size, qual, "add", var, __val);            \
- } while (0)
-=20
- #define percpu_from_op(size, qual, op, _var)                           \
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403290006.WfusvToB-lkp@intel.com/
 
-I added a temporary variable there to avoid expanding
-the argument too many times.
+All errors (new ones prefixed by >>):
 
-       Arnd
+>> net/tls/tls_device_fallback.c:280:22: error: too few arguments to function call, expected 2, have 1
+     280 |                 __skb_frag_ref(frag);
+         |                 ~~~~~~~~~~~~~~     ^
+   include/linux/skbuff.h:3517:20: note: '__skb_frag_ref' declared here
+    3517 | static inline void __skb_frag_ref(skb_frag_t *frag, bool recycle)
+         |                    ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +280 net/tls/tls_device_fallback.c
+
+e8f69799810c32 Ilya Lesokhin  2018-04-30  228  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  229  /* This function may be called after the user socket is already
+e8f69799810c32 Ilya Lesokhin  2018-04-30  230   * closed so make sure we don't use anything freed during
+e8f69799810c32 Ilya Lesokhin  2018-04-30  231   * tls_sk_proto_close here
+e8f69799810c32 Ilya Lesokhin  2018-04-30  232   */
+e8f69799810c32 Ilya Lesokhin  2018-04-30  233  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  234  static int fill_sg_in(struct scatterlist *sg_in,
+e8f69799810c32 Ilya Lesokhin  2018-04-30  235  		      struct sk_buff *skb,
+d80a1b9d186057 Boris Pismenny 2018-07-13  236  		      struct tls_offload_context_tx *ctx,
+e8f69799810c32 Ilya Lesokhin  2018-04-30  237  		      u64 *rcd_sn,
+e8f69799810c32 Ilya Lesokhin  2018-04-30  238  		      s32 *sync_size,
+e8f69799810c32 Ilya Lesokhin  2018-04-30  239  		      int *resync_sgs)
+e8f69799810c32 Ilya Lesokhin  2018-04-30  240  {
+504148fedb8542 Eric Dumazet   2022-06-30  241  	int tcp_payload_offset = skb_tcp_all_headers(skb);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  242  	int payload_len = skb->len - tcp_payload_offset;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  243  	u32 tcp_seq = ntohl(tcp_hdr(skb)->seq);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  244  	struct tls_record_info *record;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  245  	unsigned long flags;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  246  	int remaining;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  247  	int i;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  248  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  249  	spin_lock_irqsave(&ctx->lock, flags);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  250  	record = tls_get_record(ctx, tcp_seq, rcd_sn);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  251  	if (!record) {
+e8f69799810c32 Ilya Lesokhin  2018-04-30  252  		spin_unlock_irqrestore(&ctx->lock, flags);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  253  		return -EINVAL;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  254  	}
+e8f69799810c32 Ilya Lesokhin  2018-04-30  255  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  256  	*sync_size = tcp_seq - tls_record_start_seq(record);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  257  	if (*sync_size < 0) {
+e8f69799810c32 Ilya Lesokhin  2018-04-30  258  		int is_start_marker = tls_record_is_start_marker(record);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  259  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  260  		spin_unlock_irqrestore(&ctx->lock, flags);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  261  		/* This should only occur if the relevant record was
+e8f69799810c32 Ilya Lesokhin  2018-04-30  262  		 * already acked. In that case it should be ok
+e8f69799810c32 Ilya Lesokhin  2018-04-30  263  		 * to drop the packet and avoid retransmission.
+e8f69799810c32 Ilya Lesokhin  2018-04-30  264  		 *
+e8f69799810c32 Ilya Lesokhin  2018-04-30  265  		 * There is a corner case where the packet contains
+e8f69799810c32 Ilya Lesokhin  2018-04-30  266  		 * both an acked and a non-acked record.
+e8f69799810c32 Ilya Lesokhin  2018-04-30  267  		 * We currently don't handle that case and rely
+a0e128ef88e4a0 Yueh-Shun Li   2023-06-22  268  		 * on TCP to retransmit a packet that doesn't contain
+e8f69799810c32 Ilya Lesokhin  2018-04-30  269  		 * already acked payload.
+e8f69799810c32 Ilya Lesokhin  2018-04-30  270  		 */
+e8f69799810c32 Ilya Lesokhin  2018-04-30  271  		if (!is_start_marker)
+e8f69799810c32 Ilya Lesokhin  2018-04-30  272  			*sync_size = 0;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  273  		return -EINVAL;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  274  	}
+e8f69799810c32 Ilya Lesokhin  2018-04-30  275  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  276  	remaining = *sync_size;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  277  	for (i = 0; remaining > 0; i++) {
+e8f69799810c32 Ilya Lesokhin  2018-04-30  278  		skb_frag_t *frag = &record->frags[i];
+e8f69799810c32 Ilya Lesokhin  2018-04-30  279  
+e8f69799810c32 Ilya Lesokhin  2018-04-30 @280  		__skb_frag_ref(frag);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  281  		sg_set_page(sg_in + i, skb_frag_page(frag),
+b54c9d5bd6e38e Jonathan Lemon 2019-07-30  282  			    skb_frag_size(frag), skb_frag_off(frag));
+e8f69799810c32 Ilya Lesokhin  2018-04-30  283  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  284  		remaining -= skb_frag_size(frag);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  285  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  286  		if (remaining < 0)
+e8f69799810c32 Ilya Lesokhin  2018-04-30  287  			sg_in[i].length += remaining;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  288  	}
+e8f69799810c32 Ilya Lesokhin  2018-04-30  289  	*resync_sgs = i;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  290  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  291  	spin_unlock_irqrestore(&ctx->lock, flags);
+e8f69799810c32 Ilya Lesokhin  2018-04-30  292  	if (skb_to_sgvec(skb, &sg_in[i], tcp_payload_offset, payload_len) < 0)
+e8f69799810c32 Ilya Lesokhin  2018-04-30  293  		return -EINVAL;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  294  
+e8f69799810c32 Ilya Lesokhin  2018-04-30  295  	return 0;
+e8f69799810c32 Ilya Lesokhin  2018-04-30  296  }
+e8f69799810c32 Ilya Lesokhin  2018-04-30  297  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
