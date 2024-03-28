@@ -1,128 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008857E58E
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 11:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7247D413;
+	Thu, 28 Mar 2024 12:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711625648; cv=none; b=drN5juJxUkaP4fZeqokTMjyjT7lY38EtHyEFvaBHt8Z3qP/wgkC0uUOjY2HveeplhhZz9Y0BQ/wQvOVLkWwPu8HxOalDwX2zehYHnJtzIsFIsXyp1OyeslHWz9AFYeUHfHp7cB4sIxK0vNaa7xlEybAAIzhYzRS+yzwJc6hzuNE=
+	t=1711627273; cv=none; b=a3KM/7/dSUYpGN8Gy8du9BOuKuf9W7BqEOnNqdose1PXSa79pc7Ff+gBvDydjictVa0t98qP8yAoY/2cwCJlxrJObB/o9tmNSiAAa1O4oHn1NdzE7lLTVwtkgznhVTfPiHGA0AumJFPpPI9lIe05wk+IMMyzdjDIexu4P4aDi2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711625648; c=relaxed/simple;
-	bh=eBy42X35pJreeO0yYa4HjMU6RLBU89fmPu6IVcsQXa4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=OLa1RlDn3s1wJYQMOEgqEIkJNUX1ISczMAloOR4LlEjPGNODmpSgdIbyAfayK07zQjDQGqLSG/LbYLkBztq38Wp1BZdJtJ652XtEACEEO/xycKawJpQqDugptrcXI8pmBtyagaKr+rw1Wpa5qo4RBtjSO6uImNP9DE/DNYOl8OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yd69XgQC; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1711627273; c=relaxed/simple;
+	bh=nffDaJVrBNsyAnwZsAeZUbVZ9WuEdxBLqM6rPP+Bab8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jCb22dvozA52izJHpmH2DeCNLTt2AKnzCgvq6tBGy1CCsfhD58MOVfRdzMv6jd0Co+TfNB9AQ5cVUrr16S99hVY3Npi629M8/rHhKWbk9CVYMzIG6C3XYVyEtWggScsRlGApqrIGQ8FiE7o3snCbyLWNVFHTkoWIP1B/zmhKI1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cE5JLRU1; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yd69XgQC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cE5JLRU1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711625647; x=1743161647;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=eBy42X35pJreeO0yYa4HjMU6RLBU89fmPu6IVcsQXa4=;
-  b=Yd69XgQCgHNADQiqP8MkFqumlxehwR2w89jdZw8mYC74P3QyZmTpyBzl
-   WrAs8qwUAKMJfP5dw+I8L/RYqSjIwBNcvf/koIFyCAoLvKKjoY1gjJLW1
-   RVqs6dwBI1xhklFlXouiHYtFWK/wmnpxXMV2Lez5aaFT4K0dVHZx8Xu1u
-   zkzMqCtdo0WvW09HvAr22gsofos1N58KAOrYWdLTbehyMc6aG1TNhMizt
-   Y6WwsRtzLWlEnrzna9Q0BK4+/xNWByuys2/i9xHq8PTGzjAxR657qyCdL
-   K+8f/VNqOJY1wg9iGuW2jMDJ5p5pZUkK/QAixXYUfilaRQg19m2EkxF+B
-   A==;
-X-CSE-ConnectionGUID: 2FsYYJqxTTCeR6jeHGhRRQ==
-X-CSE-MsgGUID: 71GTVpviQamlXJYH9Og2Lg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="32175430"
+  t=1711627269; x=1743163269;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nffDaJVrBNsyAnwZsAeZUbVZ9WuEdxBLqM6rPP+Bab8=;
+  b=cE5JLRU1AVT2PXYUdBWc6Kg3aU5i/KW9EoQp4QPAJY7Mv+uF6Buco5Uy
+   aK0HnXpYPXdnUPq3duRZ/U/A9nHlLiCHQI0zRxIgDEji3HlCKQif7gtTH
+   Nndyp5kA0/VRhRcxccmhr3HdRGVNxV9BSfgpEJ3bbOWFSffXnyv+9FMdh
+   mwkEDdGfxrhkL+F9SffG0+rA7Nl7FzpTVgtywWpjaf0B+uIKqhqXgW9IR
+   GcDiIqIlcadnejjTnz1tlB/vkFdY6nx77OMeoMYc1m53UagTropynR/1M
+   Yg33vu1yHYmOaor8DOQQl2QaguHlBbjVKkdSTXbnSMvolDXGbAlWhOHvQ
+   g==;
+X-CSE-ConnectionGUID: QTqfdC5SQf6Y3BZfPLAMfg==
+X-CSE-MsgGUID: kpeBDwItRYy3hKRb/YCaUA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="9731498"
 X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="32175430"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 04:34:05 -0700
+   d="scan'208";a="9731498"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 05:01:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="21344061"
-Received: from abdulqaf-mobl2.amr.corp.intel.com (HELO localhost) ([10.252.57.138])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 04:33:57 -0700
-From: Jani Nikula <jani.nikula@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
- intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org, David
- Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, Alex Deucher <alexander.deucher@amd.com>, Christian
- =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>, "Pan, Xinhui"
- <Xinhui.Pan@amd.com>,
- Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, Danilo
- Krummrich <dakr@redhat.com>, Rob Clark <robdclark@gmail.com>, Abhinav
- Kumar <quic_abhinavk@quicinc.com>, Dmitry Baryshkov
- <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>, Marijn Suijten
- <marijn.suijten@somainline.org>, Hamza Mahfooz <hamza.mahfooz@amd.com>,
- Javier Martinez Canillas <javierm@redhat.com>, Sui Jingfeng
- <sui.jingfeng@linux.dev>, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [RESEND v3 2/2] drm: Add CONFIG_DRM_WERROR
-In-Reply-To: <20240327163331.GB1153323@dev-arch.thelio-3990X>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <cover.1709629403.git.jani.nikula@intel.com>
- <afe5ed943414f7ec3044c1547503b9941686a867.1709629403.git.jani.nikula@intel.com>
- <20240326225650.GA2784736@dev-arch.thelio-3990X>
- <20240327-cherubic-steel-tiger-e1c36a@houat> <87a5mkgl6i.fsf@intel.com>
- <20240327163331.GB1153323@dev-arch.thelio-3990X>
-Date: Thu, 28 Mar 2024 13:33:53 +0200
-Message-ID: <87il16fv4u.fsf@intel.com>
+   d="scan'208";a="54073874"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 28 Mar 2024 05:01:06 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpoRM-00026w-0r;
+	Thu, 28 Mar 2024 12:01:04 +0000
+Date: Thu, 28 Mar 2024 20:00:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org
+Subject: [rafael-pm:intel_pstate-testing 4/14]
+ drivers/cpufreq/intel_pstate.c:1655:25: warning: variable 'cpudata' is
+ uninitialized when used here
+Message-ID: <202403281955.LhZVDhXg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 27 Mar 2024, Nathan Chancellor <nathan@kernel.org> wrote:
-> On Wed, Mar 27, 2024 at 09:59:01AM +0200, Jani Nikula wrote:
->> An alternative would be to "depends on !COMPILE_TEST" that we have in
->> i915, but then some folks want to have COMPILE_TEST in drm, because some
->> drivers are otherwise hard for people to build.
->
-> Right. I think it is unfortunate how (at least in my opinion)
-> CONFIG_COMPILE_TEST has two meanings: genuinely just compile testing or
-> "allmodconfig". For the first case, we would want CONFIG_DRM_WERROR=y
-> but for the second case, it would be nice for CONFIG_DRM_WERROR to
-> default to off (because CONFIG_WERROR is enabled) but allow developers
-> to turn it on explicitly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_pstate-testing
+head:   16303764deedb814defe7e69712edec6a09b50ad
+commit: ac9f58c46515ad482d972d5a65c127241c4751b9 [4/14] cpufreq: intel_pstate: Get rid of unnecessary READ_ONCE() annotations
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240328/202403281955.LhZVDhXg-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403281955.LhZVDhXg-lkp@intel.com/reproduce)
 
-Yes, CONFIG_COMPILE_TEST has become overloaded.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403281955.LhZVDhXg-lkp@intel.com/
 
-> Another lofty/wistful idea to solve this would be to implement something
-> similar to compiler diagnostic groups for Kconfig, where there would be
-> a hierarchy like
->
->   CONFIG_WERROR
->     CONFIG_DRM_WERROR
->     CONFIG_SUBSYSTEM_A_WERROR
->     CONFIG_SUBSYSTEM_B_WERROR
->
-> where the value of CONFIG_WERROR is the same value for all
-> subconfigurations under it but they could still be enabled individually
-> without any additional dependencies (ala something like '-Wno-unused
-> -Wunused-variable'), which would allow my use case of CONFIG_WERROR=n
-> removing all instances of -Werror to continue to work but allow other
-> developers and CI systems to just set their specific -Werror
-> configuration and be done with it. I don't think something like that
-> exists but maybe I don't know Kconfig as well as I think I do :)
+All warnings (new ones prefixed by >>):
 
-Yet another idea is to have a way to mark a config option "manual", that
-is, never enable this automatically under any circumstances, not in make
-allyesconfig or allmodconfig, don't ask in make oldconfig, don't allow
-selects. The only way to enable is to toggle it manually. If you want it
-and enable it and see problems, it's on you.
+>> drivers/cpufreq/intel_pstate.c:1655:25: warning: variable 'cpudata' is uninitialized when used here [-Wuninitialized]
+    1655 |         schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
+         |                                ^~~~~~~
+   drivers/cpufreq/intel_pstate.c:1639:25: note: initialize the variable 'cpudata' to silence this warning
+    1639 |         struct cpudata *cpudata;
+         |                                ^
+         |                                 = NULL
+   1 warning generated.
 
-CONFIG_WERROR and CONFIG_DRM_WERROR could both be like this. The problem
-with them is that they're not so much different configurations, they are
-about how to deal with build errors, and that's not really what, say,
-make allyesconfig should be about.
 
-BR,
-Jani.
+vim +/cpudata +1655 drivers/cpufreq/intel_pstate.c
 
+57577c996d731c Srinivas Pandruvada 2021-09-28  1635  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1636  void notify_hwp_interrupt(void)
+57577c996d731c Srinivas Pandruvada 2021-09-28  1637  {
+57577c996d731c Srinivas Pandruvada 2021-09-28  1638  	unsigned int this_cpu = smp_processor_id();
+57577c996d731c Srinivas Pandruvada 2021-09-28  1639  	struct cpudata *cpudata;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1640  	unsigned long flags;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1641  	u64 value;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1642  
+ac9f58c46515ad Rafael J. Wysocki   2024-03-25  1643  	if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
+57577c996d731c Srinivas Pandruvada 2021-09-28  1644  		return;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1645  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1646  	rdmsrl_safe(MSR_HWP_STATUS, &value);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1647  	if (!(value & 0x01))
+57577c996d731c Srinivas Pandruvada 2021-09-28  1648  		return;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1649  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1650  	spin_lock_irqsave(&hwp_notify_lock, flags);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1651  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1652  	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
+57577c996d731c Srinivas Pandruvada 2021-09-28  1653  		goto ack_intr;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1654  
+57577c996d731c Srinivas Pandruvada 2021-09-28 @1655  	schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
+57577c996d731c Srinivas Pandruvada 2021-09-28  1656  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1657  	spin_unlock_irqrestore(&hwp_notify_lock, flags);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1658  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1659  	return;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1660  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1661  ack_intr:
+57577c996d731c Srinivas Pandruvada 2021-09-28  1662  	wrmsrl_safe(MSR_HWP_STATUS, 0);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1663  	spin_unlock_irqrestore(&hwp_notify_lock, flags);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1664  }
+57577c996d731c Srinivas Pandruvada 2021-09-28  1665  
+
+:::::: The code at line 1655 was first introduced by commit
+:::::: 57577c996d731ce1e5a4a488e64e6e201b360847 cpufreq: intel_pstate: Process HWP Guaranteed change notification
+
+:::::: TO: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 -- 
-Jani Nikula, Intel
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
