@@ -1,115 +1,128 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32B936AF2
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 09:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008857E58E
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 11:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711617510; cv=none; b=cV+WzKYgNmNT/sr32eUFUTqb6WAvm6iZMJzc5myGB4RjPOP34YjDmgVccjAAIFT21M1rPdMA+llNyOREHxxhbDuXlSBH3GFIvr16Lfh64QbKtiGLiu72OHXuB7jDJPezCH0HqJK2Kt4rex14EFwwvK19f6+RZ6YcLTuApt3At0c=
+	t=1711625648; cv=none; b=drN5juJxUkaP4fZeqokTMjyjT7lY38EtHyEFvaBHt8Z3qP/wgkC0uUOjY2HveeplhhZz9Y0BQ/wQvOVLkWwPu8HxOalDwX2zehYHnJtzIsFIsXyp1OyeslHWz9AFYeUHfHp7cB4sIxK0vNaa7xlEybAAIzhYzRS+yzwJc6hzuNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711617510; c=relaxed/simple;
-	bh=JdlPi/D8q9gRz0rC7iT/EQjBcreVsogwectsXFf1ljg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ezkXJAHzcph3u4oy9SUJE3nROmpEeMxBnQtjsY/aiJIqHnhvV0KeK+RHrGMzv3Nn4lEj5r0cUB2dh7NYvO5CWUtCdRECDpBx2bE36Cx9dzVVA/mvDI3nJnr5+/K61BzAItpwu1MKmLsHMCnLaf+B6g+5bNZ3XbTCr7Snv19LqPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eI0MZyiB; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1711625648; c=relaxed/simple;
+	bh=eBy42X35pJreeO0yYa4HjMU6RLBU89fmPu6IVcsQXa4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=OLa1RlDn3s1wJYQMOEgqEIkJNUX1ISczMAloOR4LlEjPGNODmpSgdIbyAfayK07zQjDQGqLSG/LbYLkBztq38Wp1BZdJtJ652XtEACEEO/xycKawJpQqDugptrcXI8pmBtyagaKr+rw1Wpa5qo4RBtjSO6uImNP9DE/DNYOl8OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yd69XgQC; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eI0MZyiB"
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dcc80d6006aso675857276.0
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 02:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711617508; x=1712222308; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JdlPi/D8q9gRz0rC7iT/EQjBcreVsogwectsXFf1ljg=;
-        b=eI0MZyiBbEAEaOC9hRS5RdubHRBuSzcY4YhEqkIIZGLNjSUoqaIVxP5lYB0pSKp055
-         1uXCS72HFFxshwDVr6h6mAA0+kX8rk6/Fq/Qds9arbhg3FUVW7crSH858kyjxDBMHDMK
-         QTO2vsb1ZS3dIGrNDn5LIsjtftPSfyvIYrDauJIVFCpTt1rNjk4xBHS0+qCKf8Y4QTxr
-         lAUXFQRj5HgKojl33359EqCnTAdxjBoWkBeDUPKUtNPT4YfZtUum6b2YYDTp/b2RYCIj
-         bLLk9BOLJJlJjFZocVmHAp6QrhopnJmgXUudvj50si+akZxTYuNRC+/w0RrymYCQLX7W
-         a0hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711617508; x=1712222308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JdlPi/D8q9gRz0rC7iT/EQjBcreVsogwectsXFf1ljg=;
-        b=gKmeJZvX2s6EXGXpuE5J3Z82XW3efCg7T8M29Sxf44TdTdHHylKD2kfRraSyz0RZ60
-         UyRYBtD5P3M/6nm/IgPICmP6vqHw8IwmH0clFSmFXVSiQN0fGKi7xbB5dBEhzAlnFskL
-         DUSJXRoW0yFdmDMh3FJMeUCe9SDcVala7zq00WhSAazJ+8Lt6D9JJBOng/2tBEfM8426
-         GQ4Blg2lVFXo9+4FSGVGwyE0NFjtKdjoKXGGDjMrHx1VvQ/A/XtBAedSqBFkrlOEtqPq
-         NTA13Tgc7kMSNkNSlRg/CpvTQpqttKMXQ2wgyyBfkPo17xJ6NlT05WmS4d60dK4LVdV7
-         duPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVYuY7+q6kKNty8HG+UV/YKhQl7c8f1Mx3kvYjO1Li8jTDpCwXaMO0cFfna27ROzsfcSpQcNQKsiEAGLAeWunT2mm1eyw==
-X-Gm-Message-State: AOJu0YwTEVVTSLnBR47v3GCkw3tO4HZE54RJahq52t7lSSk4jfEQudHX
-	2CqaGaDW/XCqPc4R66+UMNbw/Jl59wyTYQvQYG5Wx0JoDem/mYdamWTRMY1GPdQ49OCZ5CmXQ1E
-	P2RWJZo2wnkST/dz/VptEUfMZD8mzGNMGknwVhg==
-X-Google-Smtp-Source: AGHT+IHUYiXsFEyaSrFSbE/Sr9EQQEbq6LIDEHkAK2tUEMiEJLOv+Yp1LaCp4ieBZ7Wds5RI7onQUIkumjvsdiSFxmI=
-X-Received: by 2002:a25:9091:0:b0:dca:e4fd:b6d6 with SMTP id
- t17-20020a259091000000b00dcae4fdb6d6mr2028363ybl.61.1711617507999; Thu, 28
- Mar 2024 02:18:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yd69XgQC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711625647; x=1743161647;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=eBy42X35pJreeO0yYa4HjMU6RLBU89fmPu6IVcsQXa4=;
+  b=Yd69XgQCgHNADQiqP8MkFqumlxehwR2w89jdZw8mYC74P3QyZmTpyBzl
+   WrAs8qwUAKMJfP5dw+I8L/RYqSjIwBNcvf/koIFyCAoLvKKjoY1gjJLW1
+   RVqs6dwBI1xhklFlXouiHYtFWK/wmnpxXMV2Lez5aaFT4K0dVHZx8Xu1u
+   zkzMqCtdo0WvW09HvAr22gsofos1N58KAOrYWdLTbehyMc6aG1TNhMizt
+   Y6WwsRtzLWlEnrzna9Q0BK4+/xNWByuys2/i9xHq8PTGzjAxR657qyCdL
+   K+8f/VNqOJY1wg9iGuW2jMDJ5p5pZUkK/QAixXYUfilaRQg19m2EkxF+B
+   A==;
+X-CSE-ConnectionGUID: 2FsYYJqxTTCeR6jeHGhRRQ==
+X-CSE-MsgGUID: 71GTVpviQamlXJYH9Og2Lg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="32175430"
+X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
+   d="scan'208";a="32175430"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 04:34:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
+   d="scan'208";a="21344061"
+Received: from abdulqaf-mobl2.amr.corp.intel.com (HELO localhost) ([10.252.57.138])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 04:33:57 -0700
+From: Jani Nikula <jani.nikula@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
+ intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org, David
+ Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
+ <tzimmermann@suse.de>, Alex Deucher <alexander.deucher@amd.com>, Christian
+ =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>, "Pan, Xinhui"
+ <Xinhui.Pan@amd.com>,
+ Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, Danilo
+ Krummrich <dakr@redhat.com>, Rob Clark <robdclark@gmail.com>, Abhinav
+ Kumar <quic_abhinavk@quicinc.com>, Dmitry Baryshkov
+ <dmitry.baryshkov@linaro.org>, Sean Paul <sean@poorly.run>, Marijn Suijten
+ <marijn.suijten@somainline.org>, Hamza Mahfooz <hamza.mahfooz@amd.com>,
+ Javier Martinez Canillas <javierm@redhat.com>, Sui Jingfeng
+ <sui.jingfeng@linux.dev>, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [RESEND v3 2/2] drm: Add CONFIG_DRM_WERROR
+In-Reply-To: <20240327163331.GB1153323@dev-arch.thelio-3990X>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1709629403.git.jani.nikula@intel.com>
+ <afe5ed943414f7ec3044c1547503b9941686a867.1709629403.git.jani.nikula@intel.com>
+ <20240326225650.GA2784736@dev-arch.thelio-3990X>
+ <20240327-cherubic-steel-tiger-e1c36a@houat> <87a5mkgl6i.fsf@intel.com>
+ <20240327163331.GB1153323@dev-arch.thelio-3990X>
+Date: Thu, 28 Mar 2024 13:33:53 +0200
+Message-ID: <87il16fv4u.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240326144741.3094687-1-arnd@kernel.org> <20240326144741.3094687-2-arnd@kernel.org>
-In-Reply-To: <20240326144741.3094687-2-arnd@kernel.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 28 Mar 2024 10:18:17 +0100
-Message-ID: <CACRpkdbSsgzzwkTLTBvyc6JRVrAuVF=iFVQX7RZFJw5UyGuwyQ@mail.gmail.com>
-Subject: Re: [PATCH 01/12] kbuild: make -Woverride-init warnings more consistent
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	Harry Wentland <harry.wentland@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	Oded Gabbay <ogabbay@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, linux-mm@kvack.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tue, Mar 26, 2024 at 3:49=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+On Wed, 27 Mar 2024, Nathan Chancellor <nathan@kernel.org> wrote:
+> On Wed, Mar 27, 2024 at 09:59:01AM +0200, Jani Nikula wrote:
+>> An alternative would be to "depends on !COMPILE_TEST" that we have in
+>> i915, but then some folks want to have COMPILE_TEST in drm, because some
+>> drivers are otherwise hard for people to build.
+>
+> Right. I think it is unfortunate how (at least in my opinion)
+> CONFIG_COMPILE_TEST has two meanings: genuinely just compile testing or
+> "allmodconfig". For the first case, we would want CONFIG_DRM_WERROR=y
+> but for the second case, it would be nice for CONFIG_DRM_WERROR to
+> default to off (because CONFIG_WERROR is enabled) but allow developers
+> to turn it on explicitly.
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The -Woverride-init warn about code that may be intentional or not,
-> but the inintentional ones tend to be real bugs, so there is a bit of
-> disagreement on whether this warning option should be enabled by default
-> and we have multiple settings in scripts/Makefile.extrawarn as well as
-> individual subsystems.
->
-> Older versions of clang only supported -Wno-initializer-overrides with
-> the same meaning as gcc's -Woverride-init, though all supported versions
-> now work with both. Because of this difference, an earlier cleanup of
-> mine accidentally turned the clang warning off for W=3D1 builds and only
-> left it on for W=3D2, while it's still enabled for gcc with W=3D1.
->
-> There is also one driver that only turns the warning off for newer
-> versions of gcc but not other compilers, and some but not all the
-> Makefiles still use a cc-disable-warning conditional that is no
-> longer needed with supported compilers here.
->
-> Address all of the above by removing the special cases for clang
-> and always turning the warning off unconditionally where it got
-> in the way, using the syntax that is supported by both compilers.
->
-> Fixes: 2cd3271b7a31 ("kbuild: avoid duplicate warning options")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Yes, CONFIG_COMPILE_TEST has become overloaded.
 
-Neat!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Another lofty/wistful idea to solve this would be to implement something
+> similar to compiler diagnostic groups for Kconfig, where there would be
+> a hierarchy like
+>
+>   CONFIG_WERROR
+>     CONFIG_DRM_WERROR
+>     CONFIG_SUBSYSTEM_A_WERROR
+>     CONFIG_SUBSYSTEM_B_WERROR
+>
+> where the value of CONFIG_WERROR is the same value for all
+> subconfigurations under it but they could still be enabled individually
+> without any additional dependencies (ala something like '-Wno-unused
+> -Wunused-variable'), which would allow my use case of CONFIG_WERROR=n
+> removing all instances of -Werror to continue to work but allow other
+> developers and CI systems to just set their specific -Werror
+> configuration and be done with it. I don't think something like that
+> exists but maybe I don't know Kconfig as well as I think I do :)
 
-Yours,
-Linus Walleij
+Yet another idea is to have a way to mark a config option "manual", that
+is, never enable this automatically under any circumstances, not in make
+allyesconfig or allmodconfig, don't ask in make oldconfig, don't allow
+selects. The only way to enable is to toggle it manually. If you want it
+and enable it and see problems, it's on you.
+
+CONFIG_WERROR and CONFIG_DRM_WERROR could both be like this. The problem
+with them is that they're not so much different configurations, they are
+about how to deal with build errors, and that's not really what, say,
+make allyesconfig should be about.
+
+BR,
+Jani.
+
+
+-- 
+Jani Nikula, Intel
