@@ -1,139 +1,114 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BE640859
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F99C12F5A4
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711663787; cv=none; b=PDtR+biK+2+eyd/mvOvAaCeF+5/3rvGD3izpJ0ymV4nJ9w0qalvByPmvDcIriiSF2H8ny10riLrrA1eIzU4T0cksKXg5vIoZXfHCPaYqFiBm4zaCNANZEGPd/e8L8MWbfuwTYJRGgbvJHGEc0l47Wi83LbVYkw0le1cnicPbrKQ=
+	t=1711663985; cv=none; b=MPyhedvSbOXyAFvK+d5QEYFRhgHapj/p7+85oJ2LUH9nAwiGmCMzFk2KN1a2TfhN8a45INvgAOu0466V32mbJAYgI1a4M6WMkbyfMgBFI8867rdP23UxKcDQJb8zg0JXyG6LNHHo7xqhsBxm/fnnXXbTjdLqRRxHoqzEdV5Z7kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711663787; c=relaxed/simple;
-	bh=BOXlsNwnprUececioCWqQEsiqvtUYISmlVnkC/Wl+j8=;
+	s=arc-20240116; t=1711663985; c=relaxed/simple;
+	bh=UIn7MGUsViPkQt8ICxQrkMUs2JY8jgTueQwbo2IwpX4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FYG7qkAXIasglCyWzUs+0yyvT5lFp7+MNYOXvD7SDzSwsHgPfGyd2np2jsM8afx4JW2Cdf2sCSASi2eRZxgEF/NFS0PkW9OrydOUc7p/bVBWOEYNrHeYnOfK/JJxPjeWsSrObXs482Y1iaxTKEt5k1AwtNx/YZRCQZRr3tlgjnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JSMncIGH; arc=none smtp.client-ip=209.85.208.53
+	 To:Cc:Content-Type; b=k47cPfjNfZ1MHwlkjEieUGNcNxh+nvT40i5hloJ9jTPp2NglcCyEYZJ0+G3ZBdzuosSI2R5NNl9aj1O0r1gN5RZ6yykhsX5VrE9BrP6dEmt3Uyj0AKmfJBXSL3czVnpNM/mF0+AadOtKkRMlEkMVsWlSHjDn8oVG2daUq7ZeZuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1/pjnTky; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JSMncIGH"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56bb22ff7baso1642897a12.3
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:09:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1/pjnTky"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-513da1c1f26so1703341e87.3
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:13:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711663784; x=1712268584; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1711663981; x=1712268781; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D+7Drz3KCpZvZH2UsNch2VNXZc69VVimkJhVMnXEUEw=;
-        b=JSMncIGHoS5M1ftqtxNDQz0XYhPact+1pNwxy4DN6u3TEiPcNRihut1YVJrQw2q7Iu
-         Aqd0AlpyYasz5XsCfpqj7HCvR6m3bz7ndtJvAugeOBohFc/MqDt0iNB19xx7visXaEtd
-         /jKIROjSeOp2cX/tbMO+Px7+nPRhfZOLPDBHrfBluMM6W+SNr7AjYRPh/Jcc+JzGIvPG
-         b4d1uj1/dBd23mqXXtYcKrkcGI2TpoUFhhj0bA86zgpK8doXSF80OPgyCViugT0WViT8
-         +YAwy3kRmOpOCr3m/QMftuGQ9rAA6kN8e1n1Kcwi5iIhx1WGQb6uXhQieT4Zb4FnqPqg
-         Gq4g==
+        bh=ICkGbpRzf1cYfCwK/zqGbOtZejo0e91jUNy63Mscxkw=;
+        b=1/pjnTkyi4n/UYO8dyvg/r3JY6uG6oxLWEdFrGxNVvDgTazpL95v6l0AGzmtttPnS3
+         LA5QnRLugdG3FVwL64uKQxfPm+XyFUinyX7FVDA6BgnMnPPwwcRYf51X3ZrN/ytw7YXB
+         A/S8RHXJHQfU8lmQi/8aiDaroTcMEe+YWoWzNE9bmXshZ9hKsT9V+J6g1p6nfW6PLAWj
+         urKLMcm7q+5bk3EmqyJv2ec1SyMbv82ZERyRtRVnvJ/gt+aod+WJ1HWMH115k+enSJKO
+         BPWv9GTVNRIUZFlDGCAzt0M22ZQsGuTTdpXQcSSaSgCjtwPq59XxcMGqrmucJTkLxQjA
+         ZL1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711663784; x=1712268584;
+        d=1e100.net; s=20230601; t=1711663981; x=1712268781;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D+7Drz3KCpZvZH2UsNch2VNXZc69VVimkJhVMnXEUEw=;
-        b=LgFxqvYhvxUGA3ZAOiyGijdYFFlJd5rLow328LZj/FhEIoHsHMxv1GyZMArgwlSj0l
-         iRIgj+hJ0CHlD69G1GPX8QvWSCzsLz9GYLxXurqD1sBNUU9gxqUavh2DANqgxDeXaCXr
-         AgWbd1I64T6EDIKIv38n3y5gRnZsbwv7L2E9K/c8Ek4EnRFK1QF5Q+wappeenXDZM5dN
-         48a/dJKhUjVPh7FnCBcldSWxggcHdthdkAZT4mHor/aPpn34M5PWrVu4t6D/A5TruWBJ
-         yXnTd/K8jhLlVm/VpYjZFPaR5BjT0wwhJVFg7Cwp6Z8ZbCgg0ZNl9fe/9vjAdpJxpu9r
-         gmcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUzKYqHZVxFQi98UCh1dJ9Fd2HjGv83OW1JOZqBQSkDdFJ5KvpECe9XFtamxGPaYGVULX9YuARGXUbn28imOimJyvkD/Q==
-X-Gm-Message-State: AOJu0YxtwlX8AOSCGbswxx+Vh9c3k5jg7pgi7ZB8DedTNj3KFz0uk3ZP
-	2RlI2tGqUSRXPkEgiNgWPIMTp8Qv4KZaMIsc/2VXlUp0JpBOAa4xD3npHLHJserxSk64iBlwSv3
-	q0/dy/RI5htpQCZk5KXxwjyhJ8ZkG1pfcU9jN
-X-Google-Smtp-Source: AGHT+IFlZjMDM+xUDBM0MqA1a/+L68VZiYm6JTYTrKDyQTRWVSkTX38SqjBvy4N9VKZ94M58Wndm1vGhgVCwh8IuY4w=
-X-Received: by 2002:a50:931d:0:b0:564:f6d5:f291 with SMTP id
- m29-20020a50931d000000b00564f6d5f291mr308024eda.34.1711663783904; Thu, 28 Mar
- 2024 15:09:43 -0700 (PDT)
+        bh=ICkGbpRzf1cYfCwK/zqGbOtZejo0e91jUNy63Mscxkw=;
+        b=psSrbOGTuv72dPd6PPCyoF/LI/KYuSsXyXyUyEo/ALy0717TVJWVuVI3YPqyTdvlnZ
+         dl1/5cUVsaE2FuM1g/j+DFH34OZNuwhDHjCzWA9KmDommJrJg/G0WI8GNBzfJBbMLxoS
+         h8l/p3ZhCUOrhAt3CV2SAk92BusQIx920Q+cVVvMtnq+fwn/2WJTSPk7j/KXmXk2SBTH
+         vDc/Fbef/IrEg+avV6s7TvU6WvwjIDtq5Ua1iyJb1mIvo8sEPTHfw2BpMPkyHyZdFVNa
+         PZ6Jop06EiAaetRvziRZXNmv1yvIxM1/olEfkDwnU84iQHEg1Cir2OEnLVUX42N81hTm
+         g9kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX8pStXAnJjott0kDX3Ss8mfMkxcnoR3xsq4dslzCrcnxKRR81YPUnziRpoOv6mSvszmgHwORcHt2Ri/sdeIkLjfPODLw==
+X-Gm-Message-State: AOJu0YxM+FwxkMQJKiIKxk41/dBzT+J+2WlEWZsMi/aNS4Lt0vXgUChd
+	E9OnA0dUfQyQakmrHA6htEJ6P6P0sOatMJYsx9NBgWtFbmx42C90qMtrDJXkntRb5tEkTHeNdV0
+	9vuhpQMMJv8rmTEp4jC24YE/ESLM2IXkk9HF8
+X-Google-Smtp-Source: AGHT+IHSqMcf1h2xQB5wa4ZUcWCBKayE/iQN+78kFaOeI10I6ErDFcmpdz42xUhwteOa3FVAVroi2xGibnGqS3oLTFc=
+X-Received: by 2002:a19:6902:0:b0:513:d484:da51 with SMTP id
+ e2-20020a196902000000b00513d484da51mr440445lfc.65.1711663981372; Thu, 28 Mar
+ 2024 15:13:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-9-arnd@kernel.org>
-In-Reply-To: <20240328143051.1069575-9-arnd@kernel.org>
+References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-8-arnd@kernel.org>
+In-Reply-To: <20240328143051.1069575-8-arnd@kernel.org>
 From: Justin Stitt <justinstitt@google.com>
-Date: Thu, 28 Mar 2024 15:09:30 -0700
-Message-ID: <CAFhGd8pTdJNzmxhUaCpDkWpYiAP0Gvm6K=o+w5uE-g20M7u3rA@mail.gmail.com>
-Subject: Re: [PATCH 8/9] mlx5: stop warning for 64KB pages
+Date: Thu, 28 Mar 2024 15:12:49 -0700
+Message-ID: <CAFhGd8ojRE3no8K--Nanj5PJz4oO-eG2J8Q_4579pDEEJz8uNw@mail.gmail.com>
+Subject: Re: [PATCH 7/9] infiniband: uverbs: avoid out-of-range warnings
 To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>, 
-	Leon Romanovsky <leon@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Maxim Mikityanskiy <maxtram95@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Tariq Toukan <tariqt@nvidia.com>, Gal Pressman <gal@nvidia.com>, 
-	netdev@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Kees Cook <keescook@chromium.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Thu, Mar 28, 2024 at 7:32=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
 te:
+> Add a cast to u32 in both cases, so it never warns about this.
 >
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> When building with 64KB pages, clang points out that xsk->chunk_size
-> can never be PAGE_SIZE:
-
-This is under W=3D1 right? Otherwise this is a mighty annoying warning.
-
->
-> drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error: resu=
-lt of comparison of constant 65536 with expression of type 'u16' (aka 'unsi=
-gned short') is always false [-Werror,-Wtautological-constant-out-of-range-=
-compare]
->         if (xsk->chunk_size > PAGE_SIZE ||
->             ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
->
-> In older versions of this code, using PAGE_SIZE was the only
-> possibility, so this would have never worked on 64KB page kernels,
-> but the patch apparently did not address this case completely.
->
-> As Maxim Mikityanskiy suggested, 64KB chunks are really not all that
-> useful, so just shut up the warning by adding a cast.
->
-> Fixes: 282c0c798f8e ("net/mlx5e: Allow XSK frames smaller than a page")
-> Link: https://lore.kernel.org/netdev/20211013150232.2942146-1-arnd@kernel=
-.org/
-> Link: https://lore.kernel.org/lkml/a7b27541-0ebb-4f2d-bd06-270a4d404613@a=
-pp.fastmail.com/
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Reviewed-by: Justin Stitt <justinstitt@google.com>
 
 > ---
->  drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/infiniband/core/uverbs_ioctl.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/dri=
-vers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-> index 06592b9f0424..9240cfe25d10 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-> @@ -28,8 +28,10 @@ bool mlx5e_validate_xsk_param(struct mlx5e_params *par=
-ams,
->                               struct mlx5e_xsk_param *xsk,
->                               struct mlx5_core_dev *mdev)
->  {
-> -       /* AF_XDP doesn't support frames larger than PAGE_SIZE. */
-> -       if (xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5E_MIN_XS=
-K_CHUNK_SIZE) {
-> +       /* AF_XDP doesn't support frames larger than PAGE_SIZE,
-> +        * and xsk->chunk_size is limited to 65535 bytes.
-> +        */
-> +       if ((size_t)xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5=
-E_MIN_XSK_CHUNK_SIZE) {
->                 mlx5_core_err(mdev, "XSK chunk size %u out of bounds [%u,=
- %lu]\n", xsk->chunk_size,
->                               MLX5E_MIN_XSK_CHUNK_SIZE, PAGE_SIZE);
->                 return false;
+> diff --git a/drivers/infiniband/core/uverbs_ioctl.c b/drivers/infiniband/=
+core/uverbs_ioctl.c
+> index f80da6a67e24..e0cc3ddae71b 100644
+> --- a/drivers/infiniband/core/uverbs_ioctl.c
+> +++ b/drivers/infiniband/core/uverbs_ioctl.c
+> @@ -90,7 +90,7 @@ void uapi_compute_bundle_size(struct uverbs_api_ioctl_m=
+ethod *method_elm,
+>                 ALIGN(bundle_size + 256, sizeof(*pbundle->internal_buffer=
+));
+>
+>         /* Do not want order-2 allocations for this. */
+> -       WARN_ON_ONCE(method_elm->bundle_size > PAGE_SIZE);
+> +       WARN_ON_ONCE((u32)method_elm->bundle_size > PAGE_SIZE);
+>  }
+>
+>  /**
+> @@ -636,7 +636,7 @@ long ib_uverbs_ioctl(struct file *filp, unsigned int =
+cmd, unsigned long arg)
+>         if (err)
+>                 return -EFAULT;
+>
+> -       if (hdr.length > PAGE_SIZE ||
+> +       if ((u32)hdr.length > PAGE_SIZE ||
+>             hdr.length !=3D struct_size(&hdr, attrs, hdr.num_attrs))
+>                 return -EINVAL;
+>
 > --
 > 2.39.2
 >
