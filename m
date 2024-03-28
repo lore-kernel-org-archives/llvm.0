@@ -1,75 +1,76 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB6812F5A4
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BE640859
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711663504; cv=none; b=mBoG+WKwlnYTbu8RqfSj7NTjXyfmo7jcTsPxMlKelUAT73Xv7MRRxF48CunxEXu57rZVG5BPPbM+rFu2X0zVyW0ZuKw0oHP4fpXBh+20Nz9AxI2uIut+/eUQcO9Nt700USAXURPsnkRCDZrFiYLSzgQWVZecVfr71F0k4QB6Jg0=
+	t=1711663787; cv=none; b=PDtR+biK+2+eyd/mvOvAaCeF+5/3rvGD3izpJ0ymV4nJ9w0qalvByPmvDcIriiSF2H8ny10riLrrA1eIzU4T0cksKXg5vIoZXfHCPaYqFiBm4zaCNANZEGPd/e8L8MWbfuwTYJRGgbvJHGEc0l47Wi83LbVYkw0le1cnicPbrKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711663504; c=relaxed/simple;
-	bh=9ZSPvENfmgfhIsnuJFWhvL6BmUkVhFz5PSQ7INGUgHQ=;
+	s=arc-20240116; t=1711663787; c=relaxed/simple;
+	bh=BOXlsNwnprUececioCWqQEsiqvtUYISmlVnkC/Wl+j8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P1Z/yfD1RankBlPeAiTs1QEqrjJijMJehfn8Qw9NXdCwaLZucOSjlziUzzMt/pjhDme0uIKMUcjTyejKDqHwgDe2LUEgy66LmZduaIUpIyCmpKLDMVkETDyIBtn/yTFO7rHAVaH2hgllq2oS6V4EK4ZZ8ikgPiDi8eArybS2dOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mqke1D4f; arc=none smtp.client-ip=209.85.208.54
+	 To:Cc:Content-Type; b=FYG7qkAXIasglCyWzUs+0yyvT5lFp7+MNYOXvD7SDzSwsHgPfGyd2np2jsM8afx4JW2Cdf2sCSASi2eRZxgEF/NFS0PkW9OrydOUc7p/bVBWOEYNrHeYnOfK/JJxPjeWsSrObXs482Y1iaxTKEt5k1AwtNx/YZRCQZRr3tlgjnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JSMncIGH; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mqke1D4f"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56c4ca65dc6so1802383a12.1
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:05:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JSMncIGH"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56bb22ff7baso1642897a12.3
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:09:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711663501; x=1712268301; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1711663784; x=1712268584; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MGMxoG8AQ8BGP67PTNjLH3VS7bl1OwfTgMURF7OtwG4=;
-        b=mqke1D4f1Ogx+clo0212f779OIBiwQ4DcBnwxfuSdDT0SwvKbSZuHqmau23Zo4do3J
-         bMfI0PxwaqHvozbYjVjMlF/8SA+sxJKBAIKAzqvTEo6V9UtzVFvo9pL4JmKftvHnwt1C
-         JDscH48L+SSWKevYbGuVsyC58lR4rhSsNElvvt2q0G/ff9QonUwW+EuPatUIezhJNspZ
-         YquuvU4MmdY9zOX7cQJuCKBlP6vBAQVJn4I6Y/RxFQByrqr3DnDM70ppPA2/dfjjx4pg
-         gHlLsAtidYpsGXH44JkqbaoS0513aP75pJqqYtdun8cjkAZwkFc7hJICrVGm7dKL5a+r
-         kXeg==
+        bh=D+7Drz3KCpZvZH2UsNch2VNXZc69VVimkJhVMnXEUEw=;
+        b=JSMncIGHoS5M1ftqtxNDQz0XYhPact+1pNwxy4DN6u3TEiPcNRihut1YVJrQw2q7Iu
+         Aqd0AlpyYasz5XsCfpqj7HCvR6m3bz7ndtJvAugeOBohFc/MqDt0iNB19xx7visXaEtd
+         /jKIROjSeOp2cX/tbMO+Px7+nPRhfZOLPDBHrfBluMM6W+SNr7AjYRPh/Jcc+JzGIvPG
+         b4d1uj1/dBd23mqXXtYcKrkcGI2TpoUFhhj0bA86zgpK8doXSF80OPgyCViugT0WViT8
+         +YAwy3kRmOpOCr3m/QMftuGQ9rAA6kN8e1n1Kcwi5iIhx1WGQb6uXhQieT4Zb4FnqPqg
+         Gq4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711663501; x=1712268301;
+        d=1e100.net; s=20230601; t=1711663784; x=1712268584;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MGMxoG8AQ8BGP67PTNjLH3VS7bl1OwfTgMURF7OtwG4=;
-        b=SViWvt1aDXE8UJmzimd73CtMa6O2V7yyPYmmlOLKrOEzEvDk+t8JeTZctgcT/2+rZG
-         4dPmORTmA2/S1yuh+iCYr5Of99dHvtLjXgFJ/BfvydjOFBbUkAQMk9aJpAT2heSU4Gjp
-         erOkJtR/JixJqSrcEnVwe2CpPWfmED2mLO/PxwT386AbVTU37N4DYWnBD8seBH4VRJs4
-         nhXpI8Zqp5qjTrKNCWHxPzob8pilo56yMcbiEnDe2jsXoomCcIJVnrQaHCaaGiGz+rW6
-         yQucMH/DQqBlQUhyPjZ/Map7ZjNEOkmQRCzV3+tavYCOM51Afqh9Q/kdezGswhQrasJ4
-         VBvw==
-X-Forwarded-Encrypted: i=1; AJvYcCWxl77/3uniLMR3m4m63H3LbFAKsM+NpuxlflK2DcJ31/pkrwJh5BsQxe7AyU+PrDLCeKEvt3pQzINoFsPEVLhIXR7KYw==
-X-Gm-Message-State: AOJu0Yw/s9HWk49HoPJXQAISvTF6kwTmIDAHDWjj3XFlQLMPnGC8s1yY
-	6SS6ClhlpYi6/YoLqGgiZEMzWi5dBdQIEltjXLSmrdl1UwI3ISAP4q3XERi3HrlrwrHj47hhOW+
-	+IOYVBh6wV/q07F8hk+vxjS6NWo+PcVCNkIpD
-X-Google-Smtp-Source: AGHT+IGI1NuivKb4Ji1liwhmjoNA08qow9K2J1nHBY2lkA7t+bjvkMMP3tHaIzK6dIha9lwR+QhUcEEc6nDcKmlEY7E=
-X-Received: by 2002:a05:6402:35ca:b0:56c:2ef7:f3ed with SMTP id
- z10-20020a05640235ca00b0056c2ef7f3edmr442959edc.35.1711663501455; Thu, 28 Mar
- 2024 15:05:01 -0700 (PDT)
+        bh=D+7Drz3KCpZvZH2UsNch2VNXZc69VVimkJhVMnXEUEw=;
+        b=LgFxqvYhvxUGA3ZAOiyGijdYFFlJd5rLow328LZj/FhEIoHsHMxv1GyZMArgwlSj0l
+         iRIgj+hJ0CHlD69G1GPX8QvWSCzsLz9GYLxXurqD1sBNUU9gxqUavh2DANqgxDeXaCXr
+         AgWbd1I64T6EDIKIv38n3y5gRnZsbwv7L2E9K/c8Ek4EnRFK1QF5Q+wappeenXDZM5dN
+         48a/dJKhUjVPh7FnCBcldSWxggcHdthdkAZT4mHor/aPpn34M5PWrVu4t6D/A5TruWBJ
+         yXnTd/K8jhLlVm/VpYjZFPaR5BjT0wwhJVFg7Cwp6Z8ZbCgg0ZNl9fe/9vjAdpJxpu9r
+         gmcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzKYqHZVxFQi98UCh1dJ9Fd2HjGv83OW1JOZqBQSkDdFJ5KvpECe9XFtamxGPaYGVULX9YuARGXUbn28imOimJyvkD/Q==
+X-Gm-Message-State: AOJu0YxtwlX8AOSCGbswxx+Vh9c3k5jg7pgi7ZB8DedTNj3KFz0uk3ZP
+	2RlI2tGqUSRXPkEgiNgWPIMTp8Qv4KZaMIsc/2VXlUp0JpBOAa4xD3npHLHJserxSk64iBlwSv3
+	q0/dy/RI5htpQCZk5KXxwjyhJ8ZkG1pfcU9jN
+X-Google-Smtp-Source: AGHT+IFlZjMDM+xUDBM0MqA1a/+L68VZiYm6JTYTrKDyQTRWVSkTX38SqjBvy4N9VKZ94M58Wndm1vGhgVCwh8IuY4w=
+X-Received: by 2002:a50:931d:0:b0:564:f6d5:f291 with SMTP id
+ m29-20020a50931d000000b00564f6d5f291mr308024eda.34.1711663783904; Thu, 28 Mar
+ 2024 15:09:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-7-arnd@kernel.org>
-In-Reply-To: <20240328143051.1069575-7-arnd@kernel.org>
+References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-9-arnd@kernel.org>
+In-Reply-To: <20240328143051.1069575-9-arnd@kernel.org>
 From: Justin Stitt <justinstitt@google.com>
-Date: Thu, 28 Mar 2024 15:04:49 -0700
-Message-ID: <CAFhGd8oJ5trNE7na9jCDbEt5kox1rg0mia59EHj+XikHUnay5w@mail.gmail.com>
-Subject: Re: [PATCH 6/9] nilfs2: fix out-of-range warning
+Date: Thu, 28 Mar 2024 15:09:30 -0700
+Message-ID: <CAFhGd8pTdJNzmxhUaCpDkWpYiAP0Gvm6K=o+w5uE-g20M7u3rA@mail.gmail.com>
+Subject: Re: [PATCH 8/9] mlx5: stop warning for 64KB pages
 To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Philipp Stanner <pstanner@redhat.com>, 
-	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
-	Thorsten Blum <thorsten.blum@toblux.com>, linux-nilfs@vger.kernel.org, 
-	llvm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
+	Maxim Mikityanskiy <maxtram95@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Tariq Toukan <tariqt@nvidia.com>, Gal Pressman <gal@nvidia.com>, 
+	netdev@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -78,44 +79,61 @@ te:
 >
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> clang-14 points out that v_size is always smaller than a 64KB
-> page size if that is configured by the CPU architecture:
+> When building with 64KB pages, clang points out that xsk->chunk_size
+> can never be PAGE_SIZE:
 
-Is this only with clang-14?
+This is under W=3D1 right? Otherwise this is a mighty annoying warning.
 
 >
-> fs/nilfs2/ioctl.c:63:19: error: result of comparison of constant 65536 wi=
-th expression of type '__u16' (aka 'unsigned short') is always false [-Werr=
-or,-Wtautological-constant-out-of-range-compare]
->         if (argv->v_size > PAGE_SIZE)
->             ~~~~~~~~~~~~ ^ ~~~~~~~~~
+> drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error: resu=
+lt of comparison of constant 65536 with expression of type 'u16' (aka 'unsi=
+gned short') is always false [-Werror,-Wtautological-constant-out-of-range-=
+compare]
+>         if (xsk->chunk_size > PAGE_SIZE ||
+>             ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
 >
-> This is ok, so just shut up that warning with a cast.
+> In older versions of this code, using PAGE_SIZE was the only
+> possibility, so this would have never worked on 64KB page kernels,
+> but the patch apparently did not address this case completely.
 >
+> As Maxim Mikityanskiy suggested, 64KB chunks are really not all that
+> useful, so just shut up the warning by adding a cast.
+>
+> Fixes: 282c0c798f8e ("net/mlx5e: Allow XSK frames smaller than a page")
+> Link: https://lore.kernel.org/netdev/20211013150232.2942146-1-arnd@kernel=
+.org/
+> Link: https://lore.kernel.org/lkml/a7b27541-0ebb-4f2d-bd06-270a4d404613@a=
+pp.fastmail.com/
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-My question out of curiosity aside,
 
 Reviewed-by: Justin Stitt <justinstitt@google.com>
 
 > ---
->  fs/nilfs2/ioctl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> diff --git a/fs/nilfs2/ioctl.c b/fs/nilfs2/ioctl.c
-> index f1a01c191cf5..8be471ce4f19 100644
-> --- a/fs/nilfs2/ioctl.c
-> +++ b/fs/nilfs2/ioctl.c
-> @@ -60,7 +60,7 @@ static int nilfs_ioctl_wrap_copy(struct the_nilfs *nilf=
-s,
->         if (argv->v_nmembs =3D=3D 0)
->                 return 0;
->
-> -       if (argv->v_size > PAGE_SIZE)
-> +       if ((size_t)argv->v_size > PAGE_SIZE)
->                 return -EINVAL;
->
->         /*
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/dri=
+vers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+> index 06592b9f0424..9240cfe25d10 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
+> @@ -28,8 +28,10 @@ bool mlx5e_validate_xsk_param(struct mlx5e_params *par=
+ams,
+>                               struct mlx5e_xsk_param *xsk,
+>                               struct mlx5_core_dev *mdev)
+>  {
+> -       /* AF_XDP doesn't support frames larger than PAGE_SIZE. */
+> -       if (xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5E_MIN_XS=
+K_CHUNK_SIZE) {
+> +       /* AF_XDP doesn't support frames larger than PAGE_SIZE,
+> +        * and xsk->chunk_size is limited to 65535 bytes.
+> +        */
+> +       if ((size_t)xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5=
+E_MIN_XSK_CHUNK_SIZE) {
+>                 mlx5_core_err(mdev, "XSK chunk size %u out of bounds [%u,=
+ %lu]\n", xsk->chunk_size,
+>                               MLX5E_MIN_XSK_CHUNK_SIZE, PAGE_SIZE);
+>                 return false;
 > --
 > 2.39.2
 >
