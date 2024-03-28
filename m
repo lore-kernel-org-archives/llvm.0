@@ -1,61 +1,60 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0C1548F3
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 08:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942C954BDE
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 08:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711613980; cv=none; b=EFGt8u2YhwF4+FCKPvrI3LXw5kR3ms3swi3m3KxozN5tAqnq5QsFLAXoJBou1QWqpkPamUG3uGC1TqA2heVlQv87StyNGCbUdrNRCpllJsSkrvTcI9GktugWMixI5K3XRIuATFnNotLK0r7AiuyNiAfVgYSme9vACwYp6vCfgtg=
+	t=1711613982; cv=none; b=Gk7BYp6Qg/QtTR7MJpbtwRfUcA7VpJkZpDAy6SqJq4mjdLbplgxsqbjyWMqTB/lYpVDn2e5+19l9Egg0dXumf78vjeu3mX0pAi4W1f8UW05UWibGN8RvYKplL21vebwqVASibk8q0SyrcKQoqitS2py0wDqurv+ERDZojsOdeBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711613980; c=relaxed/simple;
-	bh=gAJ6BRl+6GJFjFfj7hK6glDoqAeKWO/JdoYGGNwtQaY=;
+	s=arc-20240116; t=1711613982; c=relaxed/simple;
+	bh=AL/QCBYWKJGY7XP5PfdyARYdf97ROc4rHsNV59u/o0A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=A1X8dpam88CuVLkMDp1bDzWjeYKye4bBykWl32JgsKKbAUtnngBMz6LG8/HSLgTa2vShi4r5GQZDMALOM56FgplZ7iSkQblFZFenp2zGDWSO8yewiopsJl3knLbMxfHgvM6rfT3XhIg5CjM15X9zQTfUVIRq8oLfjtYpLnhYSfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=M0HRel9D; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:To:Cc; b=Auhb4OxN1+0zXah7FaTWxrOjeAM0swz0BNq9OwXTDlXSgm9VURZ9jewa3Oae22K3xQaskXs/tqxKHMwJU8V0wkzR8uz2hSRnyMIrjwDRQiVPiNKmPDQS7mkfCU9v7YNa27VL7qPCYmM6yqSgQ/b5wxgDEEM82dW02OJMPAph7QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ou2OAKno; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M0HRel9D"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56829f41f81so760408a12.2
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 01:19:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ou2OAKno"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56c441e66a5so813996a12.0
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 01:19:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711613976; x=1712218776; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1711613977; x=1712218777; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6rFKQQriDx8kyCVbgQlVcguGLC3EYwSTxPGRwqSUeh0=;
-        b=M0HRel9Dam28i0xsRB+nDTedfKcBe2eL7PTqd5yGAG9K2jVceC5hqngHyJDyxcTQ45
-         IY38MZUOoaIDW/BbucPVOTGpadh07sLnMYqPJey+ysS4bgAYlERRcurTi3GC00aa7K9A
-         U/W6myXzFqV+yqyVraS5hkd3Di5EiFRHoVXuyDEpOKkeMYjsU7sKcBXKAvKY8Vz/LeTo
-         Jsc71OJ9XyOJOW2oul15uDdFvCZc8ixeklkaz6v8lK6owBpdpH/LFPxBhDB85AKyy8aO
-         dIJcGOisxEuWOxNRy25CrnyAoOpBCjZEhvx/0MjhAlpFE3zjUgjNyfwwBptebQyEzVRE
-         TzVw==
+        bh=dL1PAu5oBmwIibkhRxksxjOxcUl4/h9Sp4T5IgFq6UI=;
+        b=ou2OAKnodyrdKd/T7xsJ6s2uKaX9n76FrXMSqHSkaO6vU4cgM4PcWJeF0TyWCCABk9
+         HlRDuas4pbXbX/z9+bhTqs6m8IFHjBohKe6XyfQ3Vi0yQOSv91Irsc2p7yz+Uk2EVrcw
+         QHs+GzlbU2vHiN2byOJ94sGDyA8XeLuus7AvYqjjALJA+JWTuzZPQYhcHed/IFPIAu9g
+         lyKV9khsKKN7+UQNb4O2zE3SNIpw1yml0TJHtEDqFXwr24QtNk0uC0dTwc2FsbHvXsUJ
+         pb8UIBPKZRdnXlKIAOPkvItOmPHkaDK8X4ESpdy309Jrxvr5yQMKVzhaOTPEm7ZTyf/5
+         djoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711613976; x=1712218776;
+        d=1e100.net; s=20230601; t=1711613977; x=1712218777;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6rFKQQriDx8kyCVbgQlVcguGLC3EYwSTxPGRwqSUeh0=;
-        b=TB+QcraKiwK+dza8F8ln6tkHBqO2gyuS6nGARNCLz41Q7JVH+mVKIOyHqNFFWI2SsC
-         Uo509XlQLx1AH/f0VxtMNjl0m9h2q8yNhSs6Qu4MCcDK4NDo1CBydK8tsvWTMtO7aWBI
-         ung9MOpkxTZfwb3g0tHB6RXmuHdNb9OeABuHH+99/ea381MEHljGfe2/03d1HL2ZpNNx
-         DYHmfkf6gLLlYxukfoumlThu+lbUHdUbd5TA1GeszSrgXKNpBbgtMa0aFohF4GUtrHSD
-         xzyzxtViX8q8C56WcINWvsfZV1bo3ngIfm+v2ZPfYi+c9CAzBuZhmescXhNlvbUcHxLM
-         6ZPw==
-X-Forwarded-Encrypted: i=1; AJvYcCW/lHq0OUt6oKIhxHcfWk4hLEELKTsYjJKo8l49RT4kUBFNa4BH2u0LSOg4SpPA4YALzTrAAYjDeV108yf1es14TV5aaw==
-X-Gm-Message-State: AOJu0YxSWBwrOfTc3JfE4D+WxKxO8xLgYs3KkRDQD2ByLD5Wjs8oJplL
-	XP+j7ImnlYdaTlu5g961RIPazVpSSGEm2dMsObCOqzTogh/OHDOxcOUN4j6EEu9cizrSszi8uKJ
-	k
-X-Google-Smtp-Source: AGHT+IFyrbNGcgombAS1Q/MVB83BT8nlFzTxjXpcqYRdLoPAd/Ph2OS/kY09OwmJKYa/enUyqz94cA==
-X-Received: by 2002:a50:bac4:0:b0:568:180a:284b with SMTP id x62-20020a50bac4000000b00568180a284bmr1457913ede.37.1711613976227;
-        Thu, 28 Mar 2024 01:19:36 -0700 (PDT)
+        bh=dL1PAu5oBmwIibkhRxksxjOxcUl4/h9Sp4T5IgFq6UI=;
+        b=q6hvNDChetU+GIH3mjhMMkYsN9lo8Aea7lz4xJV3ocU6kQYsLGEGzzCSmkpQj65Dcc
+         j2BTATTeDndUcT43pJVx7jGNDqCFl6ebFE7RIOyBRX+d6SkjEgCNugZzZqwDU0WLh6zV
+         76MNGWJxbj/kVvYjTMtHZebkwxdK2rd6rS6lmBxwo5hi59S5Fg268hO+GKncfWRZ8occ
+         MPfYD7jC242wkBbf068EJ/C7r7I+lmyGcOGjTvRH+fkUs/+9byjDEIMYsWo1wTbcx8k1
+         HFz/YpFAEdnbCg6TiE38OHbhkBZ6f/yOTyuq6C2Kx2mR5vjU97v1TdyJ+F/IuLhCbEiP
+         j/iA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTwcy7dojRVz5RTHW3Djd3/Uc3yrMPeFxP+MNXOAOmTa7CqYxWpS8EBOYv+piQaRYq4jR465AUljaNojS1hLURu/ZlMQ==
+X-Gm-Message-State: AOJu0Yw6JCYHThzVYE+Uc+bhblQqaFSZE2TGA6Cnrv8F+yX2ESsqkfRA
+	XT42UeiHktFuxJsPFmmKmiizS4RTAO7p7T3pQn7jzBJBZY8yVNQ4bNGlPSCcQ0M=
+X-Google-Smtp-Source: AGHT+IEgIIeBpOAlEcp0lkFmRLIsdQ22UaTMh5mg6w1wr8y00mRjEjewYrsdslcH95qybKFwSmKZrA==
+X-Received: by 2002:a50:f697:0:b0:566:44ca:9f5c with SMTP id d23-20020a50f697000000b0056644ca9f5cmr1650320edn.8.1711613977544;
+        Thu, 28 Mar 2024 01:19:37 -0700 (PDT)
 Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id n7-20020a509347000000b0056c24df7a78sm566397eda.5.2024.03.28.01.19.35
+        by smtp.gmail.com with ESMTPSA id n7-20020a509347000000b0056c24df7a78sm566397eda.5.2024.03.28.01.19.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 01:19:35 -0700 (PDT)
+        Thu, 28 Mar 2024 01:19:36 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 28 Mar 2024 09:19:29 +0100
-Subject: [PATCH v4 6/8] ARM: lib: Annotate loop delay instructions for CFI
+Date: Thu, 28 Mar 2024 09:19:30 +0100
+Subject: [PATCH v4 7/8] ARM: hw_breakpoint: Handle CFI breakpoints
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240328-arm32-cfi-v4-6-a11046139125@linaro.org>
+Message-Id: <20240328-arm32-cfi-v4-7-a11046139125@linaro.org>
 References: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
 In-Reply-To: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -76,73 +75,118 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.13.0
 
-When we annotate the loop delay code with SYM_TYPED_FUNC_START()
-a function prototype signature will be emitted into the object
-file above each site called from C, and the delay loop code is
-using "fallthroughs" from the different assembly callbacks. This
-will not work as the execution flow will run into the prototype
-signatures.
+This registers a breakpoint handler for the new breakpoint type
+(0x03) inserted by LLVM CLANG for CFI breakpoints.
 
-Rewrite the code to use explicit branches to the other code
-segments and annotate the code using SYM_TYPED_FUNC_START().
+If we are in permissive mode, just print a backtrace and continue.
 
-Tested on the ARM Versatile which uses the calibrated loop delay.
+Example with CONFIG_CFI_PERMISSIVE enabled:
+
+> echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
+lkdtm: Performing direct entry CFI_FORWARD_PROTO
+lkdtm: Calling matched prototype ...
+lkdtm: Calling mismatched prototype ...
+CFI failure at lkdtm_indirect_call+0x40/0x4c (target: 0x0; expected type: 0x00000000)
+WARNING: CPU: 1 PID: 112 at lkdtm_indirect_call+0x40/0x4c
+CPU: 1 PID: 112 Comm: sh Not tainted 6.8.0-rc1+ #150
+Hardware name: ARM-Versatile Express
+(...)
+lkdtm: FAIL: survived mismatched prototype function call!
+lkdtm: Unexpected! This kernel (6.8.0-rc1+ armv7l) was built with CONFIG_CFI_CLANG=y
+
+As you can see the LKDTM test fails, but I expect that this would be
+expected behaviour in the permissive mode.
+
+We are currently not implementing target and type for the CFI
+breakpoint as this requires additional operand bundling compiler
+extensions.
+
+CPUs without breakpoint support cannot handle breakpoints naturally,
+in these cases the permissive mode will not work, CFI will fall over
+on an undefined instruction:
+
+Internal error: Oops - undefined instruction: 0 [#1] PREEMPT ARM
+CPU: 0 PID: 186 Comm: ash Tainted: G        W          6.9.0-rc1+ #7
+Hardware name: Gemini (Device Tree)
+PC is at lkdtm_indirect_call+0x38/0x4c
+LR is at lkdtm_CFI_FORWARD_PROTO+0x30/0x6c
+
+This is reasonable I think: it's the best CFI can do to ascertain
+the the control flow is not broken on these CPUs.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/lib/delay-loop.S | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ arch/arm/include/asm/hw_breakpoint.h |  1 +
+ arch/arm/kernel/hw_breakpoint.c      | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
-diff --git a/arch/arm/lib/delay-loop.S b/arch/arm/lib/delay-loop.S
-index 3ac05177d097..33b08ca1c242 100644
---- a/arch/arm/lib/delay-loop.S
-+++ b/arch/arm/lib/delay-loop.S
-@@ -5,6 +5,7 @@
-  *  Copyright (C) 1995, 1996 Russell King
-  */
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- #include <asm/assembler.h>
- #include <asm/delay.h>
+diff --git a/arch/arm/include/asm/hw_breakpoint.h b/arch/arm/include/asm/hw_breakpoint.h
+index 62358d3ca0a8..e7f9961c53b2 100644
+--- a/arch/arm/include/asm/hw_breakpoint.h
++++ b/arch/arm/include/asm/hw_breakpoint.h
+@@ -84,6 +84,7 @@ static inline void decode_ctrl_reg(u32 reg,
+ #define ARM_DSCR_MOE(x)			((x >> 2) & 0xf)
+ #define ARM_ENTRY_BREAKPOINT		0x1
+ #define ARM_ENTRY_ASYNC_WATCHPOINT	0x2
++#define ARM_ENTRY_CFI_BREAKPOINT	0x3
+ #define ARM_ENTRY_SYNC_WATCHPOINT	0xa
  
-@@ -24,21 +25,26 @@
-  * HZ  <= 1000
-  */
+ /* DSCR monitor/halting bits. */
+diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
+index dc0fb7a81371..ce7c152dd6e9 100644
+--- a/arch/arm/kernel/hw_breakpoint.c
++++ b/arch/arm/kernel/hw_breakpoint.c
+@@ -17,6 +17,7 @@
+ #include <linux/perf_event.h>
+ #include <linux/hw_breakpoint.h>
+ #include <linux/smp.h>
++#include <linux/cfi.h>
+ #include <linux/cpu_pm.h>
+ #include <linux/coresight.h>
  
--ENTRY(__loop_udelay)
-+SYM_TYPED_FUNC_START(__loop_udelay)
- 		ldr	r2, .LC1
- 		mul	r0, r2, r0		@ r0 = delay_us * UDELAY_MULT
--ENTRY(__loop_const_udelay)			@ 0 <= r0 <= 0xfffffaf0
-+		b	__loop_const_udelay
-+SYM_FUNC_END(__loop_udelay)
+@@ -903,6 +904,32 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
+ 	watchpoint_single_step_handler(addr);
+ }
+ 
++#ifdef CONFIG_CFI_CLANG
++static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
++{
++	/* TODO: implementing target and type requires compiler work */
++	unsigned long target = 0;
++	u32 type = 0;
 +
-+SYM_TYPED_FUNC_START(__loop_const_udelay)	@ 0 <= r0 <= 0xfffffaf0
- 		ldr	r2, .LC0
- 		ldr	r2, [r2]
- 		umull	r1, r0, r2, r0		@ r0-r1 = r0 * loops_per_jiffy
- 		adds	r1, r1, #0xffffffff	@ rounding up ...
- 		adcs	r0, r0, r0		@ and right shift by 31
- 		reteq	lr
-+		b	__loop_delay
-+SYM_FUNC_END(__loop_const_udelay)
- 
- 		.align 3
- 
- @ Delay routine
--ENTRY(__loop_delay)
-+SYM_TYPED_FUNC_START(__loop_delay)
- 		subs	r0, r0, #1
- #if 0
- 		retls	lr
-@@ -58,6 +64,4 @@ ENTRY(__loop_delay)
- #endif
- 		bhi	__loop_delay
- 		ret	lr
--ENDPROC(__loop_udelay)
--ENDPROC(__loop_const_udelay)
--ENDPROC(__loop_delay)
-+SYM_FUNC_END(__loop_delay)
++	switch (report_cfi_failure(regs, instruction_pointer(regs), &target, type)) {
++	case BUG_TRAP_TYPE_BUG:
++		die("Oops - CFI", regs, 0);
++		break;
++	case BUG_TRAP_TYPE_WARN:
++		/* Skip the breaking instruction */
++		instruction_pointer(regs) += 4;
++		break;
++	default:
++		die("Unknown CFI error", regs, 0);
++		break;
++	}
++}
++#else
++static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
++{
++}
++#endif
++
+ /*
+  * Called from either the Data Abort Handler [watchpoint] or the
+  * Prefetch Abort Handler [breakpoint] with interrupts disabled.
+@@ -932,6 +959,9 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
+ 	case ARM_ENTRY_SYNC_WATCHPOINT:
+ 		watchpoint_handler(addr, fsr, regs);
+ 		break;
++	case ARM_ENTRY_CFI_BREAKPOINT:
++		hw_breakpoint_cfi_handler(regs);
++		break;
+ 	default:
+ 		ret = 1; /* Unhandled fault. */
+ 	}
 
 -- 
 2.44.0
