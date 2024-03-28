@@ -1,162 +1,202 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EEE4D5AC
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 23:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ADE4F888;
+	Thu, 28 Mar 2024 23:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711666898; cv=none; b=cfn+GDJ95XuIASasCZ5JEvWCeDJ6AN6vRnlrooEU6d5pP+BWN//tg/gUv0KcqWve6iZdtuLF11NHzzPO9oqy7Hq6fu7TSfrtvKb2IeAw4fmNWVohq8gjMIlxCwUF89kLF4lXDh3RodjdIivRUL3YKbsSgvYTli0wEjlVuuky1Cg=
+	t=1711669413; cv=none; b=h9X87MG9Md+3kp7HGd+Gw3WO5LMTIxuKajeIbv7AGlAhpiaaz+b3WFfi6AMnEdsczGlWDXUssmy5Sz62c+assDWUtNuG3Ma96XP1TYEuZaNYjejKwKHY/9rZUA+NPFouq3eyaThxzfALC6hd6AyLSN0Tze72gCMC/IeE1pQcxO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711666898; c=relaxed/simple;
-	bh=TKsivGU+pbBggUpaqWi4+K2eNDTC87QeNNtNFbqc9rM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EfJKO6FEuM7X4KaID+E+Uxttoqq0Gq1bhLj+RhSRsWfowyxJLZLfwCqe814HdyHrRzJE7SHyT/t1qM9aP4NZeTDSTqOWLZ/URG/HH6HJ6wMgIOBXk+N9vI5fdko3gkvzQFp38mlx1K+y82BMoO057l2BY5ZX1xrw1ODFzrgyTsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IOGGxR3K; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1711669413; c=relaxed/simple;
+	bh=I/WZfIyNxjJxFKhS5s+O6KXilxr0kqvm8WeoL63ejdo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jRNxyUmB+Cn0ZPY7LC7iqiwfqgVqeyFC9C3de6zbQDM45k6tw84s2PrnAOavLjXsWuYAGryd5fwNi31VYZvrl5xmYw/mxxnOhenc+W8GKx3xR/19/b1bC+e4kvnGiYvnw0fa/L6kXLByhpUqfqAmfOxJPiXwghPU2kwDlBlHIkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XsD+k0lI; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IOGGxR3K"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56bdf81706aso1867891a12.2
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 16:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711666895; x=1712271695; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oA17YR4InWjyg8TEVheIC338xk5MwmSEpPeuNx4GZW0=;
-        b=IOGGxR3KURkaVLhZkOZNqD9PzVwsWRyGvDWBWBcxFCPgFq/3ySFRGENMsaffmb6ULH
-         CXD9VZOp+2npubRyM4GRZLnrrXsxppXkR+pVmRP8ewgMdqX52Eab6klNsWH5R+DcxecR
-         AwdEzbP2pAvxjLMVOzjwpCABwqhhdz4m42hGmOkPRp2e3Qlmc/Zes4KwtTV7JAjNkz+l
-         oM5O1G2J/1VEN+M3A2g9BRG9EfXQH/cvmd8CXajF+x4/TjfI+IMvQEN81JxKfJtuTUZ5
-         8ENNRC3dHv3oqVmBiNP4vj+L9ktxe+ZjqCjOOxa8bQCc4xwM01qG1mZyFxBBHc3RFgY2
-         goZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711666895; x=1712271695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oA17YR4InWjyg8TEVheIC338xk5MwmSEpPeuNx4GZW0=;
-        b=QJON+OBKRWFbEoyZlrzVL8TYmSxJzDKjvAV+YV3n2MwzGwFGBxABZvz3ivUhLQPYQw
-         yh5AnhTRh4p+pzX1oRlJgfYR2NbcbraWEexDS8l+dN/ItbVIxbDTEx5DFqIB+1T6dGp3
-         mcLbBa8EZRyWN5vGuSwM0cD46GE4e0yCuemf4dzFdCtTzwKzyMmQHPYIbEUh0gL+iQNR
-         5lV8lLgj8+q9kzqaSKyoRdWeCtp6oXbOCm18bSddXqGdfMIdS9mh3F35ihXJOXC6ltzz
-         ymqSoownKmK7KJiSvovTwJDM7aLfGPUbgZfmjJdemUiVryWL/nps0ZuPEbXbeBRsdVps
-         d78Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXgWp1iowZn9jL3yTR7VylJ38wC9N1MjKGxbyelnXDE6AkyUXAH+XhB5kRHnCyV1HXXUJ1Y9XmV2hkoEH6mh7HD9M1p/g==
-X-Gm-Message-State: AOJu0Yyta3WCUUfgWfH92BCNWH+c2Ks/h1updbLt0xbitf3P/6Rr5GKr
-	OL4VD+99fnlvLwIdf6rUWRJdmipy9boBMgl6bNXPOYtiQCH1cYlIYGO76w7TyjHAy4hj+5xt/kJ
-	G58P/HV28ENSH3J9T67QRpqZQYvITXaBHWVfg
-X-Google-Smtp-Source: AGHT+IHSDimwfZi+Mu8w7ftuh2TFjJ1pdwWklM9rbYXTjg5wTtqltWADADutdRuEB4qRyX7gMEY0XftN4jstinrasFQ=
-X-Received: by 2002:a05:6402:51cd:b0:56a:2b6b:42cd with SMTP id
- r13-20020a05640251cd00b0056a2b6b42cdmr433486edd.3.1711666895187; Thu, 28 Mar
- 2024 16:01:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XsD+k0lI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711669410; x=1743205410;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I/WZfIyNxjJxFKhS5s+O6KXilxr0kqvm8WeoL63ejdo=;
+  b=XsD+k0lIZ/T5yrHrLAtV+lMcgb34Qj1ahphb+hrWxY2M+D7lUFBA10zJ
+   bm0mfXARN5eSGL0irmQ12dhmbRB6dVSfmYo0UdumFitu1NVygU0QeClVQ
+   8Ac07+AGuy3C+S84Nsh31Tzs4Ud4M9wr+F5mm3BfOwtNhmluez1Q67Qb+
+   wiar0au+MABZFvv9LSvGNKSzYKlHlnzEc8a4AAJHtiC6psD0HugwBwCyL
+   9SMffL3SQuUxLQsLibPtzkIFVFo23Pp0d1/1GciMtJjRGdthEGZoZ/u63
+   geozC1hV4y97/GDwtFRXKxGAArBlaydvi4IQu7wPtjJAIAwxHdt0eLppa
+   Q==;
+X-CSE-ConnectionGUID: Oi3hEQIzSbOgXnYtuiHiJQ==
+X-CSE-MsgGUID: e7DqEydwSb+lm046z8A6GQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="6689760"
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="6689760"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 16:43:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="47777412"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 28 Mar 2024 16:43:27 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpzP2-0002d0-15;
+	Thu, 28 Mar 2024 23:43:24 +0000
+Date: Fri, 29 Mar 2024 07:42:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Karthikeyan Periyasamy <quic_periyasa@quicinc.com>,
+	ath12k@lists.infradead.org, johannes@sipsolutions.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org,
+	Harshitha Prem <quic_hprem@quicinc.com>,
+	Karthikeyan Periyasamy <quic_periyasa@quicinc.com>
+Subject: Re: [PATCH 13/13] wifi: ath12k: Advertise multi hardware iface
+ combination
+Message-ID: <202403290724.p8vSV474-lkp@intel.com>
+References: <20240328072916.1164195-14-quic_periyasa@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240328140512.4148825-1-arnd@kernel.org> <20240328140512.4148825-10-arnd@kernel.org>
-In-Reply-To: <20240328140512.4148825-10-arnd@kernel.org>
-From: Justin Stitt <justinstitt@google.com>
-Date: Thu, 28 Mar 2024 16:01:23 -0700
-Message-ID: <CAFhGd8oHht+uMBouT7_AXZt4DMRJi=A7_=fyhZ2Hf_ne+8xE8w@mail.gmail.com>
-Subject: Re: [PATCH 09/11] staging: rtl8723bs: convert strncpy to strscpy
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Franziska Naepelt <franziska.naepelt@googlemail.com>, 
-	Johannes Berg <johannes.berg@intel.com>, Yang Yingliang <yangyingliang@huawei.com>, 
-	Erick Archer <erick.archer@gmx.com>, linux-staging@lists.linux.dev, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328072916.1164195-14-quic_periyasa@quicinc.com>
 
-Hi,
+Hi Karthikeyan,
 
-On Thu, Mar 28, 2024 at 7:07=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> gcc-9 complains about a possibly unterminated string in the strncpy() des=
-tination:
->
-> In function 'rtw_cfg80211_add_monitor_if',
->     inlined from 'cfg80211_rtw_add_virtual_intf' at drivers/staging/rtl87=
-23bs/os_dep/ioctl_cfg80211.c:2209:9:
-> drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:2146:2: error: 'strncpy=
-' specified bound 16 equals destination size [-Werror=3Dstringop-truncation=
-]
->  2146 |  strncpy(mon_ndev->name, name, IFNAMSIZ);
->       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> This one is a false-positive because of the explicit termination in the f=
-ollowing
-> line, and recent versions of clang and gcc no longer warn about this.
->
-> Interestingly, the other strncpy() in this file is missing a termination =
-but
-> does not produce a warning, possibly because of the type confusion and th=
-e
-> cast between u8 and char.
->
-> Change both strncpy() instances to strscpy(), which avoids the warning as=
- well
-> as the possibly missing termination. No additional padding is needed here=
-.
+kernel test robot noticed the following build warnings:
 
-Could you also clean up the strncpy present in
-drivers/staging/rtl8723bs/os_dep/os_intfs.c so all these are cleaned
-up at once?
+[auto build test WARNING on d69aef8084cc72df7b0f2583096d9b037c647ec8]
 
-Maybe we could use the new 2-argument version of strscpy() introduced
-in Commit e6584c3964f2f ("string: Allow 2-argument strscpy()") for all
-3 of these too.
+url:    https://github.com/intel-lab-lkp/linux/commits/Karthikeyan-Periyasamy/wifi-cfg80211-Add-provision-to-advertise-multiple-radio-in-one-wiphy/20240328-153303
+base:   d69aef8084cc72df7b0f2583096d9b037c647ec8
+patch link:    https://lore.kernel.org/r/20240328072916.1164195-14-quic_periyasa%40quicinc.com
+patch subject: [PATCH 13/13] wifi: ath12k: Advertise multi hardware iface combination
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240329/202403290724.p8vSV474-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 79ba323bdd0843275019e16b6e9b35133677c514)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403290724.p8vSV474-lkp@intel.com/reproduce)
 
-It looks like:
-    strscpy(dest, src);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403290724.p8vSV474-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm64/include/asm/cacheflush.h:11:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wireless/ath/ath12k/mac.c:7795:11: warning: variable 'band' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    7796 |                  ar->supports_6ghz)
+         |                  ~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath12k/mac.c:7799:44: note: uninitialized use occurs here
+    7799 |         chans = kzalloc(struct_size(chans, chans, band->n_channels),
+         |                                                   ^~~~
+   include/linux/overflow.h:294:53: note: expanded from macro 'struct_size'
+     294 |                 size_add(sizeof(*(p)), flex_array_size(p, member, count)))
+         |                                                                   ^~~~~
+   include/linux/overflow.h:278:12: note: expanded from macro 'flex_array_size'
+     278 |                 size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
+         |                          ^~~~~
+   drivers/net/wireless/ath/ath12k/mac.c:7795:7: note: remove the 'if' if its condition is always true
+    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    7796 |                  ar->supports_6ghz)
+         |                  ~~~~~~~~~~~~~~~~~~
+    7797 |                 band = &ar->mac.sbands[NL80211_BAND_6GHZ];
+>> drivers/net/wireless/ath/ath12k/mac.c:7795:11: warning: variable 'band' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath12k/mac.c:7799:44: note: uninitialized use occurs here
+    7799 |         chans = kzalloc(struct_size(chans, chans, band->n_channels),
+         |                                                   ^~~~
+   include/linux/overflow.h:294:53: note: expanded from macro 'struct_size'
+     294 |                 size_add(sizeof(*(p)), flex_array_size(p, member, count)))
+         |                                                                   ^~~~~
+   include/linux/overflow.h:278:12: note: expanded from macro 'flex_array_size'
+     278 |                 size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
+         |                          ^~~~~
+   drivers/net/wireless/ath/ath12k/mac.c:7795:11: note: remove the '&&' if its condition is always true
+    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath12k/mac.c:7788:39: note: initialize the variable 'band' to silence this warning
+    7788 |         struct ieee80211_supported_band *band;
+         |                                              ^
+         |                                               = NULL
+   7 warnings generated.
 
 
+vim +7795 drivers/net/wireless/ath/ath12k/mac.c
 
+  7783	
+  7784	static
+  7785	struct ieee80211_chans_per_hw *ath12k_setup_per_hw_chan(struct ath12k *ar)
+  7786	{
+  7787		struct ieee80211_chans_per_hw *chans;
+  7788		struct ieee80211_supported_band *band;
+  7789	
+  7790		if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_2G_CAP)
+  7791			band = &ar->mac.sbands[NL80211_BAND_2GHZ];
+  7792		else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
+  7793			 !ar->supports_6ghz)
+  7794			band = &ar->mac.sbands[NL80211_BAND_5GHZ];
+> 7795		else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
+  7796			 ar->supports_6ghz)
+  7797			band = &ar->mac.sbands[NL80211_BAND_6GHZ];
+  7798	
+  7799		chans = kzalloc(struct_size(chans, chans, band->n_channels),
+  7800				GFP_KERNEL);
+  7801		if (!chans)
+  7802			return NULL;
+  7803	
+  7804		memcpy(chans->chans, band->channels,
+  7805		       sizeof(*band->channels) * band->n_channels);
+  7806		chans->n_chans = band->n_channels;
+  7807	
+  7808		return chans;
+  7809	}
+  7810	
 
-
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/=
-staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-> index 65a450fcdce7..98bc5520e77d 100644
-> --- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-> +++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-> @@ -884,7 +884,7 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, =
-struct net_device *ndev,
->                 goto addkey_end;
->         }
->
-> -       strncpy((char *)param->u.crypt.alg, alg_name, IEEE_CRYPT_ALG_NAME=
-_LEN);
-> +       strscpy(param->u.crypt.alg, alg_name, IEEE_CRYPT_ALG_NAME_LEN);
->
->         if (!mac_addr || is_broadcast_ether_addr(mac_addr))
->                 param->u.crypt.set_tx =3D 0; /* for wpa/wpa2 group key */
-> @@ -2143,8 +2143,7 @@ static int rtw_cfg80211_add_monitor_if(struct adapt=
-er *padapter, char *name, str
->         }
->
->         mon_ndev->type =3D ARPHRD_IEEE80211_RADIOTAP;
-> -       strncpy(mon_ndev->name, name, IFNAMSIZ);
-> -       mon_ndev->name[IFNAMSIZ - 1] =3D 0;
-> +       strscpy(mon_ndev->name, name, IFNAMSIZ);
->         mon_ndev->needs_free_netdev =3D true;
->         mon_ndev->priv_destructor =3D rtw_ndev_destructor;
->
-> --
-> 2.39.2
->
-
-Thanks
-Justin
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
