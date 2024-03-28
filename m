@@ -1,135 +1,121 @@
 Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269BB3BBE2
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 21:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB6812F5A4
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711663170; cv=none; b=stlTKJuW5mXudhTB0vKS7qXOledi1rQ1O45HsZbux9bwMpy71eu0bu+FXkd3C5UahoK8RzMQN07iOTyBF75tG3zEW6Ex/D5BBKq+Xv1o9hfhL7kHXcwEgFCytg7i/6uJjbZykC6vkH8as4Knrm970+H8QFjtCob8z1srNcoQceY=
+	t=1711663504; cv=none; b=mBoG+WKwlnYTbu8RqfSj7NTjXyfmo7jcTsPxMlKelUAT73Xv7MRRxF48CunxEXu57rZVG5BPPbM+rFu2X0zVyW0ZuKw0oHP4fpXBh+20Nz9AxI2uIut+/eUQcO9Nt700USAXURPsnkRCDZrFiYLSzgQWVZecVfr71F0k4QB6Jg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711663170; c=relaxed/simple;
-	bh=xmo39MCdNMPQmHxw1MUgA6OOoECS018DvUqLxEsi7YM=;
+	s=arc-20240116; t=1711663504; c=relaxed/simple;
+	bh=9ZSPvENfmgfhIsnuJFWhvL6BmUkVhFz5PSQ7INGUgHQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ee+KFSD04Asu8Oic76Hs/0Kp3XxfbvnmkMbm2gwBjLNLSc9ANBNb6bpmAOcDFxN48PeKMmrBqNjncpB5eTVnTlYY8JgasO0YSquH/+3CgRFl7Xc8muY0Agzx/Z3RECSHW08hYJLj8iThsPHZmgaaFLBorbANFQtIj9X3KMGBmaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vWDR4AOi; arc=none smtp.client-ip=209.85.208.54
+	 To:Cc:Content-Type; b=P1Z/yfD1RankBlPeAiTs1QEqrjJijMJehfn8Qw9NXdCwaLZucOSjlziUzzMt/pjhDme0uIKMUcjTyejKDqHwgDe2LUEgy66LmZduaIUpIyCmpKLDMVkETDyIBtn/yTFO7rHAVaH2hgllq2oS6V4EK4ZZ8ikgPiDi8eArybS2dOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mqke1D4f; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vWDR4AOi"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56c08d1e900so1692063a12.3
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 14:59:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mqke1D4f"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56c4ca65dc6so1802383a12.1
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711663167; x=1712267967; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1711663501; x=1712268301; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JkrR3TRsPYSXBmltvKoz6z3FLacSM3QfrKhBArRhwdM=;
-        b=vWDR4AOikZrPkEoNr3Dbo7gARKJc4jWB8vP0gjn8rQeq/BafbmYzkyrV3O3zu1x+lp
-         fK+ob+KXv4w5Ys+H4ROBUoFfWDQL2vVUzNmhaF0Sd2rVspgbGB7/xFVEs1j8mON+8+J2
-         GEa/93ycYqMUmCrW9ehN9Zz/ur53xaNGNI6mD1NZfT40Rfkc+tIa4rBg2DTIMXPhFYpe
-         HatRe8zKek37oKgBtbxW97TyatpPX0zO2LZgOz74GgVafv718bQpYYNTP74raigC45nH
-         Rlk6++ot5DJH+9Zgul1FOP+PgLD1zZfu5/9Aj16FM2mcOG33DWYag/zUIpi3h5GZ0yNI
-         OD2g==
+        bh=MGMxoG8AQ8BGP67PTNjLH3VS7bl1OwfTgMURF7OtwG4=;
+        b=mqke1D4f1Ogx+clo0212f779OIBiwQ4DcBnwxfuSdDT0SwvKbSZuHqmau23Zo4do3J
+         bMfI0PxwaqHvozbYjVjMlF/8SA+sxJKBAIKAzqvTEo6V9UtzVFvo9pL4JmKftvHnwt1C
+         JDscH48L+SSWKevYbGuVsyC58lR4rhSsNElvvt2q0G/ff9QonUwW+EuPatUIezhJNspZ
+         YquuvU4MmdY9zOX7cQJuCKBlP6vBAQVJn4I6Y/RxFQByrqr3DnDM70ppPA2/dfjjx4pg
+         gHlLsAtidYpsGXH44JkqbaoS0513aP75pJqqYtdun8cjkAZwkFc7hJICrVGm7dKL5a+r
+         kXeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711663167; x=1712267967;
+        d=1e100.net; s=20230601; t=1711663501; x=1712268301;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JkrR3TRsPYSXBmltvKoz6z3FLacSM3QfrKhBArRhwdM=;
-        b=UIzUKOkL0MSXGL2wuKDLDkJgw0Jz1ebypu1BM7n9sWy97DkrkM+JIcCtmWlB25xt2f
-         za+BB6umfYc6wcKq//y1CxwuieVE3gMMbvdiXy6yXupXVvB7AQNH6eIuOXdZ0ehlC00l
-         KNaMgDK+ILTt0Ux6J0k/yGXZse5fVuaD/8DgZ/n+1fEjT7vWYsoiikKwbxLNsAee5V7r
-         kbXbQAlfmcGHA79RDhlQaA96P3e5MXqNSB4j1RzKhC3unYjiKQEEjpZMbVMhJoH5DKNk
-         k0mp3gYa8p9RTkd31bnpC7VlBYodMDw4INKAYWgrrhm6Mp8jmCddNoMQlGHG8siySWfr
-         aNJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVO7y7vcDU4oUECWORPwjnZhrwfYiy4/d/oz4ZXQV2HlwXO8yDHSGF6Zsl9MLmvhn1a5napagT4TIXfNMSp7ip+VlnYiw==
-X-Gm-Message-State: AOJu0Yy6ontTrH59dSQw6zxVHOqZK6p5GS4aRWCH23ooNJqrlNdAAxXL
-	zjEcqLDeBultetCRPO2vT++KGHI78EruZcX3AGOFt0aSV2j5HCl5yBHOPDA9IcOY10Jll3FYyw9
-	ateGE3aO3r8XGRnr3JIviue0l2hTK5U/gKHlT
-X-Google-Smtp-Source: AGHT+IHxVJPGgWlPUtD38LmquZT+Kw2h6yv1jTsdsBsy+O/RrcoVPzZF9uidn02SdlhCE7x48PGrZPsbAniqVO9n/64=
-X-Received: by 2002:a05:6402:3548:b0:56b:c210:870c with SMTP id
- f8-20020a056402354800b0056bc210870cmr331295edd.15.1711663167480; Thu, 28 Mar
- 2024 14:59:27 -0700 (PDT)
+        bh=MGMxoG8AQ8BGP67PTNjLH3VS7bl1OwfTgMURF7OtwG4=;
+        b=SViWvt1aDXE8UJmzimd73CtMa6O2V7yyPYmmlOLKrOEzEvDk+t8JeTZctgcT/2+rZG
+         4dPmORTmA2/S1yuh+iCYr5Of99dHvtLjXgFJ/BfvydjOFBbUkAQMk9aJpAT2heSU4Gjp
+         erOkJtR/JixJqSrcEnVwe2CpPWfmED2mLO/PxwT386AbVTU37N4DYWnBD8seBH4VRJs4
+         nhXpI8Zqp5qjTrKNCWHxPzob8pilo56yMcbiEnDe2jsXoomCcIJVnrQaHCaaGiGz+rW6
+         yQucMH/DQqBlQUhyPjZ/Map7ZjNEOkmQRCzV3+tavYCOM51Afqh9Q/kdezGswhQrasJ4
+         VBvw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxl77/3uniLMR3m4m63H3LbFAKsM+NpuxlflK2DcJ31/pkrwJh5BsQxe7AyU+PrDLCeKEvt3pQzINoFsPEVLhIXR7KYw==
+X-Gm-Message-State: AOJu0Yw/s9HWk49HoPJXQAISvTF6kwTmIDAHDWjj3XFlQLMPnGC8s1yY
+	6SS6ClhlpYi6/YoLqGgiZEMzWi5dBdQIEltjXLSmrdl1UwI3ISAP4q3XERi3HrlrwrHj47hhOW+
+	+IOYVBh6wV/q07F8hk+vxjS6NWo+PcVCNkIpD
+X-Google-Smtp-Source: AGHT+IGI1NuivKb4Ji1liwhmjoNA08qow9K2J1nHBY2lkA7t+bjvkMMP3tHaIzK6dIha9lwR+QhUcEEc6nDcKmlEY7E=
+X-Received: by 2002:a05:6402:35ca:b0:56c:2ef7:f3ed with SMTP id
+ z10-20020a05640235ca00b0056c2ef7f3edmr442959edc.35.1711663501455; Thu, 28 Mar
+ 2024 15:05:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240328-panthor-drop-csg_mod_mask-v1-1-5a80be3df581@kernel.org>
-In-Reply-To: <20240328-panthor-drop-csg_mod_mask-v1-1-5a80be3df581@kernel.org>
+References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-7-arnd@kernel.org>
+In-Reply-To: <20240328143051.1069575-7-arnd@kernel.org>
 From: Justin Stitt <justinstitt@google.com>
-Date: Thu, 28 Mar 2024 14:59:15 -0700
-Message-ID: <CAFhGd8qJQw9TFPzM5VqwPAdvFCfYRW6TMFYZcOOPWW74qvNz6Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/panthor: Fix clang -Wunused-but-set-variable in tick_ctx_apply()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: boris.brezillon@collabora.com, steven.price@arm.com, liviu.dudau@arm.com, 
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de, 
-	ndesaulniers@google.com, morbo@google.com, heiko@sntech.de, 
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev
+Date: Thu, 28 Mar 2024 15:04:49 -0700
+Message-ID: <CAFhGd8oJ5trNE7na9jCDbEt5kox1rg0mia59EHj+XikHUnay5w@mail.gmail.com>
+Subject: Re: [PATCH 6/9] nilfs2: fix out-of-range warning
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Philipp Stanner <pstanner@redhat.com>, 
+	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+	Thorsten Blum <thorsten.blum@toblux.com>, linux-nilfs@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 9:22=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
+On Thu, Mar 28, 2024 at 7:32=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-> Clang warns (or errors with CONFIG_WERROR):
+> From: Arnd Bergmann <arnd@arndb.de>
 >
->   drivers/gpu/drm/panthor/panthor_sched.c:2048:6: error: variable 'csg_mo=
-d_mask' set but not used [-Werror,-Wunused-but-set-variable]
->    2048 |         u32 csg_mod_mask =3D 0, free_csg_slots =3D 0;
->         |             ^
->   1 error generated.
->
-> The variable is an artifact left over from refactoring that occurred
-> during the development of the initial series for this driver. Remove it
-> to resolve the warning.
+> clang-14 points out that v_size is always smaller than a 64KB
+> page size if that is configured by the CPU architecture:
 
-Yep, makes sense.
+Is this only with clang-14?
 
 >
-> Fixes: de8548813824 ("drm/panthor: Add the scheduler logical block")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> fs/nilfs2/ioctl.c:63:19: error: result of comparison of constant 65536 wi=
+th expression of type '__u16' (aka 'unsigned short') is always false [-Werr=
+or,-Wtautological-constant-out-of-range-compare]
+>         if (argv->v_size > PAGE_SIZE)
+>             ~~~~~~~~~~~~ ^ ~~~~~~~~~
+>
+> This is ok, so just shut up that warning with a cast.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+My question out of curiosity aside,
 
 Reviewed-by: Justin Stitt <justinstitt@google.com>
 
 > ---
->  drivers/gpu/drm/panthor/panthor_sched.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  fs/nilfs2/ioctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/gpu/drm/panthor/panthor_sched.c b/drivers/gpu/drm/pa=
-nthor/panthor_sched.c
-> index 5f7803b6fc48..e5a710f190d2 100644
-> --- a/drivers/gpu/drm/panthor/panthor_sched.c
-> +++ b/drivers/gpu/drm/panthor/panthor_sched.c
-> @@ -2045,7 +2045,7 @@ tick_ctx_apply(struct panthor_scheduler *sched, str=
-uct panthor_sched_tick_ctx *c
->         struct panthor_device *ptdev =3D sched->ptdev;
->         struct panthor_csg_slot *csg_slot;
->         int prio, new_csg_prio =3D MAX_CSG_PRIO, i;
-> -       u32 csg_mod_mask =3D 0, free_csg_slots =3D 0;
-> +       u32 free_csg_slots =3D 0;
->         struct panthor_csg_slots_upd_ctx upd_ctx;
->         int ret;
+> diff --git a/fs/nilfs2/ioctl.c b/fs/nilfs2/ioctl.c
+> index f1a01c191cf5..8be471ce4f19 100644
+> --- a/fs/nilfs2/ioctl.c
+> +++ b/fs/nilfs2/ioctl.c
+> @@ -60,7 +60,7 @@ static int nilfs_ioctl_wrap_copy(struct the_nilfs *nilf=
+s,
+>         if (argv->v_nmembs =3D=3D 0)
+>                 return 0;
 >
-> @@ -2139,7 +2139,6 @@ tick_ctx_apply(struct panthor_scheduler *sched, str=
-uct panthor_sched_tick_ctx *c
+> -       if (argv->v_size > PAGE_SIZE)
+> +       if ((size_t)argv->v_size > PAGE_SIZE)
+>                 return -EINVAL;
 >
->                         csg_iface =3D panthor_fw_get_csg_iface(ptdev, csg=
-_id);
->                         csg_slot =3D &sched->csg_slots[csg_id];
-> -                       csg_mod_mask |=3D BIT(csg_id);
->                         group_bind_locked(group, csg_id);
->                         csg_slot_prog_locked(ptdev, csg_id, new_csg_prio-=
--);
->                         csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
->
-> ---
-> base-commit: d180649238f04183950d9c8a7d8a2c2f1788a89c
-> change-id: 20240328-panthor-drop-csg_mod_mask-b4bbe317d690
->
-> Best regards,
+>         /*
 > --
-> Nathan Chancellor <nathan@kernel.org>
+> 2.39.2
 >
