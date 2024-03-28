@@ -1,294 +1,120 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D903DBBF
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9FC651AE
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 16:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711641119; cv=none; b=WWN9IA98Z48usEJawvQYA5IF1eKNxuaRzgPT8is5c1JNrXMyMRfm0o8ZrFJnezYTUFyRIJeIwhLrM8Wq9x/Rx9lVv2XhQ56hP9hPa0dhG3PUNch/jEBzMgUI4qcxRMEpA3+qRFBVdSB54fRHmbm7wKiM99SRiHhR82d2EPFFAyk=
+	t=1711642367; cv=none; b=P+UpqPUqnEFef8yheS+9zeU6JY/AB4pG9KJ09+SofC44FTmIFVlSLfnHGR/3qWPHAevqsq3y7CdEWzyKAKZfPCClSTwZJPYvFO40e4S9VKWhIWfdJWystEIKkr3MtcXspcLhRFnxUj5o+kun65wb2WAcu+ICELdwQjYVYF1U46U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711641119; c=relaxed/simple;
-	bh=Ke8i0TRtjx5ZFSdZott23A8QqP/B51J9yaY5GocXqkM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pDzFyiToSQNo+7wjG+pCBqbD7K2VT7bK4tN2XfE+H5KDlbcnrc/Lzg82E/mg9aza7sGLsN1PJg8C6VDfC2YGtGNeAxuPoNGZH/bursEbS9D6YYZdKzEX08J1IGqWeVJ0iF6s5TAo8vQR7o+2nuIWKKuZJ8EEQoURYNsZGHWVDt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fMxg1Beh; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1711642367; c=relaxed/simple;
+	bh=pGTWxtR8t55PSLe9wdn/GlKwMsqBfge9PbgnDIXZN1k=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=e8X7B52bG66O2DofGVeQbTI86oGZ8rAvV8YDeGfoalO3g+YaQbyqQfngKm/I13FBoH9cfdDmKtVNklmNzUKR5Wh//nfv0oLiQ9EdIxx2Vkfw5+YfygVD7kczTdxCVSV4BCcSH5w6bp5Pvyy0f+QUizUHL7Tv9cFqmIBmJhNpADw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pr/Moz0a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HVMJ8PxS; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fMxg1Beh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711641115;
-	bh=Ke8i0TRtjx5ZFSdZott23A8QqP/B51J9yaY5GocXqkM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fMxg1BeheGYK1iBjBHLYpbSTaSQYgwezZNL2V4tB0NUxZ5KUEGNIfEw2v4ez56eg7
-	 DD1b6cZwb/Eh4C6/ol9SY3sQKeqodqvCldVEe8ky6fX1/SSpvrg+uMWrMrXZje+Ad6
-	 uDTBmjtmrhtUMGnEJWi8/b7wtjGqI4qJJDvMKiQbbXDNu0TXpLzMyT7C7GDQTwzrdr
-	 i0eDX1tg6eVrl+j01EBI2TA3v3Xdh2NhQk6414tmR/7TFSPsZNPYWvQ4emIckxXswc
-	 IcwEA91Xf4K46FJ6e4oHD8l2QMKzfGjpOriU9AT2Ed/1UufxmS8Ewivzce6OdBS6Hy
-	 lJXNXdkTFDPyA==
-Received: from localhost (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bbrezillon)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 9592D37804B2;
-	Thu, 28 Mar 2024 15:51:54 +0000 (UTC)
-Date: Thu, 28 Mar 2024 16:51:53 +0100
-From: Boris Brezillon <boris.brezillon@collabora.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>, "Marty
- E . Plummer" <hanetzer@startmail.com>, Rob Herring <robh@kernel.org>,
- =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>, Nicolas Boichat
- <drinkcat@chromium.org>, Neil Armstrong <neil.armstrong@linaro.org>, Faith
- Ekstrand <faith.ekstrand@collabora.com>, Daniel Stone
- <daniels@collabora.com>, Liviu Dudau <Liviu.Dudau@arm.com>, Steven Price
- <steven.price@arm.com>, Robin Murphy <robin.murphy@arm.com>,
- kernel@collabora.com, Heiko Stuebner <heiko@sntech.de>, Tatsuyuki Ishi
- <ishitatsuyuki@gmail.com>, Chris Diamand <chris.diamand@foss.arm.com>,
- Ketil Johnsen <ketil.johnsen@arm.com>, Maxime Ripard <mripard@kernel.org>,
- llvm@lists.linux.dev
-Subject: Re: [PATCH v6 10/14] drm/panthor: Add the scheduler logical block
-Message-ID: <20240328165153.0e3ff2d0@collabora.com>
-In-Reply-To: <20240328153809.GA2673768@dev-arch.thelio-3990X>
-References: <20240229162230.2634044-1-boris.brezillon@collabora.com>
-	<20240229162230.2634044-11-boris.brezillon@collabora.com>
-	<20240328153809.GA2673768@dev-arch.thelio-3990X>
-Organization: Collabora
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pr/Moz0a";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HVMJ8PxS"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id CF8511380138;
+	Thu, 28 Mar 2024 12:12:44 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 28 Mar 2024 12:12:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1711642364; x=1711728764; bh=yBZLt1IotB
+	ltcCRHWDdPe59/imWh5Tf9BCrIy8mVGDw=; b=pr/Moz0a71aofp46Is9vCctPWg
+	dG1WvxuZpAO9jRKb+EppwbnVxIgY2B22sFnZAEFuC0rP9eYQBxIQQN6cFEFIP88B
+	gEuGKY8/ItJYP3gTTY9LVF710l3TDKtwOJf0THlL8Ork1YCCeXLpH00f+C9KuPvO
+	3Z9VVmEYXKeUlMIDvz417QEmglQNKgWaCPofdSn6TRk5n06/jeUjzDkfEjbeKubE
+	0d7ETXD21LjC/7jOq/lio2lUgDBWoS9yT3FXYQN5/OGUJ9UAMhSuWH9o1x0M79nn
+	c63TBBgUS9z8szedCPtfrIVFyLggobRbUEHKDoIDxQec45qWp7h2YLfVEdHg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1711642364; x=1711728764; bh=yBZLt1IotBltcCRHWDdPe59/imWh
+	5Tf9BCrIy8mVGDw=; b=HVMJ8PxSbQXFoQR5Xj5YTspS4zpHiY6/+kQvZrPhUhSV
+	FGIVvwjru+16YOA/5q+RZFcWknd5F0dRLW7Fg6zv5SNeAU2HwHuxJzdRqCOmGdK5
+	Inn9089mnbc/KKiPWhx1R4ihdqBIydcCF72UHU4rWbNtVfS684VgapjJpM+XUljz
+	zNdz/z55QTBzwcelz9pJo56RGvTsXgTh/jiFFHoubL/E+TsVwmcKzwNqRAgtplbK
+	BLVGdSD2zHxCjrFJw9h8tQdmvvFoQUb6HUB36PE0UL/uCcjnMkrugG35zqZIb3Og
+	+4x036hdlSqBI+YixM36mc/jVxw7/Wull2nOgOChWQ==
+X-ME-Sender: <xms:-5YFZnr665NksCT90A5BioJ6_9K7Umvncb7geZOMM753OUWq47ciHA>
+    <xme:-5YFZhpe8fpM_Xs82WNvywZQgUZSClqXuK72tTCnltht3BbLtzD24RzGE9s8e-btD
+    OddfkzvLTmMYpeyE-U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduledgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:-5YFZkPFqPbyR-jlaOl7TvmFuhsUrVd7v39PJlUmlWR2J0uayao76Q>
+    <xmx:-5YFZq6bvd8W5eJs-UAQUDOUCWKaLiemvr5tFo1jyKlSM-cahSK_5A>
+    <xmx:-5YFZm5hRUJyLv8-s52LALMuyAW21UXaU1U1zqCETiYp2efKrMdC6w>
+    <xmx:-5YFZijsYUMMWSdfiEH7V4DkAKVl8Otkx_0fEzoqPWd_-ipDI71RJg>
+    <xmx:_JYFZlTGH9z7KqtaDtzrw3ayMMvXSEJCLO7wrThyhP25rPNaTZsZew>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id C8F92B6008F; Thu, 28 Mar 2024 12:12:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Message-Id: <e96b89e1-0fd7-44c1-a0ed-cd40a5e7af67@app.fastmail.com>
+In-Reply-To: <25b5f2297c98500ed91971a61ccc4bfa5921035e.camel@redhat.com>
+References: <20240328143051.1069575-1-arnd@kernel.org>
+ <20240328143051.1069575-7-arnd@kernel.org>
+ <25b5f2297c98500ed91971a61ccc4bfa5921035e.camel@redhat.com>
+Date: Thu, 28 Mar 2024 17:12:03 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Philipp Stanner" <pstanner@redhat.com>,
+ "Arnd Bergmann" <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+ "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
+ "Nathan Chancellor" <nathan@kernel.org>
+Cc: "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Christian Brauner" <brauner@kernel.org>, "Jeff Layton" <jlayton@kernel.org>,
+ "Thorsten Blum" <thorsten.blum@toblux.com>, linux-nilfs@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH 6/9] nilfs2: fix out-of-range warning
+Content-Type: text/plain
 
-Hi Nathan,
+On Thu, Mar 28, 2024, at 16:21, Philipp Stanner wrote:
+> On Thu, 2024-03-28 at 15:30 +0100, Arnd Bergmann wrote:
+>> 
+>> This is ok, so just shut up that warning with a cast.
+>
+> nit:
+> It's not a warning, but actually a compile error, right?
 
-On Thu, 28 Mar 2024 08:38:09 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+I build with CONFIG_WERROR=y, which turns all warnings
+into errors. It's just a warning without that, and is
+currently only enabled when building with 'make W=1',
+though the point of my series is to have it always enabled.
 
-> Hi Boris,
-> 
-> On Thu, Feb 29, 2024 at 05:22:24PM +0100, Boris Brezillon wrote:
-> <snip>
-> > ---
-> >  drivers/gpu/drm/panthor/panthor_sched.c | 3502 +++++++++++++++++++++++
-> >  drivers/gpu/drm/panthor/panthor_sched.h |   50 +
-> >  2 files changed, 3552 insertions(+)
-> >  create mode 100644 drivers/gpu/drm/panthor/panthor_sched.c
-> >  create mode 100644 drivers/gpu/drm/panthor/panthor_sched.h
-> > 
-> > diff --git a/drivers/gpu/drm/panthor/panthor_sched.c b/drivers/gpu/drm/panthor/panthor_sched.c
-> > new file mode 100644
-> > index 000000000000..5f7803b6fc48
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/panthor/panthor_sched.c  
-> <snip>
-> > +static void
-> > +tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *ctx)
-> > +{
-> > +	struct panthor_group *group, *tmp;
-> > +	struct panthor_device *ptdev = sched->ptdev;
-> > +	struct panthor_csg_slot *csg_slot;
-> > +	int prio, new_csg_prio = MAX_CSG_PRIO, i;
-> > +	u32 csg_mod_mask = 0, free_csg_slots = 0;
-> > +	struct panthor_csg_slots_upd_ctx upd_ctx;
-> > +	int ret;
-> > +
-> > +	csgs_upd_ctx_init(&upd_ctx);
-> > +
-> > +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
-> > +		/* Suspend or terminate evicted groups. */
-> > +		list_for_each_entry(group, &ctx->old_groups[prio], run_node) {
-> > +			bool term = !group_can_run(group);
-> > +			int csg_id = group->csg_id;
-> > +
-> > +			if (drm_WARN_ON(&ptdev->base, csg_id < 0))
-> > +				continue;
-> > +
-> > +			csg_slot = &sched->csg_slots[csg_id];
-> > +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
-> > +						term ? CSG_STATE_TERMINATE : CSG_STATE_SUSPEND,
-> > +						CSG_STATE_MASK);
-> > +		}
-> > +
-> > +		/* Update priorities on already running groups. */
-> > +		list_for_each_entry(group, &ctx->groups[prio], run_node) {
-> > +			struct panthor_fw_csg_iface *csg_iface;
-> > +			int csg_id = group->csg_id;
-> > +
-> > +			if (csg_id < 0) {
-> > +				new_csg_prio--;
-> > +				continue;
-> > +			}
-> > +
-> > +			csg_slot = &sched->csg_slots[csg_id];
-> > +			csg_iface = panthor_fw_get_csg_iface(ptdev, csg_id);
-> > +			if (csg_slot->priority == new_csg_prio) {
-> > +				new_csg_prio--;
-> > +				continue;
-> > +			}
-> > +
-> > +			panthor_fw_update_reqs(csg_iface, endpoint_req,
-> > +					       CSG_EP_REQ_PRIORITY(new_csg_prio),
-> > +					       CSG_EP_REQ_PRIORITY_MASK);
-> > +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
-> > +						csg_iface->output->ack ^ CSG_ENDPOINT_CONFIG,
-> > +						CSG_ENDPOINT_CONFIG);
-> > +			new_csg_prio--;
-> > +		}
-> > +	}
-> > +
-> > +	ret = csgs_upd_ctx_apply_locked(ptdev, &upd_ctx);
-> > +	if (ret) {
-> > +		panthor_device_schedule_reset(ptdev);
-> > +		ctx->csg_upd_failed_mask |= upd_ctx.timedout_mask;
-> > +		return;
-> > +	}
-> > +
-> > +	/* Unbind evicted groups. */
-> > +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
-> > +		list_for_each_entry(group, &ctx->old_groups[prio], run_node) {
-> > +			/* This group is gone. Process interrupts to clear
-> > +			 * any pending interrupts before we start the new
-> > +			 * group.
-> > +			 */
-> > +			if (group->csg_id >= 0)
-> > +				sched_process_csg_irq_locked(ptdev, group->csg_id);
-> > +
-> > +			group_unbind_locked(group);
-> > +		}
-> > +	}
-> > +
-> > +	for (i = 0; i < sched->csg_slot_count; i++) {
-> > +		if (!sched->csg_slots[i].group)
-> > +			free_csg_slots |= BIT(i);
-> > +	}
-> > +
-> > +	csgs_upd_ctx_init(&upd_ctx);
-> > +	new_csg_prio = MAX_CSG_PRIO;
-> > +
-> > +	/* Start new groups. */
-> > +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
-> > +		list_for_each_entry(group, &ctx->groups[prio], run_node) {
-> > +			int csg_id = group->csg_id;
-> > +			struct panthor_fw_csg_iface *csg_iface;
-> > +
-> > +			if (csg_id >= 0) {
-> > +				new_csg_prio--;
-> > +				continue;
-> > +			}
-> > +
-> > +			csg_id = ffs(free_csg_slots) - 1;
-> > +			if (drm_WARN_ON(&ptdev->base, csg_id < 0))
-> > +				break;
-> > +
-> > +			csg_iface = panthor_fw_get_csg_iface(ptdev, csg_id);
-> > +			csg_slot = &sched->csg_slots[csg_id];
-> > +			csg_mod_mask |= BIT(csg_id);
-> > +			group_bind_locked(group, csg_id);
-> > +			csg_slot_prog_locked(ptdev, csg_id, new_csg_prio--);
-> > +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
-> > +						group->state == PANTHOR_CS_GROUP_SUSPENDED ?
-> > +						CSG_STATE_RESUME : CSG_STATE_START,
-> > +						CSG_STATE_MASK);
-> > +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
-> > +						csg_iface->output->ack ^ CSG_ENDPOINT_CONFIG,
-> > +						CSG_ENDPOINT_CONFIG);
-> > +			free_csg_slots &= ~BIT(csg_id);
-> > +		}
-> > +	}
-> > +
-> > +	ret = csgs_upd_ctx_apply_locked(ptdev, &upd_ctx);
-> > +	if (ret) {
-> > +		panthor_device_schedule_reset(ptdev);
-> > +		ctx->csg_upd_failed_mask |= upd_ctx.timedout_mask;
-> > +		return;
-> > +	}
-> > +
-> > +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
-> > +		list_for_each_entry_safe(group, tmp, &ctx->groups[prio], run_node) {
-> > +			list_del_init(&group->run_node);
-> > +
-> > +			/* If the group has been destroyed while we were
-> > +			 * scheduling, ask for an immediate tick to
-> > +			 * re-evaluate as soon as possible and get rid of
-> > +			 * this dangling group.
-> > +			 */
-> > +			if (group->destroyed)
-> > +				ctx->immediate_tick = true;
-> > +			group_put(group);
-> > +		}
-> > +
-> > +		/* Return evicted groups to the idle or run queues. Groups
-> > +		 * that can no longer be run (because they've been destroyed
-> > +		 * or experienced an unrecoverable error) will be scheduled
-> > +		 * for destruction in tick_ctx_cleanup().
-> > +		 */
-> > +		list_for_each_entry_safe(group, tmp, &ctx->old_groups[prio], run_node) {
-> > +			if (!group_can_run(group))
-> > +				continue;
-> > +
-> > +			if (group_is_idle(group))
-> > +				list_move_tail(&group->run_node, &sched->groups.idle[prio]);
-> > +			else
-> > +				list_move_tail(&group->run_node, &sched->groups.runnable[prio]);
-> > +			group_put(group);
-> > +		}
-> > +	}
-> > +
-> > +	sched->used_csg_slot_count = ctx->group_count;
-> > +	sched->might_have_idle_groups = ctx->idle_group_count > 0;
-> > +}  
-> 
-> Clang builds fail after this change in -next as commit
-> de8548813824 ("drm/panthor: Add the scheduler logical block"):
-> 
->   drivers/gpu/drm/panthor/panthor_sched.c:2048:6: error: variable 'csg_mod_mask' set but not used [-Werror,-Wunused-but-set-variable]
->    2048 |         u32 csg_mod_mask = 0, free_csg_slots = 0;
->         |             ^
->   1 error generated.
-> 
-> It appears legitimate to me, csg_mod_mask is only updated with '|=' but
-> never accessed in any other manner. Should the variable be removed or
-> was it supposed to be used somewhere else?
+> (no idea why they make that an error btw. Warning would be perfectly
+> fine)
+>
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Should / could that be backported to stable kernels in case people
+> start building those with clang-14?
 
-Thanks for the report!
+It's clearly harmless and could be backported, but it
+is not needed either since older kernels will keep the
+option as part of W=1, not the default.
 
-It's a leftover from a refactor that happened in v2 or v3 of this
-patchset, csg_mod_mask can be dropped (like you do in your diff).
-Mind sending a proper patch to dri-devel@lists.freedesktop.org with me,
-Steven and Liviu in Cc?
-
-Regards,
-
-Boris
-
-> 
-> Cheers,
-> Nathan
-> 
-> diff --git a/drivers/gpu/drm/panthor/panthor_sched.c b/drivers/gpu/drm/panthor/panthor_sched.c
-> index 5f7803b6fc48..e5a710f190d2 100644
-> --- a/drivers/gpu/drm/panthor/panthor_sched.c
-> +++ b/drivers/gpu/drm/panthor/panthor_sched.c
-> @@ -2045,7 +2045,7 @@ tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *c
->  	struct panthor_device *ptdev = sched->ptdev;
->  	struct panthor_csg_slot *csg_slot;
->  	int prio, new_csg_prio = MAX_CSG_PRIO, i;
-> -	u32 csg_mod_mask = 0, free_csg_slots = 0;
-> +	u32 free_csg_slots = 0;
->  	struct panthor_csg_slots_upd_ctx upd_ctx;
->  	int ret;
->  
-> @@ -2139,7 +2139,6 @@ tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *c
->  
->  			csg_iface = panthor_fw_get_csg_iface(ptdev, csg_id);
->  			csg_slot = &sched->csg_slots[csg_id];
-> -			csg_mod_mask |= BIT(csg_id);
->  			group_bind_locked(group, csg_id);
->  			csg_slot_prog_locked(ptdev, csg_id, new_csg_prio--);
->  			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
-
+      Arnd
