@@ -1,95 +1,156 @@
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A9B7FBB3;
-	Thu, 28 Mar 2024 12:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807361DFF2
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 13:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711630622; cv=none; b=DgotwKjrBWJPzww8N1UOZJttK82weLQfg01nYRUx/QZA1DEw73Z2fjDw+DzuZUCV7hPqQF1ZA333VBwk7IHyKlAPqdKKJZ1YU2Ep4LbNFumT7Q2Pv+PMOMgH04jIv19J03a46NNf8JM8qgq/nv4WYnuCUROw+KcFEjJVgrw1bTg=
+	t=1711631486; cv=none; b=enwlisIi0Xhbu4M4ZH8jbLj3MulFTPrrKiQq8V1DIi2O26Hyu9k4VQNSu2qT4k3TgA1OHHoBzqJvwDHwSogVg6W3lEqBk5FKde23rkPZsTqJ3KOI0ELNjC3ZSfzZvmAqhUammqBWLgNLAd22DgmPOP9d1Ig9CLDHuMmxY+ocx8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711630622; c=relaxed/simple;
-	bh=7Fc2f2taPu8F/E1+eeZWRcLoS6XcYuD22fmjyeCfJiE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Eiqk1vJ3fnYMxB4tYOcdNHprO0X5uFt72fZTO34unqse7olcKSq7JKVDRQjNUClGgWhExII4e2kxp0aKXkhMHwVNurAMebgBMSJBbKs+3/EyPDy5A+Ew0crHyxT8OfHRm7B0WgiGLUVkFSR1/AQ2AeEFTuZrPQDuyZRr1TdmEOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4V53SK2XWbz1wnbZ;
-	Thu, 28 Mar 2024 20:56:01 +0800 (CST)
-Received: from dggpemm100001.china.huawei.com (unknown [7.185.36.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2706F1A016C;
-	Thu, 28 Mar 2024 20:56:51 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 28 Mar 2024 20:56:50 +0800
-Message-ID: <52f333be-9370-4865-b0fb-5ca6825ef39a@huawei.com>
-Date: Thu, 28 Mar 2024 20:56:49 +0800
+	s=arc-20240116; t=1711631486; c=relaxed/simple;
+	bh=HUByaQuWRaIKmZ26KXeRj8SPZkk7Pft/Zgj05UFaJDA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=hCcbT2rkhOqTRH3LZxovccmUCEUwiSbt6qsm7nffhlWch2UIxecxqRL+U6q5mtMVL/RMeqNYBUQNGBp/3B93rvDXkLXOMju3yIcHFNdexlqmLGyOCsrTOXSD8zzrx53n4uGXUN94rd15as87pEyZJR7UhedsA4qvWPQyVmqILiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iToduXIb; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iToduXIb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711631483;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=THIe8Ou7tHgJUlWLoGF/4515OEDzwT3QE759NKBDK5Q=;
+	b=iToduXIbcW/Ckn8OTBK9WA2TYdrJ21Ko8c+Uww+AfAK/H6TRWOvCPhUXPxIW7ET4qqAKY4
+	E7JtasTBxVS0l/nAtmHsSOklfUAiaAmQhu9t0HQ9Ia7aVsr0+DGDYEqUs2HDVcZ5uVRWEJ
+	mhmI58jD86/pPamXN2v3Jb8fsnqkr6E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-681-1QASwqn-NKGW8fcNX1qScQ-1; Thu, 28 Mar 2024 09:11:22 -0400
+X-MC-Unique: 1QASwqn-NKGW8fcNX1qScQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2D2F816F22
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 13:11:21 +0000 (UTC)
+Received: from [172.64.11.58] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 681D93C54;
+	Thu, 28 Mar 2024 13:11:21 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 199 of 204): Test report for master
+ (6.9.0-rc1, mainline.kernel.org-clang, 96249052)
+Date: Thu, 28 Mar 2024 13:11:21 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] mm: remove isolate_lru_page()
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, Andrew Morton
-	<akpm@linux-foundation.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Linux Memory
- Management List <linux-mm@kvack.org>, <willy@infradead.org>, Miaohe Lin
-	<linmiaohe@huawei.com>, Naoya Horiguchi <naoya.horiguchi@nec.com>, David
- Hildenbrand <david@redhat.com>, Oscar Salvador <osalvador@suse.de>, Zi Yan
-	<ziy@nvidia.com>, Hugh Dickins <hughd@google.com>, Jonathan Corbet
-	<corbet@lwn.net>, <linux-doc@vger.kernel.org>, Baolin Wang
-	<baolin.wang@linux.alibaba.com>
-References: <20240327141034.3712697-4-wangkefeng.wang@huawei.com>
- <202403282057.pIA3kJoz-lkp@intel.com>
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <202403282057.pIA3kJoz-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm100001.china.huawei.com (7.185.36.93)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <85944.124032809112200258@us-mta-681.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'probes-fixes-v6.9-rc1' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/trace/linux-trace
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/137724
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: bpf-helpers.rst:20: (WARNING/2) Field=
+ list ends without a blank line; unexpected unindent
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1405
+            Affected tests:
+                kselftest build - bpf [x86_64 (debug)]
 
 
+Tests that were not ran because of internal issues:=20
+    AMTU (Abstract Machine Test Utility) [x86_64 (debug), s390x, ppc64le, a=
+arch64, x86_64]
+    Boot test [x86_64 (debug), x86_64 (debug), x86_64 (debug), s390x, s390x=
+, s390x, s390x, ppc64le, ppc64le, ppc64le, aarch64, aarch64, aarch64, aarch=
+64, aarch64, x86_64, x86_64, x86_64, x86_64, x86_64]
+    CKI/restraint [x86_64 (debug), x86_64 (debug), x86_64 (debug), s390x, s=
+390x, s390x, s390x, ppc64le, ppc64le, ppc64le, aarch64, aarch64, aarch64, a=
+arch64, aarch64, x86_64, x86_64, x86_64, x86_64, x86_64]
+    Filesystem - Loopdev Sanity [x86_64 (debug), s390x, ppc64le, aarch64, x=
+86_64]
+    Hardware - Firmware test suite [aarch64]
+    Hardware - pciutils: sanity smoke test [x86_64 (debug), x86_64]
+    kdump - file-load [s390x, ppc64le, x86_64]
+    kdump - kexec-file-load [s390x, aarch64, x86_64]
+    kdump - kexec_boot [s390x, aarch64, x86_64]
+    kdump - sysrq-c [s390x, ppc64le, aarch64, x86_64]
+    kselftests upstream - bpf [x86_64 (debug), x86_64]
+    kselftests upstream - bpf_test_progs [x86_64 (debug), x86_64]
+    kselftests upstream - net [x86_64 (debug), x86_64]
+    Libkcapi AF_ALG test [x86_64 (debug), s390x, ppc64le, aarch64, x86_64]
+    machineinfo [x86_64 (debug), x86_64 (debug), x86_64 (debug), s390x, s39=
+0x, s390x, s390x, ppc64le, ppc64le, ppc64le, aarch64, aarch64, aarch64, aar=
+ch64, aarch64, x86_64, x86_64, x86_64, x86_64, x86_64]
+    Memory function: memfd_create [x86_64 (debug), s390x, ppc64le, aarch64,=
+ x86_64]
+    Networking - Ethernet drivers sanity [x86_64 (debug), s390x, ppc64le, a=
+arch64, x86_64]
+    Networking cki netfilter test [x86_64 (debug), s390x, ppc64le, aarch64,=
+ x86_64]
+    Networking vnic: ipvlan/basic [s390x, ppc64le, aarch64, x86_64]
+    POSIX pjd-fstest suites [x86_64 (debug), s390x, ppc64le, aarch64, x86_6=
+4]
+    Reboot test [x86_64 (debug), x86_64 (debug), x86_64 (debug), s390x, s39=
+0x, s390x, s390x, ppc64le, ppc64le, ppc64le, aarch64, aarch64, aarch64, aar=
+ch64, aarch64, x86_64, x86_64, x86_64, x86_64, x86_64]
+    SELinux Custom Module Setup [x86_64 (debug), x86_64 (debug), x86_64 (de=
+bug), s390x, s390x, s390x, s390x, ppc64le, ppc64le, ppc64le, aarch64, aarch=
+64, aarch64, aarch64, aarch64, x86_64, x86_64, x86_64, x86_64, x86_64]
+    selinux-policy: serge-testsuite [s390x, ppc64le, aarch64, x86_64]
+    Storage - blktests - blk - upstream [s390x, aarch64, x86_64]
+    Storage - blktests - nvme-tcp - upstream [s390x, aarch64, x86_64]
+    Storage - dm/common [x86_64 (debug), s390x, ppc64le, aarch64, x86_64]
+    Storage - swraid scsi_raid [x86_64 (debug), s390x, aarch64, x86_64]
+    stress: stress-ng - cpu-cache [s390x, aarch64, x86_64]
+    stress: stress-ng - memory [s390x, aarch64, x86_64]
+    xfstests - btrfs [x86_64 (debug), aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64 (debug), x86_64]
+    xfstests - ext4 [x86_64 (debug), aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64 (debug), x86_64]
+    xfstests - xfs [x86_64 (debug), aarch64, x86_64]
 
-On 2024/3/28 20:22, kernel test robot wrote:
-> Hi Kefeng,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.9-rc1]
-> [cannot apply to akpm-mm/mm-everything next-20240328]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/mm-migrate-add-isolate_movable_folio/20240327-221513
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/20240327141034.3712697-4-wangkefeng.wang%40huawei.com
-> patch subject: [PATCH 3/6] mm: remove isolate_lru_page()
-> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240328/202403282057.pIA3kJoz-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403282057.pIA3kJoz-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202403282057.pIA3kJoz-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-This changed locally, but missing this when rebase on new branch, will fix.
-> 
->>> mm/migrate_device.c:388:9: error: call to undeclared function 'isolate_lru_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->       388 |                         if (!isolate_lru_page(page)) {
->           |                              ^
->     mm/migrate_device.c:388:9: note: did you mean '__isolate_free_page'?
->     mm/internal.h:487:12: note: '__isolate_free_page' declared here
->       487 | extern int __isolate_free_page(struct page *page, unsigned int order);
->           |            ^
->     1 error generated.
-> 
-> 
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
