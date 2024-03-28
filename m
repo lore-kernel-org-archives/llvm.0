@@ -1,118 +1,116 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E0113AA54
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3839780639
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 22:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711664551; cv=none; b=LkihYx4yCg7JN2kjJ2cm5LnQsSH8ueQdDr+iS/vDakxsYFJ9g9/0LiFsM4RgvkcptFIVHk00O8hewpn5uvYuU56i1px/a0qDPigMufdGVKeXEKkMGcmfKyXRAe4Skq98+boef1Fn+ST9sbdki2l9wW/EfCyOE1ME/hpi8XZJz7s=
+	t=1711664724; cv=none; b=GDbSFzpWsd1AGQp7FiZRJmzdkFtJHj4sf561QhK5UIiCGyPCy0VcG4BywwfAv1jpcxv3O8tcbDCbpBkEeSz0d9IAWZUJw/9P+75of/j++6QsnUpD224ob/gJnBbVFjWWbmU3kPsXn8AsIlIF6/upWbrBgpnPnnVYKjyf9JjZ6dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711664551; c=relaxed/simple;
-	bh=pgT/xSr/q7YOUPevv2EeewjHySxRn4YCFK6IyZ/aNb0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bfve7uxVTWhfr8+1/bKBU8ZRDAKViJW9TfgaxaidY9lCLYViNMBqy7442AzsdJv+LLPtGiRixhOxZBYdYzmHTjO/QEDPbpDKqAxLBJaotBsl3/wH3slBr/h3ZFqcI8b+Tu2PcCorE0LVUSu6qgtq30Oytf/+MjvTZjr06iGeQfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cELou1Cz; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1711664724; c=relaxed/simple;
+	bh=ppizF28GJ3LdnDD74TLR2TBswWgmrok26AkI6XA+GvY=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=qfxlD1jueBlkocGXQ5Y0lpztQ7R4IEk+KgTxY4RdKz8ybPeQzVUvaza1Y/D9AHI7m/QPlLa/q2SF2qrAn3othCr4aFp+RQm4aXhQLiohGivTGL7VzuWh1awaN6Rt4BcDs6WoEhycyhsgVedGiPL+TobV50mKHZollmKZ9qLnqlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=l+yscp6T; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eCVMfMXR; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cELou1Cz"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-56c147205b9so2594717a12.0
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711664548; x=1712269348; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F/OjdkXwLEp7mczzswJbuZjPn4dGgroiJ8sIvpa89YE=;
-        b=cELou1Czh1mF+S9/XdIALn0hf+AO77/ZLPkZxAol6EA4+fG7vPgTmfU8/QE1LbBEb+
-         SPI1ewzAU7vGFTbbzV36lLBH2ffIPPJNIUfRgU4yIVCqOTLmyeslDTcfUDEYDPuVnoQb
-         0E26tRxw+CxG7rJ8V3H8aXaW7GHTfB+J7qZJvZ3cUZ86JpoHMdqVBCVQHia+bdJ77jRF
-         tAGGyXa7ZmGZjrmqXKKThcsKphQeao8rctEppCRL20W/nvhu/INLWfzAy3qsOl+EEzqi
-         /evLsnUqME+EV4gt4tApdhI+s92F6I1BnA8/L83tqE4eMkBQNMy03jDamONd2OtPdiCq
-         eTsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711664548; x=1712269348;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F/OjdkXwLEp7mczzswJbuZjPn4dGgroiJ8sIvpa89YE=;
-        b=lCdD6yM8S5uPdzNIy8FEAGfuBFKOMDed9/RGcfcT5K8BBg0aBYAUbcu2XAyD70qewr
-         70mhh3OLBuv4BHfEiOPWT6JfgNNgeBpeBIt0fgNlHmEwh7sbKQZ5R8ztDwF5YrHU0a6X
-         EwBGcKLg5S5oXP6j5E6sRIK+Q9uj/AqbR1RXDQBbm4Cc0g9A10GUuqWuWiUbXXlN06NA
-         D4hEBZ0mj3hZKNC0UlK8qK1bzeUeGtcDngxidozzQmzXwpf0OgwnxEv5HpwNQlys11tX
-         EPKuzEhWzce9Y1IEHp1pfDUCA9cDVRoVN0r1UHZexsSrwe23NRUhGyfS6Ci52COEeDDo
-         ZpOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUXgSmNpKYagUuZMYRXh9+vw6JvMHIemdIiQdAaVUR8hKzNWOtkqnlc9hIbgdQxZjuYtcf9tRICmvgRz8ZwwnYd8cTPAA==
-X-Gm-Message-State: AOJu0YyjBn+L/6FGSJH94YwWLvImrBNh6C2U545Vo2uL1lCy/al+ajbE
-	6yaFr2rbFs97gxoGalaxapR6PNz6iUOk8NhcF3CulTpbI33jsyUcxvnC2rx2VVybk1KCIVSy8BE
-	0wrL7NgHBE9AI9nn0JhbaipVQxSffu6YdrHm4
-X-Google-Smtp-Source: AGHT+IGxckfdewYCc6Tjhn2/sl6SaRBJ+pS/iXe46GfGkpDclyLzmNtDvyladQRwAYhZrkyCk/zHbrjCjRNd7FWr0Ac=
-X-Received: by 2002:a50:9feb:0:b0:56c:53b2:9e32 with SMTP id
- c98-20020a509feb000000b0056c53b29e32mr527053edf.13.1711664547964; Thu, 28 Mar
- 2024 15:22:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="l+yscp6T";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eCVMfMXR"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 4F2E611400B6;
+	Thu, 28 Mar 2024 18:25:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 28 Mar 2024 18:25:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1711664722;
+	 x=1711751122; bh=V1Y8NL42FRYoNz9ofpzM8dhY+4wahoNvVAvwDhLdbSo=; b=
+	l+yscp6TuHF8ctQPM7YN4/r6EBiPGAVFL8OnAVBc0fM9vQrbW+wP4gLU2BKF6VOM
+	8iMUsSCaxSFjrBnOqmyWK5AZio1bTniTaKYqLIRHkxEwxsVxOQ+Bo0P61c4hSVkx
+	dIp7bLkLOCig152y/g9kUdQOGE52iKeR8KqGdYLOx5xN1llSBYoPeE7gCiSnle1j
+	JyG8b59yJK7GANGRn1wffVEii8YAWUzpKoJR8tVraTIG5+VT6LuM+J9lEEE24an2
+	pagvEak42n2XwmcjkFQZ25M4/ayfi4RVbSBl197XvR7d/FBcj4r27xqM6jz1GJhl
+	X+uq7fFDxWowL6RCp49IUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1711664722; x=
+	1711751122; bh=V1Y8NL42FRYoNz9ofpzM8dhY+4wahoNvVAvwDhLdbSo=; b=e
+	CVMfMXR+DryLyC83NzLZuRcZOjzDgdQmFMkmnapaPa3G3HQEFvrepNIiomYykBEF
+	qhEvXwEGoGnoUrcxqgp9nTcvvyvDdVGRHCgdc129uD0WTzg7MxNuvkdpBDFhVMP6
+	D7su0MrQXVWH9FXTzFulqMaF3nk7/9BHDQ4qdq828HLYoT8R5uetZjUq6Y6u/ORg
+	cvJPe7yQ9nvUH/hGCLG940Z7S3FsosoP46h7+Nn8T8SYVvm8FQo4j1eep4h1NmJt
+	Uvzv5eVhKQRzwjlFcPf1cGCs5MwJ+GTfbb41ud31PJ+iPIFsZ53C1lk9enBwf6OG
+	PL3eS/9G+OVZ1Xizqc9+g==
+X-ME-Sender: <xms:Uu4FZhxgakoAbyH5Q7hDADDY7-O5D1vSKafJXvGqETUBFTQVV_kxIQ>
+    <xme:Uu4FZhQwamuOD9Bg0c6VSbXJc90AFS9C52iUI2KQ1PSSZjTDR4_NtIJsDzdWZ2GRH
+    n6KH5o1dWXJbjcrQic>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduledgudeitdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Uu4FZrXIOMXxK8B67rZEhkHYa-f0yEE9zbulKQh0KOp291ZVT7MlsQ>
+    <xmx:Uu4FZjh_Pz8qD4PMjMQoFHcEqbVdNU4DznteJDbp3vWe7UmWMYW7bw>
+    <xmx:Uu4FZjA_OQ5FZqd6uHWgiuVZ2DP5IuSrGu9shoDKWVXzBGTgSY4vmA>
+    <xmx:Uu4FZsKjS95zQaTa74NwjNe2pQbYYhGiksNlLKiw1n2H4WDFKf91SQ>
+    <xmx:Uu4FZrY6-mJd6e4vZkG19-Y8vkQbuNkDVpC5dk7oi-khCwClUNzyoA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0518BB6008D; Thu, 28 Mar 2024 18:25:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-5-arnd@kernel.org>
-In-Reply-To: <20240328143051.1069575-5-arnd@kernel.org>
-From: Justin Stitt <justinstitt@google.com>
-Date: Thu, 28 Mar 2024 15:22:16 -0700
-Message-ID: <CAFhGd8qDCMkP6rZ6A6i3b7DuJ0Rzem=V0TxAkvmMTsZM3NH43A@mail.gmail.com>
-Subject: Re: [PATCH 4/9] kcov: avoid clang out-of-range warning
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Andrew Morton <akpm@linux-foundation.org>, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <f93c474d-dfe4-4c10-a908-613be10ac265@app.fastmail.com>
+In-Reply-To: 
+ <CAFhGd8oJ5trNE7na9jCDbEt5kox1rg0mia59EHj+XikHUnay5w@mail.gmail.com>
+References: <20240328143051.1069575-1-arnd@kernel.org>
+ <20240328143051.1069575-7-arnd@kernel.org>
+ <CAFhGd8oJ5trNE7na9jCDbEt5kox1rg0mia59EHj+XikHUnay5w@mail.gmail.com>
+Date: Thu, 28 Mar 2024 23:25:01 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Justin Stitt" <justinstitt@google.com>, "Arnd Bergmann" <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+ "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Philipp Stanner" <pstanner@redhat.com>,
+ "Christian Brauner" <brauner@kernel.org>, "Jeff Layton" <jlayton@kernel.org>,
+ "Thorsten Blum" <thorsten.blum@toblux.com>, linux-nilfs@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH 6/9] nilfs2: fix out-of-range warning
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 7:31=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+On Thu, Mar 28, 2024, at 23:04, Justin Stitt wrote:
+> On Thu, Mar 28, 2024 at 7:32=E2=80=AFAM Arnd Bergmann <arnd@kernel.org=
+> wrote:
+>>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> clang-14 points out that v_size is always smaller than a 64KB
+>> page size if that is configured by the CPU architecture:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The area_size is never larger than the maximum on 64-bit architectutes:
->
-> kernel/kcov.c:634:29: error: result of comparison of constant 11529215046=
-06846975 with expression of type '__u32' (aka 'unsigned int') is always fal=
-se [-Werror,-Wtautological-constant-out-of-range-compare]
->                 if (remote_arg->area_size > LONG_MAX / sizeof(unsigned lo=
-ng))
->                     ~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~
->
-> The compiler can correctly optimize the check away and the code appears
-> correct to me, so just add a cast to avoid the warning.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Is this only with clang-14?
 
-Reviewed-by: Justin Stitt <justinstitt@google.com>
+No, it should be every version since then. I checked my
+randconfig tree and found that I originally committed this
+patch in September 2021 when I was first testing prerelease
+clang-14 builds. I sent a couple of fixes for this class
+of warnings then, but for some reason not this one.
 
-> ---
->  kernel/kcov.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index f9ac2e9e460f..c3124f6d5536 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -627,7 +627,8 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsig=
-ned int cmd,
->                 mode =3D kcov_get_mode(remote_arg->trace_mode);
->                 if (mode < 0)
->                         return mode;
-> -               if (remote_arg->area_size > LONG_MAX / sizeof(unsigned lo=
-ng))
-> +               if ((unsigned long)remote_arg->area_size >
-> +                   LONG_MAX / sizeof(unsigned long))
->                         return -EINVAL;
->                 kcov->mode =3D mode;
->                 t->kcov =3D kcov;
-> --
-> 2.39.2
->
+      Arnd
