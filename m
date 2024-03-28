@@ -1,117 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4330028366;
-	Thu, 28 Mar 2024 14:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F081879;
+	Thu, 28 Mar 2024 14:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711634958; cv=none; b=UG+QxWZS30RyEO73vedQPx49FoJSZxi7WHJUAfl8kv/2OgV9PqsV8eGV+0NATHSHaDHa1EmhXa/jnKh0AlIhhbvghTVVkRURmghe/tct6S0KlwM7q+1nNRIiYccOT2dhqXmEEu+Z9q9tEXr8/d9GE1gW4KGc+/qQ+9Z6y7kGY/c=
+	t=1711636265; cv=none; b=TsaSuZaa+mOPb4gMTrYw6L6GZvvkXyWSJl1F6oLiN/d9cyei/sqjeLivDoKuLEArbftgkr8kn/4RC8rMN9pSq8Gslumnb5ALq7gqV9IAkh6ac+f9ubVSGA5egeD7c36qrt3LE6ob/nVFyIDbCG9PrsXhJb8Ue7u7TlApyLr1VNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711634958; c=relaxed/simple;
-	bh=9ArBQfi0WbPJGGn9OWD45slXRdspJPNTm1sjms/frXQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nmY8Dmz6vm3ghh/XPjmkpQk1DSO/abBU6Fz1Arpvhb2sMrCCYoEcWARpCU4oqlBsMqDkAUCNh4QwI4IvvAxbwS5ai/KBlP1jO48fonJicUxQbOrOYBnX5qYWcuxn+7//PTFKzQUGEJE0YHxevioOZ2JjDzyMrhfTbYLHU4GOYns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X+ChRLuS; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711636265; c=relaxed/simple;
+	bh=zN2hzijZlAwA7dSIUuqXqTXuAGGw3rihlUXROhzown4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XSfHzXv59ixjGGMOCuKiEcRfQH5Wz0iPodm6syal3cKs1ibOcBB8VQ6aE2+tAAVPsfPQQBTyRyb/qoda2KTCVttB0xw3cB816Y4UGNxWeP4Km2wwe+2WJvcSsEZOcPsQad/YfFPQWfacVFhDbYmSmLNrUyj97Cy6uzU917PbO2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWM+Qp30; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X+ChRLuS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711634956; x=1743170956;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9ArBQfi0WbPJGGn9OWD45slXRdspJPNTm1sjms/frXQ=;
-  b=X+ChRLuS6jrpwnLModiwf+FW8VkMuWNRM6nmGu5R8hjmWXEnHUOBLzNn
-   eJvgng3EHaHPlYDmn+NF5ryeK19y9chQ2ji8PA91CL4i9YHTBuWTG8DQh
-   mhs+kibMkTZJUbGGQIwyXLH1iapxN0UXTBANXW0PP82McQQ/3Jvw5Yb+T
-   OnO3PCmXPQt8dJL2QX+V77pJ9iA2TUVDv+4+3fwlsLDsfVbuiCr8SuVUw
-   ZNtFvHQeuiIo019HKhocbCYNGZeyk/+G2q6wg2MvKanKtvnA/+v+FBRu8
-   oDPlcsc5miGOBuESNIw1UlTYdaR1i034WznPV7rpBibV7URSoENh4B/xI
-   Q==;
-X-CSE-ConnectionGUID: PqkxZ9Y9TfSbt/NFLFQzuw==
-X-CSE-MsgGUID: pNkKCnizT+iRxfd3ZtGV7A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="9745392"
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="9745392"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 07:09:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="21126920"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 28 Mar 2024 07:09:09 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rpqRH-0002CY-0y;
-	Thu, 28 Mar 2024 14:09:07 +0000
-Date: Thu, 28 Mar 2024 22:08:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org
-Subject: [rafael-pm:intel_pstate-testing 14/14]
- drivers/cpufreq/intel_pstate.c:963:2: error: call to undeclared function
- 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202403282240.I0XCTxpL-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWM+Qp30"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7141C433C7;
+	Thu, 28 Mar 2024 14:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711636264;
+	bh=zN2hzijZlAwA7dSIUuqXqTXuAGGw3rihlUXROhzown4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=eWM+Qp30VXj9Cmh0LnGCxoeRKFCdiRG/+7cYiw3/d1A2+4+cFEwZTeR0JCmdB7dCq
+	 BJ9rIQbF9IBEI+soObC424HP7laoiCA3/oi1O9qP9rBITnPfxuSYeV5KRvg9hYcRab
+	 e/dCX3l7xvE+Crt9nLuvyn+RK8JuQn+i+0gl/X6RqKrS31M7lA4cVVAcZLH+2tD70I
+	 3HfxG2oBSEgx+79CZh8PlNRuEJmIOG2T+nm5DpqItFA2gaY6b7ltr3jg7UjRUmiCnX
+	 fBIiKt6tGKRHDPmTgbO18UpcTP5WlsP5+HLng5MSKm27q042WFMvRohaMfXHDUBt2+
+	 CV0uOkwqjgK7A==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Dongsheng Yang <dongsheng.yang@easystack.cn>,
+	Jens Axboe <axboe@kernel.dk>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	dm-devel@lists.linux.dev,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Xiubo Li <xiubli@redhat.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	David Ahern <dsahern@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	ceph-devel@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-nilfs@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/9] address remaining -Wtautological-constant-out-of-range-compare
+Date: Thu, 28 Mar 2024 15:30:38 +0100
+Message-Id: <20240328143051.1069575-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_pstate-testing
-head:   16303764deedb814defe7e69712edec6a09b50ad
-commit: 16303764deedb814defe7e69712edec6a09b50ad [14/14] cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid systems
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20240328/202403282240.I0XCTxpL-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403282240.I0XCTxpL-lkp@intel.com/reproduce)
+From: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403282240.I0XCTxpL-lkp@intel.com/
+The warning option was introduced a few years ago but left disabled
+by default. All of the actual bugs that this has found have been
+fixed in the meantime, and this series should address the remaining
+false-positives, as tested on arm/arm64/x86 randconfigs as well as
+allmodconfig builds for all architectures supported by clang.
 
-All errors (new ones prefixed by >>):
+Please apply the patches individually to subsystem maintainer trees.
 
->> drivers/cpufreq/intel_pstate.c:963:2: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     963 |         arch_set_cpu_capacity(cpu->cpu, cap);
-         |         ^
-   drivers/cpufreq/intel_pstate.c:963:2: note: did you mean 'arch_scale_cpu_capacity'?
-   include/linux/sched/topology.h:267:15: note: 'arch_scale_cpu_capacity' declared here
-     267 | unsigned long arch_scale_cpu_capacity(int cpu)
-         |               ^
-   drivers/cpufreq/intel_pstate.c:1008:3: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1008 |                 arch_set_cpu_capacity(max_perf_cpu->cpu, SCHED_CAPACITY_SCALE);
-         |                 ^
-   drivers/cpufreq/intel_pstate.c:1014:4: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1014 |                         arch_set_cpu_capacity(cpunum, SCHED_CAPACITY_SCALE);
-         |                         ^
-   drivers/cpufreq/intel_pstate.c:1073:3: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1073 |                 arch_set_cpu_capacity(cpu->cpu, SCHED_CAPACITY_SCALE);
-         |                 ^
-   drivers/cpufreq/intel_pstate.c:1207:2: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1207 |         arch_set_cpu_capacity(cpu->cpu, SCHED_CAPACITY_SCALE);
-         |         ^
-   5 errors generated.
+      Arnd
 
+Arnd Bergmann (9):
+  dm integrity: fix out-of-range warning
+  libceph: avoid clang out-of-range warning
+  rbd: avoid out-of-range warning
+  kcov: avoid clang out-of-range warning
+  ipv4: tcp_output: avoid warning about NET_ADD_STATS
+  nilfs2: fix out-of-range warning
+  infiniband: uverbs: avoid out-of-range warnings
+  mlx5: stop warning for 64KB pages
+  kbuild: enable tautological-constant-out-of-range-compare
 
-vim +/arch_set_cpu_capacity +963 drivers/cpufreq/intel_pstate.c
-
-   957	
-   958	static void hybrid_set_cpu_capacity(struct cpudata *cpu)
-   959	{
-   960		u64 cap = div_u64((u64)SCHED_CAPACITY_SCALE * cpu->capacity_perf,
-   961				  hybrid_max_perf_cpu->capacity_perf);
-   962	
- > 963		arch_set_cpu_capacity(cpu->cpu, cap);
-   964	}
-   965	
+ drivers/block/rbd.c                                    | 2 +-
+ drivers/infiniband/core/uverbs_ioctl.c                 | 4 ++--
+ drivers/md/dm-integrity.c                              | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 6 ++++--
+ fs/ceph/snap.c                                         | 2 +-
+ fs/nilfs2/ioctl.c                                      | 2 +-
+ kernel/kcov.c                                          | 3 ++-
+ net/ceph/osdmap.c                                      | 4 ++--
+ net/ipv4/tcp_output.c                                  | 2 +-
+ scripts/Makefile.extrawarn                             | 1 -
+ 10 files changed, 15 insertions(+), 13 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
+Cc: Ilya Dryomov <idryomov@gmail.com>
+Cc: Dongsheng Yang <dongsheng.yang@easystack.cn>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Mike Snitzer <snitzer@kernel.org>
+Cc: Mikulas Patocka <mpatocka@redhat.com>
+Cc: dm-devel@lists.linux.dev
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Xiubo Li <xiubli@redhat.com>
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Tariq Toukan <tariqt@nvidia.com>
+Cc: ceph-devel@vger.kernel.org
+Cc: linux-block@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-nilfs@vger.kernel.org
+Cc: kasan-dev@googlegroups.com
+Cc: linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
