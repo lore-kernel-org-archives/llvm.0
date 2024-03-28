@@ -1,78 +1,54 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702B281754
-	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9247012F37B
+	for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 15:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711640252; cv=none; b=p7PIwPCZD4fFMZSWhGP/CoFmGu/pWaR/iToDAlVuW5bAAltB7INMgDvlp2zUqTdjV0rGBpMPoX2Br0bBubjwXVcwwaExhjGwbTn9ro6VQ3GOg52rGxGUI4J2aR+Qc75N/pg0vc1PtbldrUIDlR/DGLPf1EUK0GAD7+PB1JKsI8g=
+	t=1711640292; cv=none; b=k9dxRfIXbNwC6rWIB36G6paBphta/fZboyHmF0PLpI19VbXEYLAzVZ7Xv7DDML5qRRvARSd8jFdut87ffwPeaJ/HMINiamFyacjYM5fKam6wva2ESPn9552O0Ssy3NlDXH8CiFbonc2GENb37b8Jx+XONMpdXM9AjMWTmMMeN1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711640252; c=relaxed/simple;
-	bh=ZfXVRtq1u5vymjiT7ojVTA9XFtGE28bgjB/onGJZ8hU=;
+	s=arc-20240116; t=1711640292; c=relaxed/simple;
+	bh=a3UiF8Jb5VsXbW8jUWWhts4BMqGG1Eg6dk9smFBR0Hk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MzV4KXU6OwrgL06Q9iOLOoI47L47zRJeHM0Ov6UrVxNBl9JQgCUYkr+ggPdXhIKhsUR+ypQgOsyxKouczB5HRKj/fvOjgID+8v+F1rfikJj4w7Z/I+7JesH6eOe9EJc4FQm5kQPjUjcelIkngoPJ8ri9hV4tkVACjmGvFRYWz/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O5L5Nvfd; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dT7hHCla+VG6YjjwD7PrdhP71rqCkXpRm/vZ/wghhTu93fZRoXaamEHGt+nEBNCgcQmdl9hWyGHP0SzQvgaPR2cna9THjHO9AKUDRe2YFoDjCIdzKVq2PjlFxQgHmNZWNH3kUaY1iPTM05p2gU8blc1TfQ57KbXTEGK/hkvLWtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fm4u9YVv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O5L5Nvfd"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so152068166b.0
-        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 08:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711640249; x=1712245049; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RhS2REDAhTzWK8iAd8IyYrz11N45EIO/J79cDyAdowQ=;
-        b=O5L5NvfdI8+su4m8NsAs116zCl7Fz2EVUdj1oTghy/gXdK5h0Oe0r7HAkhilJHQKKH
-         Esr5clLYLWez2Tn0qeEw6JJvQNzgeBTeH0IlGkpiPJs9MnK0bzzbeevKvDwfPh6lQMNe
-         HJ8pbHd4AYseo180QGqBXiQ9h0/vQq3tKqDwwlxTFQddM6cgd3hH+JfkwM4mgdfK7nb2
-         yEWZ4F0tIIyvtFXlqvjfF572n+gdmkx0jKdPKF5z7GGi26J0eqt2mzryIB6S6C72GVkR
-         sgio3aGCnhtNHdxep4S53QCf2UQpgDcUWoG2YVPafLuqdUbUrA3Y/noPsawW4DPdH0LZ
-         5ZTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711640249; x=1712245049;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RhS2REDAhTzWK8iAd8IyYrz11N45EIO/J79cDyAdowQ=;
-        b=F/PfivbUzKK7aZmdX47uIgkOVWOvRBpE//mlQTvoAu41iipQsE5xxmDfMVB/2khJzW
-         JPXQdvZvskhBxrgXxw0mq8f7gPVaWpEdsQqS1p7toZQWFKGPDovHMXr4TPOpT95+7dWe
-         8pLsaJb9LeQZZ1Y3ysohZK0ggTV7HKzJ7ZVTi0E+juGd6ZMwlMMK+nzBvmWLxoSdAvJ1
-         8SQi/MhlGsN8nu7HitSTPx6FTqsR1Gh3hD957t4HKvyfVpyAOYribHt6ooXoWIhPw+IS
-         OR5ZQip5pTfzVyLgDo5YM0K/BuGE48r05u7Ahgq2Mv5ZqFJdTYtTUCi+ROQqgpV77Rrd
-         0AUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpxeCbHZ1ZOfmtiqI6dVhQCJNVlX8ZOSWfdzcb6i60YZpk6FSqlg+8vLvTVus8d0G1NjgTdhm/8B6bro9KqkZJIgsNxw==
-X-Gm-Message-State: AOJu0Yxp9NRJRy7ISvetkUgag6/w6PJ+mlYK61SZyg0DDsaEilVFMDp2
-	vwZE/dKTjJki/QQQ3r9DI5sSb+IZ9XlTs1yf64m0kpRp/+COHotm
-X-Google-Smtp-Source: AGHT+IHLAX8H+QbTYqezSKW4j0ZnyixcNtPA+A5huNZM9xWL44hJRChQo43XVH2PzR2CA3U0ALz53g==
-X-Received: by 2002:a17:906:f0d0:b0:a4e:e20:df53 with SMTP id dk16-20020a170906f0d000b00a4e0e20df53mr2174114ejb.59.1711640248640;
-        Thu, 28 Mar 2024 08:37:28 -0700 (PDT)
-Received: from localhost ([185.220.101.129])
-        by smtp.gmail.com with ESMTPSA id u14-20020a1709064ace00b00a46b8cd9b51sm877653ejt.185.2024.03.28.08.37.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 08:37:28 -0700 (PDT)
-Date: Thu, 28 Mar 2024 17:37:15 +0200
-From: Maxim Mikityanskiy <maxtram95@gmail.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-	netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 8/9] mlx5: stop warning for 64KB pages
-Message-ID: <ZgWOqwZpNFzLT-VS@mail.gmail.com>
-References: <20240328143051.1069575-1-arnd@kernel.org>
- <20240328143051.1069575-9-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fm4u9YVv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E81C433F1;
+	Thu, 28 Mar 2024 15:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711640292;
+	bh=a3UiF8Jb5VsXbW8jUWWhts4BMqGG1Eg6dk9smFBR0Hk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fm4u9YVvM62G4iA4zhCy+erMwipS4b5BSZOx7Cmzuo1x17b+BJJYzqNqSkliEMtfw
+	 DQxQRnqinXSN4Z0eL7TtHPM0Hg3GfrACIrroy4JWQOCAYvQL8+JVtriCdrOgJOxrTL
+	 QNqWYQuR3Mq/bzT3a7tbXgt8j3sZ1TYUSYzgns6LGwG5ifaa4Jls7WPf5cDXXschNK
+	 uoIcAO0XYD9+jOFTVc+2Lx8URvVLW9JnoboNm7QRLfJMzdpHxo9u97+vXsh9tYTp8A
+	 xtc5/l6l8Lj3UOcBQFsBzI+lXueMnhM+DFnyX5Xk5eduwrQD6zNXfQkw9dQedrlfQO
+	 0CctndvqCj0Kw==
+Date: Thu, 28 Mar 2024 08:38:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Boris Brezillon <boris.brezillon@collabora.com>
+Cc: dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+	"Marty E . Plummer" <hanetzer@startmail.com>,
+	Rob Herring <robh@kernel.org>,
+	=?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
+	Nicolas Boichat <drinkcat@chromium.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Faith Ekstrand <faith.ekstrand@collabora.com>,
+	Daniel Stone <daniels@collabora.com>,
+	Liviu Dudau <Liviu.Dudau@arm.com>,
+	Steven Price <steven.price@arm.com>,
+	Robin Murphy <robin.murphy@arm.com>, kernel@collabora.com,
+	Heiko Stuebner <heiko@sntech.de>,
+	Tatsuyuki Ishi <ishitatsuyuki@gmail.com>,
+	Chris Diamand <chris.diamand@foss.arm.com>,
+	Ketil Johnsen <ketil.johnsen@arm.com>,
+	Maxime Ripard <mripard@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 10/14] drm/panthor: Add the scheduler logical block
+Message-ID: <20240328153809.GA2673768@dev-arch.thelio-3990X>
+References: <20240229162230.2634044-1-boris.brezillon@collabora.com>
+ <20240229162230.2634044-11-boris.brezillon@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,53 +57,215 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240328143051.1069575-9-arnd@kernel.org>
+In-Reply-To: <20240229162230.2634044-11-boris.brezillon@collabora.com>
 
-On Thu, 28 Mar 2024 at 15:30:46 +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When building with 64KB pages, clang points out that xsk->chunk_size
-> can never be PAGE_SIZE:
-> 
-> drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c:19:22: error: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->         if (xsk->chunk_size > PAGE_SIZE ||
->             ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
-> 
-> In older versions of this code, using PAGE_SIZE was the only
-> possibility, so this would have never worked on 64KB page kernels,
-> but the patch apparently did not address this case completely.
-> 
-> As Maxim Mikityanskiy suggested, 64KB chunks are really not all that
-> useful, so just shut up the warning by adding a cast.
-> 
-> Fixes: 282c0c798f8e ("net/mlx5e: Allow XSK frames smaller than a page")
-> Link: https://lore.kernel.org/netdev/20211013150232.2942146-1-arnd@kernel.org/
-> Link: https://lore.kernel.org/lkml/a7b27541-0ebb-4f2d-bd06-270a4d404613@app.fastmail.com/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Boris,
+
+On Thu, Feb 29, 2024 at 05:22:24PM +0100, Boris Brezillon wrote:
+<snip>
 > ---
->  drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/panthor/panthor_sched.c | 3502 +++++++++++++++++++++++
+>  drivers/gpu/drm/panthor/panthor_sched.h |   50 +
+>  2 files changed, 3552 insertions(+)
+>  create mode 100644 drivers/gpu/drm/panthor/panthor_sched.c
+>  create mode 100644 drivers/gpu/drm/panthor/panthor_sched.h
 > 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-> index 06592b9f0424..9240cfe25d10 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-> @@ -28,8 +28,10 @@ bool mlx5e_validate_xsk_param(struct mlx5e_params *params,
->  			      struct mlx5e_xsk_param *xsk,
->  			      struct mlx5_core_dev *mdev)
->  {
-> -	/* AF_XDP doesn't support frames larger than PAGE_SIZE. */
-> -	if (xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5E_MIN_XSK_CHUNK_SIZE) {
-> +	/* AF_XDP doesn't support frames larger than PAGE_SIZE,
-> +	 * and xsk->chunk_size is limited to 65535 bytes.
-> +	 */
-> +	if ((size_t)xsk->chunk_size > PAGE_SIZE || xsk->chunk_size < MLX5E_MIN_XSK_CHUNK_SIZE) {
+> diff --git a/drivers/gpu/drm/panthor/panthor_sched.c b/drivers/gpu/drm/panthor/panthor_sched.c
+> new file mode 100644
+> index 000000000000..5f7803b6fc48
+> --- /dev/null
+> +++ b/drivers/gpu/drm/panthor/panthor_sched.c
+<snip>
+> +static void
+> +tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *ctx)
+> +{
+> +	struct panthor_group *group, *tmp;
+> +	struct panthor_device *ptdev = sched->ptdev;
+> +	struct panthor_csg_slot *csg_slot;
+> +	int prio, new_csg_prio = MAX_CSG_PRIO, i;
+> +	u32 csg_mod_mask = 0, free_csg_slots = 0;
+> +	struct panthor_csg_slots_upd_ctx upd_ctx;
+> +	int ret;
+> +
+> +	csgs_upd_ctx_init(&upd_ctx);
+> +
+> +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
+> +		/* Suspend or terminate evicted groups. */
+> +		list_for_each_entry(group, &ctx->old_groups[prio], run_node) {
+> +			bool term = !group_can_run(group);
+> +			int csg_id = group->csg_id;
+> +
+> +			if (drm_WARN_ON(&ptdev->base, csg_id < 0))
+> +				continue;
+> +
+> +			csg_slot = &sched->csg_slots[csg_id];
+> +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
+> +						term ? CSG_STATE_TERMINATE : CSG_STATE_SUSPEND,
+> +						CSG_STATE_MASK);
+> +		}
+> +
+> +		/* Update priorities on already running groups. */
+> +		list_for_each_entry(group, &ctx->groups[prio], run_node) {
+> +			struct panthor_fw_csg_iface *csg_iface;
+> +			int csg_id = group->csg_id;
+> +
+> +			if (csg_id < 0) {
+> +				new_csg_prio--;
+> +				continue;
+> +			}
+> +
+> +			csg_slot = &sched->csg_slots[csg_id];
+> +			csg_iface = panthor_fw_get_csg_iface(ptdev, csg_id);
+> +			if (csg_slot->priority == new_csg_prio) {
+> +				new_csg_prio--;
+> +				continue;
+> +			}
+> +
+> +			panthor_fw_update_reqs(csg_iface, endpoint_req,
+> +					       CSG_EP_REQ_PRIORITY(new_csg_prio),
+> +					       CSG_EP_REQ_PRIORITY_MASK);
+> +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
+> +						csg_iface->output->ack ^ CSG_ENDPOINT_CONFIG,
+> +						CSG_ENDPOINT_CONFIG);
+> +			new_csg_prio--;
+> +		}
+> +	}
+> +
+> +	ret = csgs_upd_ctx_apply_locked(ptdev, &upd_ctx);
+> +	if (ret) {
+> +		panthor_device_schedule_reset(ptdev);
+> +		ctx->csg_upd_failed_mask |= upd_ctx.timedout_mask;
+> +		return;
+> +	}
+> +
+> +	/* Unbind evicted groups. */
+> +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
+> +		list_for_each_entry(group, &ctx->old_groups[prio], run_node) {
+> +			/* This group is gone. Process interrupts to clear
+> +			 * any pending interrupts before we start the new
+> +			 * group.
+> +			 */
+> +			if (group->csg_id >= 0)
+> +				sched_process_csg_irq_locked(ptdev, group->csg_id);
+> +
+> +			group_unbind_locked(group);
+> +		}
+> +	}
+> +
+> +	for (i = 0; i < sched->csg_slot_count; i++) {
+> +		if (!sched->csg_slots[i].group)
+> +			free_csg_slots |= BIT(i);
+> +	}
+> +
+> +	csgs_upd_ctx_init(&upd_ctx);
+> +	new_csg_prio = MAX_CSG_PRIO;
+> +
+> +	/* Start new groups. */
+> +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
+> +		list_for_each_entry(group, &ctx->groups[prio], run_node) {
+> +			int csg_id = group->csg_id;
+> +			struct panthor_fw_csg_iface *csg_iface;
+> +
+> +			if (csg_id >= 0) {
+> +				new_csg_prio--;
+> +				continue;
+> +			}
+> +
+> +			csg_id = ffs(free_csg_slots) - 1;
+> +			if (drm_WARN_ON(&ptdev->base, csg_id < 0))
+> +				break;
+> +
+> +			csg_iface = panthor_fw_get_csg_iface(ptdev, csg_id);
+> +			csg_slot = &sched->csg_slots[csg_id];
+> +			csg_mod_mask |= BIT(csg_id);
+> +			group_bind_locked(group, csg_id);
+> +			csg_slot_prog_locked(ptdev, csg_id, new_csg_prio--);
+> +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
+> +						group->state == PANTHOR_CS_GROUP_SUSPENDED ?
+> +						CSG_STATE_RESUME : CSG_STATE_START,
+> +						CSG_STATE_MASK);
+> +			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
+> +						csg_iface->output->ack ^ CSG_ENDPOINT_CONFIG,
+> +						CSG_ENDPOINT_CONFIG);
+> +			free_csg_slots &= ~BIT(csg_id);
+> +		}
+> +	}
+> +
+> +	ret = csgs_upd_ctx_apply_locked(ptdev, &upd_ctx);
+> +	if (ret) {
+> +		panthor_device_schedule_reset(ptdev);
+> +		ctx->csg_upd_failed_mask |= upd_ctx.timedout_mask;
+> +		return;
+> +	}
+> +
+> +	for (prio = PANTHOR_CSG_PRIORITY_COUNT - 1; prio >= 0; prio--) {
+> +		list_for_each_entry_safe(group, tmp, &ctx->groups[prio], run_node) {
+> +			list_del_init(&group->run_node);
+> +
+> +			/* If the group has been destroyed while we were
+> +			 * scheduling, ask for an immediate tick to
+> +			 * re-evaluate as soon as possible and get rid of
+> +			 * this dangling group.
+> +			 */
+> +			if (group->destroyed)
+> +				ctx->immediate_tick = true;
+> +			group_put(group);
+> +		}
+> +
+> +		/* Return evicted groups to the idle or run queues. Groups
+> +		 * that can no longer be run (because they've been destroyed
+> +		 * or experienced an unrecoverable error) will be scheduled
+> +		 * for destruction in tick_ctx_cleanup().
+> +		 */
+> +		list_for_each_entry_safe(group, tmp, &ctx->old_groups[prio], run_node) {
+> +			if (!group_can_run(group))
+> +				continue;
+> +
+> +			if (group_is_idle(group))
+> +				list_move_tail(&group->run_node, &sched->groups.idle[prio]);
+> +			else
+> +				list_move_tail(&group->run_node, &sched->groups.runnable[prio]);
+> +			group_put(group);
+> +		}
+> +	}
+> +
+> +	sched->used_csg_slot_count = ctx->group_count;
+> +	sched->might_have_idle_groups = ctx->idle_group_count > 0;
+> +}
 
-Acked-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Clang builds fail after this change in -next as commit
+de8548813824 ("drm/panthor: Add the scheduler logical block"):
 
->  		mlx5_core_err(mdev, "XSK chunk size %u out of bounds [%u, %lu]\n", xsk->chunk_size,
->  			      MLX5E_MIN_XSK_CHUNK_SIZE, PAGE_SIZE);
->  		return false;
-> -- 
-> 2.39.2
-> 
+  drivers/gpu/drm/panthor/panthor_sched.c:2048:6: error: variable 'csg_mod_mask' set but not used [-Werror,-Wunused-but-set-variable]
+   2048 |         u32 csg_mod_mask = 0, free_csg_slots = 0;
+        |             ^
+  1 error generated.
+
+It appears legitimate to me, csg_mod_mask is only updated with '|=' but
+never accessed in any other manner. Should the variable be removed or
+was it supposed to be used somewhere else?
+
+Cheers,
+Nathan
+
+diff --git a/drivers/gpu/drm/panthor/panthor_sched.c b/drivers/gpu/drm/panthor/panthor_sched.c
+index 5f7803b6fc48..e5a710f190d2 100644
+--- a/drivers/gpu/drm/panthor/panthor_sched.c
++++ b/drivers/gpu/drm/panthor/panthor_sched.c
+@@ -2045,7 +2045,7 @@ tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *c
+ 	struct panthor_device *ptdev = sched->ptdev;
+ 	struct panthor_csg_slot *csg_slot;
+ 	int prio, new_csg_prio = MAX_CSG_PRIO, i;
+-	u32 csg_mod_mask = 0, free_csg_slots = 0;
++	u32 free_csg_slots = 0;
+ 	struct panthor_csg_slots_upd_ctx upd_ctx;
+ 	int ret;
+ 
+@@ -2139,7 +2139,6 @@ tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *c
+ 
+ 			csg_iface = panthor_fw_get_csg_iface(ptdev, csg_id);
+ 			csg_slot = &sched->csg_slots[csg_id];
+-			csg_mod_mask |= BIT(csg_id);
+ 			group_bind_locked(group, csg_id);
+ 			csg_slot_prog_locked(ptdev, csg_id, new_csg_prio--);
+ 			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
