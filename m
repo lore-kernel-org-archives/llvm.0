@@ -1,112 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC6F1AE862;
-	Fri, 29 Mar 2024 12:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499281509AE
+	for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 12:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716563; cv=none; b=Dhxh0sxB5RYAb0U4Qxu0M+h0NuCVjo+qFnnUA+QWvRLL2bygyK/3EnMFqKOPuzd2xXu4ITsLhDo8j6hnUmt2awU3tK7LiGriCv+SoKqAT7IQV44oCzY8TYjZarDrvnsQ0N9Kv2nucivh61wQdEaVNbb7LpxqNpEEzSfashtjUEQ=
+	t=1711716571; cv=none; b=WFNp0eh+Ox+2Ws1hU6lhcjTkBggS84PPHreImeVFYa4RXNNXEzD5rVSAbkdmb6wIh+0ArkDnA/WmPh8j6gTjEd5TiyFPlbdErEzfVvPvGNN5YfN/29s/gCFlaICBWf4PGmlQvWDaAbI1s5XEsL2oDbVrR5Y+nSAwWQjofgS4Fzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716563; c=relaxed/simple;
-	bh=M8P/3KG1nNxQ+GD7IykbZpxImOfesKInWZciBRSL8bg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FrYj4d8GPa43j31dUJCyuHAng1uN+bLvrXnh8jb1juJtdflbuP4OscQXLzMpG1e6SBMtAV1WdGRQBBQfqFb0jrT+0tKBkx6POsCQcu5GIVp1SLYeCnEI9FrYneUn/2mfVGwgd0Rb4WiwrjxPzj02SasKObqGZrezNffFYLaK3Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sep+Vtwr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711716571; c=relaxed/simple;
+	bh=nXxhZPz8FVTyUJ4AlqPr2hJ9WUeCgGrDJRtsuIgYtB4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KDV8sYJYXjrsuuMNpifAbzR8aWW6QmKW2Dmna6/Ity0tNXMGscS2Mdnz/RLkrlnVSDzBzdqC+/ecloGgkPBoH+hSiOWh/QSEJ5gKDM+ZvVSGp7BRGOZv7uU4hzen2VIYCxxioN5tgnk0hxoDIEkYuYtte2fDq9lGJ67Yla+jAlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TX3tMM4/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=MHu6ehBQ; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sep+Vtwr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5526BC433F1;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TX3tMM4/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="MHu6ehBQ"
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 53A585C557;
 	Fri, 29 Mar 2024 12:49:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711716563;
-	bh=M8P/3KG1nNxQ+GD7IykbZpxImOfesKInWZciBRSL8bg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Sep+Vtwr+Wg+8gG9lwpISIzr5Tq+DMFVh1SHL3n+UJbJmlnPN+qF0VuRtOc8RmzMK
-	 jQC3r41Ds3OpoCqnNMOPnr2mA4qnIchE/n+elenk3d64Iz4B6V9hlzEF2F2YK5DqSS
-	 SiQLJMULoOMX9UE7wiJ7wwZQuUJ2bOYcRwaGtEzX/vnEojjJhjtYZSl256sJ283INe
-	 94Tb2QmgGU9IpXrD71JR++XjZOqFoDraz1TLLOSdPw51SkQeezz6rSkvsqba1pAJUU
-	 ZJS7kKzZVapE+55sxbl+LEuN7LwlZosnajSqYCoaBsphQh68wRzb63h2cEKlqPBd9B
-	 2VJ0LucQSKkqw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Sasha Levin <sashal@kernel.org>,
-	mchehab@kernel.org,
-	nathan@kernel.org,
-	linux-media@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 11/31] media: sta2x11: fix irq handler cast
-Date: Fri, 29 Mar 2024 08:48:28 -0400
-Message-ID: <20240329124903.3093161-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240329124903.3093161-1-sashal@kernel.org>
-References: <20240329124903.3093161-1-sashal@kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711716562; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zQhqCkbcA983IXjy9mUlFe9v7QYAyJfImXhl/9lihME=;
+	b=TX3tMM4/0DjXLSlOV6rNKv0mTwK6vHbYjCJUJIf+m141IiLAZgrLezUsm9IoMpVSxIqBpb
+	Nw2FazFcE/0sfVCBYRf13AFTNNsTwDwJHU5O1lLiHXuXRXmEm0I1bC2psHoEYfnctfojY8
+	AJ9qR4vx6Pf4NAWmIu8GiBRQklQxKjk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711716562;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zQhqCkbcA983IXjy9mUlFe9v7QYAyJfImXhl/9lihME=;
+	b=MHu6ehBQl41Fw65AwEvYTP7et0t4RxErT1i4Ng+Vbesf8KQTLSDzybkHgFdoaJLo8+9aXE
+	IF6K0dNWhL/Su/Cg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id A88D313A89;
+	Fri, 29 Mar 2024 12:49:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id ZGB1ItC4BmaDRgAAn2gu4w
+	(envelope-from <jdelvare@suse.de>); Fri, 29 Mar 2024 12:49:20 +0000
+Date: Fri, 29 Mar 2024 13:49:17 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Greg Kroah-Hartman <gregkh@suse.de>,
+ Nicolas Schier <nicolas@fjasle.eu>, Arnd Bergmann <arnd@arndb.de>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH 05/12] firmware: dmi-id: add a release callback function
+Message-ID: <20240329134917.579c3557@endymion.delvare>
+In-Reply-To: <20240326145140.3257163-4-arnd@kernel.org>
+References: <20240326144741.3094687-1-arnd@kernel.org>
+	<20240326145140.3257163-4-arnd@kernel.org>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.214
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 53A585C557
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_SHORT(-0.19)[-0.945];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	HAS_ORG_HEADER(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	R_DKIM_NA(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email]
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Arnd,
 
-[ Upstream commit 3de49ae81c3a0f83a554ecbce4c08e019f30168e ]
+On Tue, 26 Mar 2024 15:51:30 +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> dmi_class uses kfree() as the .release function, but that now causes
+> a warning with clang-16 as it violates control flow integrity (KCFI)
+> rules:
+> 
+> drivers/firmware/dmi-id.c:174:17: error: cast from 'void (*)(const void *)' to 'void (*)(struct device *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>   174 |         .dev_release = (void(*)(struct device *)) kfree,
+> 
+> Add an explicit function to call kfree() instead.
+> 
+> Fixes: 4f5c791a850e ("DMI-based module autoloading")
 
-clang-16 warns about casting incompatible function pointers:
+Not sure if this fixes tag is really warranted. As I understand it,
+your change only removes a warning but there was no actual bug, right?
 
-drivers/media/pci/sta2x11/sta2x11_vip.c:1057:6: error: cast from 'irqreturn_t (*)(int, struct sta2x11_vip *)' (aka 'enum irqreturn (*)(int, struct sta2x11_vip *)') to 'irq_handler_t' (aka 'enum irqreturn (*)(int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+> Link: https://lore.kernel.org/lkml/20240213100238.456912-1-arnd@kernel.org/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I sent this before but got no comments for it
 
-Change the prototype of the irq handler to the regular version with a
-local variable to adjust the argument type.
+I indeed overlooked your initial submission, my bad.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-[hverkuil: update argument documentation]
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/pci/sta2x11/sta2x11_vip.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> ---
+>  drivers/firmware/dmi-id.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/dmi-id.c b/drivers/firmware/dmi-id.c
+> index 5f3a3e913d28..d19c78a78ae3 100644
+> --- a/drivers/firmware/dmi-id.c
+> +++ b/drivers/firmware/dmi-id.c
+> @@ -169,9 +169,14 @@ static int dmi_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
+>  	return 0;
+>  }
+>  
+> +static void dmi_dev_release(struct device *dev)
+> +{
+> +	kfree(dev);
+> +}
+> +
+>  static struct class dmi_class = {
+>  	.name = "dmi",
+> -	.dev_release = (void(*)(struct device *)) kfree,
+> +	.dev_release = dmi_dev_release,
+>  	.dev_uevent = dmi_dev_uevent,
+>  };
+>  
 
-diff --git a/drivers/media/pci/sta2x11/sta2x11_vip.c b/drivers/media/pci/sta2x11/sta2x11_vip.c
-index 336df65c8af11..01ca940aecc2d 100644
---- a/drivers/media/pci/sta2x11/sta2x11_vip.c
-+++ b/drivers/media/pci/sta2x11/sta2x11_vip.c
-@@ -760,7 +760,7 @@ static const struct video_device video_dev_template = {
- /**
-  * vip_irq - interrupt routine
-  * @irq: Number of interrupt ( not used, correct number is assumed )
-- * @vip: local data structure containing all information
-+ * @data: local data structure containing all information
-  *
-  * check for both frame interrupts set ( top and bottom ).
-  * check FIFO overflow, but limit number of log messages after open.
-@@ -770,8 +770,9 @@ static const struct video_device video_dev_template = {
-  *
-  * IRQ_HANDLED, interrupt done.
-  */
--static irqreturn_t vip_irq(int irq, struct sta2x11_vip *vip)
-+static irqreturn_t vip_irq(int irq, void *data)
- {
-+	struct sta2x11_vip *vip = data;
- 	unsigned int status;
- 
- 	status = reg_read(vip, DVP_ITS);
-@@ -1053,9 +1054,7 @@ static int sta2x11_vip_init_one(struct pci_dev *pdev,
- 
- 	spin_lock_init(&vip->slock);
- 
--	ret = request_irq(pdev->irq,
--			  (irq_handler_t) vip_irq,
--			  IRQF_SHARED, KBUILD_MODNAME, vip);
-+	ret = request_irq(pdev->irq, vip_irq, IRQF_SHARED, KBUILD_MODNAME, vip);
- 	if (ret) {
- 		dev_err(&pdev->dev, "request_irq failed\n");
- 		ret = -ENODEV;
+Looks good to me, thanks for doing that.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+
+Will you get this upstream, or do you expect me to take it in my
+dmi/for-next branch?
+
 -- 
-2.43.0
-
+Jean Delvare
+SUSE L3 Support
