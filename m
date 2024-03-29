@@ -1,71 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AB3A923;
-	Fri, 29 Mar 2024 17:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C0B1EEE4;
+	Fri, 29 Mar 2024 19:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711734360; cv=none; b=D/2Nmrcm6H/WSwNsyA+ktsLbxhMaAL1wyfaMLwFs2fGkQ16PwNCyBMBIBGsck8PUKhrG5n7cXISO/eDtsB2w0o5o2dHSYH3bPptxcW3fAKI5iU8HeBtSsMH8E0F3vL3VMKwjRPgyGBL8rH6okW7yD4hOwda1BTU9XYs1faYm49Y=
+	t=1711740633; cv=none; b=Y3AO3jOXTEgQYgdkbMV5ewrZXrVKIo6X4CYShjKv6NdKcjbw3VUuXTgX6iKbaKNUnVKVChX5FkkEdkpv3iXyTc2gQOx0ld+O0FfG7VjD1gKw/ao3DGZC7AyK12+hK3ag1Y2SAycLRM/tO1/Ih8FrgIdrAOgSzW7O5mNPsiyhcTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711734360; c=relaxed/simple;
-	bh=HFcDQXQ4/V0olwInsRZS2sioZwVCn9Un9HBzhqOv1RU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TN6ZBJ/m3QgENynxI4kHHCqb8eHGZtaNFVM9k/SCcs3HNg/1d/kREYQkj1xXjxMgu/wtMoBTT/kv+tNa+041OwKHjQeaDypptuca0FTxAXgGP5YcyJhDnLbLOUcsgM+n066xl7JEqQcbd5/+GV6LSscryUF/ZIdHr/OsdsI4ePI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OxY7oCjP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711740633; c=relaxed/simple;
+	bh=kASKGM3dFtExpzEE03kTs35TIgPe+csliIufLHzIK04=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=UqowPDwocud2Wj+bZuOSSys0qv9GjoET7RZzSWGxGa3G6E/OBej94f4wXaAe8vZCZsubIQhZhS6gBt4K1VKYAff947m6odSezcJPV4n1DrxVukivW4s5hRZyS0HxXvAB5WBwYM8kjXxqlhP2jF38ZpDyzoX86MS8xRz258oc/PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IVV3npmS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OxY7oCjP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06549C433C7;
-	Fri, 29 Mar 2024 17:45:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IVV3npmS"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 293A4C43390;
+	Fri, 29 Mar 2024 19:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711734359;
-	bh=HFcDQXQ4/V0olwInsRZS2sioZwVCn9Un9HBzhqOv1RU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OxY7oCjP2GoakWmVTJBFF2ww/W7egc/tuBsgT+LvgoNjXbz5XwsVTEma04/FTqDsl
-	 bMa+jHbV8m8GxuR/3uOnxSXXX+bAFfM03hL9LrQr0zf2+8yyxEAHue0ZfUkbU/2NVv
-	 HoTNsUjzowUTEggo897VrBoN5mjEpmUH6ImYGZdlTVBneXFff+v6O3ME9Yyf9hqfVy
-	 qMWU0FY3zoN41h/ZZTnr4UZncWDr+X31eue4/IjvX72xqy/MpwyKmcbWboI2BDv8cU
-	 IrtQTkRYd1Xw80UnleTlfuHSdGlTF6pbjU8sDFNyiCyRKGOfg0T1PRNuV8TMcvT8Rw
-	 0w1jwraAZ1RDg==
-Date: Fri, 29 Mar 2024 17:45:53 +0000
-From: Simon Horman <horms@kernel.org>
-To: Su Hui <suhui@nfschina.com>
-Cc: sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-	hkelam@marvell.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
-	dan.carpenter@linaro.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next v3] octeontx2-pf: remove unused variables
- req_hdr and rsp_hdr
-Message-ID: <20240329174553.GN651713@kernel.org>
-References: <20240328020723.4071539-1-suhui@nfschina.com>
+	s=k20201202; t=1711740633;
+	bh=kASKGM3dFtExpzEE03kTs35TIgPe+csliIufLHzIK04=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=IVV3npmSePL8advnxP77niTJn9r5VWn3Rp+dlR8NGJ9lX2oLIqkoGV+xDPWNxKxDQ
+	 Vy1L2g8YCGgRSXrLc/sQkv/2M4J9jxdAA8SAbhGR8ajFTlmfsqHLf0fvOTAPm2dcKv
+	 R1fVsKFXQ0PjDCVdjZFjTagXNRerIfdbo2okMOvrjklmOXE9qqZC9SCAN3EPi44fip
+	 ZCq07ahttvJ9JoOo07ITMoNBIgDCC6Y+Xv77EcLFfSARbiSqQFxIHg2hw6SwpkmRbP
+	 ts7yiXSanAtz/RnbfgXbCMeoFa7uggmPCtKepIwsnK9u0syfJQLIrvmxPSuoFye3BV
+	 B+EvADBhn/jTg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0FC90D2D0EE;
+	Fri, 29 Mar 2024 19:30:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240328020723.4071539-1-suhui@nfschina.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/9] enabled -Wformat-truncation for clang
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171174063305.18563.745216419087873927.git-patchwork-notify@kernel.org>
+Date: Fri, 29 Mar 2024 19:30:33 +0000
+References: <20240326223825.4084412-1-arnd@kernel.org>
+In-Reply-To: <20240326223825.4084412-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: llvm@lists.linux.dev, arnd@arndb.de, dmitry.torokhov@gmail.com,
+ claudiu.manoil@nxp.com, vladimir.oltean@nxp.com, kuba@kernel.org,
+ saeedm@nvidia.com, leon@kernel.org, aelior@marvell.com, manishc@marvell.com,
+ hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, luzmaximilian@gmail.com,
+ hare@kernel.org, martin.petersen@oracle.com, deller@gmx.de,
+ masahiroy@kernel.org, nathan@kernel.org, nicolas@fjasle.eu,
+ johannes@sipsolutions.net, perex@perex.cz, tiwai@suse.com,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kbuild@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
 
-On Thu, Mar 28, 2024 at 10:07:24AM +0800, Su Hui wrote:
-> Clang static checker(scan-buid):
-> drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:503:2: warning:
-> Value stored to 'rsp_hdr' is never read [deadcode.DeadStores]
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 26 Mar 2024 23:37:59 +0100 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Remove these unused variables to save some space.
+> With randconfig build testing, I found only eight files that produce
+> warnings with clang when -Wformat-truncation is enabled. This means
+> we can just turn it on by default rather than only enabling it for
+> "make W=1".
 > 
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
-> v3:
->  - using net-next in subject
->  - split the v2 patchset into individual patches
-> v2:
->  - add "net" in subject
+> [...]
 
-Thanks for the updates.
+Here is the summary with links:
+  - [2/9] enetc: avoid truncating error message
+    https://git.kernel.org/netdev/net-next/c/9046d581ed58
+  - [3/9] qed: avoid truncating work queue length
+    https://git.kernel.org/netdev/net-next/c/954fd908f177
+  - [4/9] mlx5: avoid truncating error message
+    https://git.kernel.org/netdev/net-next/c/b324a960354b
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
