@@ -1,111 +1,248 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400D513CC7A
-	for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 23:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11653364BA;
+	Sat, 30 Mar 2024 00:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711754148; cv=none; b=r9aFOTvWubaA1AO58Jx3qW3o+/9ZS+0gtLP1aH351MvqqLabg1A3hw43h21mk7RlJnKD8UOicp1GPAPC//Bu2aMNyKHUim4z+hmE/jDXOtHy+JHakTiM4njfBwA0vKwj1sA6RARXsqPWo9MZ+MaY0S7htzuXYu2O5WaI+ayIKzg=
+	t=1711756818; cv=none; b=RY4jLgmD1ueG1EVVSagI4MVIL1+EqlZzeDYBPlrakrv1GMnoa8Is/u567Vg0ZW/c/mxgrGr6WL/E7uLAV6bt64qO4Diwy2FMpj48z7GcZ6dzxmvhC9Am8duqPvsrjvMb0ZEfvfBoqy4WDhTSusoARAtU2CNA8LwpLaR7L0H7PUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711754148; c=relaxed/simple;
-	bh=B38TqAIR6twb3262TohECiLCnvKqAKZDcFpAUNQGD2w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B2dcxBAi17lkmRUdICegxg6aZSxElRsD8B5niPY7f7PXa+DU4x+Amx0FT8Sl1fvlXfcdYht/0Dfpx5EwnsM7/c6Gh5VpW8y44SG8o1HfGLK129QVOKtj1IWI1jSeVnZW1T4JZjjUOhxLoTh7CPUhFaU3wLW+yD+9N43nIGNXx58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=e8YgaQDH; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1711756818; c=relaxed/simple;
+	bh=iGZ/eEQlOXZ6oU4a4b0LlMVeGr0pZcm6ir9fO0S8ymU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LXBqqr0keFqkmin8gsfefWFjDA2eHMBDEfpfRe8RizPc9Faulvho0l1nkhOXMgK5Px97XNXUPhXBWhLhtPEu0mhB8+xvyj0icIh9woS0qtI4TqU3erL5biiMwhGRNVfubm0EDisSKGz/QuctrDSP0wsMUS9WyCIcnJdWMRU0fhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cMYpdqnL; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="e8YgaQDH"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dd3c6c8dbbso2910515ad.1
-        for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 16:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1711754145; x=1712358945; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=btl1USfK6BwXzey2GUv6BywGO2c/oXOq7q5Lz+WFwhk=;
-        b=e8YgaQDHLxJNhrrTKIXoNCY4n94nF+FSslpsWP9V/kqvfkrlAPIJkvH3Ohw5lQURlR
-         NdnoKjj6mNmxzJYYv7sZEyXi3ooZnmArTLRwVxYquL8BPl9UXUtPIayXg9eXtpighnT1
-         07jg0LsGsXs3LPDuGwK1LY9GOAC4wRaVvoq43r86TU8TMb6Npa/qXq0ZQ694H82T/eQu
-         TLwGLvpzIF5gKci/5wqMADCb1JOpfMKy3HjaF+iuKj4BTo0P7eLYVdLA2B8AJc39bvom
-         PxM8rb3xM1tIt4kJzjRnNJraxE2z1uhMDbp5jz7jhcW16klzRSETHYwUC+WsULmiXyfx
-         zvCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711754145; x=1712358945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=btl1USfK6BwXzey2GUv6BywGO2c/oXOq7q5Lz+WFwhk=;
-        b=enoE1n1FcDeDNq8I8Bcxe6PC1URal2T5AfHVw26VTajF9Wje2JFvs8Q5S5VsZ/XBGp
-         ZTgY8QPH5uyR0zHFyZ5rF2ZHby/VIKgbd37s3JaVX+9hBAQoBrtv3cOMzIR0Y2WUmEsV
-         Y+3DTFYzkTdQxIoa4R6Qcz84T2L2sQC/ex1sO2J6l8w9rn7V/siBgOCixOTSHATlEewu
-         cVEko8b0wOxS8TcEkxBsyDPHm4kYtNqqyPx9EbnNN8QoNwkvkdmz7MrHBwpASDIWNRsW
-         94RIPiL2MnId4BA3q8VXxpT/b3GKvBw7sYe3rQtk0B5mC9OrcrCPSpfOAZ2a2nQF1rhD
-         7rbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUioLh1s2KrzyG6UFmaQ0nBP82OJKPK9Qi+y/OHq730uB6f5eJuqGb6OI6oL38DQVBkNKKhYdY9CJq6ozBZFgdpttM5ug==
-X-Gm-Message-State: AOJu0YxCn2gEdcvAuUiYaPB95mHQb1uNz6KXCzlx0Uw9RBMMpIU0L/yk
-	36IPwuWqkxZZi9g2xRUU2E+eDKQzrnOUb55BneTjBwdEIobZK5EfZlSqCRpbnSU=
-X-Google-Smtp-Source: AGHT+IHh/wJNDKYjDS0Le/CHe87pb86v8J4ceX9zE09VetBqcdnyHpg0XYEZONgJzfODOr4SfEliaw==
-X-Received: by 2002:a17:902:c255:b0:1de:e8ce:9d7a with SMTP id 21-20020a170902c25500b001dee8ce9d7amr3684053plg.5.1711754145427;
-        Fri, 29 Mar 2024 16:15:45 -0700 (PDT)
-Received: from [10.46.44.174] ([156.39.10.100])
-        by smtp.gmail.com with ESMTPSA id w20-20020a1709027b9400b001dca3a65200sm4004014pll.228.2024.03.29.16.15.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Mar 2024 16:15:44 -0700 (PDT)
-Message-ID: <940f0842-194d-4799-8bb2-2024e6903608@kernel.dk>
-Date: Fri, 29 Mar 2024 17:15:44 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cMYpdqnL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711756815; x=1743292815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iGZ/eEQlOXZ6oU4a4b0LlMVeGr0pZcm6ir9fO0S8ymU=;
+  b=cMYpdqnLogKcPUXa5WrpkTBS1namR7jhfmwbxVgxr1VWyQ9eIpejkSyE
+   aZGH6qgY23r1TgX++jBoxc72C2cQ4+WUDy5txf2vQyXMxwjNwDT8PdFLS
+   kN0h9QUR9LA20lk64GovvyUKMDwmGQSbfNNiktfh72+rHK5FADz248Sza
+   a8KQx8/mq/EBobRMzRQRBj1BRxnBJexO0duj7ree7EixRqjjVlp1h5p9q
+   HcVpUfR5Z95Gp3/IYPggIDNvG1E/Z0R309GLnWDLlnSQsbWe9bgKUKrPa
+   QNts5ix3ChOMoqE+EES2wAsWmO7EcVq7S7OBg8avwGktrpyx+wR80pthE
+   Q==;
+X-CSE-ConnectionGUID: BKXIgPo6T0SFef3lcq0c6w==
+X-CSE-MsgGUID: 8Qb3M8q7TEayZp6mwF4zhw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="18395248"
+X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
+   d="scan'208";a="18395248"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 17:00:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
+   d="scan'208";a="48082034"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 29 Mar 2024 17:00:11 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rqM8n-0003l8-0O;
+	Sat, 30 Mar 2024 00:00:09 +0000
+Date: Sat, 30 Mar 2024 07:59:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Bauer via B4 Relay <devnull+johnebgood.securitylive.com@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linh.tp.vu@gmail.com, ribalda@chromium.org, soyer@irl.hu,
+	John Bauer <johnebgood@securitylive.com>
+Subject: Re: [PATCH 1/2] media: uvcvideo: UVC minimum relative pan/tilt/zoom
+ speed fix
+Message-ID: <202403300745.omqy1CdY-lkp@intel.com>
+References: <20240328-uvc-fix-relative-ptz-speed-v1-1-17373eb8b2be@securitylive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [axboe-block:for-6.10/io_uring 42/42] io_uring/register.c:175:24:
- warning: arithmetic between different enumeration types ('enum
- io_uring_register_restriction_op' and 'enum io_uring_register_op')
-Content-Language: en-US
-To: Gabriel Krisman Bertazi <krisman@suse.de>,
- kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev,
- io-uring@vger.kernel.org
-References: <202403291458.6AjzdI64-lkp@intel.com>
- <87h6go66fm.fsf@mailhost.krisman.be>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <87h6go66fm.fsf@mailhost.krisman.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328-uvc-fix-relative-ptz-speed-v1-1-17373eb8b2be@securitylive.com>
 
-On 3/29/24 4:04 PM, Gabriel Krisman Bertazi wrote:
-> kernel test robot <lkp@intel.com> writes:
-> 
-> [+ io_uring list ]
-> 
->>>> io_uring/register.c:175:24: warning: arithmetic between different
->> enumeration types ('enum io_uring_register_restriction_op' and 'enum
->> io_uring_register_op') [-Wenum-enum-conversion]
->>      175 |         if (!arg || nr_args > IORING_MAX_RESTRICTIONS)
->>          |                               ^~~~~~~~~~~~~~~~~~~~~~~
->>    io_uring/register.c:31:58: note: expanded from macro 'IORING_MAX_RESTRICTIONS'
->>       31 | #define IORING_MAX_RESTRICTIONS (IORING_RESTRICTION_LAST + \
->>          |                                  ~~~~~~~~~~~~~~~~~~~~~~~ ^
->>       32 |                                  IORING_REGISTER_LAST + IORING_OP_LAST)
->>          |                                  ~~~~~~~~~~~~~~~~~~~~
->>    14 warnings generated.
-> 
-> hm.
-> 
-> Do we want to fix?  The arithmetic is safe here.  I actually tried
-> triggering the warning with gcc, but even with -Wenum-conversion in
-> gcc-12 (which is in -Wextra and we don't use in the kernel build), I
-> couldn't do it.  only llvm catches this.
-> 
-> can we explicit cast to int to silent it?
+Hi John,
 
-I don't think we care, there are others like it in the kernel already.
-Plus you need some magic warning incantation to hit it, clang by default
-is not going to be enough.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 23956900041d968f9ad0f30db6dede4daccd7aa9]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Bauer-via-B4-Relay/media-uvcvideo-UVC-minimum-relative-pan-tilt-zoom-speed-fix/20240329-071938
+base:   23956900041d968f9ad0f30db6dede4daccd7aa9
+patch link:    https://lore.kernel.org/r/20240328-uvc-fix-relative-ptz-speed-v1-1-17373eb8b2be%40securitylive.com
+patch subject: [PATCH 1/2] media: uvcvideo: UVC minimum relative pan/tilt/zoom speed fix
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240330/202403300745.omqy1CdY-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240330/202403300745.omqy1CdY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403300745.omqy1CdY-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/usb/uvc/uvc_ctrl.c:1944:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+                   default:
+                   ^
+   drivers/media/usb/uvc/uvc_ctrl.c:1944:3: note: insert 'break;' to avoid fall-through
+                   default:
+                   ^
+                   break; 
+   1 warning generated.
+
+
+vim +1944 drivers/media/usb/uvc/uvc_ctrl.c
+
+  1898	
+  1899	int uvc_ctrl_set(struct uvc_fh *handle,
+  1900		struct v4l2_ext_control *xctrl)
+  1901	{
+  1902		struct uvc_video_chain *chain = handle->chain;
+  1903		struct uvc_control *ctrl;
+  1904		struct uvc_control_mapping *mapping;
+  1905		s32 value;
+  1906		u32 step;
+  1907		s32 min;
+  1908		s32 max;
+  1909		int ret;
+  1910	
+  1911		if (__uvc_query_v4l2_class(chain, xctrl->id, 0) >= 0)
+  1912			return -EACCES;
+  1913	
+  1914		ctrl = uvc_find_control(chain, xctrl->id, &mapping);
+  1915		if (ctrl == NULL)
+  1916			return -EINVAL;
+  1917		if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR))
+  1918			return -EACCES;
+  1919	
+  1920		/* Clamp out of range values. */
+  1921		switch (mapping->v4l2_type) {
+  1922		case V4L2_CTRL_TYPE_INTEGER:
+  1923			if (!ctrl->cached) {
+  1924				ret = uvc_ctrl_populate_cache(chain, ctrl);
+  1925				if (ret < 0)
+  1926					return ret;
+  1927			}
+  1928	
+  1929			min = mapping->get(mapping, UVC_GET_MIN,
+  1930					   uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
+  1931			max = mapping->get(mapping, UVC_GET_MAX,
+  1932					   uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
+  1933	
+  1934			/*
+  1935			 * For the relative speed implementation the minimum
+  1936			 * value cannot be probed so it becomes the additive
+  1937			 * inverse of maximum.
+  1938			 */
+  1939			switch (xctrl->id) {
+  1940			case V4L2_CID_ZOOM_CONTINUOUS:
+  1941			case V4L2_CID_PAN_SPEED:
+  1942			case V4L2_CID_TILT_SPEED:
+  1943				min = max * -1;
+> 1944			default:
+  1945				break;
+  1946			}
+  1947	
+  1948			step = mapping->get(mapping, UVC_GET_RES,
+  1949					    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+  1950			if (step == 0)
+  1951				step = 1;
+  1952	
+  1953			xctrl->value = min + DIV_ROUND_CLOSEST((u32)(xctrl->value - min),
+  1954								step) * step;
+  1955			if (mapping->data_type == UVC_CTRL_DATA_TYPE_SIGNED)
+  1956				xctrl->value = clamp(xctrl->value, min, max);
+  1957			else
+  1958				xctrl->value = clamp_t(u32, xctrl->value, min, max);
+  1959			value = xctrl->value;
+  1960			break;
+  1961	
+  1962		case V4L2_CTRL_TYPE_BITMASK:
+  1963			if (!ctrl->cached) {
+  1964				ret = uvc_ctrl_populate_cache(chain, ctrl);
+  1965				if (ret < 0)
+  1966					return ret;
+  1967			}
+  1968	
+  1969			xctrl->value &= uvc_get_ctrl_bitmap(ctrl, mapping);
+  1970			value = xctrl->value;
+  1971			break;
+  1972	
+  1973		case V4L2_CTRL_TYPE_BOOLEAN:
+  1974			xctrl->value = clamp(xctrl->value, 0, 1);
+  1975			value = xctrl->value;
+  1976			break;
+  1977	
+  1978		case V4L2_CTRL_TYPE_MENU:
+  1979			if (xctrl->value < (ffs(mapping->menu_mask) - 1) ||
+  1980			    xctrl->value > (fls(mapping->menu_mask) - 1))
+  1981				return -ERANGE;
+  1982	
+  1983			if (!test_bit(xctrl->value, &mapping->menu_mask))
+  1984				return -EINVAL;
+  1985	
+  1986			value = uvc_mapping_get_menu_value(mapping, xctrl->value);
+  1987	
+  1988			/*
+  1989			 * Valid menu indices are reported by the GET_RES request for
+  1990			 * UVC controls that support it.
+  1991			 */
+  1992			if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
+  1993				if (!ctrl->cached) {
+  1994					ret = uvc_ctrl_populate_cache(chain, ctrl);
+  1995					if (ret < 0)
+  1996						return ret;
+  1997				}
+  1998	
+  1999				if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & value))
+  2000					return -EINVAL;
+  2001			}
+  2002	
+  2003			break;
+  2004	
+  2005		default:
+  2006			value = xctrl->value;
+  2007			break;
+  2008		}
+  2009	
+  2010		/*
+  2011		 * If the mapping doesn't span the whole UVC control, the current value
+  2012		 * needs to be loaded from the device to perform the read-modify-write
+  2013		 * operation.
+  2014		 */
+  2015		if ((ctrl->info.size * 8) != mapping->size) {
+  2016			ret = __uvc_ctrl_load_cur(chain, ctrl);
+  2017			if (ret < 0)
+  2018				return ret;
+  2019		}
+  2020	
+  2021		/* Backup the current value in case we need to rollback later. */
+  2022		if (!ctrl->dirty) {
+  2023			memcpy(uvc_ctrl_data(ctrl, UVC_CTRL_DATA_BACKUP),
+  2024			       uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
+  2025			       ctrl->info.size);
+  2026		}
+  2027	
+  2028		mapping->set(mapping, value,
+  2029			uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT));
+  2030	
+  2031		if (ctrl->info.flags & UVC_CTRL_FLAG_ASYNCHRONOUS)
+  2032			ctrl->handle = handle;
+  2033	
+  2034		ctrl->dirty = 1;
+  2035		ctrl->modified = 1;
+  2036		return 0;
+  2037	}
+  2038	
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
