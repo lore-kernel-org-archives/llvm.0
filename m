@@ -1,100 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6018E3B185;
-	Fri, 29 Mar 2024 04:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B25E524A
+	for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 04:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711686521; cv=none; b=BVL5BbPog6dMD0xb41knXIq/3qQg5nZD4bksidpOk9ruVjCikCwPgkBxRITsr6rNgQPDQ51uIVlhARq33RiIWeqyLLG+JVWGNDH4XPwb12b6KeWADTVXho1K8H60yO2OXH5ZrCvVtMEmVdz3UWu1mKsjhJeA3nzRwRHuQWA3Ws8=
+	t=1711686668; cv=none; b=TDgjWC/3CYOnjoOOmekZMqE56c2ry5RB0cxaq5CISBlWWnZQPhSpacRSf873vl+QuT3hwTej5WsQ+RRFdo/IyEAIguRQVasHT1k256QIYw6HGOlLkY9HDu5jlJGKkdQsuwzbuYqJaJjSlcmvyOjhTv5p19CIdQvaQ75xdV8maE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711686521; c=relaxed/simple;
-	bh=EcTg62zCHPxuWh4o9OYgfrumFml5MN4UYgRbhdm30H4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pm8PKX2jUFV4dXRrNljoORrixdOTan0jhxSfIwxfrHDg3GteZ4im2OX2APNBccChT81RaYBNetNvAt6IZ+ni8CNf132pTf/xa5R/WzsAN5RsdSo5TgOfI/ML54U8m0SfXL0vqgnj7s9+Jx/61KVk+S9xUYQbs88wZTGURnGi7v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R6uO6KTL; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711686668; c=relaxed/simple;
+	bh=4tuZU0VxAWZCngBO+KXLQ+svTKy/o+JCnKslmdnTO98=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PFnC/YqpZKzpBtvjDVg595usz9B8TpXRqQGGYX9iVZ2jpk71vlUudiaAjhwoEEI0XcQspMCNfocppI72d9nsgv53nZhqRGitAXLv8DO4WrFaARf9Ip668W583qBLZQpWH0w572KV++SD5BP8OUdy3WA9rtChUu8sYhTZIKysPbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jM3QFB57; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R6uO6KTL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711686519; x=1743222519;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EcTg62zCHPxuWh4o9OYgfrumFml5MN4UYgRbhdm30H4=;
-  b=R6uO6KTLCCl41Gk3J8rjpiJld9EMOsMYwsRfzujGZN5O+HYQzU5RwRno
-   TgnV+C0nrzgrlsEjSSoIEkJWVHLFOrYOXSdEsy2Dro3lymeKObDGJ3U14
-   DyhS8KUsC66/cu6C0I4eq33Jjik9ge1OsXvCsXUhaEgojmg6BSUgtKvug
-   Cu9q3sZih3yAHhvUWLHemztwxZHKOy1Iv0yf2+y6voM51mx51cpdb1O+T
-   dshJBauaZAYzcG/LVqUSUFUTLrOH/1u1NYbmPH/TB5FapwEHvK3/X9qgm
-   YNuLQSoZyVy1PNyzXaIdAGsu9suTJMbC0+FcBg1+y2Kd74OebPIl5A8ON
-   Q==;
-X-CSE-ConnectionGUID: oiDCgotvQBiOhTLhSOTRrg==
-X-CSE-MsgGUID: RbbMQ1KrRO6MElj2hCYEnw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="6768172"
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="6768172"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 21:28:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="16912031"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Mar 2024 21:28:34 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rq3qy-0002qW-0N;
-	Fri, 29 Mar 2024 04:28:32 +0000
-Date: Fri, 29 Mar 2024 12:27:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Samuel Holland <samuel.holland@sifive.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Christoph Hellwig <hch@lst.de>
-Subject: [akpm-mm:mm-nonmm-unstable 53/62] lib/raid6/recov_neon_inner.c:7:10:
- fatal error: 'arm_neon.h' file not found
-Message-ID: <202403291210.ioK7bfPA-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jM3QFB57"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711686666;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vPOKpqu+VonzKE60Go8Rzjj59IEMFfZ65ySNR1Kli2M=;
+	b=jM3QFB57vzT6t7wDdj2HzXgTq9K7B3tTc5KBovMhAptuwH7SlLy963k19KEGSzHJqdJOfa
+	OdnG3gFTsSBUG0IXdPsim8btkRCLVRDnF+WGyuKEs7hiC6GSsFkV6j63tu5dgi142UKJL3
+	vBF8xp5RDRHds8uAD9alKRT75yca+Iw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-43-sG8DfgteMyGuBK47lJA5mQ-1; Fri, 29 Mar 2024 00:31:02 -0400
+X-MC-Unique: sG8DfgteMyGuBK47lJA5mQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AAB83800262
+	for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 04:31:02 +0000 (UTC)
+Received: from [172.64.11.58] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6577E111F3C6;
+	Fri, 29 Mar 2024 04:31:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 199 of 204): Test report for master
+ (6.9.0-rc1, mainline.kernel.org-clang, 317c7bc0)
+Date: Fri, 29 Mar 2024 04:31:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <38229.124032900310201033@us-mta-43.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-head:   b065e14a3960a495216a032e6d383c104147c9ef
-commit: aa73a95380b4ef76ccf00344b777d0d415026b7b [53/62] lib/raid6: use CC_FLAGS_FPU for NEON CFLAGS
-config: arm-randconfig-002-20240329 (https://download.01.org/0day-ci/archive/20240329/202403291210.ioK7bfPA-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 79ba323bdd0843275019e16b6e9b35133677c514)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403291210.ioK7bfPA-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403291210.ioK7bfPA-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> lib/raid6/recov_neon_inner.c:7:10: fatal error: 'arm_neon.h' file not found
-       7 | #include <arm_neon.h>
-         |          ^~~~~~~~~~~~
-   1 error generated.
+Kernel information:
+    Commit message: Merge tag 'mmc-v6.9-rc1' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/ulfh/mmc
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/137979
+
+Tests that were not ran because of internal issues:=20
+    AMTU (Abstract Machine Test Utility) [s390x, ppc64le, aarch64, x86_64 (=
+debug), x86_64]
+    Boot test [s390x, s390x, s390x, s390x, ppc64le, ppc64le, ppc64le, aarch=
+64, aarch64, aarch64, aarch64, aarch64, x86_64 (debug), x86_64 (debug), x86=
+_64 (debug), x86_64, x86_64, x86_64, x86_64, x86_64]
+    CKI/restraint [s390x, s390x, s390x, s390x, ppc64le, ppc64le, ppc64le, a=
+arch64, aarch64, aarch64, aarch64, aarch64, x86_64 (debug), x86_64 (debug),=
+ x86_64 (debug), x86_64, x86_64, x86_64, x86_64, x86_64]
+    Filesystem - Loopdev Sanity [s390x, ppc64le, aarch64, x86_64 (debug), x=
+86_64]
+    Hardware - Firmware test suite [aarch64]
+    Hardware - pciutils: sanity smoke test [x86_64 (debug), x86_64]
+    kdump - file-load [s390x, ppc64le, x86_64]
+    kdump - kexec-file-load [s390x, aarch64, x86_64]
+    kdump - kexec_boot [s390x, aarch64, x86_64]
+    kdump - sysrq-c [s390x, ppc64le, aarch64, x86_64]
+    kselftests upstream - bpf [x86_64 (debug), x86_64]
+    kselftests upstream - bpf_test_progs [x86_64 (debug), x86_64]
+    kselftests upstream - net [x86_64 (debug), x86_64]
+    Libkcapi AF_ALG test [s390x, ppc64le, aarch64, x86_64 (debug), x86_64]
+    machineinfo [s390x, s390x, s390x, s390x, ppc64le, ppc64le, ppc64le, aar=
+ch64, aarch64, aarch64, aarch64, aarch64, x86_64 (debug), x86_64 (debug), x=
+86_64 (debug), x86_64, x86_64, x86_64, x86_64, x86_64]
+    Memory function: memfd_create [s390x, ppc64le, aarch64, x86_64 (debug),=
+ x86_64]
+    Networking - Ethernet drivers sanity [s390x, ppc64le, aarch64, x86_64 (=
+debug), x86_64]
+    Networking cki netfilter test [s390x, ppc64le, aarch64, x86_64 (debug),=
+ x86_64]
+    Networking vnic: ipvlan/basic [s390x, ppc64le, aarch64, x86_64]
+    POSIX pjd-fstest suites [s390x, ppc64le, aarch64, x86_64 (debug), x86_6=
+4]
+    Reboot test [s390x, s390x, s390x, s390x, ppc64le, ppc64le, ppc64le, aar=
+ch64, aarch64, aarch64, aarch64, aarch64, x86_64 (debug), x86_64 (debug), x=
+86_64 (debug), x86_64, x86_64, x86_64, x86_64, x86_64]
+    SELinux Custom Module Setup [s390x, s390x, s390x, s390x, ppc64le, ppc64=
+le, ppc64le, aarch64, aarch64, aarch64, aarch64, aarch64, x86_64 (debug), x=
+86_64 (debug), x86_64 (debug), x86_64, x86_64, x86_64, x86_64, x86_64]
+    selinux-policy: serge-testsuite [s390x, ppc64le, aarch64, x86_64]
+    Storage - blktests - blk - upstream [s390x, aarch64, x86_64]
+    Storage - blktests - nvme-tcp - upstream [s390x, aarch64, x86_64]
+    Storage - dm/common [s390x, ppc64le, aarch64, x86_64 (debug), x86_64]
+    Storage - swraid scsi_raid [s390x, aarch64, x86_64 (debug), x86_64]
+    stress: stress-ng - cpu-cache [s390x, aarch64, x86_64]
+    stress: stress-ng - memory [s390x, aarch64, x86_64]
+    xfstests - btrfs [aarch64, x86_64 (debug), x86_64]
+    xfstests - cifsv3.11 [x86_64 (debug), x86_64]
+    xfstests - ext4 [aarch64, x86_64 (debug), x86_64]
+    xfstests - nfsv4.2 [x86_64 (debug), x86_64]
+    xfstests - xfs [aarch64, x86_64 (debug), x86_64]
 
 
-vim +7 lib/raid6/recov_neon_inner.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-6ec4e2514decd6 Ard Biesheuvel 2017-07-13 @7  #include <arm_neon.h>
-3de13550a20fd5 Arnd Bergmann  2023-05-17  8  #include "neon.h"
-6ec4e2514decd6 Ard Biesheuvel 2017-07-13  9  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: The code at line 7 was first introduced by commit
-:::::: 6ec4e2514decd6fb4782a9364fa71d6244d05af4 md/raid6: implement recovery using ARM NEON intrinsics
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
