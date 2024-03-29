@@ -1,202 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ADE4F888;
-	Thu, 28 Mar 2024 23:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC7C196
+	for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 00:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711669413; cv=none; b=h9X87MG9Md+3kp7HGd+Gw3WO5LMTIxuKajeIbv7AGlAhpiaaz+b3WFfi6AMnEdsczGlWDXUssmy5Sz62c+assDWUtNuG3Ma96XP1TYEuZaNYjejKwKHY/9rZUA+NPFouq3eyaThxzfALC6hd6AyLSN0Tze72gCMC/IeE1pQcxO8=
+	t=1711670739; cv=none; b=OyF78RnuJiEKBhMSwZgpF5zuhnDBg3EqPdiOETU7LQbWBTmN6Vjk73sahe2J1CGuZqHOpDNfxu9UWXum3M9W1rx6SolML3Q46f8fZyb4aI7vHuc2dubK5PxmFXbkCfEBL5JjIoMefCEtninOX2DeoQ5UW8BMvKU1MNPCf7XmXw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711669413; c=relaxed/simple;
-	bh=I/WZfIyNxjJxFKhS5s+O6KXilxr0kqvm8WeoL63ejdo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jRNxyUmB+Cn0ZPY7LC7iqiwfqgVqeyFC9C3de6zbQDM45k6tw84s2PrnAOavLjXsWuYAGryd5fwNi31VYZvrl5xmYw/mxxnOhenc+W8GKx3xR/19/b1bC+e4kvnGiYvnw0fa/L6kXLByhpUqfqAmfOxJPiXwghPU2kwDlBlHIkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XsD+k0lI; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711670739; c=relaxed/simple;
+	bh=cjxm1Ryfb5Z9F4sbSdTRXRhffmjVd0tmVnxtg9IiFvg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l+ymQwZeezIjWi5TkzIZLtrQ8WiLEsE/5zhTZYpN2/RJt8PKkvozojuJWWVk6Vhl+zlpVAwZCwjcmWM5cyEXm7Pa0KAsbwXe2lcNOCjpVXJ2qfLrOEbvq3Q5DG+85nWbJcnvehLlRthBWBvEZBMUKAA48u7jpsQvLIU20jzgaeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i3bTekP7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XsD+k0lI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711669410; x=1743205410;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I/WZfIyNxjJxFKhS5s+O6KXilxr0kqvm8WeoL63ejdo=;
-  b=XsD+k0lIZ/T5yrHrLAtV+lMcgb34Qj1ahphb+hrWxY2M+D7lUFBA10zJ
-   bm0mfXARN5eSGL0irmQ12dhmbRB6dVSfmYo0UdumFitu1NVygU0QeClVQ
-   8Ac07+AGuy3C+S84Nsh31Tzs4Ud4M9wr+F5mm3BfOwtNhmluez1Q67Qb+
-   wiar0au+MABZFvv9LSvGNKSzYKlHlnzEc8a4AAJHtiC6psD0HugwBwCyL
-   9SMffL3SQuUxLQsLibPtzkIFVFo23Pp0d1/1GciMtJjRGdthEGZoZ/u63
-   geozC1hV4y97/GDwtFRXKxGAArBlaydvi4IQu7wPtjJAIAwxHdt0eLppa
-   Q==;
-X-CSE-ConnectionGUID: Oi3hEQIzSbOgXnYtuiHiJQ==
-X-CSE-MsgGUID: e7DqEydwSb+lm046z8A6GQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="6689760"
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="6689760"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 16:43:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="47777412"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 28 Mar 2024 16:43:27 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rpzP2-0002d0-15;
-	Thu, 28 Mar 2024 23:43:24 +0000
-Date: Fri, 29 Mar 2024 07:42:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Karthikeyan Periyasamy <quic_periyasa@quicinc.com>,
-	ath12k@lists.infradead.org, johannes@sipsolutions.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org,
-	Harshitha Prem <quic_hprem@quicinc.com>,
-	Karthikeyan Periyasamy <quic_periyasa@quicinc.com>
-Subject: Re: [PATCH 13/13] wifi: ath12k: Advertise multi hardware iface
- combination
-Message-ID: <202403290724.p8vSV474-lkp@intel.com>
-References: <20240328072916.1164195-14-quic_periyasa@quicinc.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i3bTekP7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711670736;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oquIsO/B8A2Gk2EwI1tx+d6zNaq8dTKXgOE1D72BOIw=;
+	b=i3bTekP7uHuTkj6ouHBfEKGr8LYAO9pNQDW0BfyP/03t49V2PPgG25WWQDROoKbNz9xbCm
+	DFBCsbYVKXopkWbFIIX1TaJ9JlwHkX1X/KXZR3qDwUvmcQwl+LaU+X+ruTLu0AWzRq3jr6
+	U45UX+ggdQjXbK+mH5JLW4dYeW+8fAs=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-612-n1X65qTKMva-bY7YZGjn9g-1; Thu, 28 Mar 2024 20:05:34 -0400
+X-MC-Unique: n1X65qTKMva-bY7YZGjn9g-1
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6e6c21dad26so1465614a34.2
+        for <llvm@lists.linux.dev>; Thu, 28 Mar 2024 17:05:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711670734; x=1712275534;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oquIsO/B8A2Gk2EwI1tx+d6zNaq8dTKXgOE1D72BOIw=;
+        b=Il1a2k+8Kw/YyIj54Lky5T2cv+++XgVs0CJJyms/Lfl1aBd8VvK7t9ZZ1WaMWxOOYb
+         Tf7i1cseOo7DlPITfm5srRbK1uu5pG5+bZqE/eAEXm9vBfurTv2y406TFVppXh8HWylQ
+         eK2V0cG81xnHedWvhVJFxvsVrpp4iKeVxl55xP4sP0T8y1SSmtC1LhsR1vwCK2JU5iHc
+         vC/92Z9wViXkhYoeuf3ItmAen+pCtL0HCVx0k45D+x/Vq/RhLpcoVLaXWfQxARhwMtP0
+         S66MLqTe6DGp3X2DVBFomJE+vGfWW09bF6PN6BqaFoVkIouGEdQf0B18wa0Q+b40QG4h
+         fP/A==
+X-Forwarded-Encrypted: i=1; AJvYcCU2+kdnfj6So9CyrsMG4Le71K4bFeRtGFvgRQSRzG2fF1HQDwB+R+qlNogIhQ2JBYPsla89fgFkblWEBm21xdNcYq4hUg==
+X-Gm-Message-State: AOJu0YxrVE9nX4Srf9nCW32ojvyA827riIlfOrs4d5jpLesBhYyz2a8i
+	X1s2msbXGtAXoG3yOnRsretS2JSw5+qS3g99qJVDOJe5bRBkZBsr/Ex0zjVjUmuPDswFBEmN0eD
+	AYai2sssKuNVTDYY7X3unujdg6dvKKobaORlKe+s47khp93g8jEg=
+X-Received: by 2002:a05:6870:9213:b0:22a:e91:2d9c with SMTP id e19-20020a056870921300b0022a0e912d9cmr744895oaf.56.1711670733970;
+        Thu, 28 Mar 2024 17:05:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGnEoQrZF39Z3vBtcbSJQo0k22y/TmSjLE13uEQmcKttgsZxV4Si5B4aokUcJRse8C4U5UT1g==
+X-Received: by 2002:a05:6870:9213:b0:22a:e91:2d9c with SMTP id e19-20020a056870921300b0022a0e912d9cmr744867oaf.56.1711670733707;
+        Thu, 28 Mar 2024 17:05:33 -0700 (PDT)
+Received: from [10.72.112.41] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id j23-20020aa78d17000000b006e681769ee0sm2020583pfe.145.2024.03.28.17.05.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Mar 2024 17:05:33 -0700 (PDT)
+Message-ID: <93fc9138-7498-4268-9bd2-d5b87f215963@redhat.com>
+Date: Fri, 29 Mar 2024 08:05:20 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240328072916.1164195-14-quic_periyasa@quicinc.com>
-
-Hi Karthikeyan,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on d69aef8084cc72df7b0f2583096d9b037c647ec8]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Karthikeyan-Periyasamy/wifi-cfg80211-Add-provision-to-advertise-multiple-radio-in-one-wiphy/20240328-153303
-base:   d69aef8084cc72df7b0f2583096d9b037c647ec8
-patch link:    https://lore.kernel.org/r/20240328072916.1164195-14-quic_periyasa%40quicinc.com
-patch subject: [PATCH 13/13] wifi: ath12k: Advertise multi hardware iface combination
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240329/202403290724.p8vSV474-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 79ba323bdd0843275019e16b6e9b35133677c514)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403290724.p8vSV474-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403290724.p8vSV474-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm64/include/asm/cacheflush.h:11:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/wireless/ath/ath12k/mac.c:7795:11: warning: variable 'band' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    7796 |                  ar->supports_6ghz)
-         |                  ~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/mac.c:7799:44: note: uninitialized use occurs here
-    7799 |         chans = kzalloc(struct_size(chans, chans, band->n_channels),
-         |                                                   ^~~~
-   include/linux/overflow.h:294:53: note: expanded from macro 'struct_size'
-     294 |                 size_add(sizeof(*(p)), flex_array_size(p, member, count)))
-         |                                                                   ^~~~~
-   include/linux/overflow.h:278:12: note: expanded from macro 'flex_array_size'
-     278 |                 size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
-         |                          ^~~~~
-   drivers/net/wireless/ath/ath12k/mac.c:7795:7: note: remove the 'if' if its condition is always true
-    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    7796 |                  ar->supports_6ghz)
-         |                  ~~~~~~~~~~~~~~~~~~
-    7797 |                 band = &ar->mac.sbands[NL80211_BAND_6GHZ];
->> drivers/net/wireless/ath/ath12k/mac.c:7795:11: warning: variable 'band' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/mac.c:7799:44: note: uninitialized use occurs here
-    7799 |         chans = kzalloc(struct_size(chans, chans, band->n_channels),
-         |                                                   ^~~~
-   include/linux/overflow.h:294:53: note: expanded from macro 'struct_size'
-     294 |                 size_add(sizeof(*(p)), flex_array_size(p, member, count)))
-         |                                                                   ^~~~~
-   include/linux/overflow.h:278:12: note: expanded from macro 'flex_array_size'
-     278 |                 size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
-         |                          ^~~~~
-   drivers/net/wireless/ath/ath12k/mac.c:7795:11: note: remove the '&&' if its condition is always true
-    7795 |         else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/mac.c:7788:39: note: initialize the variable 'band' to silence this warning
-    7788 |         struct ieee80211_supported_band *band;
-         |                                              ^
-         |                                               = NULL
-   7 warnings generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/9] rbd: avoid out-of-range warning
+To: Alex Elder <elder@ieee.org>, Arnd Bergmann <arnd@kernel.org>,
+ linux-kernel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+ Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>,
+ Alex Elder <elder@inktank.com>, Josh Durgin <josh.durgin@inktank.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Dongsheng Yang <dongsheng.yang@easystack.cn>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Hannes Reinecke <hare@suse.de>, Christian Brauner <brauner@kernel.org>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ "Ricardo B. Marliere" <ricardo@marliere.net>,
+ Jinjie Ruan <ruanjinjie@huawei.com>, Alex Elder <elder@linaro.org>,
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, llvm@lists.linux.dev
+References: <20240328143051.1069575-1-arnd@kernel.org>
+ <20240328143051.1069575-4-arnd@kernel.org>
+ <b8e848fe-96d8-4f75-a2e9-2ed5c11a2fd7@ieee.org>
+From: Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <b8e848fe-96d8-4f75-a2e9-2ed5c11a2fd7@ieee.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +7795 drivers/net/wireless/ath/ath12k/mac.c
+On 3/28/24 22:53, Alex Elder wrote:
+> On 3/28/24 9:30 AM, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> clang-14 points out that the range check is always true on 64-bit
+>> architectures since a u32 is not greater than the allowed size:
+>>
+>> drivers/block/rbd.c:6079:17: error: result of comparison of constant 
+>> 2305843009213693948 with expression of type 'u32' (aka 'unsigned 
+>> int') is always false 
+>> [-Werror,-Wtautological-constant-out-of-range-compare]
+> w
+>>              ~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> This is harmless, so just change the type of the temporary to size_t
+>> to shut up that warning.
+>
+> This fixes the warning, but then the now size_t value is passed
+> to ceph_decode_32_safe(), which implies a different type conversion.
+> That too is not harmful, but...
+>
+> Could we just cast the value in the comparison instead?
+>
+>   if ((size_t)snap_count > (SIZE_MAX - sizeof (struct ceph_snap_context))
+>
+> You could drop the space between sizeof and ( while
+> you're at it (I always used the space back then).
+>
+Agree.
 
-  7783	
-  7784	static
-  7785	struct ieee80211_chans_per_hw *ath12k_setup_per_hw_chan(struct ath12k *ar)
-  7786	{
-  7787		struct ieee80211_chans_per_hw *chans;
-  7788		struct ieee80211_supported_band *band;
-  7789	
-  7790		if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_2G_CAP)
-  7791			band = &ar->mac.sbands[NL80211_BAND_2GHZ];
-  7792		else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
-  7793			 !ar->supports_6ghz)
-  7794			band = &ar->mac.sbands[NL80211_BAND_5GHZ];
-> 7795		else if (ar->pdev->cap.supported_bands & WMI_HOST_WLAN_5G_CAP &&
-  7796			 ar->supports_6ghz)
-  7797			band = &ar->mac.sbands[NL80211_BAND_6GHZ];
-  7798	
-  7799		chans = kzalloc(struct_size(chans, chans, band->n_channels),
-  7800				GFP_KERNEL);
-  7801		if (!chans)
-  7802			return NULL;
-  7803	
-  7804		memcpy(chans->chans, band->channels,
-  7805		       sizeof(*band->channels) * band->n_channels);
-  7806		chans->n_chans = band->n_channels;
-  7807	
-  7808		return chans;
-  7809	}
-  7810	
+- Xiubo
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+> -Alex
+>
+>>
+>> Fixes: bb23e37acb2a ("rbd: refactor rbd_header_from_disk()")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>   drivers/block/rbd.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+>> index 26ff5cd2bf0a..cb25ee513ada 100644
+>> --- a/drivers/block/rbd.c
+>> +++ b/drivers/block/rbd.c
+>> @@ -6062,7 +6062,7 @@ static int rbd_dev_v2_snap_context(struct 
+>> rbd_device *rbd_dev,
+>>       void *p;
+>>       void *end;
+>>       u64 seq;
+>> -    u32 snap_count;
+>> +    size_t snap_count;
+>>       struct ceph_snap_context *snapc;
+>>       u32 i;
+>
+>
+
