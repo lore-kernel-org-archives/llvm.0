@@ -1,58 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAE83BB2A;
-	Fri, 29 Mar 2024 04:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482CB3BB20;
+	Fri, 29 Mar 2024 06:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711687779; cv=none; b=LaG/L9Sob47FXfATrS+Qf3lJJkUL4Hs8TtIjnHnxwJjfu3MRH38lS5quqpE4Tt0Vo1xrBOcFh8goN+4eFXojyFjSN2veCeVveNhX9iFxYw2ccgnbPHyDYrHK8plelcbEKBbbLeKRX8Jgj2hfhty5HtxpjcF+Ge6mTDtfHaPp75U=
+	t=1711693420; cv=none; b=QezykpjPQ/bekCS9qczmTFldxKwdftzP1iroLHVUjv7xVPKmYrxp+1Bc9gxaExdcBLaePvJcYX32QqgvTFHk8I0qY4wJID96emGMwsBxpKfB82MFVjppg4UQxSKCllFfLZCmYO1vpgnw2p+3hnbx6zLVziDqk7jP+ONFHTntkfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711687779; c=relaxed/simple;
-	bh=vv4SNQXLInmiHP0tSWxOQa++VXcfnRI535VlwVnxIew=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tt5Wzroc7nWnrsH8rf9XaHV7awVH5II+V/BL66GIGIGc/rnYaTuTbVaDz/Yl5HtaK2q6JK8nXHZa80oChopXf8iHVlQ/wmKDAFodwDUqeoVIbmCmJVqtn3/os9oajGB7jTlUWx131GXMaohvdHIEjJZzsW3GwEDafqr7Cl+SVRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EZTLLViW; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1711693420; c=relaxed/simple;
+	bh=p4kHE8rODr2xlL4ztKNqmeD3hDSVlddAYyyJwKKhQtQ=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Y7sFSQlJqq/6LNbklPpBvmcpxUJThkfrf8mYpEeMzlYHG7FzXQkjXEH2rQup7nuNTcb5eolW1roDtNlpFQkPxptlY0vCPaWiZLpawayTeGWCgGT59yOIzSeSRSqkvQ0K1g95q/IehSP0tTceIi1U/rD4FxSHw811ft0983L8900=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i2WCnPVL; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EZTLLViW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i2WCnPVL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711687778; x=1743223778;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vv4SNQXLInmiHP0tSWxOQa++VXcfnRI535VlwVnxIew=;
-  b=EZTLLViWjq1DJbC12xNjCLCw8ZmV6WK0MPSAGh0ZQqXSI+utNRZSgHOn
-   J1HgQz0yJdM353VeE0fzGHLacDqoXjzxQTolxgdf31mfOUbLV9JEKLAEo
-   ag1S5oh0ocX/MFO2y+IliAa9Qx89Et2672x0VMmTdM8yd4je5/6NdQzBa
-   8DdRBBgmhI5ebY/t+bUfusgv2g+1eu/Ue+uybSM/QNyWWDuG8+zFKucGQ
-   Pni4rGkZZiVuvmz9X/TlN7nZdkmxWTxAg59A8aIppwHnh2sDhGHRetBGf
-   r4B50+c2cI4nq6NRed7Qnf8qCZ+9nb6BFMNSt8rP75EBb8n7O82dgVneH
+  t=1711693418; x=1743229418;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=p4kHE8rODr2xlL4ztKNqmeD3hDSVlddAYyyJwKKhQtQ=;
+  b=i2WCnPVL0uaV230tlLX9JhLOTH/wuNeMxsy7bM2uLmtnD74vs7Uef9jE
+   QoSBlMF9DWbEATmR+QjxxXRfHkyR5WvFHn3sjD73oT1tbV7VcNtmyV5d9
+   PvC8/fk4WLy9V09AyYScewMb9v9xRIO3vSuUZXwt9N3GrUNvkWTqb+a2t
+   uMyo0Hp58Z9mRwNhDQce+x5ZEExuCAfi7bHQxFzhJJR5x3XbJPIt0NSES
+   4AMM15gjbs1Vhk9GbdbrBiC8Cw4cMiW+E7xZg/RCoJV33lGglNKgOUX6y
+   KTV7PB9Lleo4xFNyC0m8IrbaLbCSJ4Dq3lqk0RhiMIyvBC06EqemahBTF
    g==;
-X-CSE-ConnectionGUID: A0N6E7WaRzK/WP8AJ/HWMA==
-X-CSE-MsgGUID: utWEdMcsTzSyW+Xokq97Sw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="18020175"
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="18020175"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 21:49:37 -0700
+X-CSE-ConnectionGUID: N6B9HNH7QnSffwnpHdVIMQ==
+X-CSE-MsgGUID: Z9HIBqZZQWGf+4tq+ZcPjg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="18258240"
+X-IronPort-AV: E=Sophos;i="6.07,164,1708416000"; 
+   d="scan'208";a="18258240"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 23:23:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="17507527"
+X-IronPort-AV: E=Sophos;i="6.07,164,1708416000"; 
+   d="scan'208";a="21553061"
 Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 28 Mar 2024 21:49:35 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 28 Mar 2024 23:23:36 -0700
 Received: from kbuild by be39aa325d23 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rq4BI-0002rE-1Z;
-	Fri, 29 Mar 2024 04:49:32 +0000
-Date: Fri, 29 Mar 2024 12:49:02 +0800
+	id 1rq5eI-0002ud-1R;
+	Fri, 29 Mar 2024 06:23:34 +0000
+Date: Fri, 29 Mar 2024 14:23:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCHv9 06/17] x86/mm: Make
- x86_platform.guest.enc_status_change_*() return errno
-Message-ID: <202403291232.y3DBx965-lkp@intel.com>
-References: <20240325103911.2651793-7-kirill.shutemov@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [axboe-block:for-6.10/io_uring 42/42] io_uring/register.c:175:24:
+ warning: arithmetic between different enumeration types ('enum
+ io_uring_register_restriction_op' and 'enum io_uring_register_op')
+Message-ID: <202403291458.6AjzdI64-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,187 +59,207 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240325103911.2651793-7-kirill.shutemov@linux.intel.com>
 
-Hi Kirill,
+TO: Gabriel Krisman Bertazi <krisman@suse.de>
+CC: Jens Axboe <axboe@kernel.dk>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.9-rc1 next-20240328]
-[cannot apply to tip/x86/core tip/x86/mm rafael-pm/acpi-bus rafael-pm/devprop]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-A-Shutemov/x86-acpi-Extract-ACPI-MADT-wakeup-code-into-a-separate-file/20240326-023510
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20240325103911.2651793-7-kirill.shutemov%40linux.intel.com
-patch subject: [PATCHv9 06/17] x86/mm: Make x86_platform.guest.enc_status_change_*() return errno
-config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240329/202403291232.y3DBx965-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403291232.y3DBx965-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.10/io_uring
+head:   2c1b098239d277b21a006cc0c8009ad7bf1b6189
+commit: 2c1b098239d277b21a006cc0c8009ad7bf1b6189 [42/42] io_uring: Avoid anonymous enums in io_uring uapi
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240329/202403291458.6AjzdI64-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 79ba323bdd0843275019e16b6e9b35133677c514)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403291458.6AjzdI64-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403291232.y3DBx965-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403291458.6AjzdI64-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/hyperv/ivm.c:551:3: error: use of undeclared identifier 'result'
-     551 |                 result = false;
-         |                 ^
-   arch/x86/hyperv/ivm.c:587:3: error: use of undeclared identifier 'result'
-     587 |                 result = false;
-         |                 ^
->> arch/x86/hyperv/ivm.c:662:47: error: incompatible function pointer types assigning to 'int (*)(unsigned long, int, bool)' (aka 'int (*)(unsigned long, int, _Bool)') from 'bool (unsigned long, int, bool)' (aka '_Bool (unsigned long, int, _Bool)') [-Wincompatible-function-pointer-types]
-     662 |         x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
-         |                                                      ^ ~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+   In file included from io_uring/register.c:9:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:5:
+   In file included from include/linux/tracepoint.h:22:
+   In file included from include/linux/static_call.h:135:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from io_uring/register.c:29:
+   In file included from io_uring/napi.h:8:
+   In file included from include/net/busy_poll.h:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from io_uring/register.c:29:
+   In file included from io_uring/napi.h:8:
+   In file included from include/net/busy_poll.h:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from io_uring/register.c:29:
+   In file included from io_uring/napi.h:8:
+   In file included from include/net/busy_poll.h:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> io_uring/register.c:175:24: warning: arithmetic between different enumeration types ('enum io_uring_register_restriction_op' and 'enum io_uring_register_op') [-Wenum-enum-conversion]
+     175 |         if (!arg || nr_args > IORING_MAX_RESTRICTIONS)
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~
+   io_uring/register.c:31:58: note: expanded from macro 'IORING_MAX_RESTRICTIONS'
+      31 | #define IORING_MAX_RESTRICTIONS (IORING_RESTRICTION_LAST + \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~ ^
+      32 |                                  IORING_REGISTER_LAST + IORING_OP_LAST)
+         |                                  ~~~~~~~~~~~~~~~~~~~~
+   14 warnings generated.
 
 
-vim +/result +551 arch/x86/hyperv/ivm.c
+vim +175 io_uring/register.c
 
-0f34d11234868d Michael Kelley        2024-01-15  530  
-810a521265023a Tianyu Lan            2021-10-25  531  /*
-812b0597fb4043 Michael Kelley        2023-03-26  532   * hv_vtom_set_host_visibility - Set specified memory visible to host.
-810a521265023a Tianyu Lan            2021-10-25  533   *
-810a521265023a Tianyu Lan            2021-10-25  534   * In Isolation VM, all guest memory is encrypted from host and guest
-810a521265023a Tianyu Lan            2021-10-25  535   * needs to set memory visible to host via hvcall before sharing memory
-810a521265023a Tianyu Lan            2021-10-25  536   * with host. This function works as wrap of hv_mark_gpa_visibility()
-810a521265023a Tianyu Lan            2021-10-25  537   * with memory base and size.
-810a521265023a Tianyu Lan            2021-10-25  538   */
-f223946fdefa0e Kirill A. Shutemov    2024-03-25  539  static int hv_vtom_set_host_visibility(unsigned long kbuffer, int pagecount, bool enc)
-810a521265023a Tianyu Lan            2021-10-25  540  {
-812b0597fb4043 Michael Kelley        2023-03-26  541  	enum hv_mem_host_visibility visibility = enc ?
-812b0597fb4043 Michael Kelley        2023-03-26  542  			VMBUS_PAGE_NOT_VISIBLE : VMBUS_PAGE_VISIBLE_READ_WRITE;
-810a521265023a Tianyu Lan            2021-10-25  543  	u64 *pfn_array;
-9fef276f9f416a Michael Kelley        2024-01-15  544  	phys_addr_t paddr;
-9fef276f9f416a Michael Kelley        2024-01-15  545  	void *vaddr;
-810a521265023a Tianyu Lan            2021-10-25  546  	int ret = 0;
-810a521265023a Tianyu Lan            2021-10-25  547  	int i, pfn;
-810a521265023a Tianyu Lan            2021-10-25  548  
-810a521265023a Tianyu Lan            2021-10-25  549  	pfn_array = kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
-0f34d11234868d Michael Kelley        2024-01-15  550  	if (!pfn_array) {
-0f34d11234868d Michael Kelley        2024-01-15 @551  		result = false;
-0f34d11234868d Michael Kelley        2024-01-15  552  		goto err_set_memory_p;
-0f34d11234868d Michael Kelley        2024-01-15  553  	}
-810a521265023a Tianyu Lan            2021-10-25  554  
-810a521265023a Tianyu Lan            2021-10-25  555  	for (i = 0, pfn = 0; i < pagecount; i++) {
-9fef276f9f416a Michael Kelley        2024-01-15  556  		/*
-9fef276f9f416a Michael Kelley        2024-01-15  557  		 * Use slow_virt_to_phys() because the PRESENT bit has been
-9fef276f9f416a Michael Kelley        2024-01-15  558  		 * temporarily cleared in the PTEs.  slow_virt_to_phys() works
-9fef276f9f416a Michael Kelley        2024-01-15  559  		 * without the PRESENT bit while virt_to_hvpfn() or similar
-9fef276f9f416a Michael Kelley        2024-01-15  560  		 * does not.
-9fef276f9f416a Michael Kelley        2024-01-15  561  		 */
-9fef276f9f416a Michael Kelley        2024-01-15  562  		vaddr = (void *)kbuffer + (i * HV_HYP_PAGE_SIZE);
-9fef276f9f416a Michael Kelley        2024-01-15  563  		paddr = slow_virt_to_phys(vaddr);
-9fef276f9f416a Michael Kelley        2024-01-15  564  		pfn_array[pfn] = paddr >> HV_HYP_PAGE_SHIFT;
-810a521265023a Tianyu Lan            2021-10-25  565  		pfn++;
-810a521265023a Tianyu Lan            2021-10-25  566  
-810a521265023a Tianyu Lan            2021-10-25  567  		if (pfn == HV_MAX_MODIFY_GPA_REP_COUNT || i == pagecount - 1) {
-810a521265023a Tianyu Lan            2021-10-25  568  			ret = hv_mark_gpa_visibility(pfn, pfn_array,
-810a521265023a Tianyu Lan            2021-10-25  569  						     visibility);
-f223946fdefa0e Kirill A. Shutemov    2024-03-25  570  			if (ret)
-810a521265023a Tianyu Lan            2021-10-25  571  				goto err_free_pfn_array;
-810a521265023a Tianyu Lan            2021-10-25  572  			pfn = 0;
-810a521265023a Tianyu Lan            2021-10-25  573  		}
-810a521265023a Tianyu Lan            2021-10-25  574  	}
-810a521265023a Tianyu Lan            2021-10-25  575  
-810a521265023a Tianyu Lan            2021-10-25  576  err_free_pfn_array:
-810a521265023a Tianyu Lan            2021-10-25  577  	kfree(pfn_array);
-0f34d11234868d Michael Kelley        2024-01-15  578  
-0f34d11234868d Michael Kelley        2024-01-15  579  err_set_memory_p:
-0f34d11234868d Michael Kelley        2024-01-15  580  	/*
-0f34d11234868d Michael Kelley        2024-01-15  581  	 * Set the PTE PRESENT bits again to revert what hv_vtom_clear_present()
-0f34d11234868d Michael Kelley        2024-01-15  582  	 * did. Do this even if there is an error earlier in this function in
-0f34d11234868d Michael Kelley        2024-01-15  583  	 * order to avoid leaving the memory range in a "broken" state. Setting
-0f34d11234868d Michael Kelley        2024-01-15  584  	 * the PRESENT bits shouldn't fail, but return an error if it does.
-0f34d11234868d Michael Kelley        2024-01-15  585  	 */
-0f34d11234868d Michael Kelley        2024-01-15  586  	if (set_memory_p(kbuffer, pagecount))
-0f34d11234868d Michael Kelley        2024-01-15  587  		result = false;
-0f34d11234868d Michael Kelley        2024-01-15  588  
-f223946fdefa0e Kirill A. Shutemov    2024-03-25  589  	return ret;
-812b0597fb4043 Michael Kelley        2023-03-26  590  }
-812b0597fb4043 Michael Kelley        2023-03-26  591  
-812b0597fb4043 Michael Kelley        2023-03-26  592  static bool hv_vtom_tlb_flush_required(bool private)
-812b0597fb4043 Michael Kelley        2023-03-26  593  {
-0f34d11234868d Michael Kelley        2024-01-15  594  	/*
-0f34d11234868d Michael Kelley        2024-01-15  595  	 * Since hv_vtom_clear_present() marks the PTEs as "not present"
-0f34d11234868d Michael Kelley        2024-01-15  596  	 * and flushes the TLB, they can't be in the TLB. That makes the
-0f34d11234868d Michael Kelley        2024-01-15  597  	 * flush controlled by this function redundant, so return "false".
-0f34d11234868d Michael Kelley        2024-01-15  598  	 */
-0f34d11234868d Michael Kelley        2024-01-15  599  	return false;
-812b0597fb4043 Michael Kelley        2023-03-26  600  }
-812b0597fb4043 Michael Kelley        2023-03-26  601  
-812b0597fb4043 Michael Kelley        2023-03-26  602  static bool hv_vtom_cache_flush_required(void)
-812b0597fb4043 Michael Kelley        2023-03-26  603  {
-812b0597fb4043 Michael Kelley        2023-03-26  604  	return false;
-812b0597fb4043 Michael Kelley        2023-03-26  605  }
-812b0597fb4043 Michael Kelley        2023-03-26  606  
-812b0597fb4043 Michael Kelley        2023-03-26  607  static bool hv_is_private_mmio(u64 addr)
-812b0597fb4043 Michael Kelley        2023-03-26  608  {
-812b0597fb4043 Michael Kelley        2023-03-26  609  	/*
-812b0597fb4043 Michael Kelley        2023-03-26  610  	 * Hyper-V always provides a single IO-APIC in a guest VM.
-812b0597fb4043 Michael Kelley        2023-03-26  611  	 * When a paravisor is used, it is emulated by the paravisor
-812b0597fb4043 Michael Kelley        2023-03-26  612  	 * in the guest context and must be mapped private.
-812b0597fb4043 Michael Kelley        2023-03-26  613  	 */
-812b0597fb4043 Michael Kelley        2023-03-26  614  	if (addr >= HV_IOAPIC_BASE_ADDRESS &&
-812b0597fb4043 Michael Kelley        2023-03-26  615  	    addr < (HV_IOAPIC_BASE_ADDRESS + PAGE_SIZE))
-812b0597fb4043 Michael Kelley        2023-03-26  616  		return true;
-812b0597fb4043 Michael Kelley        2023-03-26  617  
-812b0597fb4043 Michael Kelley        2023-03-26  618  	/* Same with a vTPM */
-812b0597fb4043 Michael Kelley        2023-03-26  619  	if (addr >= VTPM_BASE_ADDRESS &&
-812b0597fb4043 Michael Kelley        2023-03-26  620  	    addr < (VTPM_BASE_ADDRESS + PAGE_SIZE))
-812b0597fb4043 Michael Kelley        2023-03-26  621  		return true;
-812b0597fb4043 Michael Kelley        2023-03-26  622  
-812b0597fb4043 Michael Kelley        2023-03-26  623  	return false;
-810a521265023a Tianyu Lan            2021-10-25  624  }
-846da38de0e822 Tianyu Lan            2021-12-13  625  
-812b0597fb4043 Michael Kelley        2023-03-26  626  void __init hv_vtom_init(void)
-812b0597fb4043 Michael Kelley        2023-03-26  627  {
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  628  	enum hv_isolation_type type = hv_get_isolation_type();
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  629  
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  630  	switch (type) {
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  631  	case HV_ISOLATION_TYPE_VBS:
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  632  		fallthrough;
-812b0597fb4043 Michael Kelley        2023-03-26  633  	/*
-812b0597fb4043 Michael Kelley        2023-03-26  634  	 * By design, a VM using vTOM doesn't see the SEV setting,
-812b0597fb4043 Michael Kelley        2023-03-26  635  	 * so SEV initialization is bypassed and sev_status isn't set.
-812b0597fb4043 Michael Kelley        2023-03-26  636  	 * Set it here to indicate a vTOM VM.
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  637  	 *
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  638  	 * Note: if CONFIG_AMD_MEM_ENCRYPT is not set, sev_status is
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  639  	 * defined as 0ULL, to which we can't assigned a value.
-812b0597fb4043 Michael Kelley        2023-03-26  640  	 */
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  641  #ifdef CONFIG_AMD_MEM_ENCRYPT
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  642  	case HV_ISOLATION_TYPE_SNP:
-812b0597fb4043 Michael Kelley        2023-03-26  643  		sev_status = MSR_AMD64_SNP_VTOM;
-da86eb96118407 Borislav Petkov (AMD  2023-05-08  644) 		cc_vendor = CC_VENDOR_AMD;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  645  		break;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  646  #endif
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  647  
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  648  	case HV_ISOLATION_TYPE_TDX:
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  649  		cc_vendor = CC_VENDOR_INTEL;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  650  		break;
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  651  
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  652  	default:
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  653  		panic("hv_vtom_init: unsupported isolation type %d\n", type);
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  654  	}
-d3a9d7e49d1531 Dexuan Cui            2023-08-24  655  
-812b0597fb4043 Michael Kelley        2023-03-26  656  	cc_set_mask(ms_hyperv.shared_gpa_boundary);
-812b0597fb4043 Michael Kelley        2023-03-26  657  	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
-812b0597fb4043 Michael Kelley        2023-03-26  658  
-812b0597fb4043 Michael Kelley        2023-03-26  659  	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
-812b0597fb4043 Michael Kelley        2023-03-26  660  	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
-812b0597fb4043 Michael Kelley        2023-03-26  661  	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
-0f34d11234868d Michael Kelley        2024-01-15 @662  	x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
-812b0597fb4043 Michael Kelley        2023-03-26  663  	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
-c957f1f3c498bc Juergen Gross         2023-05-02  664  
-c957f1f3c498bc Juergen Gross         2023-05-02  665  	/* Set WB as the default cache mode. */
-c957f1f3c498bc Juergen Gross         2023-05-02  666  	mtrr_overwrite_state(NULL, 0, MTRR_TYPE_WRBACK);
-812b0597fb4043 Michael Kelley        2023-03-26  667  }
-812b0597fb4043 Michael Kelley        2023-03-26  668  
+c43203154d8ac5 Jens Axboe 2023-12-19  159  
+c43203154d8ac5 Jens Axboe 2023-12-19  160  static __cold int io_register_restrictions(struct io_ring_ctx *ctx,
+c43203154d8ac5 Jens Axboe 2023-12-19  161  					   void __user *arg, unsigned int nr_args)
+c43203154d8ac5 Jens Axboe 2023-12-19  162  {
+c43203154d8ac5 Jens Axboe 2023-12-19  163  	struct io_uring_restriction *res;
+c43203154d8ac5 Jens Axboe 2023-12-19  164  	size_t size;
+c43203154d8ac5 Jens Axboe 2023-12-19  165  	int i, ret;
+c43203154d8ac5 Jens Axboe 2023-12-19  166  
+c43203154d8ac5 Jens Axboe 2023-12-19  167  	/* Restrictions allowed only if rings started disabled */
+c43203154d8ac5 Jens Axboe 2023-12-19  168  	if (!(ctx->flags & IORING_SETUP_R_DISABLED))
+c43203154d8ac5 Jens Axboe 2023-12-19  169  		return -EBADFD;
+c43203154d8ac5 Jens Axboe 2023-12-19  170  
+c43203154d8ac5 Jens Axboe 2023-12-19  171  	/* We allow only a single restrictions registration */
+c43203154d8ac5 Jens Axboe 2023-12-19  172  	if (ctx->restrictions.registered)
+c43203154d8ac5 Jens Axboe 2023-12-19  173  		return -EBUSY;
+c43203154d8ac5 Jens Axboe 2023-12-19  174  
+c43203154d8ac5 Jens Axboe 2023-12-19 @175  	if (!arg || nr_args > IORING_MAX_RESTRICTIONS)
+c43203154d8ac5 Jens Axboe 2023-12-19  176  		return -EINVAL;
+c43203154d8ac5 Jens Axboe 2023-12-19  177  
+c43203154d8ac5 Jens Axboe 2023-12-19  178  	size = array_size(nr_args, sizeof(*res));
+c43203154d8ac5 Jens Axboe 2023-12-19  179  	if (size == SIZE_MAX)
+c43203154d8ac5 Jens Axboe 2023-12-19  180  		return -EOVERFLOW;
+c43203154d8ac5 Jens Axboe 2023-12-19  181  
+c43203154d8ac5 Jens Axboe 2023-12-19  182  	res = memdup_user(arg, size);
+c43203154d8ac5 Jens Axboe 2023-12-19  183  	if (IS_ERR(res))
+c43203154d8ac5 Jens Axboe 2023-12-19  184  		return PTR_ERR(res);
+c43203154d8ac5 Jens Axboe 2023-12-19  185  
+c43203154d8ac5 Jens Axboe 2023-12-19  186  	ret = 0;
+c43203154d8ac5 Jens Axboe 2023-12-19  187  
+c43203154d8ac5 Jens Axboe 2023-12-19  188  	for (i = 0; i < nr_args; i++) {
+c43203154d8ac5 Jens Axboe 2023-12-19  189  		switch (res[i].opcode) {
+c43203154d8ac5 Jens Axboe 2023-12-19  190  		case IORING_RESTRICTION_REGISTER_OP:
+c43203154d8ac5 Jens Axboe 2023-12-19  191  			if (res[i].register_op >= IORING_REGISTER_LAST) {
+c43203154d8ac5 Jens Axboe 2023-12-19  192  				ret = -EINVAL;
+c43203154d8ac5 Jens Axboe 2023-12-19  193  				goto out;
+c43203154d8ac5 Jens Axboe 2023-12-19  194  			}
+c43203154d8ac5 Jens Axboe 2023-12-19  195  
+c43203154d8ac5 Jens Axboe 2023-12-19  196  			__set_bit(res[i].register_op,
+c43203154d8ac5 Jens Axboe 2023-12-19  197  				  ctx->restrictions.register_op);
+c43203154d8ac5 Jens Axboe 2023-12-19  198  			break;
+c43203154d8ac5 Jens Axboe 2023-12-19  199  		case IORING_RESTRICTION_SQE_OP:
+c43203154d8ac5 Jens Axboe 2023-12-19  200  			if (res[i].sqe_op >= IORING_OP_LAST) {
+c43203154d8ac5 Jens Axboe 2023-12-19  201  				ret = -EINVAL;
+c43203154d8ac5 Jens Axboe 2023-12-19  202  				goto out;
+c43203154d8ac5 Jens Axboe 2023-12-19  203  			}
+c43203154d8ac5 Jens Axboe 2023-12-19  204  
+c43203154d8ac5 Jens Axboe 2023-12-19  205  			__set_bit(res[i].sqe_op, ctx->restrictions.sqe_op);
+c43203154d8ac5 Jens Axboe 2023-12-19  206  			break;
+c43203154d8ac5 Jens Axboe 2023-12-19  207  		case IORING_RESTRICTION_SQE_FLAGS_ALLOWED:
+c43203154d8ac5 Jens Axboe 2023-12-19  208  			ctx->restrictions.sqe_flags_allowed = res[i].sqe_flags;
+c43203154d8ac5 Jens Axboe 2023-12-19  209  			break;
+c43203154d8ac5 Jens Axboe 2023-12-19  210  		case IORING_RESTRICTION_SQE_FLAGS_REQUIRED:
+c43203154d8ac5 Jens Axboe 2023-12-19  211  			ctx->restrictions.sqe_flags_required = res[i].sqe_flags;
+c43203154d8ac5 Jens Axboe 2023-12-19  212  			break;
+c43203154d8ac5 Jens Axboe 2023-12-19  213  		default:
+c43203154d8ac5 Jens Axboe 2023-12-19  214  			ret = -EINVAL;
+c43203154d8ac5 Jens Axboe 2023-12-19  215  			goto out;
+c43203154d8ac5 Jens Axboe 2023-12-19  216  		}
+c43203154d8ac5 Jens Axboe 2023-12-19  217  	}
+c43203154d8ac5 Jens Axboe 2023-12-19  218  
+c43203154d8ac5 Jens Axboe 2023-12-19  219  out:
+c43203154d8ac5 Jens Axboe 2023-12-19  220  	/* Reset all restrictions if an error happened */
+c43203154d8ac5 Jens Axboe 2023-12-19  221  	if (ret != 0)
+c43203154d8ac5 Jens Axboe 2023-12-19  222  		memset(&ctx->restrictions, 0, sizeof(ctx->restrictions));
+c43203154d8ac5 Jens Axboe 2023-12-19  223  	else
+c43203154d8ac5 Jens Axboe 2023-12-19  224  		ctx->restrictions.registered = true;
+c43203154d8ac5 Jens Axboe 2023-12-19  225  
+c43203154d8ac5 Jens Axboe 2023-12-19  226  	kfree(res);
+c43203154d8ac5 Jens Axboe 2023-12-19  227  	return ret;
+c43203154d8ac5 Jens Axboe 2023-12-19  228  }
+c43203154d8ac5 Jens Axboe 2023-12-19  229  
+
+:::::: The code at line 175 was first introduced by commit
+:::::: c43203154d8ac579537aa0c7802b77d463b1f53a io_uring/register: move io_uring_register(2) related code to register.c
+
+:::::: TO: Jens Axboe <axboe@kernel.dk>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
 
 -- 
 0-DAY CI Kernel Test Service
