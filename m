@@ -1,96 +1,71 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C513D135A50
-	for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 17:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AB3A923;
+	Fri, 29 Mar 2024 17:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711734198; cv=none; b=sNbUBYnL2LkzabSfH4ZycCvCTZBmfmpnmxoaL/xSZ6AdQ4VuR5kfdnoRTG8U2E7REjrc/sr8/oyOa2/8jX7jk2O5f96CRlbqkvySfwbyo8aXzpWxp4ANzXc1eVNtc7P9O3LdMS4bExvo0TyhynjWIO+eIrdvDG0fpv+tQzgoZr8=
+	t=1711734360; cv=none; b=D/2Nmrcm6H/WSwNsyA+ktsLbxhMaAL1wyfaMLwFs2fGkQ16PwNCyBMBIBGsck8PUKhrG5n7cXISO/eDtsB2w0o5o2dHSYH3bPptxcW3fAKI5iU8HeBtSsMH8E0F3vL3VMKwjRPgyGBL8rH6okW7yD4hOwda1BTU9XYs1faYm49Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711734198; c=relaxed/simple;
-	bh=Db+baHi+o4t0sQoTiWsOVnUn4il6QNvBEK0IZXfUirU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=kPzz7jJrLM+vXihFmCu0vCEUyAVV4uRJvah2OGw27DeFi3RlGmsGJVcWlmo+mXFLgiJd2MXnUPJVlo1z8fh4w35OhWOgW2DBEbDsofZmdece9oies0ejcFr51MMRPzVZ9MO2FTtrsjfVO3wN7aWPEObNXsWHvrjVGdHWMNBWVp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WQwi9FK4; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+	s=arc-20240116; t=1711734360; c=relaxed/simple;
+	bh=HFcDQXQ4/V0olwInsRZS2sioZwVCn9Un9HBzhqOv1RU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TN6ZBJ/m3QgENynxI4kHHCqb8eHGZtaNFVM9k/SCcs3HNg/1d/kREYQkj1xXjxMgu/wtMoBTT/kv+tNa+041OwKHjQeaDypptuca0FTxAXgGP5YcyJhDnLbLOUcsgM+n066xl7JEqQcbd5/+GV6LSscryUF/ZIdHr/OsdsI4ePI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OxY7oCjP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WQwi9FK4"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5c5c8ef7d0dso1632855a12.2
-        for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 10:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711734196; x=1712338996; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Y4P2FVE0GZuV8xN0/OHVBz5dTMWkMVwFfht6IsCHyUY=;
-        b=WQwi9FK4Ingl5FPjhDF91XRBA5MSZpKQ73ylEd84P9qN18oamQRZ+GQbngoxJ0xFJC
-         mtHOODxl3Aszh/zpQ8FIFz6GlGx/sQqqSME6rUBAUJubWqCd8Qj39IJxVTy3djx5h7GL
-         H0hwdI+BwMCKctRbjf0D1QG5rm8nq49K1xHE+DYDi4uR042waepEUMakmle01REGjbdO
-         WJUxeaZU29EmgqfLdeRtkplhg23WmSVJl4t2h175Wo4lSGWnN1zAhC9bYCfz2hW28LWQ
-         gKcv3k1Ff993UAcMQkf9eIPg4Q5gkxZC4TPUCLeW2NoJBfMldNrWFqKzN0l2BTcINc12
-         8qWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711734196; x=1712338996;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4P2FVE0GZuV8xN0/OHVBz5dTMWkMVwFfht6IsCHyUY=;
-        b=FhahXYDQN/EDO/S02Hn7s2g3ZmpFWJHbSHfek/jskO4JhuBlJfq2H5oP1KBaa8G0m2
-         BeQF2dHK4oDsR5P6GSN7bWk9o4LVDJt/y4DrTMa+Fc60ooCkMaN1JK1bKGzRyvjJOLvY
-         UvYUrA/BoeMphZHBEhNlCldrlh73q/Z0QbRYD0TMi64HKXPHZGWwXVwGSZJise66xnE1
-         lTnS0nlOzYP9b3jMWN2KWcdzcInsfSh+yWwQ5i3cuAJP2Wl7H2ZRbzXPRrACFtt5iDSE
-         P9r/BwLIdykPCBN7E+OO9aDmbouq/KsdfQSANje2mUK3dhkgWiRimpi7ghaSdHGB+gPS
-         INNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOPY0pEehUXsSKHpdR330Sp7y5uxd0B9vlml3umr0rXN93yBBFCJc3MnevPwuPBMhfWTCr68yAiB9XNiqffji/YnBEfQ==
-X-Gm-Message-State: AOJu0YwWSmUr2mHZrjx47nQbxzDxXuAnxE0gqtFKlAvu3OKopSpsLaY6
-	o3VIT34uJuXloMvSuLDqimExSYnmVlFM2P3QQmQxDqI4moQphZTSjTlsYqH2Me8gEF6TiB7bEbd
-	TPA==
-X-Google-Smtp-Source: AGHT+IEk3daVAOxTw6ZxgVuNe0bbBjzztiCGBF5zYuViJhnrfrxtU4S3QA/1YszNBdzc0L46hiha467222c=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a65:4388:0:b0:5dc:8af0:ca81 with SMTP id
- m8-20020a654388000000b005dc8af0ca81mr7467pgp.7.1711734195797; Fri, 29 Mar
- 2024 10:43:15 -0700 (PDT)
-Date: Fri, 29 Mar 2024 17:42:34 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OxY7oCjP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06549C433C7;
+	Fri, 29 Mar 2024 17:45:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711734359;
+	bh=HFcDQXQ4/V0olwInsRZS2sioZwVCn9Un9HBzhqOv1RU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OxY7oCjP2GoakWmVTJBFF2ww/W7egc/tuBsgT+LvgoNjXbz5XwsVTEma04/FTqDsl
+	 bMa+jHbV8m8GxuR/3uOnxSXXX+bAFfM03hL9LrQr0zf2+8yyxEAHue0ZfUkbU/2NVv
+	 HoTNsUjzowUTEggo897VrBoN5mjEpmUH6ImYGZdlTVBneXFff+v6O3ME9Yyf9hqfVy
+	 qMWU0FY3zoN41h/ZZTnr4UZncWDr+X31eue4/IjvX72xqy/MpwyKmcbWboI2BDv8cU
+	 IrtQTkRYd1Xw80UnleTlfuHSdGlTF6pbjU8sDFNyiCyRKGOfg0T1PRNuV8TMcvT8Rw
+	 0w1jwraAZ1RDg==
+Date: Fri, 29 Mar 2024 17:45:53 +0000
+From: Simon Horman <horms@kernel.org>
+To: Su Hui <suhui@nfschina.com>
+Cc: sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
+	hkelam@marvell.com, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	dan.carpenter@linaro.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net-next v3] octeontx2-pf: remove unused variables
+ req_hdr and rsp_hdr
+Message-ID: <20240329174553.GN651713@kernel.org>
+References: <20240328020723.4071539-1-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240329174236.2278217-1-edliaw@google.com>
-Subject: [PATCH] selftests/mm: import strings.h for ffsl
-From: Edward Liaw <edliaw@google.com>
-To: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Peter Xu <peterx@redhat.com>, 
-	David Hildenbrand <david@redhat.com>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>
-Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, linux-mm@kvack.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328020723.4071539-1-suhui@nfschina.com>
 
-Got a compilation error for ffsl after 91b80cc5b39f ("selftests: mm: fix
-map_hugetlb failure on 64K page size systems") imported vm_util.h.
+On Thu, Mar 28, 2024 at 10:07:24AM +0800, Su Hui wrote:
+> Clang static checker(scan-buid):
+> drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:503:2: warning:
+> Value stored to 'rsp_hdr' is never read [deadcode.DeadStores]
+> 
+> Remove these unused variables to save some space.
+> 
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+> v3:
+>  - using net-next in subject
+>  - split the v2 patchset into individual patches
+> v2:
+>  - add "net" in subject
 
-Fixes: af605d26a8f2 ("selftests/mm: merge util.h into vm_util.h")
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
- tools/testing/selftests/mm/vm_util.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the updates.
 
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index c02990bbd56f..9007c420d52c 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -3,7 +3,7 @@
- #include <stdbool.h>
- #include <sys/mman.h>
- #include <err.h>
--#include <string.h> /* ffsl() */
-+#include <strings.h> /* ffsl() */
- #include <unistd.h> /* _SC_PAGESIZE */
- 
- #define BIT_ULL(nr)                   (1ULL << (nr))
--- 
-2.44.0.478.gd926399ef9-goog
+Reviewed-by: Simon Horman <horms@kernel.org>
 
