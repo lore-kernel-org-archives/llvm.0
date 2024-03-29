@@ -1,242 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CE012F5BB;
-	Fri, 29 Mar 2024 12:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E120D17E3C1;
+	Fri, 29 Mar 2024 12:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711715395; cv=none; b=IeaK2lWOaEv+y5/7P30Sdj9mcyaPTGLxOKR6cN0ULdMVvOodX4p3ph43+tBNsY0tRXrnD1aKEIV9Ua8gtQJ/XVDBNHE+lQETqo4iRdV/GkdNYwJitLAGHg0VZo2wMOiLRtYnz3mjnnXE1mlV6FFIXHWoquHhvy6qYPMVKFXQ+n0=
+	t=1711716081; cv=none; b=l37nyVoRZG5eWSj4sA7KVJlDn2+q46b7tssVNwDZjEsWqhKud1OYHox2K8LgsxEWJIZZhi998haZyrRKPTtTbAWoGYgCZdJs+N0Bp03es0wyNkzeP3WRE8XV0ba66jE1joy4nY4J60gxjYxteI7ii28L3zmo1AbYMCwCufAPisA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711715395; c=relaxed/simple;
-	bh=zlL5uCtBWx/cCQnKA8sr/TvI8oSJzMNDzwGE/gDiQuA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JFUwoR0Mj+06Gzp5VamICCigrqcsbqQadFwWiTNueET+XFJwzzMHTff/AIcGqTJEjVLK9CQ2knA4hXMIS3VnGrk24HcyPamX5z2Z2I1arZb3hq03T1DXynUGPFajLyvW/jOYgOleqvkijK1hQM6PyjkuozlcGJ43Z1akRwrT8uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OSMAQknI; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711716081; c=relaxed/simple;
+	bh=g4G966sqyGAo0Tea4bdG14ocnuCnsoCEQwCF6LPvnEs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AygvTBvs/PgLtu2lGFzacifQ01Co9RtpygHpCxrn4eG7c8lJUsOE9C6HobeaRqsqbW/X639/NnKXDWbfigfha6+L0TXT27ft/b2GA5+ViU2NK26ZTMg01ZmwG4Oa5hMQVZ0OaY+HO1dfKsroj2yTGg14OwaqNWWVFJ2Q7kNax0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpthkKxL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OSMAQknI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711715394; x=1743251394;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zlL5uCtBWx/cCQnKA8sr/TvI8oSJzMNDzwGE/gDiQuA=;
-  b=OSMAQknIKmKzezaQsyGyPKMJroFM98dhiYVMTjEoibC4UoXwzKE/rCdP
-   InvBboEwHHbg1HAZpRXWiwgnqxj576ULid8TqXHP8YqhzJ4Fa3hAMor6J
-   1dYHD2hwonBL7g05f7QZEG/ALvZ1EHkcTn3M4FLDpegMlKEalkdvC4Mpt
-   8epVzJwEvRIqngS4+EU4SQF9MxooVs8rrvkaxrhZ3LZ1J9ve2DOCv3q2b
-   DvzVhveI+dRLVp4FhZGnEZOMvOlXMIJ7o8oUmuBwwk6JkkIrii3/YdGZG
-   t84uB2CfwTkPn8wpkLoxIvDS87Bs7DDuyCuKYoFfmBvwpa7cMpOdW2m0z
-   g==;
-X-CSE-ConnectionGUID: pzpAf/cRQECJXT85mAc24Q==
-X-CSE-MsgGUID: zD/4NJnUR+u8sJ0lIG1DKg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="9858832"
-X-IronPort-AV: E=Sophos;i="6.07,164,1708416000"; 
-   d="scan'208";a="9858832"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 05:29:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,164,1708416000"; 
-   d="scan'208";a="17426697"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 Mar 2024 05:29:50 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rqBMh-0003BC-1E;
-	Fri, 29 Mar 2024 12:29:47 +0000
-Date: Fri, 29 Mar 2024 20:29:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, eric.dumazet@gmail.com,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 6/8] net: rps: change
- input_queue_tail_incr_save()
-Message-ID: <202403292036.FloftiJL-lkp@intel.com>
-References: <20240328170309.2172584-7-edumazet@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpthkKxL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 769E8C433C7;
+	Fri, 29 Mar 2024 12:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711716080;
+	bh=g4G966sqyGAo0Tea4bdG14ocnuCnsoCEQwCF6LPvnEs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LpthkKxLOvVpnc4K/7vaeUzbYN70oq9d9k1NVj8uLOMgthvBV7ISvwJJsoz6rkawd
+	 467ontqzAywfQ+YMrQ9kQpFqtCCR77oVsoCWcK/5tgvXkDLk4jQZgZDIxVNc8DHay3
+	 kdUV0+hG35gX7DwVkwP2ZBJiTe/txyW+8Rc7k5nIEx4X5/UwEPFTacKc/j1zyY7RDv
+	 QRnzIZqj/BfxK35DFxFi2YJWPLLVfRmUBPbVFzy4rNJ+lMzWqCCMPi8jymZVAxP4Ym
+	 im4qf15rO6AUjjV4hzmfO8s3d8+ID75Qm8/7hO11eItyTTb8VBDm9zjiFEWxtD99B9
+	 zvt/vFOYrG5dA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Sasha Levin <sashal@kernel.org>,
+	mchehab@kernel.org,
+	nathan@kernel.org,
+	linux-media@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.8 44/98] media: sta2x11: fix irq handler cast
+Date: Fri, 29 Mar 2024 08:37:15 -0400
+Message-ID: <20240329123919.3087149-44-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240329123919.3087149-1-sashal@kernel.org>
+References: <20240329123919.3087149-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240328170309.2172584-7-edumazet@google.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.8.2
+Content-Transfer-Encoding: 8bit
 
-Hi Eric,
+From: Arnd Bergmann <arnd@arndb.de>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit 3de49ae81c3a0f83a554ecbce4c08e019f30168e ]
 
-[auto build test ERROR on net-next/main]
+clang-16 warns about casting incompatible function pointers:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-move-kick_defer_list_purge-to-net-core-dev-h/20240329-011413
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240328170309.2172584-7-edumazet%40google.com
-patch subject: [PATCH net-next 6/8] net: rps: change input_queue_tail_incr_save()
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20240329/202403292036.FloftiJL-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403292036.FloftiJL-lkp@intel.com/reproduce)
+drivers/media/pci/sta2x11/sta2x11_vip.c:1057:6: error: cast from 'irqreturn_t (*)(int, struct sta2x11_vip *)' (aka 'enum irqreturn (*)(int, struct sta2x11_vip *)') to 'irq_handler_t' (aka 'enum irqreturn (*)(int, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403292036.FloftiJL-lkp@intel.com/
+Change the prototype of the irq handler to the regular version with a
+local variable to adjust the argument type.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+[hverkuil: update argument documentation]
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/pci/sta2x11/sta2x11_vip.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-   In file included from net/core/dev.c:89:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from net/core/dev.c:89:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from net/core/dev.c:89:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> net/core/dev.c:4819:10: error: call to undeclared function 'rps_input_queue_tail_incr'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   tail = rps_input_queue_tail_incr(sd);
-                          ^
->> net/core/dev.c:4823:3: error: call to undeclared function 'rps_input_queue_tail_save'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   rps_input_queue_tail_save(qtail, tail);
-                   ^
->> net/core/dev.c:5901:4: error: call to undeclared function 'rps_input_queue_head_incr'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           rps_input_queue_head_incr(sd);
-                           ^
-   net/core/dev.c:5910:4: error: call to undeclared function 'rps_input_queue_head_incr'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           rps_input_queue_head_incr(sd);
-                           ^
-   net/core/dev.c:6038:4: error: call to undeclared function 'rps_input_queue_head_incr'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           rps_input_queue_head_incr(sd);
-                           ^
-   net/core/dev.c:11452:3: error: call to undeclared function 'rps_input_queue_head_incr'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   rps_input_queue_head_incr(oldsd);
-                   ^
-   net/core/dev.c:11456:3: error: call to undeclared function 'rps_input_queue_head_incr'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   rps_input_queue_head_incr(oldsd);
-                   ^
-   12 warnings and 7 errors generated.
-
-
-vim +/rps_input_queue_tail_incr +4819 net/core/dev.c
-
-  4781	
-  4782	/*
-  4783	 * enqueue_to_backlog is called to queue an skb to a per CPU backlog
-  4784	 * queue (may be a remote CPU queue).
-  4785	 */
-  4786	static int enqueue_to_backlog(struct sk_buff *skb, int cpu,
-  4787				      unsigned int *qtail)
-  4788	{
-  4789		enum skb_drop_reason reason;
-  4790		struct softnet_data *sd;
-  4791		unsigned long flags;
-  4792		unsigned int qlen;
-  4793		int max_backlog;
-  4794		u32 tail;
-  4795	
-  4796		reason = SKB_DROP_REASON_DEV_READY;
-  4797		if (!netif_running(skb->dev))
-  4798			goto bad_dev;
-  4799	
-  4800		reason = SKB_DROP_REASON_CPU_BACKLOG;
-  4801		sd = &per_cpu(softnet_data, cpu);
-  4802	
-  4803		qlen = skb_queue_len_lockless(&sd->input_pkt_queue);
-  4804		max_backlog = READ_ONCE(net_hotdata.max_backlog);
-  4805		if (unlikely(qlen > max_backlog))
-  4806			goto cpu_backlog_drop;
-  4807		backlog_lock_irq_save(sd, &flags);
-  4808		qlen = skb_queue_len(&sd->input_pkt_queue);
-  4809		if (qlen <= max_backlog && !skb_flow_limit(skb, qlen)) {
-  4810			if (!qlen) {
-  4811				/* Schedule NAPI for backlog device. We can use
-  4812				 * non atomic operation as we own the queue lock.
-  4813				 */
-  4814				if (!__test_and_set_bit(NAPI_STATE_SCHED,
-  4815							&sd->backlog.state))
-  4816					napi_schedule_rps(sd);
-  4817			}
-  4818			__skb_queue_tail(&sd->input_pkt_queue, skb);
-> 4819			tail = rps_input_queue_tail_incr(sd);
-  4820			backlog_unlock_irq_restore(sd, &flags);
-  4821	
-  4822			/* save the tail outside of the critical section */
-> 4823			rps_input_queue_tail_save(qtail, tail);
-  4824			return NET_RX_SUCCESS;
-  4825		}
-  4826	
-  4827		backlog_unlock_irq_restore(sd, &flags);
-  4828	
-  4829	cpu_backlog_drop:
-  4830		atomic_inc(&sd->dropped);
-  4831	bad_dev:
-  4832		dev_core_stats_rx_dropped_inc(skb->dev);
-  4833		kfree_skb_reason(skb, reason);
-  4834		return NET_RX_DROP;
-  4835	}
-  4836	
-
+diff --git a/drivers/media/pci/sta2x11/sta2x11_vip.c b/drivers/media/pci/sta2x11/sta2x11_vip.c
+index e4cf9d63e926d..364ce9e570182 100644
+--- a/drivers/media/pci/sta2x11/sta2x11_vip.c
++++ b/drivers/media/pci/sta2x11/sta2x11_vip.c
+@@ -757,7 +757,7 @@ static const struct video_device video_dev_template = {
+ /**
+  * vip_irq - interrupt routine
+  * @irq: Number of interrupt ( not used, correct number is assumed )
+- * @vip: local data structure containing all information
++ * @data: local data structure containing all information
+  *
+  * check for both frame interrupts set ( top and bottom ).
+  * check FIFO overflow, but limit number of log messages after open.
+@@ -767,8 +767,9 @@ static const struct video_device video_dev_template = {
+  *
+  * IRQ_HANDLED, interrupt done.
+  */
+-static irqreturn_t vip_irq(int irq, struct sta2x11_vip *vip)
++static irqreturn_t vip_irq(int irq, void *data)
+ {
++	struct sta2x11_vip *vip = data;
+ 	unsigned int status;
+ 
+ 	status = reg_read(vip, DVP_ITS);
+@@ -1053,9 +1054,7 @@ static int sta2x11_vip_init_one(struct pci_dev *pdev,
+ 
+ 	spin_lock_init(&vip->slock);
+ 
+-	ret = request_irq(pdev->irq,
+-			  (irq_handler_t) vip_irq,
+-			  IRQF_SHARED, KBUILD_MODNAME, vip);
++	ret = request_irq(pdev->irq, vip_irq, IRQF_SHARED, KBUILD_MODNAME, vip);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "request_irq failed\n");
+ 		ret = -ENODEV;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
