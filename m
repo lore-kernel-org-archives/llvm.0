@@ -1,93 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1920A131E59;
-	Fri, 29 Mar 2024 20:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57322376F1
+	for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 20:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711742437; cv=none; b=U+/SbMjZXFFV5DmCRmBAAN7gMYg3DReVOIIFVGEM1/cPwThxnzy9A03wNDMZOl2vR/DoXWfFAdUBgB23VhlT62a39SDnxtql4Y26Z8m+28xFqzSUgkFDLruM3/R0yMGgzHhPoE2hvwd96fiOjGyCXt+1v9kNkndBXOn8oEd2nZ4=
+	t=1711744424; cv=none; b=DbFRe1wZ/6sZWetyLdh9CSplhQpNRc0IlHAf4WxRudo+2WK+sqK/xyn1zhch9oVRxiyW4luEBwHABJKqJdiRdQ/EI0NDVSM6T15tyLXB7Ti86R8vuOB2N7hwMqR3wR4FBj+hTUTP9wBx64ZRLQ0HRKyyMQmI1MlSj5afEDhTR1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711742437; c=relaxed/simple;
-	bh=O10HO98LXxHRjwwegetD1LC2QarBz8wOkuidkGTxkic=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PnBmFAmNiNutZAk0OAiRfOfj4Z2HD6NoW97nrh2+lO5n6JMkXzTn3Ihn7SnnGPbDb9SMGZsG4adEqxuLnV30VfuxMDc4fgkYIMiyQCOsPWJT8o7iIwlxXVMZY4IqORrEwr2MotYud95+XXa7IkqNz6Nheiojtzqm8ru8lXqtTjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ibdChtO/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711744424; c=relaxed/simple;
+	bh=7fJ4rSAI0GoYiQAMJdDfQgj6t00Kp7TpJETA/wU9wok=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Iqs/fL+EKZRAAPtEkdUo7yZxZLqjB3itpq/P6tZbywT/GQjEm12LGK8J2cg2LlzUS5BeeLWdLSkYBhTvqlVF8ZMuGrOPeuabT36CDlG5WNwcBk4Zwv5M7PqYq2Y2ubZM5NI8t9/T/OXo5CwT1S91m5UqYpIuKQncdpjamGoK/Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZCZ06w4C; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ibdChtO/"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 88958C43399;
-	Fri, 29 Mar 2024 20:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711742436;
-	bh=O10HO98LXxHRjwwegetD1LC2QarBz8wOkuidkGTxkic=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ibdChtO/bXootBctSxklNeA7bYCBts1UgwUFhft4x2sjMGXGiyQ6xGf96V2e0eOA1
-	 ODq9Ia/6579epCaP4lnUDfDLkut5fsOWeaFbJF7me6TstZSBLf3BMrkYDf55Adi731
-	 zHrMkkINKMdPiMUb6gLSoTWBG++DiMupsV5KEmKMPytdOQEZ4kBSph0dMZLkdeLFkK
-	 EbluA1me7aURKnJpRkImBfuddbCDZ41vUC7YUj2cCjTbvsHIIgprJTvRvr6boPp1Ff
-	 UJoxCMbUZIsBcLic6mF8suqylfUb00h7TTGot8oyp8sxfTR9PMGMw0bRiDFpkQ8O6Y
-	 waG7vYyhosOoA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B142D84BAF;
-	Fri, 29 Mar 2024 20:00:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZCZ06w4C"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56c63f4a468so10799a12.0
+        for <llvm@lists.linux.dev>; Fri, 29 Mar 2024 13:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711744420; x=1712349220; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7fJ4rSAI0GoYiQAMJdDfQgj6t00Kp7TpJETA/wU9wok=;
+        b=ZCZ06w4CuKmRO+56N0w842AbfPOWGFsMAvSUJS0diR+1ij+sopSR7mPAVXxYJYxlYF
+         rOlxlXzGliF/r97c4nTdBRMWIWiKhAU3xTP+aPd0eaJZQHl7IjW1NCiZyPrJ8lQPY135
+         vdeoQtWuLrGjzsicdUNZNRsjiHTSqzu79OjgPgAFxSmp8Osp9rN3E+YFRaUIPbQhR/yq
+         8Pb0sGqGBO5TFZUB3Cc3x2cYBpe0YbDn+GBJuz6FXQ13aEgb5Foz8ND50zfKjTmGxx4i
+         0KeEiR3IcvpIGeBWLklW1d+QBW/DZvIm/C6VyWBSJFX0EY8qqiVLoVNPkJzFzMBD64te
+         +kIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711744420; x=1712349220;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7fJ4rSAI0GoYiQAMJdDfQgj6t00Kp7TpJETA/wU9wok=;
+        b=H7JOknEquNKFeZp8B5MPNvJFSdB5wZ8jERDuLBuaXOtNfC6sfn1uBHET3ol0iAAG9A
+         AKTcY/+2dW6i/I4Vve70Csold3lfAOwT82pTdWDP/2N2dvXS3+oLmOx1tBHRHAPK04wA
+         8uzVrYlAAdfwwqnowehcUTUQCude2VG2iHBCXr9L2LbY2B39mbHXj4FcX1a0lMDUVsas
+         sE7z7VDPNtKmg6H98EInih2FPduC52lLj6sBZ/ABTompnklpMIQM9I/xRCYJbLLnFk7P
+         xy6U4EaB3tloKAsI9CYQ1sHwBoT4WsGaYi0k21O1dEFA5Ys71m9I8TsCs086MWIK3DgX
+         ZNhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVHWVcYlavEL9Fgc3hCsnE2iNW9wzVvEKtoDg6YMMU/u/DAGQSn7ikf8GHWAhC7HHO+gnnN28+EyAmbIjlZc1paRaoIEQ==
+X-Gm-Message-State: AOJu0Yx82/L2oPmp9hm+GaqBuDzi5IcVisIVeu2knDpIL1VoNN2EIFkH
+	K+PT30eTgDsZKPx4bDvzh0FMa85Pb4l7f5gQUeoPf32IGXDybW2fRGY5XOoch63lt7vS3pTwFrg
+	isRumTSsGgyni3CoPWOScwFNfIQdAUq2dXlR9
+X-Google-Smtp-Source: AGHT+IFMizgS0G5ukFYvjYIGxUljt4fuYwgJVd/7xudG/ccYnF78sLbJwmbgsF7dKolFZvWx8Fq/tlthiyGNWzulF3Q=
+X-Received: by 2002:a05:6402:c94:b0:56c:2d40:7430 with SMTP id
+ cm20-20020a0564020c9400b0056c2d407430mr138817edb.3.1711744419595; Fri, 29 Mar
+ 2024 13:33:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/9] address remaining
- -Wtautological-constant-out-of-range-compare
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171174243650.4906.1760676317968487901.git-patchwork-notify@kernel.org>
-Date: Fri, 29 Mar 2024 20:00:36 +0000
-References: <20240328143051.1069575-1-arnd@kernel.org>
-In-Reply-To: <20240328143051.1069575-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, arnd@arndb.de, idryomov@gmail.com,
- dongsheng.yang@easystack.cn, axboe@kernel.dk, jgg@ziepe.ca, leon@kernel.org,
- agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com,
- dm-devel@lists.linux.dev, saeedm@nvidia.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, xiubli@redhat.com,
- jlayton@kernel.org, konishi.ryusuke@gmail.com, dvyukov@google.com,
- andreyknvl@gmail.com, dsahern@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, nicolas@fjasle.eu, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, keescook@chromium.org,
- gustavoars@kernel.org, tariqt@nvidia.com, ceph-devel@vger.kernel.org,
- linux-block@vger.kernel.org, linux-rdma@vger.kernel.org,
- netdev@vger.kernel.org, linux-nilfs@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev
+References: <20240329174236.2278217-1-edliaw@google.com> <909806c1-a9c4-4f51-a807-46075efb8ab9@collabora.com>
+In-Reply-To: <909806c1-a9c4-4f51-a807-46075efb8ab9@collabora.com>
+From: Edward Liaw <edliaw@google.com>
+Date: Fri, 29 Mar 2024 13:33:12 -0700
+Message-ID: <CAG4es9UYvT5tRPFtsRUqJnz9obLuAz03b0+61aAagmGjGTMnsA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: import strings.h for ffsl
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Peter Xu <peterx@redhat.com>, 
+	David Hildenbrand <david@redhat.com>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com, linux-mm@kvack.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, Mar 29, 2024 at 12:32=E2=80=AFPM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> On 3/29/24 10:42 PM, Edward Liaw wrote:
+> > Got a compilation error for ffsl after 91b80cc5b39f ("selftests: mm: fi=
+x
+> > map_hugetlb failure on 64K page size systems") imported vm_util.h.
+> >
+> > Fixes: af605d26a8f2 ("selftests/mm: merge util.h into vm_util.h")
+> Why do you think this Fixes tag is needed? This refers to a patch which i=
+s
+> just moving code. It doesn't seem to have any thing related to strings.h.
+Oops, I guess it should be:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 28 Mar 2024 15:30:38 +0100 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The warning option was introduced a few years ago but left disabled
-> by default. All of the actual bugs that this has found have been
-> fixed in the meantime, and this series should address the remaining
-> false-positives, as tested on arm/arm64/x86 randconfigs as well as
-> allmodconfig builds for all architectures supported by clang.
-> 
-> [...]
-
-Here is the summary with links:
-  - [2/9] libceph: avoid clang out-of-range warning
-    (no matching commit)
-  - [5/9] ipv4: tcp_output: avoid warning about NET_ADD_STATS
-    (no matching commit)
-  - [8/9] mlx5: stop warning for 64KB pages
-    https://git.kernel.org/netdev/net-next/c/a5535e533694
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Fixes: 6f6a841fb77d ("selftest/vm: add helpers to detect PAGE_SIZE and
+PAGE_SHIFT")
