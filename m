@@ -1,157 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9AE62C86A;
-	Sat, 30 Mar 2024 11:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB1D433D7;
+	Sat, 30 Mar 2024 23:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711797997; cv=none; b=Rt7lL8ss1cuD6RhHdIHNinSuIrVPLOYwYv9iE/ZDrpMRGrloNDk9siDG9zxXYPbDXtdV87NJTRd690bqsRuz61X2o/P7JrzhYQviXRRYXJhoSozxbvu+3hgVz99Tw09hgCpVFyNk4MBb0eR3pjlUK0/+I62QXlMK/ZdDJmuXuzo=
+	t=1711839785; cv=none; b=E+Bp7itBBA98jvv4jw2tjNSjGUhg060qtFxQGAT6pEQQk+u7gV6R+WPytaS/Z0UlG3s9/IDjjBb8zKZJw5lYHtuTEXNVGnC5hfxY1VkjmijYP8hYMYS0S2/QsSz7ND5FBpEXZYLgnR/mwxY5hiRHntdqj81mblrGEv0tFac5UI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711797997; c=relaxed/simple;
-	bh=Uuar7vsbKm5w+9KCxDbjk3gAMAqKDjuJHWplhv29qXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xkj5phfoeaSkUIc2YPi6siLuKQ7Zm1cs7iQpbpxaVGGajB9AxX7GBiFQhagItppygAS7OAE6on/CIcjCIiAL1hRECmLnMXwrVg69qh67CwNzukMMTN0SOCbMNWJ8FetHILIDreU0GWwQ9f0qYhMrp/HGsVHrT8n85EJcWji8JYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TOZmPiRM; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711839785; c=relaxed/simple;
+	bh=Uk4iJZwSrM2dCVspPrkJGokzJ84YsOa1I77r4NRPHC0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mh1Yg4LoVM0aKqjJcGa8EnsuCvNza+l3cA2Bi1aXlQ77iX3SrTkyygfAPJJtbYujclh51KY7omJVY0+/lxyvlPU9vKKSBaTwF9NjuqoYpboCTvK/+oPtcG6Ob1nVQY1dZmJaw3Ih9s6FvqjF9TVPc61jk0mFHCcpvph2v0QIHFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/FvMNA4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TOZmPiRM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711797995; x=1743333995;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uuar7vsbKm5w+9KCxDbjk3gAMAqKDjuJHWplhv29qXw=;
-  b=TOZmPiRM6BRwLkwSe/dqoma9Ugjarl5AC703zitpwNa1dZ1qQeYfaM7o
-   UFbeqFSLWA47lxbRwGdRylkpzr7Wxwmsd8E+Oq5U7/ZpKRWdcM7FMD8ri
-   EmWd+KFgay/FjRygHfTqrmbyKfJSUvB8v3c6d7lTtIBLzceRVbwRL7Hgp
-   KdwPCBdxYyH92BLB7xbyQgaXNAsXL/aHwfEF0op/c7SucYVjysDrNbF8E
-   yOHilJWrBBtHygogyLR7ZuoWdMXMz7eA8s+dVsJgoE1jvfgvs25ELWfy/
-   UPTcfq0uaGIh+NucHd1moCjUz94hKunsik9MHvJm0h6LDc4eNHeuw5Hzn
-   g==;
-X-CSE-ConnectionGUID: 28Rahel1SKaqjim7jK+Hzw==
-X-CSE-MsgGUID: Tt0SrH9VRuKXmTQ4OD4FmQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="29456973"
-X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="29456973"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 04:26:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="48409144"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 30 Mar 2024 04:26:28 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rqWqw-0004CM-1b;
-	Sat, 30 Mar 2024 11:26:26 +0000
-Date: Sat, 30 Mar 2024 19:26:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com,
-	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
-	ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>,
-	Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH v16 11/20] block|security: add LSM blob to block_device
-Message-ID: <202403301936.l8vO4jha-lkp@intel.com>
-References: <1711657047-10526-12-git-send-email-wufan@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/FvMNA4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A79C7C43390;
+	Sat, 30 Mar 2024 23:03:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711839784;
+	bh=Uk4iJZwSrM2dCVspPrkJGokzJ84YsOa1I77r4NRPHC0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=i/FvMNA4ajDWw3JT6GuQSg3gc4xs2GzlA3SCsxisY2qLC3bGo80ykGUjUaTIiocLD
+	 lRGCz3ydTGXWc9MoUWRBMJu/9FbZZJPWV12PoXqxsppdCXrU8hHh+NymV2yepcsJNC
+	 K7BDfrHSAkC5V99trtRQNa/4PtPMQPBgn/CodlK8jj2un6YK+Gh99eL+areqP6zqQ1
+	 QiWea0HfcnrJFuvlEt7hZs0IfqQYPAAQ9l2NHMn0IwN5a3qzpUzLflfgmLAO+6l3JU
+	 uROY0jV31xGtHg33rUZY3YoG62cD0nvV34ZRuIAFZ5W4KdjCjb9KJrTAiQHOpfNyy0
+	 jOpSWwWTNr3bg==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d52e65d4a8so41326161fa.0;
+        Sat, 30 Mar 2024 16:03:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWmlHJr+LDXaNb4IBZuvCH/CN7BzYtkaQQC+3uLl9DXemzaf6YWI5ROyUJ/MBGYpktpo5AivIycSQgKLoKOIhJiPAcT2oSAIcXgv4+tEBBJBZ21RoZZbyRzvnucdjg=
+X-Gm-Message-State: AOJu0Yww3guEmrP90okCGjP9yL2yXPYeGXkh5gPbYnlGMl4qKySunhSl
+	FHRuCipjL52oirj+k0A5U+IAeX0vYcufM3rtBf4BVDjKtQrwHeW93HLwZyIy1FJ0xjlo2+2kwUM
+	VWYeCAjWny0luDplwiUVB2KoF3pM=
+X-Google-Smtp-Source: AGHT+IFd/LGv2PBoBuzAtx8igo0NJbXoa4v9MDGe5vtLEj5wDpfnPVtw0+ng93ETtALsKDvhhb4I7KxixPbeWm91ZZg=
+X-Received: by 2002:a05:651c:b0d:b0:2d7:68a0:9b28 with SMTP id
+ b13-20020a05651c0b0d00b002d768a09b28mr1710557ljr.7.1711839783412; Sat, 30 Mar
+ 2024 16:03:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1711657047-10526-12-git-send-email-wufan@linux.microsoft.com>
+References: <20240327-llvm-docs-s390-llvm-1-v1-1-56ad95d2bc27@kernel.org>
+In-Reply-To: <20240327-llvm-docs-s390-llvm-1-v1-1-56ad95d2bc27@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 31 Mar 2024 08:02:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARVoiek2kt7aAK=tL-y6RhbmSOeRyx_4W2vk=usyceu5A@mail.gmail.com>
+Message-ID: <CAK7LNARVoiek2kt7aAK=tL-y6RhbmSOeRyx_4W2vk=usyceu5A@mail.gmail.com>
+Subject: Re: [PATCH] Documentation/llvm: Note s390 LLVM=1 support with LLVM
+ 18.1.0 and newer
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+	nicolas@fjasle.eu, corbet@lwn.net, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Fan,
+On Thu, Mar 28, 2024 at 2:20=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> As of the first s390 pull request during the 6.9 merge window,
+> commit 691632f0e869 ("Merge tag 's390-6.9-1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux"), s390 can be
+> built with LLVM=3D1 when using LLVM 18.1.0, which is the first version
+> that has SystemZ support implemented in ld.lld and llvm-objcopy.
+>
+> Update the supported architectures table in the Kbuild LLVM
+> documentation to note this explicitly to make it more discoverable by
+> users and other developers. Additionally, this brings s390 in line with
+> the rest of the architectures in the table, which all support LLVM=3D1.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on device-mapper-dm/for-next]
-[also build test ERROR on axboe-block/for-next lwn/docs-next linus/master v6.9-rc1 next-20240328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fan-Wu/security-add-ipe-lsm/20240329-042339
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-patch link:    https://lore.kernel.org/r/1711657047-10526-12-git-send-email-wufan%40linux.microsoft.com
-patch subject: [PATCH v16 11/20] block|security: add LSM blob to block_device
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240330/202403301936.l8vO4jha-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240330/202403301936.l8vO4jha-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403301936.l8vO4jha-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/nfs/blocklayout/blocklayout.c:41:
-   In file included from fs/nfs/blocklayout/../pnfs.h:34:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:101:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:45:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:9:
->> include/linux/security.h:1506:36: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                       ^
-         |                                                                       int
-   include/linux/security.h:1506:34: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                     ^
-   fs/nfs/blocklayout/blocklayout.c:384:9: warning: variable 'count' set but not used [-Wunused-but-set-variable]
-     384 |         size_t count = header->args.count;
-         |                ^
-   2 warnings and 1 error generated.
---
-   In file included from fs/nfs/blocklayout/dev.c:8:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:101:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:45:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:9:
->> include/linux/security.h:1506:36: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                       ^
-         |                                                                       int
-   include/linux/security.h:1506:34: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                     ^
-   1 warning and 1 error generated.
+Applied to linux-kbuild/fixes.
+Thanks.
 
 
-vim +/int +1506 include/linux/security.h
 
-  1504	
-  1505	static inline int security_bdev_setintegrity(struct block_device *bdev,
-> 1506						     enum lsm_integrity_type, type,
-  1507						     const void *value, size_t size)
-  1508	{
-  1509		return 0;
-  1510	}
-  1511	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Best Regards
+Masahiro Yamada
