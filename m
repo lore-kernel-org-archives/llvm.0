@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85434101C8;
-	Sat, 30 Mar 2024 09:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9D421115;
+	Sat, 30 Mar 2024 10:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711791512; cv=none; b=bK7jUllxqjFTS/vC+dGyx/nEM0A9A2i34pofIfuiDyb6jMhxlif286sMrLATsH71/azTs9OB50jyXkpWal4190bYeYLHBl9w55zaq2T+rvDvxOXgtroPruZU7gRfUPcBnnYQio+FHpf8l3ZoJLc7jCJoRkiCUoLztPLgHwU9Zwg=
+	t=1711793434; cv=none; b=D/aqO0Ztn5Ovm+qDSuMHskfpO+R3sVhQzbvYGnMClhof0YzbuhDCxT1fb8cHXmQh6zsBE/gaQCoOMyowtt1COSzWX5t2M1hZdpQeiHwz+uEzI0krKhwjyoVejg4j1kAAk67Ca9Cmh6ePQAaSFQCxMeaDCi5jDZvaGG2aFBj8KlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711791512; c=relaxed/simple;
-	bh=+UDvDzkEealmmiWn3qyXkFv8xSxGpYh+eHNDrKmB8c4=;
+	s=arc-20240116; t=1711793434; c=relaxed/simple;
+	bh=fVIRqSJRfEPHi/nmw7J79d0AwEnag7/0FX+UeuSAw8I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i+UbqVLFE49mOHRLxCQqMtkopOrHAoZOZxOdjhf2a2DeMB2uu9OYjl/joJcF0Mr5yGgsawRupnwmXRsZsTJTrgLW1tH/7mjkXmGDAC9dWxInV6Ryq53E3nG1el53e9YUNxr4MFLRh3P+g+7id6+THYYMaccj6CRcOiy1yu+70PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AiTuGhxx; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=eWN6vN7GJgAiHE3yuEe2/h38Gqrd1/30hlKelD9hc16pxDBP7qv6SYM4T0Uu8+MTLtGHgbgWgozZfQlPzA+IyTtdm56omgqT3qdhElNl8dDaRs2pLCWECeBIBrldK5XnitJNOAKzwWUznMLZZfSW6Pk/xYPlTwEGfbWtzEX9l+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fp+S0S86; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AiTuGhxx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fp+S0S86"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711791510; x=1743327510;
+  t=1711793431; x=1743329431;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+UDvDzkEealmmiWn3qyXkFv8xSxGpYh+eHNDrKmB8c4=;
-  b=AiTuGhxxmHsHsmmuU/jtitOYsGku13eaR8ljHBx2u/QmNv+Xn+EiOTYB
-   tAxhNQF9fIeDfJJ8NjSHMzSAbZf8YkWtAKsvhkidTKRU8gmv8GuUVc3nZ
-   lxOscbXChQZ0vqxUwlRJdXa7N7eLVf6ZPk6rCTkrf1mw/6PqN/sSpaFH5
-   Z7wZZJgpaJBbQdaN0904fWcwNjJiy1dRO/k5p3Wnpgono3QE3y0YVU9ip
-   UpO34Xib3Rh+dq5pww2DVwCm47YqNuSjapEWlwQioBpLEUAMReh2kBjXG
-   Vf1RKr3qf7bomHT/BkiQU5ZgDGLsYNL1/a2HCkpZ42U4zaD3MVeDS7XUv
+  bh=fVIRqSJRfEPHi/nmw7J79d0AwEnag7/0FX+UeuSAw8I=;
+  b=Fp+S0S862PSNbA9R3VGEdDc9O9bCVV0Yikh43HBjnl2bZHsyu9+zKTJG
+   OW09kOzofxqBnH7ogRiyCqZOdV253oYwiClyQnZYEsMo+vKcmgxBRBSAj
+   WvWKQoDR7RTz7xSikdgWY6mKcUpVRzg2fGbM5MMSmPq5BBodZNZPbY7wm
+   BhriArbVkbOTH8Jg5pUnOyKpcalNIfaIlnE77G/eiJ9TO7SoaPYnz+bw8
+   q8ajWrWBQmXc8KabxHkA1/cP/REFTnT+W3ouiJIGhDgICN3WMUNGYQQWh
+   Iw1xe/iRGmO4bElhwWtwIvaPZ96Hr8xT76zNZndZPxWPkRcZfiF6acwwO
    g==;
-X-CSE-ConnectionGUID: dlUIZcIGQPC34TQQ+mNKGQ==
-X-CSE-MsgGUID: +C6oUuEHQfmY0Tidkx2EUw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="9922949"
+X-CSE-ConnectionGUID: 21FnOiazRJ6xL8niEs0fuQ==
+X-CSE-MsgGUID: jF9I4JwnSWy3V4cNrImQ9w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="17527983"
 X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="9922949"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 02:38:29 -0700
+   d="scan'208";a="17527983"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 03:10:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="17239943"
+   d="scan'208";a="17179555"
 Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 30 Mar 2024 02:38:26 -0700
+  by orviesa009.jf.intel.com with ESMTP; 30 Mar 2024 03:10:27 -0700
 Received: from kbuild by be39aa325d23 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rqVAO-00047m-07;
-	Sat, 30 Mar 2024 09:38:24 +0000
-Date: Sat, 30 Mar 2024 17:37:48 +0800
+	id 1rqVfM-000494-2Z;
+	Sat, 30 Mar 2024 10:10:24 +0000
+Date: Sat, 30 Mar 2024 18:10:05 +0800
 From: kernel test robot <lkp@intel.com>
 To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
 	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
 	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 2/4] bpf: inline bpf_get_smp_processor_id()
- helper
-Message-ID: <202403301711.Z4Wp1R02-lkp@intel.com>
-References: <20240329184740.4084786-3-andrii@kernel.org>
+Subject: Re: [PATCH bpf-next 1/4] bpf: add internal-only per-CPU LDX
+ instructions
+Message-ID: <202403301707.PvBvfoI2-lkp@intel.com>
+References: <20240329184740.4084786-2-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,827 +63,886 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240329184740.4084786-3-andrii@kernel.org>
+In-Reply-To: <20240329184740.4084786-2-andrii@kernel.org>
 
 Hi Andrii,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on bpf-next/master]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bpf-add-internal-only-per-CPU-LDX-instructions/20240330-025035
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240329184740.4084786-3-andrii%40kernel.org
-patch subject: [PATCH bpf-next 2/4] bpf: inline bpf_get_smp_processor_id() helper
-config: arm-randconfig-001-20240330 (https://download.01.org/0day-ci/archive/20240330/202403301711.Z4Wp1R02-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 79ba323bdd0843275019e16b6e9b35133677c514)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240330/202403301711.Z4Wp1R02-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20240329184740.4084786-2-andrii%40kernel.org
+patch subject: [PATCH bpf-next 1/4] bpf: add internal-only per-CPU LDX instructions
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240330/202403301707.PvBvfoI2-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240330/202403301707.PvBvfoI2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403301711.Z4Wp1R02-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403301707.PvBvfoI2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-          |                                        ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10532:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10532 |                 regs[BPF_REG_0].type = PTR_TO_TCP_SOCK | ret_flag;
-          |                                        ~~~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10536:37: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10536 |                 regs[BPF_REG_0].type = PTR_TO_MEM | ret_flag;
-          |                                        ~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10558:38: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10558 |                         regs[BPF_REG_0].type = PTR_TO_MEM | ret_flag;
-          |                                                ~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10562:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10562 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC | MEM_RCU;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:10570:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10570 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | ret_flag;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10584:40: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10584 |                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | ret_flag;
-          |                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:11324:21: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11324 |         case PTR_TO_BTF_ID | MEM_ALLOC:
-          |              ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11779:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11779 |                         if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11784:43: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11784 |                         } else if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU)) {
-          |                                                  ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11824:25: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11824 |                                    (dynptr_arg_type & MEM_UNINIT)) {
-          |                                     ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:11844:26: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11844 |                         if (!(dynptr_arg_type & MEM_UNINIT)) {
-          |                               ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:11871:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11871 |                             reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11875:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11875 |                         if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC) && !reg->ref_obj_id) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11885:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11885 |                             reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11889:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11889 |                         if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC) && !reg->ref_obj_id) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11898:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11898 |                         if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11921:37: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11921 |                                 if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                                   ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12166:19: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12166 |                                 if (reg->type & MEM_RCU) {
-          |                                     ~~~~~~~~~ ^ ~~~~~~~
-   include/linux/bpf_verifier.h:476:12: note: expanded from macro 'bpf_for_each_reg_in_vstate_mask'
-     476 |                                 (void)(__expr);                          \
-         |                                        ^~~~~~
-   kernel/bpf/verifier.c:12166:19: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12166 |                                 if (reg->type & MEM_RCU) {
-          |                                     ~~~~~~~~~ ^ ~~~~~~~
-   include/linux/bpf_verifier.h:481:12: note: expanded from macro 'bpf_for_each_reg_in_vstate_mask'
-     481 |                                 (void)(__expr);                          \
-         |                                        ^~~~~~
-   kernel/bpf/verifier.c:12330:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12330 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12340:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12340 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12359:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12359 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_TRUSTED;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   kernel/bpf/verifier.c:12371:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12371 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_UNTRUSTED;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:12388:39: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12388 |                                 regs[BPF_REG_0].type = PTR_TO_MEM | type_flag;
-          |                                                        ~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12948:20: warning: bitwise operation between different enumeration types ('const enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12948 |         if (ptr_reg->type & PTR_MAYBE_NULL) {
-          |             ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:17572:31: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    17572 |                         *prev_type = PTR_TO_BTF_ID | PTR_UNTRUSTED;
-          |                                      ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:18030:38: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    18030 |                 aux->btf_var.reg_type = PTR_TO_MEM | MEM_RDONLY;
-          |                                         ~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:18049:41: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    18049 |                 aux->btf_var.reg_type = PTR_TO_BTF_ID | MEM_PERCPU;
-          |                                         ~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:18066:38: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    18066 |                 aux->btf_var.reg_type = PTR_TO_MEM | MEM_RDONLY;
-          |                                         ~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:19001:22: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    19001 |                 case PTR_TO_BTF_ID | PTR_UNTRUSTED:
-          |                      ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:19008:22: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    19008 |                 case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
-          |                      ~~~~~~~~~~~~~ ^ ~~~~~~~~~
->> kernel/bpf/verifier.c:20078:55: error: use of undeclared identifier 'pcpu_hot'
-    20078 |                         insn_buf[0] = BPF_MOV32_IMM(BPF_REG_0, (u32)(long)&pcpu_hot.cpu_number);
-          |                                                                            ^
-   kernel/bpf/verifier.c:20491:51: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20491 |                         } else if (arg->arg_type == (ARG_PTR_TO_DYNPTR | MEM_RDONLY)) {
-          |                                                      ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:20496:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20496 |                                 if (arg->arg_type & PTR_MAYBE_NULL)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:20503:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20503 |                                 if (arg->arg_type & PTR_MAYBE_NULL)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:20505:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20505 |                                 if (arg->arg_type & PTR_UNTRUSTED)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:20507:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20507 |                                 if (arg->arg_type & PTR_TRUSTED)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   99 warnings and 1 error generated.
+>> arch/x86/net/bpf_jit_comp.c:1925:14: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+    1925 |                         u32 off = (u32)(void *)&this_cpu_off;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/pcpu_hot +20078 kernel/bpf/verifier.c
+vim +1925 arch/x86/net/bpf_jit_comp.c
 
- 19587	
- 19588	/* Do various post-verification rewrites in a single program pass.
- 19589	 * These rewrites simplify JIT and interpreter implementations.
- 19590	 */
- 19591	static int do_misc_fixups(struct bpf_verifier_env *env)
- 19592	{
- 19593		struct bpf_prog *prog = env->prog;
- 19594		enum bpf_attach_type eatype = prog->expected_attach_type;
- 19595		enum bpf_prog_type prog_type = resolve_prog_type(prog);
- 19596		struct bpf_insn *insn = prog->insnsi;
- 19597		const struct bpf_func_proto *fn;
- 19598		const int insn_cnt = prog->len;
- 19599		const struct bpf_map_ops *ops;
- 19600		struct bpf_insn_aux_data *aux;
- 19601		struct bpf_insn insn_buf[16];
- 19602		struct bpf_prog *new_prog;
- 19603		struct bpf_map *map_ptr;
- 19604		int i, ret, cnt, delta = 0, cur_subprog = 0;
- 19605		struct bpf_subprog_info *subprogs = env->subprog_info;
- 19606		u16 stack_depth = subprogs[cur_subprog].stack_depth;
- 19607		u16 stack_depth_extra = 0;
- 19608	
- 19609		if (env->seen_exception && !env->exception_callback_subprog) {
- 19610			struct bpf_insn patch[] = {
- 19611				env->prog->insnsi[insn_cnt - 1],
- 19612				BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
- 19613				BPF_EXIT_INSN(),
- 19614			};
- 19615	
- 19616			ret = add_hidden_subprog(env, patch, ARRAY_SIZE(patch));
- 19617			if (ret < 0)
- 19618				return ret;
- 19619			prog = env->prog;
- 19620			insn = prog->insnsi;
- 19621	
- 19622			env->exception_callback_subprog = env->subprog_cnt - 1;
- 19623			/* Don't update insn_cnt, as add_hidden_subprog always appends insns */
- 19624			mark_subprog_exc_cb(env, env->exception_callback_subprog);
- 19625		}
- 19626	
- 19627		for (i = 0; i < insn_cnt;) {
- 19628			if (insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && insn->imm) {
- 19629				if ((insn->off == BPF_ADDR_SPACE_CAST && insn->imm == 1) ||
- 19630				    (((struct bpf_map *)env->prog->aux->arena)->map_flags & BPF_F_NO_USER_CONV)) {
- 19631					/* convert to 32-bit mov that clears upper 32-bit */
- 19632					insn->code = BPF_ALU | BPF_MOV | BPF_X;
- 19633					/* clear off and imm, so it's a normal 'wX = wY' from JIT pov */
- 19634					insn->off = 0;
- 19635					insn->imm = 0;
- 19636				} /* cast from as(0) to as(1) should be handled by JIT */
- 19637				goto next_insn;
- 19638			}
- 19639	
- 19640			if (env->insn_aux_data[i + delta].needs_zext)
- 19641				/* Convert BPF_CLASS(insn->code) == BPF_ALU64 to 32-bit ALU */
- 19642				insn->code = BPF_ALU | BPF_OP(insn->code) | BPF_SRC(insn->code);
- 19643	
- 19644			/* Make divide-by-zero exceptions impossible. */
- 19645			if (insn->code == (BPF_ALU64 | BPF_MOD | BPF_X) ||
- 19646			    insn->code == (BPF_ALU64 | BPF_DIV | BPF_X) ||
- 19647			    insn->code == (BPF_ALU | BPF_MOD | BPF_X) ||
- 19648			    insn->code == (BPF_ALU | BPF_DIV | BPF_X)) {
- 19649				bool is64 = BPF_CLASS(insn->code) == BPF_ALU64;
- 19650				bool isdiv = BPF_OP(insn->code) == BPF_DIV;
- 19651				struct bpf_insn *patchlet;
- 19652				struct bpf_insn chk_and_div[] = {
- 19653					/* [R,W]x div 0 -> 0 */
- 19654					BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
- 19655						     BPF_JNE | BPF_K, insn->src_reg,
- 19656						     0, 2, 0),
- 19657					BPF_ALU32_REG(BPF_XOR, insn->dst_reg, insn->dst_reg),
- 19658					BPF_JMP_IMM(BPF_JA, 0, 0, 1),
- 19659					*insn,
- 19660				};
- 19661				struct bpf_insn chk_and_mod[] = {
- 19662					/* [R,W]x mod 0 -> [R,W]x */
- 19663					BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
- 19664						     BPF_JEQ | BPF_K, insn->src_reg,
- 19665						     0, 1 + (is64 ? 0 : 1), 0),
- 19666					*insn,
- 19667					BPF_JMP_IMM(BPF_JA, 0, 0, 1),
- 19668					BPF_MOV32_REG(insn->dst_reg, insn->dst_reg),
- 19669				};
- 19670	
- 19671				patchlet = isdiv ? chk_and_div : chk_and_mod;
- 19672				cnt = isdiv ? ARRAY_SIZE(chk_and_div) :
- 19673					      ARRAY_SIZE(chk_and_mod) - (is64 ? 2 : 0);
- 19674	
- 19675				new_prog = bpf_patch_insn_data(env, i + delta, patchlet, cnt);
- 19676				if (!new_prog)
- 19677					return -ENOMEM;
- 19678	
- 19679				delta    += cnt - 1;
- 19680				env->prog = prog = new_prog;
- 19681				insn      = new_prog->insnsi + i + delta;
- 19682				goto next_insn;
- 19683			}
- 19684	
- 19685			/* Implement LD_ABS and LD_IND with a rewrite, if supported by the program type. */
- 19686			if (BPF_CLASS(insn->code) == BPF_LD &&
- 19687			    (BPF_MODE(insn->code) == BPF_ABS ||
- 19688			     BPF_MODE(insn->code) == BPF_IND)) {
- 19689				cnt = env->ops->gen_ld_abs(insn, insn_buf);
- 19690				if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf)) {
- 19691					verbose(env, "bpf verifier is misconfigured\n");
- 19692					return -EINVAL;
- 19693				}
- 19694	
- 19695				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19696				if (!new_prog)
- 19697					return -ENOMEM;
- 19698	
- 19699				delta    += cnt - 1;
- 19700				env->prog = prog = new_prog;
- 19701				insn      = new_prog->insnsi + i + delta;
- 19702				goto next_insn;
- 19703			}
- 19704	
- 19705			/* Rewrite pointer arithmetic to mitigate speculation attacks. */
- 19706			if (insn->code == (BPF_ALU64 | BPF_ADD | BPF_X) ||
- 19707			    insn->code == (BPF_ALU64 | BPF_SUB | BPF_X)) {
- 19708				const u8 code_add = BPF_ALU64 | BPF_ADD | BPF_X;
- 19709				const u8 code_sub = BPF_ALU64 | BPF_SUB | BPF_X;
- 19710				struct bpf_insn *patch = &insn_buf[0];
- 19711				bool issrc, isneg, isimm;
- 19712				u32 off_reg;
- 19713	
- 19714				aux = &env->insn_aux_data[i + delta];
- 19715				if (!aux->alu_state ||
- 19716				    aux->alu_state == BPF_ALU_NON_POINTER)
- 19717					goto next_insn;
- 19718	
- 19719				isneg = aux->alu_state & BPF_ALU_NEG_VALUE;
- 19720				issrc = (aux->alu_state & BPF_ALU_SANITIZE) ==
- 19721					BPF_ALU_SANITIZE_SRC;
- 19722				isimm = aux->alu_state & BPF_ALU_IMMEDIATE;
- 19723	
- 19724				off_reg = issrc ? insn->src_reg : insn->dst_reg;
- 19725				if (isimm) {
- 19726					*patch++ = BPF_MOV32_IMM(BPF_REG_AX, aux->alu_limit);
- 19727				} else {
- 19728					if (isneg)
- 19729						*patch++ = BPF_ALU64_IMM(BPF_MUL, off_reg, -1);
- 19730					*patch++ = BPF_MOV32_IMM(BPF_REG_AX, aux->alu_limit);
- 19731					*patch++ = BPF_ALU64_REG(BPF_SUB, BPF_REG_AX, off_reg);
- 19732					*patch++ = BPF_ALU64_REG(BPF_OR, BPF_REG_AX, off_reg);
- 19733					*patch++ = BPF_ALU64_IMM(BPF_NEG, BPF_REG_AX, 0);
- 19734					*patch++ = BPF_ALU64_IMM(BPF_ARSH, BPF_REG_AX, 63);
- 19735					*patch++ = BPF_ALU64_REG(BPF_AND, BPF_REG_AX, off_reg);
- 19736				}
- 19737				if (!issrc)
- 19738					*patch++ = BPF_MOV64_REG(insn->dst_reg, insn->src_reg);
- 19739				insn->src_reg = BPF_REG_AX;
- 19740				if (isneg)
- 19741					insn->code = insn->code == code_add ?
- 19742						     code_sub : code_add;
- 19743				*patch++ = *insn;
- 19744				if (issrc && isneg && !isimm)
- 19745					*patch++ = BPF_ALU64_IMM(BPF_MUL, off_reg, -1);
- 19746				cnt = patch - insn_buf;
- 19747	
- 19748				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19749				if (!new_prog)
- 19750					return -ENOMEM;
- 19751	
- 19752				delta    += cnt - 1;
- 19753				env->prog = prog = new_prog;
- 19754				insn      = new_prog->insnsi + i + delta;
- 19755				goto next_insn;
- 19756			}
- 19757	
- 19758			if (is_may_goto_insn(insn)) {
- 19759				int stack_off = -stack_depth - 8;
- 19760	
- 19761				stack_depth_extra = 8;
- 19762				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
- 19763				insn_buf[1] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, insn->off + 2);
- 19764				insn_buf[2] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_AX, 1);
- 19765				insn_buf[3] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_AX, stack_off);
- 19766				cnt = 4;
- 19767	
- 19768				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19769				if (!new_prog)
- 19770					return -ENOMEM;
- 19771	
- 19772				delta += cnt - 1;
- 19773				env->prog = prog = new_prog;
- 19774				insn = new_prog->insnsi + i + delta;
- 19775				goto next_insn;
- 19776			}
- 19777	
- 19778			if (insn->code != (BPF_JMP | BPF_CALL))
- 19779				goto next_insn;
- 19780			if (insn->src_reg == BPF_PSEUDO_CALL)
- 19781				goto next_insn;
- 19782			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 19783				ret = fixup_kfunc_call(env, insn, insn_buf, i + delta, &cnt);
- 19784				if (ret)
- 19785					return ret;
- 19786				if (cnt == 0)
- 19787					goto next_insn;
- 19788	
- 19789				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19790				if (!new_prog)
- 19791					return -ENOMEM;
- 19792	
- 19793				delta	 += cnt - 1;
- 19794				env->prog = prog = new_prog;
- 19795				insn	  = new_prog->insnsi + i + delta;
- 19796				goto next_insn;
- 19797			}
- 19798	
- 19799			if (insn->imm == BPF_FUNC_get_route_realm)
- 19800				prog->dst_needed = 1;
- 19801			if (insn->imm == BPF_FUNC_get_prandom_u32)
- 19802				bpf_user_rnd_init_once();
- 19803			if (insn->imm == BPF_FUNC_override_return)
- 19804				prog->kprobe_override = 1;
- 19805			if (insn->imm == BPF_FUNC_tail_call) {
- 19806				/* If we tail call into other programs, we
- 19807				 * cannot make any assumptions since they can
- 19808				 * be replaced dynamically during runtime in
- 19809				 * the program array.
- 19810				 */
- 19811				prog->cb_access = 1;
- 19812				if (!allow_tail_call_in_subprogs(env))
- 19813					prog->aux->stack_depth = MAX_BPF_STACK;
- 19814				prog->aux->max_pkt_offset = MAX_PACKET_OFF;
- 19815	
- 19816				/* mark bpf_tail_call as different opcode to avoid
- 19817				 * conditional branch in the interpreter for every normal
- 19818				 * call and to prevent accidental JITing by JIT compiler
- 19819				 * that doesn't support bpf_tail_call yet
- 19820				 */
- 19821				insn->imm = 0;
- 19822				insn->code = BPF_JMP | BPF_TAIL_CALL;
- 19823	
- 19824				aux = &env->insn_aux_data[i + delta];
- 19825				if (env->bpf_capable && !prog->blinding_requested &&
- 19826				    prog->jit_requested &&
- 19827				    !bpf_map_key_poisoned(aux) &&
- 19828				    !bpf_map_ptr_poisoned(aux) &&
- 19829				    !bpf_map_ptr_unpriv(aux)) {
- 19830					struct bpf_jit_poke_descriptor desc = {
- 19831						.reason = BPF_POKE_REASON_TAIL_CALL,
- 19832						.tail_call.map = BPF_MAP_PTR(aux->map_ptr_state),
- 19833						.tail_call.key = bpf_map_key_immediate(aux),
- 19834						.insn_idx = i + delta,
- 19835					};
- 19836	
- 19837					ret = bpf_jit_add_poke_descriptor(prog, &desc);
- 19838					if (ret < 0) {
- 19839						verbose(env, "adding tail call poke descriptor failed\n");
- 19840						return ret;
- 19841					}
- 19842	
- 19843					insn->imm = ret + 1;
- 19844					goto next_insn;
- 19845				}
- 19846	
- 19847				if (!bpf_map_ptr_unpriv(aux))
- 19848					goto next_insn;
- 19849	
- 19850				/* instead of changing every JIT dealing with tail_call
- 19851				 * emit two extra insns:
- 19852				 * if (index >= max_entries) goto out;
- 19853				 * index &= array->index_mask;
- 19854				 * to avoid out-of-bounds cpu speculation
- 19855				 */
- 19856				if (bpf_map_ptr_poisoned(aux)) {
- 19857					verbose(env, "tail_call abusing map_ptr\n");
- 19858					return -EINVAL;
- 19859				}
- 19860	
- 19861				map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
- 19862				insn_buf[0] = BPF_JMP_IMM(BPF_JGE, BPF_REG_3,
- 19863							  map_ptr->max_entries, 2);
- 19864				insn_buf[1] = BPF_ALU32_IMM(BPF_AND, BPF_REG_3,
- 19865							    container_of(map_ptr,
- 19866									 struct bpf_array,
- 19867									 map)->index_mask);
- 19868				insn_buf[2] = *insn;
- 19869				cnt = 3;
- 19870				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19871				if (!new_prog)
- 19872					return -ENOMEM;
- 19873	
- 19874				delta    += cnt - 1;
- 19875				env->prog = prog = new_prog;
- 19876				insn      = new_prog->insnsi + i + delta;
- 19877				goto next_insn;
- 19878			}
- 19879	
- 19880			if (insn->imm == BPF_FUNC_timer_set_callback) {
- 19881				/* The verifier will process callback_fn as many times as necessary
- 19882				 * with different maps and the register states prepared by
- 19883				 * set_timer_callback_state will be accurate.
- 19884				 *
- 19885				 * The following use case is valid:
- 19886				 *   map1 is shared by prog1, prog2, prog3.
- 19887				 *   prog1 calls bpf_timer_init for some map1 elements
- 19888				 *   prog2 calls bpf_timer_set_callback for some map1 elements.
- 19889				 *     Those that were not bpf_timer_init-ed will return -EINVAL.
- 19890				 *   prog3 calls bpf_timer_start for some map1 elements.
- 19891				 *     Those that were not both bpf_timer_init-ed and
- 19892				 *     bpf_timer_set_callback-ed will return -EINVAL.
- 19893				 */
- 19894				struct bpf_insn ld_addrs[2] = {
- 19895					BPF_LD_IMM64(BPF_REG_3, (long)prog->aux),
- 19896				};
- 19897	
- 19898				insn_buf[0] = ld_addrs[0];
- 19899				insn_buf[1] = ld_addrs[1];
- 19900				insn_buf[2] = *insn;
- 19901				cnt = 3;
- 19902	
- 19903				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19904				if (!new_prog)
- 19905					return -ENOMEM;
- 19906	
- 19907				delta    += cnt - 1;
- 19908				env->prog = prog = new_prog;
- 19909				insn      = new_prog->insnsi + i + delta;
- 19910				goto patch_call_imm;
- 19911			}
- 19912	
- 19913			if (is_storage_get_function(insn->imm)) {
- 19914				if (!in_sleepable(env) ||
- 19915				    env->insn_aux_data[i + delta].storage_get_func_atomic)
- 19916					insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__force __s32)GFP_ATOMIC);
- 19917				else
- 19918					insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__force __s32)GFP_KERNEL);
- 19919				insn_buf[1] = *insn;
- 19920				cnt = 2;
- 19921	
- 19922				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19923				if (!new_prog)
- 19924					return -ENOMEM;
- 19925	
- 19926				delta += cnt - 1;
- 19927				env->prog = prog = new_prog;
- 19928				insn = new_prog->insnsi + i + delta;
- 19929				goto patch_call_imm;
- 19930			}
- 19931	
- 19932			/* bpf_per_cpu_ptr() and bpf_this_cpu_ptr() */
- 19933			if (env->insn_aux_data[i + delta].call_with_percpu_alloc_ptr) {
- 19934				/* patch with 'r1 = *(u64 *)(r1 + 0)' since for percpu data,
- 19935				 * bpf_mem_alloc() returns a ptr to the percpu data ptr.
- 19936				 */
- 19937				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0);
- 19938				insn_buf[1] = *insn;
- 19939				cnt = 2;
- 19940	
- 19941				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 19942				if (!new_prog)
- 19943					return -ENOMEM;
- 19944	
- 19945				delta += cnt - 1;
- 19946				env->prog = prog = new_prog;
- 19947				insn = new_prog->insnsi + i + delta;
- 19948				goto patch_call_imm;
- 19949			}
- 19950	
- 19951			/* BPF_EMIT_CALL() assumptions in some of the map_gen_lookup
- 19952			 * and other inlining handlers are currently limited to 64 bit
- 19953			 * only.
- 19954			 */
- 19955			if (prog->jit_requested && BITS_PER_LONG == 64 &&
- 19956			    (insn->imm == BPF_FUNC_map_lookup_elem ||
- 19957			     insn->imm == BPF_FUNC_map_update_elem ||
- 19958			     insn->imm == BPF_FUNC_map_delete_elem ||
- 19959			     insn->imm == BPF_FUNC_map_push_elem   ||
- 19960			     insn->imm == BPF_FUNC_map_pop_elem    ||
- 19961			     insn->imm == BPF_FUNC_map_peek_elem   ||
- 19962			     insn->imm == BPF_FUNC_redirect_map    ||
- 19963			     insn->imm == BPF_FUNC_for_each_map_elem ||
- 19964			     insn->imm == BPF_FUNC_map_lookup_percpu_elem)) {
- 19965				aux = &env->insn_aux_data[i + delta];
- 19966				if (bpf_map_ptr_poisoned(aux))
- 19967					goto patch_call_imm;
- 19968	
- 19969				map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
- 19970				ops = map_ptr->ops;
- 19971				if (insn->imm == BPF_FUNC_map_lookup_elem &&
- 19972				    ops->map_gen_lookup) {
- 19973					cnt = ops->map_gen_lookup(map_ptr, insn_buf);
- 19974					if (cnt == -EOPNOTSUPP)
- 19975						goto patch_map_ops_generic;
- 19976					if (cnt <= 0 || cnt >= ARRAY_SIZE(insn_buf)) {
- 19977						verbose(env, "bpf verifier is misconfigured\n");
- 19978						return -EINVAL;
- 19979					}
- 19980	
- 19981					new_prog = bpf_patch_insn_data(env, i + delta,
- 19982								       insn_buf, cnt);
- 19983					if (!new_prog)
- 19984						return -ENOMEM;
- 19985	
- 19986					delta    += cnt - 1;
- 19987					env->prog = prog = new_prog;
- 19988					insn      = new_prog->insnsi + i + delta;
- 19989					goto next_insn;
- 19990				}
- 19991	
- 19992				BUILD_BUG_ON(!__same_type(ops->map_lookup_elem,
- 19993					     (void *(*)(struct bpf_map *map, void *key))NULL));
- 19994				BUILD_BUG_ON(!__same_type(ops->map_delete_elem,
- 19995					     (long (*)(struct bpf_map *map, void *key))NULL));
- 19996				BUILD_BUG_ON(!__same_type(ops->map_update_elem,
- 19997					     (long (*)(struct bpf_map *map, void *key, void *value,
- 19998						      u64 flags))NULL));
- 19999				BUILD_BUG_ON(!__same_type(ops->map_push_elem,
- 20000					     (long (*)(struct bpf_map *map, void *value,
- 20001						      u64 flags))NULL));
- 20002				BUILD_BUG_ON(!__same_type(ops->map_pop_elem,
- 20003					     (long (*)(struct bpf_map *map, void *value))NULL));
- 20004				BUILD_BUG_ON(!__same_type(ops->map_peek_elem,
- 20005					     (long (*)(struct bpf_map *map, void *value))NULL));
- 20006				BUILD_BUG_ON(!__same_type(ops->map_redirect,
- 20007					     (long (*)(struct bpf_map *map, u64 index, u64 flags))NULL));
- 20008				BUILD_BUG_ON(!__same_type(ops->map_for_each_callback,
- 20009					     (long (*)(struct bpf_map *map,
- 20010						      bpf_callback_t callback_fn,
- 20011						      void *callback_ctx,
- 20012						      u64 flags))NULL));
- 20013				BUILD_BUG_ON(!__same_type(ops->map_lookup_percpu_elem,
- 20014					     (void *(*)(struct bpf_map *map, void *key, u32 cpu))NULL));
- 20015	
- 20016	patch_map_ops_generic:
- 20017				switch (insn->imm) {
- 20018				case BPF_FUNC_map_lookup_elem:
- 20019					insn->imm = BPF_CALL_IMM(ops->map_lookup_elem);
- 20020					goto next_insn;
- 20021				case BPF_FUNC_map_update_elem:
- 20022					insn->imm = BPF_CALL_IMM(ops->map_update_elem);
- 20023					goto next_insn;
- 20024				case BPF_FUNC_map_delete_elem:
- 20025					insn->imm = BPF_CALL_IMM(ops->map_delete_elem);
- 20026					goto next_insn;
- 20027				case BPF_FUNC_map_push_elem:
- 20028					insn->imm = BPF_CALL_IMM(ops->map_push_elem);
- 20029					goto next_insn;
- 20030				case BPF_FUNC_map_pop_elem:
- 20031					insn->imm = BPF_CALL_IMM(ops->map_pop_elem);
- 20032					goto next_insn;
- 20033				case BPF_FUNC_map_peek_elem:
- 20034					insn->imm = BPF_CALL_IMM(ops->map_peek_elem);
- 20035					goto next_insn;
- 20036				case BPF_FUNC_redirect_map:
- 20037					insn->imm = BPF_CALL_IMM(ops->map_redirect);
- 20038					goto next_insn;
- 20039				case BPF_FUNC_for_each_map_elem:
- 20040					insn->imm = BPF_CALL_IMM(ops->map_for_each_callback);
- 20041					goto next_insn;
- 20042				case BPF_FUNC_map_lookup_percpu_elem:
- 20043					insn->imm = BPF_CALL_IMM(ops->map_lookup_percpu_elem);
- 20044					goto next_insn;
- 20045				}
- 20046	
- 20047				goto patch_call_imm;
- 20048			}
- 20049	
- 20050			/* Implement bpf_jiffies64 inline. */
- 20051			if (prog->jit_requested && BITS_PER_LONG == 64 &&
- 20052			    insn->imm == BPF_FUNC_jiffies64) {
- 20053				struct bpf_insn ld_jiffies_addr[2] = {
- 20054					BPF_LD_IMM64(BPF_REG_0,
- 20055						     (unsigned long)&jiffies),
- 20056				};
- 20057	
- 20058				insn_buf[0] = ld_jiffies_addr[0];
- 20059				insn_buf[1] = ld_jiffies_addr[1];
- 20060				insn_buf[2] = BPF_LDX_MEM(BPF_DW, BPF_REG_0,
- 20061							  BPF_REG_0, 0);
- 20062				cnt = 3;
- 20063	
- 20064				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
- 20065							       cnt);
- 20066				if (!new_prog)
- 20067					return -ENOMEM;
- 20068	
- 20069				delta    += cnt - 1;
- 20070				env->prog = prog = new_prog;
- 20071				insn      = new_prog->insnsi + i + delta;
- 20072				goto next_insn;
- 20073			}
- 20074	
- 20075			/* Implement bpf_get_smp_processor_id() inline. */
- 20076			if (insn->imm == BPF_FUNC_get_smp_processor_id &&
- 20077			    prog->jit_requested && bpf_jit_supports_percpu_insns()) {
- 20078				insn_buf[0] = BPF_MOV32_IMM(BPF_REG_0, (u32)(long)&pcpu_hot.cpu_number);
- 20079				insn_buf[1] = BPF_LDX_MEM_PERCPU(BPF_W, BPF_REG_0, BPF_REG_0, 0);
- 20080				cnt = 2;
- 20081	
- 20082				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 20083				if (!new_prog)
- 20084					return -ENOMEM;
- 20085	
- 20086				delta    += cnt - 1;
- 20087				env->prog = prog = new_prog;
- 20088				insn      = new_prog->insnsi + i + delta;
- 20089				goto next_insn;
- 20090			}
- 20091	
- 20092			/* Implement bpf_get_func_arg inline. */
- 20093			if (prog_type == BPF_PROG_TYPE_TRACING &&
- 20094			    insn->imm == BPF_FUNC_get_func_arg) {
- 20095				/* Load nr_args from ctx - 8 */
- 20096				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
- 20097				insn_buf[1] = BPF_JMP32_REG(BPF_JGE, BPF_REG_2, BPF_REG_0, 6);
- 20098				insn_buf[2] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 3);
- 20099				insn_buf[3] = BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_1);
- 20100				insn_buf[4] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, 0);
- 20101				insn_buf[5] = BPF_STX_MEM(BPF_DW, BPF_REG_3, BPF_REG_0, 0);
- 20102				insn_buf[6] = BPF_MOV64_IMM(BPF_REG_0, 0);
- 20103				insn_buf[7] = BPF_JMP_A(1);
- 20104				insn_buf[8] = BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
- 20105				cnt = 9;
- 20106	
- 20107				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 20108				if (!new_prog)
- 20109					return -ENOMEM;
- 20110	
- 20111				delta    += cnt - 1;
- 20112				env->prog = prog = new_prog;
- 20113				insn      = new_prog->insnsi + i + delta;
- 20114				goto next_insn;
- 20115			}
- 20116	
- 20117			/* Implement bpf_get_func_ret inline. */
- 20118			if (prog_type == BPF_PROG_TYPE_TRACING &&
- 20119			    insn->imm == BPF_FUNC_get_func_ret) {
- 20120				if (eatype == BPF_TRACE_FEXIT ||
- 20121				    eatype == BPF_MODIFY_RETURN) {
- 20122					/* Load nr_args from ctx - 8 */
- 20123					insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
- 20124					insn_buf[1] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 3);
- 20125					insn_buf[2] = BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1);
- 20126					insn_buf[3] = BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_0, 0);
- 20127					insn_buf[4] = BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_3, 0);
- 20128					insn_buf[5] = BPF_MOV64_IMM(BPF_REG_0, 0);
- 20129					cnt = 6;
- 20130				} else {
- 20131					insn_buf[0] = BPF_MOV64_IMM(BPF_REG_0, -EOPNOTSUPP);
- 20132					cnt = 1;
- 20133				}
- 20134	
- 20135				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 20136				if (!new_prog)
- 20137					return -ENOMEM;
- 20138	
- 20139				delta    += cnt - 1;
- 20140				env->prog = prog = new_prog;
- 20141				insn      = new_prog->insnsi + i + delta;
- 20142				goto next_insn;
- 20143			}
- 20144	
- 20145			/* Implement get_func_arg_cnt inline. */
- 20146			if (prog_type == BPF_PROG_TYPE_TRACING &&
- 20147			    insn->imm == BPF_FUNC_get_func_arg_cnt) {
- 20148				/* Load nr_args from ctx - 8 */
- 20149				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
- 20150	
- 20151				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
- 20152				if (!new_prog)
- 20153					return -ENOMEM;
- 20154	
- 20155				env->prog = prog = new_prog;
- 20156				insn      = new_prog->insnsi + i + delta;
- 20157				goto next_insn;
- 20158			}
- 20159	
- 20160			/* Implement bpf_get_func_ip inline. */
- 20161			if (prog_type == BPF_PROG_TYPE_TRACING &&
- 20162			    insn->imm == BPF_FUNC_get_func_ip) {
- 20163				/* Load IP address from ctx - 16 */
- 20164				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -16);
- 20165	
- 20166				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
- 20167				if (!new_prog)
- 20168					return -ENOMEM;
- 20169	
- 20170				env->prog = prog = new_prog;
- 20171				insn      = new_prog->insnsi + i + delta;
- 20172				goto next_insn;
- 20173			}
- 20174	
- 20175			/* Implement bpf_kptr_xchg inline */
- 20176			if (prog->jit_requested && BITS_PER_LONG == 64 &&
- 20177			    insn->imm == BPF_FUNC_kptr_xchg &&
- 20178			    bpf_jit_supports_ptr_xchg()) {
- 20179				insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_2);
- 20180				insn_buf[1] = BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_REG_0, 0);
- 20181				cnt = 2;
- 20182	
- 20183				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 20184				if (!new_prog)
- 20185					return -ENOMEM;
- 20186	
- 20187				delta    += cnt - 1;
- 20188				env->prog = prog = new_prog;
- 20189				insn      = new_prog->insnsi + i + delta;
- 20190				goto next_insn;
- 20191			}
- 20192	patch_call_imm:
- 20193			fn = env->ops->get_func_proto(insn->imm, env->prog);
- 20194			/* all functions that have prototype and verifier allowed
- 20195			 * programs to call them, must be real in-kernel functions
- 20196			 */
- 20197			if (!fn->func) {
- 20198				verbose(env,
- 20199					"kernel subsystem misconfigured func %s#%d\n",
- 20200					func_id_name(insn->imm), insn->imm);
- 20201				return -EFAULT;
- 20202			}
- 20203			insn->imm = fn->func - __bpf_call_base;
- 20204	next_insn:
- 20205			if (subprogs[cur_subprog + 1].start == i + delta + 1) {
- 20206				subprogs[cur_subprog].stack_depth += stack_depth_extra;
- 20207				subprogs[cur_subprog].stack_extra = stack_depth_extra;
- 20208				cur_subprog++;
- 20209				stack_depth = subprogs[cur_subprog].stack_depth;
- 20210				stack_depth_extra = 0;
- 20211			}
- 20212			i++;
- 20213			insn++;
- 20214		}
- 20215	
- 20216		env->prog->aux->stack_depth = subprogs[0].stack_depth;
- 20217		for (i = 0; i < env->subprog_cnt; i++) {
- 20218			int subprog_start = subprogs[i].start;
- 20219			int stack_slots = subprogs[i].stack_extra / 8;
- 20220	
- 20221			if (!stack_slots)
- 20222				continue;
- 20223			if (stack_slots > 1) {
- 20224				verbose(env, "verifier bug: stack_slots supports may_goto only\n");
- 20225				return -EFAULT;
- 20226			}
- 20227	
- 20228			/* Add ST insn to subprog prologue to init extra stack */
- 20229			insn_buf[0] = BPF_ST_MEM(BPF_DW, BPF_REG_FP,
- 20230						 -subprogs[i].stack_depth, BPF_MAX_LOOPS);
- 20231			/* Copy first actual insn to preserve it */
- 20232			insn_buf[1] = env->prog->insnsi[subprog_start];
- 20233	
- 20234			new_prog = bpf_patch_insn_data(env, subprog_start, insn_buf, 2);
- 20235			if (!new_prog)
- 20236				return -ENOMEM;
- 20237			env->prog = prog = new_prog;
- 20238		}
- 20239	
- 20240		/* Since poke tab is now finalized, publish aux to tracker. */
- 20241		for (i = 0; i < prog->aux->size_poke_tab; i++) {
- 20242			map_ptr = prog->aux->poke_tab[i].tail_call.map;
- 20243			if (!map_ptr->ops->map_poke_track ||
- 20244			    !map_ptr->ops->map_poke_untrack ||
- 20245			    !map_ptr->ops->map_poke_run) {
- 20246				verbose(env, "bpf verifier is misconfigured\n");
- 20247				return -EINVAL;
- 20248			}
- 20249	
- 20250			ret = map_ptr->ops->map_poke_track(map_ptr, prog->aux);
- 20251			if (ret < 0) {
- 20252				verbose(env, "tracking tail call prog failed\n");
- 20253				return ret;
- 20254			}
- 20255		}
- 20256	
- 20257		sort_kfunc_descs_by_imm_off(env->prog);
- 20258	
- 20259		return 0;
- 20260	}
- 20261	
+  1264	
+  1265	/* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
+  1266	#define RESTORE_TAIL_CALL_CNT(stack)				\
+  1267		EMIT3_off32(0x48, 0x8B, 0x85, -round_up(stack, 8) - 8)
+  1268	
+  1269	static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image,
+  1270			  int oldproglen, struct jit_context *ctx, bool jmp_padding)
+  1271	{
+  1272		bool tail_call_reachable = bpf_prog->aux->tail_call_reachable;
+  1273		struct bpf_insn *insn = bpf_prog->insnsi;
+  1274		bool callee_regs_used[4] = {};
+  1275		int insn_cnt = bpf_prog->len;
+  1276		bool tail_call_seen = false;
+  1277		bool seen_exit = false;
+  1278		u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
+  1279		u64 arena_vm_start, user_vm_start;
+  1280		int i, excnt = 0;
+  1281		int ilen, proglen = 0;
+  1282		u8 *prog = temp;
+  1283		int err;
+  1284	
+  1285		arena_vm_start = bpf_arena_get_kern_vm_start(bpf_prog->aux->arena);
+  1286		user_vm_start = bpf_arena_get_user_vm_start(bpf_prog->aux->arena);
+  1287	
+  1288		detect_reg_usage(insn, insn_cnt, callee_regs_used,
+  1289				 &tail_call_seen);
+  1290	
+  1291		/* tail call's presence in current prog implies it is reachable */
+  1292		tail_call_reachable |= tail_call_seen;
+  1293	
+  1294		emit_prologue(&prog, bpf_prog->aux->stack_depth,
+  1295			      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
+  1296			      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
+  1297		/* Exception callback will clobber callee regs for its own use, and
+  1298		 * restore the original callee regs from main prog's stack frame.
+  1299		 */
+  1300		if (bpf_prog->aux->exception_boundary) {
+  1301			/* We also need to save r12, which is not mapped to any BPF
+  1302			 * register, as we throw after entry into the kernel, which may
+  1303			 * overwrite r12.
+  1304			 */
+  1305			push_r12(&prog);
+  1306			push_callee_regs(&prog, all_callee_regs_used);
+  1307		} else {
+  1308			if (arena_vm_start)
+  1309				push_r12(&prog);
+  1310			push_callee_regs(&prog, callee_regs_used);
+  1311		}
+  1312		if (arena_vm_start)
+  1313			emit_mov_imm64(&prog, X86_REG_R12,
+  1314				       arena_vm_start >> 32, (u32) arena_vm_start);
+  1315	
+  1316		ilen = prog - temp;
+  1317		if (rw_image)
+  1318			memcpy(rw_image + proglen, temp, ilen);
+  1319		proglen += ilen;
+  1320		addrs[0] = proglen;
+  1321		prog = temp;
+  1322	
+  1323		for (i = 1; i <= insn_cnt; i++, insn++) {
+  1324			const s32 imm32 = insn->imm;
+  1325			u32 dst_reg = insn->dst_reg;
+  1326			u32 src_reg = insn->src_reg;
+  1327			u8 b2 = 0, b3 = 0;
+  1328			u8 *start_of_ldx;
+  1329			s64 jmp_offset;
+  1330			s16 insn_off;
+  1331			u8 jmp_cond;
+  1332			u8 *func;
+  1333			int nops;
+  1334	
+  1335			switch (insn->code) {
+  1336				/* ALU */
+  1337			case BPF_ALU | BPF_ADD | BPF_X:
+  1338			case BPF_ALU | BPF_SUB | BPF_X:
+  1339			case BPF_ALU | BPF_AND | BPF_X:
+  1340			case BPF_ALU | BPF_OR | BPF_X:
+  1341			case BPF_ALU | BPF_XOR | BPF_X:
+  1342			case BPF_ALU64 | BPF_ADD | BPF_X:
+  1343			case BPF_ALU64 | BPF_SUB | BPF_X:
+  1344			case BPF_ALU64 | BPF_AND | BPF_X:
+  1345			case BPF_ALU64 | BPF_OR | BPF_X:
+  1346			case BPF_ALU64 | BPF_XOR | BPF_X:
+  1347				maybe_emit_mod(&prog, dst_reg, src_reg,
+  1348					       BPF_CLASS(insn->code) == BPF_ALU64);
+  1349				b2 = simple_alu_opcodes[BPF_OP(insn->code)];
+  1350				EMIT2(b2, add_2reg(0xC0, dst_reg, src_reg));
+  1351				break;
+  1352	
+  1353			case BPF_ALU64 | BPF_MOV | BPF_X:
+  1354				if (insn_is_cast_user(insn)) {
+  1355					if (dst_reg != src_reg)
+  1356						/* 32-bit mov */
+  1357						emit_mov_reg(&prog, false, dst_reg, src_reg);
+  1358					/* shl dst_reg, 32 */
+  1359					maybe_emit_1mod(&prog, dst_reg, true);
+  1360					EMIT3(0xC1, add_1reg(0xE0, dst_reg), 32);
+  1361	
+  1362					/* or dst_reg, user_vm_start */
+  1363					maybe_emit_1mod(&prog, dst_reg, true);
+  1364					if (is_axreg(dst_reg))
+  1365						EMIT1_off32(0x0D,  user_vm_start >> 32);
+  1366					else
+  1367						EMIT2_off32(0x81, add_1reg(0xC8, dst_reg),  user_vm_start >> 32);
+  1368	
+  1369					/* rol dst_reg, 32 */
+  1370					maybe_emit_1mod(&prog, dst_reg, true);
+  1371					EMIT3(0xC1, add_1reg(0xC0, dst_reg), 32);
+  1372	
+  1373					/* xor r11, r11 */
+  1374					EMIT3(0x4D, 0x31, 0xDB);
+  1375	
+  1376					/* test dst_reg32, dst_reg32; check if lower 32-bit are zero */
+  1377					maybe_emit_mod(&prog, dst_reg, dst_reg, false);
+  1378					EMIT2(0x85, add_2reg(0xC0, dst_reg, dst_reg));
+  1379	
+  1380					/* cmove r11, dst_reg; if so, set dst_reg to zero */
+  1381					/* WARNING: Intel swapped src/dst register encoding in CMOVcc !!! */
+  1382					maybe_emit_mod(&prog, AUX_REG, dst_reg, true);
+  1383					EMIT3(0x0F, 0x44, add_2reg(0xC0, AUX_REG, dst_reg));
+  1384					break;
+  1385				}
+  1386				fallthrough;
+  1387			case BPF_ALU | BPF_MOV | BPF_X:
+  1388				if (insn->off == 0)
+  1389					emit_mov_reg(&prog,
+  1390						     BPF_CLASS(insn->code) == BPF_ALU64,
+  1391						     dst_reg, src_reg);
+  1392				else
+  1393					emit_movsx_reg(&prog, insn->off,
+  1394						       BPF_CLASS(insn->code) == BPF_ALU64,
+  1395						       dst_reg, src_reg);
+  1396				break;
+  1397	
+  1398				/* neg dst */
+  1399			case BPF_ALU | BPF_NEG:
+  1400			case BPF_ALU64 | BPF_NEG:
+  1401				maybe_emit_1mod(&prog, dst_reg,
+  1402						BPF_CLASS(insn->code) == BPF_ALU64);
+  1403				EMIT2(0xF7, add_1reg(0xD8, dst_reg));
+  1404				break;
+  1405	
+  1406			case BPF_ALU | BPF_ADD | BPF_K:
+  1407			case BPF_ALU | BPF_SUB | BPF_K:
+  1408			case BPF_ALU | BPF_AND | BPF_K:
+  1409			case BPF_ALU | BPF_OR | BPF_K:
+  1410			case BPF_ALU | BPF_XOR | BPF_K:
+  1411			case BPF_ALU64 | BPF_ADD | BPF_K:
+  1412			case BPF_ALU64 | BPF_SUB | BPF_K:
+  1413			case BPF_ALU64 | BPF_AND | BPF_K:
+  1414			case BPF_ALU64 | BPF_OR | BPF_K:
+  1415			case BPF_ALU64 | BPF_XOR | BPF_K:
+  1416				maybe_emit_1mod(&prog, dst_reg,
+  1417						BPF_CLASS(insn->code) == BPF_ALU64);
+  1418	
+  1419				/*
+  1420				 * b3 holds 'normal' opcode, b2 short form only valid
+  1421				 * in case dst is eax/rax.
+  1422				 */
+  1423				switch (BPF_OP(insn->code)) {
+  1424				case BPF_ADD:
+  1425					b3 = 0xC0;
+  1426					b2 = 0x05;
+  1427					break;
+  1428				case BPF_SUB:
+  1429					b3 = 0xE8;
+  1430					b2 = 0x2D;
+  1431					break;
+  1432				case BPF_AND:
+  1433					b3 = 0xE0;
+  1434					b2 = 0x25;
+  1435					break;
+  1436				case BPF_OR:
+  1437					b3 = 0xC8;
+  1438					b2 = 0x0D;
+  1439					break;
+  1440				case BPF_XOR:
+  1441					b3 = 0xF0;
+  1442					b2 = 0x35;
+  1443					break;
+  1444				}
+  1445	
+  1446				if (is_imm8(imm32))
+  1447					EMIT3(0x83, add_1reg(b3, dst_reg), imm32);
+  1448				else if (is_axreg(dst_reg))
+  1449					EMIT1_off32(b2, imm32);
+  1450				else
+  1451					EMIT2_off32(0x81, add_1reg(b3, dst_reg), imm32);
+  1452				break;
+  1453	
+  1454			case BPF_ALU64 | BPF_MOV | BPF_K:
+  1455			case BPF_ALU | BPF_MOV | BPF_K:
+  1456				emit_mov_imm32(&prog, BPF_CLASS(insn->code) == BPF_ALU64,
+  1457					       dst_reg, imm32);
+  1458				break;
+  1459	
+  1460			case BPF_LD | BPF_IMM | BPF_DW:
+  1461				emit_mov_imm64(&prog, dst_reg, insn[1].imm, insn[0].imm);
+  1462				insn++;
+  1463				i++;
+  1464				break;
+  1465	
+  1466				/* dst %= src, dst /= src, dst %= imm32, dst /= imm32 */
+  1467			case BPF_ALU | BPF_MOD | BPF_X:
+  1468			case BPF_ALU | BPF_DIV | BPF_X:
+  1469			case BPF_ALU | BPF_MOD | BPF_K:
+  1470			case BPF_ALU | BPF_DIV | BPF_K:
+  1471			case BPF_ALU64 | BPF_MOD | BPF_X:
+  1472			case BPF_ALU64 | BPF_DIV | BPF_X:
+  1473			case BPF_ALU64 | BPF_MOD | BPF_K:
+  1474			case BPF_ALU64 | BPF_DIV | BPF_K: {
+  1475				bool is64 = BPF_CLASS(insn->code) == BPF_ALU64;
+  1476	
+  1477				if (dst_reg != BPF_REG_0)
+  1478					EMIT1(0x50); /* push rax */
+  1479				if (dst_reg != BPF_REG_3)
+  1480					EMIT1(0x52); /* push rdx */
+  1481	
+  1482				if (BPF_SRC(insn->code) == BPF_X) {
+  1483					if (src_reg == BPF_REG_0 ||
+  1484					    src_reg == BPF_REG_3) {
+  1485						/* mov r11, src_reg */
+  1486						EMIT_mov(AUX_REG, src_reg);
+  1487						src_reg = AUX_REG;
+  1488					}
+  1489				} else {
+  1490					/* mov r11, imm32 */
+  1491					EMIT3_off32(0x49, 0xC7, 0xC3, imm32);
+  1492					src_reg = AUX_REG;
+  1493				}
+  1494	
+  1495				if (dst_reg != BPF_REG_0)
+  1496					/* mov rax, dst_reg */
+  1497					emit_mov_reg(&prog, is64, BPF_REG_0, dst_reg);
+  1498	
+  1499				if (insn->off == 0) {
+  1500					/*
+  1501					 * xor edx, edx
+  1502					 * equivalent to 'xor rdx, rdx', but one byte less
+  1503					 */
+  1504					EMIT2(0x31, 0xd2);
+  1505	
+  1506					/* div src_reg */
+  1507					maybe_emit_1mod(&prog, src_reg, is64);
+  1508					EMIT2(0xF7, add_1reg(0xF0, src_reg));
+  1509				} else {
+  1510					if (BPF_CLASS(insn->code) == BPF_ALU)
+  1511						EMIT1(0x99); /* cdq */
+  1512					else
+  1513						EMIT2(0x48, 0x99); /* cqo */
+  1514	
+  1515					/* idiv src_reg */
+  1516					maybe_emit_1mod(&prog, src_reg, is64);
+  1517					EMIT2(0xF7, add_1reg(0xF8, src_reg));
+  1518				}
+  1519	
+  1520				if (BPF_OP(insn->code) == BPF_MOD &&
+  1521				    dst_reg != BPF_REG_3)
+  1522					/* mov dst_reg, rdx */
+  1523					emit_mov_reg(&prog, is64, dst_reg, BPF_REG_3);
+  1524				else if (BPF_OP(insn->code) == BPF_DIV &&
+  1525					 dst_reg != BPF_REG_0)
+  1526					/* mov dst_reg, rax */
+  1527					emit_mov_reg(&prog, is64, dst_reg, BPF_REG_0);
+  1528	
+  1529				if (dst_reg != BPF_REG_3)
+  1530					EMIT1(0x5A); /* pop rdx */
+  1531				if (dst_reg != BPF_REG_0)
+  1532					EMIT1(0x58); /* pop rax */
+  1533				break;
+  1534			}
+  1535	
+  1536			case BPF_ALU | BPF_MUL | BPF_K:
+  1537			case BPF_ALU64 | BPF_MUL | BPF_K:
+  1538				maybe_emit_mod(&prog, dst_reg, dst_reg,
+  1539					       BPF_CLASS(insn->code) == BPF_ALU64);
+  1540	
+  1541				if (is_imm8(imm32))
+  1542					/* imul dst_reg, dst_reg, imm8 */
+  1543					EMIT3(0x6B, add_2reg(0xC0, dst_reg, dst_reg),
+  1544					      imm32);
+  1545				else
+  1546					/* imul dst_reg, dst_reg, imm32 */
+  1547					EMIT2_off32(0x69,
+  1548						    add_2reg(0xC0, dst_reg, dst_reg),
+  1549						    imm32);
+  1550				break;
+  1551	
+  1552			case BPF_ALU | BPF_MUL | BPF_X:
+  1553			case BPF_ALU64 | BPF_MUL | BPF_X:
+  1554				maybe_emit_mod(&prog, src_reg, dst_reg,
+  1555					       BPF_CLASS(insn->code) == BPF_ALU64);
+  1556	
+  1557				/* imul dst_reg, src_reg */
+  1558				EMIT3(0x0F, 0xAF, add_2reg(0xC0, src_reg, dst_reg));
+  1559				break;
+  1560	
+  1561				/* Shifts */
+  1562			case BPF_ALU | BPF_LSH | BPF_K:
+  1563			case BPF_ALU | BPF_RSH | BPF_K:
+  1564			case BPF_ALU | BPF_ARSH | BPF_K:
+  1565			case BPF_ALU64 | BPF_LSH | BPF_K:
+  1566			case BPF_ALU64 | BPF_RSH | BPF_K:
+  1567			case BPF_ALU64 | BPF_ARSH | BPF_K:
+  1568				maybe_emit_1mod(&prog, dst_reg,
+  1569						BPF_CLASS(insn->code) == BPF_ALU64);
+  1570	
+  1571				b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+  1572				if (imm32 == 1)
+  1573					EMIT2(0xD1, add_1reg(b3, dst_reg));
+  1574				else
+  1575					EMIT3(0xC1, add_1reg(b3, dst_reg), imm32);
+  1576				break;
+  1577	
+  1578			case BPF_ALU | BPF_LSH | BPF_X:
+  1579			case BPF_ALU | BPF_RSH | BPF_X:
+  1580			case BPF_ALU | BPF_ARSH | BPF_X:
+  1581			case BPF_ALU64 | BPF_LSH | BPF_X:
+  1582			case BPF_ALU64 | BPF_RSH | BPF_X:
+  1583			case BPF_ALU64 | BPF_ARSH | BPF_X:
+  1584				/* BMI2 shifts aren't better when shift count is already in rcx */
+  1585				if (boot_cpu_has(X86_FEATURE_BMI2) && src_reg != BPF_REG_4) {
+  1586					/* shrx/sarx/shlx dst_reg, dst_reg, src_reg */
+  1587					bool w = (BPF_CLASS(insn->code) == BPF_ALU64);
+  1588					u8 op;
+  1589	
+  1590					switch (BPF_OP(insn->code)) {
+  1591					case BPF_LSH:
+  1592						op = 1; /* prefix 0x66 */
+  1593						break;
+  1594					case BPF_RSH:
+  1595						op = 3; /* prefix 0xf2 */
+  1596						break;
+  1597					case BPF_ARSH:
+  1598						op = 2; /* prefix 0xf3 */
+  1599						break;
+  1600					}
+  1601	
+  1602					emit_shiftx(&prog, dst_reg, src_reg, w, op);
+  1603	
+  1604					break;
+  1605				}
+  1606	
+  1607				if (src_reg != BPF_REG_4) { /* common case */
+  1608					/* Check for bad case when dst_reg == rcx */
+  1609					if (dst_reg == BPF_REG_4) {
+  1610						/* mov r11, dst_reg */
+  1611						EMIT_mov(AUX_REG, dst_reg);
+  1612						dst_reg = AUX_REG;
+  1613					} else {
+  1614						EMIT1(0x51); /* push rcx */
+  1615					}
+  1616					/* mov rcx, src_reg */
+  1617					EMIT_mov(BPF_REG_4, src_reg);
+  1618				}
+  1619	
+  1620				/* shl %rax, %cl | shr %rax, %cl | sar %rax, %cl */
+  1621				maybe_emit_1mod(&prog, dst_reg,
+  1622						BPF_CLASS(insn->code) == BPF_ALU64);
+  1623	
+  1624				b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+  1625				EMIT2(0xD3, add_1reg(b3, dst_reg));
+  1626	
+  1627				if (src_reg != BPF_REG_4) {
+  1628					if (insn->dst_reg == BPF_REG_4)
+  1629						/* mov dst_reg, r11 */
+  1630						EMIT_mov(insn->dst_reg, AUX_REG);
+  1631					else
+  1632						EMIT1(0x59); /* pop rcx */
+  1633				}
+  1634	
+  1635				break;
+  1636	
+  1637			case BPF_ALU | BPF_END | BPF_FROM_BE:
+  1638			case BPF_ALU64 | BPF_END | BPF_FROM_LE:
+  1639				switch (imm32) {
+  1640				case 16:
+  1641					/* Emit 'ror %ax, 8' to swap lower 2 bytes */
+  1642					EMIT1(0x66);
+  1643					if (is_ereg(dst_reg))
+  1644						EMIT1(0x41);
+  1645					EMIT3(0xC1, add_1reg(0xC8, dst_reg), 8);
+  1646	
+  1647					/* Emit 'movzwl eax, ax' */
+  1648					if (is_ereg(dst_reg))
+  1649						EMIT3(0x45, 0x0F, 0xB7);
+  1650					else
+  1651						EMIT2(0x0F, 0xB7);
+  1652					EMIT1(add_2reg(0xC0, dst_reg, dst_reg));
+  1653					break;
+  1654				case 32:
+  1655					/* Emit 'bswap eax' to swap lower 4 bytes */
+  1656					if (is_ereg(dst_reg))
+  1657						EMIT2(0x41, 0x0F);
+  1658					else
+  1659						EMIT1(0x0F);
+  1660					EMIT1(add_1reg(0xC8, dst_reg));
+  1661					break;
+  1662				case 64:
+  1663					/* Emit 'bswap rax' to swap 8 bytes */
+  1664					EMIT3(add_1mod(0x48, dst_reg), 0x0F,
+  1665					      add_1reg(0xC8, dst_reg));
+  1666					break;
+  1667				}
+  1668				break;
+  1669	
+  1670			case BPF_ALU | BPF_END | BPF_FROM_LE:
+  1671				switch (imm32) {
+  1672				case 16:
+  1673					/*
+  1674					 * Emit 'movzwl eax, ax' to zero extend 16-bit
+  1675					 * into 64 bit
+  1676					 */
+  1677					if (is_ereg(dst_reg))
+  1678						EMIT3(0x45, 0x0F, 0xB7);
+  1679					else
+  1680						EMIT2(0x0F, 0xB7);
+  1681					EMIT1(add_2reg(0xC0, dst_reg, dst_reg));
+  1682					break;
+  1683				case 32:
+  1684					/* Emit 'mov eax, eax' to clear upper 32-bits */
+  1685					if (is_ereg(dst_reg))
+  1686						EMIT1(0x45);
+  1687					EMIT2(0x89, add_2reg(0xC0, dst_reg, dst_reg));
+  1688					break;
+  1689				case 64:
+  1690					/* nop */
+  1691					break;
+  1692				}
+  1693				break;
+  1694	
+  1695				/* speculation barrier */
+  1696			case BPF_ST | BPF_NOSPEC:
+  1697				EMIT_LFENCE();
+  1698				break;
+  1699	
+  1700				/* ST: *(u8*)(dst_reg + off) = imm */
+  1701			case BPF_ST | BPF_MEM | BPF_B:
+  1702				if (is_ereg(dst_reg))
+  1703					EMIT2(0x41, 0xC6);
+  1704				else
+  1705					EMIT1(0xC6);
+  1706				goto st;
+  1707			case BPF_ST | BPF_MEM | BPF_H:
+  1708				if (is_ereg(dst_reg))
+  1709					EMIT3(0x66, 0x41, 0xC7);
+  1710				else
+  1711					EMIT2(0x66, 0xC7);
+  1712				goto st;
+  1713			case BPF_ST | BPF_MEM | BPF_W:
+  1714				if (is_ereg(dst_reg))
+  1715					EMIT2(0x41, 0xC7);
+  1716				else
+  1717					EMIT1(0xC7);
+  1718				goto st;
+  1719			case BPF_ST | BPF_MEM | BPF_DW:
+  1720				EMIT2(add_1mod(0x48, dst_reg), 0xC7);
+  1721	
+  1722	st:			if (is_imm8(insn->off))
+  1723					EMIT2(add_1reg(0x40, dst_reg), insn->off);
+  1724				else
+  1725					EMIT1_off32(add_1reg(0x80, dst_reg), insn->off);
+  1726	
+  1727				EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
+  1728				break;
+  1729	
+  1730				/* STX: *(u8*)(dst_reg + off) = src_reg */
+  1731			case BPF_STX | BPF_MEM | BPF_B:
+  1732			case BPF_STX | BPF_MEM | BPF_H:
+  1733			case BPF_STX | BPF_MEM | BPF_W:
+  1734			case BPF_STX | BPF_MEM | BPF_DW:
+  1735				emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
+  1736				break;
+  1737	
+  1738			case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+  1739			case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+  1740			case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
+  1741			case BPF_ST | BPF_PROBE_MEM32 | BPF_DW:
+  1742				start_of_ldx = prog;
+  1743				emit_st_r12(&prog, BPF_SIZE(insn->code), dst_reg, insn->off, insn->imm);
+  1744				goto populate_extable;
+  1745	
+  1746				/* LDX: dst_reg = *(u8*)(src_reg + r12 + off) */
+  1747			case BPF_LDX | BPF_PROBE_MEM32 | BPF_B:
+  1748			case BPF_LDX | BPF_PROBE_MEM32 | BPF_H:
+  1749			case BPF_LDX | BPF_PROBE_MEM32 | BPF_W:
+  1750			case BPF_LDX | BPF_PROBE_MEM32 | BPF_DW:
+  1751			case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
+  1752			case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
+  1753			case BPF_STX | BPF_PROBE_MEM32 | BPF_W:
+  1754			case BPF_STX | BPF_PROBE_MEM32 | BPF_DW:
+  1755				start_of_ldx = prog;
+  1756				if (BPF_CLASS(insn->code) == BPF_LDX)
+  1757					emit_ldx_r12(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
+  1758				else
+  1759					emit_stx_r12(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
+  1760	populate_extable:
+  1761				{
+  1762					struct exception_table_entry *ex;
+  1763					u8 *_insn = image + proglen + (start_of_ldx - temp);
+  1764					s64 delta;
+  1765	
+  1766					if (!bpf_prog->aux->extable)
+  1767						break;
+  1768	
+  1769					if (excnt >= bpf_prog->aux->num_exentries) {
+  1770						pr_err("mem32 extable bug\n");
+  1771						return -EFAULT;
+  1772					}
+  1773					ex = &bpf_prog->aux->extable[excnt++];
+  1774	
+  1775					delta = _insn - (u8 *)&ex->insn;
+  1776					/* switch ex to rw buffer for writes */
+  1777					ex = (void *)rw_image + ((void *)ex - (void *)image);
+  1778	
+  1779					ex->insn = delta;
+  1780	
+  1781					ex->data = EX_TYPE_BPF;
+  1782	
+  1783					ex->fixup = (prog - start_of_ldx) |
+  1784						((BPF_CLASS(insn->code) == BPF_LDX ? reg2pt_regs[dst_reg] : DONT_CLEAR) << 8);
+  1785				}
+  1786				break;
+  1787	
+  1788				/* LDX: dst_reg = *(u8*)(src_reg + off) */
+  1789			case BPF_LDX | BPF_MEM | BPF_B:
+  1790			case BPF_LDX | BPF_PROBE_MEM | BPF_B:
+  1791			case BPF_LDX | BPF_MEM | BPF_H:
+  1792			case BPF_LDX | BPF_PROBE_MEM | BPF_H:
+  1793			case BPF_LDX | BPF_MEM | BPF_W:
+  1794			case BPF_LDX | BPF_PROBE_MEM | BPF_W:
+  1795			case BPF_LDX | BPF_MEM | BPF_DW:
+  1796			case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
+  1797				/* LDXS: dst_reg = *(s8*)(src_reg + off) */
+  1798			case BPF_LDX | BPF_MEMSX | BPF_B:
+  1799			case BPF_LDX | BPF_MEMSX | BPF_H:
+  1800			case BPF_LDX | BPF_MEMSX | BPF_W:
+  1801			case BPF_LDX | BPF_PROBE_MEMSX | BPF_B:
+  1802			case BPF_LDX | BPF_PROBE_MEMSX | BPF_H:
+  1803			case BPF_LDX | BPF_PROBE_MEMSX | BPF_W:
+  1804				insn_off = insn->off;
+  1805	
+  1806				if (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
+  1807				    BPF_MODE(insn->code) == BPF_PROBE_MEMSX) {
+  1808					/* Conservatively check that src_reg + insn->off is a kernel address:
+  1809					 *   src_reg + insn->off >= TASK_SIZE_MAX + PAGE_SIZE
+  1810					 * src_reg is used as scratch for src_reg += insn->off and restored
+  1811					 * after emit_ldx if necessary
+  1812					 */
+  1813	
+  1814					u64 limit = TASK_SIZE_MAX + PAGE_SIZE;
+  1815					u8 *end_of_jmp;
+  1816	
+  1817					/* At end of these emitted checks, insn->off will have been added
+  1818					 * to src_reg, so no need to do relative load with insn->off offset
+  1819					 */
+  1820					insn_off = 0;
+  1821	
+  1822					/* movabsq r11, limit */
+  1823					EMIT2(add_1mod(0x48, AUX_REG), add_1reg(0xB8, AUX_REG));
+  1824					EMIT((u32)limit, 4);
+  1825					EMIT(limit >> 32, 4);
+  1826	
+  1827					if (insn->off) {
+  1828						/* add src_reg, insn->off */
+  1829						maybe_emit_1mod(&prog, src_reg, true);
+  1830						EMIT2_off32(0x81, add_1reg(0xC0, src_reg), insn->off);
+  1831					}
+  1832	
+  1833					/* cmp src_reg, r11 */
+  1834					maybe_emit_mod(&prog, src_reg, AUX_REG, true);
+  1835					EMIT2(0x39, add_2reg(0xC0, src_reg, AUX_REG));
+  1836	
+  1837					/* if unsigned '>=', goto load */
+  1838					EMIT2(X86_JAE, 0);
+  1839					end_of_jmp = prog;
+  1840	
+  1841					/* xor dst_reg, dst_reg */
+  1842					emit_mov_imm32(&prog, false, dst_reg, 0);
+  1843					/* jmp byte_after_ldx */
+  1844					EMIT2(0xEB, 0);
+  1845	
+  1846					/* populate jmp_offset for JAE above to jump to start_of_ldx */
+  1847					start_of_ldx = prog;
+  1848					end_of_jmp[-1] = start_of_ldx - end_of_jmp;
+  1849				}
+  1850				if (BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
+  1851				    BPF_MODE(insn->code) == BPF_MEMSX)
+  1852					emit_ldsx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
+  1853				else
+  1854					emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
+  1855				if (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
+  1856				    BPF_MODE(insn->code) == BPF_PROBE_MEMSX) {
+  1857					struct exception_table_entry *ex;
+  1858					u8 *_insn = image + proglen + (start_of_ldx - temp);
+  1859					s64 delta;
+  1860	
+  1861					/* populate jmp_offset for JMP above */
+  1862					start_of_ldx[-1] = prog - start_of_ldx;
+  1863	
+  1864					if (insn->off && src_reg != dst_reg) {
+  1865						/* sub src_reg, insn->off
+  1866						 * Restore src_reg after "add src_reg, insn->off" in prev
+  1867						 * if statement. But if src_reg == dst_reg, emit_ldx
+  1868						 * above already clobbered src_reg, so no need to restore.
+  1869						 * If add src_reg, insn->off was unnecessary, no need to
+  1870						 * restore either.
+  1871						 */
+  1872						maybe_emit_1mod(&prog, src_reg, true);
+  1873						EMIT2_off32(0x81, add_1reg(0xE8, src_reg), insn->off);
+  1874					}
+  1875	
+  1876					if (!bpf_prog->aux->extable)
+  1877						break;
+  1878	
+  1879					if (excnt >= bpf_prog->aux->num_exentries) {
+  1880						pr_err("ex gen bug\n");
+  1881						return -EFAULT;
+  1882					}
+  1883					ex = &bpf_prog->aux->extable[excnt++];
+  1884	
+  1885					delta = _insn - (u8 *)&ex->insn;
+  1886					if (!is_simm32(delta)) {
+  1887						pr_err("extable->insn doesn't fit into 32-bit\n");
+  1888						return -EFAULT;
+  1889					}
+  1890					/* switch ex to rw buffer for writes */
+  1891					ex = (void *)rw_image + ((void *)ex - (void *)image);
+  1892	
+  1893					ex->insn = delta;
+  1894	
+  1895					ex->data = EX_TYPE_BPF;
+  1896	
+  1897					if (dst_reg > BPF_REG_9) {
+  1898						pr_err("verifier error\n");
+  1899						return -EFAULT;
+  1900					}
+  1901					/*
+  1902					 * Compute size of x86 insn and its target dest x86 register.
+  1903					 * ex_handler_bpf() will use lower 8 bits to adjust
+  1904					 * pt_regs->ip to jump over this x86 instruction
+  1905					 * and upper bits to figure out which pt_regs to zero out.
+  1906					 * End result: x86 insn "mov rbx, qword ptr [rax+0x14]"
+  1907					 * of 4 bytes will be ignored and rbx will be zero inited.
+  1908					 */
+  1909					ex->fixup = (prog - start_of_ldx) | (reg2pt_regs[dst_reg] << 8);
+  1910				}
+  1911				break;
+  1912	
+  1913			/* internal-only per-cpu zero-extending memory load */
+  1914			case BPF_LDX | BPF_MEM_PERCPU | BPF_B:
+  1915			case BPF_LDX | BPF_MEM_PERCPU | BPF_H:
+  1916			case BPF_LDX | BPF_MEM_PERCPU | BPF_W:
+  1917			case BPF_LDX | BPF_MEM_PERCPU | BPF_DW:
+  1918				insn_off = insn->off;
+  1919				EMIT1(0x65); /* gs segment modifier */
+  1920				emit_ldx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
+  1921				break;
+  1922	
+  1923			/* internal-only load-effective-address-of per-cpu offset */
+  1924			case BPF_LDX | BPF_ADDR_PERCPU | BPF_DW: {
+> 1925				u32 off = (u32)(void *)&this_cpu_off;
+  1926	
+  1927				/* mov <dst>, <src> (if necessary) */
+  1928				EMIT_mov(dst_reg, src_reg);
+  1929	
+  1930				/* add <dst>, gs:[<off>] */
+  1931				EMIT2(0x65, add_1mod(0x48, dst_reg));
+  1932				EMIT3(0x03, add_1reg(0x04, dst_reg), 0x25);
+  1933				EMIT(off, 4);
+  1934	
+  1935				break;
+  1936			}
+  1937			case BPF_STX | BPF_ATOMIC | BPF_W:
+  1938			case BPF_STX | BPF_ATOMIC | BPF_DW:
+  1939				if (insn->imm == (BPF_AND | BPF_FETCH) ||
+  1940				    insn->imm == (BPF_OR | BPF_FETCH) ||
+  1941				    insn->imm == (BPF_XOR | BPF_FETCH)) {
+  1942					bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+  1943					u32 real_src_reg = src_reg;
+  1944					u32 real_dst_reg = dst_reg;
+  1945					u8 *branch_target;
+  1946	
+  1947					/*
+  1948					 * Can't be implemented with a single x86 insn.
+  1949					 * Need to do a CMPXCHG loop.
+  1950					 */
+  1951	
+  1952					/* Will need RAX as a CMPXCHG operand so save R0 */
+  1953					emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
+  1954					if (src_reg == BPF_REG_0)
+  1955						real_src_reg = BPF_REG_AX;
+  1956					if (dst_reg == BPF_REG_0)
+  1957						real_dst_reg = BPF_REG_AX;
+  1958	
+  1959					branch_target = prog;
+  1960					/* Load old value */
+  1961					emit_ldx(&prog, BPF_SIZE(insn->code),
+  1962						 BPF_REG_0, real_dst_reg, insn->off);
+  1963					/*
+  1964					 * Perform the (commutative) operation locally,
+  1965					 * put the result in the AUX_REG.
+  1966					 */
+  1967					emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
+  1968					maybe_emit_mod(&prog, AUX_REG, real_src_reg, is64);
+  1969					EMIT2(simple_alu_opcodes[BPF_OP(insn->imm)],
+  1970					      add_2reg(0xC0, AUX_REG, real_src_reg));
+  1971					/* Attempt to swap in new value */
+  1972					err = emit_atomic(&prog, BPF_CMPXCHG,
+  1973							  real_dst_reg, AUX_REG,
+  1974							  insn->off,
+  1975							  BPF_SIZE(insn->code));
+  1976					if (WARN_ON(err))
+  1977						return err;
+  1978					/*
+  1979					 * ZF tells us whether we won the race. If it's
+  1980					 * cleared we need to try again.
+  1981					 */
+  1982					EMIT2(X86_JNE, -(prog - branch_target) - 2);
+  1983					/* Return the pre-modification value */
+  1984					emit_mov_reg(&prog, is64, real_src_reg, BPF_REG_0);
+  1985					/* Restore R0 after clobbering RAX */
+  1986					emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
+  1987					break;
+  1988				}
+  1989	
+  1990				err = emit_atomic(&prog, insn->imm, dst_reg, src_reg,
+  1991						  insn->off, BPF_SIZE(insn->code));
+  1992				if (err)
+  1993					return err;
+  1994				break;
+  1995	
+  1996				/* call */
+  1997			case BPF_JMP | BPF_CALL: {
+  1998				int offs;
+  1999	
+  2000				func = (u8 *) __bpf_call_base + imm32;
+  2001				if (tail_call_reachable) {
+  2002					RESTORE_TAIL_CALL_CNT(bpf_prog->aux->stack_depth);
+  2003					if (!imm32)
+  2004						return -EINVAL;
+  2005					offs = 7 + x86_call_depth_emit_accounting(&prog, func);
+  2006				} else {
+  2007					if (!imm32)
+  2008						return -EINVAL;
+  2009					offs = x86_call_depth_emit_accounting(&prog, func);
+  2010				}
+  2011				if (emit_call(&prog, func, image + addrs[i - 1] + offs))
+  2012					return -EINVAL;
+  2013				break;
+  2014			}
+  2015	
+  2016			case BPF_JMP | BPF_TAIL_CALL:
+  2017				if (imm32)
+  2018					emit_bpf_tail_call_direct(bpf_prog,
+  2019								  &bpf_prog->aux->poke_tab[imm32 - 1],
+  2020								  &prog, image + addrs[i - 1],
+  2021								  callee_regs_used,
+  2022								  bpf_prog->aux->stack_depth,
+  2023								  ctx);
+  2024				else
+  2025					emit_bpf_tail_call_indirect(bpf_prog,
+  2026								    &prog,
+  2027								    callee_regs_used,
+  2028								    bpf_prog->aux->stack_depth,
+  2029								    image + addrs[i - 1],
+  2030								    ctx);
+  2031				break;
+  2032	
+  2033				/* cond jump */
+  2034			case BPF_JMP | BPF_JEQ | BPF_X:
+  2035			case BPF_JMP | BPF_JNE | BPF_X:
+  2036			case BPF_JMP | BPF_JGT | BPF_X:
+  2037			case BPF_JMP | BPF_JLT | BPF_X:
+  2038			case BPF_JMP | BPF_JGE | BPF_X:
+  2039			case BPF_JMP | BPF_JLE | BPF_X:
+  2040			case BPF_JMP | BPF_JSGT | BPF_X:
+  2041			case BPF_JMP | BPF_JSLT | BPF_X:
+  2042			case BPF_JMP | BPF_JSGE | BPF_X:
+  2043			case BPF_JMP | BPF_JSLE | BPF_X:
+  2044			case BPF_JMP32 | BPF_JEQ | BPF_X:
+  2045			case BPF_JMP32 | BPF_JNE | BPF_X:
+  2046			case BPF_JMP32 | BPF_JGT | BPF_X:
+  2047			case BPF_JMP32 | BPF_JLT | BPF_X:
+  2048			case BPF_JMP32 | BPF_JGE | BPF_X:
+  2049			case BPF_JMP32 | BPF_JLE | BPF_X:
+  2050			case BPF_JMP32 | BPF_JSGT | BPF_X:
+  2051			case BPF_JMP32 | BPF_JSLT | BPF_X:
+  2052			case BPF_JMP32 | BPF_JSGE | BPF_X:
+  2053			case BPF_JMP32 | BPF_JSLE | BPF_X:
+  2054				/* cmp dst_reg, src_reg */
+  2055				maybe_emit_mod(&prog, dst_reg, src_reg,
+  2056					       BPF_CLASS(insn->code) == BPF_JMP);
+  2057				EMIT2(0x39, add_2reg(0xC0, dst_reg, src_reg));
+  2058				goto emit_cond_jmp;
+  2059	
+  2060			case BPF_JMP | BPF_JSET | BPF_X:
+  2061			case BPF_JMP32 | BPF_JSET | BPF_X:
+  2062				/* test dst_reg, src_reg */
+  2063				maybe_emit_mod(&prog, dst_reg, src_reg,
+  2064					       BPF_CLASS(insn->code) == BPF_JMP);
+  2065				EMIT2(0x85, add_2reg(0xC0, dst_reg, src_reg));
+  2066				goto emit_cond_jmp;
+  2067	
+  2068			case BPF_JMP | BPF_JSET | BPF_K:
+  2069			case BPF_JMP32 | BPF_JSET | BPF_K:
+  2070				/* test dst_reg, imm32 */
+  2071				maybe_emit_1mod(&prog, dst_reg,
+  2072						BPF_CLASS(insn->code) == BPF_JMP);
+  2073				EMIT2_off32(0xF7, add_1reg(0xC0, dst_reg), imm32);
+  2074				goto emit_cond_jmp;
+  2075	
+  2076			case BPF_JMP | BPF_JEQ | BPF_K:
+  2077			case BPF_JMP | BPF_JNE | BPF_K:
+  2078			case BPF_JMP | BPF_JGT | BPF_K:
+  2079			case BPF_JMP | BPF_JLT | BPF_K:
+  2080			case BPF_JMP | BPF_JGE | BPF_K:
+  2081			case BPF_JMP | BPF_JLE | BPF_K:
+  2082			case BPF_JMP | BPF_JSGT | BPF_K:
+  2083			case BPF_JMP | BPF_JSLT | BPF_K:
+  2084			case BPF_JMP | BPF_JSGE | BPF_K:
+  2085			case BPF_JMP | BPF_JSLE | BPF_K:
+  2086			case BPF_JMP32 | BPF_JEQ | BPF_K:
+  2087			case BPF_JMP32 | BPF_JNE | BPF_K:
+  2088			case BPF_JMP32 | BPF_JGT | BPF_K:
+  2089			case BPF_JMP32 | BPF_JLT | BPF_K:
+  2090			case BPF_JMP32 | BPF_JGE | BPF_K:
+  2091			case BPF_JMP32 | BPF_JLE | BPF_K:
+  2092			case BPF_JMP32 | BPF_JSGT | BPF_K:
+  2093			case BPF_JMP32 | BPF_JSLT | BPF_K:
+  2094			case BPF_JMP32 | BPF_JSGE | BPF_K:
+  2095			case BPF_JMP32 | BPF_JSLE | BPF_K:
+  2096				/* test dst_reg, dst_reg to save one extra byte */
+  2097				if (imm32 == 0) {
+  2098					maybe_emit_mod(&prog, dst_reg, dst_reg,
+  2099						       BPF_CLASS(insn->code) == BPF_JMP);
+  2100					EMIT2(0x85, add_2reg(0xC0, dst_reg, dst_reg));
+  2101					goto emit_cond_jmp;
+  2102				}
+  2103	
+  2104				/* cmp dst_reg, imm8/32 */
+  2105				maybe_emit_1mod(&prog, dst_reg,
+  2106						BPF_CLASS(insn->code) == BPF_JMP);
+  2107	
+  2108				if (is_imm8(imm32))
+  2109					EMIT3(0x83, add_1reg(0xF8, dst_reg), imm32);
+  2110				else
+  2111					EMIT2_off32(0x81, add_1reg(0xF8, dst_reg), imm32);
+  2112	
 
 -- 
 0-DAY CI Kernel Test Service
