@@ -1,65 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3476A1FBA;
-	Sat, 30 Mar 2024 10:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9AE62C86A;
+	Sat, 30 Mar 2024 11:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711794753; cv=none; b=eRi5uLsR86zwJVy5g7XtzWSSvPrjFf8mfTjtr581iaRo0K3lpb3dvVECrKHILHLLk6njkmiRCI2q5gq3v1lzRDwmQIqh9Lm6BkJL6FHT03j/5Ehhuapnionp0qbuQZnNIHn9Louqlu5GIJHwta3/6UbdXGfWZXdjHPRQF3JZPCo=
+	t=1711797997; cv=none; b=Rt7lL8ss1cuD6RhHdIHNinSuIrVPLOYwYv9iE/ZDrpMRGrloNDk9siDG9zxXYPbDXtdV87NJTRd690bqsRuz61X2o/P7JrzhYQviXRRYXJhoSozxbvu+3hgVz99Tw09hgCpVFyNk4MBb0eR3pjlUK0/+I62QXlMK/ZdDJmuXuzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711794753; c=relaxed/simple;
-	bh=XtM/Gfmk+g0ebxAIgyQGRPZgpW6mCp/0GRoMXkTZgn4=;
+	s=arc-20240116; t=1711797997; c=relaxed/simple;
+	bh=Uuar7vsbKm5w+9KCxDbjk3gAMAqKDjuJHWplhv29qXw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CKWUF8vCT6Furu8XonvQ7/EJFWYiWORHgTDM2XOplLx26EcKtVgtT3VzANgFfLJiye4blNPgBzUFMqCgfu2o4NOhtvzWHqelxjKqhabnmD9YSwze7PMBKWcQQEUa6Hxf7YlpW+0kq+lp+4I/o88jlGOrHWm0D//YXol5lQwRK8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TuNxGilP; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xkj5phfoeaSkUIc2YPi6siLuKQ7Zm1cs7iQpbpxaVGGajB9AxX7GBiFQhagItppygAS7OAE6on/CIcjCIiAL1hRECmLnMXwrVg69qh67CwNzukMMTN0SOCbMNWJ8FetHILIDreU0GWwQ9f0qYhMrp/HGsVHrT8n85EJcWji8JYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TOZmPiRM; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TuNxGilP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TOZmPiRM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711794751; x=1743330751;
+  t=1711797995; x=1743333995;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XtM/Gfmk+g0ebxAIgyQGRPZgpW6mCp/0GRoMXkTZgn4=;
-  b=TuNxGilPsvhm7QBzRRTgRDMV+vhRs0RHm+sg0fJS2Y4PQV5Fq26+pcyU
-   2rR8DruXYiE846A66Bf2GrafdA366d7gXOcbK0fkuK0XVoDMvYjbRLvBJ
-   J7JEUmhjynZkkUSKlc1ulrspWcdyKq56Fd7aZ6UPPK1OO5Fx/zkUHKEDs
-   HB9AR/oI5pco7kOHGtctIkWPRpiVAvnmex19J6lfUrD5ZFCsbd2ZoYhCH
-   zp2bLYPOIBOAOHFF0F+Mxju67SLNEy7sI28vzPNGOsm5SQFnX3DjQ1qf1
-   H9sPjMjyiYmOZj++TFNqJ0TZilIXcPmjgMKgHxBo6NqMWK4KPJoPc9hDL
+  bh=Uuar7vsbKm5w+9KCxDbjk3gAMAqKDjuJHWplhv29qXw=;
+  b=TOZmPiRM6BRwLkwSe/dqoma9Ugjarl5AC703zitpwNa1dZ1qQeYfaM7o
+   UFbeqFSLWA47lxbRwGdRylkpzr7Wxwmsd8E+Oq5U7/ZpKRWdcM7FMD8ri
+   EmWd+KFgay/FjRygHfTqrmbyKfJSUvB8v3c6d7lTtIBLzceRVbwRL7Hgp
+   KdwPCBdxYyH92BLB7xbyQgaXNAsXL/aHwfEF0op/c7SucYVjysDrNbF8E
+   yOHilJWrBBtHygogyLR7ZuoWdMXMz7eA8s+dVsJgoE1jvfgvs25ELWfy/
+   UPTcfq0uaGIh+NucHd1moCjUz94hKunsik9MHvJm0h6LDc4eNHeuw5Hzn
    g==;
-X-CSE-ConnectionGUID: Crao2COZR8Owq1zKZuH2XQ==
-X-CSE-MsgGUID: m/aykhMBQXqm4C4ynIsQhA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="18117915"
+X-CSE-ConnectionGUID: 28Rahel1SKaqjim7jK+Hzw==
+X-CSE-MsgGUID: Tt0SrH9VRuKXmTQ4OD4FmQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="29456973"
 X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="18117915"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 03:32:31 -0700
+   d="scan'208";a="29456973"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 04:26:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="21871653"
+   d="scan'208";a="48409144"
 Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 30 Mar 2024 03:32:27 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 30 Mar 2024 04:26:28 -0700
 Received: from kbuild by be39aa325d23 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rqW0f-0004AM-1U;
-	Sat, 30 Mar 2024 10:32:25 +0000
-Date: Sat, 30 Mar 2024 18:31:49 +0800
+	id 1rqWqw-0004CM-1b;
+	Sat, 30 Mar 2024 11:26:26 +0000
+Date: Sat, 30 Mar 2024 19:26:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Damien Le Moal <dlemoal@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org
+To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com,
+	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
+	ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 19/19] PCI: rockchip-ep: Handle PERST signal in endpoint
- mode
-Message-ID: <202403301809.VzsJsDFL-lkp@intel.com>
-References: <20240329090945.1097609-20-dlemoal@kernel.org>
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Deven Bowers <deven.desai@linux.microsoft.com>,
+	Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH v16 11/20] block|security: add LSM blob to block_device
+Message-ID: <202403301936.l8vO4jha-lkp@intel.com>
+References: <1711657047-10526-12-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,101 +69,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240329090945.1097609-20-dlemoal@kernel.org>
+In-Reply-To: <1711657047-10526-12-git-send-email-wufan@linux.microsoft.com>
 
-Hi Damien,
+Hi Fan,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v6.9-rc1 next-20240328]
+[auto build test ERROR on device-mapper-dm/for-next]
+[also build test ERROR on axboe-block/for-next lwn/docs-next linus/master v6.9-rc1 next-20240328]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Damien-Le-Moal/PCI-endpoint-Introduce-pci_epc_check_func/20240329-171158
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20240329090945.1097609-20-dlemoal%40kernel.org
-patch subject: [PATCH 19/19] PCI: rockchip-ep: Handle PERST signal in endpoint mode
-config: i386-buildonly-randconfig-005-20240330 (https://download.01.org/0day-ci/archive/20240330/202403301809.VzsJsDFL-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Fan-Wu/security-add-ipe-lsm/20240329-042339
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+patch link:    https://lore.kernel.org/r/1711657047-10526-12-git-send-email-wufan%40linux.microsoft.com
+patch subject: [PATCH v16 11/20] block|security: add LSM blob to block_device
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240330/202403301936.l8vO4jha-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240330/202403301809.VzsJsDFL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240330/202403301936.l8vO4jha-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403301809.VzsJsDFL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403301936.l8vO4jha-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/pcie-rockchip-ep.c:633:2: error: call to undeclared function 'irq_set_irq_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     633 |         irq_set_irq_type(ep->perst_irq,
-         |         ^
-   drivers/pci/controller/pcie-rockchip-ep.c:633:2: note: did you mean 'irq_set_irq_wake'?
-   include/linux/interrupt.h:482:12: note: 'irq_set_irq_wake' declared here
-     482 | extern int irq_set_irq_wake(unsigned int irq, unsigned int on);
-         |            ^
->> drivers/pci/controller/pcie-rockchip-ep.c:657:2: error: call to undeclared function 'irq_set_status_flags'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     657 |         irq_set_status_flags(ep->perst_irq, IRQ_NOAUTOEN);
-         |         ^
->> drivers/pci/controller/pcie-rockchip-ep.c:657:38: error: use of undeclared identifier 'IRQ_NOAUTOEN'
-     657 |         irq_set_status_flags(ep->perst_irq, IRQ_NOAUTOEN);
-         |                                             ^
-   3 errors generated.
+   In file included from fs/nfs/blocklayout/blocklayout.c:41:
+   In file included from fs/nfs/blocklayout/../pnfs.h:34:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:101:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:45:
+   In file included from include/uapi/linux/neighbour.h:6:
+   In file included from include/linux/netlink.h:9:
+   In file included from include/net/scm.h:9:
+>> include/linux/security.h:1506:36: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    1506 |                                              enum lsm_integrity_type, type,
+         |                                                                       ^
+         |                                                                       int
+   include/linux/security.h:1506:34: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+    1506 |                                              enum lsm_integrity_type, type,
+         |                                                                     ^
+   fs/nfs/blocklayout/blocklayout.c:384:9: warning: variable 'count' set but not used [-Wunused-but-set-variable]
+     384 |         size_t count = header->args.count;
+         |                ^
+   2 warnings and 1 error generated.
+--
+   In file included from fs/nfs/blocklayout/dev.c:8:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:101:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:45:
+   In file included from include/uapi/linux/neighbour.h:6:
+   In file included from include/linux/netlink.h:9:
+   In file included from include/net/scm.h:9:
+>> include/linux/security.h:1506:36: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    1506 |                                              enum lsm_integrity_type, type,
+         |                                                                       ^
+         |                                                                       int
+   include/linux/security.h:1506:34: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+    1506 |                                              enum lsm_integrity_type, type,
+         |                                                                     ^
+   1 warning and 1 error generated.
 
 
-vim +/irq_set_irq_type +633 drivers/pci/controller/pcie-rockchip-ep.c
+vim +/int +1506 include/linux/security.h
 
-   620	
-   621	static irqreturn_t rockchip_pcie_ep_perst_irq_thread(int irq, void *data)
-   622	{
-   623		struct pci_epc *epc = data;
-   624		struct rockchip_pcie_ep *ep = epc_get_drvdata(epc);
-   625		struct rockchip_pcie *rockchip = &ep->rockchip;
-   626		u32 perst = gpiod_get_value(rockchip->ep_gpio);
-   627	
-   628		if (perst)
-   629			rockchip_pcie_ep_perst_assert(ep);
-   630		else
-   631			rockchip_pcie_ep_perst_deassert(ep);
-   632	
- > 633		irq_set_irq_type(ep->perst_irq,
-   634				 (perst ? IRQF_TRIGGER_HIGH : IRQF_TRIGGER_LOW));
-   635	
-   636		return IRQ_HANDLED;
-   637	}
-   638	
-   639	static int rockchip_pcie_ep_setup_irq(struct pci_epc *epc)
-   640	{
-   641		struct rockchip_pcie_ep *ep = epc_get_drvdata(epc);
-   642		struct rockchip_pcie *rockchip = &ep->rockchip;
-   643		struct device *dev = rockchip->dev;
-   644		int ret;
-   645	
-   646		if (!rockchip->ep_gpio)
-   647			return 0;
-   648	
-   649		/* PCIe reset interrupt */
-   650		ep->perst_irq = gpiod_to_irq(rockchip->ep_gpio);
-   651		if (ep->perst_irq < 0) {
-   652			dev_err(dev, "No corresponding IRQ for PERST GPIO\n");
-   653			return ep->perst_irq;
-   654		}
-   655	
-   656		ep->perst_asserted = true;
- > 657		irq_set_status_flags(ep->perst_irq, IRQ_NOAUTOEN);
-   658		ret = devm_request_threaded_irq(dev, ep->perst_irq, NULL,
-   659						rockchip_pcie_ep_perst_irq_thread,
-   660						IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
-   661						"pcie-ep-perst", epc);
-   662		if (ret) {
-   663			dev_err(dev, "Request PERST GPIO IRQ failed %d\n", ret);
-   664			return ret;
-   665		}
-   666	
-   667		return 0;
-   668	}
-   669	
+  1504	
+  1505	static inline int security_bdev_setintegrity(struct block_device *bdev,
+> 1506						     enum lsm_integrity_type, type,
+  1507						     const void *value, size_t size)
+  1508	{
+  1509		return 0;
+  1510	}
+  1511	
 
 -- 
 0-DAY CI Kernel Test Service
