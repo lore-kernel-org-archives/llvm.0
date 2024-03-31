@@ -1,179 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D42A1E520;
-	Sun, 31 Mar 2024 19:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321E02E3E5
+	for <llvm@lists.linux.dev>; Sun, 31 Mar 2024 20:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711914163; cv=none; b=Ku054GGQ9aiRgsd7HLmoR9AJtnJq9hscDAwS4yRVY8+zAkmx9XTwUYXHr+0I22Yc/xS0T415F9mJu7K1X2G/oF9l1KBMyBE6VS+OIfawnXxhJ09Ay6IHkSJfR/WRCtJ5KEmCzJsjviY3BWPeW5afTwGJnwsfzJyB5C2vtECko0U=
+	t=1711918796; cv=none; b=N19x6RaqpuZlO3iI/MmBOgBX/60ar0HFC0LOC4pZQC5J1GHp/sv4p79nohReiODSTK3pMNAxHW+biv5mEWisIgKDhZG76xK1Lv3mTRIvnVJRHyNnFyHhugSWBMayfL4lM9PGUNqmyDWb1sd1IxWGgbzuUAoN2MU9SGMc1xq2wqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711914163; c=relaxed/simple;
-	bh=OIBNlY7LjIdSH6waygfdC7frJgQfxvU/feQbHIJAt00=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NOAyiUgWyNRqapLRHv98pla6ksvyPooMlqotv54pO6/IED8OW3A1PkMGFPc7SYQJRYxULW5XK2z4MC9d+qzEPVinOHvqFe9OSiuXGdnehSh+3pcrYEFk848lvR/NTaLpHYKX946gUY/YElMgUk9p9XsBkoccbweBRNJgadGvFSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RVfa33Sh; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711918796; c=relaxed/simple;
+	bh=S9I+Dzh80MHnY1OT3f1I/KGqljo+hkE9iQAPevgW43I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NBNAcH0obqeGrIemZpkdU1LbPktDTDOuNH4a/aEgfXa458vT5YVJUxUyAd5u2q7g7+7UVYkMxabCgRJsZdODJGC3ynUjT8314mNSP7sizSBQuxZRJvAuflEV1PpzsP0XZoCbxL4XbuId4sYgdrZ6ezZLYYInMd5nmdexkDhXiGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H2C6SKaY; arc=none smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RVfa33Sh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711914161; x=1743450161;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OIBNlY7LjIdSH6waygfdC7frJgQfxvU/feQbHIJAt00=;
-  b=RVfa33Sh5RtBC3xlK43uVTowwlV/e09abhl+I/YYMSpwIbqFMUbwyRsO
-   ga3u8sSpM4ru2LLr7DaWjqXMekbXa1PpWvzVY9ueiOZKQcAOFUSHt1iAU
-   8EYI2stMbs5BwNMvX2+gIIgIVKV57Vp86andVqoqS4oCFObD3CBjecZwK
-   8YbLCqOvuJjwAoJqmis7q9bB28DK4Teq4Ve7cMMiE6mg3UvUNd5ndElyt
-   qf2boqE3l3ZGB4qQV78W9HwCr2x1mOy3QmygZCD/re9sLryCFo2iTQO1I
-   tkW1zVhIuJQ+Xs3z87to72cQLxKjqjRVYJyNf+S24Tq/zVbkK46IARB1Y
-   w==;
-X-CSE-ConnectionGUID: mJbb8bD+QcyLJB9TKyOavA==
-X-CSE-MsgGUID: wluhHOWRRuCvTaz+IWPezg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="6933534"
-X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="6933534"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2024 12:42:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="17337395"
-Received: from lkp-server01.sh.intel.com (HELO 3d808bfd2502) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 31 Mar 2024 12:42:38 -0700
-Received: from kbuild by 3d808bfd2502 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rr14d-0001NO-2Z;
-	Sun, 31 Mar 2024 19:42:35 +0000
-Date: Mon, 1 Apr 2024 03:42:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Borislav Petkov (AMD)" <bp@alien8.de>
-Subject: [ardb:x86-efi-peheader-backport-for-v5.15 29/77]
- arch/x86/boot/compressed/pgtable_64.c:134:3: error: use of undeclared
- identifier '__pgtable_l5_enabled'
-Message-ID: <202404010344.7OPWIxxT-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H2C6SKaY"
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3c3f16f9c81so1580838b6e.1
+        for <llvm@lists.linux.dev>; Sun, 31 Mar 2024 13:59:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711918794; x=1712523594; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=62r08+vv81bc15gP+QLC+CCLQ9XEz9F5J6/drEN32h0=;
+        b=H2C6SKaYEHjlwGO5lf75hAZn90slx4juzm4ddPOb1SfVsFJBllHsX4B5yGFUic2OTB
+         M2HYPnOdR7WzaIvtwv5gEm5tnjdis9WOjde2/8MTQE2vzqpi482Y1x9sdz0tAEnmDcnL
+         0Uu8fY+ryv3bBjm8pRuKRjXCL5tTJ9vUgGCDDx/tg7D1k+QyT2DZtonmM/5DC76xkEMK
+         NkE5mmh12Ve3eoGcywZHGVCbQe3xr/i8XS5DrWnyI7LHgz285nbW102DTALQiaORUuny
+         w6psjW/wxaS+QH546Prdm8c8GuwU/p2XZkHllN6i4k0awN7mxUaIUN9gf5ZTIPRG5+BN
+         DD2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711918794; x=1712523594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=62r08+vv81bc15gP+QLC+CCLQ9XEz9F5J6/drEN32h0=;
+        b=nnoShf7lxGOdOAru5l+xLRV4jUCINBRbhIDGivyA3HOePwqvNNpaGXXXhqoAMbUg2g
+         Mh4XKqF5jW15ioLdY0qnRZqTqQ0Lzv5ruyBL50lLYJq5rqMW/AzYc4FZb0rkDHv7ZAUO
+         /xATTN9QiCTbC9u7OipRGCWei5PQuzGPlBM542urPyoteljeT2hrSnMSfx2f9Ji2itQU
+         kUfct5id13xiogO6EGKPTn+rU+3kBcaunDKB+jC/nia9veF5rX6meJ6gbu4X5WMtXl6w
+         eEXks5RLmgFMbHkJmJaWPgGcIiTUpXu5TwTSRk++MZVoaps6XV/JZ/XCMFbM9J0syaRC
+         yF+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUBXKFrpOFw7zoiKCmYoQKP/epB4etJ8HtlppnH7V8y6diNXUbD7TdEwxx1Yb3yM/SfNorawxnFn9GVuaJL5+ftLKX6Rg==
+X-Gm-Message-State: AOJu0YyBxW1AOhNSFS5eYHNgsyxmK6V2nbKJumoz/42TyFN2dM9cKpfp
+	TxSOuuU93ngYnIu0/SFMwxwhPvcvwhKYjmUF8QX6OEUhE6BoOGs6VbbRAkYaIb++pOPXSezfA0i
+	iVXpouihD/3RA7HsSV/pOI9mWsFOZi+Ezv+Pq
+X-Google-Smtp-Source: AGHT+IEzHUCXtxEs/St9wm+0065V87APlYWHJK73R9BRkcaMBTaQUPw4xUsbBcEWCoGxmFWvQMN0ZyayAufxJn8GKQc=
+X-Received: by 2002:a05:6808:2e4c:b0:3c3:d847:7a8f with SMTP id
+ gp12-20020a0568082e4c00b003c3d8477a8fmr11313609oib.24.1711918794081; Sun, 31
+ Mar 2024 13:59:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202403290334.USWrYrMw-lkp@intel.com> <CAJuCfpEKhhbG45RLFyh5yJ4iZ8NdqWcbj_+rf3=9Kg+hdxTtVg@mail.gmail.com>
+ <20240329193714.8e968aad80b39be32b848f82@linux-foundation.org>
+In-Reply-To: <20240329193714.8e968aad80b39be32b848f82@linux-foundation.org>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Sun, 31 Mar 2024 13:59:41 -0700
+Message-ID: <CAJuCfpHHcQStzQ3-XHyR5eyYh-8D8+6MLyknoCHatukquk8aUw@mail.gmail.com>
+Subject: Re: [linux-next:master 1076/1266] include/linux/alloc_tag.h:43:2:
+ error: "Memory allocation profiling is incompatible with ARCH_NEEDS_WEAK_PER_CPU"
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-efi-peheader-backport-for-v5.15
-head:   51ff9e27b53cd980cd3f4a8ec02b1b34d99091db
-commit: 32a1efd2dd3eb5863ff81e49a3f78526747ef2af [29/77] x86/decompressor: Assign paging related global variables earlier
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240401/202404010344.7OPWIxxT-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240401/202404010344.7OPWIxxT-lkp@intel.com/reproduce)
+On Fri, Mar 29, 2024 at 7:37=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Thu, 28 Mar 2024 13:02:44 -0700 Suren Baghdasaryan <surenb@google.com>=
+ wrote:
+>
+> > Well, this is what I expected, we do not support this feature for
+> > ARCH_NEEDS_WEAK_PER_CPU (alpha and s390 with CONFIG_SMP=3Dy &&
+> > CONFIG_MODULE=3Dy).
+> > Unfortunately ARCH_NEEDS_WEAK_PER_CPU is not a config option, so I
+> > can't add it as a dependency for CONFIG_MEM_ALLOC_PROFILING. Should I
+> > handle this differently?
+>
+> Make it a config option?  That would be a cleanup on its own.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404010344.7OPWIxxT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/boot/compressed/pgtable_64.c:134:3: error: use of undeclared identifier '__pgtable_l5_enabled'
-     134 |                 __pgtable_l5_enabled = 1;
-         |                 ^
-   1 error generated.
-
-
-vim +/__pgtable_l5_enabled +134 arch/x86/boot/compressed/pgtable_64.c
-
-   107	
-   108	struct paging_config paging_prepare(void *rmode)
-   109	{
-   110		struct paging_config paging_config = {};
-   111	
-   112		/* Initialize boot_params. Required for cmdline_find_option_bool(). */
-   113		boot_params = rmode;
-   114	
-   115		/*
-   116		 * Check if LA57 is desired and supported.
-   117		 *
-   118		 * There are several parts to the check:
-   119		 *   - if the kernel supports 5-level paging: CONFIG_X86_5LEVEL=y
-   120		 *   - if user asked to disable 5-level paging: no5lvl in cmdline
-   121		 *   - if the machine supports 5-level paging:
-   122		 *     + CPUID leaf 7 is supported
-   123		 *     + the leaf has the feature bit set
-   124		 *
-   125		 * That's substitute for boot_cpu_has() in early boot code.
-   126		 */
-   127		if (IS_ENABLED(CONFIG_X86_5LEVEL) &&
-   128				!cmdline_find_option_bool("no5lvl") &&
-   129				native_cpuid_eax(0) >= 7 &&
-   130				(native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 & 31)))) {
-   131			paging_config.l5_required = 1;
-   132	
-   133			/* Initialize variables for 5-level paging */
- > 134			__pgtable_l5_enabled = 1;
-   135			pgdir_shift = 48;
-   136			ptrs_per_p4d = 512;
-   137		}
-   138	
-   139		paging_config.trampoline_start = find_trampoline_placement();
-   140	
-   141		trampoline_32bit = (unsigned long *)paging_config.trampoline_start;
-   142	
-   143		/* Preserve trampoline memory */
-   144		memcpy(trampoline_save, trampoline_32bit, TRAMPOLINE_32BIT_SIZE);
-   145	
-   146		/* Clear trampoline memory first */
-   147		memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
-   148	
-   149		/* Copy trampoline code in place */
-   150		memcpy(trampoline_32bit + TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
-   151				&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
-   152	
-   153		/*
-   154		 * The code below prepares page table in trampoline memory.
-   155		 *
-   156		 * The new page table will be used by trampoline code for switching
-   157		 * from 4- to 5-level paging or vice versa.
-   158		 *
-   159		 * If switching is not required, the page table is unused: trampoline
-   160		 * code wouldn't touch CR3.
-   161		 */
-   162	
-   163		/*
-   164		 * We are not going to use the page table in trampoline memory if we
-   165		 * are already in the desired paging mode.
-   166		 */
-   167		if (paging_config.l5_required == !!(native_read_cr4() & X86_CR4_LA57))
-   168			goto out;
-   169	
-   170		if (paging_config.l5_required) {
-   171			/*
-   172			 * For 4- to 5-level paging transition, set up current CR3 as
-   173			 * the first and the only entry in a new top-level page table.
-   174			 */
-   175			trampoline_32bit[TRAMPOLINE_32BIT_PGTABLE_OFFSET] = __native_read_cr3() | _PAGE_TABLE_NOENC;
-   176		} else {
-   177			unsigned long src;
-   178	
-   179			/*
-   180			 * For 5- to 4-level paging transition, copy page table pointed
-   181			 * by first entry in the current top-level page table as our
-   182			 * new top-level page table.
-   183			 *
-   184			 * We cannot just point to the page table from trampoline as it
-   185			 * may be above 4G.
-   186			 */
-   187			src = *(unsigned long *)__native_read_cr3() & PAGE_MASK;
-   188			memcpy(trampoline_32bit + TRAMPOLINE_32BIT_PGTABLE_OFFSET / sizeof(unsigned long),
-   189			       (void *)src, PAGE_SIZE);
-   190		}
-   191	
-   192	out:
-   193		return paging_config;
-   194	}
-   195	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'll take a stab at it. Thanks!
