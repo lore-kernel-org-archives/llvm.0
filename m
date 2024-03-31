@@ -1,85 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB1D433D7;
-	Sat, 30 Mar 2024 23:03:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0063815BB
+	for <llvm@lists.linux.dev>; Sun, 31 Mar 2024 02:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711839785; cv=none; b=E+Bp7itBBA98jvv4jw2tjNSjGUhg060qtFxQGAT6pEQQk+u7gV6R+WPytaS/Z0UlG3s9/IDjjBb8zKZJw5lYHtuTEXNVGnC5hfxY1VkjmijYP8hYMYS0S2/QsSz7ND5FBpEXZYLgnR/mwxY5hiRHntdqj81mblrGEv0tFac5UI0=
+	t=1711852445; cv=none; b=Pj9ztFoeNFC8W8Bmk7O2Z5NF1FqYCQSQXvXHwYXp92impW8yqIqXKztodGBRpXQU5wfGBPjF30T0jKjGp+dRMIVrE9+rHt+E/sK11cG0ccYiCxhujgs6p0ewfBT+tyH81Ba1BpjFwcgtUyVZk4Fx9c+IJDc8Pbb3UqAFDp4kjvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711839785; c=relaxed/simple;
-	bh=Uk4iJZwSrM2dCVspPrkJGokzJ84YsOa1I77r4NRPHC0=;
+	s=arc-20240116; t=1711852445; c=relaxed/simple;
+	bh=+9xtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mh1Yg4LoVM0aKqjJcGa8EnsuCvNza+l3cA2Bi1aXlQ77iX3SrTkyygfAPJJtbYujclh51KY7omJVY0+/lxyvlPU9vKKSBaTwF9NjuqoYpboCTvK/+oPtcG6Ob1nVQY1dZmJaw3Ih9s6FvqjF9TVPc61jk0mFHCcpvph2v0QIHFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/FvMNA4; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=PCxe4cBbfRJV3gpTvYKFbbR/6Oo8CmYNpvDoIAdyEoT+Fst6iaUXtghvq3ijq3w1+V6jl8iuUhxs26iFUlXrzTxzkigqaTs5dnoEnR/bLxwsiIwpFFcP1wwql0Rd0L+n+/bc3NcLBp7LSIEUyTq3KbDcKWe4NXrWGbBy3k5Tsu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZ9D70uV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/FvMNA4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A79C7C43390;
-	Sat, 30 Mar 2024 23:03:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZ9D70uV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED4DC433C7
+	for <llvm@lists.linux.dev>; Sun, 31 Mar 2024 02:34:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711839784;
-	bh=Uk4iJZwSrM2dCVspPrkJGokzJ84YsOa1I77r4NRPHC0=;
+	s=k20201202; t=1711852444;
+	bh=+9xtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=i/FvMNA4ajDWw3JT6GuQSg3gc4xs2GzlA3SCsxisY2qLC3bGo80ykGUjUaTIiocLD
-	 lRGCz3ydTGXWc9MoUWRBMJu/9FbZZJPWV12PoXqxsppdCXrU8hHh+NymV2yepcsJNC
-	 K7BDfrHSAkC5V99trtRQNa/4PtPMQPBgn/CodlK8jj2un6YK+Gh99eL+areqP6zqQ1
-	 QiWea0HfcnrJFuvlEt7hZs0IfqQYPAAQ9l2NHMn0IwN5a3qzpUzLflfgmLAO+6l3JU
-	 uROY0jV31xGtHg33rUZY3YoG62cD0nvV34ZRuIAFZ5W4KdjCjb9KJrTAiQHOpfNyy0
-	 jOpSWwWTNr3bg==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d52e65d4a8so41326161fa.0;
-        Sat, 30 Mar 2024 16:03:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWmlHJr+LDXaNb4IBZuvCH/CN7BzYtkaQQC+3uLl9DXemzaf6YWI5ROyUJ/MBGYpktpo5AivIycSQgKLoKOIhJiPAcT2oSAIcXgv4+tEBBJBZ21RoZZbyRzvnucdjg=
-X-Gm-Message-State: AOJu0Yww3guEmrP90okCGjP9yL2yXPYeGXkh5gPbYnlGMl4qKySunhSl
-	FHRuCipjL52oirj+k0A5U+IAeX0vYcufM3rtBf4BVDjKtQrwHeW93HLwZyIy1FJ0xjlo2+2kwUM
-	VWYeCAjWny0luDplwiUVB2KoF3pM=
-X-Google-Smtp-Source: AGHT+IFd/LGv2PBoBuzAtx8igo0NJbXoa4v9MDGe5vtLEj5wDpfnPVtw0+ng93ETtALsKDvhhb4I7KxixPbeWm91ZZg=
-X-Received: by 2002:a05:651c:b0d:b0:2d7:68a0:9b28 with SMTP id
- b13-20020a05651c0b0d00b002d768a09b28mr1710557ljr.7.1711839783412; Sat, 30 Mar
- 2024 16:03:03 -0700 (PDT)
+	b=PZ9D70uVOm8Q1eV7TepfO1FkN+1k1kWNkT6Ku6f/2s6iTAOV7tZxn2zhkvPsVyaFX
+	 RPw7j/3dyOXbWPTqh7GDBBmESHoa0/CSjp3BgTh7gbx5KJ1tdiDym07g+AY4FzPgQS
+	 DKX7tgoR9K9mHdV/+tGZPsttPaEAScJJhqA81HNprVN9Fu9EJ0XTEzkGTvbaVJb6Hx
+	 Qzks5PLB5vorWVg53klblNq3phtjvnvFZqLRpBY/lb0TuCBuxS4GgeeCTYGb+VI6ok
+	 zfc1qtwfOHsXCTucSL4Xb61hPPubFgtHkxN2eCV1J182QybCpwgfTt0/4sSb25g/FL
+	 PUk6ZaAAFbN5g==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d6c220a377so36304441fa.2
+        for <llvm@lists.linux.dev>; Sat, 30 Mar 2024 19:34:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU2QHHbVITNd8WfnHXI4SVH0n0yabHxNMdPtF5qtm7dukwG+1gZ5kVtK7AbHNKikMeXk/Wx+5yHujRVIiqZLpofQemYuw==
+X-Gm-Message-State: AOJu0Ywo2hNHUQ+7RUOmUtmu7rzd7EM3pWUaiKFwTh9Mjw/9jbVC2K+l
+	g4h83fZw8pYQNweHtDC2KL6Tf/Q1RBRB9x/YdHifEctzj1Ifi0YPorthiuMy8A2wXaCcY7sx4uA
+	Mfp6siB9srYUlGjxT79QLvt6VoaY=
+X-Google-Smtp-Source: AGHT+IGpEQPL0v7g3+p+5E8g7HGnWQKzlMop6CryhqCRVmhK61t313PDdp5vf1ukKDWFXpyLX2tmge1Ix/vKXAwQ4u4=
+X-Received: by 2002:a2e:9914:0:b0:2d4:6aba:f1a9 with SMTP id
+ v20-20020a2e9914000000b002d46abaf1a9mr4254960lji.40.1711852443253; Sat, 30
+ Mar 2024 19:34:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240327-llvm-docs-s390-llvm-1-v1-1-56ad95d2bc27@kernel.org>
-In-Reply-To: <20240327-llvm-docs-s390-llvm-1-v1-1-56ad95d2bc27@kernel.org>
+References: <20240326144741.3094687-1-arnd@kernel.org> <20240326144741.3094687-2-arnd@kernel.org>
+ <87jzlohhbc.fsf@intel.com> <cb853762-06d4-401c-a1c8-07a0c031b499@app.fastmail.com>
+ <87edbwglle.fsf@intel.com> <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastmail.com>
+In-Reply-To: <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastmail.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 31 Mar 2024 08:02:27 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARVoiek2kt7aAK=tL-y6RhbmSOeRyx_4W2vk=usyceu5A@mail.gmail.com>
-Message-ID: <CAK7LNARVoiek2kt7aAK=tL-y6RhbmSOeRyx_4W2vk=usyceu5A@mail.gmail.com>
-Subject: Re: [PATCH] Documentation/llvm: Note s390 LLVM=1 support with LLVM
- 18.1.0 and newer
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
-	nicolas@fjasle.eu, corbet@lwn.net, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
-	patches@lists.linux.dev
+Date: Sun, 31 Mar 2024 11:33:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLunhpxXA@mail.gmail.com>
+Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLunhpxXA@mail.gmail.com>
+Subject: Re: [PATCH 01/12] kbuild: make -Woverride-init warnings more consistent
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>, Arnd Bergmann <arnd@kernel.org>, 
+	linux-kbuild@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Linus Walleij <linus.walleij@linaro.org>, 
+	Joel Stanley <joel@jms.id.au>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>, linux-mm@kvack.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 2:20=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
+On Wed, Mar 27, 2024 at 6:23=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
-> As of the first s390 pull request during the 6.9 merge window,
-> commit 691632f0e869 ("Merge tag 's390-6.9-1' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux"), s390 can be
-> built with LLVM=3D1 when using LLVM 18.1.0, which is the first version
-> that has SystemZ support implemented in ld.lld and llvm-objcopy.
+> On Wed, Mar 27, 2024, at 08:50, Jani Nikula wrote:
+> > On Tue, 26 Mar 2024, "Arnd Bergmann" <arnd@arndb.de> wrote:
+> >> On Tue, Mar 26, 2024, at 21:24, Jani Nikula wrote:
+> >>> On Tue, 26 Mar 2024, Arnd Bergmann <arnd@kernel.org> wrote:
+> >>
+> >> It works now.
+> >>
+> >> The original __diag_ignore_all() only did it for gcc-8 and above
+> >> because that was initially needed to suppress warnings that
+> >> got added in that version, but this was always a mistake.
+> >>
+> >> 689b097a06ba ("compiler-gcc: Suppress -Wmissing-prototypes
+> >> warning for all supported GCC") made it work correctly.
+> >
+> > Oh, nice! Then I think we'd like to go back to __diag_ignore_all() in
+> > i915 and xe.
+> >
+> > The diff is below. I'm fine with you squashing it to your patch, or if
+> > you want me to turn it into a proper patch for you to pick up in your
+> > series, that's fine too. Just let me know.
 >
-> Update the supported architectures table in the Kbuild LLVM
-> documentation to note this explicitly to make it more discoverable by
-> users and other developers. Additionally, this brings s390 in line with
-> the rest of the architectures in the table, which all support LLVM=3D1.
+> I think I'd prefer to keep my patch simpler for the moment and
+> get that merged through the kbuild tree, it already touches
+> too many places at once.
 >
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+> It may be better for me to just drop the drivers/gpu/ part of
+> my patch so you can just just take your patch through the
+> drm tree. I actually have a similar patch for the amdgpu driver
+> that I can send if you like this option better.
+>
+>     Arnd
+>
+
+
 
 Applied to linux-kbuild/fixes.
 Thanks.
-
-
-
 
 --=20
 Best Regards
