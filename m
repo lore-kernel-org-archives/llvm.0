@@ -1,371 +1,486 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D1F1465AA;
-	Sun, 31 Mar 2024 16:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF33615F41F
+	for <llvm@lists.linux.dev>; Sun, 31 Mar 2024 16:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=62.96.220.36
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711901275; cv=fail; b=n6ngXWBnh3pWgvcOHuPTNk5YTP13VS9M7fijMAShTdHHOcO5cP1ZOdNadxswjmniBSMKaV8EsiyIoAF3xBzxAz1BLM13QnN3Z+wm2Ag27SDys1lOJKflQB9GzaUXNpARr/QKL7W463bgOBqvT0dGf3TyYApMAUOh2XDLyHx0EJk=
+	t=1711903434; cv=fail; b=T5XPWk9Eg17DBmCzKYERXfu2iYPw4dwOXRV0fgAMqsFcds6GBh2EoEOuD/rFoXF4HlG4VKvXXdarRTz0sMueRJaPni/uBi1a/HdaD2M2Lm2vsAigaJihiNAcX+sm0wtqMYt+A+S1N7vKBazQ8AwXgVMI2BE04NBSLXfqc0j9IBo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711901275; c=relaxed/simple;
-	bh=ROUD/NtB2afjyy4nZ+HTeQn33ckLP6ZF+S2OGUYMlcY=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Zvc+r476ien/fq4EDIbZqkLHhM2HhoTfJ0X0z9Sd1cDG2usB3gJAhfgsLDKSaqnHcVCugX1NU4VbSFOUyLfpCMGgpwAqY7T7gi8zZe5NDwsQcEwjDvqHGom7/sdLghsN9D+ZCxmLJe1XFvUuI2uVCLqzR4U0tLAYaKFz2XPVVqw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jl7Y9ors; arc=fail smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711903434; c=relaxed/simple;
+	bh=dGNDFLbwo2zVue7sRo2PwG/gEsf8+f+zgZSuaW6M1Pc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IfQD1pneNkthddsq3/1h4tHiymauBvdGYM1X3sFWxW20an0LilN1NNWZkVtUwgD+uwzuE51elPQ7xQUJQmPa97EWTCkE+1Q5YlQN/0QPFgX8rWzCjdhNaHMWXbW+jQoupPVWDMcRqqkAn4X52BwY4MM73VqzfQv7i5tR0RJJf74=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZ9D70uV reason="signature verification failed"; arc=none smtp.client-ip=10.30.226.201; arc=fail smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jl7Y9ors"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711901272; x=1743437272;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=ROUD/NtB2afjyy4nZ+HTeQn33ckLP6ZF+S2OGUYMlcY=;
-  b=jl7Y9orsZe5aHcYKciuqZNRfBHQEWTQqUSOCWtycqUQ2G6/pt4vdQQPB
-   cHlqI4u/qSggE2tdYD6cnKklPiS0YpPD8LILFuYldmx8TLtofTdVAMi1C
-   8uyTDRNmThtfXuMTCkmm8hVv1wBGorqj5gNeGkvAumjKOZAAZ7lidep9+
-   jPfZjUCMSazWW2FUTbHBTjDhe2kLrZxHVOY3SmBk2SjBiFvy5Hb2UOec6
-   E+gBzhuAKL79ThCl/0wb8wtSpxN8z7PPZfuz4qZIkIyCHRVGLnqSZpeTD
-   oK8GNLX5qfMq2nto29d+cM9fD8XxDHZaU1qJHwYUAci84i4L1tP3isAqG
-   w==;
-X-CSE-ConnectionGUID: 2lTSpQLgRzmfudzWYotLUQ==
-X-CSE-MsgGUID: 3d9AKui3ThW7MqPRT0H9UQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="17598098"
-X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="17598098"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2024 09:07:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="22170039"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 31 Mar 2024 09:07:51 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZ9D70uV"
+Received: from localhost (localhost [127.0.0.1])
+	by a.mx.secunet.com (Postfix) with ESMTP id 7D1A1208CF;
+	Sun, 31 Mar 2024 18:43:49 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O8B0iyqHsjZA; Sun, 31 Mar 2024 18:43:46 +0200 (CEST)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by a.mx.secunet.com (Postfix) with ESMTPS id 4E98D208CE;
+	Sun, 31 Mar 2024 18:43:45 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 4E98D208CE
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+	by mailout1.secunet.com (Postfix) with ESMTP id 404DA800061;
+	Sun, 31 Mar 2024 18:43:45 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 09:07:50 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Sun, 31 Mar 2024 09:07:50 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Sun, 31 Mar 2024 09:07:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gqXkXmVAFeHGKt9BLiArI3T77Z4TOfFuoJCTRPnbQBjZLKFud78djb3G2MQSUdy9QTVoXUwnx50Hy1n4Q+aL5awX8soBaHO/Y7bft3otxyZLZ9Bh+idH/wljI1RqO2vcZwzixNoApeqCZjGihWnFH1UthMANv0b28IjvYPr8hrc999Q9PRcgTMsqX1X910SAsOzHa+Pm8AoDN4jrkRGsRX1sg9MfzguFrF9mSpdEuKV2+h8L+vCIyHA3CU88YMgF6wsQv8ti6uuAtlJe9WiFJ/+t6nWxBIvOwwf5WXRmIorQAOxgl48q/h5uyOcZCdpcf32+sJOIhdhNdccNa/dHJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zAMU3ZjsN04fgM1duXRbRPWZa6mRQ9V2UGIp6sFTb38=;
- b=lIBdyKBxMBGh17MG3948rguQ6LMq8L61UyDxS9m93t4zuF1dAPZ6bqmwftQpdyJJ4Cb27i29zyicMvLvXB1B2X7MSnyfXqDNl17ypdeeGeWQAVVbhkkf9DgnrQwUDGuIE2PtjEiSiahPBFR2jqU8HFZG53JrNuUiBHzmndunGS8bmejItyCI7aS0spg9NWoQiH6iS3Gy3sSdNNWIxe4rKqPqDwX4W6Jsbd1fp8AlQY7BYlRVht9m9GNhZz9/koCxeFz7wZI1gG2qovhzB2DAEkqVMOmaRYCeii61AkjpsgKLV4/q3wVB3gUTzBoS1ZVvqomF2wiA/kgLYIa7KFfB4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by SA1PR11MB8476.namprd11.prod.outlook.com (2603:10b6:806:3af::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.41; Sun, 31 Mar
- 2024 16:07:47 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::7118:c3d4:7001:cf9d]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::7118:c3d4:7001:cf9d%6]) with mapi id 15.20.7452.017; Sun, 31 Mar 2024
- 16:07:47 +0000
-Date: Mon, 1 Apr 2024 00:01:06 +0800
-From: Yujie Liu <yujie.liu@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-CC: kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [paulmck-rcu:dev.2024.03.27b 66/69]
- include/linux/atomic/atomic-arch-fallback.h:2026:9: error: call to
- undeclared function 'cmpxchg_emu_u8'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <ZgmIwuxCR9+pK8MP@yujie-X299>
-References: <202403292322.bwguovKc-lkp@intel.com>
- <45452057-6655-4bab-a27d-38f2dff018e8@paulmck-laptop>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <45452057-6655-4bab-a27d-38f2dff018e8@paulmck-laptop>
-X-ClientProxiedBy: SG2P153CA0005.APCP153.PROD.OUTLOOK.COM (2603:1096::15) To
- CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ 15.1.2507.35; Sun, 31 Mar 2024 18:43:45 +0200
+Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
+ 15.1.2507.17; Sun, 31 Mar 2024 16:36:27 +0000
+X-sender: <netdev+bounces-83536-steffen.klassert=secunet.com@vger.kernel.org>
+X-Receiver: <steffen.klassert@secunet.com>
+ ORCPT=rfc822;steffen.klassert@secunet.com NOTIFY=NEVER;
+ X-ExtendedProps=BQAVABYAAgAAAAUAFAARAPDFCS25BAlDktII2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAwAAgAABQBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9ye
+	TogRmFsc2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
+X-CreatedBy: MSExchange15
+X-HeloDomain: a.mx.secunet.com
+X-ExtendedProps: BQBjAAoAJWsFfe5Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAHAAAAHN0ZWZmZW4ua2xhc3NlcnRAc2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAYgAKAF0AAADpigAABQBkAA8AAwAAAEh1Yg==
+X-Source: SMTP:Default MBX-ESSEN-02
+X-SourceIPAddress: 62.96.220.36
+X-EndOfInjectedXHeaders: 15161
+X-Virus-Scanned: by secunet
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.199.223; helo=ny.mirrors.kernel.org; envelope-from=netdev+bounces-83536-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 75874207FD
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711852445; cv=none; b=Pj9ztFoeNFC8W8Bmk7O2Z5NF1FqYCQSQXvXHwYXp92impW8yqIqXKztodGBRpXQU5wfGBPjF30T0jKjGp+dRMIVrE9+rHt+E/sK11cG0ccYiCxhujgs6p0ewfBT+tyH81Ba1BpjFwcgtUyVZk4Fx9c+IJDc8Pbb3UqAFDp4kjvQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711852445; c=relaxed/simple;
+	bh=+9xtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PCxe4cBbfRJV3gpTvYKFbbR/6Oo8CmYNpvDoIAdyEoT+Fst6iaUXtghvq3ijq3w1+V6jl8iuUhxs26iFUlXrzTxzkigqaTs5dnoEnR/bLxwsiIwpFFcP1wwql0Rd0L+n+/bc3NcLBp7LSIEUyTq3KbDcKWe4NXrWGbBy3k5Tsu0=
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZ9D70uV; arc=none smtp.client-ip=10.30.226.201
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711852444;
+	bh=+9xtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PZ9D70uVOm8Q1eV7TepfO1FkN+1k1kWNkT6Ku6f/2s6iTAOV7tZxn2zhkvPsVyaFX
+	 RPw7j/3dyOXbWPTqh7GDBBmESHoa0/CSjp3BgTh7gbx5KJ1tdiDym07g+AY4FzPgQS
+	 DKX7tgoR9K9mHdV/+tGZPsttPaEAScJJhqA81HNprVN9Fu9EJ0XTEzkGTvbaVJb6Hx
+	 Qzks5PLB5vorWVg53klblNq3phtjvnvFZqLRpBY/lb0TuCBuxS4GgeeCTYGb+VI6ok
+	 zfc1qtwfOHsXCTucSL4Xb61hPPubFgtHkxN2eCV1J182QybCpwgfTt0/4sSb25g/FL
+	 PUk6ZaAAFbN5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVDkGXqULJb0iTE30zok3Z/DcAitzYB9HUyf5pQ/qSbH7TnoDghRS696d3Z3Bc7u3vJtKOCIyp0hkqFnVKFWXLHRnz0A8czvwM7M2KtNDkdHOpr2c074bO9nltfNZLNpXSwZIksKCLZNGtZiA0bHX646SeY+kLLS+WUzjnVm4MKEuoM
+X-Gm-Message-State: AOJu0YzWfQ4zDI0K2CTviHTVM/YUaXaFBBv4MmJVL07IxX6zt/sEhULv
+	8wYbpd4A6ohvhE1X1s1afNGS2g9DPx2m3V/0v8z3Oa7dpCwciQaRAnkxDrAd98WqSrH+OiQMNXB
+	qPMEzBdnsGuo/e1Si+icML8zVNFY=
+X-Google-Smtp-Source: AGHT+IGpEQPL0v7g3+p+5E8g7HGnWQKzlMop6CryhqCRVmhK61t313PDdp5vf1ukKDWFXpyLX2tmge1Ix/vKXAwQ4u4=
+X-Received: by 2002:a2e:9914:0:b0:2d4:6aba:f1a9 with SMTP id
+ v20-20020a2e9914000000b002d46abaf1a9mr4254960lji.40.1711852443253; Sat, 30
+ Mar 2024 19:34:03 -0700 (PDT)
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|SA1PR11MB8476:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QYrZbh6rkHsbVp0R8f07NmPsrIDyyvUbU4XieDYsNczVZTtSAU6ZtT0wPHQsXbTAx2LFXqPvp9k2hhKi+6ZTqSKmxtivYpEYc0l1wzxe2nZXBA4uOd5Qd05ExyCqdfAhO3UlTzcHJYRR8mDAv8jorzfoR9P9ppPZZjgqBDlUkQvj7l4nhlp1QYc/TlHRxj6xTcr0NLfcFaueGG0m/ihCwB8uiuUw8n8beWkRYdj9kghhaNQ/pkQEKOKyinBc98eVK1CyBgxPvaFUzynBi99vVyOuRw5Eh8DhKjYtvEb9VdzqvHWsPJ0abjV9m4/A7OTJxNWwlf4+NGb31eFfsQhsNo/A4/TrUoZzqE8cFnC7YxFxB67eDXM9yPoUlLI88Jgc8EqXKBbPswcDqxE4T+SPprD8uv6wSKAb9UIueY7iNKH8j9BvY5dCL67L457Fr6CkCt4EyOhK2ZJ5PsHSF0TyF46rbpnlACkYnHl2NwInFX2TR4W0VoFhEraxlMDB6oWehZcVxzz8XF3uzwihcYnRCkqALfspuT1J26LPb0RidPx6TZr5nkDaOtkGiUOSGq4WJoeigmhduJU++K+2Nr80du54LQMv4N+LYbfZXvIjvhDP1tUhLeRPcKJ0NHn0dmY6
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(376005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zYLoD0pEZNCXPC0puETLQVkM7EaxpzK4JoG6zA6olE1qEvYLN3zpjitS3+Jl?=
- =?us-ascii?Q?pj/kl9PAW0UAxL/EDTLbnpEArTwiyDVQ7kQ9yAm4s7dlJcFfYOcM71n2JkA9?=
- =?us-ascii?Q?5NMwAxKJXypqe9u0guu64HUFhrH0TJVbiSAQezKdcXKk+WUUGbFYdcGoDUNR?=
- =?us-ascii?Q?feo57s2u882QIsHkOUQPVST8SU/j0i0EO3zcPotzyru2gHAG5WsRKIyEXChB?=
- =?us-ascii?Q?Y60EPBi21rLdo02/bZ2ouadyGTrHWOpytbj3yYnxfPzSoMA8imfZ8qMj4kNq?=
- =?us-ascii?Q?wz9MytsrOFhFr77anFXYf1+WiJb1CYZBI6Ctqgu9nL0L5RypOQ2bYkWQfC0J?=
- =?us-ascii?Q?G2kQKzMO2CEM9JHIxinsIHL8pOjwbpT9nHCSc+u3W/CC3HG0mbzhhm6T9QOR?=
- =?us-ascii?Q?nxNcNEPIGnHoKv6qGePFvySGNe9j/rTKZYAqa3+Lg29s0TTvzdribY9A97LK?=
- =?us-ascii?Q?kvQHte0lZFiXFju345FvTszrYqrgy7aKK3GLYJgxO/ugPKEDYpozTRajXsvY?=
- =?us-ascii?Q?0SgeNlFOtweOmMFACtkOtDyxn1egrpBpPnyDJvgmNUUOXNb3JlOJyRS009cM?=
- =?us-ascii?Q?yJ/mR92hv1L3WrmixAU7AMYMhg3T1MgpexpEWXG/TaS9SsIC/a6zDsa9VZE1?=
- =?us-ascii?Q?T/oPXRdxsPQSNgLczwJBBjMzC2gFLZc41PZQ2aZQKVuouSDvbYy4AHJnIHVd?=
- =?us-ascii?Q?LwuqQPZ53DnUtfrWxgBsayHFZ0KrMHcd1jnD64H2rgRXPQYX1kyx7zzaMlql?=
- =?us-ascii?Q?a/c6R0riPTj17z+NEqr20uuubfHs8QBMcTRqyLdkMKuRt8kd+2a6Pi05ikbd?=
- =?us-ascii?Q?x471ccdHOATRK8Pns72NEVEW6mENF8uau6qHbxiKJYt3kbbYCCvVmZO0UFE/?=
- =?us-ascii?Q?qRivLowDW2DJSr/0k1tr5i3kZNVeUPpqRdTbhlVHn1DTkVmJAZ6r2hyZ68cP?=
- =?us-ascii?Q?lDd6RFu8rmCxemX/FsUlhu2NbhKzL7m1xgigTizPMPdUzrF3kLVVNvtPupKL?=
- =?us-ascii?Q?1e0mmEJXXut1QFK40zl8bR6aHucVBUKZ2ahi1SDpS0KiCKhIRq3lVw0L8YSo?=
- =?us-ascii?Q?WJsXPpCUCjlLMQdpqyOxUUlTCjTCETR60csLyMH2pU0QmtaOX1HkRyDgyXtO?=
- =?us-ascii?Q?aM1RLMxbHRFk0U49Mzp9roBSynxdReRuA1Vpq2uAly+ben6Bu7oSX6FxGml1?=
- =?us-ascii?Q?8QA7DFb8M72bj45VPGYLJh0GZLf6st0YxBAjNsjpJyl89tIClGxbLhct/dmH?=
- =?us-ascii?Q?9MVs8L5gvTv1tAln5q9smKyTJItvu04DYXGxDfOt7q1fsEMUzBZc+bGlcHi5?=
- =?us-ascii?Q?NwRB6C7gkfCFJiI2qJetulyLprBXEjtwTVl6OLT4LaLhHQNndelvtFFPmZIP?=
- =?us-ascii?Q?ZLUtGxTMQOgnQx+m24beZUmADXXr6Z14xHB7BfM/bUKlKnwUHDU28cpfrWlv?=
- =?us-ascii?Q?cFzQ2KP5S87DXSlwzZooHiRGdJyvdSMbA7PT0pUvoNJNIVEiBYSO6qwEmaZC?=
- =?us-ascii?Q?vYdHzXQumuHinH7wkrQas10VwlUn0OzsNguC7qLY8TuYSFxWlfvamI3PC/qz?=
- =?us-ascii?Q?dcuhnnTlFnK6adhLtA1GVM19IFLyn3WYvIhFDoFN?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0a5363d-3e0b-48d0-9411-08dc519cb4c2
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2024 16:07:47.0825
+References: <20240326144741.3094687-1-arnd@kernel.org> <20240326144741.3094687-2-arnd@kernel.org>
+ <87jzlohhbc.fsf@intel.com> <cb853762-06d4-401c-a1c8-07a0c031b499@app.fastmail.com>
+ <87edbwglle.fsf@intel.com> <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastmail.com>
+In-Reply-To: <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 31 Mar 2024 11:33:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLunhpxXA@mail.gmail.com>
+Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLunhpxXA@mail.gmail.com>
+Subject: Re: [PATCH 01/12] kbuild: make -Woverride-init warnings more consistent
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>, Arnd Bergmann <arnd@kernel.org>, 
+	linux-kbuild@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Linus Walleij <linus.walleij@linaro.org>, 
+	Joel Stanley <joel@jms.id.au>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>, linux-mm@kvack.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Message-ID: <20240331023327.pp1b5xJkBs6tYGs-1GUSBEP4rOBZwV8xIVymXZsyVMQ@z>
+
+On Wed, Mar 27, 2024 at 6:23=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Wed, Mar 27, 2024, at 08:50, Jani Nikula wrote:
+> > On Tue, 26 Mar 2024, "Arnd Bergmann" <arnd@arndb.de> wrote:
+> >> On Tue, Mar 26, 2024, at 21:24, Jani Nikula wrote:
+> >>> On Tue, 26 Mar 2024, Arnd Bergmann <arnd@kernel.org> wrote:
+> >>
+> >> It works now.
+> >>
+> >> The original __diag_ignore_all() only did it for gcc-8 and above
+> >> because that was initially needed to suppress warnings that
+> >> got added in that version, but this was always a mistake.
+> >>
+> >> 689b097a06ba ("compiler-gcc: Suppress -Wmissing-prototypes
+> >> warning for all supported GCC") made it work correctly.
+> >
+> > Oh, nice! Then I think we'd like to go back to __diag_ignore_all() in
+> > i915 and xe.
+> >
+> > The diff is below. I'm fine with you squashing it to your patch, or if
+> > you want me to turn it into a proper patch for you to pick up in your
+> > series, that's fine too. Just let me know.
+>
+> I think I'd prefer to keep my patch simpler for the moment and
+> get that merged through the kbuild tree, it already touches
+> too many places at once.
+>
+> It may be better for me to just drop the drivers/gpu/ part of
+> my patch so you can just just take your patch through the
+> drm tree. I actually have a similar patch for the amdgpu driver
+> that I can send if you like this option better.
+>
+>     Arnd
+>
+
+
+
+Applied to linux-kbuild/fixes.
+Thanks.
+
+--=20
+Best Regards
+Masahiro Yamada
+
+X-sender: <linux-kernel+bounces-125929-steffen.klassert=3Dcunet.com@vger.ke=
+rnel.org>
+X-Receiver: <steffen.klassert@secunet.com> ORCPT=3Dc822;steffen.klassert@se=
+cunet.com NOTIFY=3DVER; X-ExtendedProps=3DAVABYAAgAAAAUAFAARAPDFCS25BAlDktI=
+I2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSX=
+NSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAA=
+AUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChG=
+WURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwA=
+XAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG=
+1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHc=
+m91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29u=
+ZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAw=
+AAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC=
+5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAwAAgAAB=
+QBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbixPVT1V=
+c2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1J=
+lc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc2UNCg8ALwAAAE1pY3Jvc2=
+9mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb=
+3VwRXhwYW5zaW9uBQAjAAIAAQ=3D=0A=
+X-CreatedBy: MSExchange15
+X-HeloDomain: a.mx.secunet.com
+X-ExtendedProps: BQBjAAoAJWsFfe5Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc2=
+9mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAA=
+AAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAHAAAAHN0ZWZmZW4ua2xhc3NlcnRAc2Vj=
+dW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwA=
+AAAAABQAFAAIAAQUAYgAKAF4AAADpigAABQBkAA8AAwAAAEh1Yg=3D=0A=
+X-Source: SMTP:Default MBX-ESSEN-02
+X-SourceIPAddress: 62.96.220.36
+X-EndOfInjectedXHeaders: 15141
+Received: from cas-essen-01.secunet.de (10.53.40.201) by
+ mbx-essen-02.secunet.de (10.53.40.198) with Microsoft SMTP Server
+ (version=3DS1_2, cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.37; Sun, 31 Mar 2024 04:34:25 +0200
+Received: from a.mx.secunet.com (62.96.220.36) by cas-essen-01.secunet.de
+ (10.53.40.201) with Microsoft SMTP Server (version=3DS1_2,
+ cipher=3DS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37 via Frontend
+ Transport; Sun, 31 Mar 2024 04:34:25 +0200
+Received: from localhost (localhost [127.0.0.1])
+	by a.mx.secunet.com (Postfix) with ESMTP id 6D21320892
+	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 04:34:25 +0200 (CEST)
+X-Virus-Scanned: by secunet
+X-Spam-Flag: NO
+X-Spam-Score: -1.2
+X-Spam-Level:
+X-Spam-Status: No, score=3D.2 tagged_above=3D99 required=3D1
+	tests=3DKIMWL_WL_HIGH=3D.1, DKIM_SIGNED=3D1, DKIM_VALID=3D.1,
+	DKIM_VALID_AU=3D.1, MAILING_LIST_MULTI=3D, RCVD_IN_DNSWL_NONE=3D.0001,
+	SPF_HELO_NONE=3D001, SPF_PASS=3D.001]
+	autolearn=3Davailable autolearn_force=3D
+Authentication-Results: a.mx.secunet.com (amavisd-new);
+	dkim=3Dss (2048-bit key) header.d=3Drnel.org
+Received: from a.mx.secunet.com ([127.0.0.1])
+	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ymmiznFv0woJ for <steffen.klassert@secunet.com>;
+	Sun, 31 Mar 2024 04:34:25 +0200 (CEST)
+Received-SPF: Pass (sender SPF authorized) identity=3Dilfrom; client-ip=147=
+.75.80.249; helo=3D.mirrors.kernel.org; envelope-from=3Dnux-kernel+bounces-=
+125929-steffen.klassert=3Dcunet.com@vger.kernel.org; receiver=3Deffen.klass=
+ert@secunet.com=20
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com E4C94207FD
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249]=
+)
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by a.mx.secunet.com (Postfix) with ESMTPS id E4C94207FD
+	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 04:34:24 +0200 (CEST)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.2=
+5.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C02B1F218D2
+	for <steffen.klassert@secunet.com>; Sun, 31 Mar 2024 02:34:24 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB2C4416;
+	Sun, 31 Mar 2024 02:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=3Dss (2048-bit key) header.d=3Drnel.org header.i=3Dernel.org header.b=
+=3DZ9D70uV"
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.or=
+g [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA3D184E;
+	Sun, 31 Mar 2024 02:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=3Dne smtp.client-ip=
+=10.30.226.201
+ARC-Seal: i=3D a=3Da-sha256; d=3Dbspace.kernel.org; s=3Dc-20240116;
+	t=1711852445; cv=3Dne; b=3D9ztFoeNFC8W8Bmk7O2Z5NF1FqYCQSQXvXHwYXp92impW8yq=
+IqXKztodGBRpXQU5wfGBPjF30T0jKjGp+dRMIVrE9+rHt+E/sK11cG0ccYiCxhujgs6p0ewfBT+=
+tyH81Ba1BpjFwcgtUyVZk4Fx9c+IJDc8Pbb3UqAFDp4kjvQARC-Message-Signature: i=3D =
+a=3Da-sha256; d=3Dbspace.kernel.org;
+	s=3Dc-20240116; t=1711852445; c=3Dlaxed/simple;
+	bh=3DxtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=3D=0A=
+	h=3DME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=3Dxe4cBbfRJV3gpTvYKFbbR/6Oo8CmYNpvDoIAdyEoT+Fst6iaU=
+Xtghvq3ijq3w1+V6jl8iuUhxs26iFUlXrzTxzkigqaTs5dnoEnR/bLxwsiIwpFFcP1wwql0Rd0L=
++n+/bc3NcLBp7LSIEUyTq3KbDcKWe4NXrWGbBy3k5Tsu0ARC-Authentication-Results: i=
+=3D smtp.subspace.kernel.org; dkim=3Dss (2048-bit key) header.d=3Drnel.org =
+header.i=3Dernel.org header.b=3D9D70uV; arc=3Dne smtp.client-ip=10.30.226.2=
+01
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A71FCC433B2;
+	Sun, 31 Mar 2024 02:34:04 +0000 (UTC)
+DKIM-Signature: v=3D a=3Da-sha256; c=3Dlaxed/simple; d=3Drnel.org;
+	s=3D0201202; t=1711852444;
+	bh=3DxtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=3D=0A=
+	h=3Dferences:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=3D9D70uVOm8Q1eV7TepfO1FkN+1k1kWNkT6Ku6f/2s6iTAOV7tZxn2zhkvPsVyaFX
+	 RPw7j/3dyOXbWPTqh7GDBBmESHoa0/CSjp3BgTh7gbx5KJ1tdiDym07g+AY4FzPgQS
+	 DKX7tgoR9K9mHdV/+tGZPsttPaEAScJJhqA81HNprVN9Fu9EJ0XTEzkGTvbaVJb6Hx
+	 Qzks5PLB5vorWVg53klblNq3phtjvnvFZqLRpBY/lb0TuCBuxS4GgeeCTYGb+VI6ok
+	 zfc1qtwfOHsXCTucSL4Xb61hPPubFgtHkxN2eCV1J182QybCpwgfTt0/4sSb25g/FL
+	 PUk6ZaAAFbN5g=3D=0A=
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-513d23be0b6=
+so3396180e87.0;
+        Sat, 30 Mar 2024 19:34:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=3D AJvYcCVDkGXqULJb0iTE30zok3Z/DcAitzYB9HUyf5pQ/qS=
+bH7TnoDghRS696d3Z3Bc7u3vJtKOCIyp0hkqFnVKFWXLHRnz0A8czvwM7M2KtNDkdHOpr2c074b=
+O9nltfNZLNpXSwZIksKCLZNGtZiA0bHX646SeY+kLLS+WUzjnVm4MKEuoM
+X-Gm-Message-State: AOJu0YzWfQ4zDI0K2CTviHTVM/YUaXaFBBv4MmJVL07IxX6zt/sEhUL=
+v
+	8wYbpd4A6ohvhE1X1s1afNGS2g9DPx2m3V/0v8z3Oa7dpCwciQaRAnkxDrAd98WqSrH+OiQMNX=
+B
+	qPMEzBdnsGuo/e1Si+icML8zVNFYX-Google-Smtp-Source: AGHT+IGpEQPL0v7g3+p+5E8g=
+7HGnWQKzlMop6CryhqCRVmhK61t313PDdp5vf1ukKDWFXpyLX2tmge1Ix/vKXAwQ4u4X-Receiv=
+ed: by 2002:a2e:9914:0:b0:2d4:6aba:f1a9 with SMTP id
+ v20-20020a2e9914000000b002d46abaf1a9mr4254960lji.40.1711852443253; Sat, 30
+ Mar 2024 19:34:03 -0700 (PDT)
+Precedence: bulk
+X-Mailing-List: linux-kernel@vger.kernel.org
+List-Id: <linux-kernel.vger.kernel.org>
+List-Subscribe: <mailto:linux-kernel+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kernel+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240326144741.3094687-1-arnd@kernel.org> <20240326144741.3094=
+687-2-arnd@kernel.org>
+ <87jzlohhbc.fsf@intel.com> <cb853762-06d4-401c-a1c8-07a0c031b499@app.fastm=
+ail.com>
+ <87edbwglle.fsf@intel.com> <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastm=
+ail.com>
+In-Reply-To: <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 31 Mar 2024 11:33:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLu=
+nhpxXA@mail.gmail.com>
+Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLunhpxXA@mail.gmail=
+.com>
+Subject: Re: [PATCH 01/12] kbuild: make -Woverride-init warnings more consi=
+stent
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>, Arnd Bergmann <arnd@kernel.o=
+rg>,=20
+	linux-kbuild@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,=20
+	Alex Deucher <alexander.deucher@amd.com>, =3DTF-8?Q?Christian_K=C3=B6nig?=
+=3Dhristian.koenig@amd.com>,=20
+	Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.or=
+g>,=20
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mrip=
+ard@kernel.org>,=20
+	Thomas Zimmermann <tzimmermann@suse.de>, Jakub Kicinski <kuba@kernel.org>,=
+ Paolo Abeni <pabeni@redhat.com>,=20
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Linus Walleij <linus.walleij=
+@linaro.org>,=20
+	Joel Stanley <joel@jms.id.au>, Alexei Starovoitov <ast@kernel.org>, Daniel=
+ Borkmann <daniel@iogearbox.net>,=20
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kerne=
+l.org>,=20
+	Nicolas Schier <nicolas@fjasle.eu>, dri-devel@lists.freedesktop.org,=20
+	linux-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>, linux-mm@kv=
+ack.org,=20
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset=3DTF-8"
+Content-Transfer-Encoding: quoted-printable
+Return-Path: linux-kernel+bounces-125929-steffen.klassert=3Dcunet.com@vger.=
+kernel.org
+X-MS-Exchange-Organization-OriginalArrivalTime: 31 Mar 2024 02:34:25.4166
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +RbyVRM2cnU9TE6xqNhVcx0wDmN5n9b7LMfwGZmr4Czm9d13f0PiWyysqX6uDf/6FZZCCIqw/qpOFoZ5UkkKpg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8476
-X-OriginatorOrg: intel.com
+X-MS-Exchange-Organization-Network-Message-Id: 95989cb8-1654-4156-ee8e-08dc=
+512b14cc
+X-MS-Exchange-Organization-OriginalClientIPAddress: 62.96.220.36
+X-MS-Exchange-Organization-OriginalServerIPAddress: 10.53.40.201
+X-MS-Exchange-Organization-Cross-Premises-Headers-Processed: cas-essen-01.s=
+ecunet.de
+X-MS-Exchange-Organization-OrderedPrecisionLatencyInProgress: LSRV=3Dx-esse=
+n-02.secunet.de:TOTAL-HUB=3D408|SMR=3D329(SMRDE=3D004|SMRC=3D324(SMRCL=3D10=
+2|X-SMRCR=3D322))|CAT=3D078(CATOS=3D001
+ |CATRESL=3D028(CATRESLP2R=3D022)|CATORES=3D046(CATRS=3D046(CATRS-Transport
+ Rule Agent=3D001 |CATRS-Index Routing Agent=3D044)));2024-03-31T02:34:25.9=
+41Z
+X-MS-Exchange-Forest-ArrivalHubServer: mbx-essen-02.secunet.de
+X-MS-Exchange-Organization-AuthSource: cas-essen-01.secunet.de
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Exchange-Organization-FromEntityHeader: Internet
+X-MS-Exchange-Organization-OriginalSize: 9587
+X-MS-Exchange-Organization-HygienePolicy: Standard
+X-MS-Exchange-Organization-MessageLatency: SRV=CAs-essen-01.secunet.de:TOTA=
+L-FE=3D117|SMR=3D022(SMRPI=3D020(SMRPI-FrontendProxyAgent=3D019))|SMS=3D094
+X-MS-Exchange-Organization-Recipient-Limit-Verified: True
+X-MS-Exchange-Organization-TotalRecipientCount: 1
+X-MS-Exchange-Organization-Rules-Execution-History: 0b0cf904-14ac-4724-8bdf=
+-482ee6223cf2%%%fd34672d-751c-45ae-a963-ed177fcabe23%%%d8080257-b0c3-47b4-b=
+0db-23bc0c8ddb3c%%%95e591a2-5d7d-4afa-b1d0-7573d6c0a5d9%%%f7d0f6bc-4dcc-487=
+6-8c5d-b3d6ddbb3d55%%%16355082-c50b-4214-9c7d-d39575f9f79b
+X-MS-Exchange-Forest-RulesExecuted: mbx-essen-02
+X-MS-Exchange-Organization-RulesExecuted: mbx-essen-02
+X-MS-Exchange-Forest-IndexAgent-0: AQ0CZW4AAX0EAAAPAAADH4sIAAAAAAAEAI1UTW8b=
+NxClvmXZjuEGuU
+ 99cQJItuM0TmIURpMcCgdwW7QGgp4Mapdasdolt1xuFN36j/p7eu0v
+ 6eNwJduADVQiVlxy5r03b0j9s/2zoc8qHdOVdHT6ZkynJ6ffkfR0dn
+ 766t+//v7lit47k9IH5bJCGkPfS7z+EB7To1Rd0NJZr853RxcY9BDY
+ OKCdvD1/fTKmT9Jo+kkv6lzeJhLnXdcK8WcxldMO7hEfPM5MF7cInH
+ 52h/n05XmYPcJ88Qj3QzUvlDMqP7Iuu8/dKLj0tLRuUZGxy6N7O9dz
+ RdbpTBuZ081NqmV2ozNjnbqRef78BVmTryjVKWlPM+soS5LJW5KQIK
+ f2i2pgpiqRdaXIz1HWUlakjfYaCCsySqUqJW+pqsvSqapCgDPaZBWH
+ NwiZ9STTEKlNhPmiXKWtGdO09ljRFQPLfClX+KFCV14u1P1yzt6+m5
+ 68eyNPzqaSnh8ktih1rtwEqs/ptzX/5DOSKyiYlPDK+lWpqgagkcal
+ Qj5rts5D1o8fPx68oEKmKlgR7KTEOqcSn6+iiOa8zMdkdKK+Dd4aug
+ zSzYKW6jClXC9UcCKzNJXJIkwf8lybCKXfvXzNVn9VdxlCz1I9mxEs
+ maocLaXLw4Jm2ihaaj+nla2p+rOW1TyUArXgwZqjUvoE8lCbnkWsEL
+ qUxlPBwnztTEjQBi+SYE+pmjS2JIRjp9QQX5ehVQE3QlXKaVWNuXmH
+ VZTjrT2iT3XlKVfMsWhOYEhZW3MJZ9CYGZiAvVCqpGLVkFa6KNFAJv
+ eou7CFglqYEhAy5eNZKXAdwiGbO1tnc45cTGudY8kpXCCUJHOnZLoC
+ RZ3MY7+hDg014MploqpwJa1J1EYfcOUKFmN434iIPv0RSkrhDlOlTo
+ fDepyV9TF0O8CwvbdVsP+USBMz+RFO75223BUfklNXsHg0l2Tia75M
+ c/lFoS9wRefybmOCDFmkUNCo4fqCNZdMWykcIz1jGfEUhgtlS48b1p
+ S3Ljt8wn8Mv8bv+7LMdbzEuTb110k093imv6oKeddzaRZhsjuaTHZH
+ HxTK+1Vl0qXw+UpWcq6dpd8lbo8MQUK0Racjep2W2MEQ3bbodkWv3e
+ oMhBiIIeZDMeq2xK7o9UQfuz2x+1BKHym9lugJjAGy+mLQEzsxst0S
+ 2xhhjsgBY27/X8x7gE8eAuxvRO5xWCfAPkUkwDtiHzHD1ta+aHeb3R
+ DfCRQhHYy9FlJFS7Q7QclOrBrzLTFCPMKGYgujK7Y5AII7CBiILWYP
+ kQhD+kA82xF7w6AfW0ES5k/F1kjsAzNwMWYUEEG2xLP2ugQg9HgSd2
+ MAHLirvL3W1hZPIjuXOYjzjexNeo/1t5n9Hiw/wciu9qO2zRZPUPuw
+ z8531si8vhN1xqo3KVjZ1MhSG0mYx3WGCtbhdcBOxt2IGXuBJ+d2Nz
+ ojLyNEW/qRq+nduuo41hoidR86uWs9bs1wUyYo+jgtvL6xZQPFu990
+ xR5SAlfoZp9dght7se+A7f8HnaT+4RQJAAABCrECPD94bWwgdmVyc2
+ lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTE2Ij8+DQo8RW1haWxTZXQ+
+ DQogIDxWZXJzaW9uPjE1LjAuMC4wPC9WZXJzaW9uPg0KICA8RW1haW
+ xzPg0KICAgIDxFbWFpbCBTdGFydEluZGV4PSI0NyI+DQogICAgICA8
+ RW1haWxTdHJpbmc+YXJuZEBhcm5kYi5kZTwvRW1haWxTdHJpbmc+DQ
+ ogICAgPC9FbWFpbD4NCiAgICA8RW1haWwgU3RhcnRJbmRleD0iMjkx
+ Ij4NCiAgICAgIDxFbWFpbFN0cmluZz5hcm5kQGtlcm5lbC5vcmc8L0
+ VtYWlsU3RyaW5nPg0KICAgIDwvRW1haWw+DQogIDwvRW1haWxzPg0K
+ PC9FbWFpbFNldD4BDLEJPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZG
+ luZz0idXRmLTE2Ij8+DQo8Q29udGFjdFNldD4NCiAgPFZlcnNpb24+
+ MTUuMC4wLjA8L1ZlcnNpb24+DQogIDxDb250YWN0cz4NCiAgICA8Q2
+ 9udGFjdCBTdGFydEluZGV4PSIzMiI+DQogICAgICA8UGVyc29uIFN0
+ YXJ0SW5kZXg9IjMyIj4NCiAgICAgICAgPFBlcnNvblN0cmluZz5Bcm
+ 5kIEJlcmdtYW5uPC9QZXJzb25TdHJpbmc+DQogICAgICA8L1BlcnNv
+ bj4NCiAgICAgIDxFbWFpbHM+DQogICAgICAgIDxFbWFpbCBTdGFydE
+ luZGV4PSI0NyI+DQogICAgICAgICAgPEVtYWlsU3RyaW5nPmFybmRA
+ YXJuZGIuZGU8L0VtYWlsU3RyaW5nPg0KICAgICAgICA8L0VtYWlsPg
+ 0KICAgICAgPC9FbWFpbHM+DQogICAgICA8Q29udGFjdFN0cmluZz5B
+ cm5kIEJlcmdtYW5uICZsdDthcm5kQGFybmRiLmRlPC9Db250YWN0U3
+ RyaW5nPg0KICAgIDwvQ29udGFjdD4NCiAgICA8Q29udGFjdCBTdGFy
+ dEluZGV4PSIxNTMiPg0KICAgICAgPFBlcnNvbiBTdGFydEluZGV4PS
+ IxNTMiPg0KICAgICAgICA8UGVyc29uU3RyaW5nPkFybmQgQmVyZ21h
+ bm48L1BlcnNvblN0cmluZz4NCiAgICAgIDwvUGVyc29uPg0KICAgIC
+ AgPEVtYWlscz4NCiAgICAgICAgPEVtYWlsIFN0YXJ0SW5kZXg9IjE2
+ OSI+DQogICAgICAgICAgPEVtYWlsU3RyaW5nPmFybmRAYXJuZGIuZG
+ U8L0VtYWlsU3RyaW5nPg0KICAgICAgICA8L0VtYWlsPg0KICAgICAg
+ PC9FbWFpbHM+DQogICAgICA8Q29udGFjdFN0cmluZz5Bcm5kIEJlcm
+ dtYW5uIiAmbHQ7YXJuZEBhcm5kYi5kZTwvQ29udGFjdFN0cmluZz4N
+ CiAgICA8L0NvbnRhY3Q+DQogICAgPENvbnRhY3QgU3RhcnRJbmRleD
+ 0iMjc2Ij4NCiAgICAgIDxQZXJzb24gU3RhcnRJbmRleD0iMjc2Ij4N
+ CiAgICAgICAgPFBlcnNvblN0cmluZz5Bcm5kIEJlcmdtYW5uPC9QZX
+ Jzb25TdHJpbmc+DQogICAgICA8L1BlcnNvbj4NCiAgICAgIDxFbWFp
+ bHM+DQogICAgICAgIDxFbWFpbCBTdGFydEluZGV4PSIyOTEiPg0KIC
+ AgICAgICAgIDxFbWFpbFN0cmluZz5hcm5kQGtlcm5lbC5vcmc8L0Vt
+ YWlsU3RyaW5nPg0KICAgICAgICA8L0VtYWlsPg0KICAgICAgPC9FbW
+ FpbHM+DQogICAgICA8Q29udGFjdFN0cmluZz5Bcm5kIEJlcmdtYW5u
+ ICZsdDthcm5kQGtlcm5lbC5vcmc8L0NvbnRhY3RTdHJpbmc+DQogIC
+ AgPC9Db250YWN0Pg0KICA8L0NvbnRhY3RzPg0KPC9Db250YWN0U2V0
+ PgEOzwFSZXRyaWV2ZXJPcGVyYXRvciwxMCwxO1JldHJpZXZlck9wZX
+ JhdG9yLDExLDI7UG9zdERvY1BhcnNlck9wZXJhdG9yLDEwLDE7UG9z
+ dERvY1BhcnNlck9wZXJhdG9yLDExLDA7UG9zdFdvcmRCcmVha2VyRG
+ lhZ25vc3RpY09wZXJhdG9yLDEwLDI7UG9zdFdvcmRCcmVha2VyRGlh
+ Z25vc3RpY09wZXJhdG9yLDExLDA7VHJhbnNwb3J0V3JpdGVyUHJvZH VjZXIsMjAsMjIX-MS-E=
+xchange-Forest-IndexAgent: 1 2885
+X-MS-Exchange-Forest-EmailMessageHash: 121D0850
+X-MS-Exchange-Forest-Language: en
+X-MS-Exchange-Organization-Processed-By-Journaling: Journal Agent
 
-On Fri, Mar 29, 2024 at 11:52:16AM -0700, Paul E. McKenney wrote:
-> On Fri, Mar 29, 2024 at 11:08:05PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2024.03.27b
-> > head:   786fab3085d764055a78edb54023420920344333
-> > commit: 032d9f7e1213171131a3f45c5c532ea5d11b4b9a [66/69] riscv: Emulate one-byte and two-byte cmpxchg
-> > config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240329/202403292322.bwguovKc-lkp@intel.com/config)
-> > compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 79ba323bdd0843275019e16b6e9b35133677c514)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403292322.bwguovKc-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202403292322.bwguovKc-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    In file included from arch/riscv/kernel/asm-offsets.c:10:
-> >    In file included from include/linux/mm.h:7:
-> >    In file included from include/linux/gfp.h:7:
-> >    In file included from include/linux/mmzone.h:8:
-> >    In file included from include/linux/spinlock.h:63:
-> >    In file included from include/linux/lockdep.h:14:
-> >    In file included from include/linux/smp.h:13:
-> >    In file included from include/linux/cpumask.h:14:
-> >    In file included from include/linux/atomic.h:80:
-> > >> include/linux/atomic/atomic-arch-fallback.h:2026:9: error: call to undeclared function 'cmpxchg_emu_u8'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >     2026 |         return raw_cmpxchg(&v->counter, old, new);
-> >          |                ^
-> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-> >       55 | #define raw_cmpxchg arch_cmpxchg
-> >          |                     ^
-> >    arch/riscv/include/asm/cmpxchg.h:367:23: note: expanded from macro 'arch_cmpxchg'
-> >      367 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-> >          |                              ^
-> >    arch/riscv/include/asm/cmpxchg.h:328:11: note: expanded from macro '__cmpxchg'
-> >      328 |                 __ret = cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
-> >          |                         ^
-> 
-> Again, good catch!  And again, does the diff at the end of this email
-> fix things for you?
+On Wed, Mar 27, 2024 at 6:23=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Wed, Mar 27, 2024, at 08:50, Jani Nikula wrote:
+> > On Tue, 26 Mar 2024, "Arnd Bergmann" <arnd@arndb.de> wrote:
+> >> On Tue, Mar 26, 2024, at 21:24, Jani Nikula wrote:
+> >>> On Tue, 26 Mar 2024, Arnd Bergmann <arnd@kernel.org> wrote:
+> >>
+> >> It works now.
+> >>
+> >> The original __diag_ignore_all() only did it for gcc-8 and above
+> >> because that was initially needed to suppress warnings that
+> >> got added in that version, but this was always a mistake.
+> >>
+> >> 689b097a06ba ("compiler-gcc: Suppress -Wmissing-prototypes
+> >> warning for all supported GCC") made it work correctly.
+> >
+> > Oh, nice! Then I think we'd like to go back to __diag_ignore_all() in
+> > i915 and xe.
+> >
+> > The diff is below. I'm fine with you squashing it to your patch, or if
+> > you want me to turn it into a proper patch for you to pick up in your
+> > series, that's fine too. Just let me know.
+>
+> I think I'd prefer to keep my patch simpler for the moment and
+> get that merged through the kbuild tree, it already touches
+> too many places at once.
+>
+> It may be better for me to just drop the drivers/gpu/ part of
+> my patch so you can just just take your patch through the
+> drm tree. I actually have a similar patch for the amdgpu driver
+> that I can send if you like this option better.
+>
+>     Arnd
+>
 
-The error is fixed by the diff at the end of this mail.
 
-Tested-by: Yujie Liu <yujie.liu@intel.com>
 
-> 
-> 							Thanx, Paul
-> 
-> >    In file included from arch/riscv/kernel/asm-offsets.c:10:
-> >    In file included from include/linux/mm.h:7:
-> >    In file included from include/linux/gfp.h:7:
-> >    In file included from include/linux/mmzone.h:8:
-> >    In file included from include/linux/spinlock.h:63:
-> >    In file included from include/linux/lockdep.h:14:
-> >    In file included from include/linux/smp.h:13:
-> >    In file included from include/linux/cpumask.h:14:
-> >    In file included from include/linux/atomic.h:80:
-> > >> include/linux/atomic/atomic-arch-fallback.h:2026:9: error: call to undeclared function 'cmpxchg_emu_u16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-> >       55 | #define raw_cmpxchg arch_cmpxchg
-> >          |                     ^
-> >    arch/riscv/include/asm/cmpxchg.h:367:23: note: expanded from macro 'arch_cmpxchg'
-> >      367 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-> >          |                              ^
-> >    arch/riscv/include/asm/cmpxchg.h:332:11: note: expanded from macro '__cmpxchg'
-> >      332 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
-> >          |                         ^
-> >    In file included from arch/riscv/kernel/asm-offsets.c:10:
-> >    In file included from include/linux/mm.h:7:
-> >    In file included from include/linux/gfp.h:7:
-> >    In file included from include/linux/mmzone.h:8:
-> >    In file included from include/linux/spinlock.h:63:
-> >    In file included from include/linux/lockdep.h:14:
-> >    In file included from include/linux/smp.h:13:
-> >    In file included from include/linux/cpumask.h:14:
-> >    In file included from include/linux/atomic.h:80:
-> >    include/linux/atomic/atomic-arch-fallback.h:2055:9: error: call to undeclared function 'cmpxchg_emu_u8'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >     2055 |         return raw_cmpxchg_acquire(&v->counter, old, new);
-> >          |                ^
-> >    include/linux/atomic/atomic-arch-fallback.h:65:29: note: expanded from macro 'raw_cmpxchg_acquire'
-> >       65 | #define raw_cmpxchg_acquire arch_cmpxchg_acquire
-> >          |                             ^
-> >    arch/riscv/include/asm/cmpxchg.h:263:23: note: expanded from macro 'arch_cmpxchg_acquire'
-> >      263 |         (__typeof__(*(ptr))) __cmpxchg_acquire((ptr),                   \
-> >          |                              ^
-> >    arch/riscv/include/asm/cmpxchg.h:224:11: note: expanded from macro '__cmpxchg_acquire'
-> >      224 |                 __ret = cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
-> >          |                         ^
-> >    In file included from arch/riscv/kernel/asm-offsets.c:10:
-> >    In file included from include/linux/mm.h:7:
-> >    In file included from include/linux/gfp.h:7:
-> >    In file included from include/linux/mmzone.h:8:
-> >    In file included from include/linux/spinlock.h:63:
-> >    In file included from include/linux/lockdep.h:14:
-> >    In file included from include/linux/smp.h:13:
-> >    In file included from include/linux/cpumask.h:14:
-> >    In file included from include/linux/atomic.h:80:
-> >    include/linux/atomic/atomic-arch-fallback.h:2055:9: error: call to undeclared function 'cmpxchg_emu_u16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >    include/linux/atomic/atomic-arch-fallback.h:65:29: note: expanded from macro 'raw_cmpxchg_acquire'
-> >       65 | #define raw_cmpxchg_acquire arch_cmpxchg_acquire
-> >          |                             ^
-> >    arch/riscv/include/asm/cmpxchg.h:263:23: note: expanded from macro 'arch_cmpxchg_acquire'
-> >      263 |         (__typeof__(*(ptr))) __cmpxchg_acquire((ptr),                   \
-> >          |                              ^
-> >    arch/riscv/include/asm/cmpxchg.h:228:11: note: expanded from macro '__cmpxchg_acquire'
-> >      228 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
-> >          |                         ^
-> >    In file included from arch/riscv/kernel/asm-offsets.c:10:
-> >    In file included from include/linux/mm.h:7:
-> >    In file included from include/linux/gfp.h:7:
-> >    In file included from include/linux/mmzone.h:8:
-> >    In file included from include/linux/spinlock.h:63:
-> >    In file included from include/linux/lockdep.h:14:
-> >    In file included from include/linux/smp.h:13:
-> >    In file included from include/linux/cpumask.h:14:
-> >    In file included from include/linux/atomic.h:80:
-> >    include/linux/atomic/atomic-arch-fallback.h:2083:9: error: call to undeclared function 'cmpxchg_emu_u8'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >     2083 |         return raw_cmpxchg_release(&v->counter, old, new);
-> >          |                ^
-> >    include/linux/atomic/atomic-arch-fallback.h:77:29: note: expanded from macro 'raw_cmpxchg_release'
-> >       77 | #define raw_cmpxchg_release arch_cmpxchg_release
-> >          |                             ^
-> >    arch/riscv/include/asm/cmpxchg.h:315:23: note: expanded from macro 'arch_cmpxchg_release'
-> >      315 |         (__typeof__(*(ptr))) __cmpxchg_release((ptr),                   \
-> >          |                              ^
-> >    arch/riscv/include/asm/cmpxchg.h:276:11: note: expanded from macro '__cmpxchg_release'
-> >      276 |                 __ret = cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
-> >          |                         ^
-> >    In file included from arch/riscv/kernel/asm-offsets.c:10:
-> >    In file included from include/linux/mm.h:7:
-> >    In file included from include/linux/gfp.h:7:
-> >    In file included from include/linux/mmzone.h:8:
-> >    In file included from include/linux/spinlock.h:63:
-> >    In file included from include/linux/lockdep.h:14:
-> >    In file included from include/linux/smp.h:13:
-> >    In file included from include/linux/cpumask.h:14:
-> >    In file included from include/linux/atomic.h:80:
-> >    include/linux/atomic/atomic-arch-fallback.h:2083:9: error: call to undeclared function 'cmpxchg_emu_u16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >    include/linux/atomic/atomic-arch-fallback.h:77:29: note: expanded from macro 'raw_cmpxchg_release'
-> >       77 | #define raw_cmpxchg_release arch_cmpxchg_release
-> >          |                             ^
-> >    arch/riscv/include/asm/cmpxchg.h:315:23: note: expanded from macro 'arch_cmpxchg_release'
-> >      315 |         (__typeof__(*(ptr))) __cmpxchg_release((ptr),                   \
-> >          |                              ^
-> >    arch/riscv/include/asm/cmpxchg.h:280:11: note: expanded from macro '__cmpxchg_release'
-> >      280 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
-> >          |                         ^
-> >    In file included from arch/riscv/kernel/asm-offsets.c:10:
-> >    In file included from include/linux/mm.h:7:
-> >    In file included from include/linux/gfp.h:7:
-> >    In file included from include/linux/mmzone.h:8:
-> >    In file included from include/linux/spinlock.h:63:
-> >    In file included from include/linux/lockdep.h:14:
-> >    In file included from include/linux/smp.h:13:
-> >    In file included from include/linux/cpumask.h:14:
-> >    In file included from include/linux/atomic.h:80:
-> >    include/linux/atomic/atomic-arch-fallback.h:2108:9: error: call to undeclared function 'cmpxchg_emu_u8'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >     2108 |         return raw_cmpxchg_relaxed(&v->counter, old, new);
-> > 
-> > 
-> > vim +/cmpxchg_emu_u8 +2026 include/linux/atomic/atomic-arch-fallback.h
-> > 
-> > 37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  2000  
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2001  /**
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2002   * raw_atomic_cmpxchg() - atomic compare and exchange with full ordering
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2003   * @v: pointer to atomic_t
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2004   * @old: int value to compare with
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2005   * @new: int value to assign
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2006   *
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2007   * If (@v == @old), atomically updates @v to @new with full ordering.
-> > 6dfee110c6cc7a include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2024-02-09  2008   * Otherwise, @v is not modified and relaxed ordering is provided.
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2009   *
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2010   * Safe to use in noinstr code; prefer atomic_cmpxchg() elsewhere.
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2011   *
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2012   * Return: The original value of @v.
-> > ad8110706f3811 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2013   */
-> > 37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  2014  static __always_inline int
-> > 9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2015  raw_atomic_cmpxchg(atomic_t *v, int old, int new)
-> > 37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  2016  {
-> > 1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2017  #if defined(arch_atomic_cmpxchg)
-> > 1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2018  	return arch_atomic_cmpxchg(v, old, new);
-> > 1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2019  #elif defined(arch_atomic_cmpxchg_relaxed)
-> > 37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  2020  	int ret;
-> > 37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  2021  	__atomic_pre_full_fence();
-> > 9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2022  	ret = arch_atomic_cmpxchg_relaxed(v, old, new);
-> > 37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  2023  	__atomic_post_full_fence();
-> > 37f8173dd84936 include/linux/atomic-arch-fallback.h        Peter Zijlstra 2020-01-24  2024  	return ret;
-> > 9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2025  #else
-> > 9257959a6e5b4f include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05 @2026  	return raw_cmpxchg(&v->counter, old, new);
-> > d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2027  #endif
-> > 1d78814d41701c include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2028  }
-> > d12157efc8e083 include/linux/atomic/atomic-arch-fallback.h Mark Rutland   2023-06-05  2029  
-> > 
-> > :::::: The code at line 2026 was first introduced by commit
-> > :::::: 9257959a6e5b4fca6fc8e985790bff62c2046f20 locking/atomic: scripts: restructure fallback ifdeffery
-> > 
-> > :::::: TO: Mark Rutland <mark.rutland@arm.com>
-> > :::::: CC: Peter Zijlstra <peterz@infradead.org>
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
-> 
-> commit da6c6c7a30e5a5015a2995b2119053ca3d12b7a2
-> Author: Paul E. McKenney <paulmck@kernel.org>
-> Date:   Fri Mar 29 11:50:32 2024 -0700
-> 
->     squash! riscv: Emulate one-byte and two-byte cmpxchg
->     
->     [ paulmck: Apply kernel test robot feedback. ]
->     
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-> index b4cbea69ad2c8..a5b377481785c 100644
-> --- a/arch/riscv/include/asm/cmpxchg.h
-> +++ b/arch/riscv/include/asm/cmpxchg.h
-> @@ -9,6 +9,7 @@
->  #include <linux/bug.h>
->  
->  #include <asm/fence.h>
-> +#include <linux/cmpxchg-emu.h>
->  
->  #define __xchg_relaxed(ptr, new, size)					\
->  ({									\
-> 
-> 
+Applied to linux-kbuild/fixes.
+Thanks.
+
+--=20
+Best Regards
+Masahiro Yamada
+
