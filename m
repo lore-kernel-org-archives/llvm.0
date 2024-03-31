@@ -1,113 +1,212 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0063815BB
-	for <llvm@lists.linux.dev>; Sun, 31 Mar 2024 02:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF3515A5;
+	Sun, 31 Mar 2024 04:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711852445; cv=none; b=Pj9ztFoeNFC8W8Bmk7O2Z5NF1FqYCQSQXvXHwYXp92impW8yqIqXKztodGBRpXQU5wfGBPjF30T0jKjGp+dRMIVrE9+rHt+E/sK11cG0ccYiCxhujgs6p0ewfBT+tyH81Ba1BpjFwcgtUyVZk4Fx9c+IJDc8Pbb3UqAFDp4kjvQ=
+	t=1711858099; cv=none; b=GEaUxPo+ynsHIXJS/B5gVu6qfWanZeVCpx7SL1K5uDJJxZmF3+v74B4JpIBMGVX+X57Hh0WW/MJwvssmFrwbXxkpLiUoD0CAipugpiLz+mvlgwwrDyscFvuytwT1pyGPBfdhhGwqgaqWMxYTF8xpmKUJjFppC65D+XGETqm2U9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711852445; c=relaxed/simple;
-	bh=+9xtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PCxe4cBbfRJV3gpTvYKFbbR/6Oo8CmYNpvDoIAdyEoT+Fst6iaUXtghvq3ijq3w1+V6jl8iuUhxs26iFUlXrzTxzkigqaTs5dnoEnR/bLxwsiIwpFFcP1wwql0Rd0L+n+/bc3NcLBp7LSIEUyTq3KbDcKWe4NXrWGbBy3k5Tsu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZ9D70uV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711858099; c=relaxed/simple;
+	bh=XJWEFG8cBuLzbsdXT8I0vTyUl7M6hr6UYWZ6WptGkp8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sTUZ64MBuKLXoY0lSm9FLadHms4IhjM/V0A4GMTHqJkNbAqbwSu9atbkL4GjKdLI1+1NWnAv6mryde/srgzj/E0HpQEsW3rA2r5VzrwYkFJ/5JkFFZ2dSYW0eM7hDegpKuvpGBF7rtebclLrsAq6XAcfJtZhhvFGniuU4W9Hg0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWOvOp95; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZ9D70uV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED4DC433C7
-	for <llvm@lists.linux.dev>; Sun, 31 Mar 2024 02:34:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711852444;
-	bh=+9xtEveTESmqEmgqfqi/AHy+l/CY7o7HoCu99ORDDcA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PZ9D70uVOm8Q1eV7TepfO1FkN+1k1kWNkT6Ku6f/2s6iTAOV7tZxn2zhkvPsVyaFX
-	 RPw7j/3dyOXbWPTqh7GDBBmESHoa0/CSjp3BgTh7gbx5KJ1tdiDym07g+AY4FzPgQS
-	 DKX7tgoR9K9mHdV/+tGZPsttPaEAScJJhqA81HNprVN9Fu9EJ0XTEzkGTvbaVJb6Hx
-	 Qzks5PLB5vorWVg53klblNq3phtjvnvFZqLRpBY/lb0TuCBuxS4GgeeCTYGb+VI6ok
-	 zfc1qtwfOHsXCTucSL4Xb61hPPubFgtHkxN2eCV1J182QybCpwgfTt0/4sSb25g/FL
-	 PUk6ZaAAFbN5g==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d6c220a377so36304441fa.2
-        for <llvm@lists.linux.dev>; Sat, 30 Mar 2024 19:34:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU2QHHbVITNd8WfnHXI4SVH0n0yabHxNMdPtF5qtm7dukwG+1gZ5kVtK7AbHNKikMeXk/Wx+5yHujRVIiqZLpofQemYuw==
-X-Gm-Message-State: AOJu0Ywo2hNHUQ+7RUOmUtmu7rzd7EM3pWUaiKFwTh9Mjw/9jbVC2K+l
-	g4h83fZw8pYQNweHtDC2KL6Tf/Q1RBRB9x/YdHifEctzj1Ifi0YPorthiuMy8A2wXaCcY7sx4uA
-	Mfp6siB9srYUlGjxT79QLvt6VoaY=
-X-Google-Smtp-Source: AGHT+IGpEQPL0v7g3+p+5E8g7HGnWQKzlMop6CryhqCRVmhK61t313PDdp5vf1ukKDWFXpyLX2tmge1Ix/vKXAwQ4u4=
-X-Received: by 2002:a2e:9914:0:b0:2d4:6aba:f1a9 with SMTP id
- v20-20020a2e9914000000b002d46abaf1a9mr4254960lji.40.1711852443253; Sat, 30
- Mar 2024 19:34:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWOvOp95"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711858097; x=1743394097;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XJWEFG8cBuLzbsdXT8I0vTyUl7M6hr6UYWZ6WptGkp8=;
+  b=RWOvOp95mDYrblg5CXcz59BO5+0aUcN0zFWUUFr5xtSc2Z9VlYhoo8sh
+   EE1tOhYJmEg5TUjO2SsyQCrTxEQqM1NoMngBSPsbfP86LCTx2yiUwd308
+   kz7De6KHXLnxeJ/negybs2g4ts21Jph9ptkT7BY6mqp1UF6+s8L0r9vNR
+   UmmICQTI3+95t2HiWK26YQKOzyiseVfTNeOY+V84QiSQQ43GxdcvikY/L
+   V4xP4xPe6LpfawdpS9BEckzIHU2jlMF1j3/G6W4jVqbz5sAHeZ79JbRZd
+   XvWRQCTVFbLMO98L7E4dTRGGZfPDr4onmRJiDawh+Z8zPEVDIKyUBx1IE
+   Q==;
+X-CSE-ConnectionGUID: dn+XvmW+QzOH0R4QIT/rHQ==
+X-CSE-MsgGUID: JdQ5vzKPQ06IG/qsi5MGQg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11029"; a="17626161"
+X-IronPort-AV: E=Sophos;i="6.07,169,1708416000"; 
+   d="scan'208";a="17626161"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 21:08:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,169,1708416000"; 
+   d="scan'208";a="17401381"
+Received: from lkp-server01.sh.intel.com (HELO 3d808bfd2502) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 30 Mar 2024 21:08:15 -0700
+Received: from kbuild by 3d808bfd2502 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rqmUO-0000mO-1R;
+	Sun, 31 Mar 2024 04:08:12 +0000
+Date: Sun, 31 Mar 2024 12:07:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, Ondrej Jirman <megi@xff.cz>
+Subject: [linux-next:master 1069/2532] sound/soc/sunxi/sun8i-codec.c:1355:38:
+ error: no member named 'type' in 'struct snd_jack'
+Message-ID: <202403311242.2m3EXGCO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240326144741.3094687-1-arnd@kernel.org> <20240326144741.3094687-2-arnd@kernel.org>
- <87jzlohhbc.fsf@intel.com> <cb853762-06d4-401c-a1c8-07a0c031b499@app.fastmail.com>
- <87edbwglle.fsf@intel.com> <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastmail.com>
-In-Reply-To: <07c604d1-6304-4ff8-844b-03c3d5c727ad@app.fastmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 31 Mar 2024 11:33:27 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLunhpxXA@mail.gmail.com>
-Message-ID: <CAK7LNARmABUDDTFtp_HCqKid7=8011wk0HMgHYGHWOLunhpxXA@mail.gmail.com>
-Subject: Re: [PATCH 01/12] kbuild: make -Woverride-init warnings more consistent
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>, Arnd Bergmann <arnd@kernel.org>, 
-	linux-kbuild@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>, 
-	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Linus Walleij <linus.walleij@linaro.org>, 
-	Joel Stanley <joel@jms.id.au>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>, linux-mm@kvack.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Mar 27, 2024 at 6:23=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Wed, Mar 27, 2024, at 08:50, Jani Nikula wrote:
-> > On Tue, 26 Mar 2024, "Arnd Bergmann" <arnd@arndb.de> wrote:
-> >> On Tue, Mar 26, 2024, at 21:24, Jani Nikula wrote:
-> >>> On Tue, 26 Mar 2024, Arnd Bergmann <arnd@kernel.org> wrote:
-> >>
-> >> It works now.
-> >>
-> >> The original __diag_ignore_all() only did it for gcc-8 and above
-> >> because that was initially needed to suppress warnings that
-> >> got added in that version, but this was always a mistake.
-> >>
-> >> 689b097a06ba ("compiler-gcc: Suppress -Wmissing-prototypes
-> >> warning for all supported GCC") made it work correctly.
-> >
-> > Oh, nice! Then I think we'd like to go back to __diag_ignore_all() in
-> > i915 and xe.
-> >
-> > The diff is below. I'm fine with you squashing it to your patch, or if
-> > you want me to turn it into a proper patch for you to pick up in your
-> > series, that's fine too. Just let me know.
->
-> I think I'd prefer to keep my patch simpler for the moment and
-> get that merged through the kbuild tree, it already touches
-> too many places at once.
->
-> It may be better for me to just drop the drivers/gpu/ part of
-> my patch so you can just just take your patch through the
-> drm tree. I actually have a similar patch for the amdgpu driver
-> that I can send if you like this option better.
->
->     Arnd
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   a6bd6c9333397f5a0e2667d4d82fef8c970108f2
+commit: 21fa98f4197bb3365dda1417708b318f403c13c1 [1069/2532] ASoC: sun8i-codec: Implement jack and accessory detection
+config: hexagon-randconfig-r016-20211019 (https://download.01.org/0day-ci/archive/20240331/202403311242.2m3EXGCO-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240331/202403311242.2m3EXGCO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403311242.2m3EXGCO-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from sound/soc/sunxi/sun8i-codec.c:16:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from sound/soc/sunxi/sun8i-codec.c:16:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from sound/soc/sunxi/sun8i-codec.c:16:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> sound/soc/sunxi/sun8i-codec.c:1355:38: error: no member named 'type' in 'struct snd_jack'
+    1355 |         int type_mask = scodec->jack->jack->type;
+         |                         ~~~~~~~~~~~~~~~~~~  ^
+   sound/soc/sunxi/sun8i-codec.c:1494:30: error: no member named 'type' in 'struct snd_jack'
+    1494 |                                             scodec->jack->jack->type);
+         |                                             ~~~~~~~~~~~~~~~~~~  ^
+   6 warnings and 2 errors generated.
 
 
+vim +1355 sound/soc/sunxi/sun8i-codec.c
 
-Applied to linux-kbuild/fixes.
-Thanks.
+  1349	
+  1350	static void sun8i_codec_jack_work(struct work_struct *work)
+  1351	{
+  1352		struct sun8i_codec *scodec = container_of(work, struct sun8i_codec,
+  1353							  jack_work.work);
+  1354		unsigned int mdata;
+> 1355		int type_mask = scodec->jack->jack->type;
+  1356		int type;
+  1357	
+  1358		guard(mutex)(&scodec->jack_mutex);
+  1359	
+  1360		if (scodec->jack_status == SUN8I_JACK_STATUS_DISCONNECTED) {
+  1361			if (scodec->last_hmic_irq != SUN8I_HMIC_STS_JACK_IN_IRQ_ST)
+  1362				return;
+  1363	
+  1364			scodec->jack_last_sample = -1;
+  1365	
+  1366			if (type_mask & SND_JACK_MICROPHONE) {
+  1367				/*
+  1368				 * If we were in disconnected state, we enable HBIAS and
+  1369				 * wait 600ms before reading initial HDATA value.
+  1370				 */
+  1371				scodec->jack_hbias_ready = ktime_add_ms(ktime_get(), 600);
+  1372				sun8i_codec_set_hmic_bias(scodec, true);
+  1373				queue_delayed_work(system_power_efficient_wq,
+  1374						   &scodec->jack_work,
+  1375						   msecs_to_jiffies(610));
+  1376				scodec->jack_status = SUN8I_JACK_STATUS_WAITING_HBIAS;
+  1377			} else {
+  1378				snd_soc_jack_report(scodec->jack, SND_JACK_HEADPHONE,
+  1379						    type_mask);
+  1380				scodec->jack_status = SUN8I_JACK_STATUS_CONNECTED;
+  1381			}
+  1382		} else if (scodec->jack_status == SUN8I_JACK_STATUS_WAITING_HBIAS) {
+  1383			/*
+  1384			 * If we're waiting for HBIAS to stabilize, and we get plug-out
+  1385			 * interrupt and nothing more for > 100ms, just cancel the
+  1386			 * initialization.
+  1387			 */
+  1388			if (scodec->last_hmic_irq == SUN8I_HMIC_STS_JACK_OUT_IRQ_ST) {
+  1389				scodec->jack_status = SUN8I_JACK_STATUS_DISCONNECTED;
+  1390				sun8i_codec_set_hmic_bias(scodec, false);
+  1391				return;
+  1392			}
+  1393	
+  1394			/*
+  1395			 * If we're not done waiting for HBIAS to stabilize, wait more.
+  1396			 */
+  1397			if (!ktime_after(ktime_get(), scodec->jack_hbias_ready)) {
+  1398				s64 msecs = ktime_ms_delta(scodec->jack_hbias_ready,
+  1399							   ktime_get());
+  1400	
+  1401				queue_delayed_work(system_power_efficient_wq,
+  1402						   &scodec->jack_work,
+  1403						   msecs_to_jiffies(msecs + 10));
+  1404				return;
+  1405			}
+  1406	
+  1407			/*
+  1408			 * Everything is stabilized, determine jack type and report it.
+  1409			 */
+  1410			regmap_read(scodec->regmap, SUN8I_HMIC_STS, &mdata);
+  1411			mdata &= SUN8I_HMIC_STS_HMIC_DATA_MASK;
+  1412			mdata >>= SUN8I_HMIC_STS_HMIC_DATA;
+  1413	
+  1414			regmap_write(scodec->regmap, SUN8I_HMIC_STS, 0);
+  1415	
+  1416			type = mdata < 16 ? SND_JACK_HEADPHONE : SND_JACK_HEADSET;
+  1417			if (type == SND_JACK_HEADPHONE)
+  1418				sun8i_codec_set_hmic_bias(scodec, false);
+  1419	
+  1420			snd_soc_jack_report(scodec->jack, type, type_mask);
+  1421			scodec->jack_status = SUN8I_JACK_STATUS_CONNECTED;
+  1422		} else if (scodec->jack_status == SUN8I_JACK_STATUS_CONNECTED) {
+  1423			if (scodec->last_hmic_irq != SUN8I_HMIC_STS_JACK_OUT_IRQ_ST)
+  1424				return;
+  1425	
+  1426			scodec->jack_status = SUN8I_JACK_STATUS_DISCONNECTED;
+  1427			if (type_mask & SND_JACK_MICROPHONE)
+  1428				sun8i_codec_set_hmic_bias(scodec, false);
+  1429	
+  1430			snd_soc_jack_report(scodec->jack, 0, type_mask);
+  1431		}
+  1432	}
+  1433	
 
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
