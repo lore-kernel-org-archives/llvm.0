@@ -1,101 +1,202 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6648F4E
-	for <llvm@lists.linux.dev>; Mon,  1 Apr 2024 06:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3998B8F6E;
+	Mon,  1 Apr 2024 07:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711952658; cv=none; b=Dkrmlovfq6AHGUWqGkwIbas50jkQ9DJoSlIkUS4Roa1yKNbpg7r0/qac0QsmFb7nhKtP+3Wz5QYScF0ajQUXPNSU1PU2CSRwBL9v0E7eJQ2PbpCh+fRlG6QExC21kdpCQA+3HT7KZ+8OI/w5XM9049TMGteXCFdj4BKu58zYoKc=
+	t=1711955346; cv=none; b=s46A6WL9jeR60OPp2PjDJfbYq9bBZoxy1r0YqGl9TrgJ+Gmf6tojb4S0eb/dOnAKWeYo0Rnq6dIc8p9FEenTYHm+CQcSvuEY+ImYTXNu73kX4fKKZikuO9ex4A0/00+ac6AC0zVUBJPtX9Hv7WuVZszESBC1ebLD/+sRWobxRzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711952658; c=relaxed/simple;
-	bh=tNXqN5M71+tjw6FpcPPDIY/Rszo4GvwiHe9uN7gj2b8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NfYE1pq1DfSM/QpCx63W9xE3LBugiUL+cLWbK/nqBHhJLoAtn77ECyEQvLedPfDRv+NNVN+Bj84j9wOZsS0p0aZY+QA9ghxB0VWZMIGj/YltEc03KcVMH6KO7cTrHmD2/5MkugjL8tS+bSyeXXVxYJfunFQCC0DSTuEGNLiDMsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rrB5a-0000GP-Mi; Mon, 01 Apr 2024 08:24:14 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rrB5Z-009k0b-D4; Mon, 01 Apr 2024 08:24:13 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rrB5Z-00Dx64-0z;
-	Mon, 01 Apr 2024 08:24:13 +0200
-Date: Mon, 1 Apr 2024 08:24:13 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: llvm@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Maximilian Luz <luzmaximilian@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/9] surface3_power: avoid format string truncation
- warning
-Message-ID: <yiqdxzxtcw4dpths24sl4x2qwmuf2bj5lnayd3pclk5zf4h3mm@oc4l3ojar2i4>
-References: <20240326223825.4084412-1-arnd@kernel.org>
- <20240326223825.4084412-6-arnd@kernel.org>
+	s=arc-20240116; t=1711955346; c=relaxed/simple;
+	bh=Yyu6J6GZaiez1H2m1XGhKtvi+4/m1eSvkPh5cBaNwXo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=eFzqiGnJhkAQf9nsfdGQawg5wo88jcXwvY9TF7cdHJvxKX9uLR4SKeesL1pd6h5zSCJDsOP/xbPTzofba8Zs9YLLMtyIZL2qgaGLFACWAWy2VW8pXcHzTblANlITL9GGmW/0Q4Ktt5Scs0DUgbsWOn8fcUBcsrgXUBzSIUCzkB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pC80AAS8; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pC80AAS8"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=faKtwJA5t6Zj+D3Q/jEbeWC+9IIE68VhlZebCZwcy9Y=; b=pC80AAS8EZ4vHufsZXQhhNJXMB
+	pEZ4zygf0sNfgHbd7JHc5VE5r8vplOj8Vdo3RUxGuZj3OM9UhReJOicLxpX1+QY61C88nz5lxjIfg
+	sg7AVzqLO24mjIphRT4DTseRQTfjnua7G0tZICN3mZhOyWNk4Ux23hZQfM7ItidY5DxS9ZcvtELvq
+	2F5Er7a13fIYALE36kvV1kcuaYoXBuzsP9iPq5Zivg1qEU8qYHH1BFZgbDk70vqEhQDvSf+dHN8gY
+	rpOES3fB8J5cnkDomIiqIAd96lW16AN/qj5MdS8bMsnXjsEx8BMLOUbfsLuAH+DFFzx2MSQxg63+M
+	iGiaMIfw==;
+Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rrBml-0000000016F-0yKC;
+	Mon, 01 Apr 2024 07:08:52 +0000
+Message-ID: <d64f06f4-81ae-4ec5-ab3b-d7f7f091e0ac@infradead.org>
+Date: Mon, 1 Apr 2024 16:08:31 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="v26yt34kxi4ilpyq"
-Content-Disposition: inline
-In-Reply-To: <20240326223825.4084412-6-arnd@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH v2] powerpc: Fix PS3 allmodconfig warning
+From: Geoff Levand <geoff@infradead.org>
+To: Arnd Bergmann <arnd@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nathan Chancellor <nathan@kernel.org>, Paul Mackerras <paulus@ozlabs.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kevin Hao <haokexin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240320180333.151043-1-arnd@kernel.org>
+ <415f4af0-f44a-49fb-b1fa-76f64ed09ec6@infradead.org>
+Content-Language: en-US
+In-Reply-To: <415f4af0-f44a-49fb-b1fa-76f64ed09ec6@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+The struct ps3_notification_device in the ps3_probe_thread routine
+is too large to be on the stack, causing a warning for an
+allmodconfig build with clang.
 
---v26yt34kxi4ilpyq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Change the struct ps3_notification_device from a variable on the stack
+to a dynamically allocated variable.
 
-Hello,
+Reported-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Geoff Levand <geoff@infradead.org>
 
-just a nitpick:
+diff --git a/arch/powerpc/platforms/ps3/device-init.c b/arch/powerpc/platforms/ps3/device-init.c
+index 878bc160246e..b18e1c92e554 100644
+--- a/arch/powerpc/platforms/ps3/device-init.c
++++ b/arch/powerpc/platforms/ps3/device-init.c
+@@ -770,49 +770,51 @@ static struct task_struct *probe_task;
+ 
+ static int ps3_probe_thread(void *data)
+ {
+-	struct ps3_notification_device dev;
++	struct {
++		struct ps3_notification_device dev;
++		u8 buf[512];
++	} *local;
++	struct ps3_notify_cmd *notify_cmd;
++	struct ps3_notify_event *notify_event;
+ 	int res;
+ 	unsigned int irq;
+ 	u64 lpar;
+-	void *buf;
+-	struct ps3_notify_cmd *notify_cmd;
+-	struct ps3_notify_event *notify_event;
+ 
+ 	pr_debug(" -> %s:%u: kthread started\n", __func__, __LINE__);
+ 
+-	buf = kzalloc(512, GFP_KERNEL);
+-	if (!buf)
++	local = kzalloc(sizeof(*local), GFP_KERNEL);
++	if (!local)
+ 		return -ENOMEM;
+ 
+-	lpar = ps3_mm_phys_to_lpar(__pa(buf));
+-	notify_cmd = buf;
+-	notify_event = buf;
++	lpar = ps3_mm_phys_to_lpar(__pa(&local->buf));
++	notify_cmd = (struct ps3_notify_cmd *)&local->buf;
++	notify_event = (struct ps3_notify_event *)&local->buf;
+ 
+ 	/* dummy system bus device */
+-	dev.sbd.bus_id = (u64)data;
+-	dev.sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
+-	dev.sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
++	local->dev.sbd.bus_id = (u64)data;
++	local->dev.sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
++	local->dev.sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
+ 
+-	res = lv1_open_device(dev.sbd.bus_id, dev.sbd.dev_id, 0);
++	res = lv1_open_device(local->dev.sbd.bus_id, local->dev.sbd.dev_id, 0);
+ 	if (res) {
+ 		pr_err("%s:%u: lv1_open_device failed %s\n", __func__,
+ 		       __LINE__, ps3_result(res));
+ 		goto fail_free;
+ 	}
+ 
+-	res = ps3_sb_event_receive_port_setup(&dev.sbd, PS3_BINDING_CPU_ANY,
+-					      &irq);
++	res = ps3_sb_event_receive_port_setup(&local->dev.sbd,
++		PS3_BINDING_CPU_ANY, &irq);
+ 	if (res) {
+ 		pr_err("%s:%u: ps3_sb_event_receive_port_setup failed %d\n",
+ 		       __func__, __LINE__, res);
+ 	       goto fail_close_device;
+ 	}
+ 
+-	spin_lock_init(&dev.lock);
+-	rcuwait_init(&dev.wait);
++	spin_lock_init(&local->dev.lock);
++	rcuwait_init(&local->dev.wait);
+ 
+ 	res = request_irq(irq, ps3_notification_interrupt, 0,
+-			  "ps3_notification", &dev);
++			  "ps3_notification", &local->dev);
+ 	if (res) {
+ 		pr_err("%s:%u: request_irq failed %d\n", __func__, __LINE__,
+ 		       res);
+@@ -823,7 +825,7 @@ static int ps3_probe_thread(void *data)
+ 	notify_cmd->operation_code = 0; /* must be zero */
+ 	notify_cmd->event_mask = 1UL << notify_region_probe;
+ 
+-	res = ps3_notification_read_write(&dev, lpar, 1);
++	res = ps3_notification_read_write(&local->dev, lpar, 1);
+ 	if (res)
+ 		goto fail_free_irq;
+ 
+@@ -834,36 +836,37 @@ static int ps3_probe_thread(void *data)
+ 
+ 		memset(notify_event, 0, sizeof(*notify_event));
+ 
+-		res = ps3_notification_read_write(&dev, lpar, 0);
++		res = ps3_notification_read_write(&local->dev, lpar, 0);
+ 		if (res)
+ 			break;
+ 
+ 		pr_debug("%s:%u: notify event type 0x%llx bus id %llu dev id %llu"
+ 			 " type %llu port %llu\n", __func__, __LINE__,
+-			 notify_event->event_type, notify_event->bus_id,
+-			 notify_event->dev_id, notify_event->dev_type,
+-			 notify_event->dev_port);
++			notify_event->event_type, notify_event->bus_id,
++			notify_event->dev_id, notify_event->dev_type,
++			notify_event->dev_port);
+ 
+ 		if (notify_event->event_type != notify_region_probe ||
+-		    notify_event->bus_id != dev.sbd.bus_id) {
++			notify_event->bus_id != local->dev.sbd.bus_id) {
+ 			pr_warn("%s:%u: bad notify_event: event %llu, dev_id %llu, dev_type %llu\n",
+ 				__func__, __LINE__, notify_event->event_type,
+ 				notify_event->dev_id, notify_event->dev_type);
+ 			continue;
+ 		}
+ 
+-		ps3_find_and_add_device(dev.sbd.bus_id, notify_event->dev_id);
++		ps3_find_and_add_device(local->dev.sbd.bus_id,
++			notify_event->dev_id);
+ 
+ 	} while (!kthread_should_stop());
+ 
+ fail_free_irq:
+-	free_irq(irq, &dev);
++	free_irq(irq, &local->dev);
+ fail_sb_event_receive_port_destroy:
+-	ps3_sb_event_receive_port_destroy(&dev.sbd, irq);
++	ps3_sb_event_receive_port_destroy(&local->dev.sbd, irq);
+ fail_close_device:
+-	lv1_close_device(dev.sbd.bus_id, dev.sbd.dev_id);
++	lv1_close_device(local->dev.sbd.bus_id, local->dev.sbd.dev_id);
+ fail_free:
+-	kfree(buf);
++	kfree(local);
+ 
+ 	probe_task = NULL;
+ 
 
-On Tue, Mar 26, 2024 at 11:38:04PM +0100, Arnd Bergmann wrote:
-> Change the format string two print two less bytes so it always fits. The =
-string
-
-s/two/to/
-
-> is still truncated, so there is no change in behavior, but the compiler no
-> longer warns about it.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---v26yt34kxi4ilpyq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYKUwwACgkQj4D7WH0S
-/k69qwgAo8++BQ8OE5ajtNU6wrlQxb07HGXRy3w/Nb7iL0ELQ6yDY51J7dRFylDo
-/hmKPWn6X+ybKlK1W1VXlA1Qm+UbMHaj3KhHMUR9rFAC2r1SLzxJ1DpP0zdXe1Qw
-h/rErFvH2tgtF/C9ZeNNWputJhMsSlTkJJUJYACkEb8hdEDDbv/wB0y/wBsl3uBi
-KFdxlCFmr54MtZbQ+khq31iVIrmbAqHKL8VAVPiiuB16I0OJwsOzL5C0mr/w1t6F
-C2Ijqcy2kHwcdzzNQYRwAJR48nwZNc6Vp3G2jD2FlhuptBMngX1RrFpUeYkAgjbt
-04h9y2wTPfVkwMUViYBW/huM0Fgi+g==
-=VQ95
------END PGP SIGNATURE-----
-
---v26yt34kxi4ilpyq--
