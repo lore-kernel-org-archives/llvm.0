@@ -1,202 +1,88 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3998B8F6E;
-	Mon,  1 Apr 2024 07:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CED4416;
+	Mon,  1 Apr 2024 08:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711955346; cv=none; b=s46A6WL9jeR60OPp2PjDJfbYq9bBZoxy1r0YqGl9TrgJ+Gmf6tojb4S0eb/dOnAKWeYo0Rnq6dIc8p9FEenTYHm+CQcSvuEY+ImYTXNu73kX4fKKZikuO9ex4A0/00+ac6AC0zVUBJPtX9Hv7WuVZszESBC1ebLD/+sRWobxRzQ=
+	t=1711961419; cv=none; b=CfAAEomtWYydq2F5IbV1QRbwKDACRHDW9IO23ql8ETvWANskh2/u3qD3+iDvjZSyEnS7kYrWuNfpYqODU/5/Qw6RWo8fV/5Kf+O6mQwIT/MdnjJJp0O7LfkCz3omPngfxhPh0wQrIK7eEv9Vs8dexlGjubT/ienBtOsO2tpIy9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711955346; c=relaxed/simple;
-	bh=Yyu6J6GZaiez1H2m1XGhKtvi+4/m1eSvkPh5cBaNwXo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=eFzqiGnJhkAQf9nsfdGQawg5wo88jcXwvY9TF7cdHJvxKX9uLR4SKeesL1pd6h5zSCJDsOP/xbPTzofba8Zs9YLLMtyIZL2qgaGLFACWAWy2VW8pXcHzTblANlITL9GGmW/0Q4Ktt5Scs0DUgbsWOn8fcUBcsrgXUBzSIUCzkB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pC80AAS8; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1711961419; c=relaxed/simple;
+	bh=9hgQj4u8ELvFghX7HeUW/UJDK0JKDzLGYG5tkIEE9Ds=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=B5kwBpo44m8Iqdi4eNbk8N8u1cGLg9WitPQMaH+XRPkUGyiHd4ZwzIf4YRPeyc5e93SEKmx9mRzzRd4zjMKM2HK9H/OWWm3pEuVQEq4bvci/8kLwpYJhidSV53+9Hf+7wVopUkI43fFsunogu9PSD09iAgT1mA706eJxQcMgfHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bswvWu7U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pC80AAS8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=faKtwJA5t6Zj+D3Q/jEbeWC+9IIE68VhlZebCZwcy9Y=; b=pC80AAS8EZ4vHufsZXQhhNJXMB
-	pEZ4zygf0sNfgHbd7JHc5VE5r8vplOj8Vdo3RUxGuZj3OM9UhReJOicLxpX1+QY61C88nz5lxjIfg
-	sg7AVzqLO24mjIphRT4DTseRQTfjnua7G0tZICN3mZhOyWNk4Ux23hZQfM7ItidY5DxS9ZcvtELvq
-	2F5Er7a13fIYALE36kvV1kcuaYoXBuzsP9iPq5Zivg1qEU8qYHH1BFZgbDk70vqEhQDvSf+dHN8gY
-	rpOES3fB8J5cnkDomIiqIAd96lW16AN/qj5MdS8bMsnXjsEx8BMLOUbfsLuAH+DFFzx2MSQxg63+M
-	iGiaMIfw==;
-Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rrBml-0000000016F-0yKC;
-	Mon, 01 Apr 2024 07:08:52 +0000
-Message-ID: <d64f06f4-81ae-4ec5-ab3b-d7f7f091e0ac@infradead.org>
-Date: Mon, 1 Apr 2024 16:08:31 +0900
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bswvWu7U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF06C43390;
+	Mon,  1 Apr 2024 08:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711961418;
+	bh=9hgQj4u8ELvFghX7HeUW/UJDK0JKDzLGYG5tkIEE9Ds=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bswvWu7Us7jzRfjUdOlHMTISbpgV553r31hBaJeCdPVcx05ZW8bATLlGeWWOKmQ+h
+	 XUHPScHKY/1YqXn24JsSsb0mOf4cdgXrAI7gL+LJHQoBLGblnLSCFP09YYLal0daBv
+	 HiealdE1JUUCbG868oyMugfpoG0OyY229yu9TsQWgm4YoNIefn8ELhYB2Qs7mF7X1a
+	 ndgdBzJo1IqMd2oNv94Nr2u5nq5ZYHL10yGYR3FxT/Ie83JEBzAlBp5F6xFbgX00Bg
+	 o1vWRXSjLyKsZIOLVkYyNavgkjzHObtuYxbjN85e5+nD+qCPneEcv7cJVSlRx9oql4
+	 I8yXy8G6h23BA==
+From: Christian Brauner <brauner@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Philipp Stanner <pstanner@redhat.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Thorsten Blum <thorsten.blum@toblux.com>,
+	linux-nilfs@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: (subset) [PATCH 6/9] nilfs2: fix out-of-range warning
+Date: Mon,  1 Apr 2024 10:50:03 +0200
+Message-ID: <20240401-dienlich-oboen-93121c59c71c@brauner>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240328143051.1069575-7-arnd@kernel.org>
+References: <20240328143051.1069575-1-arnd@kernel.org> <20240328143051.1069575-7-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2] powerpc: Fix PS3 allmodconfig warning
-From: Geoff Levand <geoff@infradead.org>
-To: Arnd Bergmann <arnd@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
- Nathan Chancellor <nathan@kernel.org>, Paul Mackerras <paulus@ozlabs.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kevin Hao <haokexin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240320180333.151043-1-arnd@kernel.org>
- <415f4af0-f44a-49fb-b1fa-76f64ed09ec6@infradead.org>
-Content-Language: en-US
-In-Reply-To: <415f4af0-f44a-49fb-b1fa-76f64ed09ec6@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1225; i=brauner@kernel.org; h=from:subject:message-id; bh=9hgQj4u8ELvFghX7HeUW/UJDK0JKDzLGYG5tkIEE9Ds=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRxldouytW8UyWk83OVX6cd89vzd1izC+X+aQq0O21e4 9lWsEiro5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCLOWYwMWzdpX3nxSM1+f8OZ m/LK/za8Z5M1WTR76aOKJy4r/jebzGRkeHXqXt8iTX+BexNTf1+bJsCuNVVx19S+TSqzdGf8yPP dxAEA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-The struct ps3_notification_device in the ps3_probe_thread routine
-is too large to be on the stack, causing a warning for an
-allmodconfig build with clang.
+On Thu, 28 Mar 2024 15:30:44 +0100, Arnd Bergmann wrote:
+> clang-14 points out that v_size is always smaller than a 64KB
+> page size if that is configured by the CPU architecture:
+> 
+> fs/nilfs2/ioctl.c:63:19: error: result of comparison of constant 65536 with expression of type '__u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>         if (argv->v_size > PAGE_SIZE)
+>             ~~~~~~~~~~~~ ^ ~~~~~~~~~
+> 
+> [...]
 
-Change the struct ps3_notification_device from a variable on the stack
-to a dynamically allocated variable.
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-Reported-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Geoff Levand <geoff@infradead.org>
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-diff --git a/arch/powerpc/platforms/ps3/device-init.c b/arch/powerpc/platforms/ps3/device-init.c
-index 878bc160246e..b18e1c92e554 100644
---- a/arch/powerpc/platforms/ps3/device-init.c
-+++ b/arch/powerpc/platforms/ps3/device-init.c
-@@ -770,49 +770,51 @@ static struct task_struct *probe_task;
- 
- static int ps3_probe_thread(void *data)
- {
--	struct ps3_notification_device dev;
-+	struct {
-+		struct ps3_notification_device dev;
-+		u8 buf[512];
-+	} *local;
-+	struct ps3_notify_cmd *notify_cmd;
-+	struct ps3_notify_event *notify_event;
- 	int res;
- 	unsigned int irq;
- 	u64 lpar;
--	void *buf;
--	struct ps3_notify_cmd *notify_cmd;
--	struct ps3_notify_event *notify_event;
- 
- 	pr_debug(" -> %s:%u: kthread started\n", __func__, __LINE__);
- 
--	buf = kzalloc(512, GFP_KERNEL);
--	if (!buf)
-+	local = kzalloc(sizeof(*local), GFP_KERNEL);
-+	if (!local)
- 		return -ENOMEM;
- 
--	lpar = ps3_mm_phys_to_lpar(__pa(buf));
--	notify_cmd = buf;
--	notify_event = buf;
-+	lpar = ps3_mm_phys_to_lpar(__pa(&local->buf));
-+	notify_cmd = (struct ps3_notify_cmd *)&local->buf;
-+	notify_event = (struct ps3_notify_event *)&local->buf;
- 
- 	/* dummy system bus device */
--	dev.sbd.bus_id = (u64)data;
--	dev.sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
--	dev.sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
-+	local->dev.sbd.bus_id = (u64)data;
-+	local->dev.sbd.dev_id = PS3_NOTIFICATION_DEV_ID;
-+	local->dev.sbd.interrupt_id = PS3_NOTIFICATION_INTERRUPT_ID;
- 
--	res = lv1_open_device(dev.sbd.bus_id, dev.sbd.dev_id, 0);
-+	res = lv1_open_device(local->dev.sbd.bus_id, local->dev.sbd.dev_id, 0);
- 	if (res) {
- 		pr_err("%s:%u: lv1_open_device failed %s\n", __func__,
- 		       __LINE__, ps3_result(res));
- 		goto fail_free;
- 	}
- 
--	res = ps3_sb_event_receive_port_setup(&dev.sbd, PS3_BINDING_CPU_ANY,
--					      &irq);
-+	res = ps3_sb_event_receive_port_setup(&local->dev.sbd,
-+		PS3_BINDING_CPU_ANY, &irq);
- 	if (res) {
- 		pr_err("%s:%u: ps3_sb_event_receive_port_setup failed %d\n",
- 		       __func__, __LINE__, res);
- 	       goto fail_close_device;
- 	}
- 
--	spin_lock_init(&dev.lock);
--	rcuwait_init(&dev.wait);
-+	spin_lock_init(&local->dev.lock);
-+	rcuwait_init(&local->dev.wait);
- 
- 	res = request_irq(irq, ps3_notification_interrupt, 0,
--			  "ps3_notification", &dev);
-+			  "ps3_notification", &local->dev);
- 	if (res) {
- 		pr_err("%s:%u: request_irq failed %d\n", __func__, __LINE__,
- 		       res);
-@@ -823,7 +825,7 @@ static int ps3_probe_thread(void *data)
- 	notify_cmd->operation_code = 0; /* must be zero */
- 	notify_cmd->event_mask = 1UL << notify_region_probe;
- 
--	res = ps3_notification_read_write(&dev, lpar, 1);
-+	res = ps3_notification_read_write(&local->dev, lpar, 1);
- 	if (res)
- 		goto fail_free_irq;
- 
-@@ -834,36 +836,37 @@ static int ps3_probe_thread(void *data)
- 
- 		memset(notify_event, 0, sizeof(*notify_event));
- 
--		res = ps3_notification_read_write(&dev, lpar, 0);
-+		res = ps3_notification_read_write(&local->dev, lpar, 0);
- 		if (res)
- 			break;
- 
- 		pr_debug("%s:%u: notify event type 0x%llx bus id %llu dev id %llu"
- 			 " type %llu port %llu\n", __func__, __LINE__,
--			 notify_event->event_type, notify_event->bus_id,
--			 notify_event->dev_id, notify_event->dev_type,
--			 notify_event->dev_port);
-+			notify_event->event_type, notify_event->bus_id,
-+			notify_event->dev_id, notify_event->dev_type,
-+			notify_event->dev_port);
- 
- 		if (notify_event->event_type != notify_region_probe ||
--		    notify_event->bus_id != dev.sbd.bus_id) {
-+			notify_event->bus_id != local->dev.sbd.bus_id) {
- 			pr_warn("%s:%u: bad notify_event: event %llu, dev_id %llu, dev_type %llu\n",
- 				__func__, __LINE__, notify_event->event_type,
- 				notify_event->dev_id, notify_event->dev_type);
- 			continue;
- 		}
- 
--		ps3_find_and_add_device(dev.sbd.bus_id, notify_event->dev_id);
-+		ps3_find_and_add_device(local->dev.sbd.bus_id,
-+			notify_event->dev_id);
- 
- 	} while (!kthread_should_stop());
- 
- fail_free_irq:
--	free_irq(irq, &dev);
-+	free_irq(irq, &local->dev);
- fail_sb_event_receive_port_destroy:
--	ps3_sb_event_receive_port_destroy(&dev.sbd, irq);
-+	ps3_sb_event_receive_port_destroy(&local->dev.sbd, irq);
- fail_close_device:
--	lv1_close_device(dev.sbd.bus_id, dev.sbd.dev_id);
-+	lv1_close_device(local->dev.sbd.bus_id, local->dev.sbd.dev_id);
- fail_free:
--	kfree(buf);
-+	kfree(local);
- 
- 	probe_task = NULL;
- 
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
+
+[6/9] nilfs2: fix out-of-range warning
+      https://git.kernel.org/vfs/vfs/c/d20180d5dd10
