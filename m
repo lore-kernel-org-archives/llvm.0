@@ -1,179 +1,214 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F3D4F88B;
-	Mon,  1 Apr 2024 18:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B2C51C4C
+	for <llvm@lists.linux.dev>; Mon,  1 Apr 2024 19:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711997957; cv=none; b=VcldxrDcnBJWwTaDuaFXvHFE87RgPiwaR6TjMG+SZZXuURwVR+hRgxVpSnUcq90LDU8z0oTJAsCmx/0ChaTjz5NrOP+lcbsDvie8xGtxpRT1+0Qfz13W+19VmqK0K0Jd0OfTu30ewHjegwJ1QSh5DPyLvZxbceC10hVx4tT+yOs=
+	t=1711998749; cv=none; b=TsXGb/KdugiPtLR9I8z+qKtzPylAAm5N4xFowvS53GW263/W3EzE3UCdqQ5UdOo2lHYyAiobX7MBaV1dsXhh3JtzJK9/i1bgpq2TWRJddWY5tNMlQm9uDZcy24udS32OYIeCjlAnrbwmdtV0Zti9B0KNfm1dAm/o0b9qjDi5AHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711997957; c=relaxed/simple;
-	bh=E4LYyB1g+NzjiSmEYXbDoBDY5Nv9pqgj7lADa5zIguw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kf3oTgaScmgb6VGvFbSdOds6+RnF1Qy5e5z45vM3el1FuTF0FKMrVVhxEKDzWTwF0U9LAkyrKuiSfMRCdsF5mAfN2sr0NO3RhGPM6THDLe2dJKExa9ZUkwHByQ9LHrUAc4NVkmDKs7s4AeEpyE4KECLKlovcHXBlWex73lJOovY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j0RKNvv9; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711998749; c=relaxed/simple;
+	bh=lZZgdgpRsCAM7XWp90WoIM3pYzhJNQF6JGgYWb3X5bU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CxuSxGmoai4m2iwQrKa9jhy83GTh7clwFT2fEs+65di7rfO1Vs2glgS8bhU6FD1kQifqZPBgbD9Y3DJHNoESGwmYb5k3pavIbdxdJBtWcFc8jWRE6BqVbWVEePuwYI+N9m+K6mIKgu9+8JE3APes/ny2tbnC4/XUen1IbW93aO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X7nVb9Qi; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j0RKNvv9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711997956; x=1743533956;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E4LYyB1g+NzjiSmEYXbDoBDY5Nv9pqgj7lADa5zIguw=;
-  b=j0RKNvv9T0HXNoV8NJbGMlqD6fj2YT/knOxZ9dkIm7RhoGop/P/3Xpyt
-   zz8QQaCSSvNwbrwPhwiKQiy0jUDm40Xf3E3KNJGi8kN9USErZlUTajNlB
-   htcelCPzLEUcGM5hG5yGt41C7v2OYcBQ+cEFo5QkZHsNg08YIIuvhYpzc
-   Sw/620nCl7eA1+1EGeVJkQdBvDTT5igLYizYnKlDHpjKIC5ekm9rpIWwk
-   Kg74oV3WboHQKm5d1I11UAU6uestQ7mOBKRcnvAvnmmTV/UdpWLCC9INt
-   LDhSR3QQRcTj+MoQYFXmussn+V+1wehMi/8IF9aBBjK6ZEcYrvmWVmT20
-   w==;
-X-CSE-ConnectionGUID: E4IKEk8WT0K1iwmD5qmwNQ==
-X-CSE-MsgGUID: a21ALiLgSuWZEuvgBJ1n8A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="10922443"
-X-IronPort-AV: E=Sophos;i="6.07,172,1708416000"; 
-   d="scan'208";a="10922443"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 11:59:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,172,1708416000"; 
-   d="scan'208";a="49009818"
-Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 01 Apr 2024 11:59:12 -0700
-Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rrMsA-0000Yf-09;
-	Mon, 01 Apr 2024 18:59:10 +0000
-Date: Tue, 2 Apr 2024 02:58:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andreas Hindborg <a.hindborg@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, Danilo Krummrich <dakr@redhat.com>
-Subject: [drm-misc:topic/rust-drm 8/18] error[E0308]: mismatched types
-Message-ID: <202404020229.fdzDQ9lB-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X7nVb9Qi"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56be32b9775so5663476a12.1
+        for <llvm@lists.linux.dev>; Mon, 01 Apr 2024 12:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711998746; x=1712603546; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=obzM0IGvE9A6DBXNxjXsovCrfa1fQhH1FBfKC4ISWA4=;
+        b=X7nVb9QiFDpjLCnMXR21vc7BoLZGAXp3SGjzsI6qWYoaefVJuOZUTQ0f4zLI+fCoNI
+         XOBj+N5JnhvnKV0vipjnn2xvPywETA9ukXwszChAic7BUw0v2oaSGo1psIebUQVJ4G5G
+         Lk4JlFvR6YGA4PJjGRCeg3aawPADRypDC0tLomSEXwHeY2wV1DOqjyVMVzFfqGknhBSF
+         U7RBHdHcxsk2xad6Z0cHYK9RbWa9yrzaTkovJr6h+fbxdH1eaBLTZGJB3ZLRi2SsWzp4
+         As1mh+7HlqzW/GF65hw43IrqDaRwsJh1PSNBWDwjNrWTwRrblOV5H5jRRwGtlMSq7HvJ
+         rjYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711998746; x=1712603546;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=obzM0IGvE9A6DBXNxjXsovCrfa1fQhH1FBfKC4ISWA4=;
+        b=SIvY10NrGtFNOkAkCWpMPQAr87jRaldL3EDYXnVucx6zvwIJOt+GcGz6chcMhsJypO
+         gUp3xUjLEpcTeaQTcq4BG1BvSTvi4YAHuFoKMnARwn68SxoA6eAT8Om3ljiirpWD+nbj
+         4jON9YUfOx+wtzprjqutrtWSJNhkP+0w4vOYqHVxU0FRJRj9UbGIhx7Nae2WveF8Kplq
+         bFSwd7Y722ePQj4DMVgUWNHRkXrozx8+wc7tLlQ0O1L0+wLOHWDfcvxhH13IrbVXjMFG
+         YHRoXdPUhSPk0hp7fgp5fvmqzTa83dFW4L2AE+LZmcNp2tj1wV0k+HHfD+qzIa3H0Dbg
+         6LWA==
+X-Forwarded-Encrypted: i=1; AJvYcCUd8kztaHARdpjdm6sjqnerrm/kYw1Gx6ezoNjD3rvTl6dt8SfhTGRcwrYaIfZ3+xxmOyJ95PtoSHLvGEmWxamtxeXkGQ==
+X-Gm-Message-State: AOJu0YyGTLpF6SkKlU9rwQwZzRBxtPILBgGPPmQaeR2XNn6AgN0AXNMG
+	C4/Hgk2CeXlIpgbsE0r9DnMvMZaQZ/Bfk2QMG7Ux9dU67s2HR3iLpCd6dOFgX2hxjqKNiP5KDSO
+	BdrLrVasSS5roljN4gGa3cl91uk0pIqlcyM/3
+X-Google-Smtp-Source: AGHT+IFrZn3P1g+mO8cYYJQ1aggkfW8cijER2IOdPjsyl9o0cR1x5wATnba0CgmMUUzNstTzMmB5e81d1T6aIF3k/Pw=
+X-Received: by 2002:a17:906:cb86:b0:a47:2f8c:7614 with SMTP id
+ mf6-20020a170906cb8600b00a472f8c7614mr6155069ejb.43.1711998746014; Mon, 01
+ Apr 2024 12:12:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240401-bluetooth-fix-len-type-getsockopt_old-v1-1-c6b5448b5374@kernel.org>
+In-Reply-To: <20240401-bluetooth-fix-len-type-getsockopt_old-v1-1-c6b5448b5374@kernel.org>
+From: Justin Stitt <justinstitt@google.com>
+Date: Mon, 1 Apr 2024 12:12:13 -0700
+Message-ID: <CAFhGd8q7vomqQ27FRi-Bn4Dn0s-Qp_PLWS_jwLUi4TFC0KSbeQ@mail.gmail.com>
+Subject: Re: [PATCH bluetooth] Bluetooth: Fix type of len in {l2cap,sco}_sock_getsockopt_old()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com, 
+	ndesaulniers@google.com, morbo@google.com, keescook@chromium.org, 
+	linux-bluetooth@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc topic/rust-drm
-head:   fbe8094e2cd8106e88e348ed3ce97680d7ae9e7b
-commit: 5aad7a29ba6037a224c3f8ff36bfb2c82a5d3f4d [8/18] rust: add revocable objects
-config: x86_64-randconfig-003-20240401 (https://download.01.org/0day-ci/archive/20240402/202404020229.fdzDQ9lB-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240402/202404020229.fdzDQ9lB-lkp@intel.com/reproduce)
+On Mon, Apr 1, 2024 at 11:24=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> After an innocuous optimization change in LLVM main (19.0.0), x86_64
+> allmodconfig (which enables CONFIG_KCSAN / -fsanitize=3Dthread) fails to
+> build due to the checks in check_copy_size():
+>
+>   In file included from net/bluetooth/sco.c:27:
+>   In file included from include/linux/module.h:13:
+>   In file included from include/linux/stat.h:19:
+>   In file included from include/linux/time.h:60:
+>   In file included from include/linux/time32.h:13:
+>   In file included from include/linux/timex.h:67:
+>   In file included from arch/x86/include/asm/timex.h:6:
+>   In file included from arch/x86/include/asm/tsc.h:10:
+>   In file included from arch/x86/include/asm/msr.h:15:
+>   In file included from include/linux/percpu.h:7:
+>   In file included from include/linux/smp.h:118:
+>   include/linux/thread_info.h:244:4: error: call to '__bad_copy_from' dec=
+lared with 'error' attribute: copy source size is too small
+>     244 |                         __bad_copy_from();
+>         |                         ^
+>
+> The same exact error occurs in l2cap_sock.c. The copy_to_user()
+> statements that are failing come from l2cap_sock_getsockopt_old() and
+> sco_sock_getsockopt_old(). This does not occur with GCC with or without
+> KCSAN or Clang without KCSAN enabled.
+>
+> len is defined as an 'int' because it is assigned from
+> '__user int *optlen'. However, it is clamped against the result of
+> sizeof(), which has a type of 'size_t' ('unsigned long' for 64-bit
+> platforms). This is done with min_t() because min() requires compatible
+> types, which results in both len and the result of sizeof() being casted
+> to 'unsigned int', meaning len changes signs and the result of sizeof()
+> is truncated. From there, len is passed to copy_to_user(), which has a
+> third parameter type of 'unsigned long', so it is widened and changes
+> signs again. This excessive casting in combination with the KCSAN
+> instrumentation causes LLVM to fail to eliminate the __bad_copy_from()
+> call, failing the build.
+>
+> The official recommendation from LLVM developers is to consistently use
+> long types for all size variables to avoid the unnecessary casting in
+> the first place. Change the type of len to size_t in both
+> l2cap_sock_getsockopt_old() and sco_sock_getsockopt_old(). This clears
+> up the error while allowing min_t() to be replaced with min(), resulting
+> in simpler code with no casts and fewer implicit conversions. While len
+> is a different type than optlen now, it should result in no functional
+> change because the result of sizeof() will clamp all values of optlen in
+> the same manner as before.
+>
+> Cc: stable@vger.kernel.org
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2007
+> Link: https://github.com/llvm/llvm-project/issues/85647
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404020229.fdzDQ9lB-lkp@intel.com/
+Reviewed-by: Justin Stitt <justinstitt@google.com>
 
-All errors (new ones prefixed by >>):
-
->> error[E0308]: mismatched types
-   --> rust/doctests_kernel_generated.rs:2184:20
-   |
-   2184 | assert_eq!(add_two(&v), Some(30));
-   |            ------- ^^ expected `&Revocable<Example>`, found `&impl PinInit<Revocable<Example>>`
-   |            |
-   |            arguments to this function are incorrect
-   |
-   ::: rust/kernel/revocable.rs:90:42
-   |
-   90   |     pub fn new(data: impl PinInit<T>) -> impl PinInit<Self> {
-   |                                          ------------------ the found opaque type
-   |
-   = note: expected reference `&Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_78_0::Example>`
-   found reference `&impl rust_doctest_kernel_build_assert_rs_0::kernel::init::PinInit<Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_78_0::Example>>`
-   note: function defined here
-   --> rust/doctests_kernel_generated.rs:2178:4
-   |
-   2178 | fn add_two(v: &Revocable<Example>) -> Option<u32> {
-   |    ^^^^^^^ ----------------------
---
->> error[E0599]: no method named `revoke` found for opaque type `impl PinInit<Revocable<Example>>` in the current scope
-   --> rust/doctests_kernel_generated.rs:2185:3
-   |
-   2185 | v.revoke();
-   |   ^^^^^^ method not found in `impl PinInit<Revocable<Example>>`
-   |
-   = note: the full type name has been written to 'rust/doctests_kernel_generated.long-type-7986498715854771358.txt'
---
->> error[E0308]: mismatched types
-   --> rust/doctests_kernel_generated.rs:2186:20
-   |
-   2186 | assert_eq!(add_two(&v), None);
-   |            ------- ^^ expected `&Revocable<Example>`, found `&impl PinInit<Revocable<Example>>`
-   |            |
-   |            arguments to this function are incorrect
-   |
-   ::: rust/kernel/revocable.rs:90:42
-   |
-   90   |     pub fn new(data: impl PinInit<T>) -> impl PinInit<Self> {
-   |                                          ------------------ the found opaque type
-   |
-   = note: expected reference `&Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_78_0::Example>`
-   found reference `&impl rust_doctest_kernel_build_assert_rs_0::kernel::init::PinInit<Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_78_0::Example>>`
-   note: function defined here
-   --> rust/doctests_kernel_generated.rs:2178:4
-   |
-   2178 | fn add_two(v: &Revocable<Example>) -> Option<u32> {
-   |    ^^^^^^^ ----------------------
---
->> error[E0308]: mismatched types
-   --> rust/doctests_kernel_generated.rs:2249:20
-   |
-   2249 | assert_eq!(add_two(&v), Some(30));
-   |            ------- ^^ expected `&Revocable<Example>`, found `&impl PinInit<Revocable<Example>>`
-   |            |
-   |            arguments to this function are incorrect
-   |
-   ::: rust/kernel/revocable.rs:90:42
-   |
-   90   |     pub fn new(data: impl PinInit<T>) -> impl PinInit<Self> {
-   |                                          ------------------ the found opaque type
-   |
-   = note: expected reference `&Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_99_0::Example>`
-   found reference `&impl rust_doctest_kernel_build_assert_rs_0::kernel::init::PinInit<Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_99_0::Example>>`
-   note: function defined here
-   --> rust/doctests_kernel_generated.rs:2242:4
-   |
-   2242 | fn add_two(v: &Revocable<Example>) -> Option<u32> {
-   |    ^^^^^^^ ----------------------
---
->> error[E0599]: no method named `revoke` found for opaque type `impl PinInit<Revocable<Example>>` in the current scope
-   --> rust/doctests_kernel_generated.rs:2250:3
-   |
-   2250 | v.revoke();
-   |   ^^^^^^ method not found in `impl PinInit<Revocable<Example>>`
-   |
-   = note: the full type name has been written to 'rust/doctests_kernel_generated.long-type-16004988436775023416.txt'
---
->> error[E0308]: mismatched types
-   --> rust/doctests_kernel_generated.rs:2251:20
-   |
-   2251 | assert_eq!(add_two(&v), None);
-   |            ------- ^^ expected `&Revocable<Example>`, found `&impl PinInit<Revocable<Example>>`
-   |            |
-   |            arguments to this function are incorrect
-   |
-   ::: rust/kernel/revocable.rs:90:42
-   |
-   90   |     pub fn new(data: impl PinInit<T>) -> impl PinInit<Self> {
-   |                                          ------------------ the found opaque type
-   |
-   = note: expected reference `&Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_99_0::Example>`
-   found reference `&impl rust_doctest_kernel_build_assert_rs_0::kernel::init::PinInit<Revocable<_doctest_main__kbuild_src_consumer_rust_kernel_revocable_rs_99_0::Example>>`
-   note: function defined here
-   --> rust/doctests_kernel_generated.rs:2242:4
-   |
-   2242 | fn add_two(v: &Revocable<Example>) -> Option<u32> {
-   |    ^^^^^^^ ----------------------
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  net/bluetooth/l2cap_sock.c | 7 ++++---
+>  net/bluetooth/sco.c        | 7 ++++---
+>  2 files changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+> index 4287aa6cc988..81193427bf05 100644
+> --- a/net/bluetooth/l2cap_sock.c
+> +++ b/net/bluetooth/l2cap_sock.c
+> @@ -439,7 +439,8 @@ static int l2cap_sock_getsockopt_old(struct socket *s=
+ock, int optname,
+>         struct l2cap_chan *chan =3D l2cap_pi(sk)->chan;
+>         struct l2cap_options opts;
+>         struct l2cap_conninfo cinfo;
+> -       int len, err =3D 0;
+> +       int err =3D 0;
+> +       size_t len;
+>         u32 opt;
+>
+>         BT_DBG("sk %p", sk);
+> @@ -486,7 +487,7 @@ static int l2cap_sock_getsockopt_old(struct socket *s=
+ock, int optname,
+>
+>                 BT_DBG("mode 0x%2.2x", chan->mode);
+>
+> -               len =3D min_t(unsigned int, len, sizeof(opts));
+> +               len =3D min(len, sizeof(opts));
+>                 if (copy_to_user(optval, (char *) &opts, len))
+>                         err =3D -EFAULT;
+>
+> @@ -536,7 +537,7 @@ static int l2cap_sock_getsockopt_old(struct socket *s=
+ock, int optname,
+>                 cinfo.hci_handle =3D chan->conn->hcon->handle;
+>                 memcpy(cinfo.dev_class, chan->conn->hcon->dev_class, 3);
+>
+> -               len =3D min_t(unsigned int, len, sizeof(cinfo));
+> +               len =3D min(len, sizeof(cinfo));
+>                 if (copy_to_user(optval, (char *) &cinfo, len))
+>                         err =3D -EFAULT;
+>
+> diff --git a/net/bluetooth/sco.c b/net/bluetooth/sco.c
+> index 43daf965a01e..9a72d7f1946c 100644
+> --- a/net/bluetooth/sco.c
+> +++ b/net/bluetooth/sco.c
+> @@ -967,7 +967,8 @@ static int sco_sock_getsockopt_old(struct socket *soc=
+k, int optname,
+>         struct sock *sk =3D sock->sk;
+>         struct sco_options opts;
+>         struct sco_conninfo cinfo;
+> -       int len, err =3D 0;
+> +       int err =3D 0;
+> +       size_t len;
+>
+>         BT_DBG("sk %p", sk);
+>
+> @@ -989,7 +990,7 @@ static int sco_sock_getsockopt_old(struct socket *soc=
+k, int optname,
+>
+>                 BT_DBG("mtu %u", opts.mtu);
+>
+> -               len =3D min_t(unsigned int, len, sizeof(opts));
+> +               len =3D min(len, sizeof(opts));
+>                 if (copy_to_user(optval, (char *)&opts, len))
+>                         err =3D -EFAULT;
+>
+> @@ -1007,7 +1008,7 @@ static int sco_sock_getsockopt_old(struct socket *s=
+ock, int optname,
+>                 cinfo.hci_handle =3D sco_pi(sk)->conn->hcon->handle;
+>                 memcpy(cinfo.dev_class, sco_pi(sk)->conn->hcon->dev_class=
+, 3);
+>
+> -               len =3D min_t(unsigned int, len, sizeof(cinfo));
+> +               len =3D min(len, sizeof(cinfo));
+>                 if (copy_to_user(optval, (char *)&cinfo, len))
+>                         err =3D -EFAULT;
+>
+>
+> ---
+> base-commit: 7835fcfd132eb88b87e8eb901f88436f63ab60f7
+> change-id: 20240401-bluetooth-fix-len-type-getsockopt_old-73c4a8e60444
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
