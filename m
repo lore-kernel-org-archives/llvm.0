@@ -1,216 +1,177 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816B94C601;
-	Tue,  2 Apr 2024 09:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0C157873
+	for <llvm@lists.linux.dev>; Tue,  2 Apr 2024 09:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712048886; cv=none; b=b7/p3Iy1zrfxJCVfc7vBCsfkdjxuYk1hNeuwInvQ/KaTAE9sk5Tjvy9Ks3LBG1W2ScjlqwcEsg28tHusrLYfRvU/YLiDmrMBF3InR/8eaJPovJ8XEUDTF1nVc+os2YkuumvH5RAv2l9CTT58RvboKTZ8KGb/e2AFcbpfADShGEM=
+	t=1712050289; cv=none; b=onZ+I11hZUJ1a6qnOCH+1vdz/8tG9AtbdGQ3pb0a8JDUbsSg85AyfRrYEICdrsy0IOO0l8B3hK/p6GU10y1a2KlHPQaOtVSWZ30D0arHSIt2e02nZ28FXbZdBHTxc7lfaN9Jm+t4ZD/+OxoadS5AQkzbhA0qyaW5bCJRjr0z4Zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712048886; c=relaxed/simple;
-	bh=ema+qLab8lL+nIbiX4CCF09DCqwE7Wm0HmljMxrRfiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UKwh7RWIOBnjYcXp7DQ4kIi+Hlm4wTSfxPBbRjzZGYmRkBN6dOih3JNXWJcfb615cbnUpoe6h2BG4fznZ/eTDgbitmSe47te4GTc7vHyQJSWaq0uEcdKlPI0uEibneJz7q8Bd+xYwuvPkfTN8XQN5Xm2xj7lim6Jg0HlIbleq88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AdAeaYG9; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712050289; c=relaxed/simple;
+	bh=o6NVxR5nkihphjalPkWWY9ft65teoe71fTL1qg1pVfw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Wgk7qxyP24aDxRC+Wlybjytv9JZwL+o1qgelU7fIzvPUN4CRR74T78keg/rq16NBnBkVXNkGvDZS9kZfD4JGu/vaIcAi9z3HaXqkDHrxHAYmwF1DKpmO0AO5Pxw19oRGRvYBhyMHbHc353SoBqz0uRWiCZLFS4hF4G90EnvbIfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ec6bZQtn; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AdAeaYG9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712048882; x=1743584882;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ema+qLab8lL+nIbiX4CCF09DCqwE7Wm0HmljMxrRfiQ=;
-  b=AdAeaYG9e29T5zIWF0k6uUY+wR4iQeE56x0g1AARG+SxI2xTsVH+Dqo3
-   IldhGqIgrtjzJXc5ILXxg5nMwuBpagzX7z/me3MNiJdFNQ0i/4HR4Lsg7
-   MHbqCxIbG8ONNfGMXp3k4DyBGwyjoBO7Avua0bDdPeBa2eNAWUteLVvTX
-   Ao+kGPPqXInJcJ6e3n9xK5W1fJZPG1Ak2dhLTvPDG9Koj9sGc3uLPGQWt
-   aClZx2VftqtCJIdHqh79JifyOrQwgCqo0BFYPofM+FZIl8GiZcsfBIsXi
-   +o7DWq9l+TwIEc3zdI1loaRTjFpaF+x5pmV4OII1b+nACe9J3VaAy4p7J
-   w==;
-X-CSE-ConnectionGUID: rtjy+xmCTpmsmkHVeGeUUQ==
-X-CSE-MsgGUID: f5O1Y0lCQS692IrczMsN+w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="11025468"
-X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="11025468"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 02:08:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
-   d="scan'208";a="18052696"
-Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Apr 2024 02:07:59 -0700
-Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rra7W-00014m-0W;
-	Tue, 02 Apr 2024 09:07:55 +0000
-Date: Tue, 2 Apr 2024 17:07:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chunhai Guo <guochunhai@vivo.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Xiang Gao <xiang@kernel.org>, linux-erofs@lists.ozlabs.org
-Subject: [xiang-erofs:dev-test 2/2] fs/erofs/super.c:876:6: error: assigning
- to 'int' from incompatible type 'void'
-Message-ID: <202404021750.7EQaoKAb-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ec6bZQtn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712050286;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Qkj917LdrTr3iNQ/GbaaWTXCr5IcdB/kxXzE04QQjAU=;
+	b=Ec6bZQtngSNaYCCcPUMcoqK3gzK6f4oaY/mCjI6Akzpzxc/MYkbONZh1A4UFVomPAnoewh
+	PEIQcTqLTW8rCvQJz58SjWuAT7LgUSb687ofzK58o4d1KOait3I5qpLNFSs/IBdNiT8oJ5
+	q+5cxZN1qFzDzs0jaSOY0o6xokuP/hc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-307-kIXIXw11PUCfgNDhXauKbQ-1; Tue,
+ 02 Apr 2024 05:31:25 -0400
+X-MC-Unique: kIXIXw11PUCfgNDhXauKbQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F3A829AC029
+	for <llvm@lists.linux.dev>; Tue,  2 Apr 2024 09:31:25 +0000 (UTC)
+Received: from [172.64.11.58] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B780C2024517;
+	Tue,  2 Apr 2024 09:31:24 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
+ (6.9.0-rc2, mainline.kernel.org-clang, 026e680b)
+Date: Tue, 02 Apr 2024 09:31:24 -0000
+To: xzhou@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <75909.124040205312500301@us-mta-307.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-head:   38654ff32711761d45ff138634e559a98003c31c
-commit: 38654ff32711761d45ff138634e559a98003c31c [2/2] erofs: rename per-CPU buffers to global buffer pool and make it configurable
-config: hexagon-randconfig-001-20240402 (https://download.01.org/0day-ci/archive/20240402/202404021750.7EQaoKAb-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240402/202404021750.7EQaoKAb-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404021750.7EQaoKAb-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/erofs/super.c:10:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/erofs/super.c:10:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/erofs/super.c:10:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/erofs/super.c:876:6: error: assigning to 'int' from incompatible type 'void'
-           err = z_erofs_gbuf_init();
-               ^ ~~~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +876 fs/erofs/super.c
+Kernel information:
+    Commit message: Merge tag 'pwm/for-6.9-rc3-fixes' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/ukleinek/linux
 
-   850	
-   851	static int __init erofs_module_init(void)
-   852	{
-   853		int err;
-   854	
-   855		erofs_check_ondisk_layout_definitions();
-   856	
-   857		erofs_inode_cachep = kmem_cache_create("erofs_inode",
-   858				sizeof(struct erofs_inode), 0,
-   859				SLAB_RECLAIM_ACCOUNT | SLAB_ACCOUNT,
-   860				erofs_inode_init_once);
-   861		if (!erofs_inode_cachep)
-   862			return -ENOMEM;
-   863	
-   864		err = erofs_init_shrinker();
-   865		if (err)
-   866			goto shrinker_err;
-   867	
-   868		err = z_erofs_lzma_init();
-   869		if (err)
-   870			goto lzma_err;
-   871	
-   872		err = z_erofs_deflate_init();
-   873		if (err)
-   874			goto deflate_err;
-   875	
- > 876		err = z_erofs_gbuf_init();
-   877		if (err)
-   878			goto gbuf_err;
-   879	
-   880		err = z_erofs_init_zip_subsystem();
-   881		if (err)
-   882			goto zip_err;
-   883	
-   884		err = erofs_init_sysfs();
-   885		if (err)
-   886			goto sysfs_err;
-   887	
-   888		err = register_filesystem(&erofs_fs_type);
-   889		if (err)
-   890			goto fs_err;
-   891	
-   892		return 0;
-   893	
-   894	fs_err:
-   895		erofs_exit_sysfs();
-   896	sysfs_err:
-   897		z_erofs_exit_zip_subsystem();
-   898	zip_err:
-   899		z_erofs_gbuf_exit();
-   900	gbuf_err:
-   901		z_erofs_deflate_exit();
-   902	deflate_err:
-   903		z_erofs_lzma_exit();
-   904	lzma_err:
-   905		erofs_exit_shrinker();
-   906	shrinker_err:
-   907		kmem_cache_destroy(erofs_inode_cachep);
-   908		return err;
-   909	}
-   910	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/138320
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11866630
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11866636
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11866625
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/310
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+
+
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [x86_64 (debug), aarch64, x86_64, ppc64le=
+, s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
