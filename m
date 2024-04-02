@@ -1,114 +1,93 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CD43B295;
-	Tue,  2 Apr 2024 07:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD412BD1C;
+	Tue,  2 Apr 2024 07:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712043440; cv=none; b=oJgtJ+jK1SwomffybNqGEJxGTgEhfwKn8jflUEI5KCm7e7VbxxeSul54uwK+UWEiGCpcUCWfaYR/3wgdoSQaHqSTI2n6fn7Vw+JFFJkW8DyE6X4xXHivJBLUQPS3pkerX48t80BzjreWOYGecMTmsKdAQPXEnmkXv+3kp26BCCY=
+	t=1712044360; cv=none; b=cC1OZUSWWltik7xsKYk4UzWBCtHq7TirPIVAl/yasml5y7hubGthW6HND2u4iP5inS2tQTJGlwx3wT+M1zo2n+z3E6D1qzhzIbe7uBzijp/bQCqNCJnXtrZZX6iPz4iypbj9YbpcdqP2S8Xc/n8XRLSQOI5L8xDdcPdFKBEDEV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712043440; c=relaxed/simple;
-	bh=DsIySMDvEsnmgwhe9U5+RGVKXgRQnbg+r6m0SbCq970=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kVo2pbcRWEvp1kx27Th7Kz9lRF603bgke41LNGeLOJ5mynKk4ijilhhLSPIdo8SXQFPQ7tdOj9WH8bi0aKC0GOYhQhPBAENb3lnRZ5EgGdmgczP6G7LkwDwporunlDcGdYuKY2cWd4Ks8c64vmtF7ZL/mTW59/iXjKm9TuXDJQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Jb0P9P9p; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1712044360; c=relaxed/simple;
+	bh=9GYk/o1L1Sq5XdS3X2uQ+HwYGDAvh7G6d7J8AZ2nK2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ul519YCpsQhXkV8LLxwwDDXwcQa7lvIxVcoEg29ZJERgL0wT7OuMTYQkhCP/AVE2vxwwe0hXACC48hksV4GgIBX8BklTjbQU+gxqzN6k+K1pnn3/uV84ebxUooUr3iaG43dHbNLBwJAPJzmkEalrv8cJZNT16qNSn0vntMPHids=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CBumZXBR; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Jb0P9P9p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712043436;
-	bh=DsIySMDvEsnmgwhe9U5+RGVKXgRQnbg+r6m0SbCq970=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Jb0P9P9pUf7J+27Fgsrpgq/psWpmzDvQKWKgd6TEF67/hoMAiXcr/sqpgOJI3Ow09
-	 QNLoGhN4KqHIwTJtJCaTFA5IE1OCL+6n48Zn8nJ7tvEBS3KGC8XwerkiRCqTC5/OjW
-	 HWU+13fQFnGdL64jzHvZnLx2y7Y0Yni8yQ9uz6T0dsyBOAvwIwR4o/AnbIgWZJvv9T
-	 I6aURhal8gudv0H5Q382pr6wPqZn192L2fUl+GEXngZeNzj5sI8EkKh8ioLxvNMHq5
-	 r2tKpb5h0v1kVx9XblVy2jMkjg6pxKJkvc3B6Qq3CcnKCR5SOrkZV2jIMqkS3UfTt2
-	 CcRM9fJn7rOAA==
-Received: from localhost (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bbrezillon)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CF209378045F;
-	Tue,  2 Apr 2024 07:37:15 +0000 (UTC)
-Date: Tue, 2 Apr 2024 09:37:14 +0200
-From: Boris Brezillon <boris.brezillon@collabora.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: steven.price@arm.com, liviu.dudau@arm.com,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- heiko@sntech.de, dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
- patches@lists.linux.dev
-Subject: Re: [PATCH] drm/panthor: Fix clang -Wunused-but-set-variable in
- tick_ctx_apply()
-Message-ID: <20240402093714.16ee9a4c@collabora.com>
-In-Reply-To: <20240328-panthor-drop-csg_mod_mask-v1-1-5a80be3df581@kernel.org>
-References: <20240328-panthor-drop-csg_mod_mask-v1-1-5a80be3df581@kernel.org>
-Organization: Collabora
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CBumZXBR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712044359; x=1743580359;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9GYk/o1L1Sq5XdS3X2uQ+HwYGDAvh7G6d7J8AZ2nK2k=;
+  b=CBumZXBRbnqcX8jnQ+4QGh6CyPTLzmQnS2LRdHoAE8bvAsNFW1l4TpHK
+   G5mmFcrn4FW3seFWFjEC7pXvh+ygrHibYdjjhw5gUfIlR4UV8b2vBZpy3
+   ubN+SQLfW7/YAHdwKuX4QRivuJu5pmBzy+a/qsfI2DgWGBGKA5MH/xsXC
+   PORraYwmlgwRpOZXf0APpveLsijZLTec/clAjLPyw/yY/BwhFKHw5i4WN
+   wz6AZ8Ib+M+3OV4+5YMW7L2EWLe2a31kZx8Ne11IWSYxIagLYd1l828el
+   CmZJ3sGBCPppygjfWM8yQjxCMyOVaBzDBLMPH59rCLdOn2IS5nCoJ6EXj
+   g==;
+X-CSE-ConnectionGUID: C3t8V2adRXm25nHd+wO0Xw==
+X-CSE-MsgGUID: z+TQy6K2QqCJQL7TS5rR0w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="11016304"
+X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
+   d="scan'208";a="11016304"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 00:52:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
+   d="scan'208";a="18002833"
+Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 02 Apr 2024 00:52:36 -0700
+Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rrYwc-00011J-0A;
+	Tue, 02 Apr 2024 07:52:34 +0000
+Date: Tue, 2 Apr 2024 15:52:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Jani Nikula <jani.nikula@intel.com>
+Subject: [linux-next:master 2055/3220] ld.lld: error: undefined symbol:
+ __drm_atomic_helper_private_obj_duplicate_state
+Message-ID: <202404021556.0JVcNC13-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 28 Mar 2024 09:22:07 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   c0b832517f627ead3388c6f0c74e8ac10ad5774b
+commit: d674858ff979550a0e97b4ac766f2640f0d9d7e7 [2055/3220] drm/display: Make all helpers visible and switch to depends on
+config: arm-aspeed_g4_defconfig (https://download.01.org/0day-ci/archive/20240402/202404021556.0JVcNC13-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240402/202404021556.0JVcNC13-lkp@intel.com/reproduce)
 
-> Clang warns (or errors with CONFIG_WERROR):
-> 
->   drivers/gpu/drm/panthor/panthor_sched.c:2048:6: error: variable 'csg_mod_mask' set but not used [-Werror,-Wunused-but-set-variable]
->    2048 |         u32 csg_mod_mask = 0, free_csg_slots = 0;
->         |             ^
->   1 error generated.
-> 
-> The variable is an artifact left over from refactoring that occurred
-> during the development of the initial series for this driver. Remove it
-> to resolve the warning.
-> 
-> Fixes: de8548813824 ("drm/panthor: Add the scheduler logical block")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404021556.0JVcNC13-lkp@intel.com/
 
-Queued to drm-misc-next.
+All errors (new ones prefixed by >>):
 
-Thanks,
+>> ld.lld: error: undefined symbol: __drm_atomic_helper_private_obj_duplicate_state
+   >>> referenced by drm_dp_mst_topology.c:5088 (drivers/gpu/drm/display/drm_dp_mst_topology.c:5088)
+   >>>               drivers/gpu/drm/display/drm_dp_mst_topology.o:(drm_dp_mst_duplicate_state) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: drm_kms_helper_hotplug_event
+   >>> referenced by drm_dp_mst_topology.c:2692 (drivers/gpu/drm/display/drm_dp_mst_topology.c:2692)
+   >>>               drivers/gpu/drm/display/drm_dp_mst_topology.o:(drm_dp_mst_link_probe_work) in archive vmlinux.a
+   >>> referenced by drm_dp_mst_topology.c:5074 (drivers/gpu/drm/display/drm_dp_mst_topology.c:5074)
+   >>>               drivers/gpu/drm/display/drm_dp_mst_topology.o:(drm_dp_delayed_destroy_work) in archive vmlinux.a
+   >>> referenced by drm_dp_mst_topology.c:4033 (drivers/gpu/drm/display/drm_dp_mst_topology.c:4033)
+   >>>               drivers/gpu/drm/display/drm_dp_mst_topology.o:(drm_dp_mst_up_req_work) in archive vmlinux.a
 
-Boris
-
-> ---
->  drivers/gpu/drm/panthor/panthor_sched.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panthor/panthor_sched.c b/drivers/gpu/drm/panthor/panthor_sched.c
-> index 5f7803b6fc48..e5a710f190d2 100644
-> --- a/drivers/gpu/drm/panthor/panthor_sched.c
-> +++ b/drivers/gpu/drm/panthor/panthor_sched.c
-> @@ -2045,7 +2045,7 @@ tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *c
->  	struct panthor_device *ptdev = sched->ptdev;
->  	struct panthor_csg_slot *csg_slot;
->  	int prio, new_csg_prio = MAX_CSG_PRIO, i;
-> -	u32 csg_mod_mask = 0, free_csg_slots = 0;
-> +	u32 free_csg_slots = 0;
->  	struct panthor_csg_slots_upd_ctx upd_ctx;
->  	int ret;
->  
-> @@ -2139,7 +2139,6 @@ tick_ctx_apply(struct panthor_scheduler *sched, struct panthor_sched_tick_ctx *c
->  
->  			csg_iface = panthor_fw_get_csg_iface(ptdev, csg_id);
->  			csg_slot = &sched->csg_slots[csg_id];
-> -			csg_mod_mask |= BIT(csg_id);
->  			group_bind_locked(group, csg_id);
->  			csg_slot_prog_locked(ptdev, csg_id, new_csg_prio--);
->  			csgs_upd_ctx_queue_reqs(ptdev, &upd_ctx, csg_id,
-> 
-> ---
-> base-commit: d180649238f04183950d9c8a7d8a2c2f1788a89c
-> change-id: 20240328-panthor-drop-csg_mod_mask-b4bbe317d690
-> 
-> Best regards,
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
