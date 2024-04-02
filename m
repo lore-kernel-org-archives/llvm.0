@@ -1,126 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7688D4207D;
-	Tue,  2 Apr 2024 23:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCA458ACC
+	for <llvm@lists.linux.dev>; Tue,  2 Apr 2024 23:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712100493; cv=none; b=bs3Js+uIYAsigWKQHnP/mjje8P5HweZxz/e2rSh6sjkMi2zV59EeqBivDQZI6mKs4w455Maq7bC9LivtecIAUX7OO1XCb3oV7mgmvesd/fpz8b+hjXD1TW3WMyfiEQMJatkSN5n6UlmRezltIeDmkr36rq04HSNqBTC2HSJM/RY=
+	t=1712101976; cv=none; b=GH/Fut3mQ9NMwYBrPYMZWU6wa8cM4yWoRuWmNCFUvGHJsipSkaSgsrEjCLOyLTEYDHvcRv51Pun2yVtSLAXJ89zUfwlQlSWDa36+TZ1E2j3YtKHJkFhpQZNhKFDSMZKE7ZML6HTQkqWXy1mGfmOFUFaMN32ZGIDaMAiMCkAWR6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712100493; c=relaxed/simple;
-	bh=znAnZElW3HhdrPFD8m6JNH/pRGieKQYD0c5LGW72PNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ujAQFV1bP66P495bZaPUuLPHXBkSZXmFgtQMRqrzYQ2lYNQ8BVW7pAdztI6SQ0+6whPKZTbnIMA8ds4Xi/4FH7m2qP6bENjmu4mzJzjRSkL+d+dsPKG+SLvSjv+nWrUHhq6nC+2qB49yf7W/OlWhAuw2R/N+9a4RcqN3d069SGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FbAUuJMb; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712101976; c=relaxed/simple;
+	bh=9LtQU8UiOsgDWvjTc1/6rw/QlwvMZqMAcV47wDqmoxI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=I/XkJ+pqPxZow5BL1Za3Ucp66wa/cyZ3e6oSfhZGhQ3iGmabf3+QXsUC71UVmzJnwXzFky8aO2PsOP9iZmBORa1M/eJupfPN3RX8zbXJOgUM1a5uOg4W0L5s6xE5GzHKR+UxzdwD6sUjA/fkC85BPaC2VtkeeISjYP4WPZRsbYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nqLa498n; arc=none smtp.client-ip=209.85.166.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FbAUuJMb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712100492; x=1743636492;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=znAnZElW3HhdrPFD8m6JNH/pRGieKQYD0c5LGW72PNU=;
-  b=FbAUuJMb46NNejCvyXm/WMETrPaMnAxhLVdmL7pPsjelBZbTTBIqn6Pt
-   SVYPj0IWDvA+LYFbLUvnHr1wE9YhfJ0GWyvwd60qed65zy7Wwn/XBa2Zq
-   FnSvUtM1frU483yzoq7ua/uJhxyidi6qzF+BkbbD79UTALx9jTT2EtI0h
-   BYap8/HP8WzKKzH53MZitczCfx+sCVUJQ5xxIIWW40TOcVTqVs2AWT29L
-   72Bj1ZZvS7/+sPvnZSjTNaALNfte89xcAEWZEMoeufR/9ufNjGZ5LcsJe
-   79ti6DkZJYoJSW31JlvaJkMAHCoJBBodtxJetfSzSXD1HL4TuM+sgBUPD
-   g==;
-X-CSE-ConnectionGUID: EfRcmB08SLm+3w6i/jE1fQ==
-X-CSE-MsgGUID: 1w0Vrum0RlOMH89eMnaksA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="7528486"
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="7528486"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 16:27:43 -0700
-X-CSE-ConnectionGUID: BSopshwbS4G3LLPrYfdkcQ==
-X-CSE-MsgGUID: gZgoGCGgR7ylTrcN4HlBDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="18348504"
-Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 02 Apr 2024 16:27:41 -0700
-Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rrnXX-0001cn-08;
-	Tue, 02 Apr 2024 23:27:39 +0000
-Date: Wed, 3 Apr 2024 07:27:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Atish Patra <atishp@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Atish Patra <Atish.Patra@wdc.com>
-Subject: [atishp04:kvm_pmu_snapshot_v5 12/26]
- arch/riscv/kernel/paravirt.c:65:13: error: use of undeclared identifier
- 'SBI_STA_SHMEM_DISABLE'
-Message-ID: <202404030746.BC3MI8IG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nqLa498n"
+Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-7cc74ea8606so692267139f.2
+        for <llvm@lists.linux.dev>; Tue, 02 Apr 2024 16:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712101974; x=1712706774; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Tvk0aVaJ4x37W0/x3VCM6LH3wJVHl8Qg2TqljtL5b2o=;
+        b=nqLa498n8yjC7zwQLl/apQ5zr0Wri/v1kWdgPW9sR+J8T1DUby+C3n18LHKWPRboLJ
+         gOxHUHHzMxjU096GB1KKIpvY/WZNsGsnNcMFuuvOGDoKutfA8xrsKTjqbswZzZPNAFpd
+         xhzWXY+djKwKyti/ynfNAuD+JZjLszzcd7xqsHJig/2Z617/jn95uThRahH8xQjDYI1i
+         m4nowTILziK4OigIxrwpMihnef9SzES83qChj8dw8RHvtnogRIY4pSsnX075GxJ6qijv
+         4F3PbDHbjbmRyJLvBsXeaI1XA03It2KbHmJPHfOx41BVuZaKAaueLSJnAIyMA7RjougD
+         o8Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712101974; x=1712706774;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tvk0aVaJ4x37W0/x3VCM6LH3wJVHl8Qg2TqljtL5b2o=;
+        b=mvwi28IhTlS+53Aaxhey2U5kPjvc7INP0jbMcfHJwxx8c6PoMsTiZ6uryZJmOJJC6H
+         PBdowSEoLjPaPGJwqdJE9GgG3vit5NZ6W6EPgeqo6dj6cib4zLCh8ko/IWdGkIvcM7kg
+         8ujWskmMHQaTE2Il0vmusbpcOTlwErZLl0ggHdU4zT5yudmOorLdX0mHf0Q4xbPUkuut
+         C7JyL1Vu4QFT9iIiFVzolr/PUDv57NSKNfXu4nkZSizZ5aQQ6Fzb+/Dj8XPAr8RJV0an
+         XhP9llwsrg3WzvI+ieN9t95UCD9wMjvVTNsya+voOAI3SLAJPa+uqthnpml6mSMNdk71
+         p72Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXOl6Qq9365GC5g88XaR5dfDxv7Hy/3ZhUlvta7pGZUP+3s6glelyFIHo4BS9Mq4XuYsTPxsJylYoHCDeO3wvNqE2BUTw==
+X-Gm-Message-State: AOJu0YxHkNkMvw9rVnu/kdc1Tctoh5S0Knexn5XZiWBIBCN4I+reEglo
+	RfDcczMQdsnunsuHj+LT/W9IE9XtbHX+wjARHVqxr/3P1E5FPr9Ok5JrmrkhZjh0SeBXo0ANzS0
+	RXzh5Y73KO2IyfZtYivaJpw==
+X-Google-Smtp-Source: AGHT+IHqfntMZvEh1IDSUP5f1hWGOYNSwBw+18ziFh0WsvD10M9EC1a4tUtqLDDJLrDg+I4iAyRRGaMZVfbPd0kinA==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6602:2c09:b0:7d0:3aa9:94db with
+ SMTP id w9-20020a0566022c0900b007d03aa994dbmr603145iov.3.1712101974132; Tue,
+ 02 Apr 2024 16:52:54 -0700 (PDT)
+Date: Tue, 02 Apr 2024 23:52:50 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAFGaDGYC/x3MywqDMBBG4VeRWXcghoiXV5EuavzTDi0xTEQq4
+ rsbXH6Lcw7KUEGmoTpIsUmWJRbUj4r85xXfYJmLyRrrjDOW86rRp52/0IgfTymwXxTs2c2d7dv QN6g7Kn1SBPnf7/F5nhfph1hDawAAAA==
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712101973; l=2998;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=9LtQU8UiOsgDWvjTc1/6rw/QlwvMZqMAcV47wDqmoxI=; b=9eawufW76cipSSrsORhJnGqUMNurLvEpfUyoII8eluIWnnZohNwLUI4Ga3x/2S39PDuLyAWM7
+ vhLFRLTK1VuAkgtgTTd42TrWoz+DfOiAW/9po4OuSCw0r10GMfSFmV4
+X-Mailer: b4 0.12.3
+Message-ID: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
+Subject: [PATCH] bpf: replace deprecated strncpy with strscpy
+From: Justin Stitt <justinstitt@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-tree:   https://github.com/atishp04/linux kvm_pmu_snapshot_v5
-head:   cdddc91e3f95ed945d275254a88f64fc64b62f96
-commit: b02b0545bb76e198b4a7e481866b42596e15bb00 [12/26] RISC-V: KVM: Rename the SBI_STA_SHMEM_DISABLE to a generic
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20240403/202404030746.BC3MI8IG-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240403/202404030746.BC3MI8IG-lkp@intel.com/reproduce)
+strncpy() is deprecated for use on NUL-terminated destination strings
+[1] and as such we should prefer more robust and less ambiguous string
+interfaces.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404030746.BC3MI8IG-lkp@intel.com/
+bpf sym names get looked up and compared/cleaned with various string
+apis. This suggests they need to be NUL-terminated (strncpy() suggests
+this but does not guarantee it).
 
-All errors (new ones prefixed by >>):
+|	static int compare_symbol_name(const char *name, char *namebuf)
+|	{
+|		cleanup_symbol_name(namebuf);
+|		return strcmp(name, namebuf);
+|	}
 
->> arch/riscv/kernel/paravirt.c:65:13: error: use of undeclared identifier 'SBI_STA_SHMEM_DISABLE'
-      65 |                 if (lo == SBI_STA_SHMEM_DISABLE && hi == SBI_STA_SHMEM_DISABLE)
-         |                           ^
-   arch/riscv/kernel/paravirt.c:65:44: error: use of undeclared identifier 'SBI_STA_SHMEM_DISABLE'
-      65 |                 if (lo == SBI_STA_SHMEM_DISABLE && hi == SBI_STA_SHMEM_DISABLE)
-         |                                                          ^
-   arch/riscv/kernel/paravirt.c:87:38: error: use of undeclared identifier 'SBI_STA_SHMEM_DISABLE'
-      87 |         return sbi_sta_steal_time_set_shmem(SBI_STA_SHMEM_DISABLE,
-         |                                             ^
-   arch/riscv/kernel/paravirt.c:88:10: error: use of undeclared identifier 'SBI_STA_SHMEM_DISABLE'
-      88 |                                             SBI_STA_SHMEM_DISABLE, 0);
-         |                                             ^
-   4 errors generated.
+|	static void cleanup_symbol_name(char *s)
+|	{
+|		...
+|		res = strstr(s, ".llvm.");
+|		...
+|	}
 
+Use strscpy() as this method guarantees NUL-termination on the
+destination buffer.
 
-vim +/SBI_STA_SHMEM_DISABLE +65 arch/riscv/kernel/paravirt.c
+This patch also replaces two uses of strncpy() used in log.c. These are
+simple replacements as postfix has been zero-initialized on the stack
+and has source arguments with a size less than the destination's size.
 
-323925ed6dbb0e Andrew Jones 2023-12-20  56  
-fdf68acccfc6af Andrew Jones 2023-12-20  57  static int sbi_sta_steal_time_set_shmem(unsigned long lo, unsigned long hi,
-fdf68acccfc6af Andrew Jones 2023-12-20  58  					unsigned long flags)
-323925ed6dbb0e Andrew Jones 2023-12-20  59  {
-fdf68acccfc6af Andrew Jones 2023-12-20  60  	struct sbiret ret;
-fdf68acccfc6af Andrew Jones 2023-12-20  61  
-fdf68acccfc6af Andrew Jones 2023-12-20  62  	ret = sbi_ecall(SBI_EXT_STA, SBI_EXT_STA_STEAL_TIME_SET_SHMEM,
-fdf68acccfc6af Andrew Jones 2023-12-20  63  			lo, hi, flags, 0, 0, 0);
-fdf68acccfc6af Andrew Jones 2023-12-20  64  	if (ret.error) {
-fdf68acccfc6af Andrew Jones 2023-12-20 @65  		if (lo == SBI_STA_SHMEM_DISABLE && hi == SBI_STA_SHMEM_DISABLE)
-fdf68acccfc6af Andrew Jones 2023-12-20  66  			pr_warn("Failed to disable steal-time shmem");
-fdf68acccfc6af Andrew Jones 2023-12-20  67  		else
-fdf68acccfc6af Andrew Jones 2023-12-20  68  			pr_warn("Failed to set steal-time shmem");
-fdf68acccfc6af Andrew Jones 2023-12-20  69  		return sbi_err_map_linux_errno(ret.error);
-fdf68acccfc6af Andrew Jones 2023-12-20  70  	}
-fdf68acccfc6af Andrew Jones 2023-12-20  71  
-323925ed6dbb0e Andrew Jones 2023-12-20  72  	return 0;
-323925ed6dbb0e Andrew Jones 2023-12-20  73  }
-323925ed6dbb0e Andrew Jones 2023-12-20  74  
+Note that this patch uses the new 2-argument version of strscpy
+introduced in Commit e6584c3964f2f ("string: Allow 2-argument
+strscpy()").
 
-:::::: The code at line 65 was first introduced by commit
-:::::: fdf68acccfc6af9497c34ee411d89af13b6516ed RISC-V: paravirt: Implement steal-time support
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+Link: https://github.com/KSPP/linux/issues/90
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Note: build-tested only.
 
-:::::: TO: Andrew Jones <ajones@ventanamicro.com>
-:::::: CC: Anup Patel <anup@brainfault.org>
+Found with: $ rg "strncpy\("
+---
+ kernel/bpf/core.c | 4 ++--
+ kernel/bpf/log.c  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 696bc55de8e8..8c9078f4549c 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -747,7 +747,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 		unsigned long symbol_start = ksym->start;
+ 		unsigned long symbol_end = ksym->end;
+ 
+-		strncpy(sym, ksym->name, KSYM_NAME_LEN);
++		strscpy(sym, ksym->name, KSYM_NAME_LEN);
+ 
+ 		ret = sym;
+ 		if (size)
+@@ -813,7 +813,7 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+ 		if (it++ != symnum)
+ 			continue;
+ 
+-		strncpy(sym, ksym->name, KSYM_NAME_LEN);
++		strscpy(sym, ksym->name, KSYM_NAME_LEN);
+ 
+ 		*value = ksym->start;
+ 		*type  = BPF_SYM_ELF_TYPE;
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 2a243cf37c60..4bd8f17a9f24 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -467,9 +467,9 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
+ 
+ 	if (type & PTR_MAYBE_NULL) {
+ 		if (base_type(type) == PTR_TO_BTF_ID)
+-			strncpy(postfix, "or_null_", 16);
++			strscpy(postfix, "or_null_");
+ 		else
+-			strncpy(postfix, "_or_null", 16);
++			strscpy(postfix, "_or_null");
+ 	}
+ 
+ 	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
+
+---
+base-commit: 026e680b0a08a62b1d948e5a8ca78700bfac0e6e
+change-id: 20240402-strncpy-kernel-bpf-core-c-4d8297f95e18
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
