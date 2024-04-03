@@ -1,125 +1,139 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11433148FE6
-	for <llvm@lists.linux.dev>; Wed,  3 Apr 2024 13:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B3A5CDC9;
+	Wed,  3 Apr 2024 14:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712150778; cv=none; b=kjhVoXMQVH/g3eIZpsCRxZb4KWrK33N5kfh/1LhNG+in8O0r9UlW8AkikI4vSgRR6AMJvXgPPeAzY+ORgHeFtgSeU7Evj8/7+rPDSwrWit53/ClTPoUD5G/JojjR0nNXbiQ2xogublkvMKviKtC24PdsAFqjLHJRouSSyp21qBw=
+	t=1712156111; cv=none; b=MrC0lzDv4+nR9Jy9jaerILBmD3pxYeGkz3MK2sApuKDdLO50Eg3ikO6CJU52i+FNhot4Iq7zHtnCfvdtaUq7fi6lcwD8g/r02IMBENDzNKrEoRaNtfWRGsRgjaZ9gLbOzQc68mCVcOlA24EFE+2VvRG+i7AELTUiUlo65Do31xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712150778; c=relaxed/simple;
-	bh=/ZFx3ebO9y9cafs7GJSvKhCZCl2L53c7NYdEippbANY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nC2J2NTSuDA7bn9AqUmEYKmEVbJIv7wyU2mwTe00qPDk/DBRCMn5VYlY1gWrDn5uLY+KFlp/ebJYunfpCcSP/VKi00E63/PmrJxmJLx8nKK7G/aVjcTpZJfJMi2N6FbcUKenk4taAKyaPfENZEkIdSDzrwz3jFRoYNpE8gybVts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=umwxK4KK; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1712156111; c=relaxed/simple;
+	bh=9kQ/LYVoCJX5B8ktIxgmV8Sg3jd1h969aqDlA5UHmXg=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=kgfL2jAuevjBMPDX6o+PD4A20N5bocCSaNi9soGfQP4TFbM9HPt2RPUTsc6JPG22OJJ1EAoLLwyENMVjjv7oAkD4KCS0dBXLkbiaDCUO5Eo8rtHSU7dR60SaxRsIIKClxTst6eTeQ2qFbLEPw50H93+nEsynk0gtOqdjigcnC7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=jIpGFAap; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="umwxK4KK"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2a271c6d3f1so1091656a91.3
-        for <llvm@lists.linux.dev>; Wed, 03 Apr 2024 06:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712150776; x=1712755576; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kr5yQL8fx0u0tyLMbu3sLuMSllEG5G+mAeHccxYfdVY=;
-        b=umwxK4KKByOj/COu24jV2itAunqLtVyHvkAADbIOoxCfowx0BRpkqHf0JeQ1qCIA+4
-         yBS69PiFLlb0vtW8DulIstDQGcyk7Q0DrYt8XMn6fgQQjk9qrpVC3WXWvG0qSc65cDPS
-         yV8s6LLCBWSWXKrrsgnPjIfhmH4d/mgF+0IvIjwJvPCHLmAyu625+JsJ1HGaMOhwW69J
-         qB4KiuZSRLbqp3ktQbjdUrU6CGCLdsg+ZAdZVWPZgTULSssZCbiB50oOaDU6wR+bbbY8
-         Hm0EnZCxNLFk/Y9LYo3NzN2BE4ssDDerrdAQE/U6hJy0RndYWrvn4zQE6uSQXMoXZVXe
-         biFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712150776; x=1712755576;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kr5yQL8fx0u0tyLMbu3sLuMSllEG5G+mAeHccxYfdVY=;
-        b=UFOfPvxrPO90ZU+sV1AW5fOhoDz96IfSTyQtvonpsDwVNoANDqEsnT8PuOeguba2jd
-         xMlRKUPzmjulai0duzyqMLMNvakE66Inz6OSAQEuSikFyv5f1sHNVkQULppZCTvFg348
-         cKVFfbQpx8wZZAhcgOT4wIC5VwpccD3gIwNJ8c3SfCgpHdzjP4nDspkh9yymZBncegyq
-         sVn9cnD8+rHEWczXgf1iIo4BvGBaF4bWOjpEa4STCnPJqKQoWehCl26ZVtn4Q78sojo+
-         wmckaod1HXc+xmI0RXVz6X5nGNXMsgy38IJ7MKJx0+yhHgapJ5eFtC3ZFtqzvBQFMSzF
-         k2Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCWAplMnMDwPOp1lNEu2hGNm6yQxdBC0b4uPypPNX910Ule6yPGqEEht8UQccRoSJSii3HByE6zCJZ5BXJwrouythtcIRg==
-X-Gm-Message-State: AOJu0Yxsgakw1JediAxUnxSloS5Hvf2WVi8SobkNN34fvjfK84FwOwMe
-	Pjnl9xvxaSxMhC1f5tKYzJlTizGfseocV28ajFpkXH7FZzUOtllaB7S3Sla/udVP3mfnyoZug1u
-	rjvHuTEN7vHe8RAORlHmQCneaj/TS7OUzKU/SNeovSsTXCBLcU74=
-X-Google-Smtp-Source: AGHT+IEak/WLSgffbuVSjwab06JTulWpxWfMzkQ8I6F5L8nOzPRvaiqB048L3gfCz5mrvMfqk7JY/JqIUVyg8IDxNG0=
-X-Received: by 2002:a17:90b:19c3:b0:2a2:a7be:3b5c with SMTP id
- nm3-20020a17090b19c300b002a2a7be3b5cmr1005626pjb.6.1712150776261; Wed, 03 Apr
- 2024 06:26:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="jIpGFAap"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=9pVtSJ44xOIUG48fskQmP0c+CrYiusBg1BPFjxUy9dY=; b=jIpGFAapFCUN02RNfLFiWVKy35
+	Nx2oLc0g6e8m9/AUdvt+Vagvd+ovgBM69W1NuGYB+AGsJSd+ECYN5/+xjwx33W5gNh6Xf9LaUgQ6K
+	57JrRud/zBvtFlB3JXAYpzrA+zBiugwrU7XWeNhyaayYBUD8JSRoYTzukmaqEo4L/SRNJ2i96mL+L
+	KCqBKih404TwHKdY+nBQAj5zU31iMHnWKEG++s3ToQ1eaorswU33TUx905LRIT0zUemxLtnN6LqqB
+	FwfV4gyAJOE9dWlZ7BF89hzSC3x+nQ1W0oyF9bRhK3uthd53/P6G5p/zS8uNbKJ99LC8EK7aWJvYv
+	+rpmNtcw==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rs210-0000Cf-G6; Wed, 03 Apr 2024 16:55:02 +0200
+Received: from [178.197.248.12] (helo=linux.home)
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rs20z-00037x-3A;
+	Wed, 03 Apr 2024 16:55:01 +0200
+Subject: Re: [PATCH] bpf: replace deprecated strncpy with strscpy
+To: Ratheesh Kannoth <rkannoth@marvell.com>,
+ Justin Stitt <justinstitt@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
+ <20240403030642.GA1652044@maili.marvell.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5998a7da-9e61-1852-8281-aee919468953@iogearbox.net>
+Date: Wed, 3 Apr 2024 16:55:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYtj3aBdRreBmKZDQApEe2x8mugycPgN+_J5ebJzXDEq4g@mail.gmail.com>
-In-Reply-To: <CA+G9fYtj3aBdRreBmKZDQApEe2x8mugycPgN+_J5ebJzXDEq4g@mail.gmail.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Wed, 3 Apr 2024 15:26:05 +0200
-Message-ID: <CAKfTPtC9YgbZgGNK82MhhzzsD3P6j64+w6oieJMDKQNOmrC4FQ@mail.gmail.com>
-Subject: Re: kernel/sched/core.c:961:15: error: incompatible pointer to
- integer conversion passing 'typeof
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>, 
-	Linux Regressions <regressions@lists.linux.dev>, lkft-triage@lists.linaro.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Linux PM <linux-pm@vger.kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20240403030642.GA1652044@maili.marvell.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27234/Wed Apr  3 10:25:27 2024)
 
-Hi Naresh,
+On 4/3/24 5:06 AM, Ratheesh Kannoth wrote:
+> On 2024-04-03 at 05:22:50, Justin Stitt (justinstitt@google.com) wrote:
+>> strncpy() is deprecated for use on NUL-terminated destination strings
+>> [1] and as such we should prefer more robust and less ambiguous string
+>> interfaces.
+>>
+>> bpf sym names get looked up and compared/cleaned with various string
+>> apis. This suggests they need to be NUL-terminated (strncpy() suggests
+>> this but does not guarantee it).
+>>
+>> |	static int compare_symbol_name(const char *name, char *namebuf)
+>> |	{
+>> |		cleanup_symbol_name(namebuf);
+>> |		return strcmp(name, namebuf);
+>> |	}
+>>
+>> |	static void cleanup_symbol_name(char *s)
+>> |	{
+>> |		...
+>> |		res = strstr(s, ".llvm.");
+>> |		...
+>> |	}
+>>
+>> Use strscpy() as this method guarantees NUL-termination on the
+>> destination buffer.
+>>
+>> This patch also replaces two uses of strncpy() used in log.c. These are
+>> simple replacements as postfix has been zero-initialized on the stack
+>> and has source arguments with a size less than the destination's size.
+>>
+>> Note that this patch uses the new 2-argument version of strscpy
+>> introduced in Commit e6584c3964f2f ("string: Allow 2-argument
+>> strscpy()").
+>>
+>> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+>> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+>> Link: https://github.com/KSPP/linux/issues/90
+>> Cc: linux-hardening@vger.kernel.org
+>> Signed-off-by: Justin Stitt <justinstitt@google.com>
+>> ---
+>> Note: build-tested only.
+>>
+>> Found with: $ rg "strncpy\("
+>> ---
+>>   kernel/bpf/core.c | 4 ++--
+>>   kernel/bpf/log.c  | 4 ++--
+>>   2 files changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 696bc55de8e8..8c9078f4549c 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -747,7 +747,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
+>>   		unsigned long symbol_start = ksym->start;
+>>   		unsigned long symbol_end = ksym->end;
+>>
+>> -		strncpy(sym, ksym->name, KSYM_NAME_LEN);
+>> +		strscpy(sym, ksym->name, KSYM_NAME_LEN);
+> You dont have to check return value of strscpy for errors ?
 
-Adding riscv people
+That would be overkill, it can be easily audited that both pointers are
+of size KSYM_NAME_LEN, as is the count arg.
 
-On Wed, 3 Apr 2024 at 09:38, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> The riscv clang-17 defconfig build failed due to following warnings / errors
-> on the Linux next-20240402.
-
-Could you confirm that there is no problem with other arch and/or
-other toolchain ?
-
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> riscv:
->   build:
->     * clang-17-lkftconfig - Failed
->     * rv32-clang-17-defconfig - Failed
->     * clang-17-tinyconfig - Failed
->     * rv32-clang-17-tinyconfig - Failed
->     * clang-17-defconfig - Failed
->     * clang-17-allnoconfig - Failed
->     * rv32-clang-17-allnoconfig - Failed
->
-> Build log:
-> -------
-> kernel/sched/core.c:961:15: error: incompatible pointer to integer
-> conversion passing 'typeof (*((__ai_ptr)))' (aka 'struct wake_q_node
-> *') to parameter of type 'uintptr_t' (aka 'unsigned long')
-> [-Wint-conversion]
->   961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-There is no recent change on this code. Could it be a change in
-cmpxchg_relaxed ?
-
->
-> Steps to reproduce:
-> ---------
-> # tuxmake --runtime podman --target-arch riscv --toolchain clang-17
-> --kconfig defconfig LLVM=1 LLVM_IAS=1
->
-> Links:
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240402/testrun/23264917/suite/build/test/clang-17-defconfig/details/
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240402/testrun/23264917/suite/build/test/clang-17-defconfig/log
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+Thanks,
+Daniel
