@@ -1,181 +1,144 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09E01B950;
-	Wed,  3 Apr 2024 03:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B196C40BEE;
+	Wed,  3 Apr 2024 04:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712113649; cv=none; b=b+e5vIlpE/a5dl4FjhxbV2nPf1tqQuRW2h+yqeCqmgb7XzN7fwpd3UxOSdIK3z16Xm6m9G273ylnHJ9umsR9zMNjMLkEDhlHk3daLfrFNE1uucIxtcSMOI30b7nWOV6oCslqr2fPwPBrnd0jTSvre0+bXZpt1xqdl3MQMW3FRO4=
+	t=1712118251; cv=none; b=J7zOP8c3D4GH085Mx/faSYDW11PCck8BLCdN2Jq/gGT7GKwO12qzkceq379aK+TLYGjoy01tMuwGHvRSTdzr3XM6XZnbtgN/2OWjVTkToW17Ujmj3L4NAm8Lk9hVsp6eIxS57q0JMBsTgZVsJEH+id19y1kG+RKG5Aagi9TdAsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712113649; c=relaxed/simple;
-	bh=ROtb/TdhEhS14cmCDYhPnEoNJ0jX0mNNsCCUwMkC5ks=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XcteU3FEEj2phViZHqXmQCJfBK9DsewYTggSaLHB+WwyOJevjxVS85F9Y32dZOvI/8q1JtYNl/8MVT1VRI7P9izTXriUyOAElqZbKC2gVx0jkfLdEeu8U8ZiiCASt21jxAfhI7ZZZnu3+jhASjsUrWl/fppiZ876i//A5qXkrMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Y8m7nmA3; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1712118251; c=relaxed/simple;
+	bh=kvZKyFnzaSdzkHLInBECq2A4x1BE0FyawGZWZBsWnfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YLP3y4KHoVEXB+nDC3JB+udyPE7m75T2FQrtERonbNax6BQko+zmIGiQ/8rRI5Kr49eZjPqsaIMyKKv5ujYs2xIdr/V63An3jCdOmA7ATbMpGJq9byHsOEGL/xXQPn6SSXvkGX7R73zIWUQLT674zlyp82xmsmYFIc97G9pSMEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PPfRJjsJ; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Y8m7nmA3"
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 432K39iQ029137;
-	Tue, 2 Apr 2024 20:06:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=pfpt0220; bh=cIxSFpufY5nRKyMlIffzzC
-	ralxEiy0TVlswlh++OQgg=; b=Y8m7nmA30w8NYNhiX4YIbCGNGlGZX7dT/8zPJv
-	HlIxSC+6YMvHY21sG5K/WUMfk4V0GdHxba7suvb+SEIHVp3WY+s5BXMLo9KG/s8u
-	mHmnkUyrhTxGHoPLOFUYCaVJJ6nZ4F7q6CLGmCERuXheUKkO202W8HOrFh4owbAV
-	AbV9Db6FzRW0MiP6yruMsD5gxz2bBygAZzpkJaJaQOS6aVlCiOSRY1aYjzjlF3E4
-	Rs9KjqOA0OX2ulNkcVLM6pC+QKUap67aLihgPW69+jx4m5d1kSCR00rZtXs8wptT
-	guwL1M6SCfKq10J/1rFt91BJ+Ez1g+1obP+hbdbT35k4BTLw==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3x809fx510-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Apr 2024 20:06:51 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Tue, 2 Apr 2024 20:06:49 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 2 Apr 2024 20:06:49 -0700
-Received: from maili.marvell.com (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id 134265B694C;
-	Tue,  2 Apr 2024 20:06:43 -0700 (PDT)
-Date: Wed, 3 Apr 2024 08:36:42 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Justin Stitt <justinstitt@google.com>
-CC: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii
- Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song
-	<yonghong.song@linux.dev>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-        <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] bpf: replace deprecated strncpy with strscpy
-Message-ID: <20240403030642.GA1652044@maili.marvell.com>
-References: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PPfRJjsJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712118250; x=1743654250;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kvZKyFnzaSdzkHLInBECq2A4x1BE0FyawGZWZBsWnfY=;
+  b=PPfRJjsJOX4oSmgLCsliSskMSRF+Hh9YHAe9cI7ElhhoujYqDT46taCm
+   apr6zOxqDjzig3irLSY38S7hx1j3YY6JUZJ84qQol3NIm1wfdrCCvVOPl
+   l4jbxQo7bdoZyCjMAymgIyhBwtazP8jVSO6eZo76r/IESlmstoDBECjHK
+   g3G2g0jXhCuV4XMC2ytm95CDl/B3OCiVgCBNM0zJNbCpJcRGNQVO/GbSD
+   SV8qpApYrKm6i8e1ABL+iIFL0eqKeVtwB3aH6lb9Hnm0VFaIV+B2fes/G
+   Ui9drTkrN3TWSI59zUm0UDqc2JATdltwvPMw3U2gUPYD30RMHXZxh4Z4c
+   Q==;
+X-CSE-ConnectionGUID: PGiLIUKHR8CLQ4ULTTf+mA==
+X-CSE-MsgGUID: wvylyuamQ5CXX1IFDSDYqA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="11104932"
+X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
+   d="scan'208";a="11104932"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 21:24:09 -0700
+X-CSE-ConnectionGUID: vr7UOS3ATjqARwTETHCDhA==
+X-CSE-MsgGUID: bcwQ72D4S1KwGBlIGF571A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
+   d="scan'208";a="22779970"
+Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 02 Apr 2024 21:24:06 -0700
+Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rrsAO-0001qZ-07;
+	Wed, 03 Apr 2024 04:24:04 +0000
+Date: Wed, 3 Apr 2024 12:23:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Damien Le Moal <dlemoal@kernel.org>, linux-block@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>, linux-scsi@vger.kernel.org,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	dm-devel@lists.linux.dev, Mike Snitzer <snitzer@redhat.com>,
+	linux-nvme@lists.infradead.org, Keith Busch <kbusch@kernel.org>,
+	Christoph Hellwig <hch@lst.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 07/28] block: Introduce zone write plugging
+Message-ID: <202404031242.Oy7q9BWh-lkp@intel.com>
+References: <20240402123907.512027-8-dlemoal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240402-strncpy-kernel-bpf-core-c-v1-1-7cb07a426e78@google.com>
-X-Proofpoint-GUID: QmRE6pvh5nsQpJLoK1ntZVKZA9QB3BtZ
-X-Proofpoint-ORIG-GUID: QmRE6pvh5nsQpJLoK1ntZVKZA9QB3BtZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-03_02,2024-04-01_01,2023-05-22_02
+In-Reply-To: <20240402123907.512027-8-dlemoal@kernel.org>
 
-On 2024-04-03 at 05:22:50, Justin Stitt (justinstitt@google.com) wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
->
-> bpf sym names get looked up and compared/cleaned with various string
-> apis. This suggests they need to be NUL-terminated (strncpy() suggests
-> this but does not guarantee it).
->
-> |	static int compare_symbol_name(const char *name, char *namebuf)
-> |	{
-> |		cleanup_symbol_name(namebuf);
-> |		return strcmp(name, namebuf);
-> |	}
->
-> |	static void cleanup_symbol_name(char *s)
-> |	{
-> |		...
-> |		res = strstr(s, ".llvm.");
-> |		...
-> |	}
->
-> Use strscpy() as this method guarantees NUL-termination on the
-> destination buffer.
->
-> This patch also replaces two uses of strncpy() used in log.c. These are
-> simple replacements as postfix has been zero-initialized on the stack
-> and has source arguments with a size less than the destination's size.
->
-> Note that this patch uses the new 2-argument version of strscpy
-> introduced in Commit e6584c3964f2f ("string: Allow 2-argument
-> strscpy()").
->
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Note: build-tested only.
->
-> Found with: $ rg "strncpy\("
-> ---
->  kernel/bpf/core.c | 4 ++--
->  kernel/bpf/log.c  | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 696bc55de8e8..8c9078f4549c 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -747,7 +747,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
->  		unsigned long symbol_start = ksym->start;
->  		unsigned long symbol_end = ksym->end;
->
-> -		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-> +		strscpy(sym, ksym->name, KSYM_NAME_LEN);
-You dont have to check return value of strscpy for errors ?
+Hi Damien,
 
->
->  		ret = sym;
->  		if (size)
-> @@ -813,7 +813,7 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
->  		if (it++ != symnum)
->  			continue;
->
-> -		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-> +		strscpy(sym, ksym->name, KSYM_NAME_LEN);
->
->  		*value = ksym->start;
->  		*type  = BPF_SYM_ELF_TYPE;
-> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-> index 2a243cf37c60..4bd8f17a9f24 100644
-> --- a/kernel/bpf/log.c
-> +++ b/kernel/bpf/log.c
-> @@ -467,9 +467,9 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
->
->  	if (type & PTR_MAYBE_NULL) {
->  		if (base_type(type) == PTR_TO_BTF_ID)
-> -			strncpy(postfix, "or_null_", 16);
-> +			strscpy(postfix, "or_null_");
->  		else
-> -			strncpy(postfix, "_or_null", 16);
-> +			strscpy(postfix, "_or_null");
->  	}
->
->  	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
->
-> ---
-> base-commit: 026e680b0a08a62b1d948e5a8ca78700bfac0e6e
-> change-id: 20240402-strncpy-kernel-bpf-core-c-4d8297f95e18
->
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
->
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on linus/master v6.9-rc2 next-20240402]
+[cannot apply to jejb-scsi/for-next device-mapper-dm/for-next mkp-scsi/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Damien-Le-Moal/block-Restore-sector-of-flush-requests/20240402-204657
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20240402123907.512027-8-dlemoal%40kernel.org
+patch subject: [PATCH v4 07/28] block: Introduce zone write plugging
+config: i386-buildonly-randconfig-003-20240403 (https://download.01.org/0day-ci/archive/20240403/202404031242.Oy7q9BWh-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240403/202404031242.Oy7q9BWh-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404031242.Oy7q9BWh-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> block/blk-zoned.c:1435:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    1435 |                 return ret;
+         |                        ^~~
+   block/blk-zoned.c:1415:9: note: initialize the variable 'ret' to silence this warning
+    1415 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +/ret +1435 block/blk-zoned.c
+
+  1410	
+  1411	static int disk_alloc_zone_resources(struct gendisk *disk,
+  1412					     unsigned int pool_size)
+  1413	{
+  1414		unsigned int i;
+  1415		int ret;
+  1416	
+  1417		disk->zone_wplugs_hash_bits =
+  1418			min(ilog2(pool_size) + 1, BLK_ZONE_WPLUG_MAX_HASH_BITS);
+  1419	
+  1420		disk->zone_wplugs_hash =
+  1421			kcalloc(disk_zone_wplugs_hash_size(disk),
+  1422				sizeof(struct hlist_head), GFP_KERNEL);
+  1423		if (!disk->zone_wplugs_hash)
+  1424			return -ENOMEM;
+  1425	
+  1426		for (i = 0; i < disk_zone_wplugs_hash_size(disk); i++)
+  1427			INIT_HLIST_HEAD(&disk->zone_wplugs_hash[i]);
+  1428	
+  1429		disk->zone_wplugs_pool = mempool_create_kmalloc_pool(pool_size,
+  1430							sizeof(struct blk_zone_wplug));
+  1431		if (!disk->zone_wplugs_pool) {
+  1432			kfree(disk->zone_wplugs_hash);
+  1433			disk->zone_wplugs_hash = NULL;
+  1434			disk->zone_wplugs_hash_bits = 0;
+> 1435			return ret;
+  1436		}
+  1437	
+  1438		return 0;
+  1439	}
+  1440	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
