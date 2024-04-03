@@ -1,234 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6022B4D117;
-	Wed,  3 Apr 2024 06:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91DA5C60D
+	for <llvm@lists.linux.dev>; Wed,  3 Apr 2024 07:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712125458; cv=none; b=LxSDnaZ0oetXjXPaAYeY60sVHwmxMpZ9ACThuRAXc9TDjp9FRbdTGZeVpcAdFW7Dv2g/iBPhjv1LvQirpbw346V5eKgWMzrZndxSaQxxB6yMunZMB6kTWsenfhDkJI5QCN7oE6OcI2NH2FTrFp5gvdRyOGCqyh11CKEtz06GwsI=
+	t=1712129903; cv=none; b=SspEr+EAXxpehNr5BxnitpqRdd3IGGTh0W6f8iyD53aE+2GTgAaYWHXaYlfS9qJCRQpGxlGk8WONBNBaf9n33Zw0GwE41IkEtrSJyo31vJeVxjf8KV1meu7c3GhLhOmLB2RxmHb08RX9KTqwITWcODBy+f9qAiLLdmGvszhA/K8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712125458; c=relaxed/simple;
-	bh=RDyK31AOeEL/cCCmbPt9zfwDnreb2sRz5FeVRJFgW4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=b6oEnjzRnCcW1woCt2dUaUmKxZSveyWMlZoaWe02SQj66qPLSUMoYOlIGncZCTfF05BLr2sKDXQO43+QpfpToneIfRndg+RD1IBpTy8fQBanVH6KYJshY9mA1UCCT1VFcZ70lNp+o/P8zO+uJHCQ26TAwSkGKf9BJxIQJ6s1k+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g/CbTEd/; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712129903; c=relaxed/simple;
+	bh=9WbOVVSwUWwd5K793ppWlQLxaj4rX8ZTjnhFhq5Y5v8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=cpRZQ1+3ik4ioJf0wqqIu91TgMSdxYuXgAU9Pm3A299OjklAT8IjPh6jIQXt8inR8vit3JAVM24HoHXoKkpgY4SWGUBe+E3FxXLuqByefezjrrxwZJ/vu9qsFKHZcgflzQUwZr3vy2ci+3oO+Qv3bmn+Cn4Bp+Vo3+vhOnVaiZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h5jTtbEx; arc=none smtp.client-ip=209.85.222.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g/CbTEd/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712125456; x=1743661456;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RDyK31AOeEL/cCCmbPt9zfwDnreb2sRz5FeVRJFgW4k=;
-  b=g/CbTEd/+ghxnJHnV5qyGNa87QXKx03BdF8Tl7+iCtw6fE48RwVkmHZl
-   ROsMV9DgpwHMLQEZvHSklarSPR5D9izcMDN77Cl9xzbs/vYMsDO19j3Oy
-   IfQfikR4Jh6FYq7gROB4Js6eMP00UFBR/qqMzLDIZZbiVYZCSQoVRwIbx
-   QS5kzJtb7DcA3r6cNIVCWXpX1fBGLKxPslkLJnP3MkGWbBzEvOVHHWz2s
-   WI6UROdC9WecnbsFRU4nPDEN/enpowUY2Z62xU7Xcv8YN3ZUB+A359kNU
-   90pKIue/3w+yD+GwQPF/gW95loH/+ghOGyxDzNs4uQhmuHHtvQxJX0Aqj
-   Q==;
-X-CSE-ConnectionGUID: dUMiA5iDSKKtnFEQOG01gg==
-X-CSE-MsgGUID: b+uv3a5XTTejQ6cIdYO0wQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="7493069"
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="7493069"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 23:24:16 -0700
-X-CSE-ConnectionGUID: yQ41SlkZTjuPPmtk41U2Lw==
-X-CSE-MsgGUID: a4yDXplhTUiRPNH+ZpSmng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="18748633"
-Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 02 Apr 2024 23:24:14 -0700
-Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rru2d-0001vZ-1y;
-	Wed, 03 Apr 2024 06:24:11 +0000
-Date: Wed, 3 Apr 2024 14:23:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Boris Brezillon <bbrezillon@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, Liviu Dudau <liviu.dudau@arm.com>,
-	Steven Price <steven.price@arm.com>
-Subject: [drm-misc:for-linux-next 3/4]
- drivers/gpu/drm/panthor/panthor_fw.c:979:1: error: unused variable 'cookie'
-Message-ID: <202404031446.7Mpki5DV-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h5jTtbEx"
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-7e3b3e33ae3so278979241.0
+        for <llvm@lists.linux.dev>; Wed, 03 Apr 2024 00:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712129900; x=1712734700; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QKsiTWwQltevYA1r+W4p6ubtTr4MlTT13dNzhqyl5yk=;
+        b=h5jTtbExD3olT3RfzP00t/JzotC1K2JGqcnUMVxx5T+qexjEu+4MgEXZy3GCdSfMne
+         hesjJdY65uik9UPUVyuAzA/7STFwCzVIGXMf0x+5GBXD88m3NHBBlLYlQlRLXJHPO+Ek
+         sOI19L4I34Mxz1aXqR9tQjSN0D9FpFU7+KG/7WiaT61Ov7wBOd5nn9RH0e/r+1ekHx2u
+         WODxxtn2DtIS7fgzQxWUI6grllQIS38nI8vUnxqF14zsIWfqwIl+BcWlMumA0upNOZLk
+         nFvtUlmQCAwg7zWHd+itA753PmgCsnQaxRJfC7EeXWX7t/VPVwcqpjtnXvIz2xb/VSO9
+         fh/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712129900; x=1712734700;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QKsiTWwQltevYA1r+W4p6ubtTr4MlTT13dNzhqyl5yk=;
+        b=HiBMaeilEawklk41tFt1/BVhsj+IM6jP0lXf+gFLXe6khJ/YKckBQ9UvbW0sK6qOFR
+         Oo2xkVTp3Cq3u3i0UeTjxkD8AMhOsACQt+/uNMLqCjnQWJaoF3brcdpHE1rqOwN32KtI
+         QZq6FbjYMFQLenc5GZa95faEqru+pXXP//y+PnZdQ09kVlaT7GPaLvUZBHfQc2YToaEZ
+         Oq65397KxI9XACDKcrn/aMVX4qYZHehYTSGPPyjUDQXE95eeGCbterEa2mbzksxbefkZ
+         nBu0h7AKN36+emgIa/WVIm6fQXokoPVG6DRyC367i16qt+f2WjoxyF/hpxaxqiQgFgEj
+         t8wg==
+X-Forwarded-Encrypted: i=1; AJvYcCUe1DSubRhKLy4SO0xLAj3e2qWnISPh2ysDxYYfDJPM48Tvs7HQY2kweQA6Wxh46H3dSZr1eD+Ymiy7WisqJv2ivQZFPg==
+X-Gm-Message-State: AOJu0Yziv/TffdL3t57vGpYx5Ww11j2as2/Og6yvOh2uo9tAmCZOqX68
+	bE2BD2amJt+3D79zelw3V1+SIwU9meP9isrO0xkZOuS0U+sL3MidmkD2Z01D581a8JMfq5yhJxR
+	LH2OMyQKhVpNj6GJqYKFVKBhP5s+qPZtTWFweCg==
+X-Google-Smtp-Source: AGHT+IEDsnkIj6HCOWhXVjqLOlYJRYneScfnCc6Qn1cRIG8coLw2kTdZBaOy3HnsF7h3qlnpsiRbKmaYqRzZ9wPLo58=
+X-Received: by 2002:a67:e359:0:b0:478:32e2:1833 with SMTP id
+ s25-20020a67e359000000b0047832e21833mr11298728vsm.22.1712129900501; Wed, 03
+ Apr 2024 00:38:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 3 Apr 2024 13:08:08 +0530
+Message-ID: <CA+G9fYtj3aBdRreBmKZDQApEe2x8mugycPgN+_J5ebJzXDEq4g@mail.gmail.com>
+Subject: kernel/sched/core.c:961:15: error: incompatible pointer to integer
+ conversion passing 'typeof
+To: open list <linux-kernel@vger.kernel.org>, 
+	Linux Regressions <regressions@lists.linux.dev>, lkft-triage@lists.linaro.org, 
+	clang-built-linux <llvm@lists.linux.dev>, Linux PM <linux-pm@vger.kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
-head:   10021ef27310279c850cf6cb38542c443a995e92
-commit: 962f88b9c91647f3ff4a0d3709662641baed5164 [3/4] drm/panthor: Drop the dev_enter/exit() sections in _irq_suspend/resume()
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20240403/202404031446.7Mpki5DV-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240403/202404031446.7Mpki5DV-lkp@intel.com/reproduce)
+The riscv clang-17 defconfig build failed due to following warnings / errors
+on the Linux next-20240402.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404031446.7Mpki5DV-lkp@intel.com/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-All errors (new ones prefixed by >>):
+riscv:
+  build:
+    * clang-17-lkftconfig - Failed
+    * rv32-clang-17-defconfig - Failed
+    * clang-17-tinyconfig - Failed
+    * rv32-clang-17-tinyconfig - Failed
+    * clang-17-defconfig - Failed
+    * clang-17-allnoconfig - Failed
+    * rv32-clang-17-allnoconfig - Failed
 
-   In file included from drivers/gpu/drm/panthor/panthor_fw.c:9:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/panthor/panthor_fw.c:979:1: error: unused variable 'cookie' [-Werror,-Wunused-variable]
-     979 | PANTHOR_IRQ_HANDLER(job, JOB, panthor_job_irq_handler);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/panthor/panthor_device.h:326:6: note: expanded from macro 'PANTHOR_IRQ_HANDLER'
-     326 |         int cookie;                                                                             \
-         |             ^~~~~~
->> drivers/gpu/drm/panthor/panthor_fw.c:979:1: error: unused variable 'cookie' [-Werror,-Wunused-variable]
-     979 | PANTHOR_IRQ_HANDLER(job, JOB, panthor_job_irq_handler);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/panthor/panthor_device.h:336:6: note: expanded from macro 'PANTHOR_IRQ_HANDLER'
-     336 |         int cookie;                                                                             \
-         |             ^~~~~~
-   7 errors generated.
+Build log:
+-------
+kernel/sched/core.c:961:15: error: incompatible pointer to integer
+conversion passing 'typeof (*((__ai_ptr)))' (aka 'struct wake_q_node
+*') to parameter of type 'uintptr_t' (aka 'unsigned long')
+[-Wint-conversion]
+  961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Steps to reproduce:
+---------
+# tuxmake --runtime podman --target-arch riscv --toolchain clang-17
+--kconfig defconfig LLVM=1 LLVM_IAS=1
+
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240402/testrun/23264917/suite/build/test/clang-17-defconfig/details/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240402/testrun/23264917/suite/build/test/clang-17-defconfig/log
+
 --
-   In file included from drivers/gpu/drm/panthor/panthor_gpu.c:9:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/panthor/panthor_gpu.c:166:1: error: unused variable 'cookie' [-Werror,-Wunused-variable]
-     166 | PANTHOR_IRQ_HANDLER(gpu, GPU, panthor_gpu_irq_handler);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/panthor/panthor_device.h:326:6: note: expanded from macro 'PANTHOR_IRQ_HANDLER'
-     326 |         int cookie;                                                                             \
-         |             ^~~~~~
->> drivers/gpu/drm/panthor/panthor_gpu.c:166:1: error: unused variable 'cookie' [-Werror,-Wunused-variable]
-     166 | PANTHOR_IRQ_HANDLER(gpu, GPU, panthor_gpu_irq_handler);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/panthor/panthor_device.h:336:6: note: expanded from macro 'PANTHOR_IRQ_HANDLER'
-     336 |         int cookie;                                                                             \
-         |             ^~~~~~
-   7 errors generated.
---
-   In file included from drivers/gpu/drm/panthor/panthor_mmu.c:5:
-   In file included from include/drm/drm_debugfs.h:38:
-   In file included from include/drm/drm_gpuvm.h:34:
-   In file included from include/drm/drm_gem.h:42:
-   In file included from include/drm/drm_vma_manager.h:27:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/panthor/panthor_mmu.c:1689:1: error: unused variable 'cookie' [-Werror,-Wunused-variable]
-    1689 | PANTHOR_IRQ_HANDLER(mmu, MMU, panthor_mmu_irq_handler);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/panthor/panthor_device.h:326:6: note: expanded from macro 'PANTHOR_IRQ_HANDLER'
-     326 |         int cookie;                                                                             \
-         |             ^~~~~~
->> drivers/gpu/drm/panthor/panthor_mmu.c:1689:1: error: unused variable 'cookie' [-Werror,-Wunused-variable]
-    1689 | PANTHOR_IRQ_HANDLER(mmu, MMU, panthor_mmu_irq_handler);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/panthor/panthor_device.h:336:6: note: expanded from macro 'PANTHOR_IRQ_HANDLER'
-     336 |         int cookie;                                                                             \
-         |             ^~~~~~
-   7 errors generated.
-
-
-vim +/cookie +979 drivers/gpu/drm/panthor/panthor_fw.c
-
-2718d91816eeed Boris Brezillon 2024-02-29  965  
-2718d91816eeed Boris Brezillon 2024-02-29  966  static void panthor_job_irq_handler(struct panthor_device *ptdev, u32 status)
-2718d91816eeed Boris Brezillon 2024-02-29  967  {
-2718d91816eeed Boris Brezillon 2024-02-29  968  	if (!ptdev->fw->booted && (status & JOB_INT_GLOBAL_IF))
-2718d91816eeed Boris Brezillon 2024-02-29  969  		ptdev->fw->booted = true;
-2718d91816eeed Boris Brezillon 2024-02-29  970  
-2718d91816eeed Boris Brezillon 2024-02-29  971  	wake_up_all(&ptdev->fw->req_waitqueue);
-2718d91816eeed Boris Brezillon 2024-02-29  972  
-2718d91816eeed Boris Brezillon 2024-02-29  973  	/* If the FW is not booted, don't process IRQs, just flag the FW as booted. */
-2718d91816eeed Boris Brezillon 2024-02-29  974  	if (!ptdev->fw->booted)
-2718d91816eeed Boris Brezillon 2024-02-29  975  		return;
-2718d91816eeed Boris Brezillon 2024-02-29  976  
-2718d91816eeed Boris Brezillon 2024-02-29  977  	panthor_sched_report_fw_events(ptdev, status);
-2718d91816eeed Boris Brezillon 2024-02-29  978  }
-2718d91816eeed Boris Brezillon 2024-02-29 @979  PANTHOR_IRQ_HANDLER(job, JOB, panthor_job_irq_handler);
-2718d91816eeed Boris Brezillon 2024-02-29  980  
-
-:::::: The code at line 979 was first introduced by commit
-:::::: 2718d91816eeed03c09c8abe872e45f59078768c drm/panthor: Add the FW logical block
-
-:::::: TO: Boris Brezillon <boris.brezillon@collabora.com>
-:::::: CC: Boris Brezillon <boris.brezillon@collabora.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Linaro LKFT
+https://lkft.linaro.org
