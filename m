@@ -1,167 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FB8135A6F
-	for <llvm@lists.linux.dev>; Wed,  3 Apr 2024 10:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74057317F;
+	Wed,  3 Apr 2024 11:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712138487; cv=none; b=MdxzYcugrXLQtxBRSiOR9XXb+n39Sl43S9H3sap0qoyQBvWeO0rtx/p8BlRS0YvFFgezTr7QcUrQwD2oNDM09R3XnVzftHfaqfQXLEcyexxTaHK0B0eDlgxVqRZ32ozy8JL8ZOmZIsNUEnxnhy9B9T4RhYDqjxsswn9+oW6ka18=
+	t=1712142646; cv=none; b=Ilnii5JTbp4IZEAwYdEKXL40jP6+pXFyY5JeUEJvlv0jaQR++3r+J7qfRtlIwM9GzJDj/xu3+jUeDVXyHxUskaslcsZbUvVC6IxBYHSMDHS0n974k+A+e5IZtB8dcgHXBHEwfFxprLDkYP8+nZ1Q6Z5gS5CQS4YCsPJMKkMHytU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712138487; c=relaxed/simple;
-	bh=/X5uNOej55n+ypg3DO+L4u/K/JMdnRi1Ma0+D+9zkFY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=T4uCTVSc2A7S+7cpO/K4TTeXUTevLgDm6Fxk9K87ZvSm7NQv3/ayCOPbbt8FWEu/NPzxqo2VP+1iCrY6VK7n9Pj/L6CiyLfUFp8H1f2FbjgtzFcm6Y44ZUIPqrG5GXpFt/aTIrkcJ70Ld/pAF08gtA4Z+BDcp5s0QcDnYuvd7j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bj8Sm19T; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1712142646; c=relaxed/simple;
+	bh=yemH83Y1IBRrxs46KNsj+mhkx+dw4Xz7CPBdGbd26JA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fv8kHGhfZH1yG5LILSiyZ5D3Q+EBd9mt6IH1Pi7aORjc8B6Qb+nsSChQEaRoVIcV4jEIlgddoQagp6jc2+ssZPONrwcEdQknL5S4bYRO6LvkDufp+sHOLBJ3Zf+hfi4cdIfSYMD/V0Bj6fcrHIbfgicrZW+C9jK8Si/9QGPiOAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p8OpL00w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bj8Sm19T"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712138484;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YPE6vzn5knNYYIk34mIA3+HEwWB3mPfIgcd5rPzDmr8=;
-	b=Bj8Sm19Tl7M0Sz5YFsmls1wvDdSm9lja1/mVuVyATxTJgd/XQwXXRJlHDse3xh2PzMQPen
-	m+F4Q5srWw8QB535GLuWpNJ8D3YY6yVvJoxqJ3r0nXm1NEvKUbljMrBKh6OX+An8AeinG4
-	ywiEpeqH6u+EMi8q83ecbIyqAJRkqu8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-513-vso2Ym0hOC-2wBRvxuSanQ-1; Wed, 03 Apr 2024 06:01:22 -0400
-X-MC-Unique: vso2Ym0hOC-2wBRvxuSanQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0CE2888D12C
-	for <llvm@lists.linux.dev>; Wed,  3 Apr 2024 10:01:22 +0000 (UTC)
-Received: from [172.64.11.58] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B4DDCC15773;
-	Wed,  3 Apr 2024 10:01:21 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
- (6.9.0-rc2, mainline.kernel.org-clang, b1e6ec0a)
-Date: Wed, 03 Apr 2024 10:01:21 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8OpL00w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF05CC433F1;
+	Wed,  3 Apr 2024 11:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712142646;
+	bh=yemH83Y1IBRrxs46KNsj+mhkx+dw4Xz7CPBdGbd26JA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=p8OpL00wcZVyQKOBcHjcsrO2JtE29/xzGT0Gm/uzql1T88/EYGguTdJTo4G+RluYH
+	 4PJ3QF4DDjlmPalPT9IFnXWYuk8bEmWM0AXG3wzvWJGLeabh7IlGUxYFHdG+H/HVIn
+	 ng39qgroZoJ62mm7YlyhKTfC4NGLh0qy2OAJ1dhZI4muA4LhpG11rWrjdL+njYfDMo
+	 1M4oWR2oLmk+v4PW5MvlFCOQCbNFnBbuvQqYuaQUnZioz5HzbvQtiBd/ElkRQZdNyO
+	 Y1Mes2KzffMbvkeR/I2dKYRHgCDeCkEmadaNLkA7zk1eWRNf5Z5tmaNVK9Q/XpuMp4
+	 l1HG00ANDz4jg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nikunj Kela <quic_nkela@quicinc.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] firmware: arm_scmi: Avoid non-constant printk format strings
+Date: Wed,  3 Apr 2024 13:10:24 +0200
+Message-Id: <20240403111040.3924658-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <62214.124040306012200564@us-mta-513.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Arnd Bergmann <arnd@arndb.de>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+A recent rework changed the constant format strings to a local variable,
+which causes warnings from clang when -Wformat-security is enabled:
 
+drivers/firmware/arm_scmi/driver.c: In function 'scmi_probe':
+drivers/firmware/arm_scmi/driver.c:2936:25: error: format not a string literal and no format arguments [-Werror=format-security]
+ 2936 |                         dev_err(dev, err_str);
+      |                         ^~~~~~~
+drivers/firmware/arm_scmi/driver.c:2993:9: error: format not a string literal and no format arguments [-Werror=format-security]
+ 2993 |         return dev_err_probe(dev, ret, err_str);
 
-Kernel information:
-    Commit message: Merge tag 'docs-6.9-fixes' of git://git.lwn.net/linux
+Print these using an explicit "%s" string instead.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/138623
+Fixes: 3a7d93d1f71b ("firmware: arm_scmi: Use dev_err_probe to bail out")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/firmware/arm_scmi/driver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11882112
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/310
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
-        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
- __exclude_unnecessary_pages: Can't read the buffer of struct page
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
-            Affected tests:
-                kdump - file-load [ppc64le]
-                kdump - sysrq-c [ppc64le]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-
-
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [s390x, aarch64, x86_64, ppc64le, x86_64 =
-(debug)]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+index d0091459a276..36e3eb50a8d4 100644
+--- a/drivers/firmware/arm_scmi/driver.c
++++ b/drivers/firmware/arm_scmi/driver.c
+@@ -2933,7 +2933,7 @@ static int scmi_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		err_str = "unable to communicate with SCMI\n";
+ 		if (coex) {
+-			dev_err(dev, err_str);
++			dev_err(dev, "%s", err_str);
+ 			return 0;
+ 		}
+ 		goto notification_exit;
+@@ -2990,7 +2990,7 @@ static int scmi_probe(struct platform_device *pdev)
+ clear_ida:
+ 	ida_free(&scmi_id, info->id);
+ 
+-	return dev_err_probe(dev, ret, err_str);
++	return dev_err_probe(dev, ret, "%s", err_str);
+ }
+ 
+ static void scmi_remove(struct platform_device *pdev)
+-- 
+2.39.2
 
