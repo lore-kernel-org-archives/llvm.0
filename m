@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D8416D9BA;
-	Wed,  3 Apr 2024 17:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB53416F0DF;
+	Wed,  3 Apr 2024 17:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164814; cv=none; b=bMWvW2svgH5mzy9ysw2DYf/JVEkJndNVKWWTG9m1Doq0URLnblHBIHJtEQpFWsmQp6iL9cWdMtKTAlBYtWIi/pVQpbzHGdscFIhUMvpT4fr9q+DA3ME4I81GhNSKGidWZi0dfmdYs6ygQn/WwfqYzpNIuy+7kzLsRZ3MsBQebVs=
+	t=1712164833; cv=none; b=AdH9drkNLRqzE7FVu7KgTKoYxc/Dhd20/9fa6cNJArPCpMuNBbxDKJfgNIz5m0ixpKLPeT32STHrqw2Kj6jM5blOopNQUNenuf1rBe55KFis4I9tncCTWrpNhybaGjg6xFR18Nb2WteNL3EyIeX6+ZDcO5zLHiqhrVOL9wliN7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164814; c=relaxed/simple;
-	bh=omDK8ATC7zjxQypnUCkye0G9rSVtvt61YKJnjYhtQYI=;
+	s=arc-20240116; t=1712164833; c=relaxed/simple;
+	bh=dRwY8HYdqT7o3WvvpYcqMk1yH1fOKmhm6ji/WNm0als=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IcHy7uMgttNjmyaWcwEgeJJ+tgPp3wL3Upb5hkH68ihzUcfxiKI3rRoAi9T5thnbkF17xQ+TDhd+otRoDHfgp7zWPiidX8d7cs5+CqgAPtW7mmj8L+ap6JLcsl4pQr4tLclBqZYAwuwhCqauKZ03cHhDLKiHJJxOWHIxK85767o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=opsGT8h1; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=tAvvaNVSNXZRiY3SwOI4LA48cRzf3Ottwg6DUsnuChdAG16LNhGbX/XIrSXM456cs1BBPvvoWwK4SxjwRbZjVXRu2jZGEKop45/cAtVkQNtNhcQdrF36C4XC47CGz/ygci4rN12EoAIYfbuIo6kvCxzLwyvTlA0704828OCECc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FPwC6ZbI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="opsGT8h1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5A9C433F1;
-	Wed,  3 Apr 2024 17:20:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FPwC6ZbI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B92D3C43390;
+	Wed,  3 Apr 2024 17:20:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164813;
-	bh=omDK8ATC7zjxQypnUCkye0G9rSVtvt61YKJnjYhtQYI=;
+	s=k20201202; t=1712164832;
+	bh=dRwY8HYdqT7o3WvvpYcqMk1yH1fOKmhm6ji/WNm0als=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=opsGT8h1oTQuheE0Yh5ct49GbxGgVdlVjSq4yiLo8JOElS3fGS2csjLolIe2NoeGO
-	 qE7lib/nXol+QYobneAvOpG6lhqNV28/u5xcLw6uxi2mxs5RM112m7ZuMSYAXPhXIM
-	 HJ9G+tv24XPzN5W5qfXacx9u9QmQmp/Y0BWyXMzl+Meq/qt+64qMsmTcVAy2QRBJ/l
-	 vmzmHj787lat/IzI4jEfeP5j6fRQNT0HFUsDnHM18KLihNPCaIYMPYh/Y14L4vZnKV
-	 fuZI4SRcMPSU4lYvx3isB+7Jo+MCObp7GzUSPMBLUIfB8W+6g9uPeT+buZXK0sNWOF
-	 ODytXl3pxWUUA==
+	b=FPwC6ZbI9qd3XOEAxhgfpg4K/jLYKbWosB1hy4fJ51JLp9WL7brzF2Oc2+SKT9/OE
+	 7EHConxC0Hv1ceSf30bFTt7ATem4St4Glukr90E+z7O+ESIjpznw8XK6ZUGfdxHcEw
+	 7EbBUprhMa0b6TOWsIhVnHOvuihSSbGN7m4sdoko6FMz+ss1nMIAIp7m7WwJGDw5G2
+	 oIJzlxhKTa5qjcJ2HLR8PgjVixXYWDDwhb6k0y1FRjo0JzNoNoYXoN4x5mvfiZn8dh
+	 ua6DYnbZB1nbzeqRNKzeE5r+MAB9GAUEvnF2QuMQzSTF1bmo1ncKHMFACADqz6JN0h
+	 qlrJukXIbVwRg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -36,12 +36,12 @@ Cc: Colin Ian King <colin.i.king@gmail.com>,
 	u.kleine-koenig@pengutronix.de,
 	linux-usb@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 4/8] usb: sl811-hcd: only defined function checkdone if QUIRK2 is defined
-Date: Wed,  3 Apr 2024 13:19:58 -0400
-Message-ID: <20240403172006.353022-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 4/6] usb: sl811-hcd: only defined function checkdone if QUIRK2 is defined
+Date: Wed,  3 Apr 2024 13:20:20 -0400
+Message-ID: <20240403172026.353926-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240403172006.353022-1-sashal@kernel.org>
-References: <20240403172006.353022-1-sashal@kernel.org>
+In-Reply-To: <20240403172026.353926-1-sashal@kernel.org>
+References: <20240403172026.353926-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.214
+X-stable-base: Linux 5.4.273
 Content-Transfer-Encoding: 8bit
 
 From: Colin Ian King <colin.i.king@gmail.com>
@@ -73,7 +73,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
-index 9465fce99c822..f803079a9f263 100644
+index 936fddc6d8207..3cf8fce40c9dc 100644
 --- a/drivers/usb/host/sl811-hcd.c
 +++ b/drivers/usb/host/sl811-hcd.c
 @@ -585,6 +585,7 @@ done(struct sl811 *sl811, struct sl811h_ep *ep, u8 bank)
