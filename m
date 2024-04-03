@@ -1,104 +1,167 @@
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91DA5C60D
-	for <llvm@lists.linux.dev>; Wed,  3 Apr 2024 07:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FB8135A6F
+	for <llvm@lists.linux.dev>; Wed,  3 Apr 2024 10:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712129903; cv=none; b=SspEr+EAXxpehNr5BxnitpqRdd3IGGTh0W6f8iyD53aE+2GTgAaYWHXaYlfS9qJCRQpGxlGk8WONBNBaf9n33Zw0GwE41IkEtrSJyo31vJeVxjf8KV1meu7c3GhLhOmLB2RxmHb08RX9KTqwITWcODBy+f9qAiLLdmGvszhA/K8=
+	t=1712138487; cv=none; b=MdxzYcugrXLQtxBRSiOR9XXb+n39Sl43S9H3sap0qoyQBvWeO0rtx/p8BlRS0YvFFgezTr7QcUrQwD2oNDM09R3XnVzftHfaqfQXLEcyexxTaHK0B0eDlgxVqRZ32ozy8JL8ZOmZIsNUEnxnhy9B9T4RhYDqjxsswn9+oW6ka18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712129903; c=relaxed/simple;
-	bh=9WbOVVSwUWwd5K793ppWlQLxaj4rX8ZTjnhFhq5Y5v8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=cpRZQ1+3ik4ioJf0wqqIu91TgMSdxYuXgAU9Pm3A299OjklAT8IjPh6jIQXt8inR8vit3JAVM24HoHXoKkpgY4SWGUBe+E3FxXLuqByefezjrrxwZJ/vu9qsFKHZcgflzQUwZr3vy2ci+3oO+Qv3bmn+Cn4Bp+Vo3+vhOnVaiZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h5jTtbEx; arc=none smtp.client-ip=209.85.222.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1712138487; c=relaxed/simple;
+	bh=/X5uNOej55n+ypg3DO+L4u/K/JMdnRi1Ma0+D+9zkFY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=T4uCTVSc2A7S+7cpO/K4TTeXUTevLgDm6Fxk9K87ZvSm7NQv3/ayCOPbbt8FWEu/NPzxqo2VP+1iCrY6VK7n9Pj/L6CiyLfUFp8H1f2FbjgtzFcm6Y44ZUIPqrG5GXpFt/aTIrkcJ70Ld/pAF08gtA4Z+BDcp5s0QcDnYuvd7j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bj8Sm19T; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h5jTtbEx"
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-7e3b3e33ae3so278979241.0
-        for <llvm@lists.linux.dev>; Wed, 03 Apr 2024 00:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712129900; x=1712734700; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QKsiTWwQltevYA1r+W4p6ubtTr4MlTT13dNzhqyl5yk=;
-        b=h5jTtbExD3olT3RfzP00t/JzotC1K2JGqcnUMVxx5T+qexjEu+4MgEXZy3GCdSfMne
-         hesjJdY65uik9UPUVyuAzA/7STFwCzVIGXMf0x+5GBXD88m3NHBBlLYlQlRLXJHPO+Ek
-         sOI19L4I34Mxz1aXqR9tQjSN0D9FpFU7+KG/7WiaT61Ov7wBOd5nn9RH0e/r+1ekHx2u
-         WODxxtn2DtIS7fgzQxWUI6grllQIS38nI8vUnxqF14zsIWfqwIl+BcWlMumA0upNOZLk
-         nFvtUlmQCAwg7zWHd+itA753PmgCsnQaxRJfC7EeXWX7t/VPVwcqpjtnXvIz2xb/VSO9
-         fh/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712129900; x=1712734700;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QKsiTWwQltevYA1r+W4p6ubtTr4MlTT13dNzhqyl5yk=;
-        b=HiBMaeilEawklk41tFt1/BVhsj+IM6jP0lXf+gFLXe6khJ/YKckBQ9UvbW0sK6qOFR
-         Oo2xkVTp3Cq3u3i0UeTjxkD8AMhOsACQt+/uNMLqCjnQWJaoF3brcdpHE1rqOwN32KtI
-         QZq6FbjYMFQLenc5GZa95faEqru+pXXP//y+PnZdQ09kVlaT7GPaLvUZBHfQc2YToaEZ
-         Oq65397KxI9XACDKcrn/aMVX4qYZHehYTSGPPyjUDQXE95eeGCbterEa2mbzksxbefkZ
-         nBu0h7AKN36+emgIa/WVIm6fQXokoPVG6DRyC367i16qt+f2WjoxyF/hpxaxqiQgFgEj
-         t8wg==
-X-Forwarded-Encrypted: i=1; AJvYcCUe1DSubRhKLy4SO0xLAj3e2qWnISPh2ysDxYYfDJPM48Tvs7HQY2kweQA6Wxh46H3dSZr1eD+Ymiy7WisqJv2ivQZFPg==
-X-Gm-Message-State: AOJu0Yziv/TffdL3t57vGpYx5Ww11j2as2/Og6yvOh2uo9tAmCZOqX68
-	bE2BD2amJt+3D79zelw3V1+SIwU9meP9isrO0xkZOuS0U+sL3MidmkD2Z01D581a8JMfq5yhJxR
-	LH2OMyQKhVpNj6GJqYKFVKBhP5s+qPZtTWFweCg==
-X-Google-Smtp-Source: AGHT+IEDsnkIj6HCOWhXVjqLOlYJRYneScfnCc6Qn1cRIG8coLw2kTdZBaOy3HnsF7h3qlnpsiRbKmaYqRzZ9wPLo58=
-X-Received: by 2002:a67:e359:0:b0:478:32e2:1833 with SMTP id
- s25-20020a67e359000000b0047832e21833mr11298728vsm.22.1712129900501; Wed, 03
- Apr 2024 00:38:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bj8Sm19T"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712138484;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YPE6vzn5knNYYIk34mIA3+HEwWB3mPfIgcd5rPzDmr8=;
+	b=Bj8Sm19Tl7M0Sz5YFsmls1wvDdSm9lja1/mVuVyATxTJgd/XQwXXRJlHDse3xh2PzMQPen
+	m+F4Q5srWw8QB535GLuWpNJ8D3YY6yVvJoxqJ3r0nXm1NEvKUbljMrBKh6OX+An8AeinG4
+	ywiEpeqH6u+EMi8q83ecbIyqAJRkqu8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-513-vso2Ym0hOC-2wBRvxuSanQ-1; Wed, 03 Apr 2024 06:01:22 -0400
+X-MC-Unique: vso2Ym0hOC-2wBRvxuSanQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0CE2888D12C
+	for <llvm@lists.linux.dev>; Wed,  3 Apr 2024 10:01:22 +0000 (UTC)
+Received: from [172.64.11.58] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B4DDCC15773;
+	Wed,  3 Apr 2024 10:01:21 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
+ (6.9.0-rc2, mainline.kernel.org-clang, b1e6ec0a)
+Date: Wed, 03 Apr 2024 10:01:21 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 3 Apr 2024 13:08:08 +0530
-Message-ID: <CA+G9fYtj3aBdRreBmKZDQApEe2x8mugycPgN+_J5ebJzXDEq4g@mail.gmail.com>
-Subject: kernel/sched/core.c:961:15: error: incompatible pointer to integer
- conversion passing 'typeof
-To: open list <linux-kernel@vger.kernel.org>, 
-	Linux Regressions <regressions@lists.linux.dev>, lkft-triage@lists.linaro.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Linux PM <linux-pm@vger.kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <62214.124040306012200564@us-mta-513.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The riscv clang-17 defconfig build failed due to following warnings / errors
-on the Linux next-20240402.
+Hi, we tested your kernel and here are the results:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-riscv:
-  build:
-    * clang-17-lkftconfig - Failed
-    * rv32-clang-17-defconfig - Failed
-    * clang-17-tinyconfig - Failed
-    * rv32-clang-17-tinyconfig - Failed
-    * clang-17-defconfig - Failed
-    * clang-17-allnoconfig - Failed
-    * rv32-clang-17-allnoconfig - Failed
 
-Build log:
--------
-kernel/sched/core.c:961:15: error: incompatible pointer to integer
-conversion passing 'typeof (*((__ai_ptr)))' (aka 'struct wake_q_node
-*') to parameter of type 'uintptr_t' (aka 'unsigned long')
-[-Wint-conversion]
-  961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Kernel information:
+    Commit message: Merge tag 'docs-6.9-fixes' of git://git.lwn.net/linux
 
-Steps to reproduce:
----------
-# tuxmake --runtime podman --target-arch riscv --toolchain clang-17
---kconfig defconfig LLVM=1 LLVM_IAS=1
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/138623
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240402/testrun/23264917/suite/build/test/clang-17-defconfig/details/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240402/testrun/23264917/suite/build/test/clang-17-defconfig/log
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11882112
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/310
 
---
-Linaro LKFT
-https://lkft.linaro.org
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+
+
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [s390x, aarch64, x86_64, ppc64le, x86_64 =
+(debug)]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
