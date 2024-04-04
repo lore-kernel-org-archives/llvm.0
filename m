@@ -1,88 +1,84 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5781BC57;
-	Thu,  4 Apr 2024 14:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54AD612D75A;
+	Thu,  4 Apr 2024 15:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712242380; cv=none; b=qErica9o1xpQj3uanTMN9Q4eu+N6vpz5rQGAVWA4iX/BG+7/Ia8ELJchxpFXG0SA2CsPKCV+1d4LKvoAY7eJ0X6YtRuScnqb4Iz0wRs6BTndbl29aUGdNPSdTfuk3/jPjFNNnrW7fRzdv9qP6U3Q7QRi4mjBU9FbWEnjKtGLEcU=
+	t=1712243839; cv=none; b=kdvnH6ciEiQQ+ujkNx/UAanuhNMTGUrleCdzH5/qD52Svt84fd1/dC1zW2VLzppk5FrGNpx3HbYJSQX4Xtf0PCSEJHmg9lo7SVUgwMG+ys4Gg+Vvl1jtTWxGndnXoCcCN5lQs55UaUYV9loaCspXuqjRuUi3NTIcAKrfSgVpWwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712242380; c=relaxed/simple;
-	bh=5gPtLGZZHXTkeKBzZGN8PF0oWPkX9s7yVOhL6fXJnwI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=D7Vj9b36vSHuFNIkhZzeiVXMy4hHcXcvG50hxbo/qq48QVPQn/JERALQA9LrUpdYTOn97EJem0ysXugdHZFfCm4Y+wP0uI5NzO0DVUhxsZmS7fG9Uxrl0GkjARTBGIlJTAZiiaNAg5O82IybdQ3Q3gmc413hdbf7k7GyLK7ks+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BnV4ZJEO; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712243839; c=relaxed/simple;
+	bh=ra+W5lQfPkd8zP92QWXnwHL7MhuJZh7uU6466dDEa8E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BuZnIYddI0+bk8JtcDciUksneAk+QiKvczHZHyTrOlkTbh0oP2o6VvhKUa3H3yoiK+qfLFhTJ0PQodm1gehzQtlyWjqz5sE2ETzTcOd+n1OnpEj42gIFcoISapnyhjRkHpAcuJc/Ju7x2PEGN2rEHZy7Hj6hiCaum2xS2jcMqBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YcjbtZ+T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BnV4ZJEO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712242379; x=1743778379;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5gPtLGZZHXTkeKBzZGN8PF0oWPkX9s7yVOhL6fXJnwI=;
-  b=BnV4ZJEOGZdDa3KmCdvqUYZDsmi30uSUPPfHHshG3BPhyWGbM5i60WqB
-   kiMY5g4RGVzK51LP3CGDbU2teg3x+EJYWuZZF1jaBoVPjqMnyj6khZQPe
-   hJlIsWviemi8eLdxgP0dSjjelCXPFwPArKYYCUNIB9mUkEsgkjOzf4c/7
-   bZ/A2GI/5HEvv9IFY2i1avuWTbaftYEJZAtgSTLrkrQGPW8cq5f542e3K
-   Wm7phm/9WXtiwI0Y/W25cXCpoUasikqmxc0h4u9gXL2z6T6Qth/Yb1jVV
-   Yy4er5vwfYYQRd9TuWK3R0eO1dv9ZuCuAJrQwRsFcHm79HzSBa/R5dqxo
-   g==;
-X-CSE-ConnectionGUID: cOQWleMETPqxKa9QEbuy3w==
-X-CSE-MsgGUID: 8NTtMd1XQLCNhQxlgquK8Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="18260336"
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="18260336"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 07:52:57 -0700
-X-CSE-ConnectionGUID: KGYFFwrKRuimuUf9A1x5dw==
-X-CSE-MsgGUID: zfk0vGRkTAy3xL5xlSDlBw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="19249923"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 04 Apr 2024 07:52:56 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rsOST-0001C6-1c;
-	Thu, 04 Apr 2024 14:52:53 +0000
-Date: Thu, 4 Apr 2024 22:52:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Subject: [linux-next:master 3790/3921] ld.lld: error: undefined symbol:
- i2c_root_adapter
-Message-ID: <202404042206.MjAQC32x-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YcjbtZ+T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D063AC433F1;
+	Thu,  4 Apr 2024 15:17:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712243838;
+	bh=ra+W5lQfPkd8zP92QWXnwHL7MhuJZh7uU6466dDEa8E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YcjbtZ+T5iGrFx7Xa4Xz0zBIl2J8VEBXxUlbBijbcgeZ+xikscezuqtuxaW3xul4z
+	 L5ZPZO8c18dWuOpdmVKN7jW4bVoCFmGaNDwFWSMn3qS0GG75BLkdT/bvwSoaoaF4XZ
+	 jF3qV6UpeVR09F/UfL8EaPP+4F0AeRVLHI2XsRtEnawVi1uQLKg1LPHW55PtyDS1VO
+	 yv9wnvGXUeyIW05vn2mGgplqabr+Go7vyEz9ekcDBkFgbHrAl8hHRy1qdBhnVkcP39
+	 GSEO3EBE9BlA2UoXue/0EwNjdKpO+fDaEls1Co1LzCWRn6przLQD0kwKulZX06e3QI
+	 xnNZBcnSt11/Q==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	linux-kbuild@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/4] Enable more warnings by default
+Date: Thu,  4 Apr 2024 17:16:53 +0200
+Message-Id: <20240404151713.3493098-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   2b3d5988ae2cb5cd945ddbc653f0a71706231fdd
-commit: 71b494e043d2cb567f4f4748bcb0b6fb7bc32a01 [3790/3921] i2c: i801: Call i2c_register_spd for muxed child segments
-config: i386-buildonly-randconfig-005-20240404 (https://download.01.org/0day-ci/archive/20240404/202404042206.MjAQC32x-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240404/202404042206.MjAQC32x-lkp@intel.com/reproduce)
+From: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404042206.MjAQC32x-lkp@intel.com/
+I think these can now get merged into linux-next. I reordered
+these slightly from my previous submission to skip the
+-Wcast-function-type-strict warnings but instead include the
+-Wformat-truncation enablement, based on what got merged so
+far.
 
-All errors (new ones prefixed by >>):
+We are still missing the "kallsyms: rework symbol lookup return codes"
+and "firmware: dmi-id: add a release callback function" patches, but
+I expect them to get merged through the respective trees soon.
 
->> ld.lld: error: undefined symbol: i2c_root_adapter
-   >>> referenced by i2c-i801.c
-   >>>               drivers/i2c/busses/i2c-i801.o:(i801_notifier_call) in archive vmlinux.a
+There is still an open question about the order of patches in the
+coming merge window: if some of the other patches are also queued
+for 6.10 rather than 6.9, this series has to come after those to
+avoid regressions. Maybe they can go into some kind of 'kbuild/late'
+branch that gets merged in the second half of the merge window?
+
+     Arnd
+
+Link: https://lore.kernel.org/lkml/20240326223825.4084412-1-arnd@kernel.org/ 
+Link: https://lore.kernel.org/lkml/20240326144741.3094687-1-arnd@kernel.org/
+
+Arnd Bergmann (4):
+  kbuild: turn on -Wextra by default
+  kbuild: remove redundant extra warning flags
+  kbuild: turn on -Wrestrict by default
+  kbuild: enable -Wformat-truncation on clang
+
+ scripts/Makefile.extrawarn | 29 +++++++++++------------------
+ 1 file changed, 11 insertions(+), 18 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
