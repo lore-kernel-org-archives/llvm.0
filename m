@@ -1,54 +1,54 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C6813C3D4
-	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 21:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C904F13AA4D
+	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 21:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712266009; cv=none; b=tB4xO5rWG+8AGgYl8e22zLN7KJ86+SvKXdI/1Zw6FbTuejKJ1RujtY6VfER7Y4HPwt+OaaUc9RDRii6zGsrQwILdvxj81SMV5eS6cjE4MrYPwsUFftHN1V2guIA2+jdh+U89TMbvYkBTtgCNPz56+Og4q1vyCyLJor2DYP5yNC0=
+	t=1712266049; cv=none; b=APh9NLG2o7NZlivHMwo5V8IY6bsXjUPc1TuYNgDXAL6PRqvYne9MA2EPLdTa1O3LwTcDp7p3Lf1FWKTIAmV1jWWXfMAwYk1OVKAaONeM4EL5DiEIc4X7GY33OBIeIZQlezUttwyf6gKgX9LJDpcsVshXCZEcZqIyn2SIC6/5qdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712266009; c=relaxed/simple;
-	bh=8/OTDWwd0PkHDZVVQkIc807xoaRH+QrHOIYJhEaw7/w=;
+	s=arc-20240116; t=1712266049; c=relaxed/simple;
+	bh=zvuYWl21FSsrhHyfcnLt8fv7pQ1nEZE2mtTQ0ru0qJ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=doLehw4d2/EKzz6igXrAO5zYfljdLpWQclC5SxoWo0MHWlcCcmlwDmq47SNox/4R3O4yKKwUlN9glSt2QCDAfhzBIldXorjyBB8fPySCFW2PI382TNGN90TejeocDMu1FdOLzDc+L5BhRC2multag8hj/GvfADdrA98O8lhFd/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QZrESaY1; arc=none smtp.client-ip=209.85.210.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=q1h9EdMoeSc8T3nYeb3YhPpChDyKctb4tkSruTds3qj9RsiO1b0TpxUgeVGe8ARVC6RJnJK1JrAtaWhIXJ3Qgz/z8LSCKW+Wv+NAkUT1O34s05c3JzLQJQjUgrXRXaAYlOQpt8pQJ9FoIj8QQEiDEN09Z8PsJQFjzidBms8iIHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=evbi4RQK; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QZrESaY1"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6eaf9565e6bso1104419b3a.2
-        for <llvm@lists.linux.dev>; Thu, 04 Apr 2024 14:26:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="evbi4RQK"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e2987e9d06so13126525ad.2
+        for <llvm@lists.linux.dev>; Thu, 04 Apr 2024 14:27:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712266007; x=1712870807; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1712266047; x=1712870847; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DgYnGJst+ZiZfm8ZbfksoEITg37DemIHtgCmtLvGPes=;
-        b=QZrESaY1Ic7FzMXOUC+ICq1itPg2VsGv1yNg7xwhlmmvZC8pyc72I3CMUxR80gwGKh
-         HJYVJoY7yngJ52bgq3D7iADKoITUg83DntmqEeiwUZnBBMxgYYGJXEWETLrbl+rQBNoC
-         qH9r48NN+EnE226FUYAEvit2evX8SbFzRe8/s=
+        bh=5Y44qs4OUh5ul6NtjE+55E8vlpwqKRAnt03mDTkQinM=;
+        b=evbi4RQKUlZUlIdFLz4oG/XX9SbNsexOKbbEb0fEjEeOcFeLoLU/SXKt0luk0RtvSZ
+         F/tLd8ARC59M5yoLXCv9YImH+hIA1G1D85X/VIpaejcdO8daryJnmeRL4gLVKotVmq/M
+         JAK6DTgL35U6AVNnkvHMcn3yOJBr4FmovqrxM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712266007; x=1712870807;
+        d=1e100.net; s=20230601; t=1712266047; x=1712870847;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DgYnGJst+ZiZfm8ZbfksoEITg37DemIHtgCmtLvGPes=;
-        b=S/h2vhImZ0GjRUqoEJQOX2YSGgoRFCybXFxM0mJOxYmrtCXtQVoFVyaK45CqXVszJ3
-         EyQSzTqgibh4OXE4wcvYECjb/Co1Fja64SK2EbDEqfthRhPHwJwjCKTxYTc77x+vb3BF
-         h9q0bH47WWnqbiXC42BhUDAnfJgFjdnNpowpSABjRbgDLU8UaEBYDHhFvtnzskbhEKgL
-         ROoZP11Oali8oo8N++WWNvvbzyvxyMxdlxw44jZjPeWg9BWUJbIb9uCDUjALa+x7JpP0
-         eS65mmqtmoLrIrSe3a6MMPANbhFJGwIE4C+woDeXNAXDqY82ZzLaSl8rvZwG0gFk4Q6o
-         mHsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDej3ewpXYGJarkXKbHjGW9p0rotWLhoKl5nm7ijgoo9eS/qFWNJmPSJZk044TYQ4KKjaq705tUYjyfWqWYuMxFqXREA==
-X-Gm-Message-State: AOJu0YwP9DiLeAigAGeFc7e+33pgAFxJoAgJN1B/koyuv8c0dcw9SKgw
-	uYG+enNAJRL8eP2TzrYTQF1KOsE6Naoe0vFsqu1VM7446sVYWwCn/QpnxJAc5Q==
-X-Google-Smtp-Source: AGHT+IE3VAEGnyJZjxWWizzkl8A8UqQPU05exvSE7NCf9gCPgZiPeGDco3wbRo8ROfRWHlGVbpfRGA==
-X-Received: by 2002:a05:6a00:1828:b0:6ec:fdcd:18eb with SMTP id y40-20020a056a00182800b006ecfdcd18ebmr513393pfa.21.1712266007232;
-        Thu, 04 Apr 2024 14:26:47 -0700 (PDT)
+        bh=5Y44qs4OUh5ul6NtjE+55E8vlpwqKRAnt03mDTkQinM=;
+        b=rd1l68PLuR/gf/sja6CWbN+xenuhbFmhvOnGNRuBJ7ddR1IZ3FjX+nphe50iHIcCFb
+         IvbxPlK1p9dKNAwm8XOkFtZcYuKMlMNRxGt0w6m8qOB41getu977CGEMrD8nzI+pwqHC
+         WAz86X7WMvjggmivDQxyIGzbD9eU4OleuvUMQC8oFwtc+HRhnsPcjFH/+k8KcAS0Okkc
+         Ewy7VZJA0UDJPRlJmK4zcxlcNQ9LOr3ykDyY8rVPct/uAPo+s44TxG/FIxHtNHtK45S0
+         7o6e1htQ9293IJAGLScoJ9izcYwn/12ct0C0a73M4R4kBVXzNX3xCb88EAde3vYm/YtL
+         6ZJw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxtNVT+bwDXftdFnQwQub0E17ipuTGtxMhAybI5041Nj61as8BUttsOcWzwJ+SolCdW1Yc5JpncbAILsvaoggz2dJTvA==
+X-Gm-Message-State: AOJu0YzgYaWmcc88Q4h5AY3sLRObCy118I5qtD46xGuhCVP/xkQgIxsW
+	TgW67msl1ZrSb3dcQ+e45PLXVhYMLOVzmWCpHIyL/mZMjBQL7rWOmkROtIk60w==
+X-Google-Smtp-Source: AGHT+IHi38RDnlKmYx0khv6mZQJ7Liv0SUQJ59Uq5gOOAeCsZSf0YQQlHiQV7NO8+/ZIFA1CRlITrQ==
+X-Received: by 2002:a17:902:c94a:b0:1e2:7c72:767 with SMTP id i10-20020a170902c94a00b001e27c720767mr3397197pla.30.1712266047076;
+        Thu, 04 Apr 2024 14:27:27 -0700 (PDT)
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id du17-20020a056a002b5100b006ecceed26bfsm93629pfb.219.2024.04.04.14.26.46
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b001dc01efaec2sm81777pln.168.2024.04.04.14.27.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 14:26:46 -0700 (PDT)
-Date: Thu, 4 Apr 2024 14:26:46 -0700
+        Thu, 04 Apr 2024 14:27:26 -0700 (PDT)
+Date: Thu, 4 Apr 2024 14:27:25 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Linus Walleij <linus.walleij@linaro.org>
 Cc: Russell King <linux@armlinux.org.uk>,
@@ -57,10 +57,9 @@ Cc: Russell King <linux@armlinux.org.uk>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 7/8] ARM: hw_breakpoint: Handle CFI breakpoints
-Message-ID: <202404041426.F7AA8E92@keescook>
+Subject: Re: [PATCH v4 0/8] CFI for ARM32 using LLVM
+Message-ID: <202404041427.E2A40D1@keescook>
 References: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
- <20240328-arm32-cfi-v4-7-a11046139125@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,53 +68,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240328-arm32-cfi-v4-7-a11046139125@linaro.org>
+In-Reply-To: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
 
-On Thu, Mar 28, 2024 at 09:19:30AM +0100, Linus Walleij wrote:
-> This registers a breakpoint handler for the new breakpoint type
-> (0x03) inserted by LLVM CLANG for CFI breakpoints.
+On Thu, Mar 28, 2024 at 09:19:23AM +0100, Linus Walleij wrote:
+> This is a first patch set to support CLANG CFI (Control Flow
+> Integrity) on ARM32.
 > 
-> If we are in permissive mode, just print a backtrace and continue.
+> For information about what CFI is, see:
+> https://clang.llvm.org/docs/ControlFlowIntegrity.html
 > 
-> Example with CONFIG_CFI_PERMISSIVE enabled:
+> For the kernel KCFI flavor, see:
+> https://lwn.net/Articles/898040/
 > 
-> > echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
-> lkdtm: Performing direct entry CFI_FORWARD_PROTO
-> lkdtm: Calling matched prototype ...
-> lkdtm: Calling mismatched prototype ...
-> CFI failure at lkdtm_indirect_call+0x40/0x4c (target: 0x0; expected type: 0x00000000)
-> WARNING: CPU: 1 PID: 112 at lkdtm_indirect_call+0x40/0x4c
-> CPU: 1 PID: 112 Comm: sh Not tainted 6.8.0-rc1+ #150
-> Hardware name: ARM-Versatile Express
-> (...)
-> lkdtm: FAIL: survived mismatched prototype function call!
-> lkdtm: Unexpected! This kernel (6.8.0-rc1+ armv7l) was built with CONFIG_CFI_CLANG=y
+> The base changes required to bring up KCFI on ARM32 was mostly
+> related to the use of custom vtables in the kernel, combined
+> with defines to call into these vtable members directly from
+> sites where they are used.
 > 
-> As you can see the LKDTM test fails, but I expect that this would be
-> expected behaviour in the permissive mode.
+> We annotate all assembly calls that are called directly from
+> C with SYM_TYPED_FUNC_START()/SYM_FUNC_END() so it is easy
+> to see while reading the assembly that these functions are
+> called from C and can have CFI prototype information prefixed
+> to them.
 > 
-> We are currently not implementing target and type for the CFI
-> breakpoint as this requires additional operand bundling compiler
-> extensions.
+> As protype prefix information is just some random bytes, it is
+> not possible to "fall through" into an assembly function that
+> is tagged with SYM_TYPED_FUNC_START(): there will be some
+> binary noise in front of the function so this design pattern
+> needs to be explicitly avoided at each site where it occurred.
 > 
-> CPUs without breakpoint support cannot handle breakpoints naturally,
-> in these cases the permissive mode will not work, CFI will fall over
-> on an undefined instruction:
+> The approach to binding the calls to C is two-fold:
 > 
-> Internal error: Oops - undefined instruction: 0 [#1] PREEMPT ARM
-> CPU: 0 PID: 186 Comm: ash Tainted: G        W          6.9.0-rc1+ #7
-> Hardware name: Gemini (Device Tree)
-> PC is at lkdtm_indirect_call+0x38/0x4c
-> LR is at lkdtm_CFI_FORWARD_PROTO+0x30/0x6c
+> - Either convert the affected vtable struct to C and provide
+>   per-CPU prototypes for all the calls (done for TLB, cache)
+>   or:
 > 
-> This is reasonable I think: it's the best CFI can do to ascertain
-> the the control flow is not broken on these CPUs.
+> - Provide prototypes in a special files just for CFI and tag
+>   all these functions addressable.
+> 
+> The permissive mode handles the new breakpoint type (0x03) that
+> LLVM CLANG is emitting.
+> 
+> To runtime-test the patches:
+> - Enable CONFIG_LKDTM
+> - echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
+> 
+> The patch set has been booted to userspace on the following
+> test platforms:
+> 
+> - Arm Versatile (QEMU)
+> - Arm Versatile Express (QEMU)
+> - multi_v7 booted on Versatile Express (QEMU)
+> - Footbridge Netwinder (SA110 ARMv4)
+> - Ux500 (ARMv7 SMP)
+> - Gemini (FA526)
+> 
+> I am not saying there will not be corner cases that we need
+> to fix in addition to this, but it is enough to get started.
+> Looking at what was fixed for arm64 I am a bit weary that
+> e.g. BPF might need something to trampoline properly.
+> 
+> But hopefullt people can get to testing it and help me fix
+> remaining issues before the final version, or we can fix it
+> in-tree.
 > 
 > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thanks for making this "fail closed". Looks good!
+For the series:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Kees Cook <keescook@chromium.org>
+
+Thanks for making this work!
 
 -- 
 Kees Cook
