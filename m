@@ -1,94 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E7412E1C7;
-	Thu,  4 Apr 2024 15:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269181BC57
+	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 15:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712243882; cv=none; b=Qx/TAOaLuApfeTojlB7ZWL4ZVFlFD4mgCLEZ1jTUwLpD46GjzRobqzybHSgCZTv03IPvkUj6xJ7kNVkAik+8nZ9ODuJyPMWYhkR9XSN0Suka7AFqglQcPapOAm2ZpfG+bc/Mj/Ih7iACpYcHHEmnmsjigryh0K89XcVdjY8WEF8=
+	t=1712244328; cv=none; b=byt7Tg/wB85fdIjo8bAyLdiLwVN4c4CqBmjy5FobHP+k90JkIdNEK9IU9Lzxs5zqlgzQl24MekZ1u6QQvb/JjTNaFYdEl+/tGdNEwq0Enp1RwVs2rum28TW54cXFlFUdTwNFoNIZwY6Ruw6sp5RS5Cs2jBNw6E79qmeOuLBD4BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712243882; c=relaxed/simple;
-	bh=lz3EUYQCI/wMAJ8fw+7g8LlY6qdomo5S2mS7cruxavw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=t1DZup7mHR6TRWr70h1RPAcT3pNqYxQ0TgSd0V5SfoB+XZxeWSJrcqlOBE3237f3IkWsXeXRjORJpBt06BQP1qlXJVRcEfNYw3O115pL4U3j2Tj9e6R2L9N7EwRntxOCVVVD6DbnoEqKsZshOVT8ejZdQEOd+Us5u6x/HO1Hvks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uZ7kfb45; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712244328; c=relaxed/simple;
+	bh=ByPtciC+URhiVQn652U1XVXGfMYChxV1rxw8MNlXaIw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fZsX6eTvyEyP7gNgbO3/TUMP8ETxd+XA/4PaShYBzkwK9FIPPOrVIc1w4cqLlXlee2vaoiKrMjZBFMTAdX5Ij5hwDLysvX1QvEUBoJ+A/0gJCzddDbzboG4gCp5U3SBLzrlyxQUqR879SbTU7uwEGqklq7m2lhB4/HIxcPZxWsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fSQSKcjO; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uZ7kfb45"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BF9C433C7;
-	Thu,  4 Apr 2024 15:17:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712243881;
-	bh=lz3EUYQCI/wMAJ8fw+7g8LlY6qdomo5S2mS7cruxavw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uZ7kfb454DbAzeYfGgxRnkq2XhaKiar/gY+s0ta8csvS5Dhx/xr462Uu5nSBMEiEb
-	 6fbIm0ewI0SmO/8PwCGJ89ku5rpiNwqd9xIp460tpcpKDX48VpphL+WBLercjEpUve
-	 OMjgmYQD3OsKCsBHNXPPonFDEfKMwTOywH+UKyIfDcc7bhk1YN83ltjAGz56VgDlJ1
-	 X2Dfj7a025W+oBBVpQFUAC2U4OQtFHGxnNeyNIVYn8G8ocZaxPjTnwDKnuTUk0OnWo
-	 UShgjM8T6dF0l5CUMxhpQ4Q1WF/stcQDDZcZE+ePgOKqBCkxF9G4fzz3C/4iO+6m1v
-	 unlRu1UoZ2WaA==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	linux-kbuild@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 4/4] kbuild: enable -Wformat-truncation on clang
-Date: Thu,  4 Apr 2024 17:16:57 +0200
-Message-Id: <20240404151713.3493098-5-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240404151713.3493098-1-arnd@kernel.org>
-References: <20240404151713.3493098-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fSQSKcjO"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56e0430f714so12807a12.1
+        for <llvm@lists.linux.dev>; Thu, 04 Apr 2024 08:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712244324; x=1712849124; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ByPtciC+URhiVQn652U1XVXGfMYChxV1rxw8MNlXaIw=;
+        b=fSQSKcjONJ1RUe2aXSVih7IkuKKEyuRFSqRZQE/nFdf9KsBxFgXteCMlz6RrlYlv5H
+         y7DIWzfK0MevbkjpeRKv1H2/TPRHDKU5ukPOHfoEyUiMICaZNlwJqADARnva8lW34pBb
+         jS24t2shnyB6EsveEMQSboLLlQFir6J6JeOqfX0ZoidYMcwYnYO/GtThkVSn+ib4Nm+e
+         beEHFYsU7ei2A2sjuye0x6rOCv9beX6cfZgajDLb8NtfZqoktW9oVZ8PAxmyvtSwAc5N
+         8ZgZs+PjjBpDsvbwhpmnVETfa2Fyw3enYHoCt/zTQJPoHHVmUhfo3BFESvQTQC9JptfS
+         2W/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712244324; x=1712849124;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ByPtciC+URhiVQn652U1XVXGfMYChxV1rxw8MNlXaIw=;
+        b=ngR0tKPUewdO1fhuQhR9x/GhliRDonHddMWad4O2eMbD9qvUYE4isvyotHvKOq+T9v
+         pO6lSh8q1LgUAnb/sn0oVRFCA6mN945IgejDQAunch7Ho7a33jcIAl3PSmh9/w7x9ViI
+         /m3L9PEFkqR058DGcd5JU0KTSfhblABqA7OrUhGUm/C339zms1X+ahhzV2IXAqeIdxTx
+         06CxzYvnTB8ahObGaobyL7/T+M8AIWRDP1YvMQRzCAM4KCg7bekR2qsvrpxwGsS9x1Oo
+         m/O2dn5TPDNY4Kn1AYo4dUJOOGPfd10fhcyiWfrMa7TEC66taCpAsMOqHJSRkYa1BJB1
+         5BKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV7Ro+nXApqjDELsAeBSyCQvvVHfyD1/TL0YNG++agzYoLavMy40RgSsPQaLZRCGLJhOHJxdeyVIlzj193irSLxOS67cQ==
+X-Gm-Message-State: AOJu0YxVtLDftRLVmtxi3J9VcmXoXrjHDr35y1vG+13NxZdXcsC8SeKo
+	sMxsrF0tVadk/hZpkIsqnCU8NTKjwwtnL4I2omZIQ2T3jlj/VtTu5pYwq73k1uArH6ITSKQnXZJ
+	qz4Fe+N0c+5NolrTTkMhlNynb5mYSww+Jp6nK
+X-Google-Smtp-Source: AGHT+IGu/Cr/TzqDAagcQzAh2crALYKXnU9saXFMj2Uan9qVNOsYqiQC9yQvytlJZqCQ8hhUrVOQhul4utm/mgjk4xU=
+X-Received: by 2002:aa7:c38a:0:b0:56e:234f:b44 with SMTP id
+ k10-20020aa7c38a000000b0056e234f0b44mr71333edq.5.1712244324404; Thu, 04 Apr
+ 2024 08:25:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240404-providing-emporium-e652e359c711@spud> <CANiq72m9YAu=dr1=WMSHOqfpszj4S6OkMEQ05vqbv_zKO5pOsg@mail.gmail.com>
+In-Reply-To: <CANiq72m9YAu=dr1=WMSHOqfpszj4S6OkMEQ05vqbv_zKO5pOsg@mail.gmail.com>
+From: Matthew Maurer <mmaurer@google.com>
+Date: Thu, 4 Apr 2024 08:25:11 -0700
+Message-ID: <CAGSQo024u1gHJgzsO38Xg3c4or+JupoPABQx_+0BLEpPg0cOEA@mail.gmail.com>
+Subject: Re: [PATCH v3] rust: make mutually exclusive with CFI_CLANG
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org, 
+	Conor Dooley <conor.dooley@microchip.com>, stable@vger.kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+	Ramon de C Valle <rcvalle@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Arnd Bergmann <arnd@arndb.de>
+>
+> Cc'ing Matthew & Ramon as well so that they are aware and in case they
+> want to comment.
+>
+> Cheers,
+> Miguel
 
-This warning option still produces output on gcc but is now clean when
-building with clang, so enable it conditionally on the compiler for now.
+This patch is fine by me - the last patch needed for KCFI to be
+functional in Rust just landed upstream last night, so we should
+revisit this (in the form of enabling it) once we move to
+`rustc-1.79.0` or later. In case anyone wants it for local
+experimentation, I have a backport branch [1] which applies these to
+the 1.73.0 compiler and enables it in the kernel [2] (not upstreamed
+because the feature isn't yet in kernel's `rustc`), which Android will
+be using for the Rust binder driver. This patch will require a recent
+(last year or so) clang, as it relies on
+`-fsanitize-cfi-icall-experimental-normalize-integers`.
 
-As far as I can tell, the remaining warnings with gcc are the result of
-analysing the code more deeply across inlining, while clang only does
-this within a function.
-
-Link: https://lore.kernel.org/lkml/20240326230511.GA2796782@dev-arch.thelio-3990X/
-Link: https://lore.kernel.org/linux-patches/20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- scripts/Makefile.extrawarn | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index fbe4d7144860..5063b847a658 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -99,7 +99,14 @@ KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
- KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
- KBUILD_CFLAGS += $(call cc-disable-warning, packed-not-aligned)
- KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow)
-+ifdef CONFIG_CC_IS_GCC
- KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation)
-+else
-+# Clang checks for overflow/truncation with '%p', while GCC does not:
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
-+KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
-+KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
-+endif
- KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
- 
- KBUILD_CFLAGS += -Wno-override-init # alias for -Wno-initializer-overrides in clang
--- 
-2.39.2
-
+[1]: https://github.com/maurer/rust/tree/1.73.0%2Bcfi
+[2]: https://android-review.git.corp.google.com/c/kernel/common/+/2930616
