@@ -1,108 +1,88 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832911643A
-	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 14:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5781BC57;
+	Thu,  4 Apr 2024 14:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712241233; cv=none; b=L5C00iozZHhFkT/sbmMfVVQrdNihXLHopfYQJQXFsuhpa5Vr6z695SFj5KqXsqqVTOg+kmNCsGDxOfu2UAH0n3rzOLEkWT/PC/D0Ny7xyhnvgBArAjKYhQUqp/WP+I5hUPh9Vgu+G7vD1QYuTjBx2Pnxloc2U6pfJwNBl5js7Pc=
+	t=1712242380; cv=none; b=qErica9o1xpQj3uanTMN9Q4eu+N6vpz5rQGAVWA4iX/BG+7/Ia8ELJchxpFXG0SA2CsPKCV+1d4LKvoAY7eJ0X6YtRuScnqb4Iz0wRs6BTndbl29aUGdNPSdTfuk3/jPjFNNnrW7fRzdv9qP6U3Q7QRi4mjBU9FbWEnjKtGLEcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712241233; c=relaxed/simple;
-	bh=jpF7tTa5Sd3tDtJxZDaT9Swi8PyGNUK+y0VMQ7cXB4o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PwmMJC81yJEXc3EE5Ft69wU/v1npaeWQNv14lc83bfj2q907UtptFuEGl4DqNtGQM4U6SXSmRtubAp1miOpc7cDGo06CXKo0c9fKFQUmEkW6ssQiiLKDfBZx0ZJWWUX+vvB6xbEYEQBcg5AbDdudE20jscu8ra9BN7M4uLaltd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cONwlH6A; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712242380; c=relaxed/simple;
+	bh=5gPtLGZZHXTkeKBzZGN8PF0oWPkX9s7yVOhL6fXJnwI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=D7Vj9b36vSHuFNIkhZzeiVXMy4hHcXcvG50hxbo/qq48QVPQn/JERALQA9LrUpdYTOn97EJem0ysXugdHZFfCm4Y+wP0uI5NzO0DVUhxsZmS7fG9Uxrl0GkjARTBGIlJTAZiiaNAg5O82IybdQ3Q3gmc413hdbf7k7GyLK7ks+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BnV4ZJEO; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cONwlH6A"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5dc949f998fso804072a12.3
-        for <llvm@lists.linux.dev>; Thu, 04 Apr 2024 07:33:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712241230; x=1712846030; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jpF7tTa5Sd3tDtJxZDaT9Swi8PyGNUK+y0VMQ7cXB4o=;
-        b=cONwlH6Ax9hOG5L4jfbD5fwgfrgZ7xq08xPK4B4Zu3hGkfdsaEokDBtN/poNDziVz2
-         IILsLmfonl5NWu1gjANB8zTHsyuCB42l/amaX6qZ7D+AHUxXMqFAzEHBc8q3ktNC8xIH
-         jRiRS6hpDjrgxiiG4LXIah22UzTau6jcrb4kTfW6NCQmur0krWHPMlvxH81HfHKDx0xA
-         X4+KDI1MepeVZ274EvmNUBQPg6J5leugbG4kdRh2z/MWoc5K2YmFw/M41ehdqVH1J6Bs
-         fJkRW6ztD2Kd0rULY6SwM7R0JrcEWxs13nDRAn+VKQeSR3yhIrrOwsKjHk/usnQg4SR+
-         C1aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712241230; x=1712846030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jpF7tTa5Sd3tDtJxZDaT9Swi8PyGNUK+y0VMQ7cXB4o=;
-        b=Dg4+s1dC3B72k3wxB402nzMW7WqRO4Q8VEQnEirt+doCGzdG0OVCRKonHjOPt+6E99
-         vMiNPgS/V681F3R9HjVB9y2sZsWzRKk/NSkcs6gcvcwP70zWgkDet2IMw7FvkmSvS+v/
-         BYIbzXLtLgSeydHxlmlwIH58c7CEWfBHeFagXJVEfnKKkArGz7yYuVK563OyDZeHtWyF
-         LNJHWR1utdpyxuWYGGCkYiby78jvl1Tg6Y1HOVHw8Ys54vcpUXODzL1s+xNHZxQjKh2t
-         /x8Z1kbQ6alZgXIMYgvI0o7QS0lMzOcs3Cph2sNKx+UKMZpVuPqp8SBeOq2Ey05JfjMd
-         TtDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUXX+dbjxE8HcsXRGtY5xuCz9g60NdHeo8eDgTGmseL7o6JXhBf5SdQrGZoeaVNV1vvk94N2M9SEa6Zxs9CQ7ClUCBtJA==
-X-Gm-Message-State: AOJu0YzWb0l69qW5K1b/ISb2gg3/caLIlJxXnYnxFSeLX4IEntcAt11l
-	PkRb732wtAqts45hASWHqJX1kzLpX4utL5cD7KtL/4tmGqDUzd8ug2sQIC/rUwRGZ2qEVzmLUex
-	H9r2LVr05AikbWvDr2yvQSnhmXn8=
-X-Google-Smtp-Source: AGHT+IG20eNpSzNkxnsgTkafpuA97Ew4OmO4JnqBaV5mNVNvOzgcdHEwHOPWG79O1UTpYlFkEm87j6CqNJkr6GVC/L4=
-X-Received: by 2002:a17:90b:f18:b0:29d:dd93:5865 with SMTP id
- br24-20020a17090b0f1800b0029ddd935865mr2399668pjb.46.1712241230437; Thu, 04
- Apr 2024 07:33:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BnV4ZJEO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712242379; x=1743778379;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5gPtLGZZHXTkeKBzZGN8PF0oWPkX9s7yVOhL6fXJnwI=;
+  b=BnV4ZJEOGZdDa3KmCdvqUYZDsmi30uSUPPfHHshG3BPhyWGbM5i60WqB
+   kiMY5g4RGVzK51LP3CGDbU2teg3x+EJYWuZZF1jaBoVPjqMnyj6khZQPe
+   hJlIsWviemi8eLdxgP0dSjjelCXPFwPArKYYCUNIB9mUkEsgkjOzf4c/7
+   bZ/A2GI/5HEvv9IFY2i1avuWTbaftYEJZAtgSTLrkrQGPW8cq5f542e3K
+   Wm7phm/9WXtiwI0Y/W25cXCpoUasikqmxc0h4u9gXL2z6T6Qth/Yb1jVV
+   Yy4er5vwfYYQRd9TuWK3R0eO1dv9ZuCuAJrQwRsFcHm79HzSBa/R5dqxo
+   g==;
+X-CSE-ConnectionGUID: cOQWleMETPqxKa9QEbuy3w==
+X-CSE-MsgGUID: 8NTtMd1XQLCNhQxlgquK8Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="18260336"
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="18260336"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 07:52:57 -0700
+X-CSE-ConnectionGUID: KGYFFwrKRuimuUf9A1x5dw==
+X-CSE-MsgGUID: zfk0vGRkTAy3xL5xlSDlBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="19249923"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 04 Apr 2024 07:52:56 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rsOST-0001C6-1c;
+	Thu, 04 Apr 2024 14:52:53 +0000
+Date: Thu, 4 Apr 2024 22:52:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>
+Subject: [linux-next:master 3790/3921] ld.lld: error: undefined symbol:
+ i2c_root_adapter
+Message-ID: <202404042206.MjAQC32x-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240404-providing-emporium-e652e359c711@spud>
-In-Reply-To: <20240404-providing-emporium-e652e359c711@spud>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 4 Apr 2024 16:33:08 +0200
-Message-ID: <CANiq72m9YAu=dr1=WMSHOqfpszj4S6OkMEQ05vqbv_zKO5pOsg@mail.gmail.com>
-Subject: Re: [PATCH v3] rust: make mutually exclusive with CFI_CLANG
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-riscv@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>, 
-	stable@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	Matthew Maurer <mmaurer@google.com>, Ramon de C Valle <rcvalle@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Apr 4, 2024 at 4:17=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> On RISC-V and arm64, and presumably x86, if CFI_CLANG is enabled,
-> loading a rust module will trigger a kernel panic. Support for
-> sanitisers, including kcfi (CFI_CLANG), is in the works, but for now
-> they're nightly-only options in rustc. Make RUST depend on !CFI_CLANG
-> to prevent configuring a kernel without symmetrical support for kfi.
->
-> Fixes: 2f7ab1267dc9 ("Kbuild: add Rust support")
-> cc: stable@vger.kernel.org
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> Sending this one on its own, there's no explicit dep on this for the
-> riscv enabling patch, v3 to continue the numbering from there. Nothing
-> has changed since v2.
->
-> CC: Miguel Ojeda <ojeda@kernel.org>
-> CC: Alex Gaynor <alex.gaynor@gmail.com>
-> CC: Wedson Almeida Filho <wedsonaf@gmail.com>
-> CC: linux-kernel@vger.kernel.org (open list)
-> CC: rust-for-linux@vger.kernel.org
-> CC: Sami Tolvanen <samitolvanen@google.com>
-> CC: Kees Cook <keescook@chromium.org>
-> CC: Nathan Chancellor <nathan@kernel.org>
-> CC: llvm@lists.linux.dev
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   2b3d5988ae2cb5cd945ddbc653f0a71706231fdd
+commit: 71b494e043d2cb567f4f4748bcb0b6fb7bc32a01 [3790/3921] i2c: i801: Call i2c_register_spd for muxed child segments
+config: i386-buildonly-randconfig-005-20240404 (https://download.01.org/0day-ci/archive/20240404/202404042206.MjAQC32x-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240404/202404042206.MjAQC32x-lkp@intel.com/reproduce)
 
-Cc'ing Matthew & Ramon as well so that they are aware and in case they
-want to comment.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404042206.MjAQC32x-lkp@intel.com/
 
-Cheers,
-Miguel
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: i2c_root_adapter
+   >>> referenced by i2c-i801.c
+   >>>               drivers/i2c/busses/i2c-i801.o:(i801_notifier_call) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
