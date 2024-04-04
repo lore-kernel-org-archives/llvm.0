@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54AD612D75A;
-	Thu,  4 Apr 2024 15:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E7412E1C7;
+	Thu,  4 Apr 2024 15:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712243839; cv=none; b=kdvnH6ciEiQQ+ujkNx/UAanuhNMTGUrleCdzH5/qD52Svt84fd1/dC1zW2VLzppk5FrGNpx3HbYJSQX4Xtf0PCSEJHmg9lo7SVUgwMG+ys4Gg+Vvl1jtTWxGndnXoCcCN5lQs55UaUYV9loaCspXuqjRuUi3NTIcAKrfSgVpWwc=
+	t=1712243882; cv=none; b=Qx/TAOaLuApfeTojlB7ZWL4ZVFlFD4mgCLEZ1jTUwLpD46GjzRobqzybHSgCZTv03IPvkUj6xJ7kNVkAik+8nZ9ODuJyPMWYhkR9XSN0Suka7AFqglQcPapOAm2ZpfG+bc/Mj/Ih7iACpYcHHEmnmsjigryh0K89XcVdjY8WEF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712243839; c=relaxed/simple;
-	bh=ra+W5lQfPkd8zP92QWXnwHL7MhuJZh7uU6466dDEa8E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BuZnIYddI0+bk8JtcDciUksneAk+QiKvczHZHyTrOlkTbh0oP2o6VvhKUa3H3yoiK+qfLFhTJ0PQodm1gehzQtlyWjqz5sE2ETzTcOd+n1OnpEj42gIFcoISapnyhjRkHpAcuJc/Ju7x2PEGN2rEHZy7Hj6hiCaum2xS2jcMqBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YcjbtZ+T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712243882; c=relaxed/simple;
+	bh=lz3EUYQCI/wMAJ8fw+7g8LlY6qdomo5S2mS7cruxavw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=t1DZup7mHR6TRWr70h1RPAcT3pNqYxQ0TgSd0V5SfoB+XZxeWSJrcqlOBE3237f3IkWsXeXRjORJpBt06BQP1qlXJVRcEfNYw3O115pL4U3j2Tj9e6R2L9N7EwRntxOCVVVD6DbnoEqKsZshOVT8ejZdQEOd+Us5u6x/HO1Hvks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uZ7kfb45; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YcjbtZ+T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D063AC433F1;
-	Thu,  4 Apr 2024 15:17:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uZ7kfb45"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BF9C433C7;
+	Thu,  4 Apr 2024 15:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712243838;
-	bh=ra+W5lQfPkd8zP92QWXnwHL7MhuJZh7uU6466dDEa8E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=YcjbtZ+T5iGrFx7Xa4Xz0zBIl2J8VEBXxUlbBijbcgeZ+xikscezuqtuxaW3xul4z
-	 L5ZPZO8c18dWuOpdmVKN7jW4bVoCFmGaNDwFWSMn3qS0GG75BLkdT/bvwSoaoaF4XZ
-	 jF3qV6UpeVR09F/UfL8EaPP+4F0AeRVLHI2XsRtEnawVi1uQLKg1LPHW55PtyDS1VO
-	 yv9wnvGXUeyIW05vn2mGgplqabr+Go7vyEz9ekcDBkFgbHrAl8hHRy1qdBhnVkcP39
-	 GSEO3EBE9BlA2UoXue/0EwNjdKpO+fDaEls1Co1LzCWRn6przLQD0kwKulZX06e3QI
-	 xnNZBcnSt11/Q==
+	s=k20201202; t=1712243881;
+	bh=lz3EUYQCI/wMAJ8fw+7g8LlY6qdomo5S2mS7cruxavw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uZ7kfb454DbAzeYfGgxRnkq2XhaKiar/gY+s0ta8csvS5Dhx/xr462Uu5nSBMEiEb
+	 6fbIm0ewI0SmO/8PwCGJ89ku5rpiNwqd9xIp460tpcpKDX48VpphL+WBLercjEpUve
+	 OMjgmYQD3OsKCsBHNXPPonFDEfKMwTOywH+UKyIfDcc7bhk1YN83ltjAGz56VgDlJ1
+	 X2Dfj7a025W+oBBVpQFUAC2U4OQtFHGxnNeyNIVYn8G8ocZaxPjTnwDKnuTUk0OnWo
+	 UShgjM8T6dF0l5CUMxhpQ4Q1WF/stcQDDZcZE+ePgOKqBCkxF9G4fzz3C/4iO+6m1v
+	 unlRu1UoZ2WaA==
 From: Arnd Bergmann <arnd@kernel.org>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Nathan Chancellor <nathan@kernel.org>,
@@ -34,11 +35,17 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 0/4] Enable more warnings by default
-Date: Thu,  4 Apr 2024 17:16:53 +0200
-Message-Id: <20240404151713.3493098-1-arnd@kernel.org>
+Subject: [PATCH 4/4] kbuild: enable -Wformat-truncation on clang
+Date: Thu,  4 Apr 2024 17:16:57 +0200
+Message-Id: <20240404151713.3493098-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240404151713.3493098-1-arnd@kernel.org>
+References: <20240404151713.3493098-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,36 +56,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-I think these can now get merged into linux-next. I reordered
-these slightly from my previous submission to skip the
--Wcast-function-type-strict warnings but instead include the
--Wformat-truncation enablement, based on what got merged so
-far.
+This warning option still produces output on gcc but is now clean when
+building with clang, so enable it conditionally on the compiler for now.
 
-We are still missing the "kallsyms: rework symbol lookup return codes"
-and "firmware: dmi-id: add a release callback function" patches, but
-I expect them to get merged through the respective trees soon.
+As far as I can tell, the remaining warnings with gcc are the result of
+analysing the code more deeply across inlining, while clang only does
+this within a function.
 
-There is still an open question about the order of patches in the
-coming merge window: if some of the other patches are also queued
-for 6.10 rather than 6.9, this series has to come after those to
-avoid regressions. Maybe they can go into some kind of 'kbuild/late'
-branch that gets merged in the second half of the merge window?
+Link: https://lore.kernel.org/lkml/20240326230511.GA2796782@dev-arch.thelio-3990X/
+Link: https://lore.kernel.org/linux-patches/20231002-disable-wformat-truncation-overflow-non-kprintf-v1-1-35179205c8d9@kernel.org/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ scripts/Makefile.extrawarn | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-     Arnd
-
-Link: https://lore.kernel.org/lkml/20240326223825.4084412-1-arnd@kernel.org/ 
-Link: https://lore.kernel.org/lkml/20240326144741.3094687-1-arnd@kernel.org/
-
-Arnd Bergmann (4):
-  kbuild: turn on -Wextra by default
-  kbuild: remove redundant extra warning flags
-  kbuild: turn on -Wrestrict by default
-  kbuild: enable -Wformat-truncation on clang
-
- scripts/Makefile.extrawarn | 29 +++++++++++------------------
- 1 file changed, 11 insertions(+), 18 deletions(-)
-
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index fbe4d7144860..5063b847a658 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -99,7 +99,14 @@ KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
+ KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+ KBUILD_CFLAGS += $(call cc-disable-warning, packed-not-aligned)
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow)
++ifdef CONFIG_CC_IS_GCC
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation)
++else
++# Clang checks for overflow/truncation with '%p', while GCC does not:
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
++KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
++KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
++endif
+ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
+ 
+ KBUILD_CFLAGS += -Wno-override-init # alias for -Wno-initializer-overrides in clang
 -- 
 2.39.2
 
