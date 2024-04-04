@@ -1,129 +1,126 @@
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F9112CDB0
-	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 16:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5BC12FB0A;
+	Thu,  4 Apr 2024 16:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712248698; cv=none; b=OEjW0ziOx3h3W3T2ZRuc6+CgjpL7Hhg2akig699k/zh6Zgtfi7QpTwtg92W/fdv3oMZN4Z2QwFEq9Y+ADMaa6lUDFEuzC6zDRs80RSE/1SFEOYMRG7by1az07lFRoWsKCELdK6ojg1La8+srTB0gF/jVHntPYBM1VBaEGaHLQDE=
+	t=1712249347; cv=none; b=G7Zb4H298QTdWZr36aq+V7xXGkPzHkxekm2Sa5B+RhH0t739zDV/oK0EW164tAPL7mt73HLWLvPp53q/YYMLEYEI0mDuFry3XRDKFjHpkWEGdsnywOgeJDgUQvprneZBYOeZQ6+zGRDziZHFv70gfUvxZS5v8PRexMsPouxNRFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712248698; c=relaxed/simple;
-	bh=YBwK7BNdkJWP3oyNHpQfdPDIsnxbAs2+1nrrXIvCyGk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IgZ4ZFMhX7n24lfD19fakwajgUOvdaKSpzSE1FxwJXki/NkfzKA7YC4Yqr4I0uI0MiecXNmhCaQ3I1IPaJVjtB1CxJcMm/LS7Szj+lkvuDzaLHXWPA09K5PkJourPTULc+GRW5V8IsJWQSEdtzKQpjNXj2b+a1H9rBCg0l3A70A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XGxrAT32; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1712249347; c=relaxed/simple;
+	bh=NCHIHhS3NCawYOD9GHi3JKwQbHl1BzIb2rKZtwzxTE8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F00HJJPY+r/+v8KVzeESkdDmMZiZjX3IVKbI1LGcZ4PttCzoDL05uMMQkxr1JhDZUG9RpwMgzIWBfUvVINjuZ27Xcm4Zw+mxH6KhgvZEDICYdSull+Bojmy1gctpScYOLvt5DtoE6zWjDsBmIFIp54glvcvK0F61oUVyiFUDazc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xks/IabH; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XGxrAT32"
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-7cc0e831e11so22710539f.1
-        for <llvm@lists.linux.dev>; Thu, 04 Apr 2024 09:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1712248695; x=1712853495; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O1lHp+OkDVz4M/u4JQhfwxqw91sDKLwvBIfOpOSX1Dg=;
-        b=XGxrAT32JFxT/GnSMteP/2JtobbaLx15waW32feVwKg0yuDYFhGN2lNpz9sSoLr5wV
-         c2Qk1HZvYCqA6TQ9fPEpzJGUsGfFpUi93I15btrveOcoxJdM6JlhF1pqmA4CeS/EK4y5
-         3T8Ps4y/vPAIB+QiYeANhiRTTlTuyhD5lyjVM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712248695; x=1712853495;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1lHp+OkDVz4M/u4JQhfwxqw91sDKLwvBIfOpOSX1Dg=;
-        b=MxVEjuj6nNZr8mlWM+GfAMXGp9YofcopkhRt4hdfsbipDw8mxYgSvug6oX+DcC1zpl
-         goG8RPojzuBSvFH9hp6z08rHwDbBHKFntuon9SCVA1yH6C3epzLi0ENfuCF2y8TPqYHM
-         Fw7tmQnyAaLNhewqXqLO2Rnz9KrL/nr6Fyv8aK5HkKHpGDvmgSuEnay088NfVIjx5uiR
-         aCeSDA85P2N+faaNYygmtqrejIodpHPu+jUmGsbOYBjV494B7WL6ojjQavXDZrNyWJdG
-         /77tcvapNmeUaSf/rVR2Xlrq/S1oSG23YS08nXLy6jx8j+ZaqoJC20u0+3Q537fUZIlM
-         PfAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWAh3iPG8yX6iwRtM/x44zHjdx26VfFaN6xI0kvMDd1aKDdSEDJ/uYy2zNtjnBKPoHRz6sgR9bxg9/V5v85SIjD/g9C0g==
-X-Gm-Message-State: AOJu0YyEvNcJxt7+jPaZUZJpaYZkSvmqUC+PIUqkU5GVOrKmPzEz2a1Q
-	o/5pP09+OFJgNnVfVjAspfZcYDOc9ZoyL0mQd5NXbGu5bRBqcwi4ROZ2nMQRi+c=
-X-Google-Smtp-Source: AGHT+IEA8Ot5VjOmH74kiKn6+rvyxZEZ0N/0e2VKSGgMgVavV4DwpFIgcNyVzFCXgCqx/llLPTQifw==
-X-Received: by 2002:a5e:8b45:0:b0:7d0:c0e7:b577 with SMTP id z5-20020a5e8b45000000b007d0c0e7b577mr3031325iom.2.1712248695143;
-        Thu, 04 Apr 2024 09:38:15 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id r22-20020a056638131600b0047ed8c3e578sm4146726jad.134.2024.04.04.09.38.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 09:38:14 -0700 (PDT)
-Message-ID: <d84a8714-89e0-4ac0-b42c-02e8c4920e32@linuxfoundation.org>
-Date: Thu, 4 Apr 2024 10:38:14 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xks/IabH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712249346; x=1743785346;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NCHIHhS3NCawYOD9GHi3JKwQbHl1BzIb2rKZtwzxTE8=;
+  b=Xks/IabHWvwe79k5oZUPuPVpYYCn/uigAWNRgCnKwn3JJbPKodMUn/Sc
+   1h3ud9I0xgJcWxn9QPN14FZPSBTKLFLbCptB6CYtvKCdzilmcq0JJBwe3
+   KTYOQWexyq5Z9QLcXxcYbjbfLikv4DpUv4r9QUSzslG+1mfz8pp5dL6Dq
+   P/oBSTXpkEx+rSmq55eitoBb9DjZw4iY+8bmziom5CSieVSj9GTyFZJAX
+   hF+XOvStBlVYrzaEShlrz5yQP6ZJ7elovyFyE4NxRLQbYPL0cdAXYn+2t
+   kHBwEWb9MgtJTR07zx0s8k98jGp2nEOa46O48nTeSKjmcULCbQQ1GZcQH
+   A==;
+X-CSE-ConnectionGUID: KysWmy4WRHeiZximdHoz+w==
+X-CSE-MsgGUID: o/Rkt/cERBOWGvfCu869Zw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="32947135"
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="32947135"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 09:49:05 -0700
+X-CSE-ConnectionGUID: aE3biAaRTxu8/thS9/7KFg==
+X-CSE-MsgGUID: H0B8oYeDQcelsnsC4rHSxw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="49804476"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 04 Apr 2024 09:49:02 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rsQGo-0001Ic-3D;
+	Thu, 04 Apr 2024 16:48:58 +0000
+Date: Fri, 5 Apr 2024 00:48:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jim Quinlan <james.quinlan@broadcom.com>, linux-pci@vger.kernel.org,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Cyril Brulebois <kibi@debian.org>,
+	Phil Elwell <phil@raspberrypi.com>,
+	bcm-kernel-feedback-list@broadcom.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Jim Quinlan <jim2101024@gmail.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 3/4] PCI: brcmstb: Set downstream maximum {no-}snoop
+ LTR values
+Message-ID: <202404050015.fmF1uXeK-lkp@intel.com>
+References: <20240403213902.26391-4-james.quinlan@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Bug Report] selftests: Clang: kselftests build errors in
- KernelCI
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Gustavo Padovan <gus@collabora.com>, llvm@lists.linux.dev,
- kernelci@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@collabora.com,
- Mark Brown <broonie@kernel.org>, Justin Stitt <justinstitt@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>,
- Bill Wendling <morbo@google.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <0c6d4f0d-2064-4444-986b-1d1ed782135f@collabora.com>
- <CAKwvOd=ueTmUThCOkBGUjhMGr6mKDtbTt-d7tHKe7A2nrchWMw@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAKwvOd=ueTmUThCOkBGUjhMGr6mKDtbTt-d7tHKe7A2nrchWMw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403213902.26391-4-james.quinlan@broadcom.com>
 
-On 4/4/24 10:34, Nick Desaulniers wrote:
-> Thanks for the report.  We've been tracking getting this working for a
-> while: https://github.com/ClangBuiltLinux/linux/issues/1698.  Other
-> fires have continued to take priority.
-> 
-> On Thu, Apr 4, 2024 at 9:30 AM Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->>
->> Hi,
->>
->> We have caught bugs in kselftest suites on linux-next and on stable-RCs etc
->> when using clang. There are two types of bugs (logs with clang-17 are
->> attached.):
->> As usually people use GCC, there are GCC-specific flags added to the
->> Makefiles that clang doesn't recognize. For example:
->> * clang: error: argument unused during compilation: '-pie'
->> [-Werror,-Wunused-command-line-argument]
->> * clang: error: unknown argument '-static-libasan'; did you mean
->> '-static-libsan'?
->> * clang: error: cannot specify -o when generating multiple output files
->>
->> Clang has best static analysis tools. It is reporting static errors. For
->> example:
->> * test_execve.c:121:13: warning: variable 'have_outer_privilege' is used
->> uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->> * test_execve.c:121:9: note: remove the 'if' if its condition is always true
->> * test_memcontrol.c:727:6: warning: variable 'fd' is used uninitialized
->> whenever 'if' condition is true [-Wsometimes-uninitialized]
->>
->> We have found these issues through our new KernelCI system when enabling
->> kselftest and clang there. The new system dashboard is a WIP, so It is not
->> the web dashboard you are used-to with in KernelCI. We can show you ways of
->> pulling the data if you are interest into.
->>
->> Unless the above is some sort of false-positive or misconfiguration, it
->> would be great to support clang for kselftests. What we can do from our
->> side is that clang kselftests builds should be enabled on KernelCI to find
->> and fix the errors. What is your stance about this?
-> 
-> As with anything kernel related; help send patches for obvious fixes.
-> Or provide steps to reproduce in
-> https://github.com/ClangBuiltLinux/linux/issues/1698.
-> 
+Hi Jim,
 
-+1 on this. Please send patches to fixes as you find them. We have
-been taking fixes found by clang and -Wformat-security, -Werror
-checks.
+kernel test robot noticed the following build warnings:
 
-thanks,
--- Shuah
+[auto build test WARNING on 9f8413c4a66f2fb776d3dc3c9ed20bf435eb305e]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Quinlan/dt-bindings-PCI-brcmstb-Add-property-brcm-clkreq-mode/20240404-054118
+base:   9f8413c4a66f2fb776d3dc3c9ed20bf435eb305e
+patch link:    https://lore.kernel.org/r/20240403213902.26391-4-james.quinlan%40broadcom.com
+patch subject: [PATCH v9 3/4] PCI: brcmstb: Set downstream maximum {no-}snoop LTR values
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240405/202404050015.fmF1uXeK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240405/202404050015.fmF1uXeK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404050015.fmF1uXeK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pci/controller/pcie-brcmstb.c:728:6: warning: no previous prototype for function 'brcm_set_downstream_devs_ltr_max' [-Wmissing-prototypes]
+   void brcm_set_downstream_devs_ltr_max(struct brcm_pcie *pcie)
+        ^
+   drivers/pci/controller/pcie-brcmstb.c:728:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void brcm_set_downstream_devs_ltr_max(struct brcm_pcie *pcie)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/brcm_set_downstream_devs_ltr_max +728 drivers/pci/controller/pcie-brcmstb.c
+
+   727	
+ > 728	void brcm_set_downstream_devs_ltr_max(struct brcm_pcie *pcie)
+   729	{
+   730		struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+   731		u16 ltr_fmt = FIELD_PREP(GENMASK(9, 0), BRCM_LTR_MAX_VALUE)
+   732			| FIELD_PREP(GENMASK(12, 10), BRCM_LTR_MAX_SCALE)
+   733			| GENMASK(15, 15);
+   734	
+   735		if (bridge->native_ltr)
+   736			pci_walk_bus(bridge->bus, brcm_set_dev_ltr_max, &ltr_fmt);
+   737	}
+   738	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
