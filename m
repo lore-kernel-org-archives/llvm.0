@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505AB156663;
-	Wed,  3 Apr 2024 23:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38E92F37;
+	Thu,  4 Apr 2024 01:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712187019; cv=none; b=FIQMXjbwd3kMGEH1jPtT+tCZpSsi8+5doTnbbpt0c1NXSezN15m7ZY3bKWvjWrsQ63OH6E0dTZcHZN1fTXBpbF4qNPVhm2dJ/K95lWiQbymr+qs9YnHWpE4pa5pLPhSXCyDWGqgKBzyit90IDgUHkxVx9g6UC7H0BYB/3gIMi0A=
+	t=1712192783; cv=none; b=nCVwf5FNsGiTWp0nXXwbf6rcE04eh1Rb2FxK7vehxKj1lwu37TuHvLy2eYh0Jiq+e7Bu8IiizJ0wVXb5Dpb+D0X/TpbFGfAQ7t5S/KBkvwOXx+V1UOMyzGRitxzL4GxWgr7qe/tsOgT6HwkeI9lXkV3kG4pOWv85IxmNfR2nYn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712187019; c=relaxed/simple;
-	bh=loAVFzG6xIhSt4p7rp71AyU9Iqo1Tl5vLML5P3CK2no=;
+	s=arc-20240116; t=1712192783; c=relaxed/simple;
+	bh=0GC/Qw8hWRbjNNS1/hj8iSQFATAoxPnNUkI+y/vTRyc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KU7e97iwj4Bn3lL2ctjkeUkhArx2bcFA2Tc/sAG4cz9fqN9SU8FZ+X4FxyidmM2I4UQHza2NXdNaEzWNgreVuevzCt6ylf/udp8xlM4nfIpcl3gkxu3vXIELA8iqYtHAnihqAExGMA0dNUfGloG06vG5d2uvNaKq2ynStTlAPa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GyA1xq8A; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=o8gLD2rNuFEBpQrnVzBx7+Xa5fLf28VYFCgAn1xKbqEtH06cSY0TIkOyUEsw6BYUhf3PBYAeX1CuG0fML5AMEc788YTehDkY6BBUoGdxYmEcsrT+HLCByfGe1Y6X1WW24NIWUtxpgnOWCea8QbcTyzrYNhKBP7RHs9QWDJKkl40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kkqFTxD9; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GyA1xq8A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kkqFTxD9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712187018; x=1743723018;
+  t=1712192782; x=1743728782;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=loAVFzG6xIhSt4p7rp71AyU9Iqo1Tl5vLML5P3CK2no=;
-  b=GyA1xq8AfShvt7Bk2Tmg4/KponmxPZy6F6xqsmo+SadKVdwudbDns5+J
-   5HqX01V63ERMJgqt6Tam/MaB0lE3JRgVS110q+NQdd1W0g+hhUnoir57z
-   XZTTikBu4r08PMRFre2hRculEVsOPDNK3yP2MlsmC9qq2rvpC6QoAklvc
-   jqYd74euuxaFuiz1wYxm8U1VseSzKXxUtoIR41zseAY2Iv7DSse7RaGSQ
-   Dxd+AqVCtMAnX2XK8TQOFrgaEuNi6sJB5hFK7EskUrEasCbUj5mLcVybs
-   b48C/KMpgDU3mtt7pogYfmHuJRu7Ix23nVTwtDd5q3jErMpAu0i+e+84g
-   A==;
-X-CSE-ConnectionGUID: I2IgsPftQ2ieR8INxjZQww==
-X-CSE-MsgGUID: F44EdptHRIup1c6raCqklQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7618867"
+  bh=0GC/Qw8hWRbjNNS1/hj8iSQFATAoxPnNUkI+y/vTRyc=;
+  b=kkqFTxD9YLJ+TA5sGkZaFx83qIHEEtsCTABmlDeVdUFa66NcOhhXzW7a
+   +/WpUgT5nhx10T2CIQiHr4Tgsz2cdreZSiJy/2twg5pVxuo5ZjccRK77y
+   nxM0zlJFC97AU0VTVT0ekMZ91bLUXqIH1HTYv2GCllrH0QHRSFk1YDg6W
+   u5v44ybnZlYdG/Y8Z1Ozai+eaCQdias3j3DPze5vX1TM18v+g/epUjMY0
+   sfrK3hmJIW4iPmZ67jfb9xaIggYhYSRu6hlmOVOTyCxwyH8hl6265OD7P
+   6dvDgnNchpBsAFHsVZiEGL9hDJOyMQ3qtnNCPR/bHZt1LfDStPiHQ3z0z
+   w==;
+X-CSE-ConnectionGUID: QpMG7+JTSf2FDTt8R5Zi3A==
+X-CSE-MsgGUID: PJUhBMKgTAGLS3peIxnroA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="11231697"
 X-IronPort-AV: E=Sophos;i="6.07,178,1708416000"; 
-   d="scan'208";a="7618867"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 16:30:17 -0700
-X-CSE-ConnectionGUID: x6iDNCJoTzO+8KkmV1aLhA==
-X-CSE-MsgGUID: I3BYMYWITwWJhYwKWOEd5w==
+   d="scan'208";a="11231697"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 18:06:21 -0700
+X-CSE-ConnectionGUID: UcqdzYGeQO6hDLzLNOYPzw==
+X-CSE-MsgGUID: xtsFhUwZRvSoPNR+Tn1uzA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,178,1708416000"; 
-   d="scan'208";a="41762602"
+   d="scan'208";a="56071612"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Apr 2024 16:30:16 -0700
+  by orviesa001.jf.intel.com with ESMTP; 03 Apr 2024 18:06:20 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rsA3a-0000MY-1L;
-	Wed, 03 Apr 2024 23:30:14 +0000
-Date: Thu, 4 Apr 2024 07:29:26 +0800
+	id 1rsBYX-0000QC-0r;
+	Thu, 04 Apr 2024 01:06:17 +0000
+Date: Thu, 4 Apr 2024 09:06:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 9/12] fs/tracefs/inode.c:56:9: error: implicit
- declaration of function 'iov_iter_count' is invalid in C99
-Message-ID: <202404040725.9Abdcjc9-lkp@intel.com>
+Subject: [axboe-block:rw_iter 11/14] kernel/panic.c:757:1: error: use of
+ undeclared identifier 'debugfs_attr_read_iter'; did you mean
+ 'debugfs_attr_read'?
+Message-ID: <202404040851.yUb7lBNV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,33 +64,101 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   8e8fd62fac9e105d05cfda66070e98a3a255e1a0
-commit: bb285b16cf180b4178bb9a45a8ffbf1ca5d9a701 [9/12] fs: convert remaining users of ->read and ->write to iterator variants
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240404/202404040725.9Abdcjc9-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240404/202404040725.9Abdcjc9-lkp@intel.com/reproduce)
+head:   1c5b8f0f389d0dbf8dcba694d17e2915059b8043
+commit: e70895a95ab70c8ce8c28b7358dcbe587ce7b834 [11/14] libfs: switch to read iter and add copy helpers
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240404/202404040851.yUb7lBNV-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240404/202404040851.yUb7lBNV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404040725.9Abdcjc9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404040851.yUb7lBNV-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/tracefs/inode.c:56:9: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return iov_iter_count(from);
-                  ^
-   1 error generated.
+   In file included from kernel/panic.c:15:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> kernel/panic.c:757:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+     757 | DEFINE_DEBUGFS_ATTRIBUTE(clear_warn_once_fops, NULL, clear_warn_once_set,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+>> kernel/panic.c:757:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+     757 | DEFINE_DEBUGFS_ATTRIBUTE(clear_warn_once_fops, NULL, clear_warn_once_set,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> kernel/panic.c:757:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+     757 | DEFINE_DEBUGFS_ATTRIBUTE(clear_warn_once_fops, NULL, clear_warn_once_set,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> kernel/panic.c:757:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'int (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'int (struct file *, char *, unsigned int, long long *)') [-Wincompatible-function-pointer-types]
+     757 | DEFINE_DEBUGFS_ATTRIBUTE(clear_warn_once_fops, NULL, clear_warn_once_set,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     758 |                          "%lld\n");
+         |                          ~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+>> kernel/panic.c:757:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'int (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'int (*)(struct file *, const char *, unsigned int, long long *)') [-Wincompatible-function-pointer-types]
+     757 | DEFINE_DEBUGFS_ATTRIBUTE(clear_warn_once_fops, NULL, clear_warn_once_set,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     758 |                          "%lld\n");
+         |                          ~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:59:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 5 errors generated.
 
 
-vim +/iov_iter_count +56 fs/tracefs/inode.c
+vim +757 kernel/panic.c
 
-    53	
-    54	static ssize_t default_write_file_iter(struct kiocb *iocb, struct iov_iter *from)
-    55	{
-  > 56		return iov_iter_count(from);
-    57	}
-    58	
+b1fca27d384e84 Andi Kleen 2017-11-17  756  
+4169680e9f7cdb YueHaibing 2019-03-07 @757  DEFINE_DEBUGFS_ATTRIBUTE(clear_warn_once_fops, NULL, clear_warn_once_set,
+b1fca27d384e84 Andi Kleen 2017-11-17  758  			 "%lld\n");
+b1fca27d384e84 Andi Kleen 2017-11-17  759  
+
+:::::: The code at line 757 was first introduced by commit
+:::::: 4169680e9f7cdbf893f8885611b3235aeda94224 kernel/panic.c: taint: fix debugfs_simple_attr.cocci warnings
+
+:::::: TO: YueHaibing <yuehaibing@huawei.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
