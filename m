@@ -1,230 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47FE85C69;
-	Thu,  4 Apr 2024 11:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50371292E5
+	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 14:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712230972; cv=none; b=Q+xfHfsVG3oZkAsV1w54JA/WwlzvdtfqUg5fThnjd4BRpoiEiNNllym6YnG75ldoNikUPt8M3b+ma12xJ0B7JSyQV0fxqenbGzebegGYM4bySNBJEjg0m6lOTB+0SlvqgCrA8lVQp2oMKSeYsrGJpbfegxYeJ++wc8JXm3vazdg=
+	t=1712239701; cv=none; b=GuIL0W4SsjA6a7TNpXsEvfO6Ca0bGyESVzyNZpQ6XmEOOAVajzKrp7zEu/D4p7VQhflXUDAkWaxcUTqmKZS0eLNWynyF9efCYQLitIFLINzZ1VtR63ht1GYAz1HcxSdCIlu5PhwDS+zOGxCnXXSHUniXhLZ9Y7Uo5q5uYtZ+n28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712230972; c=relaxed/simple;
-	bh=XfVw85LlYxUIoWD+n31Wz341FL4ChN0VrqdDihjnxj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HVn8nv6hKdQi9AdRDtnM0U4e0zuV3Khekkk0xnGZR2HLODHLlZe7EZil2vPwxIUeDPv9ndg47709/AoNXy+oEWYvES6Tx6H07JL14B7QthxbCLeM68/XXFIr+ssU4Xhj2L8BZnEyoyv/lLitjr97iQ5XptC9bT/dSYht5ncV14c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UR81OxVc; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712239701; c=relaxed/simple;
+	bh=1bjFWCvwY4ohIIq4OBpqdx2ADu0JX5LSALPQRIoYYZE=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=EXTr2xLywmFTa3RI5FLi7MKw2if3H/7S3hU4GsVNoSQAVhONzhaxKvWFqD2pSNrSjiQ5hZfDmr0r6unbK50t1zdAw99xaLG4GK07BmriVDPcHz29Q7XcICTXWXOj9PcwcIhzqe24EcQLAvcrKePG9htIQr2VpkejcF1n8M7TOFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TTi7DkXO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=uuYYX8pM; arc=none smtp.client-ip=64.147.123.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UR81OxVc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712230970; x=1743766970;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XfVw85LlYxUIoWD+n31Wz341FL4ChN0VrqdDihjnxj4=;
-  b=UR81OxVcbYRXAKau/ZJNDFRX9z3Hz1/Irkrg5zG2Qvy0rRR23i/0bRiz
-   pgs/+TrdSbls1V7agWw89/zxyd+f0yAarfbIr86jFRxGnrc4kW8PgPwZ3
-   TyfkXAovxIV9yRPFF6mOgEz6wVfpjNdDHXpdXsfaSJYKbvN6+NE19spVP
-   MQisHUrVcs7F8SnAHPfaxQv7Hwv8kijqceWUOuiuzV5ueHZOtu9QuC3vF
-   8831pQyssIU4GkVm1BgCe2pEFWgTPSpBhZ9ZsXN6Ht4LQoCbs7qGouxPx
-   cgMe5bGODA0two9lH5uhEz1MvL4JcBXYCm5gMaYTjbQ+FIE6HAc+zg5/L
-   w==;
-X-CSE-ConnectionGUID: zUw6fW96S165qIzrX9R/Zg==
-X-CSE-MsgGUID: 1i4qZgUwSXCEuX9K3s+n0w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7694491"
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="7694491"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 04:42:49 -0700
-X-CSE-ConnectionGUID: xHjDDfFiRTevZ3xn64/scQ==
-X-CSE-MsgGUID: KTfw1ycfTdaOzCV3DtEawg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="18869861"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 04 Apr 2024 04:42:47 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rsLUS-000100-2H;
-	Thu, 04 Apr 2024 11:42:44 +0000
-Date: Thu, 4 Apr 2024 19:42:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Duyck <alexander.duyck@gmail.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander Duyck <alexanderduyck@fb.com>, kuba@kernel.org,
-	davem@davemloft.net, pabeni@redhat.com
-Subject: Re: [net-next PATCH 09/15] eth: fbnic: implement Rx queue
- alloc/start/stop/free
-Message-ID: <202404041954.giczimoH-lkp@intel.com>
-References: <171217494276.1598374.468010123854919775.stgit@ahduyck-xeon-server.home.arpa>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TTi7DkXO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uuYYX8pM"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id ACB071800184;
+	Thu,  4 Apr 2024 10:08:17 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 04 Apr 2024 10:08:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1712239697; x=1712326097; bh=N+EYyvLWA/
+	1764pidiha23yH25rL43NPhdGDRm3VFBo=; b=TTi7DkXO2JErQaJb0mScNFsUOv
+	Ss+oTwRiua3x1I+5B5mvMdi9nPtasukJWugr5CpHyYRxnOIvvKK121hd7Ck9H+SL
+	stQo5kyzsyTe+0idyL0ID/nrKDicBBPRail/37wobyKp41hO7LWjcsBlPTJ8wSxg
+	CgCRm3xTmEIjDmz7T7IZE7uO35smMcdGc8xc/Op2WSaWnZ6l2gSghydvEUIIyfEH
+	bltcRCGN3V2ubt/6BddGSZAfcIDA1+o3TyyRpbYB7KS1YDIXn4KTuA937rzuswLT
+	F4Wf04nmzuORreEv5hnxvDQ+3rCwvhyQ+trCk6m8vcTcq9KHfcFvDe6Zv5fw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1712239697; x=1712326097; bh=N+EYyvLWA/1764pidiha23yH25rL
+	43NPhdGDRm3VFBo=; b=uuYYX8pMYU0SWFnQWsweQ28E0GRlxxYRT0voaidY4sqB
+	tqKLxhUoUvPoNh93u26rJTm5ZSFIVOKnZ3WevqhyE22onSEuGfQDLHa1t3A+4zdj
+	q4UT+LoQt8P4VVQhShqxkSNwfUO730DUBkTXQuxIrvPRoIOZBi+5iUD0jXsUhmr+
+	heJe81RODGAkiiejUEL4AANUlmqoCjF66QvVZH1PyotncNx9g0gwmMeN5u2Nf5QG
+	A6LzW3j0gnVkgXV/vObxTrJoBQuied3ViBJvD1aSWb8wJCEdEBIN5FV3RkgOI8px
+	Ne83yEPpk20VTa4sbkpLUViY01PP8Qd8Nyo6fb75IQ==
+X-ME-Sender: <xms:ULQOZpweIHBp5RM3Zs1jKtESHSb13qwmOhq6k53Xlr8WAefjyVRb8A>
+    <xme:ULQOZpRM82Cn1UJCo1aQN1H2jqBjG_LBdOXtwbwpE5w-wB07ZrF0LKtF-I3QyFqm7
+    auYsJIaHp8zcvfbxDo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudefkedgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ULQOZjXrNMawndcDSle5TXDxDz9-DnCfBIG8lMFt0Q78PYegzMwMow>
+    <xmx:ULQOZrgvmf_yree2eWcVvAynlZCxTGuL5dvMohqcL6TSMv66XdRdHw>
+    <xmx:ULQOZrBl_D5JIAzIEnwl6xkNXTmg96VsA5JrBdhChLvtV43-AEwMdA>
+    <xmx:ULQOZkII-nOeFzbgnGiSNJ1NROTu5OrlI0hsr-LQzCwzNzJhDApRzw>
+    <xmx:UbQOZv4J3vWbq1plchMjr03X3AXp52mode6qC1AoUBQ-KR-_C5DuifsW>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 13AC2B6008D; Thu,  4 Apr 2024 10:08:16 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <171217494276.1598374.468010123854919775.stgit@ahduyck-xeon-server.home.arpa>
+Message-Id: <63909b0a-7d76-418d-a54c-1061bd3b6e11@app.fastmail.com>
+In-Reply-To: <20240329134917.579c3557@endymion.delvare>
+References: <20240326144741.3094687-1-arnd@kernel.org>
+ <20240326145140.3257163-4-arnd@kernel.org>
+ <20240329134917.579c3557@endymion.delvare>
+Date: Thu, 04 Apr 2024 16:07:55 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jean Delvare" <jdelvare@suse.de>, "Arnd Bergmann" <arnd@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@suse.de>, "Nicolas Schier" <nicolas@fjasle.eu>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 05/12] firmware: dmi-id: add a release callback function
+Content-Type: text/plain
 
-Hi Alexander,
+On Fri, Mar 29, 2024, at 13:49, Jean Delvare wrote:
+> On Tue, 26 Mar 2024 15:51:30 +0100, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> dmi_class uses kfree() as the .release function, but that now causes
+>> a warning with clang-16 as it violates control flow integrity (KCFI)
+>> rules:
+>> 
+>> drivers/firmware/dmi-id.c:174:17: error: cast from 'void (*)(const void *)' to 'void (*)(struct device *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>>   174 |         .dev_release = (void(*)(struct device *)) kfree,
+>> 
+>> Add an explicit function to call kfree() instead.
+>> 
+>> Fixes: 4f5c791a850e ("DMI-based module autoloading")
+>
+> Not sure if this fixes tag is really warranted. As I understand it,
+> your change only removes a warning but there was no actual bug, right?
 
-kernel test robot noticed the following build errors:
+As Nathan already commented, it's a real bug. I also add 'Fixes'
+tags for false-positives just to document what introduced a
+warning. The Fixes tag doesn't automatically mean something gets
+backported, though the stable maintainers often end up backporting
+warning fixes as well, and it helps identify which kernels
+need it.
 
-[auto build test ERROR on net-next/main]
+> Looks good to me, thanks for doing that.
+>
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+>
+> Will you get this upstream, or do you expect me to take it in my
+> dmi/for-next branch?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Duyck/PCI-Add-Meta-Platforms-vendor-ID/20240404-041319
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/171217494276.1598374.468010123854919775.stgit%40ahduyck-xeon-server.home.arpa
-patch subject: [net-next PATCH 09/15] eth: fbnic: implement Rx queue alloc/start/stop/free
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240404/202404041954.giczimoH-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240404/202404041954.giczimoH-lkp@intel.com/reproduce)
+It would help me if you can apply it to your tree directly.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404041954.giczimoH-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:4:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:4:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:4:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:5:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:1041:6: error: call to '__compiletime_assert_733' declared with 'error' attribute: FIELD_PREP: value too large for the field
-    1041 |             FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_TROOM_MASK, FBNIC_RX_TROOM);
-         |             ^
-   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
-     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^
-   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
-      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-         |                 ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
-     448 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:441:4: note: expanded from macro '__compiletime_assert'
-     441 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:54:1: note: expanded from here
-      54 | __compiletime_assert_733
-         | ^
-   17 warnings and 1 error generated.
-
-
-vim +1041 drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-
-  1030	
-  1031	static void fbnic_config_drop_mode_rcq(struct fbnic_napi_vector *nv,
-  1032					       struct fbnic_ring *rcq)
-  1033	{
-  1034		u32 drop_mode, rcq_ctl;
-  1035	
-  1036		drop_mode = FBNIC_QUEUE_RDE_CTL0_DROP_IMMEDIATE;
-  1037	
-  1038		/* Specify packet layout */
-  1039		rcq_ctl = FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_DROP_MODE_MASK, drop_mode) |
-  1040		    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_HROOM_MASK, FBNIC_RX_HROOM) |
-> 1041		    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_TROOM_MASK, FBNIC_RX_TROOM);
-  1042	
-  1043		fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
-  1044	}
-  1045	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     Arnd
