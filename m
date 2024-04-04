@@ -1,125 +1,69 @@
-Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50371292E5
-	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 14:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91F36129E8C
+	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 14:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712239701; cv=none; b=GuIL0W4SsjA6a7TNpXsEvfO6Ca0bGyESVzyNZpQ6XmEOOAVajzKrp7zEu/D4p7VQhflXUDAkWaxcUTqmKZS0eLNWynyF9efCYQLitIFLINzZ1VtR63ht1GYAz1HcxSdCIlu5PhwDS+zOGxCnXXSHUniXhLZ9Y7Uo5q5uYtZ+n28=
+	t=1712239958; cv=none; b=fBpJpQ75uneaPLBSjUGfthofKGp3tZDFHhhbS4cjd4aq3SnaKsETVKj7RYCr9xfh805dPjvvI4szQFc7tStZkBiyRP3B15wCsDrJiEIiyaRWIpKnelktnDG2bdyUVL9iGjrnqpGBsQHQfqW3mieUnpTNz/y7NXQEG4MJ6yl12rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712239701; c=relaxed/simple;
-	bh=1bjFWCvwY4ohIIq4OBpqdx2ADu0JX5LSALPQRIoYYZE=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=EXTr2xLywmFTa3RI5FLi7MKw2if3H/7S3hU4GsVNoSQAVhONzhaxKvWFqD2pSNrSjiQ5hZfDmr0r6unbK50t1zdAw99xaLG4GK07BmriVDPcHz29Q7XcICTXWXOj9PcwcIhzqe24EcQLAvcrKePG9htIQr2VpkejcF1n8M7TOFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TTi7DkXO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=uuYYX8pM; arc=none smtp.client-ip=64.147.123.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TTi7DkXO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uuYYX8pM"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id ACB071800184;
-	Thu,  4 Apr 2024 10:08:17 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 04 Apr 2024 10:08:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1712239697; x=1712326097; bh=N+EYyvLWA/
-	1764pidiha23yH25rL43NPhdGDRm3VFBo=; b=TTi7DkXO2JErQaJb0mScNFsUOv
-	Ss+oTwRiua3x1I+5B5mvMdi9nPtasukJWugr5CpHyYRxnOIvvKK121hd7Ck9H+SL
-	stQo5kyzsyTe+0idyL0ID/nrKDicBBPRail/37wobyKp41hO7LWjcsBlPTJ8wSxg
-	CgCRm3xTmEIjDmz7T7IZE7uO35smMcdGc8xc/Op2WSaWnZ6l2gSghydvEUIIyfEH
-	bltcRCGN3V2ubt/6BddGSZAfcIDA1+o3TyyRpbYB7KS1YDIXn4KTuA937rzuswLT
-	F4Wf04nmzuORreEv5hnxvDQ+3rCwvhyQ+trCk6m8vcTcq9KHfcFvDe6Zv5fw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712239697; x=1712326097; bh=N+EYyvLWA/1764pidiha23yH25rL
-	43NPhdGDRm3VFBo=; b=uuYYX8pMYU0SWFnQWsweQ28E0GRlxxYRT0voaidY4sqB
-	tqKLxhUoUvPoNh93u26rJTm5ZSFIVOKnZ3WevqhyE22onSEuGfQDLHa1t3A+4zdj
-	q4UT+LoQt8P4VVQhShqxkSNwfUO730DUBkTXQuxIrvPRoIOZBi+5iUD0jXsUhmr+
-	heJe81RODGAkiiejUEL4AANUlmqoCjF66QvVZH1PyotncNx9g0gwmMeN5u2Nf5QG
-	A6LzW3j0gnVkgXV/vObxTrJoBQuied3ViBJvD1aSWb8wJCEdEBIN5FV3RkgOI8px
-	Ne83yEPpk20VTa4sbkpLUViY01PP8Qd8Nyo6fb75IQ==
-X-ME-Sender: <xms:ULQOZpweIHBp5RM3Zs1jKtESHSb13qwmOhq6k53Xlr8WAefjyVRb8A>
-    <xme:ULQOZpRM82Cn1UJCo1aQN1H2jqBjG_LBdOXtwbwpE5w-wB07ZrF0LKtF-I3QyFqm7
-    auYsJIaHp8zcvfbxDo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudefkedgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ULQOZjXrNMawndcDSle5TXDxDz9-DnCfBIG8lMFt0Q78PYegzMwMow>
-    <xmx:ULQOZrgvmf_yree2eWcVvAynlZCxTGuL5dvMohqcL6TSMv66XdRdHw>
-    <xmx:ULQOZrBl_D5JIAzIEnwl6xkNXTmg96VsA5JrBdhChLvtV43-AEwMdA>
-    <xmx:ULQOZkII-nOeFzbgnGiSNJ1NROTu5OrlI0hsr-LQzCwzNzJhDApRzw>
-    <xmx:UbQOZv4J3vWbq1plchMjr03X3AXp52mode6qC1AoUBQ-KR-_C5DuifsW>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 13AC2B6008D; Thu,  4 Apr 2024 10:08:16 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
+	s=arc-20240116; t=1712239958; c=relaxed/simple;
+	bh=lORFwPl3NMSZOhW/0VatvvCkLT890zc2MdJM71SHOXk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=s5bMsHaoxjW112U512nSBVkIUVGu7SfgYG1Ma25aylImzD/T9bLETjKZVV8d6xmafs1lOnHNGCzlBeZuiC71bEDvw5JDwXhNkLr/z8q58HvKbGn7ED9NHPsDsvxr42l4mYVTDTi3n4vuTDNmDM/up6nZez0ZmXplcH4xmTIF1ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2806FEC;
+	Thu,  4 Apr 2024 07:13:05 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6B9633F64C;
+	Thu,  4 Apr 2024 07:12:33 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Cristian Marussi <cristian.marussi@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nikunj Kela <quic_nkela@quicinc.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] firmware: arm_scmi: Avoid non-constant printk format strings
+Date: Thu,  4 Apr 2024 15:12:21 +0100
+Message-ID: <171223989405.451881.1515372166025152395.b4-ty@arm.com>
+X-Mailer: git-send-email 2.43.2
+In-Reply-To: <20240403111040.3924658-1-arnd@kernel.org>
+References: <20240403111040.3924658-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <63909b0a-7d76-418d-a54c-1061bd3b6e11@app.fastmail.com>
-In-Reply-To: <20240329134917.579c3557@endymion.delvare>
-References: <20240326144741.3094687-1-arnd@kernel.org>
- <20240326145140.3257163-4-arnd@kernel.org>
- <20240329134917.579c3557@endymion.delvare>
-Date: Thu, 04 Apr 2024 16:07:55 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jean Delvare" <jdelvare@suse.de>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@suse.de>, "Nicolas Schier" <nicolas@fjasle.eu>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 05/12] firmware: dmi-id: add a release callback function
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 29, 2024, at 13:49, Jean Delvare wrote:
-> On Tue, 26 Mar 2024 15:51:30 +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> dmi_class uses kfree() as the .release function, but that now causes
->> a warning with clang-16 as it violates control flow integrity (KCFI)
->> rules:
->> 
->> drivers/firmware/dmi-id.c:174:17: error: cast from 'void (*)(const void *)' to 'void (*)(struct device *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->>   174 |         .dev_release = (void(*)(struct device *)) kfree,
->> 
->> Add an explicit function to call kfree() instead.
->> 
->> Fixes: 4f5c791a850e ("DMI-based module autoloading")
+On Wed, 03 Apr 2024 13:10:24 +0200, Arnd Bergmann wrote:
+> A recent rework changed the constant format strings to a local variable,
+> which causes warnings from clang when -Wformat-security is enabled:
 >
-> Not sure if this fixes tag is really warranted. As I understand it,
-> your change only removes a warning but there was no actual bug, right?
-
-As Nathan already commented, it's a real bug. I also add 'Fixes'
-tags for false-positives just to document what introduced a
-warning. The Fixes tag doesn't automatically mean something gets
-backported, though the stable maintainers often end up backporting
-warning fixes as well, and it helps identify which kernels
-need it.
-
-> Looks good to me, thanks for doing that.
+> drivers/firmware/arm_scmi/driver.c: In function 'scmi_probe':
+> drivers/firmware/arm_scmi/driver.c:2936:25: error: format not a string literal and no format arguments [-Werror=format-security]
+>  2936 |                         dev_err(dev, err_str);
+>       |                         ^~~~~~~
+> drivers/firmware/arm_scmi/driver.c:2993:9: error: format not a string literal and no format arguments [-Werror=format-security]
+>  2993 |         return dev_err_probe(dev, ret, err_str);
 >
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
->
-> Will you get this upstream, or do you expect me to take it in my
-> dmi/for-next branch?
+> [...]
 
-It would help me if you can apply it to your tree directly.
+Applied to sudeep.holla/linux (for-next/scmi/updates), thanks!
 
-     Arnd
+[1/1] firmware: arm_scmi: Avoid non-constant printk format strings
+      https://git.kernel.org/sudeep.holla/c/495667d49c50
+--
+Regards,
+Sudeep
+
