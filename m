@@ -1,65 +1,61 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C904F13AA4D
-	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 21:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E2213C3E3;
+	Thu,  4 Apr 2024 22:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712266049; cv=none; b=APh9NLG2o7NZlivHMwo5V8IY6bsXjUPc1TuYNgDXAL6PRqvYne9MA2EPLdTa1O3LwTcDp7p3Lf1FWKTIAmV1jWWXfMAwYk1OVKAaONeM4EL5DiEIc4X7GY33OBIeIZQlezUttwyf6gKgX9LJDpcsVshXCZEcZqIyn2SIC6/5qdI=
+	t=1712268619; cv=none; b=K50PMOFFY5GYhLmOC6R475pt04/FhDlSYszBKrd4HzStcWUnRJJInqvrAChEiAkYVefm2nhQmeTt1j8FDn2pcj+nUqMRpYzKYZJKJRcz+WnPVyqNZWhyGM+NAUPC5Qd4+OZtkz2lmLB9UStkbPVBM1DWkso3oK0FHrfNi+qr6OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712266049; c=relaxed/simple;
-	bh=zvuYWl21FSsrhHyfcnLt8fv7pQ1nEZE2mtTQ0ru0qJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q1h9EdMoeSc8T3nYeb3YhPpChDyKctb4tkSruTds3qj9RsiO1b0TpxUgeVGe8ARVC6RJnJK1JrAtaWhIXJ3Qgz/z8LSCKW+Wv+NAkUT1O34s05c3JzLQJQjUgrXRXaAYlOQpt8pQJ9FoIj8QQEiDEN09Z8PsJQFjzidBms8iIHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=evbi4RQK; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1712268619; c=relaxed/simple;
+	bh=x9YImRUgczdtN1gsBIQYqYrgwTtPDST/DQC6rlVvDGQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=h3CyGMnTVivuyGwoF5G4Bdc5uEM+/JsAeti4374LJRZ2f0KSOwBXvW8x+vigwLpNdnQNvKgKUtsFIcc4DM9OCKxed+4iRE9aVnOBnKsArtYopaY6aCQ4ev145u5GFj+X0N0Y8GEoxuoBwfXGsSoqyo84Gp51OA+ECPOzvR/bztY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NLe5sLrM; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="evbi4RQK"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e2987e9d06so13126525ad.2
-        for <llvm@lists.linux.dev>; Thu, 04 Apr 2024 14:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712266047; x=1712870847; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Y44qs4OUh5ul6NtjE+55E8vlpwqKRAnt03mDTkQinM=;
-        b=evbi4RQKUlZUlIdFLz4oG/XX9SbNsexOKbbEb0fEjEeOcFeLoLU/SXKt0luk0RtvSZ
-         F/tLd8ARC59M5yoLXCv9YImH+hIA1G1D85X/VIpaejcdO8daryJnmeRL4gLVKotVmq/M
-         JAK6DTgL35U6AVNnkvHMcn3yOJBr4FmovqrxM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712266047; x=1712870847;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Y44qs4OUh5ul6NtjE+55E8vlpwqKRAnt03mDTkQinM=;
-        b=rd1l68PLuR/gf/sja6CWbN+xenuhbFmhvOnGNRuBJ7ddR1IZ3FjX+nphe50iHIcCFb
-         IvbxPlK1p9dKNAwm8XOkFtZcYuKMlMNRxGt0w6m8qOB41getu977CGEMrD8nzI+pwqHC
-         WAz86X7WMvjggmivDQxyIGzbD9eU4OleuvUMQC8oFwtc+HRhnsPcjFH/+k8KcAS0Okkc
-         Ewy7VZJA0UDJPRlJmK4zcxlcNQ9LOr3ykDyY8rVPct/uAPo+s44TxG/FIxHtNHtK45S0
-         7o6e1htQ9293IJAGLScoJ9izcYwn/12ct0C0a73M4R4kBVXzNX3xCb88EAde3vYm/YtL
-         6ZJw==
-X-Forwarded-Encrypted: i=1; AJvYcCWxtNVT+bwDXftdFnQwQub0E17ipuTGtxMhAybI5041Nj61as8BUttsOcWzwJ+SolCdW1Yc5JpncbAILsvaoggz2dJTvA==
-X-Gm-Message-State: AOJu0YzgYaWmcc88Q4h5AY3sLRObCy118I5qtD46xGuhCVP/xkQgIxsW
-	TgW67msl1ZrSb3dcQ+e45PLXVhYMLOVzmWCpHIyL/mZMjBQL7rWOmkROtIk60w==
-X-Google-Smtp-Source: AGHT+IHi38RDnlKmYx0khv6mZQJ7Liv0SUQJ59Uq5gOOAeCsZSf0YQQlHiQV7NO8+/ZIFA1CRlITrQ==
-X-Received: by 2002:a17:902:c94a:b0:1e2:7c72:767 with SMTP id i10-20020a170902c94a00b001e27c720767mr3397197pla.30.1712266047076;
-        Thu, 04 Apr 2024 14:27:27 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b001dc01efaec2sm81777pln.168.2024.04.04.14.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 14:27:26 -0700 (PDT)
-Date: Thu, 4 Apr 2024 14:27:25 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Russell King <linux@armlinux.org.uk>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/8] CFI for ARM32 using LLVM
-Message-ID: <202404041427.E2A40D1@keescook>
-References: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NLe5sLrM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712268617; x=1743804617;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=x9YImRUgczdtN1gsBIQYqYrgwTtPDST/DQC6rlVvDGQ=;
+  b=NLe5sLrMLb5lnVh2lMrqbcIy7AaQ/tEtoROS2xd4ftqOoz4TAOn3eKgE
+   64bH+WuqjOFze9IzDJ4ff4W0Z4xbExFDaO5SDlP+MQN5dGllopqnTwwIF
+   f+seSutTycly2xRcalLySUXR3IG8C/o1FsWaat8J1OvpwdeuUC8eISbTG
+   vFwuDi+weOnBfJ2p8V1V0YrvdwuXQ2d1XIIZBvRQDsNoMWnESMFQhzHQ3
+   nOs/wLCWjM42K8QEpWgECOvMEOIbldSfHlyGjQ0Gg6XBCJY8OdClCTjv0
+   kZDmbL8l+8uB9AQIDPI+eqGI+acbtkz2kOrs5Wi+ozTuzGk7KwrPlNSwW
+   Q==;
+X-CSE-ConnectionGUID: Xu4DtRJCRtOJ7J/7zaj9Cg==
+X-CSE-MsgGUID: GXy7MANhQPeoJh15fq/O4w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="7713985"
+X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
+   d="scan'208";a="7713985"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 15:10:14 -0700
+X-CSE-ConnectionGUID: 7hZJWJJSQ4aA4bJTIGc0+g==
+X-CSE-MsgGUID: 8mp0uYzwSmSJ4iWpIDTDGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
+   d="scan'208";a="18829573"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 04 Apr 2024 15:10:14 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rsVHe-0001ZF-2T;
+	Thu, 04 Apr 2024 22:10:10 +0000
+Date: Fri, 5 Apr 2024 06:09:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org,
+	Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [trondmy-nfs:testing 31/31] fs/nfs/inode.c:2434:6: warning:
+ incompatible pointer to integer conversion assigning to 'int' from 'struct
+ proc_dir_entry *'
+Message-ID: <202404050613.KnVPG1fF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,77 +64,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
 
-On Thu, Mar 28, 2024 at 09:19:23AM +0100, Linus Walleij wrote:
-> This is a first patch set to support CLANG CFI (Control Flow
-> Integrity) on ARM32.
-> 
-> For information about what CFI is, see:
-> https://clang.llvm.org/docs/ControlFlowIntegrity.html
-> 
-> For the kernel KCFI flavor, see:
-> https://lwn.net/Articles/898040/
-> 
-> The base changes required to bring up KCFI on ARM32 was mostly
-> related to the use of custom vtables in the kernel, combined
-> with defines to call into these vtable members directly from
-> sites where they are used.
-> 
-> We annotate all assembly calls that are called directly from
-> C with SYM_TYPED_FUNC_START()/SYM_FUNC_END() so it is easy
-> to see while reading the assembly that these functions are
-> called from C and can have CFI prototype information prefixed
-> to them.
-> 
-> As protype prefix information is just some random bytes, it is
-> not possible to "fall through" into an assembly function that
-> is tagged with SYM_TYPED_FUNC_START(): there will be some
-> binary noise in front of the function so this design pattern
-> needs to be explicitly avoided at each site where it occurred.
-> 
-> The approach to binding the calls to C is two-fold:
-> 
-> - Either convert the affected vtable struct to C and provide
->   per-CPU prototypes for all the calls (done for TLB, cache)
->   or:
-> 
-> - Provide prototypes in a special files just for CFI and tag
->   all these functions addressable.
-> 
-> The permissive mode handles the new breakpoint type (0x03) that
-> LLVM CLANG is emitting.
-> 
-> To runtime-test the patches:
-> - Enable CONFIG_LKDTM
-> - echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
-> 
-> The patch set has been booted to userspace on the following
-> test platforms:
-> 
-> - Arm Versatile (QEMU)
-> - Arm Versatile Express (QEMU)
-> - multi_v7 booted on Versatile Express (QEMU)
-> - Footbridge Netwinder (SA110 ARMv4)
-> - Ux500 (ARMv7 SMP)
-> - Gemini (FA526)
-> 
-> I am not saying there will not be corner cases that we need
-> to fix in addition to this, but it is enough to get started.
-> Looking at what was fixed for arm64 I am a bit weary that
-> e.g. BPF might need something to trampoline properly.
-> 
-> But hopefullt people can get to testing it and help me fix
-> remaining issues before the final version, or we can fix it
-> in-tree.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+tree:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git testing
+head:   f290a586e31f8965387dde660729c716a3af9b6c
+commit: f290a586e31f8965387dde660729c716a3af9b6c [31/31] nfs: Handle error of rpc_proc_register() in nfs_net_init().
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240405/202404050613.KnVPG1fF-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240405/202404050613.KnVPG1fF-lkp@intel.com/reproduce)
 
-For the series:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404050613.KnVPG1fF-lkp@intel.com/
 
-Tested-by: Kees Cook <keescook@chromium.org>
+All warnings (new ones prefixed by >>):
 
-Thanks for making this work!
+>> fs/nfs/inode.c:2434:6: warning: incompatible pointer to integer conversion assigning to 'int' from 'struct proc_dir_entry *' [-Wint-conversion]
+           err = rpc_proc_register(net, &nn->rpcstats);
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +2434 fs/nfs/inode.c
+
+  2426	
+  2427	static int nfs_net_init(struct net *net)
+  2428	{
+  2429		struct nfs_net *nn = net_generic(net, nfs_net_id);
+  2430		int err;
+  2431	
+  2432		nfs_clients_init(net);
+  2433	
+> 2434		err = rpc_proc_register(net, &nn->rpcstats);
+  2435		if (err) {
+  2436			nfs_clients_exit(net);
+  2437			return err;
+  2438		}
+  2439	
+  2440		return nfs_fs_proc_net_init(net);
+  2441	}
+  2442	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
