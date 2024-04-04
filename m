@@ -1,99 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D6E823D0;
-	Thu,  4 Apr 2024 14:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832911643A
+	for <llvm@lists.linux.dev>; Thu,  4 Apr 2024 14:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712240238; cv=none; b=Mfv/k9LBl55fzvzUVE8+hXvUbTGiCxovYINQfEqKDliPFMq+WXMA/eYJlYPMFiOGy+jbIkvuZLa5HH/OHh6OHC4r/hy2odnMeY22C9tH52nDC6K9WL7yk2l1d/Ukp9aGGeJT+n3fNHKaoJ5zoAo1eVI0wuQXnXmNMYx8eL+dNeI=
+	t=1712241233; cv=none; b=L5C00iozZHhFkT/sbmMfVVQrdNihXLHopfYQJQXFsuhpa5Vr6z695SFj5KqXsqqVTOg+kmNCsGDxOfu2UAH0n3rzOLEkWT/PC/D0Ny7xyhnvgBArAjKYhQUqp/WP+I5hUPh9Vgu+G7vD1QYuTjBx2Pnxloc2U6pfJwNBl5js7Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712240238; c=relaxed/simple;
-	bh=fCiV5G+P7hLxL4/i+fatn5exEfxvCbsdD/tZJnnspDM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rha/GG3c5Da7TgCqIw+gTdfDskCI+RR59mm+oqKHqS+ULP3YN7AdV7Ra+XgzqE0NbTsVhqa7j+ib7uTN8w+jB8ZZCxjVdgVhVPSAFZBUB2qToK7mGDIF6FHKj5GGNGq18dBaQgREvLm4e1jzPb+vaum+1M+XVqwqDTA3CTx8IbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tctwqk93; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712241233; c=relaxed/simple;
+	bh=jpF7tTa5Sd3tDtJxZDaT9Swi8PyGNUK+y0VMQ7cXB4o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PwmMJC81yJEXc3EE5Ft69wU/v1npaeWQNv14lc83bfj2q907UtptFuEGl4DqNtGQM4U6SXSmRtubAp1miOpc7cDGo06CXKo0c9fKFQUmEkW6ssQiiLKDfBZx0ZJWWUX+vvB6xbEYEQBcg5AbDdudE20jscu8ra9BN7M4uLaltd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cONwlH6A; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tctwqk93"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA1B4C43390;
-	Thu,  4 Apr 2024 14:17:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712240237;
-	bh=fCiV5G+P7hLxL4/i+fatn5exEfxvCbsdD/tZJnnspDM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Tctwqk93E2w4iLsFrEADOfQFuky5b4wNMuH6FA88PWnTMge2gd9Hb9e396USZ965X
-	 X/JhrcRRgI/hyNaxrYA09P4GxYq9t47w868GKYGKvaniHLwu1zKEAxTpKaDGH7nxSf
-	 4W8KuZfZkJkqDOJFMU1VdzBKY4pn4H7sVRNSvr12C+/Fa0YIIikqPxf1h2qBXYD4Y5
-	 WdLs9hr5Oq3lVO8TRXPTLgSXdunvgNpBkHQ3I7iL4lmRbVcSNcSkonFwkNyhmYFnGT
-	 YV8WYH87o7DqMAdJVbzimEHAEU/Ma+NaEH5xRmk8N7gl5Sa4vjwGmdii7BFYbAjZt0
-	 7yFjs9n5jPC4g==
-From: Conor Dooley <conor@kernel.org>
-To: linux-riscv@lists.infradead.org
-Cc: conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	stable@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev
-Subject: [PATCH v3] rust: make mutually exclusive with CFI_CLANG
-Date: Thu,  4 Apr 2024 15:17:02 +0100
-Message-ID: <20240404-providing-emporium-e652e359c711@spud>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cONwlH6A"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5dc949f998fso804072a12.3
+        for <llvm@lists.linux.dev>; Thu, 04 Apr 2024 07:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712241230; x=1712846030; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jpF7tTa5Sd3tDtJxZDaT9Swi8PyGNUK+y0VMQ7cXB4o=;
+        b=cONwlH6Ax9hOG5L4jfbD5fwgfrgZ7xq08xPK4B4Zu3hGkfdsaEokDBtN/poNDziVz2
+         IILsLmfonl5NWu1gjANB8zTHsyuCB42l/amaX6qZ7D+AHUxXMqFAzEHBc8q3ktNC8xIH
+         jRiRS6hpDjrgxiiG4LXIah22UzTau6jcrb4kTfW6NCQmur0krWHPMlvxH81HfHKDx0xA
+         X4+KDI1MepeVZ274EvmNUBQPg6J5leugbG4kdRh2z/MWoc5K2YmFw/M41ehdqVH1J6Bs
+         fJkRW6ztD2Kd0rULY6SwM7R0JrcEWxs13nDRAn+VKQeSR3yhIrrOwsKjHk/usnQg4SR+
+         C1aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712241230; x=1712846030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jpF7tTa5Sd3tDtJxZDaT9Swi8PyGNUK+y0VMQ7cXB4o=;
+        b=Dg4+s1dC3B72k3wxB402nzMW7WqRO4Q8VEQnEirt+doCGzdG0OVCRKonHjOPt+6E99
+         vMiNPgS/V681F3R9HjVB9y2sZsWzRKk/NSkcs6gcvcwP70zWgkDet2IMw7FvkmSvS+v/
+         BYIbzXLtLgSeydHxlmlwIH58c7CEWfBHeFagXJVEfnKKkArGz7yYuVK563OyDZeHtWyF
+         LNJHWR1utdpyxuWYGGCkYiby78jvl1Tg6Y1HOVHw8Ys54vcpUXODzL1s+xNHZxQjKh2t
+         /x8Z1kbQ6alZgXIMYgvI0o7QS0lMzOcs3Cph2sNKx+UKMZpVuPqp8SBeOq2Ey05JfjMd
+         TtDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXX+dbjxE8HcsXRGtY5xuCz9g60NdHeo8eDgTGmseL7o6JXhBf5SdQrGZoeaVNV1vvk94N2M9SEa6Zxs9CQ7ClUCBtJA==
+X-Gm-Message-State: AOJu0YzWb0l69qW5K1b/ISb2gg3/caLIlJxXnYnxFSeLX4IEntcAt11l
+	PkRb732wtAqts45hASWHqJX1kzLpX4utL5cD7KtL/4tmGqDUzd8ug2sQIC/rUwRGZ2qEVzmLUex
+	H9r2LVr05AikbWvDr2yvQSnhmXn8=
+X-Google-Smtp-Source: AGHT+IG20eNpSzNkxnsgTkafpuA97Ew4OmO4JnqBaV5mNVNvOzgcdHEwHOPWG79O1UTpYlFkEm87j6CqNJkr6GVC/L4=
+X-Received: by 2002:a17:90b:f18:b0:29d:dd93:5865 with SMTP id
+ br24-20020a17090b0f1800b0029ddd935865mr2399668pjb.46.1712241230437; Thu, 04
+ Apr 2024 07:33:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1428; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=3u+yX39PQ8dR4zv/dMqW8YPDJelB+vvZV3YqW2204hQ=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDGl822LTjwUwHJoqN+fKFFm3BycEP1hoNrKwX41vS5S+1 bXxXr5bRykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACZiwMHwP7PP/eEiv1sfLKq0 V2q68F9UjXt3suRX0LdHRVEsSySmaDAynC5ZcfReOgfPsxPyDuYKEUVMiYz8wtM8kp7O8fjXWGT FBAA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
+References: <20240404-providing-emporium-e652e359c711@spud>
+In-Reply-To: <20240404-providing-emporium-e652e359c711@spud>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 4 Apr 2024 16:33:08 +0200
+Message-ID: <CANiq72m9YAu=dr1=WMSHOqfpszj4S6OkMEQ05vqbv_zKO5pOsg@mail.gmail.com>
+Subject: Re: [PATCH v3] rust: make mutually exclusive with CFI_CLANG
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-riscv@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>, 
+	stable@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+	Matthew Maurer <mmaurer@google.com>, Ramon de C Valle <rcvalle@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Apr 4, 2024 at 4:17=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
+e:
+>
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> On RISC-V and arm64, and presumably x86, if CFI_CLANG is enabled,
+> loading a rust module will trigger a kernel panic. Support for
+> sanitisers, including kcfi (CFI_CLANG), is in the works, but for now
+> they're nightly-only options in rustc. Make RUST depend on !CFI_CLANG
+> to prevent configuring a kernel without symmetrical support for kfi.
+>
+> Fixes: 2f7ab1267dc9 ("Kbuild: add Rust support")
+> cc: stable@vger.kernel.org
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Sending this one on its own, there's no explicit dep on this for the
+> riscv enabling patch, v3 to continue the numbering from there. Nothing
+> has changed since v2.
+>
+> CC: Miguel Ojeda <ojeda@kernel.org>
+> CC: Alex Gaynor <alex.gaynor@gmail.com>
+> CC: Wedson Almeida Filho <wedsonaf@gmail.com>
+> CC: linux-kernel@vger.kernel.org (open list)
+> CC: rust-for-linux@vger.kernel.org
+> CC: Sami Tolvanen <samitolvanen@google.com>
+> CC: Kees Cook <keescook@chromium.org>
+> CC: Nathan Chancellor <nathan@kernel.org>
+> CC: llvm@lists.linux.dev
 
-On RISC-V and arm64, and presumably x86, if CFI_CLANG is enabled,
-loading a rust module will trigger a kernel panic. Support for
-sanitisers, including kcfi (CFI_CLANG), is in the works, but for now
-they're nightly-only options in rustc. Make RUST depend on !CFI_CLANG
-to prevent configuring a kernel without symmetrical support for kfi.
+Cc'ing Matthew & Ramon as well so that they are aware and in case they
+want to comment.
 
-Fixes: 2f7ab1267dc9 ("Kbuild: add Rust support")
-cc: stable@vger.kernel.org
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Sending this one on its own, there's no explicit dep on this for the
-riscv enabling patch, v3 to continue the numbering from there. Nothing
-has changed since v2.
-
-CC: Miguel Ojeda <ojeda@kernel.org>
-CC: Alex Gaynor <alex.gaynor@gmail.com>
-CC: Wedson Almeida Filho <wedsonaf@gmail.com>
-CC: linux-kernel@vger.kernel.org (open list)
-CC: rust-for-linux@vger.kernel.org
-CC: Sami Tolvanen <samitolvanen@google.com>
-CC: Kees Cook <keescook@chromium.org>
-CC: Nathan Chancellor <nathan@kernel.org>
-CC: llvm@lists.linux.dev
----
- init/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index aa02aec6aa7d..ad9a2da27dc9 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1899,6 +1899,7 @@ config RUST
- 	bool "Rust support"
- 	depends on HAVE_RUST
- 	depends on RUST_IS_AVAILABLE
-+	depends on !CFI_CLANG
- 	depends on !MODVERSIONS
- 	depends on !GCC_PLUGINS
- 	depends on !RANDSTRUCT
--- 
-2.43.0
-
+Cheers,
+Miguel
