@@ -1,111 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA93C1292EE;
-	Thu,  4 Apr 2024 15:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1312224DE;
+	Thu,  4 Apr 2024 15:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712244781; cv=none; b=Ap1X0x0yW7X8vUxpvUpPFI5SX/oFwheKh1BRjk/8SOrov4vcKsrfuLWmdN1LGsek8AVy7WybS8Zs+pQB7wQf8u0Uc0WeFGB+lAliMz4WBJ5se+pR6XWYz8LCbyUIVLPbwMzzghIRj1voJ6xFMXhCP/Zf2y7TXs2vOzwm6Mp+QMQ=
+	t=1712246112; cv=none; b=uQf1v/I5MWWIDPO5YurNpZvUN6lUa7Wa2zsSnwkdG21xBqclXMZpydkHgGvpVgWY4wLNGpNran1oW2g0ZO0+Cpw8HsUqj4XRgOhwCoSAIpwt8YmRR+QWTf2ElNdZPVp97Vr+D0atq+2f64gMOpLK9bpGVSgT9uiED069bviMvGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712244781; c=relaxed/simple;
-	bh=+ihKIoYDSDX/L3rUTACaGuGGhf6TLUZ/+4aywDsnmIM=;
+	s=arc-20240116; t=1712246112; c=relaxed/simple;
+	bh=QCZhhAi2IfI/C1X4OG5OteKxlexOeyNRa+UFstr4Z1Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UEt5xSpdYo0uctKDX1QyToz6xN01HMRwwuwzURpBDcd3VELKQzzpo7gRiAql9aFF8mFNv7JzBZkpms7RATLwSjS36yQ2dRDH8f+6QEi/kTOtAts+YpzNgv2wLYliqdBCuFvEHRJ2qJL0Dv0bR23r6L+ZP43rrDto7pXeJg5Qehw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PQLRQoQ8; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=JyX61uykcNBYRjngxfDbghZzza0TVjtNABPAWNyDehNaztPP4VJUBIBgi4samT6JvThtQoMArBi0zLOMN5MtOJA1LSx47ar0xA+xyhVGM+iwYUV0XfjpCBwPDdKXkL3nS+2bfg9+JCdPaNaUt3GkT1b0JKtU+iFsdqkLTq9aThk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8G5JjnF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQLRQoQ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96471C433F1;
-	Thu,  4 Apr 2024 15:33:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8G5JjnF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D92DC433F1;
+	Thu,  4 Apr 2024 15:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712244781;
-	bh=+ihKIoYDSDX/L3rUTACaGuGGhf6TLUZ/+4aywDsnmIM=;
+	s=k20201202; t=1712246111;
+	bh=QCZhhAi2IfI/C1X4OG5OteKxlexOeyNRa+UFstr4Z1Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PQLRQoQ8m3JLC2Td7LqTr9Gyx8iw2LqCI4y/rdO3jtZZbS+Jx+i1K/p9KSnZBmeME
-	 +c29ns5saD6bgCr/l+2SX/f4nFyiiSIxm/5E9rcRe8PW0ZE7NZpGIwjxhx5E89VL15
-	 82t9Vd7JFQgbffAMgIwa0aZMPBP883Z6LDkVPEtCDYG8PJHV9dhQXrPGeZxtYv/B+S
-	 TdPsbPup6lVeq9b/AlKD3BSDhXEVHVqOEnkLN8LdjH60jD/0MagUPdIpfuABSjbPKn
-	 Ca++IKiyI5MdVDhXG+zD+xnTEBgDZk67+RLYMxMdw2G32RjOdiVttZUzTgVOGqjsQP
-	 tS4iFvBCBEjKg==
-Date: Thu, 4 Apr 2024 08:32:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-riscv@lists.infradead.org,
+	b=j8G5JjnFYhpyVd72/vt+yRhHZsfCsxia00x2zFU1pfRCqMt4j3zxPLko4lL+6iIdN
+	 CRHrX26+60Jam3GIxjzzr79h8wGLgLsH+WON+CUZ7nRl7P3vC7U+n8Twmy3h0zie6B
+	 e9npyR2HcW7Ip06hHliSt9JUqCVGUNrisOrUHi3Y4yRov3BTHa6fGM3TqhoJ0esdSX
+	 5bW0LsQt2IbsZ+9r4naRbvOohbSxR2XUJBjmPzZ4jcjbh9L7AkPTt8/2lroWXyfPc4
+	 CdLXJv75z2r3azPbxbE7G34ErS4zKLkaG5eZSac3JJn5fLvD/ZlQRm5vxTSCUfIDap
+	 Gv13d+AGP2Wwg==
+Date: Thu, 4 Apr 2024 16:55:05 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	linux-riscv@lists.infradead.org,
 	Conor Dooley <conor.dooley@microchip.com>, stable@vger.kernel.org,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
 	Wedson Almeida Filho <wedsonaf@gmail.com>,
 	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+	Ramon de C Valle <rcvalle@google.com>
 Subject: Re: [PATCH v3] rust: make mutually exclusive with CFI_CLANG
-Message-ID: <20240404153258.GA852748@dev-arch.thelio-3990X>
+Message-ID: <20240404-valid-sixtieth-9b8fa0f3ad7e@spud>
 References: <20240404-providing-emporium-e652e359c711@spud>
+ <CANiq72m9YAu=dr1=WMSHOqfpszj4S6OkMEQ05vqbv_zKO5pOsg@mail.gmail.com>
+ <CAGSQo024u1gHJgzsO38Xg3c4or+JupoPABQx_+0BLEpPg0cOEA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ywt68H1Qj7pbb+ly"
+Content-Disposition: inline
+In-Reply-To: <CAGSQo024u1gHJgzsO38Xg3c4or+JupoPABQx_+0BLEpPg0cOEA@mail.gmail.com>
+
+
+--ywt68H1Qj7pbb+ly
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240404-providing-emporium-e652e359c711@spud>
 
-On Thu, Apr 04, 2024 at 03:17:02PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> On RISC-V and arm64, and presumably x86, if CFI_CLANG is enabled,
-> loading a rust module will trigger a kernel panic. Support for
-> sanitisers, including kcfi (CFI_CLANG), is in the works, but for now
-> they're nightly-only options in rustc. Make RUST depend on !CFI_CLANG
-> to prevent configuring a kernel without symmetrical support for kfi.
-> 
-> Fixes: 2f7ab1267dc9 ("Kbuild: add Rust support")
-> cc: stable@vger.kernel.org
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Apr 04, 2024 at 08:25:11AM -0700, Matthew Maurer wrote:
+> >
+> > Cc'ing Matthew & Ramon as well so that they are aware and in case they
+> > want to comment.
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+Ah crap, I knew I forgot to CC someone from the last conversation,
+thanks Miguel.
 
-It seems like this won't be forgotten about but if there is not already
-an issue open for this somewhere, it would be good to have one, since we
-obviously want this for both C and Rust code.
+> This patch is fine by me - the last patch needed for KCFI to be
+> functional in Rust just landed upstream last night, so we should
+> revisit this (in the form of enabling it) once we move to
+> `rustc-1.79.0` or later.
 
-As a general meta comment not directed at anyone in particualr, I think
-these 'depends on !' should all have some sort of comment or description
-as to why they are disabled. I can infer from most of them but it would
-still be good to be explicit, especially since someone might want to
-work on fixing the ones that are due to missing support and such.
+That's great news, thanks for working on it :)
 
-> ---
-> Sending this one on its own, there's no explicit dep on this for the
-> riscv enabling patch, v3 to continue the numbering from there. Nothing
-> has changed since v2.
-> 
-> CC: Miguel Ojeda <ojeda@kernel.org>
-> CC: Alex Gaynor <alex.gaynor@gmail.com>
-> CC: Wedson Almeida Filho <wedsonaf@gmail.com>
-> CC: linux-kernel@vger.kernel.org (open list)
-> CC: rust-for-linux@vger.kernel.org
-> CC: Sami Tolvanen <samitolvanen@google.com>
-> CC: Kees Cook <keescook@chromium.org>
-> CC: Nathan Chancellor <nathan@kernel.org>
-> CC: llvm@lists.linux.dev
-> ---
->  init/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/init/Kconfig b/init/Kconfig
-> index aa02aec6aa7d..ad9a2da27dc9 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1899,6 +1899,7 @@ config RUST
->  	bool "Rust support"
->  	depends on HAVE_RUST
->  	depends on RUST_IS_AVAILABLE
-> +	depends on !CFI_CLANG
->  	depends on !MODVERSIONS
->  	depends on !GCC_PLUGINS
->  	depends on !RANDSTRUCT
-> -- 
-> 2.43.0
-> 
-> 
+--ywt68H1Qj7pbb+ly
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZg7NWQAKCRB4tDGHoIJi
+0q8YAQD58we+6Ow/LjNjeDbYjbV+gc/42O61F+M6UlffcXE9MAD/fGp5kccAaKmb
+/RxEeaa3gQh5m7NgNUiwxZS1/cHnnQY=
+=jQb5
+-----END PGP SIGNATURE-----
+
+--ywt68H1Qj7pbb+ly--
