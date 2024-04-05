@@ -1,135 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E51F16C858
-	for <llvm@lists.linux.dev>; Fri,  5 Apr 2024 16:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA3716C858
+	for <llvm@lists.linux.dev>; Fri,  5 Apr 2024 17:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712335085; cv=none; b=hvN9eynRjkKZwfSoRzRSHl863oGjiQXlrJ8hiNwAVUDzjbRam3Asc0wvKgp1VqByA5ek+HvzgkZZyWmQEds4gDm9dJPC6Ti+HeGD3PprBLpFrAhLFzHQBXyl8vki1mJhHK1U3aW5qFysrd0xk9jUNzZ7+JMagPj8/PD1UrhJeng=
+	t=1712337234; cv=none; b=DE+JH0MuxiLF3oas8cwqur4jqoTb+c/CCgQHh6XNhEivdx7TgJEnXdt3DDSzVabakqUGJdtsHPRTri99iANi8RylkvMctVHJfA0yFHEdac1wjOOWSXlzyxmKkVHeKmX7S1grgskKSf5sJbeuvtyAY2L2aeWmGRZ3hvuikyE4foo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712335085; c=relaxed/simple;
-	bh=BLotXCHXqHDC9O4AKiHbeR7Z5NsPPN4ypYaPcCf605E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KyL/2FoBBz1F/Chk/HT2b8drsbeghbVihVXc5yr05sagEACiKh7TvkIhF2/vRwYWPUgcQeieF3PYAoc7uI0qo8I279MhJy58NMoF8A2R0FhIaSeEyuWudNfkOllygBJkj0vZvCu1wW82r7OscXmDqcvrP+bW1qiePXooE8T7yZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NKNsYItO; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1712337234; c=relaxed/simple;
+	bh=lPpM0wT4yWeklYwKPrb4XynteXC/5k41kP/uRm4NnA0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tHDnkPlGDgT4TdXmj37mwp2qwJU5n0a7Sjm7jHAxWxx61LbG6/wN7cDVTFfcgFfVN0fuuNB7LwGBCXJzum+/g+WRjxZlGxzZQfaC4cZ9NDltomTLjkN92reuxjmJC20c4LjHcfqNIpkTKsW5kEeRADuaERgNdpWSTukhWQQwglg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C3KuxGcD; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NKNsYItO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C3KuxGcD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712335082;
+	s=mimecast20190719; t=1712337232;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fkF4QSWzhf6Nw/44NW74bQyP4bUB/6PnvqawpC9bEv4=;
-	b=NKNsYItOuCy+lMvw2UcnqA5wEEMp0zo/QT4Llw7N5Rx8d8t5wODaoAaCZf3C/wmxFhDF+V
-	AofiYIkPITIaePY18DdQef4AGy5aDC+dV/g902gVN4qMsS3U5JmHJDYwnA5yqng8xyf6WE
-	B55HhmKqOapOZmO8bt6vpM/4tl0tPPU=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=lPpM0wT4yWeklYwKPrb4XynteXC/5k41kP/uRm4NnA0=;
+	b=C3KuxGcDk8a/F2LtBBiz0Hd0oqcwc/5AFL3d3D0o9wwz67u5xXrd/mLwxFmnwi9N+CH44S
+	RGdsRBZEgPg5eo8BuW06z3dXjOqh5r3HdKX7GaP69/n5EsRS4GXYwEmH2xAAl1gKaCv61K
+	rMYVRM1dkeR7/ubX3/cvnMyIZYlefI8=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-121-_KrdAL0dPNq_AblegV13ng-1; Fri, 05 Apr 2024 12:38:00 -0400
-X-MC-Unique: _KrdAL0dPNq_AblegV13ng-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-343d1d16d9fso778066f8f.1
-        for <llvm@lists.linux.dev>; Fri, 05 Apr 2024 09:38:00 -0700 (PDT)
+ us-mta-376-KJU19PyyNUqariHEs34Trw-1; Fri, 05 Apr 2024 13:13:49 -0400
+X-MC-Unique: KJU19PyyNUqariHEs34Trw-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2d871ee2f2cso560711fa.0
+        for <llvm@lists.linux.dev>; Fri, 05 Apr 2024 10:13:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712335079; x=1712939879;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fkF4QSWzhf6Nw/44NW74bQyP4bUB/6PnvqawpC9bEv4=;
-        b=tcEfO8zVU3cZqgjQ+LwFfWDA6se9esENpOICsIkLAUY6/mB+l+p0CKy+EDi4nrnNn1
-         DL93GHviilSnIWDx6jyGoPmz4o+gIDdm6npR6ZPFH6oSGcUvICoMpOLVFwPhkEQ02qLw
-         FsLBWrp7R7eSnQJ/9oLeLGX3J+o27edX93kxXL2/AHepGwjDeSg43K746DsS8pp83yKx
-         /ZLX1fSatrg7lxLpAK3uTRJJw4GWBu61CIc61e/+lTBTTXFf51v/7gKZmfZknZQVhwIp
-         eC1VSLR+kfQUNjNEgk96FC3Gdgft+5Cgcfk1FFxEbvo/kBXA8hRAa5Ck1Q+uFYZVVHLK
-         K87w==
-X-Forwarded-Encrypted: i=1; AJvYcCVeAdWdqnIqQQe/y7lqjXEeTgaKIOE/0rGLkaF4jz7lcIj94nRTLfsDX2L+gSDn62Tqh10+fw8sOgpCvUnft0hao3YS6g==
-X-Gm-Message-State: AOJu0YzeC87BH0BBb4Dsd1QTFMYM2Nr6pZYkl1ZVOhb8yaQKBeHyaiNk
-	Ust3p45ervqcfMhBnn4seQREZtlMEnqR5pHOO44/h4OMlm/T67kMeRQRN93/zuRYyN2crJFHIUL
-	WHTkxkUnndncPcT4XOI2h3FEtZvdiKbuT6eZp2jwdn5xum6HiBP4=
-X-Received: by 2002:adf:e849:0:b0:343:e031:69b8 with SMTP id d9-20020adfe849000000b00343e03169b8mr1687194wrn.41.1712335079583;
-        Fri, 05 Apr 2024 09:37:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHZ46bQriV6ycJFTO0VuNynMncgm9/Re4exnqTKKZrOf8MmqZKAujsFuh4iSK3zn2MXU1fy4Q==
-X-Received: by 2002:adf:e849:0:b0:343:e031:69b8 with SMTP id d9-20020adfe849000000b00343e03169b8mr1687176wrn.41.1712335079306;
-        Fri, 05 Apr 2024 09:37:59 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:ee94:abf:b8ff:feee:998b? ([2a02:810d:4b3f:ee94:abf:b8ff:feee:998b])
-        by smtp.gmail.com with ESMTPSA id q8-20020adfea08000000b00341c6440c36sm2409149wrm.74.2024.04.05.09.37.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Apr 2024 09:37:58 -0700 (PDT)
-Message-ID: <cefb67c2-f5f5-4b54-8ed6-a9cab3718ff5@redhat.com>
-Date: Fri, 5 Apr 2024 18:37:57 +0200
+        d=1e100.net; s=20230601; t=1712337228; x=1712942028;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lPpM0wT4yWeklYwKPrb4XynteXC/5k41kP/uRm4NnA0=;
+        b=N7HOvID84/k93FRLNb0WI6OD6bAb0p3ERWLoQJcxmC0QGZgaS+ikND0/8Av/7dEKrd
+         qoLSbNoQ4Gp9uuIZ2Ahw6r545RKUDgJdqWbH7ZMhsC9UyjW7d5pHANKQ5+QqWZDCWbH1
+         Aa72njANZJUPSd7IfDYwiWnhpvTIRDzXZsSBxM+uG44chxAfXO+U8nf7m5zyoc7EoCeV
+         iSFF1QzeWAkluvUlPKdTTK6M2caaxgjefuwRHstmwRVzimiZYm/bxletz8J3APn37JjZ
+         cs5A+dMTnTnjArFxtYwcn6egrCyjxwNGLdqjullEsoVCNYgoKGY9xNprUiDzPAlMpivH
+         qp2w==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ9Pm73YZ67mma8I9kpLlMWLAk1y6BIkWmObSNzYPCA33MXB9N9yXxUBPEnvTHYEjTVDHF8CjvEY0wWSqo+M/MA/6Png==
+X-Gm-Message-State: AOJu0YwRsTnQeU1oxwj2MlmA1IFHjbCztEugiI1dSfQQF/4TmUEXcXsO
+	n3obBYqqbjPienq+6g44IBqWOuuNr3q3o47+FDwmOn969Zd26ww/lD3su+B0SkvmR+R4Vw+B0iE
+	Fzj8F06mSfPdG7VLNFW94MgFaDrFYANEXpE7uPiUyHfM1vwF/xR4=
+X-Received: by 2002:a2e:8095:0:b0:2d6:c59e:37bd with SMTP id i21-20020a2e8095000000b002d6c59e37bdmr1535960ljg.3.1712337228331;
+        Fri, 05 Apr 2024 10:13:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE7mr/0zQsW+7ufXN8Cy1V8GjLrwfuTgftu9UYTsupPGSbHO+hK+Reby8puICIcwXAsNILmAA==
+X-Received: by 2002:a2e:8095:0:b0:2d6:c59e:37bd with SMTP id i21-20020a2e8095000000b002d6c59e37bdmr1535935ljg.3.1712337227885;
+        Fri, 05 Apr 2024 10:13:47 -0700 (PDT)
+Received: from pstanner-thinkpadt14sgen1.remote.csb ([2001:9e8:32e2:c00:227b:d2ff:fe26:2a7a])
+        by smtp.gmail.com with ESMTPSA id d2-20020adffd82000000b00343e085fb89sm2317448wrr.2.2024.04.05.10.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 10:13:47 -0700 (PDT)
+Message-ID: <2aaca204c110d33025c3b4fd7e6f67b78d72ab59.camel@redhat.com>
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+From: Philipp Stanner <pstanner@redhat.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>, Kent Overstreet
+	 <kent.overstreet@linux.dev>
+Cc: comex <comexk@gmail.com>, "Dr. David Alan Gilbert" <dave@treblig.org>, 
+ Boqun Feng <boqun.feng@gmail.com>, rust-for-linux
+ <rust-for-linux@vger.kernel.org>,  linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, llvm@lists.linux.dev,  Miguel Ojeda
+ <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida
+ Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
+ <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice
+ Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea
+ Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David
+ Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc
+ Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel
+ Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Marco Elver
+ <elver@google.com>, Mark Rutland <mark.rutland@arm.com>,  Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>,  Catalin Marinas
+ <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org,
+ linux-fsdevel@vger.kernel.org
+Date: Fri, 05 Apr 2024 19:13:45 +0200
+In-Reply-To: <CAHk-=wgQy+FRKjO_BvZgZN56w6-+jDO8p-Mt=X=zM70CG=CVBQ@mail.gmail.com>
+References: <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+	 <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+	 <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+	 <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
+	 <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+	 <bu3seu56hfozsvgpdqjarbdkqo3lsjfc4lhluk5oj456xmrjc7@lfbbjxuf4rpv>
+	 <CAHk-=wgLGWBXvNODAkzkVHEj7zrrnTq_hzMft62nKNkaL89ZGQ@mail.gmail.com>
+	 <ZgIRXL5YM2AwBD0Y@gallifrey>
+	 <CAHk-=wjwxKD9CxYsf5x+K5fJbJa_JYZh1eKB4PT5cZJq1+foGw@mail.gmail.com>
+	 <160DB953-1588-418E-A490-381009CD8DE0@gmail.com>
+	 <qyjrex54hbhvhw4gmn7b6l2hr45o56bwt6fazfalykwcp5zzkx@vwt7k3d6kdwt>
+	 <CAHk-=wgQy+FRKjO_BvZgZN56w6-+jDO8p-Mt=X=zM70CG=CVBQ@mail.gmail.com>
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [v2] nouveau: fix function cast warning
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Ben Skeggs <bskeggs@redhat.com>, dri-devel@lists.freedesktop.org,
- nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Karol Herbst <kherbst@redhat.com>,
- Lyude Paul <lyude@redhat.com>
-References: <20240404160234.2923554-1-arnd@kernel.org>
-From: Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <20240404160234.2923554-1-arnd@kernel.org>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/4/24 18:02, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Calling a function through an incompatible pointer type causes breaks
-> kcfi, so clang warns about the assignment:
-> 
-> drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c:73:10: error: cast from 'void (*)(const void *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->     73 |         .fini = (void(*)(void *))kfree,
-> 
-> Avoid this with a trivial wrapper.
-> 
-> Fixes: c39f472e9f14 ("drm/nouveau: remove symlinks, move core/ to nvkm/ (no code changes)")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, 2024-03-27 at 12:07 -0700, Linus Torvalds wrote:
+> On Wed, 27 Mar 2024 at 11:51, Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >=20
+> > On Wed, Mar 27, 2024 at 09:16:09AM -0700, comex wrote:
+> > > Meanwhile, Rust intentionally lacks strict aliasing.
+> >=20
+> > I wasn't aware of this. Given that unrestricted pointers are a real
+> > impediment to compiler optimization, I thought that with Rust we
+> > were
+> > finally starting to nail down a concrete enough memory model to
+> > tackle
+> > this safely. But I guess not?
+>=20
+> Strict aliasing is a *horrible* mistake.
+>=20
+> It's not even *remotely* "tackle this safely". It's the exact
+> opposite. It's completely broken.
+>=20
+> Anybody who thinks strict aliasing is a good idea either
+>=20
+> =C2=A0(a) doesn't understand what it means
+>=20
+> =C2=A0(b) has been brainwashed by incompetent compiler people.
+>=20
+> it's a horrendous crock that was introduced by people who thought it
+> was too complicated to write out "restrict" keywords, and that
+> thought
+> that "let's break old working programs and make it harder to write
+> new
+> programs" was a good idea.
+>=20
+> Nobody should ever do it. The fact that Rust doesn't do the C strict
+> aliasing is a good thing. Really.
 
-Applied to drm-misc-fixes, thanks!
+Btw, for the interested, that's a nice article on strict aliasing:
+https://blog.regehr.org/archives/1307
 
-> ---
-> v2: avoid 'return kfree()' expression returning a void
-> ---
->   drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c
-> index 4bf486b57101..cb05f7f48a98 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c
-> @@ -66,11 +66,16 @@ of_init(struct nvkm_bios *bios, const char *name)
->   	return ERR_PTR(-EINVAL);
->   }
->   
-> +static void of_fini(void *p)
-> +{
-> +	kfree(p);
-> +}
-> +
->   const struct nvbios_source
->   nvbios_of = {
->   	.name = "OpenFirmware",
->   	.init = of_init,
-> -	.fini = (void(*)(void *))kfree,
-> +	.fini = of_fini,
->   	.read = of_read,
->   	.size = of_size,
->   	.rw = false,
+Dennis Ritchie, the Man Himself, back in the 1980s pushed back quite
+strongly on (different?) aliasing experiments:
+https://www.yodaiken.com/2021/03/19/dennis-ritchie-on-alias-analysis-in-the=
+-c-programming-language-1988/
+
+
+No idea why they can't just leave C alone... It's not without reason
+that new languages like Zig and Hare want to freeze the language
+(standard) once they are released.
+
+P.
+
+>=20
+> I suspect you have been fooled by the name. Because "strict aliasing"
+> sounds like a good thing. It sounds like "I know these strictly can't
+> alias". But despite that name, it's the complete opposite of that,
+> and
+> means "I will ignore actual real aliasing even if it exists, because
+> I
+> will make aliasing decisions on entirely made-up grounds".
+>=20
+> Just say no to strict aliasing. Thankfully, there's an actual
+> compiler
+> flag for that: -fno-strict-aliasing. It should absolutely have been
+> the default.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 Linus
+>=20
 
