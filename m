@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C4C14288;
-	Fri,  5 Apr 2024 02:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7FA1BC40;
+	Fri,  5 Apr 2024 02:47:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712283326; cv=none; b=C1+BQP+5Q+Cvc3Em4xjDGaK2Gr+xeeVTA0T4KRanMB4cNddPlt8QoWa//b6DgcUnr3qFy+aA1c/B5RvJxNgGMKXdkXez30/Ob3UOntc7Bqol3AbA50G7wguBSGn5GCnBG9yYiD7fuEfjLnGpzUUuoxmYiwYneGsUcLGESyPY1E8=
+	t=1712285253; cv=none; b=SQx0JmLyntXPEEORBc5UljL6A/m+3sP9+QkRdKhG4TUi2+x0zMLv300Dh89kYr6u5AHJllovhodCPxh8MvsPc/SGvVquA7Z0kiDrgaiREVmYg1u7AJCMW3L99rSMRdqqDCSqGn0tEBgaWhOBFFIJnVlzRCq+wRT2l+KOFBilgh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712283326; c=relaxed/simple;
-	bh=8RNziIHlVkO0i8kR56y6C2xmukLnt0XbZgK/aTLFaqY=;
+	s=arc-20240116; t=1712285253; c=relaxed/simple;
+	bh=pzmU0/o0jjsqRYfWnvaLhrQsx1T5dDQLZBqGxAZpNS0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rqP22C3EOrAd7HImJ7nSWWaGR/80SnhkPNm4K2zOSMNbBhjBEZMFEl4IK053vSLv7shItexdbRFrC4CRkaHZuDsKLIXU8kP9vD+BoCYab9Zoz3GCi1VdpXDjELixLPEZ199pqp2by1v2xUFuHqIwgWeznOBB1VdwbH2li3OLhoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=buCPBzdY; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=bA6GLJNIYf4LYNEuVdKbEbGCCiqC5GGPTA8ECedG0N8D/e7uOKA6v095VMZ44BXn03T3TzqrSVxXFmAoOa/wQNeYz7wi6dQYX4Rk1WzbRC0XNH7lUPxyjBbKKDYGA6JdtccTS3AJNpHJryUaWMDW85PTr2yddGFjWAGhw28KaYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UgyCzH9D; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="buCPBzdY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UgyCzH9D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712283324; x=1743819324;
+  t=1712285251; x=1743821251;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8RNziIHlVkO0i8kR56y6C2xmukLnt0XbZgK/aTLFaqY=;
-  b=buCPBzdYExcMVKIxI5cNGaxCmLL59Kd/GRZugQ1ETw/9FgE2f6z1zef5
-   Erq4XHFY+4lRi22KKjelzYu5U9y+R7hs5e3LC6NB8H9jbEL7WjZZneZxm
-   fP1nybctDFmX1ugtONUZT92G23yyhGXUWBMchDKiGty0haaj4efL920y3
-   krmOKBBCj8C8Y4YzL69JEbi4lZSKFzqO62DTEyN7BBK6i7Yt5samI1cpx
-   MTcexFF77b9uCcclO9Siw20sxPMyndD3vDWlbnOyMFkqDvg5+Jpo02XEz
-   zjLyHkF8OZrGP23u7IMmBaOqbaeallj5kwTJmX0Xzv6wsztaUuHy8Iybe
-   g==;
-X-CSE-ConnectionGUID: UYqsCOY8Sce7dPOSbd5xkw==
-X-CSE-MsgGUID: d1LQBGtxRpiAIsynmgNzbA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="7704735"
+  bh=pzmU0/o0jjsqRYfWnvaLhrQsx1T5dDQLZBqGxAZpNS0=;
+  b=UgyCzH9DQV/k4KvmA2MkrzROexfWMKrfklswyG3gMPUbmqxcL8AKPF4S
+   o3CfIRIgDoiOxCEYoZ4dy2WGzBE/rWPO2rJDegEO6L00wDHX3iQIAVkkM
+   K/hitYQWNidIozD3W0i6eIHWOHJzQZjkzPPYA2yzsfOmicugHTPm7kQpp
+   dqs+gtwkGsS9daZkAdECBLt0dfgGiPIZRFeDhIo15U1pcIFesbf0X8eOa
+   yZMMPRfNwUw4xDtDNSumjNcMY993PqkMMHOVjNPuIM1McxbM6f2P7e8tp
+   Lma9EXd4LfjpwhERR12kdmBuSrGKduajNoTPcYptwhN3WY3t0EXr5T6Ho
+   Q==;
+X-CSE-ConnectionGUID: /YAVT29PRwGABoonpXXQgQ==
+X-CSE-MsgGUID: qAJA7mp+S0S7vtPSFgo7kA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="8182499"
 X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
-   d="scan'208";a="7704735"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 19:15:24 -0700
-X-CSE-ConnectionGUID: SEMxfj+JRKe2WsBGGoMKpA==
-X-CSE-MsgGUID: D9f/f4wGReCrFCoonpN7wA==
+   d="scan'208";a="8182499"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 19:47:25 -0700
+X-CSE-ConnectionGUID: vnBKRh9cT5S/mtaCdfvgmA==
+X-CSE-MsgGUID: p4aZC1VQR0OeaENsPJS/eA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
-   d="scan'208";a="18957183"
+   d="scan'208";a="23654239"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 04 Apr 2024 19:15:22 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 04 Apr 2024 19:47:23 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rsZ6t-0001ls-1j;
-	Fri, 05 Apr 2024 02:15:19 +0000
-Date: Fri, 5 Apr 2024 10:14:44 +0800
+	id 1rsZbt-0001o7-0H;
+	Fri, 05 Apr 2024 02:47:21 +0000
+Date: Fri, 5 Apr 2024 10:46:43 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 15/29]
- drivers/staging/axis-fifo/axis-fifo.c:354:15: warning: variable 'copied' set
- but not used
-Message-ID: <202404051005.42QnWRjN-lkp@intel.com>
+Subject: [axboe-block:rw_iter 30/37] drivers/usb/chipidea/debug.c:76:17:
+ error: implicit declaration of function 'iov_iter_count' is invalid in C99
+Message-ID: <202404051032.X5yg2o62-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,202 +63,176 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   34a49de340a534b0cb222309e73d1ef215ff4db6
-commit: 9bddfc061dffa3ca19b6e971ef1f1281458ee8a3 [15/29] staging: convert drivers to read/write iterators
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240405/202404051005.42QnWRjN-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240405/202404051005.42QnWRjN-lkp@intel.com/reproduce)
+head:   449fd46baa282dd51ed0f757f111cd2cb11d03d9
+commit: 32cd57aa11bcff56cc617bd01c4e00fbcf4a5ee7 [30/37] drivers/usb: convert to ->read_iter and ->write_iter
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240405/202404051032.X5yg2o62-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240405/202404051032.X5yg2o62-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404051005.42QnWRjN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404051032.X5yg2o62-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/staging/axis-fifo/axis-fifo.c:27:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/staging/axis-fifo/axis-fifo.c:27:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/staging/axis-fifo/axis-fifo.c:27:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   drivers/staging/axis-fifo/axis-fifo.c:351:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     351 |         size_t len = iov_iter_count(to);
-         |                      ^
-   drivers/staging/axis-fifo/axis-fifo.c:434:8: error: call to undeclared function 'copy_to_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     434 |                 if (!copy_to_iter_full(tmp_buf, copy * sizeof(u32), to)) {
-         |                      ^
->> drivers/staging/axis-fifo/axis-fifo.c:354:15: warning: variable 'copied' set but not used [-Wunused-but-set-variable]
-     354 |         unsigned int copied;
-         |                      ^
-   drivers/staging/axis-fifo/axis-fifo.c:470:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     470 |         size_t len = iov_iter_count(from);
-         |                      ^
-   drivers/staging/axis-fifo/axis-fifo.c:542:8: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     542 |                 if (!copy_from_iter_full(tmp_buf, copy * sizeof(u32), from)) {
-         |                      ^
-   drivers/staging/axis-fifo/axis-fifo.c:542:8: note: did you mean 'copy_from_user_nofault'?
+>> drivers/usb/chipidea/debug.c:76:17: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t count = iov_iter_count(from);
+                          ^
+>> drivers/usb/chipidea/debug.c:84:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(buf, count, from))
+                ^
+   drivers/usb/chipidea/debug.c:84:7: note: did you mean 'copy_from_user_nofault'?
    include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-     377 | long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-         |      ^
-   7 warnings and 4 errors generated.
+   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
+        ^
+   2 errors generated.
+--
+>> drivers/usb/dwc2/debugfs.c:30:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+>> drivers/usb/dwc2/debugfs.c:36:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   drivers/usb/dwc2/debugfs.c:36:7: note: did you mean 'copy_from_user_nofault'?
+   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
+   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
+        ^
+   2 errors generated.
+--
+>> drivers/usb/dwc3/debugfs.c:371:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+>> drivers/usb/dwc3/debugfs.c:378:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   drivers/usb/dwc3/debugfs.c:378:7: note: did you mean 'copy_from_user_nofault'?
+   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
+   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
+        ^
+   drivers/usb/dwc3/debugfs.c:442:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+   drivers/usb/dwc3/debugfs.c:447:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   drivers/usb/dwc3/debugfs.c:528:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+   drivers/usb/dwc3/debugfs.c:535:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   drivers/usb/dwc3/debugfs.c:616:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+   drivers/usb/dwc3/debugfs.c:625:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   8 errors generated.
+--
+>> drivers/usb/host/xhci-debugfs.c:366:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+>> drivers/usb/host/xhci-debugfs.c:373:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   drivers/usb/host/xhci-debugfs.c:373:7: note: did you mean 'copy_from_user_nofault'?
+   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
+   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
+        ^
+   2 errors generated.
+--
+>> drivers/usb/musb/musb_debugfs.c:166:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+>> drivers/usb/musb/musb_debugfs.c:173:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   drivers/usb/musb/musb_debugfs.c:173:7: note: did you mean 'copy_from_user_nofault'?
+   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
+   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
+        ^
+   drivers/usb/musb/musb_debugfs.c:266:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  count = iov_iter_count(from);
+                                           ^
+   drivers/usb/musb/musb_debugfs.c:273:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
+                ^
+   4 errors generated.
+--
+>> drivers/usb/gadget/function/f_hid.c:438:17: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t count = iov_iter_count(from);
+                          ^
+>> drivers/usb/gadget/function/f_hid.c:477:11: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           status = copy_from_iter_full(req->buf, count, from);
+                    ^
+   drivers/usb/gadget/function/f_hid.c:477:11: note: did you mean 'copy_from_user_nofault'?
+   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
+   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
+        ^
+   2 errors generated.
+--
+>> drivers/usb/gadget/function/f_printer.c:432:18: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                          len = iov_iter_count(to);
+                                                 ^
+>> drivers/usb/gadget/function/f_printer.c:525:11: error: implicit declaration of function 'copy_to_iter' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   size -= copy_to_iter(current_rx_buf, size, to);
+                           ^
+   drivers/usb/gadget/function/f_printer.c:525:11: note: did you mean 'copy_to_user'?
+   include/linux/uaccess.h:188:1: note: 'copy_to_user' declared here
+   copy_to_user(void __user *to, const void *from, unsigned long n)
+   ^
+   drivers/usb/gadget/function/f_printer.c:573:17: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           size_t                  len = iov_iter_count(from);
+                                         ^
+>> drivers/usb/gadget/function/f_printer.c:644:8: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (!copy_from_iter_full(req->buf, size, from)) {
+                        ^
+   drivers/usb/gadget/function/f_printer.c:644:8: note: did you mean 'copy_from_user_nofault'?
+   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
+   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
+        ^
+   4 errors generated.
 
 
-vim +/copied +354 drivers/staging/axis-fifo/axis-fifo.c
+vim +/iov_iter_count +76 drivers/usb/chipidea/debug.c
 
-4a965c5f89decd Jacob Feder       2018-07-22  332  
-0443b3f4436321 Quentin Deslandes 2020-01-21  333  /**
-bbf40b2f6e38d0 Lee Jones         2021-04-14  334   * axis_fifo_read() - Read a packet from AXIS-FIFO character device.
-c848434c629db5 Lee Jones         2021-04-14  335   * @f: Open file.
-c848434c629db5 Lee Jones         2021-04-14  336   * @buf: User space buffer to read to.
-c848434c629db5 Lee Jones         2021-04-14  337   * @len: User space buffer length.
-c848434c629db5 Lee Jones         2021-04-14  338   * @off: Buffer offset.
-0443b3f4436321 Quentin Deslandes 2020-01-21  339   *
-0443b3f4436321 Quentin Deslandes 2020-01-21  340   * As defined by the device's documentation, we need to check the device's
-0443b3f4436321 Quentin Deslandes 2020-01-21  341   * occupancy before reading the length register and then the data. All these
-0443b3f4436321 Quentin Deslandes 2020-01-21  342   * operations must be executed atomically, in order and one after the other
-0443b3f4436321 Quentin Deslandes 2020-01-21  343   * without missing any.
-0443b3f4436321 Quentin Deslandes 2020-01-21  344   *
-0443b3f4436321 Quentin Deslandes 2020-01-21  345   * Returns the number of bytes read from the device or negative error code
-0443b3f4436321 Quentin Deslandes 2020-01-21  346   *	on failure.
-0443b3f4436321 Quentin Deslandes 2020-01-21  347   */
-9bddfc061dffa3 Jens Axboe        2024-04-03  348  static ssize_t axis_fifo_read(struct kiocb *iocb, struct iov_iter *to)
-4a965c5f89decd Jacob Feder       2018-07-22  349  {
-9bddfc061dffa3 Jens Axboe        2024-04-03  350  	struct axis_fifo *fifo = iocb->ki_filp->private_data;
-9bddfc061dffa3 Jens Axboe        2024-04-03  351  	size_t len = iov_iter_count(to);
-4a965c5f89decd Jacob Feder       2018-07-22  352  	size_t bytes_available;
-4a965c5f89decd Jacob Feder       2018-07-22  353  	unsigned int words_available;
-4a965c5f89decd Jacob Feder       2018-07-22 @354  	unsigned int copied;
-4a965c5f89decd Jacob Feder       2018-07-22  355  	unsigned int copy;
-4a965c5f89decd Jacob Feder       2018-07-22  356  	unsigned int i;
-4a965c5f89decd Jacob Feder       2018-07-22  357  	int ret;
-4a965c5f89decd Jacob Feder       2018-07-22  358  	u32 tmp_buf[READ_BUF_SIZE];
-4a965c5f89decd Jacob Feder       2018-07-22  359  
-4a965c5f89decd Jacob Feder       2018-07-22  360  	if (fifo->read_flags & O_NONBLOCK) {
-0443b3f4436321 Quentin Deslandes 2020-01-21  361  		/*
-0443b3f4436321 Quentin Deslandes 2020-01-21  362  		 * Device opened in non-blocking mode. Try to lock it and then
-0443b3f4436321 Quentin Deslandes 2020-01-21  363  		 * check if any packet is available.
-4a965c5f89decd Jacob Feder       2018-07-22  364  		 */
-0443b3f4436321 Quentin Deslandes 2020-01-21  365  		if (!mutex_trylock(&fifo->read_lock))
-4a965c5f89decd Jacob Feder       2018-07-22  366  			return -EAGAIN;
-0443b3f4436321 Quentin Deslandes 2020-01-21  367  
-0443b3f4436321 Quentin Deslandes 2020-01-21  368  		if (!ioread32(fifo->base_addr + XLLF_RDFO_OFFSET)) {
-0443b3f4436321 Quentin Deslandes 2020-01-21  369  			ret = -EAGAIN;
-0443b3f4436321 Quentin Deslandes 2020-01-21  370  			goto end_unlock;
-0443b3f4436321 Quentin Deslandes 2020-01-21  371  		}
-4a965c5f89decd Jacob Feder       2018-07-22  372  	} else {
-4a965c5f89decd Jacob Feder       2018-07-22  373  		/* opened in blocking mode
-4a965c5f89decd Jacob Feder       2018-07-22  374  		 * wait for a packet available interrupt (or timeout)
-4a965c5f89decd Jacob Feder       2018-07-22  375  		 * if nothing is currently available
-4a965c5f89decd Jacob Feder       2018-07-22  376  		 */
-0443b3f4436321 Quentin Deslandes 2020-01-21  377  		mutex_lock(&fifo->read_lock);
-0443b3f4436321 Quentin Deslandes 2020-01-21  378  		ret = wait_event_interruptible_timeout(fifo->read_queue,
-4a965c5f89decd Jacob Feder       2018-07-22  379  			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
-752cbd8f191678 Khadija Kamran    2023-03-17  380  			read_timeout);
-4a965c5f89decd Jacob Feder       2018-07-22  381  
-0443b3f4436321 Quentin Deslandes 2020-01-21  382  		if (ret <= 0) {
-4a965c5f89decd Jacob Feder       2018-07-22  383  			if (ret == 0) {
-0443b3f4436321 Quentin Deslandes 2020-01-21  384  				ret = -EAGAIN;
-0443b3f4436321 Quentin Deslandes 2020-01-21  385  			} else if (ret != -ERESTARTSYS) {
-4a965c5f89decd Jacob Feder       2018-07-22  386  				dev_err(fifo->dt_device, "wait_event_interruptible_timeout() error in read (ret=%i)\n",
-4a965c5f89decd Jacob Feder       2018-07-22  387  					ret);
-0443b3f4436321 Quentin Deslandes 2020-01-21  388  			}
-0443b3f4436321 Quentin Deslandes 2020-01-21  389  
-0443b3f4436321 Quentin Deslandes 2020-01-21  390  			goto end_unlock;
-4a965c5f89decd Jacob Feder       2018-07-22  391  		}
-4a965c5f89decd Jacob Feder       2018-07-22  392  	}
-4a965c5f89decd Jacob Feder       2018-07-22  393  
-4a965c5f89decd Jacob Feder       2018-07-22  394  	bytes_available = ioread32(fifo->base_addr + XLLF_RLR_OFFSET);
-4a965c5f89decd Jacob Feder       2018-07-22  395  	if (!bytes_available) {
-4a965c5f89decd Jacob Feder       2018-07-22  396  		dev_err(fifo->dt_device, "received a packet of length 0 - fifo core will be reset\n");
-4a965c5f89decd Jacob Feder       2018-07-22  397  		reset_ip_core(fifo);
-0443b3f4436321 Quentin Deslandes 2020-01-21  398  		ret = -EIO;
-0443b3f4436321 Quentin Deslandes 2020-01-21  399  		goto end_unlock;
-4a965c5f89decd Jacob Feder       2018-07-22  400  	}
-4a965c5f89decd Jacob Feder       2018-07-22  401  
-4a965c5f89decd Jacob Feder       2018-07-22  402  	if (bytes_available > len) {
-4a965c5f89decd Jacob Feder       2018-07-22  403  		dev_err(fifo->dt_device, "user read buffer too small (available bytes=%zu user buffer bytes=%zu) - fifo core will be reset\n",
-4a965c5f89decd Jacob Feder       2018-07-22  404  			bytes_available, len);
-4a965c5f89decd Jacob Feder       2018-07-22  405  		reset_ip_core(fifo);
-0443b3f4436321 Quentin Deslandes 2020-01-21  406  		ret = -EINVAL;
-0443b3f4436321 Quentin Deslandes 2020-01-21  407  		goto end_unlock;
-4a965c5f89decd Jacob Feder       2018-07-22  408  	}
-4a965c5f89decd Jacob Feder       2018-07-22  409  
-4a965c5f89decd Jacob Feder       2018-07-22  410  	if (bytes_available % sizeof(u32)) {
-4a965c5f89decd Jacob Feder       2018-07-22  411  		/* this probably can't happen unless IP
-4a965c5f89decd Jacob Feder       2018-07-22  412  		 * registers were previously mishandled
-4a965c5f89decd Jacob Feder       2018-07-22  413  		 */
-4a965c5f89decd Jacob Feder       2018-07-22  414  		dev_err(fifo->dt_device, "received a packet that isn't word-aligned - fifo core will be reset\n");
-4a965c5f89decd Jacob Feder       2018-07-22  415  		reset_ip_core(fifo);
-0443b3f4436321 Quentin Deslandes 2020-01-21  416  		ret = -EIO;
-0443b3f4436321 Quentin Deslandes 2020-01-21  417  		goto end_unlock;
-4a965c5f89decd Jacob Feder       2018-07-22  418  	}
-4a965c5f89decd Jacob Feder       2018-07-22  419  
-4a965c5f89decd Jacob Feder       2018-07-22  420  	words_available = bytes_available / sizeof(u32);
-4a965c5f89decd Jacob Feder       2018-07-22  421  
-4a965c5f89decd Jacob Feder       2018-07-22  422  	/* read data into an intermediate buffer, copying the contents
-4a965c5f89decd Jacob Feder       2018-07-22  423  	 * to userspace when the buffer is full
-4a965c5f89decd Jacob Feder       2018-07-22  424  	 */
-4a965c5f89decd Jacob Feder       2018-07-22  425  	copied = 0;
-4a965c5f89decd Jacob Feder       2018-07-22  426  	while (words_available > 0) {
-4a965c5f89decd Jacob Feder       2018-07-22  427  		copy = min(words_available, READ_BUF_SIZE);
-4a965c5f89decd Jacob Feder       2018-07-22  428  
-4a965c5f89decd Jacob Feder       2018-07-22  429  		for (i = 0; i < copy; i++) {
-4a965c5f89decd Jacob Feder       2018-07-22  430  			tmp_buf[i] = ioread32(fifo->base_addr +
-4a965c5f89decd Jacob Feder       2018-07-22  431  					      XLLF_RDFD_OFFSET);
-4a965c5f89decd Jacob Feder       2018-07-22  432  		}
-4a965c5f89decd Jacob Feder       2018-07-22  433  
-9bddfc061dffa3 Jens Axboe        2024-04-03  434  		if (!copy_to_iter_full(tmp_buf, copy * sizeof(u32), to)) {
-4a965c5f89decd Jacob Feder       2018-07-22  435  			reset_ip_core(fifo);
-0443b3f4436321 Quentin Deslandes 2020-01-21  436  			ret = -EFAULT;
-0443b3f4436321 Quentin Deslandes 2020-01-21  437  			goto end_unlock;
-4a965c5f89decd Jacob Feder       2018-07-22  438  		}
-4a965c5f89decd Jacob Feder       2018-07-22  439  
-4a965c5f89decd Jacob Feder       2018-07-22  440  		copied += copy;
-4a965c5f89decd Jacob Feder       2018-07-22  441  		words_available -= copy;
-4a965c5f89decd Jacob Feder       2018-07-22  442  	}
-4a965c5f89decd Jacob Feder       2018-07-22  443  
-0443b3f4436321 Quentin Deslandes 2020-01-21  444  	ret = bytes_available;
-0443b3f4436321 Quentin Deslandes 2020-01-21  445  
-0443b3f4436321 Quentin Deslandes 2020-01-21  446  end_unlock:
-0443b3f4436321 Quentin Deslandes 2020-01-21  447  	mutex_unlock(&fifo->read_lock);
-0443b3f4436321 Quentin Deslandes 2020-01-21  448  
-0443b3f4436321 Quentin Deslandes 2020-01-21  449  	return ret;
-4a965c5f89decd Jacob Feder       2018-07-22  450  }
-4a965c5f89decd Jacob Feder       2018-07-22  451  
-
-:::::: The code at line 354 was first introduced by commit
-:::::: 4a965c5f89decd636129cddc47e5f2c61e8f13e6 staging: add driver for Xilinx AXI-Stream FIFO v4.1 IP core
-
-:::::: TO: Jacob Feder <jacobsfeder@gmail.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    69	
+    70	/*
+    71	 * ci_port_test_write: writes port test mode
+    72	 */
+    73	static ssize_t ci_port_test_write(struct kiocb *iocb, struct iov_iter *from)
+    74	{
+    75		struct seq_file *s = iocb->ki_filp->private_data;
+  > 76		size_t count = iov_iter_count(from);
+    77		struct ci_hdrc *ci = s->private;
+    78		unsigned long flags;
+    79		unsigned mode;
+    80		char buf[32];
+    81		int ret;
+    82	
+    83		count = min_t(size_t, sizeof(buf) - 1, count);
+  > 84		if (!copy_from_iter_full(buf, count, from))
+    85			return -EFAULT;
+    86	
+    87		/* sscanf requires a zero terminated string */
+    88		buf[count] = '\0';
+    89	
+    90		if (sscanf(buf, "%u", &mode) != 1)
+    91			return -EINVAL;
+    92	
+    93		if (mode > 255)
+    94			return -EBADRQC;
+    95	
+    96		pm_runtime_get_sync(ci->dev);
+    97		spin_lock_irqsave(&ci->lock, flags);
+    98		ret = hw_port_test_set(ci, mode);
+    99		spin_unlock_irqrestore(&ci->lock, flags);
+   100		pm_runtime_put_sync(ci->dev);
+   101	
+   102		return ret ? ret : count;
+   103	}
+   104	
 
 -- 
 0-DAY CI Kernel Test Service
