@@ -1,201 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5022416F284
-	for <llvm@lists.linux.dev>; Fri,  5 Apr 2024 14:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E51F16C858
+	for <llvm@lists.linux.dev>; Fri,  5 Apr 2024 16:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712328081; cv=none; b=Sj5JacV82nPTU3obM/6YImwkEY5gQjQIWuB4K/wsVWhKNBbfJ46hK387B24R+nXlerSYF+i47ySHI/EngsojlNGalVTds1drhFvxopjE8AKNLlmQ6Y56Mc392GRdxVSDXzqPggAgX0JR0yvv8VQX7DAhKUKa25RqVohABciGGgg=
+	t=1712335085; cv=none; b=hvN9eynRjkKZwfSoRzRSHl863oGjiQXlrJ8hiNwAVUDzjbRam3Asc0wvKgp1VqByA5ek+HvzgkZZyWmQEds4gDm9dJPC6Ti+HeGD3PprBLpFrAhLFzHQBXyl8vki1mJhHK1U3aW5qFysrd0xk9jUNzZ7+JMagPj8/PD1UrhJeng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712328081; c=relaxed/simple;
-	bh=xysLvei3ccvFbGrLpvnyRv8yuZ4bQg4XJELIQkeJXxw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Hd9gVlVdzp83FDyrcdQXb50VYiWnWreTbwAHvjw1AjqQsBvbZmd8bLi6ZalHJUCR9kCIWZPN6KO9kmS3x1xwTAS+hr3vV+DchqRZxnW1Qj8p3O853onyRNwOQDE0XBwCpqUIA3CffsF2k4MJZ/5sTu9Ud/LXym5c+Zh5f+wwHNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jISChc9o; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1712335085; c=relaxed/simple;
+	bh=BLotXCHXqHDC9O4AKiHbeR7Z5NsPPN4ypYaPcCf605E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KyL/2FoBBz1F/Chk/HT2b8drsbeghbVihVXc5yr05sagEACiKh7TvkIhF2/vRwYWPUgcQeieF3PYAoc7uI0qo8I279MhJy58NMoF8A2R0FhIaSeEyuWudNfkOllygBJkj0vZvCu1wW82r7OscXmDqcvrP+bW1qiePXooE8T7yZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NKNsYItO; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jISChc9o"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NKNsYItO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712328078;
+	s=mimecast20190719; t=1712335082;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=H0C/gkutRxLR9OvZHv3CTDJPFUY+0Z2ILw2AXG6wbJA=;
-	b=jISChc9oqqSt1dNrPilG9pIa8P5eOuPUFSse7qf7OUXmZ3hHpzU8hqc1e5Myx2eQu0HZNQ
-	1t6qQgPAwKELgYBaUd8UBkzIluMGEUm9tq6lYREMQ6RqYjYj1165ODR9jHUkjYe9p1gUH4
-	w10OxsstC7YlOTcBvkCp+LS4aoZJnUk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fkF4QSWzhf6Nw/44NW74bQyP4bUB/6PnvqawpC9bEv4=;
+	b=NKNsYItOuCy+lMvw2UcnqA5wEEMp0zo/QT4Llw7N5Rx8d8t5wODaoAaCZf3C/wmxFhDF+V
+	AofiYIkPITIaePY18DdQef4AGy5aDC+dV/g902gVN4qMsS3U5JmHJDYwnA5yqng8xyf6WE
+	B55HhmKqOapOZmO8bt6vpM/4tl0tPPU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-562-7tmEFcPhOby7Fx7uw1HPwQ-1; Fri, 05 Apr 2024 10:41:17 -0400
-X-MC-Unique: 7tmEFcPhOby7Fx7uw1HPwQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BBFE2185A787
-	for <llvm@lists.linux.dev>; Fri,  5 Apr 2024 14:41:15 +0000 (UTC)
-Received: from [172.64.13.37] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 77332111F3C6;
-	Fri,  5 Apr 2024 14:41:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 21 of 204): Test report for master
- (6.9.0-rc2, mainline.kernel.org-clang, c88b9b4c)
-Date: Fri, 05 Apr 2024 14:41:15 -0000
-To: xzhou@redhat.com, llvm@lists.linux.dev
+ us-mta-121-_KrdAL0dPNq_AblegV13ng-1; Fri, 05 Apr 2024 12:38:00 -0400
+X-MC-Unique: _KrdAL0dPNq_AblegV13ng-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-343d1d16d9fso778066f8f.1
+        for <llvm@lists.linux.dev>; Fri, 05 Apr 2024 09:38:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712335079; x=1712939879;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fkF4QSWzhf6Nw/44NW74bQyP4bUB/6PnvqawpC9bEv4=;
+        b=tcEfO8zVU3cZqgjQ+LwFfWDA6se9esENpOICsIkLAUY6/mB+l+p0CKy+EDi4nrnNn1
+         DL93GHviilSnIWDx6jyGoPmz4o+gIDdm6npR6ZPFH6oSGcUvICoMpOLVFwPhkEQ02qLw
+         FsLBWrp7R7eSnQJ/9oLeLGX3J+o27edX93kxXL2/AHepGwjDeSg43K746DsS8pp83yKx
+         /ZLX1fSatrg7lxLpAK3uTRJJw4GWBu61CIc61e/+lTBTTXFf51v/7gKZmfZknZQVhwIp
+         eC1VSLR+kfQUNjNEgk96FC3Gdgft+5Cgcfk1FFxEbvo/kBXA8hRAa5Ck1Q+uFYZVVHLK
+         K87w==
+X-Forwarded-Encrypted: i=1; AJvYcCVeAdWdqnIqQQe/y7lqjXEeTgaKIOE/0rGLkaF4jz7lcIj94nRTLfsDX2L+gSDn62Tqh10+fw8sOgpCvUnft0hao3YS6g==
+X-Gm-Message-State: AOJu0YzeC87BH0BBb4Dsd1QTFMYM2Nr6pZYkl1ZVOhb8yaQKBeHyaiNk
+	Ust3p45ervqcfMhBnn4seQREZtlMEnqR5pHOO44/h4OMlm/T67kMeRQRN93/zuRYyN2crJFHIUL
+	WHTkxkUnndncPcT4XOI2h3FEtZvdiKbuT6eZp2jwdn5xum6HiBP4=
+X-Received: by 2002:adf:e849:0:b0:343:e031:69b8 with SMTP id d9-20020adfe849000000b00343e03169b8mr1687194wrn.41.1712335079583;
+        Fri, 05 Apr 2024 09:37:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHZ46bQriV6ycJFTO0VuNynMncgm9/Re4exnqTKKZrOf8MmqZKAujsFuh4iSK3zn2MXU1fy4Q==
+X-Received: by 2002:adf:e849:0:b0:343:e031:69b8 with SMTP id d9-20020adfe849000000b00343e03169b8mr1687176wrn.41.1712335079306;
+        Fri, 05 Apr 2024 09:37:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:4b3f:ee94:abf:b8ff:feee:998b? ([2a02:810d:4b3f:ee94:abf:b8ff:feee:998b])
+        by smtp.gmail.com with ESMTPSA id q8-20020adfea08000000b00341c6440c36sm2409149wrm.74.2024.04.05.09.37.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Apr 2024 09:37:58 -0700 (PDT)
+Message-ID: <cefb67c2-f5f5-4b54-8ed6-a9cab3718ff5@redhat.com>
+Date: Fri, 5 Apr 2024 18:37:57 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <77370.124040510411700501@us-mta-562.us.mimecast.lan>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] [v2] nouveau: fix function cast warning
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Ben Skeggs <bskeggs@redhat.com>, dri-devel@lists.freedesktop.org,
+ nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Karol Herbst <kherbst@redhat.com>,
+ Lyude Paul <lyude@redhat.com>
+References: <20240404160234.2923554-1-arnd@kernel.org>
+From: Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <20240404160234.2923554-1-arnd@kernel.org>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 4/4/24 18:02, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Calling a function through an incompatible pointer type causes breaks
+> kcfi, so clang warns about the assignment:
+> 
+> drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c:73:10: error: cast from 'void (*)(const void *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>     73 |         .fini = (void(*)(void *))kfree,
+> 
+> Avoid this with a trivial wrapper.
+> 
+> Fixes: c39f472e9f14 ("drm/nouveau: remove symlinks, move core/ to nvkm/ (no code changes)")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Applied to drm-misc-fixes, thanks!
 
-
-Kernel information:
-    Commit message: Merge tag 'net-6.9-rc3' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/139152
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11915165
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/129
-                       =E2=9D=8C FAIL generic/135
-                       =E2=9D=8C FAIL generic/141
-                       =E2=9D=8C FAIL generic/169
-                       =E2=9D=8C FAIL generic/198
-                       =E2=9D=8C FAIL generic/207
-                       =E2=9D=8C FAIL generic/208
-                       =E2=9D=8C FAIL generic/210
-                       =E2=9D=8C FAIL generic/211
-                       =E2=9D=8C FAIL generic/212
-                       =E2=9D=8C FAIL generic/214
-                       =E2=9D=8C FAIL generic/221
-                       =E2=9D=8C FAIL generic/245
-                       =E2=9D=8C FAIL generic/246
-                       =E2=9D=8C FAIL generic/248
-                       =E2=9D=8C FAIL generic/249
-                       =E2=9D=8C FAIL generic/257
-                       =E2=9D=8C FAIL generic/308
-                       =E2=9D=8C FAIL generic/309
-                       =E2=9D=8C FAIL generic/310
-                       =E2=9D=8C FAIL generic/339
-                       =E2=9D=8C FAIL generic/340
-        xfstests - nfsv4.2
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11915164
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/129
-                       =E2=9D=8C FAIL generic/354
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
- __exclude_unnecessary_pages: Can't read the buffer of struct page
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
-            Affected tests:
-                kdump - file-load [ppc64le]
-                kdump - sysrq-c [ppc64le]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [x86_64, x86_64 (debug)]
-    CKI/restraint [x86_64, x86_64 (debug)]
-    machineinfo [x86_64, x86_64 (debug)]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64, x86_64 (debug)]
-    SELinux Custom Module Setup [x86_64, x86_64 (debug)]
-    Storage - blktests - blk - upstream [x86_64]
-    Storage - blktests - nvme-tcp - upstream [x86_64]
-    Storage - swraid scsi_raid [x86_64, x86_64 (debug)]
-    stress: stress-ng - cpu-cache [x86_64]
-    stress: stress-ng - memory [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+> ---
+> v2: avoid 'return kfree()' expression returning a void
+> ---
+>   drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c
+> index 4bf486b57101..cb05f7f48a98 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/shadowof.c
+> @@ -66,11 +66,16 @@ of_init(struct nvkm_bios *bios, const char *name)
+>   	return ERR_PTR(-EINVAL);
+>   }
+>   
+> +static void of_fini(void *p)
+> +{
+> +	kfree(p);
+> +}
+> +
+>   const struct nvbios_source
+>   nvbios_of = {
+>   	.name = "OpenFirmware",
+>   	.init = of_init,
+> -	.fini = (void(*)(void *))kfree,
+> +	.fini = of_fini,
+>   	.read = of_read,
+>   	.size = of_size,
+>   	.rw = false,
 
