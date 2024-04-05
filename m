@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7FA1BC40;
-	Fri,  5 Apr 2024 02:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A449422EF2;
+	Fri,  5 Apr 2024 04:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712285253; cv=none; b=SQx0JmLyntXPEEORBc5UljL6A/m+3sP9+QkRdKhG4TUi2+x0zMLv300Dh89kYr6u5AHJllovhodCPxh8MvsPc/SGvVquA7Z0kiDrgaiREVmYg1u7AJCMW3L99rSMRdqqDCSqGn0tEBgaWhOBFFIJnVlzRCq+wRT2l+KOFBilgh4=
+	t=1712292331; cv=none; b=lxctEKQC5Pwd00mi/ItI6mQXa1u7e28dWPATaztwkHscrkKRl0bsdjCwvBheoKHSYplksYvrokC6dsmNYJyhthqfXM+ST7BnFccGZNixYeRzNAiX3mNgh1VcnlMKbj2RCfyVWKl109o9/k/WccE1i4zlm4u6OZbdCas8Xc86xj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712285253; c=relaxed/simple;
-	bh=pzmU0/o0jjsqRYfWnvaLhrQsx1T5dDQLZBqGxAZpNS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bA6GLJNIYf4LYNEuVdKbEbGCCiqC5GGPTA8ECedG0N8D/e7uOKA6v095VMZ44BXn03T3TzqrSVxXFmAoOa/wQNeYz7wi6dQYX4Rk1WzbRC0XNH7lUPxyjBbKKDYGA6JdtccTS3AJNpHJryUaWMDW85PTr2yddGFjWAGhw28KaYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UgyCzH9D; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1712292331; c=relaxed/simple;
+	bh=vD4QbkqfvTSmt/Gh2KCI6gGacZcfRXXvd5ryA6KC8T4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nASvXQIGTv0rhDDw9sk+0eVzbOXXcaJdxu6gDujdYLc+ghxv29vQ7740x2ASmHLsB++/PJkjdCQnxjEpjYFTzW5KOrgY/s/fRe/Y4YegX7bMnLoNXuilH4LBHjA/m9mHDqSLGkNsH49hxzPuQkd410f2j9KHsC3GaR1BG43Lcq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DmkD6uHR; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UgyCzH9D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DmkD6uHR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712285251; x=1743821251;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pzmU0/o0jjsqRYfWnvaLhrQsx1T5dDQLZBqGxAZpNS0=;
-  b=UgyCzH9DQV/k4KvmA2MkrzROexfWMKrfklswyG3gMPUbmqxcL8AKPF4S
-   o3CfIRIgDoiOxCEYoZ4dy2WGzBE/rWPO2rJDegEO6L00wDHX3iQIAVkkM
-   K/hitYQWNidIozD3W0i6eIHWOHJzQZjkzPPYA2yzsfOmicugHTPm7kQpp
-   dqs+gtwkGsS9daZkAdECBLt0dfgGiPIZRFeDhIo15U1pcIFesbf0X8eOa
-   yZMMPRfNwUw4xDtDNSumjNcMY993PqkMMHOVjNPuIM1McxbM6f2P7e8tp
-   Lma9EXd4LfjpwhERR12kdmBuSrGKduajNoTPcYptwhN3WY3t0EXr5T6Ho
+  t=1712292329; x=1743828329;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vD4QbkqfvTSmt/Gh2KCI6gGacZcfRXXvd5ryA6KC8T4=;
+  b=DmkD6uHR76G5m9Qmk2avpP5FN1GLmIiu0FnDWDSX2149nhyEgj4zNnqO
+   /S3VRUMANgRsjZHCaEnsF2dxQf4BfzasAfwBwP9BDV/PtwNyeCSbIHkHN
+   QyuVoZ+woyBEgMkCRB4qzbUYuThGGN9eEhIGc2v+T8p+DtOfj8HkjT6R5
+   6zObvk/afaJlRC7X9ELTfPXMwTiEDheE3WJ8ALlVQXqDlEgEz0ffMVU6z
+   06h4bEmu/RYMeEZ0iViLHCzBfwB/qMpEgky0uwoi1NUSKo7OODMwINnKB
+   90hOIhEqkByACe/MaHeb5vGSLNRd2q0w72vdGC6/3BfCou/GL6tAtOqvM
    Q==;
-X-CSE-ConnectionGUID: /YAVT29PRwGABoonpXXQgQ==
-X-CSE-MsgGUID: qAJA7mp+S0S7vtPSFgo7kA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="8182499"
+X-CSE-ConnectionGUID: wf8sjpVoSbSeB40sY9uJ3Q==
+X-CSE-MsgGUID: 39uMtDaGTxiQMnDN0Wy2ZA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="33007667"
 X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
-   d="scan'208";a="8182499"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 19:47:25 -0700
-X-CSE-ConnectionGUID: vnBKRh9cT5S/mtaCdfvgmA==
-X-CSE-MsgGUID: p4aZC1VQR0OeaENsPJS/eA==
+   d="scan'208";a="33007667"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 21:45:28 -0700
+X-CSE-ConnectionGUID: lcgGNDK3RkiZNTtxVT6BDQ==
+X-CSE-MsgGUID: hJ2pYlcKTPyjXUAZ4zs0gQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,180,1708416000"; 
-   d="scan'208";a="23654239"
+   d="scan'208";a="19073332"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 04 Apr 2024 19:47:23 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 04 Apr 2024 21:45:27 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rsZbt-0001o7-0H;
-	Fri, 05 Apr 2024 02:47:21 +0000
-Date: Fri, 5 Apr 2024 10:46:43 +0800
+	id 1rsbS8-0001ta-1X;
+	Fri, 05 Apr 2024 04:45:24 +0000
+Date: Fri, 5 Apr 2024 12:44:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 30/37] drivers/usb/chipidea/debug.c:76:17:
- error: implicit declaration of function 'iov_iter_count' is invalid in C99
-Message-ID: <202404051032.X5yg2o62-lkp@intel.com>
+Subject: Re: [PATCHv9 06/17] x86/mm: Make
+ x86_platform.guest.enc_status_change_*() return errno
+Message-ID: <202404051207.YGViuP7O-lkp@intel.com>
+References: <20240325103911.2651793-7-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,178 +63,187 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240325103911.2651793-7-kirill.shutemov@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   449fd46baa282dd51ed0f757f111cd2cb11d03d9
-commit: 32cd57aa11bcff56cc617bd01c4e00fbcf4a5ee7 [30/37] drivers/usb: convert to ->read_iter and ->write_iter
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240405/202404051032.X5yg2o62-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240405/202404051032.X5yg2o62-lkp@intel.com/reproduce)
+Hi Kirill,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v6.9-rc2]
+[cannot apply to tip/x86/core tip/x86/mm rafael-pm/acpi-bus rafael-pm/devprop next-20240405]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-A-Shutemov/x86-acpi-Extract-ACPI-MADT-wakeup-code-into-a-separate-file/20240404-032544
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20240325103911.2651793-7-kirill.shutemov%40linux.intel.com
+patch subject: [PATCHv9 06/17] x86/mm: Make x86_platform.guest.enc_status_change_*() return errno
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240405/202404051207.YGViuP7O-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240405/202404051207.YGViuP7O-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404051032.X5yg2o62-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404051207.YGViuP7O-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/usb/chipidea/debug.c:76:17: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t count = iov_iter_count(from);
-                          ^
->> drivers/usb/chipidea/debug.c:84:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(buf, count, from))
-                ^
-   drivers/usb/chipidea/debug.c:84:7: note: did you mean 'copy_from_user_nofault'?
-   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-        ^
-   2 errors generated.
---
->> drivers/usb/dwc2/debugfs.c:30:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
->> drivers/usb/dwc2/debugfs.c:36:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   drivers/usb/dwc2/debugfs.c:36:7: note: did you mean 'copy_from_user_nofault'?
-   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-        ^
-   2 errors generated.
---
->> drivers/usb/dwc3/debugfs.c:371:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
->> drivers/usb/dwc3/debugfs.c:378:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   drivers/usb/dwc3/debugfs.c:378:7: note: did you mean 'copy_from_user_nofault'?
-   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-        ^
-   drivers/usb/dwc3/debugfs.c:442:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
-   drivers/usb/dwc3/debugfs.c:447:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   drivers/usb/dwc3/debugfs.c:528:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
-   drivers/usb/dwc3/debugfs.c:535:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   drivers/usb/dwc3/debugfs.c:616:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
-   drivers/usb/dwc3/debugfs.c:625:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   8 errors generated.
---
->> drivers/usb/host/xhci-debugfs.c:366:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
->> drivers/usb/host/xhci-debugfs.c:373:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   drivers/usb/host/xhci-debugfs.c:373:7: note: did you mean 'copy_from_user_nofault'?
-   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-        ^
-   2 errors generated.
---
->> drivers/usb/musb/musb_debugfs.c:166:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
->> drivers/usb/musb/musb_debugfs.c:173:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   drivers/usb/musb/musb_debugfs.c:173:7: note: did you mean 'copy_from_user_nofault'?
-   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-        ^
-   drivers/usb/musb/musb_debugfs.c:266:19: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  count = iov_iter_count(from);
-                                           ^
-   drivers/usb/musb/musb_debugfs.c:273:7: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (!copy_from_iter_full(&buf, min_t(size_t, sizeof(buf) - 1, count), from))
-                ^
-   4 errors generated.
---
->> drivers/usb/gadget/function/f_hid.c:438:17: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t count = iov_iter_count(from);
-                          ^
->> drivers/usb/gadget/function/f_hid.c:477:11: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           status = copy_from_iter_full(req->buf, count, from);
-                    ^
-   drivers/usb/gadget/function/f_hid.c:477:11: note: did you mean 'copy_from_user_nofault'?
-   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-        ^
-   2 errors generated.
---
->> drivers/usb/gadget/function/f_printer.c:432:18: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                          len = iov_iter_count(to);
-                                                 ^
->> drivers/usb/gadget/function/f_printer.c:525:11: error: implicit declaration of function 'copy_to_iter' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   size -= copy_to_iter(current_rx_buf, size, to);
-                           ^
-   drivers/usb/gadget/function/f_printer.c:525:11: note: did you mean 'copy_to_user'?
-   include/linux/uaccess.h:188:1: note: 'copy_to_user' declared here
-   copy_to_user(void __user *to, const void *from, unsigned long n)
-   ^
-   drivers/usb/gadget/function/f_printer.c:573:17: error: implicit declaration of function 'iov_iter_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           size_t                  len = iov_iter_count(from);
-                                         ^
->> drivers/usb/gadget/function/f_printer.c:644:8: error: implicit declaration of function 'copy_from_iter_full' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   if (!copy_from_iter_full(req->buf, size, from)) {
-                        ^
-   drivers/usb/gadget/function/f_printer.c:644:8: note: did you mean 'copy_from_user_nofault'?
-   include/linux/uaccess.h:377:6: note: 'copy_from_user_nofault' declared here
-   long copy_from_user_nofault(void *dst, const void __user *src, size_t size);
-        ^
-   4 errors generated.
+>> arch/x86/hyperv/ivm.c:551:3: error: use of undeclared identifier 'result'
+     551 |                 result = false;
+         |                 ^
+   arch/x86/hyperv/ivm.c:587:3: error: use of undeclared identifier 'result'
+     587 |                 result = false;
+         |                 ^
+>> arch/x86/hyperv/ivm.c:662:47: error: incompatible function pointer types assigning to 'int (*)(unsigned long, int, bool)' (aka 'int (*)(unsigned long, int, _Bool)') from 'bool (unsigned long, int, bool)' (aka '_Bool (unsigned long, int, _Bool)') [-Wincompatible-function-pointer-types]
+     662 |         x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
+         |                                                      ^ ~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
-vim +/iov_iter_count +76 drivers/usb/chipidea/debug.c
+vim +/result +551 arch/x86/hyperv/ivm.c
 
-    69	
-    70	/*
-    71	 * ci_port_test_write: writes port test mode
-    72	 */
-    73	static ssize_t ci_port_test_write(struct kiocb *iocb, struct iov_iter *from)
-    74	{
-    75		struct seq_file *s = iocb->ki_filp->private_data;
-  > 76		size_t count = iov_iter_count(from);
-    77		struct ci_hdrc *ci = s->private;
-    78		unsigned long flags;
-    79		unsigned mode;
-    80		char buf[32];
-    81		int ret;
-    82	
-    83		count = min_t(size_t, sizeof(buf) - 1, count);
-  > 84		if (!copy_from_iter_full(buf, count, from))
-    85			return -EFAULT;
-    86	
-    87		/* sscanf requires a zero terminated string */
-    88		buf[count] = '\0';
-    89	
-    90		if (sscanf(buf, "%u", &mode) != 1)
-    91			return -EINVAL;
-    92	
-    93		if (mode > 255)
-    94			return -EBADRQC;
-    95	
-    96		pm_runtime_get_sync(ci->dev);
-    97		spin_lock_irqsave(&ci->lock, flags);
-    98		ret = hw_port_test_set(ci, mode);
-    99		spin_unlock_irqrestore(&ci->lock, flags);
-   100		pm_runtime_put_sync(ci->dev);
-   101	
-   102		return ret ? ret : count;
-   103	}
-   104	
+0f34d11234868d Michael Kelley        2024-01-15  530  
+810a521265023a Tianyu Lan            2021-10-25  531  /*
+812b0597fb4043 Michael Kelley        2023-03-26  532   * hv_vtom_set_host_visibility - Set specified memory visible to host.
+810a521265023a Tianyu Lan            2021-10-25  533   *
+810a521265023a Tianyu Lan            2021-10-25  534   * In Isolation VM, all guest memory is encrypted from host and guest
+810a521265023a Tianyu Lan            2021-10-25  535   * needs to set memory visible to host via hvcall before sharing memory
+810a521265023a Tianyu Lan            2021-10-25  536   * with host. This function works as wrap of hv_mark_gpa_visibility()
+810a521265023a Tianyu Lan            2021-10-25  537   * with memory base and size.
+810a521265023a Tianyu Lan            2021-10-25  538   */
+93c65513f71649 Kirill A. Shutemov    2024-03-25  539  static int hv_vtom_set_host_visibility(unsigned long kbuffer, int pagecount, bool enc)
+810a521265023a Tianyu Lan            2021-10-25  540  {
+812b0597fb4043 Michael Kelley        2023-03-26  541  	enum hv_mem_host_visibility visibility = enc ?
+812b0597fb4043 Michael Kelley        2023-03-26  542  			VMBUS_PAGE_NOT_VISIBLE : VMBUS_PAGE_VISIBLE_READ_WRITE;
+810a521265023a Tianyu Lan            2021-10-25  543  	u64 *pfn_array;
+9fef276f9f416a Michael Kelley        2024-01-15  544  	phys_addr_t paddr;
+9fef276f9f416a Michael Kelley        2024-01-15  545  	void *vaddr;
+810a521265023a Tianyu Lan            2021-10-25  546  	int ret = 0;
+810a521265023a Tianyu Lan            2021-10-25  547  	int i, pfn;
+810a521265023a Tianyu Lan            2021-10-25  548  
+810a521265023a Tianyu Lan            2021-10-25  549  	pfn_array = kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
+0f34d11234868d Michael Kelley        2024-01-15  550  	if (!pfn_array) {
+0f34d11234868d Michael Kelley        2024-01-15 @551  		result = false;
+0f34d11234868d Michael Kelley        2024-01-15  552  		goto err_set_memory_p;
+0f34d11234868d Michael Kelley        2024-01-15  553  	}
+810a521265023a Tianyu Lan            2021-10-25  554  
+810a521265023a Tianyu Lan            2021-10-25  555  	for (i = 0, pfn = 0; i < pagecount; i++) {
+9fef276f9f416a Michael Kelley        2024-01-15  556  		/*
+9fef276f9f416a Michael Kelley        2024-01-15  557  		 * Use slow_virt_to_phys() because the PRESENT bit has been
+9fef276f9f416a Michael Kelley        2024-01-15  558  		 * temporarily cleared in the PTEs.  slow_virt_to_phys() works
+9fef276f9f416a Michael Kelley        2024-01-15  559  		 * without the PRESENT bit while virt_to_hvpfn() or similar
+9fef276f9f416a Michael Kelley        2024-01-15  560  		 * does not.
+9fef276f9f416a Michael Kelley        2024-01-15  561  		 */
+9fef276f9f416a Michael Kelley        2024-01-15  562  		vaddr = (void *)kbuffer + (i * HV_HYP_PAGE_SIZE);
+9fef276f9f416a Michael Kelley        2024-01-15  563  		paddr = slow_virt_to_phys(vaddr);
+9fef276f9f416a Michael Kelley        2024-01-15  564  		pfn_array[pfn] = paddr >> HV_HYP_PAGE_SHIFT;
+810a521265023a Tianyu Lan            2021-10-25  565  		pfn++;
+810a521265023a Tianyu Lan            2021-10-25  566  
+810a521265023a Tianyu Lan            2021-10-25  567  		if (pfn == HV_MAX_MODIFY_GPA_REP_COUNT || i == pagecount - 1) {
+810a521265023a Tianyu Lan            2021-10-25  568  			ret = hv_mark_gpa_visibility(pfn, pfn_array,
+810a521265023a Tianyu Lan            2021-10-25  569  						     visibility);
+93c65513f71649 Kirill A. Shutemov    2024-03-25  570  			if (ret)
+810a521265023a Tianyu Lan            2021-10-25  571  				goto err_free_pfn_array;
+810a521265023a Tianyu Lan            2021-10-25  572  			pfn = 0;
+810a521265023a Tianyu Lan            2021-10-25  573  		}
+810a521265023a Tianyu Lan            2021-10-25  574  	}
+810a521265023a Tianyu Lan            2021-10-25  575  
+810a521265023a Tianyu Lan            2021-10-25  576  err_free_pfn_array:
+810a521265023a Tianyu Lan            2021-10-25  577  	kfree(pfn_array);
+0f34d11234868d Michael Kelley        2024-01-15  578  
+0f34d11234868d Michael Kelley        2024-01-15  579  err_set_memory_p:
+0f34d11234868d Michael Kelley        2024-01-15  580  	/*
+0f34d11234868d Michael Kelley        2024-01-15  581  	 * Set the PTE PRESENT bits again to revert what hv_vtom_clear_present()
+0f34d11234868d Michael Kelley        2024-01-15  582  	 * did. Do this even if there is an error earlier in this function in
+0f34d11234868d Michael Kelley        2024-01-15  583  	 * order to avoid leaving the memory range in a "broken" state. Setting
+0f34d11234868d Michael Kelley        2024-01-15  584  	 * the PRESENT bits shouldn't fail, but return an error if it does.
+0f34d11234868d Michael Kelley        2024-01-15  585  	 */
+0f34d11234868d Michael Kelley        2024-01-15  586  	if (set_memory_p(kbuffer, pagecount))
+0f34d11234868d Michael Kelley        2024-01-15  587  		result = false;
+0f34d11234868d Michael Kelley        2024-01-15  588  
+93c65513f71649 Kirill A. Shutemov    2024-03-25  589  	return ret;
+812b0597fb4043 Michael Kelley        2023-03-26  590  }
+812b0597fb4043 Michael Kelley        2023-03-26  591  
+812b0597fb4043 Michael Kelley        2023-03-26  592  static bool hv_vtom_tlb_flush_required(bool private)
+812b0597fb4043 Michael Kelley        2023-03-26  593  {
+0f34d11234868d Michael Kelley        2024-01-15  594  	/*
+0f34d11234868d Michael Kelley        2024-01-15  595  	 * Since hv_vtom_clear_present() marks the PTEs as "not present"
+0f34d11234868d Michael Kelley        2024-01-15  596  	 * and flushes the TLB, they can't be in the TLB. That makes the
+0f34d11234868d Michael Kelley        2024-01-15  597  	 * flush controlled by this function redundant, so return "false".
+0f34d11234868d Michael Kelley        2024-01-15  598  	 */
+0f34d11234868d Michael Kelley        2024-01-15  599  	return false;
+812b0597fb4043 Michael Kelley        2023-03-26  600  }
+812b0597fb4043 Michael Kelley        2023-03-26  601  
+812b0597fb4043 Michael Kelley        2023-03-26  602  static bool hv_vtom_cache_flush_required(void)
+812b0597fb4043 Michael Kelley        2023-03-26  603  {
+812b0597fb4043 Michael Kelley        2023-03-26  604  	return false;
+812b0597fb4043 Michael Kelley        2023-03-26  605  }
+812b0597fb4043 Michael Kelley        2023-03-26  606  
+812b0597fb4043 Michael Kelley        2023-03-26  607  static bool hv_is_private_mmio(u64 addr)
+812b0597fb4043 Michael Kelley        2023-03-26  608  {
+812b0597fb4043 Michael Kelley        2023-03-26  609  	/*
+812b0597fb4043 Michael Kelley        2023-03-26  610  	 * Hyper-V always provides a single IO-APIC in a guest VM.
+812b0597fb4043 Michael Kelley        2023-03-26  611  	 * When a paravisor is used, it is emulated by the paravisor
+812b0597fb4043 Michael Kelley        2023-03-26  612  	 * in the guest context and must be mapped private.
+812b0597fb4043 Michael Kelley        2023-03-26  613  	 */
+812b0597fb4043 Michael Kelley        2023-03-26  614  	if (addr >= HV_IOAPIC_BASE_ADDRESS &&
+812b0597fb4043 Michael Kelley        2023-03-26  615  	    addr < (HV_IOAPIC_BASE_ADDRESS + PAGE_SIZE))
+812b0597fb4043 Michael Kelley        2023-03-26  616  		return true;
+812b0597fb4043 Michael Kelley        2023-03-26  617  
+812b0597fb4043 Michael Kelley        2023-03-26  618  	/* Same with a vTPM */
+812b0597fb4043 Michael Kelley        2023-03-26  619  	if (addr >= VTPM_BASE_ADDRESS &&
+812b0597fb4043 Michael Kelley        2023-03-26  620  	    addr < (VTPM_BASE_ADDRESS + PAGE_SIZE))
+812b0597fb4043 Michael Kelley        2023-03-26  621  		return true;
+812b0597fb4043 Michael Kelley        2023-03-26  622  
+812b0597fb4043 Michael Kelley        2023-03-26  623  	return false;
+810a521265023a Tianyu Lan            2021-10-25  624  }
+846da38de0e822 Tianyu Lan            2021-12-13  625  
+812b0597fb4043 Michael Kelley        2023-03-26  626  void __init hv_vtom_init(void)
+812b0597fb4043 Michael Kelley        2023-03-26  627  {
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  628  	enum hv_isolation_type type = hv_get_isolation_type();
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  629  
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  630  	switch (type) {
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  631  	case HV_ISOLATION_TYPE_VBS:
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  632  		fallthrough;
+812b0597fb4043 Michael Kelley        2023-03-26  633  	/*
+812b0597fb4043 Michael Kelley        2023-03-26  634  	 * By design, a VM using vTOM doesn't see the SEV setting,
+812b0597fb4043 Michael Kelley        2023-03-26  635  	 * so SEV initialization is bypassed and sev_status isn't set.
+812b0597fb4043 Michael Kelley        2023-03-26  636  	 * Set it here to indicate a vTOM VM.
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  637  	 *
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  638  	 * Note: if CONFIG_AMD_MEM_ENCRYPT is not set, sev_status is
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  639  	 * defined as 0ULL, to which we can't assigned a value.
+812b0597fb4043 Michael Kelley        2023-03-26  640  	 */
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  641  #ifdef CONFIG_AMD_MEM_ENCRYPT
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  642  	case HV_ISOLATION_TYPE_SNP:
+812b0597fb4043 Michael Kelley        2023-03-26  643  		sev_status = MSR_AMD64_SNP_VTOM;
+da86eb96118407 Borislav Petkov (AMD  2023-05-08  644) 		cc_vendor = CC_VENDOR_AMD;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  645  		break;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  646  #endif
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  647  
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  648  	case HV_ISOLATION_TYPE_TDX:
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  649  		cc_vendor = CC_VENDOR_INTEL;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  650  		break;
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  651  
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  652  	default:
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  653  		panic("hv_vtom_init: unsupported isolation type %d\n", type);
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  654  	}
+d3a9d7e49d1531 Dexuan Cui            2023-08-24  655  
+812b0597fb4043 Michael Kelley        2023-03-26  656  	cc_set_mask(ms_hyperv.shared_gpa_boundary);
+812b0597fb4043 Michael Kelley        2023-03-26  657  	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
+812b0597fb4043 Michael Kelley        2023-03-26  658  
+812b0597fb4043 Michael Kelley        2023-03-26  659  	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
+812b0597fb4043 Michael Kelley        2023-03-26  660  	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
+812b0597fb4043 Michael Kelley        2023-03-26  661  	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
+0f34d11234868d Michael Kelley        2024-01-15 @662  	x86_platform.guest.enc_status_change_prepare = hv_vtom_clear_present;
+812b0597fb4043 Michael Kelley        2023-03-26  663  	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
+c957f1f3c498bc Juergen Gross         2023-05-02  664  
+c957f1f3c498bc Juergen Gross         2023-05-02  665  	/* Set WB as the default cache mode. */
+c957f1f3c498bc Juergen Gross         2023-05-02  666  	mtrr_overwrite_state(NULL, 0, MTRR_TYPE_WRBACK);
+812b0597fb4043 Michael Kelley        2023-03-26  667  }
+812b0597fb4043 Michael Kelley        2023-03-26  668  
 
 -- 
 0-DAY CI Kernel Test Service
