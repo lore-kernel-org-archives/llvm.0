@@ -1,148 +1,201 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698CA16C68C;
-	Fri,  5 Apr 2024 11:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5022416F284
+	for <llvm@lists.linux.dev>; Fri,  5 Apr 2024 14:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712317011; cv=none; b=b2vWSnmUprdo70D4nZTqt9bTZgm0HYlFNM7YVJlvauLzPijOSxJt4mKZ0baSJv7Hr9h/HDj8gEH/wrTvFMn05IQa1zkhlktHK0atJnCknXv388+UDo6S8NUOaL9Y4NCsC88Qim0KArrhxzlCyrGdOe3paFCE9ZIA5iAZGiuliPQ=
+	t=1712328081; cv=none; b=Sj5JacV82nPTU3obM/6YImwkEY5gQjQIWuB4K/wsVWhKNBbfJ46hK387B24R+nXlerSYF+i47ySHI/EngsojlNGalVTds1drhFvxopjE8AKNLlmQ6Y56Mc392GRdxVSDXzqPggAgX0JR0yvv8VQX7DAhKUKa25RqVohABciGGgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712317011; c=relaxed/simple;
-	bh=Sg12EAx3ICVX5lOqralz4pA5DQW+y0y4c7gHeCPwJD4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lWLvRjihJSbZrDO6uxgDHCrX06XMi4Mm3MpuSa7fq27ia/hQoaSzbeDGWuD3tSc4Wqc2NOMiaGuIdigF53HECKnnXca0uTVX/cYhFQAK/buA1eU1LF5o+tNE/608UFq70SF38qr6OsQr3hUNBY1OElkAxNQElPOp728nn0hdlH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mBA4z7sD; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712328081; c=relaxed/simple;
+	bh=xysLvei3ccvFbGrLpvnyRv8yuZ4bQg4XJELIQkeJXxw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Hd9gVlVdzp83FDyrcdQXb50VYiWnWreTbwAHvjw1AjqQsBvbZmd8bLi6ZalHJUCR9kCIWZPN6KO9kmS3x1xwTAS+hr3vV+DchqRZxnW1Qj8p3O853onyRNwOQDE0XBwCpqUIA3CffsF2k4MJZ/5sTu9Ud/LXym5c+Zh5f+wwHNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jISChc9o; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mBA4z7sD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712317010; x=1743853010;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sg12EAx3ICVX5lOqralz4pA5DQW+y0y4c7gHeCPwJD4=;
-  b=mBA4z7sDqkYCvNhKr1+dRFu0J/WbKMsV5V78kawYWXhjwcbz5N35fRS1
-   FiZNVTxdwcGABOP2dcsOm6Tf09InRQaBLK+J2zoQwVveYkU0VNBHhtptX
-   cOe9jNmvap9cJGjvv8Z7sLYO/Ph9I+a29pbLlcAQTqLspvWo6XnWS2P9R
-   qSxRQF5QjJcUyt2DZxsaCxkhZs4TtqOWZqy2Kr30JfIrA/jOA9O+7Id2m
-   qIbwtFAhuQVHd0GkPKVUI1jVFwqda0YcC+AQJjGy6fCZNqr6yGpoyJUCq
-   4+Md+J0dqujr6UeEOWGa/N266nfAnv0rCJEv0k4KAUNuD4/5y9OdC1ksG
-   w==;
-X-CSE-ConnectionGUID: ei1q9BITQAuUSi0yHgGLKA==
-X-CSE-MsgGUID: TJ6EmnYgQjO1bxsSpCIYDg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="7875562"
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="7875562"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 04:36:49 -0700
-X-CSE-ConnectionGUID: FdXcbv0BS7OEke4j78pCPw==
-X-CSE-MsgGUID: /HKD6oOtRniCRwO9R7X0qw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="56602327"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 05 Apr 2024 04:36:43 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rshs8-0002DT-1p;
-	Fri, 05 Apr 2024 11:36:40 +0000
-Date: Fri, 5 Apr 2024 19:36:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ashish Kalra <Ashish.Kalra@amd.com>, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, rafael@kernel.org,
-	adrian.hunter@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-	jun.nakajima@intel.com, rick.p.edgecombe@intel.com,
-	thomas.lendacky@amd.com, michael.roth@amd.com, seanjc@google.com,
-	kai.huang@intel.com, bhe@redhat.com,
-	kirill.shutemov@linux.intel.com, bdas@redhat.com,
-	vkuznets@redhat.com, dionnaglaze@google.com, anisinha@redhat.com,
-	jroedel@suse.de, ardb@kernel.org, kexec@lists.infradead.org,
-	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] x86/snp: Convert shared memory back to private on
- kexec
-Message-ID: <202404051917.mk4DoDkI-lkp@intel.com>
-References: <41db1ebbe58fb082dbe848f1c666ed23e83f1752.1712270976.git.ashish.kalra@amd.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jISChc9o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712328078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=H0C/gkutRxLR9OvZHv3CTDJPFUY+0Z2ILw2AXG6wbJA=;
+	b=jISChc9oqqSt1dNrPilG9pIa8P5eOuPUFSse7qf7OUXmZ3hHpzU8hqc1e5Myx2eQu0HZNQ
+	1t6qQgPAwKELgYBaUd8UBkzIluMGEUm9tq6lYREMQ6RqYjYj1165ODR9jHUkjYe9p1gUH4
+	w10OxsstC7YlOTcBvkCp+LS4aoZJnUk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-562-7tmEFcPhOby7Fx7uw1HPwQ-1; Fri, 05 Apr 2024 10:41:17 -0400
+X-MC-Unique: 7tmEFcPhOby7Fx7uw1HPwQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BBFE2185A787
+	for <llvm@lists.linux.dev>; Fri,  5 Apr 2024 14:41:15 +0000 (UTC)
+Received: from [172.64.13.37] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 77332111F3C6;
+	Fri,  5 Apr 2024 14:41:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 21 of 204): Test report for master
+ (6.9.0-rc2, mainline.kernel.org-clang, c88b9b4c)
+Date: Fri, 05 Apr 2024 14:41:15 -0000
+To: xzhou@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41db1ebbe58fb082dbe848f1c666ed23e83f1752.1712270976.git.ashish.kalra@amd.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <77370.124040510411700501@us-mta-562.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ashish,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on efi/next]
-[also build test WARNING on linus/master v6.9-rc2 next-20240405]
-[cannot apply to tip/x86/core tip/master tip/x86/mm tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ashish-Kalra/efi-x86-skip-efi_arch_mem_reserve-in-case-of-kexec/20240405-071346
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-patch link:    https://lore.kernel.org/r/41db1ebbe58fb082dbe848f1c666ed23e83f1752.1712270976.git.ashish.kalra%40amd.com
-patch subject: [PATCH v3 4/4] x86/snp: Convert shared memory back to private on kexec
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240405/202404051917.mk4DoDkI-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240405/202404051917.mk4DoDkI-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404051917.mk4DoDkI-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/x86/kernel/sev.c:1006:14: error: call to undeclared function 'pte_decrypted'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1006 |                 if (pte && pte_decrypted(*pte) && !pte_none(*pte)) {
-         |                            ^
-   arch/x86/kernel/sev.c:1035:16: error: call to undeclared function 'pte_decrypted'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1035 |                 if (!pte || !pte_decrypted(*pte) || pte_none(*pte))
-         |                              ^
->> arch/x86/kernel/sev.c:1025:16: warning: variable 'size' set but not used [-Wunused-but-set-variable]
-    1025 |         unsigned long size;
-         |                       ^
-   arch/x86/kernel/sev.c:1056:7: error: call to undeclared function 'stop_memory_enc_conversion'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1056 |         if (!stop_memory_enc_conversion(wait_for_lock))
-         |              ^
-   1 warning and 3 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/size +1025 arch/x86/kernel/sev.c
+Kernel information:
+    Commit message: Merge tag 'net-6.9-rc3' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
 
-  1021	
-  1022	static void unshare_all_bss_decrypted_memory(void)
-  1023	{
-  1024		unsigned long vaddr, vaddr_end;
-> 1025		unsigned long size;
-  1026		unsigned int level;
-  1027		unsigned int npages;
-  1028		pte_t *pte;
-  1029	
-  1030		vaddr = (unsigned long)__start_bss_decrypted;
-  1031		vaddr_end = (unsigned long)__start_bss_decrypted_unused;
-  1032		npages = (vaddr_end - vaddr) >> PAGE_SHIFT;
-  1033		for (; vaddr < vaddr_end; vaddr += PAGE_SIZE) {
-  1034			pte = lookup_address(vaddr, &level);
-  1035			if (!pte || !pte_decrypted(*pte) || pte_none(*pte))
-  1036				continue;
-  1037	
-  1038			size = page_level_size(level);
-  1039			set_pte_enc(pte, level, (void *)vaddr);
-  1040		}
-  1041		vaddr = (unsigned long)__start_bss_decrypted;
-  1042		snp_set_memory_private(vaddr, npages);
-  1043	}
-  1044	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/139152
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11915165
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/129
+                       =E2=9D=8C FAIL generic/135
+                       =E2=9D=8C FAIL generic/141
+                       =E2=9D=8C FAIL generic/169
+                       =E2=9D=8C FAIL generic/198
+                       =E2=9D=8C FAIL generic/207
+                       =E2=9D=8C FAIL generic/208
+                       =E2=9D=8C FAIL generic/210
+                       =E2=9D=8C FAIL generic/211
+                       =E2=9D=8C FAIL generic/212
+                       =E2=9D=8C FAIL generic/214
+                       =E2=9D=8C FAIL generic/221
+                       =E2=9D=8C FAIL generic/245
+                       =E2=9D=8C FAIL generic/246
+                       =E2=9D=8C FAIL generic/248
+                       =E2=9D=8C FAIL generic/249
+                       =E2=9D=8C FAIL generic/257
+                       =E2=9D=8C FAIL generic/308
+                       =E2=9D=8C FAIL generic/309
+                       =E2=9D=8C FAIL generic/310
+                       =E2=9D=8C FAIL generic/339
+                       =E2=9D=8C FAIL generic/340
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11915164
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/129
+                       =E2=9D=8C FAIL generic/354
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [x86_64, x86_64 (debug)]
+    CKI/restraint [x86_64, x86_64 (debug)]
+    machineinfo [x86_64, x86_64 (debug)]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [x86_64, x86_64 (debug)]
+    SELinux Custom Module Setup [x86_64, x86_64 (debug)]
+    Storage - blktests - blk - upstream [x86_64]
+    Storage - blktests - nvme-tcp - upstream [x86_64]
+    Storage - swraid scsi_raid [x86_64, x86_64 (debug)]
+    stress: stress-ng - cpu-cache [x86_64]
+    stress: stress-ng - memory [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
