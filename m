@@ -1,213 +1,86 @@
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05olkn2085.outbound.protection.outlook.com [40.92.90.85])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8521D2C1B9
-	for <llvm@lists.linux.dev>; Sat,  6 Apr 2024 16:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.90.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712420667; cv=fail; b=F0oimQ/GVL9b36tNrmG+DqD/IyTnpGSPBGRMMhG67m6Y/IzE+SJuQIcmP1rAg5KQTPCE4L3OjsV305PCJL3+yo9sKuxPEiedAJ9ruW+K4IwoNM5yaGR+nBJ4IAMHJkv/H+PK4vWsa8q9Gb0S48w4fxWhWA/owfj48dJnhMnByPo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712420667; c=relaxed/simple;
-	bh=em0KuTuS5v17wCYbmf3zMkFaHtwR1H6btaoNK7MFnqo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ig3PACukOFH9dBIuuAJ3Jn+/SFAQZM6ifdVUN8pCLBPi5SRV5B9eMX4soTltQ0BXd5ED14m97rMU5XtKQQcdfL030324B2pSsDkJmaLStQ2rWott7/rDNEXB+l3ZuM5LEpr4ShYHgBGmaEjKcTQ3lq7R1eg+Xl+Ev6AZksXMcgI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=MsGYFUNX; arc=fail smtp.client-ip=40.92.90.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B13446A0;
+	Sat,  6 Apr 2024 17:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712425066; cv=none; b=L/Pdu7L3d4oqvzK/x2nBPhQtD+Z0ZH8zPch0Hupf4qnFjDpWGM2dC2wGiztHxdNKbHrHrbNI94hDwGapQDQg1xxyLpdQEG0KLE7VABcXgXBXFgyTLWbcdp8ctm16n+5n7Db6iyflzVwrFlHzgNtU2gt3P7/X5NUcKnkweKGmF68=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712425066; c=relaxed/simple;
+	bh=19uVdfL+EX41ApFyzvHi/X5zi1j2O2EONq+3NpwzYXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sTsATEDt/SC/SqHqiz5aL8nqst4yd8O4hwM0166TW5Vb1F2uu01yh38IT0CWmWHh58ifcgFcn4eOv7633pDMGm7FpQsR5I9Nf78gtLv3iHvoTW+hEg7Z12h2DzUBcKuFILskFk5RGripq9wbD/aq/iEwafE/f+4tMu6JJEteg7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UmNCQWCw; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="MsGYFUNX"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DOAuPUI3GCFvdWS02y8lYX+Btl759fFtLz9XBkXpU6nc1U7x4A2adtJgW2HMOj6BmYHdZ/zzmjtEl/FaMwMYCSA7QNkx4qQYQpBO31bgo/zlpMBn4Iqb1oJxseHBIqioaHkBG4axX1fjF6cbpxlStIy7v6jKr/Qd4JDXA8pE+nV3ArBUVj8M97JU4ZOti2jnnCY/jLsDxBykGE54zkAZcVOVi6M8MvDl5QmDyIsN1MsORsUKgeMmSDB3VZmHi/F9mPPHW39Q/RSpn5Xl6/1G3R5Mo6p79EWsM+gASwIave6BCJ3BmXhawWTeTzHqRN9xyHciWGcEhS1kRtNB/DfPjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=78EOzeiJpMwIvqdyeb+jNXi711WZpDuzvqqWUG13Uhw=;
- b=YlR+qatxpUXpOsmAAdM8iRuaVnp1mFJ1HjV5gfLL3gzsScaI0zkykG4bEDieel81IvxdTNUkid3KcrCfPaxi+HU1eultff35hBflNmgsMg4tHE94zhKoW/rePopxiazz4XCeCoHM9t91UArZ/1pj46LzPfyu45DMgtKhj3/RSuAb05GGS1l9BvOX6si3n1NbQEhztyQ6h7weXuoofzzl5gx74WdYCxnpoX4SXxPBzNCWmsmmZ9CbaL91YK+k+QarikG4TjYfr9I929p5gjaD5biAduQesJeaLBNkTDBRyU5JnE4IUvAzZVbVyRODHVUS9QRRzFv/40ySnZ+knlpGiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=78EOzeiJpMwIvqdyeb+jNXi711WZpDuzvqqWUG13Uhw=;
- b=MsGYFUNX9o4ieQ4Qn3OmFt9qnPNd4LxXPzY3+VmYbMiZnQvSGOZu2rQ+Us8GvaETy+RsZ54Do9ZLf6hhfJWwp/uGUArQxv3qG80QLVY4DD0xtV+myToh+uX6aaJxqc243qe44qXb5d7MXTFthsf49k22qOgez7XbU3nZPkIgN5R56E0WnH5LuvG3nCJ2v4e2JwoxvEsoY/1sRcrzWEyLNrxSGb2sshSKEEb/2HdzDdScDxQ6INBs+OoKMSKjdRf2iizhoaHD6hX93eq578gvz/gr5xyGxpObD2t82yaWLBmQ7KghN/WZ+Xbmq3JQp7gLHxx7uI/q1eQbdXR/kFE1Qg==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by DU0PR02MB9121.eurprd02.prod.outlook.com (2603:10a6:10:464::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Sat, 6 Apr
- 2024 16:24:22 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::9817:eaf5:e2a7:e486]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::9817:eaf5:e2a7:e486%4]) with mapi id 15.20.7409.049; Sat, 6 Apr 2024
- 16:24:22 +0000
-From: Erick Archer <erick.archer@outlook.com>
-To: Long Li <longli@microsoft.com>,
-	Ajay Sharma <sharmaajay@microsoft.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Shradha Gupta <shradhagupta@linux.microsoft.com>,
-	Konstantin Taranov <kotaranov@microsoft.com>
-Cc: Erick Archer <erick.archer@outlook.com>,
-	linux-rdma@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3 3/3] net: mana: Avoid open coded arithmetic
-Date: Sat,  6 Apr 2024 16:23:37 +0200
-Message-ID:
- <AS8PR02MB7237A21355C86EC0DCC0D83B8B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240406142337.16241-1-erick.archer@outlook.com>
-References: <20240406142337.16241-1-erick.archer@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [IjmoCuAyloIqhvoUYW9pNGyBpZ9aP3ZY]
-X-ClientProxiedBy: MA4P292CA0011.ESPP292.PROD.OUTLOOK.COM
- (2603:10a6:250:2d::17) To AS8PR02MB7237.eurprd02.prod.outlook.com
- (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID:
- <20240406142337.16241-4-erick.archer@outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UmNCQWCw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712425065; x=1743961065;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=19uVdfL+EX41ApFyzvHi/X5zi1j2O2EONq+3NpwzYXk=;
+  b=UmNCQWCwiM6SI9Mtc4pXSD1ZwmDDQjLO8youEE7uzD0rctuLG4XHT5qn
+   K/Vr5gs1pIxFm8QFb8eg53JE+eabo9r9XKqLJWljt8C1f8S/wD6y4aGVG
+   5XxU2OHkLvKYWRlvDZLzpoMtKpmcWBrd63hlb4Rdqye3qdn716HUmpX/J
+   sl3+qpxSFmqnzMD/gaM4w3SIFeKsnURbEpUFACgTVKTAIP9wUTP7TYq6m
+   BQfWyl329gSy4rF5sLOGaq+XhyeM4FiTEBe8iF6pPOo3wKRz/JjZcvqM7
+   pFUx86trPl+qK7ejyFKihaFaSfnfh+HrxV9hlUHrirPkiQBj9/QQHdqnO
+   Q==;
+X-CSE-ConnectionGUID: QfWeA2m3Ta+XRvt5rPvlSQ==
+X-CSE-MsgGUID: li0vupAFSbSXAR/mwVXIOA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="11513950"
+X-IronPort-AV: E=Sophos;i="6.07,183,1708416000"; 
+   d="scan'208";a="11513950"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 10:37:44 -0700
+X-CSE-ConnectionGUID: 6DWphFNhTx6F0yAjIrSEIg==
+X-CSE-MsgGUID: kH8ePQwcRba0h00Da/f0ug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,183,1708416000"; 
+   d="scan'208";a="23958778"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 06 Apr 2024 10:37:43 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rt9z2-0003io-39;
+	Sat, 06 Apr 2024 17:37:40 +0000
+Date: Sun, 7 Apr 2024 01:36:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:master 61/66] ld.lld: error: undefined symbol:
+ __get_user_bad
+Message-ID: <202404070139.iR6dc6kY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|DU0PR02MB9121:EE_
-X-MS-Office365-Filtering-Correlation-Id: a83463e9-01d5-437c-88e7-08dc5656044e
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	fmAByG4ma+dK8Rj55/hFD4vso/r9uC/2Bz1PS6+SQo77Bb0CnEgVXzR12W+2H2TMK6OvXWfMjf8t9RP0fuPXr8YDA1zzxjiP63yQ18gfRkf7GCSjyBoSUu4z8mCD6JxYudlL0ORmsJ8a27z3bsJxm1LPYfzv3Fhxgz1j1nY1tgQo7GdfDeksB0X4GeoJd+gNV/TU4XRZAZZNdq3BAMNhI+oHfMSu1Vdoywq8DFzkWBNbgN4q0Q1LmKYGbG5JzKaZFOJVi+SyuUhIQ0voWFjSEcFwwbN5hVuLOQT0n00JUXRRw0Gp8SEUNCARAR409DkPcbvUhCRG67gjIB6uAZ7szhafmpLlkvQDawZNzEc4wD6PpxEpziZeOcD2AvOARbOvbcOCsHQHmXCmrbYutYgGtHjqWSuDMrF8Qch5QuQOT6UWWakLqPjUgH71EwSOGVuxN64A+/KnpioHpM2gg++wkgcN/1Um4Vv4gCvYVZpY6CPcqSj639AJYeRHY2iNgee6Rj3gCtVL0rc9htXDFjbnrD6OciIOGhGI/ko1b8Z5L/CxCzUUHn7A3TT2y+tFDaySazPpETdf5oP8n22cskEp0pzCnQiSYOsKTlxWfYZuKY34Hgh9A66oNR2hLGsUTrW2bITX4Yx0WD0m1+Y5Df/8ww77xbbNtWIyuuE4CDXXVsXqMNy27lKGEv5CFjFyoz4XFhP90EtXMmsdOsUaMaPG1w==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?x+NWygIoX/E7zdR3o15zzkhmyeh9NM3/hLj/sqpX5ZrTznHVy7G0Dd3qWURk?=
- =?us-ascii?Q?Fjrw03gGJ/vUqrk93iB8X1M9OjZd+YZ3FzbEAsN/yNS5HgsJvUkniC+6FUIq?=
- =?us-ascii?Q?VH4e6IYNJMLBWNuvIjkLYB3xRXb9QXIKCN+2rznnE5XiGFSwmnWzDp/ci+PJ?=
- =?us-ascii?Q?YdN4Wu2vDO7tcPGX/1GTkQAQcp03vLEO8jAMF+vOZnFrMR0irMGGfq18+4UI?=
- =?us-ascii?Q?aWYhrCNPqdhddaV9i1pzhkxU3WEyRqxjH4SDIi3YAJ8OQMsfWBfRGFbR/AdB?=
- =?us-ascii?Q?cPx5YsBpSaztOXBGP0JYfsK8oSjcfQsv9ebqpx41l8aI/XV85s/fesTVhoHx?=
- =?us-ascii?Q?i+LQ77LJ0fEMmkumWdWILeQ2i5KztcZENcTvL0zIjN1ICbFA3HdVZu8Hmlf9?=
- =?us-ascii?Q?Sd5x2TzBFMLwiHWd5H04exp383hrdWjc3UJkedDm94sR9CYGbaDqQ+cSSobJ?=
- =?us-ascii?Q?UVBB+Fz/GXSi6rq6+bpIJfJzrw0LwR0HClZlc5IDKWvmLOExfF9y4JKQu6sA?=
- =?us-ascii?Q?ex7QoVZUGekG4wBtyVTFx0PnT3/gAecEE7dY8620K6CABFM7h5AyLogYw/K1?=
- =?us-ascii?Q?g3S1ZgeuviP4Wg8LFAcAIWILZW/6i111xgtvqGXM4in4FoOG3nheijWC2unl?=
- =?us-ascii?Q?rWfJGXgajODKjR4lfzAk7Sdj2/RTNvq+cx9HBTe7jtMOM59N3oiWrgQYDD/D?=
- =?us-ascii?Q?DxPbWkLsmS1ePvbjpEWY0BgbwsdEhDjVmoi4V+cdB7cSDHye+kD6uUl4U47p?=
- =?us-ascii?Q?5Pgc/ivUWRkaeunOCD6L9Qh/ulScSza5LorKy/Fk7ZQULG+LoTOnq5VLnO+V?=
- =?us-ascii?Q?CIZuNz0CkV+Aje//Z6/zu/+CgpXjIJQUxQV/ZPZMU30qf/3Trmlr36jnDV7V?=
- =?us-ascii?Q?9yU8Jtonv+69USUMU4+azbHKKb2Xvbjl4gaHLf80wwCjq9TJaXp0w3bvcMxs?=
- =?us-ascii?Q?YXcw83Z1frjZ+7CVV4xVMqDRdiO5u/h/s41jmILwhRouySm6qrZsJ3akfrSW?=
- =?us-ascii?Q?6hzs2t21fN04u1ZwTFnjs+lONtvLqEY1uj1WCyiVJr8eq+20UXfFIiopgkbY?=
- =?us-ascii?Q?qFv4L3QFfL7xtuBaKNSNS9PsrYR12hqrnMDr6tkv4Qy8Z+ucYM8OAqkFIFMI?=
- =?us-ascii?Q?PjfTm5iqkE1nLAWun9PBjwrA8ZA5WzCozx39uzDit2WWOb1Z/rzIxy9GZVEi?=
- =?us-ascii?Q?gJ8RvR6odiv8/uRyVyun0JY4UJBVyX3BIfFo6MsZGgLKiN3BzK5V9TfQ8exc?=
- =?us-ascii?Q?/9kawPV6I8vrX/j7Z4bA?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a83463e9-01d5-437c-88e7-08dc5656044e
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2024 16:24:22.1362
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB9121
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is an effort to get rid of all multiplications from allocation
-functions in order to prevent integer overflows [1][2].
+tree:   https://evilpiepirate.org/git/bcachefs.git master
+head:   86bf22aacb4afe50b74f567a62ae4deff198eab5
+commit: 7f246d8d9649d5f40683ce07f98c1a134fae4b4c [61/66] bcachefs: Fix BCH_IOCTL_FSCK_OFFLINE for encrypted filesystems
+config: arm-randconfig-002-20240406 (https://download.01.org/0day-ci/archive/20240407/202404070139.iR6dc6kY-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 233c030dcb18880d5f0a749573f11f96f35e76b8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070139.iR6dc6kY-lkp@intel.com/reproduce)
 
-As the "req" variable is a pointer to "struct mana_cfg_rx_steer_req_v2"
-and this structure ends in a flexible array:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404070139.iR6dc6kY-lkp@intel.com/
 
-struct mana_cfg_rx_steer_req_v2 {
-        [...]
-        mana_handle_t indir_tab[] __counted_by(num_indir_entries);
-};
+All errors (new ones prefixed by >>):
 
-the preferred way in the kernel is to use the struct_size() helper to
-do the arithmetic instead of the calculation "size + size * count" in
-the kzalloc() function.
+>> ld.lld: error: undefined symbol: __get_user_bad
+   >>> referenced by chardev.c
+   >>>               fs/bcachefs/chardev.o:(bch2_chardev_ioctl) in archive vmlinux.a
 
-Moreover, use the "offsetof" helper to get the indirect table offset
-instead of the "sizeof" operator and avoid the open-coded arithmetic in
-pointers using the new flex member. This new structure member also allow
-us to remove the "req_indir_tab" variable since it is no longer needed.
-
-Now, it is also possible to use the "flex_array_size" helper to compute
-the size of these trailing elements in the "memcpy" function.
-
-This way, the code is more readable and safer.
-
-This code was detected with the help of Coccinelle, and audited and
-modified manually.
-
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
-Link: https://github.com/KSPP/linux/issues/160 [2]
-Signed-off-by: Erick Archer <erick.archer@outlook.com>
----
- drivers/net/ethernet/microsoft/mana/mana_en.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index d8af5e7e15b4..f2fae659bf3b 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -1058,11 +1058,10 @@ static int mana_cfg_vport_steering(struct mana_port_context *apc,
- 	struct mana_cfg_rx_steer_req_v2 *req;
- 	struct mana_cfg_rx_steer_resp resp = {};
- 	struct net_device *ndev = apc->ndev;
--	mana_handle_t *req_indir_tab;
- 	u32 req_buf_size;
- 	int err;
- 
--	req_buf_size = sizeof(*req) + sizeof(mana_handle_t) * num_entries;
-+	req_buf_size = struct_size(req, indir_tab, num_entries);
- 	req = kzalloc(req_buf_size, GFP_KERNEL);
- 	if (!req)
- 		return -ENOMEM;
-@@ -1074,7 +1073,8 @@ static int mana_cfg_vport_steering(struct mana_port_context *apc,
- 
- 	req->vport = apc->port_handle;
- 	req->num_indir_entries = num_entries;
--	req->indir_tab_offset = sizeof(*req);
-+	req->indir_tab_offset = offsetof(struct mana_cfg_rx_steer_req_v2,
-+					 indir_tab);
- 	req->rx_enable = rx;
- 	req->rss_enable = apc->rss_state;
- 	req->update_default_rxobj = update_default_rxobj;
-@@ -1086,11 +1086,9 @@ static int mana_cfg_vport_steering(struct mana_port_context *apc,
- 	if (update_key)
- 		memcpy(&req->hashkey, apc->hashkey, MANA_HASH_KEY_SIZE);
- 
--	if (update_tab) {
--		req_indir_tab = (mana_handle_t *)(req + 1);
--		memcpy(req_indir_tab, apc->rxobj_table,
--		       req->num_indir_entries * sizeof(mana_handle_t));
--	}
-+	if (update_tab)
-+		memcpy(req->indir_tab, apc->rxobj_table,
-+		       flex_array_size(req, indir_tab, req->num_indir_entries));
- 
- 	err = mana_send_request(apc->ac, req, req_buf_size, &resp,
- 				sizeof(resp));
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
