@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6BE45037;
-	Sat,  6 Apr 2024 22:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4831E4E1BC;
+	Sat,  6 Apr 2024 23:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712443618; cv=none; b=VimYL7GRNyVfaOellNK1qnxaS110fBu3zmaBwxQ0V2tbHWUkqZC1KqYChSPInIanqEYOsEP26aU2leKpyl97u8ukOnRClzuKlKRP7OV7/LTestaJj45FEuxUEdaRtyvfgCcidAjgN5mVpxljSdCb1ptDcO61kRhNZNdiolfcdp0=
+	t=1712445657; cv=none; b=diRMDy2MDM9OTmKd23EdZz0RlruBm00H7gpCeh3wrZCGeUdsR2kQAKSKinIir3T1VtWgxa+lGU8pN1l2EPkWvaCWRqwqq182mGCX9MNQ9hp2OegZt4UH6iaacPQEmM2249htSkZ/7WeYYKKoTwOSOhbkTZz85EpNSXdoMsbVhEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712443618; c=relaxed/simple;
-	bh=I1OiO+ZEI9YWtq71HEl4I/O2u8xoSYN4danCs8WD6PE=;
+	s=arc-20240116; t=1712445657; c=relaxed/simple;
+	bh=P8vUFA5vjSy7BTRrLgiVzjR/Xcoa7aOmYkB2kbDF/wE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uXmZyP0MJLDUMXuXj5lQl2nPD3dQD/Fsh6W/WTiFwce6zvyytzk7Mkn+jd//6NjmEopCUeO0v+CVh8Rpod8KC6s57A6mYvyO+RlXnWy1sL8wzsTNyLaSCujuBwxF7POOonyubNHcVyAWA/tvpQyP4Yj1FJnkgizjXek6Bb/WP0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fNal/srR; arc=none smtp.client-ip=192.198.163.8
+	 Content-Disposition; b=QXa1AUwHOPxhx53ggPIkpx/rCGY9n2/7N14F4gNpJufhEXENTDi+3gax0I+3h3MIMQ27BTX51OghKpDN2qvj3nWop3XpZOi+4k2i33i8lfH6qTeUOwEk/PfHbdugdRV4I24UAFfW7/2W+MoWyXjC7I1wiATUQGumE//dhb41Bao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Djhtn8PN; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fNal/srR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Djhtn8PN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712443616; x=1743979616;
+  t=1712445655; x=1743981655;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I1OiO+ZEI9YWtq71HEl4I/O2u8xoSYN4danCs8WD6PE=;
-  b=fNal/srRY0wse7Nrts98MESYGNJfcc0tsRgz1/k8toPi/q3UPkDp00Wx
-   NM0pLeLan5UWYBcFEsWUVEwbGe+G1B7LHWxpAY7suvkCdFE87EFfocEND
-   M9h9HqgwKeeYbN+TaXd7Y+6UgACj83d3le3utjg8YyCAF2BCj0pTBsxPn
-   MCjlJtHvKX6/GMJUNZPKmZ45bNaLa/weVhNgJV8GekojL/Dm9Fk4WJxeN
-   rwOXiYTALzLxPjVTRxPscQ+Q1ccn6Js/Yn1S6gTKaHQesOFLi4vf7ab3R
-   nzGJxH4YPBlJPpi5RPezw7W88pKUU8XR5dk5BR8p6U4aF+6fXuTUsIrpY
+  bh=P8vUFA5vjSy7BTRrLgiVzjR/Xcoa7aOmYkB2kbDF/wE=;
+  b=Djhtn8PNUHUpTMumdnfnPF1SKNTHFqg08nqK6frSHDO+pSwejUjfx9gW
+   nNKdWmqD4YBcS+KCmWszcJ8hesk7mCYBXab3VVug0im6jZpgscwq0rWUK
+   s4mtlTW1ebHCqeIlI2CXib8Zb+xVa9WXySmevGMwSvDrp3cMM27RWyNJF
+   uP6CibzxjAkTUe3nXnzrUKeLf/n/vZvo0IfcLxXot9qJCKqZkHLuIMXCx
+   BzwFtx9n1A5E4KK4tiJeaix2mRkb9vu19Z79R25XR2Pf9+jMW1k3NVeC4
+   4hu5dEffI2zV2T8X6b5RBDB41jBZg9LOb/Iz/cp2pqEjwoSYshDTHzjRE
    Q==;
-X-CSE-ConnectionGUID: r80PwGhKTy2N1sG8N+OtaQ==
-X-CSE-MsgGUID: 1zV3ImbxTDSSJqLKekcjJQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="25251931"
+X-CSE-ConnectionGUID: EF4G23S8Rc+w5kHadNoxIA==
+X-CSE-MsgGUID: AiFHVpudQDuAVde2T4ampA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="10720439"
 X-IronPort-AV: E=Sophos;i="6.07,184,1708416000"; 
-   d="scan'208";a="25251931"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 15:46:52 -0700
-X-CSE-ConnectionGUID: gONa6hqbSqGVlkaA1kDRNg==
-X-CSE-MsgGUID: lluMgK2/QROHMgwDUQ0MBw==
+   d="scan'208";a="10720439"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 16:20:54 -0700
+X-CSE-ConnectionGUID: BPdPr+PPTn25OVnEQIhtGQ==
+X-CSE-MsgGUID: mTePqGlLT2OZINFtOHIzsw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,184,1708416000"; 
-   d="scan'208";a="23995112"
+   d="scan'208";a="24180541"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 06 Apr 2024 15:46:51 -0700
+  by orviesa003.jf.intel.com with ESMTP; 06 Apr 2024 16:20:53 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rtEoD-0003v6-1K;
-	Sat, 06 Apr 2024 22:46:49 +0000
-Date: Sun, 7 Apr 2024 06:46:11 +0800
+	id 1rtFL8-0003xe-1D;
+	Sat, 06 Apr 2024 23:20:50 +0000
+Date: Sun, 7 Apr 2024 07:19:52 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 127/133] drivers/most/most_cdev.c:188:17:
- error: call to undeclared function 'iov_iter_count'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202404070647.uLcGRMUV-lkp@intel.com>
+Subject: [axboe-block:rw_iter 10/133] mm/hwpoison-inject.c:63:1: error: use
+ of undeclared identifier 'debugfs_attr_read_iter'; did you mean
+ 'debugfs_attr_read'?
+Message-ID: <202404070742.qmfvDpAw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,144 +65,473 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
 head:   1a95bcd36c1c2fd1c92f33b5ea95c2e0a5667100
-commit: 5e20f57e36986fd1fbf488594d6c04bdd6a62102 [127/133] drivers/most: convert to read/write iterators
-config: i386-buildonly-randconfig-004-20240407 (https://download.01.org/0day-ci/archive/20240407/202404070647.uLcGRMUV-lkp@intel.com/config)
+commit: c8683d55c177756d4a8bcffdd3dc2271e61405c1 [10/133] libfs: switch to read iter and add copy helpers
+config: x86_64-buildonly-randconfig-004-20240407 (https://download.01.org/0day-ci/archive/20240407/202404070742.qmfvDpAw-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070647.uLcGRMUV-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070742.qmfvDpAw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404070647.uLcGRMUV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404070742.qmfvDpAw-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/most/most_cdev.c:188:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     188 |         size_t count = iov_iter_count(from);
-         |                        ^
->> drivers/most/most_cdev.c:207:8: error: call to undeclared function 'copy_from_iter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     207 |         ret = copy_from_iter(mbo->virt_address + c->mbo_offs, to_copy, from);
-         |               ^
-   drivers/most/most_cdev.c:207:8: note: did you mean 'copy_from_user'?
-   include/linux/uaccess.h:180:1: note: 'copy_from_user' declared here
-     180 | copy_from_user(void *to, const void __user *from, unsigned long n)
+>> mm/hwpoison-inject.c:63:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+      63 | DEFINE_DEBUGFS_ATTRIBUTE(hwpoison_fops, NULL, hwpoison_inject, "%lli\n");
          | ^
-   drivers/most/most_cdev.c:239:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     239 |         size_t count = iov_iter_count(to);
-         |                        ^
->> drivers/most/most_cdev.c:263:11: error: call to undeclared function 'copy_to_iter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     263 |         copied = copy_to_iter(mbo->virt_address + c->mbo_offs, to_copy, to);
-         |                  ^
-   drivers/most/most_cdev.c:263:11: note: did you mean 'copy_to_user'?
-   include/linux/uaccess.h:188:1: note: 'copy_to_user' declared here
-     188 | copy_to_user(void __user *to, const void *from, unsigned long n)
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+>> mm/hwpoison-inject.c:63:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+      63 | DEFINE_DEBUGFS_ATTRIBUTE(hwpoison_fops, NULL, hwpoison_inject, "%lli\n");
          | ^
-   4 errors generated.
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> mm/hwpoison-inject.c:63:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+      63 | DEFINE_DEBUGFS_ATTRIBUTE(hwpoison_fops, NULL, hwpoison_inject, "%lli\n");
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> mm/hwpoison-inject.c:63:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+      63 | DEFINE_DEBUGFS_ATTRIBUTE(hwpoison_fops, NULL, hwpoison_inject, "%lli\n");
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+   mm/hwpoison-inject.c:63:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+      63 | DEFINE_DEBUGFS_ATTRIBUTE(hwpoison_fops, NULL, hwpoison_inject, "%lli\n");
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:59:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/hwpoison-inject.c:64:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+      64 | DEFINE_DEBUGFS_ATTRIBUTE(unpoison_fops, NULL, hwpoison_unpoison, "%lli\n");
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+   mm/hwpoison-inject.c:64:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+      64 | DEFINE_DEBUGFS_ATTRIBUTE(unpoison_fops, NULL, hwpoison_unpoison, "%lli\n");
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+   mm/hwpoison-inject.c:64:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+      64 | DEFINE_DEBUGFS_ATTRIBUTE(unpoison_fops, NULL, hwpoison_unpoison, "%lli\n");
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+   mm/hwpoison-inject.c:64:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+      64 | DEFINE_DEBUGFS_ATTRIBUTE(unpoison_fops, NULL, hwpoison_unpoison, "%lli\n");
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+   mm/hwpoison-inject.c:64:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+      64 | DEFINE_DEBUGFS_ATTRIBUTE(unpoison_fops, NULL, hwpoison_unpoison, "%lli\n");
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:59:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   10 errors generated.
+--
+>> lib/test_fpu.c:66:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+      66 | DEFINE_DEBUGFS_ATTRIBUTE(test_fpu_fops, test_fpu_get, NULL, "%lld\n");
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+>> lib/test_fpu.c:66:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+      66 | DEFINE_DEBUGFS_ATTRIBUTE(test_fpu_fops, test_fpu_get, NULL, "%lld\n");
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> lib/test_fpu.c:66:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+      66 | DEFINE_DEBUGFS_ATTRIBUTE(test_fpu_fops, test_fpu_get, NULL, "%lld\n");
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> lib/test_fpu.c:66:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+      66 | DEFINE_DEBUGFS_ATTRIBUTE(test_fpu_fops, test_fpu_get, NULL, "%lld\n");
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+>> lib/test_fpu.c:66:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+      66 | DEFINE_DEBUGFS_ATTRIBUTE(test_fpu_fops, test_fpu_get, NULL, "%lld\n");
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:59:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 errors generated.
+--
+   drivers/memory/tegra/tegra124-emc.c:1207:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+    1207 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+   drivers/memory/tegra/tegra124-emc.c:1207:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+    1207 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+   drivers/memory/tegra/tegra124-emc.c:1207:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+    1207 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> drivers/memory/tegra/tegra124-emc.c:1207:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+    1207 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1208 |                         tegra_emc_debug_min_rate_get,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1209 |                         tegra_emc_debug_min_rate_set, "%llu\n");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra124-emc.c:1207:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+    1207 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1208 |                         tegra_emc_debug_min_rate_get,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1209 |                         tegra_emc_debug_min_rate_set, "%llu\n");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:59:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra124-emc.c:1237:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+    1237 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+   drivers/memory/tegra/tegra124-emc.c:1237:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+    1237 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+   drivers/memory/tegra/tegra124-emc.c:1237:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+    1237 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
+         | ^
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+   drivers/memory/tegra/tegra124-emc.c:1237:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+    1237 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1238 |                         tegra_emc_debug_max_rate_get,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1239 |                         tegra_emc_debug_max_rate_set, "%llu\n");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra124-emc.c:1237:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+    1237 | DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1238 |                         tegra_emc_debug_max_rate_get,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1239 |                         tegra_emc_debug_max_rate_set, "%llu\n");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:59:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   10 errors generated.
+--
+>> drivers/i2c/busses/i2c-gpio.c:101:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+     101 | WIRE_ATTRIBUTE(scl);
+         | ^
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+>> drivers/i2c/busses/i2c-gpio.c:101:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+     101 | WIRE_ATTRIBUTE(scl);
+         | ^
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> drivers/i2c/busses/i2c-gpio.c:101:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+     101 | WIRE_ATTRIBUTE(scl);
+         | ^
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+>> drivers/i2c/busses/i2c-gpio.c:101:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+     101 | WIRE_ATTRIBUTE(scl);
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+      99 | DEFINE_DEBUGFS_ATTRIBUTE(fops_##wire, fops_##wire##_get, fops_##wire##_set, "%llu\n")
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-gpio.c:101:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+     101 | WIRE_ATTRIBUTE(scl);
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+      99 | DEFINE_DEBUGFS_ATTRIBUTE(fops_##wire, fops_##wire##_get, fops_##wire##_set, "%llu\n")
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:59:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-gpio.c:102:1: error: use of undeclared identifier 'debugfs_attr_read_iter'; did you mean 'debugfs_attr_read'?
+     102 | WIRE_ATTRIBUTE(sda);
+         | ^
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^
+   include/linux/debugfs.h:271:23: note: 'debugfs_attr_read' declared here
+     271 | static inline ssize_t debugfs_attr_read(struct file *file, char __user *buf,
+         |                       ^
+   drivers/i2c/busses/i2c-gpio.c:102:1: error: use of undeclared identifier 'debugfs_attr_write_iter_signed'; did you mean 'debugfs_attr_write_signed'?
+     102 | WIRE_ATTRIBUTE(sda);
+         | ^
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:31: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                      ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+   drivers/i2c/busses/i2c-gpio.c:102:1: error: use of undeclared identifier 'debugfs_attr_write_iter'; did you mean 'debugfs_attr_write_signed'?
+     102 | WIRE_ATTRIBUTE(sda);
+         | ^
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^
+   include/linux/debugfs.h:59:64: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      59 |         .write_iter= (__is_signed) ? debugfs_attr_write_iter_signed : debugfs_attr_write_iter,  \
+         |                                                                       ^
+   include/linux/debugfs.h:284:23: note: 'debugfs_attr_write_signed' declared here
+     284 | static inline ssize_t debugfs_attr_write_signed(struct file *file,
+         |                       ^
+   drivers/i2c/busses/i2c-gpio.c:102:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+     102 | WIRE_ATTRIBUTE(sda);
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+      99 | DEFINE_DEBUGFS_ATTRIBUTE(fops_##wire, fops_##wire##_get, fops_##wire##_set, "%llu\n")
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:64:2: note: expanded from macro '\
+   DEFINE_DEBUGFS_ATTRIBUTE'
+      64 |         DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:58:15: note: expanded from macro 'DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED'
+      58 |         .read_iter = debugfs_attr_read_iter,                            \
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-gpio.c:102:1: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
+     102 | WIRE_ATTRIBUTE(sda);
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-gpio.c:98:10: note: expanded from macro 'WIRE_ATTRIBUTE'
+      98 | }                                                               \
+         |                                                                 ^
+      99 | DEFINE_DEBUGFS_ATTRIBUTE(fops_##wire, fops_##wire##_get, fops_##wire##_set, "%llu\n")
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/iov_iter_count +188 drivers/most/most_cdev.c
+vim +63 mm/hwpoison-inject.c
 
-   174	
-   175	/**
-   176	 * comp_write - implements the syscall to write to the device
-   177	 * @filp: file pointer
-   178	 * @buf: pointer to user buffer
-   179	 * @count: number of bytes to write
-   180	 * @offset: offset from where to start writing
-   181	 */
-   182	static ssize_t comp_write(struct kiocb *iocb, struct iov_iter *from)
-   183	{
-   184		int ret;
-   185		size_t to_copy;
-   186		struct mbo *mbo = NULL;
-   187		struct comp_channel *c = iocb->ki_filp->private_data;
- > 188		size_t count = iov_iter_count(from);
-   189	
-   190		mutex_lock(&c->io_mutex);
-   191		while (c->dev && !ch_get_mbo(c, &mbo)) {
-   192			mutex_unlock(&c->io_mutex);
-   193	
-   194			if (iocb->ki_filp->f_flags & O_NONBLOCK)
-   195				return -EAGAIN;
-   196			if (wait_event_interruptible(c->wq, ch_has_mbo(c) || !c->dev))
-   197				return -ERESTARTSYS;
-   198			mutex_lock(&c->io_mutex);
-   199		}
-   200	
-   201		if (unlikely(!c->dev)) {
-   202			ret = -ENODEV;
-   203			goto unlock;
-   204		}
-   205	
-   206		to_copy = min(count, c->cfg->buffer_size - c->mbo_offs);
- > 207		ret = copy_from_iter(mbo->virt_address + c->mbo_offs, to_copy, from);
-   208		if (ret != to_copy) {
-   209			ret = -EFAULT;
-   210			goto unlock;
-   211		}
-   212	
-   213		c->mbo_offs += ret;
-   214		if (c->mbo_offs >= c->cfg->buffer_size ||
-   215		    c->cfg->data_type == MOST_CH_CONTROL ||
-   216		    c->cfg->data_type == MOST_CH_ASYNC) {
-   217			kfifo_skip(&c->fifo);
-   218			mbo->buffer_length = c->mbo_offs;
-   219			c->mbo_offs = 0;
-   220			most_submit_mbo(mbo);
-   221		}
-   222	unlock:
-   223		mutex_unlock(&c->io_mutex);
-   224		return ret;
-   225	}
-   226	
-   227	/**
-   228	 * comp_read - implements the syscall to read from the device
-   229	 * @filp: file pointer
-   230	 * @buf: pointer to user buffer
-   231	 * @count: number of bytes to read
-   232	 * @offset: offset from where to start reading
-   233	 */
-   234	static ssize_t comp_read(struct kiocb *iocb, struct iov_iter *to)
-   235	{
-   236		size_t to_copy, copied;
-   237		struct mbo *mbo = NULL;
-   238		struct comp_channel *c = iocb->ki_filp->private_data;
-   239		size_t count = iov_iter_count(to);
-   240	
-   241		mutex_lock(&c->io_mutex);
-   242		while (c->dev && !kfifo_peek(&c->fifo, &mbo)) {
-   243			mutex_unlock(&c->io_mutex);
-   244			if (iocb->ki_filp->f_flags & O_NONBLOCK)
-   245				return -EAGAIN;
-   246			if (wait_event_interruptible(c->wq,
-   247						     (!kfifo_is_empty(&c->fifo) ||
-   248						      (!c->dev))))
-   249				return -ERESTARTSYS;
-   250			mutex_lock(&c->io_mutex);
-   251		}
-   252	
-   253		/* make sure we don't submit to gone devices */
-   254		if (unlikely(!c->dev)) {
-   255			mutex_unlock(&c->io_mutex);
-   256			return -ENODEV;
-   257		}
-   258	
-   259		to_copy = min_t(size_t,
-   260				count,
-   261				mbo->processed_length - c->mbo_offs);
-   262	
- > 263		copied = copy_to_iter(mbo->virt_address + c->mbo_offs, to_copy, to);
-   264	
-   265		c->mbo_offs += copied;
-   266		if (c->mbo_offs >= mbo->processed_length) {
-   267			kfifo_skip(&c->fifo);
-   268			most_put_mbo(mbo);
-   269			c->mbo_offs = 0;
-   270		}
-   271		mutex_unlock(&c->io_mutex);
-   272		return copied;
-   273	}
-   274	
+847ce401df392b Wu Fengguang 2009-12-16  62  
+35e3d566df5ff8 zhong jiang  2019-11-30 @63  DEFINE_DEBUGFS_ATTRIBUTE(hwpoison_fops, NULL, hwpoison_inject, "%lli\n");
+35e3d566df5ff8 zhong jiang  2019-11-30  64  DEFINE_DEBUGFS_ATTRIBUTE(unpoison_fops, NULL, hwpoison_unpoison, "%lli\n");
+cae681fc12a824 Andi Kleen   2009-09-16  65  
+
+:::::: The code at line 63 was first introduced by commit
+:::::: 35e3d566df5ff86d19488d2cd9b49b2d9389780e mm/hwpoison-inject: use DEFINE_DEBUGFS_ATTRIBUTE to define debugfs fops
+
+:::::: TO: zhong jiang <zhongjiang@huawei.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
