@@ -1,202 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BBE18C1F;
-	Sat,  6 Apr 2024 22:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0070555E7C;
+	Sat,  6 Apr 2024 22:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712441457; cv=none; b=dD3I0t00vSpg0GF3n03MqKYKrjbBRbILleLvgWFDTufxJUmNMMWBoSHkSulnkmQ34ROAaIJXGOYnbUnI16g9SnQahoXyifnzq5DmYTza9shNAnUa0UmLRghPjwSNd9HSTDtSfDiyTVtXznMjgGyj1jmfg3M3w75Rr2c3QZw+K1Q=
+	t=1712443254; cv=none; b=RYu4/ZdHYPx7bqSkh6Hepmm2X3J9MfCWY+050RtvKYEg3t1H0u4V2kRvMC8G+6c0+fEmbm7NanMxROXaxmSsRq6mLlBYuFtHvdIXZBSXYIJYQpRsmbbyMv/ykSA3fnONFGx6jCqFOm2ubiVO6KjsD/upL0LENrU+fI7itHHabJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712441457; c=relaxed/simple;
-	bh=uKcMeizvLw4H0gyPCzX7r7W2LD1YWXnC64ly4wAntzo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oJRpLWRShHAhA6LKgeFGx4fx6Y7o3n5W9ul2COI2rTDTfTdpla8wlW3EFNcnvzDN2PBAGS9cuOUBJubfBzHvetD24O9ZW3X9NL9JIeieBOkhz59MD1wiJAmFYOAGA935BUdz05R1Yx1GGUjQDdZHu+sWkhM4KTxfVOihO2zX/co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k1vWnyrQ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712443254; c=relaxed/simple;
+	bh=ya5N7l00Y8YsPWBwlQpXL8/LHrb/WyVg1tQy2ALoU90=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BXO7E+ZZ0l4w4hvR4uIt9Fv65y9Ii/vJTBOPlKBxg135Y8Wu35VKk6CbR07OGFXZxDgUtS0sdro7kidDyPu/Yxoecu9wjw80jDKKoW3hLCL/jh9XyGBmRpKJWy7z3H7rfg55AqlP5jR7ZWxYd7odMXCTsVOMsPtaYVyiIBX6Ux8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzsfYkRh; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k1vWnyrQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712441455; x=1743977455;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uKcMeizvLw4H0gyPCzX7r7W2LD1YWXnC64ly4wAntzo=;
-  b=k1vWnyrQRDtcyiZXcIFd4py4pDSRKpvYkyMbvHiMc1aCGNaNem+ICOj5
-   h4CafuT5fyRseJV8RVOJcPab6AU1S3E70qYiWfkIpaVLz3kCgqxLFj7Lz
-   dZS0LBvSVsqbX639OOnNGkKzbdLd5wbDpz2G1wz6VmyZuUORb/VGd5nMa
-   q3msLLOEseOtQj36Nax389ZN7GKKBhO+XphdPC14fvNusJXBAhm1VcED8
-   ebESIIDhh4Q7j/n+4j8IASsRrmujEubmqLobQzuR2jVIL1CS49pA14oNd
-   t/M+oeP2kV9QHP/Td3WBGbEJMJ+wIHJ0RUZISKg2bFTVI766obWTuh37t
-   A==;
-X-CSE-ConnectionGUID: dUXMWFSiTsuILNuFoVU5HQ==
-X-CSE-MsgGUID: gggo1dfXTLeR5yOB1xBkPQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="7586063"
-X-IronPort-AV: E=Sophos;i="6.07,184,1708416000"; 
-   d="scan'208";a="7586063"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 15:10:52 -0700
-X-CSE-ConnectionGUID: vD5ypcZwQ+qULTTy2ApRDA==
-X-CSE-MsgGUID: Lr4ewZ8GS46XFxSKfH/qEA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,184,1708416000"; 
-   d="scan'208";a="19353736"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 06 Apr 2024 15:10:50 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rtEFM-0003tY-1y;
-	Sat, 06 Apr 2024 22:10:48 +0000
-Date: Sun, 7 Apr 2024 06:10:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 84/126] drivers/misc/ibmasm/ibmasmfs.c:262:17:
- error: call to undeclared function 'iov_iter_count'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202404070622.SapnCbAi-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzsfYkRh"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e0ae065d24so27188155ad.1;
+        Sat, 06 Apr 2024 15:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712443252; x=1713048052; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mSfK4DYWjgMvyV/uT21dZSzXx4WeG9M/RrTSO1WqEGo=;
+        b=PzsfYkRhsD0StKpXwZH51RTM1hN/BOEmQJiuHfWgwEj4emtzlcoWtiN22h6WNjCVI9
+         m6gV2amFncJbvoVvUA2eATi+AG5yw8PdNqWrv2aW4xOO5WI6alnLI1PBbpJRFGTCHAfh
+         OCm81YXvrMv26BBgmBZIilRmTIgwVIagCWwv3bivB585b74LbUV0qE5DCUiYz5X1d9E0
+         xMuJ6xzc42QJd1SYp8deYPEUDCzfwCmHoca3DbRgzMHeNrFbhtAty7NLjCd9SIIK8xjD
+         DYy3s+1wTUSTfdOZ/0fK3Usseu1pcluZUmYybBEFZBbVPL97/GHOZAoU26gDOZwKQnfJ
+         3AVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712443252; x=1713048052;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mSfK4DYWjgMvyV/uT21dZSzXx4WeG9M/RrTSO1WqEGo=;
+        b=ZkypxjSApAWuMfVJE1ryniIjmZdHXKDHkMIwSbftUOPZTRkhZbhkBl7O9GJWYvB2gF
+         BqMo/ohMRIkLT7TeD0fVf0kxhDaoN0cFv4zIjd2HJspFRjr3+08XNobunUIz0zw5HaMH
+         CcF4dgFLP4BDAUhRBu5RvYDHq1sTGjXwz03KNUTM+kRomAbzoYhOfUXnD6xeJ6A6bbwx
+         3pzOtKRjahvZEkI2yfU47RKhhSkzkTgF/EFqRfxrJGkqf6H9xSqkUAwG14B6S93cG1v3
+         nVnFcJFurFRK9CZtZ9wrdUZhLYtZlrI6QuUiuY0nDsCDP3XybP5c1z90r/HuRq/PIO1E
+         yP1A==
+X-Forwarded-Encrypted: i=1; AJvYcCVaBLRn4ONolFKSiLIub3slT8lHBcje0X53b9C1aXiwKmudf2TJ5y75RosxWYF/U78I+TwSWlPGhR142XUqHu7yJOnIBGPtKlJdKsTdwrvMa2afSJlhixHTfz2Lhqs2hu4/Bck=
+X-Gm-Message-State: AOJu0YxipOteoFyPVNbdQnokZ9dpm6XdbeKfjd8Zh28H0H/U4Eq97RJG
+	TTPiz41nIdGK245b6JHNb99mTyJEozV7cxRlOlCBG6nsudiDyJAS
+X-Google-Smtp-Source: AGHT+IFOk9kHM81QLTCgMT3cvyrNDqwVnfq7ZHWBk30/Pjwvy+YRmEHpkYLTf5SF1D/MKcbQTrUC4Q==
+X-Received: by 2002:a17:903:2351:b0:1e2:88fd:c211 with SMTP id c17-20020a170903235100b001e288fdc211mr5359594plh.4.1712443252165;
+        Sat, 06 Apr 2024 15:40:52 -0700 (PDT)
+Received: from localhost.localdomain ([2407:7000:8942:5500:aaa1:59ff:fe57:eb97])
+        by smtp.gmail.com with ESMTPSA id jf20-20020a170903269400b001dd82855d47sm3869450plb.265.2024.04.06.15.40.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Apr 2024 15:40:51 -0700 (PDT)
+From: Barry Song <21cnbao@gmail.com>
+To: lkp@intel.com
+Cc: akpm@linux-foundation.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	v-songbaohua@oppo.com
+Subject: [akpm-mm:mm-unstable 313/322] include/linux/huge_mm.h:274:16: error: fields must have a constant size: 'variable length array in structure' extension will never be supported
+Date: Sun,  7 Apr 2024 10:40:38 +1200
+Message-Id: <20240406224038.5412-1-21cnbao@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <202404061754.n8jmZ6s3-lkp@intel.com>
+References: <202404061754.n8jmZ6s3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   dfd9382e4a4aed32db7f783cdb7651dc1ac095bd
-commit: 581bf1087e1da579548512b7d80e188fbc1f3741 [84/126] misc: ibmasm: convert to read/write iterators
-config: i386-buildonly-randconfig-002-20240407 (https://download.01.org/0day-ci/archive/20240407/202404070622.SapnCbAi-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070622.SapnCbAi-lkp@intel.com/reproduce)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   f43b3aae94511d62174c3b29239da0dd22d0eeb3
+> commit: d4358ee0a075e232114dfec0cd162860cfa2771b [313/322] mm: add per-order mTHP anon_alloc and anon_alloc_fallback counters
+> config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240406/202404061754.n8jmZ6s3-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240406/202404061754.n8jmZ6s3-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202404061754.n8jmZ6s3-lkp@intel.com/
+> 
+> All error/warnings (new ones prefixed by >>):
+> 
+>    In file included from arch/powerpc/kernel/asm-offsets.c:19:
+>    In file included from include/linux/mman.h:5:
+>    In file included from include/linux/mm.h:1115:
+>>> include/linux/huge_mm.h:274:22: warning: variable length array used [-Wvla]
+>      274 |         unsigned long stats[PMD_ORDER + 1][__MTHP_STAT_COUNT];
+>          |                             ^~~~~~~~~~~~~
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404070622.SapnCbAi-lkp@intel.com/
+This is amazing. powerpc's PMD_ORDER isn't const. I will
+move to alloc_percpu instead of using a static array.
 
-All errors (new ones prefixed by >>):
+Thanks
+Barry
 
->> drivers/misc/ibmasm/ibmasmfs.c:262:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     262 |         size_t count = iov_iter_count(to);
-         |                        ^
->> drivers/misc/ibmasm/ibmasmfs.c:288:7: error: call to undeclared function 'copy_to_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     288 |         if (!copy_to_iter_full(cmd->buffer, len, to)) {
-         |              ^
-   drivers/misc/ibmasm/ibmasmfs.c:300:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     300 |         size_t count = iov_iter_count(from);
-         |                        ^
->> drivers/misc/ibmasm/ibmasmfs.c:319:7: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     319 |         if (!copy_from_iter_full(cmd->buffer, count, from)) {
-         |              ^
-   drivers/misc/ibmasm/ibmasmfs.c:375:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     375 |         size_t count = iov_iter_count(to);
-         |                        ^
-   drivers/misc/ibmasm/ibmasmfs.c:403:14: error: call to undeclared function 'copy_to_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     403 |         if (!copy_to_iter_full(reader->data, reader->data_size, to)) {
-         |              ^
-   drivers/misc/ibmasm/ibmasmfs.c:417:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     417 |         size_t count = iov_iter_count(from);
-         |                        ^
-   drivers/misc/ibmasm/ibmasmfs.c:459:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     459 |         size_t count = iov_iter_count(to);
-         |                        ^
-   drivers/misc/ibmasm/ibmasmfs.c:488:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     488 |         size_t count = iov_iter_count(from);
-         |                        ^
-   drivers/misc/ibmasm/ibmasmfs.c:524:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     524 |         size_t count = iov_iter_count(from);
-         |                        ^
-   drivers/misc/ibmasm/ibmasmfs.c:539:7: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     539 |         if (!copy_from_iter_full(buff, count, from)) {
-         |              ^
-   11 errors generated.
-
-
-vim +/iov_iter_count +262 drivers/misc/ibmasm/ibmasmfs.c
-
-   258	
-   259	static ssize_t command_file_read(struct kiocb *iocb, struct iov_iter *to)
-   260	{
-   261		struct ibmasmfs_command_data *command_data = iocb->ki_filp->private_data;
- > 262		size_t count = iov_iter_count(to);
-   263		struct command *cmd;
-   264		int len;
-   265		unsigned long flags;
-   266	
-   267		if (iocb->ki_pos < 0)
-   268			return -EINVAL;
-   269		if (count == 0 || count > IBMASM_CMD_MAX_BUFFER_SIZE)
-   270			return 0;
-   271		if (iocb->ki_pos != 0)
-   272			return 0;
-   273	
-   274		spin_lock_irqsave(&command_data->sp->lock, flags);
-   275		cmd = command_data->command;
-   276		if (cmd == NULL) {
-   277			spin_unlock_irqrestore(&command_data->sp->lock, flags);
-   278			return 0;
-   279		}
-   280		command_data->command = NULL;
-   281		spin_unlock_irqrestore(&command_data->sp->lock, flags);
-   282	
-   283		if (cmd->status != IBMASM_CMD_COMPLETE) {
-   284			command_put(cmd);
-   285			return -EIO;
-   286		}
-   287		len = min(count, cmd->buffer_size);
- > 288		if (!copy_to_iter_full(cmd->buffer, len, to)) {
-   289			command_put(cmd);
-   290			return -EFAULT;
-   291		}
-   292		command_put(cmd);
-   293	
-   294		return len;
-   295	}
-   296	
-   297	static ssize_t command_file_write(struct kiocb *iocb, struct iov_iter *from)
-   298	{
-   299		struct ibmasmfs_command_data *command_data = iocb->ki_filp->private_data;
-   300		size_t count = iov_iter_count(from);
-   301		struct command *cmd;
-   302		unsigned long flags;
-   303	
-   304		if (iocb->ki_pos < 0)
-   305			return -EINVAL;
-   306		if (count == 0 || count > IBMASM_CMD_MAX_BUFFER_SIZE)
-   307			return 0;
-   308		if (iocb->ki_pos != 0)
-   309			return 0;
-   310	
-   311		/* commands are executed sequentially, only one command at a time */
-   312		if (command_data->command)
-   313			return -EAGAIN;
-   314	
-   315		cmd = ibmasm_new_command(command_data->sp, count);
-   316		if (!cmd)
-   317			return -ENOMEM;
-   318	
- > 319		if (!copy_from_iter_full(cmd->buffer, count, from)) {
-   320			command_put(cmd);
-   321			return -EFAULT;
-   322		}
-   323	
-   324		spin_lock_irqsave(&command_data->sp->lock, flags);
-   325		if (command_data->command) {
-   326			spin_unlock_irqrestore(&command_data->sp->lock, flags);
-   327			command_put(cmd);
-   328			return -EAGAIN;
-   329		}
-   330		command_data->command = cmd;
-   331		spin_unlock_irqrestore(&command_data->sp->lock, flags);
-   332	
-   333		ibmasm_exec_command(command_data->sp, cmd);
-   334		ibmasm_wait_for_response(cmd, get_dot_command_timeout(cmd->buffer));
-   335	
-   336		return count;
-   337	}
-   338	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
