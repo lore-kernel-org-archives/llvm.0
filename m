@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84C81D52B;
-	Fri,  5 Apr 2024 23:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002F03207;
+	Sat,  6 Apr 2024 00:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712360833; cv=none; b=lwdekVxksbSndmzKrm7gX2eM0+7zPacpb4mVnlXiIhfutu8ZuypNK0TI2uxcq1n9XXVXow06lT0tDEz+vcQIdKHO50a2y36LDMpxgaG3txYZy9aHxzuNYBLABf62aMKXL5ci9lEZpQQRKds1FUxS773qDizaQH4j8EOgrBtWLYA=
+	t=1712362093; cv=none; b=TP+Wt9OtbToBMxuHszePfqo/R2Sp13RvokutvtOujt/QZtbjLUgSfP4kQsrih29o0axz58T4OPh1DFNB73p6jtJwIlDF67fIwtBklGh1foHZ6YlAj5TC2P4Ogo9BRKAdrIPTvD4Iz/mRCE8PCqmbTn3Xp7ufrkE29G8HyNMXiFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712360833; c=relaxed/simple;
-	bh=PZYJDA0d/pefABqFOioV8IxbC7pGCDL8rtej7zBOAhk=;
+	s=arc-20240116; t=1712362093; c=relaxed/simple;
+	bh=OyEBKOEOowC75cpht3zWSV3ZRAk3c2S/PN4y+ulobzs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kPM2Pyo513kUzOBhKP06DLoy0AuQ6bTKNEIGKfQhMQEI13EYMOsGG+cifX7iZT4Y4WKkxZ/wFyBzP1hG2wpryFCPoVaYVmduzc3puVrKU+gEFgpQm4E2UZT2ke9XYZ7yjWnAXhSgLOyqQqnpgIAMBNbzfKQBW1jrXZHqMCBEG68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n/WgqDq2; arc=none smtp.client-ip=198.175.65.15
+	 Content-Disposition; b=PQE0OLepUjbVTXw0/6BdZNLxBEUHcaIrwQn75YV8t9QArVPKWSXc+2RqnMzPyIydjnUlia3UIBhBCEdnk7+o/f/EIkCWiuUD62dyz0fcZV1hME9TgyI7hlu5pSCHfZ0q22UID3iXb+D2BP/oSyOUU9jGkH2/O4JknAYvE8IVVOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nYgt6tWj; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n/WgqDq2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nYgt6tWj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712360832; x=1743896832;
+  t=1712362092; x=1743898092;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PZYJDA0d/pefABqFOioV8IxbC7pGCDL8rtej7zBOAhk=;
-  b=n/WgqDq2jyEPVug4nXANMOGU6gUfEIznN/hIqwG5/oGDWMUXIRlr7QK/
-   8jRnPoj0e3hgeDZp2/Ew6eShgfAYvW43ge+SBGjsNfoHsnaPURBPD37bQ
-   e///TXg/NKpgSPYumpsmeJYaK3CjJaRUPSFZLPxNH4+abI9WcL4WYYGXe
-   /t/+kQEGLLh7T4aRwPe9z6vC9MXvqV5je4TmGAfYXVqFKydcAPlRBagQU
-   NJ2BaEF81d3IvnLXPiFDunY1pF4FDingJ0dTY0mTpMpckLYama3cyIdOF
-   bEeadIttmy+Tt0s1d3V1MhE3JdW0K4otvZedzXK+GPvkhM925ltkl/0sW
-   A==;
-X-CSE-ConnectionGUID: kOoACOXNT4ywQFKx1KOkeA==
-X-CSE-MsgGUID: FnsFFmXMTISlzhc6pV+4fA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="11503235"
+  bh=OyEBKOEOowC75cpht3zWSV3ZRAk3c2S/PN4y+ulobzs=;
+  b=nYgt6tWj9yqEO5UjeWlVHLWFlRNCAo8vh2saGfhxFmm41wRRn6iLt7aI
+   v7+SnJtt/femHl1wImYjkMAfpLFTqkgS15bZYU9VeKSL7984e30Z51ooM
+   BBNcSs4AS6SvaJie1d9SS/ceb0rVxTHbU63wQxxhnlWns3t+DZPVgojyp
+   jSyV+b/NliNzu3GDRzSYur2L183U+L+uP73doCpnAbmlaceZq6l6Byvtz
+   VtmZ2uTfja4T1XnhvpsFD+mKNRKF7sqL8cbViEbsepRjLMqVMPQKlT49J
+   1elGuQkMSlFvkmwJfanphOdFIrfQxJAg7oiudKedamiuAYYnMbIpJxD7r
+   g==;
+X-CSE-ConnectionGUID: YHq3VpJdRFWASkW68icX0Q==
+X-CSE-MsgGUID: NLz6UFJ5Q7mCZxOQhMuY+g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="18442828"
 X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
-   d="scan'208";a="11503235"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 16:47:11 -0700
-X-CSE-ConnectionGUID: ZWeDekeBTUuIuFtwjnpymA==
-X-CSE-MsgGUID: Q+l0zr19RWSFAAMoTBoZOQ==
+   d="scan'208";a="18442828"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 17:08:11 -0700
+X-CSE-ConnectionGUID: 1qdy0Y3ySNyYVu5N8+kElQ==
+X-CSE-MsgGUID: 23I31qYjRT69lnR2QVWaug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
-   d="scan'208";a="24043972"
+   d="scan'208";a="23808086"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 05 Apr 2024 16:47:09 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 05 Apr 2024 17:08:10 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rstH1-0002sS-1u;
-	Fri, 05 Apr 2024 23:47:07 +0000
-Date: Sat, 6 Apr 2024 07:46:46 +0800
+	id 1rstbM-0002ts-0j;
+	Sat, 06 Apr 2024 00:08:08 +0000
+Date: Sat, 6 Apr 2024 08:08:05 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 53/93] drivers/gpu/drm/drm_file.c:545:17:
- error: call to undeclared function 'iov_iter_count'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202404060732.gecci6ak-lkp@intel.com>
+Subject: [axboe-block:rw_iter 69/93]
+ arch/riscv/kvm/../../../virt/kvm/kvm_main.c:5079:15: error: use of
+ undeclared identifier 'kvm_vm_stats_read_iter'; did you mean
+ 'kvm_vcpu_stats_read_iter'?
+Message-ID: <202404060740.RLbOVHYz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,163 +65,58 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   025d6230e73400e8c46ec29a297b9bca08f36f6f
-commit: 006113b249eac4c98b4ad16c1c3d1b6aae90fcda [53/93] drivers/gpu: convert to ->read_iter and ->write_iter
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20240406/202404060732.gecci6ak-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240406/202404060732.gecci6ak-lkp@intel.com/reproduce)
+head:   222e1965f038cbce873a9392d6b9e0df82837498
+commit: ef0f2e8cc6f036e45cface7a6e208ffcf4de2fbf [69/93] virt: convert to ->read_iter and ->write_iter
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240406/202404060740.RLbOVHYz-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240406/202404060740.RLbOVHYz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404060732.gecci6ak-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404060740.RLbOVHYz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/drm_file.c:545:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     545 |         size_t count = iov_iter_count(to);
-         |                        ^
-   drivers/gpu/drm/drm_file.c:594:9: error: call to undeclared function 'copy_to_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     594 |                         if (!copy_to_iter_full(e->event, length, to)) {
-         |                              ^
-   2 errors generated.
---
->> drivers/gpu/drm/drm_debugfs.c:410:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     410 |         size_t len = iov_iter_count(from);
-         |                      ^
->> drivers/gpu/drm/drm_debugfs.c:416:7: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     416 |         if (!copy_from_iter_full(buf, len, from))
-         |              ^
-   2 errors generated.
---
->> drivers/gpu/drm/drm_debugfs_crc.c:289:17: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     289 |         size_t count = iov_iter_count(to);
-         |                        ^
->> drivers/gpu/drm/drm_debugfs_crc.c:339:7: error: call to undeclared function 'copy_to_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     339 |         if (!copy_to_iter_full(buf, LINE_LEN(crc->values_cnt), to))
-         |              ^
-   2 errors generated.
---
->> drivers/gpu/drm/i915/display/intel_hotplug.c:1028:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1028 |         size_t len = iov_iter_count(from);
-         |                      ^
->> drivers/gpu/drm/i915/display/intel_hotplug.c:1037:7: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1037 |         if (!copy_from_iter_full(tmp, len, from))
-         |              ^
-   drivers/gpu/drm/i915/display/intel_hotplug.c:1109:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1109 |         size_t len = iov_iter_count(from);
-         |                      ^
-   drivers/gpu/drm/i915/display/intel_hotplug.c:1118:7: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1118 |         if (!copy_from_iter_full(tmp, len, from))
-         |              ^
-   4 errors generated.
---
->> drivers/gpu/drm/i915/display/intel_wm.c:293:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     293 |         size_t len = iov_iter_count(from);
-         |                      ^
->> drivers/gpu/drm/i915/display/intel_wm.c:302:7: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     302 |         if (!copy_from_iter_full(tmp, len, from))
-         |              ^
-   2 errors generated.
+   In file included from arch/riscv/kvm/../../../virt/kvm/kvm_main.c:18:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:23:
+   In file included from arch/riscv/include/asm/irq.h:10:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:5079:15: error: use of undeclared identifier 'kvm_vm_stats_read_iter'; did you mean 'kvm_vcpu_stats_read_iter'?
+    5079 |         .read_iter = kvm_vm_stats_read_iter,
+         |                      ^~~~~~~~~~~~~~~~~~~~~~
+         |                      kvm_vcpu_stats_read_iter
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4376:1: note: 'kvm_vcpu_stats_read_iter' declared here
+    4376 | FOPS_READ_ITER_HELPER(kvm_vcpu_stats_read);
+         | ^
+   include/linux/fs.h:2148:16: note: expanded from macro 'FOPS_READ_ITER_HELPER'
+    2148 | static ssize_t name## _iter(struct kiocb *iocb, struct iov_iter *to)    \
+         |                ^
+   <scratch space>:98:1: note: expanded from here
+      98 | kvm_vcpu_stats_read_iter
+         | ^
+   1 warning and 1 error generated.
 
 
-vim +/iov_iter_count +545 drivers/gpu/drm/drm_file.c
+vim +5079 arch/riscv/kvm/../../../virt/kvm/kvm_main.c
 
-   515	
-   516	/**
-   517	 * drm_read - read method for DRM file
-   518	 * @filp: file pointer
-   519	 * @buffer: userspace destination pointer for the read
-   520	 * @count: count in bytes to read
-   521	 * @offset: offset to read
-   522	 *
-   523	 * This function must be used by drivers as their &file_operations.read
-   524	 * method if they use DRM events for asynchronous signalling to userspace.
-   525	 * Since events are used by the KMS API for vblank and page flip completion this
-   526	 * means all modern display drivers must use it.
-   527	 *
-   528	 * @offset is ignored, DRM events are read like a pipe. Polling support is
-   529	 * provided by drm_poll().
-   530	 *
-   531	 * This function will only ever read a full event. Therefore userspace must
-   532	 * supply a big enough buffer to fit any event to ensure forward progress. Since
-   533	 * the maximum event space is currently 4K it's recommended to just use that for
-   534	 * safety.
-   535	 *
-   536	 * RETURNS:
-   537	 *
-   538	 * Number of bytes read (always aligned to full events, and can be 0) or a
-   539	 * negative error code on failure.
-   540	 */
-   541	ssize_t drm_read(struct kiocb *iocb, struct iov_iter *to)
-   542	{
-   543		struct drm_file *file_priv = iocb->ki_filp->private_data;
-   544		struct drm_device *dev = file_priv->minor->dev;
- > 545		size_t count = iov_iter_count(to);
-   546		ssize_t ret;
-   547	
-   548		ret = mutex_lock_interruptible(&file_priv->event_read_lock);
-   549		if (ret)
-   550			return ret;
-   551	
-   552		for (;;) {
-   553			struct drm_pending_event *e = NULL;
-   554	
-   555			spin_lock_irq(&dev->event_lock);
-   556			if (!list_empty(&file_priv->event_list)) {
-   557				e = list_first_entry(&file_priv->event_list,
-   558						struct drm_pending_event, link);
-   559				file_priv->event_space += e->event->length;
-   560				list_del(&e->link);
-   561			}
-   562			spin_unlock_irq(&dev->event_lock);
-   563	
-   564			if (e == NULL) {
-   565				if (ret)
-   566					break;
-   567	
-   568				if (iocb->ki_filp->f_flags & O_NONBLOCK) {
-   569					ret = -EAGAIN;
-   570					break;
-   571				}
-   572	
-   573				mutex_unlock(&file_priv->event_read_lock);
-   574				ret = wait_event_interruptible(file_priv->event_wait,
-   575							       !list_empty(&file_priv->event_list));
-   576				if (ret >= 0)
-   577					ret = mutex_lock_interruptible(&file_priv->event_read_lock);
-   578				if (ret)
-   579					return ret;
-   580			} else {
-   581				unsigned length = e->event->length;
-   582	
-   583				if (length > count - ret) {
-   584	put_back_event:
-   585					spin_lock_irq(&dev->event_lock);
-   586					file_priv->event_space -= length;
-   587					list_add(&e->link, &file_priv->event_list);
-   588					spin_unlock_irq(&dev->event_lock);
-   589					wake_up_interruptible_poll(&file_priv->event_wait,
-   590						EPOLLIN | EPOLLRDNORM);
-   591					break;
-   592				}
-   593	
-   594				if (!copy_to_iter_full(e->event, length, to)) {
-   595					if (ret == 0)
-   596						ret = -EFAULT;
-   597					goto put_back_event;
-   598				}
-   599	
-   600				ret += length;
-   601				kfree(e);
-   602			}
-   603		}
-   604		mutex_unlock(&file_priv->event_read_lock);
-   605	
-   606		return ret;
-   607	}
-   608	EXPORT_SYMBOL(drm_read);
-   609	
+  5076	
+  5077	static const struct file_operations kvm_vm_stats_fops = {
+  5078		.owner = THIS_MODULE,
+> 5079		.read_iter = kvm_vm_stats_read_iter,
+  5080		.release = kvm_vm_stats_release,
+  5081		.llseek = noop_llseek,
+  5082	};
+  5083	
 
 -- 
 0-DAY CI Kernel Test Service
