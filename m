@@ -1,148 +1,211 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01olkn2066.outbound.protection.outlook.com [40.92.64.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C52C22094;
-	Sat,  6 Apr 2024 10:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712399618; cv=none; b=MctMT/wNNqHSPOota9HZpAPNulRrPcgIVt3yayWlPo/ac+MU7o8Rvubv8WWd6CR13zV72NWoeO19awmiuehnBcHUkBNnqAzHLpFqZAGxXnRrw6i9xWuESf+nUTos4XNO7clvxftD8Xtm92+mlaaPp9yTrmsFjiBDIlZiAirX8ZA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712399618; c=relaxed/simple;
-	bh=X5tsa7eLX6h92RpchhaZofh+CcOwNJe3uIwkNfFcBrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QLPJLriR4ACqUsG7E+LD+EQCcO/oD79J5b1QUSwalWe0YKBJw9geJ+tnIif0/ej0WYUpMVUBoiYo7RslNJEJuQrNPK9QlxMCSiaoylzpweDG3rzWR9P8ayK5quiiT1Uqnc6o9JqCQPMYCH1+pFTVdR7g/haN0t1S6SbOJygn9OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZeZhQfgI; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5D3374FF
+	for <llvm@lists.linux.dev>; Sat,  6 Apr 2024 14:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.64.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712413442; cv=fail; b=Q8HK8/1IXHtZN0cRJgafQGhuX8Aa/deX5MoUMdafnmcsMM2t69VPH9v5X2OaaxgU6l/Hz1j4FZbRk45DKfWc2kbjQ2V2pRUOdm7yF/lyRnzIkoblK0lLDltr0WRLPEfsOApuiwhr9Unx3ZuLvjx33kzMp5a+AG87x4wCYvNjhHg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712413442; c=relaxed/simple;
+	bh=8+krBbLFj0a9KMu1NVr7xAyCxwjsguyRmPlBgMP2Ols=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=EagFyFzuq/bVeuoXDDSMEEOtnD/t7vo7P/JQwTkG7UF3uCpZHPlVm59D7janbilt2SRssBPdvON93DeS65oJD/G5ix+9hUzx95F3jUqeB1u6rX9qD/r9VRB1x2osvmLYZ6Wg3kc2UNQ9IEWaPx364HVdnjNGzEghmoVM5iT5irM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=fxS6G0qu; arc=fail smtp.client-ip=40.92.64.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZeZhQfgI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712399616; x=1743935616;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X5tsa7eLX6h92RpchhaZofh+CcOwNJe3uIwkNfFcBrc=;
-  b=ZeZhQfgI023MBA4C2DutgU2cY8H1FhKWHLLpL65G2ASzVZzqCFDmYNAG
-   ODHrx9brvt7/3DHTGx/SBdqER5mH+qlvHrV3pyemti85pTEHej8dZMptn
-   dEUFaTuyXnStsYKDAxdw4++o2vEGzYsh6eyy6R4W88/9EB2K3hO5i+w4t
-   cWRX3rGKaHmLOKXSg2cIW5BESGLb35eh9Kjg/MvR1WR0NWEYeZPRDtRyF
-   kZ0M7lIh+a2TU3w9vSJUe5V2aNEjVo/vJ57EeKZv6PrN5hzoYwj6FHK9x
-   aQtfgXO49ZBi5W3UbFLq3MQ5/VLAH+XyRDf63a5Lvg7PqPskU/Cu+E/cm
-   Q==;
-X-CSE-ConnectionGUID: kToLUr5BQX2VfcInV1LlXw==
-X-CSE-MsgGUID: VgxbCZ5ORna2YV6CKN3QXg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="25234384"
-X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
-   d="scan'208";a="25234384"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 03:33:35 -0700
-X-CSE-ConnectionGUID: G9PzvfOATT+1qypTb+2KIA==
-X-CSE-MsgGUID: sVDakfYxRMSk61kSRpmTIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,183,1708416000"; 
-   d="scan'208";a="19266072"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 06 Apr 2024 03:33:30 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rt3MW-0003Nu-0H;
-	Sat, 06 Apr 2024 10:33:28 +0000
-Date: Sat, 6 Apr 2024 18:32:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	devicetree@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH 4/6] drm/msm/adreno: Implement SMEM-based speed bin
-Message-ID: <202404061839.0waGfXwj-lkp@intel.com>
-References: <20240405-topic-smem_speedbin-v1-4-ce2b864251b1@linaro.org>
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="fxS6G0qu"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VsU6oaA1aH7tiiNEaP6PN8+R7V4ZBA+DjnxQQkFlPiqqXwkixqBOTgMRSoCV8W6sqxpVrOUbKOT3b8N/SeP/LvOTJk0+QysSPbovTxKX1b2DYU3GKdijfiBYA86I76vEPhguFaQS7Byq1j2pUYP/DUbQ1s6QgU75tdKnYTiDF+WvklSejYCNgGYv6rwi9Tyx2HFplK8bAfeoYFUFIx9XpaPItuFhm4vTskRSHltJJWMd3XzfcWLqTBKw0h49AFeI05IH0L+8HJTqGdYhA7vOfYcbIpAgNxgFYiXgje1sp8dDUdKYAREeZBUMWQBBuacky6awl2PH9NvDUacBoZS2sw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZDfBJDDHGhws9RvASCHeLW947uhPvaYZPSg9kp3IHIE=;
+ b=Tq4rncYDr8px/5JqZe26qSH4oU/WpOhuSk/g24gcefqWPeGnTo1TT7SgkAx81Ph45D1t+1qA0z4ffmeW7BtXGZ4ayavSOIWjkumImegTkFaPY9wGTMQVKSCgiraTTDQ/U/v1GlcZAmLbhL/pmitvr5fc5YqKB7mtVjVASfJ3+xzu60rb9SUg+u6IQedJ4nVuR4gnmZdLPVX7b2lamQLWKaSd0WSgnM1VKmJlOEHmE2oJ/LPenm8uEFE+9YPtgSycB0IerWjn5rOSffUjBW2h6VezJe1Lnm28LorxI/LSU6bDr77yPaxO4XztrsR4Dyv1S0gnSD0gQouTcuTAXOapNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZDfBJDDHGhws9RvASCHeLW947uhPvaYZPSg9kp3IHIE=;
+ b=fxS6G0quvhsH+fRGJF19DhOHfXpRUgcBGw2RkUUbQ3YR1FncPAn9vzm/N/SBC25io9/9/Bf3mICysi5ecenUsiPN6vvRE7raiHFz22PIz62i2lK2Zx3wvThVQH4H2Jw+pyUKD3EoM3PF2q5xvzZ8u8zlzL1uxgQJFLvYPvjnawDDEWYFcnlRbZrbg6eBdlef24194tYF2UwiBL8VKxZUJdR9uqPe/e43+cQpW9u2Fyh+KzHmL4CQnAI4bTjvoRFUC1XueF/f8OzxhIN4JrhoC0W89zbVG3VgRrfgBZ7IXuwfv/FrJT3vSoKOBoZtTMaR6IAsmBY9WsBKoCn1EGa9qA==
+Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
+ by AS8PR02MB6967.eurprd02.prod.outlook.com (2603:10a6:20b:2b5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Sat, 6 Apr
+ 2024 14:23:58 +0000
+Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
+ ([fe80::9817:eaf5:e2a7:e486]) by AS8PR02MB7237.eurprd02.prod.outlook.com
+ ([fe80::9817:eaf5:e2a7:e486%4]) with mapi id 15.20.7409.049; Sat, 6 Apr 2024
+ 14:23:57 +0000
+From: Erick Archer <erick.archer@outlook.com>
+To: Long Li <longli@microsoft.com>,
+	Ajay Sharma <sharmaajay@microsoft.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Shradha Gupta <shradhagupta@linux.microsoft.com>,
+	Konstantin Taranov <kotaranov@microsoft.com>
+Cc: Erick Archer <erick.archer@outlook.com>,
+	linux-rdma@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v3 0/3] RDMA/mana_ib: Add flex array to struct mana_cfg_rx_steer_req_v2
+Date: Sat,  6 Apr 2024 16:23:34 +0200
+Message-ID:
+ <AS8PR02MB72374BD1B23728F2E3C3B1A18B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN: [K7DW6bStmsUjCdMj41mLOHOK5maQoDjt]
+X-ClientProxiedBy: MA4P292CA0010.ESPP292.PROD.OUTLOOK.COM
+ (2603:10a6:250:2d::13) To AS8PR02MB7237.eurprd02.prod.outlook.com
+ (2603:10a6:20b:3f1::10)
+X-Microsoft-Original-Message-ID:
+ <20240406142337.16241-1-erick.archer@outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240405-topic-smem_speedbin-v1-4-ce2b864251b1@linaro.org>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|AS8PR02MB6967:EE_
+X-MS-Office365-Filtering-Correlation-Id: a57313b9-651b-42e7-2775-08dc56453095
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	ut24Vp4o5AQM6Th+tP0RVh2XbmGVC9hqgHIXOxmrGVcbopHo0STJhJbo6zo2A9kpmm+wEdhO3c8v3FV9/Y/T69ezQzmosxGtYY/ueRZzuyjuUhO21a6qzFuc0rMDUSD2iBKbZC3rWjxUqkpOBM1dCjCz2z1JjxytJZoZ8hoPSOoiGwrdzicJuhjJoyaCS/dvxfnWCdnaxtM0AeQLod0959t33f2ikz0vzFNj9X1PGNqXKRRPZzVbj5G7DUblq7GR5P0HHtiqR5eSnwqdU46lhPzXLcdhQW0sxZhMWHeLlgOQvB2kBzkxIEYERE7SPX3Btq7iP4Uu2HtIk2ltJ9HnO7p/Xyww4OF6JNnE5wxtKBEGHhejgc0Yyxz5M/TzCq2lXtRa60FrnNItjrNWCu/i5Qv0YD2qVU3WVZ7uvzEzP2cvEdl04xeMuta7Gbedl9R5swaAYTEe2NHm8qkmba5IdIDGKsAwNw8sJabdAklPYAX1jnOGsyaFXuoTrReY0/LHMpOSzuYSTUPKXKCWqkwNRvzopSu0+AB17SOY6dVOFqVDMLla0EFnfxqxL1m3UqiCX9QeZXzUgmIaGU849aEj/MA3t0046gC5MSpf4jncgrUwXuTg+hKbaa1fATLr7BSgXAl+K4x2WH87LJTxmGMprC0RzvUSFHoRW8Ow5osxVVVuOZ5ghJvbEh2pYqFo2Q0IWt3SkFawoZcwA+7E1PZc7Q==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?T4XFanc7FK1DSvOBD/bTTBZixWGmrdtxywfz8eMZvGXDZqt/k7qSLICoUXDU?=
+ =?us-ascii?Q?7aLGGIjLDfGAUn4jfVbBx1tSE+U/P6pz6mRZFnu0QeW0dLHXwjeuwM+kBpX8?=
+ =?us-ascii?Q?SC+WIbYApCpgzCuJBUyQkmiaDU25Z7qcwurgmp1cKgQ3adtMe4LqaMeXqztH?=
+ =?us-ascii?Q?pV3ktqBjq92ghhn5iR3i+lrpdDUf0ss3r5sQHbF1IOHWgDFIQxtch8qKVA3A?=
+ =?us-ascii?Q?1mFXMEcZu9kayUcl95ZEnsxkeH0Y2sgykuWXiTik90VApWcPwfMI08y1EVUU?=
+ =?us-ascii?Q?qJkNneeE5NOYvw/u2eTJhieCafV3nKZgsp2psT2bwJDCjwGlE6CIu9vFTV9T?=
+ =?us-ascii?Q?0u4dH9dvw8es+jZEfz6/8eDVCm5cPwOp5NbVHMpL9CyYa4elIYomHiyyTn2f?=
+ =?us-ascii?Q?D6P89IJwIiysEETRaI2KypJCZ0w/2gTybQ0Q/ozwfzUcKXVlY3V1QaXUiLlR?=
+ =?us-ascii?Q?OUk9QBxC49oTV4ulU0JMQxZck9Ii+8dExsn1kKM899fAMiPOlB9QIwBlHOks?=
+ =?us-ascii?Q?PkwwIlgE9Nbb3tUO0J4y3zjPpUDqo2KAPVGU3bQNGdilWBVyKequoTrpBCx4?=
+ =?us-ascii?Q?bfzTPI4+0ne7spfV8ZlIdIrh+32U/soA0nDbbOAPU9e3FVa7gD4dXtoz39ox?=
+ =?us-ascii?Q?xBw4xWPa5sJVHneew9gi7rheERKKUx6KcamXIMoJpNW+chfoY2IuprU0pjRN?=
+ =?us-ascii?Q?OQOZ3514tePmiryJISOkeyJAkcV2kGjMF0wFlW2tFNotdK608LUTWg1iWBcH?=
+ =?us-ascii?Q?F2jAvhlcuArUT/4dMo781soOB0pgZi37N7TZctbnjClZu82xGeYYD6Qk1rkK?=
+ =?us-ascii?Q?LlzTHpQNBqy4dyJQpd7bJLYln4+xxC5XlfgsK0U/XsnOiZA8Tqdg/G2hr269?=
+ =?us-ascii?Q?z1y+sWgXxpDyuPf4BMS5OYYPaxfTRMKSNcvt46USx2PTV8N2y6HHigjqxe5s?=
+ =?us-ascii?Q?7Yhw0CkzCbGWtgUNMXn2RAEw6WHiiVyEqz6jXEHHKCUA/8TubDjsQUBXubcE?=
+ =?us-ascii?Q?fo61OgOBab84Kvu/FatqypN+H7SL3nMcqmhb/zO3eds+ED52rvwov0dT0fwp?=
+ =?us-ascii?Q?GkZEbWtKUqYxCLZUw2ELes2k4UWvI4qPdxGuX4vAKc0NwUHfeeWdc4hOZdS/?=
+ =?us-ascii?Q?LSXfWtCsD86wEo50YPB/uXBh7ZUonmzm0obJyWQOQ0fz2IwPgqXvjYzO9b9d?=
+ =?us-ascii?Q?oNeDqJT1hMBfdeCStzZ3Rx4XdYXM1AbEzupChxRESoVqo1V4W8uI/L7X4nwL?=
+ =?us-ascii?Q?++BIv9JWXE9UadALUXpF?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a57313b9-651b-42e7-2775-08dc56453095
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2024 14:23:57.7266
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR02MB6967
 
-Hi Konrad,
+The "struct mana_cfg_rx_steer_req_v2" uses a dynamically sized set of
+trailing elements. Specifically, it uses a "mana_handle_t" array. So,
+use the preferred way in the kernel declaring a flexible array [1].
 
-kernel test robot noticed the following build errors:
+At the same time, prepare for the coming implementation by GCC and Clang
+of the __counted_by attribute. Flexible array members annotated with
+__counted_by can have their accesses bounds-checked at run-time via
+CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
+strcpy/memcpy-family functions).
 
-[auto build test ERROR on 2b3d5988ae2cb5cd945ddbc653f0a71706231fdd]
+Also, avoid the open-coded arithmetic in the memory allocator functions
+[2] using the "struct_size" macro.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/soc-qcom-Move-some-socinfo-defines-to-the-header-expand-them/20240405-164231
-base:   2b3d5988ae2cb5cd945ddbc653f0a71706231fdd
-patch link:    https://lore.kernel.org/r/20240405-topic-smem_speedbin-v1-4-ce2b864251b1%40linaro.org
-patch subject: [PATCH 4/6] drm/msm/adreno: Implement SMEM-based speed bin
-config: i386-buildonly-randconfig-001-20240406 (https://download.01.org/0day-ci/archive/20240406/202404061839.0waGfXwj-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240406/202404061839.0waGfXwj-lkp@intel.com/reproduce)
+Moreover, use the "offsetof" helper to get the indirect table offset
+instead of the "sizeof" operator and avoid the open-coded arithmetic in
+pointers using the new flex member. This new structure member also allow
+us to remove the "req_indir_tab" variable since it is no longer needed.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404061839.0waGfXwj-lkp@intel.com/
+Now, it is also possible to use the "flex_array_size" helper to compute
+the size of these trailing elements in the "memcpy" function.
 
-All errors (new ones prefixed by >>):
+Specifically, the first commit adds the flex member and the patches 2 and
+3 refactor the consumers of the "struct mana_cfg_rx_steer_req_v2".
 
->> drivers/gpu/drm/msm/adreno/adreno_gpu.c:1090:14: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1090 |         *speedbin = FIELD_PREP(ADRENO_SKU_ID_PCODE, pcode) |
-         |                     ^
-   1 error generated.
+This code was detected with the help of Coccinelle, and audited and
+modified manually. The Coccinelle script used to detect this code pattern
+is the following:
 
+virtual report
 
-vim +/FIELD_PREP +1090 drivers/gpu/drm/msm/adreno/adreno_gpu.c
+@rule1@
+type t1;
+type t2;
+identifier i0;
+identifier i1;
+identifier i2;
+identifier ALLOC =~ "kmalloc|kzalloc|kmalloc_node|kzalloc_node|vmalloc|vzalloc|kvmalloc|kvzalloc";
+position p1;
+@@
 
-  1062	
-  1063	int adreno_read_speedbin(struct adreno_gpu *adreno_gpu,
-  1064				 struct device *dev, u32 *speedbin)
-  1065	{
-  1066		u32 fcode, pcode;
-  1067		int ret;
-  1068	
-  1069		/* Try reading the speedbin via a nvmem cell first */
-  1070		ret = nvmem_cell_read_variable_le_u32(dev, "speed_bin", speedbin);
-  1071		if (!ret && ret != -EINVAL)
-  1072			return ret;
-  1073	
-  1074		ret = qcom_smem_get_feature_code(&fcode);
-  1075		if (ret) {
-  1076			dev_err(dev, "Couldn't get feature code from SMEM!\n");
-  1077			return ret;
-  1078		}
-  1079	
-  1080		ret = qcom_smem_get_product_code(&pcode);
-  1081		if (ret) {
-  1082			dev_err(dev, "Couldn't get product code from SMEM!\n");
-  1083			return ret;
-  1084		}
-  1085	
-  1086		/* Don't consider fcode for external feature codes */
-  1087		if (fcode <= SOCINFO_FC_EXT_RESERVE)
-  1088			fcode = SOCINFO_FC_UNKNOWN;
-  1089	
-> 1090		*speedbin = FIELD_PREP(ADRENO_SKU_ID_PCODE, pcode) |
-  1091			    FIELD_PREP(ADRENO_SKU_ID_FCODE, fcode);
-  1092	
-  1093		return ret;
-  1094	}
-  1095	
+i0 = sizeof(t1) + sizeof(t2) * i1;
+...
+i2 = ALLOC@p1(..., i0, ...);
+
+@script:python depends on report@
+p1 << rule1.p1;
+@@
+
+msg = "WARNING: verify allocation on line %s" % (p1[0].line)
+coccilib.report.print_report(p1[0],msg)
+
+Link: https://www.kernel.org/doc/html/next/process/deprecated.html#zero-length-and-one-element-arrays [1]
+Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [2]
+Signed-off-by: Erick Archer <erick.archer@outlook.com>
+---
+Changes in v3:
+- Split the changes in various commits to simplify the acceptance process
+  (Leon Romanovsky).
+
+Changes in v2:
+- Remove the "req_indir_tab" variable (Gustavo A. R. Silva).
+- Update the commit message.
+- Add the "__counted_by" attribute.
+
+Previous versions:
+v1 -> https://lore.kernel.org/linux-hardening/AS8PR02MB7237974EF1B9BAFA618166C38B382@AS8PR02MB7237.eurprd02.prod.outlook.com/
+v2 -> https://lore.kernel.org/linux-hardening/AS8PR02MB723729C5A63F24C312FC9CD18B3F2@AS8PR02MB7237.eurprd02.prod.outlook.com/
+---
+Erick Archer (3):
+  net: mana: Add flex array to struct mana_cfg_rx_steer_req_v2
+  RDMA/mana_ib: Prefer struct_size over open coded arithmetic
+  net: mana: Avoid open coded arithmetic
+
+ drivers/infiniband/hw/mana/qp.c               | 12 +++++-------
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 14 ++++++--------
+ include/net/mana/mana.h                       |  1 +
+ 3 files changed, 12 insertions(+), 15 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
