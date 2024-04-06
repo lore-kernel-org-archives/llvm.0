@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D8A38DF2;
-	Sat,  6 Apr 2024 19:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01243535A5;
+	Sat,  6 Apr 2024 21:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712431431; cv=none; b=d5IALgwvFw0yabSSf/8pvuPxG7bZovmDPgTcF/7qRPc5aELJ/SecGtC6kTwY85ldpJrvDWjPi4ny41f73lwkS8C+9TKwSrCq4BkzOiLctmQYFnK0P2sAgEZwsYRXkBsUvhEyjoFZklZb6Ket6Zpr/FhfsqaaWtAizgEIc+JPv/g=
+	t=1712440798; cv=none; b=SPf4OSyFsQQPsyGWHuXqes77I0dfDJ5XoBgv0m7AWU0ow5VH+JqQ3cTkP0gD9g+8xJ9VXNUVqhwyPGv3sWL4S2JA6zAe9jy5GMBVFsciZnrsfd1QGfvsJXYr0G+/eZFqCIHYonD4xiCRQiv3l6eIFtdAa9U1JwnW72uLysVP++4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712431431; c=relaxed/simple;
-	bh=YCaWIPOM92dAfCLRQ84iiSieXZG4QEHgGa5od2iFsXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QkIfj7GWeH9nX4pY1Fo9gXeqvy3YCqkuvA1/N3fKht/4fv/d6fbKtoPtr730/gwMUf7t1IuJ2qpjexIKZ5blyIdY7Q/I9fK8eDrvHC1mgXmVYhGyjJLsjsIpS3PAAZYz5rhYaUM4nRGGbFMMXVpExrCDtIdzwPRUQt8G/DuW0TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mbf/rY3Z; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1712440798; c=relaxed/simple;
+	bh=X36AahOvRdmhhEHZoQJWezKkzEmJVfURxWwBjvTWeA0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZhwKPSahv8D4+5jmyR2e+YurbdSBMay8bKVvNJUWsq9rVjMGKKRQR5thmJuxAWaaDptOSjZfu1Xw3oAAbwjsVDQzOW5c7ZiJkqKio/mj/6VsarDyMdQV7MpKc/TN470FsT4NakXQt5LZKS5XqkBpwrjh8QEJRid1dG5F9K8rQqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=egeln4Rm; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mbf/rY3Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="egeln4Rm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712431428; x=1743967428;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YCaWIPOM92dAfCLRQ84iiSieXZG4QEHgGa5od2iFsXo=;
-  b=Mbf/rY3ZXnfg2LonVvDI2rxF0/eOUmuFR9UZgAhpJn6PKtzpCaUCt+c3
-   fZCe5e4gIqJGUjEkm8noqdMaKeYDljuS7tOA+kMreCa9ug59WEJlMOtan
-   +o3C0KIKi4mErK5Qh+31wrHhosk+xmlHyf/dYY7XAksCcgJb7BXA19wGz
-   BASzc4nGFgngGK+j2acTvigo+4oDWGYyEJFdbuLthkkUWwBZ/xe/epUyq
-   pXapE3fCpHlxzXky7E8uHARwcPqVVp6p9m3SEvge+PCECck2s2W4z1x+U
-   52fxLF76x5Ko5Sc1lRBUsMsJBVlfBaLXl8GQ6WCSQdkSqI8M6LO1EvQKR
+  t=1712440796; x=1743976796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X36AahOvRdmhhEHZoQJWezKkzEmJVfURxWwBjvTWeA0=;
+  b=egeln4RmUuSIlzlhkeN64f5vHAxUh4D275FmT6DRPNGMMPHnRj/VzYKK
+   eO0ZrU9DvxbhDbtdMq6RLmq3vx/y4N29Axiw3khojT6glPkqhvE4ha2/v
+   uFnQpCSkiGhPxyXEuT/Yu6uF607Vs1fFdSQ/N7lj4WsKakT3OydQzI2mx
+   JE3BKGWiEvv5sDEIVdN6W9qNVvNGpytTApi8uIdV+5jSWWbK2eMvEZQKD
+   22U7jcRAX24ov5KQwS34K4sH0x7RTJqmzML5+ZiQDssy7328i9oTIEZgq
+   VuhaC6nX/bm0NnPrrK/SsKrTZRF5mu9zUXVSG3VSHo8btoaddrfNUNRZg
    A==;
-X-CSE-ConnectionGUID: si+Lzi7tTvCxWUDOv8rcLA==
-X-CSE-MsgGUID: TPhK6a/4QLam2DT6ilYUFA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="7912139"
-X-IronPort-AV: E=Sophos;i="6.07,183,1708416000"; 
-   d="scan'208";a="7912139"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 12:23:48 -0700
-X-CSE-ConnectionGUID: k2yJeMtkRsmLE+tMjsVLXg==
-X-CSE-MsgGUID: i1EuU4n7R6GnrLyQu3tWIw==
+X-CSE-ConnectionGUID: rIZmpvMMSaK0+7WEUg4aMA==
+X-CSE-MsgGUID: VdJgjr19SGCKXnM7biGL2Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="18318126"
+X-IronPort-AV: E=Sophos;i="6.07,184,1708416000"; 
+   d="scan'208";a="18318126"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 14:59:52 -0700
+X-CSE-ConnectionGUID: eoTrljCeSVq8BwFg4XTNfg==
+X-CSE-MsgGUID: QWTEMOYVTByICr1JYSSDiQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,183,1708416000"; 
-   d="scan'208";a="42649172"
+X-IronPort-AV: E=Sophos;i="6.07,184,1708416000"; 
+   d="scan'208";a="23977349"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 06 Apr 2024 12:23:46 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 06 Apr 2024 14:59:50 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rtBdg-0003n2-2r;
-	Sat, 06 Apr 2024 19:23:44 +0000
-Date: Sun, 7 Apr 2024 03:23:09 +0800
+	id 1rtE4i-0003sj-0k;
+	Sat, 06 Apr 2024 21:59:48 +0000
+Date: Sun, 7 Apr 2024 05:59:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bui Quang Minh <minhquangbui99@gmail.com>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>,
+	dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jens Axboe <axboe@kernel.dk>
-Subject: [axboe-block:rw_iter 112/120]
- drivers/net/ethernet/amd/xgbe/xgbe-debugfs.c:393:15: warning: variable
- 'value' set but not used
-Message-ID: <202404070316.d8eNIHI0-lkp@intel.com>
+	intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH 06/12] drm/client: Constify modes
+Message-ID: <202404070528.NgbaKKH3-lkp@intel.com>
+References: <20240404203336.10454-7-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,48 +64,149 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240404203336.10454-7-ville.syrjala@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   f5a71066e2fa8ca66dd137e17bac2e2090b3802d
-commit: dd988e82f94c0ea4e91d77876ef0b90d4294afeb [112/120] drivers/net/ethernet/amd-xgbe: convert to read/write iterators
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240407/202404070316.d8eNIHI0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070316.d8eNIHI0-lkp@intel.com/reproduce)
+Hi Ville,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.9-rc2 next-20240405]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-client-Fully-protect-modes-with-dev-mode_config-mutex/20240405-043540
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240404203336.10454-7-ville.syrjala%40linux.intel.com
+patch subject: [PATCH 06/12] drm/client: Constify modes
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240407/202404070528.NgbaKKH3-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070528.NgbaKKH3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404070316.d8eNIHI0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404070528.NgbaKKH3-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/amd/xgbe/xgbe-debugfs.c:393:15: warning: variable 'value' set but not used [-Wunused-but-set-variable]
-     393 |         unsigned int value;
-         |                      ^
-   1 warning generated.
+   In file included from drivers/gpu/drm/drm_client_modeset.c:16:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/drm_client_modeset.c:16:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/drm_client_modeset.c:16:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/gpu/drm/drm_client_modeset.c:16:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/gpu/drm/drm_client_modeset.c:1241:
+>> drivers/gpu/drm/tests/drm_client_modeset_test.c:108:7: error: assigning to 'struct drm_display_mode *' from 'const struct drm_display_mode *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     108 |         mode = drm_connector_pick_cmdline_mode(connector);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   8 errors generated.
 
 
-vim +/value +393 drivers/net/ethernet/amd/xgbe/xgbe-debugfs.c
+vim +108 drivers/gpu/drm/tests/drm_client_modeset_test.c
 
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10  388  
-dd988e82f94c0e Bui Quang Minh   2024-04-06  389  static ssize_t xi2c_reg_value_read_iter(struct kiocb *iocb,
-dd988e82f94c0e Bui Quang Minh   2024-04-06  390  					struct iov_iter *to)
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10  391  {
-dd988e82f94c0e Bui Quang Minh   2024-04-06  392  	struct xgbe_prv_data *pdata = iocb->ki_filp->private_data;
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10 @393  	unsigned int value;
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10  394  
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10  395  	value = XI2C_IOREAD(pdata, pdata->debugfs_xi2c_reg);
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10  396  
-dd988e82f94c0e Bui Quang Minh   2024-04-06  397  	return xgbe_common_read_iter(to, &iocb->ki_pos,
-dd988e82f94c0e Bui Quang Minh   2024-04-06  398  				     pdata->debugfs_xi2c_reg);
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10  399  }
-5ab1dcd58597c0 Lendacky, Thomas 2016-11-10  400  
-
-:::::: The code at line 393 was first introduced by commit
-:::::: 5ab1dcd58597c04f6d50980c3d5f3c2518301b31 amd-xgbe: Add I2C support for sideband communication
-
-:::::: TO: Lendacky, Thomas <Thomas.Lendacky@amd.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   84  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   85  static void drm_test_pick_cmdline_res_1920_1080_60(struct kunit *test)
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   86  {
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   87  	struct drm_client_modeset_test_priv *priv = test->priv;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   88  	struct drm_device *drm = priv->drm;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   89  	struct drm_connector *connector = &priv->connector;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   90  	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   91  	struct drm_display_mode *expected_mode, *mode;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   92  	const char *cmdline = "1920x1080@60";
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   93  	int ret;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   94  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   95  	expected_mode = drm_mode_find_dmt(priv->drm, 1920, 1080, 60, false);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   96  	KUNIT_ASSERT_NOT_NULL(test, expected_mode);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   97  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   98  	KUNIT_ASSERT_TRUE(test,
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   99  			  drm_mode_parse_command_line_for_connector(cmdline,
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  100  								    connector,
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  101  								    cmdline_mode));
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  102  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  103  	mutex_lock(&drm->mode_config.mutex);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  104  	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  105  	mutex_unlock(&drm->mode_config.mutex);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  106  	KUNIT_ASSERT_GT(test, ret, 0);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  107  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14 @108  	mode = drm_connector_pick_cmdline_mode(connector);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  109  	KUNIT_ASSERT_NOT_NULL(test, mode);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  110  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  111  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected_mode, mode));
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  112  }
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  113  
 
 -- 
 0-DAY CI Kernel Test Service
