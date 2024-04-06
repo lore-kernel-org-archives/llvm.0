@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5F3BE6C;
-	Sat,  6 Apr 2024 18:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F53F40BFE;
+	Sat,  6 Apr 2024 19:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712426989; cv=none; b=A4Gw8/gq0YFaJln/JyjWUNSY9obXFAybDNjJ197vcYuNUr47bdWSRP4fg7POBlIsgwjQQWanSD+won19lNJscTrZ/I4u9KZuHygg7fDFoOCyohArC/XTmBHsnKjrw+SOlrlK5rgTImpp9fxpaNlMFTCAORp0zaWd57GWnFUJ8Wc=
+	t=1712430110; cv=none; b=DK0iyCGJlZQOGcvquoUMCdzXQxO36xZkwBeaTKuUxyUMAWdzDER5unjNGVbTsj6OHr71HhcLl8VOsaJGSXnV3I+ynyYi8DhVsue+GonN5UncnPKWk1lCRh91Sie9+8wb7Y1Bm5UODmDcjWnTJcjqYraCmfPiySe2RcboeDoE8m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712426989; c=relaxed/simple;
-	bh=n0JlIHA5Iqd7L/Kv9q775wtwPQAEggHT1d+NKpgw4ns=;
+	s=arc-20240116; t=1712430110; c=relaxed/simple;
+	bh=//MYeLRGeF3aktaU/CGqZkxj5GDSbySTTwda27UORSg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cBhIzjllZOvLTYEBLyLulQ3p4KBe5+fJrl3HWNwcIdcre+b3Sq3hJ9eCCpTKWXQgW+tSx6RmGx6o34naednYr3stp1GlF/FDLV82CwN1ryLtV/nrlrhVRaw/RRsxrja4VHBlTLRsql2zFsTaCcRqWJvRpysNEy5BvCbhx0rU+SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YD08y/6M; arc=none smtp.client-ip=198.175.65.19
+	 Content-Disposition; b=gAqOBSb4/418cvGLFJ2kVGJcjACmyuosCxiejI0bJEANJBAfDO4MOvzSSgwe1lfNnoTifSkzy9dQqSyxW7Xcf0af6tzxaBUvgSaHrNJ7eb9+vwkviT/i/qKcY4NrBs91FjZakdh6KGnMpfdG0tl72/xJSATggTvP2ihKkAWak2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ddzST5h4; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YD08y/6M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ddzST5h4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712426987; x=1743962987;
+  t=1712430108; x=1743966108;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n0JlIHA5Iqd7L/Kv9q775wtwPQAEggHT1d+NKpgw4ns=;
-  b=YD08y/6MDwWh4TQhOdWMlg+mi3lT2LGlGzat+SnthPS4krGdDdsQL9/s
-   8hN2e7OKkCxMtJVSNERkSpAT79qZ2gKFJUAbd3eyjxkafdZJuPj4H432i
-   yFxboWZXrbfXWEtxrTOXqoVj4LZcwXNt/VBvSmfZbW23h4/vRjfOpwQR7
-   Uw5N9g/VStwxAb4eg18zYqgaE0ExgLv5WA5xp+1Yk1U7X0KbpY71ngMII
-   3eLf5X+Yc3uTHhiHRW1DPEuDH2T8RDDx0cF7DnIF+m4F+893F2FOr0s1I
-   2d7A41JgJ/9nK3ZHAda2cT3t+YThBpdZaK+kP15Wi0rFFiJ/WQv49nFJn
-   g==;
-X-CSE-ConnectionGUID: GVVmQWOESdutJVIMq+ddug==
-X-CSE-MsgGUID: F36mkv/5RBCbatk0HoENgg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="7601253"
+  bh=//MYeLRGeF3aktaU/CGqZkxj5GDSbySTTwda27UORSg=;
+  b=ddzST5h4+FzWSyPu9y3XeMAoVC+4IOAqqikm+DIUmn79WyoFYRwONpo0
+   2NHulxovuanABtLuZcaecUq6AezJj773heGjfvsYG5ebqPLauZBXROoyU
+   XrNC4N2fHb0n3xeDZUaheOKxMr2v3k1dGcdJkL07FM63+AmM19j4YUaRp
+   HGKiYuN0FK6ajhr1jr8nh0dIRqvQc4lC2N+J/YmeUBECqEnFYmuXChDBp
+   S1s9tXq0egBi795AuzJwoiPMPXdW7/jz3ocPD4KI/kNTN+LPQWyIS6+ma
+   xcUjPkDc180V1Z9ju3w2+XcdqhBYq7yzEOwEaILPxwUS8nxCEWWmFPWgl
+   Q==;
+X-CSE-ConnectionGUID: qROwztHSR6CdNvbmJvTeMA==
+X-CSE-MsgGUID: jiaENJ6SQjCbkKCisutP7Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11036"; a="11568836"
 X-IronPort-AV: E=Sophos;i="6.07,183,1708416000"; 
-   d="scan'208";a="7601253"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 11:09:46 -0700
-X-CSE-ConnectionGUID: MGytukvRS2qX8u7eRJKNhg==
-X-CSE-MsgGUID: dp90UWJZSR2lU7KbEBc98w==
+   d="scan'208";a="11568836"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2024 12:01:47 -0700
+X-CSE-ConnectionGUID: DxkPB3wATSKo7trPGgE22Q==
+X-CSE-MsgGUID: QnmN0twHQtODfHK7Sw9hGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,183,1708416000"; 
-   d="scan'208";a="24193729"
+   d="scan'208";a="56953781"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 06 Apr 2024 11:09:44 -0700
+  by orviesa001.jf.intel.com with ESMTP; 06 Apr 2024 12:01:47 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rtAU1-0003kK-2i;
-	Sat, 06 Apr 2024 18:09:41 +0000
-Date: Sun, 7 Apr 2024 02:08:47 +0800
+	id 1rtBIO-0003mI-0F;
+	Sat, 06 Apr 2024 19:01:44 +0000
+Date: Sun, 7 Apr 2024 03:01:35 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 107/120] drivers/net/ieee802154/ca8210.c:2448:
- warning: Function parameter or struct member 'iocb' not described in
- 'ca8210_test_int_user_write'
-Message-ID: <202404070201.i53oMmZ7-lkp@intel.com>
+Subject: [axboe-block:rw_iter 105/106] samples/vfio-mdev/mtty.c:887:15:
+ error: call to undeclared function 'iov_iter_count'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202404070215.itiTTElr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,175 +65,235 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
 head:   f5a71066e2fa8ca66dd137e17bac2e2090b3802d
-commit: d5a83c7c7a55cb27d2dba543610d7cce1523f87c [107/120] drivers/net/ieee802154: convert to read/write iterators
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240407/202404070201.i53oMmZ7-lkp@intel.com/config)
+commit: d16395df532bf3f4343cc3445521c486d1925dcc [105/106] samples/vfio-mdev: convert to read/write iterators
+config: x86_64-buildonly-randconfig-001-20240406 (https://download.01.org/0day-ci/archive/20240407/202404070215.itiTTElr-lkp@intel.com/config)
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070201.i53oMmZ7-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240407/202404070215.itiTTElr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404070201.i53oMmZ7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404070215.itiTTElr-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ieee802154/ca8210.c:2448: warning: Function parameter or struct member 'iocb' not described in 'ca8210_test_int_user_write'
->> drivers/net/ieee802154/ca8210.c:2448: warning: Function parameter or struct member 'from' not described in 'ca8210_test_int_user_write'
->> drivers/net/ieee802154/ca8210.c:2448: warning: Excess function parameter 'filp' description in 'ca8210_test_int_user_write'
->> drivers/net/ieee802154/ca8210.c:2448: warning: Excess function parameter 'in_buf' description in 'ca8210_test_int_user_write'
->> drivers/net/ieee802154/ca8210.c:2448: warning: Excess function parameter 'len' description in 'ca8210_test_int_user_write'
->> drivers/net/ieee802154/ca8210.c:2448: warning: Excess function parameter 'off' description in 'ca8210_test_int_user_write'
->> drivers/net/ieee802154/ca8210.c:2521: warning: Function parameter or struct member 'iocb' not described in 'ca8210_test_int_user_read'
->> drivers/net/ieee802154/ca8210.c:2521: warning: Function parameter or struct member 'to' not described in 'ca8210_test_int_user_read'
->> drivers/net/ieee802154/ca8210.c:2521: warning: Excess function parameter 'filp' description in 'ca8210_test_int_user_read'
->> drivers/net/ieee802154/ca8210.c:2521: warning: Excess function parameter 'buf' description in 'ca8210_test_int_user_read'
->> drivers/net/ieee802154/ca8210.c:2521: warning: Excess function parameter 'len' description in 'ca8210_test_int_user_read'
->> drivers/net/ieee802154/ca8210.c:2521: warning: Excess function parameter 'offp' description in 'ca8210_test_int_user_read'
+>> samples/vfio-mdev/mtty.c:887:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     887 |         size_t len = iov_iter_count(to);
+         |                      ^
+>> samples/vfio-mdev/mtty.c:912:8: error: call to undeclared function 'copy_to_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     912 |                 if (!copy_to_iter_full((void *)&migf->data + *pos, len, to)) {
+         |                      ^
+   samples/vfio-mdev/mtty.c:1026:15: error: call to undeclared function 'iov_iter_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1026 |         size_t len = iov_iter_count(from);
+         |                      ^
+>> samples/vfio-mdev/mtty.c:1050:7: error: call to undeclared function 'copy_from_iter_full'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1050 |         if (!copy_from_iter_full((void *)&migf->data + *pos, len, from)) {
+         |              ^
+   4 errors generated.
 
 
-vim +2448 drivers/net/ieee802154/ca8210.c
+vim +/iov_iter_count +887 samples/vfio-mdev/mtty.c
 
-ded845a781a578d Harry Morris 2017-03-28  2434  
-ded845a781a578d Harry Morris 2017-03-28  2435  /**
-ded845a781a578d Harry Morris 2017-03-28  2436   * ca8210_test_int_user_write() - Called by a process in userspace to send a
-ded845a781a578d Harry Morris 2017-03-28  2437   *                                message to the ca8210 drivers
-ded845a781a578d Harry Morris 2017-03-28  2438   * @filp:    file interface
-ded845a781a578d Harry Morris 2017-03-28  2439   * @in_buf:  Buffer containing message to write
-ded845a781a578d Harry Morris 2017-03-28  2440   * @len:     length of message
-ded845a781a578d Harry Morris 2017-03-28  2441   * @off:     file offset
-ded845a781a578d Harry Morris 2017-03-28  2442   *
-ded845a781a578d Harry Morris 2017-03-28  2443   * Return: 0 or linux error code
-ded845a781a578d Harry Morris 2017-03-28  2444   */
-ded845a781a578d Harry Morris 2017-03-28  2445  static ssize_t ca8210_test_int_user_write(
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2446  	struct kiocb *iocb,
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2447  	struct iov_iter *from)
-ded845a781a578d Harry Morris 2017-03-28 @2448  {
-ded845a781a578d Harry Morris 2017-03-28  2449  	int ret;
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2450  	struct ca8210_priv *priv = iocb->ki_filp->private_data;
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2451  	size_t len = iov_iter_count(from);
-ded845a781a578d Harry Morris 2017-03-28  2452  	u8 command[CA8210_SPI_BUF_SIZE];
-ded845a781a578d Harry Morris 2017-03-28  2453  
-86674a97f5055f4 Harry Morris 2018-03-28  2454  	memset(command, SPI_IDLE, 6);
-86674a97f5055f4 Harry Morris 2018-03-28  2455  	if (len > CA8210_SPI_BUF_SIZE || len < 2) {
-ded845a781a578d Harry Morris 2017-03-28  2456  		dev_warn(
-ded845a781a578d Harry Morris 2017-03-28  2457  			&priv->spi->dev,
-86674a97f5055f4 Harry Morris 2018-03-28  2458  			"userspace requested erroneous write length (%zu)\n",
-ded845a781a578d Harry Morris 2017-03-28  2459  			len
-ded845a781a578d Harry Morris 2017-03-28  2460  		);
-86674a97f5055f4 Harry Morris 2018-03-28  2461  		return -EBADE;
-ded845a781a578d Harry Morris 2017-03-28  2462  	}
-ded845a781a578d Harry Morris 2017-03-28  2463  
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2464  	ret = !copy_from_iter_full(command, len, from);
-ded845a781a578d Harry Morris 2017-03-28  2465  	if (ret) {
-ded845a781a578d Harry Morris 2017-03-28  2466  		dev_err(
-ded845a781a578d Harry Morris 2017-03-28  2467  			&priv->spi->dev,
-ded845a781a578d Harry Morris 2017-03-28  2468  			"%d bytes could not be copied from userspace\n",
-ded845a781a578d Harry Morris 2017-03-28  2469  			ret
-ded845a781a578d Harry Morris 2017-03-28  2470  		);
-ded845a781a578d Harry Morris 2017-03-28  2471  		return -EIO;
-ded845a781a578d Harry Morris 2017-03-28  2472  	}
-86674a97f5055f4 Harry Morris 2018-03-28  2473  	if (len != command[1] + 2) {
-86674a97f5055f4 Harry Morris 2018-03-28  2474  		dev_err(
-86674a97f5055f4 Harry Morris 2018-03-28  2475  			&priv->spi->dev,
-86674a97f5055f4 Harry Morris 2018-03-28  2476  			"write len does not match packet length field\n"
-86674a97f5055f4 Harry Morris 2018-03-28  2477  		);
-86674a97f5055f4 Harry Morris 2018-03-28  2478  		return -EBADE;
-86674a97f5055f4 Harry Morris 2018-03-28  2479  	}
-ded845a781a578d Harry Morris 2017-03-28  2480  
-ded845a781a578d Harry Morris 2017-03-28  2481  	ret = ca8210_test_check_upstream(command, priv->spi);
-ded845a781a578d Harry Morris 2017-03-28  2482  	if (ret == 0) {
-ded845a781a578d Harry Morris 2017-03-28  2483  		ret = ca8210_spi_exchange(
-ded845a781a578d Harry Morris 2017-03-28  2484  			command,
-ded845a781a578d Harry Morris 2017-03-28  2485  			command[1] + 2,
-ded845a781a578d Harry Morris 2017-03-28  2486  			NULL,
-ded845a781a578d Harry Morris 2017-03-28  2487  			priv->spi
-ded845a781a578d Harry Morris 2017-03-28  2488  		);
-ded845a781a578d Harry Morris 2017-03-28  2489  		if (ret < 0) {
-ded845a781a578d Harry Morris 2017-03-28  2490  			/* effectively 0 bytes were written successfully */
-ded845a781a578d Harry Morris 2017-03-28  2491  			dev_err(
-ded845a781a578d Harry Morris 2017-03-28  2492  				&priv->spi->dev,
-ded845a781a578d Harry Morris 2017-03-28  2493  				"spi exchange failed\n"
-ded845a781a578d Harry Morris 2017-03-28  2494  			);
-ded845a781a578d Harry Morris 2017-03-28  2495  			return ret;
-ded845a781a578d Harry Morris 2017-03-28  2496  		}
-ded845a781a578d Harry Morris 2017-03-28  2497  		if (command[0] & SPI_SYN)
-ded845a781a578d Harry Morris 2017-03-28  2498  			priv->sync_down++;
-ded845a781a578d Harry Morris 2017-03-28  2499  	}
-ded845a781a578d Harry Morris 2017-03-28  2500  
-ded845a781a578d Harry Morris 2017-03-28  2501  	return len;
-ded845a781a578d Harry Morris 2017-03-28  2502  }
-ded845a781a578d Harry Morris 2017-03-28  2503  
-ded845a781a578d Harry Morris 2017-03-28  2504  /**
-ded845a781a578d Harry Morris 2017-03-28  2505   * ca8210_test_int_user_read() - Called by a process in userspace to read a
-ded845a781a578d Harry Morris 2017-03-28  2506   *                               message from the ca8210 drivers
-ded845a781a578d Harry Morris 2017-03-28  2507   * @filp:  file interface
-ded845a781a578d Harry Morris 2017-03-28  2508   * @buf:   Buffer to write message to
-ded845a781a578d Harry Morris 2017-03-28  2509   * @len:   length of message to read (ignored)
-ded845a781a578d Harry Morris 2017-03-28  2510   * @offp:  file offset
-ded845a781a578d Harry Morris 2017-03-28  2511   *
-ded845a781a578d Harry Morris 2017-03-28  2512   * If the O_NONBLOCK flag was set when opening the file then this function will
-ded845a781a578d Harry Morris 2017-03-28  2513   * not block, i.e. it will return if the fifo is empty. Otherwise the function
-ded845a781a578d Harry Morris 2017-03-28  2514   * will block, i.e. wait until new data arrives.
-ded845a781a578d Harry Morris 2017-03-28  2515   *
-ded845a781a578d Harry Morris 2017-03-28  2516   * Return: number of bytes read
-ded845a781a578d Harry Morris 2017-03-28  2517   */
-ded845a781a578d Harry Morris 2017-03-28  2518  static ssize_t ca8210_test_int_user_read(
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2519  	struct kiocb *iocb,
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2520  	struct iov_iter *to)
-ded845a781a578d Harry Morris 2017-03-28 @2521  {
-ded845a781a578d Harry Morris 2017-03-28  2522  	int i, cmdlen;
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2523  	struct ca8210_priv *priv = iocb->ki_filp->private_data;
-ded845a781a578d Harry Morris 2017-03-28  2524  	unsigned char *fifo_buffer;
-ded845a781a578d Harry Morris 2017-03-28  2525  	unsigned long bytes_not_copied;
-ded845a781a578d Harry Morris 2017-03-28  2526  
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2527  	if (iocb->ki_filp->f_flags & O_NONBLOCK) {
-ded845a781a578d Harry Morris 2017-03-28  2528  		/* Non-blocking mode */
-ded845a781a578d Harry Morris 2017-03-28  2529  		if (kfifo_is_empty(&priv->test.up_fifo))
-ded845a781a578d Harry Morris 2017-03-28  2530  			return 0;
-ded845a781a578d Harry Morris 2017-03-28  2531  	} else {
-ded845a781a578d Harry Morris 2017-03-28  2532  		/* Blocking mode */
-ded845a781a578d Harry Morris 2017-03-28  2533  		wait_event_interruptible(
-ded845a781a578d Harry Morris 2017-03-28  2534  			priv->test.readq,
-ded845a781a578d Harry Morris 2017-03-28  2535  			!kfifo_is_empty(&priv->test.up_fifo)
-ded845a781a578d Harry Morris 2017-03-28  2536  		);
-ded845a781a578d Harry Morris 2017-03-28  2537  	}
-ded845a781a578d Harry Morris 2017-03-28  2538  
-ded845a781a578d Harry Morris 2017-03-28  2539  	if (kfifo_out(&priv->test.up_fifo, &fifo_buffer, 4) != 4) {
-ded845a781a578d Harry Morris 2017-03-28  2540  		dev_err(
-ded845a781a578d Harry Morris 2017-03-28  2541  			&priv->spi->dev,
-ded845a781a578d Harry Morris 2017-03-28  2542  			"test_interface: Wrong number of elements popped from upstream fifo\n"
-ded845a781a578d Harry Morris 2017-03-28  2543  		);
-ded845a781a578d Harry Morris 2017-03-28  2544  		return 0;
-ded845a781a578d Harry Morris 2017-03-28  2545  	}
-ded845a781a578d Harry Morris 2017-03-28  2546  	cmdlen = fifo_buffer[1];
-ded845a781a578d Harry Morris 2017-03-28  2547  	bytes_not_copied = cmdlen + 2;
-ded845a781a578d Harry Morris 2017-03-28  2548  
-d5a83c7c7a55cb2 Jens Axboe   2024-04-06  2549  	bytes_not_copied = !copy_to_iter_full(fifo_buffer, bytes_not_copied, to);
-ded845a781a578d Harry Morris 2017-03-28  2550  	if (bytes_not_copied > 0) {
-ded845a781a578d Harry Morris 2017-03-28  2551  		dev_err(
-ded845a781a578d Harry Morris 2017-03-28  2552  			&priv->spi->dev,
-ded845a781a578d Harry Morris 2017-03-28  2553  			"%lu bytes could not be copied to user space!\n",
-ded845a781a578d Harry Morris 2017-03-28  2554  			bytes_not_copied
-ded845a781a578d Harry Morris 2017-03-28  2555  		);
-ded845a781a578d Harry Morris 2017-03-28  2556  	}
-ded845a781a578d Harry Morris 2017-03-28  2557  
-ded845a781a578d Harry Morris 2017-03-28  2558  	dev_dbg(&priv->spi->dev, "test_interface: Cmd len = %d\n", cmdlen);
-ded845a781a578d Harry Morris 2017-03-28  2559  
-ded845a781a578d Harry Morris 2017-03-28  2560  	dev_dbg(&priv->spi->dev, "test_interface: Read\n");
-ded845a781a578d Harry Morris 2017-03-28  2561  	for (i = 0; i < cmdlen + 2; i++)
-ded845a781a578d Harry Morris 2017-03-28  2562  		dev_dbg(&priv->spi->dev, "%#03x\n", fifo_buffer[i]);
-ded845a781a578d Harry Morris 2017-03-28  2563  
-ded845a781a578d Harry Morris 2017-03-28  2564  	kfree(fifo_buffer);
-ded845a781a578d Harry Morris 2017-03-28  2565  
-ded845a781a578d Harry Morris 2017-03-28  2566  	return cmdlen + 2;
-ded845a781a578d Harry Morris 2017-03-28  2567  }
-ded845a781a578d Harry Morris 2017-03-28  2568  
-
-:::::: The code at line 2448 was first introduced by commit
-:::::: ded845a781a578dfb0b5b2c138e5a067aa3b1242 ieee802154: Add CA8210 IEEE 802.15.4 device driver
-
-:::::: TO: Harry Morris <harrymorris12@gmail.com>
-:::::: CC: Marcel Holtmann <marcel@holtmann.org>
+   883	
+   884	static ssize_t mtty_save_read(struct kiocb *iocb, struct iov_iter *to)
+   885	{
+   886		struct mtty_migration_file *migf = iocb->ki_filp->private_data;
+ > 887		size_t len = iov_iter_count(to);
+   888		ssize_t ret = 0;
+   889		loff_t *pos;
+   890	
+   891		if (iocb->ki_pos)
+   892			return -ESPIPE;
+   893	
+   894		pos = &iocb->ki_filp->f_pos;
+   895	
+   896		mutex_lock(&migf->lock);
+   897	
+   898		dev_dbg(migf->mdev_state->vdev.dev, "%s ask %zu\n", __func__, len);
+   899	
+   900		if (migf->disabled) {
+   901			ret = -ENODEV;
+   902			goto out_unlock;
+   903		}
+   904	
+   905		if (*pos > migf->filled_size) {
+   906			ret = -EINVAL;
+   907			goto out_unlock;
+   908		}
+   909	
+   910		len = min_t(size_t, migf->filled_size - *pos, len);
+   911		if (len) {
+ > 912			if (!copy_to_iter_full((void *)&migf->data + *pos, len, to)) {
+   913				ret = -EFAULT;
+   914				goto out_unlock;
+   915			}
+   916			*pos += len;
+   917			ret = len;
+   918		}
+   919	out_unlock:
+   920		dev_dbg(migf->mdev_state->vdev.dev, "%s read %zu\n", __func__, ret);
+   921		mutex_unlock(&migf->lock);
+   922		return ret;
+   923	}
+   924	
+   925	static const struct file_operations mtty_save_fops = {
+   926		.owner = THIS_MODULE,
+   927		.read_iter = mtty_save_read,
+   928		.unlocked_ioctl = mtty_precopy_ioctl,
+   929		.compat_ioctl = compat_ptr_ioctl,
+   930		.release = mtty_release_migf,
+   931		.llseek = no_llseek,
+   932	};
+   933	
+   934	static void mtty_save_state(struct mdev_state *mdev_state)
+   935	{
+   936		struct mtty_migration_file *migf = mdev_state->saving_migf;
+   937		int i;
+   938	
+   939		mutex_lock(&migf->lock);
+   940		for (i = 0; i < mdev_state->nr_ports; i++) {
+   941			memcpy(&migf->data.ports[i],
+   942				&mdev_state->s[i], sizeof(struct serial_port));
+   943			migf->filled_size += sizeof(struct serial_port);
+   944		}
+   945		dev_dbg(mdev_state->vdev.dev,
+   946			"%s filled to %zu\n", __func__, migf->filled_size);
+   947		mutex_unlock(&migf->lock);
+   948	}
+   949	
+   950	static int mtty_load_state(struct mdev_state *mdev_state)
+   951	{
+   952		struct mtty_migration_file *migf = mdev_state->resuming_migf;
+   953		int i;
+   954	
+   955		mutex_lock(&migf->lock);
+   956		/* magic and version already tested by resume write fn */
+   957		if (migf->filled_size < mtty_data_size(mdev_state)) {
+   958			dev_dbg(mdev_state->vdev.dev, "%s expected %zu, got %zu\n",
+   959				__func__, mtty_data_size(mdev_state),
+   960				migf->filled_size);
+   961			mutex_unlock(&migf->lock);
+   962			return -EINVAL;
+   963		}
+   964	
+   965		for (i = 0; i < mdev_state->nr_ports; i++)
+   966			memcpy(&mdev_state->s[i],
+   967			       &migf->data.ports[i], sizeof(struct serial_port));
+   968	
+   969		mutex_unlock(&migf->lock);
+   970		return 0;
+   971	}
+   972	
+   973	static struct mtty_migration_file *
+   974	mtty_save_device_data(struct mdev_state *mdev_state,
+   975			      enum vfio_device_mig_state state)
+   976	{
+   977		struct mtty_migration_file *migf = mdev_state->saving_migf;
+   978		struct mtty_migration_file *ret = NULL;
+   979	
+   980		if (migf) {
+   981			if (state == VFIO_DEVICE_STATE_STOP_COPY)
+   982				goto fill_data;
+   983			return ret;
+   984		}
+   985	
+   986		migf = kzalloc(sizeof(*migf), GFP_KERNEL_ACCOUNT);
+   987		if (!migf)
+   988			return ERR_PTR(-ENOMEM);
+   989	
+   990		migf->filp = anon_inode_getfile("mtty_mig", &mtty_save_fops,
+   991						migf, O_RDONLY);
+   992		if (IS_ERR(migf->filp)) {
+   993			int rc = PTR_ERR(migf->filp);
+   994	
+   995			kfree(migf);
+   996			return ERR_PTR(rc);
+   997		}
+   998	
+   999		stream_open(migf->filp->f_inode, migf->filp);
+  1000		mutex_init(&migf->lock);
+  1001		migf->mdev_state = mdev_state;
+  1002	
+  1003		migf->data.magic = MTTY_MAGIC;
+  1004		migf->data.major_ver = MTTY_MAJOR_VER;
+  1005		migf->data.minor_ver = MTTY_MINOR_VER;
+  1006		migf->data.nr_ports = mdev_state->nr_ports;
+  1007	
+  1008		migf->filled_size = offsetof(struct mtty_data, ports);
+  1009	
+  1010		dev_dbg(mdev_state->vdev.dev, "%s filled header to %zu\n",
+  1011			__func__, migf->filled_size);
+  1012	
+  1013		ret = mdev_state->saving_migf = migf;
+  1014	
+  1015	fill_data:
+  1016		if (state == VFIO_DEVICE_STATE_STOP_COPY)
+  1017			mtty_save_state(mdev_state);
+  1018	
+  1019		return ret;
+  1020	}
+  1021	
+  1022	static ssize_t mtty_resume_write(struct kiocb *iocb, struct iov_iter *from)
+  1023	{
+  1024		struct mtty_migration_file *migf = iocb->ki_filp->private_data;
+  1025		struct mdev_state *mdev_state = migf->mdev_state;
+  1026		size_t len = iov_iter_count(from);
+  1027		loff_t requested_length;
+  1028		ssize_t ret = 0;
+  1029		loff_t *pos;
+  1030	
+  1031		if (iocb->ki_pos)
+  1032			return -ESPIPE;
+  1033	
+  1034		pos = &iocb->ki_filp->f_pos;
+  1035	
+  1036		if (*pos < 0 ||
+  1037		    check_add_overflow((loff_t)len, *pos, &requested_length))
+  1038			return -EINVAL;
+  1039	
+  1040		if (requested_length > mtty_data_size(mdev_state))
+  1041			return -ENOMEM;
+  1042	
+  1043		mutex_lock(&migf->lock);
+  1044	
+  1045		if (migf->disabled) {
+  1046			ret = -ENODEV;
+  1047			goto out_unlock;
+  1048		}
+  1049	
+> 1050		if (!copy_from_iter_full((void *)&migf->data + *pos, len, from)) {
+  1051			ret = -EFAULT;
+  1052			goto out_unlock;
+  1053		}
+  1054	
+  1055		*pos += len;
+  1056		ret = len;
+  1057	
+  1058		dev_dbg(migf->mdev_state->vdev.dev, "%s received %zu, total %zu\n",
+  1059			__func__, len, migf->filled_size + len);
+  1060	
+  1061		if (migf->filled_size < offsetof(struct mtty_data, ports) &&
+  1062		    migf->filled_size + len >= offsetof(struct mtty_data, ports)) {
+  1063			if (migf->data.magic != MTTY_MAGIC || migf->data.flags ||
+  1064			    migf->data.major_ver != MTTY_MAJOR_VER ||
+  1065			    migf->data.minor_ver != MTTY_MINOR_VER ||
+  1066			    migf->data.nr_ports != mdev_state->nr_ports) {
+  1067				dev_dbg(migf->mdev_state->vdev.dev,
+  1068					"%s failed validation\n", __func__);
+  1069				ret = -EFAULT;
+  1070			} else {
+  1071				dev_dbg(migf->mdev_state->vdev.dev,
+  1072					"%s header validated\n", __func__);
+  1073			}
+  1074		}
+  1075	
+  1076		migf->filled_size += len;
+  1077	
+  1078	out_unlock:
+  1079		mutex_unlock(&migf->lock);
+  1080		return ret;
+  1081	}
+  1082	
 
 -- 
 0-DAY CI Kernel Test Service
