@@ -1,105 +1,201 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849B23D993
-	for <llvm@lists.linux.dev>; Sun,  7 Apr 2024 20:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129343D55B
+	for <llvm@lists.linux.dev>; Sun,  7 Apr 2024 20:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712520212; cv=none; b=RmWPZI9SLBz8FApKgkTm6rPLVlT1Q+1nK8xr2O2bZYikoczT5Wp65cWdR2wYaJUKmWQCOePaR9FmYKaEIkbQPOFkmDsZyhiqeenQrrmGbXdPYFAem9syVtlEJsiExMWP/pbr7EhvuELZpXNRIuVKTcp7KN7vuGWuTUnPsq3NG3o=
+	t=1712520677; cv=none; b=XUQ+gQ1KG9Z2ZOLqMCc7JIyuqIWn7XQtXvLwkrKTfbxp7bR4IHQAqUlikqIyshBFUZCadBimlBph3Ru+PXdXn+blrW1F6swo9q9/7TL7KibsUDBh1lZEqe/G/K4JeegTWP1MbSBVxPaze2h75S5AASlR9pRxVObWdNC/wsx9iNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712520212; c=relaxed/simple;
-	bh=zzYff9yQtgJXPQgk/ATjyS1y8lhCcN/zh2bqNrpQlq0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bTnQoS/Mqx6OzCNkQB+NDIIWkFF4KB3IJinCLaGC07nCfjlw/23VXaqaJ4HQoC1mm7GMvelq7UmrRSxXZFfte9Kip4tIRtaVpaM89r4DwMACjiaauv+AwqLY3d4J1f4Ct0dcFlsv43HKYKj9xadzXDkFzZ6HFyAcFT5wjUIq3R0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1ScCS8B; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712520677; c=relaxed/simple;
+	bh=YkiPdSORpqel8Z/t3kETwRyS4KaD/9q9qalivXxY6ZA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=J7etQaT1V2YJF6Pf8enYwC6V4RkCMlBOtO/ZAqlTG0JIw8m2J9KDNjCxQ1sW4rQXOIBuVHijEbU4aAmcOaR5DUboXTlgfTkMZ5FQ9g82gyM0tpHIbF2aKYLSv5ZgfEfimTjGVUJ1idaf1zC+bnTLH1j5risdwFeBTL6YaEtQQSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g3MTOvxK; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1ScCS8B"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-29c14800a7fso2628255a91.2
-        for <llvm@lists.linux.dev>; Sun, 07 Apr 2024 13:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712520210; x=1713125010; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yfMh48UYa1lhTnaBkcMEl7zleuPMjILYPz6KbF68Au8=;
-        b=i1ScCS8BTKJeJvJed21eoPcd2sJQgPNk9takcYYTr+h95U3CVrre8y9ahFiQNnMlaM
-         OJJ5uzBrHHVk2dsaA1+nM+3mkKM4rgk4MoEDgOoOKOETtEYj4fNPheQIDpWJLqsbFxNe
-         M6Nbpp25e0O+BcNbBnvF1vgB0DXDJ2+7k36Va9KfYAy9RTz/S1p0QRouyNDW2MXRk0q+
-         SMU/0BGDbG/5F+ZH6QAzRCy6kagFLDMdnPaWEH+kw9pMYpV4MsIBxQZDMelUjRINE+MD
-         DcSAdBiRdiGdiMzMMMBC8qgYeuIcvtTRmd/wQDTvIxzzjv7k+/IbPXt4cM8hcwhOaw+D
-         cFKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712520210; x=1713125010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yfMh48UYa1lhTnaBkcMEl7zleuPMjILYPz6KbF68Au8=;
-        b=IkQxA9M6SZG1SZBWX3Pv4iDozaoMf2+Z/EA3CghS10Hzo16HvfJhk2GjhrdrE2AjSg
-         kLTEqmDB6pldfoLv4l54fW3l/iw1UmAA+nPSA4CsXmlzZbg936+mKexzLLcu5ovxJiKj
-         pLcY7kwIy0RZyNcZqAFucr7LnvgQYs9SLPs3A78cL5x3eNCyTRz0o6QzdrLANUpmGoPg
-         wNDqME2aV4+3IIB/bactJUEgkHqP91FrGDu6B70QYhXhUMafAtcuTKljm+jk2sslHgtS
-         wqtPsj/NDYzmo9lDDzH3ukgNw5KzvmmgLEUcZxFQw782yXXrDatDCWtqupcrZVoawxbw
-         jo+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWrmlVdRV0OH5IrRHb+LuMSFU7pBTyMg/K8iCO0L9zDGRPYZRpWjeVsC4qj1LpTPlgSiODaZhyge+S6rVzw0XYMsae8gw==
-X-Gm-Message-State: AOJu0YzWs1EQdS/aTEROY3vc/nZ6sV76Mki6+cyLws/kUlo+LVrFixcq
-	33wcuu2Ukki1LHi10ydnPPePkt2OhpfY7pYGy5TDc1VBFQCRchWhR/xWfnToIwCkv2HsXTCt3LI
-	XEmLkVeBfSr9PRLngkJOuMRovLXs=
-X-Google-Smtp-Source: AGHT+IEIt1Lru4k/Tnepu4IBYtQBsXst4gyHMFJlhgjYVHRQdcRfEYeE8aY/BvrRmgDuYCRzjKItROgB6OPb0gkL7mQ=
-X-Received: by 2002:a17:90a:4dc6:b0:2a4:f53d:e732 with SMTP id
- r6-20020a17090a4dc600b002a4f53de732mr810440pjl.13.1712520210362; Sun, 07 Apr
- 2024 13:03:30 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g3MTOvxK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712520675;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=we1R4A33K/r7FpptPGTd8TZIKbRRW2OAWGWEgGw5Tkc=;
+	b=g3MTOvxKJJ+RPs0D9yeDMt8RGZYQcqXVSFwlEtxXDSEp3h2N5N2zxsAYf/qwyNgqOi4Cv9
+	5ML6pPnhLijEB0wHyT988Bk80LApA/cbBRY2VabJ4TfHrDwTbtgljcTWIRFjj7WEVM6Q3f
+	CWhvpwkEbSpRG9te2pD70c5c015j9T8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-634-858glXkRN72qkEt9xea7CA-1; Sun,
+ 07 Apr 2024 16:11:13 -0400
+X-MC-Unique: 858glXkRN72qkEt9xea7CA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14A503811707
+	for <llvm@lists.linux.dev>; Sun,  7 Apr 2024 20:11:13 +0000 (UTC)
+Received: from [172.64.13.37] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C2C8D442D20;
+	Sun,  7 Apr 2024 20:11:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 204): Test report for master
+ (6.9.0-rc2, mainline.kernel.org-clang, e8b0ccb2)
+Date: Sun, 07 Apr 2024 20:11:12 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240404-providing-emporium-e652e359c711@spud>
-In-Reply-To: <20240404-providing-emporium-e652e359c711@spud>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 7 Apr 2024 22:02:46 +0200
-Message-ID: <CANiq72mUGAXj+ajfojfMgOD7S22Q0Y0Y4QCTxNLoNxwCSpksdg@mail.gmail.com>
-Subject: Re: [PATCH v3] rust: make mutually exclusive with CFI_CLANG
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-riscv@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>, 
-	stable@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <37349.124040716111300102@us-mta-634.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 4, 2024 at 4:17=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> On RISC-V and arm64, and presumably x86, if CFI_CLANG is enabled,
-> loading a rust module will trigger a kernel panic. Support for
-> sanitisers, including kcfi (CFI_CLANG), is in the works, but for now
-> they're nightly-only options in rustc. Make RUST depend on !CFI_CLANG
-> to prevent configuring a kernel without symmetrical support for kfi.
->
-> Fixes: 2f7ab1267dc9 ("Kbuild: add Rust support")
-> cc: stable@vger.kernel.org
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Hi, we tested your kernel and here are the results:
 
-[ Matthew Maurer writes [1]:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-    This patch is fine by me - the last patch needed for KCFI to be
-    functional in Rust just landed upstream last night, so we should
-    revisit this (in the form of enabling it) once we move to
-    `rustc-1.79.0` or later.
 
-  Ramon de C Valle also gave feedback [2] on the status of KCFI for
-  Rust and created a tracking issue [3] in upstream Rust.   - Miguel ]
+Kernel information:
+    Commit message: Merge tag '9p-for-6.9-rc3' of https://github.com/martin=
+etd/linux
 
-[ Added feedback from the list, links, and used Cc for the tag. ]
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/139319
 
-Applied to `rust-fixes` -- thanks everyone! Please feel free to send
-more tags for this one.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11930922
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11931068
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/135
+                       =E2=9D=8C FAIL generic/141
+                       =E2=9D=8C FAIL generic/169
+                       =E2=9D=8C FAIL generic/198
+                       =E2=9D=8C FAIL generic/207
+                       =E2=9D=8C FAIL generic/208
+                       =E2=9D=8C FAIL generic/210
+                       =E2=9D=8C FAIL generic/211
+                       =E2=9D=8C FAIL generic/212
+                       =E2=9D=8C FAIL generic/214
+                       =E2=9D=8C FAIL generic/221
+                       =E2=9D=8C FAIL generic/245
+                       =E2=9D=8C FAIL generic/246
+                       =E2=9D=8C FAIL generic/248
+                       =E2=9D=8C FAIL generic/249
+                       =E2=9D=8C FAIL generic/257
+                       =E2=9D=8C FAIL generic/308
+                       =E2=9D=8C FAIL generic/309
+                       =E2=9D=8C FAIL generic/310
+                       =E2=9D=8C FAIL generic/339
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11931067
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/129
+                       =E2=9D=8C FAIL generic/340
 
-Cheers,
-Miguel
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [s390x, x86_64]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [Rawhide] readpage_elf: Attempt to read non-existent page at=
+ __exclude_unnecessary_pages: Can't read the buffer of struct page
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2269991
+            Affected tests:
+                kdump - file-load [ppc64le]
+                kdump - sysrq-c [ppc64le]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+
+
+Tests that were not ran because of internal issues:=20
+    Filesystem - Loopdev Sanity [aarch64]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [aarch64, x86_64]
+    Storage - blktests - blk - upstream [aarch64]
+    Storage - blktests - nvme-tcp - upstream [aarch64]
+    Storage - swraid scsi_raid [aarch64]
+    stress: stress-ng - cpu-cache [aarch64]
+    stress: stress-ng - memory [aarch64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
