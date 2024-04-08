@@ -1,205 +1,217 @@
-Received: from HK3PR03CU002.outbound.protection.outlook.com (mail-eastasiaazon11021007.outbound.protection.outlook.com [52.101.128.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5B625632
-	for <llvm@lists.linux.dev>; Mon,  8 Apr 2024 08:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.128.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712563554; cv=fail; b=VRZWU47ZDTMcYiW0v8BDa0ZTxNbOQ9aHrJW9EPoLoAh9VmRGNE9ZFNiE3YaAs2mmq+1dszkK0nczE8Q/LK9j+PdJRByHyGDWAbxxVp9e44WQtZsJJ8Y9Vkj5f85DY+pQDbhU/k9ZGJFhlLuqrF9ztf62X0o9nwbX7zNnkIf16dA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712563554; c=relaxed/simple;
-	bh=rohCanJmUvZYONxL80o9aBSNN3KAC0vsj3oeC5tKz14=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mA4PLIqOFLoKhod/4mL7nhgwT5BoSH2+fLXjZS/b4kUIZizV8GCk/4LLL/70SOddM16yfIOPwrsT6KNSn4ZtmxhJ0VWgLoTm6sAMSc0r1OjPVdF+0qATjBW7ZdSA5k2kC21gxE9wt05f0EwHZW0EYJw9pXEwLDCFdPP3VKqmb2k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com; spf=pass smtp.mailfrom=oppo.com; dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b=giRdlQmU; arc=fail smtp.client-ip=52.101.128.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oppo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oppo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C602030B
+	for <llvm@lists.linux.dev>; Mon,  8 Apr 2024 08:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712564381; cv=none; b=R4cxshSuHuZpSr7mbHyqFNVIBZ7vJ4XbfXV9wOO6AAGqJt6vynkToJXEtW2TNDdM2abAsQWeHNWvfxgyeNDFeSvHrq9+pNmmaUpbJlhLffSXuIiE9Su9fJGILA5ddGrfLZCtfDiBRceDcM3qNs9pryqUvfBp1MeFNWjfZ3qGWdk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712564381; c=relaxed/simple;
+	bh=3xyKNVnpyx7eTuoCOHoqqHyJSp+D6SnTDkUbYoFulbY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DaqyLTzaLakeNNrBQnDbNpGW/6FpT/n1sKylebbrIDmsZVNKf2sopzDRwgc6nyRrQqoQP71IFZ91Zve2xHX4xyZ0lss9GsM/Oa1xsQW/EF301HV5OSLdLJUQHo8zvt2krHWM33p2S2v9Om0SlTx7cP9txCcNP93pObC/2f+GVSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q2U1lzly; arc=none smtp.client-ip=209.85.217.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=oppo.com header.i=@oppo.com header.b="giRdlQmU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vs7/zhumL9OZar+t9l6pg8oi++AA2aFxGF6C+zIRbpIV4g4krLLftuUDSPUi0RF3pY2p7Xdem+KCvT34czRCU2CHlaOiUpBz/shbQcBb0+K50/Lf0EQNnP9lyuYE5H380Jt9cFOGqSzRSttesLQfMbVsMlScjwR56AF4W56GZUCVITlJ0XN9r94PXQY79iP04jTQAbuj7bl7yNQapIJE5BcDsvS21ZVShA3HQG0tgFsR7+sQWJKLgtBY6U2eX5tK0T32vPk/PwBDhCGZ+of6S4Zy/8cX4M3bhbE7EtpSF78lhWjw2rxwSiGK+F8Fg75OtJ+YZsUQP75mrFy5rjFRKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eh6gNWfQfB972JQeZP4EtAiL349Z8N7AB3fAYjXU0Pc=;
- b=E3b5S0kIHP1508G1ANUIJxArb8Wbo4QGbbuiOmcRicoEXMH6vc9eNzv1uWwjDW3cb4ZxbY6eDJq23UeLr/y8CayAei6PiOUFlIVLw5HtKo510QEIZ4hhqdmvaylq6vYzdCYU49oMXjZAgdpRxsTOHIByNvvBWrfg3ccqzHieVyggyZCxUsOi6Z8AIOUWbPkcVAgTLiCD8S1uE3KIbrFjybpJHOKa92y0rtSMEGY125dO8BS91zU0PZZxtUaU5N6cIqegDKd+ClrlrDJoVbTrRu2P+zgAPInyYXCmm96d3DXgRF5+qUh+xyEyfch+NfwqTn/Jw8ept1KWS+WWMuUqEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 58.252.5.68) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=oppo.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=oppo.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eh6gNWfQfB972JQeZP4EtAiL349Z8N7AB3fAYjXU0Pc=;
- b=giRdlQmU08UlbbTbs4oEBve+3ywwIuaxxCg3ibvu3xytpxfvPqupppsdLFIeraShAw8eA6wQogRgxZyuh3Zx4td1G6v9DVkSMDYSyFBkT1soXsEtHwbEjfIUDSIi/HWad9Di018WTIRRuOEpvrWA2gmHNQKw0TbY/Ft8GwYkYa4=
-Received: from SI2PR01CA0022.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::14) by SEZPR02MB5933.apcprd02.prod.outlook.com
- (2603:1096:101:75::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Mon, 8 Apr
- 2024 08:05:48 +0000
-Received: from SG2PEPF000B66CB.apcprd03.prod.outlook.com
- (2603:1096:4:192:cafe::2e) by SI2PR01CA0022.outlook.office365.com
- (2603:1096:4:192::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.33 via Frontend
- Transport; Mon, 8 Apr 2024 08:05:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 58.252.5.68)
- smtp.mailfrom=oppo.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=oppo.com;
-Received-SPF: Pass (protection.outlook.com: domain of oppo.com designates
- 58.252.5.68 as permitted sender) receiver=protection.outlook.com;
- client-ip=58.252.5.68; helo=mail.oppo.com; pr=C
-Received: from mail.oppo.com (58.252.5.68) by
- SG2PEPF000B66CB.mail.protection.outlook.com (10.167.240.24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7452.22 via Frontend Transport; Mon, 8 Apr 2024 08:05:47 +0000
-Received: from PH80250894.adc.com (172.16.40.118) by mailappw30.adc.com
- (172.16.56.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 8 Apr
- 2024 16:05:47 +0800
-From: <liuhailong@oppo.com>
-To: <akpm@linux-foundation.org>
-CC: <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<surenb@google.com>, <zhaoyang.huang@unisoc.com>,
-	<quic_charante@quicinc.com>, <yuzhao@google.com>, liuhailong
-	<liuhailong@oppo.com>
-Subject: [PATCH] mm: vmscan: do not skip CMA while LRU is full of CMA folios
-Date: Mon, 8 Apr 2024 16:05:39 +0800
-Message-ID: <20240408080539.14282-1-liuhailong@oppo.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q2U1lzly"
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-479cd0d5df9so1549230137.3
+        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 01:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712564379; x=1713169179; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AX5+jXHMJTfU3cppVGB1oM10Q5k8KJr3dApT/VnvvYU=;
+        b=Q2U1lzlyH7/6vhrlD1ZAPBJrPvKFvLBAuwxfcWdNnh4vEfgwQ2vRgfUz6n5bau7yoS
+         32vPz5t5Itf12MNbnVfnFioN1YVn2LQV0OR1huIWnDjcQLmoyYFwVJV79cDnaz8ikVra
+         AE+mNMu35UxXjweZftuF0+iXeLQSDgB6/kdEnef8nDh2AlmuIeJL+BqvVcezqptD3i2v
+         Fy3wiKOJY9mfMCGcSRq0crfb+dxoHE+FD7hHQ4apW0JQeDNi/A9bfknnswEh1kmadQO7
+         1bOam9LbYOLehoZeVgItlLahQ8xnoFgRWLLym0TOeI87MyOv7kab42OqGytMd8h6g1+a
+         0TDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712564379; x=1713169179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AX5+jXHMJTfU3cppVGB1oM10Q5k8KJr3dApT/VnvvYU=;
+        b=MMQC7gIWTmCMJl4AX59d5hGGyqtKjf5CCj8wvzhPejOziz1SKmM3ieBFBBcACVkVXW
+         HZueGGo7GaUaBrXAr4NYzg6kGEUhTw8Vdrfp0hOZQa+dij0znLwzEfFlC0RvLeT0lkRd
+         FG0GrdAg2VrEg1LpBMO+fsBYxQ/67OlsmHn3JMI7kB0AiCMj6Tbgp5jDZ9jB2Ig02Sa9
+         w30eHA58R162kjHSwHDRY8GJo9ddULnXHXcdzPLWdsV657XeOHRHDQ53y0nRnxSyowtj
+         Yrr/3F56GDDq4ROY49mETi03lO1Es+6UKLVw1dLWJNQsl7v1pdKmrBe1DJTJMQKOP9NF
+         lYeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXwtbCLZh9rjRTl1/5rumqtEKv2Uzuhx8ebYsbIUrYfiMsMh4NIKXdMo+TCeg9wIZ2gecJe/6A4W2GKNl87lVo53IYEgA==
+X-Gm-Message-State: AOJu0YyPhAUTQHHh+kdB92JhkOdtTquJOq3qW6eub3fvROzve/85cbUz
+	+CRXbc+UezkWulOdPeZJLtc+k88iqXW8gyGzRg9WUPuixLbAEJEPwsVHCp9ctI/JdPPdrijsjKb
+	oHUbpc96eFAFvIi0Rxsjg2ANMvEw=
+X-Google-Smtp-Source: AGHT+IHwKABiDH+sg4ocAOFV1rysPCy6M6jUel2pd3ftK4+6+b2hwxv91016VKyxPctK/xPT3DR2sG4D7Wn8cgcCrtA=
+X-Received: by 2002:a05:6102:32c8:b0:47a:110:143e with SMTP id
+ o8-20020a05610232c800b0047a0110143emr1628878vss.6.1712564378854; Mon, 08 Apr
+ 2024 01:19:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: mailappw30.adc.com (172.16.56.197) To mailappw30.adc.com
- (172.16.56.197)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CB:EE_|SEZPR02MB5933:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5764fdb-344e-439b-9085-08dc57a2b301
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	vlKAfEE9x9eP6K/KM+1rxAjqqD3gl7DeVo/z2zV2Ak+axWxVXAq7PT6/kHxxpw97KCj50rDoh71J4Nm7+Qy6tNdKZe7/KcIMj8yCJIk2vgWW8/BpuWsfx6lAIIEwNMLWhoYgXgerfule1HPZb3HFypkpWS7BbpVkypyvCtDrkJ5vktlRGuaFWbQIXzk3q7VMbhDR3wV125rPYGjj8WZ+QAlUxHFQv7F7E++L5AENlBV9lx8xDtdGhMqn8qcPFjjHgEBy5YcyHjFTqGUJUlqKw/eek+jfYKkswjImk6hhkcKO5i7RVAGngAWPx7rWlsTHsr4TuWQJYXLgP5LtwT7C0JyoNEb8OTcgDldow6dzBkEZOzdQ+RuxsQvHZnXLKrBjn4A8zFE10NKtOybwA9UZ+j0fE3RfKhqqzBXWPdPPsHVsyqGziAoCN3yWFr2H4hJTENGnvggRJE4sGsjKvQoyMmkTKZgoI1FNKXkUI4hUTYAghrJPwFVAAVyjaFqtrdzzfuIF9AmN4DNGCBqUz95ht7UEg90p4qRVMfkxn0oFSZD8NTTWpn9KZb7AchCFW3hXfUmyWXyEtyn1WSW9q6w+72q0GOC4vfOxF21oeZF20mvIBYUQJIzQ255wIesSkoyzBck4PlOQSD+HVpw05lx0Ap1DXEUOVNPV1iZolLhA61J75T9u6MzU5vrEeIamiU1HKD1W6k+5mAnBry7GKjnmWXIrAP1/QE0Lq8Yt0Ekgfu6Ph5wCPoUFHxX47Wox+fxX
-X-Forefront-Antispam-Report:
-	CIP:58.252.5.68;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.oppo.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(376005)(82310400014)(36860700004)(7416005);DIR:OUT;SFP:1102;
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2024 08:05:47.8216
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5764fdb-344e-439b-9085-08dc57a2b301
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f1905eb1-c353-41c5-9516-62b4a54b5ee6;Ip=[58.252.5.68];Helo=[mail.oppo.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SG2PEPF000B66CB.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR02MB5933
+References: <20240408080539.14282-1-liuhailong@oppo.com>
+In-Reply-To: <20240408080539.14282-1-liuhailong@oppo.com>
+From: Barry Song <21cnbao@gmail.com>
+Date: Mon, 8 Apr 2024 20:19:26 +1200
+Message-ID: <CAGsJ_4y7oGpxrgaWp=0WmG-zdkr2JmqMxnqQdjTsc1Q=5kKdoQ@mail.gmail.com>
+Subject: Re: [PATCH] mm: vmscan: do not skip CMA while LRU is full of CMA folios
+To: liuhailong@oppo.com
+Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com, 
+	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com, 
+	quic_charante@quicinc.com, yuzhao@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: liuhailong <liuhailong@oppo.com>
+On Mon, Apr 8, 2024 at 8:06=E2=80=AFPM <liuhailong@oppo.com> wrote:
+>
+> From: liuhailong <liuhailong@oppo.com>
+>
+> If the allocation flag isn't movable, commit 5da226dbfce3 ("mm:
+> skip CMA pages when they are not available") skips CMA during direct
+> reclamation. This generally speeds up the reclamation of non-movable
+> folios. However, in scenarios with limited system memory and a majority
+> of reclaimable folios in LRU being from CMA, this can result in prolonged
+> idle loops where the system reclaims nothing but consumes CPU.
+>
+> I traced the process of a thread entering direct reclamation,
+> and printed the relevant information of the sc(scan_control).
+> __alloc_pages_direct_reclaim start
+> sc->priority:9 sc->nr_skipped_cma:32208  sc->nr_scanned:36  sc->nr_reclai=
+med:3
+> sc->priority:8 sc->nr_skipped_cma:32199  sc->nr_scanned:69  sc->nr_reclai=
+med:3
+> sc->priority:7 sc->nr_skipped_cma:198405 sc->nr_scanned:121 sc->nr_reclai=
+med:3
+> sc->priority:6 sc->nr_skipped_cma:236713 sc->nr_scanned:147 sc->nr_reclai=
+med:3
+> sc->priority:5 sc->nr_skipped_cma:708209 sc->nr_scanned:379 sc->nr_reclai=
+med:3
+> sc->priority:4 sc->nr_skipped_cma:785537 sc->nr_scanned:646 sc->nr_reclai=
+med:3
+> __alloc_pages_direct_reclaim end duration 3356ms
+>
+> Continuously skipping CMA even when the LRU is filled with CMA
+> folios can also result in lmkd failing to terminate processes. The
+> duration of psi_memstall (measured from the exit to the entry of
+> __alloc_pages_direct_reclaim) becomes excessively long, lasting for
+> example a couple of seconds. Consequently, lmkd fails to awaken and
+> terminate processes promptly.
 
-If the allocation flag isn't movable, commit 5da226dbfce3 ("mm:
-skip CMA pages when they are not available") skips CMA during direct
-reclamation. This generally speeds up the reclamation of non-movable
-folios. However, in scenarios with limited system memory and a majority
-of reclaimable folios in LRU being from CMA, this can result in prolonged
-idle loops where the system reclaims nothing but consumes CPU.
+If you're planning to send a newer version, it's best to include
+the reproducer here.
 
-I traced the process of a thread entering direct reclamation,
-and printed the relevant information of the sc(scan_control).
-__alloc_pages_direct_reclaim start
-sc->priority:9 sc->nr_skipped_cma:32208  sc->nr_scanned:36  sc->nr_reclaimed:3
-sc->priority:8 sc->nr_skipped_cma:32199  sc->nr_scanned:69  sc->nr_reclaimed:3
-sc->priority:7 sc->nr_skipped_cma:198405 sc->nr_scanned:121 sc->nr_reclaimed:3
-sc->priority:6 sc->nr_skipped_cma:236713 sc->nr_scanned:147 sc->nr_reclaimed:3
-sc->priority:5 sc->nr_skipped_cma:708209 sc->nr_scanned:379 sc->nr_reclaimed:3
-sc->priority:4 sc->nr_skipped_cma:785537 sc->nr_scanned:646 sc->nr_reclaimed:3
-__alloc_pages_direct_reclaim end duration 3356ms
+>
+> This patch introduces no_skip_cma and sets it to true when the number of
+> skipped CMA folios is excessively high. It offers two benefits: Rather
+> than wasting time in idle loops, it's better to assist other threads in
+> reclaiming some folios; This shortens the duration of psi_memstall and
+> ensures timely activation of lmkd within a few milliseconds.
+>
+> Signed-off-by: liuhailong <liuhailong@oppo.com>
 
-Continuously skipping CMA even when the LRU is filled with CMA
-folios can also result in lmkd failing to terminate processes. The
-duration of psi_memstall (measured from the exit to the entry of
-__alloc_pages_direct_reclaim) becomes excessively long, lasting for
-example a couple of seconds. Consequently, lmkd fails to awaken and
-terminate processes promptly.
+I believe this patch tackles a niche scenario where CMA is configured
+to be large.
 
-This patch introduces no_skip_cma and sets it to true when the number of
-skipped CMA folios is excessively high. It offers two benefits: Rather
-than wasting time in idle loops, it's better to assist other threads in
-reclaiming some folios; This shortens the duration of psi_memstall and
-ensures timely activation of lmkd within a few milliseconds.
+Acked-by: Barry Song <baohua@kernel.org>
 
-Signed-off-by: liuhailong <liuhailong@oppo.com>
----
- mm/vmscan.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+> ---
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index fa321c125099..2c74c1c94d88 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -114,6 +114,9 @@ struct scan_control {
- 	/* Proactive reclaim invoked by userspace through memory.reclaim */
- 	unsigned int proactive:1;
+This is evidently version 3 of your previous patch titled "[PATCH v2] Rever=
+t "
+mm: skip CMA pages when they are not available".[1]
 
-+	/* Can reclaim skip cma pages */
-+	unsigned int no_skip_cma:1;
-+
- 	/*
- 	 * Cgroup memory below memory.low is protected as long as we
- 	 * don't threaten to OOM. If any cgroup is reclaimed at
-@@ -157,6 +160,9 @@ struct scan_control {
- 	/* Number of pages freed so far during a call to shrink_zones() */
- 	unsigned long nr_reclaimed;
+It's advisable to provide a brief explanation of the changes made from v2
+and include a link to v2 here.
 
-+	/* Number of cma-pages skipped so far during a call to shrink_zones() */
-+	unsigned long nr_skipped_cma;
-+
- 	struct {
- 		unsigned int dirty;
- 		unsigned int unqueued_dirty;
-@@ -1572,9 +1578,13 @@ static __always_inline void update_lru_sizes(struct lruvec *lruvec,
-  */
- static bool skip_cma(struct folio *folio, struct scan_control *sc)
- {
--	return !current_is_kswapd() &&
-+	bool ret = !current_is_kswapd() && !sc->no_skip_cma &&
- 			gfp_migratetype(sc->gfp_mask) != MIGRATE_MOVABLE &&
- 			folio_migratetype(folio) == MIGRATE_CMA;
-+
-+	if (ret)
-+		sc->nr_skipped_cma += folio_nr_pages(folio);
-+	return ret;
- }
- #else
- static bool skip_cma(struct folio *folio, struct scan_control *sc)
-@@ -6188,6 +6198,7 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
- 			vmpressure_prio(sc->gfp_mask, sc->target_mem_cgroup,
- 					sc->priority);
- 		sc->nr_scanned = 0;
-+		sc->nr_skipped_cma = 0;
- 		shrink_zones(zonelist, sc);
+[1] https://lore.kernel.org/linux-mm/CAGsJ_4wD-NiquhnhK_6TGEF4reTGO9pVNGyYB=
+nYZ1inVFc40WQ@mail.gmail.com/
 
- 		if (sc->nr_reclaimed >= sc->nr_to_reclaim)
-@@ -6202,6 +6213,16 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
- 		 */
- 		if (sc->priority < DEF_PRIORITY - 2)
- 			sc->may_writepage = 1;
-+
-+		/*
-+		 * If we're getting trouble reclaiming non-cma pages and
-+		 * currently a substantial number of CMA pages on LRU,
-+		 * start reclaiming cma pages to alleviate other threads
-+		 * and decrease lru size.
-+		 */
-+		if (sc->priority < DEF_PRIORITY - 2 &&
-+		    sc->nr_scanned < (sc->nr_skipped_cma >> 3))
-+			sc->no_skip_cma = 1;
- 	} while (--sc->priority >= 0);
+>  mm/vmscan.c | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index fa321c125099..2c74c1c94d88 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -114,6 +114,9 @@ struct scan_control {
+>         /* Proactive reclaim invoked by userspace through memory.reclaim =
+*/
+>         unsigned int proactive:1;
+>
+> +       /* Can reclaim skip cma pages */
+> +       unsigned int no_skip_cma:1;
+> +
+>         /*
+>          * Cgroup memory below memory.low is protected as long as we
+>          * don't threaten to OOM. If any cgroup is reclaimed at
+> @@ -157,6 +160,9 @@ struct scan_control {
+>         /* Number of pages freed so far during a call to shrink_zones() *=
+/
+>         unsigned long nr_reclaimed;
+>
+> +       /* Number of cma-pages skipped so far during a call to shrink_zon=
+es() */
+> +       unsigned long nr_skipped_cma;
+> +
+>         struct {
+>                 unsigned int dirty;
+>                 unsigned int unqueued_dirty;
+> @@ -1572,9 +1578,13 @@ static __always_inline void update_lru_sizes(struc=
+t lruvec *lruvec,
+>   */
+>  static bool skip_cma(struct folio *folio, struct scan_control *sc)
+>  {
+> -       return !current_is_kswapd() &&
+> +       bool ret =3D !current_is_kswapd() && !sc->no_skip_cma &&
+>                         gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABL=
+E &&
+>                         folio_migratetype(folio) =3D=3D MIGRATE_CMA;
+> +
+> +       if (ret)
+> +               sc->nr_skipped_cma +=3D folio_nr_pages(folio);
+> +       return ret;
+>  }
+>  #else
+>  static bool skip_cma(struct folio *folio, struct scan_control *sc)
+> @@ -6188,6 +6198,7 @@ static unsigned long do_try_to_free_pages(struct zo=
+nelist *zonelist,
+>                         vmpressure_prio(sc->gfp_mask, sc->target_mem_cgro=
+up,
+>                                         sc->priority);
+>                 sc->nr_scanned =3D 0;
+> +               sc->nr_skipped_cma =3D 0;
+>                 shrink_zones(zonelist, sc);
+>
+>                 if (sc->nr_reclaimed >=3D sc->nr_to_reclaim)
+> @@ -6202,6 +6213,16 @@ static unsigned long do_try_to_free_pages(struct z=
+onelist *zonelist,
+>                  */
+>                 if (sc->priority < DEF_PRIORITY - 2)
+>                         sc->may_writepage =3D 1;
+> +
+> +               /*
+> +                * If we're getting trouble reclaiming non-cma pages and
+> +                * currently a substantial number of CMA pages on LRU,
+> +                * start reclaiming cma pages to alleviate other threads
+> +                * and decrease lru size.
+> +                */
+> +               if (sc->priority < DEF_PRIORITY - 2 &&
+> +                   sc->nr_scanned < (sc->nr_skipped_cma >> 3))
+> +                       sc->no_skip_cma =3D 1;
+>         } while (--sc->priority >=3D 0);
+>
+>         last_pgdat =3D NULL;
+> --
+> 2.36.1
+>
 
- 	last_pgdat = NULL;
---
-2.36.1
-
+Thanks
+Barry
