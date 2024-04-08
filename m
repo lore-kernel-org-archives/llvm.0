@@ -1,124 +1,146 @@
-Received: from wfhigh7-smtp.messagingengine.com (wfhigh7-smtp.messagingengine.com [64.147.123.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC701E532;
-	Mon,  8 Apr 2024 18:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14B71119A;
+	Mon,  8 Apr 2024 18:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712600166; cv=none; b=t2qb7o8qPYTjABuAfgdDcUhkhZsl51PVzMenRMxV7TQab2uMdTeGF0ZlVI5ZquU9cCwR0z+JmjptRJNnk9NG+j+JAPuMMIMJs9o36+e9IABwWLnOXzS4FAlWcuETKB3dgEZwCUOVyGmEM5gn20axREYWv1InB1VkXMbjJjYzBsY=
+	t=1712602060; cv=none; b=lgdunCBSJZXSISm5qXrrQnhm7nGiLJ7xu1c/Xvk6ws69gZWjh6/3U1AQ2N1JCTZfKagBBxff7AzAT989NQweuZieIV14peGiyBIuWwpLBIofEck/j6D0oCohmx9UUSSWDxJyQ/f85Ql8rytzDRDwZ57+eNgk+iezWeCafH6Is/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712600166; c=relaxed/simple;
-	bh=MDYifrGyvwaoGVS+wMS9G7XMJdOcFm56x3yKmUDlCjw=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=cvr8IAzWJJENKdI5vlG44jA9vZ+k8MYnAyZcaltORDBnRs41N1qswDuny63EV0lE/nFA6l5FpH7CdvgDGHvXHHs664/BpNlyQ4dgiMEIqGFWC1BUpL5+cG00qwPHednxHzDgdu0hP+MYYg3gY1UqjugqwunqMUfhKuIxA/nwpjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=X4lqC6PP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=brA1246/; arc=none smtp.client-ip=64.147.123.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1712602060; c=relaxed/simple;
+	bh=SYyVUdi9VjoNm97IS/XTV920oO6eW28EJnO10HujZm8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BAD1uGh5/jiEisr7PO2yg9oUKY485YTarDPD1+eXGVLB7fx9XsfUWXQOYwGE6VuOaGCyhEWojXZ1SWneUy9/lAPKHRsjX8JXTVM+JAPFqJwLpGN+PdwGFkPilREbowxgQUMVaRk3U2N87QDV4dqJ9bgf4u7Z5YdV3OgaRlSQgWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QH3VMMm5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="X4lqC6PP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="brA1246/"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 0FFE718000A2;
-	Mon,  8 Apr 2024 14:16:02 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Mon, 08 Apr 2024 14:16:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1712600162; x=1712686562; bh=uabcAv4sm9
-	QYZcdZ/b6FrksBhz9HMv6R7WfGoejGE2M=; b=X4lqC6PPRq8/BS0cG3KhmAVnat
-	HyqBcPaVzsEiVwxpPN3rbtDmRgU9knT33j8At7hboS2MTa3cumVGjQNlivQyxAFZ
-	L7EbB76mAopFndsMBr6RHuGUF5XcOmPchlxjgtFCyd+D/gx+aTna7a+j0t3DqjuT
-	RpqwRCs3gc37ez6LlxXOaQOxlXNfk4OrMaL50j9snDNaixyf3hT5mTL+PxTgtMxj
-	dZiZrfcTReOxtL5EvkK3Ueo8EeI/XVLuJ9/gfwWvI151T56yHXBrWcb7H6TSGdL8
-	VkW20KJQxR3KhRn6GXZDVLuLaoO0YwE5Vi28y5CNcTqA7KTjENrgTZ3VCmOA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712600162; x=1712686562; bh=uabcAv4sm9QYZcdZ/b6FrksBhz9H
-	Mv6R7WfGoejGE2M=; b=brA1246/ZjazOoL77tMsNgpiLQe1cwwZOea1I4nVQ8o2
-	B3LnC1bTfVbLaB4oq8qWOMQM8Vo1TVX0Uyc5ozULKQQdzkbgbJcW0yaVJusIz6av
-	Ots8tZz3d82uE6Incvjvqap5+iORqpx3eIuZJzoKR2ILAO0ZI3gKmdh4WTFFjLwH
-	56Ab92ae/0M0cMxh5Z+VeazcLG6joIoQ9oEhEN21wTr9lavJ/j0fKV2RePHl86Pk
-	9WPwxMVlf2YJeFlBQQ4W1VxKcldDMgiemwLTfleOd13w1IS+nlYZXFbAS/004Yyr
-	oPVvXlPbAkYg40PpXQj9eYFQbFtLuxwkdlvBBr6TnQ==
-X-ME-Sender: <xms:YTQUZqFuRf12gSUgJ3dJ02nzi9xAT0Ly0HakoA6MZ7Sr7A_dVA532g>
-    <xme:YTQUZrXcVhpbdvYvIT8_G6RScF0exkcbj6xOwoo7QxYOSzqOzp9AEb13zUZShDwT0
-    TqVhpz3b2qNnT2DPDw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudegiedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:YTQUZkLvgqU3sMf570ndvKnvzIbeptNstKCcvm46jO3Cc9iYV8jguw>
-    <xmx:YTQUZkGXcC3v2o_4RxhoGZEoaSxyIqjrL8Jv5jiHW24URKjMYynmCw>
-    <xmx:YTQUZgWRBIsXSMvq5S9tALxMlE17MR-_rd9RK5VtUUFQhaJTRdoMmw>
-    <xmx:YTQUZnPZvtKfGHXe1c1RD1AbH6Ii-sJPuE1wgyoHOxUnqLEljbQWbg>
-    <xmx:YjQUZhvT4js17EwuALwlK4b_kVBv0x1QVL9g6iY3bJHwOJeV-kbyOm82>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id B6FB7B6008D; Mon,  8 Apr 2024 14:16:01 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-368-gc733b1d8df-fm-20240402.001-gc733b1d8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QH3VMMm5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7457AC433C7;
+	Mon,  8 Apr 2024 18:47:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712602059;
+	bh=SYyVUdi9VjoNm97IS/XTV920oO6eW28EJnO10HujZm8=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=QH3VMMm5SOy+a5/Le74mjOj7Gdef3Nx9WwKw4QdG6/4a+h1jicQcuUxj5+AbinxgI
+	 5O0WFSLX1tLKfiZqZk9z4W57aYMdLzXxokbye8N4IAJTRT10k5C02VRxNvZLANEXPH
+	 96FljbScvGcjKUjEf5DwEKEM5c1SQmnDIiMku/rAZriOl1SsozESEUU/P8SlrWCidN
+	 AipWE/sidcx/TcflQso3P15T0WQ+VhU8rBrSGPPBvGDzMSc4OkBRiugBoJDyCVH95M
+	 4e8DhZGuKYDGFqEyanXAB5XTPjkKaLhR1rfGz4FVPrUCAKzWUpjPKSi5TP6PlVxXdc
+	 VWuo/YoxOqJ0w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 17CC2CE126C; Mon,  8 Apr 2024 11:47:39 -0700 (PDT)
+Date: Mon, 8 Apr 2024 11:47:39 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Philipp Stanner <pstanner@redhat.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <c3e507cb-26bb-4fdc-b1dc-b512c7bfc093@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20240322233838.868874-1-boqun.feng@gmail.com>
+ <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
+ <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
+ <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
+ <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
+ <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
+ <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
+ <ZhQVHZnU3beOhEGU@casper.infradead.org>
+ <fec60bba-e414-43d1-bc3e-870f5ffe4626@paulmck-laptop>
+ <ZhQjT4xdS3h-GbtC@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <132c99af-bbac-4dad-84b7-7ed016517d0c@app.fastmail.com>
-In-Reply-To: 
- <CAFhGd8oHht+uMBouT7_AXZt4DMRJi=A7_=fyhZ2Hf_ne+8xE8w@mail.gmail.com>
-References: <20240328140512.4148825-1-arnd@kernel.org>
- <20240328140512.4148825-10-arnd@kernel.org>
- <CAFhGd8oHht+uMBouT7_AXZt4DMRJi=A7_=fyhZ2Hf_ne+8xE8w@mail.gmail.com>
-Date: Mon, 08 Apr 2024 20:15:30 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Justin Stitt" <justinstitt@google.com>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>,
- "Franziska Naepelt" <franziska.naepelt@googlemail.com>,
- "Johannes Berg" <johannes.berg@intel.com>,
- "Yang Yingliang" <yangyingliang@huawei.com>,
- "Erick Archer" <erick.archer@gmx.com>, linux-staging@lists.linux.dev,
- llvm@lists.linux.dev
-Subject: Re: [PATCH 09/11] staging: rtl8723bs: convert strncpy to strscpy
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZhQjT4xdS3h-GbtC@casper.infradead.org>
 
-On Fri, Mar 29, 2024, at 00:01, Justin Stitt wrote:
->> Change both strncpy() instances to strscpy(), which avoids the warning as well
->> as the possibly missing termination. No additional padding is needed here.
->
-> Could you also clean up the strncpy present in
-> drivers/staging/rtl8723bs/os_dep/os_intfs.c so all these are cleaned
-> up at once?
+On Mon, Apr 08, 2024 at 06:03:11PM +0100, Matthew Wilcox wrote:
+> On Mon, Apr 08, 2024 at 09:55:23AM -0700, Paul E. McKenney wrote:
+> > On Mon, Apr 08, 2024 at 05:02:37PM +0100, Matthew Wilcox wrote:
+> > > In my ideal world, the compiler would turn this into:
+> > > 
+> > > 	newfolio->flags |= folio->flags & MIGRATE_MASK;
+> > 
+> > Why not accumulate the changes in a mask, and then apply the mask the
+> > one time?  (In situations where __folio_set_foo() need not apply.)
+> 
+> Yes, absolutely, we can, should and probably eventually will do this
+> when it gets to the top of somebody's todo list.  But it irks me that
+> we can't tell the compiler this is a safe transformation for it to make.
+> There are a number of places where similar things happen.
+> 
+> $ git grep folio_test.*folio_test
+> 
+> will find you 82 of them (where they happen to be on the same line)
+> 
+>                 if (folio_test_dirty(folio) || folio_test_locked(folio) ||
+>                                 folio_test_writeback(folio))
+>                         break;
+> 
+> turns into:
+> 
+>     1f41:       48 8b 29                mov    (%rcx),%rbp
+>     1f44:       48 c1 ed 04             shr    $0x4,%rbp
+>     1f48:       83 e5 01                and    $0x1,%ebp
+>     1f4b:       0f 85 d5 00 00 00       jne    2026 <filemap_range_has_writeback+0x1a6>
+>     1f51:       48 8b 29                mov    (%rcx),%rbp
+>     1f54:       83 e5 01                and    $0x1,%ebp
+>     1f57:       0f 85 c9 00 00 00       jne    2026 <filemap_range_has_writeback+0x1a6>
+>     1f5d:       48 8b 29                mov    (%rcx),%rbp
+>     1f60:       48 d1 ed                shr    $1,%rbp
+>     1f63:       83 e5 01                and    $0x1,%ebp
+>     1f66:       0f 85 ba 00 00 00       jne    2026 <filemap_range_has_writeback+0x1a6>
+> 
+> rather than _one_ load from rcx and a test against a mask.
 
-I originally tried not to mix the general conversion with the
-warning fixes, but it looks like it has the same issue in theory.
+Agreed, it would be nice if we could convince the compiler to do this
+for us, preferably without breaking anything.
 
-Not sure why there is no warning for this one, I guess it's because
-it copies from a fixed-size source of the same length?
+> > If it turns out that we really do need a not-quite-volatile, what exactly
+> > does it do?  You clearly want it to be able to be optimized so as to merge
+> > similar accesses.  Is there a limit to the number of accesses that can
+> > be merged or to the region of code over which such merging is permitted?
+> > Either way, how is the compiler informed of these limits?
+> 
+> Right, like I said, it's not going to be easy to define exactly what we
+> want.
 
-Anyway, it's clearly related here so I've added this for v2.
+Or to convince the usual suspects that any definition we might come up
+with is useful/implementable/teacheable/...  :-/
 
-> Maybe we could use the new 2-argument version of strscpy() introduced
-> in Commit e6584c3964f2f ("string: Allow 2-argument strscpy()") for all
-> 3 of these too.
->
-> It looks like:
->     strscpy(dest, src);
->
-
-Done now, after double-checking that the sizes actually match.
-
-Thanks for the review,
-
-      Arnd
+							Thanx, Paul
