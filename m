@@ -1,136 +1,227 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242B76E60E;
-	Mon,  8 Apr 2024 17:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E051448C3;
+	Mon,  8 Apr 2024 17:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712595803; cv=none; b=N8j2jfrMH+MXK+SNc7xO3VyLq+XD4ysLe9vu3MYvNkTGnAyFQhe5bK6EShCtaOpy8yQiC5PwI/1May8wQrTz2po4qPg5RcFHMw6of4oDhHWgwuY0BHPb3NZWkIgcLgZ433+1yBmvqkqOapHSt130KhmTNyz1gEliBZn7rY5q0EY=
+	t=1712598040; cv=none; b=gnJZyuIzVBXrKaTqUp10UHgs4Gt7lDdv+eW052AoRHfy6Tuxbnpqc3TsFZr7rJ25QGjqHrGRRGSGdrMQNZWGwy/uzTPofn3ppkjQb17JG4dZxxHLIDiBHtBksAmADZMMvvyz6+aFZwAS/+HOJaFe7DgR5/fy8VqrGsMu2Nc29Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712595803; c=relaxed/simple;
-	bh=gN//XILcBlT0DJQEOTanYjKqrO+N1Qj9zEhssZWgESs=;
+	s=arc-20240116; t=1712598040; c=relaxed/simple;
+	bh=zRPDmo8wzpH7MlQn4X4AWPBc1kRD+usMYJ2d45VIlrc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S9GN/SZX4xgj3LOy33wBl9t/NauJV7i8gJRXhp4j8SkMhkuPf5Aw19PcVzsX4ZT70HNvGYx5c4f+Dl1tO80iKLFjiPQCLqCw89Y4Cn+hgLrBuOaRMSfozvRCHZgKjaFVEWoJIfqTSH0blpGR+ykc9CK79ndSLjSyQB/dJCPQ4TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=aiNc++Ts; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=nhBUSjEVTPLmuAK6ocd/tX2Ng8ZTBgZdVrXZiokXjebgxzeXK8gFwFKyhjAI6H/Ckmt5pFBYQLEAp8rHWWQAJ2auryQkoyQFWF9T2L7iiLB2D3RPA+eNROFCWWC6Hyyuv8hCxzWfFCmPEwoQFVpx2AXDbQCoNtVocs77MxS4xjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SOaK6WnO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="aiNc++Ts"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=EC+c0K53M4cQQaYWWH6ov1Mzjcw38TyRZLp9ANkJLfo=; b=aiNc++TsrqGY3idP8BZBqBlc23
-	oDcNXXEP/RYnFgfQlOPLjGuK9TyM29iXrAGUee+aG7r2LzkLZm3oki+4c3erRNHbk6dMGfEFjMs4I
-	FTKkciLzcgIwLKHkl1eY78PCHKwjaPO86ZVwYHCxX4QdmJB67yprKZRnjijIXIvZTfkqMKvacRcxu
-	nH1VzsXeLWU7yECxgsj+2YHhAwMGTKhhyxnqIzXdjbb9vdOSvLe67vpVrSG0J9QzB4BhBNxuMhk1t
-	TCl1NW+7G3YF8eev+borvQZqjaJVd7MnzNDG5NUNdpmA1v/ZJnCJV0VHqR9LXo4wwNtZpFziOEsBJ
-	ZSxQj4EQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rtsOl-00000000Fng-1Lf1;
-	Mon, 08 Apr 2024 17:03:11 +0000
-Date: Mon, 8 Apr 2024 18:03:11 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Philipp Stanner <pstanner@redhat.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-Message-ID: <ZhQjT4xdS3h-GbtC@casper.infradead.org>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <ZhQVHZnU3beOhEGU@casper.infradead.org>
- <fec60bba-e414-43d1-bc3e-870f5ffe4626@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SOaK6WnO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4DCC433C7;
+	Mon,  8 Apr 2024 17:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712598040;
+	bh=zRPDmo8wzpH7MlQn4X4AWPBc1kRD+usMYJ2d45VIlrc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=SOaK6WnObDMcMHd8T8S9Z0NgzHv3kuI7vwL8ETNJXEIQpVKAmy4kN+yHE4zqLd5jz
+	 +DrV6ICL0i2Xl8xcYT6WbD5gwnsyrUcuRGfQvKnRRb6HvWAPU1/JY7/nZidoszEakY
+	 9GOnZSPsYAvBCNbYKdM6vdFcsKlPD60YRemfCGSEk4RraWCT5vTBybckptOTvqqrvB
+	 ipgAbzt4J8Wua+pUbGc1XgUgMYtvCw9Ow12VK8HWGyYNwZ+qGN8bcASBl8pMUiGZUs
+	 XllRM3Z2nSnJY2Z7wtT7tPJD83EXeMwbVMPTLkW4Fd3tfWczNXm3zo/Q99Ja/FLyX3
+	 KgK2AJbL5+grw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id B81C1CE126C; Mon,  8 Apr 2024 10:40:39 -0700 (PDT)
+Date: Mon, 8 Apr 2024 10:40:39 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: "Liu, Yujie" <yujie.liu@intel.com>
+Cc: lkp <lkp@intel.com>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
+Subject: Re: [linux-next:master 2524/3504] kernel/locking/rtmutex.c:218:9:
+ error: incompatible pointer to integer conversion passing 'typeof
+ (*(((__ai_ptr))))' (aka 'struct task_struct *') to parameter of type
+ 'uintptr_t' (aka 'unsigned long')
+Message-ID: <9683809f-ff98-4c9f-bd67-97d99dc89e8f@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202404040526.GVzaL2io-lkp@intel.com>
+ <302e5ce2-5a65-4e07-8ca8-cced83e9af5b@paulmck-laptop>
+ <98704087ab6012031f3e117460cc1b24457a554f.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <fec60bba-e414-43d1-bc3e-870f5ffe4626@paulmck-laptop>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <98704087ab6012031f3e117460cc1b24457a554f.camel@intel.com>
 
-On Mon, Apr 08, 2024 at 09:55:23AM -0700, Paul E. McKenney wrote:
-> On Mon, Apr 08, 2024 at 05:02:37PM +0100, Matthew Wilcox wrote:
-> > In my ideal world, the compiler would turn this into:
-> > 
-> > 	newfolio->flags |= folio->flags & MIGRATE_MASK;
+On Sun, Apr 07, 2024 at 04:41:02AM +0000, Liu, Yujie wrote:
+> Hi Paul,
 > 
-> Why not accumulate the changes in a mask, and then apply the mask the
-> one time?  (In situations where __folio_set_foo() need not apply.)
+> On Thu, 2024-04-04 at 10:44 -0700, Paul E. McKenney wrote:
+> > On Thu, Apr 04, 2024 at 05:13:20AM +0800, kernel test robot wrote:
+> > > tree:  
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > >  master
+> > > head:   727900b675b749c40ba1f6669c7ae5eb7eb8e837
+> > > commit: df35ee400e06b23ecd44fdb66451a5343932f834 [2524/3504] riscv:
+> > > Emulate one-byte and two-byte cmpxchg
+> > > config: riscv-nommu_virt_defconfig
+> > > (https://download.01.org/0day-ci/archive/20240404/202404040526.GVza
+> > > L2io-lkp@intel.com/config)
+> > > compiler: clang version 19.0.0git
+> > > (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a59
+> > > 55e355a3b27)
+> > > reproduce (this is a W=1 build):
+> > > (https://download.01.org/0day-ci/archive/20240404/202404040526.GVza
+> > > L2io-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a
+> > > new version of
+> > > the same patch/commit), kindly add following tags
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Closes:
+> > > > https://lore.kernel.org/oe-kbuild-all/202404040526.GVzaL2io-lkp@intel.com/
+> > 
+> > I believe that this is fixed by the following updated commit in -rcu:
+> > 
+> > 27011e7159ef ("riscv: Emulate one-byte cmpxchg")
+> > 
+> > But please let me know if I am missing something.
+> 
+> Sorry for the delay of reply due to we were on public holidays in the
+> last few days.
+> 
+> The error still exists on the updated commit.
+> 
+> Commit 27011e7159ef added the uintptr_t cast for __old and __new only
+> in the first occurrence of __ret assignment, but missed that in the
+> remaining __ret assignments. Seems it needs another fixup as below:
+> 
+> -------------------------------------------------------------------
+> 
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index abcd5543b861b..a9803825567cf 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -219,7 +219,7 @@
+>         register unsigned int __rc;                                     \
+>         switch (size) {                                                 \
+>         case 1:                                                         \
+> -               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
+> +               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
+>                 break;                                                  \
+>         case 4:                                                         \
+>                 __asm__ __volatile__ (                                  \
+> @@ -268,7 +268,7 @@
+>         register unsigned int __rc;                                     \
+>         switch (size) {                                                 \
+>         case 1:                                                         \
+> -               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
+> +               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
+>                 break;                                                  \
+>         case 4:                                                         \
+>                 __asm__ __volatile__ (                                  \
+> @@ -317,7 +317,7 @@
+>         register unsigned int __rc;                                     \
+>         switch (size) {                                                 \
+>         case 1:                                                         \
+> -               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
+> +               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
+>                 break;                                                  \
+>         case 4:                                                         \
+>                 __asm__ __volatile__ (                                  \
+> 
 
-Yes, absolutely, we can, should and probably eventually will do this
-when it gets to the top of somebody's todo list.  But it irks me that
-we can't tell the compiler this is a safe transformation for it to make.
-There are a number of places where similar things happen.
+Applied with attribution, thank you!
 
-$ git grep folio_test.*folio_test
+Quite the variety of casts required by the various architectures.  ;-)
 
-will find you 82 of them (where they happen to be on the same line)
+Please see below for the updated patch.
 
-                if (folio_test_dirty(folio) || folio_test_locked(folio) ||
-                                folio_test_writeback(folio))
-                        break;
+							Thanx, Paul
 
-turns into:
+------------------------------------------------------------------------
 
-    1f41:       48 8b 29                mov    (%rcx),%rbp
-    1f44:       48 c1 ed 04             shr    $0x4,%rbp
-    1f48:       83 e5 01                and    $0x1,%ebp
-    1f4b:       0f 85 d5 00 00 00       jne    2026 <filemap_range_has_writeback+0x1a6>
-    1f51:       48 8b 29                mov    (%rcx),%rbp
-    1f54:       83 e5 01                and    $0x1,%ebp
-    1f57:       0f 85 c9 00 00 00       jne    2026 <filemap_range_has_writeback+0x1a6>
-    1f5d:       48 8b 29                mov    (%rcx),%rbp
-    1f60:       48 d1 ed                shr    $1,%rbp
-    1f63:       83 e5 01                and    $0x1,%ebp
-    1f66:       0f 85 ba 00 00 00       jne    2026 <filemap_range_has_writeback+0x1a6>
+commit 4d5c72a34948625caf85c00b1db85372f4edbcae
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Wed Mar 27 17:13:02 2024 -0700
 
-rather than _one_ load from rcx and a test against a mask.
+    riscv: Emulate one-byte cmpxchg
+    
+    Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on riscv.
+    
+    [ paulmck: Apply kernel test robot feedback, additional casts from Liu, Yujie. ]
+    [ paulmck: Drop two-byte support per Arnd Bergmann feedback. ]
+    
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Tested-by: Yujie Liu <yujie.liu@intel.com>
+    Cc: Andi Shyti <andi.shyti@linux.intel.com>
+    Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+    Cc: Arnd Bergmann <arnd@arndb.de>
+    Cc: <linux-riscv@lists.infradead.org>
+    Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-> If it turns out that we really do need a not-quite-volatile, what exactly
-> does it do?  You clearly want it to be able to be optimized so as to merge
-> similar accesses.  Is there a limit to the number of accesses that can
-> be merged or to the region of code over which such merging is permitted?
-> Either way, how is the compiler informed of these limits?
-
-Right, like I said, it's not going to be easy to define exactly what we
-want.
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index be09c8836d56b..3bab9c5c0f465 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -44,6 +44,7 @@ config RISCV
+ 	select ARCH_HAS_UBSAN
+ 	select ARCH_HAS_VDSO_DATA
+ 	select ARCH_KEEP_MEMBLOCK if ACPI
++	select ARCH_NEED_CMPXCHG_1_EMU
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+ 	select ARCH_STACKWALK
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 2fee65cc84432..a9803825567cf 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -9,6 +9,7 @@
+ #include <linux/bug.h>
+ 
+ #include <asm/fence.h>
++#include <linux/cmpxchg-emu.h>
+ 
+ #define __xchg_relaxed(ptr, new, size)					\
+ ({									\
+@@ -170,6 +171,9 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	register unsigned int __rc;					\
+ 	switch (size) {							\
++	case 1:								\
++		__ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
++		break;							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+ 			"0:	lr.w %0, %2\n"				\
+@@ -214,6 +218,9 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	register unsigned int __rc;					\
+ 	switch (size) {							\
++	case 1:								\
++		__ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
++		break;							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+ 			"0:	lr.w %0, %2\n"				\
+@@ -260,6 +267,9 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	register unsigned int __rc;					\
+ 	switch (size) {							\
++	case 1:								\
++		__ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
++		break;							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+ 			RISCV_RELEASE_BARRIER				\
+@@ -306,6 +316,9 @@
+ 	__typeof__(*(ptr)) __ret;					\
+ 	register unsigned int __rc;					\
+ 	switch (size) {							\
++	case 1:								\
++		__ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
++		break;							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+ 			"0:	lr.w %0, %2\n"				\
