@@ -1,153 +1,348 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B169E146596
-	for <llvm@lists.linux.dev>; Mon,  8 Apr 2024 20:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D69F146A68;
+	Mon,  8 Apr 2024 20:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712606741; cv=none; b=MHE3i5TsOuR2YUTrC27fBBQaVqi1PGTDqi2C6l+wVc8a4mSM+b29tQixlanJGwfRvd9oJJTfHXhP6H7FtqEP7cbI8r0923yDyKMjfZVEHe8nYMDY89OUNdC/lj0Fkk7XSaUtHj3n61gw61j9BdrzldshGI+8QvF4tqNSlnjTYG8=
+	t=1712607612; cv=none; b=pmBnO/xlLhZZiGrxoQIqtKDymqqWp2U+KlPZ9HOFaPFfvF61i9ntJMk06peSnsoLIG9kIehh06zf7XyUvMcNTd9PfweZEqcntpl7p8om7qjl4mq9USTHdOWElTOQ/9I2huIXwiCeEeS2WcbmiaPAFUotuYZsK/Qj6KVfR1AwhII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712606741; c=relaxed/simple;
-	bh=82F1MgsQLgdYIQgatWxiRfAXR/TCmhkAjQEqWWRhptw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jhicjhUSgwJP/DunFR/gEwKVcpYE2/KE5ddOp9RJEqEjwBMbVnsyKJzYIBELldTxoHM5owKxpV+DRDptIJ/1bQZm4U5cINUOCBmIfu8/Ur5elsQ3JhYq0VNXU1eN1dRQCXhcOsphHceMeKLbm+W/JOYU2DpBC43w5CDAGtLofUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=X7o27qFY; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1712607612; c=relaxed/simple;
+	bh=FopTkbXlJzDGZH5vTNleHJZA3l0e8MEhRKXnz8foTUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QSustNkiM6sl35iR8TxYUxtvatQvBazyzATKmS21yas4gV0VumPeqxL5qwfOFV9Rf4vL+C4Ef33PzjZguyWQZ+d23FCfnoqNc+CpXkx2s80ofq791vK1yOS/UvosDpo2Jq9svOFjWQAjzdnEANilgfGaHV/H8zZ6KCStJIgGZEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HxYWI+je; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="X7o27qFY"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-516d09bd434so5071072e87.1
-        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 13:05:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1712606738; x=1713211538; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRKPouMe4xkFwANgjkQYrxaOlNKZlWPMAGzB1iq7Iyc=;
-        b=X7o27qFYqvFkSMNZ1y40IhaH0RUl+F4W+oBaaLMOzmLzrqbTbNSjXvLIlOT00lXVOw
-         Mq8Mp9YbP1Mw1oxZ01CRXhd1G2wiwkve/jFKXGde/p0C4cK5+SpxMXLvk5CKySIqCG//
-         PpB/M/gbXZR8wYeHLBldCSkWKUnKmxO/0Epn4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712606738; x=1713211538;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rRKPouMe4xkFwANgjkQYrxaOlNKZlWPMAGzB1iq7Iyc=;
-        b=gd3vY2pgbG+msTX4DAiY/LrT0GTFKsSrH022fVOZA9jE0ikkIg3559dZAwtvheQRr1
-         tP+PYkFr4EG/1wStIZaCh+T3tsGPcb2pka0YQ7LAYBrKGiFLAXC6UwMvHCern0hcxTlR
-         s02DLdiKJPsNO8D5VMjFSWuT/URMrpn12yl2wEYyhx0E0ToZ/rcalNCqk1d7gU2amX6v
-         yg7EgiOjhGq3y/OBamPNiGRfxD2SPhsQR0BnPEfyCFNi+agWu4YsoNRvx2IzULCxzvwl
-         OksIBifSpXEUMekJ4FY/cIlecqN5CKy+oL5SnuxiZ2gtLs5gK1Gfst+gQ3QDJs4GT7C8
-         Mv1g==
-X-Forwarded-Encrypted: i=1; AJvYcCXOUny0A7RJomXAATR0XXMMPX6hgvRjfHi3gvWb6rgkojc603jc92nRm/DHE2p1g9Md51tctLRjL4ajlYhOj+KDFrCZcg==
-X-Gm-Message-State: AOJu0YxBLwk+1nZx/tyRciOC2qWq9SSFbJflA3K28rHIdqo6V3KWlJKt
-	zjS/j11LQlXUZ6lp+JVc5Q7DMGhCsXqwFbx935uA/8pDhpghWOccd10neIhRR/k1R0YoXbWROMe
-	9W2PXYw==
-X-Google-Smtp-Source: AGHT+IFYB6KDCvr7NDO+8zc3mHsLVZitbBjAzYufqvFuw2FAJZxSRiwvcnpsM/bnE9mwVSe38rFV7w==
-X-Received: by 2002:a05:6512:158c:b0:515:90e5:4555 with SMTP id bp12-20020a056512158c00b0051590e54555mr7260945lfb.16.1712606737784;
-        Mon, 08 Apr 2024 13:05:37 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac25462000000b00515cc918069sm1294778lfn.150.2024.04.08.13.05.37
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Apr 2024 13:05:37 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-516dbc36918so2937046e87.0
-        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 13:05:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWnnG13Tkq+U7aBKpJV0FjCboFhUEB3VMXD6tLY7d56YmNWFmdq7U1B50sdrJGRUDlP8DBdAgAlpKRFgfHzhbmtyfS+6A==
-X-Received: by 2002:a05:6512:60f:b0:516:9fdc:2621 with SMTP id
- b15-20020a056512060f00b005169fdc2621mr6538971lfe.0.1712606737016; Mon, 08 Apr
- 2024 13:05:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HxYWI+je"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712607609; x=1744143609;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FopTkbXlJzDGZH5vTNleHJZA3l0e8MEhRKXnz8foTUA=;
+  b=HxYWI+jeeyPIxrJx/esE/0ARCjyLXPCp76BfUTGXWEj9B9iCplPjPHxK
+   dA9NNsqMtzonovF2CqRXbWC7O2j+nTJRXsNELvxt95ZsUwTLiQy6uJwey
+   g4G77cgNr+uHlwQ/xfh/yr1U/rg2QSLQ3e6lIqK6DWk0Hq8cRr6tMW+Kr
+   TQoNZleZKENNmNUAFm0uxsI/jj3KtOMKXlwAQD18PQp2ejYJp93tKw8FM
+   S73xrt+OP4IC9TRniWDaTN+eQ/+eb3xSOYPYTwQQqRZFgbj7p+jIL3d8Y
+   EkwobD2cSO/xVLqKRbfHVbhU8HA6joky3Mnr1nTpFj8RrgR5Jqow+vmeR
+   w==;
+X-CSE-ConnectionGUID: 4fOdhhfdTX+SnH2qOZE8Tg==
+X-CSE-MsgGUID: 2zvMS6uVRmCDmCF1+8Nvdg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="8085753"
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="8085753"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 13:20:05 -0700
+X-CSE-ConnectionGUID: goSAFJy5SZChhJsbk4b5Ew==
+X-CSE-MsgGUID: Vwmj11fsSH+3gcLuoUu1Iw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="19866443"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 08 Apr 2024 13:20:03 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rtvTE-0005Ss-0y;
+	Mon, 08 Apr 2024 20:20:00 +0000
+Date: Tue, 9 Apr 2024 04:19:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:rw_iter 78/144]
+ drivers/misc/eeprom/idt_89hpesx.c:903:55: error: expected ')'
+Message-ID: <202404090440.xDx6plBE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240322233838.868874-1-boqun.feng@gmail.com> <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <ZhQVHZnU3beOhEGU@casper.infradead.org> <CAHk-=whmmeU_r_o+sPMcr7tPr-EU+HLnmL+GaWUkMUW0kDzDxw@mail.gmail.com>
- <20240408181436.GO538574@ZenIV>
-In-Reply-To: <20240408181436.GO538574@ZenIV>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 8 Apr 2024 13:05:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wispSt+JezguriGPKnJ0xOUWG_LFDgaM-NVJu6cVa+-xw@mail.gmail.com>
-Message-ID: <CAHk-=wispSt+JezguriGPKnJ0xOUWG_LFDgaM-NVJu6cVa+-xw@mail.gmail.com>
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Matthew Wilcox <willy@infradead.org>, Philipp Stanner <pstanner@redhat.com>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 8 Apr 2024 at 11:14, Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> FWIW, PA-RISC is no better - the same "fetch and replace with constant"
-> kind of primitive as for sparc32, only the constant is (u32)0 instead
-> of (u8)~0.  And unlike sparc64, 64bit variant didn't get better.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
+head:   1b82b543d52b554590942733a069919265a5f27b
+commit: 79301b69940a7eb819122a94ae86009cde5fdfda [78/144] misc: eeprom/idt_89hpesx: convert to read/write iterators
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240409/202404090440.xDx6plBE-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240409/202404090440.xDx6plBE-lkp@intel.com/reproduce)
 
-Heh. The thing about PA-RISC is that it is actually *so* much worse
-that it was never useful for an arithmetic type.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404090440.xDx6plBE-lkp@intel.com/
 
-IOW, the fact that sparc used just a byte meant that the aotmic_t
-hackery on sparc still gave us 24 useful bits in a 32-bit atomic_t.
+All errors (new ones prefixed by >>):
 
-So long ago, we used to have an arithmetic atomic_t that was 32-bit on
-all sane architectures, but only had a 24-bit range on sparc.
+   In file included from drivers/misc/eeprom/idt_89hpesx.c:50:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/misc/eeprom/idt_89hpesx.c:50:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/misc/eeprom/idt_89hpesx.c:50:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/misc/eeprom/idt_89hpesx.c:50:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/misc/eeprom/idt_89hpesx.c:903:55: error: expected ')'
+     903 | static ssize_t idt_dbgfs_csr_write(struct file *kiocb *iocb,
+         |                                                       ^
+   drivers/misc/eeprom/idt_89hpesx.c:903:35: note: to match this '('
+     903 | static ssize_t idt_dbgfs_csr_write(struct file *kiocb *iocb,
+         |                                   ^
+>> drivers/misc/eeprom/idt_89hpesx.c:906:33: error: use of undeclared identifier 'filep'
+     906 |         struct idt_89hpesx_dev *pdev = filep->private_data;
+         |                                        ^
+>> drivers/misc/eeprom/idt_89hpesx.c:908:32: error: use of undeclared identifier 'from'
+     908 |         size_t count = iov_iter_count(from);
+         |                                       ^
+>> drivers/misc/eeprom/idt_89hpesx.c:913:6: error: use of undeclared identifier 'iocb'; did you mean 'kiocb'?
+     913 |         if (iocb->ki_pos)
+         |             ^~~~
+         |             kiocb
+   drivers/misc/eeprom/idt_89hpesx.c:903:49: note: 'kiocb' declared here
+     903 | static ssize_t idt_dbgfs_csr_write(struct file *kiocb *iocb,
+         |                                                 ^
+>> drivers/misc/eeprom/idt_89hpesx.c:913:12: error: no member named 'ki_pos' in 'struct file'; did you mean 'f_pos'?
+     913 |         if (iocb->ki_pos)
+         |                   ^~~~~~
+         |                   f_pos
+   include/linux/fs.h:1011:11: note: 'f_pos' declared here
+    1011 |         loff_t                  f_pos;
+         |                                 ^
+>> drivers/misc/eeprom/idt_89hpesx.c:917:8: error: call to undeclared function 'iterdup_user'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     917 |         buf = iterdup_user(from, count);
+         |               ^
+   drivers/misc/eeprom/idt_89hpesx.c:917:21: error: use of undeclared identifier 'from'; did you mean 'for'?
+     917 |         buf = iterdup_user(from, count);
+         |                            ^~~~
+         |                            for
+>> drivers/misc/eeprom/idt_89hpesx.c:917:21: error: expected expression
+>> drivers/misc/eeprom/idt_89hpesx.c:1028:16: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'int (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *)' (aka 'int (struct file *)') [-Wincompatible-function-pointer-types]
+    1028 |         .write_iter = idt_dbgfs_csr_write,
+         |                       ^~~~~~~~~~~~~~~~~~~
+   7 warnings and 9 errors generated.
 
-And I know you know all this, I'm just explaining the horror for the audience.
 
-On PA-RISC you couldn't do that horrendous trick, so parist just used
-the "we use a hashed spinlock for all atomics", and "atomic_t" was a
-regular full-sized integer type.
+vim +903 drivers/misc/eeprom/idt_89hpesx.c
 
-Anyway, the sparc 24-bit atomics were actually replaced by the PA-RISC
-version back twenty years ago (almost to the day):
+   887	
+   888	/*
+   889	 * idt_dbgfs_csr_write() - CSR debugfs-node write callback
+   890	 * @filep:	Pointer to the file system file descriptor
+   891	 * @buf:	Buffer to read data from
+   892	 * @count:	Size of the buffer
+   893	 * @offp:	Offset within the file
+   894	 *
+   895	 * It accepts either "0x<reg addr>:0x<value>" for saving register address
+   896	 * and writing value to specified DWORD register or "0x<reg addr>" for
+   897	 * just saving register address in order to perform next read operation.
+   898	 *
+   899	 * WARNING No spaces are allowed. Incoming string must be strictly formated as:
+   900	 * "<reg addr>:<value>". Register address must be aligned within 4 bytes
+   901	 * (one DWORD).
+   902	 */
+ > 903	static ssize_t idt_dbgfs_csr_write(struct file *kiocb *iocb,
+   904					   struct iov_iter *from)
+   905	{
+ > 906		struct idt_89hpesx_dev *pdev = filep->private_data;
+   907		char *colon_ch, *csraddr_str, *csrval_str;
+ > 908		size_t count = iov_iter_count(from);
+   909		int ret;
+   910		u32 csraddr, csrval;
+   911		char *buf;
+   912	
+ > 913		if (iocb->ki_pos)
+   914			return 0;
+   915	
+   916		/* Copy data from User-space */
+ > 917		buf = iterdup_user(from, count);
+   918		if (IS_ERR(buf))
+   919			return PTR_ERR(buf);
+   920	
+   921		/* Find position of colon in the buffer */
+   922		colon_ch = strnchr(buf, count, ':');
+   923	
+   924		/*
+   925		 * If there is colon passed then new CSR value should be parsed as
+   926		 * well, so allocate buffer for CSR address substring.
+   927		 * If no colon is found, then string must have just one number with
+   928		 * no new CSR value
+   929		 */
+   930		if (colon_ch != NULL) {
+   931			/* Copy the register address to the substring buffer */
+   932			csraddr_str = kmemdup_nul(buf, colon_ch - buf, GFP_KERNEL);
+   933			if (csraddr_str == NULL) {
+   934				ret = -ENOMEM;
+   935				goto free_buf;
+   936			}
+   937			/* Register value must follow the colon */
+   938			csrval_str = colon_ch + 1;
+   939		} else /* if (str_colon == NULL) */ {
+   940			csraddr_str = (char *)buf; /* Just to shut warning up */
+   941			csrval_str = NULL;
+   942		}
+   943	
+   944		/* Convert CSR address to u32 value */
+   945		ret = kstrtou32(csraddr_str, 0, &csraddr);
+   946		if (ret != 0)
+   947			goto free_csraddr_str;
+   948	
+   949		/* Check whether passed register address is valid */
+   950		if (csraddr > CSR_MAX || !IS_ALIGNED(csraddr, SZ_4)) {
+   951			ret = -EINVAL;
+   952			goto free_csraddr_str;
+   953		}
+   954	
+   955		/* Shift register address to the right so to have u16 address */
+   956		pdev->csr = (csraddr >> 2);
+   957	
+   958		/* Parse new CSR value and send it to IDT, if colon has been found */
+   959		if (colon_ch != NULL) {
+   960			ret = kstrtou32(csrval_str, 0, &csrval);
+   961			if (ret != 0)
+   962				goto free_csraddr_str;
+   963	
+   964			ret = idt_csr_write(pdev, pdev->csr, csrval);
+   965			if (ret != 0)
+   966				goto free_csraddr_str;
+   967		}
+   968	
+   969		/* Free memory only if colon has been found */
+   970	free_csraddr_str:
+   971		if (colon_ch != NULL)
+   972			kfree(csraddr_str);
+   973	
+   974		/* Free buffer allocated for data retrieved from User-space */
+   975	free_buf:
+   976		kfree(buf);
+   977	
+   978		return (ret != 0 ? ret : count);
+   979	}
+   980	
+   981	/*
+   982	 * idt_dbgfs_csr_read() - CSR debugfs-node read callback
+   983	 * @filep:	Pointer to the file system file descriptor
+   984	 * @buf:	Buffer to write data to
+   985	 * @count:	Size of the buffer
+   986	 * @offp:	Offset within the file
+   987	 *
+   988	 * It just prints the pair "0x<reg addr>:0x<value>" to passed buffer.
+   989	 */
+   990	#define CSRBUF_SIZE	((size_t)32)
+   991	static ssize_t idt_dbgfs_csr_read(struct kiocb *iocb, struct iov_iter *to)
+   992	{
+   993		struct idt_89hpesx_dev *pdev = iocb->ki_filp->private_data;
+   994		u32 csraddr, csrval;
+   995		char buf[CSRBUF_SIZE];
+   996		int ret, size;
+   997	
+   998		/* Perform CSR read operation */
+   999		ret = idt_csr_read(pdev, pdev->csr, &csrval);
+  1000		if (ret != 0)
+  1001			return ret;
+  1002	
+  1003		/* Shift register address to the left so to have real address */
+  1004		csraddr = ((u32)pdev->csr << 2);
+  1005	
+  1006		/* Print the "0x<reg addr>:0x<value>" to buffer */
+  1007		size = snprintf(buf, CSRBUF_SIZE, "0x%05x:0x%08x\n",
+  1008			(unsigned int)csraddr, (unsigned int)csrval);
+  1009	
+  1010		/* Copy data to User-space */
+  1011		return simple_copy_to_iter(buf, &iocb->ki_pos, size, to);
+  1012	}
+  1013	
+  1014	/*
+  1015	 * eeprom_attribute - EEPROM sysfs-node attributes
+  1016	 *
+  1017	 * NOTE Size will be changed in compliance with OF node. EEPROM attribute will
+  1018	 * be read-only as well if the corresponding flag is specified in OF node.
+  1019	 */
+  1020	static BIN_ATTR_RW(eeprom, EEPROM_DEF_SIZE);
+  1021	
+  1022	/*
+  1023	 * csr_dbgfs_ops - CSR debugfs-node read/write operations
+  1024	 */
+  1025	static const struct file_operations csr_dbgfs_ops = {
+  1026		.owner = THIS_MODULE,
+  1027		.open = simple_open,
+> 1028		.write_iter = idt_dbgfs_csr_write,
+  1029		.read_iter = idt_dbgfs_csr_read
+  1030	};
+  1031	
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=373f1583c5c5
-
-and while we still had some left-over of that horror in the git tree
-up until 2011 (until commit 348738afe530: "sparc32: drop unused
-atomic24 support") we probably should have made the
-"arch_atomic_xyz()" ops work on generic types rather than "atomic_t"
-for a long long time, so that you could use them on other things than
-"atomic_t" and friends.
-
-You can see the casting horror here, for example:
-
-   include/asm-generic/bitops/atomic.h
-
-where we do that cast from "volatile unsigned long *p" to
-"atomic_long_t *" just to use the raw_atomic_long_xyz() operations.
-
-It would make more sense if the raw atomics took that "native"
-volatile unsigned long pointer directly.
-
-(And here that "volatile" is not because it's necessary used as a
-volatile - it is - but simply because it's the most permissive type of
-pointer. You can see other places using "const volatile unsigned long"
-pointers for the same reason: passing in a non-const or non-volatile
-pointer is perfectly fine).
-
-              Linus
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
