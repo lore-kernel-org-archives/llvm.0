@@ -1,85 +1,57 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE66610E9
-	for <llvm@lists.linux.dev>; Mon,  8 Apr 2024 08:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6355FB8F;
+	Mon,  8 Apr 2024 11:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712565529; cv=none; b=lpQWBGyY88HDuSdAcSN9yBQganRqPhIGVVxxdJrvFU9aoRvJ1JzTP9bRcF3tVULOEhJKDGSpHUjn7Rv6dfUgI5Lf6V/XDMOgZhDCCXbxAaViSssqxEqAqTWQc4KuKBH4Ayeg+aDCO5dTnFIZA/XKrzEDqQVtZuYhPmprCuLy96A=
+	t=1712574454; cv=none; b=Vlt6gDLKffoyJKU9P1bzesROtLbsECTZ7m2Btur6VOM7HWWXQrGi+Hnh8kwpwSm7wflsyGe4Cfbkzw8vzMa7+qdo6VoblREGCTfV+rPpAr8bqhRvtKKp7u3OcAy2KFnV3eXtzK8cnzq2EA5nEvNWIFaanjFnl5Oae7abcqZSnhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712565529; c=relaxed/simple;
-	bh=v3k0q3Ssrf6AF5pL/NajPpfMBf3IXMrttmu5uBqjp4s=;
+	s=arc-20240116; t=1712574454; c=relaxed/simple;
+	bh=R2LuuhSb8d6q3LtxSsHfHd/kQABTJ1jxxQJ/ujhQYfg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PyoNx1yld4AN7qeAUuM2C30wAaD1kT3SSY0+2dXrzLFKilgRu8Z9Qwzfkgv6gOyPNgYb0623XpfrCHVjM2fLj6N4iHbLCqJwH2sG2pEl2H+pSvBygfxOkjhrs94uLtXeXkZfg9GuHqaKJdxPcOj0sCKsmzkIzW3eLIf+b42BQU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bQjM7iN1; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RJuKPCAu; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SiLVrbBS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xirxDqDV; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=WyLIMGHVj42/HKhQyZURVyaCFPiWnI/yiySUmVN0W0hya83f8MyMae2HEoVHce9EocmMwyX1+Wj1bq4jPQX4PaEtqhItBOP6vYngHc2xZXGAdqTUSsiNOP3pmNRpFsQeT+11Q5Us0exeTyTSd4ISV2oB7nMY769GexIUg961cbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nByh4qB0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bQjM7iN1";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RJuKPCAu";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SiLVrbBS";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xirxDqDV"
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 8FD7F20216;
-	Mon,  8 Apr 2024 08:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1712565525; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Uwj3JbLD7BKun3ExrCgpdE7EoWxAzmC5eFj4hgIUgzc=;
-	b=bQjM7iN1MOxIU5bzvPcqCwH5r/tNIMEzlCqXLYxXDnq+ub9OHTM5+PIiadc8+RUPPJ5Yyh
-	VM7164xNrnJamL9DvMEjBzUXlBVBYo7ULATm7M3IFy4iKKpQqwDRitzxg533Q3LB9cN9Ws
-	AE4B2ScfYCuyOxAn86fN2a7HhbhV/pU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1712565525;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Uwj3JbLD7BKun3ExrCgpdE7EoWxAzmC5eFj4hgIUgzc=;
-	b=RJuKPCAuwK2No9fzXyGUbVY31cWdKkZs8F7FUhWDK1NE4bf/1QH2qxr7ZWbkKWyQojf1i6
-	NgBP6KxxrGYvmuCg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1712565524; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Uwj3JbLD7BKun3ExrCgpdE7EoWxAzmC5eFj4hgIUgzc=;
-	b=SiLVrbBSJnRd7N8cOdzaN634wlBtCeYIquZGxihR4+wENZdbf8P6PPiDa+qAk3rRxMl2Ol
-	8qmOLP3txCznxrGa4OxGqe4PYnzIXGOJASiLiHreBunsdHJLdXP8qrLjdfyhE1eJ3tco2M
-	lrqek+1HxriF/O6nEnkkIq7W8RHKLVc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1712565524;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Uwj3JbLD7BKun3ExrCgpdE7EoWxAzmC5eFj4hgIUgzc=;
-	b=xirxDqDVmy4uOe8Yy+70NYnEAAHytWEHUnJGKOC7R2WIkbwTBblqGI4rsaplyUWtZa/x02
-	jppQn6xkNwCwW6Ag==
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id B30211332F;
-	Mon,  8 Apr 2024 08:38:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id zBSLKBOtE2Y5IgAAn2gu4w
-	(envelope-from <osalvador@suse.de>); Mon, 08 Apr 2024 08:38:43 +0000
-Date: Mon, 8 Apr 2024 10:38:34 +0200
-From: Oscar Salvador <osalvador@suse.de>
-To: liuhailong@oppo.com
-Cc: akpm@linux-foundation.org, nathan@kernel.org, ndesaulniers@google.com,
-	trix@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, surenb@google.com, zhaoyang.huang@unisoc.com,
-	quic_charante@quicinc.com, yuzhao@google.com
-Subject: Re: [PATCH] mm: vmscan: do not skip CMA while LRU is full of CMA
- folios
-Message-ID: <ZhOtCtGBSCntUHvR@localhost.localdomain>
-References: <20240408080539.14282-1-liuhailong@oppo.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nByh4qB0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F33AC433F1;
+	Mon,  8 Apr 2024 11:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712574454;
+	bh=R2LuuhSb8d6q3LtxSsHfHd/kQABTJ1jxxQJ/ujhQYfg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nByh4qB0rdSeeOibjSvCimXfcV/qAR7lbkNljjj77K8nA+Oj7E/oM3toKo88czV+8
+	 9rxlZFwLtCElIPO4Z8Sqd8Txi3ZQABfDJxi+ROUR3NXvwN1+qpl9xfRhhZX3VRpMGV
+	 7olUd5uOgTdIXHrdPLNuHkF79Hfcc8Ox/K2OTfe7g4gwCI9t68JcexnDji9plBCvdD
+	 RnOazez5g2lcqCZGMDMXNkx9+sOMsHIsdQC3bVFCG362slU0ZVxBo4DkktEK5fbCHq
+	 sEGEC+JlIMcl+zuAep24ICZzrrb/+j+HGFFI1wM4dCHDfQ1GHcYjhxnK1c+8QK2A0v
+	 zAS2hdWoWm87g==
+Date: Mon, 8 Apr 2024 14:07:30 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Erick Archer <erick.archer@outlook.com>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: Long Li <longli@microsoft.com>, Ajay Sharma <sharmaajay@microsoft.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Shradha Gupta <shradhagupta@linux.microsoft.com>,
+	Konstantin Taranov <kotaranov@microsoft.com>,
+	linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 0/3] RDMA/mana_ib: Add flex array to struct
+ mana_cfg_rx_steer_req_v2
+Message-ID: <20240408110730.GE8764@unreal>
+References: <AS8PR02MB72374BD1B23728F2E3C3B1A18B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -88,53 +60,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240408080539.14282-1-liuhailong@oppo.com>
-X-Spam-Flag: NO
-X-Spam-Score: -3.65
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.65 / 50.00];
-	BAYES_HAM(-2.35)[96.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:helo,imap2.dmz-prg2.suse.org:rdns,oppo.com:email]
+In-Reply-To: <AS8PR02MB72374BD1B23728F2E3C3B1A18B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
 
-On Mon, Apr 08, 2024 at 04:05:39PM +0800, liuhailong@oppo.com wrote:
-> From: liuhailong <liuhailong@oppo.com>
-> @@ -6202,6 +6213,16 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
->  		 */
->  		if (sc->priority < DEF_PRIORITY - 2)
->  			sc->may_writepage = 1;
-> +
-> +		/*
-> +		 * If we're getting trouble reclaiming non-cma pages and
-> +		 * currently a substantial number of CMA pages on LRU,
-"sit on LRU" ?
+On Sat, Apr 06, 2024 at 04:23:34PM +0200, Erick Archer wrote:
+> The "struct mana_cfg_rx_steer_req_v2" uses a dynamically sized set of
+> trailing elements. Specifically, it uses a "mana_handle_t" array. So,
+> use the preferred way in the kernel declaring a flexible array [1].
+> 
+> At the same time, prepare for the coming implementation by GCC and Clang
+> of the __counted_by attribute. Flexible array members annotated with
+> __counted_by can have their accesses bounds-checked at run-time via
+> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
+> strcpy/memcpy-family functions).
+> 
+> Also, avoid the open-coded arithmetic in the memory allocator functions
+> [2] using the "struct_size" macro.
+> 
+> Moreover, use the "offsetof" helper to get the indirect table offset
+> instead of the "sizeof" operator and avoid the open-coded arithmetic in
+> pointers using the new flex member. This new structure member also allow
+> us to remove the "req_indir_tab" variable since it is no longer needed.
+> 
+> Now, it is also possible to use the "flex_array_size" helper to compute
+> the size of these trailing elements in the "memcpy" function.
+> 
+> Specifically, the first commit adds the flex member and the patches 2 and
+> 3 refactor the consumers of the "struct mana_cfg_rx_steer_req_v2".
+> 
+> This code was detected with the help of Coccinelle, and audited and
+> modified manually. The Coccinelle script used to detect this code pattern
+> is the following:
+> 
+> virtual report
+> 
+> @rule1@
+> type t1;
+> type t2;
+> identifier i0;
+> identifier i1;
+> identifier i2;
+> identifier ALLOC =~ "kmalloc|kzalloc|kmalloc_node|kzalloc_node|vmalloc|vzalloc|kvmalloc|kvzalloc";
+> position p1;
+> @@
+> 
+> i0 = sizeof(t1) + sizeof(t2) * i1;
+> ...
+> i2 = ALLOC@p1(..., i0, ...);
+> 
+> @script:python depends on report@
+> p1 << rule1.p1;
+> @@
+> 
+> msg = "WARNING: verify allocation on line %s" % (p1[0].line)
+> coccilib.report.print_report(p1[0],msg)
+> 
+> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#zero-length-and-one-element-arrays [1]
+> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [2]
+> Signed-off-by: Erick Archer <erick.archer@outlook.com>
+> ---
+> Changes in v3:
+> - Split the changes in various commits to simplify the acceptance process
+>   (Leon Romanovsky).
+> 
+> Changes in v2:
+> - Remove the "req_indir_tab" variable (Gustavo A. R. Silva).
+> - Update the commit message.
+> - Add the "__counted_by" attribute.
+> 
+> Previous versions:
+> v1 -> https://lore.kernel.org/linux-hardening/AS8PR02MB7237974EF1B9BAFA618166C38B382@AS8PR02MB7237.eurprd02.prod.outlook.com/
+> v2 -> https://lore.kernel.org/linux-hardening/AS8PR02MB723729C5A63F24C312FC9CD18B3F2@AS8PR02MB7237.eurprd02.prod.outlook.com/
+> ---
+> Erick Archer (3):
+>   net: mana: Add flex array to struct mana_cfg_rx_steer_req_v2
+>   RDMA/mana_ib: Prefer struct_size over open coded arithmetic
+>   net: mana: Avoid open coded arithmetic
 
-> +		 * start reclaiming cma pages to alleviate other threads
-> +		 * and decrease lru size.
-> +		 */
-> +		if (sc->priority < DEF_PRIORITY - 2 &&
-> +		    sc->nr_scanned < (sc->nr_skipped_cma >> 3))
+Unfortunately, I still can't take RDMA patch alone without the netdev
+patches.
 
-Why "sc->nr_skipped_cma >> 3"? It feels a bit hardcoded.
-Maybe the comment or the changelog should contain a reference about why
-this "/8" was a good choice.
+Jakub, do you want shared branch for this series or should I take
+everything through RDMA tree as netdev part is small enough?
 
-
--- 
-Oscar Salvador
-SUSE Labs
+Thanks
