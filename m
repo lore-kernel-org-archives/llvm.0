@@ -1,113 +1,110 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778DD12B14F
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 22:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D825E12F59D
+	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 22:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712702204; cv=none; b=j6I8QiZw+vJtGUNJYQ1RP54RrHKIlfA9aNwo9QDj7fxI5tEfFg/pW4UbzZzKgWFaXaMpbc5/V0hnBs1j3PmuVyVU0zUgwHcNbtxejIipi1TENEQKMIHFpeqzLx5oHKqPHFfXbQ5BjMc27ks0RnwAFVyhZCohvr1GahcKGySSTc0=
+	t=1712702582; cv=none; b=rJlE0VCR3ogjLo9T2ZaURjjvBZ29UIJwSbwwHWONydZ3ZVu4DVMKrzRoRQ05LSWQ3XvzlE5m/hPhPCka6KVxGoX5TTjqAgIZLDzAI8UJOM1pnpMI2WPHFva4fRC9Y9X8N3OpL237O1gTFFPpC8DH5DTMv+tmArxCvN1JSswyaz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712702204; c=relaxed/simple;
-	bh=ekmWQXPMS1ofI798+g9KJMBbmIdCWYxH3WwE6dopHvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oAjkcPHNJ5tVM6YCr5kRSVuiRbFNnJ6UfmupFpTs2HUu/ljTCLGk/f36VRPyrzuhe5jRBGKR68UUROR9NOJNCqmQqbMF9jjbUnhYtAlP+iyBHdzMT2n7npebIfTof6l/yglNG43nGdL2asyVZsCua0bDFtxB3JCRefjFZB5UqfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b=FCtmrKyI; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
+	s=arc-20240116; t=1712702582; c=relaxed/simple;
+	bh=EOPsmlwJFzGM2UI4dOfw8LD2YE7U8XKi3h9Rz8SnOGo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=UlrhLgXQxiCo6sk/2xlhKLvM8lCsHPkcn1VLN4BLLhEVdGjtpleiM7fJlXNWoACrSo4UyiDI9QWwutqNtmqTYZOKh651ZEhsOIzZXKoFc0+i5cn0OmS/TVeUbZBE8YT1cl3A+iMwLwP83ws82MFWNjNrDLtefgGeKXf+iUd3O+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0yg7WegV; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="FCtmrKyI"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-69b37a4f1e5so2449766d6.0
-        for <llvm@lists.linux.dev>; Tue, 09 Apr 2024 15:36:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0yg7WegV"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6180514a5ffso27200867b3.0
+        for <llvm@lists.linux.dev>; Tue, 09 Apr 2024 15:43:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1712702200; x=1713307000; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=99sdplKohlye3r4EJyuRnGxNAU41Gs/6WufhBIEtHTM=;
-        b=FCtmrKyIXpFtW0xeNbwQITIMErRMSq+A79nnIQTqZoYDQndZgAxhQlhy9jBfMyh/+K
-         u7HSbyGUFMNha9m43CletM/Q6glw3jswTFUMT3htOlL5EMPo090YKIPJU/bpAOUlv/f4
-         MlZrL9i65hR7oCrQN9uM/pNaQO/eJSPXn5mzzYuUpaqmSFGlCqxvVAlrFvzCpO/5IWeJ
-         Pb/PRVApqPo/NADSm02PPZ1ktu3XCTuPyHfRUnh1Zosi+SacgkoPSaK3S8zp80NYo89h
-         /Pcrq0WydC4/hIl5b5edTZ1fi3RHKAspQd5mSz7OgcoXEJpNn51v4juDdv/KVqcD/JvQ
-         OB6w==
+        d=google.com; s=20230601; t=1712702580; x=1713307380; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nvOU5J+d22A5HC2jQZ6Bg8Tqj0DfjFxuF6JsjQ8c2sA=;
+        b=0yg7WegVnOJUit+wV7Xw+t32zhvKiPOjBToWwhUfmH8AvsXvCeTN7eRJ9qvZJTiWbC
+         QDb5F9Hrvw06xFXYpzCmkxfe6z1NSLZ4110cF4W7XhShuRRbnYeHp3n7jNYxHJiFO5f8
+         LPdg46HW3wA+igg2lExSBzwTMPyanngE5PfUPLha3+jL6jPj+h9+u+EvO6AqnqCRbn+u
+         O7LdeTCocR4FmI/05JOAM637333c/eSK+tf6vK6dnW6ucweq/hDH0akOzbAdrnyVx5mY
+         vENTmdDk6S2ywMcWrGEkqm/PhThIQ0hRO4kohIYOE6gdOvqzo9uOpHYVhzG/vGfuE69/
+         QJLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712702200; x=1713307000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=99sdplKohlye3r4EJyuRnGxNAU41Gs/6WufhBIEtHTM=;
-        b=kRId+tz5y9uSOwXfrhXQN6YfiGcV9tL9JwELWawmQas4En5E2rabyawap3VWoxfkxC
-         wnBV90UXRIgRK533P5yZSCyI9LZbWpPLtndo+Zk5mVNxRKznWBeiPmXQJ1Dw/nfoxapz
-         nkoWT49fiSi8uY4yx0u4qOWZyZA1wRuzisvlv9wJalxVh0dqCoP5MyH+V0YiDNPyIo+7
-         o646Y5y54dfMKQ46Xhxogecw3Zww1tRozf2emNSUUBQk79F8rOr5xJbJoggPj10K8IR7
-         KGxndbeFK65IGWbeYCz/Y+kmeP9GodcTMb/C5Lmvsx553dQKkVocdn++3fDpi0HNJUYD
-         kmyw==
-X-Forwarded-Encrypted: i=1; AJvYcCXbIr8SbQsujf5Y14FBuEQgWTnI4oZs1C2LA+GlH0kLA+dNJGPbc4HLinJNYOe/xob52lpMfrlNxiDNfB0buvKichuUBA==
-X-Gm-Message-State: AOJu0YxHhyFhpGH9Sm+3TXMKRFtQ++4yEQoIz9VwPAHp3VuKzFvEIHV7
-	qMV2hT0KD65B2WcrfuR9svk7tZpp0joLCNGu+BUoP0bmtD/NOYpGwLIIThHYCXw=
-X-Google-Smtp-Source: AGHT+IH3zjPIq/2rU2Q+QMQhrWtdTesHopSX764fJEFz7KNJ8EcquWTJaKtRksgWvIZKZKBshA04Eg==
-X-Received: by 2002:a05:6214:5602:b0:699:45f3:d3a7 with SMTP id mg2-20020a056214560200b0069945f3d3a7mr6376509qvb.16.1712702200125;
-        Tue, 09 Apr 2024 15:36:40 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:6db8])
-        by smtp.gmail.com with ESMTPSA id p24-20020a05620a057800b0078d6c4b0b3bsm1153406qkp.26.2024.04.09.15.36.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Apr 2024 15:36:39 -0700 (PDT)
-Date: Tue, 9 Apr 2024 18:36:38 -0400
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>, vbabka@suse.cz,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, david@redhat.com,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	mgorman@techsingularity.net, ying.huang@intel.com, ziy@nvidia.com
-Subject: Re: [PATCH] mm: page_alloc: consolidate free page accounting fix 3
-Message-ID: <20240409223638.GD1057805@cmpxchg.org>
-References: <a2a48baca69f103aa431fd201f8a06e3b95e203d.1712648441.git.baolin.wang@linux.alibaba.com>
- <202404100519.mVXXF6kV-lkp@intel.com>
+        d=1e100.net; s=20230601; t=1712702580; x=1713307380;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nvOU5J+d22A5HC2jQZ6Bg8Tqj0DfjFxuF6JsjQ8c2sA=;
+        b=e9M0tQuz01ckAI6JWbsYAyN/sSixu2N9e94885TRt8zxUs0PdevBZXSyK/knUkOhTb
+         cjb8DuZH8e8P9jThpfGY2uyaLo+l3FMuchcIpOl8BwVw22SkEvBdapbBFdMoRR8B275P
+         frwA5N6kEVA1IywohKg3YTD6vyBQ2qCEzlz9FHNAws3oFY2WiXQXsL5ObHnJZjfmo/qF
+         WPY/Haxx/qXfpA3JHm7rd5U1V8PVWDbyyhPXSwFFc+ne7XGYmRnz4iYullU/eL6TgEAb
+         WmgUKNx7dmmZ5DH4LC7M+y7oX4eJecQAFNE6TE5vZ9qYuWV3JiV13C5joZqrb2OPHGeK
+         j0xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/UYie/2RBeHjooUeRZepgY/HPD+8ho3i4II6cnL349g+qNYq8HVwI3m78TitcN2S/mSKfZZ+GOKqL9MkRCJEHEVuVQg==
+X-Gm-Message-State: AOJu0YxyPigDOoDw7l8C5G742f3uHQstDl97ivA32DqLD3fG6OGDdQ4P
+	bLymNy/tJb/P1oNN86qY/+mYSNI9qsa4Ci+5jc5DG7n3DxQq8EVgcVSwpOWavVtz8GTMyDl/wFd
+	rvA==
+X-Google-Smtp-Source: AGHT+IEG/dXsyx++mqFslFlSc76Kv14rRGbklYITWYGwB/A65qSHXmzSLYmI3ivC7yI9+fzybcMRqsjyIHQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:a002:0:b0:614:2a7d:5ad3 with SMTP id
+ x2-20020a81a002000000b006142a7d5ad3mr980648ywg.0.1712702579990; Tue, 09 Apr
+ 2024 15:42:59 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Tue,  9 Apr 2024 15:42:56 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202404100519.mVXXF6kV-lkp@intel.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
+Message-ID: <20240409224256.1581292-1-seanjc@google.com>
+Subject: [PATCH] selftests: kselftest_harness: Print empty string, not empty
+ fmt on PASS/FAIL
+From: Sean Christopherson <seanjc@google.com>
+To: Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
+	Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Apr 10, 2024 at 05:15:01AM +0800, kernel test robot wrote:
-> Hi Baolin,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> 
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/UPDATE-20240409-154935/Johannes-Weiner/mm-page_alloc-remove-pcppage-migratetype-caching/20240321-020814
-> base:   the 10th patch of https://lore.kernel.org/r/20240320180429.678181-11-hannes%40cmpxchg.org
-> patch link:    https://lore.kernel.org/r/a2a48baca69f103aa431fd201f8a06e3b95e203d.1712648441.git.baolin.wang%40linux.alibaba.com
-> patch subject: [PATCH] mm: page_alloc: consolidate free page accounting fix 3
-> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240410/202404100519.mVXXF6kV-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240410/202404100519.mVXXF6kV-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202404100519.mVXXF6kV-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> mm/page_alloc.c:808:54: error: too few arguments to function call, expected 4, have 3
->      808 |                         account_freepages(zone, -(1 << order), migratetype);
->          |                         ~~~~~~~~~~~~~~~~~                                 ^
->    mm/page_alloc.c:645:20: note: 'account_freepages' declared here
->      645 | static inline void account_freepages(struct page *page, struct zone *zone,
->          |                    ^                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->      646 |                                      int nr_pages, int migratetype)
->          |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 error generated.
+When printing nothing for the diagnostic on PASS/FAIL, use a string format
+with an empty string, not an empty format with a NULL parameter.  Clang
+complains about the empty format string, which in turn breaks building
+with -Werror.
 
-Looks like a false alarm because the test bot didn't pick up the
-fixlet to remove the page parameter from account_freepages():
+../kselftest_harness.h:1205:30: error: format string is empty [-Werror,-Wformat-zero-length]
+                              diagnostic ? "%s" : "", diagnostic);
+                                                  ^~
+Fixes: 378193eff339 ("selftests: kselftest_harness: let PASS / FAIL provide diagnostic")
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ tools/testing/selftests/kselftest_harness.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-https://lore.kernel.org/all/20240327185831.GB7597@cmpxchg.org/
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 4fd735e48ee7..79ac9e9ada33 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -1197,12 +1197,11 @@ void __run_test(struct __fixture_metadata *f,
+ 	if (t->results->reason[0])
+ 		diagnostic = t->results->reason;
+ 	else if (t->exit_code == KSFT_PASS || t->exit_code == KSFT_FAIL)
+-		diagnostic = NULL;
++		diagnostic = "";
+ 	else
+ 		diagnostic = "unknown";
+ 
+-	ksft_test_result_code(t->exit_code, test_name,
+-			      diagnostic ? "%s" : "", diagnostic);
++	ksft_test_result_code(t->exit_code, test_name, "%s", diagnostic);
+ }
+ 
+ static int test_harness_run(int argc, char **argv)
 
-It's right in Andrew's tree.
+base-commit: 2c71fdf02a95b3dd425b42f28fd47fb2b1d22702
+-- 
+2.44.0.478.gd926399ef9-goog
+
