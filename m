@@ -1,104 +1,143 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24FD762F8;
-	Tue,  9 Apr 2024 03:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C7B54794;
+	Tue,  9 Apr 2024 03:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712632163; cv=none; b=s7mehQ6s9rVWagWhZbBMP1InPPksDTElx3mISR4F2uLFJxJQC0NCnNqvnhA3pqQVi1flrxMmHQn+lVXup1PK3KJszOz36ZTHcqrgzrwv0OMuTzJw1r543HtVNCFxovKwIKJ+0xsYgFaYvG7a/NNnEDoh5sFSAm8bkpdiM963hwU=
+	t=1712632538; cv=none; b=pWa3nhUF8HA2sDK5G2JMkNSsxWfcCtJg8PWV9ZA7KbKZhx/CNWYRbwXIIBbcN6xTxAfMT2LPptNSaGzjZiy6RFL3uEUTMoyTpt1q5DCp37952ubmQFM8/7E6EE9oYW6BE5OWssmSNfkSttD9FHfntcdeJKfCzMd7p+kWaUpdejQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712632163; c=relaxed/simple;
-	bh=CQ4kHtXmSlTCEKFKjUcJPYXU4rAZRhCLTgFIC9/77uM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lmAFKYH+EwlZ4YfXM7uAx1jWXfcoWnhANCMu4iJRcZEnHIXrmygXWKv+rNKlTkETCmk0r6ku1c8fxazmpM6tkgl31ivIO7SgyxBFVK6bcBLPBNJfqf1MYRTDknV3Fgspv/wt7fsbhphyTAZzMvxJuZaJDM6crUT5HZYvrm4q7cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=kDdjjbmq; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1712632538; c=relaxed/simple;
+	bh=QqeHzXMVJ0irSOqoEDbTXP6pf9dzwvyBcaGWTv6ysbU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ryFqWzqA1SIJuYpqoJ1vgSJTLp+3nmGCzWSCHsudyTNhXV9wOl0LyDVigpWmUz7SeG3tlnboH8BmX3cCJlTn+ZdYlHgm+nJaUGMJAmbixxW3bLV/xwl0cuceBif6yxLgvSpBZHbrAgdCYifvfaJPkYoOXcpupk3noYm4/eFdBs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DuWeWw1w; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kDdjjbmq"
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 438Ln5Ac013214;
-	Tue, 9 Apr 2024 03:09:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=I1kwtWVsd09P1c4oQc3NhxV8xHoHjoJIs2C84Zz1jt4=;
- b=kDdjjbmqSuNw35uvKo/Pv05ELmXBA0O9d9eX7mn4RIUfZBG4i1Q5e2mIcADtCgB44LXi
- 9Jz6cnSc+oLFPDDo1PtPqhg/XryPE5aH8hmURqLWK1qwRIRdIWL1KvGu7PnM8YvDjnEx
- Lx8OGOAN5N7Vb1lKTJl+wJGNS15n5DJfTQs8H6CpXzRplD5EoFAvtb5zpd7QKPvVtiiV
- /q06Bl7lv97v1Zx9bJGM2qq998Cn6svzj1wVLnr9pBkhhFIurP9HaH46Yr63j16HT66v
- yOT7hC0Q+mrRhIzGwAxVfpvp9r3XqmHmKHf4htnd6yuHl7FOPQQLe3HTrJjkpP1Udoj/ /Q== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xavtf44xu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Apr 2024 03:09:10 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4391NqCB020038;
-	Tue, 9 Apr 2024 03:09:03 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3xavuca6ef-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Apr 2024 03:09:03 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 439392FB012913;
-	Tue, 9 Apr 2024 03:09:03 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3xavuca6e1-2;
-	Tue, 09 Apr 2024 03:09:03 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: "Manoj N. Kumar" <manoj@linux.ibm.com>,
-        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
-        Uma Krishnan <ukrishn@linux.ibm.com>, Arnd Bergmann <arnd@kernel.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [v2] cxlflash: fix function pointer cast warnings
-Date: Mon,  8 Apr 2024 23:08:51 -0400
-Message-ID: <171260277849.3109929.1668041090243479256.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240404161524.3473857-1-arnd@kernel.org>
-References: <20240404161524.3473857-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DuWeWw1w"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712632536; x=1744168536;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QqeHzXMVJ0irSOqoEDbTXP6pf9dzwvyBcaGWTv6ysbU=;
+  b=DuWeWw1wKkQB3hTgGaT3Iawbzkax1qqsjl4giDm8LxpX3jnyXj7jBfnx
+   iApA2peh4xz9349e/6bM1BehnhUtGpDySeNa997x0waUIXgAx//zICcsq
+   PYeUDpM1exLpyY45QBLvTQwil74j+H2HOAnkTAE3eMQcYexaOt8hrOLNy
+   CZTRdaddVs/8kCUi16QECVuYxlrr5Q9g7svryjw1vfv/UWBZl4DgsVakh
+   telgBH9qenBVfauwT5BX3IjhhG9MpRe418mnRgULce4GK7bjIuAvzP5se
+   D57/oq9apL/IlUa4Xce8B4ZuQ5K4CcndRHG2jaW/swhdPwO/WTnMvxs4S
+   w==;
+X-CSE-ConnectionGUID: 2jX3EwxoT9CUkBEsvxMChg==
+X-CSE-MsgGUID: 1ga0INxKQliSvGpc5AO1Kw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="18654790"
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="18654790"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 20:15:36 -0700
+X-CSE-ConnectionGUID: S/Pa6DX7QJK0zfKzU+XnZw==
+X-CSE-MsgGUID: XpsFjjNeSYW23JqQkmILkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="20655425"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 08 Apr 2024 20:15:32 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ru1xK-0005fs-0e;
+	Tue, 09 Apr 2024 03:15:30 +0000
+Date: Tue, 9 Apr 2024 11:15:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Eric Dumazet <edumazet@google.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next 2/3] net: dsa: allow DSA switch drivers to
+ provide their own phylink mac ops
+Message-ID: <202404091147.pdi8izJ3-lkp@intel.com>
+References: <E1rtn25-0065p0-2C@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-08_19,2024-04-05_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 adultscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2404010000
- definitions=main-2404090018
-X-Proofpoint-GUID: -_XBwNVxPZXBmBkFdUdqEDIHQTbQZZGZ
-X-Proofpoint-ORIG-GUID: -_XBwNVxPZXBmBkFdUdqEDIHQTbQZZGZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1rtn25-0065p0-2C@rmk-PC.armlinux.org.uk>
 
-On Thu, 04 Apr 2024 18:14:58 +0200, Arnd Bergmann wrote:
+Hi Russell,
 
-> Calling a function through an incompatible pointer type causes breaks
-> kcfi, so clang warns about the assignments:
-> 
-> drivers/scsi/cxlflash/main.c:3498:3: error: cast from 'int (*)(struct cxlflash_cfg *, struct ht_cxlflash_lun_provision *)' to 'hioctl' (aka 'int (*)(struct cxlflash_cfg *, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->  3498 |                 (hioctl)cxlflash_lun_provision },
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/cxlflash/main.c:3500:3: error: cast from 'int (*)(struct cxlflash_cfg *, struct ht_cxlflash_afu_debug *)' to 'hioctl' (aka 'int (*)(struct cxlflash_cfg *, void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->  3500 |                 (hioctl)cxlflash_afu_debug },
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> [...]
+kernel test robot noticed the following build warnings:
 
-Applied to 6.10/scsi-queue, thanks!
+[auto build test WARNING on net-next/main]
 
-[1/1] cxlflash: fix function pointer cast warnings
-      https://git.kernel.org/mkp/scsi/c/28fc2bd2c729
+url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-dsa-introduce-dsa_phylink_to_port/20240408-232316
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/E1rtn25-0065p0-2C%40rmk-PC.armlinux.org.uk
+patch subject: [PATCH net-next 2/3] net: dsa: allow DSA switch drivers to provide their own phylink mac ops
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240409/202404091147.pdi8izJ3-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240409/202404091147.pdi8izJ3-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404091147.pdi8izJ3-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/dsa/port.c:1981:6: warning: unused variable 'port' [-Wunused-variable]
+           int port = dp->index;
+               ^
+   1 warning generated.
+
+
+vim +/port +1981 net/dsa/port.c
+
+3a506cb7012a98 Russell King (Oracle  2024-04-08  1975) 
+770375ff331111 Vladimir Oltean       2022-08-18  1976  int dsa_shared_port_link_register_of(struct dsa_port *dp)
+57ab1ca2159717 Vivien Didelot        2017-10-26  1977  {
+0e27921816ad99 Ioana Ciornei         2019-05-28  1978  	struct dsa_switch *ds = dp->ds;
+e09e9873152e3f Vladimir Oltean       2022-08-18  1979  	bool missing_link_description;
+e09e9873152e3f Vladimir Oltean       2022-08-18  1980  	bool missing_phy_mode;
+3be98b2d5fbca3 Andrew Lunn           2020-04-14 @1981  	int port = dp->index;
+0e27921816ad99 Ioana Ciornei         2019-05-28  1982  
+e09e9873152e3f Vladimir Oltean       2022-08-18  1983  	dsa_shared_port_validate_of(dp, &missing_phy_mode,
+e09e9873152e3f Vladimir Oltean       2022-08-18  1984  				    &missing_link_description);
+e09e9873152e3f Vladimir Oltean       2022-08-18  1985  
+e09e9873152e3f Vladimir Oltean       2022-08-18  1986  	if ((missing_phy_mode || missing_link_description) &&
+e09e9873152e3f Vladimir Oltean       2022-08-18  1987  	    !of_device_compatible_match(ds->dev->of_node,
+e09e9873152e3f Vladimir Oltean       2022-08-18  1988  					dsa_switches_apply_workarounds))
+e09e9873152e3f Vladimir Oltean       2022-08-18  1989  		return -EINVAL;
+e09e9873152e3f Vladimir Oltean       2022-08-18  1990  
+a20f997010c4ec Andrew Lunn           2020-03-11  1991  	if (!ds->ops->adjust_link) {
+e09e9873152e3f Vladimir Oltean       2022-08-18  1992  		if (missing_link_description) {
+e09e9873152e3f Vladimir Oltean       2022-08-18  1993  			dev_warn(ds->dev,
+e09e9873152e3f Vladimir Oltean       2022-08-18  1994  				 "Skipping phylink registration for %s port %d\n",
+e09e9873152e3f Vladimir Oltean       2022-08-18  1995  				 dsa_port_is_cpu(dp) ? "CPU" : "DSA", dp->index);
+e09e9873152e3f Vladimir Oltean       2022-08-18  1996  		} else {
+3a506cb7012a98 Russell King (Oracle  2024-04-08  1997) 			dsa_shared_port_link_down(dp);
+e09e9873152e3f Vladimir Oltean       2022-08-18  1998  
+770375ff331111 Vladimir Oltean       2022-08-18  1999  			return dsa_shared_port_phylink_register(dp);
+3be98b2d5fbca3 Andrew Lunn           2020-04-14  2000  		}
+a20f997010c4ec Andrew Lunn           2020-03-11  2001  		return 0;
+a20f997010c4ec Andrew Lunn           2020-03-11  2002  	}
+0e27921816ad99 Ioana Ciornei         2019-05-28  2003  
+0e27921816ad99 Ioana Ciornei         2019-05-28  2004  	dev_warn(ds->dev,
+0e27921816ad99 Ioana Ciornei         2019-05-28  2005  		 "Using legacy PHYLIB callbacks. Please migrate to PHYLINK!\n");
+0e27921816ad99 Ioana Ciornei         2019-05-28  2006  
+33615367f378fe Sebastian Reichel     2018-01-23  2007  	if (of_phy_is_fixed_link(dp->dn))
+770375ff331111 Vladimir Oltean       2022-08-18  2008  		return dsa_shared_port_fixed_link_register_of(dp);
+33615367f378fe Sebastian Reichel     2018-01-23  2009  	else
+770375ff331111 Vladimir Oltean       2022-08-18  2010  		return dsa_shared_port_setup_phy_of(dp, true);
+33615367f378fe Sebastian Reichel     2018-01-23  2011  }
+57ab1ca2159717 Vivien Didelot        2017-10-26  2012  
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
