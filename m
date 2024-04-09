@@ -1,125 +1,178 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524C054FAF;
-	Tue,  9 Apr 2024 05:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34FE6EB5D
+	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 06:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712641972; cv=none; b=KMagb/yYRoB62/OX062ClNiPeSUfUgwCFVqgWIj5lODOCokVqBbhbxaf5XGrSti4z9JPtlU+KGYMc+GlYwP99m53nKYJQS6+rY2VrFqT0cq16mzobKYwnyqgIivNbXg8xn+2Le9BQdmjtuRJkqc2d272OWsUmC7msw075rTFmUo=
+	t=1712643120; cv=none; b=B9d6fsLavxsvPT6sd7rCaJQyssIzrH0yYZAQBgTIu6AExDPZngINTWhb7r/q+Yh8gSXtgJpYkkMut6B5AfvpoMNgmvU80owcxTptp2GxNSPrBuoyVbHP5N9oZlRork7LSVLMnDlJD6AS1RG4FcKzVwMJFhDw92/eRfUEOa90s3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712641972; c=relaxed/simple;
-	bh=7wUmDr3frKZuQy64K+WPW7PE3+/3btlpAS+Kqagh5dw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cevvlyk44zsLrLXkKEI456aUw/5pC1idq609m7jYAAsDanqRHmBIssd8y+BC4HFaNZaqhZt1Fdl/UgOSYPfdBQUJYhr5H7afRhTOb1J6/kna+jPi6KJYu7iNwlHKDkA9h1awsH7CGIzYuD6kTc5HBwO0ZFdgdQ9719/7ghF9s9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YRci/fGl; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712643120; c=relaxed/simple;
+	bh=I9xVI12IPjLWrDdUcoDuZ65TsSjC6yYu8PIgdN/YZ0I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XuRWWGC/subgZ3K34/9GMFufV0Zy2VzhzfB2KpIK8TsWf7wdN/Lsq1SLIh/9T3vKQnEa2ngUxdgez0CP2FgDy3mioyeXrd340EpUCrYhmdwKstRgpF4HXIMpJrLebqf4l/zNHedEEe/TdbJ5Ah+bOfZiu9pA6F7J10ECrw1b3kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=wA6R0s3B; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YRci/fGl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712641970; x=1744177970;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7wUmDr3frKZuQy64K+WPW7PE3+/3btlpAS+Kqagh5dw=;
-  b=YRci/fGlrvHX1YccpJoEWg1l1gzcC5nU+OCRPsH1TGsFgYAE0LzhTr/x
-   zjxcBiDoVS42ITpXuzpHHqYVStDTRjEqN8vcPqTZpJEoDFJ+FrFd+HwbV
-   UDzv2b2uBHdljgv2vnrQdIATmbltggEcZMZUve+PUvwtUyIQJigaF+wo0
-   PuF6nK+tLtn7+nijGtpZpLKqHDxZ/BOgFxgvRYjek7eq5CDHr6w8tEBwf
-   19VGMUMRCjyAswOTn1MYsaHnmzhdgM+Qh1+D3bsq8JjPe1xNB7/8XY6/b
-   KhDZol6QNlTP6E0qX7xOHD0TNzQe1bxwtqlkdTH0isMRvoiSwtp8h5ihD
-   Q==;
-X-CSE-ConnectionGUID: RxWBX3jvTOyCYh9/6XI2Kw==
-X-CSE-MsgGUID: /j6XeOEXRrK2O7DUQUVWhQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7814924"
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="7814924"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 22:52:50 -0700
-X-CSE-ConnectionGUID: FH7NPd1dSwqS6kuFU1TDug==
-X-CSE-MsgGUID: ZtPxBkcbRLiqPk4EkLsAkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="20031577"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Apr 2024 22:52:48 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ru4PW-0005n4-0e;
-	Tue, 09 Apr 2024 05:52:46 +0000
-Date: Tue, 9 Apr 2024 13:52:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 161/222] fs/ubifs/debug.c:2690: warning:
- Function parameter or struct member 'iocb' not described in
- 'provide_user_output'
-Message-ID: <202404091311.xLdIyOn0-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="wA6R0s3B"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5ce2aada130so3653785a12.1
+        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 23:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712643117; x=1713247917; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LNu+GMI0LnpE6OoNqPaNP2xIRA7y3ywXaMFD3+hEy+U=;
+        b=wA6R0s3BYSMXQHpu09Mb+mRih7yK9G4LO7ihnPzl4BiZzihL3SdaZovAZuCJC5NvDS
+         EyNAWUzq3inEz+yGzx8QIeg8TNnNdiOdjVlwQrOL2OqvgsEHzoSgtmBfxe8efsLK9Ky6
+         APKY6esu2rTyFWysWoIk5undx2Cm5r6W6OdYCVjNJGzNoUrf/TatniYx7k3Jv0DHp3H6
+         A7p/ty0n+MOvhiNL7r37idRFSpMGPtbOWNHvKDh6vonEB5SmVddLk2Km7G+0Em1WbFIt
+         libKG/if3C4nD8NS5OeAN+pU1cYpDOdMj41XClnjw5X4/5JQrpC/gVlwo2n/dKYaq0Dq
+         2jcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712643117; x=1713247917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LNu+GMI0LnpE6OoNqPaNP2xIRA7y3ywXaMFD3+hEy+U=;
+        b=WwDvmzEk+kuiaHsp6mE76FzVkaMLyA0g4yAMRJVIkHztBJp1eBhTps0PeXEHsmDHE8
+         vCI3Lhengx61cs9Op99srbeBrx/OKJ1XdzpKLYmoLIgRqXRuYr3cjAcZh1v+PnxprP9O
+         5FUKXSjKiGIKQZeeD9FVHOK2Y77xHJvKU5f1FDBLrk9vAr6YPUbVnZGyBdcnBuBYk2ls
+         j7btmKhV5m7Ia8fgs3vHmKRVbCBUOm5acCG2S7sOmwxkWbXor+WVvFX7YJj8lRzlSMG6
+         aJde+Blt5cDT1v7NmHQIrWjWj9h9LaZcnJ3IIGIkKhXVGMahw5d7DjrZriZGxh/VwXYm
+         i/Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCWh+vvH/YRUCEedAZwP1Pvo/Kj6nw4U/cJXZgWzlUljAtcY/emJU8Ra064Ywj0V9TL76VXHO9Ew2mKlLvvXOvy9A2uaBA==
+X-Gm-Message-State: AOJu0YxLD7dHu4LsadsweXEXO1ABEI4D3iKLFWEi6OTlhJxOZh+qJcZZ
+	FqurbRsz5eFRYkg7PnXnWphCsUY0rHNAaBxTADo0TKaKsuQrkf9mpV1lQJz9xtQ=
+X-Google-Smtp-Source: AGHT+IFAEx2oWQm/CjdpGB2Fg/5zWgfQFm9z3OMamljMoc1Ud/BPFjN+0/Vy6Ix6zi2EHTDC9jxG0Q==
+X-Received: by 2002:a17:902:cecc:b0:1e2:ac38:2657 with SMTP id d12-20020a170902cecc00b001e2ac382657mr10867433plg.24.1712643117037;
+        Mon, 08 Apr 2024 23:11:57 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001e3dd5972ccsm5775564plf.185.2024.04.08.23.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 23:11:56 -0700 (PDT)
+From: Deepak Gupta <debug@rivosinc.com>
+To: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	andy.chiu@sifive.com,
+	debug@rivosinc.com,
+	hankuan.chen@sifive.com,
+	guoren@kernel.org,
+	greentime.hu@sifive.com,
+	samitolvanen@google.com,
+	cleger@rivosinc.com,
+	apatel@ventanamicro.com,
+	ajones@ventanamicro.com,
+	conor.dooley@microchip.com,
+	mchitale@ventanamicro.com,
+	dbarboza@ventanamicro.com,
+	waylingii@gmail.com,
+	sameo@rivosinc.com,
+	alexghiti@rivosinc.com,
+	akpm@linux-foundation.org,
+	shikemeng@huaweicloud.com,
+	rppt@kernel.org,
+	charlie@rivosinc.com,
+	xiao.w.wang@intel.com,
+	willy@infradead.org,
+	jszhang@kernel.org,
+	leobras@redhat.com,
+	songshuaishuai@tinylab.org,
+	haxel@fzi.de,
+	samuel.holland@sifive.com,
+	namcaov@gmail.com,
+	bjorn@rivosinc.com,
+	cuiyunhui@bytedance.com,
+	wangkefeng.wang@huawei.com,
+	falcon@tinylab.org,
+	viro@zeniv.linux.org.uk,
+	bhe@redhat.com,
+	chenjiahao16@huawei.com,
+	hca@linux.ibm.com,
+	arnd@arndb.de,
+	kent.overstreet@linux.dev,
+	boqun.feng@gmail.com,
+	oleg@redhat.com,
+	paulmck@kernel.org,
+	broonie@kernel.org,
+	rick.p.edgecombe@intel.com
+Subject: [RFC PATCH v1] riscv kernel control flow integrity
+Date: Mon,  8 Apr 2024 23:10:31 -0700
+Message-Id: <20240409061043.3269676-1-debug@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   8d5e62882d13747268ce489ec43048c8eff31b7a
-commit: d9673adf2dd3c1d1e73990a1f38ea80c09167efb [161/222] ubifs: convert to read/write iterators
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240409/202404091311.xLdIyOn0-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240409/202404091311.xLdIyOn0-lkp@intel.com/reproduce)
+Basic overview
+---------------
+This is a RFC patch series for enabling kernel control flow integrity on
+riscv architecture. This patch series enables kernel control flow
+integrity using proposed riscv cpu extensions `zicfilp` and `zicfiss` [1].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404091311.xLdIyOn0-lkp@intel.com/
+`zicfilp` enforces that all indirect calls and jumps must land on a landing
+pad instruction (`lpad`). Additionally `lpad` has 20bit encoded value as
+part of instruction and cpu will check this 20bit value with t2/x7 register
+, if they mismatch then cpu will raise an exception `software check
+exception` (a new exception with cause=18). In this patch series, a
+constant label value of 0x1 is used. As series will mature, it will switch
+to a 20 bit truncated hash over function signature. Label based on function
+signature allows stricter control flow and fewer call/jmp locations from a
+callsite.
 
-All warnings (new ones prefixed by >>):
+`zicfiss` protects the return path from functions where return relies on
+obtaining return address from stack which is corruptible. `zicfiss`
+provides a shadow stack which can be used by software to place return
+addresses on shadow stack and while returning from function it can be used
+to compare against return address from regular stack. If they dont match,
+cpu will raise software check exception. `zicfiss` based shadow stack are
+protected against tampering using special page table encodings (please
+refer to [1])
 
->> fs/ubifs/debug.c:2690: warning: Function parameter or struct member 'iocb' not described in 'provide_user_output'
->> fs/ubifs/debug.c:2690: warning: Function parameter or struct member 'to' not described in 'provide_user_output'
->> fs/ubifs/debug.c:2690: warning: Excess function parameter 'u' description in 'provide_user_output'
->> fs/ubifs/debug.c:2690: warning: Excess function parameter 'count' description in 'provide_user_output'
->> fs/ubifs/debug.c:2690: warning: Excess function parameter 'ppos' description in 'provide_user_output'
+To obtain more details about `zicfiss` and `zicfilp` ISA extension, please
+refer to [1]. There is an ongoing patchsets for enabling this feature for
+user mode software here [2]
+
+Enabling on kernel
+===================
+This patch series introduces new riscv config `CONFIG_RISCV_KERNEL_CFI`.
+If this config is selected, it turns on 
+	- forward control flow for kernel using `zicfilp`
+	- selects `CONFIG_SHADOW_CALL_STACK` /w `CONFIG_DYNAMIC_SCS` to enable
+	  backward control flow.
+
+forward control flow for kernel
+================================
+This patch series simply compiles kernel with `march=_zicfilp` compiler
+option. Currently toolchain uses constant label scheme of label = 0x1.
+This patch series manually fixes some of the assembly callsites and
+sequences to make sure they are not breaking rules setup by `zicfilp`.
+
+backward control flow for kernel
+=================================
+There is an existing support for riscv kernel for shadow call stack [3],
+which is a software based shadow stack and uses clang /w instrumentation
+to push/pop return address in prolog and epilog of functions. Although
+software based shadow stack lacks memory protections and thus suffers from
+same issue of return address susceptible to hijacking. shadow call stack
+uses `CONFIG_SHADOW_CALL_STACK` /w option of `CONFIG_DYNAMIC_SCS` so that
+hardware vendors hook into the flow to provide stronger guarantees. This
+patch uses `CONFIG_SHADOW_CALL_STACK` flow along with `CONFIG_DYNAMIC_SCS`
+to enable return control flow integrity on riscv kernel.
+
+[1] - https://github.com/riscv/riscv-cfi
+[2] - https://lore.kernel.org/all/20240403234054.2020347-1-debug@rivosinc.com/ 
+[3] - https://lore.kernel.org/all/20230927224757.1154247-8-samitolvanen@google.com/
 
 
-vim +2690 fs/ubifs/debug.c
-
-552ff3179d1e93a Artem Bityutskiy 2008-10-23  2676  
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2677  /**
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2678   * provide_user_output - provide output to the user reading a debugfs file.
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2679   * @val: boolean value for the answer
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2680   * @u: the buffer to store the answer at
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2681   * @count: size of the buffer
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2682   * @ppos: position in the @u output buffer
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2683   *
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2684   * This is a simple helper function which stores @val boolean value in the user
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2685   * buffer when the user reads one of UBIFS debugfs files. Returns amount of
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2686   * bytes written to @u in case of success and a negative error code in case of
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2687   * failure.
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2688   */
-d9673adf2dd3c1d Jens Axboe       2024-04-05  2689  static int provide_user_output(int val, struct kiocb *iocb, struct iov_iter *to)
-28488fc28aa3981 Artem Bityutskiy 2011-06-03 @2690  {
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2691  	char buf[3];
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2692  
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2693  	if (val)
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2694  		buf[0] = '1';
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2695  	else
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2696  		buf[0] = '0';
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2697  	buf[1] = '\n';
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2698  	buf[2] = 0x00;
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2699  
-d9673adf2dd3c1d Jens Axboe       2024-04-05  2700  	return simple_copy_to_iter(buf, &iocb->ki_pos, 2, to);
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2701  }
-28488fc28aa3981 Artem Bityutskiy 2011-06-03  2702  
-
-:::::: The code at line 2690 was first introduced by commit
-:::::: 28488fc28aa39815b78c2cbeaaf25f33fef92ce8 UBIFS: introduce debugfs helpers
-
-:::::: TO: Artem Bityutskiy <Artem.Bityutskiy@nokia.com>
-:::::: CC: Artem Bityutskiy <dedekind1@gmail.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
