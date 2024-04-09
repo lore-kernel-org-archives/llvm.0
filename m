@@ -1,95 +1,66 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9899D23A6
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 00:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC12C79CC;
+	Tue,  9 Apr 2024 01:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712624310; cv=none; b=KPEqFEQcNpC4Zy+2/UclmviMJdv5NBiGe4r25MCur40pBQUDHjr0Wi6F2pUgnTRqkJf0QX2oQqXnRaWvlwABEcNxmOhRSHAzYe80iU5eZG3Zc91JgsfeL+MDvGUGuvNHleO2vtRynIYkyHpBKsZpX2RmkAMEJLv0SauGSeJS0Eg=
+	t=1712626620; cv=none; b=pQ2cUbhvIzUVI209GVbmKPAg46jqUBQfKORs+b/4BCLU/yGmpXtLRaGQsiDppGofdOVc78CYhxPwPFahN6b/DEwUYHQirxKiEiibhyWqZtgGyi1XJ6LsDzrqW1kKe5WlIHiQKACTSUI2QcCbYAihWWZ83/R0quJ5Pv0/ckLVWTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712624310; c=relaxed/simple;
-	bh=V3FgUl+FC3/IXTQNHB8mnAyeNIvxhDluphd24WLUhWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zip/R8gfDXwyWyadf5PbdfoLzxYH7OK+9GpS0HRXxYsqpI96XcteNiL0onfB4mo7Vo8fiz98Ie5REzrDKk39HSfUhrGHwf3siRef+q/kWjUCWUZgUrFD8Q4PDYlhcKazKqmmwXf04RBotbn0FUI5/GIzS/4DyTePkAV49AmhPyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yg0oT7qs; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712626620; c=relaxed/simple;
+	bh=QiC3HcFltPSH+8IPm65nID/AeFgYSMHRNQTGacGvZOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OlPqDd7RN0xVGYqCyLckxZdSrBruv7BJqGjA5gzZYl0lhggzNEGg6kQw1XhVPIc/gehyogbbjW6BMZcEFRZABnOSTrNU//o3hjpm3bnxDMD0M2/lereEiUP0sMev4hyeV/Rog7edsb/pGGxWrtXDZvYbNP8bFYBSy4lF85yVdo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hd2hHsiK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yg0oT7qs"
-Date: Mon, 8 Apr 2024 20:58:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712624306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3p52dOP2BlWsYrHqgAKRiWPR5jPclXgPdAlCcB00rdo=;
-	b=Yg0oT7qsnYRV74HSHZV+PlfEXWOlcnFzfPrvXVczJoE3Vngi7zfHZ2/ShgxuejqSLDaMMK
-	U5FGxqvfqWMQDSdwmZz3Le+3pQE/gahuOSVkMc0TjzXwTPfS204xfiJqi1B2ETV4/d0MJb
-	jYvHh/kfoPgNCoQM/NPr2GXhQRCRdz8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Philipp Stanner <pstanner@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, Akira Yokosawa <akiyks@gmail.com>, 
-	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	elver@google.com, Mark Rutland <mark.rutland@arm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-Message-ID: <bmbsx3zfgedqo5ef6yzzvpnwx2ukhzhm33ovb6zyhq4g6vutnn@b7qlnf2pyxvj>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <ZhQVHZnU3beOhEGU@casper.infradead.org>
- <fec60bba-e414-43d1-bc3e-870f5ffe4626@paulmck-laptop>
- <ZhQjT4xdS3h-GbtC@casper.infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hd2hHsiK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4070C433F1;
+	Tue,  9 Apr 2024 01:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712626620;
+	bh=QiC3HcFltPSH+8IPm65nID/AeFgYSMHRNQTGacGvZOE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hd2hHsiKY2UEOVT1Qo8Is9fP+8NlV9vFq1pFkwShK1QSb4PyHre9do08np2q02862
+	 9enyc9/neSjA2H8IQzUSAIuI0Jg9bInVlMeeSkFbjKLFEkKfXYH3E23E8aaf0Mgc47
+	 aozIVu8MqpYNnSRp5AIC7reAeGwKCQsOGD/kFGd3AOSu/uGW82z66dTTQ8ERoCjF1O
+	 8ALULnvzgVnkSN/RrFC3K/qe6yD1Ze5FMw/FCgYVYiAX7yZ+1ldaqB21TVvl3/CHzv
+	 C6fWmup12uvWZv2IePJduWEJq1PkVuk2mlhVheHPL97CX/t0wZPBdkIeeQp4C3mDsX
+	 Uuok8x4qQIcNQ==
+Date: Mon, 8 Apr 2024 18:36:57 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: Erick Archer <erick.archer@outlook.com>, Long Li <longli@microsoft.com>,
+ Ajay Sharma <sharmaajay@microsoft.com>, "K. Y. Srinivasan"
+ <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu
+ <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Kees Cook <keescook@chromium.org>, "Gustavo A. R.
+ Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Shradha Gupta <shradhagupta@linux.microsoft.com>, Konstantin Taranov
+ <kotaranov@microsoft.com>, linux-rdma@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v3 0/3] RDMA/mana_ib: Add flex array to struct
+ mana_cfg_rx_steer_req_v2
+Message-ID: <20240408183657.7fb6cc35@kernel.org>
+In-Reply-To: <20240408110730.GE8764@unreal>
+References: <AS8PR02MB72374BD1B23728F2E3C3B1A18B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
+	<20240408110730.GE8764@unreal>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZhQjT4xdS3h-GbtC@casper.infradead.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 08, 2024 at 06:03:11PM +0100, Matthew Wilcox wrote:
-> On Mon, Apr 08, 2024 at 09:55:23AM -0700, Paul E. McKenney wrote:
-> > On Mon, Apr 08, 2024 at 05:02:37PM +0100, Matthew Wilcox wrote:
-> > > In my ideal world, the compiler would turn this into:
-> > > 
-> > > 	newfolio->flags |= folio->flags & MIGRATE_MASK;
-> > 
-> > Why not accumulate the changes in a mask, and then apply the mask the
-> > one time?  (In situations where __folio_set_foo() need not apply.)
-> 
-> But it irks me that we can't tell the compiler this is a safe
-> transformation for it to make. There are a number of places where
-> similar things happen.
+On Mon, 8 Apr 2024 14:07:30 +0300 Leon Romanovsky wrote:
+> Jakub, do you want shared branch for this series or should I take
+> everything through RDMA tree as netdev part is small enough?
 
-Same thing comes up with bignum code - you really want to be able to
-tell the compiler "you can apply x/y/z optimizations for these
-functions", e.g. replace add(mul(a, b), c) with fma(a, b, c).
-
-Compiler optimizations are just algebraic transformations, we just need
-a way to tell the compiler what the algebraic properties of our
-functions are.
+Shared branch would be good. Ed has some outstanding patches 
+to refactor the ethtool RSS API.
