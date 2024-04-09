@@ -1,134 +1,221 @@
-Received: from wfout6-smtp.messagingengine.com (wfout6-smtp.messagingengine.com [64.147.123.149])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D50EE566
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 19:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43A6158869;
+	Tue,  9 Apr 2024 21:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712691697; cv=none; b=rXQ+LbPZ6hLvT38m/hnHDKAeEuqJOoAN8xtHAKryp0tLif1teVtPZ5aNFcbXt0694zJGpZYtznbZK7t8jukzNbJ491Pzg0+7DlJjXrqI7F+jMLhKEUflLb+JYc5MF/UxRlMETDAarqinqldLLciFLZ/6Kw4LLUn1AzJaibulvRU=
+	t=1712697376; cv=none; b=QuFFZfKd6aXv7Akr6wuOthWj5IRVTr1YNObXIeguLUbNAdi2J25T3qk6yjkvullaQLmHWulMDVWCd7xKmDB9Gf+z/vcHpTu2VwNOyx5a66yNrboUV/URfX4DxNtVBxeHIotqz8b066IKXr2+V+UKsiyuwAMiiMb5SsPl4AgA5yU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712691697; c=relaxed/simple;
-	bh=mz+ivdvfJu2xvIClgoV0DYYhljRVDMHl7FLu7Sohooc=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=o/cJOL8nCFaU/ChqnERJbMKMlPb3uW1I9DkequHddzyi5KcuBtDkbBcYS7mzkLplvamu+MrKnXOAn+GW80uPHu/9e2/p/3ebfYx/KlrEz9XIQGKxPu5VOIpHlOKGUUml7D0gdDm7XT8YO11Yz51UhrGuzNrcQahZgdq1xM5GUYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=EfW+m/MH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rb1V6qJS; arc=none smtp.client-ip=64.147.123.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1712697376; c=relaxed/simple;
+	bh=a6ygL+/fUwPck1ccv8s7ruzmTryeKbeD8k2zVjh+OOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CPxSyAQByDleQfUx8hdLHdFyVRrTGV9u5wjHoPlp/K08nYuKdEDZMnAXHUjvIBrWB1QJ9M1wu/v7VaZsu8rGbha7SHKOj/q/wZqTnE2hfvEOlI/QLf9/DmPIfNQhuBTGr0nTbkkban77fm4+gH5nIwekkFHkyQ3TAgvBnma8rvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IKvGdjB+; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="EfW+m/MH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rb1V6qJS"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id C91921C00099;
-	Tue,  9 Apr 2024 15:41:33 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 09 Apr 2024 15:41:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1712691693; x=1712778093; bh=tr06fHvNZN
-	R9qLnaA0dmPX0JUluTiub3QurVgyRyKZs=; b=EfW+m/MHJuGNp7wXiicYMOS8Gv
-	We8w+3YSyD4clKI2gkcpD2WNcM0lQ9rd3MZpLFaCfYJG/zaBs1ebm5M36gKoh32W
-	m8ZJcu4hezY4WiZYb3o6qwEVNUvpBCHDrkWbW3iCekIOgfB7UgaSRvDaQpWd/eT1
-	sfO3+wrjTi8XIaSfXXbtDJSaZD9/zJurHdTgcqF04AtwZ51AOeZxhY3TcBdjVtSv
-	uSEOpvZD1vQ4QxdJGvAMTfM1h/FkXk7rUpHnLIGqN880m2sVYRMZskVlQ1eEp9/Y
-	F0hGlWQ0lZq53kXiJiT/jTm1nfOXIhA+dpOh5yIY9SOi5PQI0HH1BdEo6hpQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712691693; x=1712778093; bh=tr06fHvNZNR9qLnaA0dmPX0JUluT
-	iub3QurVgyRyKZs=; b=rb1V6qJSNgbGGdqQQU9F4tJTo59+boX82uQrHnvyee53
-	veZDR6VeYq32/e8LTKaRr7pPjNZ4sRR9J3ZeagHdbOsuwPNCJB+i5T6AD02wBzKw
-	uS1Onk40A6IKHwti7aQ859+qrruqGLO8rvf+aoTy49lKEOgc5qsup5BVTqoYXIYj
-	8XOslqgIJg1aINSMFq4Yu31JdQehXDuDlcNb2MNcspoi8dpIoB+7vBoUAAeRPOR7
-	5yBMC0YW1Obp+fRUbQr42UFD1bQls9AcbXAlSJje87gOmhNum4UaBVqJvpQW/gmn
-	4CfNu2/KcxrVy+E2y8lCyrnj5L96+LZbC+4NuK3mvQ==
-X-ME-Sender: <xms:65kVZuzRHlJqdc8gdCzRnkf8Q5ICABlpTnwB__2u8GKHgUS6o_S3vw>
-    <xme:65kVZqSFPx1AOaA9Ahf5D6FhxcO6mVb__3arlEEMbfd5rSJVuxA7OhxWfv8NLrAsp
-    rfqUMfSyy6s8tMnZXI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehgedgudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeetiefhjedvhfeffffhvddvvdffgfetvdetiefghefhheduffeljeeuuddv
-    lefgnecuffhomhgrihhnpehprghsthgvsghinhdrtghomhenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:65kVZgWXrehyrpr_yQTpXeJMDMlXSa5f93wRP0adgsABvMDmPxO8tA>
-    <xmx:65kVZkg3F9scO3itqMlmUro250T6g6FD2KHWCAUPmBb7jcXTNzrZXw>
-    <xmx:65kVZgD-MMeK6JG039kFpxTCq9eOS2IsuXw3zwG-6svuTA3ajUKJbQ>
-    <xmx:65kVZlLC9nycoVuLJytyvSLwJdZF5wGT69HIPkEJagB0yKXdiv_CXw>
-    <xmx:7ZkVZi6U0iWQBsONeDhxJFwA3KH0jkXBGDvxYYDjJukURMTilmxli-Pj>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 0176CB6008D; Tue,  9 Apr 2024 15:41:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IKvGdjB+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712697374; x=1744233374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=a6ygL+/fUwPck1ccv8s7ruzmTryeKbeD8k2zVjh+OOM=;
+  b=IKvGdjB+dtLPRHhYP321zGYpgSTHCAIdAEN2qvZdNYRoNX2vCRVXGpMx
+   AhUBZgcTBc0McyIF8Y0cB+0D8CsSHWVAaXoeK0NwrkUaQciUphEWhp76t
+   xNvAO5cWO6LrH11EU8GNsbqf999fHzO+sEdfWRRJqMOt5jbmNUICJmLcA
+   3eYYURY6J/LsI88kK/Wwav/ROAtphIXTLXHAizvzie3igqmcg99HVv9Wt
+   6s7aPe3J7MItS90D+q4KB3hRSFvCTIwjoY6SJuLbYoC5vmzb115huDVX7
+   C46J0ggrB0EWVvGZJyr758bOSQ7kzYrPqnltjiXJ6IWP1R/UfyKj/iRCg
+   A==;
+X-CSE-ConnectionGUID: vMLGTPFsQaC1wBzIW333NA==
+X-CSE-MsgGUID: LwXb4e2WQUiRo73GzQ+qrg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="7907326"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="7907326"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 14:16:06 -0700
+X-CSE-ConnectionGUID: 2twYPn6RTra1WZAfOA0uwA==
+X-CSE-MsgGUID: niUwqrdZQQy2XgiiTH0liw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="20454084"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 09 Apr 2024 14:16:02 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ruIoy-0006W0-1c;
+	Tue, 09 Apr 2024 21:16:00 +0000
+Date: Wed, 10 Apr 2024 05:15:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>, vbabka@suse.cz
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
+	david@redhat.com, hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, mgorman@techsingularity.net,
+	ying.huang@intel.com, ziy@nvidia.com
+Subject: Re: [PATCH] mm: page_alloc: consolidate free page accounting fix 3
+Message-ID: <202404100519.mVXXF6kV-lkp@intel.com>
+References: <a2a48baca69f103aa431fd201f8a06e3b95e203d.1712648441.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <f94c6943-eb93-4533-8e4d-3645ef38b990@app.fastmail.com>
-In-Reply-To: <20240409161517.GA3219862@dev-arch.thelio-3990X>
-References: <20240216202657.2493685-1-arnd@kernel.org>
- <202402161301.BBFA14EE@keescook>
- <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
- <20240409161517.GA3219862@dev-arch.thelio-3990X>
-Date: Tue, 09 Apr 2024 21:41:09 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>
-Cc: "Kees Cook" <keescook@chromium.org>, "Arnd Bergmann" <arnd@kernel.org>,
- "Steffen Klassert" <steffen.klassert@secunet.com>,
- "Herbert Xu" <herbert@gondor.apana.org.au>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Leon Romanovsky" <leon@kernel.org>, "Lin Ma" <linma@zju.edu.cn>,
- "Simon Horman" <horms@kernel.org>, "Breno Leitao" <leitao@debian.org>,
- "Tobias Brunner" <tobias@strongswan.org>, "Raed Salem" <raeds@nvidia.com>,
- Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] xfrm: work around a clang-19 fortifiy-string false-positive
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2a48baca69f103aa431fd201f8a06e3b95e203d.1712648441.git.baolin.wang@linux.alibaba.com>
 
-On Tue, Apr 9, 2024, at 18:15, Nathan Chancellor wrote:
-> On Mon, Apr 08, 2024 at 09:06:21AM +0200, Arnd Bergmann wrote:
->> >
->> > The shorter fix (in the issue) is to explicitly range-check before
->> > the loop:
->> >
->> >        if (xp->xfrm_nr > XFRM_MAX_DEPTH)
->> >                return -ENOBUFS;
->> 
->> I ran into this issue again and I see that Nathan's fix has
->> made it into mainline and backports, but it's apparently
->> not sufficient.
->> 
->> I don't see the warning with my patch from this thread, but
->> there may still be a better fix.
->
-> Is it the exact same warning? clang-19 or older?
-> What > architecture/configuration? If my change is not sufficient then maybe
-> there are two separate issues here? I have not seen this warning appear
-> in our CI since my change was applied.
+Hi Baolin,
 
-I only see it with clang-19. I've never seen it with arm32 and
-currently only see it with arm64, though I had seen it with x86-64
-as well in February before your patch.
+kernel test robot noticed the following build errors:
 
-The warning is the same as before aside from the line number,
-which which is now include/linux/fortify-string.h:462:4
-where it was line 420, but I think that is just a context
-change.
 
-I have a number of configs that reproduce this bug, see
-https://pastebin.com/tMgfD7cu for an example with current
-linux-next.
 
-     Arnd
+url:    https://github.com/intel-lab-lkp/linux/commits/UPDATE-20240409-154935/Johannes-Weiner/mm-page_alloc-remove-pcppage-migratetype-caching/20240321-020814
+base:   the 10th patch of https://lore.kernel.org/r/20240320180429.678181-11-hannes%40cmpxchg.org
+patch link:    https://lore.kernel.org/r/a2a48baca69f103aa431fd201f8a06e3b95e203d.1712648441.git.baolin.wang%40linux.alibaba.com
+patch subject: [PATCH] mm: page_alloc: consolidate free page accounting fix 3
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240410/202404100519.mVXXF6kV-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240410/202404100519.mVXXF6kV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404100519.mVXXF6kV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/page_alloc.c:808:54: error: too few arguments to function call, expected 4, have 3
+     808 |                         account_freepages(zone, -(1 << order), migratetype);
+         |                         ~~~~~~~~~~~~~~~~~                                 ^
+   mm/page_alloc.c:645:20: note: 'account_freepages' declared here
+     645 | static inline void account_freepages(struct page *page, struct zone *zone,
+         |                    ^                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     646 |                                      int nr_pages, int migratetype)
+         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +808 mm/page_alloc.c
+
+   759	
+   760	/*
+   761	 * Freeing function for a buddy system allocator.
+   762	 *
+   763	 * The concept of a buddy system is to maintain direct-mapped table
+   764	 * (containing bit values) for memory blocks of various "orders".
+   765	 * The bottom level table contains the map for the smallest allocatable
+   766	 * units of memory (here, pages), and each level above it describes
+   767	 * pairs of units from the levels below, hence, "buddies".
+   768	 * At a high level, all that happens here is marking the table entry
+   769	 * at the bottom level available, and propagating the changes upward
+   770	 * as necessary, plus some accounting needed to play nicely with other
+   771	 * parts of the VM system.
+   772	 * At each level, we keep a list of pages, which are heads of continuous
+   773	 * free pages of length of (1 << order) and marked with PageBuddy.
+   774	 * Page's order is recorded in page_private(page) field.
+   775	 * So when we are allocating or freeing one, we can derive the state of the
+   776	 * other.  That is, if we allocate a small block, and both were
+   777	 * free, the remainder of the region must be split into blocks.
+   778	 * If a block is freed, and its buddy is also free, then this
+   779	 * triggers coalescing into a block of larger size.
+   780	 *
+   781	 * -- nyc
+   782	 */
+   783	
+   784	static inline void __free_one_page(struct page *page,
+   785			unsigned long pfn,
+   786			struct zone *zone, unsigned int order,
+   787			int migratetype, fpi_t fpi_flags)
+   788	{
+   789		struct capture_control *capc = task_capc(zone);
+   790		unsigned long buddy_pfn = 0;
+   791		unsigned long combined_pfn;
+   792		struct page *buddy;
+   793		bool to_tail;
+   794	
+   795		VM_BUG_ON(!zone_is_initialized(zone));
+   796		VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
+   797	
+   798		VM_BUG_ON(migratetype == -1);
+   799		VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+   800		VM_BUG_ON_PAGE(bad_range(zone, page), page);
+   801	
+   802		account_freepages(page, zone, 1 << order, migratetype);
+   803	
+   804		while (order < MAX_PAGE_ORDER) {
+   805			int buddy_mt = migratetype;
+   806	
+   807			if (compaction_capture(capc, page, order, migratetype)) {
+ > 808				account_freepages(zone, -(1 << order), migratetype);
+   809				return;
+   810			}
+   811	
+   812			buddy = find_buddy_page_pfn(page, pfn, order, &buddy_pfn);
+   813			if (!buddy)
+   814				goto done_merging;
+   815	
+   816			if (unlikely(order >= pageblock_order)) {
+   817				/*
+   818				 * We want to prevent merge between freepages on pageblock
+   819				 * without fallbacks and normal pageblock. Without this,
+   820				 * pageblock isolation could cause incorrect freepage or CMA
+   821				 * accounting or HIGHATOMIC accounting.
+   822				 */
+   823				buddy_mt = get_pfnblock_migratetype(buddy, buddy_pfn);
+   824	
+   825				if (migratetype != buddy_mt &&
+   826				    (!migratetype_is_mergeable(migratetype) ||
+   827				     !migratetype_is_mergeable(buddy_mt)))
+   828					goto done_merging;
+   829			}
+   830	
+   831			/*
+   832			 * Our buddy is free or it is CONFIG_DEBUG_PAGEALLOC guard page,
+   833			 * merge with it and move up one order.
+   834			 */
+   835			if (page_is_guard(buddy))
+   836				clear_page_guard(zone, buddy, order);
+   837			else
+   838				__del_page_from_free_list(buddy, zone, order, buddy_mt);
+   839	
+   840			if (unlikely(buddy_mt != migratetype)) {
+   841				/*
+   842				 * Match buddy type. This ensures that an
+   843				 * expand() down the line puts the sub-blocks
+   844				 * on the right freelists.
+   845				 */
+   846				set_pageblock_migratetype(buddy, migratetype);
+   847			}
+   848	
+   849			combined_pfn = buddy_pfn & pfn;
+   850			page = page + (combined_pfn - pfn);
+   851			pfn = combined_pfn;
+   852			order++;
+   853		}
+   854	
+   855	done_merging:
+   856		set_buddy_order(page, order);
+   857	
+   858		if (fpi_flags & FPI_TO_TAIL)
+   859			to_tail = true;
+   860		else if (is_shuffle_order(order))
+   861			to_tail = shuffle_pick_tail();
+   862		else
+   863			to_tail = buddy_merge_likely(pfn, buddy_pfn, page, order);
+   864	
+   865		__add_to_free_list(page, zone, order, migratetype, to_tail);
+   866	
+   867		/* Notify page reporting subsystem of freed page */
+   868		if (!(fpi_flags & FPI_SKIP_REPORT_NOTIFY))
+   869			page_reporting_notify_free(order);
+   870	}
+   871	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
