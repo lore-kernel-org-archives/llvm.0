@@ -1,55 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC76F13D8A0;
-	Tue,  9 Apr 2024 16:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EF513E05F;
+	Tue,  9 Apr 2024 16:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712679321; cv=none; b=g3k1qFm2kFNlA2pzpEB3RiFr+Lhwej5VykU5AoJC/eaR/gZ7PsoH9zNyYGRUKZ/Ysa1PMLj4McuThBtIrlsKhdOD9XanvyAKvPVW+XHTpre08ZaMZOs+vavb7JTj3/ra3jLkSCcTXZDMowzQyP6Nz1HXGvLmv+2bQe2+0FpyQ9c=
+	t=1712679924; cv=none; b=NqBb1B9x2+Luorm34o9mWcdJKYyp2lLwXpd1esPNp45ukW5WEJNSl0BhVvEhygtSHM94dpQI6m+w2XY2ZTCPkm1QIY6hJdrHn0fG064XXAcNJrNLnI69Lx7hQ8rgTgdLz/h06txDfSGgvIOzlHvqA8amh81AIrwjmkRnWBg5gAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712679321; c=relaxed/simple;
-	bh=aQnXMHVSse19+ZZ5n5B1a+ECbXRCEMx+99YFJTJvLZ4=;
+	s=arc-20240116; t=1712679924; c=relaxed/simple;
+	bh=uJctOMuhPDkERpG5xm6MiFTXF8uTWooFYRCnRMixZwY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mceUZbe7EsObDX7LtXrBy+kAWo2ZLRA1VVWOgsXkUQXBgciE5NeLIH5nABbJ3V/dlKdvII7RC8/LkGROJrzJ/Ljr0vcpDRegUIPfamfImta0nBDcCQGkG4VA7RHI1jW61MDVqCISpfdxgeGTdhbn9NTQTYmYB4UKI/ZBE1k4LkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hk3e+T5w; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=JFuxZNHND8v8yGe9OgXPiPEyaqIofgeo/LKyysJPIR4BfCKjlKMuWg07OKzqFawtXbICKFN5SKcPtmKv3RJKMbYs9008XoOr7yWz9gnu9Q18zfQYcgZmWSryw4WUKmsMYlU1QFWGPeHx/HmwPD61mycBABZC5Oq5vyeiZIl5+VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwFBl0k9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hk3e+T5w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A2AC433F1;
-	Tue,  9 Apr 2024 16:15:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwFBl0k9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B87C433F1;
+	Tue,  9 Apr 2024 16:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712679320;
-	bh=aQnXMHVSse19+ZZ5n5B1a+ECbXRCEMx+99YFJTJvLZ4=;
+	s=k20201202; t=1712679924;
+	bh=uJctOMuhPDkERpG5xm6MiFTXF8uTWooFYRCnRMixZwY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hk3e+T5wh0K9Kad+FZuar56N0ZsAlmRAJwkkOgstUx5MMjyakXAd3tuT1BItcL+w1
-	 bWWSW5ioBrtKbw8Qt5gCwr915JRo0jesU2hD4Q26gIJ3yYa0AV4hQAr+EV7vTFFI+H
-	 GqmhWn8Pli4YMOBs5+19b+MyGAM+ppmX9cqkZWFdkL4/Di4EGtYtzYR1OO+fUJkcER
-	 0zUCzflp3O2liOCbbuG8iz2p2sCXVzMYGUtv2DckZLOGZedO2cSaqGoCfPdOCv1GiV
-	 Ea2hz+dGJvBPzTXvJjlzunxRnZEY6622if4iEHFFvcFGIcDSHJCEe57X8vR2da+OUn
-	 /okM8DtsW6K0Q==
-Date: Tue, 9 Apr 2024 09:15:17 -0700
+	b=VwFBl0k9bkLttN/WJ96r6EQuRwo4CDY4jxuBxzWIg14f93pv0PXA2elk2b9bmBxwL
+	 AQuupZp7GdMt7a/0Pf9xRg8C1sO7eLJQgeBP42fsrpd5z+OQffouhHHuv3pNfSRLtK
+	 TSZVhCFYdEhS9fkq2NNigvC9AZksrsCZFy+snBiqx9qxbjHPtmupR45ALDlRaPwmOv
+	 fT9POW2ESCxlgTN0GgTJ55bAUKZF8LzhPQqB7WZaIbrCMBZyFmd4HK6r6l10ydwUBd
+	 6iqNB46VIBbw9c+TnsneeTPW7/qfO1OxuOdAzj8PBMX4g9DLn/XajPuWl90NVAPD3R
+	 oM9M6kfXvG8XA==
+Date: Tue, 9 Apr 2024 09:25:21 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Leon Romanovsky <leon@kernel.org>, Lin Ma <linma@zju.edu.cn>,
-	Simon Horman <horms@kernel.org>, Breno Leitao <leitao@debian.org>,
-	Tobias Brunner <tobias@strongswan.org>,
-	Raed Salem <raeds@nvidia.com>, Netdev <netdev@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] xfrm: work around a clang-19 fortifiy-string
- false-positive
-Message-ID: <20240409161517.GA3219862@dev-arch.thelio-3990X>
-References: <20240216202657.2493685-1-arnd@kernel.org>
- <202402161301.BBFA14EE@keescook>
- <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/4] kbuild: turn on -Wextra by default
+Message-ID: <20240409162521.GB3219862@dev-arch.thelio-3990X>
+References: <20240404151713.3493098-1-arnd@kernel.org>
+ <20240404151713.3493098-2-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,58 +45,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
+In-Reply-To: <20240404151713.3493098-2-arnd@kernel.org>
 
-On Mon, Apr 08, 2024 at 09:06:21AM +0200, Arnd Bergmann wrote:
-> On Fri, Feb 16, 2024, at 22:19, Kees Cook wrote:
-> > On Fri, Feb 16, 2024 at 09:26:40PM +0100, Arnd Bergmann wrote:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >> 
-> >> clang-19 recently got branched from clang-18 and is not yet released.
-> >> The current version introduces exactly one new warning that I came
-> >> across in randconfig testing, in the copy_to_user_tmpl() function:
-> >> 
-> >> include/linux/fortify-string.h:420:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> >>   420 |                         __write_overflow_field(p_size_field, size);
-> >> 
-> >> I have not yet produced a minimized test case for it, but I have a
-> >> local workaround, which avoids the memset() here by replacing it with
-> >> an initializer.
-> >> 
-> >> The memset is required to avoid leaking stack data to user space
-> >> and was added in commit 1f86840f8977 ("xfrm_user: fix info leak in
-> >> copy_to_user_tmpl()"). Simply changing the initializer to set all fields
-> >> still risks leaking data in the padding between them, which the compiler
-> >> is free to do here. To work around that problem, explicit padding fields
-> >> have to get added as well.
-> >
-> > Per C11, padding bits are zero initialized if there is an initializer,
-> > so "= { }" here should be sufficient -- no need to add the struct
-> > members.
-> >
-> >> Since this is a false positive, a better fix would likely be to
-> >> fix the compiler.
-> >
-> > As Nathan has found, this appears to be a loop unrolling bug in Clang.
-> > https://github.com/ClangBuiltLinux/linux/issues/1985
-> >
-> > The shorter fix (in the issue) is to explicitly range-check before
-> > the loop:
-> >
-> >        if (xp->xfrm_nr > XFRM_MAX_DEPTH)
-> >                return -ENOBUFS;
+On Thu, Apr 04, 2024 at 05:16:54PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I ran into this issue again and I see that Nathan's fix has
-> made it into mainline and backports, but it's apparently
-> not sufficient.
+> The -Wextra option controls a number of different warnings that differ
+> slightly by compiler version. Some are useful in general, others are
+> better left at W=1 or higher. Based on earlier work, the ones that
+> should be disabled by default are left for the higher warning levels
+> already, and a lot of the useful ones have no remaining output when
+> enabled.
 > 
-> I don't see the warning with my patch from this thread, but
-> there may still be a better fix.
+> Move the -Wextra option up into the set of default-enabled warnings
+> and just rely on the individual ones getting disabled as needed.
+> 
+> The -Wunused warning was always grouped with this, so turn it on
+> by default as well, except for the -Wunused-parameter warning that
+> really has no value at all for the kernel since many interfaces
+> have intentionally unused arguments.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Is it the exact same warning? clang-19 or older? What
-architecture/configuration? If my change is not sufficient then maybe
-there are two separate issues here? I have not seen this warning appear
-in our CI since my change was applied.
+I have not done any LLVM builds with this change but if this is going to
+be in -next for a little bit, we should be able to get any regressions
+handled quickly.
 
-Cheers,
-Nathan
+I am in favor of more warnings but I am a little nervous this will make
+compiler upgrades (or tracking their mainline) even more difficult. I do
+not have a feeling for how often warnings are added to -Wall and -Wextra
+so this may be unfounded but the kernel's -Werror use complicates this
+in my opinion. I can engage with the clang folks to try and be given a
+heads up when a warning is going to be added to -Wextra, it would be
+good to have someone do something similar for GCC, so that those
+upgrades do not cause something like this change to be rolled back.
+
+It is easy enough to back out of this if necessary though, so:
+
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  scripts/Makefile.extrawarn | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index c5af566e911a..c247552c192c 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -82,12 +82,14 @@ KBUILD_CFLAGS += $(call cc-option,-Werror=designated-init)
+>  # Warn if there is an enum types mismatch
+>  KBUILD_CFLAGS += $(call cc-option,-Wenum-conversion)
+>  
+> +KBUILD_CFLAGS += -Wextra
+> +KBUILD_CFLAGS += -Wunused
+> +
+>  #
+>  # W=1 - warnings which may be relevant and do not occur too often
+>  #
+>  ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
+>  
+> -KBUILD_CFLAGS += -Wextra -Wunused -Wno-unused-parameter
+>  KBUILD_CFLAGS += $(call cc-option, -Wrestrict)
+>  KBUILD_CFLAGS += -Wmissing-format-attribute
+>  KBUILD_CFLAGS += -Wold-style-definition
+> @@ -190,6 +192,7 @@ else
+>  
+>  # The following turn off the warnings enabled by -Wextra
+>  KBUILD_CFLAGS += -Wno-sign-compare
+> +KBUILD_CFLAGS += -Wno-unused-parameter
+>  
+>  endif
+>  
+> -- 
+> 2.39.2
+> 
