@@ -1,57 +1,57 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE2A7E767
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 06:12:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CE47EEF3
+	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 06:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712643139; cv=none; b=PwoYC9C0XehndR5d+XwaqyKxY2dN+gTzh6zqIJ09rr7mC5f3qqpobN8OWJgGY5Hj3CQuzlqiFWwSO2XGtMVs+R1YGcelKdmJltMy1ps+DBHgmTTMwC21ibEvSLBBY2ybcP8jh7CbobaF/EvJZu5wyldFJhScGwdNvTk8FlVYRcA=
+	t=1712643142; cv=none; b=JVgW4LGbATJp35YXz0AcfDPfCMJNBCPt7/MasYUGdKMWY2nQfcmCWchGfO6v1tRDj7CgsIN417NG3aRiCBP6HK5fPiFqNUuy3b4g/OpjV8xx6jUP7NUfacjjPGyxmB8Jkrnl+KW7lDcydcA37bl2csIXC9XilKytmrnXWPusUK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712643139; c=relaxed/simple;
-	bh=wl3aqJRZY3tGjSAdrBhGHd2RCmOZTytU6+iHNOCOXfo=;
+	s=arc-20240116; t=1712643142; c=relaxed/simple;
+	bh=dTY/GwwtQQn+cv6gzN7QoMkNpekzSb9lOmQZaapsMdI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HKSJtqooon9vEK0mIRXb3FsbfVAp1/MVsSg5DwE3ylG7EVdpiLBd/qsQJ7EzXB9KZ2csNVxFPSLaoRUkSYTKkXp4g6xzTJMrM7+Uadrvc8hAgRilKBBOxrtQGltAe2S8a7DhWqmYxmBKv6KVBrIqYdGrf6Bq1/mTWvdh0l89yxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=umlzJ5st; arc=none smtp.client-ip=209.85.210.177
+	 MIME-Version; b=sU9NiByRgpeoSuX2mWrurTJD551pu3ktB+n6/8EYymWIQ3LUww2j2iwI8CrYSTUZ2xmYNGmWQaGFxHvlSxzSUCeYHAbpN2U2PVFheNO8qWdsGd5XlqtPDjh0k3+GQ7xhhlXKGZW/zu9KReOCePoHulFucOc3E8F0a3FZi0pFxS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=TsZC4c5X; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="umlzJ5st"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6ecf3f001c5so4296035b3a.1
-        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 23:12:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="TsZC4c5X"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6ed32341906so1389489b3a.1
+        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 23:12:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712643137; x=1713247937; darn=lists.linux.dev;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712643139; x=1713247939; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2Dd+qicqNqOTXPUN+vfB0pN9kY+D/OYBSctt1TBOZeY=;
-        b=umlzJ5stga/Sc3GqR1vIiED9FajYlhZ5iG9QSlcYrlb20SJIifRs0EdMgCDk+OnamH
-         tqj4nsCajdN4qih/RJirdXCH/4IHfC2lXiWgf+OusZKUCGdTeWqCTautnIW49gV2nTDK
-         2ZdumDw+W4v0IyyWFB+qcmi0u0g4YW86IhZ0TSpqDASqxzEcv7dGtoOwLRWzGmy1iIjE
-         PXr/gO8FkCn4fYujueP7Cq9LppAHu72uOaLPJGZ40chzOzaAB5KJ9oDyQSTNMQgSeBkv
-         5pUyxcyGQcG/nDEW+oAohVJ54anZqeyBQ22+0mmclvURu5kSYYubbAS9QFrTQXa792yb
-         s6bg==
+        bh=3uNeXG8cnKNkHDs5z+HyiJ2ZiLa62BNigh2TpBUq9FE=;
+        b=TsZC4c5XjjwqU80kAMOaHjrThXD/IiPqAkYGMQSSuwZx8uTud8ZW5+HwA5tMbd4dVa
+         IrDAUzoAC3tDAk50DSsCcQEm8c9YPEt2Vizx9qtwwd6CUIRIZyHIcmMRKNk0akXhAWmE
+         YVbo/OgxblMgzdmo/KYy61K+MyZ8ABuLs1fw/y8Iimdxf+QGF2g1PtIUY4EhWX6qCao0
+         TjLb79zNodz1yJ8nUCLt72CDdaPTwf8J/akhVAtMN59/CERnMD538DABcX+rQFk82ShD
+         ICeqxeE8NDMVk38rIKP7BA69tekcdE0lmkwwA0/HNdYXeNT72XdIDY0rAGcWvM6fQQSX
+         EvXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712643137; x=1713247937;
+        d=1e100.net; s=20230601; t=1712643139; x=1713247939;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2Dd+qicqNqOTXPUN+vfB0pN9kY+D/OYBSctt1TBOZeY=;
-        b=j9GEWkwHdMEWFLAqat9WFDPEd+te6AyRw1ON7/u7jPjlwKyusUMdlwKlqF2jsv1vRH
-         qaTS0WqXOIEMS9L7b0oHx3n2Zib8rJAfYOKTD+I6p3ApNahwvy8Hoz2nCwNUKMnxvCcC
-         hKF2pJXzN159f95BkAw1wT62bx/zQidO4Rsjg4GiFUCjH5dBPiJpOJD9vv7nA0XRofB/
-         gsoEKbpsBuqf9VwqTa/mbqVcT06y8Rpi0KJkdh3GEWGfJZcmap4rCNNiXTy3BCgzlj4X
-         t1b/Bt+TsgLTuiIXM9lfp4KRvAybOn/DglGVfnKTK2/rZg5Y+FBgXpNID5AkX8hBuR6V
-         brkA==
-X-Forwarded-Encrypted: i=1; AJvYcCXR3SgOBQKoatgujHmqT9blt1Ceh6VaKXEPVUO5dDagJLNHlRV2/JjFecU9mlqWgOIESZc2yJSxs7awt0Z3dooIWcrHkg==
-X-Gm-Message-State: AOJu0Yxr0x0c9Vy6QotMqqTtXZAo0dDe9T2Kqw5RINCQBEBnTmsoif6v
-	TCBLK9SZ7ZyPVPXY/uq54e8AER0jv1ZgwqLch5WOKMO/qNYVwVZqRDUp+KBiay4=
-X-Google-Smtp-Source: AGHT+IGcPqN2fScaedBq3ewRagrgaPjfyc3cvTGWCEiCpjBURAFRRAm2I2dL0qDPjIDkD3S3Bq2SLQ==
-X-Received: by 2002:a05:6a20:de15:b0:1a3:e2ed:62af with SMTP id kz21-20020a056a20de1500b001a3e2ed62afmr8155980pzb.34.1712643137498;
-        Mon, 08 Apr 2024 23:12:17 -0700 (PDT)
+        bh=3uNeXG8cnKNkHDs5z+HyiJ2ZiLa62BNigh2TpBUq9FE=;
+        b=vzy2jF59Smi2meZW3OrTVpRyCKS8qBhe1iIpPuDKwBSy9PBTS8VQsJumwPoqAuHKXY
+         UkLQ46WNjLGF3JdqC4dhR3IY3RFqAY6IYNVojyRFF842xnGgNLUe8yu57neF5lgqwn/U
+         uuguNuTNiAHNKDsKCiGx0FYpo9t65RQwcIs8M94tzMb4EjhlALNdqKOzkfN+ZfRidaNr
+         BiYoAg3+Hm/YmCEa2vo/5CtqNPjq9O1w3IGrD3Fz/d2W6eBG1Eqq+MkKymfsTJYyvHwT
+         AAv8hRoSqT77pXigPD+qQ77eil5Ik3aFrot4DLFA8SO+GqephDltoQplKPyY93yRJ5ay
+         GZWw==
+X-Forwarded-Encrypted: i=1; AJvYcCWRZJT72RqiLMnjEzx/0jZ7Ct88q0QEDMc2De3w1KjoABV0hHqFAAn+nu8x8oWoQ4IVJs8IjohE1EjN6wcytLSZsUqHsA==
+X-Gm-Message-State: AOJu0YxxJsfVukzwdf3TazZQ1FW+S8fjM9wluD0gSVVsGGHzWq4hO28J
+	cnE7w7LmW0cMLsoRAxepMpj5GxusM+irRCDfiqdgO52tR4+sn1V8VcOo1HT9IvA=
+X-Google-Smtp-Source: AGHT+IGfw5gGVpfgehYAjws0Ix22Cm1DN/qW9eRm+J9+S7AHD87B900xvYwa0hBVxmABGwIoWI7SCg==
+X-Received: by 2002:a05:6a20:2d28:b0:1a3:57b4:ed1c with SMTP id g40-20020a056a202d2800b001a357b4ed1cmr12934235pzl.25.1712643139603;
+        Mon, 08 Apr 2024 23:12:19 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001e3dd5972ccsm5775564plf.185.2024.04.08.23.12.15
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001e3dd5972ccsm5775564plf.185.2024.04.08.23.12.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 23:12:17 -0700 (PDT)
+        Mon, 08 Apr 2024 23:12:19 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
 To: linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -105,9 +105,9 @@ Cc: paul.walmsley@sifive.com,
 	paulmck@kernel.org,
 	broonie@kernel.org,
 	rick.p.edgecombe@intel.com
-Subject: [RFC PATCH 10/12] riscv/traps: Introduce software check exception
-Date: Mon,  8 Apr 2024 23:10:41 -0700
-Message-Id: <20240409061043.3269676-11-debug@rivosinc.com>
+Subject: [RFC PATCH 11/12] riscv: Kconfig & Makefile for riscv kernel control flow integrity
+Date: Mon,  8 Apr 2024 23:10:42 -0700
+Message-Id: <20240409061043.3269676-12-debug@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240409061043.3269676-1-debug@rivosinc.com>
 References: <20240409061043.3269676-1-debug@rivosinc.com>
@@ -119,78 +119,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-zicfiss / zicfilp introduces a new exception to priv isa `software check
-exception` with cause code = 18. This patch implements software check
-exception.
+Defines `CONFIG_RISCV_KERNEL_CFI` and selects SHADOW_CALL_STACK
+and DYNAMIC_SCS both so that zicfiss can be wired up.
 
-If sw check exception was triggered while in usermode, unknown trap is
-triggered for usermode. If sw check exception was triggered for kernel
-mode, kernel dies.
+Makefile checks if CONFIG_RISCV_KERNEL_CFI is enabled, then light
+up zicfiss and zicfilp compiler flags.
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/include/asm/asm-prototypes.h |  1 +
- arch/riscv/kernel/entry.S               |  3 +++
- arch/riscv/kernel/traps.c               | 20 ++++++++++++++++++++
- 3 files changed, 24 insertions(+)
+ arch/riscv/Kconfig  | 36 +++++++++++++++++++++++++++++++++++-
+ arch/riscv/Makefile |  6 ++++++
+ 2 files changed, 41 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
-index cd627ec289f1..5a27cefd7805 100644
---- a/arch/riscv/include/asm/asm-prototypes.h
-+++ b/arch/riscv/include/asm/asm-prototypes.h
-@@ -51,6 +51,7 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_u);
- DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
- DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
- DECLARE_DO_ERROR_INFO(do_trap_break);
-+DECLARE_DO_ERROR_INFO(do_trap_software_check);
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index be09c8836d56..5276598bb773 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -193,7 +193,7 @@ config GCC_SUPPORTS_DYNAMIC_FTRACE
+ 	depends on $(cc-option,-fpatchable-function-entry=8)
  
- asmlinkage void handle_bad_stack(struct pt_regs *regs);
- asmlinkage void do_page_fault(struct pt_regs *regs);
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index 0262b46ab064..89aeae803702 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -353,6 +353,9 @@ SYM_DATA_START_LOCAL(excp_vect_table)
- 	RISCV_PTR do_page_fault   /* load page fault */
- 	RISCV_PTR do_trap_unknown
- 	RISCV_PTR do_page_fault   /* store page fault */
-+	RISCV_PTR do_trap_unknown /* cause=16 */
-+	RISCV_PTR do_trap_unknown /* cause=17 */
-+	RISCV_PTR do_trap_software_check /* cause=18 is sw check exception */
- SYM_DATA_END_LABEL(excp_vect_table, SYM_L_LOCAL, excp_vect_table_end)
+ config HAVE_SHADOW_CALL_STACK
+-	def_bool $(cc-option,-fsanitize=shadow-call-stack)
++	def_bool $(cc-option,-fsanitize=shadow-call-stack) || $(cc-option,-mabi=lp64 -march=rv64ima_zicfilp_zicfiss)
+ 	# https://github.com/riscv-non-isa/riscv-elf-psabi-doc/commit/a484e843e6eeb51f0cb7b8819e50da6d2444d769
+ 	depends on $(ld-option,--no-relax-gp)
  
- #ifndef CONFIG_MMU
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index 05a16b1f0aee..b464355f62b2 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -354,6 +354,26 @@ void do_trap_ecall_u(struct pt_regs *regs)
+@@ -211,6 +211,30 @@ config ARCH_HAS_BROKEN_DWARF5
+ 	# https://github.com/llvm/llvm-project/commit/7ffabb61a5569444b5ac9322e22e5471cc5e4a77
+ 	depends on LD_IS_LLD && LLD_VERSION < 180000
  
- }
- 
-+/*
-+ * software check exception is defined with risc-v cfi spec. Software check
-+ * exception is raised when:-
-+ * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
-+ *    instruction or `label` value programmed in `lpad` instr doesn't
-+ *    match with value setup in `x7`. reported code in `xtval` is 2.
-+ * b) `sspopchk` instruction finds a mismatch between top of shadow stack (ssp)
-+ *    and x1/x5. reported code in `xtval` is 3.
-+ */
-+asmlinkage __visible __trap_section void do_trap_software_check(struct pt_regs *regs)
-+{
-+	if (user_mode(regs)) {
-+		/* deliver unknown trap to usermode */
-+		do_trap_unknown(regs);
-+	} else {
-+		/* sw check exception coming from kernel is a bug in kernel, die */
-+		die(regs, "Kernel BUG");
-+	}
-+}
++config RISCV_KERNEL_CFI
++	def_bool n
++	bool "hw assisted riscv kernel control flow integrity (kcfi)"
++	depends on 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicfilp_zicfiss)
++	select ARCH_SUPPORTS_SHADOW_CALL_STACK
++	select SHADOW_CALL_STACK
++	select DYNAMIC_SCS
++	help
++	  Provides CPU assisted control flow integrity to for riscv kernel.
++	  Control flow integrity is provided by implementing shadow stack for
++	  backward edge and indirect branch tracking for forward edge. Shadow
++	  stack protection is a hardware feature that detects function return
++	  address corruption. This helps mitigate ROP attacks. RISCV_KERNEL_CFI
++	  selects CONFIG_SHADOW_CALL_STACK which uses software based shadow
++	  stack but is unprotected against stray writes. Selecting RISCV_KERNEL_CFI
++	  will select CONFIG_DYNAMIC_SCS and will enable hardware assisted shadow
++	  stack protection against stray writes.
++	  Indirect branch tracking enforces that all indirect branches must land
++	  on a landing pad instruction else CPU will fault. This enables forward
++	  control flow (call/jmp) protection in kernel and restricts all indirect
++	  call or jump in kernel to a landing pad instruction which mostly likely
++	  will be start of the function.
++	  default n
 +
- #ifdef CONFIG_MMU
- asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
- {
+ config ARCH_MMAP_RND_BITS_MIN
+ 	default 18 if 64BIT
+ 	default 8
+@@ -639,6 +663,16 @@ config RISCV_ISA_ZICBOZ
+ 
+ 	   If you don't know what to do here, say Y.
+ 
++config TOOLCHAIN_HAS_ZICFILP
++	bool
++	default y
++	depends on 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicfilp)
++
++config TOOLCHAIN_HAS_ZICFISS
++	bool
++	default y
++	depends on 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicfiss)
++
+ config TOOLCHAIN_HAS_ZIHINTPAUSE
+ 	bool
+ 	default y
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 5b3115a19852..ae156e37e886 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -58,8 +58,10 @@ else ifeq ($(CONFIG_LTO_CLANG),y)
+ endif
+ 
+ ifeq ($(CONFIG_SHADOW_CALL_STACK),y)
++ifndef CONFIG_DYNAMIC_SCS
+ 	KBUILD_LDFLAGS += --no-relax-gp
+ endif
++endif
+ 
+ # ISA string setting
+ riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
+@@ -78,6 +80,10 @@ endif
+ # Check if the toolchain supports Zihintpause extension
+ riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE) := $(riscv-march-y)_zihintpause
+ 
++ifeq ($(CONFIG_RISCV_KERNEL_CFI),y)
++riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICFILP) := $(riscv-march-y)_zicfilp
++riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICFISS) := $(riscv-march-y)_zicfiss
++endif
+ # Remove F,D,V from isa string for all. Keep extensions between "fd" and "v" by
+ # matching non-v and non-multi-letter extensions out with the filter ([^v_]*)
+ KBUILD_CFLAGS += -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64ima)fd([^v_]*)v?/\1\2/')
 -- 
 2.43.2
 
