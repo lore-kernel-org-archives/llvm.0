@@ -1,57 +1,57 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D328B76413
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 06:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BDF7BAEC
+	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 06:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712643125; cv=none; b=VoHIrvpCljbxyuNeLuRc3J5YpCrA3NLr5+z9kKLbhd3d1ykCmrY1uzahbK96+dNlmo38ZVKF8Rh1qp/bvXRZdkjnjBGyYwANpOBHkXvtNf4delLiv4vRUn+PIRIAR1fviwke1CCTsKcINiQslfTeGRNufFZgeL2EYCgcsH27Zn8=
+	t=1712643127; cv=none; b=q+uItEhp24JIDl+vSDI0rsVLrExHndkcIFUazSgw72qvBbaktxPzaJ9M5InvekUsNi8f3dsYX69lzoCnBfYBGnveSTUfsTUnZw5LghBu84NoDkDY0ULXmnXV/OIpCsgVGgGB2pdmKHFHD3vAbN3jLmi9l4qp3ZO9z3Bovj/5w5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712643125; c=relaxed/simple;
-	bh=n+EOKrjOyFwBtqRSR4DqiXVEGHHNMUiIaHIFFgQ4+cs=;
+	s=arc-20240116; t=1712643127; c=relaxed/simple;
+	bh=q12GxppowlvRFXq75ryC8R5A1MalQLYi1g7lhdrusLc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J1jBJrZhgICz12COYS5IhUt/kyhDlev1SwD15yHXtT30ajtR29997SpBgaYRDuq1iltb6V0UdIKrAZEvfYmFDcDtEInR9I6kww5X90m7SRB++WwEOc78vTNZEf9zCv4/q66ki+ze1b7u2S5QLIaCxKhGWBBNZQyH7mmM3kYCdN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=YNkFZraf; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version; b=OYjUGcEDBrG4CdBOylTziRxGlQE7170F2xs1SyfQnpFEGMtiStpmi0J5e1PEX3p1wcp+1iaAB1E6+k0flLIo1Tlrt+qMrZrOHW3/LvalBUoc/wN2RWehXco+OhKoLvxO6r0bHvyJKeRasrsC00hJ0SXXUXK2POhnKLKun6CbsG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NQvxztqh; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="YNkFZraf"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e244c7cbf8so43834075ad.0
-        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 23:12:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NQvxztqh"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e3f17c6491so18602435ad.2
+        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 23:12:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712643123; x=1713247923; darn=lists.linux.dev;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712643125; x=1713247925; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=otFFuZ99fXcVhYb8FNCR9GjZzpzmViSqESgMKU4iT8s=;
-        b=YNkFZrafjqgcgXAIO1fHxZexHs/PtJZGxpOhTq4Q0Y8q1p5/5LqplNcRbWoXHUWi/H
-         DdVq3oKwXLWcKO0Q6t1fiIipQa0hXA6RGv0g3gZF04ADNMsjIp5ywZcfW3JmFxrqTBYy
-         UbIJyXOgV8gHQiGIx9GRXPOth1th1ZrnpXA38PvyW/goVtiAfLMmJSbdrm+8Cf5yfv4D
-         Wi8Ss04crimnp2TqyThcWW42ofXZ+aRyqLEGOUpCnjGEiNo7uM96qlZAda3stSvIrDmj
-         qNmaPeATWwoSQS2iq1w7pRsYO39AXPDOyEVAC2HQhnBqdknG67cMuHHd9NvhLiqCgolK
-         d35A==
+        bh=AyLlHJKX0lMHHliH3LunddmcG89n9f9Z2NkEHCH/heM=;
+        b=NQvxztqhnsyeNezV/FV2aJ6R3VOoDpcyix2Rnq/nUaxZailsaJJZB2Qq+lmBxMgYZ7
+         DCc7W3YpBPdyyJi4h8tHQt21/YaiDsQHtIfKGgFxe8JCYD4Iqd0NK8cdsnWXQQAWxVWI
+         gRYsFCsKo8oySqpdCXFG89nqf/iXZ+hYOlTnLgttkWRqsbVATYRHJAkVz6lrHetnBUd/
+         fX/OvuTeBpb7u/fQpHhI6R1xuWXRnyBtSV5hhFqX0eDwSjLeJx6x0Nc/A+RZQMkV7IMn
+         e0VljOlNSBbjfQ3kti3zx5SU2qEt5/nB1aeYgypKQRj24pKz68aTQAgP2guKpdJbXQpO
+         P4WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712643123; x=1713247923;
+        d=1e100.net; s=20230601; t=1712643125; x=1713247925;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=otFFuZ99fXcVhYb8FNCR9GjZzpzmViSqESgMKU4iT8s=;
-        b=p20qWoYbzizPfM+GkLsNsqupdXSl9Edm6pweK69MPDppEQkQpJWbxhTHuj12QvJg0Y
-         YpSkV06HVhKZEMS/aYzfkCC+aS8AbNLLm3AK7RY0r9P6a29hxnIKWrMn0xt+xhEHftSe
-         bO4X2c6xOawS028m9DCoxXP9ylz75t4DaPePkTNdRQDelOIlEyvWkKdC0oD/R/S6cXAt
-         qSLTOzKIWdQtr12CiLK1oFjhYvHY+H4//4/+Kn0P3q4VXHYlHFo1nxQ2TaFMuc9IhrpD
-         896fil+MJ853ZTK2fkEpq9wRyxTYuKA93nKtdQU6qIGWxzVBbBeFGlMr6s5N47mNAycj
-         Anfg==
-X-Forwarded-Encrypted: i=1; AJvYcCWa+PEk8pJWw8bWL/ElqwOgPxTsP/GN4K9jhoN5OqWI3mYT+7JG3dXcttqOG+bSMDsWi7z88LJnCH0ybDL9ez0bzx+e/Q==
-X-Gm-Message-State: AOJu0YyW8b7dybNlWhpWx0MgjXdI0m1xspnNhT/vG/hV++S/iek9pEs/
-	C/qrpLgemywOHx0ha9DnuWU9B7c1FgsqS6P1DulOOAVVtZSCj3+FFO0LYl0aUWw=
-X-Google-Smtp-Source: AGHT+IFyiikZL/hhay4BjKgWK3lEvoskg6V/4zLFxKB+Bpw4p7lBdSTWw7dgsT6Vm8oj6bbr2fXrdA==
-X-Received: by 2002:a17:902:c40c:b0:1e4:62e2:fc86 with SMTP id k12-20020a170902c40c00b001e462e2fc86mr3254513plk.7.1712643123055;
-        Mon, 08 Apr 2024 23:12:03 -0700 (PDT)
+        bh=AyLlHJKX0lMHHliH3LunddmcG89n9f9Z2NkEHCH/heM=;
+        b=CjB0vswajLnczvj1asRDZEZZf9R5k1WS+4ThxF77IPscu7t7nianmiBOEObgDpUlvk
+         C1ptWzJbkaqaj3OaFJoZJuADQbCX3KK3wRMtN4jC63RSYIFjKulV5u+60DP2Pv5Ec4oR
+         0k9oTDk4bJAPqybxdx0DJxk9IhRa4FYnVqIR82qUGra7juciyIltlDQ84dsbU4u/DQ86
+         /XClz9HGR/xtYZXPsRjUJjAzMT58DWScnGc3UCD3EdTSv1Se6gIJXLjKcq1ULmxlJXqq
+         2e5rjno9SSJtkypY262hk6d8Z52vSweib8epGjIbnYZQI+zj0P7FyVMhMl0H5MfvCqcq
+         4gPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXS/QqDHmjJrlCya/9OIrxx7U99teN7x9YzOxZXSVI3h91Twuh9z/8pFSOusxwOMBs3kWogWbv5QIKHr8gXljwUrykKow==
+X-Gm-Message-State: AOJu0YxSPUyJA/etthRI1noMoyP0iBbI5LXFn5ORoxJx75uqV23IXlhS
+	fFvdcBBVnMG6v3VdXXYTUJJzVvWW2oTsbQgY9dBEfdblKbnS+qI5fLicPdQIpyw=
+X-Google-Smtp-Source: AGHT+IGL8mfXw1okbZ4dRjVvOwEcO62l/RlkfUkZG7ORslpV7FBhWFsCcs2aRsgrjDOA1d+dJmo0hA==
+X-Received: by 2002:a17:902:e409:b0:1e2:992a:ae3 with SMTP id m9-20020a170902e40900b001e2992a0ae3mr9134870ple.45.1712643125208;
+        Mon, 08 Apr 2024 23:12:05 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001e3dd5972ccsm5775564plf.185.2024.04.08.23.12.01
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001e3dd5972ccsm5775564plf.185.2024.04.08.23.12.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 23:12:02 -0700 (PDT)
+        Mon, 08 Apr 2024 23:12:04 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
 To: linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -105,9 +105,9 @@ Cc: paul.walmsley@sifive.com,
 	paulmck@kernel.org,
 	broonie@kernel.org,
 	rick.p.edgecombe@intel.com
-Subject: [RFC PATCH 03/12] riscv: after saving expected landing pad (elp), clear elp state
-Date: Mon,  8 Apr 2024 23:10:34 -0700
-Message-Id: <20240409061043.3269676-4-debug@rivosinc.com>
+Subject: [RFC PATCH 04/12] riscv: update asm call sites with label setup
+Date: Mon,  8 Apr 2024 23:10:35 -0700
+Message-Id: <20240409061043.3269676-5-debug@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240409061043.3269676-1-debug@rivosinc.com>
 References: <20240409061043.3269676-1-debug@rivosinc.com>
@@ -119,28 +119,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On trap entry, save expected landing pad state and subsequently clear it
-in sstatus so that if there are traps later on in kernel and sret happens
-back to same mode, cpu will start faulting.
+All call sites written in asm which will be converted to indirect call
+form, they need to setup label register (t2/x7) with correct label.
+
+Currently kernel is enabled with consant label of 0x1 for all functions.
+Thus label is setup with 0x1 at call site. Eventually when hash over
+function signature based label is adopted, such callsites in asm needs
+to b updated as well. We need better scheme for that (some macro)
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/kernel/entry.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/kernel/entry.S   | 2 ++
+ arch/riscv/kernel/head.S    | 1 +
+ arch/riscv/lib/clear_page.S | 1 +
+ 3 files changed, 4 insertions(+)
 
 diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index 68a24cf9481a..be07355b9eff 100644
+index be07355b9eff..a35050a3e0ea 100644
 --- a/arch/riscv/kernel/entry.S
 +++ b/arch/riscv/kernel/entry.S
-@@ -56,7 +56,7 @@ SYM_CODE_START(handle_exception)
- 	 * Disable the FPU/Vector to detect illegal usage of floating point
- 	 * or vector in kernel space.
- 	 */
--	li t0, SR_SUM | SR_FS_VS
-+	li t0, SR_SUM | SR_FS_VS | SR_ELP
+@@ -219,6 +219,7 @@ SYM_CODE_START_LOCAL(handle_kernel_stack_overflow)
+ 	REG_S s4, PT_CAUSE(sp)
+ 	REG_S s5, PT_TP(sp)
+ 	move a0, sp
++	lui t2,0x1
+ 	tail handle_bad_stack
+ SYM_CODE_END(handle_kernel_stack_overflow)
+ ASM_NOKPROBE(handle_kernel_stack_overflow)
+@@ -258,6 +259,7 @@ SYM_FUNC_START(call_on_irq_stack)
+ 	load_per_cpu t0, irq_stack_ptr, t1
+ 	li	t1, IRQ_STACK_SIZE
+ 	add	sp, t0, t1
++	lui t2, 0x1
+ 	jalr	a1
  
- 	REG_L s0, TASK_TI_USER_SP(tp)
- 	csrrc s1, CSR_STATUS, t0
+ 	/* Switch back to the thread shadow call stack */
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 4236a69c35cb..6c311517c3b5 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -165,6 +165,7 @@ secondary_start_sbi:
+ #endif
+ 	call .Lsetup_trap_vector
+ 	scs_load_current
++	lui t2, 0x1
+ 	tail smp_callin
+ #endif /* CONFIG_SMP */
+ 
+diff --git a/arch/riscv/lib/clear_page.S b/arch/riscv/lib/clear_page.S
+index 20ff03f5b0f2..16e63ea91baa 100644
+--- a/arch/riscv/lib/clear_page.S
++++ b/arch/riscv/lib/clear_page.S
+@@ -69,6 +69,7 @@ SYM_FUNC_START(clear_page)
+ 	ret
+ .Lno_zicboz:
+ 	li	a1, 0
++	lui t2, 0x1
+ 	tail	__memset
+ SYM_FUNC_END(clear_page)
+ EXPORT_SYMBOL(clear_page)
 -- 
 2.43.2
 
