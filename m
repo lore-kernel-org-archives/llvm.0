@@ -1,112 +1,125 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42678433C8
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 05:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524C054FAF;
+	Tue,  9 Apr 2024 05:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712639339; cv=none; b=ourwCg+bniFDtgt3OehxNnwXO3G5RD96qDbSge6jpvu9VaggBHr6BC66NulIxBlpIdnq3xS3k3kfm5GC2aVDtqe4QZRyaUkQYWymCJaqVMbP2I5rdEijqxIs9eRATZgSgagGE7o+ryCgEpJCdcPaRaCd1bk+XmgwV7MQEUJfaLk=
+	t=1712641972; cv=none; b=KMagb/yYRoB62/OX062ClNiPeSUfUgwCFVqgWIj5lODOCokVqBbhbxaf5XGrSti4z9JPtlU+KGYMc+GlYwP99m53nKYJQS6+rY2VrFqT0cq16mzobKYwnyqgIivNbXg8xn+2Le9BQdmjtuRJkqc2d272OWsUmC7msw075rTFmUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712639339; c=relaxed/simple;
-	bh=dpumPbGeuszlGgZ/6QcYn1ZPkL3r/LCYuwQdgcIzQWU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZMpa/IZvhHcVVx53Ip6MYmrWrSMoFgefFcaKCWcQDzxQqlXZ1eLM4oh086er7/DRwFijSBXGhZW6Gy3ob9M6nQQM1v3F1elpDQ/GwP8NJndY8Kn/MXzYaULeSv/ix59VZz3GySkEFjVrPBWLqIiQOeClQ1gm2Hs8TDjdy4vk/EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i1DdHUgo; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1712641972; c=relaxed/simple;
+	bh=7wUmDr3frKZuQy64K+WPW7PE3+/3btlpAS+Kqagh5dw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cevvlyk44zsLrLXkKEI456aUw/5pC1idq609m7jYAAsDanqRHmBIssd8y+BC4HFaNZaqhZt1Fdl/UgOSYPfdBQUJYhr5H7afRhTOb1J6/kna+jPi6KJYu7iNwlHKDkA9h1awsH7CGIzYuD6kTc5HBwO0ZFdgdQ9719/7ghF9s9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YRci/fGl; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i1DdHUgo"
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-36a2667fdaeso55845ab.0
-        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 22:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712639337; x=1713244137; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LEL615D0PAohpi/ZueAVrRaSlrpex4n/Ywu5HFL+HUA=;
-        b=i1DdHUgo5PVzMiNjTEc/Z2SzHKTnWakfiEcBZhWpLhj1TY0Ahu1FMZZpuc4rh6g0zS
-         9oC8V+PAeeywD8y6e/1TKGQ1f3d1wCsS0XHXzUJmIuVmRaURcp9XUO/gYSBqGQbPx67Y
-         aBA7YYcV6Ge2m+2G32EgmDQ04H8p/1b17yLwy6V5P3NWBpGPC8dyi71kDBZbxXgbxv0L
-         fAzhZmRQ3SLVLUjFy7C0FLGCDfx9ZAliRIA8QmRH7UCRO2TUdNtrzKRBnYF1TlPvFfAR
-         2G19Dtc7dbd3grJApuo1gfTS0rQICJhRiJhkmKN1c3bQ/LwsFMtXaeu4y8+su3Mv3wR9
-         9gAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712639337; x=1713244137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LEL615D0PAohpi/ZueAVrRaSlrpex4n/Ywu5HFL+HUA=;
-        b=Cv8TEYWtW1Xn06E5UbPGPYxP1ctmlTHLborizy/HKnatJNqKKwXTNYPvdE+0+TTZ37
-         7+GgnY7erh94sLDXn+JDhEFzLwf+2Pew8js3fWyl+EaPkZCoV+yTDXJJ2Ifhn3DId4Ip
-         3J+2RficR/KlepGN9M2WtXNPTOwUrdRfB2P1K+f63uBeLBjg0tgnNQUcY7M6i1evyGh9
-         213L6gwDhOWYKqhwKpe6iDMAEr0rGxwL255muSb05AASh+OCmmABjOjbXVRKeRyVAGRB
-         c3Q6yriw7EtF8JqBbD+IuzM3zUey+OLKMU0x2m1OQek4iWSXRO44pNWWTWiCbuBzlggT
-         5bRg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4yNoWSHs5n24q5OQOpt+sJz6XcVlCx0xFEshCM+Hb/RfclhWd/dd8FqZc5nzsutuYUuSxarJB5u/r8HAobViNFj3MZQ==
-X-Gm-Message-State: AOJu0YzdR4mERFoyiSmuCzm+VYtVd3Izz941T5gtUE/XqrZ1NEleOvgB
-	PiGlaAu2/flXjWBU3xKSVIFSrQKOuZepCti4mGnKlNfgVkSv7TF4zNnPUXm0aLDDWwDCKn2Jlzm
-	5ih1GrypMoI931xf93EzlP1xs+0lIth8c3pSnHzXwFp+Zo/Bu/w==
-X-Google-Smtp-Source: AGHT+IH7efisCsDzy68bbh6f3D2qyn7Zhr5zd6BXbQlYQ1t6gloGyZQkP7PdJR/HI8I6TtSndLyjiGhNNjGm2w1rVPE=
-X-Received: by 2002:a05:6e02:1d86:b0:36a:1278:5c5 with SMTP id
- h6-20020a056e021d8600b0036a127805c5mr177596ila.26.1712639337111; Mon, 08 Apr
- 2024 22:08:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YRci/fGl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712641970; x=1744177970;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7wUmDr3frKZuQy64K+WPW7PE3+/3btlpAS+Kqagh5dw=;
+  b=YRci/fGlrvHX1YccpJoEWg1l1gzcC5nU+OCRPsH1TGsFgYAE0LzhTr/x
+   zjxcBiDoVS42ITpXuzpHHqYVStDTRjEqN8vcPqTZpJEoDFJ+FrFd+HwbV
+   UDzv2b2uBHdljgv2vnrQdIATmbltggEcZMZUve+PUvwtUyIQJigaF+wo0
+   PuF6nK+tLtn7+nijGtpZpLKqHDxZ/BOgFxgvRYjek7eq5CDHr6w8tEBwf
+   19VGMUMRCjyAswOTn1MYsaHnmzhdgM+Qh1+D3bsq8JjPe1xNB7/8XY6/b
+   KhDZol6QNlTP6E0qX7xOHD0TNzQe1bxwtqlkdTH0isMRvoiSwtp8h5ihD
+   Q==;
+X-CSE-ConnectionGUID: RxWBX3jvTOyCYh9/6XI2Kw==
+X-CSE-MsgGUID: /j6XeOEXRrK2O7DUQUVWhQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7814924"
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="7814924"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 22:52:50 -0700
+X-CSE-ConnectionGUID: FH7NPd1dSwqS6kuFU1TDug==
+X-CSE-MsgGUID: ZtPxBkcbRLiqPk4EkLsAkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
+   d="scan'208";a="20031577"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 08 Apr 2024 22:52:48 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ru4PW-0005n4-0e;
+	Tue, 09 Apr 2024 05:52:46 +0000
+Date: Tue, 9 Apr 2024 13:52:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:rw_iter 161/222] fs/ubifs/debug.c:2690: warning:
+ Function parameter or struct member 'iocb' not described in
+ 'provide_user_output'
+Message-ID: <202404091311.xLdIyOn0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202404082207.HCEdQhUO-lkp@intel.com> <20240408230632.5ml3amaztr5soyfs@skbuf>
-In-Reply-To: <20240408230632.5ml3amaztr5soyfs@skbuf>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 9 Apr 2024 07:08:42 +0200
-Message-ID: <CANn89iJ8EcqiF8YCPhDxcp5t79J1RLzTh6GHHgAxbTXbC+etRA@mail.gmail.com>
-Subject: Re: [net-next:main 26/50] net/ipv4/tcp.c:4673:2: error: call to
- '__compiletime_assert_1030' declared with 'error' attribute: BUILD_BUG_ON
- failed: offsetof(struct tcp_sock, __cacheline_group_end__tcp_sock_write_txrx)
- - offsetofend(struct tcp_sock, __cacheline_group_begin__tcp_sock_...
-To: Vladimir Oltean <olteanv@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Apr 9, 2024 at 1:06=E2=80=AFAM Vladimir Oltean <olteanv@gmail.com> =
-wrote:
->
-> Hi Eric,
->
-> On Mon, Apr 08, 2024 at 10:49:35PM +0800, kernel test robot wrote:
-> > >> net/ipv4/tcp.c:4673:2: error: call to '__compiletime_assert_1030' de=
-clared with 'error' attribute: BUILD_BUG_ON failed: offsetof(struct tcp_soc=
-k, __cacheline_group_end__tcp_sock_write_txrx) - offsetofend(struct tcp_soc=
-k, __cacheline_group_begin__tcp_sock_write_txrx) > 92
-> > > 4673                CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_=
-sock_write_txrx, 92);
->
-> I can confirm the same compile time assertion with an armv7 gcc 7.3.1 com=
-piler.
-> If I revert commit 86dad9aebd0d ("Revert "tcp: more struct tcp_sock adjus=
-tments")
-> it goes away.
->
-> Before the change (actually with it reverted), I can see that the
-> tcp_sock_write_txrx cacheline group begins at offset 1821 with a 3 byte
-> hole, and ends at offset 1897 (it has 76 bytes).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
+head:   8d5e62882d13747268ce489ec43048c8eff31b7a
+commit: d9673adf2dd3c1d1e73990a1f38ea80c09167efb [161/222] ubifs: convert to read/write iterators
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240409/202404091311.xLdIyOn0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240409/202404091311.xLdIyOn0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404091311.xLdIyOn0-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ubifs/debug.c:2690: warning: Function parameter or struct member 'iocb' not described in 'provide_user_output'
+>> fs/ubifs/debug.c:2690: warning: Function parameter or struct member 'to' not described in 'provide_user_output'
+>> fs/ubifs/debug.c:2690: warning: Excess function parameter 'u' description in 'provide_user_output'
+>> fs/ubifs/debug.c:2690: warning: Excess function parameter 'count' description in 'provide_user_output'
+>> fs/ubifs/debug.c:2690: warning: Excess function parameter 'ppos' description in 'provide_user_output'
 
 
-...
+vim +2690 fs/ubifs/debug.c
 
-> It gained 20 bytes in the change. Most notably, it gained a 4 byte hole
-> between pred_flags and tcp_clock_cache.
->
-> I haven't followed the development of these optimizations, and I tried a
-> few trivial things, some of which didn't work, and some of which did.
-> Of those that worked, the most notable one was letting the 2 u64 fields,
-> tcp_clock_cache and tcp_mstamp, be the first members of the group, and
-> moving the __be32 pred_flags right below them.
->
-> Obviously my level of confidence in the fix is quite low, so it would be
-> great if you could cast an expert eye onto this.
+552ff3179d1e93a Artem Bityutskiy 2008-10-23  2676  
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2677  /**
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2678   * provide_user_output - provide output to the user reading a debugfs file.
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2679   * @val: boolean value for the answer
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2680   * @u: the buffer to store the answer at
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2681   * @count: size of the buffer
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2682   * @ppos: position in the @u output buffer
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2683   *
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2684   * This is a simple helper function which stores @val boolean value in the user
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2685   * buffer when the user reads one of UBIFS debugfs files. Returns amount of
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2686   * bytes written to @u in case of success and a negative error code in case of
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2687   * failure.
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2688   */
+d9673adf2dd3c1d Jens Axboe       2024-04-05  2689  static int provide_user_output(int val, struct kiocb *iocb, struct iov_iter *to)
+28488fc28aa3981 Artem Bityutskiy 2011-06-03 @2690  {
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2691  	char buf[3];
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2692  
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2693  	if (val)
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2694  		buf[0] = '1';
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2695  	else
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2696  		buf[0] = '0';
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2697  	buf[1] = '\n';
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2698  	buf[2] = 0x00;
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2699  
+d9673adf2dd3c1d Jens Axboe       2024-04-05  2700  	return simple_copy_to_iter(buf, &iocb->ki_pos, 2, to);
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2701  }
+28488fc28aa3981 Artem Bityutskiy 2011-06-03  2702  
 
-I am on it, do not worry, thanks !
+:::::: The code at line 2690 was first introduced by commit
+:::::: 28488fc28aa39815b78c2cbeaaf25f33fef92ce8 UBIFS: introduce debugfs helpers
+
+:::::: TO: Artem Bityutskiy <Artem.Bityutskiy@nokia.com>
+:::::: CC: Artem Bityutskiy <dedekind1@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
