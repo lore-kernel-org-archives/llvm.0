@@ -1,89 +1,56 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F14158DCB
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 23:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFD61EB5C;
+	Tue,  9 Apr 2024 23:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712706403; cv=none; b=q+NVJvtf3lizQgmw7jdPV5Soa0I7ULf8jjNJKHKCkg50OS43pz95QBolPu6XMHZw8k3LkSFbn4vJRVx4mKy48qrPw/i99mrKdRJlWRb1shru6D7/lHJ6b4vDvNKvQ1GtWmX1rKHcfPlasOSVYoji6zupYRPZHaa72qnily11NWQ=
+	t=1712706804; cv=none; b=BUI8wFflu+RpEGnZcZ1/Z/ESLOqynMYNBZYy67uKTOx6uzwq3mmQlUTzAHo7Te4DBJTTU9efxNmNBBsL2NpeqI9YU4kHSIBnf83pUNjuimwzWQjRtrxSF2712QTkT9hZEzLhnY5azrPj3d3M2haIj6B3CXJqFhs8MYA5ZlbJB/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712706403; c=relaxed/simple;
-	bh=jNSBzWXhZJZfc+eIqIw5Gr2uSmaIhh7uL5umKj2kPfg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AQDBC1IS4NUG51XMQf9e39agMGQ2qFmjvZHwbIjeiZuiKMR7Y/hZQuAsH7jezma4oWbFOmCWC5EagC7pFM4vxD4dS6VW7YHaivN68pvMxCqhbc3lndvWNwNUB/qZWQ7YXbsrUqtmv6C2NOsPxfSUTcfV7/DCV+5/luxXbJDxBso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BFnh+HxD; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1712706804; c=relaxed/simple;
+	bh=d2JlSSzg7fvVL/MPAAgkaaEpRGccUssPU5uIiZerKmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LZ5ID47LyO2+UeJJc47pubhFUyZo5sRCEvsUob8daRZhq6dndtxHGce7Z9ii9jSd3ErCkQnc8CU/91gViQLUVtgEvwhPTGbxu8m+JbYEs/Q2oRnlnCyE9JYr/G2ba5QwG8AwYhIxL57CvmOROcjP7p1TU5o+SqQhFAUABvPglN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=naEikCrZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BFnh+HxD"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e424bd30fbso19466135ad.0
-        for <llvm@lists.linux.dev>; Tue, 09 Apr 2024 16:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712706401; x=1713311201; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iAaMW4DkptdB8vkfU6X0XRhtKwrtwp59dGPucd4k3xk=;
-        b=BFnh+HxDv5fArWveoMU9FLWGuv8YQHgMvhZ5ve60og0/XAZRPqNIy1VFK6FCfpE7Rd
-         0dXfhD5FATqxET50jtRxc2h5Rw/dlR/R5uuA64yzHK+99Sq8o2CxfS23UkhUv8N3Qs5n
-         dx8eC+YYLUe7/ucEbhKhKnjHLYG1fwd6jPo8E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712706401; x=1713311201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iAaMW4DkptdB8vkfU6X0XRhtKwrtwp59dGPucd4k3xk=;
-        b=BLaQs3uYBOMIidvjtfsSh5E2z2kRyo5bOZEVAY/4lFpeRqdZmJaNDsv9+zc/dchEif
-         mW+WP0QZm806Ph/0uVlKIPqtHoV7hwWOerQbYw0temIm54eSojTHyU8ifNDtGH/m3sSL
-         0BfCwFMxWn72Kcok9pFSADXx+PX+KVV5HbNp9dNPOku50GlOTgIX3i+KBzEqe3xehKn2
-         qlT1xPUvInTp/sx9GAuokwc0PYGNWmbrbBO+EMJj3X0r2nBtBWOHfqgj+EGeP7RvD40t
-         +4nviqJFJ7j8tSSyKwN0Q8e48dfMjOskpCoiqFwyDzegTCNuGeC+YMOn+0HgeypwC8tN
-         wNsA==
-X-Forwarded-Encrypted: i=1; AJvYcCVvqkTeH2lgzcgYWsCw20XCKhIZjzKhQK5l0CZyHvI7V9NuBRZiqhcemVqOj4gO4ehTU/0TwepKPAC3nPmEWITO3JDMoA==
-X-Gm-Message-State: AOJu0YyVvdZCe60Fr/ZUSG+jDe8os0VYWNunCJ8cmEKJEgE+Nrl8obhn
-	Q289CzV1OGtorlkcUpPNDG0cNvGBHEjHJMUIT6J1SUQCGw4V1t0FpymPPo/uWw==
-X-Google-Smtp-Source: AGHT+IGINmKk+cI6DD2WQ7SjjT99R0HHKYxf0CC6JwcygaTUpcCJ8LVus266jgna/DTBfAx9a5m9Ow==
-X-Received: by 2002:a17:902:eb8f:b0:1e3:cf18:7344 with SMTP id q15-20020a170902eb8f00b001e3cf187344mr1829767plg.11.1712706401500;
-        Tue, 09 Apr 2024 16:46:41 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170902eb4d00b001e2086fddecsm9497419pli.139.2024.04.09.16.46.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Apr 2024 16:46:41 -0700 (PDT)
-Date: Tue, 9 Apr 2024 16:46:40 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Jakub Kicinski <kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naEikCrZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE3CC433F1;
+	Tue,  9 Apr 2024 23:53:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712706803;
+	bh=d2JlSSzg7fvVL/MPAAgkaaEpRGccUssPU5uIiZerKmA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=naEikCrZJLwa2e4s14QNHzroCD+4520uCwiRMpO6eAiSrKimNqKens3UgVB+/sXex
+	 Pr6sdUHBsmsAOrR5iA5OIzI/fdkBHWCuKuvDD+TT1MXG46AwXClumgPZV0X0zaWPx5
+	 ic0bVc2HoEZCtc1/RIawGKXqIEfuHsqRljF/fRctfTqVDPPcpe/8zgA60jYI47NmJZ
+	 oaTnbbpz1plp5Dwk51AtKGZ1up7S8Ve6cCsAaCDJS8VEsTAHCUKWzZ0v0CBZVXIAU9
+	 3CZC2oTWoQ9jiDbM8+VNAfZjJzTe3YxHYcnStMgMBybJ9r2BicDA1iZK758KG4ff3w
+	 jjxwwYvHH1m2Q==
+Date: Tue, 9 Apr 2024 16:53:22 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Kees Cook <keescook@chromium.org>
 Cc: Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
+ Nathan Chancellor <nathan@kernel.org>, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] selftests: kselftest_harness: Print empty string, not
  empty fmt on PASS/FAIL
-Message-ID: <202404091644.9CFF82A@keescook>
+Message-ID: <20240409165322.60f1bcbc@kernel.org>
+In-Reply-To: <202404091644.9CFF82A@keescook>
 References: <20240409224256.1581292-1-seanjc@google.com>
- <20240409160920.3bfe3eeb@kernel.org>
+	<20240409160920.3bfe3eeb@kernel.org>
+	<202404091644.9CFF82A@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240409160920.3bfe3eeb@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 09, 2024 at 04:09:20PM -0700, Jakub Kicinski wrote:
-> On Tue,  9 Apr 2024 15:42:56 -0700 Sean Christopherson wrote:
-> > -	ksft_test_result_code(t->exit_code, test_name,
-> > -			      diagnostic ? "%s" : "", diagnostic);
-> > +	ksft_test_result_code(t->exit_code, test_name, "%s", diagnostic);
-> 
-> Have you tested that to make sure it doesn't change the output?
-> 
-> .. warning: ^^ leading question ;)
+On Tue, 9 Apr 2024 16:46:40 -0700 Kees Cook wrote:
+> 	ksft_test_result_code(t->exit_code, test_name, "%s",
+> 			      diagnostic ?: "");
 
-Probably should be just this, without changing the NULL init?
-
-	ksft_test_result_code(t->exit_code, test_name, "%s",
-			      diagnostic ?: "");
-
--- 
-Kees Cook
+Could work, but we need to change the callee to extract the first arg
+after format from va_arg, which I wasn't sufficiently familiar with :(
