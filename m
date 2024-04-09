@@ -1,56 +1,69 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A522F6A012
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 08:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FF67CF17;
+	Tue,  9 Apr 2024 08:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712649858; cv=none; b=sYIfXAYzfBVXg0+sfGtZoJAh1Xkh/wdgbof+YflJYn8Z+rPExzHH8klrAPpYDC7tQWIEiBw/yr+X9pD/FNPhhrflsrL+g4FmcU3VXlKG7ZH+SEpj0txREkeYc/pw/5pUQHHHNTvVOicr6huthGfXzY7k8yBTKB9uHVRWcpXTD5Y=
+	t=1712650382; cv=none; b=b8t9nctnd5Ua6Vck6mHGsBbq18c9UAQPqNxQ9/365fW0A9BUdXtvGCzdzXonJDaA3ec9tbG45EUGl0wtBNeF/pJdrz39iRxnIG1jiuoaVWZ8OmHF+LBFUn4iI/RvAG2CoD+q5OX8HYJ6ZwqsWOLsMkxCS374Fz387nPJCKRokmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712649858; c=relaxed/simple;
-	bh=dPNjXSxx+IC/vdRfz2vvre/Y9jJcxa2jArSRSB+2cG0=;
+	s=arc-20240116; t=1712650382; c=relaxed/simple;
+	bh=jFMEUXcHKpY2CByBls3VxrCp6NDpZv4FstKTHJezeYE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=of5cKGUIblVjFXtcUi80bqI+XGrOcmdHms/TxlxLTTKZmFBQjC/0JazQpuuPwChtliWPC8F899LlRbACFnQIh+cI261+0efpZr5CRj/7qJDnoAu2iZHHPmrKTSzAFlRz3vMz7qAH0kSCNwUDtniwAnUAeMwHIqdUHfJhXqq2qak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ljqvtNNG; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	 Content-Type:Content-Disposition:In-Reply-To; b=bO8NaMn/5GC7sOi2JJoCK4mzgc/nwgrQwzUmWpJDVobgOokH1BN/oPGPiosUSlWhHfHdMzOm49b0hpDgxJwc6AJsT8e6OV7zptmLHtMqN0pyTIqsxyjHG4cHDOvNMuPjRKy9iTBhvEdJlMtdaSvb2fkEoCH0aWg0LD4pfVGT8Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XsW/77te; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ljqvtNNG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=wi0woxGcbdQfbFrTCMc/ZSMz8i6dIciPlcb7kODLNOg=; b=ljqvtNNGKZsoqym7AEu4+1sve3
-	cYIZSpPyXbBKFz4ZG77YmvuEJz7ZvN/rGSkwYh4tUXFLgUNJRddc3RszdO62n1s8FWDYo3C9rXyRy
-	QG7xoRs4GslF7REquu6aIHlYhv7jpCc3tr5PXywVvgdh3Xi7W8k48/BWEWJjxCG2UdfqrpLh7Ccii
-	E1wCvICtBFJ2E4UqbxaUdArM0T9DKRL847w5CjXdTuNPPgzia1ddG1DFnZPgdq/yRvwrofiG/QkZc
-	Gzi+Akipuzm/GmxfRGmCvIMDnrmTWZRjqGwSCTN6KY3QLRaJR5o6d4POp7bzBPdMggMZ4RpP2Uirz
-	BgzMu6ng==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57886)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1ru6Se-00063h-1j;
-	Tue, 09 Apr 2024 09:04:08 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1ru6Sd-0004un-CB; Tue, 09 Apr 2024 09:04:07 +0100
-Date: Tue, 9 Apr 2024 09:04:07 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Eric Dumazet <edumazet@google.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next 2/3] net: dsa: allow DSA switch drivers to
- provide their own phylink mac ops
-Message-ID: <ZhT2d0bivo/yRfDs@shell.armlinux.org.uk>
-References: <E1rtn25-0065p0-2C@rmk-PC.armlinux.org.uk>
- <202404091147.pdi8izJ3-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XsW/77te"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712650379; x=1744186379;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jFMEUXcHKpY2CByBls3VxrCp6NDpZv4FstKTHJezeYE=;
+  b=XsW/77tez4K8q8LiVjasJhUxS6Oh1+EIoW5sHLEFgngHYqEhCzY++HO2
+   H8zNmZJ28iu+nC4VhOcfp4VI8Aykz92lWrW1E2FEu0LWz9a/ZRVsAE0MD
+   h90UZkM2Zz+9E8rnq64kpswuGwmr8rmiL1woKwwIKxI+2czHMuPOUysDT
+   5A7IOuirel0a2TktbH0j+D0ZTppbEpVrHKybkqbpkO40AP3i2A6lNM0Xf
+   V/I8YBzQTfD6+8D191O/JTRaBphAFMnlfWsNEPNGKz6WRJFdC2I/Bxdjc
+   WDTNesGEQ+nBWpiGtrAlNEEcLY+gTya0T+U2bbBcwiwYllY9Qyi6B1Unq
+   A==;
+X-CSE-ConnectionGUID: Uh7sM2nWScyvaHdwPEoBLQ==
+X-CSE-MsgGUID: hd09FJWqRm6TDzrSN7Qxsw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11794490"
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="11794490"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 01:12:59 -0700
+X-CSE-ConnectionGUID: 9hBXjKEUT462toanihZRYw==
+X-CSE-MsgGUID: CBkeg03FRrWz4l8Ovm+pwg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="20041447"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 09 Apr 2024 01:12:54 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ru6b6-0005sv-1j;
+	Tue, 09 Apr 2024 08:12:52 +0000
+Date: Tue, 9 Apr 2024 16:12:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Arend van Spriel <arend.vanspriel@broadcom.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH v2 1/2] gpiolib: Fix a mess with the GPIO_* flags
+Message-ID: <202404091557.rf8NTu9B-lkp@intel.com>
+References: <20240408231727.396452-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,21 +72,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202404091147.pdi8izJ3-lkp@intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20240408231727.396452-2-andriy.shevchenko@linux.intel.com>
 
-On Tue, Apr 09, 2024 at 11:15:01AM +0800, kernel test robot wrote:
-> All warnings (new ones prefixed by >>):
-> 
-> >> net/dsa/port.c:1981:6: warning: unused variable 'port' [-Wunused-variable]
->            int port = dp->index;
->                ^
->    1 warning generated.
+Hi Andy,
 
-Sigh... I don't get this warning when I build it. I guess that's because
-unused variable warnings are normally turned off. I'll respin dropping
-this.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on brgl/gpio/for-next]
+[also build test WARNING on wireless-next/main wireless/main linus/master v6.9-rc3 next-20240409]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpiolib-Fix-a-mess-with-the-GPIO_-flags/20240409-071911
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20240408231727.396452-2-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v2 1/2] gpiolib: Fix a mess with the GPIO_* flags
+config: i386-buildonly-randconfig-002-20240409 (https://download.01.org/0day-ci/archive/20240409/202404091557.rf8NTu9B-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240409/202404091557.rf8NTu9B-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404091557.rf8NTu9B-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/x86/platform/geode/net5501.c:25:
+   In file included from arch/x86/include/asm/geode.h:12:
+>> include/linux/cs5535.h:149:9: warning: 'GPIO_PULL_UP' macro redefined [-Wmacro-redefined]
+     149 | #define GPIO_PULL_UP            0x18
+         |         ^
+   include/dt-bindings/gpio/gpio.h:37:9: note: previous definition is here
+      37 | #define GPIO_PULL_UP 16
+         |         ^
+   In file included from arch/x86/platform/geode/net5501.c:25:
+   In file included from arch/x86/include/asm/geode.h:12:
+>> include/linux/cs5535.h:150:9: warning: 'GPIO_PULL_DOWN' macro redefined [-Wmacro-redefined]
+     150 | #define GPIO_PULL_DOWN          0x1C
+         |         ^
+   include/dt-bindings/gpio/gpio.h:40:9: note: previous definition is here
+      40 | #define GPIO_PULL_DOWN 32
+         |         ^
+   2 warnings generated.
+
+
+vim +/GPIO_PULL_UP +149 include/linux/cs5535.h
+
+f060f27007b393 Andres Salomon 2009-12-14  141  
+5f0a96b044d8ed Andres Salomon 2009-12-14  142  /* GPIOs */
+5f0a96b044d8ed Andres Salomon 2009-12-14  143  #define GPIO_OUTPUT_VAL		0x00
+5f0a96b044d8ed Andres Salomon 2009-12-14  144  #define GPIO_OUTPUT_ENABLE	0x04
+5f0a96b044d8ed Andres Salomon 2009-12-14  145  #define GPIO_OUTPUT_OPEN_DRAIN	0x08
+5f0a96b044d8ed Andres Salomon 2009-12-14  146  #define GPIO_OUTPUT_INVERT	0x0C
+5f0a96b044d8ed Andres Salomon 2009-12-14  147  #define GPIO_OUTPUT_AUX1	0x10
+5f0a96b044d8ed Andres Salomon 2009-12-14  148  #define GPIO_OUTPUT_AUX2	0x14
+5f0a96b044d8ed Andres Salomon 2009-12-14 @149  #define GPIO_PULL_UP		0x18
+5f0a96b044d8ed Andres Salomon 2009-12-14 @150  #define GPIO_PULL_DOWN		0x1C
+5f0a96b044d8ed Andres Salomon 2009-12-14  151  #define GPIO_INPUT_ENABLE	0x20
+5f0a96b044d8ed Andres Salomon 2009-12-14  152  #define GPIO_INPUT_INVERT	0x24
+5f0a96b044d8ed Andres Salomon 2009-12-14  153  #define GPIO_INPUT_FILTER	0x28
+5f0a96b044d8ed Andres Salomon 2009-12-14  154  #define GPIO_INPUT_EVENT_COUNT	0x2C
+5f0a96b044d8ed Andres Salomon 2009-12-14  155  #define GPIO_READ_BACK		0x30
+5f0a96b044d8ed Andres Salomon 2009-12-14  156  #define GPIO_INPUT_AUX1		0x34
+5f0a96b044d8ed Andres Salomon 2009-12-14  157  #define GPIO_EVENTS_ENABLE	0x38
+5f0a96b044d8ed Andres Salomon 2009-12-14  158  #define GPIO_LOCK_ENABLE	0x3C
+5f0a96b044d8ed Andres Salomon 2009-12-14  159  #define GPIO_POSITIVE_EDGE_EN	0x40
+5f0a96b044d8ed Andres Salomon 2009-12-14  160  #define GPIO_NEGATIVE_EDGE_EN	0x44
+5f0a96b044d8ed Andres Salomon 2009-12-14  161  #define GPIO_POSITIVE_EDGE_STS	0x48
+5f0a96b044d8ed Andres Salomon 2009-12-14  162  #define GPIO_NEGATIVE_EDGE_STS	0x4C
+5f0a96b044d8ed Andres Salomon 2009-12-14  163  
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
