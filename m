@@ -1,57 +1,57 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BDF7BAEC
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 06:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419417C09E
+	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 06:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712643127; cv=none; b=q+uItEhp24JIDl+vSDI0rsVLrExHndkcIFUazSgw72qvBbaktxPzaJ9M5InvekUsNi8f3dsYX69lzoCnBfYBGnveSTUfsTUnZw5LghBu84NoDkDY0ULXmnXV/OIpCsgVGgGB2pdmKHFHD3vAbN3jLmi9l4qp3ZO9z3Bovj/5w5g=
+	t=1712643129; cv=none; b=FaWSh48MjiLmHDI8EYRdjAhzfnb+cTiq/yWUELCpNNHKTeJH2f6ZqsBaqrshSFHDGTP1QHMXwcZf0FtzcdoZkfY/alPidbaGIFEDEtfhfYnww/4M14YImV2HQpPy4HpoNhzjPQDl/f5rX9UZNyxdA+2WUdD0KcdQxSfrETrbwfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712643127; c=relaxed/simple;
-	bh=q12GxppowlvRFXq75ryC8R5A1MalQLYi1g7lhdrusLc=;
+	s=arc-20240116; t=1712643129; c=relaxed/simple;
+	bh=pgcQ0O7mGTa5hgvj/DeLVv7bktEQUMChSoIMdpY1ek4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OYjUGcEDBrG4CdBOylTziRxGlQE7170F2xs1SyfQnpFEGMtiStpmi0J5e1PEX3p1wcp+1iaAB1E6+k0flLIo1Tlrt+qMrZrOHW3/LvalBUoc/wN2RWehXco+OhKoLvxO6r0bHvyJKeRasrsC00hJ0SXXUXK2POhnKLKun6CbsG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NQvxztqh; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=ccP6RCKKyqIKWy53S6HcH+I0twxWh1dM0u+7f/uc5Ku117e/kvVDMujMJYyOZRrGiKvTMi/8b9fwyKEC59Kp5Sqgiq9DDQMwx6pYFw/hAVPtHOEU0uwf7aiTVYaaVmkKRLkWXcqgeGnXqqybLL3vvWDO8/+fRyc/sl9KtXnMC/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=qpg8UQmc; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NQvxztqh"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e3f17c6491so18602435ad.2
-        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 23:12:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="qpg8UQmc"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e244c7cbf8so43834625ad.0
+        for <llvm@lists.linux.dev>; Mon, 08 Apr 2024 23:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712643125; x=1713247925; darn=lists.linux.dev;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712643127; x=1713247927; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AyLlHJKX0lMHHliH3LunddmcG89n9f9Z2NkEHCH/heM=;
-        b=NQvxztqhnsyeNezV/FV2aJ6R3VOoDpcyix2Rnq/nUaxZailsaJJZB2Qq+lmBxMgYZ7
-         DCc7W3YpBPdyyJi4h8tHQt21/YaiDsQHtIfKGgFxe8JCYD4Iqd0NK8cdsnWXQQAWxVWI
-         gRYsFCsKo8oySqpdCXFG89nqf/iXZ+hYOlTnLgttkWRqsbVATYRHJAkVz6lrHetnBUd/
-         fX/OvuTeBpb7u/fQpHhI6R1xuWXRnyBtSV5hhFqX0eDwSjLeJx6x0Nc/A+RZQMkV7IMn
-         e0VljOlNSBbjfQ3kti3zx5SU2qEt5/nB1aeYgypKQRj24pKz68aTQAgP2guKpdJbXQpO
-         P4WA==
+        bh=sjtTgkYtpD1hbyyXFcP/z2jvjrG+SfaQnLJvf/Uiuoc=;
+        b=qpg8UQmcpRixU/fhWzO4r5E5vIG+EfzHA7BNi29XecBz29Q0rgjzAEQ/e3LTGINhoQ
+         IWiXYoP/1l6rhqBre4tHnPzPEZOHQ72+0BLklYESTrusfEB6KI2b7dquuDxPos3QcsOD
+         PFfPD8pfnHGHOAgSGSO7u6sxlOmSr5RZKI8qu2irj+RKJULK3sKcEmvlWtPmHKRNJQN+
+         qQsyoNsX+95jgW2WZC8Hk3jPXYkKcr668W0Syro5v0OpQNs7E2olnR7HmdoAlTY/qcVn
+         W47VWckwdgCEWAwAkN/Er4HHv+UlQ7qKIMkEVj0MOzKvYgtsoUEtpOYB+B36Q7wxfI7D
+         u34w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712643125; x=1713247925;
+        d=1e100.net; s=20230601; t=1712643127; x=1713247927;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AyLlHJKX0lMHHliH3LunddmcG89n9f9Z2NkEHCH/heM=;
-        b=CjB0vswajLnczvj1asRDZEZZf9R5k1WS+4ThxF77IPscu7t7nianmiBOEObgDpUlvk
-         C1ptWzJbkaqaj3OaFJoZJuADQbCX3KK3wRMtN4jC63RSYIFjKulV5u+60DP2Pv5Ec4oR
-         0k9oTDk4bJAPqybxdx0DJxk9IhRa4FYnVqIR82qUGra7juciyIltlDQ84dsbU4u/DQ86
-         /XClz9HGR/xtYZXPsRjUJjAzMT58DWScnGc3UCD3EdTSv1Se6gIJXLjKcq1ULmxlJXqq
-         2e5rjno9SSJtkypY262hk6d8Z52vSweib8epGjIbnYZQI+zj0P7FyVMhMl0H5MfvCqcq
-         4gPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXS/QqDHmjJrlCya/9OIrxx7U99teN7x9YzOxZXSVI3h91Twuh9z/8pFSOusxwOMBs3kWogWbv5QIKHr8gXljwUrykKow==
-X-Gm-Message-State: AOJu0YxSPUyJA/etthRI1noMoyP0iBbI5LXFn5ORoxJx75uqV23IXlhS
-	fFvdcBBVnMG6v3VdXXYTUJJzVvWW2oTsbQgY9dBEfdblKbnS+qI5fLicPdQIpyw=
-X-Google-Smtp-Source: AGHT+IGL8mfXw1okbZ4dRjVvOwEcO62l/RlkfUkZG7ORslpV7FBhWFsCcs2aRsgrjDOA1d+dJmo0hA==
-X-Received: by 2002:a17:902:e409:b0:1e2:992a:ae3 with SMTP id m9-20020a170902e40900b001e2992a0ae3mr9134870ple.45.1712643125208;
-        Mon, 08 Apr 2024 23:12:05 -0700 (PDT)
+        bh=sjtTgkYtpD1hbyyXFcP/z2jvjrG+SfaQnLJvf/Uiuoc=;
+        b=S50Zdo9IPP5/1ei8CK5X8/9dNpTi+yKIga4yeixTIUafGVKW8YO0uBWrAkf7JQ3E0K
+         6XWbCLVBUdxQsPS9R9YJ0p5m6pXILNUQCTcuJu48VNY6iJDfT5w+OMlsbmXOarbfjSVq
+         SzZFpMuZm8NOUh+c1TrxEUrOcnkqEt4cu56bhcFREDMLlETAOb7DcANmsO4QPlqOCgV+
+         5yGiz6zOas/ejBTUC3vPJv9qXHkgi9oA6aTew8bCGLMiu/j/9cnn+BxQs02DZ+I8z0aL
+         cKWLYJuEkBrdZh/fE+yWeCpANQhTnukIF9lUCogQBTwUXenPeGfh3D9U4ojJ1imZFe8G
+         gxNw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfE+bn5BfiPcLxt6bTDWxjBWh6yLwepmDmW7k53OQsfjLsO0JKOhC+rfXrVIfZqBrTqfPmeBOHdo2/qrCmWx0dYARz3g==
+X-Gm-Message-State: AOJu0YzaTi16IwXfDRHvdTqH60SC9olwuu19qY0aEILr7GI1pySwID9d
+	ggr3NC/M4egySv0oN12M15w87uPDdJ8lidn3GB4V33jrEiPlwX3ZmuDFYzM9W9k=
+X-Google-Smtp-Source: AGHT+IE/zrYmmP+jRMmProhU7OrEkAtvl+lojCdG3T5dMALi5Qk/NiBMoaQSS094JtfcnVR7MBKxhA==
+X-Received: by 2002:a17:902:e945:b0:1e4:363b:1d42 with SMTP id b5-20020a170902e94500b001e4363b1d42mr4916637pll.3.1712643127547;
+        Mon, 08 Apr 2024 23:12:07 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001e3dd5972ccsm5775564plf.185.2024.04.08.23.12.03
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001e3dd5972ccsm5775564plf.185.2024.04.08.23.12.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 23:12:04 -0700 (PDT)
+        Mon, 08 Apr 2024 23:12:06 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
 To: linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -105,9 +105,9 @@ Cc: paul.walmsley@sifive.com,
 	paulmck@kernel.org,
 	broonie@kernel.org,
 	rick.p.edgecombe@intel.com
-Subject: [RFC PATCH 04/12] riscv: update asm call sites with label setup
-Date: Mon,  8 Apr 2024 23:10:35 -0700
-Message-Id: <20240409061043.3269676-5-debug@rivosinc.com>
+Subject: [RFC PATCH 05/12] riscv: fix certain indirect jumps for kernel cfi
+Date: Mon,  8 Apr 2024 23:10:36 -0700
+Message-Id: <20240409061043.3269676-6-debug@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240409061043.3269676-1-debug@rivosinc.com>
 References: <20240409061043.3269676-1-debug@rivosinc.com>
@@ -119,65 +119,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-All call sites written in asm which will be converted to indirect call
-form, they need to setup label register (t2/x7) with correct label.
-
-Currently kernel is enabled with consant label of 0x1 for all functions.
-Thus label is setup with 0x1 at call site. Eventually when hash over
-function signature based label is adopted, such callsites in asm needs
-to b updated as well. We need better scheme for that (some macro)
+Handwritten `__memset` asm routine performs certain static jumps within
+function and uses `a5` to do that. This would require a landing pad
+instruction at the target. Since its static jump and no memory load is
+involved, use `t2` instead which is exempt from requiring a landing pad.
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/kernel/entry.S   | 2 ++
- arch/riscv/kernel/head.S    | 1 +
- arch/riscv/lib/clear_page.S | 1 +
- 3 files changed, 4 insertions(+)
+ arch/riscv/lib/memset.S | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index be07355b9eff..a35050a3e0ea 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -219,6 +219,7 @@ SYM_CODE_START_LOCAL(handle_kernel_stack_overflow)
- 	REG_S s4, PT_CAUSE(sp)
- 	REG_S s5, PT_TP(sp)
- 	move a0, sp
-+	lui t2,0x1
- 	tail handle_bad_stack
- SYM_CODE_END(handle_kernel_stack_overflow)
- ASM_NOKPROBE(handle_kernel_stack_overflow)
-@@ -258,6 +259,7 @@ SYM_FUNC_START(call_on_irq_stack)
- 	load_per_cpu t0, irq_stack_ptr, t1
- 	li	t1, IRQ_STACK_SIZE
- 	add	sp, t0, t1
-+	lui t2, 0x1
- 	jalr	a1
+diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
+index 35f358e70bdb..e129ebf66986 100644
+--- a/arch/riscv/lib/memset.S
++++ b/arch/riscv/lib/memset.S
+@@ -56,12 +56,12 @@ SYM_FUNC_START(__memset)
  
- 	/* Switch back to the thread shadow call stack */
-diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-index 4236a69c35cb..6c311517c3b5 100644
---- a/arch/riscv/kernel/head.S
-+++ b/arch/riscv/kernel/head.S
-@@ -165,6 +165,7 @@ secondary_start_sbi:
+ 	/* Jump into loop body */
+ 	/* Assumes 32-bit instruction lengths */
+-	la a5, 3f
++	la t2, 3f
+ #ifdef CONFIG_64BIT
+ 	srli a4, a4, 1
  #endif
- 	call .Lsetup_trap_vector
- 	scs_load_current
-+	lui t2, 0x1
- 	tail smp_callin
- #endif /* CONFIG_SMP */
- 
-diff --git a/arch/riscv/lib/clear_page.S b/arch/riscv/lib/clear_page.S
-index 20ff03f5b0f2..16e63ea91baa 100644
---- a/arch/riscv/lib/clear_page.S
-+++ b/arch/riscv/lib/clear_page.S
-@@ -69,6 +69,7 @@ SYM_FUNC_START(clear_page)
- 	ret
- .Lno_zicboz:
- 	li	a1, 0
-+	lui t2, 0x1
- 	tail	__memset
- SYM_FUNC_END(clear_page)
- EXPORT_SYMBOL(clear_page)
+-	add a5, a5, a4
+-	jr a5
++	add t2, t2, a4
++	jr t2
+ 3:
+ 	REG_S a1,        0(t0)
+ 	REG_S a1,    SZREG(t0)
 -- 
 2.43.2
 
