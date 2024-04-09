@@ -1,155 +1,115 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755BE13AD37
-	for <llvm@lists.linux.dev>; Tue,  9 Apr 2024 15:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC76F13D8A0;
+	Tue,  9 Apr 2024 16:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712677048; cv=none; b=oK797FzlIyR2rNlj3r52qmYPtdXm/9p7UjzV5Y34E8j7t/TEKFTN5OX4llZCCZjvP4+pqsvEdJGaqUC4VdHjoMPWSB7DpyKX6ArMCfgyPKzi1c+eUO26qG56W+4I4Ep267CWudPmJKMwIcrB4K/3IBqiDEF11Nnt44C1DXnTn4U=
+	t=1712679321; cv=none; b=g3k1qFm2kFNlA2pzpEB3RiFr+Lhwej5VykU5AoJC/eaR/gZ7PsoH9zNyYGRUKZ/Ysa1PMLj4McuThBtIrlsKhdOD9XanvyAKvPVW+XHTpre08ZaMZOs+vavb7JTj3/ra3jLkSCcTXZDMowzQyP6Nz1HXGvLmv+2bQe2+0FpyQ9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712677048; c=relaxed/simple;
-	bh=Aqminu13BA5RfzICIWKV4tMcJYaOt32oW1/5Ll0JWxk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rrzaF4gIyCRBrNRF2LX5dkBollPPAaOdOfvb0NswQRyHhvLT2TVSVzR3hrMKQ6UkSXzxnv9nru+HHsrXnNIY0qBF1l9Qiy2a/doPWxQ3ErxzSLbt7geHcVu0VGSgCIefDbSkOZ31ntfUUilHtscfdBH9NTph1Av56E1o+U/jc20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xHqjtRV6; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1712679321; c=relaxed/simple;
+	bh=aQnXMHVSse19+ZZ5n5B1a+ECbXRCEMx+99YFJTJvLZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mceUZbe7EsObDX7LtXrBy+kAWo2ZLRA1VVWOgsXkUQXBgciE5NeLIH5nABbJ3V/dlKdvII7RC8/LkGROJrzJ/Ljr0vcpDRegUIPfamfImta0nBDcCQGkG4VA7RHI1jW61MDVqCISpfdxgeGTdhbn9NTQTYmYB4UKI/ZBE1k4LkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hk3e+T5w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xHqjtRV6"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-34641b7c49aso344005f8f.2
-        for <llvm@lists.linux.dev>; Tue, 09 Apr 2024 08:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712677045; x=1713281845; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O3wHvYb+xH1G7TOL58ej8375ZusY8e96JWmR5Aw1tE4=;
-        b=xHqjtRV6sHrzQ5p9CMDXPKcdPXIIZhx2tf8zVTDoBgPdM6hjLZpq8kNvUsgrxqJ0oO
-         kWChGZ6GmMCLey0EpnayDs5AwZ2yPXhrWK4PSsOV/AEuy1seslx/NqIerREwZdnl3P8K
-         EoWFcjCAISkRwv/kJ+t/ZZvlhYNQ5c0osvOzW3QvFGhcJZrHy0t8ZPJAGeu9GqoLgS9n
-         7wna2kYWgri4+9CkKXSNVtX8fGxltA2wkv7y717yvEYI8Gjn1NW4BZrBW1XpGx93VjdU
-         WtI0jGG4OaLGHCylHjS9Ps8RcfNXqK856PjAcq7FSh+dRqhh9pGo/Dtsq4mHt33JnKDk
-         k2QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712677045; x=1713281845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O3wHvYb+xH1G7TOL58ej8375ZusY8e96JWmR5Aw1tE4=;
-        b=it+NWJ3psrzG1nfXKajvc45Num2rdDk0e7VjEYs6yTiFtgIGRyTvE1vxBM5oskb6sq
-         SZYS9nvnRfiWb8V2zz/GJWElWhrnul8MXS9IKqBG0Ul5jzZUmnb5H2ELKOKgYxBepzfZ
-         MwkJ/xdhVVHniylQafBaVK2AQ1avCfMU1qvmA9KXOtepBkKidDjcCckslQVpcXkv+khQ
-         1JJC6GZMMqwzwy0p8JbLqT/gCCn+z5ruXIWIOJlMvH7eFsolxWCVTnRGbFsgEX7XVd7m
-         WzggP1tV/r+SnXriGAVNtOjOK+Rly8FUh3WWL0gKG/vzXFAMpyYPA5tuiXokjb3skxEe
-         K8ZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWW13OkL49pTIRNkrRWcIlehYmEDraNhzanbQpecMlmR+KZ30ThhRS2iIZ6HAW4TiTw+oEiJktTbNFg2lYDbATtRD5cyQ==
-X-Gm-Message-State: AOJu0YyQBWU+TI48EyFk5OUWP8dXEo5YsY1d010EfnWopr6UXUUgPjfU
-	u/9RWMfhwuG8y3uO6EzmiSLzitlb5mxL9cX9mSMYqF6U2LbTk01biT+cJAbwc7yrc7cFS1H4Jf8
-	91sndDXL5mJVSp9/WMtA5kYXUvGtvGm5Vd3r8
-X-Google-Smtp-Source: AGHT+IEATApo3o8XfWViXxHA3nBf59pbXIp4qO5W17tsNOoEx8kff/kEukGenu4hXqklT5aG6y50jY3+j+NZ6v/SAgs=
-X-Received: by 2002:adf:ec50:0:b0:33e:8aba:cd0a with SMTP id
- w16-20020adfec50000000b0033e8abacd0amr75524wrn.9.1712677044575; Tue, 09 Apr
- 2024 08:37:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hk3e+T5w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A2AC433F1;
+	Tue,  9 Apr 2024 16:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712679320;
+	bh=aQnXMHVSse19+ZZ5n5B1a+ECbXRCEMx+99YFJTJvLZ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hk3e+T5wh0K9Kad+FZuar56N0ZsAlmRAJwkkOgstUx5MMjyakXAd3tuT1BItcL+w1
+	 bWWSW5ioBrtKbw8Qt5gCwr915JRo0jesU2hD4Q26gIJ3yYa0AV4hQAr+EV7vTFFI+H
+	 GqmhWn8Pli4YMOBs5+19b+MyGAM+ppmX9cqkZWFdkL4/Di4EGtYtzYR1OO+fUJkcER
+	 0zUCzflp3O2liOCbbuG8iz2p2sCXVzMYGUtv2DckZLOGZedO2cSaqGoCfPdOCv1GiV
+	 Ea2hz+dGJvBPzTXvJjlzunxRnZEY6622if4iEHFFvcFGIcDSHJCEe57X8vR2da+OUn
+	 /okM8DtsW6K0Q==
+Date: Tue, 9 Apr 2024 09:15:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Leon Romanovsky <leon@kernel.org>, Lin Ma <linma@zju.edu.cn>,
+	Simon Horman <horms@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Tobias Brunner <tobias@strongswan.org>,
+	Raed Salem <raeds@nvidia.com>, Netdev <netdev@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [RFC] xfrm: work around a clang-19 fortifiy-string
+ false-positive
+Message-ID: <20240409161517.GA3219862@dev-arch.thelio-3990X>
+References: <20240216202657.2493685-1-arnd@kernel.org>
+ <202402161301.BBFA14EE@keescook>
+ <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAHk-=whHWjKK1TOMT1XvxFj8e-_uctJnXPxM=SyWHmW63B_EDw@mail.gmail.com>
- <20240408084934.GC21904@noisy.programming.kicks-ass.net> <CAHk-=witEwVvJ6Wh4xdP-sUkLQSwcRTtg_NSuGMMgvYmcs3teQ@mail.gmail.com>
- <CAHk-=wg=Wdct5f9W2-tvwfRefv3xmw1-9Ko+RG+6=xjLu4ndFg@mail.gmail.com> <20240409104540.GB21779@noisy.programming.kicks-ass.net>
-In-Reply-To: <20240409104540.GB21779@noisy.programming.kicks-ass.net>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 9 Apr 2024 08:37:10 -0700
-Message-ID: <CAKwvOdktV5vnKwET1PhM8x0urK+LUhAC=uc28RXHUsvq-7_vbA@mail.gmail.com>
-Subject: Re: More annoying code generation by clang
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Ingo Molnar <mingo@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Peter Anvin <hpa@zytor.com>, 
-	"the arch/x86 maintainers" <x86@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
 
-On Tue, Apr 9, 2024 at 3:45=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
-> wrote:
->
-> On Mon, Apr 08, 2024 at 12:42:31PM -0700, Linus Torvalds wrote:
->
-> > Actually, one of the github issues pages has more of an explanation
-> > (and yes, it's tied to impedance issues between the inline asm syntax
-> > and how clang works):
+On Mon, Apr 08, 2024 at 09:06:21AM +0200, Arnd Bergmann wrote:
+> On Fri, Feb 16, 2024, at 22:19, Kees Cook wrote:
+> > On Fri, Feb 16, 2024 at 09:26:40PM +0100, Arnd Bergmann wrote:
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >> 
+> >> clang-19 recently got branched from clang-18 and is not yet released.
+> >> The current version introduces exactly one new warning that I came
+> >> across in randconfig testing, in the copy_to_user_tmpl() function:
+> >> 
+> >> include/linux/fortify-string.h:420:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> >>   420 |                         __write_overflow_field(p_size_field, size);
+> >> 
+> >> I have not yet produced a minimized test case for it, but I have a
+> >> local workaround, which avoids the memset() here by replacing it with
+> >> an initializer.
+> >> 
+> >> The memset is required to avoid leaking stack data to user space
+> >> and was added in commit 1f86840f8977 ("xfrm_user: fix info leak in
+> >> copy_to_user_tmpl()"). Simply changing the initializer to set all fields
+> >> still risks leaking data in the padding between them, which the compiler
+> >> is free to do here. To work around that problem, explicit padding fields
+> >> have to get added as well.
 > >
-> >       https://github.com/llvm/llvm-project/issues/20571#issuecomment-98=
-0933442
+> > Per C11, padding bits are zero initialized if there is an initializer,
+> > so "= { }" here should be sufficient -- no need to add the struct
+> > members.
 > >
->
-> So that same issue seems to suggest Nick is actually working on this and
-> got stuff merged. Nick, what is the status of your efforts and should we
-> indeed do the below as Linus suggests or should he upgrade his compiler?
-
-Sorry, I'm no longer working on the issue.  I should mark that as such.
-
-The feature got hung up on rewriting one of the register allocation
-frameworks in llvm.
-https://github.com/llvm/llvm-project/pull/74344
-
-I have a new set of responsibilities at work so I probably wont be
-working on that issue any time soon.
-
->
-> > diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-cl=
-ang.h
-> > index 49feac0162a5..0dee061fd7a6 100644
-> > --- a/include/linux/compiler-clang.h
-> > +++ b/include/linux/compiler-clang.h
-> > @@ -118,3 +118,15 @@
+> >> Since this is a false positive, a better fix would likely be to
+> >> fix the compiler.
 > >
-> >  #define __diag_ignore_all(option, comment) \
-> >       __diag_clang(13, ignore, option)
-> > +
-> > +/*
-> > + * clang has horrible behavior with "g" or "rm" constraints for asm
-> > + * inputs, turning them into something worse than "m". Avoid using
-> > + * constraints with multiple possible uses (but "ir" seems to be ok):
-> > + *
-> > + *   https://github.com/llvm/llvm-project/issues/20571
-> > + *   https://github.com/llvm/llvm-project/issues/30873
-> > + *   https://github.com/llvm/llvm-project/issues/34837
-
-20571 is the cannonical bug for this.
-
-> > + */
-> > +#define ASM_INPUT_G "ir"
-> > +#define ASM_INPUT_RM "r"
-> > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_ty=
-pes.h
-> > index 2abaa3a825a9..e53acd310545 100644
-> > --- a/include/linux/compiler_types.h
-> > +++ b/include/linux/compiler_types.h
-> > @@ -380,6 +380,15 @@ struct ftrace_likely_data {
-> >  #define asm_goto_output(x...) asm volatile goto(x)
-> >  #endif
+> > As Nathan has found, this appears to be a loop unrolling bug in Clang.
+> > https://github.com/ClangBuiltLinux/linux/issues/1985
 > >
-> > +/*
-> > + * Clang has trouble with constraints with multiple
-> > + * alternative behaviors (mainly "g" and "rm").
-> > + */
-> > +#ifndef ASM_INPUT_G
-> > +  #define ASM_INPUT_G "g"
-> > +  #define ASM_INPUT_RM "rm"
-> > +#endif
-> > +
-> >  #ifdef CONFIG_CC_HAS_ASM_INLINE
-> >  #define asm_inline asm __inline
-> >  #else
-> > --
-> > 2.44.0.330.g4d18c88175
+> > The shorter fix (in the issue) is to explicitly range-check before
+> > the loop:
 > >
->
+> >        if (xp->xfrm_nr > XFRM_MAX_DEPTH)
+> >                return -ENOBUFS;
+> 
+> I ran into this issue again and I see that Nathan's fix has
+> made it into mainline and backports, but it's apparently
+> not sufficient.
+> 
+> I don't see the warning with my patch from this thread, but
+> there may still be a better fix.
 
+Is it the exact same warning? clang-19 or older? What
+architecture/configuration? If my change is not sufficient then maybe
+there are two separate issues here? I have not seen this warning appear
+in our CI since my change was applied.
 
---=20
-Thanks,
-~Nick Desaulniers
+Cheers,
+Nathan
