@@ -1,60 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E037D171BA;
-	Wed, 10 Apr 2024 05:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E9728363;
+	Wed, 10 Apr 2024 06:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712727699; cv=none; b=tWLbIlGVulE0U2tZsBb0DnZqBcQ8GfZ+uW1fa7L84JymGwMNKqyXTEEDRDuqXT88/S0ejd8RYfHB6eZIbWAom4VjL2OOYwuKjOpVHVoUv4E49J27iSxXUOfyR4gz1e402ubo0NXzVsdKH7xj3w2XEyNrl4vsg014SyAua8Jw5wM=
+	t=1712730232; cv=none; b=ZTXonCsMg4AixBL9Ir8W6lreLUO4Y0A1Zb88IC69+U3XbUHFcS5Jen5Qe6pnw8oqWTMgZE5jDCDdHLGnow3l4UyRI7oOEbtW9bH0Di2wlX36SMhQBvbaujDKxEItwT2+SF0z8gSxlIo1ZOV2tN1HhB420YsxX0XWSYm+oK36vHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712727699; c=relaxed/simple;
-	bh=pMSRmRBfDuHuy4muvLZqPq8Sv099ZO5wjzDO2yjjTms=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fIfhXEU4BxA8VdZMa9TbXLa07OiaSbYd9G1kZ8/6P0aBAP6Ll+PCD41MEuU9YMsAaXHNa8ocmD22nFQNhnR8hShLR02g+beGMqP7Ni6vFfY4kcjshM5qbG/wj177TnwNtJJZnXFf1mOvaTZpWy3vyRj5okl871hKBuAcXwW/FuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aZrlONGM; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1712730232; c=relaxed/simple;
+	bh=CrqbmIXc8hcwOYEXXRkcAJ1s6Ei9utAjsjiuOZBrYVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2AKNTvqKsIAFmolfXgY7Lw8bZyW74W2cvbkv+rfYLpMj7kK9s9S0aHM1+hOxK41FDWZlQK5EmEXV7xvAH5TVCdVKSunrAyBuDTWcz5FJZcf6EeyhwB6qUmq6gEnxPP7J64lKZtdCt6U5WVGPQFeMfH0UxVduxG4arLxgWT6iRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Idi/7YMc; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aZrlONGM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Idi/7YMc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712727697; x=1744263697;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pMSRmRBfDuHuy4muvLZqPq8Sv099ZO5wjzDO2yjjTms=;
-  b=aZrlONGMkZlLM9BLgw7/NWuUxo85bozY+0Yx4Cs0La0WY3O8r58IQn15
-   bsygkLZNSf0p2aZo3eUVftdw0Z4JkZNCpGkLVlU5c0hNG9/l4hxzPDQtQ
-   BFUwPtKKSsab6talhH7JlrrhXIBzmYF/VBubqix/vzuGJRVafZFOaOT9P
-   IJHBTM6BgLzTsOVqlrJGyUv3iOA1tT6Fa3wsUOWTRL/E1SN73nwpSbWo0
-   P69vwXqqgdOVJLx0TF/1ET9wpHlkIdmbhHpIcZgpZpao2T+0QFLYr5wM3
-   LhNp/99vuDyN+umj9OuCwoMgAP+cq+1eP2nT+9Eu3TlG6iLAglR6xFft9
-   A==;
-X-CSE-ConnectionGUID: IPMWTXaLSVqDRc5F8J3iLA==
-X-CSE-MsgGUID: 1gUcsKKYQzGVSHPzuHvkTg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11845676"
+  t=1712730230; x=1744266230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CrqbmIXc8hcwOYEXXRkcAJ1s6Ei9utAjsjiuOZBrYVk=;
+  b=Idi/7YMc7UJfqKZ5iOQv2SLVHhwtmsvOb0H3JBKpRw12JLFuF1e8NaWs
+   APXDzX5RUOs392l+amPq3I3HFjkaztEw/BclNjl7365UTI9xi4FEJ9w/1
+   e0KCEbBEbj/nVbftQKMlhACRaFHAf6P5Vr2ae9b13lojvrOG6COuRjHv0
+   2ZwsxsiwuvArqkNnN5dGMEtUDd5ZCxWCbYhBl1phJklVZ7qUEt3I5XMm6
+   xG5CwCZJ0HrigaDknVfReaIwXLLLBlgspEA95A5URGluTpz135kxbVL0O
+   iC4KZ+DiLmOfqtEdbqi1GJ4i6W477d4bnv0j/ZW4L6rWFmdWsac6JeoKB
+   Q==;
+X-CSE-ConnectionGUID: vl0ESfkcQlivtonCvtrcqw==
+X-CSE-MsgGUID: PZqxkt4uQNS60s95mptNyA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11864697"
 X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="11845676"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 22:41:36 -0700
-X-CSE-ConnectionGUID: E9p33JQDS+yPMOHfLF1Aug==
-X-CSE-MsgGUID: xErRgW6cRf+rBO5kynUOyA==
+   d="scan'208";a="11864697"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 23:23:50 -0700
+X-CSE-ConnectionGUID: HDtH6VViTZiBlgivADDNxQ==
+X-CSE-MsgGUID: f4IleIp6Qzu/2LKbUep5XQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="20513631"
+   d="scan'208";a="24932405"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 09 Apr 2024 22:41:35 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 09 Apr 2024 23:23:43 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ruQiC-0006xe-2p;
-	Wed, 10 Apr 2024 05:41:32 +0000
-Date: Wed, 10 Apr 2024 13:41:02 +0800
+	id 1ruRMz-0006zq-2C;
+	Wed, 10 Apr 2024 06:23:41 +0000
+Date: Wed, 10 Apr 2024 14:23:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: wefu@redhat.com, jszhang@kernel.org, guoren@kernel.org,
+	conor@kernel.org, robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, jic23@kernel.org,
+	lars@metafoo.de, andriy.shevchenko@linux.intel.com,
+	nuno.sa@analog.com, marcelo.schmitt@analog.com,
+	bigunclemax@gmail.com, marius.cristea@microchip.com,
+	fr0st61te@gmail.com, okan.sahin@analog.com,
+	marcus.folkesson@gmail.com, schnelle@linux.ibm.com, lee@kernel.org,
+	mike.looijmans@topic.nl
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org
-Subject: [linusw-gpio:b4/descriptors-wireless 2/2]
- drivers/gpio/gpio-ath79.c:240:32: error: use of undeclared identifier
- 'pdev'; did you mean 'dev'?
-Message-ID: <202404101357.XagbwkcW-lkp@intel.com>
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+	Wei Fu <wefu@redhat.com>
+Subject: Re: [PATCH 2/3] riscv: dts: thead: Add XuanTie TH1520 ADC device node
+Message-ID: <202404101407.KnrqaGoC-lkp@intel.com>
+References: <20240329200241.4122000-3-wefu@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,133 +74,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240329200241.4122000-3-wefu@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git b4/descriptors-wireless
-head:   3ca0eec7ecfa5c404f41e9b1e7690ec64de77b53
-commit: 3ca0eec7ecfa5c404f41e9b1e7690ec64de77b53 [2/2] wifi: ath9k: Obtain system GPIOS from descriptors
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240410/202404101357.XagbwkcW-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240410/202404101357.XagbwkcW-lkp@intel.com/reproduce)
+Hi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on robh/for-next linus/master v6.9-rc3 next-20240409]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/wefu-redhat-com/drivers-iio-adc-Add-XuanTie-TH1520-ADC-driver/20240330-041029
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20240329200241.4122000-3-wefu%40redhat.com
+patch subject: [PATCH 2/3] riscv: dts: thead: Add XuanTie TH1520 ADC device node
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20240410/202404101407.KnrqaGoC-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 546dc2245ffc4cccd0b05b58b7a5955e355a3b27)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240410/202404101407.KnrqaGoC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404101357.XagbwkcW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404101407.KnrqaGoC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpio/gpio-ath79.c:11:
-   In file included from include/linux/gpio/driver.h:8:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-ath79.c:11:
-   In file included from include/linux/gpio/driver.h:8:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-ath79.c:11:
-   In file included from include/linux/gpio/driver.h:8:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/gpio/gpio-ath79.c:240:32: error: use of undeclared identifier 'pdev'; did you mean 'dev'?
-     240 |         lookup = devm_kzalloc(&pdev->dev,
-         |                                ^~~~
-         |                                dev
-   drivers/gpio/gpio-ath79.c:233:64: note: 'dev' declared here
-     233 | static int ath79_gpio_register_wifi_descriptors(struct device *dev,
-         |                                                                ^
->> drivers/gpio/gpio-ath79.c:240:38: error: no member named 'dev' in 'struct device'; did you mean 'devt'?
-     240 |         lookup = devm_kzalloc(&pdev->dev,
-         |                                      ^~~
-         |                                      devt
-   include/linux/device.h:776:10: note: 'devt' declared here
-     776 |         dev_t                   devt;   /* dev_t, creates the sysfs "dev" */
-         |                                 ^
->> drivers/gpio/gpio-ath79.c:251:4: error: call to undeclared function 'PIO_LOOKUP_IDX'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     251 |                         PIO_LOOKUP_IDX(label, 0, NULL, i,
-         |                         ^
->> drivers/gpio/gpio-ath79.c:250:22: error: used type 'struct gpiod_lookup' where arithmetic or pointer type is required
-     250 |                 lookup->table[i] = (struct gpiod_lookup)
-         |                                    ^
-     251 |                         PIO_LOOKUP_IDX(label, 0, NULL, i,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     252 |                                        GPIO_ACTIVE_HIGH);
-         |                                        ~~~~~~~~~~~~~~~~~
-   6 warnings and 4 errors generated.
-
-
-vim +240 drivers/gpio/gpio-ath79.c
-
-   225	
-   226	#if IS_ENABLED(CONFIG_ATH9K_AHB)
-   227	/*
-   228	 * This registers all of the ath79k GPIOs as descriptors to be picked
-   229	 * directly from the ATH79K wifi driver if the two are jitted together
-   230	 * in the same SoC.
-   231	 */
-   232	#define ATH79K_WIFI_DESCS 32
-   233	static int ath79_gpio_register_wifi_descriptors(struct device *dev,
-   234							const char *label)
-   235	{
-   236		struct gpiod_lookup_table *lookup;
-   237		int i;
-   238	
-   239		/* Create a gpiod lookup using gpiochip-local offsets + 1 for NULL */
- > 240	        lookup = devm_kzalloc(&pdev->dev,
-   241				      struct_size(lookup, table, ATH79K_WIFI_DESCS + 1),
-   242				      GFP_KERNEL);
-   243	
-   244		if (!lookup)
-   245			return -ENOMEM;
-   246	
-   247		lookup->dev_id = "ath9k";
-   248	
-   249		for (i = 0; i < ATH79K_WIFI_DESCS; i++) {
- > 250			lookup->table[i] = (struct gpiod_lookup)
- > 251				PIO_LOOKUP_IDX(label, 0, NULL, i,
-   252					       GPIO_ACTIVE_HIGH);
-   253		}
-   254	
-   255		gpiod_add_lookup_table(lookup);
-   256	
-   257		return 0;
-   258	}
-   259	#else
-   260	static int ath79_gpio_register_wifi_descriptors(struct device *dev,
-   261							const char *label)
-   262	{
-   263	}
-   264	#endif
-   265	
+>> ERROR: Input tree has errors, aborting (use -f to force output)
 
 -- 
 0-DAY CI Kernel Test Service
