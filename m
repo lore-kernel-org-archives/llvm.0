@@ -1,82 +1,106 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4197F
-	for <llvm@lists.linux.dev>; Wed, 10 Apr 2024 00:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E7119E;
+	Wed, 10 Apr 2024 00:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712708064; cv=none; b=CiKtCR5Ef7/yPlFKI7rme4Vj0FnyoDxf5MDawE7kAxUaOdMYDsg9vkHmCq2aBx3wR+38ABPxo2jnArJioxy8MkrRYLIypGyqnbWCQKeQDk72us0X5q9pyBHFgpecjg/g9hxbLwqnR06snSNBpzvE5ym/zEKioLnYEH6wCnAcmJo=
+	t=1712709614; cv=none; b=UlhXLdEsfJIJhTmvswWlaDG6bhTifW7VvdMM1u1pvLuQ1EwNChdUhRArjcr4PWhFpR1bFwWdOhHLoj0uDPlJ+KP+Ig6nROlf1Gm0MBhsFMsgHXpbWnU6vc9ukSpHf+xx4vFx8oE13QPEGCCMCKH+fnSBUsal0ce0Jvhv2BvpUIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712708064; c=relaxed/simple;
-	bh=hylFjz6L+qK3LEVxEOjE2ZqRGFqT9dpT501eKt8B9PA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ls0rmk149vvBMtCDAStyHP1Vz87dQCQPUbL9YtGtGHhbrL3JYCWVlY68lmc1FyQgDzzExMrsqfYWdQRLFsu/DCIvrl6PY4I7olvMyKpgmZD70fSPmMrjdsMLMs2/izGo6UIuTRwjMcAdW51PJ2h4mDADMt0IbWJvGtXbZFK8CzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G51pgmBZ; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1712709614; c=relaxed/simple;
+	bh=qdKDoFgqGC7rf4IyHpvqVOhYXIVrlns2deNdJVB8rK8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=A7pbc9TXZIrT0ISKbzdxsX/2WTTIXywnh8d1/dPggR4oWgZHGu20WG6nSYC4I8+excT7HGGN85gV7dGIcqD2x+2229xIJ6aah0d2BnBccenseHN3TnTBmCkevU+c+KDiozGf11xHqynkSJWcV5gyL2PNMZAy9lVNZEY8qou9Kno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UsUOjQLo; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G51pgmBZ"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dcc58cddb50so9733074276.0
-        for <llvm@lists.linux.dev>; Tue, 09 Apr 2024 17:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712708062; x=1713312862; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dIbdZOv/vPHtFRzVH0oN0bjB08U1X8E7O8JyibswoCk=;
-        b=G51pgmBZdb6oub8T+FgOSTZOva56F2lKmGs0x7s/gzRR7yGUWndmr9lCsC89l59bh8
-         C8jbr7amH5J3JCyojo/4+pVGSSoHerxVSElMQA/4UklOKcp4JnAsau3FIw+x6olCF0+c
-         wmSf+TtNdUKziNx3v5BBfME6Ksbdcf/i9pNcA25eGyy/YOH0eyezgsoKCNP5NDJaKRtz
-         i0ToRz56QFUXpK9phtYefB6QfRQESjuVrpFkFttelfhcYtp86EB9RvSAiLlLVFt2qtkp
-         RqePG4cXURbKjNn/FjfoIUfh+UXwyEGLv8GlbSlUKuB0ftglkwhpRNVxJ5Df3+87jXgI
-         EDYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712708062; x=1713312862;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dIbdZOv/vPHtFRzVH0oN0bjB08U1X8E7O8JyibswoCk=;
-        b=j8AuiF+xYwZTUyhTs1Msp4NYk2sZNx9RAwggYLGpgl3e+e9So68c0yi/OwLuRjrydS
-         EXAsQttPKgkbdgPBRjYar66Hs4N9a2C5N9bxSvleW2yUqBudNSjve4nW+nUv2lJW0n9H
-         LMjuEz/9gymm7DfJTTGl06vqeeTfftbISrunPH5rudQ6xr0kL4Er/QbQDKjOhhUh5nE3
-         OhCNAyImDoq2kO27dxtT9Ln035QRuh2mXflscvEGxLXE9I86W5btvqy+umgufi6vxKtw
-         kCnhSSi5l60OVT+YYqa3A66W7EOtii4m4SrMliTJQ631yY7RjDdyU9GvhhpNTBN6uo/T
-         wMuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWMNbw+Xx1mWvCuNjUtXHWXUWwm8mrImYAufA+6qF9D9ryW70V3zYiWEVFmpkSzFJ6Af3Shwl7dfnjziVKRIwlspcCB7w==
-X-Gm-Message-State: AOJu0YzJUmV+iBth5ItRh8EHvHtiMWJ/9w9froLWJYEKz7ylGAZY9HG4
-	MwsHyAQqfOCyycktU11ZIJO67NqLkn0o5tA7mykdXG6vvTU3YasCpB0uLPQLTqtnKOUCrEq2zWd
-	BAg==
-X-Google-Smtp-Source: AGHT+IGGO4GWmzQYviQp1CVozWMLXLtrysbsNAF3g8Mrch1Hg1xHRMGTrIYNUcBplo2kcfvLH30UdpXAvJU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:f82:b0:dbd:b165:441 with SMTP id
- ft2-20020a0569020f8200b00dbdb1650441mr387148ybb.0.1712708062334; Tue, 09 Apr
- 2024 17:14:22 -0700 (PDT)
-Date: Tue, 9 Apr 2024 17:14:20 -0700
-In-Reply-To: <20240409160920.3bfe3eeb@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UsUOjQLo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712709612; x=1744245612;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qdKDoFgqGC7rf4IyHpvqVOhYXIVrlns2deNdJVB8rK8=;
+  b=UsUOjQLoTcI4PcJOoMxbRmDUzV4gk29ICnBOxOP1+FKYl+h24r5EJzCS
+   Gf3oGd5JsRGmaKNCSxLwpf/Y3RGcgI4lB1peYnUe1Uv8eR/XLoJHFTqPA
+   jALqNfpA5ezKOs7tqn1Jxqpll+1iakeFUVrE2Fepjn6jf5HxMDWRzsUIl
+   9TlV+FFkIZluxXsrNi9TdbWG5GL9VH6951LSFMprZBgtsms93EcKZLDRx
+   B0+tmbdkX8Ht5zhmcCeCUkwMEIxz6pkABAmPRzzuOWepYH6Vpud/tfszU
+   c7t5JHKiyBxQprClumnK5uxSoDmVeYCwas6gOhBRpe4rrw64VSVi9+3Yr
+   Q==;
+X-CSE-ConnectionGUID: Y+kLHGgiT6SuXWO9wN+Iiw==
+X-CSE-MsgGUID: JjrQFuv2QuaBtfRShRJjsA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="18661921"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="18661921"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 17:40:12 -0700
+X-CSE-ConnectionGUID: EZTvQitISg2aYh4cDOTRXg==
+X-CSE-MsgGUID: xb+RorVDTpSJnunJKPewhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="20418735"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Apr 2024 17:40:11 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ruM0X-0006f4-04;
+	Wed, 10 Apr 2024 00:40:09 +0000
+Date: Wed, 10 Apr 2024 08:39:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:execmem/v4+x86-rox 18/22] include/linux/text-patching.h:5:10:
+ fatal error: 'asm/text-patching.h' file not found
+Message-ID: <202404100830.JIQavjKK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20240409224256.1581292-1-seanjc@google.com> <20240409160920.3bfe3eeb@kernel.org>
-Message-ID: <ZhXZ3BEcbtoJKPFM@google.com>
-Subject: Re: [PATCH] selftests: kselftest_harness: Print empty string, not
- empty fmt on PASS/FAIL
-From: Sean Christopherson <seanjc@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Apr 09, 2024, Jakub Kicinski wrote:
-> On Tue,  9 Apr 2024 15:42:56 -0700 Sean Christopherson wrote:
-> > -	ksft_test_result_code(t->exit_code, test_name,
-> > -			      diagnostic ? "%s" : "", diagnostic);
-> > +	ksft_test_result_code(t->exit_code, test_name, "%s", diagnostic);
-> 
-> Have you tested that to make sure it doesn't change the output?
-> 
-> .. warning: ^^ leading question ;)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git execmem/v4+x86-rox
+head:   a14551111ff8bbf3c520771e89892d599463da71
+commit: 158774f2959493d41916e8ea6af40ba2de85c04f [18/22] module: prepare to handle ROX allocations for text
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240410/202404100830.JIQavjKK-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240410/202404100830.JIQavjKK-lkp@intel.com/reproduce)
 
-Heh, I was *this* close to adding a blurb saying this was probably only compile
-tested.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404100830.JIQavjKK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/execmem.c:3:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/execmem.c:7:
+>> include/linux/text-patching.h:5:10: fatal error: 'asm/text-patching.h' file not found
+       5 | #include <asm/text-patching.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +5 include/linux/text-patching.h
+
+ffdd58e8bffb1b Mike Rapoport (IBM  2024-02-29  4) 
+ffdd58e8bffb1b Mike Rapoport (IBM  2024-02-29 @5) #include <asm/text-patching.h>
+ffdd58e8bffb1b Mike Rapoport (IBM  2024-02-29  6) 
+
+:::::: The code at line 5 was first introduced by commit
+:::::: ffdd58e8bffb1b8316c7abdabd8b2e9bbbb921ff asm-generic: introduce text-patching.h
+
+:::::: TO: Mike Rapoport (IBM) <rppt@kernel.org>
+:::::: CC: Mike Rapoport (IBM) <rppt@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
