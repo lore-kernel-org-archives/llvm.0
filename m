@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABAC10F1;
-	Wed, 10 Apr 2024 01:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F055010F9;
+	Wed, 10 Apr 2024 02:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712713457; cv=none; b=u3+SbtIxTW6qyXzEf1Fg42GJd/rm4JW4lZIPH21yS5rT0Fwo/BOwLJT5DwSSbF7OhIZtzRWj3zONSYXDp+QXWb1ecKTZlbniBU9bDzYCIYPB0IFOD48OIoiDLIDyM2zR1HE+bn1lHWwZ69WtXCKxG/CEJBIy0jUWZfXL5phHPis=
+	t=1712714959; cv=none; b=SmxlcJMq9yPlCFCQQQcJCA+QBsgafn+zbixhkXwBKqIOTd2TSCZIDGz1VxUAxY1EY0HuuNy/Mw63VzBMsDyJXHIwHmlsXMdATmTYx9GOVqTllzRGVzx2RwxMUOsA+IO74sNX7lG663lgwaCwb3BEpt+Ix5a5Spom5X2FBYliMT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712713457; c=relaxed/simple;
-	bh=4+um5+em30SvCtzSwFQvCD2JVrLayHboJhHw4vcSzu8=;
+	s=arc-20240116; t=1712714959; c=relaxed/simple;
+	bh=1SQVaqYyMbKjIv3+zsKOuAN4nZYFqAwyXVE2WtOCfZg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=m4Tbhc0KXvicjaAz3XYXfyMnH3nC8wTOWbMnpN2pcBepK8LA+d7jksntcnCXfCzWuVLGZjKFCxpJFGYiBO7g/ZnVKP6d7gs6ONJFlvBNRveU4b4Wg6atnbks1cLFGrHjvEp3Z6eZ9rBrERkJ2qvklMWXpIWlK2VXh+ndwPAtKh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UEwLkgBR; arc=none smtp.client-ip=192.198.163.13
+	 Content-Disposition; b=qJXnHRt9eDXtU5tYkmD9FtalRPcZNRoYJ0uXhFL9ruRB846q7rgTndt3kjBnaG9DynIQ7gvYkG5X+YCLrA8xRWtClnkRShuLuKXw7ZTmWpr4jonEgyhnIyBR8rAbz7onenaD0NVe4MqfKMMl4DjIWByM1Uykv37bAlhCZWlgcBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DtISxAEZ; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UEwLkgBR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DtISxAEZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712713455; x=1744249455;
+  t=1712714957; x=1744250957;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4+um5+em30SvCtzSwFQvCD2JVrLayHboJhHw4vcSzu8=;
-  b=UEwLkgBRvpH3qBMjSxm5d/G52r6Mv7P0oGgXjJyEl4qsFb0DPRJTpVqc
-   W81oVz9TCMYStyJVHzV1lAMThO3UdFEchwpfKI9b/CtoR9jxYKoKBiyX2
-   jUvJcwafbuI+hrqCrqUWCynbeMGhLE1eFokCqLHo6MjGCkcvwsy6t11Jo
-   /V7AQTxnYh1Fa4g3joNFsa5rCcrI8PagOw9zrc5wiKOi3W48A5XU/Agrc
-   jm5jROEjMfYZkzZ+1P6oay4TdKNDJwDepEayl+Wm/ijZ2Ll4DpXND7Gvs
-   D4pDlX4shmr4ZnW1vkHCG/ltK69pgoRreivicvM6vUQfMGkXyp+eFOueD
-   g==;
-X-CSE-ConnectionGUID: olXfJf84SuaHaSGd8vZaGQ==
-X-CSE-MsgGUID: 92OREQslQvaLTZ2tEpL6tQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11023128"
+  bh=1SQVaqYyMbKjIv3+zsKOuAN4nZYFqAwyXVE2WtOCfZg=;
+  b=DtISxAEZbsK4Tz+8x6BwE+6c2bqVwSZ+qaVUUUZosgfsTi/0OMEtGLbJ
+   luq84qCxBDaTY3Xy+bpULX48yj5OrgTnWGH5ZMQgMQCnRd5/KLPVP/i28
+   gso2f+1uOASIWMyisbel/M/bT7X2LxQqZf/kdSjB3Ga/KK83nQWmv4BDX
+   1A5JuBtMm4eaxFuJjZxLRQvIZ40jnsf8nv7vytq0Sp5jCMGekNkdIiupF
+   Ag06C+eL8UD1dBXJ0iqE8dQViag/vYhW6UoWezO+CjlLwlAt8JFBdnT//
+   P9D61AK9vL7PSbJMtE+qr3XqVVyNiGtYCN4lQS8X5CPk99lDfCeaozh3F
+   w==;
+X-CSE-ConnectionGUID: AWLwZ23eSgm7aIPwTVdfEw==
+X-CSE-MsgGUID: 2HVQshLMTJuBsIJBRYTiSw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="19486063"
 X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="11023128"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 18:44:14 -0700
-X-CSE-ConnectionGUID: E7IGvE+AQcqhHZKpVJlDVQ==
-X-CSE-MsgGUID: w1EebIoDQ4eEki0ZyThmlg==
+   d="scan'208";a="19486063"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 19:09:16 -0700
+X-CSE-ConnectionGUID: x+Ge8GOhRWmV1wXEvL3QjQ==
+X-CSE-MsgGUID: Tm1SvbTnReS5hwjlNqEm1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
-   d="scan'208";a="57846683"
+   d="scan'208";a="25016664"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 09 Apr 2024 18:44:13 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 09 Apr 2024 19:09:15 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ruN0U-0006h4-1N;
-	Wed, 10 Apr 2024 01:44:10 +0000
-Date: Wed, 10 Apr 2024 09:43:58 +0800
+	id 1ruNOi-0006hm-1h;
+	Wed, 10 Apr 2024 02:09:12 +0000
+Date: Wed, 10 Apr 2024 10:08:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 258/317] arch/s390/kernel/debug.c:458:9: error:
- redefinition of 'count'
-Message-ID: <202404100923.tKl4NFHj-lkp@intel.com>
+Subject: [axboe-block:rw_iter 74/317] drivers/s390/block/dasd.c:904:19:
+ error: use of undeclared identifier 'user_len'
+Message-ID: <202404101056.0wVAjwbo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,121 +64,279 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
 head:   ce74875ea91d3421b08ce15d34f1eccd90cebb2b
-commit: 47f5beabd7c09536f0510ef3f440d09af5a08a50 [258/317] arch/s390: convert to read/write iterators
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240410/202404100923.tKl4NFHj-lkp@intel.com/config)
+commit: af31a7fb0db7b37d06e7725c1dc096c57ac1e226 [74/317] s390/dasd: convert to read/write iterators
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240410/202404101056.0wVAjwbo-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240410/202404100923.tKl4NFHj-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240410/202404101056.0wVAjwbo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404100923.tKl4NFHj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404101056.0wVAjwbo-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/s390/kernel/debug.c:458:9: error: redefinition of 'count'
-     458 |         size_t count = iov_iter_count(to);
-         |                ^
-   arch/s390/kernel/debug.c:455:9: note: previous definition is here
-     455 |         size_t count = 0;
-         |                ^
->> arch/s390/kernel/debug.c:461:7: error: use of undeclared identifier 'offset'
-     461 |         if (*offset != p_info->offset)
-         |              ^
->> arch/s390/kernel/debug.c:466:17: error: use of undeclared identifier 'len'
-     466 |         while (count < len) {
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/s390/block/dasd.c:24:
+   In file included from arch/s390/include/asm/ccwdev.h:14:
+   In file included from arch/s390/include/asm/chsc.h:12:
+   In file included from arch/s390/include/uapi/asm/chsc.h:14:
+   In file included from arch/s390/include/asm/chpid.h:10:
+   In file included from arch/s390/include/asm/cio.h:10:
+   In file included from arch/s390/include/asm/dma-types.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/s390/block/dasd.c:24:
+   In file included from arch/s390/include/asm/ccwdev.h:14:
+   In file included from arch/s390/include/asm/chsc.h:12:
+   In file included from arch/s390/include/uapi/asm/chsc.h:14:
+   In file included from arch/s390/include/asm/chpid.h:10:
+   In file included from arch/s390/include/asm/cio.h:10:
+   In file included from arch/s390/include/asm/dma-types.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/s390/block/dasd.c:24:
+   In file included from arch/s390/include/asm/ccwdev.h:14:
+   In file included from arch/s390/include/asm/chsc.h:12:
+   In file included from arch/s390/include/uapi/asm/chsc.h:14:
+   In file included from arch/s390/include/asm/chpid.h:10:
+   In file included from arch/s390/include/asm/cio.h:10:
+   In file included from arch/s390/include/asm/dma-types.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/s390/block/dasd.c:904:19: error: use of undeclared identifier 'user_len'
+     904 |         buffer = vmalloc(user_len + 1);
+         |                          ^
+   drivers/s390/block/dasd.c:907:35: error: use of undeclared identifier 'user_len'
+     907 |         if (!copy_from_iter_full(buffer, user_len), from) {
+         |                                          ^
+   drivers/s390/block/dasd.c:912:13: error: use of undeclared identifier 'user_len'
+     912 |         if (buffer[user_len - 1] == '\n')
+         |                    ^
+   drivers/s390/block/dasd.c:913:10: error: use of undeclared identifier 'user_len'
+     913 |                 buffer[user_len - 1] = 0;
          |                        ^
-   arch/s390/kernel/debug.c:474:22: error: use of undeclared identifier 'len'
-     474 |                 user_buf_residue = len-count;
-         |                                    ^
->> arch/s390/kernel/debug.c:519:23: error: incompatible function pointer types passing 'ssize_t (struct file *, const char *, size_t, loff_t *)' (aka 'long (struct file *, const char *, unsigned long, long long *)') to parameter of type 'ssize_t (*)(struct file *, char *, size_t, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
-     519 | FOPS_READ_ITER_HELPER(debug_input);
-         |                       ^~~~~~~~~~~
-   include/linux/fs.h:2155:33: note: expanded from macro 'FOPS_READ_ITER_HELPER'
-    2155 |         return vfs_read_iter(iocb, to, name);                           \
-         |                                        ^~~~
-   include/linux/fs.h:2129:19: note: passing argument to parameter 'read' here
-    2129 |                       ssize_t (*read)(struct file *, char __user *,
-         |                                 ^
-   5 errors generated.
+   drivers/s390/block/dasd.c:915:10: error: use of undeclared identifier 'user_len'
+     915 |                 buffer[user_len] = 0;
+         |                        ^
+   17 warnings and 5 errors generated.
+--
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/s390/block/dasd_proc.c:24:
+   In file included from drivers/s390/block/dasd_int.h:53:
+   In file included from arch/s390/include/asm/ccwdev.h:14:
+   In file included from arch/s390/include/asm/chsc.h:12:
+   In file included from arch/s390/include/uapi/asm/chsc.h:14:
+   In file included from arch/s390/include/asm/chpid.h:10:
+   In file included from arch/s390/include/asm/cio.h:10:
+   In file included from arch/s390/include/asm/dma-types.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/s390/block/dasd_proc.c:24:
+   In file included from drivers/s390/block/dasd_int.h:53:
+   In file included from arch/s390/include/asm/ccwdev.h:14:
+   In file included from arch/s390/include/asm/chsc.h:12:
+   In file included from arch/s390/include/uapi/asm/chsc.h:14:
+   In file included from arch/s390/include/asm/chpid.h:10:
+   In file included from arch/s390/include/asm/cio.h:10:
+   In file included from arch/s390/include/asm/dma-types.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/s390/block/dasd_proc.c:24:
+   In file included from drivers/s390/block/dasd_int.h:53:
+   In file included from arch/s390/include/asm/ccwdev.h:14:
+   In file included from arch/s390/include/asm/chsc.h:12:
+   In file included from arch/s390/include/uapi/asm/chsc.h:14:
+   In file included from arch/s390/include/asm/chpid.h:10:
+   In file included from arch/s390/include/asm/cio.h:10:
+   In file included from arch/s390/include/asm/dma-types.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/s390/block/dasd_proc.c:323:3: error: field designator 'proc_write_iter' does not refer to any field in type 'const struct proc_ops'; did you mean 'proc_read_iter'?
+     323 |         .proc_write_iter = dasd_stats_proc_write,
+         |          ^~~~~~~~~~~~~~~
+         |          proc_read_iter
+   include/linux/proc_fs.h:33:12: note: 'proc_read_iter' declared here
+      33 |         ssize_t (*proc_read_iter)(struct kiocb *, struct iov_iter *);
+         |                   ^
+   drivers/s390/block/dasd_proc.c:323:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     323 |         .proc_write_iter = dasd_stats_proc_write,
+         |                            ^~~~~~~~~~~~~~~~~~~~~
+   drivers/s390/block/dasd_proc.c:320:20: note: previous initialization is here
+     320 |         .proc_read_iter = seq_read_iter,
+         |                           ^~~~~~~~~~~~~
+   18 warnings and 1 error generated.
 
 
-vim +/count +458 arch/s390/kernel/debug.c
+vim +/user_len +904 drivers/s390/block/dasd.c
 
-   447	
-   448	/*
-   449	 * debug_output:
-   450	 * - called for user read()
-   451	 * - copies formated debug entries to the user buffer
-   452	 */
-   453	static ssize_t debug_output(struct kiocb *iocb, struct iov_iter *to)
-   454	{
-   455		size_t count = 0;
-   456		size_t entry_offset;
-   457		file_private_info_t *p_info;
- > 458		size_t count = iov_iter_count(to);
-   459	
-   460		p_info = (file_private_info_t *) iocb->ki_filp->private_data;
- > 461		if (*offset != p_info->offset)
-   462			return -EPIPE;
-   463		if (p_info->act_area >= p_info->debug_info_snap->nr_areas)
-   464			return 0;
-   465		entry_offset = p_info->act_entry_offset;
- > 466		while (count < len) {
-   467			int formatted_line_residue;
-   468			int formatted_line_size;
-   469			int user_buf_residue;
-   470			size_t copy_size;
-   471	
-   472			formatted_line_size = debug_format_entry(p_info);
-   473			formatted_line_residue = formatted_line_size - entry_offset;
-   474			user_buf_residue = len-count;
-   475			copy_size = min(user_buf_residue, formatted_line_residue);
-   476			if (copy_size) {
-   477				if (!copy_to_iter_full(p_info->temp_buf
-   478						 + entry_offset, copy_size, to))
-   479					return -EFAULT;
-   480				count += copy_size;
-   481				entry_offset += copy_size;
-   482			}
-   483			if (copy_size == formatted_line_residue) {
-   484				entry_offset = 0;
-   485				if (debug_next_entry(p_info))
-   486					goto out;
-   487			}
-   488		}
-   489	out:
-   490		p_info->offset		 = iocb->ki_pos + count;
-   491		p_info->act_entry_offset = entry_offset;
-   492		iocb->ki_pos = p_info->offset;
-   493		return count;
-   494	}
-   495	
-   496	/*
-   497	 * debug_input:
-   498	 * - called for user write()
-   499	 * - calls input function of view
-   500	 */
-   501	static ssize_t debug_input(struct file *file, const char __user *user_buf,
-   502				   size_t length, loff_t *offset)
-   503	{
-   504		file_private_info_t *p_info;
-   505		int rc = 0;
-   506	
-   507		mutex_lock(&debug_mutex);
-   508		p_info = ((file_private_info_t *) file->private_data);
-   509		if (p_info->view->input_proc) {
-   510			rc = p_info->view->input_proc(p_info->debug_info_org,
-   511						      p_info->view, file, user_buf,
-   512						      length, offset);
-   513		} else {
-   514			rc = -EPERM;
-   515		}
-   516		mutex_unlock(&debug_mutex);
-   517		return rc; /* number of input characters */
-   518	}
- > 519	FOPS_READ_ITER_HELPER(debug_input);
-   520	
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  899  
+af31a7fb0db7b3 Jens Axboe       2024-04-09  900  char *dasd_get_user_string(struct iov_iter *from)
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  901  {
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  902  	char *buffer;
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  903  
+e4258d55bff067 Stefan Weinhuber 2011-08-03 @904  	buffer = vmalloc(user_len + 1);
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  905  	if (buffer == NULL)
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  906  		return ERR_PTR(-ENOMEM);
+af31a7fb0db7b3 Jens Axboe       2024-04-09  907  	if (!copy_from_iter_full(buffer, user_len), from) {
+e4258d55bff067 Stefan Weinhuber 2011-08-03  908  		vfree(buffer);
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  909  		return ERR_PTR(-EFAULT);
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  910  	}
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  911  	/* got the string, now strip linefeed. */
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  912  	if (buffer[user_len - 1] == '\n')
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  913  		buffer[user_len - 1] = 0;
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  914  	else
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  915  		buffer[user_len] = 0;
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  916  	return buffer;
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  917  }
+4fa52aa7a82f92 Stefan Weinhuber 2011-07-24  918  
+
+:::::: The code at line 904 was first introduced by commit
+:::::: e4258d55bff06780cd424c671b576a90acc1592f [S390] dasd: use vmalloc for statistics input buffer
+
+:::::: TO: Stefan Weinhuber <wein@de.ibm.com>
+:::::: CC: Heiko Carstens <heiko.carstens@de.ibm.com>
 
 -- 
 0-DAY CI Kernel Test Service
