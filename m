@@ -1,242 +1,111 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2067.outbound.protection.outlook.com [40.107.220.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4A91C8206;
-	Thu, 11 Apr 2024 16:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712854000; cv=fail; b=aUau6sdw0+q0k9wtOzp3Ph76F+7B0t1pFo0cqdrtHhFAyzTCFVl13MDb33fJWC656F7XmecZSEytq2sa6aJZNdHJFh0fHPE6YPkjgNjrKThW1Mh6Yu/lPVrHAsPEs9uy5QQVkmJwBTYBJkyRgEaS8kC7fCxGp+ZA/4QiZ5iBDIA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712854000; c=relaxed/simple;
-	bh=5ff3E288+fhUxGKUV3tFiuspGfkKquvphHosVWIrJ2U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gJuUWvq7mSEibAlLDHSPz/Sap3krnBEsGdWYbmksufRMWU6C3EZCFikRYYVQO57hdMQ/LnWsZjOBLz6T0h8sdtRJCdGMeFX6j+UU6yLl2KWh7gzPO5hTv954dCXZ4MeN1NnH1ebBqIdPdsXWjZmO2oFedHU4e4zGBQQHbccG+fI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HVLy/bM1; arc=fail smtp.client-ip=40.107.220.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EE21DB557
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 17:06:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712855179; cv=none; b=fmFu+RiiZCC9IkJ1XPvQip4LCI4NlcYXs6gyne7C1tQENwnbFEj41GsQCBL1rDDgCA1aFggfDHP0IFJjG9tp1h3nTcQipvctOc+PK/6Oq9Xq5wqq25ZD5tb/fNsrC0kwnGV0amTvYrBmYVS8oWaxIDWQttLC0surph2YicmZzFo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712855179; c=relaxed/simple;
+	bh=lts7IF4O3wh+oACzNnyW3TMbFIhfWZAEPaIt7vwWKBA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HLoMydyfZcFsj7mpEfa/YgfOb0vez2Awo31DhZSdPMzTX7nppazXsE2AYPdNY6NlvMLrFm7vj0d9vVBtFap5ewi/0ts+gHHZk9S9m/+oKERKv5VELaFQbrxSMMhMgcb5PlDJxagbkdQADUj4o/fsxaQfEGfmbCAWYPxwUqjQOb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fU1xI6iu; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HVLy/bM1"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T+oQNLGQa/NbW6tJ37APPnOvjTVVe+iHEeWg04fNIXtWJJrQcR/NBHjqwjUWjjUP4fAJq9l5rZd1p5eRriuaQuLMRcH55gJupA80G2Pl/R09OtTutWpYwwwCdPNhKkXQ0VmjjFlymrDpQ2tzZK5WKIPvKMngKPl60vMjYfGUzkJ77OEteC+Rxd2KeV5HaylOGJgKCVUYpGozIqQxZbfliShA2Zi2jhCVmHZavaFu0sb5JBrbwI8KbPJM9MXiZ9XdhuJz6Kl7Cuz2HxAICHcT9KhtZCG256kQ+dxzCZ4i+vU+r40Vdw20iDe8Mbt1gCm9cy9g6RkYkcB4CF4z/WdBPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0NrN9Dwl70wQUv0Iu7xVFQtRrGzGbWKrTpmtmyKfgvc=;
- b=jxvlnCDd2ZKlgbO5AW9FKOHzatHVeEEcZYY5kuaFmSZ/xXrXV5CJFBr8RTVSQk9YB9GjZkSxPYMPEwYHB0KRd8EIQR74jw23NoEKiDMLciGoyPoPGIFMjzww1gt8B3f0EHvYC5CPsjTv/9Gk3o5nSQYn/oCqNtFu6fAqqGgFIQEsSFrSmvsrV/guTwktkAobCLcsLr/dVl5AcdAWMFafKT1Rhxm11tbjpH/rqL80i9iBJ2cA4vkD8wYB2M/MzRFPloztbUogipHKXsTaR1HrSq/cs3dllHwm5L+fzUetsbc/a3E3HlQWRZq70Wy72EgAvqqx7hDVM6g3BjUaY4fF+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0NrN9Dwl70wQUv0Iu7xVFQtRrGzGbWKrTpmtmyKfgvc=;
- b=HVLy/bM132ITWpF3knAxICOesuDINLarM5PcDtjPmCJxNHbbSxjJNX2BOAQtjjGhh2J6yPIiNqPPaAuZqhcbxMKoOsvRBHmA9ErJEuQqaTFPeZA4nFzARtEB7JTLBjGcbUFRuC6GB5ODcffoaFbCHh3HD1WUsEv4vDNvtoYMESn537I/6xae7UPYGVxks4ULoDBbBsdf2P0jOH61hb9FQQfpmYI6zTqUL1AZIoYDdz3PiyzQgUBDUsz2XhWkZQGzzsCtpAxXHQoydhJMi9CBhHLBYiLWrU7IGHf27kcUh8q7rlkYGPYavHnFn9ejnjIjiNZ+8mBWHbwwwGfY5A9Zhw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com (2603:10b6:5:1c7::26)
- by SJ2PR12MB8064.namprd12.prod.outlook.com (2603:10b6:a03:4cc::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 11 Apr
- 2024 16:46:30 +0000
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::6aec:dbca:a593:a222]) by DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::6aec:dbca:a593:a222%5]) with mapi id 15.20.7409.053; Thu, 11 Apr 2024
- 16:46:30 +0000
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Leon Romanovsky <leonro@mellanox.com>,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>,
-	patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Will Deacon <will@kernel.org>
-Subject: [PATCH v3 3/6] s390: Stop using weak symbols for __iowrite64_copy()
-Date: Thu, 11 Apr 2024 13:46:16 -0300
-Message-ID: <3-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-In-Reply-To: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-References:
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0249.namprd13.prod.outlook.com
- (2603:10b6:208:2ba::14) To DM6PR12MB3849.namprd12.prod.outlook.com
- (2603:10b6:5:1c7::26)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fU1xI6iu"
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-222a9eae9a7so49052fac.3
+        for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 10:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712855177; x=1713459977; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lts7IF4O3wh+oACzNnyW3TMbFIhfWZAEPaIt7vwWKBA=;
+        b=fU1xI6iuVQcCJHkYoMVDlY8nSav9Ea8ATSLuRdpUnkzCElA2xTeZ0c/+27wxUs4/y9
+         WBR3FJWT/enrsdXDR63kd6NARnLMfoFHVnpmdEeiO/LJVtScJTZZ/edCiQnfabt0+KNH
+         HlTJ09nzirBpBMPcOk/49mpLcgLF/2duvzrUxFrZgUYHZg8LHA60BPp5HHZS+mWX1Ial
+         TNKA7K+iFHavnPoz1TrfWtOI0opbPyDGqEmRf30ntLr5Z7dvtobeu4bkZg6xP5AhOCpK
+         H1Y1DFZPfJ4BYoFuI6dggdhHZf1X4uyoj7O6th0PitB30n75prXa9zoN1XaFeinrK19I
+         fb2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712855177; x=1713459977;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lts7IF4O3wh+oACzNnyW3TMbFIhfWZAEPaIt7vwWKBA=;
+        b=NVojpcZyn9Z9umnQ3f+4I/h1L6dpYWTuxZZX6ytBST4f1HbZiHCqOqfVOPJhogN7lG
+         6+U2ENviiaNaDeZYzcpdrTtw91zfIX4E1qexzBISmNYZukcxm30tr472gkxRfzvJmcce
+         glsw3/qVZ+jkiAOhW2pvlwr0v/6zvnCGlwO+/K8BdXWrN2TbRx2dHciNhR4Q7j2C/cvi
+         67RxO7X3BAMLXrXvJgQnBUF592IIeD2lXXgjZn/2/Pc6wpSW+7/Ccz9JuZTUV6qa34xa
+         OM7Hm4bFU9fWQKqI6CZz2hAnQK/EpO99TGQhbE6lP0Hc/noDOSiC4t2oDOqC3M1Dmwnm
+         uInA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8njqXS0NN+jkIOad8u4lqPQP7rCq2s411CL5Po4ryRJql02eJ3YrZcDRXiKBIB+nqFIGOJMkCho+PT7vRQyW41zIKvg==
+X-Gm-Message-State: AOJu0YwiTNeNDRO5n1cBx0cG+4uHcySoQqoMaa8QK1NGScenZ+hv2cwV
+	rrRBRCE/kTEwC1ffU2oZVhgJc02xhV/qe0kaOoUDCGpM3k11nctXN32ubM7B9HmUWAyo+eck4u6
+	220mV7wYppyaVFr/MNSPoOs7c2BEhaPbZ4fDN
+X-Google-Smtp-Source: AGHT+IFxZAwM5lscGOOxViCGPaFGQ6+rp1WtH1LHvLtTGxM3d+4WQ+OijdKn8+T80A2LN6pU7d0HQjw/vH20HZ1YHlY=
+X-Received: by 2002:a05:6871:203:b0:232:fa6d:c5bf with SMTP id
+ t3-20020a056871020300b00232fa6dc5bfmr89066oad.45.1712855176417; Thu, 11 Apr
+ 2024 10:06:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3849:EE_|SJ2PR12MB8064:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7e18661-fd39-4a1a-89fe-08dc5a46eba3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	KlfCzdrYJw0UEuCsLzFWUViNz0Atr7Qx3yp8rN9mlnkVJImYi4CCpjFR0MCeWHvm2gEfZOlW2aqtNTqvQHb4zus5Q1yjpZDq2SOtVSsDZipAYkpoGRT3lOLN26oFi67SUt72RNwDkjQXbrqM2shg9FlvwD38TlIHFxhAQYKD1M9OF4ymgibhfmfybfB/6lnNSGuZ1oBmTZkK2gYT7bIkFzPPXqkzcU/8KUBn61A5n27cGbh943LRT1mfgzApOLEiNvIVx7ynTyHv5CmSxatjgVkKgZJQB0+Bgl/RA7PzqDNadFTiG12erE/xX9F3wBOt104C7OqztHLyqafAhminsw7SZTN3H1nCnOPyfyaU4yW1WGeMCf6XNWv1CC1dBlTP375PIDnHU7hzsuuqeKpDx6tYyGSnNW7OVmhgZhXOEEeDlrjljd9LS08jxnBw1mi1TlbWKgXo8pc3i3VRyhMSMwMD8hHmCMQk3jcFgjK8G+q/v8KW5ZBtHqudkQcEDYu0tR24AqcojR3WnyUHZ0LYYqJE0EXSnOhzk/0uaokOEr9nsBDeD4IO7sStUKw+5F3vYcnUBWjzh78/RmoxXernnYgT6esvzdx8q39XjFYFvQHN7+PMbvZwZjLsD5ip13OyWYi2yOy5pCvPTUZNkVsttfb/0BQkO4g+j4YNoFJRf5IM2PolzwAHs2+r+bJcvNMRtu+PvCW4AvsO7cuKkSpEOw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(7416005)(366007)(921011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?uL8NMwQjLrc6AX25m86UiRvzHhp8hmcrYiEXeqBcC57cJTbfuFR+8T44OEeY?=
- =?us-ascii?Q?Cx7tdGV1d/HAYFkr+UZe+bU93JFBKHIBr519CY7slxbYCHkAvR0hkK1QVjSn?=
- =?us-ascii?Q?535nxBr6btGwNg/H/SqpwUNvtJkTfMiGH9daIyxMo7Xtwxp/eswLhdeAsWkZ?=
- =?us-ascii?Q?Hjc69Pxrzxk7ABWxrtSsthihjKUlBruAUxAubaJjaDqxLbI2rGqy75Uwsi0Z?=
- =?us-ascii?Q?qoIGHltEuNGgJUOTJhqnBAyO60fycUVGQY8Fp+aLfy6sYPGB1t/7xPmn70hj?=
- =?us-ascii?Q?DEnYsI4Zd7g2tfAuV4/V3e5j584Byyaw6VM7LOjoeOnsdF9h2+3PGpc5fSNK?=
- =?us-ascii?Q?iIAaD+DnfowH/WCXvxZwbjBr+JMGUQZ+jnX+KxfgbxmtJERsEOPb0YYSvx8M?=
- =?us-ascii?Q?KTTQPaDBgDVpxx7t2W3xTp5R0W1fRMeAQTMv/nNs1PpVGR6rvXKA5BCnlCn+?=
- =?us-ascii?Q?KB0pXaPJ9VVFHqJeWP3/WBGHaX8Xy+AkKa4OGmgMFAdtC1Vzftbv7u4Oa8oW?=
- =?us-ascii?Q?ivEdWuGdZApaHGfg44DOqBVfOVhMkbCUVApbJ3xvjpbqDv3WBNAiiz7ZQo3A?=
- =?us-ascii?Q?hK6Be/3MrJhNHLTO6MFkhklpZ1lg3PeECXNpQFV8qgt6E2VH6lrq1CAZaXPz?=
- =?us-ascii?Q?H1IUKGHbMAYGVgKNaYaeZ2ppIK6NQMIESRkc7MnQv0eWh2BBrryNMdZL1bqG?=
- =?us-ascii?Q?4FptOTwdFp9mvQgS2Df1JRZ1iIfgGzo4KL0NyiMmItM2eTHxfcwINjOK6oAf?=
- =?us-ascii?Q?8Z2y7mxgmcfuYfhukwX4mDv1zANdfCumoiPL5/n2PPCKjUwGEiIy9LCE7+WK?=
- =?us-ascii?Q?h4+yg3Q8JuTxJgi6XLd+J3Rek3OnJKoE4rOvxugjUTBpYWS32KGPFkDSBga+?=
- =?us-ascii?Q?Rk3qlk/T/FdINcGEcL6fihRM0Np0g4BJEJbGD4sno3U69S8uXLLxoHhPsX6Z?=
- =?us-ascii?Q?q5GgpdsGHf3h2wPxmACYO+R5ijvKE6q3GCR7vRVhE0/AYNhU+7SV8tzK86bq?=
- =?us-ascii?Q?paX7Hreg4wKlPeATHu702pxGdza+Clb1PyzmklsHMkKh1o9rruNH7wSHj8zi?=
- =?us-ascii?Q?3QFuFd/HEU3/qiBkGohuy/Em2bnogLxAZ7CHPASZxNys6nVTPw8edwMuqQOk?=
- =?us-ascii?Q?c+67qJigkd6Pk2xMh/gxToaTbus3bf7t5xStlzI8sPZNMhvqHOSAgVPmnxxv?=
- =?us-ascii?Q?kXXefYlHiPFWgNDbLlohkhx4xo1KEpt4LhjQlwvgO/bz+a0zUJjQYqa2y2fV?=
- =?us-ascii?Q?vxugjE9sfcrZwikMCzZ622lFaRVyXo2grtIHZE9xgKuOll72HuyPduil7jZ4?=
- =?us-ascii?Q?uCK2jCsWSL+sFtRghtbmql8BReTkIdU0myZDdvt9ojG7YD8T57KqLx9n6Wqe?=
- =?us-ascii?Q?aQtVG5DDyF/kOJQ4WQKygvX/SY5+Vqo1lAYK8PeRQYK6P+FNxlpt9csna+4z?=
- =?us-ascii?Q?JYLiraO30PCBcB/myB2SU9GMdWmuM1qA1qrDKKzuc6JuIN6g+OCXvuj6rnMe?=
- =?us-ascii?Q?c6d9y0TLXWVY/GdYYTAcC78ZQSLWhZ4osj6GHTmv5oEHilRdq5NIszXLQ32k?=
- =?us-ascii?Q?l0ALntWy3f0ogeFACQGhkGQXrlhvtM0QFrxuIjd2?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7e18661-fd39-4a1a-89fe-08dc5a46eba3
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3849.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2024 16:46:22.8471
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FMIENZXDu35ZSoupm9JlXaDrxm9gEzo5m+94C+//A7yeYNvlId6XS51RoRP92YfA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8064
+References: <20240409061043.3269676-1-debug@rivosinc.com> <20240409061043.3269676-9-debug@rivosinc.com>
+In-Reply-To: <20240409061043.3269676-9-debug@rivosinc.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 11 Apr 2024 17:05:38 +0000
+Message-ID: <CABCJKud622jAHZGiYed-2veynA6rd_=1mnTwnTT1WNQ6203q6A@mail.gmail.com>
+Subject: Re: [RFC PATCH 08/12] riscv: dynamic (zicfiss) shadow call stack support
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, nathan@kernel.org, ndesaulniers@google.com, 
+	morbo@google.com, justinstitt@google.com, andy.chiu@sifive.com, 
+	hankuan.chen@sifive.com, guoren@kernel.org, greentime.hu@sifive.com, 
+	cleger@rivosinc.com, apatel@ventanamicro.com, ajones@ventanamicro.com, 
+	conor.dooley@microchip.com, mchitale@ventanamicro.com, 
+	dbarboza@ventanamicro.com, waylingii@gmail.com, sameo@rivosinc.com, 
+	alexghiti@rivosinc.com, akpm@linux-foundation.org, shikemeng@huaweicloud.com, 
+	rppt@kernel.org, charlie@rivosinc.com, xiao.w.wang@intel.com, 
+	willy@infradead.org, jszhang@kernel.org, leobras@redhat.com, 
+	songshuaishuai@tinylab.org, haxel@fzi.de, samuel.holland@sifive.com, 
+	namcaov@gmail.com, bjorn@rivosinc.com, cuiyunhui@bytedance.com, 
+	wangkefeng.wang@huawei.com, falcon@tinylab.org, viro@zeniv.linux.org.uk, 
+	bhe@redhat.com, chenjiahao16@huawei.com, hca@linux.ibm.com, arnd@arndb.de, 
+	kent.overstreet@linux.dev, boqun.feng@gmail.com, oleg@redhat.com, 
+	paulmck@kernel.org, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Complete switching the __iowriteXX_copy() routines over to use #define and
-arch provided inline/macro functions instead of weak symbols.
+Hi Deepak,
 
-S390 has an implementation that simply calls another memcpy
-function. Inline this so the callers don't have to do two jumps.
+Thanks for the patches!
 
-Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
----
- arch/s390/include/asm/io.h | 7 +++++++
- arch/s390/pci/pci.c        | 6 ------
- include/linux/io.h         | 3 +++
- lib/iomap_copy.c           | 7 +++----
- 4 files changed, 13 insertions(+), 10 deletions(-)
+On Tue, Apr 9, 2024 at 6:12=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> wr=
+ote:
+>
+> Adding support for dynamic shadow call stack on riscv. zicfiss ISA extn.
+> enables protection for shadow stack against stray writes. This patch
+> enables scs_* macros to use zicfiss shadow stack pointer (CSR_SSP) instea=
+d
+> of relying on `gp`.
 
-diff --git a/arch/s390/include/asm/io.h b/arch/s390/include/asm/io.h
-index 00704fc8a54b30..0fbc992d7a5ea7 100644
---- a/arch/s390/include/asm/io.h
-+++ b/arch/s390/include/asm/io.h
-@@ -81,6 +81,13 @@ static inline void __iowrite32_copy(void __iomem *to, const void *from,
- }
- #define __iowrite32_copy __iowrite32_copy
- 
-+static inline void __iowrite64_copy(void __iomem *to, const void *from,
-+				    size_t count)
-+{
-+	zpci_memcpy_toio(to, from, count * 8);
-+}
-+#define __iowrite64_copy __iowrite64_copy
-+
- #endif /* CONFIG_PCI */
- 
- #include <asm-generic/io.h>
-diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-index 26afde0d1ed34c..0de0f6e405b51e 100644
---- a/arch/s390/pci/pci.c
-+++ b/arch/s390/pci/pci.c
-@@ -250,12 +250,6 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
- 	return 0;
- }
- 
--/* combine single writes by using store-block insn */
--void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
--{
--	zpci_memcpy_toio(to, from, count * 8);
--}
--
- void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- 			   unsigned long prot)
- {
-diff --git a/include/linux/io.h b/include/linux/io.h
-index ce86120ce9d526..42e132808f0035 100644
---- a/include/linux/io.h
-+++ b/include/linux/io.h
-@@ -21,7 +21,10 @@ void __iowrite32_copy(void __iomem *to, const void *from, size_t count);
- #endif
- 
- void __ioread32_copy(void *to, const void __iomem *from, size_t count);
-+
-+#ifndef __iowrite64_copy
- void __iowrite64_copy(void __iomem *to, const void *from, size_t count);
-+#endif
- 
- #ifdef CONFIG_MMU
- int ioremap_page_range(unsigned long addr, unsigned long end,
-diff --git a/lib/iomap_copy.c b/lib/iomap_copy.c
-index 8ddcbb53507dfe..2fd5712fb7c02b 100644
---- a/lib/iomap_copy.c
-+++ b/lib/iomap_copy.c
-@@ -60,9 +60,8 @@ EXPORT_SYMBOL_GPL(__ioread32_copy);
-  * time.  Order of access is not guaranteed, nor is a memory barrier
-  * performed afterwards.
-  */
--void __attribute__((weak)) __iowrite64_copy(void __iomem *to,
--					    const void *from,
--					    size_t count)
-+#ifndef __iowrite64_copy
-+void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
- {
- #ifdef CONFIG_64BIT
- 	u64 __iomem *dst = to;
-@@ -75,5 +74,5 @@ void __attribute__((weak)) __iowrite64_copy(void __iomem *to,
- 	__iowrite32_copy(to, from, count * 2);
- #endif
- }
--
- EXPORT_SYMBOL_GPL(__iowrite64_copy);
-+#endif
--- 
-2.43.2
+CONFIG_DYNAMIC_SCS implies that runtime patching is used to select
+between software SCS and an alternative hardware implementation (in
+arm64's case, PAC instead of hardware shadow stacks). I understand
+this series is still an RFC, but I didn't see runtime patching
+support. Are you planning on implementing this later?
 
+If there's no plan to actually patch between Zicfiss and SCS at
+runtime, CONFIG_DYNAMIC_SCS doesn't seem like the appropriate choice
+and we might need a separate config option that still allows you to
+reuse most of the software SCS code.
+
+Sami
