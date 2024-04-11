@@ -1,167 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7DD205E35
-	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 19:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282F314F65;
+	Thu, 11 Apr 2024 19:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712863230; cv=none; b=Qg3a5RG14TeHutRWb4dsujb8eZsIAltJVmCSU9d5QBDLS1g9tEKjkFHyLd31/tvkmWT6RysbcUZW86yBAgJMuUvLdD8QQfnSoX6GpENGPYKvo0hD3Js2kVM8Vs/rmYwlnQaZHVdn+FG6vTcKNwkhtysMiKtpd/dVQqScy6fOIIo=
+	t=1712863289; cv=none; b=igwzdrylBjDJw8GM9YasBuE193bVBNjXBmfKD0niPqptU2atJTj7Z3TL+q5W5UvLX4E5tENIFt8AhZPwGkKc06tB/POB7WfZHX6i6ElaBFjXnatLD//bX3iL0uUwwwjdh49BdoFKfe2m4Wz+iFucyANbtADwjodXveSO81/ynBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712863230; c=relaxed/simple;
-	bh=13LDVuqf8vWuKEi+uhVUZBGKb/yd0Fjvg1Ih5pSUXbw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gXoSo94eATmkg9SylVJS6hvnwWwoerDZTXdTMzahV1Qeyexae/gkQFf5FfHiDB1yBzVRZeOmuv0o4uLVlbkl/3ge9vYkY939UVaaFz61k54p+KUq852GfGCh+O2X2cZkTr8aDSB6LbmSjdg/bhrUc2NmCyyL06NvRie/1jTPK0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qp55oek6; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1712863289; c=relaxed/simple;
+	bh=Ik+5avN+F3onRNtV1PB619O8pLeIV7AzjthBG+4V4qg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hupFVnWasve/7JKn8rQ6PdB+KeCvvwXvCVE6Ho5CDccH8gz1DHzBdBDnJEJ8pi+mqiGKv4kvOlQApkErMNtNnK4yDPzP/n2xLFp5Ffrbn3wcFqBdBd6hpy7Is/MdXefNrnLPZhrGaClsys5ZIkyykDr4OeuYyw2iMf/SvmYMJIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZE3zeIZ; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qp55oek6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712863228;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=zgy10xEYQfAkjJ3fW3WrAO97VvX+qJZ/5KKjaGPMd7I=;
-	b=Qp55oek64NJqe4Yub3NrxTiL4daeB/wwDCuhCDi8PLENMzdGJvUZ8daDrMYm2E3MZkd3V0
-	b4+lZd2g2r1VlE2IuFlCsir49CazdclWqWArVzJPo80nu/BelwVgWJuT+F9rK7u83g8fZi
-	4d/lKt46ILrR/2RfuKgD1RzjVzPPylg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-196-MDpwloqqOayb-HdX2ODS-Q-1; Thu, 11 Apr 2024 15:20:27 -0400
-X-MC-Unique: MDpwloqqOayb-HdX2ODS-Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB2D9188ACA0
-	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 19:20:26 +0000 (UTC)
-Received: from [172.64.9.46] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 63F961121312;
-	Thu, 11 Apr 2024 19:20:26 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 21 of 204): Test report for master
- (6.9.0-rc3, mainline.kernel.org-clang, 2c71fdf0)
-Date: Thu, 11 Apr 2024 19:20:26 -0000
-To: xzhou@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZE3zeIZ"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-434c3d21450so521101cf.0;
+        Thu, 11 Apr 2024 12:21:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712863287; x=1713468087; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UM2zuMgd2tTJ9l2V10ApEN63oRSs92Yz7I6KOrw/UzQ=;
+        b=IZE3zeIZJPnNibj1UXJYjZ1Ka4bKsw29wQkICAfTXPXs+Yj9Pqjuo7xM2ICv4fz9MC
+         NcwYnz4Q51R9FD/+6WKBg8UE41TWmBR4opj5A2UZRH4jv3K/sVh84n179JoSWW6N9FHO
+         f3uK1/AdNaX6p1rbX+rVg0TW5lxS9keTi7sJBe8rdoOnc6PDxscj9KpScoqDqpar4XAq
+         vkYUDeAM3xu4xKoEQzsI34mC9gOJApyekyTWBi0WYzMQrkRL3LMy5F8i33Oo0kSUGCiL
+         A8eQ06L6UU3gOkZCeWb3P5Qf19e/0nhkFJfO41TPUtCVr8j9NdaEUuPjDCeyPDlqIrwU
+         c4Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712863287; x=1713468087;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UM2zuMgd2tTJ9l2V10ApEN63oRSs92Yz7I6KOrw/UzQ=;
+        b=E3GxExR9z8pbWsufKK73aBPHGzfnNTlsGf0GGJPww8MzrceUUQXmg6lcKUXIEu2mai
+         2y9tGg7mRzR6TOKOT+DIN5a1Ttn4DvQ+5gBBxmrifle8c+pwzS/7y5KlITAgM9lk1R27
+         pcqbR8aB+229wPPyMkX+AZdqTL7AvsX5jHmu7ZTh2aHrxZPM7zoC1qAGSxRcoPvza7wK
+         Wa0mq75wQJE+25mp2HG+ATO+ct0T7eTg5fqLWl48GZesX1qhh1OvXA6V0Sm+LtYnDdlx
+         4ZFeZeSripUtktZXad5VCGZsZ6X3+VhgCe2yCdu+aWZSNqkLZ7dWh3oqwj0fw9kC5212
+         H3iA==
+X-Forwarded-Encrypted: i=1; AJvYcCUw3qyWDQQu2oc9Sa7/I50PKfZRv6P+wsozorTH/iyH8XxZBR/iCEOfRZ5awA4vZLZD6zUdnUsB0migCGvqKtslwrGJMBwgox3paRzv1bJaRhRCxPUyfZOP07XGyv9hUOY7+jY=
+X-Gm-Message-State: AOJu0Yz5D9UzceqzWAmuynE5XZWxxdeOapisN9AsGKj/AMeRkKtduNeS
+	pB5i1ebDBQ293KLipuq5MujWG/eHsmzuXqpdOAv0GsBQvlv6Rtt9wZNV2A==
+X-Google-Smtp-Source: AGHT+IGvHxA54aKOClekMdzRkSKoQQavDjhgxAQk3dRTaypFZBWOKdo0kFNXxP05O1GXsQzB8/QW1Q==
+X-Received: by 2002:ac8:67d7:0:b0:436:8736:f0c1 with SMTP id r23-20020ac867d7000000b004368736f0c1mr150864qtp.47.1712863286926;
+        Thu, 11 Apr 2024 12:21:26 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id p26-20020ac8741a000000b0043123c8b6a6sm1274004qtq.4.2024.04.11.12.21.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Apr 2024 12:21:26 -0700 (PDT)
+Message-ID: <a59e2164-7159-445e-9f87-fcf6cb4b57d6@gmail.com>
+Date: Thu, 11 Apr 2024 12:21:22 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <40186.124041115202700197@us-mta-196.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next:main 26/50] net/ipv4/tcp.c:4673:2: error: call to
+ '__compiletime_assert_1030' declared with 'error' attribute: BUILD_BUG_ON
+ failed: offsetof(struct tcp_sock, __cacheline_group_end__tcp_sock_write_txrx)
+ - offsetofend(struct tcp_sock, __cacheline_group_begin__tcp_sock_...
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>
+Cc: Vladimir Oltean <olteanv@gmail.com>, kernel test robot <lkp@intel.com>,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org
+References: <202404082207.HCEdQhUO-lkp@intel.com>
+ <20240408230632.5ml3amaztr5soyfs@skbuf>
+ <CANn89iJ8EcqiF8YCPhDxcp5t79J1RLzTh6GHHgAxbTXbC+etRA@mail.gmail.com>
+ <db4d4a48-b581-4060-b611-996543336cd2@gmail.com>
+ <CANn89iJMirOe=TqMZ=J8mFLNQLDV=wzL4jOf9==Zkv7L2U5jcQ@mail.gmail.com>
+ <20240410183636.202fd78f@kernel.org>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20240410183636.202fd78f@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 4/10/24 18:36, Jakub Kicinski wrote:
+> On Wed, 10 Apr 2024 19:33:54 +0200 Eric Dumazet wrote:
+>>> Jakub, I do not see a 32-bit build in the various checks being run for a
+>>> patch, could you add one, if nothing else a i386 build and a
+>>> multi_v7_defconfig build would get us a good build coverage.
+>>
+>> i386 build was just fine for me.
+> 
+> Yes, we test i386 too, FWIW.
+> 
+> Florian, does arm32 break a lot? I may not be paying sufficient
+> attention. We can add more build tests but the CPU time we have
+> is unfortunately finite :(
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2024-04-09' of https://gitlab.free=
-desktop.org/drm/kernel
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/139842
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11970632
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/310
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [x86_64, x86_64 (debug)]
-    CKI/restraint [x86_64, x86_64 (debug)]
-    machineinfo [x86_64, x86_64 (debug)]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64, x86_64 (debug)]
-    SELinux Custom Module Setup [x86_64, x86_64 (debug)]
-    Storage - blktests - blk - upstream [x86_64]
-    Storage - blktests - nvme-tcp - upstream [x86_64]
-    Storage - swraid scsi_raid [x86_64, x86_64 (debug)]
-    stress: stress-ng - cpu-cache [x86_64]
-    stress: stress-ng - memory [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Yes, that is why I mentioned multi_v7_defconfig, you an see the build 
+failure with that configuration. Of course Eric fixed it now, thanks!
+-- 
+Florian
 
