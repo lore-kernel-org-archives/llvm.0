@@ -1,199 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9654017584;
-	Thu, 11 Apr 2024 19:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7DD205E35
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 19:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712862339; cv=none; b=lqk3AZWdeGQN+1FoU30WSf7t1nrLvkQbrW6hrbMR9Evzpp49Oa+s6pwql6TLUgYfzjTnqPUSjOF+/GisYTa68sekhdv2+xd8MNLMfn1XJAcrnJhcwUPC/KWHPQRMdKD7KyUpA/cKBJZIpKZ8AbAaUONyskD7/CRqN+o4P3lYl3k=
+	t=1712863230; cv=none; b=Qg3a5RG14TeHutRWb4dsujb8eZsIAltJVmCSU9d5QBDLS1g9tEKjkFHyLd31/tvkmWT6RysbcUZW86yBAgJMuUvLdD8QQfnSoX6GpENGPYKvo0hD3Js2kVM8Vs/rmYwlnQaZHVdn+FG6vTcKNwkhtysMiKtpd/dVQqScy6fOIIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712862339; c=relaxed/simple;
-	bh=fVQl7RCtOg4AqxawSMWY3ZrEfOU3fHC6NAhZRb8dlLE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JUoeeICm9F2NjXIgg1Omc66z7JIezMwzyGSSAwBtu+9cF5CBjWcX7iEN8HM2ojrWNQ9txk2r/pUCRsj4Si8SA5hT0A3uYH9RsUZxCqKYtLDoLJ03BCkn4GnywxvlhkztKOXuVeBsEjS+B9hYMLb9euDVboQH/Hj5I/jcKl2cJtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZGYLFH3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712863230; c=relaxed/simple;
+	bh=13LDVuqf8vWuKEi+uhVUZBGKb/yd0Fjvg1Ih5pSUXbw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gXoSo94eATmkg9SylVJS6hvnwWwoerDZTXdTMzahV1Qeyexae/gkQFf5FfHiDB1yBzVRZeOmuv0o4uLVlbkl/3ge9vYkY939UVaaFz61k54p+KUq852GfGCh+O2X2cZkTr8aDSB6LbmSjdg/bhrUc2NmCyyL06NvRie/1jTPK0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qp55oek6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZGYLFH3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272C7C072AA;
-	Thu, 11 Apr 2024 19:05:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712862339;
-	bh=fVQl7RCtOg4AqxawSMWY3ZrEfOU3fHC6NAhZRb8dlLE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=tZGYLFH3+un2LnOtwMq36Ug9++Qbs4WH4Ak+di9V71wmQ+EhwQ5Oc5Sj+J1HMaLov
-	 w0dbyIkhAviXl/Wt6Mxt/ncH/KVQ0+le/8rBGPxebqqPccS5jXmf46vECERs4bH4Fa
-	 cW+v6QjAbDY8IOGmBr93wEmfzCFTyP51vR/sy+mgqHLItnULvFfBddE44mI0KGCFzg
-	 ROUH6xrANvOXSqjl7puANuoKS8ZdraEuUf9QAzEu8m+jHzBpjPQpetLvvGNBZUA0aL
-	 U4OBHorixX4pykuMG6tQJrJWW5+E7tXslyN0t9VKJB2aPvVWFXne/EgP6fk5dsQ2Q/
-	 Y4Z1NzEd0V2cg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: shuah@kernel.org
-Cc: netdev@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] selftests: adopt BPF's approach to quieter builds
-Date: Thu, 11 Apr 2024 12:05:34 -0700
-Message-ID: <20240411190534.444918-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.44.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qp55oek6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712863228;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zgy10xEYQfAkjJ3fW3WrAO97VvX+qJZ/5KKjaGPMd7I=;
+	b=Qp55oek64NJqe4Yub3NrxTiL4daeB/wwDCuhCDi8PLENMzdGJvUZ8daDrMYm2E3MZkd3V0
+	b4+lZd2g2r1VlE2IuFlCsir49CazdclWqWArVzJPo80nu/BelwVgWJuT+F9rK7u83g8fZi
+	4d/lKt46ILrR/2RfuKgD1RzjVzPPylg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-196-MDpwloqqOayb-HdX2ODS-Q-1; Thu, 11 Apr 2024 15:20:27 -0400
+X-MC-Unique: MDpwloqqOayb-HdX2ODS-Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB2D9188ACA0
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 19:20:26 +0000 (UTC)
+Received: from [172.64.9.46] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 63F961121312;
+	Thu, 11 Apr 2024 19:20:26 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 21 of 204): Test report for master
+ (6.9.0-rc3, mainline.kernel.org-clang, 2c71fdf0)
+Date: Thu, 11 Apr 2024 19:20:26 -0000
+To: xzhou@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <40186.124041115202700197@us-mta-196.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-selftest build is fairly noisy, it's easy to miss warnings.
-It's standard practice to add alternative messages in
-the Makefile. I was grepping for existing solutions,
-and found that bpf already has the right knobs.
+Hi, we tested your kernel and here are the results:
 
-Move them to lib.mk and adopt in net.
-Convert the basic rules in lib.mk.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-If this is okay with everyone, can we possibly apply it to net-next?
 
-CC: ast@kernel.org
-CC: daniel@iogearbox.net
-CC: andrii@kernel.org
-CC: martin.lau@linux.dev
-CC: eddyz87@gmail.com
-CC: song@kernel.org
-CC: yonghong.song@linux.dev
-CC: john.fastabend@gmail.com
-CC: kpsingh@kernel.org
-CC: sdf@google.com
-CC: haoluo@google.com
-CC: jolsa@kernel.org
-CC: mykolal@fb.com
-CC: shuah@kernel.org
-CC: nathan@kernel.org
-CC: ndesaulniers@google.com
-CC: morbo@google.com
-CC: justinstitt@google.com
-CC: bpf@vger.kernel.org
-CC: linux-kselftest@vger.kernel.org
-CC: llvm@lists.linux.dev
----
- tools/testing/selftests/bpf/Makefile | 13 +------------
- tools/testing/selftests/lib.mk       | 17 ++++++++++++++++-
- tools/testing/selftests/net/Makefile |  9 ++++++---
- 3 files changed, 23 insertions(+), 16 deletions(-)
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2024-04-09' of https://gitlab.free=
+desktop.org/drm/kernel
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b0be07f29dde..f06c527eee34 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -135,18 +135,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 
- TEST_GEN_FILES += liburandom_read.so urandom_read sign-file uprobe_multi
- 
--# Emit succinct information message describing current building step
--# $1 - generic step name (e.g., CC, LINK, etc);
--# $2 - optional "flavor" specifier; if provided, will be emitted as [flavor];
--# $3 - target (assumed to be file); only file name will be emitted;
--# $4 - optional extra arg, emitted as-is, if provided.
--ifeq ($(V),1)
--Q =
--msg =
--else
--Q = @
--msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
--MAKEFLAGS += --no-print-directory
-+ifneq ($(V),1)
- submake_extras := feature_display=0
- endif
- 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index da2cade3bab0..aeeac5f83492 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -44,6 +44,20 @@ endif
- selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
- top_srcdir = $(selfdir)/../../..
- 
-+# msg: emit succinct information message describing current building step
-+# $1 - generic step name (e.g., CC, LINK, etc);
-+# $2 - optional "flavor" specifier; if provided, will be emitted as [flavor];
-+# $3 - target (assumed to be file); only file name will be emitted;
-+# $4 - optional extra arg, emitted as-is, if provided.
-+ifeq ($(V),1)
-+Q =
-+msg =
-+else
-+Q = @
-+msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
-+MAKEFLAGS += --no-print-directory
-+endif
-+
- ifeq ($(KHDR_INCLUDES),)
- KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
- endif
-@@ -176,7 +190,8 @@ endif
- ifeq ($(OVERRIDE_TARGETS),)
- LOCAL_HDRS += $(selfdir)/kselftest_harness.h $(selfdir)/kselftest.h
- $(OUTPUT)/%:%.c $(LOCAL_HDRS)
--	$(LINK.c) $(filter-out $(LOCAL_HDRS),$^) $(LDLIBS) -o $@
-+	$(call msg,CC,,$@)
-+	$(Q)$(LINK.c) $(filter-out $(LOCAL_HDRS),$^) $(LDLIBS) -o $@
- 
- $(OUTPUT)/%.o:%.S
- 	$(COMPILE.S) $^ -o $@
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index a3c781cb8367..7e7f243d0ab2 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -125,7 +125,8 @@ BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
- 
- MAKE_DIRS := $(BUILD_DIR)/libbpf
- $(MAKE_DIRS):
--	mkdir -p $@
-+	$(call msg,MKDIR,,$@)
-+	$(Q)mkdir -p $@
- 
- # Get Clang's default includes on this system, as opposed to those seen by
- # '--target=bpf'. This fixes "missing" files on some architectures/distros,
-@@ -149,13 +150,15 @@ BPF_PROG_OBJS := $(OUTPUT)/nat6to4.o $(OUTPUT)/xdp_dummy.o \
- 	$(OUTPUT)/sample_map_ret0.bpf.o $(OUTPUT)/sample_ret0.bpf.o
- 
- $(BPF_PROG_OBJS): $(OUTPUT)/%.o : %.c $(BPFOBJ) | $(MAKE_DIRS)
--	$(CLANG) -O2 -g --target=bpf $(CCINCLUDE) $(CLANG_SYS_INCLUDES) \
-+	$(call msg,BPF_PROG,,$@)
-+	$(Q)$(CLANG) -O2 -g --target=bpf $(CCINCLUDE) $(CLANG_SYS_INCLUDES) \
- 	-c $< -o $@
- 
- $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
- 	   $(APIDIR)/linux/bpf.h					       \
- 	   | $(BUILD_DIR)/libbpf
--	$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/     \
-+	$(call msg,MAKE,,$@)
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
- 		    EXTRA_CFLAGS='-g -O0'				       \
- 		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
- 
--- 
-2.44.0
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/139842
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11970632
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/310
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [x86_64, x86_64 (debug)]
+    CKI/restraint [x86_64, x86_64 (debug)]
+    machineinfo [x86_64, x86_64 (debug)]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [x86_64, x86_64 (debug)]
+    SELinux Custom Module Setup [x86_64, x86_64 (debug)]
+    Storage - blktests - blk - upstream [x86_64]
+    Storage - blktests - nvme-tcp - upstream [x86_64]
+    Storage - swraid scsi_raid [x86_64, x86_64 (debug)]
+    stress: stress-ng - cpu-cache [x86_64]
+    stress: stress-ng - memory [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
