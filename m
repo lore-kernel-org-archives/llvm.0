@@ -1,61 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FDC1474BC;
-	Thu, 11 Apr 2024 10:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C19146A74;
+	Thu, 11 Apr 2024 10:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712831427; cv=none; b=sgV2DsSy5EC+SfJ7Qm3uoqKg2ou0PDELo4vtT5a3sCmSWJDybeoz0wDbpjxsdac3rw4ENhyUGcqzg+nsR/XxFh0YDas/teh/VgT4fxVm86HPnnEbDaTAlh0oos4mL1NIjYcXDizRbWzBGp0EyhP+jKfYMaizm5TVgd7G9a+CsZE=
+	t=1712833124; cv=none; b=mEvkcUUAPMsL9Ftr1YnrEBN/eZiMLa7RpoFmu8c46Eo08+V1NqDYOxI3lSDR77/1wcbNFqxTsBAaFNjvvai3f7XQ55mibaDZ7tfuJ/QCAUZghtDVwIq5hHN89kKlMORPyR2z80RkTeEXKEiYEvZ6HpWgB/9s/nnH7xBeTG8iJ/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712831427; c=relaxed/simple;
-	bh=iv4AdwxeWe8sLTssZ42Ka94ROb2+1u6PpDV3JLrN6G0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hPKzFCuDjdrgFQqNmoZO/2RMtBqMBMxljqNKBZvdyh9M4vMUEhmVyb5nhm8CXO8QVDDr6Jfic8JnP2TSMX+V0BfCnEDStYEi0e8GZ/SIQH8MPZmUKm7ZtZW0qVD27I33ykg1YW6TRwoje2Nl+9gZhICv+pArq6bJzfgcI+ZzbCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iFN8P+2P; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712833124; c=relaxed/simple;
+	bh=ZFt2FgqJLD7/gLiutE/ebb+N6CTG7vGzNaG/smf7tEg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oJtVpyZ0a18cv26YdXkO+3p71h23cJJ/SPxnQuOnnNBg9r8hJqsghsg8kbNoEVG4QNE1rXCSjiRFujMq5Hccz4eFqfm07N1m3lGxmzXO2Wqdj+gs5yT5sRjAKFJGwGeYO3lH1H1lUEskgVH3r/GR0zo4y++1Rm9O7oy2eJfxZmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Md+x0skq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iFN8P+2P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712831425; x=1744367425;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iv4AdwxeWe8sLTssZ42Ka94ROb2+1u6PpDV3JLrN6G0=;
-  b=iFN8P+2PiHEu28leNyKcFBhfN36wS4eJJUxpqtCckIbtJJStfpo37DSQ
-   SC96i1MzDe6bI4Oa5Z7FjRCVgZtvM+aEQgNGVLavFBMiDWIayyISWmYX/
-   4XkComUhetEZ7jKUdCiWo1RDJNd75BCU8VgCZX5s40nscQBqCJ7DCOt8/
-   bg5w2mnjLSC8j2zwGCTjwFd+4U5fnaxcQTlrkHqIiUE4pZ8dknJMb4k0G
-   F/qzgyFtUFaHdO9IlxbEyuNJUYRccFIIWYrNKyzV3vonMyRJP3e5/b+UQ
-   vNIWuSMBGxSjgj97Ww6d0pY41XLpgE8fuSs0C5xZsql8sOq3I1GD3iWoU
-   g==;
-X-CSE-ConnectionGUID: Ec5sQ1g2T9mFEJu2/DhByg==
-X-CSE-MsgGUID: hPOoxYY2RHWzFChww8+8hA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="25687928"
-X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="25687928"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 03:30:22 -0700
-X-CSE-ConnectionGUID: jPMNEyhSThWfVsFwS+G+vA==
-X-CSE-MsgGUID: grGhvYtKQhyKPEsobof49w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="44147798"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Apr 2024 03:30:19 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rurhB-0008W3-1W;
-	Thu, 11 Apr 2024 10:30:17 +0000
-Date: Thu, 11 Apr 2024 18:29:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chuanhua Han <hanchuanhua@oppo.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Barry Song <v-songbaohua@oppo.com>
-Subject: [akpm-mm:mm-unstable 360/372] ld.lld: error: duplicate symbol:
- swap_free_nr
-Message-ID: <202404111834.XUWxYckr-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Md+x0skq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0205DC433C7;
+	Thu, 11 Apr 2024 10:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712833123;
+	bh=ZFt2FgqJLD7/gLiutE/ebb+N6CTG7vGzNaG/smf7tEg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Md+x0skqmrQ0bdIhKDQbJoPVky1ILIxBqDWPkc5ntpGNwvzj+EIYoCvzCMSpjDsSS
+	 OEcnruhA5jN/tkwLBFyGr7NlzmqHTwHXM9csV7fTkfV/RHjcfwgAUBQUV4yvj8e6SD
+	 GrhihLbDytZ7Fy7++/dECmxgklzC0Q41MV5koamg5hgMzaqmkEMDgsic85PVo1+Muk
+	 rEdb6faiuY7s6rE92ALkAbErg0pXB9wr/sipLa3z+UJtHhYTjPqwboo9ljG+pNALeO
+	 3c/Isc3zJb9cBA4AZuICvzps5EG1jNhtnJX+HyvcIUPelj/XNDxA9xY7Aj1ITmWToN
+	 1o9A3jNS9mGBw==
+Date: Thu, 11 Apr 2024 13:58:39 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Edward Cree <ecree.xilinx@gmail.com>,
+	Erick Archer <erick.archer@outlook.com>,
+	Long Li <longli@microsoft.com>,
+	Ajay Sharma <sharmaajay@microsoft.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Shradha Gupta <shradhagupta@linux.microsoft.com>,
+	Konstantin Taranov <kotaranov@microsoft.com>,
+	linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 0/3] RDMA/mana_ib: Add flex array to struct
+ mana_cfg_rx_steer_req_v2
+Message-ID: <20240411105839.GN4195@unreal>
+References: <AS8PR02MB72374BD1B23728F2E3C3B1A18B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <20240408110730.GE8764@unreal>
+ <20240408183657.7fb6cc35@kernel.org>
+ <ca8a0df8-b178-31ff-026f-b2d298f3aa84@gmail.com>
+ <20240409144419.6dc12ebb@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,88 +66,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240409144419.6dc12ebb@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   de14d5f2a9ff2df737a01575ee95bc5a35f5853d
-commit: ca23b4d4cae5d32a9d22fb3c39550dcf43df83f9 [360/372] mm: swap: introduce swap_free_nr() for batched swap_free()
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240411/202404111834.XUWxYckr-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404111834.XUWxYckr-lkp@intel.com/reproduce)
+On Tue, Apr 09, 2024 at 02:44:19PM -0700, Jakub Kicinski wrote:
+> On Tue, 9 Apr 2024 18:01:40 +0100 Edward Cree wrote:
+> > > Shared branch would be good. Ed has some outstanding patches 
+> > > to refactor the ethtool RSS API.  
+> > 
+> > For the record I am extremely unlikely to have time to get those
+> >  done this cycle :(
+> > Though in any case fwiw it doesn't look like this series touches
+> >  anything that would conflict; mana doesn't appear to support
+> >  custom RSS contexts and besides the changes are well away from
+> >  the ethtool API handling.
+> 
+> Better safe than sorry, since the change applies cleanly on an -rc tag
+> having it applied to both trees should be very little extra work.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404111834.XUWxYckr-lkp@intel.com/
+I prepared mana-ib-flex branch https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git/log/?h=mana-ib-flex
+and merge ti to our wip branch https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git/commit/?h=wip/leon-for-next&id=e537deecda03e0911e9406095ccd48bd42f328c7
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at vsprintf.c
-   >>>            vsprintf.o:(.text+0x1) in archive lib/lib.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at platform.c
-   >>>            drivers/of/platform.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at bdev.c
-   >>>            block/bdev.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at commoncap.c
-   >>>            security/commoncap.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at meminfo.c
-   >>>            fs/proc/meminfo.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at array.c
-   >>>            fs/proc/array.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at base.c
-   >>>            fs/proc/base.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at nommu.c
-   >>>            fs/proc/nommu.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at buffered-io.c
-   >>>            fs/iomap/buffered-io.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at drop_caches.c
-   >>>            fs/drop_caches.o:(.text+0x1) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: swap_free_nr
-   >>> defined at main.c
-   >>>            init/main.o:(swap_free_nr) in archive vmlinux.a
-   >>> defined at coredump.c
-   >>>            fs/coredump.o:(.text+0x1) in archive vmlinux.a
-..
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
