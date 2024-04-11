@@ -1,110 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F62E57F;
-	Thu, 11 Apr 2024 06:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF0A63D
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 07:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712815933; cv=none; b=CDHxJkDezkPCcq+rpJ3AESwcDJqqmwBsSIapzILZ6200JRvJCFGlgXnLcgFRzrfeUwDLBKqpwywz8QS5cdX0BHoQrQce77qfZaSXa7ugxR19Ry6MQX5h1+zGK33A7Tam0t63uWJexzinZRrxqCwvQc7lwMWstoG9Zq93T1V7Y4A=
+	t=1712818949; cv=none; b=idu/N+6FUVZO2u7AnIBFcynTGnZyq6K9s/iZSr8RAl5xBRBi7g/sM5C6nmCTbpElesYvV0n+BQR3uZ+yPqjWbcGhsc0C1ghfOaNl54TBUIl3Qf/Gd70T2i9/31ylV2b9ADrfwMxdZo0m1LJqDbjw+2eavUeiPLyVs27fOW/XwKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712815933; c=relaxed/simple;
-	bh=nngKxV9PZECYLbABSBmTJSKa3HScA9wsohuz9Yru0v4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oNVE3cnxtGy4llMwlPRNRiGetozVAK7TFtI8VdYAfoPKKl1ZDWk3fhdk4YkV+OGB2hAfgkY2YVxl6D9rCurzFs7sZjTZ/kvU93jgsYdnUyaodub9B4vlPxcZ0Gdmj7Pk0/rsB45s1EnQzLOkbARq6z/539jOlxbTXB322Pss2fE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ReSx3hv9; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712818949; c=relaxed/simple;
+	bh=qU7wfKPZiKmQZPy2qC63qZahYpClPjRIwc8qAFTnCRo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TgNMDQeIeEBj259aUfppcS2fbn7YgTag6ZR12D5RDXp5utxvfJ1GHHQFYc9BhHZTf+NXj8ueVO8+IRL94hO/drCc8oSch3GSH2CuEAYXsFhzduslAYPP8p9htYyGkzqfg2gVH7mzNs5/dTPaFsl1eFspp+dBpfwTI6c3xnZqF8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JnQGip1n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ReSx3hv9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712815932; x=1744351932;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nngKxV9PZECYLbABSBmTJSKa3HScA9wsohuz9Yru0v4=;
-  b=ReSx3hv908pTw8BFhZJgfk7CZj8lDFuMORGzxwiGoRkELbhEqycUQjrO
-   YRGZattVIPHUhxQI4EYZFl+srunvX7mXOHwPubkbwoDGvPMPVhIgeYSoC
-   OyX02FpiU+78pGHdlVSi2avciPIBJNwnZ8wBujhm8GvoYMHtB3KcfZ2MI
-   VyZzM2uCP1U9CS797oOe2iJTiwPD2ME4NXr6hGU5Fg5YVacEYGO6kiHRq
-   zbQplfQUVtfilTB0MvW7iLeftCRCju2+Urvbh+aVf2KJwNKeHQMqOhc36
-   rKRkpUQC5PQnbMm+ooJRI5RV2GbsZFdEihJV4IJb2GYGn7nsL70OvcDUo
-   A==;
-X-CSE-ConnectionGUID: QLfS+0bzTBGmkrIJev5R4g==
-X-CSE-MsgGUID: eFYLlwIcSz+tWcVoEkIMig==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11169827"
-X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="11169827"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 23:12:11 -0700
-X-CSE-ConnectionGUID: eEQAKC54Q1q3thvh5+yUGQ==
-X-CSE-MsgGUID: gSjypHKNSFaJ6F/M7vCRDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="21389997"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 10 Apr 2024 23:12:09 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1runfK-0008Hh-1U;
-	Thu, 11 Apr 2024 06:12:06 +0000
-Date: Thu, 11 Apr 2024 14:11:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [rostedt-trace:trace/ring-buffer-prealloc 19/19]
- kernel/trace/trace_output.c:1015:59: error: no member named 'text_delta' in
- 'struct trace_array'
-Message-ID: <202404111406.nb8xGWMw-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JnQGip1n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24511C433C7
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 07:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712818949;
+	bh=qU7wfKPZiKmQZPy2qC63qZahYpClPjRIwc8qAFTnCRo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JnQGip1nNqvMljL4chRVLeKyXx5BxyENIVgT/vswWlDP0CI98VUPJzYNZ5fqNf5O0
+	 b2OjSm/byKoEP7AjARUDNt7EJINTpuw/p3BZ0qrQ72sFbOxXEC3T+RAcH5pyJoSvBM
+	 ZoviIVNSuWSGZ9hjd2c4BpD6q0aeD9ZsToQZZ/eQmZZR2pPYRmDLC4y/X6iWPUeT8y
+	 LygNDcEhgElIlEHeOkLHInBP82wnED0INqeWrd55+uPJaMMam4QpAdt3FRZz4xHqyy
+	 EDy3RL8yJDlI/1IHfG0YU3w0H3CQMgSaH7Fb6+wc9dHIQbIDcuvdVgF4e2T6/OV0cb
+	 ljN04KYQGrQ0w==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-516c97ddcd1so9183649e87.2
+        for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 00:02:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUzYqjzy/ex5jxZDrpxJDWuEwa39ejDQ/ugjwq++wneLwcDVP14aQOlJ8PX/HdCl6rJuFvIkdtSyNvvBeZCp3baZG6WYg==
+X-Gm-Message-State: AOJu0YyfJuO0NvUAlXYr/6gbC4NjP7Hrs3Mnt6ghSSDXvkM25fNcTnA9
+	9ip2U6DzSkyfK6VDAgTjB2QjXZt2rXnRP9lv3NNhXZHO+zQtnE5l2FMrbHFW3oZswdROvGabIR7
+	IV4/7k0IY6nyQxpm8Am7nmYdk2DQ=
+X-Google-Smtp-Source: AGHT+IFfUboQwbkillPEb97o+5lWxVz4+at6POcnOx90LxTpR0WO+PgGYZmr7iUDw5DEp7TCw475oS+fqafGCEdqvDE=
+X-Received: by 2002:a05:651c:102c:b0:2d6:fc0b:f122 with SMTP id
+ w12-20020a05651c102c00b002d6fc0bf122mr2858466ljm.18.1712818947405; Thu, 11
+ Apr 2024 00:02:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240409164641.GC3219862@dev-arch.thelio-3990X>
+ <20240410024126.21589-1-zhuqiuer1@huawei.com> <20240410024126.21589-2-zhuqiuer1@huawei.com>
+ <CAMj1kXFdR49n2Je5jYSdbWRZbMGoZenfaqDX3iCQFVZUecrCmw@mail.gmail.com> <20240410153526.GA3904754@dev-arch.thelio-3990X>
+In-Reply-To: <20240410153526.GA3904754@dev-arch.thelio-3990X>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 11 Apr 2024 09:02:15 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXH=f4tS2wwgG2a8fz2eUZzATU_Hi4n82MmrOu8Aexux0A@mail.gmail.com>
+Message-ID: <CAMj1kXH=f4tS2wwgG2a8fz2eUZzATU_Hi4n82MmrOu8Aexux0A@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: Add a memory clobber to the fmrx instruction
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: zhuqiuer <zhuqiuer1@huawei.com>, justinstitt@google.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux@armlinux.org.uk, llvm@lists.linux.dev, morbo@google.com, 
+	ndesaulniers@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace/ring-buffer-prealloc
-head:   26231feef0abf43a00e0ea834d7e0df0c017be2f
-commit: 26231feef0abf43a00e0ea834d7e0df0c017be2f [19/19] tracing: Update function tracing output for previous boot buffer
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240411/202404111406.nb8xGWMw-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404111406.nb8xGWMw-lkp@intel.com/reproduce)
+On Wed, 10 Apr 2024 at 17:35, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Wed, Apr 10, 2024 at 02:31:11PM +0200, Ard Biesheuvel wrote:
+> > On Wed, 10 Apr 2024 at 04:41, zhuqiuer <zhuqiuer1@huawei.com> wrote:
+> > >
+> > > The instruction fmrx is used throughout the kernel,
+> > > where it is sometimes expected to be skipped
+> > > by incrementing the program counter, such as in vfpmodule.c:vfp_init().
+> > > Therefore, the instruction should not be reordered when it is not intended.
+> > > Adding a barrier() instruction before and after this call cannot prevent
+> > > reordering by the compiler, as the fmrx instruction is constrained
+> > > by '=r', meaning it works on the general register but not on memory.
+> > > To ensure the order of the instruction after compiling,
+> > > adding a memory clobber is necessary.
+> > >
+> > > Below is the code snippet disassembled from the method:
+> > > vfpmodule.c:vfp_init(), compiled by LLVM.
+> > >
+> > > Before the patching:
+> > > xxxxx:   xxxxx    bl  c010c688 <register_undef_hook>
+> > > xxxxx:   xxxxx    mov r0, r4
+> > > xxxxx:   xxxxx    bl  c010c6e4 <unregister_undef_hook>
+> > > ...
+> > > xxxxx:   xxxxx    bl  c0791c8c <printk>
+> > > xxxxx:   xxxxx    movw    r5, #23132  ; 0x5a5c
+> > > xxxxx:   xxxxx    vmrs    r4, fpsid  <- this is the fmrx instruction
+> > >
+> > > After the patching:
+> > > xxxxx:   xxxxx    bl  c010c688 <register_undef_hook>
+> > > xxxxx:   xxxxx    mov r0, r4
+> > > xxxxx:   xxxxx    vmrs    r5, fpsid  <- this is the fmrx instruction
+> > > xxxxx:   xxxxx    bl  c010c6e4 <unregister_undef_hook>
+> > >
+> > > Signed-off-by: zhuqiuer <zhuqiuer1@huawei.com>
+> >
+> > This also fixes the issue I observed so
+> >
+> > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> This can probably go in Russell's patch tracker?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404111406.nb8xGWMw-lkp@intel.com/
+Yes.
 
-All errors (new ones prefixed by >>):
+> Your patch had
+>
+> Cc: stable@vger.kernel.org
+>
+> in it, should this one as well?
+>
 
->> kernel/trace/trace_output.c:1015:59: error: no member named 'text_delta' in 'struct trace_array'
-           print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta, flags);
-                                                          ~~~~~~~~  ^
-   kernel/trace/trace_output.c:1680:59: error: no member named 'text_delta' in 'struct trace_array'
-           print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta, flags);
-                                                          ~~~~~~~~  ^
-   2 errors generated.
+Yes.
 
 
-vim +1015 kernel/trace/trace_output.c
-
-  1005	
-  1006	/* TRACE_FN */
-  1007	static enum print_line_t trace_fn_trace(struct trace_iterator *iter, int flags,
-  1008						struct trace_event *event)
-  1009	{
-  1010		struct ftrace_entry *field;
-  1011		struct trace_seq *s = &iter->seq;
-  1012	
-  1013		trace_assign_type(field, iter->ent);
-  1014	
-> 1015		print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta, flags);
-  1016		trace_seq_putc(s, '\n');
-  1017	
-  1018		return trace_handle_return(s);
-  1019	}
-  1020	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > > ---
+> > >  arch/arm/vfp/vfpinstr.h | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/arch/arm/vfp/vfpinstr.h b/arch/arm/vfp/vfpinstr.h
+> > > index 3c7938fd40aa..ae2c9b9b7701 100644
+> > > --- a/arch/arm/vfp/vfpinstr.h
+> > > +++ b/arch/arm/vfp/vfpinstr.h
+> > > @@ -68,14 +68,14 @@
+> > >         u32 __v;                        \
+> > >         asm(".fpu       vfpv2\n"        \
+> > >             "vmrs       %0, " #_vfp_    \
+> > > -           : "=r" (__v) : : "cc");     \
+> > > +           : "=r" (__v) : : "memory", "cc");   \
+> > >         __v;                            \
+> > >   })
+> > >
+> > >  #define fmxr(_vfp_,_var_)              \
+> > >         asm(".fpu       vfpv2\n"        \
+> > >             "vmsr       " #_vfp_ ", %0" \
+> > > -          : : "r" (_var_) : "cc")
+> > > +          : : "r" (_var_) : "memory", "cc")
+> > >
+> > >  #else
+> > >
+> > > --
+> > > 2.12.3
+> > >
