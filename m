@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB5828FD;
-	Thu, 11 Apr 2024 13:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC36148306;
+	Thu, 11 Apr 2024 13:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712841155; cv=none; b=hpyv8jwI4lYdn2DB4gViroY+ryfiGJ06qZbW3VQSoM6QTyGV+qUe90oo7lPzoy5xqVsZa3cITqd3vJKlpvgMxEdZjPkhMvZd4mnE/rFwel0dwLAzz4WKghWJL9tQ6RI2CgOVaqUHMIrMoI+4JbvzORvalu3bqOqi+JvdTHkXUPI=
+	t=1712841899; cv=none; b=aaQLqlqcGIF+WeeUODnu93kFBNM5kVKb8z8/VhcfUldsr8QPSN84Yeubw1OP4lj6oJb9ybif0UVAb8r6d4oHFIpMPaXflTtZWsxRBtxfoThMHWsdp+lsuWwvXc+cbSy6BSj3Eq7AF8nen4/OYUYLS9if4sWPmJM3HX4oxLrZYWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712841155; c=relaxed/simple;
-	bh=6jWALG/0GeQr3sgh4U39X/vqP7I/qGQuzIrJ0LkrsAM=;
+	s=arc-20240116; t=1712841899; c=relaxed/simple;
+	bh=0K5wZ0JP5Ley0IklK8KFv9Jwt2LW91kJlD0nuigeqmE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XNs3s0iBJlIMG/J/1AzzCOhqLS/6d0zqgWIxb58cNrh0WqNOBF33El8JLeAxBUd6eGRorvm7y2rY30+0Qf62a2xW1FT6e6/HV7lCxg5AKRnRzJFsUk6lGqMxbu17zVkO2xO6zyGdMx1B8zJXV+RowRzj/EVMbyhcsQCwXiJt5h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lpw4Jpp9; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=r0IaCeeNsV+Z19/Ei2eWioFruY4YKGsMGN2osYC/S9LVsu44VNVsY8fbdCLqOf6y+Nu9xEAyTjrDW9qh8Jsy7Ef7XYFMp/1VtGM7/5ZyfjB/yIHfimka24kizMYeu1hxwdQAow0FvQRpY4PT7hqteRRLTbMdsbAvQpsR6HkjhH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gZbFiEhv; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lpw4Jpp9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gZbFiEhv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712841153; x=1744377153;
+  t=1712842054; x=1744378054;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6jWALG/0GeQr3sgh4U39X/vqP7I/qGQuzIrJ0LkrsAM=;
-  b=Lpw4Jpp91AQyeLlSK0p4KZnM6P+4+7VRKsvxeO6EMbRMAR8O8xh5YYUr
-   +pdyMtVqvJsrljJ2+B+B+1ymvhWKY2QK3Y+rM83ZaQST2D+m/33GbJlbB
-   hvDuqmwJpJSxzK5vSYQ+muuQ5jg2zoK9BLRmq4xQ4faYqQacgUnsrIGm9
-   wX7tyeS1XL41Mbp8FpbSh1LfcNgEgeQuOTlJoCYjH+Pgf8UAgsG3ZJ+xR
-   TLGnvtgDwupDxsfcQJ6BKm6Um6RH9wK68SZCAKISTKA01IoKOddhjPKYL
-   iOnO9eKj6X3AwhR7hmLm9pLImOqJfg7atB4sJmsp+IQuJPhPEMOBhmbKY
-   A==;
-X-CSE-ConnectionGUID: sFlf+DW0T+eIBlMAV9xC1w==
-X-CSE-MsgGUID: jOtyOeolQAGB4OOPLJZUeA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="8103635"
+  bh=0K5wZ0JP5Ley0IklK8KFv9Jwt2LW91kJlD0nuigeqmE=;
+  b=gZbFiEhvuTYE3Fppvb14ScSb6K7VQuMVMBLLK8dyLqStPkW/8dM3Z+U9
+   Q989Zzri8P2FWDdjjPHc6JEDKviqmc43G+Zirnvpeke/n3esvc1n08ynG
+   /Xpyv9d64IBCbqKn2LRPA2DhJTxtjacgJ4zofo6K4J3iFudV2J/rMZ6fA
+   wGLRR0oIHj5bRfYR8EmANW5nqfptPtnnQNW5rDAGLAIj/D/HO8Zsa53I/
+   Jsmcv4RIH4YpBFn0BO/S6aCKq9Uke2MYajeuBC9oY2a18xvSSFKmYh/VR
+   VaUQYOort1pmaa03Z8I/TSisv5hLRycmNwsFKBfCpUew2mDp85TAW+noQ
+   w==;
+X-CSE-ConnectionGUID: /b97b/SySKysR7c95dPMJw==
+X-CSE-MsgGUID: w6D+o6t5RNiQi/2yu9+KoQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="18958502"
 X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="8103635"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 06:12:32 -0700
-X-CSE-ConnectionGUID: k/28Xh8SSSakOEdflrloxA==
-X-CSE-MsgGUID: sc8JA6qkQfWdHcAvS7l84g==
+   d="scan'208";a="18958502"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 06:27:33 -0700
+X-CSE-ConnectionGUID: oW9LtvEdRqGYIR1K3Uhf4g==
+X-CSE-MsgGUID: KX5sQs3eSJa9uNpEKvAGyA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="21398867"
+   d="scan'208";a="20948523"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 11 Apr 2024 06:12:31 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 11 Apr 2024 06:27:31 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ruuE9-0008dd-00;
-	Thu, 11 Apr 2024 13:12:29 +0000
-Date: Thu, 11 Apr 2024 21:12:00 +0800
+	id 1ruuSf-0008eF-1N;
+	Thu, 11 Apr 2024 13:27:29 +0000
+Date: Thu, 11 Apr 2024 21:26:41 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 205/415] drivers/misc/cxl/file.c:422:9: error:
- conflicting types for 'afu_read'
-Message-ID: <202404112138.TKDNBBBS-lkp@intel.com>
+Subject: [axboe-block:rw_iter 204/415] drivers/misc/ibmvmc.c:1040:35: error:
+ expected ';' at end of declaration
+Message-ID: <202404112133.BapUjEZE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,19 +64,25 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
 head:   2cdbd541e4481cb9cbd08913e0586dc8a2570aec
-commit: 2ff4bdb9c46f5a8cb1b473cd9fa7ca74a1c675d4 [205/415] misc: cxl: convert to read/write iterators
-config: powerpc64-randconfig-001-20240411 (https://download.01.org/0day-ci/archive/20240411/202404112138.TKDNBBBS-lkp@intel.com/config)
+commit: 3fa1175e116213a99f5f54c7d3f2101c252b1c4a [204/415] misc: ibmvmc: convert to read/write iterators
+config: powerpc64-randconfig-003-20240411 (https://download.01.org/0day-ci/archive/20240411/202404112133.BapUjEZE-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404112138.TKDNBBBS-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404112133.BapUjEZE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404112138.TKDNBBBS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404112133.BapUjEZE-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/misc/cxl/file.c:15:
+   In file included from drivers/misc/ibmvmc.c:22:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:24:
    In file included from include/linux/mm.h:2208:
    include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -96,140 +102,137 @@ All errors (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      528 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/misc/cxl/file.c:422:9: error: conflicting types for 'afu_read'
-     422 | ssize_t afu_read(struct kiocb *iocb, struct iov_iter *to)
-         |         ^
-   drivers/misc/cxl/cxl.h:1048:9: note: previous declaration is here
-    1048 | ssize_t afu_read(struct file *file, char __user *buf, size_t count, loff_t *off);
-         |         ^
->> drivers/misc/cxl/file.c:508:37: error: use of undeclared identifier 'buf'
-     508 |                 return afu_driver_event_copy(ctx, buf, &event, pl);
-         |                                                   ^
->> drivers/misc/cxl/file.c:528:15: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
-     528 |         .read_iter      = afu_read,
-         |                           ^~~~~~~~
-   drivers/misc/cxl/file.c:539:15: error: incompatible function pointer types initializing 'ssize_t (*)(struct kiocb *, struct iov_iter *)' (aka 'long (*)(struct kiocb *, struct iov_iter *)') with an expression of type 'ssize_t (struct file *, char *, size_t, loff_t *)' (aka 'long (struct file *, char *, unsigned long, long long *)') [-Wincompatible-function-pointer-types]
-     539 |         .read_iter      = afu_read,
-         |                           ^~~~~~~~
-   4 warnings and 4 errors generated.
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/misc/ibmvmc.c:1040:35: error: expected ';' at end of declaration
+    1040 |         struct file *file = iocb->ki_filp
+         |                                          ^
+         |                                          ;
+>> drivers/misc/ibmvmc.c:1130:8: error: use of undeclared identifier 'p'
+    1130 |         ret = p - buffer;
+         |               ^
+>> drivers/misc/ibmvmc.c:1130:12: error: use of undeclared identifier 'buffer'
+    1130 |         ret = p - buffer;
+         |                   ^
+   5 warnings and 3 errors generated.
 
 
-vim +/afu_read +422 drivers/misc/cxl/file.c
+vim +1040 drivers/misc/ibmvmc.c
 
-   421	
- > 422	ssize_t afu_read(struct kiocb *iocb, struct iov_iter *to)
-   423	{
-   424		struct cxl_context *ctx = iocb->ki_filp->private_data;
-   425		struct cxl_event_afu_driver_reserved *pl = NULL;
-   426		size_t count = iov_iter_count(to);
-   427		struct cxl_event event;
-   428		unsigned long flags;
-   429		int rc;
-   430		DEFINE_WAIT(wait);
-   431	
-   432		if (!cxl_ops->link_ok(ctx->afu->adapter, ctx->afu))
-   433			return -EIO;
-   434	
-   435		if (count < CXL_READ_MIN_SIZE)
-   436			return -EINVAL;
-   437	
-   438		spin_lock_irqsave(&ctx->lock, flags);
-   439	
-   440		for (;;) {
-   441			prepare_to_wait(&ctx->wq, &wait, TASK_INTERRUPTIBLE);
-   442			if (ctx_event_pending(ctx) || (ctx->status == CLOSED))
-   443				break;
-   444	
-   445			if (!cxl_ops->link_ok(ctx->afu->adapter, ctx->afu)) {
-   446				rc = -EIO;
-   447				goto out;
-   448			}
-   449	
-   450			if (iocb->ki_filp->f_flags & O_NONBLOCK) {
-   451				rc = -EAGAIN;
-   452				goto out;
-   453			}
-   454	
-   455			if (signal_pending(current)) {
-   456				rc = -ERESTARTSYS;
-   457				goto out;
-   458			}
-   459	
-   460			spin_unlock_irqrestore(&ctx->lock, flags);
-   461			pr_devel("afu_read going to sleep...\n");
-   462			schedule();
-   463			pr_devel("afu_read woken up\n");
-   464			spin_lock_irqsave(&ctx->lock, flags);
-   465		}
-   466	
-   467		finish_wait(&ctx->wq, &wait);
-   468	
-   469		memset(&event, 0, sizeof(event));
-   470		event.header.process_element = ctx->pe;
-   471		event.header.size = sizeof(struct cxl_event_header);
-   472		if (ctx->afu_driver_ops && atomic_read(&ctx->afu_driver_events)) {
-   473			pr_devel("afu_read delivering AFU driver specific event\n");
-   474			pl = ctx->afu_driver_ops->fetch_event(ctx);
-   475			atomic_dec(&ctx->afu_driver_events);
-   476			event.header.type = CXL_EVENT_AFU_DRIVER;
-   477		} else if (ctx->pending_irq) {
-   478			pr_devel("afu_read delivering AFU interrupt\n");
-   479			event.header.size += sizeof(struct cxl_event_afu_interrupt);
-   480			event.header.type = CXL_EVENT_AFU_INTERRUPT;
-   481			event.irq.irq = find_first_bit(ctx->irq_bitmap, ctx->irq_count) + 1;
-   482			clear_bit(event.irq.irq - 1, ctx->irq_bitmap);
-   483			if (bitmap_empty(ctx->irq_bitmap, ctx->irq_count))
-   484				ctx->pending_irq = false;
-   485		} else if (ctx->pending_fault) {
-   486			pr_devel("afu_read delivering data storage fault\n");
-   487			event.header.size += sizeof(struct cxl_event_data_storage);
-   488			event.header.type = CXL_EVENT_DATA_STORAGE;
-   489			event.fault.addr = ctx->fault_addr;
-   490			event.fault.dsisr = ctx->fault_dsisr;
-   491			ctx->pending_fault = false;
-   492		} else if (ctx->pending_afu_err) {
-   493			pr_devel("afu_read delivering afu error\n");
-   494			event.header.size += sizeof(struct cxl_event_afu_error);
-   495			event.header.type = CXL_EVENT_AFU_ERROR;
-   496			event.afu_error.error = ctx->afu_err;
-   497			ctx->pending_afu_err = false;
-   498		} else if (ctx->status == CLOSED) {
-   499			pr_devel("afu_read fatal error\n");
-   500			spin_unlock_irqrestore(&ctx->lock, flags);
-   501			return -EIO;
-   502		} else
-   503			WARN(1, "afu_read must be buggy\n");
-   504	
-   505		spin_unlock_irqrestore(&ctx->lock, flags);
-   506	
-   507		if (event.header.type == CXL_EVENT_AFU_DRIVER)
- > 508			return afu_driver_event_copy(ctx, buf, &event, pl);
-   509	
-   510		if (!copy_to_iter_full(&event, event.header.size, to))
-   511			return -EFAULT;
-   512		return event.header.size;
-   513	
-   514	out:
-   515		finish_wait(&ctx->wq, &wait);
-   516		spin_unlock_irqrestore(&ctx->lock, flags);
-   517		return rc;
-   518	}
-   519	
-   520	/* 
-   521	 * Note: if this is updated, we need to update api.c to patch the new ones in
-   522	 * too
-   523	 */
-   524	const struct file_operations afu_fops = {
-   525		.owner		= THIS_MODULE,
-   526		.open           = afu_open,
-   527		.poll		= afu_poll,
- > 528		.read_iter	= afu_read,
-   529		.release        = afu_release,
-   530		.unlocked_ioctl = afu_ioctl,
-   531		.compat_ioctl   = afu_compat_ioctl,
-   532		.mmap           = afu_mmap,
-   533	};
-   534	
+  1025	
+  1026	/**
+  1027	 * ibmvmc_write - Write
+  1028	 *
+  1029	 * @file:	file struct
+  1030	 * @buffer:	Character buffer
+  1031	 * @count:	Count field
+  1032	 * @ppos:	Offset
+  1033	 *
+  1034	 * Return:
+  1035	 *	0 - Success
+  1036	 *	Non-zero - Failure
+  1037	 */
+  1038	static ssize_t ibmvmc_write(struct kiocb *iocb, struct iov_iter *from)
+  1039	{
+> 1040		struct file *file = iocb->ki_filp
+  1041		struct inode *inode;
+  1042		struct ibmvmc_buffer *vmc_buffer;
+  1043		struct ibmvmc_file_session *session;
+  1044		struct crq_server_adapter *adapter;
+  1045		size_t count = iov_iter_count(from);
+  1046		struct ibmvmc_hmc *hmc;
+  1047		unsigned char *buf;
+  1048		unsigned long flags;
+  1049		size_t bytes;
+  1050		size_t c = count;
+  1051		int ret = 0;
+  1052	
+  1053		session = file->private_data;
+  1054		if (!session)
+  1055			return -EIO;
+  1056	
+  1057		hmc = session->hmc;
+  1058		if (!hmc)
+  1059			return -EIO;
+  1060	
+  1061		spin_lock_irqsave(&hmc->lock, flags);
+  1062		if (hmc->state == ibmhmc_state_free) {
+  1063			/* HMC connection is not valid (possibly was reset under us). */
+  1064			ret = -EIO;
+  1065			goto out;
+  1066		}
+  1067	
+  1068		adapter = hmc->adapter;
+  1069		if (!adapter) {
+  1070			ret = -EIO;
+  1071			goto out;
+  1072		}
+  1073	
+  1074		if (count > ibmvmc.max_mtu) {
+  1075			dev_warn(adapter->dev, "invalid buffer size 0x%lx\n",
+  1076				 (unsigned long)count);
+  1077			ret = -EIO;
+  1078			goto out;
+  1079		}
+  1080	
+  1081		/* Waiting for the open resp message to the ioctl(1) - retry */
+  1082		if (hmc->state == ibmhmc_state_opening) {
+  1083			ret = -EBUSY;
+  1084			goto out;
+  1085		}
+  1086	
+  1087		/* Make sure the ioctl() was called & the open msg sent, and that
+  1088		 * the HMC connection has not failed.
+  1089		 */
+  1090		if (hmc->state != ibmhmc_state_ready) {
+  1091			ret = -EIO;
+  1092			goto out;
+  1093		}
+  1094	
+  1095		vmc_buffer = ibmvmc_get_valid_hmc_buffer(hmc->index);
+  1096		if (!vmc_buffer) {
+  1097			/* No buffer available for the msg send, or we have not yet
+  1098			 * completed the open/open_resp sequence.  Retry until this is
+  1099			 * complete.
+  1100			 */
+  1101			ret = -EBUSY;
+  1102			goto out;
+  1103		}
+  1104		if (!vmc_buffer->real_addr_local) {
+  1105			dev_err(adapter->dev, "no buffer storage assigned\n");
+  1106			ret = -EIO;
+  1107			goto out;
+  1108		}
+  1109		buf = vmc_buffer->real_addr_local;
+  1110	
+  1111		ret = 0;
+  1112		while (c > 0) {
+  1113			bytes = min_t(size_t, c, vmc_buffer->size);
+  1114	
+  1115			if (!copy_from_iter_full(buf, bytes, from)) {
+  1116				ret = -EFAULT;
+  1117				goto out;
+  1118			}
+  1119			c -= bytes;
+  1120		}
+  1121	
+  1122		inode = file_inode(file);
+  1123		inode_set_mtime_to_ts(inode, inode_set_ctime_current(inode));
+  1124		mark_inode_dirty(inode);
+  1125	
+  1126		dev_dbg(adapter->dev, "write: file = 0x%lx, count = 0x%lx\n",
+  1127			(unsigned long)file, (unsigned long)count);
+  1128	
+  1129		ibmvmc_send_msg(adapter, vmc_buffer, hmc, count);
+> 1130		ret = p - buffer;
+  1131	 out:
+  1132		spin_unlock_irqrestore(&hmc->lock, flags);
+  1133		return (ssize_t)(ret);
+  1134	}
+  1135	
 
 -- 
 0-DAY CI Kernel Test Service
