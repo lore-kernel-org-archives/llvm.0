@@ -1,183 +1,199 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685D314A9F;
-	Thu, 11 Apr 2024 18:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9654017584;
+	Thu, 11 Apr 2024 19:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712861150; cv=none; b=HcyuPN3rNShttYycCZrJsdmmeYPz628JFwxGhlTYlRMQmouOpjKE5lFZOcQ+HIS195fHkxIg0KJdUrJurAMtwkebE5UQTW8+E+zxBUKXpQ7SONqtRPc8zzLiMBCvfBNRZgACSs33by7LzroRWus/2ZmbRn7lW5DO4/5toRAhljs=
+	t=1712862339; cv=none; b=lqk3AZWdeGQN+1FoU30WSf7t1nrLvkQbrW6hrbMR9Evzpp49Oa+s6pwql6TLUgYfzjTnqPUSjOF+/GisYTa68sekhdv2+xd8MNLMfn1XJAcrnJhcwUPC/KWHPQRMdKD7KyUpA/cKBJZIpKZ8AbAaUONyskD7/CRqN+o4P3lYl3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712861150; c=relaxed/simple;
-	bh=3J9KwOZ8VsQ0/GJ7lg9iQ4h/nYIgnKWTHARE6B+5FCo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jSsnRCjb4+L3e46L4S2MxMZE6dxqToMbfwi2t2Fz9FFw/rrEfyB8qodnQAiadCqWeiqMf/5UxA/92CGqXGJyECfyxLqaF5SR/GGyCMGBZka4H4okkmJW+0k7SQre2cXVT0PzfdEwqTn7NtwbqqnlnKlBlyVl8UHCennTC2RbL+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p3B6pkBa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712862339; c=relaxed/simple;
+	bh=fVQl7RCtOg4AqxawSMWY3ZrEfOU3fHC6NAhZRb8dlLE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JUoeeICm9F2NjXIgg1Omc66z7JIezMwzyGSSAwBtu+9cF5CBjWcX7iEN8HM2ojrWNQ9txk2r/pUCRsj4Si8SA5hT0A3uYH9RsUZxCqKYtLDoLJ03BCkn4GnywxvlhkztKOXuVeBsEjS+B9hYMLb9euDVboQH/Hj5I/jcKl2cJtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZGYLFH3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p3B6pkBa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F0F5C072AA;
-	Thu, 11 Apr 2024 18:45:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZGYLFH3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272C7C072AA;
+	Thu, 11 Apr 2024 19:05:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712861150;
-	bh=3J9KwOZ8VsQ0/GJ7lg9iQ4h/nYIgnKWTHARE6B+5FCo=;
-	h=From:Date:Subject:To:Cc:From;
-	b=p3B6pkBaCq00VhNmJ52+mGzQlu8zn1zqfs+z97qHqFk0h3vwoeMThLDKndm10X8kU
-	 wMzURSiapu5/IiVqMuEaGb5RBdkp/bS1wRCfOAzmAugCs+KUaQhuN6jgEnc2Tg4YHE
-	 sV5YVGRQSNSLu3oq98xbAFLP35RVKqZ1S84mHoPcuzzuH3Yh98NhNfLKqf10DoVOb4
-	 KJQJHF+vLun7Wl1+27WUkY+PWNmCwHR9bEM5YKpSBTsIMQGpjnwVIcorqammL/1YFv
-	 sVS9BMX38YQkOrvWLvaHnH0Rzelf4BAAjA/rwxaEwTqjN6dO7xrPVTLmVIgE7AmoX3
-	 D0LQlJLz1Q2fA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 11 Apr 2024 11:45:40 -0700
-Subject: [PATCH] kselftest: Mark functions that unconditionally call exit()
- as __noreturn
+	s=k20201202; t=1712862339;
+	bh=fVQl7RCtOg4AqxawSMWY3ZrEfOU3fHC6NAhZRb8dlLE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tZGYLFH3+un2LnOtwMq36Ug9++Qbs4WH4Ak+di9V71wmQ+EhwQ5Oc5Sj+J1HMaLov
+	 w0dbyIkhAviXl/Wt6Mxt/ncH/KVQ0+le/8rBGPxebqqPccS5jXmf46vECERs4bH4Fa
+	 cW+v6QjAbDY8IOGmBr93wEmfzCFTyP51vR/sy+mgqHLItnULvFfBddE44mI0KGCFzg
+	 ROUH6xrANvOXSqjl7puANuoKS8ZdraEuUf9QAzEu8m+jHzBpjPQpetLvvGNBZUA0aL
+	 U4OBHorixX4pykuMG6tQJrJWW5+E7tXslyN0t9VKJB2aPvVWFXne/EgP6fk5dsQ2Q/
+	 Y4Z1NzEd0V2cg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: shuah@kernel.org
+Cc: netdev@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] selftests: adopt BPF's approach to quieter builds
+Date: Thu, 11 Apr 2024 12:05:34 -0700
+Message-ID: <20240411190534.444918-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240411-mark-kselftest-exit-funcs-noreturn-v1-1-b027c948f586@kernel.org>
-X-B4-Tracking: v=1; b=H4sIANMvGGYC/x3NQQqDQAxA0atI1gacQZjaqxQXgyZt0MaSjEUQ7
- 96hy7f5/wQnE3K4NycYfcVl04rQNjC9sj4JZa6G2MW+60PAd7YFF6eVC3lBOqQg7zo56mZUdlM
- Mab4xpzjklKGGPkYsx3/yGK/rB/dzO1p0AAAA
-To: tglx@linutronix.de, shuah@kernel.org
-Cc: oleg@redhat.com, anna-maria@linutronix.de, frederic@kernel.org, 
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- John Stultz <jstultz@google.com>, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5035; i=nathan@kernel.org;
- h=from:subject:message-id; bh=3J9KwOZ8VsQ0/GJ7lg9iQ4h/nYIgnKWTHARE6B+5FCo=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGkS+nfLRXd8jN7zsOrXlfr8pKf94ef91P9yMPIvC+l/N
- 7N9DUNvRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhIbwUjw+WSvR4MHkZbA5s4
- xZ9Upk1Xe1uvK624+ZxSvxb/hdtahowMq3Uas7P+O012m+8sZL3p9dw3u6ec8rpt+tJJOuaC4PU
- qJgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: 8bit
 
-After commit 6d029c25b71f ("selftests/timers/posix_timers: Reimplement
-check_timer_distribution()"), clang warns:
+selftest build is fairly noisy, it's easy to miss warnings.
+It's standard practice to add alternative messages in
+the Makefile. I was grepping for existing solutions,
+and found that bpf already has the right knobs.
 
-  tools/testing/selftests/timers/../kselftest.h:398:6: warning: variable 'major' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-    398 |         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
-        |             ^~~~~~~~~~~~
-  tools/testing/selftests/timers/../kselftest.h:401:9: note: uninitialized use occurs here
-    401 |         return major > min_major || (major == min_major && minor >= min_minor);
-        |                ^~~~~
-  tools/testing/selftests/timers/../kselftest.h:398:6: note: remove the '||' if its condition is always false
-    398 |         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
-        |             ^~~~~~~~~~~~~~~
-  tools/testing/selftests/timers/../kselftest.h:395:20: note: initialize the variable 'major' to silence this warning
-    395 |         unsigned int major, minor;
-        |                           ^
-        |                            = 0
+Move them to lib.mk and adopt in net.
+Convert the basic rules in lib.mk.
 
-This is a false positive because if uname() fails, ksft_exit_fail_msg()
-will be called, which unconditionally calls exit(), a noreturn function.
-However, clang does not know that ksft_exit_fail_msg() will call exit()
-at the point in the pipeline that the warning is emitted because
-inlining has not occurred, so it assumes control flow will resume
-normally after ksft_exit_fail_msg() is called.
-
-Make it clear to clang that all of the functions that call exit()
-unconditionally in kselftest.h are noreturn transitively by marking them
-explicitly with '__attribute__((__noreturn__))', which clears up the
-warning above and any future warnings that may appear for the same
-reason.
-
-Fixes: 6d029c25b71f ("selftests/timers/posix_timers: Reimplement check_timer_distribution()")
-Reported-by: John Stultz <jstultz@google.com>
-Closes: https://lore.kernel.org/all/20240410232637.4135564-2-jstultz@google.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-I have based this change on timers/urgent, as the commit that introduces
-this particular warning is there and it is marked for stable, even
-though this appears to be a generic kselftest issue. I think it makes
-the most sense for this change to go via timers/urgent with Shuah's ack.
-While __noreturn with a return type other than 'void' does not make much
-sense semantically, there are many places that these functions are used
-as the return value for other functions such as main(), so I did not
-change the return type of these functions from 'int' to 'void' to
-minimize the necessary changes for a backport (it is an existing issue
-anyways).
+If this is okay with everyone, can we possibly apply it to net-next?
 
-I see there is another instance of this problem that will need to be
-addressed in -next, introduced by commit f07041728422 ("selftests: add
-ksft_exit_fail_perror()").
+CC: ast@kernel.org
+CC: daniel@iogearbox.net
+CC: andrii@kernel.org
+CC: martin.lau@linux.dev
+CC: eddyz87@gmail.com
+CC: song@kernel.org
+CC: yonghong.song@linux.dev
+CC: john.fastabend@gmail.com
+CC: kpsingh@kernel.org
+CC: sdf@google.com
+CC: haoluo@google.com
+CC: jolsa@kernel.org
+CC: mykolal@fb.com
+CC: shuah@kernel.org
+CC: nathan@kernel.org
+CC: ndesaulniers@google.com
+CC: morbo@google.com
+CC: justinstitt@google.com
+CC: bpf@vger.kernel.org
+CC: linux-kselftest@vger.kernel.org
+CC: llvm@lists.linux.dev
 ---
- tools/testing/selftests/kselftest.h | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 13 +------------
+ tools/testing/selftests/lib.mk       | 17 ++++++++++++++++-
+ tools/testing/selftests/net/Makefile |  9 ++++++---
+ 3 files changed, 23 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 973b18e156b2..0591974b57e0 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -80,6 +80,9 @@
- #define KSFT_XPASS 3
- #define KSFT_SKIP  4
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index b0be07f29dde..f06c527eee34 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -135,18 +135,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
  
-+#ifndef __noreturn
-+#define __noreturn       __attribute__((__noreturn__))
-+#endif
- #define __printf(a, b)   __attribute__((format(printf, a, b)))
+ TEST_GEN_FILES += liburandom_read.so urandom_read sign-file uprobe_multi
  
- /* counters */
-@@ -300,13 +303,13 @@ void ksft_test_result_code(int exit_code, const char *test_name,
- 	va_end(args);
- }
+-# Emit succinct information message describing current building step
+-# $1 - generic step name (e.g., CC, LINK, etc);
+-# $2 - optional "flavor" specifier; if provided, will be emitted as [flavor];
+-# $3 - target (assumed to be file); only file name will be emitted;
+-# $4 - optional extra arg, emitted as-is, if provided.
+-ifeq ($(V),1)
+-Q =
+-msg =
+-else
+-Q = @
+-msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
+-MAKEFLAGS += --no-print-directory
++ifneq ($(V),1)
+ submake_extras := feature_display=0
+ endif
  
--static inline int ksft_exit_pass(void)
-+static inline __noreturn int ksft_exit_pass(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_PASS);
- }
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index da2cade3bab0..aeeac5f83492 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -44,6 +44,20 @@ endif
+ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+ top_srcdir = $(selfdir)/../../..
  
--static inline int ksft_exit_fail(void)
-+static inline __noreturn int ksft_exit_fail(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_FAIL);
-@@ -333,7 +336,7 @@ static inline int ksft_exit_fail(void)
- 		  ksft_cnt.ksft_xfail +	\
- 		  ksft_cnt.ksft_xskip)
++# msg: emit succinct information message describing current building step
++# $1 - generic step name (e.g., CC, LINK, etc);
++# $2 - optional "flavor" specifier; if provided, will be emitted as [flavor];
++# $3 - target (assumed to be file); only file name will be emitted;
++# $4 - optional extra arg, emitted as-is, if provided.
++ifeq ($(V),1)
++Q =
++msg =
++else
++Q = @
++msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
++MAKEFLAGS += --no-print-directory
++endif
++
+ ifeq ($(KHDR_INCLUDES),)
+ KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
+ endif
+@@ -176,7 +190,8 @@ endif
+ ifeq ($(OVERRIDE_TARGETS),)
+ LOCAL_HDRS += $(selfdir)/kselftest_harness.h $(selfdir)/kselftest.h
+ $(OUTPUT)/%:%.c $(LOCAL_HDRS)
+-	$(LINK.c) $(filter-out $(LOCAL_HDRS),$^) $(LDLIBS) -o $@
++	$(call msg,CC,,$@)
++	$(Q)$(LINK.c) $(filter-out $(LOCAL_HDRS),$^) $(LDLIBS) -o $@
  
--static inline __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
-+static inline __noreturn __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
- {
- 	int saved_errno = errno;
- 	va_list args;
-@@ -348,19 +351,19 @@ static inline __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
- 	exit(KSFT_FAIL);
- }
+ $(OUTPUT)/%.o:%.S
+ 	$(COMPILE.S) $^ -o $@
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index a3c781cb8367..7e7f243d0ab2 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -125,7 +125,8 @@ BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
  
--static inline int ksft_exit_xfail(void)
-+static inline __noreturn int ksft_exit_xfail(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_XFAIL);
- }
+ MAKE_DIRS := $(BUILD_DIR)/libbpf
+ $(MAKE_DIRS):
+-	mkdir -p $@
++	$(call msg,MKDIR,,$@)
++	$(Q)mkdir -p $@
  
--static inline int ksft_exit_xpass(void)
-+static inline __noreturn int ksft_exit_xpass(void)
- {
- 	ksft_print_cnts();
- 	exit(KSFT_XPASS);
- }
+ # Get Clang's default includes on this system, as opposed to those seen by
+ # '--target=bpf'. This fixes "missing" files on some architectures/distros,
+@@ -149,13 +150,15 @@ BPF_PROG_OBJS := $(OUTPUT)/nat6to4.o $(OUTPUT)/xdp_dummy.o \
+ 	$(OUTPUT)/sample_map_ret0.bpf.o $(OUTPUT)/sample_ret0.bpf.o
  
--static inline __printf(1, 2) int ksft_exit_skip(const char *msg, ...)
-+static inline __noreturn __printf(1, 2) int ksft_exit_skip(const char *msg, ...)
- {
- 	int saved_errno = errno;
- 	va_list args;
-
----
-base-commit: 076361362122a6d8a4c45f172ced5576b2d4a50d
-change-id: 20240411-mark-kselftest-exit-funcs-noreturn-17d8ff729a7a
-
-Best regards,
+ $(BPF_PROG_OBJS): $(OUTPUT)/%.o : %.c $(BPFOBJ) | $(MAKE_DIRS)
+-	$(CLANG) -O2 -g --target=bpf $(CCINCLUDE) $(CLANG_SYS_INCLUDES) \
++	$(call msg,BPF_PROG,,$@)
++	$(Q)$(CLANG) -O2 -g --target=bpf $(CCINCLUDE) $(CLANG_SYS_INCLUDES) \
+ 	-c $< -o $@
+ 
+ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
+ 	   $(APIDIR)/linux/bpf.h					       \
+ 	   | $(BUILD_DIR)/libbpf
+-	$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/     \
++	$(call msg,MAKE,,$@)
++	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
+ 		    EXTRA_CFLAGS='-g -O0'				       \
+ 		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
+ 
 -- 
-Nathan Chancellor <nathan@kernel.org>
+2.44.0
 
