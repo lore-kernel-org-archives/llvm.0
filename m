@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA5B13B5A6;
-	Thu, 11 Apr 2024 04:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165822A1C9;
+	Thu, 11 Apr 2024 04:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712809570; cv=none; b=qzNRXmHzGnJ7jfuV738DkD7T69VS7z3p9NxolDLxIxW/6kCmA0LLAC3Hi2TApvGyb0M52cpsUS6vGWEWwfTcbfJZzponfsEq7laSsnMs0gbMF+zgKB5/Vqdaumj3Q7lwLkdBpxJGly0UK3eUoyRbByU9RfVfvIQCjKCYhVU8+fQ=
+	t=1712810170; cv=none; b=mnSCxDARBJOYfEkZFUoSB+0FYvvVLK311u0zrjESTiPpHTTih33lRDhUbzfeEwtpE6shOS+rXQXlqlEEpbQ20+ufbkEfIzd1559avx6GE0ZuMiPfWDfrKh3IylMWwdWYt3+gm6liZ1d19+jm+02GJs+5gLFqBD5SfKKpq5KcTyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712809570; c=relaxed/simple;
-	bh=1TseMfNL3Av924ErNrA2ZA+DXVbPmpBf/pOqyGb3OlI=;
+	s=arc-20240116; t=1712810170; c=relaxed/simple;
+	bh=xlxwn0mN35IdD+EG7uQmzcH8Y0ITPeI8ezIKPrkUQLg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F33CL2hd7Qdf8YHmU3X+261pfX+gpjSAasL3ZRJsWSwMuqTlfaeOn8/XT+bvt9Q7be8WwWcg1+ikxhYTGqSvgmZv/vCm3F5koff2wypcG13XbALZ0g5WLYM8m+PJPybtyQkl/BPp089gAu30OpJC958cNOh0Ksz6927Z0gRQbHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gbg3Ce1b; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=kvgLQG67+b/BFECNMN9SZXe0GArI+JiWHutzbIoyChZ8Gn/lt6fDflgHE7KnAK9JHI1YSXnJecdKP7mJXteVOgarhSbDYx1slhl7tsE2jGpfd+kZK/BnfLpF4rgNf0x52o95Iy962lXFf4nKn8ALzaMFCIV6S/VBMjBF4bY8PXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cTRe7fUH; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gbg3Ce1b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cTRe7fUH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712809568; x=1744345568;
+  t=1712810169; x=1744346169;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1TseMfNL3Av924ErNrA2ZA+DXVbPmpBf/pOqyGb3OlI=;
-  b=Gbg3Ce1b18LGXdqvZWJkrJ1MdCsb/zmDDFZjza/yV/6/JqPevThharv4
-   t3O3LhEQMSdeIuvxQXhsQWUwJH1PBpO/wpFAEF5DjRqtz1xJ9avcK1FZy
-   fKWiGE+k8v+3k4ToaoBDzO10r18ka4U1oDK2H0JDKTZgeeE8vMkvpBn2S
-   KjGdW3f/SBUfrg4xonMO3aOLVi6QGKC6bL4gl7dip4iD/mMYgbliOhFuI
-   Iih3iTKRKFBvzwfB2VY9AqDY+8VahkN4DHWlGWBy4n2kNBCFnM6UwGaF3
-   Bz0YiaP1RUjrvlj6y0pglHFe7BJHOuczD4kotbIJRlUmhIviKf8SupFpX
-   Q==;
-X-CSE-ConnectionGUID: iyHTsdEuT5mzcOB3DmxJ6A==
-X-CSE-MsgGUID: 12kz6Cr9RyyxQZAbeb1wMQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8310783"
+  bh=xlxwn0mN35IdD+EG7uQmzcH8Y0ITPeI8ezIKPrkUQLg=;
+  b=cTRe7fUHG1rDgZqUGVAoW3KqUWAsqV0s5olNy+gz7oapnGw8sohsiplm
+   xxNRahxh1nFwYHaNgLlHtJH92tiukR3sg2fu9NFccgWkjS2FrmMTb/h0T
+   orRGYBCcLWy0mxBrXhb3+NRJeUly/MVGR/PQX5xhLXvlYEX20R9PGvLR+
+   p6+oDG6jy7TJc4+Bb2UUbdfMVU42TlOBcu0FEiThH7Z0PtptvXSDn0mlK
+   w1GZgJe5WSw6CximtSr3Ln+Yxk1M56JX8FQU06tkjz+BpceZthzBrM5AY
+   La/MG5yUZi6SeHfsCbpbA6qqoaagm/CSH52ofdA3VLldYtQ3BBLFnmHtj
+   g==;
+X-CSE-ConnectionGUID: p9jxc6iuTHW80q/2JB2smg==
+X-CSE-MsgGUID: xUzESwxjSsiqlnEusp+BhA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="18913195"
 X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="8310783"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 21:26:07 -0700
-X-CSE-ConnectionGUID: 3WEaZcZ8TWermu8VkjYwtw==
-X-CSE-MsgGUID: nQ1E6CO/RuqfKcWv6WEwJA==
+   d="scan'208";a="18913195"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 21:36:07 -0700
+X-CSE-ConnectionGUID: W/LD+1OhSq6CvUHc/DhRzA==
+X-CSE-MsgGUID: 1YPQ6+YhTDaQ2n+QY0oRoQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="25546962"
+   d="scan'208";a="20783080"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 10 Apr 2024 21:26:06 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 10 Apr 2024 21:36:06 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rum0h-0008DQ-1Z;
-	Thu, 11 Apr 2024 04:26:03 +0000
-Date: Thu, 11 Apr 2024 12:25:14 +0800
+	id 1rumAN-0008Dm-2H;
+	Thu, 11 Apr 2024 04:36:03 +0000
+Date: Thu, 11 Apr 2024 12:36:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuanhua Han <hanchuanhua@oppo.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Barry Song <v-songbaohua@oppo.com>
-Subject: [akpm-mm:mm-unstable 360/372] include/linux/swap.h:565:6: warning:
- no previous prototype for function 'swap_free_nr'
-Message-ID: <202404111223.DDjEQDHj-lkp@intel.com>
+To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [rostedt-trace:trace/ring-buffer-prealloc 17/19]
+ kernel/trace/trace.c:6046:11: error: no member named 'text_delta' in 'struct
+ trace_array'
+Message-ID: <202404111252.7x2Al4tf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,66 +63,93 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   de14d5f2a9ff2df737a01575ee95bc5a35f5853d
-commit: ca23b4d4cae5d32a9d22fb3c39550dcf43df83f9 [360/372] mm: swap: introduce swap_free_nr() for batched swap_free()
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240411/202404111223.DDjEQDHj-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404111223.DDjEQDHj-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace/ring-buffer-prealloc
+head:   26231feef0abf43a00e0ea834d7e0df0c017be2f
+commit: 07bdbc98d5602bb910541fdd75e9756296641e69 [17/19] tracing/ring-buffer: Add last_boot_info file to boot instance
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240411/202404111252.7x2Al4tf-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404111252.7x2Al4tf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404111223.DDjEQDHj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404111252.7x2Al4tf-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
->> include/linux/swap.h:565:6: warning: no previous prototype for function 'swap_free_nr' [-Wmissing-prototypes]
-     565 | void swap_free_nr(swp_entry_t entry, int nr_pages)
-         |      ^
-   include/linux/swap.h:565:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     565 | void swap_free_nr(swp_entry_t entry, int nr_pages)
-         | ^
-         | static 
-   1 warning generated.
---
-   In file included from arch/x86/kernel/reboot.c:33:
-   In file included from arch/x86/include/asm/efi.h:7:
-   In file included from arch/x86/include/asm/tlb.h:8:
-   In file included from include/asm-generic/tlb.h:15:
->> include/linux/swap.h:565:6: warning: no previous prototype for function 'swap_free_nr' [-Wmissing-prototypes]
-     565 | void swap_free_nr(swp_entry_t entry, int nr_pages)
-         |      ^
-   include/linux/swap.h:565:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     565 | void swap_free_nr(swp_entry_t entry, int nr_pages)
-         | ^
-         | static 
-   arch/x86/kernel/reboot.c:972:20: warning: unused function 'nmi_shootdown_cpus_on_restart' [-Wunused-function]
-     972 | static inline void nmi_shootdown_cpus_on_restart(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
->> include/linux/swap.h:565:6: warning: no previous prototype for function 'swap_free_nr' [-Wmissing-prototypes]
-     565 | void swap_free_nr(swp_entry_t entry, int nr_pages)
-         |      ^
-   include/linux/swap.h:565:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     565 | void swap_free_nr(swp_entry_t entry, int nr_pages)
-         | ^
-         | static 
-   1 warning generated.
+>> kernel/trace/trace.c:6046:11: error: no member named 'text_delta' in 'struct trace_array'
+           if (!tr->text_delta && !tr->data_delta)
+                ~~  ^
+>> kernel/trace/trace.c:6046:30: error: no member named 'data_delta' in 'struct trace_array'
+           if (!tr->text_delta && !tr->data_delta)
+                                   ~~  ^
+   kernel/trace/trace.c:6053:6: error: no member named 'text_delta' in 'struct trace_array'
+           tr->text_delta = 0;
+           ~~  ^
+   kernel/trace/trace.c:6054:6: error: no member named 'data_delta' in 'struct trace_array'
+           tr->data_delta = 0;
+           ~~  ^
+   kernel/trace/trace.c:6889:49: error: no member named 'text_delta' in 'struct trace_array'
+           seq_buf_printf(&seq, "text delta:\t%ld\n", tr->text_delta);
+                                                      ~~  ^
+   kernel/trace/trace.c:6890:49: error: no member named 'data_delta' in 'struct trace_array'
+           seq_buf_printf(&seq, "data delta:\t%ld\n", tr->data_delta);
+                                                      ~~  ^
+   kernel/trace/trace.c:8742:10: error: no member named 'range_addr_start' in 'struct trace_array'
+           if (tr->range_addr_start)
+               ~~  ^
+   kernel/trace/trace.c:9289:10: error: no member named 'range_addr_start' in 'struct trace_array'
+           if (tr->range_addr_start && tr->range_addr_size) {
+               ~~  ^
+   kernel/trace/trace.c:9289:34: error: no member named 'range_addr_size' in 'struct trace_array'
+           if (tr->range_addr_start && tr->range_addr_size) {
+                                       ~~  ^
+   kernel/trace/trace.c:9291:17: error: no member named 'range_addr_start' in 'struct trace_array'
+                                                         tr->range_addr_start,
+                                                         ~~  ^
+   include/linux/ring_buffer.h:119:55: note: expanded from macro 'ring_buffer_alloc_range'
+           __ring_buffer_alloc_range((size), (flags), (order), (start),    \
+                                                                ^~~~~
+   kernel/trace/trace.c:9292:17: error: no member named 'range_addr_size' in 'struct trace_array'
+                                                         tr->range_addr_size);
+                                                         ~~  ^
+   include/linux/ring_buffer.h:120:8: note: expanded from macro 'ring_buffer_alloc_range'
+                                     (range_size), &__key);                \
+                                      ^~~~~~~~~~
+   kernel/trace/trace.c:9295:15: error: no member named 'text_delta' in 'struct trace_array'
+                                               &tr->text_delta, &tr->data_delta);
+                                                ~~  ^
+   kernel/trace/trace.c:9295:32: error: no member named 'data_delta' in 'struct trace_array'
+                                               &tr->text_delta, &tr->data_delta);
+                                                                 ~~  ^
+   kernel/trace/trace.c:9300:7: error: no member named 'mapped' in 'struct trace_array'
+                   tr->mapped++;
+                   ~~  ^
+   kernel/trace/trace.c:9473:6: error: no member named 'range_addr_start' in 'struct trace_array'
+           tr->range_addr_start = range_addr_start;
+           ~~  ^
+   kernel/trace/trace.c:9474:6: error: no member named 'range_addr_size' in 'struct trace_array'
+           tr->range_addr_size = range_addr_size;
+           ~~  ^
+   16 errors generated.
 
 
-vim +/swap_free_nr +565 include/linux/swap.h
+vim +6046 kernel/trace/trace.c
 
-   564	
- > 565	void swap_free_nr(swp_entry_t entry, int nr_pages)
-   566	{
-   567	}
-   568	
+  6043	
+  6044	static void update_last_data(struct trace_array *tr)
+  6045	{
+> 6046		if (!tr->text_delta && !tr->data_delta)
+  6047			return;
+  6048	
+  6049		/* Clear old data */
+  6050		tracing_reset_online_cpus(&tr->array_buffer);
+  6051	
+  6052		/* Using current data now */
+  6053		tr->text_delta = 0;
+  6054		tr->data_delta = 0;
+  6055	}
+  6056	
 
 -- 
 0-DAY CI Kernel Test Service
