@@ -1,139 +1,120 @@
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CAE2941E
-	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 21:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958E147A6A
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 23:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712869871; cv=none; b=EFuhVAfbq1+sUwxZRnYQ0BPEWEdE/vJ2qMvjn38aTxWgBYYwfyIWq5BLi5JKX4UF5fDUYqFj8xfevOmtevZbOi/qHU6OrNZeaaCvo8p+b79lZJlekJc5gyGC0aONn9KicC35yj9bDvAfe0jkSxlkdjS1tqf3TlGkda1UcvisiqM=
+	t=1712877599; cv=none; b=kim7C5S26/NgO2kCmt5CG06A/xLTHA1Bn+oP2Xaf8mGDZ955KLvGVL/VzeDaiZAAo0oKm9ycrdFa4qLep2QxR0QyimokYAvLzNPf0kK4H7CyH2MUioweE5j3UAtXshax2YqQnzGrtQMEee/1MWwDvMyRpkjfuErx4bo1pz251os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712869871; c=relaxed/simple;
-	bh=IEBJoFDSC/xhmN89SjQvJVuzGWr9gyS0EGlcaOZ8eMc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hghdoa3dbUE5BfJ+CH8GCV+T/ljfot15152Ld9Ix7aYOQZUYydslCnZJG4yxfH3tB1snvLfwINob53v/7JAvFNjzNwBy3SiEMNu9031F9tI7wGma9HRGjKrO/NhNkQtD/Hg1oNpXsdz/xnMj9VHuxrkOKi2H6FSuV2+TiZfE3sM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R1or4a8x; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1712877599; c=relaxed/simple;
+	bh=ls0xJJ270NTOYnvfFdGUV1ok/VYXdsyzhUfyHVXx5Rs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=mY+mFIWPWPEqCo8M5YvWoWM9aRIfRBcFIOai8/7L7iX8MWDTekN6K56S6c6sTfbxpn8ZKbygxgyl0FTkU8YGZBiKz99c8jSVM2em++d+GGYziBPwMhQ/8pnfEKnxzGpdgUFbBeGnJ+6akuj1SOLvItUr9dBawCJvVOivK0TQQyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2VymVw5v; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R1or4a8x"
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7d67d1073easo4894339f.0
-        for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 14:11:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2VymVw5v"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-6ea80a33cf6so383340b3a.1
+        for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 16:19:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1712869868; x=1713474668; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=38LeeLy9B9nLfzSgbJxSutTG0T1HzptAeGhsMkzO9sI=;
-        b=R1or4a8xuQv0grgVsQke8Y1maG0bGCuUY0SPz5PMqn3Ydd4XK2/fEn3pIQ6aFcu69C
-         PpH+zubPba0KBaKPDP4s0gq8yV5wj7DeeQy+xytfen6ksZFF3Jakb36rqaZfqAMLbcNW
-         YkudteFWz68CYMOlrVpXJI0s/yY5h7eEU6YWc=
+        d=google.com; s=20230601; t=1712877598; x=1713482398; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5zpMelPR/Q05P4yZbANW3smZq3nLKCEwEnHHYOEX7BY=;
+        b=2VymVw5v4MmsVrqQvvS5+dBtCdRrBjBOcDwkv+Ht9jBinXIurPPXk+AWIvO8fx6Duh
+         zFeXM0M3PRq4Z/7vLbkxtyMLSe7k0b4n9xJ/Kz3LRVVyBJYcOHLiXXwZCJILtazJhZkp
+         Q1xRbQtaVj8oBXywk9lpmP9gZcLklrwerFsbP5jg0djwOzNn3L+/P18mSOz10ggqtOav
+         6e+uV1sFm3pB0G4C6DsIXfzBHZAsHiBWdzxc2Kxo3u8KQi2nedhUk1KFrleYd6E+0BFR
+         4WX04v0bSGNaAYpQIPUdgAdQOqzMZ0l5vWLtvAWBU3+AlTc/+WD+wkhMlrJkIRdQSd9j
+         DHBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712869868; x=1713474668;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=38LeeLy9B9nLfzSgbJxSutTG0T1HzptAeGhsMkzO9sI=;
-        b=R/YEh9sQqlhbolB0v47byOmmEjyUd9ww/psD+C/m4PaYL7gQ2CNKURs8oHXix65eVN
-         88Fm7UWSi3/ys7Eu/hdTBLpDt/I+cDreAQXyUSWSeaMvBakkHbWhe/7EuBDMH6fDHIh8
-         lhcytGg/MH6kPv/Rq4qma+gUdlDlOY1Yyhl/bsmpil4+++sWl/MooUlmS0eSX8JBPjmX
-         yX/6GmxZN1CfKRCH4CTFj73FdlxZiDxdMStBJTmrz6f/3NW/YPV/KzsvX+79akv4PSG8
-         HBn6JYqvgTCwGdNmxUC7EEmjRFO1ULVVDAVFrTWUW4flsLvLmBG11chtyUcewhzqeIAj
-         qI7g==
-X-Forwarded-Encrypted: i=1; AJvYcCWtuF+wcc2JMAaIWogdKHgMk9Hn9HkuTIA9inIBl2aC286rvhv1BNKvEwiSsCr28tUvj1AJ2Y1KyYouThFrRXQvZdaXZA==
-X-Gm-Message-State: AOJu0YyEnvk5I2X80LPA99RaugAaBDXOcQFwh54z0NATOS1cFw7QKprG
-	6bNla0BuxO+tbiTW32LBU7kUxo8Shl94cPKhnHszxDYiOJTqaaqubfZ7+fvGoIc=
-X-Google-Smtp-Source: AGHT+IEvOEEya92osbmmTcRV/7dhRZrlPtPgQIc4ZlZO618j3bCXYpmIxG7Z7CY+DhVW9kJ6yy/Esw==
-X-Received: by 2002:a6b:c34e:0:b0:7d6:7b7c:8257 with SMTP id t75-20020a6bc34e000000b007d67b7c8257mr1040368iof.0.1712869868075;
-        Thu, 11 Apr 2024 14:11:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id bv21-20020a056638449500b0048075de1461sm598414jab.90.2024.04.11.14.11.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 14:11:07 -0700 (PDT)
-Message-ID: <8254ab4d-9cb6-402e-80dd-d9ec70d77de5@linuxfoundation.org>
-Date: Thu, 11 Apr 2024 15:11:07 -0600
+        d=1e100.net; s=20230601; t=1712877598; x=1713482398;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5zpMelPR/Q05P4yZbANW3smZq3nLKCEwEnHHYOEX7BY=;
+        b=YyAfkgXZBJlUqi+km1Hf8R55yHQJe/wXqZb1TTCSCUf7pEWnkYsm9wVuN1wy1v3mDG
+         /s/F0NlwjBTdvS+pPRUD6ZVzWzSQmyIG+Uer50inMZi2X+PNV+7qwhLPTHiuJDAMYeTT
+         E0kK/BP+gBwgXIdvGa0jdhCME3qyI540AO5l7bmUvLxi2IN6jjy01kbK6LCcHsWf9MKv
+         uUcai5MF5fje8L32hsQwAfzy/VQ/d3es+txFauAwvLJbc8IJ4rtmD7a1GwAwb0SArlp5
+         qjL4thfZxrKUEfdvUsP+BPW4FxQa9CVf8I/JsIGoWOabkb+no1W+KiFxHYLKVLG4fqaG
+         toWg==
+X-Forwarded-Encrypted: i=1; AJvYcCXts/QZ3k0uTt58So9cDv6m1BsYkoowPrNTi+xdvtF86e3kZAhD3Hf62yzc0ydbZVT+dkHFwshz9PAuJRUCqA36rkULtg==
+X-Gm-Message-State: AOJu0YwayPcgkaam6+phk4foNH/8fgB3XypdmnXsKWa74X5umjnpB0AT
+	pNKDUq8cq2/oUCsbZY2A0bCiCanVIt0BLJf/gjpCpx6Nf9G+27TWI70Lykg/uEq+x5UD3UetYGb
+	doA==
+X-Google-Smtp-Source: AGHT+IFLfDrP1amVJB3d3HaxnBLnZmZqMjR5reHrOoeYxEPUItc4VJwMrhhWU2YhVGvypmJmcL1x4zlOcQA=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a05:6a00:a16:b0:6ea:8a0d:185f with SMTP id
+ p22-20020a056a000a1600b006ea8a0d185fmr70673pfh.2.1712877597805; Thu, 11 Apr
+ 2024 16:19:57 -0700 (PDT)
+Date: Thu, 11 Apr 2024 23:19:49 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest: Mark functions that unconditionally call
- exit() as __noreturn
-To: Nathan Chancellor <nathan@kernel.org>, tglx@linutronix.de,
- shuah@kernel.org, Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: oleg@redhat.com, anna-maria@linutronix.de, frederic@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev,
- John Stultz <jstultz@google.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240411-mark-kselftest-exit-funcs-noreturn-v1-1-b027c948f586@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240411-mark-kselftest-exit-funcs-noreturn-v1-1-b027c948f586@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.683.g7961c838ac-goog
+Message-ID: <20240411231954.62156-1-edliaw@google.com>
+Subject: [PATCH] selftests/harness: remove use of LINE_MAX
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
+	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Peter Xu <peterx@redhat.com>, 
+	David Hildenbrand <david@redhat.com>, Axel Rasmussen <axelrasmussen@google.com>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, linux-mm@kvack.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 4/11/24 12:45, Nathan Chancellor wrote:
-> After commit 6d029c25b71f ("selftests/timers/posix_timers: Reimplement
-> check_timer_distribution()"), clang warns:
-> 
->    tools/testing/selftests/timers/../kselftest.h:398:6: warning: variable 'major' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
->      398 |         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
->          |             ^~~~~~~~~~~~
->    tools/testing/selftests/timers/../kselftest.h:401:9: note: uninitialized use occurs here
->      401 |         return major > min_major || (major == min_major && minor >= min_minor);
->          |                ^~~~~
->    tools/testing/selftests/timers/../kselftest.h:398:6: note: remove the '||' if its condition is always false
->      398 |         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
->          |             ^~~~~~~~~~~~~~~
->    tools/testing/selftests/timers/../kselftest.h:395:20: note: initialize the variable 'major' to silence this warning
->      395 |         unsigned int major, minor;
->          |                           ^
->          |                            = 0
-> 
-> This is a false positive because if uname() fails, ksft_exit_fail_msg()
-> will be called, which unconditionally calls exit(), a noreturn function.
-> However, clang does not know that ksft_exit_fail_msg() will call exit()
-> at the point in the pipeline that the warning is emitted because
-> inlining has not occurred, so it assumes control flow will resume
-> normally after ksft_exit_fail_msg() is called.
-> 
-> Make it clear to clang that all of the functions that call exit()
-> unconditionally in kselftest.h are noreturn transitively by marking them
-> explicitly with '__attribute__((__noreturn__))', which clears up the
-> warning above and any future warnings that may appear for the same
-> reason.
-> 
-> Fixes: 6d029c25b71f ("selftests/timers/posix_timers: Reimplement check_timer_distribution()")
-> Reported-by: John Stultz <jstultz@google.com>
-> Closes: https://lore.kernel.org/all/20240410232637.4135564-2-jstultz@google.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> I have based this change on timers/urgent, as the commit that introduces
-> this particular warning is there and it is marked for stable, even
-> though this appears to be a generic kselftest issue. I think it makes
-> the most sense for this change to go via timers/urgent with Shuah's ack.
-> While __noreturn with a return type other than 'void' does not make much
-> sense semantically, there are many places that these functions are used
-> as the return value for other functions such as main(), so I did not
-> change the return type of these functions from 'int' to 'void' to
-> minimize the necessary changes for a backport (it is an existing issue
-> anyways).
-> 
-> I see there is another instance of this problem that will need to be
-> addressed in -next, introduced by commit f07041728422 ("selftests: add
-> ksft_exit_fail_perror()").
+Android was seeing a compliation error because its C library does not
+define LINE_MAX.  This replaces the use of LINE_MAX / snprintf with
+asprintf, which will change the behavior to not truncate the test name
+if it is over 2048 chars long.
 
-Thank you. Assuming this is going through tip/timers/urgent
+See also:
+https://github.com/llvm/llvm-project/issues/88119
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/kselftest_harness.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Usama, please send patch fixing this problem in next on top of
-
-commit f07041728422 ("selftests: add
-> ksft_exit_fail_perror()").
-
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 4fd735e48ee7..70fedd2411ed 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -1156,7 +1156,7 @@ void __run_test(struct __fixture_metadata *f,
+ 		struct __test_metadata *t)
+ {
+ 	struct __test_xfail *xfail;
+-	char test_name[LINE_MAX];
++	char *test_name;
+ 	const char *diagnostic;
+ 
+ 	/* reset test struct */
+@@ -1164,8 +1164,8 @@ void __run_test(struct __fixture_metadata *f,
+ 	t->trigger = 0;
+ 	memset(t->results->reason, 0, sizeof(t->results->reason));
+ 
+-	snprintf(test_name, sizeof(test_name), "%s%s%s.%s",
+-		 f->name, variant->name[0] ? "." : "", variant->name, t->name);
++	asprintf(&test_name, "%s%s%s.%s", f->name,
++	         variant->name[0] ? "." : "", variant->name, t->name);
+ 
+ 	ksft_print_msg(" RUN           %s ...\n", test_name);
+ 
+@@ -1203,6 +1203,7 @@ void __run_test(struct __fixture_metadata *f,
+ 
+ 	ksft_test_result_code(t->exit_code, test_name,
+ 			      diagnostic ? "%s" : "", diagnostic);
++	free(test_name);
+ }
+ 
+ static int test_harness_run(int argc, char **argv)
+-- 
+2.44.0.683.g7961c838ac-goog
 
