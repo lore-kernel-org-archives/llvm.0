@@ -1,158 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04162BCE8;
-	Thu, 11 Apr 2024 21:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CAE2941E
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 21:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712869774; cv=none; b=WpE1UH0U6dG/YkJMNvoKrdgZd9tilKynEySrMvLJNMpAQ0WVuArSHU3ALCxlr6Xc4raEi91TU1WTSivATz8jaWteHHEkTJnxYLcB1I5wayX572dVNkTMO+N/DUUohCI7JlWT9voBQSpjmaygp6JVqRFi1eF5Zbyk5ZwY4KapYX4=
+	t=1712869871; cv=none; b=EFuhVAfbq1+sUwxZRnYQ0BPEWEdE/vJ2qMvjn38aTxWgBYYwfyIWq5BLi5JKX4UF5fDUYqFj8xfevOmtevZbOi/qHU6OrNZeaaCvo8p+b79lZJlekJc5gyGC0aONn9KicC35yj9bDvAfe0jkSxlkdjS1tqf3TlGkda1UcvisiqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712869774; c=relaxed/simple;
-	bh=LF4XpfoNUs4rgrgDg8WjET4ZLBJiGswBegAapshKlSA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GBjaUV9qccuVhqtjuaXVO04fWBpCmQRFIwu79n8ps6/h2dGyy1xx6szEVNTvRuSwdiuCdiD7NVojWbq5d0QAfHzZRVTqnuXf6yWR21+y9xuCchFjPns4BjmoOEhTgfkSrI8NNH56WmLJvH/YscSja1vMUF09MujP6utROg0EWxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QtDT3j8s; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712869871; c=relaxed/simple;
+	bh=IEBJoFDSC/xhmN89SjQvJVuzGWr9gyS0EGlcaOZ8eMc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hghdoa3dbUE5BfJ+CH8GCV+T/ljfot15152Ld9Ix7aYOQZUYydslCnZJG4yxfH3tB1snvLfwINob53v/7JAvFNjzNwBy3SiEMNu9031F9tI7wGma9HRGjKrO/NhNkQtD/Hg1oNpXsdz/xnMj9VHuxrkOKi2H6FSuV2+TiZfE3sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R1or4a8x; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QtDT3j8s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712869773; x=1744405773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LF4XpfoNUs4rgrgDg8WjET4ZLBJiGswBegAapshKlSA=;
-  b=QtDT3j8s81YAw/6lwgPpKWmQ6pQJH2LyDFVyNveNF/4UiO4G/ucbF8v5
-   eJsxGKoQSdPaYFsHqQmB99q/O3zBsn8uPa12MNtEOYE5JAdCIeaioXT3e
-   xdsYQVj9UF5vWzc1wYnq53HzN00JVOC/5qauF4V4VGcCNROa1my/1AeyH
-   GQ3aeg37tRwBw4a4hm7pvH/HXr6Q+ZcVAAyxUIbjy6TnPL0Iae2PSHJ3K
-   UQfGGsDMRrHoDQlEI0vdOqKXHQGT0QiX2IWnmByE9OXiEiqgRDB4j8AF6
-   00KtU2F35Cq9xlytq688LzOkFvp4Ic9wHh0OdhexzM1IETj2tqq+adVNP
-   w==;
-X-CSE-ConnectionGUID: C5V/sZvlSe6qKLMRAmDfCQ==
-X-CSE-MsgGUID: GhThpbHgQw2tPDd2iGq7Lg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="30791676"
-X-IronPort-AV: E=Sophos;i="6.07,194,1708416000"; 
-   d="scan'208";a="30791676"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 14:09:32 -0700
-X-CSE-ConnectionGUID: 9GszBZEdQweoOsAaOPrXAA==
-X-CSE-MsgGUID: By4KEyw4SXmebUA1g2eEFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,194,1708416000"; 
-   d="scan'208";a="20992366"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 11 Apr 2024 14:09:31 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rv1fk-0008z3-0N;
-	Thu, 11 Apr 2024 21:09:28 +0000
-Date: Fri, 12 Apr 2024 05:08:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alistair Popple <apopple@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 08/10] fs/dax: Properly refcount fs dax pages
-Message-ID: <202404120417.9jDId3hj-lkp@intel.com>
-References: <5cc5a152d2a03e2702be259c81af2bfe424303cd.1712796818.git-series.apopple@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R1or4a8x"
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7d67d1073easo4894339f.0
+        for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 14:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1712869868; x=1713474668; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=38LeeLy9B9nLfzSgbJxSutTG0T1HzptAeGhsMkzO9sI=;
+        b=R1or4a8xuQv0grgVsQke8Y1maG0bGCuUY0SPz5PMqn3Ydd4XK2/fEn3pIQ6aFcu69C
+         PpH+zubPba0KBaKPDP4s0gq8yV5wj7DeeQy+xytfen6ksZFF3Jakb36rqaZfqAMLbcNW
+         YkudteFWz68CYMOlrVpXJI0s/yY5h7eEU6YWc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712869868; x=1713474668;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=38LeeLy9B9nLfzSgbJxSutTG0T1HzptAeGhsMkzO9sI=;
+        b=R/YEh9sQqlhbolB0v47byOmmEjyUd9ww/psD+C/m4PaYL7gQ2CNKURs8oHXix65eVN
+         88Fm7UWSi3/ys7Eu/hdTBLpDt/I+cDreAQXyUSWSeaMvBakkHbWhe/7EuBDMH6fDHIh8
+         lhcytGg/MH6kPv/Rq4qma+gUdlDlOY1Yyhl/bsmpil4+++sWl/MooUlmS0eSX8JBPjmX
+         yX/6GmxZN1CfKRCH4CTFj73FdlxZiDxdMStBJTmrz6f/3NW/YPV/KzsvX+79akv4PSG8
+         HBn6JYqvgTCwGdNmxUC7EEmjRFO1ULVVDAVFrTWUW4flsLvLmBG11chtyUcewhzqeIAj
+         qI7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWtuF+wcc2JMAaIWogdKHgMk9Hn9HkuTIA9inIBl2aC286rvhv1BNKvEwiSsCr28tUvj1AJ2Y1KyYouThFrRXQvZdaXZA==
+X-Gm-Message-State: AOJu0YyEnvk5I2X80LPA99RaugAaBDXOcQFwh54z0NATOS1cFw7QKprG
+	6bNla0BuxO+tbiTW32LBU7kUxo8Shl94cPKhnHszxDYiOJTqaaqubfZ7+fvGoIc=
+X-Google-Smtp-Source: AGHT+IEvOEEya92osbmmTcRV/7dhRZrlPtPgQIc4ZlZO618j3bCXYpmIxG7Z7CY+DhVW9kJ6yy/Esw==
+X-Received: by 2002:a6b:c34e:0:b0:7d6:7b7c:8257 with SMTP id t75-20020a6bc34e000000b007d67b7c8257mr1040368iof.0.1712869868075;
+        Thu, 11 Apr 2024 14:11:08 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id bv21-20020a056638449500b0048075de1461sm598414jab.90.2024.04.11.14.11.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Apr 2024 14:11:07 -0700 (PDT)
+Message-ID: <8254ab4d-9cb6-402e-80dd-d9ec70d77de5@linuxfoundation.org>
+Date: Thu, 11 Apr 2024 15:11:07 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5cc5a152d2a03e2702be259c81af2bfe424303cd.1712796818.git-series.apopple@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kselftest: Mark functions that unconditionally call
+ exit() as __noreturn
+To: Nathan Chancellor <nathan@kernel.org>, tglx@linutronix.de,
+ shuah@kernel.org, Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: oleg@redhat.com, anna-maria@linutronix.de, frederic@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev,
+ John Stultz <jstultz@google.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240411-mark-kselftest-exit-funcs-noreturn-v1-1-b027c948f586@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240411-mark-kselftest-exit-funcs-noreturn-v1-1-b027c948f586@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Alistair,
+On 4/11/24 12:45, Nathan Chancellor wrote:
+> After commit 6d029c25b71f ("selftests/timers/posix_timers: Reimplement
+> check_timer_distribution()"), clang warns:
+> 
+>    tools/testing/selftests/timers/../kselftest.h:398:6: warning: variable 'major' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+>      398 |         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
+>          |             ^~~~~~~~~~~~
+>    tools/testing/selftests/timers/../kselftest.h:401:9: note: uninitialized use occurs here
+>      401 |         return major > min_major || (major == min_major && minor >= min_minor);
+>          |                ^~~~~
+>    tools/testing/selftests/timers/../kselftest.h:398:6: note: remove the '||' if its condition is always false
+>      398 |         if (uname(&info) || sscanf(info.release, "%u.%u.", &major, &minor) != 2)
+>          |             ^~~~~~~~~~~~~~~
+>    tools/testing/selftests/timers/../kselftest.h:395:20: note: initialize the variable 'major' to silence this warning
+>      395 |         unsigned int major, minor;
+>          |                           ^
+>          |                            = 0
+> 
+> This is a false positive because if uname() fails, ksft_exit_fail_msg()
+> will be called, which unconditionally calls exit(), a noreturn function.
+> However, clang does not know that ksft_exit_fail_msg() will call exit()
+> at the point in the pipeline that the warning is emitted because
+> inlining has not occurred, so it assumes control flow will resume
+> normally after ksft_exit_fail_msg() is called.
+> 
+> Make it clear to clang that all of the functions that call exit()
+> unconditionally in kselftest.h are noreturn transitively by marking them
+> explicitly with '__attribute__((__noreturn__))', which clears up the
+> warning above and any future warnings that may appear for the same
+> reason.
+> 
+> Fixes: 6d029c25b71f ("selftests/timers/posix_timers: Reimplement check_timer_distribution()")
+> Reported-by: John Stultz <jstultz@google.com>
+> Closes: https://lore.kernel.org/all/20240410232637.4135564-2-jstultz@google.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> I have based this change on timers/urgent, as the commit that introduces
+> this particular warning is there and it is marked for stable, even
+> though this appears to be a generic kselftest issue. I think it makes
+> the most sense for this change to go via timers/urgent with Shuah's ack.
+> While __noreturn with a return type other than 'void' does not make much
+> sense semantically, there are many places that these functions are used
+> as the return value for other functions such as main(), so I did not
+> change the return type of these functions from 'int' to 'void' to
+> minimize the necessary changes for a backport (it is an existing issue
+> anyways).
+> 
+> I see there is another instance of this problem that will need to be
+> addressed in -next, introduced by commit f07041728422 ("selftests: add
+> ksft_exit_fail_perror()").
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Thank you. Assuming this is going through tip/timers/urgent
 
-[auto build test WARNING on ffc253263a1375a65fa6c9f62a893e9767fbebfa]
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/mm-gup-c-Remove-redundant-check-for-PCI-P2PDMA-page/20240411-085933
-base:   ffc253263a1375a65fa6c9f62a893e9767fbebfa
-patch link:    https://lore.kernel.org/r/5cc5a152d2a03e2702be259c81af2bfe424303cd.1712796818.git-series.apopple%40nvidia.com
-patch subject: [RFC 08/10] fs/dax: Properly refcount fs dax pages
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240412/202404120417.9jDId3hj-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240412/202404120417.9jDId3hj-lkp@intel.com/reproduce)
+Usama, please send patch fixing this problem in next on top of
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404120417.9jDId3hj-lkp@intel.com/
+commit f07041728422 ("selftests: add
+> ksft_exit_fail_perror()").
 
-All warnings (new ones prefixed by >>):
+thanks,
+-- Shuah
 
-   In file included from fs/dax.c:10:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2140:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/dax.c:707:5: warning: no previous prototype for function '__dax_invalidate_entry' [-Wmissing-prototypes]
-     707 | int __dax_invalidate_entry(struct address_space *mapping,
-         |     ^
-   fs/dax.c:707:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     707 | int __dax_invalidate_entry(struct address_space *mapping,
-         | ^
-         | static 
-   6 warnings generated.
-
-
-vim +/__dax_invalidate_entry +707 fs/dax.c
-
-   706	
- > 707	int __dax_invalidate_entry(struct address_space *mapping,
-   708					  pgoff_t index, bool trunc)
-   709	{
-   710		XA_STATE(xas, &mapping->i_pages, index);
-   711		int ret = 0;
-   712		void *entry;
-   713	
-   714		xas_lock_irq(&xas);
-   715		entry = get_unlocked_entry(&xas, 0);
-   716		if (!entry || WARN_ON_ONCE(!xa_is_value(entry)))
-   717			goto out;
-   718		if (!trunc &&
-   719		    (xas_get_mark(&xas, PAGECACHE_TAG_DIRTY) ||
-   720		     xas_get_mark(&xas, PAGECACHE_TAG_TOWRITE)))
-   721			goto out;
-   722		xas_store(&xas, NULL);
-   723		mapping->nrpages -= 1UL << dax_entry_order(entry);
-   724		ret = 1;
-   725	out:
-   726		put_unlocked_entry(&xas, entry, WAKE_ALL);
-   727		xas_unlock_irq(&xas);
-   728		return ret;
-   729	}
-   730	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
