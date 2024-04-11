@@ -1,101 +1,141 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfout5-smtp.messagingengine.com (wfout5-smtp.messagingengine.com [64.147.123.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282F314F65;
-	Thu, 11 Apr 2024 19:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B378717BCC;
+	Thu, 11 Apr 2024 20:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712863289; cv=none; b=igwzdrylBjDJw8GM9YasBuE193bVBNjXBmfKD0niPqptU2atJTj7Z3TL+q5W5UvLX4E5tENIFt8AhZPwGkKc06tB/POB7WfZHX6i6ElaBFjXnatLD//bX3iL0uUwwwjdh49BdoFKfe2m4Wz+iFucyANbtADwjodXveSO81/ynBI=
+	t=1712867043; cv=none; b=q9pkl4G0sq8wwCv2VnLHpv9KNfSHe2yjIfUvd8VNr8Psz3FFnELAU35DfT0aPFTkyMoV3jGUIukklxuuasWEBbusERH6sKGiGImE1QJ8gntjrsLNy2GkX8nfPplZeCGvXGY5lV/hrZdsc7htajDGTZtSCb520iZ1vccECbmDIfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712863289; c=relaxed/simple;
-	bh=Ik+5avN+F3onRNtV1PB619O8pLeIV7AzjthBG+4V4qg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hupFVnWasve/7JKn8rQ6PdB+KeCvvwXvCVE6Ho5CDccH8gz1DHzBdBDnJEJ8pi+mqiGKv4kvOlQApkErMNtNnK4yDPzP/n2xLFp5Ffrbn3wcFqBdBd6hpy7Is/MdXefNrnLPZhrGaClsys5ZIkyykDr4OeuYyw2iMf/SvmYMJIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZE3zeIZ; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712867043; c=relaxed/simple;
+	bh=v0h2YnKyvi/FUjQO8wsyr2ccrwSEozzRKJqDGzOluPs=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=trPXNdDVh1XM8LrTLhd/drIkTqKlr3fPv8qOPiFFj9EB76GaMfpSg/btFfafr/rXs2URjUyNbq/mRt7ln7GbYYFjwZ2qdIQzcbu1pAddkdTtJ8J+z6vik+h34UvACtUOwscel5KzTN5INFai8+bczoBEMd3GbNhn1LrTV34ajr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JjAOYQGN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IwnCRI67; arc=none smtp.client-ip=64.147.123.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZE3zeIZ"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-434c3d21450so521101cf.0;
-        Thu, 11 Apr 2024 12:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712863287; x=1713468087; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UM2zuMgd2tTJ9l2V10ApEN63oRSs92Yz7I6KOrw/UzQ=;
-        b=IZE3zeIZJPnNibj1UXJYjZ1Ka4bKsw29wQkICAfTXPXs+Yj9Pqjuo7xM2ICv4fz9MC
-         NcwYnz4Q51R9FD/+6WKBg8UE41TWmBR4opj5A2UZRH4jv3K/sVh84n179JoSWW6N9FHO
-         f3uK1/AdNaX6p1rbX+rVg0TW5lxS9keTi7sJBe8rdoOnc6PDxscj9KpScoqDqpar4XAq
-         vkYUDeAM3xu4xKoEQzsI34mC9gOJApyekyTWBi0WYzMQrkRL3LMy5F8i33Oo0kSUGCiL
-         A8eQ06L6UU3gOkZCeWb3P5Qf19e/0nhkFJfO41TPUtCVr8j9NdaEUuPjDCeyPDlqIrwU
-         c4Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712863287; x=1713468087;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UM2zuMgd2tTJ9l2V10ApEN63oRSs92Yz7I6KOrw/UzQ=;
-        b=E3GxExR9z8pbWsufKK73aBPHGzfnNTlsGf0GGJPww8MzrceUUQXmg6lcKUXIEu2mai
-         2y9tGg7mRzR6TOKOT+DIN5a1Ttn4DvQ+5gBBxmrifle8c+pwzS/7y5KlITAgM9lk1R27
-         pcqbR8aB+229wPPyMkX+AZdqTL7AvsX5jHmu7ZTh2aHrxZPM7zoC1qAGSxRcoPvza7wK
-         Wa0mq75wQJE+25mp2HG+ATO+ct0T7eTg5fqLWl48GZesX1qhh1OvXA6V0Sm+LtYnDdlx
-         4ZFeZeSripUtktZXad5VCGZsZ6X3+VhgCe2yCdu+aWZSNqkLZ7dWh3oqwj0fw9kC5212
-         H3iA==
-X-Forwarded-Encrypted: i=1; AJvYcCUw3qyWDQQu2oc9Sa7/I50PKfZRv6P+wsozorTH/iyH8XxZBR/iCEOfRZ5awA4vZLZD6zUdnUsB0migCGvqKtslwrGJMBwgox3paRzv1bJaRhRCxPUyfZOP07XGyv9hUOY7+jY=
-X-Gm-Message-State: AOJu0Yz5D9UzceqzWAmuynE5XZWxxdeOapisN9AsGKj/AMeRkKtduNeS
-	pB5i1ebDBQ293KLipuq5MujWG/eHsmzuXqpdOAv0GsBQvlv6Rtt9wZNV2A==
-X-Google-Smtp-Source: AGHT+IGvHxA54aKOClekMdzRkSKoQQavDjhgxAQk3dRTaypFZBWOKdo0kFNXxP05O1GXsQzB8/QW1Q==
-X-Received: by 2002:ac8:67d7:0:b0:436:8736:f0c1 with SMTP id r23-20020ac867d7000000b004368736f0c1mr150864qtp.47.1712863286926;
-        Thu, 11 Apr 2024 12:21:26 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id p26-20020ac8741a000000b0043123c8b6a6sm1274004qtq.4.2024.04.11.12.21.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 12:21:26 -0700 (PDT)
-Message-ID: <a59e2164-7159-445e-9f87-fcf6cb4b57d6@gmail.com>
-Date: Thu, 11 Apr 2024 12:21:22 -0700
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JjAOYQGN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IwnCRI67"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.west.internal (Postfix) with ESMTP id 833041C0009F;
+	Thu, 11 Apr 2024 16:23:57 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 11 Apr 2024 16:24:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1712867037; x=1712953437; bh=JsuFLbAEjN
+	o6Pvyug1LI/IFqLsqKGpq5+U0wO0rRgwo=; b=JjAOYQGN8yunrqafnwxnDSFe0+
+	qnm7WuRckh2f2/1Bx7vcudDdDW5T54MJjqnrutUlFmoipuXXq45pWV1Ew9Xeb2Xm
+	hcVC++M9Bxyi+rQPO8tsnd2khrxLZJkxxgnppP5zbhAyGGGe31y6huY3AI8PDScZ
+	ElBBOoKc8MbFtjwtmP8TjjEC+F9y8lQ+fwD1LOlNRIegmNEtRwIMzQdGkvqCk04+
+	/hk/EUPNNkNo167Ckqnk6UUHLAXQ6vQkg7TyCZA3+oJZ6+lNbvSafwf1IgYgniKx
+	0ldCOL9J2tmeGHT4FhnANgmn2h8d55nAHGVXTpinWHYlSxdN5ZljpqK8ycDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1712867037; x=1712953437; bh=JsuFLbAEjNo6Pvyug1LI/IFqLsqK
+	Gpq5+U0wO0rRgwo=; b=IwnCRI67E37UT8PkBtjjJj+JwAaXfB/yQT4bnTtdSTaP
+	CsJC3lnLCLkGvn2s5saYs8We3/MqwkgRMgX+EQl5n8lLKyuiDYQyeAwNNPY1wLQJ
+	WCUPgyUfrKqISshpgzozDcwkmzdVK9jUeP1EdvYV0xIF357LlY2t39i9O70hv+mM
+	mBnbZv7+5NKYMaeEx/zdKEhUWHHiEkUplMKftFsjipJhfAUppsLEXBctrHym9e2w
+	lCNt+kWm7tEAWNFfcj1KV8G2hOAAlk3BIoD91K3rWRzcT445WkP2g9Pov+0XZ96Y
+	bE0Wh2Hk1sdzBPnqpKzckGkLdrKkhSvB54kMgO/x8A==
+X-ME-Sender: <xms:20YYZoJn7WvT9eEOBU1G7N1hW30AmgGyJTc_zR1IXlgBvEW-WXMEog>
+    <xme:20YYZoL64a6bw_KYLQbmSp6OwjSBsDEb4qQgH6PVEhJH56g77l2Asqp_sY7aJYkgc
+    yx00ArKdbb-SMlQvnQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehkedgudeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:20YYZovNgCBdVmC_1lDcA-pVqVwbaXw9dYUzLcCaX-1CCAx_57zrJA>
+    <xmx:20YYZlbSidqnph_CUwPU7Mja2KL8a5KeRzznPHmqTeGZDUUPp02KoA>
+    <xmx:20YYZvaWM5ek40gIgg9rhjY0DZynwI-SnzVNg7jigfADzt9IeBErzQ>
+    <xmx:20YYZhDnRroG2_xxOda4OTO_V0Muhq9jmgCY607oUyxnXQlOscqa5A>
+    <xmx:3UYYZojPUsAS9W0ge6yR4cip9kLqz_forzx3auM_rJv3vr53AcZl0bs2>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id A8515B6008D; Thu, 11 Apr 2024 16:23:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [net-next:main 26/50] net/ipv4/tcp.c:4673:2: error: call to
- '__compiletime_assert_1030' declared with 'error' attribute: BUILD_BUG_ON
- failed: offsetof(struct tcp_sock, __cacheline_group_end__tcp_sock_write_txrx)
- - offsetofend(struct tcp_sock, __cacheline_group_begin__tcp_sock_...
-Content-Language: en-US
-To: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>
-Cc: Vladimir Oltean <olteanv@gmail.com>, kernel test robot <lkp@intel.com>,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org
-References: <202404082207.HCEdQhUO-lkp@intel.com>
- <20240408230632.5ml3amaztr5soyfs@skbuf>
- <CANn89iJ8EcqiF8YCPhDxcp5t79J1RLzTh6GHHgAxbTXbC+etRA@mail.gmail.com>
- <db4d4a48-b581-4060-b611-996543336cd2@gmail.com>
- <CANn89iJMirOe=TqMZ=J8mFLNQLDV=wzL4jOf9==Zkv7L2U5jcQ@mail.gmail.com>
- <20240410183636.202fd78f@kernel.org>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20240410183636.202fd78f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <65a7d714-1004-4ba3-9c03-7c691f3c3dc7@app.fastmail.com>
+In-Reply-To: <3-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+References: <3-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+Date: Thu, 11 Apr 2024 22:23:34 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jason Gunthorpe" <jgg@nvidia.com>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>,
+ "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Leon Romanovsky" <leon@kernel.org>,
+ linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+ llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ Netdev <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Salil Mehta" <salil.mehta@huawei.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
+ "Yisen Zhuang" <yisen.zhuang@huawei.com>
+Cc: "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Leon Romanovsky" <leonro@mellanox.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, "Mark Rutland" <mark.rutland@arm.com>,
+ "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "Jijie Shao" <shaojijie@huawei.com>, "Will Deacon" <will@kernel.org>
+Subject: Re: [PATCH v3 3/6] s390: Stop using weak symbols for __iowrite64_copy()
+Content-Type: text/plain
 
-On 4/10/24 18:36, Jakub Kicinski wrote:
-> On Wed, 10 Apr 2024 19:33:54 +0200 Eric Dumazet wrote:
->>> Jakub, I do not see a 32-bit build in the various checks being run for a
->>> patch, could you add one, if nothing else a i386 build and a
->>> multi_v7_defconfig build would get us a good build coverage.
->>
->> i386 build was just fine for me.
-> 
-> Yes, we test i386 too, FWIW.
-> 
-> Florian, does arm32 break a lot? I may not be paying sufficient
-> attention. We can add more build tests but the CPU time we have
-> is unfortunately finite :(
+On Thu, Apr 11, 2024, at 18:46, Jason Gunthorpe wrote:
+> Complete switching the __iowriteXX_copy() routines over to use #define and
+> arch provided inline/macro functions instead of weak symbols.
+>
+> S390 has an implementation that simply calls another memcpy
+> function. Inline this so the callers don't have to do two jumps.
+>
+> Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  arch/s390/include/asm/io.h | 7 +++++++
+>  arch/s390/pci/pci.c        | 6 ------
+>  include/linux/io.h         | 3 +++
+>  lib/iomap_copy.c           | 7 +++----
+>  4 files changed, 13 insertions(+), 10 deletions(-)
 
-Yes, that is why I mentioned multi_v7_defconfig, you an see the build 
-failure with that configuration. Of course Eric fixed it now, thanks!
--- 
-Florian
+For the common code bits:
 
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+> -void __attribute__((weak)) __iowrite64_copy(void __iomem *to,
+> -					    const void *from,
+> -					    size_t count)
+> +#ifndef __iowrite64_copy
+> +void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
+>  {
+
+I'm always happy to see __weak functions get cleaned up.
+
+      Arnd
