@@ -1,114 +1,86 @@
-Received: from wfout7-smtp.messagingengine.com (wfout7-smtp.messagingengine.com [64.147.123.150])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF631482FC
-	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 11:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D401474AA;
+	Thu, 11 Apr 2024 11:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712835347; cv=none; b=PqRG0bC9azV9uvctekY8/9my2x0ETHRYPhPeqwRwU0YxOWclFwMkY+KLFEuK92C1TZUIqoGNgJTkVL7WZFvAFXUhZ2aP9l2cAJl8OgCDbG9s+3IO+Zfiggwu2LMVzxdcf5ncOJ/l0HslyUhnm6q0J5bLyX0Fiz+Keh0pe3VqQCA=
+	t=1712835869; cv=none; b=npcwrqcLkyJFrxWWDU02exZGRZMMchoT2pE+1sHdX3hvuGfoRiN+ua7PTvRoHAfeCk6zvlNilZgYe8qlZqIPeVLmxjuMn6rVig971zVPt+l5tJPVitm03u2zekX6wrG4SK4lYQZuCuQpXF6Ogu7bRYcAqy7SIrONl4tsMW+Doe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712835347; c=relaxed/simple;
-	bh=ajeu2BiA/YKzCiQqdIEBCBbdqVTBmASd7P1eQEFpois=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=b8DXAsab9bQN51eo8SJxo38mziBHjcnRgjKXf62YiS1kluJJ44sG/ptn9xtpTbW6zeKBbpntf6WTN92fuUIPOTDoHkKrOjIIBDdbdyCuTcK3uVlR+70xSKVXQn6touy0k/bo7dMy2hMF1X2Y9EQlpUYaItRU0lXs6FEHBrGACdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bnMNR991; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QG58MyLn; arc=none smtp.client-ip=64.147.123.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1712835869; c=relaxed/simple;
+	bh=ke4esdcE0x6GgQ9qunkK32d0/Y0fAo/3FWGyBx+G2+A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ES+XrwignOMqCzmve3vEYHhqAripCy6LpOXbnezHUaUBMf/It3hMNHyUV3l69sGOpcVdFSS/FT2fdPJjBcbzPy/hrzbY6wEYguZaS+OFTTj0SnKLA+/o20n7l31Zn92GirwMJ/I0bBAD1F/uVk63QSzFOyBoA8iCdX/F4L2TCnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LGgaYWU0; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bnMNR991";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QG58MyLn"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id CE96D1C000EC;
-	Thu, 11 Apr 2024 07:35:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 11 Apr 2024 07:35:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1712835343; x=1712921743; bh=P8MYPGxCIj
-	Ne3mVE8A2eowCiRlrk81aBVzAF/rIv8g0=; b=bnMNR991EO/fzRUIlUsUo7ahiu
-	qb62PceZ1wtjdl6FRbzcBmg7gFKzadUuGlBJRE0bV15wwLKm31vrzNuFWULKPCwl
-	wcjQkawx67wTb/vAIZBFLbLNN0aOe2hBT7QVwO/lL3E/LV/Kuvrfmdt5A+SNBPAc
-	DM1PVXuSmOW/0GD2h44GXCT8IghgC93UuE/9icOuJ5Y4kiJSdgqRqs39Z+W7mM0d
-	SG/0Rt1Yc0jjGXTZxVZtt3PnVAfICd4d9LgxhVNVVkmweh9dLQzllb7ZUE4SY8P3
-	fe+obljMws0wxnjnM1XOTyc8mBbPd8HwG9s2pEbR7bL0G8yD6FGhzuQIf8Qw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712835343; x=1712921743; bh=P8MYPGxCIjNe3mVE8A2eowCiRlrk
-	81aBVzAF/rIv8g0=; b=QG58MyLniWrPS1pdKGAzLbuZ/TMSc3cMAvJv6fC9qIg7
-	n0vdzSKsiFVeknrN8QzmosqFxkasJ9yfsPdf5Q5DzWoLxl6XnbfVAeje1BRbLyEP
-	fzwKAJMzIkA0hCtoXPOnbksd20x/1APdjag3kZ3/CeGRglyVhIlClPiAUAGIBmdk
-	c8o1bACgadLuXbZhaBlv2Me1FomnUpIsYwcU5V0M6eFB+5Q1QGSezFN6O950F7LE
-	1/RTJHMWizr3dtkOitvzACSaWG7m9Mhb/vVpN0mSMoQlRIrut9oUQPmU6Kgj6RuW
-	i4o6tT2Eixnf01w+L6NMzF1HvUKKDQUUUTU8JgLSoQ==
-X-ME-Sender: <xms:DcsXZt7SkqQZSNWmueqinwpbscul48mRYAMyLY3VfUjPy9efgIJBlQ>
-    <xme:DcsXZq5YlSx_V8WPlJ1vH7Qekn40x1A1rIahz3v-uBDKDdtWRPpUbbkI9ffbCZKLE
-    ATjmHxLUaOh5RfGSug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehkedggeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:DcsXZkduC8UpNHqOK7fnOZGUq8yg-pUvpzwLsPmoK57GIKC94wMTow>
-    <xmx:DcsXZmIqSavaJkn4HcDrg3W0wAAHEC_PQgARIaDE8Bwsy9K32XLtrg>
-    <xmx:DcsXZhLc1vQcYkF-vFu4UeFeRUocPM2P8q9hCe30iyPNnGummM9_Xw>
-    <xmx:DcsXZvx7ska2iapcMuhquoLJjrVHZ7KHN3uLSWJ04-WcC57EeatfzQ>
-    <xmx:D8sXZqguWQrev3ZMooMwLrx0i47WEB3gReRZL-o4riD8eSXOTLqE79i3>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E7849B60092; Thu, 11 Apr 2024 07:35:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LGgaYWU0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712835868; x=1744371868;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ke4esdcE0x6GgQ9qunkK32d0/Y0fAo/3FWGyBx+G2+A=;
+  b=LGgaYWU0v459E9h5UY0KIWjEELVGBfokoSPi2csjPFQ/4o9P48192Xgn
+   4ZoYoNX2wawCYBJyZ/xx4WnyDuVfo+p/GbOYCUU1JzjQUkHHyJBKfGt/j
+   IIrzX+/IMq43zlPpJ/9Z9/yoC4WJATDVAZNe53VA2/SxAWs+W1MqoF9vV
+   7Jbc1yN3wdXRbYxrIhmEDRybIdRerzcKXYFOGr7a3T5lBH1odaaE9bSB/
+   xhPgEoBMLfljaq35kSmDNyo8zLKQV2+rGeezsPybb9+sOlq5S3g6Uqnf4
+   m59QmiyVauhUfW7eQbBgE9xk4q+Rb9hHqIHQ18D7eogECTlCG6ERJaVP8
+   A==;
+X-CSE-ConnectionGUID: 8ys2J66TSFWAP+Ai4lNdoQ==
+X-CSE-MsgGUID: LVDs+RVGSJyfos7JwHMgVQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="19631001"
+X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
+   d="scan'208";a="19631001"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 04:44:27 -0700
+X-CSE-ConnectionGUID: FfZCsihQSQ2UFFhPvrIWjw==
+X-CSE-MsgGUID: 1WO5lka7S62zT4tChgfY7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
+   d="scan'208";a="52057889"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 11 Apr 2024 04:44:26 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rusqu-0008ZR-0e;
+	Thu, 11 Apr 2024 11:44:24 +0000
+Date: Thu, 11 Apr 2024 19:43:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-input@vger.kernel.org
+Subject: [hid:for-6.10/hid-bpf 5/7] ld.lld: error: undefined symbol:
+ hid_input_report
+Message-ID: <202404111903.69WRBBjD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <773febee-ace3-4ad6-8ff6-04563dbbb759@app.fastmail.com>
-In-Reply-To: <20240410174540.GB3649628@dev-arch.thelio-3990X>
-References: <20240216202657.2493685-1-arnd@kernel.org>
- <202402161301.BBFA14EE@keescook>
- <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
- <20240409161517.GA3219862@dev-arch.thelio-3990X>
- <f94c6943-eb93-4533-8e4d-3645ef38b990@app.fastmail.com>
- <20240410174540.GB3649628@dev-arch.thelio-3990X>
-Date: Thu, 11 Apr 2024 13:35:05 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>
-Cc: "Kees Cook" <keescook@chromium.org>, "Arnd Bergmann" <arnd@kernel.org>,
- "Steffen Klassert" <steffen.klassert@secunet.com>,
- "Herbert Xu" <herbert@gondor.apana.org.au>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Leon Romanovsky" <leon@kernel.org>, "Lin Ma" <linma@zju.edu.cn>,
- "Simon Horman" <horms@kernel.org>, "Breno Leitao" <leitao@debian.org>,
- "Tobias Brunner" <tobias@strongswan.org>, "Raed Salem" <raeds@nvidia.com>,
- Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] xfrm: work around a clang-19 fortifiy-string false-positive
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Apr 10, 2024, at 19:45, Nathan Chancellor wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-6.10/hid-bpf
+head:   685dadafbde29dc3d6b7a13be284d684b06d4d4f
+commit: 9be50ac30a83896a753ab9f64e941763bb7900be [5/7] HID: bpf: allow to inject HID event from BPF
+config: i386-buildonly-randconfig-001-20240411 (https://download.01.org/0day-ci/archive/20240411/202404111903.69WRBBjD-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404111903.69WRBBjD-lkp@intel.com/reproduce)
 
-> Unfortunately, I have no idea why it is complaining nor why your patch
-> resolves it but the combination of FORTIFY_SOURCE and KASAN certainly
-> seems like a reasonable place to start looking. I will see if I can come
-> up with a smaller reproducer to see if it becomes more obvious why this
-> code triggers this warning.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404111903.69WRBBjD-lkp@intel.com/
 
-I know at least why my patch avoids the warning -- it removes the
-call to memset() that contains the check. Unfortunately that still
-doesn't explain what caused it.
+All errors (new ones prefixed by >>):
 
-      Arnd
+>> ld.lld: error: undefined symbol: hid_input_report
+   >>> referenced by hid_bpf_dispatch.c
+   >>>               drivers/hid/bpf/hid_bpf_dispatch.o:(hid_bpf_input_report) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
