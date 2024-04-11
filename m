@@ -1,121 +1,158 @@
-Received: from wfhigh5-smtp.messagingengine.com (wfhigh5-smtp.messagingengine.com [64.147.123.156])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA231863C;
-	Thu, 11 Apr 2024 20:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04162BCE8;
+	Thu, 11 Apr 2024 21:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712867082; cv=none; b=rc0kJ859xxxXRo1lLhDStI4xjQLlDU/tVgXqiGLQpvgtu1E+4YyFQ+TM57Wfehx/92lN12cnzxbQQQDFFcNP+dTloOfMxk9V32HR6xaTB8+K5HPPINnghquv9e1Yzcrimy5zpyakckU0NYf8XskrdzLoksGOrTv9GvSWglhv5iA=
+	t=1712869774; cv=none; b=WpE1UH0U6dG/YkJMNvoKrdgZd9tilKynEySrMvLJNMpAQ0WVuArSHU3ALCxlr6Xc4raEi91TU1WTSivATz8jaWteHHEkTJnxYLcB1I5wayX572dVNkTMO+N/DUUohCI7JlWT9voBQSpjmaygp6JVqRFi1eF5Zbyk5ZwY4KapYX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712867082; c=relaxed/simple;
-	bh=N+rD5QfdxBQ/+DoxhEwOJBWLJNrXs7YfVLacUCjziJg=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=S3A1pSeL/36ics9eRZnDVugJblEQ1+rRC4FmFm5hLdOIPEXaF/zl17teoX6DVHFKDWB9T2K9Weg3nnCZyIfNTdtvUQsktQZ9wFVXd4rDUenCT7Jq+Wr8mqcfQpXmyF5H080R/afi3HKJxE6XDcahtlTlRKxHoLFvk+y1eN/b6ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cPj9/fmJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qHqB2bof; arc=none smtp.client-ip=64.147.123.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1712869774; c=relaxed/simple;
+	bh=LF4XpfoNUs4rgrgDg8WjET4ZLBJiGswBegAapshKlSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GBjaUV9qccuVhqtjuaXVO04fWBpCmQRFIwu79n8ps6/h2dGyy1xx6szEVNTvRuSwdiuCdiD7NVojWbq5d0QAfHzZRVTqnuXf6yWR21+y9xuCchFjPns4BjmoOEhTgfkSrI8NNH56WmLJvH/YscSja1vMUF09MujP6utROg0EWxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QtDT3j8s; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cPj9/fmJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qHqB2bof"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 51A3618000F3;
-	Thu, 11 Apr 2024 16:24:37 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 11 Apr 2024 16:24:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1712867076; x=1712953476; bh=ZXeIVotYWY
-	tiu1d2XO6gj9pTb41qrbKlByzdKKRm9q0=; b=cPj9/fmJ5ICh3OIX4HYXzZjM6n
-	cLQiW4Cz21H6OpfvtrZuajQKQhfVwrCtAKvhmNhLttcnVk+BNacSSrhvH2eoA4Jb
-	YA7ADp36lgYsoe8ZlE1IwK65U2ovNeC+NM3RZqmzX5KbJbVv+MbvmIJISIrncxpA
-	nP9LvVPza1DgjGMq5ufcQ5/epM3fh7JhGOooRe7YM/58PKTmJJHY8uIttlD7XHpF
-	n8L+VnT+Za2CYcrcZpmhXdqxVfqrRqJ9mffsEWZPmV7i7LTS2hhnaf7nEEz/gbGS
-	q2Z3cYd+YHriIMSPqNPm1krDVAqXXcfEs/RyTbq4YjbxVBfsZc7KhldP9Ozw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712867076; x=1712953476; bh=ZXeIVotYWYtiu1d2XO6gj9pTb41q
-	rbKlByzdKKRm9q0=; b=qHqB2bofPTTin25e4aiJKGl5dqQAnld3Fg7cvAp/9+KS
-	ELfm4Jw1r+Jl+HFzb4gt0Wlc7p/jT2L7gzrhBYxITEFZs7upd0f5708VfsrfRgz4
-	X3aeO6DqbAQIwROGE2QSuJBfXkqFUhhN5Ltrn//VyJ2i/TPTltK4kw+grYkliWzg
-	78RmddP4ArbDecPpHgQ3dV1tOmnRqZKsTIX3dDCtkmoGxm0Rr9Uw6WLScZyF4nc4
-	kkuKC0gFQxbps7hOK4OpwiZGBFV9aPgl0ZALkLZrFjuOO9i4mA/YsIAMvL2u80mq
-	QrecgtpIZgCiMY0ZWunP7c9wWs5BflbhcVM7acshZA==
-X-ME-Sender: <xms:BEcYZpAZwpPAmBxOlYDASCzFc-JYQXMnIOxfElOpC1NGI-C06qCjlQ>
-    <xme:BEcYZnheUgW-Q35kxjTjNuqIJPO-Jm724Zb9c9BAyFKDmDa2MHbTElW_ezoNNv_nG
-    l_UNZdtj9ZsB8oyJx0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehkedgudehtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:BEcYZklh8mIT3WyAnL0CXsulvEanTdkreoWtmohNPyKbX67YUgk6vA>
-    <xmx:BEcYZjxuyibftC51S33hv9nL8jnnYrwxGqBL77KuCKZf_31PYxnkzg>
-    <xmx:BEcYZuSbzkYjtBSFYH50QqT-S_HXRIap8ighca1--qWVlOtrBca6xw>
-    <xmx:BEcYZmbUHbWP6gDWtrjpzxKF3oMnIrQ0BFKDzvFz1UOvZ4XgXiPy0w>
-    <xmx:BEcYZhYAjiqvMqacjd-jdPFz3yG5e4uH3_E8k3rwP_Z4ENK4taN6e-b7>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 0D8BAB6008F; Thu, 11 Apr 2024 16:24:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QtDT3j8s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712869773; x=1744405773;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LF4XpfoNUs4rgrgDg8WjET4ZLBJiGswBegAapshKlSA=;
+  b=QtDT3j8s81YAw/6lwgPpKWmQ6pQJH2LyDFVyNveNF/4UiO4G/ucbF8v5
+   eJsxGKoQSdPaYFsHqQmB99q/O3zBsn8uPa12MNtEOYE5JAdCIeaioXT3e
+   xdsYQVj9UF5vWzc1wYnq53HzN00JVOC/5qauF4V4VGcCNROa1my/1AeyH
+   GQ3aeg37tRwBw4a4hm7pvH/HXr6Q+ZcVAAyxUIbjy6TnPL0Iae2PSHJ3K
+   UQfGGsDMRrHoDQlEI0vdOqKXHQGT0QiX2IWnmByE9OXiEiqgRDB4j8AF6
+   00KtU2F35Cq9xlytq688LzOkFvp4Ic9wHh0OdhexzM1IETj2tqq+adVNP
+   w==;
+X-CSE-ConnectionGUID: C5V/sZvlSe6qKLMRAmDfCQ==
+X-CSE-MsgGUID: GhThpbHgQw2tPDd2iGq7Lg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="30791676"
+X-IronPort-AV: E=Sophos;i="6.07,194,1708416000"; 
+   d="scan'208";a="30791676"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 14:09:32 -0700
+X-CSE-ConnectionGUID: 9GszBZEdQweoOsAaOPrXAA==
+X-CSE-MsgGUID: By4KEyw4SXmebUA1g2eEFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,194,1708416000"; 
+   d="scan'208";a="20992366"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 11 Apr 2024 14:09:31 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rv1fk-0008z3-0N;
+	Thu, 11 Apr 2024 21:09:28 +0000
+Date: Fri, 12 Apr 2024 05:08:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alistair Popple <apopple@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 08/10] fs/dax: Properly refcount fs dax pages
+Message-ID: <202404120417.9jDId3hj-lkp@intel.com>
+References: <5cc5a152d2a03e2702be259c81af2bfe424303cd.1712796818.git-series.apopple@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <d499b754-4b0a-4cde-9ca8-cfe0fc9bf2c9@app.fastmail.com>
-In-Reply-To: <1-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-References: <1-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-Date: Thu, 11 Apr 2024 22:24:15 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jason Gunthorpe" <jgg@nvidia.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
- "Justin Stitt" <justinstitt@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Leon Romanovsky" <leon@kernel.org>,
- linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
- llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
- "Bill Wendling" <morbo@google.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- Netdev <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Salil Mehta" <salil.mehta@huawei.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
- "Yisen Zhuang" <yisen.zhuang@huawei.com>
-Cc: "Catalin Marinas" <catalin.marinas@arm.com>,
- "Leon Romanovsky" <leonro@mellanox.com>,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, "Mark Rutland" <mark.rutland@arm.com>,
- "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
- "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Jijie Shao" <shaojijie@huawei.com>, "Will Deacon" <will@kernel.org>
-Subject: Re: [PATCH v3 1/6] x86: Stop using weak symbols for __iowrite32_copy()
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5cc5a152d2a03e2702be259c81af2bfe424303cd.1712796818.git-series.apopple@nvidia.com>
 
-On Thu, Apr 11, 2024, at 18:46, Jason Gunthorpe wrote:
->  arch/x86/include/asm/io.h    | 17 +++++++++++++++++
->  arch/x86/lib/Makefile        |  1 -
->  arch/x86/lib/iomap_copy_64.S | 15 ---------------
->  include/linux/io.h           |  5 ++++-
->  lib/iomap_copy.c             |  6 +++---
->  5 files changed, 24 insertions(+), 20 deletions(-)
->  delete mode 100644 arch/x86/lib/iomap_copy_64.S
+Hi Alistair,
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on ffc253263a1375a65fa6c9f62a893e9767fbebfa]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/mm-gup-c-Remove-redundant-check-for-PCI-P2PDMA-page/20240411-085933
+base:   ffc253263a1375a65fa6c9f62a893e9767fbebfa
+patch link:    https://lore.kernel.org/r/5cc5a152d2a03e2702be259c81af2bfe424303cd.1712796818.git-series.apopple%40nvidia.com
+patch subject: [RFC 08/10] fs/dax: Properly refcount fs dax pages
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240412/202404120417.9jDId3hj-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240412/202404120417.9jDId3hj-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404120417.9jDId3hj-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/dax.c:10:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2140:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/dax.c:707:5: warning: no previous prototype for function '__dax_invalidate_entry' [-Wmissing-prototypes]
+     707 | int __dax_invalidate_entry(struct address_space *mapping,
+         |     ^
+   fs/dax.c:707:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     707 | int __dax_invalidate_entry(struct address_space *mapping,
+         | ^
+         | static 
+   6 warnings generated.
+
+
+vim +/__dax_invalidate_entry +707 fs/dax.c
+
+   706	
+ > 707	int __dax_invalidate_entry(struct address_space *mapping,
+   708					  pgoff_t index, bool trunc)
+   709	{
+   710		XA_STATE(xas, &mapping->i_pages, index);
+   711		int ret = 0;
+   712		void *entry;
+   713	
+   714		xas_lock_irq(&xas);
+   715		entry = get_unlocked_entry(&xas, 0);
+   716		if (!entry || WARN_ON_ONCE(!xa_is_value(entry)))
+   717			goto out;
+   718		if (!trunc &&
+   719		    (xas_get_mark(&xas, PAGECACHE_TAG_DIRTY) ||
+   720		     xas_get_mark(&xas, PAGECACHE_TAG_TOWRITE)))
+   721			goto out;
+   722		xas_store(&xas, NULL);
+   723		mapping->nrpages -= 1UL << dax_entry_order(entry);
+   724		ret = 1;
+   725	out:
+   726		put_unlocked_entry(&xas, entry, WAKE_ALL);
+   727		xas_unlock_irq(&xas);
+   728		return ret;
+   729	}
+   730	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
