@@ -1,91 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA68D534;
-	Thu, 11 Apr 2024 14:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BC93FE3F;
+	Thu, 11 Apr 2024 16:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712847028; cv=none; b=r5/4x9E0dBNrteonZqQuuDLp+wB2wuyXFYxsx95dqCuAucfEatRSaBv8atQWmeFMl0QTAXMLm1yP8ou8tWhqJXl93pWaaKh3aZDV269H/aJ3zKY/NByf5F7f79H5La5UaiEZlmptzXtPi7HSE4Ww4/BUXcK3yxBS4JmpuOLbT9Y=
+	t=1712853310; cv=none; b=EKBMyZ9k4aSlpINNGFoX3fDFRt1W0sF4co4s+N75R87iOXu+ix8Il7MqmmClHUiLPbh/AUbFqmqb/JJ3W3HQKs7UbzFyZkJEaIfXVtHFfWR0837hAj3vCGzNQt3VuY3YKodjnOV4NDz9J9DLLRsdNKT9iipkNjBw509vpD8rzUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712847028; c=relaxed/simple;
-	bh=RK8HPzL73Quew+tMOrVpkfmMzV4s5rg6BXSQRmSLg8w=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Y7rQJEkNKqSqQSAvRxrF3OAGKcJ6Y0lvnWjpyca7CS8VpIbYMZHGcPq03PYzGMgIIS0+w/LS+opr8IbIp5R7srIobXGX3Nd15efnvswQLdlbGG8HwMVtczSxgK3U5fwFKVtqulleMSaPPGaCyT1NC8g3Yw1IcphwAg7EnXHrcjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jd5AQd9c; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712853310; c=relaxed/simple;
+	bh=t/v7GqviUGNbcu5JjBb89K1tBk5eKiEGunkT7kINhOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H469y0YpH5LgVoEzsPv4tMpAbWCwoM3mFoGNuxtz4Rst51FcnNRM1rI4D0Jutf1/jWOLqTJunA33D5n6xJhia6pQeTNzk8DMQChCw+qt5tOVb5nIlDSbu9c1SMY6F4W9+/aU1KG/pjvd7y8C5mQg+jhyW2szFzJ6QwZPO5uOg10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wguqg7O8; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jd5AQd9c"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9A01C113CE;
-	Thu, 11 Apr 2024 14:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712847027;
-	bh=RK8HPzL73Quew+tMOrVpkfmMzV4s5rg6BXSQRmSLg8w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Jd5AQd9c+Y+DVjeZhRA51xRwPAFPk6ny9Nly0y/GGIhczEKr22hWMYCjS18dsAbcm
-	 SBvNIG6yngZiZjIFrzq3yM41dxSy5YvzBJXVyvpgBMrdFVf4EVKS2K5cLuPVkNWung
-	 3eC9SvbTIAM9/ksLbXoQE93t6AUsWvQTZWbiF1VYooRD0dy7gqU101QW9cCW9oEOnT
-	 +MK0xXDmbSEY0Co6guBWZukqGhMkwOSoBhUulamUCMO/9z7fm0RfxIlgXKSB2znv97
-	 TSy7J79SVgJFcl5MaxOCfihWDsIeZky6uT++YnsTeenQO7oUvKaNdBFXYujUjq7RDJ
-	 Kz6gFOWlrbORg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A465FC4339F;
-	Thu, 11 Apr 2024 14:50:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wguqg7O8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712853309; x=1744389309;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t/v7GqviUGNbcu5JjBb89K1tBk5eKiEGunkT7kINhOE=;
+  b=Wguqg7O8Ds3jqsf4QGjAaDN3Y79rgtTQZ7y20+P/lFYl2c1HjpCiEvzm
+   cfpIoWQdwH8qDBpZcmtT78PGlKwsYDceN6PNQGs4KKVDXbTfNGahCllqk
+   abl4pFNM3L7c6OCD2Rsk4NG3ySkxov5M+rcx5f4ZlCf3zUMbQT5wD1Ph2
+   U8FBVUuRu7nkJkMqfiA0zSs4E/YKgZVvz/vykPR59JaF1eUJJsmR2KdmR
+   tsov/ghwoG3RN/sVcvPQEufKEkhg8Bct8nMaiwfF3fJJtMhxrZke/0d9E
+   wAVbgv5sY/nxGquzWJgG6SE/tV7CmOFa6SfkWn7s7OCnvxSra/PGRDkl0
+   w==;
+X-CSE-ConnectionGUID: nAGZwRAjRp+nZsD8hn3mgA==
+X-CSE-MsgGUID: 3UmkjNAETtCEAzKVyeLF9g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="18838650"
+X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
+   d="scan'208";a="18838650"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 09:35:03 -0700
+X-CSE-ConnectionGUID: OGiv2yLhTM6J6yDAqqzhEQ==
+X-CSE-MsgGUID: HhEIXW/IQcawTtl6wv49Dw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
+   d="scan'208";a="25423885"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 11 Apr 2024 09:34:58 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ruxO4-0008ob-2J;
+	Thu, 11 Apr 2024 16:34:56 +0000
+Date: Fri, 12 Apr 2024 00:34:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, virtualization@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH vhost 4/6] virtio_net: big mode support premapped
+Message-ID: <202404120044.VKtjHMzy-lkp@intel.com>
+References: <20240411025127.51945-5-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/3] RDMA/mana_ib: Add flex array to struct
- mana_cfg_rx_steer_req_v2
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171284702766.5792.6538200625585720132.git-patchwork-notify@kernel.org>
-Date: Thu, 11 Apr 2024 14:50:27 +0000
-References: <AS8PR02MB72374BD1B23728F2E3C3B1A18B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
-In-Reply-To: <AS8PR02MB72374BD1B23728F2E3C3B1A18B022@AS8PR02MB7237.eurprd02.prod.outlook.com>
-To: Erick Archer <erick.archer@outlook.com>
-Cc: longli@microsoft.com, sharmaajay@microsoft.com, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- keescook@chromium.org, gustavoars@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- jgg@ziepe.ca, leon@kernel.org, shradhagupta@linux.microsoft.com,
- kotaranov@microsoft.com, linux-rdma@vger.kernel.org,
- linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411025127.51945-5-xuanzhuo@linux.alibaba.com>
 
-Hello:
+Hi Xuan,
 
-This series was applied to netdev/net-next.git (main)
-by Leon Romanovsky <leon@kernel.org>:
+kernel test robot noticed the following build warnings:
 
-On Sat,  6 Apr 2024 16:23:34 +0200 you wrote:
-> The "struct mana_cfg_rx_steer_req_v2" uses a dynamically sized set of
-> trailing elements. Specifically, it uses a "mana_handle_t" array. So,
-> use the preferred way in the kernel declaring a flexible array [1].
-> 
-> At the same time, prepare for the coming implementation by GCC and Clang
-> of the __counted_by attribute. Flexible array members annotated with
-> __counted_by can have their accesses bounds-checked at run-time via
-> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
-> strcpy/memcpy-family functions).
-> 
-> [...]
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.9-rc3 next-20240411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here is the summary with links:
-  - [v3,1/3] net: mana: Add flex array to struct mana_cfg_rx_steer_req_v2
-    https://git.kernel.org/netdev/net-next/c/bfec4e18f943
-  - [v3,2/3] RDMA/mana_ib: Prefer struct_size over open coded arithmetic
-    https://git.kernel.org/netdev/net-next/c/29b8e13a8b4c
-  - [v3,3/3] net: mana: Avoid open coded arithmetic
-    https://git.kernel.org/netdev/net-next/c/a68292eb4316
+url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/virtio_ring-introduce-dma-map-api-for-page/20240411-105318
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20240411025127.51945-5-xuanzhuo%40linux.alibaba.com
+patch subject: [PATCH vhost 4/6] virtio_net: big mode support premapped
+config: i386-randconfig-016-20240411 (https://download.01.org/0day-ci/archive/20240412/202404120044.VKtjHMzy-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240412/202404120044.VKtjHMzy-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404120044.VKtjHMzy-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/virtio_net.c:449:21: warning: implicit conversion from 'dma_addr_t' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+     449 |         page_dma_addr(p) = DMA_MAPPING_ERROR;
+         |                          ~ ^~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:75:29: note: expanded from macro 'DMA_MAPPING_ERROR'
+      75 | #define DMA_MAPPING_ERROR               (~(dma_addr_t)0)
+         |                                          ^~~~~~~~~~~~~~
+>> drivers/net/virtio_net.c:485:26: warning: result of comparison of constant 18446744073709551615 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+     485 |         if (page_dma_addr(page) == DMA_MAPPING_ERROR) {
+         |             ~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +449 drivers/net/virtio_net.c
+
+   443	
+   444	static void page_chain_unmap(struct receive_queue *rq, struct page *p)
+   445	{
+   446		virtqueue_dma_unmap_page_attrs(rq->vq, page_dma_addr(p), PAGE_SIZE,
+   447					       DMA_FROM_DEVICE, 0);
+   448	
+ > 449		page_dma_addr(p) = DMA_MAPPING_ERROR;
+   450	}
+   451	
+   452	static int page_chain_map(struct receive_queue *rq, struct page *p)
+   453	{
+   454		dma_addr_t addr;
+   455	
+   456		addr = virtqueue_dma_map_page_attrs(rq->vq, p, 0, PAGE_SIZE, DMA_FROM_DEVICE, 0);
+   457		if (virtqueue_dma_mapping_error(rq->vq, addr))
+   458			return -ENOMEM;
+   459	
+   460		page_dma_addr(p) = addr;
+   461		return 0;
+   462	}
+   463	
+   464	static void page_chain_release(struct receive_queue *rq)
+   465	{
+   466		struct page *p, *n;
+   467	
+   468		for (p = rq->pages; p; p = n) {
+   469			n = page_chain_next(p);
+   470	
+   471			page_chain_unmap(rq, p);
+   472			__free_pages(p, 0);
+   473		}
+   474	
+   475		rq->pages = NULL;
+   476	}
+   477	
+   478	/*
+   479	 * put the whole most recent used list in the beginning for reuse
+   480	 */
+   481	static void give_pages(struct receive_queue *rq, struct page *page)
+   482	{
+   483		struct page *end;
+   484	
+ > 485		if (page_dma_addr(page) == DMA_MAPPING_ERROR) {
+   486			if (page_chain_map(rq, page)) {
+   487				__free_pages(page, 0);
+   488				return;
+   489			}
+   490		}
+   491	
+   492		/* Find end of list, sew whole thing into vi->rq.pages. */
+   493		for (end = page; page_chain_next(end); end = page_chain_next(end));
+   494	
+   495		page_chain_add(end, rq->pages);
+   496		rq->pages = page;
+   497	}
+   498	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
