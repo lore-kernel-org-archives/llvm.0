@@ -1,52 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64D714A4E5
-	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 13:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2776714D6E0
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 13:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712842092; cv=none; b=UjySgFjlmhheKaolTB3fvvBoymuYV4Zzbqqw46pj11sa4Hvt+L88NTuf6dNNV7y6pP9ShYAo4aEyIBQQQkAuhI7PeYVnWZ8Gi8SldgpUbdIxkkmj3dg0yArgpJmfHi0qRI8TOoqHx/OGZuz33nO1kEiVgTtcOXe1fFSewELVK2M=
+	t=1712842649; cv=none; b=L7BkR8yjcCfHuR08bX3CSjWOjkzeN3cxMzh9ZwUYUsdulzUM7hNpIsq80omXja5FmvbVw244DM5AaHDo0rZtL/+vrbkaYhssL9dsgAIol1fkx3l552G57UoyP8VU9ELljTrv2h378NbKER3F5+fg+tF4+Ud4RoyxU7eQp57KpwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712842092; c=relaxed/simple;
-	bh=rN3vnamxh1y4e19vWKAPhoeeESNA3w+VvGOlWEyFGns=;
+	s=arc-20240116; t=1712842649; c=relaxed/simple;
+	bh=ZfH/I4d1hrRMe9hj7w2rGrT0Kd9Zdc2d48cUGU8d2hE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YsO2gAHSkjVqU19iLK4+qkw7wmQ46oiyVjuZiwcGeqi4T3AFRtC6cIvEbrSezAiEjAkQ+LHkm5PhzaU5fueLdvO0jG1wUwx8kH+RRDEjishKBc8q+4i9Onguv0/Qde2oiLDeaB4p1HxeBiaXBVbh3J6OEz83CFXGqp4+XowXjFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S9Q6Z+W7; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=NnXWvZng0/Akq33UV5/NZuH6ZdEfv9L1gRoEsyd7QJaz+PQ+oPuxTzRMjT3a33+sifp0EKN8bpHO+EHpAfSTsxLOS4mjdvZEj/sOrIQeRJwNUuUQtoXh3bKmKy+DrirWHzgeLmQz45mJKwjoEsRGsExT6osymQFLKEjwSeY7YEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y3uZr7pJ; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S9Q6Z+W7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y3uZr7pJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712842091; x=1744378091;
+  t=1712842648; x=1744378648;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rN3vnamxh1y4e19vWKAPhoeeESNA3w+VvGOlWEyFGns=;
-  b=S9Q6Z+W7o1vnYlqo9nMo3eIuBz0Z7vrbM63vn+qexxoeGePkjGXCq5GX
-   UOM3dXq+SsyyhByR5FsVQwOZyyv8MDrfdvM5rRw5io+SVn9sMpjIs2I8N
-   /hsOwMykQ2O5awLRk7NgjXhxg+6koue/ISevnOgryvT8mxq8au0XiLkUJ
-   FqdWpXjZcEOkvZaDxVO5Pstg1z1PHiBg2CYFO+dW0k+QjN34Nv8ZDsDxQ
-   Rku3hXL9rdKFf3IBKyfVfvLlC50K8FPhlw+3Zta1PUuPr6ySuGVrYZAYK
-   6qcm7WZ6c4EcOG6oPOLkIpBjr+obmojlq4wdeikFsgTWWDrVeolDMGtmE
-   g==;
-X-CSE-ConnectionGUID: 8N2z3sNGQx+8mHnsslX7QA==
-X-CSE-MsgGUID: 1Tzt2YKeRsCEBhw2amR0UQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="8102460"
+  bh=ZfH/I4d1hrRMe9hj7w2rGrT0Kd9Zdc2d48cUGU8d2hE=;
+  b=Y3uZr7pJGG2BrHZ/STELSfftynmmvfpW1FFWpwbc4i3Qwk37IWW/fSFy
+   GbYcHsrf/1mRzE6tndFgsihzXmKugzMzSTofB10vmDvPNNLxv4n8nXVWe
+   W0JI1+wqqHtnOYA5e3FTfSJJY95CI6cJyfTMsOt+DW2tDqsU/LqnIcv0D
+   iaP1ZhSKHkhRQnbrVn9hFSzot8h9kKZRVzQgRXB8+RyLkX8EwmsOwfxQj
+   nexPzEWgJBzogu1B7qvINKqwxqZfYGXe5mQkpljjbbIJMPr/ngJS93DvZ
+   lXdEo+/lZs7iUIGuVJjj5/fsyObq2UuI4jv0kYnmwKTD7z03zky7csdxJ
+   A==;
+X-CSE-ConnectionGUID: +WClqAZLQS2Ydh0EWSDGdA==
+X-CSE-MsgGUID: Ik0gQYUlSLOt/R83VyJRRg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="25705541"
 X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="8102460"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 06:28:11 -0700
+   d="scan'208";a="25705541"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 06:37:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="937096973"
+X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="915463714"
 X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="937096973"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Apr 2024 06:28:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id EB28532A; Thu, 11 Apr 2024 16:28:06 +0300 (EEST)
-Date: Thu, 11 Apr 2024 16:28:06 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="915463714"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 06:37:24 -0700
+Received: from andy by smile with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1ruucE-00000003MYt-1MVd;
+	Thu, 11 Apr 2024 16:37:22 +0300
+Date: Thu, 11 Apr 2024 16:37:21 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
 	Linus Walleij <linus.walleij@linaro.org>,
@@ -56,26 +58,37 @@ Cc: linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>
 Subject: Re: [PATCH v1 0/2] gpiolib: acpi: A couple of error checks amendmends
-Message-ID: <20240411132806.GB112498@black.fi.intel.com>
+Message-ID: <ZhfnkQmhBjA1tvrk@smile.fi.intel.com>
 References: <20240410202243.1658129-1-andriy.shevchenko@linux.intel.com>
+ <20240411132806.GB112498@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240410202243.1658129-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240411132806.GB112498@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Apr 10, 2024 at 11:21:45PM +0300, Andy Shevchenko wrote:
-> One error check is moved and one is dropped.
-> No functional changes intended.
+On Thu, Apr 11, 2024 at 04:28:06PM +0300, Mika Westerberg wrote:
+> On Wed, Apr 10, 2024 at 11:21:45PM +0300, Andy Shevchenko wrote:
+> > One error check is moved and one is dropped.
+> > No functional changes intended.
+> > 
+> > Andy Shevchenko (2):
+> >   gpiolib: acpi: Remove never true check in acpi_get_gpiod_by_index()
+> >   gpiolib: acpi: Check for errors first in acpi_find_gpio()
 > 
-> Andy Shevchenko (2):
->   gpiolib: acpi: Remove never true check in acpi_get_gpiod_by_index()
->   gpiolib: acpi: Check for errors first in acpi_find_gpio()
+> Both,
+> 
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Both,
+Pushed to my review and testing queue, thanks!
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
