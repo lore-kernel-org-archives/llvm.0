@@ -1,155 +1,110 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576213E47F
-	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 17:53:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974E341A91
+	for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 18:34:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712858024; cv=none; b=KD8qG3u8nLiYPMtyN8+u2UV5p2OTUz9fxTZue3yp7IkQXxh8EFYlPc2Qf8MLJW1FLQsbD5UxfuyWaeVpUdV7MLf3BAlnvk16w4uvYKkI+Cl9JD/0zVsQ6z5kpXpaoQFJP2vzCJ76nj+aGZeEkU4bBU9tIfrUCYg/Auh4u3GDdls=
+	t=1712860451; cv=none; b=BY0K5l13/gr0OMU9bCanlxyxOXqtHqkgQpm6gYT2mAKPhB3M7EqwtWb4omCm5KYo0lCug8rgl6hRN7hs9PG0PJ0chVgdcy4D5AXYofEjw6GipSaWQ4vl/eb83wA5dPnleY+4gevWhgU62GAXACPriL3ozM+rx2x+xMIqx4sr8nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712858024; c=relaxed/simple;
-	bh=YNm3q05GBcoPy402fbEtHnVeUxD5k5EjIxg4a5DtEsE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xspb55YH9nhhgtF0sNq5Fn62kKSHicZRs+jt5awA47cHmUcgSDdBLQK1tD2t1yHJsdkPoB0yKs8H8ZGLdYKYbSerep2tX5JUByOJY5uLTBRsJttVan2Z1Gzd5GKdWu0z3FHIzFHbhMaDHzyZcK/TatIRf6Z0w2h+wVdYciCFVLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Okw2Brl1; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1712860451; c=relaxed/simple;
+	bh=stMEsNBdhDZHN0AAsq6vgx6+Ts1oyq4oANVAhdK9098=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fBQjwlA0RF68rvHuyQncbq/LsWunle8Fmy/4Q/6WM6sAhSmlUJkN9PyOEiIW7ulfKLMLW35sdbB0rtCIqQzPMkDC0+GuSteCWrnggxqss2aWkNLhbh2Qc1JIpOA4X0joJ0WhMKaELo8xVN0zcmOtGTzClDxlXLw9pG0TNNHYSZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vYKo03GB; arc=none smtp.client-ip=209.85.217.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Okw2Brl1"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6ed0e9ccca1so153235b3a.0
-        for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 10:53:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vYKo03GB"
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-47a21267aa8so50914137.3
+        for <llvm@lists.linux.dev>; Thu, 11 Apr 2024 11:34:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712858023; x=1713462823; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sNBRHOyPI+Ix6+A4cvuQZL/n3YEyzqDCW+Z4zO41EyQ=;
-        b=Okw2Brl1oZ9ApgVbR5MBngSVGnj0fDpBkdZxpCoYxy9dCKSMK/6Q3Pp5bU1v2+yzG/
-         B3r6bHst2y/NzhcibMdosG+e58xgULrNr0N9/XAhfL7whLMC31jBzfwDSPhNy08wwYg/
-         qZ0YngE1fnJLnxp6VRDf91RrWR7ay3eopsx8owyiEBtkNQXpglIMKwVQcJ+KM/OvIahO
-         LAu34i4UXsxgN03tjHU/1d9vprAI0AJktWhXLwvJuGv3nqhP3BwHVqwAApnkUQVu50no
-         dE+RPveLd2PDwc/cdHLyMPELGcd2DoszJgQR3YaLXHipbOkKht6Tx2H7YzTgkPIrvSyG
-         Q5jg==
+        d=google.com; s=20230601; t=1712860449; x=1713465249; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=stMEsNBdhDZHN0AAsq6vgx6+Ts1oyq4oANVAhdK9098=;
+        b=vYKo03GBVQWyyoj1rvPLOzUiPx1Bd3LaMGjxSw9G99jPoRfg3nB07d72tgkIIZfxcI
+         R09e7LFLQp41U/IHWYaFjtGj3YFanuSJx7U38bPDWwyS2VYnnDm2jjA0RyXqxr1FLcL3
+         NS9sv5JV/Kg1l+W6VFHaizygHyorXxhgDUmPRdKj/n5iIaEIJg6zdsYbwOGS+plfVz0C
+         PTw3iuX4HSuJxDQkaDZgTciaYZJCz7NGiYjvmTk13uPTwD1l2MXYnJv1Ic2ey5bfBCUL
+         YAlTX0DO55f5JYAdtqQJfz2ev7NtjE7YVKDhiCTsGJz/qnx+zBgVA//GrPCXn/q/qIez
+         keXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712858023; x=1713462823;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sNBRHOyPI+Ix6+A4cvuQZL/n3YEyzqDCW+Z4zO41EyQ=;
-        b=YVsrrw92iVH+Q9pqTs8mRRMdYONTyWjcahgv8D1AR14jC3byQJgCWrN4xijGntEPq1
-         rhWaKiZjq4/Q0jd4CI67mXCjWH0ly4cqsHCiSfEwcXHA2gOLKGSkR4SInC4jkETl/co5
-         wJLFpZzAB9j+i2lKefJUN9lJ97TCCiPilRy01aHyrgMf08ahknpjUpKLpsrhsiGP9CML
-         TvcED8sDWZGJaYQaQNx/ztHgr3NxDif8FgPAn71kuxIjAJ8gr3V3RpE2iQGW8+5z0ukx
-         VQfCxzAyfPYMoiKOQB1xhtq6VRH7O67CkX76/oz3a7FPnasrGlt560pj0MGmKBvYLo4t
-         SOBA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjGuuwrCX865pxHtCX/muJFCStJV2iStDdMnkvDCqaJN+SoiQUK+QoU5oP11EF3HTy9hJT5YKdtilquhrme9pploWA1g==
-X-Gm-Message-State: AOJu0YzFg+NSH0mMNG4ehnYpYautFJ3BN+AZU6EHSdclq4QpGnNaz8rg
-	jtzTqq7DK78a+xRJEqQSPep4tsWxR97Bw6DkuRLBsAZU07oGPSew071C5bHz0SA=
-X-Google-Smtp-Source: AGHT+IHvTlKfIjzPeOBTC79yWowwoTcXJYi0DJrQEFv7vxDpvjIWBOVWUaYo1AptR3Y6sfvrZ3mgAQ==
-X-Received: by 2002:a05:6a20:5648:b0:1a7:4b6f:7934 with SMTP id is8-20020a056a20564800b001a74b6f7934mr552627pzc.17.1712858022568;
-        Thu, 11 Apr 2024 10:53:42 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id a25-20020a63bd19000000b005e43cb66a7asm1356148pgf.87.2024.04.11.10.53.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 10:53:42 -0700 (PDT)
-Date: Thu, 11 Apr 2024 10:53:39 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, nathan@kernel.org, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com, andy.chiu@sifive.com,
-	hankuan.chen@sifive.com, guoren@kernel.org, greentime.hu@sifive.com,
-	cleger@rivosinc.com, apatel@ventanamicro.com,
-	ajones@ventanamicro.com, conor.dooley@microchip.com,
-	mchitale@ventanamicro.com, dbarboza@ventanamicro.com,
-	waylingii@gmail.com, sameo@rivosinc.com, alexghiti@rivosinc.com,
-	akpm@linux-foundation.org, shikemeng@huaweicloud.com,
-	rppt@kernel.org, charlie@rivosinc.com, xiao.w.wang@intel.com,
-	willy@infradead.org, jszhang@kernel.org, leobras@redhat.com,
-	songshuaishuai@tinylab.org, haxel@fzi.de, samuel.holland@sifive.com,
-	namcaov@gmail.com, bjorn@rivosinc.com, cuiyunhui@bytedance.com,
-	wangkefeng.wang@huawei.com, falcon@tinylab.org,
-	viro@zeniv.linux.org.uk, bhe@redhat.com, chenjiahao16@huawei.com,
-	hca@linux.ibm.com, arnd@arndb.de, kent.overstreet@linux.dev,
-	boqun.feng@gmail.com, oleg@redhat.com, paulmck@kernel.org,
-	broonie@kernel.org, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 02/12] riscv: add landing pad for asm routines.
-Message-ID: <ZhgjoyObf+nMihA4@debug.ba.rivosinc.com>
-References: <20240409061043.3269676-1-debug@rivosinc.com>
- <20240409061043.3269676-3-debug@rivosinc.com>
- <CABCJKuee-6GGDDjvByCkikR02gka2BNhwRVBw6UAwEcmSQposQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1712860449; x=1713465249;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=stMEsNBdhDZHN0AAsq6vgx6+Ts1oyq4oANVAhdK9098=;
+        b=NXc5GDp/AdDcwYzK+6TUdhpySi1T7sfbQbkxerW7IdHOQcUv8EeIis/uhkA9hWCUil
+         yu3FWbXm2onYi1co9MQyyYEqgopWnjfFVHn54Cgy5h+tJfLaEJc6tAhGiSKNYa7G2DQO
+         Dp/XVFRqnfJUJS/MSyfW6dlcyjs6xXkJKd/Vv5qcR4Jhto6N/q4MVYINRz7PgSbR2L0m
+         hlJyhlJdk94QZ98pi06812WFSKxtNW6/EkmGDMrwTYJ/kqwBsaThuNLPv+ga6ziJ0hJB
+         sCdtVzAp3SXIOrFVdWBTxZOEK6+s1acVBdO8hBRmCXppIpABL5fiGjSj9lFCFS9VObhy
+         tZTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXGy4fF5z7A2NOQPYJaJS4hQ5cmamT34NhpxGIL0a3dDjofsTJN4sYNqgLfTf0sao0gE7jmZCGi8iIVVIIJ/4f1w5G7Ug==
+X-Gm-Message-State: AOJu0YxQbuO1Ui/FO+EtPK5Sbs5N9Oz6Z4Wbnm1h63EEBfr/tAn5SYlE
+	xKP0/gjEvDr7JrEOmhJ73zZ+bMerDZTkaGJOqkggIjLmd+mmIj4oaw5/1j8N+PVg17AvyTbP13t
+	pJexCiWLcQTaevGqFU3eDR74L6leY3U8W93ki
+X-Google-Smtp-Source: AGHT+IFfuK5+fQsC0QczQeo6WuoykTwpS5Kk4PpmnlC1hN0dL/Pi0+fTSQq1O1Njt6aog/wFbvvhl3lV/7VPrJZJ6bQ=
+X-Received: by 2002:a05:6102:b08:b0:47a:36b9:160b with SMTP id
+ b8-20020a0561020b0800b0047a36b9160bmr819522vst.16.1712860449222; Thu, 11 Apr
+ 2024 11:34:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABCJKuee-6GGDDjvByCkikR02gka2BNhwRVBw6UAwEcmSQposQ@mail.gmail.com>
+References: <20240409061043.3269676-1-debug@rivosinc.com> <20240409061043.3269676-3-debug@rivosinc.com>
+ <CABCJKuee-6GGDDjvByCkikR02gka2BNhwRVBw6UAwEcmSQposQ@mail.gmail.com> <ZhgjoyObf+nMihA4@debug.ba.rivosinc.com>
+In-Reply-To: <ZhgjoyObf+nMihA4@debug.ba.rivosinc.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 11 Apr 2024 18:33:33 +0000
+Message-ID: <CABCJKuf5Jg5g3FVpU22vNUo4UituPEM7QwvcVP8YWrvSPK+onA@mail.gmail.com>
+Subject: Re: [RFC PATCH 02/12] riscv: add landing pad for asm routines.
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, nathan@kernel.org, ndesaulniers@google.com, 
+	morbo@google.com, justinstitt@google.com, andy.chiu@sifive.com, 
+	hankuan.chen@sifive.com, guoren@kernel.org, greentime.hu@sifive.com, 
+	cleger@rivosinc.com, apatel@ventanamicro.com, ajones@ventanamicro.com, 
+	conor.dooley@microchip.com, mchitale@ventanamicro.com, 
+	dbarboza@ventanamicro.com, waylingii@gmail.com, sameo@rivosinc.com, 
+	alexghiti@rivosinc.com, akpm@linux-foundation.org, shikemeng@huaweicloud.com, 
+	rppt@kernel.org, charlie@rivosinc.com, xiao.w.wang@intel.com, 
+	willy@infradead.org, jszhang@kernel.org, leobras@redhat.com, 
+	songshuaishuai@tinylab.org, haxel@fzi.de, samuel.holland@sifive.com, 
+	namcaov@gmail.com, bjorn@rivosinc.com, cuiyunhui@bytedance.com, 
+	wangkefeng.wang@huawei.com, falcon@tinylab.org, viro@zeniv.linux.org.uk, 
+	bhe@redhat.com, chenjiahao16@huawei.com, hca@linux.ibm.com, arnd@arndb.de, 
+	kent.overstreet@linux.dev, boqun.feng@gmail.com, oleg@redhat.com, 
+	paulmck@kernel.org, broonie@kernel.org, rick.p.edgecombe@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 11, 2024 at 05:15:17PM +0000, Sami Tolvanen wrote:
->On Tue, Apr 9, 2024 at 6:12 AM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> SYM_* macros are used to define assembly routines. In this patch series,
->> re-define those macros in risc-v arch specific include file to include
->> a landing pad instruction at the beginning. This is done only when the
->> compiler flag for landing pad is enabled (i.e. __riscv_zicfilp).
->>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/include/asm/linkage.h | 42 ++++++++++++++++++++++++++++++++
->>  1 file changed, 42 insertions(+)
->>
->> diff --git a/arch/riscv/include/asm/linkage.h b/arch/riscv/include/asm/linkage.h
->> index 9e88ba23cd2b..bb43ae7dadeb 100644
->> --- a/arch/riscv/include/asm/linkage.h
->> +++ b/arch/riscv/include/asm/linkage.h
->> @@ -6,7 +6,49 @@
->>  #ifndef _ASM_RISCV_LINKAGE_H
->>  #define _ASM_RISCV_LINKAGE_H
->>
->> +#ifdef __ASSEMBLY__
->> +#include <asm/assembler.h>
->> +#endif
->> +
->>  #define __ALIGN                .balign 4
->>  #define __ALIGN_STR    ".balign 4"
->>
->> +#ifdef __riscv_zicfilp
->> +/*
->> + * A landing pad instruction is needed at start of asm routines
->> + * re-define macros for asm routines to have a landing pad at
->> + * the beginning of function. Currently use label value of 0x1.
->> + * Eventually, label should be calculated as a hash over function
->> + * signature.
->> + */
+On Thu, Apr 11, 2024 at 5:53=E2=80=AFPM Deepak Gupta <debug@rivosinc.com> w=
+rote:
 >
->I haven't seen the compiler implementation for fine-grained Zicfilp
->yet, but in the kernel at least, this would ideally reuse as much of
->the KCFI plumbing as possible. For example, since only C code has type
->information, we left the type hash computation for the compiler, which
->allows assembly functions to just reference the appropriate
->__kcfi_typeid_* symbol.
+> In principle, I agree it should converge with software based kcfi scheme
+> as much as possible. However blocker that I see is `hash` is placed just
+> before function. This breaks for code mapped as execute only scenarios.
+> And ideally would like to have immediates at callsites instead of loads
+> (purely perf reason and not security).
 
-Fine-grained compiler support hasn't made it in yet.
+I'm not saying the schemes have to be compatible, just that it would
+be great to avoid reinventing type annotations etc. For example, when
+you implement the fine-grained variant, you could simply override
+SYM_TYPED_ENTRY (defined in include/linux/cfi_types.h) to move
+__CFI_TYPE inside the function, and then redefine __CFI_TYPE to emit a
+landing pad with the correct label. This allows SYM_TYPED_* in
+assembly code to work with both KCFI and fine-grained Zicfilp. For the
+coarse-grained variant, your current macros are perfectly fine.
 
-For reference, compiler that I've been using
-https://github.com/sifive/riscv-gnu-toolchain/tree/cfi-dev
+> But yes in next version, I'll take a look and try to converge as much as
+> possible.
 
-Honestly speaking, I didn't realize that kcfi plumbing has made it into
-riscv as well. I realized that just after sending the patches.
+Great, sounds good!
 
-In principle, I agree it should converge with software based kcfi scheme
-as much as possible. However blocker that I see is `hash` is placed just
-before function. This breaks for code mapped as execute only scenarios.
-And ideally would like to have immediates at callsites instead of loads
-(purely perf reason and not security).
-
-But yes in next version, I'll take a look and try to converge as much as
-possible.
-
->
->Sami
+Sami
