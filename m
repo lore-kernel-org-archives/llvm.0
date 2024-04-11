@@ -1,121 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EB1184106;
-	Wed, 10 Apr 2024 21:56:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675AC5F870;
+	Thu, 11 Apr 2024 01:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712786211; cv=none; b=oYF9Yg9b22acotCsru4EbCecQIw6nOoffHIs0hdpX1D9qGWkfmdNmPwlbonTBj3MyZZKUHHyp1Dcpv68Vz8mvhzdxPFwjheheusP4mO7WZDxRJ++EwWGBsfnzAohLpiyxZrWa6h+7jzEHB/92pXL4rxB0RWOe+EbrCxbiU/sUwY=
+	t=1712799398; cv=none; b=kYO7KOmLZt6iDlBnqf18h8MBhiskzl6NnY0FI4bJJbWTbl2YT72KVM00uYGhJdRzeD0w9hYVSQiyIecnkugFr5iUquC7aTIOLcpJ6p74nonPqG/9HuRalhde2hHni7TQ2DF4+L69e+NhCjSVcbL6j8ZjyImBLihuMKdPsJHrfEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712786211; c=relaxed/simple;
-	bh=2tu/mgDwnrIh97dDG/kvIPpev4llFiiFPA0qRBHR5TM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oQtqoessZ5eJiFaOzaPysBCmBSdg6bPOGMoH+2FnwUNOGiqFY9Vzt1OzvTiUU/D0Y467hrodn+Ci0u2oNnGVrWbDLdR9+VA1CHwBBqvALTa4NsetuDvxKNN+XruyzDSmMfWI0rlbp3w5wi7Kv1P3HNr6Rtd2G7pXgtJt7rv9VAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jSIzN58N; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712799398; c=relaxed/simple;
+	bh=MWTUkadnObVjMc8frEWWWyCvBCX6wsjc33gwzU1lmqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hXXh0LZ2rc/Vg2o2JJeNV+iLVxIZM6r9sHk2m6OhA4KakGSn5h1Bg1M1PE7GWljBFBUsquUgmQvhZDd7RAfEGzZAZt8g3aOB6Erv+vtSc6bTofw2LXP48GwpFv4zQO7dQa3A/7vG969UnBqAJwLIAuXN2qAUT6F3d6ldUqj0SyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rLCVPXFf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jSIzN58N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712786210; x=1744322210;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2tu/mgDwnrIh97dDG/kvIPpev4llFiiFPA0qRBHR5TM=;
-  b=jSIzN58Nxrya6U5gTJndGlDEU6xbmlGZ4mLqYX6tg/lpXVO+ZZXtUNoX
-   Va8scytwPkiwKKX+q0EEFUhhL3/QIMJaXpv9WNFyskw1ywLjXuyXkWZRV
-   BqH2kT3h5hHNRXu3Uw0nQl/DCJCBELproRbtjhb+e4EJCLmh5fInPdi2N
-   /rFTE6K2icbLJ3+pJlG7GKpp/PNbG7KFJJIJtZaSsOqFIx0t/yaJopfzg
-   TWhMAkLt8plKUfeu81ck3mOjw3ovRX5Q3IkbgDyMhopSA0OvBioYxkQv7
-   zAP25k80Fxr2nj/sgPTM0AyTU+0GKSDA+MgO6qSUHRSW1SifsmkRMIzbP
-   Q==;
-X-CSE-ConnectionGUID: gj7lXmqcQ8G4bL/m1fkq6g==
-X-CSE-MsgGUID: arRGfaH3QWGJSdruecHRLg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="12028788"
-X-IronPort-AV: E=Sophos;i="6.07,191,1708416000"; 
-   d="scan'208";a="12028788"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 14:56:50 -0700
-X-CSE-ConnectionGUID: YmchwANwRVqyI8R7j63hgQ==
-X-CSE-MsgGUID: E4n9CkhfS6ivG6dFibfvjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,191,1708416000"; 
-   d="scan'208";a="20653432"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 10 Apr 2024 14:56:48 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rufvx-0007s8-10;
-	Wed, 10 Apr 2024 21:56:45 +0000
-Date: Thu, 11 Apr 2024 05:55:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 295/367] arch/s390/kernel/sysinfo.c:512:29:
- error: use of undeclared identifier 'file'
-Message-ID: <202404110509.gFeiF3Om-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rLCVPXFf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADCCDC433C7;
+	Thu, 11 Apr 2024 01:36:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712799398;
+	bh=MWTUkadnObVjMc8frEWWWyCvBCX6wsjc33gwzU1lmqs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=rLCVPXFfBKMhygcc3c/PiSabC40ergjqMylxqFMbqJQgFxPoNEyo1INIR3JBXMxRH
+	 3pkuPZtv9CKSGL3SNLMUR1O6xXlRWpwcodiEItGct72/nmC37FJ2T4EZHxR83g+7eV
+	 +7npshUyURuv4YngCDywBcsFebv+61zXy/TfpTG5HmmvaXwFnFhhEaS+SfpSiUsPC6
+	 fBOYRYAYiV2QCQDefRMnxbqSCewH0LLLsdtVSrmnshii860QPc173K2VJXfeYIXOs7
+	 39LMAJ4hfzOyEtnlH+uoJpLYiufjVfc5zmSwDoJqe0wqpBI8Ot/iqsw3QjWX4lbtHv
+	 G0dI0jejlBlXQ==
+Date: Wed, 10 Apr 2024 18:36:36 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Eric Dumazet <edumazet@google.com>, Florian Fainelli
+ <f.fainelli@gmail.com>
+Cc: Vladimir Oltean <olteanv@gmail.com>, kernel test robot <lkp@intel.com>,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org
+Subject: Re: [net-next:main 26/50] net/ipv4/tcp.c:4673:2: error: call to
+ '__compiletime_assert_1030' declared with 'error' attribute: BUILD_BUG_ON
+ failed: offsetof(struct tcp_sock,
+ __cacheline_group_end__tcp_sock_write_txrx) - offsetofend(struct tcp_sock,
+ __cacheline_group_begin__tcp_sock_...
+Message-ID: <20240410183636.202fd78f@kernel.org>
+In-Reply-To: <CANn89iJMirOe=TqMZ=J8mFLNQLDV=wzL4jOf9==Zkv7L2U5jcQ@mail.gmail.com>
+References: <202404082207.HCEdQhUO-lkp@intel.com>
+	<20240408230632.5ml3amaztr5soyfs@skbuf>
+	<CANn89iJ8EcqiF8YCPhDxcp5t79J1RLzTh6GHHgAxbTXbC+etRA@mail.gmail.com>
+	<db4d4a48-b581-4060-b611-996543336cd2@gmail.com>
+	<CANn89iJMirOe=TqMZ=J8mFLNQLDV=wzL4jOf9==Zkv7L2U5jcQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   aa6c8a72cad54562e99c8a46f4baeaf6ea9409a6
-commit: 21031799f2d4e4555cd7a418a455253fcf81a6a2 [295/367] arch/s390: convert to read/write iterators
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240411/202404110509.gFeiF3Om-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240411/202404110509.gFeiF3Om-lkp@intel.com/reproduce)
+On Wed, 10 Apr 2024 19:33:54 +0200 Eric Dumazet wrote:
+> > Jakub, I do not see a 32-bit build in the various checks being run for a
+> > patch, could you add one, if nothing else a i386 build and a
+> > multi_v7_defconfig build would get us a good build coverage.  
+> 
+> i386 build was just fine for me.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404110509.gFeiF3Om-lkp@intel.com/
+Yes, we test i386 too, FWIW.
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/s390/kernel/sysinfo.c:10:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> arch/s390/kernel/sysinfo.c:512:29: error: use of undeclared identifier 'file'
-     512 |         return simple_copy_to_iter(file->private_data, &iocb->ki_pos, PAGE_SIZE, to);
-         |                                    ^
-   5 warnings and 1 error generated.
-
-
-vim +/file +512 arch/s390/kernel/sysinfo.c
-
-   509	
-   510	static ssize_t stsi_read(struct kiocb *iocb, struct iov_iter *to)
-   511	{
- > 512		return simple_copy_to_iter(file->private_data, &iocb->ki_pos, PAGE_SIZE, to);
-   513	}
-   514	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Florian, does arm32 break a lot? I may not be paying sufficient
+attention. We can add more build tests but the CPU time we have 
+is unfortunately finite :(
