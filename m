@@ -1,45 +1,59 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E3C14A091;
-	Fri, 12 Apr 2024 20:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73F81494A1;
+	Fri, 12 Apr 2024 21:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712953250; cv=none; b=b0Ok1ZZV37suVQCqax4XPd5E9mZb3nfF3A3EkG/F3WRLy91Qb/lcwwojuJMKIAdtiXzV1oBRb9C9nau6KAkU0dP1rvQCtMapoL0cjrqrEQnwH4UtzWQwbHe0AuXJznDVpLiEPtHpC2Dh+bWyQGsKsgAeb4+xk+z8w1YCYJBi8CM=
+	t=1712956900; cv=none; b=oiTKoB6+uSF0WE17n5dPGZO9sP/ESqmg2H/kvVR21NolZT5rZAnFXCybA64kby80ZESl9rbNPSFR3v5jwdOlGuIiev1rzxuu6bZPJdrVv5/gwjnIFDKMpAMm3atxLk3e91dtspWUi/8lcFnZkTyYlb7ua6+HqU85KrgEWwjsK7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712953250; c=relaxed/simple;
-	bh=4xLHEQcQ1V8eybg8jbVcylscrNjj4X7QeUnaQO5RvwA=;
+	s=arc-20240116; t=1712956900; c=relaxed/simple;
+	bh=BZz4CCyUCnZ0/06uL3h2AQjRd0Le7U9Oer2B28nM9wA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LtebS1eWiJ9npnH+1/mDqKqAAHm2y+PrBbR4qtebBZQ/vX8CLRAc5fudzcNJHeFcPPD8WdOcL4ZvxzZPrfm1cbd9oYDUg+X612j8H0gul1dS9dcHSEqj7uASbBgpdyw9rmLJgvaHNq66YSRDznZ3Le1ULdW2ObW9pTb+aXt2yaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=tVcUfZGX; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=ubG8gGuCdJbsou6Ii0IlUoIcDLn+qcwR5+FrqKjS7UgWYlx36M5hr/LhCf84jcK07+JvfiYyLeEEjpwYoZCGGQG5SgmvOo1DZOV2ZgBUjCUNEuZYzO92by5k1OS1RTQva84f4GWo9aLbocx947jNjzkTgoM0wZKRjR2IWWVrNPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvClbgIK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tVcUfZGX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=V1ruHJWRhf9traik+clLxlyBbZ44QWr1+mb3lIChcXg=; b=tVcUfZGXCKsFcNpkt+aEDu9t3Y
-	jPqsuKJ9q72BDW1DhXj91fBpPaEe9KiTfpBSIKkmUw9sdkO0ugrN/z9l1viJj027h8ykD8nx8Ob08
-	IZM7kfWn53Oxo4lXAB0LHC9yViVMMXJfaO6iOxXOCVPYiisFhGib5Wg5WIGdUbORp5xCqco7CMu7N
-	0CpG25SDEufzlILmoYXKO003r8Nu98HHs8azBbeljcsZ0su/xw9GtVrvJfgykzwAQPoERVtsH26f6
-	moWp5BiaEQraIkhpAgr+Mgd7GiP8SZL+negT14TpvvukRZm6iuN9xMh/K/3yNZBgSFjWM75uvUdWH
-	MIt+cqgg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rvNO9-00000001B6L-1DtP;
-	Fri, 12 Apr 2024 20:20:48 +0000
-Date: Fri, 12 Apr 2024 13:20:43 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvClbgIK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579C2C113CC;
+	Fri, 12 Apr 2024 21:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712956899;
+	bh=BZz4CCyUCnZ0/06uL3h2AQjRd0Le7U9Oer2B28nM9wA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cvClbgIKLYDiTT2Osk8I4Mc/vrMi7c/Sa+nAEpwcf5MctT8X6PzsV+nS93exiHVdY
+	 2vPpt7xoeYs6DU7X+C1XW/vaNhbBo9kAK2LnqWQemFZRdbTIJXoLbe7QUguXr+eY7L
+	 B186099umoeSpWzBRdkBSoB3rcNZ/mUMwGQszkIcXTrjTwhbQmQpZ5lM3caVwQPZwi
+	 +SD9YPgwv49fLeprSVHDewmfPCd0x9fQ2CteSfnE5Lj2UudDNTCvCzNn7bgmTvDGOh
+	 6/SRKyppP6Ow6mIH5s9lNXE+su+8TiEJfSr+KGX6CPK6yqeILt0DbuHker4iznVdeg
+	 D4RzAjUpSTGiw==
+Date: Fri, 12 Apr 2024 14:21:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kallsyms: replace deprecated strncpy with strscpy
-Message-ID: <ZhmXm4xVMY5QPEGn@bombadil.infradead.org>
-References: <20240412-strncpy-kernel-module-kallsyms-c-v1-1-ba3f0fc16163@google.com>
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Leon Romanovsky <leon@kernel.org>, Lin Ma <linma@zju.edu.cn>,
+	Simon Horman <horms@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Tobias Brunner <tobias@strongswan.org>,
+	Raed Salem <raeds@nvidia.com>, Netdev <netdev@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [RFC] xfrm: work around a clang-19 fortifiy-string
+ false-positive
+Message-ID: <20240412212136.GD2252629@dev-arch.thelio-3990X>
+References: <20240216202657.2493685-1-arnd@kernel.org>
+ <202402161301.BBFA14EE@keescook>
+ <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
+ <20240409161517.GA3219862@dev-arch.thelio-3990X>
+ <f94c6943-eb93-4533-8e4d-3645ef38b990@app.fastmail.com>
+ <20240410174540.GB3649628@dev-arch.thelio-3990X>
+ <773febee-ace3-4ad6-8ff6-04563dbbb759@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,35 +62,29 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240412-strncpy-kernel-module-kallsyms-c-v1-1-ba3f0fc16163@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <773febee-ace3-4ad6-8ff6-04563dbbb759@app.fastmail.com>
 
-On Fri, Apr 12, 2024 at 06:53:47PM +0000, Justin Stitt wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces. The goal is to remove its use completely [2].
+On Thu, Apr 11, 2024 at 01:35:05PM +0200, Arnd Bergmann wrote:
+> On Wed, Apr 10, 2024, at 19:45, Nathan Chancellor wrote:
 > 
-> namebuf is eventually cleaned of any trailing llvm suffixes using
-> strstr(). This hints that namebuf should be NUL-terminated.
+> > Unfortunately, I have no idea why it is complaining nor why your patch
+> > resolves it but the combination of FORTIFY_SOURCE and KASAN certainly
+> > seems like a reasonable place to start looking. I will see if I can come
+> > up with a smaller reproducer to see if it becomes more obvious why this
+> > code triggers this warning.
 > 
-> static void cleanup_symbol_name(char *s)
-> {
-> 	char *res;
-> 	...
-> 	res = strstr(s, ".llvm.");
-> 	...
-> }
-> 
-> Due to this, use strscpy() over strncpy() as it guarantees
-> NUL-termination on the destination buffer. Drop the -1 from the length
-> calculation as it is no longer needed to ensure NUL-termination.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html
-> Link: https://github.com/KSPP/linux/issues/90 [2]
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> I know at least why my patch avoids the warning -- it removes the
+> call to memset() that contains the check.
 
-Thanks! Queued up on modules-next.
+Yeah duh... :/ I should have realized that before I sent that message
+heh.
 
-  Luis
+> Unfortunately that still doesn't explain what caused it.
+
+Right, I'll see if I can cvise something out now that we have a more
+isolated set of conditions. I guess the only question will be if I can
+build a file preprocessed with CONFIG_KASAN=y will build with and
+without '-fsanitize=kernel-address'...
+
+Cheers,
+Nathan
