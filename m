@@ -1,95 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A5C41207;
-	Thu, 11 Apr 2024 23:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BFE4C6C;
+	Fri, 12 Apr 2024 01:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712878501; cv=none; b=qKY+5/YtlHYdb8hMT6ZakHCOZAeoOdNnougiLY5p8qUg/8wqVLpST3fXNjlWV7j+2jvWWjDVtQ4oFcizC5PWfnJQ86CUArTmSXpSo8aw84b8eZt8PlVyRlIPUNefoh2MIUDByfhV8gZ9/oaaDUsLHdiYMAhWBCEF5xatikFJCro=
+	t=1712885828; cv=none; b=F4LHEC7lsfE/6ugd2vOKKPsAAm30sdx35Z0NBdO4yAOZCGnrUUx9T9Zi8hM7Af8kiEjXpsrncYghHbgKjyT5uaUgEe64Zzk+ycCGI0lHXSz0EC9a3rttPhYvVAQtdLjF684Ih+0w6wPxA4FQmQghqB8jQs3nSk1i8ILq/GJSKVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712878501; c=relaxed/simple;
-	bh=huIfZxXK+yKtIqiaqpaMT/UeejnG38jFvbyTKcBP1/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hhVUYrgSloqt8fT05S2OEvGiT6Ud7NGMEJTPuGZtiw7gnxqf8wJW/dLqzt/XmOMIw3X9u6073cQyyUyJ/xzyKUNpGJIm881Cc+R2R5RqQL8i7ukA5kPhVFx+K4UBw4E3oB7Zr1Sal+lVRe0+Dr1Et1YpVyPnBVv87q513L8nihs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qx+rktzi; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712885828; c=relaxed/simple;
+	bh=rrwOUlSp5R9FskhZiOgiL4Shh+tlcWPb9/Ndpf1E/1c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GkSMqXuuI7zs2ybrlUPkI5Kem3bEkqcXfRNm41CnE0UjyNN5AN99u6Ex1LnKN69N7VKghPYELmbhX2R3k0Ig0+q42vQGIi8Xi3ATI9gu45vHxh9UgyYIUNyc0c9ajsVP5nAOTY/IGt0bh/NBjDSNSotZDAJSV2DhJaAeHyZf/jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rP3jUCpt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qx+rktzi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712878500; x=1744414500;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=huIfZxXK+yKtIqiaqpaMT/UeejnG38jFvbyTKcBP1/s=;
-  b=Qx+rktzi1gLvvlppk7C5DBWZ3Fzdw2RI2LMBdCpWGJ77Vv+cRgEF3XgP
-   ZFYP6p0dyT+K3Vv/lL1OVnXA33P8a89VhNX96EGOMvzDubF0ZMrD58odZ
-   /uyCClC4owVFcY6uuatc4fQoC2FskmKjErJ9l2vEDft4uCu5reIae+hVC
-   dOM4fae9E3II3/2hNci/OYSujdrV1ARYPkWA9VzTY2QERQHtk16ViePbc
-   Xbz303twZ1v9KB0b8xp95B2lDExokupW2Jw7y4NeP6VQ3iry+w87UIZfm
-   laJoKKLNbDV7vBkGJH49lVCpt4AiOsxocCbVt5nnnMhRFgsWRdXIcuIH6
-   Q==;
-X-CSE-ConnectionGUID: ThimWCcfSwmQeDswzU+okQ==
-X-CSE-MsgGUID: ZE4bk2CfRsyQbrXGCQIs0g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="18928209"
-X-IronPort-AV: E=Sophos;i="6.07,194,1708416000"; 
-   d="scan'208";a="18928209"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 16:34:59 -0700
-X-CSE-ConnectionGUID: DXMQC6YXTU+UqXgDA+zwNw==
-X-CSE-MsgGUID: spw3FfgBSdiGUKR814AGdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,194,1708416000"; 
-   d="scan'208";a="21492088"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 11 Apr 2024 16:34:58 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rv3wV-00096T-27;
-	Thu, 11 Apr 2024 23:34:55 +0000
-Date: Fri, 12 Apr 2024 07:34:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alistair Popple <apopple@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 06/10] fs/dax: Add dax_page_free callback
-Message-ID: <202404120710.6fzwGtNz-lkp@intel.com>
-References: <d3b9699a56edefe16b695ac09ed659c13391a0d5.1712796818.git-series.apopple@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rP3jUCpt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B37C072AA;
+	Fri, 12 Apr 2024 01:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712885827;
+	bh=rrwOUlSp5R9FskhZiOgiL4Shh+tlcWPb9/Ndpf1E/1c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=rP3jUCpt1pUEYZSrjmOOgLaSEU54tshLM56KRtojwra/If5nehMyZHUMksnudf/TK
+	 cPLZWBCbTts3XpF3/jPvO0ON85DTUDu3GcnTA5mnNXEdGWJi3OWNJfU9stLoGRmNz/
+	 kcjPf/zTNzRaSqgq8rc8unaV/aAI2jAAjyVeDYvaPabJEgo1t5xR8dlkryibKaLTuU
+	 K7WblVqSMyqroHzqjjzOkkqBgTR/2R7KrCzgmza0hXM+jjh2GCF2w2y7iYUGkSfrtH
+	 uI3QHZFIjhVH3kHJKCVOF0fKdIy53KkfBW82ab4De9bFc60VTq9VDZQ5mJcciBApja
+	 tIVjst0akKJzQ==
+Date: Thu, 11 Apr 2024 18:37:06 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>, Vladimir Oltean <olteanv@gmail.com>,
+ kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org
+Subject: Re: [net-next:main 26/50] net/ipv4/tcp.c:4673:2: error: call to
+ '__compiletime_assert_1030' declared with 'error' attribute: BUILD_BUG_ON
+ failed: offsetof(struct tcp_sock,
+ __cacheline_group_end__tcp_sock_write_txrx) - offsetofend(struct tcp_sock,
+ __cacheline_group_begin__tcp_sock_...
+Message-ID: <20240411183706.70e5dfcd@kernel.org>
+In-Reply-To: <a59e2164-7159-445e-9f87-fcf6cb4b57d6@gmail.com>
+References: <202404082207.HCEdQhUO-lkp@intel.com>
+	<20240408230632.5ml3amaztr5soyfs@skbuf>
+	<CANn89iJ8EcqiF8YCPhDxcp5t79J1RLzTh6GHHgAxbTXbC+etRA@mail.gmail.com>
+	<db4d4a48-b581-4060-b611-996543336cd2@gmail.com>
+	<CANn89iJMirOe=TqMZ=J8mFLNQLDV=wzL4jOf9==Zkv7L2U5jcQ@mail.gmail.com>
+	<20240410183636.202fd78f@kernel.org>
+	<a59e2164-7159-445e-9f87-fcf6cb4b57d6@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3b9699a56edefe16b695ac09ed659c13391a0d5.1712796818.git-series.apopple@nvidia.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Alistair,
+On Thu, 11 Apr 2024 12:21:22 -0700 Florian Fainelli wrote:
+> > Florian, does arm32 break a lot? I may not be paying sufficient
+> > attention. We can add more build tests but the CPU time we have
+> > is unfortunately finite :(  
+> 
+> Yes, that is why I mentioned multi_v7_defconfig, you an see the build 
+> failure with that configuration. Of course Eric fixed it now, thanks!
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Would you be willing to type up a bash script along the lines of:
 
-[auto build test ERROR on ffc253263a1375a65fa6c9f62a893e9767fbebfa]
+https://github.com/linux-netdev/nipa/blob/main/contest/tests/build-doc.sh
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/mm-gup-c-Remove-redundant-check-for-PCI-P2PDMA-page/20240411-085933
-base:   ffc253263a1375a65fa6c9f62a893e9767fbebfa
-patch link:    https://lore.kernel.org/r/d3b9699a56edefe16b695ac09ed659c13391a0d5.1712796818.git-series.apopple%40nvidia.com
-patch subject: [RFC 06/10] fs/dax: Add dax_page_free callback
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240412/202404120710.6fzwGtNz-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240412/202404120710.6fzwGtNz-lkp@intel.com/reproduce)
+perhaps some inspiration from:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404120710.6fzwGtNz-lkp@intel.com/
+https://github.com/linux-netdev/nipa/blob/main/tests/patch/build_allmodconfig_warn/build_allmodconfig.sh
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: dax_page_free
-   >>> referenced by pmem.c
-   >>>               drivers/nvdimm/pmem.o:(fsdax_pagemap_ops) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+? (the former runs on the test branches the latter commit by commit)
