@@ -1,90 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73F81494A1;
-	Fri, 12 Apr 2024 21:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691E04438E
+	for <llvm@lists.linux.dev>; Fri, 12 Apr 2024 22:07:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712956900; cv=none; b=oiTKoB6+uSF0WE17n5dPGZO9sP/ESqmg2H/kvVR21NolZT5rZAnFXCybA64kby80ZESl9rbNPSFR3v5jwdOlGuIiev1rzxuu6bZPJdrVv5/gwjnIFDKMpAMm3atxLk3e91dtspWUi/8lcFnZkTyYlb7ua6+HqU85KrgEWwjsK7k=
+	t=1712959658; cv=none; b=hKf/lE/B6EOSUr6noSNGRZPw8Tcl3YDX6twxFZpeBkKRFzkSCK6bz3vy62/5ZIQcnxUOqT1+O4Kvl82l6TNvY+cG7oV6hlLzy2ShFdRnGBi261lstSujqHgftgh/DejGZw+glu2yD5w24EBI18wJ/77NctRC+uEgFWk21sWwlE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712956900; c=relaxed/simple;
-	bh=BZz4CCyUCnZ0/06uL3h2AQjRd0Le7U9Oer2B28nM9wA=;
+	s=arc-20240116; t=1712959658; c=relaxed/simple;
+	bh=tfq73iyyWgAoURfJklfX6aQkJhE28zb97p8a2gm93xc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ubG8gGuCdJbsou6Ii0IlUoIcDLn+qcwR5+FrqKjS7UgWYlx36M5hr/LhCf84jcK07+JvfiYyLeEEjpwYoZCGGQG5SgmvOo1DZOV2ZgBUjCUNEuZYzO92by5k1OS1RTQva84f4GWo9aLbocx947jNjzkTgoM0wZKRjR2IWWVrNPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvClbgIK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=W+0rAIE/3MqwYsqq7iijK2J+++SeGUi8Me6M6aEIJHbiK0VZdmcm+hGp0zCvs14jctQK7TQOMVASYo1c0qpAIhuKNqnkg46qZvp1vk3E5neWgHawP5Qv5OGnAix8LMTLeDdHhhxdQ0gIOEv5drwODcpcFAU7IFox+uxjZCAtFUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4N0jgt+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvClbgIK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579C2C113CC;
-	Fri, 12 Apr 2024 21:21:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4N0jgt+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD38C113CC;
+	Fri, 12 Apr 2024 22:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712956899;
-	bh=BZz4CCyUCnZ0/06uL3h2AQjRd0Le7U9Oer2B28nM9wA=;
+	s=k20201202; t=1712959657;
+	bh=tfq73iyyWgAoURfJklfX6aQkJhE28zb97p8a2gm93xc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cvClbgIKLYDiTT2Osk8I4Mc/vrMi7c/Sa+nAEpwcf5MctT8X6PzsV+nS93exiHVdY
-	 2vPpt7xoeYs6DU7X+C1XW/vaNhbBo9kAK2LnqWQemFZRdbTIJXoLbe7QUguXr+eY7L
-	 B186099umoeSpWzBRdkBSoB3rcNZ/mUMwGQszkIcXTrjTwhbQmQpZ5lM3caVwQPZwi
-	 +SD9YPgwv49fLeprSVHDewmfPCd0x9fQ2CteSfnE5Lj2UudDNTCvCzNn7bgmTvDGOh
-	 6/SRKyppP6Ow6mIH5s9lNXE+su+8TiEJfSr+KGX6CPK6yqeILt0DbuHker4iznVdeg
-	 D4RzAjUpSTGiw==
-Date: Fri, 12 Apr 2024 14:21:36 -0700
+	b=H4N0jgt+nshM0QaGSw5cwyL8iqyuu2tU9Z8v2/mUi0AZrknzozTg/P3jXr91ja7R0
+	 aO79BrhKTsGgPzyoXoYipRMvqNNiAX10Uq+CBLsM71yq227uy3KizZrBBhmxqrpTBO
+	 4Ts9fZlf8UPYxm5rQEV8M/tY5tvxw8Y0QJUlxAawcizT5D0pQXpode3r/iJqaNh/ts
+	 xh5rwu+3JZxeqkyfVGReakbGAPSeKIB77NZEDOHRfdyzm4Sd58lYczEp1htKUsLVS4
+	 cZ2A4AwCjHParGzNTlDbNamc4/6OPed2YtRgU9fQNZUTquDbkx/NkLIW/TvQhvWfDZ
+	 +tU+kfZgljEpw==
+Date: Fri, 12 Apr 2024 15:07:35 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Leon Romanovsky <leon@kernel.org>, Lin Ma <linma@zju.edu.cn>,
-	Simon Horman <horms@kernel.org>, Breno Leitao <leitao@debian.org>,
-	Tobias Brunner <tobias@strongswan.org>,
-	Raed Salem <raeds@nvidia.com>, Netdev <netdev@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] xfrm: work around a clang-19 fortifiy-string
- false-positive
-Message-ID: <20240412212136.GD2252629@dev-arch.thelio-3990X>
-References: <20240216202657.2493685-1-arnd@kernel.org>
- <202402161301.BBFA14EE@keescook>
- <763214eb-20eb-4627-8d4b-2e7f29db829a@app.fastmail.com>
- <20240409161517.GA3219862@dev-arch.thelio-3990X>
- <f94c6943-eb93-4533-8e4d-3645ef38b990@app.fastmail.com>
- <20240410174540.GB3649628@dev-arch.thelio-3990X>
- <773febee-ace3-4ad6-8ff6-04563dbbb759@app.fastmail.com>
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 0/8] CFI for ARM32 using LLVM
+Message-ID: <20240412220735.GG2252629@dev-arch.thelio-3990X>
+References: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
+ <CACRpkdYW-8gC7rGtt-jg8Huv_smB_4Dze4NYgeRL53YczzzDNQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <773febee-ace3-4ad6-8ff6-04563dbbb759@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdYW-8gC7rGtt-jg8Huv_smB_4Dze4NYgeRL53YczzzDNQ@mail.gmail.com>
 
-On Thu, Apr 11, 2024 at 01:35:05PM +0200, Arnd Bergmann wrote:
-> On Wed, Apr 10, 2024, at 19:45, Nathan Chancellor wrote:
+On Fri, Apr 12, 2024 at 09:38:24AM +0200, Linus Walleij wrote:
+> On Thu, Mar 28, 2024 at 9:19 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 > 
-> > Unfortunately, I have no idea why it is complaining nor why your patch
-> > resolves it but the combination of FORTIFY_SOURCE and KASAN certainly
-> > seems like a reasonable place to start looking. I will see if I can come
-> > up with a smaller reproducer to see if it becomes more obvious why this
-> > code triggers this warning.
+> > This is a first patch set to support CLANG CFI (Control Flow
+> > Integrity) on ARM32.
 > 
-> I know at least why my patch avoids the warning -- it removes the
-> call to memset() that contains the check.
+> Not much reaction to this apart from Kees' ACK and I think
+> most patches are pretty straight-forward so I'll soon put them
+> in Russell's tracker, I can always update them if there is some
+> issue.
 
-Yeah duh... :/ I should have realized that before I sent that message
-heh.
+I've given the patches a quick glance and I do not see anything
+obviously wrong so consider this a soft LGTM. Given that it is an option
+and I am sure there are arm64 and x86_64 configurations that are not
+clean, I don't think having all CFI issues patched before the support
+lands is necessary or desirable.
 
-> Unfortunately that still doesn't explain what caused it.
+> As mentioned, there will be some rough edges (e.g. eBPF)
+> but a slew of machines boot fine with it and it should be able
+> to provide additional hardening on a slew of embedded use
+> cases.
 
-Right, I'll see if I can cvise something out now that we have a more
-isolated set of conditions. I guess the only question will be if I can
-build a file preprocessed with CONFIG_KASAN=y will build with and
-without '-fsanitize=kernel-address'...
+Agreed.
+
+I will try to file an issue for the EFI issue I noticed before so that
+it can be investigated and fixed at some point.
 
 Cheers,
 Nathan
