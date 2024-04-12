@@ -1,81 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691E04438E
-	for <llvm@lists.linux.dev>; Fri, 12 Apr 2024 22:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547438827;
+	Fri, 12 Apr 2024 22:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712959658; cv=none; b=hKf/lE/B6EOSUr6noSNGRZPw8Tcl3YDX6twxFZpeBkKRFzkSCK6bz3vy62/5ZIQcnxUOqT1+O4Kvl82l6TNvY+cG7oV6hlLzy2ShFdRnGBi261lstSujqHgftgh/DejGZw+glu2yD5w24EBI18wJ/77NctRC+uEgFWk21sWwlE0=
+	t=1712962501; cv=none; b=uTMQbzKgVFbL1JAKmoWh6NAyL2wOEcdwmrQ693AmVkb3GvBBPugqX27fhlbGHg8N9gXVhEGPZVCUozP18PAnCBQxOSCluaDeH8GYSLQvGdRwh1vfh/pkQDL8+VWBiat8rPy/kMD8gu5KHH08eH/xHZNdD07rMz6Xyh/O2Aa3d9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712959658; c=relaxed/simple;
-	bh=tfq73iyyWgAoURfJklfX6aQkJhE28zb97p8a2gm93xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W+0rAIE/3MqwYsqq7iijK2J+++SeGUi8Me6M6aEIJHbiK0VZdmcm+hGp0zCvs14jctQK7TQOMVASYo1c0qpAIhuKNqnkg46qZvp1vk3E5neWgHawP5Qv5OGnAix8LMTLeDdHhhxdQ0gIOEv5drwODcpcFAU7IFox+uxjZCAtFUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4N0jgt+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712962501; c=relaxed/simple;
+	bh=jdaQw07Ypa2Z8SryCpTTYkyyR1tt7zOsabX117YNchA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=aVPW9i8rszOGgP6ZkWe9L8Wsa4JlUQlaj793o4jHuUD56RjK6Y4BeohHdmIFjbudnSUGOgR6wfSaiIcewBxrTe81VP4cB1FTBJCqlLiCS6D708a01DJEawUtGoxSySgraIuOHQeUYpsGgSghT3mGXusLg+mhgZKxAiNS/qGN6qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=JZdIOl9h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4N0jgt+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD38C113CC;
-	Fri, 12 Apr 2024 22:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712959657;
-	bh=tfq73iyyWgAoURfJklfX6aQkJhE28zb97p8a2gm93xc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H4N0jgt+nshM0QaGSw5cwyL8iqyuu2tU9Z8v2/mUi0AZrknzozTg/P3jXr91ja7R0
-	 aO79BrhKTsGgPzyoXoYipRMvqNNiAX10Uq+CBLsM71yq227uy3KizZrBBhmxqrpTBO
-	 4Ts9fZlf8UPYxm5rQEV8M/tY5tvxw8Y0QJUlxAawcizT5D0pQXpode3r/iJqaNh/ts
-	 xh5rwu+3JZxeqkyfVGReakbGAPSeKIB77NZEDOHRfdyzm4Sd58lYczEp1htKUsLVS4
-	 cZ2A4AwCjHParGzNTlDbNamc4/6OPed2YtRgU9fQNZUTquDbkx/NkLIW/TvQhvWfDZ
-	 +tU+kfZgljEpw==
-Date: Fri, 12 Apr 2024 15:07:35 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Russell King <linux@armlinux.org.uk>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/8] CFI for ARM32 using LLVM
-Message-ID: <20240412220735.GG2252629@dev-arch.thelio-3990X>
-References: <20240328-arm32-cfi-v4-0-a11046139125@linaro.org>
- <CACRpkdYW-8gC7rGtt-jg8Huv_smB_4Dze4NYgeRL53YczzzDNQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="JZdIOl9h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5A5C113CC;
+	Fri, 12 Apr 2024 22:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1712962500;
+	bh=jdaQw07Ypa2Z8SryCpTTYkyyR1tt7zOsabX117YNchA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=JZdIOl9hH+XhYBQBRru6BF94jGLNKTAmi/gWiNkIUWx10S6feG9V2KsiNfaNe5Jvh
+	 9SCklgTQfe3yZPCvA5uvWyjrz1Ii5XCPFyVuA5wCoFqLuxW7UV2BQeFcBr4qnvmuPL
+	 QlakJw7EOIdJIx5QXVpkMFYF6yJAdE1CILW1VKHY=
+Date: Fri, 12 Apr 2024 15:54:59 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Edward Liaw <edliaw@google.com>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, Andy
+ Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Shuah
+ Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Peter Xu <peterx@redhat.com>, David
+ Hildenbrand <david@redhat.com>, Axel Rasmussen <axelrasmussen@google.com>,
+ "Mike Rapoport (IBM)" <rppt@kernel.org>, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests/harness: remove use of LINE_MAX
+Message-Id: <20240412155459.918890839d9305aaba466391@linux-foundation.org>
+In-Reply-To: <CAG4es9Wti4JACt9KzvEW4oSX0wZyBWC9NCLDW11NXYeeOzLM1w@mail.gmail.com>
+References: <20240411231954.62156-1-edliaw@google.com>
+	<20240411163409.4f8969fa8a46b63d04a28f77@linux-foundation.org>
+	<CAG4es9Wti4JACt9KzvEW4oSX0wZyBWC9NCLDW11NXYeeOzLM1w@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdYW-8gC7rGtt-jg8Huv_smB_4Dze4NYgeRL53YczzzDNQ@mail.gmail.com>
 
-On Fri, Apr 12, 2024 at 09:38:24AM +0200, Linus Walleij wrote:
-> On Thu, Mar 28, 2024 at 9:19 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+On Fri, 12 Apr 2024 12:30:15 -0700 Edward Liaw <edliaw@google.com> wrote:
+
+> On Thu, Apr 11, 2024 at 4:34 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > Thanks, I'll grab and shall send it Linuswards for 6.9-rcX.
+> >
+> > I added
+> >
+> > Fixes: 38c957f07038 ("selftests: kselftest_harness: generate test name once")
+> >
 > 
-> > This is a first patch set to support CLANG CFI (Control Flow
-> > Integrity) on ARM32.
-> 
-> Not much reaction to this apart from Kees' ACK and I think
-> most patches are pretty straight-forward so I'll soon put them
-> in Russell's tracker, I can always update them if there is some
-> issue.
+> Thanks, I just realized I forgot to remove the <limits.h> includes.
+> Should I send another patch for that or send a v2 of this one?
 
-I've given the patches a quick glance and I do not see anything
-obviously wrong so consider this a soft LGTM. Given that it is an option
-and I am sure there are arm64 and x86_64 configurations that are not
-clean, I don't think having all CFI issues patched before the support
-lands is necessary or desirable.
-
-> As mentioned, there will be some rough edges (e.g. eBPF)
-> but a slew of machines boot fine with it and it should be able
-> to provide additional hardening on a slew of embedded use
-> cases.
-
-Agreed.
-
-I will try to file an issue for the EFI issue I noticed before so that
-it can be investigated and fixed at some point.
-
-Cheers,
-Nathan
+I fixed it up, thanks.
