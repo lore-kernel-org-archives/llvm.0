@@ -1,64 +1,64 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944238C15;
-	Fri, 12 Apr 2024 05:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2401D1BC4E;
+	Fri, 12 Apr 2024 05:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712898455; cv=none; b=Oq1RynWNJudSP1XJ2mREjEjaHW+85A0Uv2/Gj8BBexobVzp7pZeNxwBZLmpxLF6nnKKmJhmcrui6jzdffOMlBnXgOh6zKZeAdZ33rZ5vuP67AAAkUXSj2LAzic+0dcLl5BScvyswa9lUVOKrlyNZO0LWO2+snk2KbGvSuu3YvYw=
+	t=1712899115; cv=none; b=t4XRKGJRFbmfAe/lhYLIxu819PbSR9ZL1SOOZcxtYsVqfpQqghrG3k9+b2r9XVGEY6nYx7mql9X6gpgBwea0I7xOqaLv1sIR/sZiMDMIF19sslOiEvrmJbndf7yY16taA8Au6y7dnqVNrxnN1zfKd/eIo52sUlmt2zT76cvD3ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712898455; c=relaxed/simple;
-	bh=GeNrzTv9ab+0ef/bNIzh19/V6Iwla0D1zpEQc5y5VcE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F5coT0dIQF4PVJIrpgDaF+yuj/p5EXQeUHksXtL4AD02BpOdSu4iTAKPFuoPvucPaDotz7VA+xqgXU6pAq8Bwmw8Mg15Yq75zRnnetpbviqL9DCmnrtAbowficKZt6sbjw38I9jtZsmb5DJPqMbnG9V5dmAnBTlgfBFsuMGh/uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YpTnlrL4; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1712899115; c=relaxed/simple;
+	bh=uwFlHt+PTlQqrCZdxzJ/sKwf6ogszPPv5s8ONO3bywk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sth7ioRfoP7fR44AbtRXUidw2oxpmlP4VKtwV5nZ/0SA0XI7tLwoCpebJfDgSzChezefOYBlWOCYgbxupxS+kqHPVjEtJRZaR9f/5wO34+SfDzfa70WUn9UEcMAPckB7aMrdyO1RkHtfgMqhThkEA+drCjLNLWZzDvM0e0rUdxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SNCvEJlg; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YpTnlrL4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SNCvEJlg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712898454; x=1744434454;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GeNrzTv9ab+0ef/bNIzh19/V6Iwla0D1zpEQc5y5VcE=;
-  b=YpTnlrL4BSagFMtvgLClANiuaf5+aYAsarkqNNMhPBgRtEI2gLgOxTc2
-   GJ+6gLgeDiPs7w5AiKoVO+I+97tWdmro38pO2rZuRw+fjjgQ36rye2IxD
-   oLnMQLQ6gBoV1sxSigXSQd61vU4f6WGJfhazSIOiYLWRlfUo7fkICPES8
-   ngE71DE2uuEM8kpacYTPqv2p3WNwW8vKDkvJa3flXITSUmS3xWUhuv7ew
-   vAhCEqRv+V6P+JIojtq/xXfKlLkX4Q7xpUR8hmPPCkzZomKBPrCqcozNw
-   SktavtgUa63BWrL9kxz/WFyei7Ess8jYz1GYIfWWr7C47L2t61skMtkzS
-   w==;
-X-CSE-ConnectionGUID: 2Za52xG8Q+q4aj43EYJAHw==
-X-CSE-MsgGUID: sHrpYieNSTWfarIbDJXr9w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="8509582"
+  t=1712899114; x=1744435114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uwFlHt+PTlQqrCZdxzJ/sKwf6ogszPPv5s8ONO3bywk=;
+  b=SNCvEJlgEqppFzvSzBwyoMrnSB7ia2PINpetDZxKlpr/7mFzjlc0pfL1
+   AqZZvDtcxft7oveGT4uFilCwsWfu0GXRf2DHN9nZ/Lg9pHNG7zUYkVQqu
+   m5LuB1IIgbYthNFrbxlQ9nBTX+DP+I45RjagnV0dUXY/JMhL2vSe808Fm
+   XtuJmDsZr5hmi8wfjkB7+cSe+cqwyncV+Qb1iPSVFPL506hH4foBtikQV
+   8SyUUKDOySaK+xuCFHXTikf9FPoxzVsXme8epdPrcYHDMfoDc17FkheOU
+   z6/hIyp7S7DnZ9a0mwpUjZvutngsESU7Cgy9KJOLX1hCoYySA4/M9kmDy
+   Q==;
+X-CSE-ConnectionGUID: psXmwm+ESu29CU6+hyIKUA==
+X-CSE-MsgGUID: BhInwZsPQs6nRtW9Ol81Nw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="8510211"
 X-IronPort-AV: E=Sophos;i="6.07,195,1708416000"; 
-   d="scan'208";a="8509582"
+   d="scan'208";a="8510211"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 22:07:33 -0700
-X-CSE-ConnectionGUID: lT11SKFTTryQFBPaRfmoKg==
-X-CSE-MsgGUID: a2Bb8C+wR+G2C9+lOUXCPw==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 22:18:34 -0700
+X-CSE-ConnectionGUID: ANtLcTM0Q3uJIRQrzST4CA==
+X-CSE-MsgGUID: bA8DNO+FS1yeaDDSQiu1MQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,195,1708416000"; 
-   d="scan'208";a="21555520"
+   d="scan'208";a="21558046"
 Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 11 Apr 2024 22:07:30 -0700
+  by orviesa006.jf.intel.com with ESMTP; 11 Apr 2024 22:18:31 -0700
 Received: from kbuild by e61807b1d151 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rv98K-0009Or-0e;
-	Fri, 12 Apr 2024 05:07:28 +0000
-Date: Fri, 12 Apr 2024 13:07:06 +0800
+	id 1rv9Iy-0009PU-1c;
+	Fri, 12 Apr 2024 05:18:28 +0000
+Date: Fri, 12 Apr 2024 13:17:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
+To: parker@finest.io, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+	linux-pci@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	John Garry <john.g.garry@oracle.com>,
-	Damien Le Moal <dlemoal@kernel.org>, Hannes Reinecke <hare@suse.de>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [mkp-scsi:for-next 112/118] drivers/usb/storage/uas.c:828:3: error:
- implicit declaration of function 'blk_queue_max_hw_sectors' is invalid in
- C99
-Message-ID: <202404121322.E6zfTcHX-lkp@intel.com>
+	Parker Newman <pnewman@connecttech.com>
+Subject: Re: [PATCH 2/2] serial: exar: adding CTI PCI/PCIe serial port
+ support to 8250_exar
+Message-ID: <202404121307.6nkI7fuG-lkp@intel.com>
+References: <9ffdef053f455c87f705dff169346bc10d307787.1712846026.git.pnewman@connecttech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,55 +67,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <9ffdef053f455c87f705dff169346bc10d307787.1712846026.git.pnewman@connecttech.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-head:   8e50d1ee8f4cdae5cba87b93de4819feb79bd049
-commit: a2ad002485c492354d572d743f60af0057ebe04e [112/118] scsi: block: Remove now unused queue limits helpers
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240412/202404121322.E6zfTcHX-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240412/202404121322.E6zfTcHX-lkp@intel.com/reproduce)
+Hi,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus pci/next pci/for-linus linus/master v6.9-rc3 next-20240411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/parker-finest-io/serial-exar-add-missing-CTI-Exar-PCI-IDs-to-include-linux-pci_ids-h/20240412-011902
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/9ffdef053f455c87f705dff169346bc10d307787.1712846026.git.pnewman%40connecttech.com
+patch subject: [PATCH 2/2] serial: exar: adding CTI PCI/PCIe serial port support to 8250_exar
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240412/202404121307.6nkI7fuG-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240412/202404121307.6nkI7fuG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404121322.E6zfTcHX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404121307.6nkI7fuG-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/usb/storage/uas.c:828:3: error: implicit declaration of function 'blk_queue_max_hw_sectors' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   blk_queue_max_hw_sectors(sdev->request_queue, 64);
-                   ^
-   drivers/usb/storage/uas.c:828:3: note: did you mean 'queue_max_hw_sectors'?
-   include/linux/blkdev.h:1137:28: note: 'queue_max_hw_sectors' declared here
-   static inline unsigned int queue_max_hw_sectors(const struct request_queue *q)
-                              ^
-   1 error generated.
+   In file included from drivers/tty/serial/8250/8250_exar.c:13:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/tty/serial/8250/8250_exar.c:1573:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    1573 |                 default:
+         |                 ^
+   drivers/tty/serial/8250/8250_exar.c:1573:3: note: insert 'break;' to avoid fall-through
+    1573 |                 default:
+         |                 ^
+         |                 break; 
+   2 warnings generated.
 
 
-vim +/blk_queue_max_hw_sectors +828 drivers/usb/storage/uas.c
+vim +1573 drivers/tty/serial/8250/8250_exar.c
 
-1363074667a6b7 Hans de Goede      2016-04-12  819  
-115bb1ffa54c39 Matthew Wilcox     2010-10-07  820  static int uas_slave_alloc(struct scsi_device *sdev)
-115bb1ffa54c39 Matthew Wilcox     2010-10-07  821  {
-ee136af4a064c2 Hans de Goede      2015-04-21  822  	struct uas_dev_info *devinfo =
-ee136af4a064c2 Hans de Goede      2015-04-21  823  		(struct uas_dev_info *)sdev->host->hostdata;
-ee136af4a064c2 Hans de Goede      2015-04-21  824  
-ee136af4a064c2 Hans de Goede      2015-04-21  825  	sdev->hostdata = devinfo;
-37599f9603bed3 Hans de Goede      2013-11-15  826  
-d5c65d32dc240b Greg Kroah-Hartman 2020-12-04  827  	if (devinfo->flags & US_FL_MAX_SECTORS_64)
-d5c65d32dc240b Greg Kroah-Hartman 2020-12-04 @828  		blk_queue_max_hw_sectors(sdev->request_queue, 64);
-d5c65d32dc240b Greg Kroah-Hartman 2020-12-04  829  	else if (devinfo->flags & US_FL_MAX_SECTORS_240)
-d5c65d32dc240b Greg Kroah-Hartman 2020-12-04  830  		blk_queue_max_hw_sectors(sdev->request_queue, 240);
-d5c65d32dc240b Greg Kroah-Hartman 2020-12-04  831  
-115bb1ffa54c39 Matthew Wilcox     2010-10-07  832  	return 0;
-115bb1ffa54c39 Matthew Wilcox     2010-10-07  833  }
-115bb1ffa54c39 Matthew Wilcox     2010-10-07  834  
-
-:::::: The code at line 828 was first introduced by commit
-:::::: d5c65d32dc240bf600d9e54250a8133e93ece60a Revert "uas: fix sdev->host->dma_dev"
-
-:::::: TO: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  1547	
+  1548	static unsigned int exar_get_nr_ports(struct exar8250_board *board,
+  1549						struct pci_dev *pcidev)
+  1550	{
+  1551		unsigned int nr_ports = 0;
+  1552	
+  1553		if (!board || !pcidev)
+  1554			return 0;
+  1555	
+  1556		if (pcidev->vendor == PCI_VENDOR_ID_ACCESSIO) {
+  1557			nr_ports = BIT(((pcidev->device & 0x38) >> 3) - 1);
+  1558		} else if (board->num_ports > 0) {
+  1559			//Check if board struct overrides number of ports
+  1560			nr_ports = board->num_ports;
+  1561		} else if (pcidev->vendor == PCI_VENDOR_ID_EXAR) {
+  1562			//Exar encodes # ports in last nibble of PCI Device ID ex. 0358
+  1563			nr_ports = pcidev->device & 0x0f;
+  1564		} else  if (pcidev->vendor == PCI_VENDOR_ID_CONNECT_TECH) {
+  1565			//Handle CTI FPGA cards
+  1566			switch (pcidev->device) {
+  1567			case PCI_DEVICE_ID_CONNECT_TECH_PCI_XR79X_12_XIG00X:
+  1568			case PCI_DEVICE_ID_CONNECT_TECH_PCI_XR79X_12_XIG01X:
+  1569				nr_ports = 12;
+  1570				break;
+  1571			case PCI_DEVICE_ID_CONNECT_TECH_PCI_XR79X_16:
+  1572				nr_ports = 16;
+> 1573			default:
+  1574				break;
+  1575			}
+  1576		}
+  1577	
+  1578		return nr_ports;
+  1579	}
+  1580	
 
 -- 
 0-DAY CI Kernel Test Service
