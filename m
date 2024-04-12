@@ -1,88 +1,82 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4055814F9E9
-	for <llvm@lists.linux.dev>; Fri, 12 Apr 2024 19:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E3C14A091;
+	Fri, 12 Apr 2024 20:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712950246; cv=none; b=ttFMpYTpIeAMhuUdbLZXAbrDDWLzZrYBkZPHrEXLnlX7zd2s4ukszneCpHs3TC8X5VyKRZVX3Um/RXEJ9DIkwTZOCGf7etzH4g+bXd4tSDbiD+52jrkvx1Jkq08XXGiQEtaezZUFGnqB9UnVFVQqPWFCsa3oQ1F/geyl7n9b/84=
+	t=1712953250; cv=none; b=b0Ok1ZZV37suVQCqax4XPd5E9mZb3nfF3A3EkG/F3WRLy91Qb/lcwwojuJMKIAdtiXzV1oBRb9C9nau6KAkU0dP1rvQCtMapoL0cjrqrEQnwH4UtzWQwbHe0AuXJznDVpLiEPtHpC2Dh+bWyQGsKsgAeb4+xk+z8w1YCYJBi8CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712950246; c=relaxed/simple;
-	bh=xXqpfdKuwNL9Kig307Qx7iHEKaVdnd+3al7mxs/lJ/E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TrSoyi7FUrS34NpYAE0bO0033kQ9l/fWbGnzNEpI6tFyhBDYrESJnXU4OTx9O3KLRxVNzoICz9rw+Y8guBO9QTZ87n6IEBSeLU+Qm444ag4YQ9lK2hDPciIhUB4lECv0UAjMedmSz7ZGOW3RU4/gswgBoaEzNt3356LbTiz6FfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CRoXfrDq; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1712953250; c=relaxed/simple;
+	bh=4xLHEQcQ1V8eybg8jbVcylscrNjj4X7QeUnaQO5RvwA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LtebS1eWiJ9npnH+1/mDqKqAAHm2y+PrBbR4qtebBZQ/vX8CLRAc5fudzcNJHeFcPPD8WdOcL4ZvxzZPrfm1cbd9oYDUg+X612j8H0gul1dS9dcHSEqj7uASbBgpdyw9rmLJgvaHNq66YSRDznZ3Le1ULdW2ObW9pTb+aXt2yaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=tVcUfZGX; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CRoXfrDq"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-417e326fceaso1695e9.0
-        for <llvm@lists.linux.dev>; Fri, 12 Apr 2024 12:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712950243; x=1713555043; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xXqpfdKuwNL9Kig307Qx7iHEKaVdnd+3al7mxs/lJ/E=;
-        b=CRoXfrDqNBTFX2SZ7REWAbWWuA1wFnvCf1yNyPSRI0+gDktDEozOxZbM/aXmCZg1iM
-         kMgKp39OcA9vD6EvLnvRdZJU4c4+3V1451VNaM+6gUX2J0six5Dvi+Tmge8SRPb3kAGa
-         +yBJV17wmYAYSNllHIwCqM1+s0afJjmLhim7Qr2+gOZazB6dDApaX+g/uLzwZ7NzvUEV
-         B+wPxlljAPj0lisscHMnbpt0rNWSbyY/squfT54QOOMfp8/grfO9FUIdJvm6j2p9o3hA
-         PwNJ5DH3SvjjQzBeQZ4SiPQ1XB1+Z5uVDTVvWGEYVRTX4nZ1hnYCkRugj1+aIXOHfh+A
-         acSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712950243; x=1713555043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xXqpfdKuwNL9Kig307Qx7iHEKaVdnd+3al7mxs/lJ/E=;
-        b=Aem+TfomyKVSrUN9zFEADbvoB7Xh0Bb2DF+liM7TjYPQ7FLPbr9Hall7I1m5D5XcmA
-         oKYt/EWUNsIbjftNo0GKgcsx9s9senrlp9F8y047tnpXFAjhEbYQ8gGXzUeoBoRxdCvb
-         YAzOrferxzQx9kaSY8uZyslLgpMKaofDeQnm4ptAz0Emw0qZecVPASHh7S5SeznryCRM
-         n/jTXZqV7G3F+Uwdcej2d3c+G7WPrbZEaK6gQekXx0thRx2rbqNfl/Eu8Fr7fnuz7Eg5
-         UGEY+kQg05wQxzX/zEhB6Fsm34LpoqrjUFscuM1MCaYO5gxUvi8T/Roa+T39Gi2JkNRB
-         J67Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWItUn9DkTRkmfJCFUE/jnKMrENITHA0oJFfKBffdbo4tlRXxkn6edJZsu23NxWo/YTsOlw9EfJm391sdeVes9tPID3Hw==
-X-Gm-Message-State: AOJu0Yw1bpxP3vxSGoIrFByfHeJrt0Jj4xPrkFSW8vQoepW2J/xZltUg
-	Auj4Yk7xHwHQCUFMOymnFXL09nZjWOsFmJsQZ/i8YP6jwo+0o935yIHM+GCnkYtdhh6hGHKZGTX
-	MW+Wj34QsP8r3rqN2NlLOuiEUmvWJpMHBxGEo
-X-Google-Smtp-Source: AGHT+IGevUffXrsP0zpzECV2A0lqZ+/gOkOlJB5YDYGLcWSxoooRreou4WiRPDCja5l0bWkxTJK40nL5YsmoSdm/uiA=
-X-Received: by 2002:a05:600c:35c7:b0:416:b76e:b9ad with SMTP id
- r7-20020a05600c35c700b00416b76eb9admr23167wmq.7.1712950243298; Fri, 12 Apr
- 2024 12:30:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tVcUfZGX"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=V1ruHJWRhf9traik+clLxlyBbZ44QWr1+mb3lIChcXg=; b=tVcUfZGXCKsFcNpkt+aEDu9t3Y
+	jPqsuKJ9q72BDW1DhXj91fBpPaEe9KiTfpBSIKkmUw9sdkO0ugrN/z9l1viJj027h8ykD8nx8Ob08
+	IZM7kfWn53Oxo4lXAB0LHC9yViVMMXJfaO6iOxXOCVPYiisFhGib5Wg5WIGdUbORp5xCqco7CMu7N
+	0CpG25SDEufzlILmoYXKO003r8Nu98HHs8azBbeljcsZ0su/xw9GtVrvJfgykzwAQPoERVtsH26f6
+	moWp5BiaEQraIkhpAgr+Mgd7GiP8SZL+negT14TpvvukRZm6iuN9xMh/K/3yNZBgSFjWM75uvUdWH
+	MIt+cqgg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rvNO9-00000001B6L-1DtP;
+	Fri, 12 Apr 2024 20:20:48 +0000
+Date: Fri, 12 Apr 2024 13:20:43 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] kallsyms: replace deprecated strncpy with strscpy
+Message-ID: <ZhmXm4xVMY5QPEGn@bombadil.infradead.org>
+References: <20240412-strncpy-kernel-module-kallsyms-c-v1-1-ba3f0fc16163@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240411231954.62156-1-edliaw@google.com> <20240411163409.4f8969fa8a46b63d04a28f77@linux-foundation.org>
-In-Reply-To: <20240411163409.4f8969fa8a46b63d04a28f77@linux-foundation.org>
-From: Edward Liaw <edliaw@google.com>
-Date: Fri, 12 Apr 2024 12:30:15 -0700
-Message-ID: <CAG4es9Wti4JACt9KzvEW4oSX0wZyBWC9NCLDW11NXYeeOzLM1w@mail.gmail.com>
-Subject: Re: [PATCH] selftests/harness: remove use of LINE_MAX
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Peter Xu <peterx@redhat.com>, 
-	David Hildenbrand <david@redhat.com>, Axel Rasmussen <axelrasmussen@google.com>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	linux-mm@kvack.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240412-strncpy-kernel-module-kallsyms-c-v1-1-ba3f0fc16163@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Thu, Apr 11, 2024 at 4:34=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> Thanks, I'll grab and shall send it Linuswards for 6.9-rcX.
->
-> I added
->
-> Fixes: 38c957f07038 ("selftests: kselftest_harness: generate test name on=
-ce")
->
+On Fri, Apr 12, 2024 at 06:53:47PM +0000, Justin Stitt wrote:
+> strncpy() is deprecated for use on NUL-terminated destination strings
+> [1] and as such we should prefer more robust and less ambiguous string
+> interfaces. The goal is to remove its use completely [2].
+> 
+> namebuf is eventually cleaned of any trailing llvm suffixes using
+> strstr(). This hints that namebuf should be NUL-terminated.
+> 
+> static void cleanup_symbol_name(char *s)
+> {
+> 	char *res;
+> 	...
+> 	res = strstr(s, ".llvm.");
+> 	...
+> }
+> 
+> Due to this, use strscpy() over strncpy() as it guarantees
+> NUL-termination on the destination buffer. Drop the -1 from the length
+> calculation as it is no longer needed to ensure NUL-termination.
+> 
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html
+> Link: https://github.com/KSPP/linux/issues/90 [2]
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-Thanks, I just realized I forgot to remove the <limits.h> includes.
-Should I send another patch for that or send a v2 of this one?
+Thanks! Queued up on modules-next.
+
+  Luis
