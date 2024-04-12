@@ -1,87 +1,126 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1566D1487E4;
-	Fri, 12 Apr 2024 16:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057A514F115
+	for <llvm@lists.linux.dev>; Fri, 12 Apr 2024 18:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712938708; cv=none; b=KFI0tC9Wtr8a+oDKhhRgDv4P0ACtErw02pHdhlGno6uerv8C9WjiQ3BzpC3ToKxjzg9LUxpsjvQjHcMoWg2XFdLLZ8U/8tS4wWqXDJwtARlIoW1k01NFpScxG4Zq+RghsEBQrMPBV50YdTbFHQRIA5+G/YYcQTnKYNGt2qdksl8=
+	t=1712948031; cv=none; b=V8Zt5ZR+vZbFsZ/8KyqXdofPsUiM8941FIb379I3Aj244LFD/NmGDi33mNOLpB//RwOxqkfTvJnSq+uGWsjKSpq9lC9gbWbI7gGRqWqSDE0Jku6ksMiKsLHN+3wuABBQ6/OluRX/3s4sw7RJqvR4EWKAcUh78zNwhzXi3R7OYTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712938708; c=relaxed/simple;
-	bh=H1fM5qZarUTqTbPcEiWO1kQWJYXX9Yqz5xJmMTOWlBo=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=XFEd2UeiSkqD/43zt/MwZml01FTmY9pGTuWN8yQ8f8V8ePbPf7qjoohB0B0iQ3zPaGoQRlaNV9YXyWsx1qGqVv/1uBf8rGpguXYDnUDIaNnba0GrC2CT6TbUkOXzrGWr/5qSk+hZZcpyBGMNsi5ZJ3JGXQvr9dHIfs63RFcB26M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=gvijH1f7; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1712948031; c=relaxed/simple;
+	bh=FHYmDrKaqpfpTRuPXl2DoFH5LA+zgDT0YDVnlDewaH0=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=J7/cCza1b1PhZuLV8wi4lSKBagTPKhRuosEXXS+zavbi84KturrmpQIkuJ6pnMWMF8h/TJwD6hb09bV5DQOxynbu3MS7BerXO4c+sYkrVqiQ3mmBHj2TbPLmcdDIz+UvUjFGFBxtnxz7yoxh0hxITOqPVcuaTYjR1ei8oDJ6ARI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hO+z4jzF; arc=none smtp.client-ip=209.85.166.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="gvijH1f7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=bA1H0J9aZpfqPqx5MnEP2Av7FJoToVyToQ8NSU4NpeQ=; b=gvijH1f72SJdDDxXvBlhF6M4ze
-	9Z1Z/qnRzbjNaRnt7P5IkGiwYQYTVCQHtwaOtbDeIEBYC4SQauR93sMOeCQDvPRFmxU57lys1YqxQ
-	JrQWJ+hVMuJ9zptkpp21DphWLnW7EXvRO6sr1ONKkZMJNg9m1E/32fdH/TmBX0HAn/y/aU+aMCEFw
-	584GfxI9CFbfjtkN6a2F1+ZQwNxxxMLOczHzdaBbFJBUc7StYAjC8GYaw9GFut2Q5hObW7YWIwvOj
-	jWTqngA3cVXClJLEKjYk7SXUOuH80h0ujw811hHQBPCptc7oFJCG6wGlqGJ4ZzzBarAgTIij/whL1
-	PRmsY6rQ==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rvJbU-0001jL-93; Fri, 12 Apr 2024 18:18:16 +0200
-Received: from [178.197.249.56] (helo=linux.home)
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rvJbS-00HALU-2d;
-	Fri, 12 Apr 2024 18:18:14 +0200
-Subject: Re: [PATCH] selftests: adopt BPF's approach to quieter builds
-To: Jakub Kicinski <kuba@kernel.org>, shuah@kernel.org
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20240411190534.444918-1-kuba@kernel.org>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <da485e3b-7b35-f701-45b4-9c3914ea6456@iogearbox.net>
-Date: Fri, 12 Apr 2024 18:16:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hO+z4jzF"
+Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-7d5f08fdba8so176714639f.0
+        for <llvm@lists.linux.dev>; Fri, 12 Apr 2024 11:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712948029; x=1713552829; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ku+cYfV3CL9NDsoRJLchzk83CxUteslcXBw1rBPpBQ4=;
+        b=hO+z4jzFZGZ6g6waZQyFCjy6vidrguidYZ+YBVYM1aBb+wMNIYSjmF7uKMWAzdlwP7
+         0GmR3ULBzhKR9JJdpXLSz4YILYVmGXDfSg3DEDQxIIIcggTNPqcgMieZYt+qEXn23ymr
+         BxiDdXpZa+hKQcd94L8rcvsO80FIpLT47B8A1cXD8pQpVd5BeqxBI3GI15qkkrF5+h0Q
+         fdFtrpm6TGTo0HJS2nhe9Ib2sy8PHAKQCrUXGm0aTqXPeicTbs9xoy/W+080t5/qpHWJ
+         i93+NnddnT2uQoSJONgfsrMgQqAVptBU//nrrsIrN2KF32nTXPr7USt2xoMdTYO/Y1rZ
+         MHjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712948029; x=1713552829;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ku+cYfV3CL9NDsoRJLchzk83CxUteslcXBw1rBPpBQ4=;
+        b=DSvFX3YZzAhcl9KAE/7ti9ZtecEpqt25ivtdOm/2TZR9TZDYH7bFkcI7S+Mqy5Ua4s
+         rD3SDK4bshmXaBm3Vcdz6TO04hhsjMGbmy8O2a7Ro0IfxIv/S76kmffNwElIs1xkg+dJ
+         RF8C7tQNjm36itJkXjF0NH6gaM/em79qE18bwFSnakHAV6paA4cQzOBLS5OtH3S+mszv
+         pJfB1sadHplIBOFAuJfs11iPALbJjXLT5L2iugYbuO07XY6owMr2/Yjd38L4BwbVdFrx
+         5zYyiAAIW9f5oiukwMoa3HqfxZn+UumbXq+C/SoAxkaGlUrqRHQ43VaeOn7oRZMkr3Lf
+         w6HA==
+X-Forwarded-Encrypted: i=1; AJvYcCWj71YvHnyJiKj6T/RsNE71YijeyFh2Fpt/mobx/zJpmNYISrYGKP1NNqx5c+fogOEsMeH+dgBzuM6Y0C8YqnkkQWufFA==
+X-Gm-Message-State: AOJu0YwUclbBggKk2dWe3nDK8i2b/6oh2px3Z0ivpYI2aUK/j+dwUkm4
+	gXBK0Cl+z4yjbJAiXyqA+vjUSeWYxP9lAh50ivo93kqpzP+XRz6LmfVYprZ7wrF4HAV0DqO5ush
+	qQ9hDD6PDffX+gAoKTE/0PQ==
+X-Google-Smtp-Source: AGHT+IFIgCcbrNG0WVTnmYkDHfTcUVCEG2xc3xCMlYSow98Vu7k7eQ29VCUlewX5/iqYIg8yJw0Aoj31HUwl+kTG/A==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6638:2720:b0:482:dafb:95b7 with
+ SMTP id m32-20020a056638272000b00482dafb95b7mr108126jav.2.1712948029249; Fri,
+ 12 Apr 2024 11:53:49 -0700 (PDT)
+Date: Fri, 12 Apr 2024 18:53:47 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <20240411190534.444918-1-kuba@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27243/Fri Apr 12 10:26:33 2024)
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIADqDGWYC/x3NQQ6CMBBG4auQWTsJVBrUqxgXWH50QilkRgmEc
+ Hcbl9/mvZ0MKjC6FTspFjGZUkZ1Kii82/QCS5dNrnR1WVeO7aMpzBsP0ITI49R9I3hoY7RtNA5 88edr8GievW8oZ2ZFL+t/cX8cxw/Rj1rpcgAAAA==
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712948028; l=1692;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=FHYmDrKaqpfpTRuPXl2DoFH5LA+zgDT0YDVnlDewaH0=; b=pWm/MHLjmrDU97kGz+go/s2QQbsbuuiO6zSazvNgFRTlpwEH0VSe83O/r1uhKZsmlXVlSBlD4
+ r6ftS/8HNstBETceWQdRRLeikrnqi2Zc9U6HVKPIW0at/1YtRhfCNrR
+X-Mailer: b4 0.12.3
+Message-ID: <20240412-strncpy-kernel-module-kallsyms-c-v1-1-ba3f0fc16163@google.com>
+Subject: [PATCH] kallsyms: replace deprecated strncpy with strscpy
+From: Justin Stitt <justinstitt@google.com>
+To: Luis Chamberlain <mcgrof@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On 4/11/24 9:05 PM, Jakub Kicinski wrote:
-> selftest build is fairly noisy, it's easy to miss warnings.
-> It's standard practice to add alternative messages in
-> the Makefile. I was grepping for existing solutions,
-> and found that bpf already has the right knobs.
-> 
-> Move them to lib.mk and adopt in net.
-> Convert the basic rules in lib.mk.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> If this is okay with everyone, can we possibly apply it to net-next?
+strncpy() is deprecated for use on NUL-terminated destination strings
+[1] and as such we should prefer more robust and less ambiguous string
+interfaces. The goal is to remove its use completely [2].
 
-Yeap, looks good!
+namebuf is eventually cleaned of any trailing llvm suffixes using
+strstr(). This hints that namebuf should be NUL-terminated.
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+static void cleanup_symbol_name(char *s)
+{
+	char *res;
+	...
+	res = strstr(s, ".llvm.");
+	...
+}
 
-Cheers,
-Daniel
+Due to this, use strscpy() over strncpy() as it guarantees
+NUL-termination on the destination buffer. Drop the -1 from the length
+calculation as it is no longer needed to ensure NUL-termination.
+
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html
+Link: https://github.com/KSPP/linux/issues/90 [2]
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+---
+ kernel/module/kallsyms.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index ef73ae7c8909..62fb57bb9f16 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -348,7 +348,7 @@ const char *module_address_lookup(unsigned long addr,
+ 	}
+ 	/* Make a copy in here where it's safe */
+ 	if (ret) {
+-		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
++		strscpy(namebuf, ret, KSYM_NAME_LEN);
+ 		ret = namebuf;
+ 	}
+ 	preempt_enable();
+
+---
+base-commit: d7ad0581567927c433918bb5f06f3d29f89807d3
+change-id: 20240412-strncpy-kernel-module-kallsyms-c-8539c5e7bf57
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
