@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B00C3233;
-	Sat, 13 Apr 2024 01:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37321C6AF;
+	Sat, 13 Apr 2024 07:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712972546; cv=none; b=MftnNOYascvxy4QK9NTFVz1fd7rzFnDjnu1AMbjQr77dLAonIvyLr4c+oNS1+GoyDKM+Nw4PL5wTLbhH2mbf1AAnF5Akl4bU6kXFYcI22UqgZQew4j/r7qBo9eyaerOLIa61oosJT1inKrcCpW1qvSFpMgOxeG73Nj5xrw8N8do=
+	t=1712991851; cv=none; b=mxdCkBPRALAQWgUldjcS3m7lhHvJgHPMQzdkUAhOF0IkqR+1jz/wlweb4NsLCDrfoHMXj5z1btzhRLQWwmYGC+pX4YtWbPVHG93sR8B8yiBVYxLllDDgvyTRqO+50J4b7ynjtImvkYJ/C+GfrMPe6FihT5JyQm2uDXNGX367EtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712972546; c=relaxed/simple;
-	bh=v+JvQDGQOnSM0+frISDrMqJC9JAm12VbcoOH/0FKg8Q=;
+	s=arc-20240116; t=1712991851; c=relaxed/simple;
+	bh=aW9wxNKqRJSeX4y280z8ZkAPeC+1lDwGPIApSV5fVEc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gQgyZW9ZhjWvCJ8Xdcb3yKdYuM0mV3OYJqWa0UXJD9Dzr3pRmocN/Spx5kMZtX709pRadlTwpHOsgrOzapALU6k/Hn3R6/WPpCx5bJHhT/XaNyFCnpZgIR4fa7Kx9haxhYdUmyunxF0Jnc1GFZLNkEat2XG7blPXj4HSo2EfLXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m3H4KOzJ; arc=none smtp.client-ip=198.175.65.19
+	 Content-Disposition; b=tOBEKcmJxKcOTle811vVqi19P6tTWH9DI+voa9DiB5n/72iKYyX2Zcy3nGlVB+dXAmAwDcl8O8JC2iseFqb6GAkdvVVdSJ08jRe/HuGYjWQEmWZa39O36VP/7Bl9ctShAVSkYbUOEgvmZ8ATj26OYMkJjYQ7xx/53eIbM7H+HvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hk7mVdtL; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m3H4KOzJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hk7mVdtL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712972543; x=1744508543;
+  t=1712991849; x=1744527849;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v+JvQDGQOnSM0+frISDrMqJC9JAm12VbcoOH/0FKg8Q=;
-  b=m3H4KOzJuJnLxQPjQHzV/BTP805vYUyfNRmLteM4q5GUMq7Op16w9V0T
-   ZB/Z4DUnw9Eozh0kzKMUoC7Mpbz4jdeKynyom9kJpGEebbW6FxZUBtGvZ
-   vhgSewDIPIyiC5nsy7D6Rc4tJiojrnvez5G12/pHZRLsF/jOIiXNN4DZk
-   Fyb8EeFwcfteaPhNJ+5nGN9kKDop9aoswihzzkAnX+vbAl3Kus3KTutF4
-   yx3KnJp41rYviFs3uWh7WAwEZW4EMVC5B2ubDfFAUywRGUkJUSwNxwh0x
-   m33k/SB8BTWiihiBRa/l3rKH5GPLi6C09KUpv9cYp/TRCtoJZzaiIqG3e
-   g==;
-X-CSE-ConnectionGUID: vHaFRju3RSSfBTSCJeGbNw==
-X-CSE-MsgGUID: BBWOTYowQ+e4uFO6upR0zw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8312187"
-X-IronPort-AV: E=Sophos;i="6.07,197,1708416000"; 
-   d="scan'208";a="8312187"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 18:42:22 -0700
-X-CSE-ConnectionGUID: /d6wiK4JT+ifCMmM/Ws/Lw==
-X-CSE-MsgGUID: dUMHbELJQr2pKC84GTuSpA==
+  bh=aW9wxNKqRJSeX4y280z8ZkAPeC+1lDwGPIApSV5fVEc=;
+  b=hk7mVdtLVl1YDkiiCIvg4E9MTq7upu8Vz/Uc8qNQ6r63oRsfJmQedLDf
+   f3aK2NVPSH84N/L6cHNtJr0YJa6LYd/TTmUARTX9VwjU6XpGOmsoRnrfr
+   i1NLkcANeZK3mOOrZIldv/IXwGB/cUzPrG9p13CScshrMAju2dogGVz2i
+   /ujHnSV09qX6xwm45jgc6ysIVoqYSGrGmLBX7PHHnsy4ckpJIZnJ2NukN
+   ThGET8JNfBlE/ccC/aaKpDwhXEmsevFawdF8likr2DjYwHRBeYG1TyAhD
+   cTRnT9wvN8kaZxI99P5pjnGM0vs25w7+COKOrvyq2DPt1cJsSZ+JLXByG
+   Q==;
+X-CSE-ConnectionGUID: 1wq3gJjzT9yDZwZromwxtw==
+X-CSE-MsgGUID: sXhKN8pLTwOKE6WEqEMN8w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8312570"
+X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
+   d="scan'208";a="8312570"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2024 00:04:08 -0700
+X-CSE-ConnectionGUID: hYR7rHi9SOiSBX/7wJMA+w==
+X-CSE-MsgGUID: DU+6UBnvRYy4nqYsR+66yw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,197,1708416000"; 
-   d="scan'208";a="21463206"
+X-IronPort-AV: E=Sophos;i="6.07,198,1708416000"; 
+   d="scan'208";a="21455636"
 Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 12 Apr 2024 18:42:21 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 13 Apr 2024 00:04:06 -0700
 Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rvSNe-00018e-00;
-	Sat, 13 Apr 2024 01:40:42 +0000
-Date: Sat, 13 Apr 2024 09:39:43 +0800
+	id 1rvXQi-0001zU-0A;
+	Sat, 13 Apr 2024 07:04:04 +0000
+Date: Sat, 13 Apr 2024 15:03:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:bhi-fixes 3/4] arch/x86/include/asm/tsc.h:26:3: error:
- expected ')'
-Message-ID: <202404130949.K7NiJlh5-lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 79/139] fs/bcachefs/btree_io.c:893:6:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'unsigned int'
+Message-ID: <202404131536.HdAMBOVc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,346 +64,259 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git bhi-fixes
-head:   37c4996142ca475889b13c1aaede6a24140c5ed7
-commit: 7c0ac333f0ddd60b0b6e5de7210a903fd22e7703 [3/4] x86/bugs: Remove support for Spectre v2 LFENCE "retpolines"
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240413/202404130949.K7NiJlh5-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240413/202404130949.K7NiJlh5-lkp@intel.com/reproduce)
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   c5ff0e7dfafa4898b8cc873266d71b465bb062dc
+commit: efa71a63d7d88348ef4dc6421e353f5bb8dd3662 [79/139] bcachefs: Check for packed bkeys that are too big
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240413/202404131536.HdAMBOVc-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240413/202404131536.HdAMBOVc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404130949.K7NiJlh5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404131536.HdAMBOVc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:25:
-   In file included from include/linux/jiffies.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/x86/include/asm/timex.h:6:
->> arch/x86/include/asm/tsc.h:26:3: error: expected ')'
-      26 |                 return 0;
-         |                 ^
-   arch/x86/include/asm/tsc.h:24:5: note: to match this '('
-      24 |         if (!IS_ENABLED(CONFIG_X86_TSC) &&
-         |            ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
-   In file included from include/linux/timer.h:6:
-   In file included from include/linux/ktime.h:25:
-   In file included from include/linux/jiffies.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
->> arch/x86/include/asm/timex.h:12:3: error: expected ')'
-      12 |                 return random_get_entropy_fallback();
-         |                 ^
-   arch/x86/include/asm/timex.h:10:5: note: to match this '('
-      10 |         if (!IS_ENABLED(CONFIG_X86_TSC) &&
-         |            ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
---
-     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
-     186 | #define _sig_not(x)     (~(x))
-         |                            ^
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:177:10: note: expanded from macro '_SIG_SET_OP'
-     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
-         |                 ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:198:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     198 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:211:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     211 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:242:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     242 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:255:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     255 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/x86/include/asm/uaccess.h:17:
-   In file included from arch/x86/include/asm/tlbflush.h:16:
-   In file included from arch/x86/include/asm/pgtable.h:21:
->> arch/x86/include/asm/pkru.h:38:3: error: expected ')'
-      38 |                 return rdpkru();
-         |                 ^
-   arch/x86/include/asm/pkru.h:37:5: note: to match this '('
-      37 |         if (cpu_feature_enabled(X86_FEATURE_OSPKE))
-         |            ^
-   arch/x86/include/asm/pkru.h:45:3: error: expected ')'
-      45 |                 return;
-         |                 ^
-   arch/x86/include/asm/pkru.h:44:5: note: to match this '('
-      44 |         if (!cpu_feature_enabled(X86_FEATURE_OSPKE))
-         |            ^
-   arch/x86/include/asm/pkru.h:57:3: error: expected ')'
-      57 |                 return;
-         |                 ^
-   arch/x86/include/asm/pkru.h:56:5: note: to match this '('
-      56 |         if (!cpu_feature_enabled(X86_FEATURE_OSPKE))
-         |            ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/x86/include/asm/uaccess.h:17:
-   In file included from arch/x86/include/asm/tlbflush.h:16:
->> arch/x86/include/asm/pgtable.h:135:67: error: expected ')'
-     135 |                (pte_flags(pte) & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY;
-         |                                                                          ^
-   arch/x86/include/asm/pgtable.h:134:9: note: to match this '('
-     134 |         return cpu_feature_enabled(X86_FEATURE_SHSTK) &&
-         |                ^
-   arch/x86/include/asm/cpufeature.h:144:2: note: expanded from macro 'cpu_feature_enabled'
-     144 |         (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/x86/include/asm/uaccess.h:17:
-   In file included from arch/x86/include/asm/tlbflush.h:16:
-   arch/x86/include/asm/pgtable.h:153:34: error: expected ')'
-     153 |                (_PAGE_DIRTY | _PAGE_PSE);
-         |                                         ^
-   arch/x86/include/asm/pgtable.h:151:9: note: to match this '('
-     151 |         return cpu_feature_enabled(X86_FEATURE_SHSTK) &&
-         |                ^
-   arch/x86/include/asm/cpufeature.h:144:2: note: expanded from macro 'cpu_feature_enabled'
-     144 |         (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
-         |         ^
-   49 warnings and 7 errors generated.
-   make[3]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1197: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:240: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> fs/bcachefs/btree_io.c:893:6: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+     887 |                 if (btree_err_on(!bkeyp_u64s_valid(&b->format, k),
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     888 |                                  -BCH_ERR_btree_node_read_err_fixable,
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     889 |                                  c, NULL, b, i,
+         |                                  ~~~~~~~~~~~~~~
+     890 |                                  btree_node_bkey_bad_u64s,
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+     891 |                                  "bad k->u64s %u (min %u max %lu)", k->u64s,
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                              %u
+     892 |                                  bkeyp_key_u64s(&b->format, k),
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     893 |                                  U8_MAX - BKEY_U64s + bkeyp_key_u64s(&b->format, k)))
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/limits.h:15:17: note: expanded from macro 'U8_MAX'
+      15 | #define U8_MAX          ((u8)~0U)
+         |                         ^
+   fs/bcachefs/btree_io.c:613:53: note: expanded from macro 'btree_err_on'
+     613 | #define btree_err_on(cond, ...) ((cond) ? btree_err(__VA_ARGS__) : false)
+         |                                           ~~~~~~~~~~^~~~~~~~~~~~
+   fs/bcachefs/btree_io.c:603:18: note: expanded from macro 'btree_err'
+     603 |                                msg, ##__VA_ARGS__);                     \
+         |                                ~~~    ^~~~~~~~~~~
+   fs/bcachefs/btree_io.c:1870:36: warning: bitwise operation between different enumeration types ('enum bch_watermark' and 'enum bch_trans_commit_flags') [-Wenum-enum-conversion]
+    1870 |                                         BCH_WATERMARK_interior_updates|
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    1871 |                                         BCH_TRANS_COMMIT_journal_reclaim|
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/btree_update.h:188:71: note: expanded from macro 'bch2_trans_do'
+     188 |         bch2_trans_run(_c, commit_do(trans, _disk_res, _journal_seq, _flags, _do))
+         |                                                                              ^~~
+   fs/bcachefs/btree_update.h:172:25: note: expanded from macro 'commit_do'
+     172 |         lockrestart_do(_trans, _do ?: bch2_trans_commit(_trans, (_disk_res),\
+         |                                ^~~
+   fs/bcachefs/btree_iter.h:662:11: note: expanded from macro 'lockrestart_do'
+     662 |         _ret2 = (_do);                                                  \
+         |                  ^~~
+   fs/bcachefs/btree_update.h:182:14: note: expanded from macro 'bch2_trans_run'
+     182 |         int _ret = (_do);                                               \
+         |                     ^~~
+   9 warnings generated.
 
 
-vim +26 arch/x86/include/asm/tsc.h
+vim +893 fs/bcachefs/btree_io.c
 
-2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon     2007-03-06  21  
-2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon     2007-03-06  22  static inline cycles_t get_cycles(void)
-2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon     2007-03-06  23  {
-3bd4abc07a267e arch/x86/include/asm/tsc.h Jason A. Donenfeld 2022-04-08  24  	if (!IS_ENABLED(CONFIG_X86_TSC) &&
-3bd4abc07a267e arch/x86/include/asm/tsc.h Jason A. Donenfeld 2022-04-08  25  	    !cpu_feature_enabled(X86_FEATURE_TSC))
-2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon     2007-03-06 @26  		return 0;
-4ea1636b04dbd6 arch/x86/include/asm/tsc.h Andy Lutomirski    2015-06-25  27  	return rdtsc();
-6d63de8dbcda98 include/asm-x86/tsc.h      Andi Kleen         2008-01-30  28  }
-3bd4abc07a267e arch/x86/include/asm/tsc.h Jason A. Donenfeld 2022-04-08  29  #define get_cycles get_cycles
-2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon     2007-03-06  30  
-
-:::::: The code at line 26 was first introduced by commit
-:::::: 2272b0e03ea5731aca058eaf79c9955b36f0c083 [PATCH] i386: make x86_64 tsc header require i386 rather than vice-versa
-
-:::::: TO: Andres Salomon <dilinger@debian.org>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+   853	
+   854	static int validate_bset_keys(struct bch_fs *c, struct btree *b,
+   855				 struct bset *i, int write,
+   856				 bool have_retry, bool *saw_error)
+   857	{
+   858		unsigned version = le16_to_cpu(i->version);
+   859		struct bkey_packed *k, *prev = NULL;
+   860		struct printbuf buf = PRINTBUF;
+   861		bool updated_range = b->key.k.type == KEY_TYPE_btree_ptr_v2 &&
+   862			BTREE_PTR_RANGE_UPDATED(&bkey_i_to_btree_ptr_v2(&b->key)->v);
+   863		int ret = 0;
+   864	
+   865		for (k = i->start;
+   866		     k != vstruct_last(i);) {
+   867			struct bkey_s u;
+   868			struct bkey tmp;
+   869			unsigned next_good_key;
+   870	
+   871			if (btree_err_on(bkey_p_next(k) > vstruct_last(i),
+   872					 -BCH_ERR_btree_node_read_err_fixable,
+   873					 c, NULL, b, i,
+   874					 btree_node_bkey_past_bset_end,
+   875					 "key extends past end of bset")) {
+   876				i->u64s = cpu_to_le16((u64 *) k - i->_data);
+   877				break;
+   878			}
+   879	
+   880			if (btree_err_on(k->format > KEY_FORMAT_CURRENT,
+   881					 -BCH_ERR_btree_node_read_err_fixable,
+   882					 c, NULL, b, i,
+   883					 btree_node_bkey_bad_format,
+   884					 "invalid bkey format %u", k->format))
+   885				goto drop_this_key;
+   886	
+   887			if (btree_err_on(!bkeyp_u64s_valid(&b->format, k),
+   888					 -BCH_ERR_btree_node_read_err_fixable,
+   889					 c, NULL, b, i,
+   890					 btree_node_bkey_bad_u64s,
+   891					 "bad k->u64s %u (min %u max %lu)", k->u64s,
+   892					 bkeyp_key_u64s(&b->format, k),
+ > 893					 U8_MAX - BKEY_U64s + bkeyp_key_u64s(&b->format, k)))
+   894				goto drop_this_key;
+   895	
+   896			if (!write)
+   897				bch2_bkey_compat(b->c.level, b->c.btree_id, version,
+   898					    BSET_BIG_ENDIAN(i), write,
+   899					    &b->format, k);
+   900	
+   901			u = __bkey_disassemble(b, k, &tmp);
+   902	
+   903			printbuf_reset(&buf);
+   904			if (bset_key_invalid(c, b, u.s_c, updated_range, write, &buf)) {
+   905				printbuf_reset(&buf);
+   906				bset_key_invalid(c, b, u.s_c, updated_range, write, &buf);
+   907				prt_printf(&buf, "\n  ");
+   908				bch2_bkey_val_to_text(&buf, c, u.s_c);
+   909	
+   910				btree_err(-BCH_ERR_btree_node_read_err_fixable,
+   911					  c, NULL, b, i,
+   912					  btree_node_bad_bkey,
+   913					  "invalid bkey: %s", buf.buf);
+   914				goto drop_this_key;
+   915			}
+   916	
+   917			if (write)
+   918				bch2_bkey_compat(b->c.level, b->c.btree_id, version,
+   919					    BSET_BIG_ENDIAN(i), write,
+   920					    &b->format, k);
+   921	
+   922			if (prev && bkey_iter_cmp(b, prev, k) > 0) {
+   923				struct bkey up = bkey_unpack_key(b, prev);
+   924	
+   925				printbuf_reset(&buf);
+   926				prt_printf(&buf, "keys out of order: ");
+   927				bch2_bkey_to_text(&buf, &up);
+   928				prt_printf(&buf, " > ");
+   929				bch2_bkey_to_text(&buf, u.k);
+   930	
+   931				if (btree_err(-BCH_ERR_btree_node_read_err_fixable,
+   932					      c, NULL, b, i,
+   933					      btree_node_bkey_out_of_order,
+   934					      "%s", buf.buf))
+   935					goto drop_this_key;
+   936			}
+   937	
+   938			prev = k;
+   939			k = bkey_p_next(k);
+   940			continue;
+   941	drop_this_key:
+   942			next_good_key = k->u64s;
+   943	
+   944			if (!next_good_key ||
+   945			    (BSET_BIG_ENDIAN(i) == CPU_BIG_ENDIAN &&
+   946			     version >= bcachefs_metadata_version_snapshot)) {
+   947				/*
+   948				 * only do scanning if bch2_bkey_compat() has nothing to
+   949				 * do
+   950				 */
+   951	
+   952				if (!bkey_packed_valid(c, b, i, (void *) ((u64 *) k + next_good_key))) {
+   953					for (next_good_key = 1;
+   954					     next_good_key < (u64 *) vstruct_last(i) - (u64 *) k;
+   955					     next_good_key++)
+   956						if (bkey_packed_valid(c, b, i, (void *) ((u64 *) k + next_good_key)))
+   957							goto got_good_key;
+   958				}
+   959	
+   960				/*
+   961				 * didn't find a good key, have to truncate the rest of
+   962				 * the bset
+   963				 */
+   964				next_good_key = (u64 *) vstruct_last(i) - (u64 *) k;
+   965			}
+   966	got_good_key:
+   967			le16_add_cpu(&i->u64s, -next_good_key);
+   968			memmove_u64s_down(k, bkey_p_next(k), (u64 *) vstruct_end(i) - (u64 *) k);
+   969		}
+   970	fsck_err:
+   971		printbuf_exit(&buf);
+   972		return ret;
+   973	}
+   974	
 
 -- 
 0-DAY CI Kernel Test Service
