@@ -1,197 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061FEBE4D
-	for <llvm@lists.linux.dev>; Sun, 14 Apr 2024 00:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABC5134A8;
+	Sun, 14 Apr 2024 02:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713052900; cv=none; b=PnFssfw0x91sCWQnetl7TzP+IrqAdKmkbxSJTYEt/wh/HgC7JgXznyuTMWAqVzzmOJ8w/wkrNw8rDbMWHBlXrFvXWjRliF9rjyjm84K06g4L5hWPKlespUPzA/QdxfGn9a1J/MLI1JPMVsowQFOGZWGuBRj28+R19r2hCRwXBtA=
+	t=1713061891; cv=none; b=Yg5R05qmb/MayIkc2Pu9DIvvjWWMaZB+0LBL6HwHuprDU1Ts9pC6wFaJDhijtqRwtk1i5K9dWzwSRTUSxLb3ZoSDnveaCYVOyl77BYamYZ7OC7d7RZhbAO2mr+6p2VnkUU4z+jkFuOYrghEZJdOhWX3EbKfV+VmOy5VAbnocF/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713052900; c=relaxed/simple;
-	bh=pMdXSf13iR5glmSFsVOEjfEJ6nQM8mhY8fV6eRxMYV4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Y/CxDRgGpWVDoGtI70VYKvhsiNh5Re8dMSYSPxAMjz1apZyT32uLeRNrA/mA3W0vBLc3pIcnB7UeVQh34xSsJLmiUkHXmqSEc2MGaP+Klz63tazjASqX5JDqR9uy/fBEsV7+4kUslTN8SRDgha7iBK6gdvNoQANtcq/IGh8hrSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W6bJfbz2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1713061891; c=relaxed/simple;
+	bh=w1+oemlR9GngmucwiYN3Qqlhba0O0Tw/aMghMq4yu/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=X3InDFL8vl7v1I8dELQ4NUe/H6MNe6EKzPN8mcxV0w3Jdk+ShGTTIxjQmb5JD24GDHqR7Lek7LYFf6QWZX2DUjkClIJI4PsI53dq8F5+4Am9vnaFlnQOsV9LbD3MdzWpzQEX2rzCnyvt3s9i8EPhJ00AwVosBBAVhaT/tla3LYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NdKRwwXv; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W6bJfbz2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713052896;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dVOFfBcfHcyKGqgvPG+YnnxzeGmaCQUxpiBVWyQmkrE=;
-	b=W6bJfbz25MF3pWSG4L+eGZyQi8UfoWWz//NzWD57fmCd4Y8wXk1h7WXM5Q/oLG3Yqqu4Tg
-	z0f6iOQpXCPeYAGj3m6Pd+8gUlk27Hvc/FTW5+ILgsXBVJYmdEOxfYRGi8siuFyNKqJhGg
-	HD94hco3UEpvUatJyPtioxNYNmtW7IY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-29-Y1VnJOnEO1KoimePJT6Mmw-1; Sat,
- 13 Apr 2024 20:01:35 -0400
-X-MC-Unique: Y1VnJOnEO1KoimePJT6Mmw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1D0D3806272
-	for <llvm@lists.linux.dev>; Sun, 14 Apr 2024 00:01:34 +0000 (UTC)
-Received: from [172.64.9.46] (unknown [10.30.34.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0625AC0157D;
-	Sun, 14 Apr 2024 00:01:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 21 of 204): Test report for master
- (6.9.0-rc3, mainline.kernel.org-clang, e8c39d0f)
-Date: Sun, 14 Apr 2024 00:01:33 -0000
-To: xzhou@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NdKRwwXv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713061890; x=1744597890;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w1+oemlR9GngmucwiYN3Qqlhba0O0Tw/aMghMq4yu/g=;
+  b=NdKRwwXvRIsPImRSg9rK2qtV5T0ElmWAeQIE5YmOZ5x+Hr4n0HjrFD7j
+   Z+n/tkn/U+pooN890rs0k5tui3AdlwhQicYlpi93d2TJP/JwmylJk0RGI
+   JdkrR84RkjAaXKWbJAJA4xnSVjI9OOoWalO7CngSeG/5RnE5ujIqdI03k
+   ArpSbkRbzI4E9wZelP6n8rJe07nH2d0YQvoVhoqtyhc6HKX7cM7/GxTdX
+   HaX8lG8/E+UpeBgz6475VewIxnWa5UIZjvUB++G+xFc1Wzu232CM9vt5m
+   MH4rv7Y4Si9VlTOuSvfRlFMUqETIviVoVil6jr/PuXF2uWKmZq6dUDVzI
+   Q==;
+X-CSE-ConnectionGUID: oISSv6mmTuyRE0biaKXH1A==
+X-CSE-MsgGUID: KZmrrfByQoOsViC5CJNi/Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11043"; a="8346185"
+X-IronPort-AV: E=Sophos;i="6.07,200,1708416000"; 
+   d="scan'208";a="8346185"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2024 19:31:29 -0700
+X-CSE-ConnectionGUID: N8IDTJe3TLGAbOo34N9txQ==
+X-CSE-MsgGUID: OIQmClcUQkWOpGUb3WrCgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,200,1708416000"; 
+   d="scan'208";a="59001024"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 13 Apr 2024 19:31:27 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rvpeO-0003AK-28;
+	Sun, 14 Apr 2024 02:31:24 +0000
+Date: Sun, 14 Apr 2024 10:31:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vinod Koul <vkoul@kernel.org>, Kishon <kishon@ti.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Zhang Yubing <yubing.zhang@rock-chips.com>,
+	Frank Wang <frank.wang@rock-chips.com>
+Subject: [phy:next 32/34] drivers/phy/rockchip/phy-rockchip-usbdp.c:1292:6:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202404141048.qFAYDctQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <57220.124041320013500139@us-mta-29.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git next
+head:   a1fe1eca0d8be69ccc1f3d615e5a529df1c82e66
+commit: 2f70bbddeb457580cef3ceb574506083b9272188 [32/34] phy: rockchip: add usbdp combo phy driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240414/202404141048.qFAYDctQ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240414/202404141048.qFAYDctQ-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404141048.qFAYDctQ-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'probes-fixes-v6.9-rc3' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/trace/linux-trace
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/140157
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11988962
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/129
-                       =E2=9D=8C FAIL generic/135
-                       =E2=9D=8C FAIL generic/141
-                       =E2=9D=8C FAIL generic/169
-                       =E2=9D=8C FAIL generic/198
-                       =E2=9D=8C FAIL generic/207
-                       =E2=9D=8C FAIL generic/208
-                       =E2=9D=8C FAIL generic/210
-                       =E2=9D=8C FAIL generic/211
-                       =E2=9D=8C FAIL generic/212
-                       =E2=9D=8C FAIL generic/214
-                       =E2=9D=8C FAIL generic/221
-                       =E2=9D=8C FAIL generic/245
-                       =E2=9D=8C FAIL generic/246
-                       =E2=9D=8C FAIL generic/248
-                       =E2=9D=8C FAIL generic/249
-                       =E2=9D=8C FAIL generic/257
-                       =E2=9D=8C FAIL generic/308
-                       =E2=9D=8C FAIL generic/309
-                       =E2=9D=8C FAIL generic/310
-                       =E2=9D=8C FAIL generic/339
-                       =E2=9D=8C FAIL generic/340
-        xfstests - nfsv4.2
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-11988961
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/129
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [s390x, x86_64]
-        Issue: blktests block/024 failed
-            URL: https://issues.redhat.com/browse/RHEL-8130
-            Affected tests:
-                Storage - blktests - blk - upstream [s390x]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+   In file included from drivers/phy/rockchip/phy-rockchip-usbdp.c:19:
+   In file included from include/linux/phy/phy.h:17:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/phy/rockchip/phy-rockchip-usbdp.c:1292:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1292 |         if (!(udphy->mode & UDPHY_MODE_USB) || udphy->hs) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/phy/rockchip/phy-rockchip-usbdp.c:1301:9: note: uninitialized use occurs here
+    1301 |         return ret;
+         |                ^~~
+   drivers/phy/rockchip/phy-rockchip-usbdp.c:1292:2: note: remove the 'if' if its condition is always false
+    1292 |         if (!(udphy->mode & UDPHY_MODE_USB) || udphy->hs) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1293 |                 rk_udphy_u3_port_disable(udphy, true);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1294 |                 goto unlock;
+         |                 ~~~~~~~~~~~~
+    1295 |         }
+         |         ~
+>> drivers/phy/rockchip/phy-rockchip-usbdp.c:1292:6: warning: variable 'ret' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    1292 |         if (!(udphy->mode & UDPHY_MODE_USB) || udphy->hs) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/phy/rockchip/phy-rockchip-usbdp.c:1301:9: note: uninitialized use occurs here
+    1301 |         return ret;
+         |                ^~~
+   drivers/phy/rockchip/phy-rockchip-usbdp.c:1292:6: note: remove the '||' if its condition is always false
+    1292 |         if (!(udphy->mode & UDPHY_MODE_USB) || udphy->hs) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/phy/rockchip/phy-rockchip-usbdp.c:1288:9: note: initialize the variable 'ret' to silence this warning
+    1288 |         int ret;
+         |                ^
+         |                 = 0
+   7 warnings generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Boot test [aarch64, x86_64 (debug)]
-    CKI/restraint [aarch64, x86_64 (debug)]
-    machineinfo [aarch64, x86_64 (debug)]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [aarch64, x86_64 (debug)]
-    SELinux Custom Module Setup [aarch64, x86_64 (debug)]
-    Storage - blktests - blk - upstream [aarch64]
-    Storage - blktests - nvme-tcp - upstream [aarch64]
-    Storage - swraid scsi_raid [aarch64, x86_64 (debug)]
-    stress: stress-ng - cpu-cache [aarch64]
-    stress: stress-ng - memory [aarch64]
+vim +1292 drivers/phy/rockchip/phy-rockchip-usbdp.c
 
+  1284	
+  1285	static int rk_udphy_usb3_phy_init(struct phy *phy)
+  1286	{
+  1287		struct rk_udphy *udphy = phy_get_drvdata(phy);
+  1288		int ret;
+  1289	
+  1290		mutex_lock(&udphy->mutex);
+  1291		/* DP only or high-speed, disable U3 port */
+> 1292		if (!(udphy->mode & UDPHY_MODE_USB) || udphy->hs) {
+  1293			rk_udphy_u3_port_disable(udphy, true);
+  1294			goto unlock;
+  1295		}
+  1296	
+  1297		ret = rk_udphy_power_on(udphy, UDPHY_MODE_USB);
+  1298	
+  1299	unlock:
+  1300		mutex_unlock(&udphy->mutex);
+  1301		return ret;
+  1302	}
+  1303	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
