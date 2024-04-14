@@ -1,104 +1,167 @@
-Received: from mail.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2FB137748
-	for <llvm@lists.linux.dev>; Sun, 14 Apr 2024 22:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.230.158.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D604134433
+	for <llvm@lists.linux.dev>; Sun, 14 Apr 2024 23:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713133588; cv=none; b=ZjP1jOZ1RRmNwl+yoiLT+IUXqzddB42uCnUUtEJ3i/TTrbkBahZ54BA9VPSq2XrMSIfZzGL7ebNDBM5HAnDoJLtmYDDl+dTcEYgJqUJBHxePrdmpspKEIP1vntnibSVRNWxsbG2X8WreDLctPYCPtjYmfminQLSJwI3XZwcs3So=
+	t=1713138656; cv=none; b=Co0qd5gCwOX7XDS+bu8nUTIHdZpfXaZPxyH7yD0VDKyUpDAGky8lGqp3qyN5f4cleZNHkMROIkWaShoRQ4yBE5+u5o+DYFO9Upe1Q91CRWs2vOP5Foge1IFMdmQ+/S22Cj1sEnqzafCmIuAQjTTRkIRrMexwSvDz/cseDfE6JAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713133588; c=relaxed/simple;
-	bh=+ghWU8oi0+edXCpEfVT/DjC4E+tVj0hs8sTKXvlPtf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=if4NwcQ1t5OIUypiTwwtBOOxeFPvNuF2DSK2DspMgNHtPy+ngKvbuDsvG6M6DbQdAvmlll8V8iDJcBUWcUuJBxQciBWVGrT8GxXJXhrV6ecY+Nrfzws/9L3MMcKps6bZt4c8L0EI/gXg2dUz1F+27ssHjJn3Ie0pxHqmteJbQUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rothwell.id.au; spf=pass smtp.mailfrom=rothwell.id.au; dkim=pass (2048-bit key) header.d=rothwell.id.au header.i=@rothwell.id.au header.b=WY6eyNg6; arc=none smtp.client-ip=103.230.158.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rothwell.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rothwell.id.au
+	s=arc-20240116; t=1713138656; c=relaxed/simple;
+	bh=WgBjh6NeBrBESE+mZyKdBEB6ZAUvoc5Rc2DAO0puYEY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=SsMrWc4/ZoWFVaNjs1cwQEt/8pBlvaKBKq4PkUysCLB4e8UB4dZ6xskTAjTQcbki/kA+LEbxnMi39CY3SrU22ow6bN12q8+VNMOb89h+bqQAuLy/3ewyM0MB1swmzsV/AJwXIep0e7x/ZUgTcTUdaJ53Lg126n3FioKddiDLOUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BRZpAwH5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rothwell.id.au header.i=@rothwell.id.au header.b="WY6eyNg6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
-	s=201702; t=1713133115;
-	bh=Zex7vZfysAqqFpHFj6AZeIO2KXBBGaa1ARC2QHSXc74=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WY6eyNg6TN9czkOHxS+N5riRPXMqHUyhdFEwHOTONBBolw2rgaQfyeM8lbxX+anxx
-	 0/DOtaDgWNjHMrF3xLwFUZljv46CEOsOyU8qjCCjYu770DvRSerOJKRJ7PP+UifM3G
-	 Aq2kVJuSUz3oP1qp8kC2WNxuWZYCDmW6b6Ca5EQ2m9h2MqpZkReEmYCwEjzoZuWes1
-	 unjtT5l4BwPVvYg0k97WywfN2uPYcTRrOHBWif1WMPB8xAZqk9AaXVPle0Xy5hycBV
-	 Co6rn7ySrWmXySGJQ+6olpn5rFHOkfGiFbNtHUCAF6wHwgqKRmY4G+JpcoqZAuBoU5
-	 74jny6yFeHH2Q==
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BRZpAwH5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713138653;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=G4GYqJEsxVG4D2GN56Zm0/0NYJbz6TrcxJ7/EAuwY8c=;
+	b=BRZpAwH52lN77ReOhsAQg7MXIAKGlnYynrXOvwrk9JAxofrRTSGLJDgHbdmOMux/oxP+t5
+	mYkR+0GpfK4nOo0zYPdI57b5/RENK9Wvd3CnSnjQyCqx2xwISQjQamjoiT+eb3DnEsHd1I
+	xWGht5c26TGJtGA56kZiObN4igrhQQE=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-590-hM4KfH7FNw6UFOQ5M_P93Q-1; Sun,
+ 14 Apr 2024 19:50:52 -0400
+X-MC-Unique: hM4KfH7FNw6UFOQ5M_P93Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.rothwell.id.au (Postfix) with ESMTPSA id 4VHl7X3MpBz8R;
-	Mon, 15 Apr 2024 08:18:32 +1000 (AEST)
-Date: Mon, 15 Apr 2024 08:18:30 +1000
-From: Stephen Rothwell <sfr@rothwell.id.au>
-To: Jean Delvare <jdelvare@suse.de>
-Cc: "Arnd Bergmann" <arnd@arndb.de>, "Stephen Rothwell"
- <sfr@canb.auug.org.au>, "Arnd Bergmann" <arnd@kernel.org>,
- linux-kbuild@vger.kernel.org, "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>, "Greg Kroah-Hartman"
- <gregkh@suse.de>, "Nicolas Schier" <nicolas@fjasle.eu>, "Nick Desaulniers"
- <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, "Justin
- Stitt" <justinstitt@google.com>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: [PATCH 05/12] firmware: dmi-id: add a release callback function
-Message-ID: <20240415081830.3057ade1@oak>
-In-Reply-To: <20240413223857.7c01985f@endymion.delvare>
-References: <20240326144741.3094687-1-arnd@kernel.org>
-	<20240326145140.3257163-4-arnd@kernel.org>
-	<20240329134917.579c3557@endymion.delvare>
-	<63909b0a-7d76-418d-a54c-1061bd3b6e11@app.fastmail.com>
-	<20240408095943.48e6c0cc@endymion.delvare>
-	<28ba40ea-7f48-41b0-ae57-99a870e68fb8@app.fastmail.com>
-	<20240413223857.7c01985f@endymion.delvare>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C73DC3806720
+	for <llvm@lists.linux.dev>; Sun, 14 Apr 2024 23:50:51 +0000 (UTC)
+Received: from [172.64.9.46] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7984D51EF;
+	Sun, 14 Apr 2024 23:50:51 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 21 of 204): Test report for master
+ (6.9.0-rc3, mainline.kernel.org-clang, 52e5070f)
+Date: Sun, 14 Apr 2024 23:50:51 -0000
+To: xzhou@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J+j9Uv/rB+H8SWjIizFhSRA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/J+j9Uv/rB+H8SWjIizFhSRA
-Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <93931.124041419505200165@us-mta-590.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jean,
+Hi, we tested your kernel and here are the results:
 
-On Sat, 13 Apr 2024 22:38:57 +0200 Jean Delvare <jdelvare@suse.de> wrote:
->
-> Hmm, Stephen cleaned up the list of trees he pulls from 2 months ago.
-> Back then, I objected that I may use my tree again in the future, and I
-> thought he had added it back to the list, but maybe I misunderstood.
->=20
-> Stephen, can you check if you still pull from tree above, and if not,
-> add it back to the list? Thanks in advance.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-I also misunderstood your position at the time.  I have now restored
-the dmi tree to linux-next.
 
---=20
-Cheers,
-Stephen Rothwell
+Kernel information:
+    Commit message: Merge tag 'hyperv-fixes-signed-20240411' of git://git.k=
+ernel.org/pub/scm/linux/kernel/git/hyperv/linux
 
---Sig_/J+j9Uv/rB+H8SWjIizFhSRA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/140420
 
------BEGIN PGP SIGNATURE-----
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+12005604
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/310
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYcVjYACgkQAVBC80lX
-0GwWmQf+I+OtIbKE6pkPfebdfoH3KcsgRiBBVTIRuH7K668elAfMvPCxYnXK/YSM
-8lhrLeBvH/ZEpcfwrSVun4uTUoouGlLYbq9MP7DTWsgCIVdrJZ0H5koh8pT47C6G
-wybvmUvhXidlIiwV4DI14iSfMGcA9dddrBre4aE65NbUN3llGFtf6apMT/zvmE1W
-yV3sHVGTIPtX5EQ5BC49rkDeBiTAiAbZ/4OL42OZh8xNAmjkcuIWwRnUzSYSxtK7
-SKq0Jm39tK0cBNTlHt0dRTtLtRKIcmptJ1KYNTPvaGfTtPOUzK9nipmMc1EKd6oj
-59qM6ec+wLRn/7hwgPB2AuH3zuHP2Q==
-=ffFN
------END PGP SIGNATURE-----
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
 
---Sig_/J+j9Uv/rB+H8SWjIizFhSRA--
+
+Tests that were not ran because of internal issues:=20
+    Boot test [x86_64, x86_64 (debug)]
+    CKI/restraint [x86_64, x86_64 (debug)]
+    machineinfo [x86_64, x86_64 (debug)]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [x86_64, x86_64 (debug)]
+    SELinux Custom Module Setup [x86_64, x86_64 (debug)]
+    Storage - blktests - blk - upstream [x86_64]
+    Storage - blktests - nvme-tcp - upstream [x86_64]
+    Storage - swraid scsi_raid [x86_64, x86_64 (debug)]
+    stress: stress-ng - cpu-cache [x86_64]
+    stress: stress-ng - memory [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
