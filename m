@@ -1,160 +1,197 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FE43233
-	for <llvm@lists.linux.dev>; Sat, 13 Apr 2024 20:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061FEBE4D
+	for <llvm@lists.linux.dev>; Sun, 14 Apr 2024 00:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713040752; cv=none; b=OrB3mK6mnIshkBkPPh4qLRyONeXTrDpzsaM/p07nj3ows0/BBex0qMJ7Driv3rH5C9XBmg+5zqoZ3avTW6MGUVBOvhEDBfl8mt5/8I8sUYtJG833xvOy2hqh8Jm5LsTqrIWJJBuAgAUDoJPOnYuCvq1qh46BfCqmEoLQ8sBtp+M=
+	t=1713052900; cv=none; b=PnFssfw0x91sCWQnetl7TzP+IrqAdKmkbxSJTYEt/wh/HgC7JgXznyuTMWAqVzzmOJ8w/wkrNw8rDbMWHBlXrFvXWjRliF9rjyjm84K06g4L5hWPKlespUPzA/QdxfGn9a1J/MLI1JPMVsowQFOGZWGuBRj28+R19r2hCRwXBtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713040752; c=relaxed/simple;
-	bh=K7TkiYMgUYlPmXv8ilMJAp1j+yeVcR9ZeHT9tFmsuSY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JccrqWemOhFnF5A7JTn7oCTmsypegcD16WaoNEGn+fIrO6lgE2Z0AqA2DNRfpvZxBzAlAoLoil4oXXcJwjuUd8CaVWqWKEAXZE5m0gjCu2mLu2dqQSSE0RTVjQTGqN7dY1BLtmmnEqWCkS2p5bnuIadr2hYqAwwkI+h7q1f1mwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lI+AREYZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Mt/UF+94; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lI+AREYZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Mt/UF+94; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1713052900; c=relaxed/simple;
+	bh=pMdXSf13iR5glmSFsVOEjfEJ6nQM8mhY8fV6eRxMYV4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Y/CxDRgGpWVDoGtI70VYKvhsiNh5Re8dMSYSPxAMjz1apZyT32uLeRNrA/mA3W0vBLc3pIcnB7UeVQh34xSsJLmiUkHXmqSEc2MGaP+Klz63tazjASqX5JDqR9uy/fBEsV7+4kUslTN8SRDgha7iBK6gdvNoQANtcq/IGh8hrSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W6bJfbz2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lI+AREYZ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Mt/UF+94";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lI+AREYZ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Mt/UF+94"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W6bJfbz2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713052896;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dVOFfBcfHcyKGqgvPG+YnnxzeGmaCQUxpiBVWyQmkrE=;
+	b=W6bJfbz25MF3pWSG4L+eGZyQi8UfoWWz//NzWD57fmCd4Y8wXk1h7WXM5Q/oLG3Yqqu4Tg
+	z0f6iOQpXCPeYAGj3m6Pd+8gUlk27Hvc/FTW5+ILgsXBVJYmdEOxfYRGi8siuFyNKqJhGg
+	HD94hco3UEpvUatJyPtioxNYNmtW7IY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-29-Y1VnJOnEO1KoimePJT6Mmw-1; Sat,
+ 13 Apr 2024 20:01:35 -0400
+X-MC-Unique: Y1VnJOnEO1KoimePJT6Mmw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 41E0034120;
-	Sat, 13 Apr 2024 20:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1713040742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I+Z/h/6l/30nYC5Gp5Ck6rYrSVsMIV8/9sXq2H2vdqQ=;
-	b=lI+AREYZXVLvMMXrvyGx2fgXl0PddZLuF3gzkL3I+XtEVxSzAgPzKGd7mY1/KLsAU/RIo9
-	9C5OI+vbCZ3NrM0PQ63IpgGbm63vgqPkCuILo491Gp/ZzUZHMY9C7HJADozRWEfXacYT+H
-	70RXioFjIWZZ+T+JXUHX9EO9iWkQTgs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1713040742;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I+Z/h/6l/30nYC5Gp5Ck6rYrSVsMIV8/9sXq2H2vdqQ=;
-	b=Mt/UF+94SRxRZH5u3huivNtUQNKIzOb/GtKdogmCQuipQR1OS1ccioe6OXEUR9bA6h/JEP
-	EttGif6DQIy2qvCg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1713040742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I+Z/h/6l/30nYC5Gp5Ck6rYrSVsMIV8/9sXq2H2vdqQ=;
-	b=lI+AREYZXVLvMMXrvyGx2fgXl0PddZLuF3gzkL3I+XtEVxSzAgPzKGd7mY1/KLsAU/RIo9
-	9C5OI+vbCZ3NrM0PQ63IpgGbm63vgqPkCuILo491Gp/ZzUZHMY9C7HJADozRWEfXacYT+H
-	70RXioFjIWZZ+T+JXUHX9EO9iWkQTgs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1713040742;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I+Z/h/6l/30nYC5Gp5Ck6rYrSVsMIV8/9sXq2H2vdqQ=;
-	b=Mt/UF+94SRxRZH5u3huivNtUQNKIzOb/GtKdogmCQuipQR1OS1ccioe6OXEUR9bA6h/JEP
-	EttGif6DQIy2qvCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 641FA138A7;
-	Sat, 13 Apr 2024 20:39:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id e3NPEWTtGmZ7KgAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Sat, 13 Apr 2024 20:39:00 +0000
-Date: Sat, 13 Apr 2024 22:38:57 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: "Arnd Bergmann" <arnd@arndb.de>, "Stephen Rothwell"
- <sfr@canb.auug.org.au>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, linux-kbuild@vger.kernel.org,
- "Masahiro Yamada" <masahiroy@kernel.org>, "Nathan Chancellor"
- <nathan@kernel.org>, "Greg Kroah-Hartman" <gregkh@suse.de>, "Nicolas
- Schier" <nicolas@fjasle.eu>, "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt"
- <justinstitt@google.com>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: [PATCH 05/12] firmware: dmi-id: add a release callback function
-Message-ID: <20240413223857.7c01985f@endymion.delvare>
-In-Reply-To: <28ba40ea-7f48-41b0-ae57-99a870e68fb8@app.fastmail.com>
-References: <20240326144741.3094687-1-arnd@kernel.org>
-	<20240326145140.3257163-4-arnd@kernel.org>
-	<20240329134917.579c3557@endymion.delvare>
-	<63909b0a-7d76-418d-a54c-1061bd3b6e11@app.fastmail.com>
-	<20240408095943.48e6c0cc@endymion.delvare>
-	<28ba40ea-7f48-41b0-ae57-99a870e68fb8@app.fastmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1D0D3806272
+	for <llvm@lists.linux.dev>; Sun, 14 Apr 2024 00:01:34 +0000 (UTC)
+Received: from [172.64.9.46] (unknown [10.30.34.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0625AC0157D;
+	Sun, 14 Apr 2024 00:01:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 21 of 204): Test report for master
+ (6.9.0-rc3, mainline.kernel.org-clang, e8c39d0f)
+Date: Sun, 14 Apr 2024 00:01:33 -0000
+To: xzhou@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <57220.124041320013500139@us-mta-29.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 12 Apr 2024 11:42:03 +0200, Arnd Bergmann wrote:
-> On Mon, Apr 8, 2024, at 09:59, Jean Delvare wrote:
-> > On Thu, 04 Apr 2024 16:07:55 +0200, Arnd Bergmann wrote:  
-> >> On Fri, Mar 29, 2024, at 13:49, Jean Delvare wrote:  
-> >> > Will you get this upstream, or do you expect me to take it in my
-> >> > dmi/for-next branch?    
-> >> 
-> >> It would help me if you can apply it to your tree directly.  
-> >
-> > OK, it's in my dmi-for-next branch now:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jdelvare/staging.git/log/?h=dmi-for-next  
-> 
-> I see it's in your tree, but I don't see your tree in linux-next.
->
-> As all the other fixes from my series got merged, I would like to
-> merge the patches that turn the warnings on, but that still
-> causes a build-time regression.
-> 
-> Is there a reason for the dmi-next tree not being part of
-> linux-next, or should we ask Stephen (added to Cc) to add it?
+Hi, we tested your kernel and here are the results:
 
-Hmm, Stephen cleaned up the list of trees he pulls from 2 months ago.
-Back then, I objected that I may use my tree again in the future, and I
-thought he had added it back to the list, but maybe I misunderstood.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Stephen, can you check if you still pull from tree above, and if not,
-add it back to the list? Thanks in advance.
 
--- 
-Jean Delvare
-SUSE L3 Support
+Kernel information:
+    Commit message: Merge tag 'probes-fixes-v6.9-rc3' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/trace/linux-trace
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/140157
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11988962
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/129
+                       =E2=9D=8C FAIL generic/135
+                       =E2=9D=8C FAIL generic/141
+                       =E2=9D=8C FAIL generic/169
+                       =E2=9D=8C FAIL generic/198
+                       =E2=9D=8C FAIL generic/207
+                       =E2=9D=8C FAIL generic/208
+                       =E2=9D=8C FAIL generic/210
+                       =E2=9D=8C FAIL generic/211
+                       =E2=9D=8C FAIL generic/212
+                       =E2=9D=8C FAIL generic/214
+                       =E2=9D=8C FAIL generic/221
+                       =E2=9D=8C FAIL generic/245
+                       =E2=9D=8C FAIL generic/246
+                       =E2=9D=8C FAIL generic/248
+                       =E2=9D=8C FAIL generic/249
+                       =E2=9D=8C FAIL generic/257
+                       =E2=9D=8C FAIL generic/308
+                       =E2=9D=8C FAIL generic/309
+                       =E2=9D=8C FAIL generic/310
+                       =E2=9D=8C FAIL generic/339
+                       =E2=9D=8C FAIL generic/340
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+11988961
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/129
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [s390x, x86_64]
+        Issue: blktests block/024 failed
+            URL: https://issues.redhat.com/browse/RHEL-8130
+            Affected tests:
+                Storage - blktests - blk - upstream [s390x]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [aarch64, x86_64 (debug)]
+    CKI/restraint [aarch64, x86_64 (debug)]
+    machineinfo [aarch64, x86_64 (debug)]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [aarch64, x86_64 (debug)]
+    SELinux Custom Module Setup [aarch64, x86_64 (debug)]
+    Storage - blktests - blk - upstream [aarch64]
+    Storage - blktests - nvme-tcp - upstream [aarch64]
+    Storage - swraid scsi_raid [aarch64, x86_64 (debug)]
+    stress: stress-ng - cpu-cache [aarch64]
+    stress: stress-ng - memory [aarch64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
