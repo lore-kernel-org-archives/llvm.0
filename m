@@ -1,162 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235D01EF1A
-	for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 22:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325CF25601;
+	Mon, 15 Apr 2024 22:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713218461; cv=none; b=BWY23t+hH6CnpIKpFAWnUC1DgwPDmYc8bkOhOMbinaCJVXFxVWFh5haQ9qdZsQCZgigmStoQh/Xoydsx0EqjT3o2jItg7AIB76uxuJ9R+wOUFg19SSKvfrvs6pYP6rwA5u79eyo8+EVseLXzl8GEwhpeCyeGXDEj0trMt4pnKes=
+	t=1713218789; cv=none; b=dyrSPZYZ0idggUCwdQSaf0R3CisfSrie7uk0Tiu83/z00m1AcVvh7tiYVfN2yEgaDG9j2s8h/q2hJQ8XlfeN3cAWW+VEnlM4zADDEKVL3LWEym2AUcSQBbdvsiy9Xjp5Me6RoSXuE0TnlbreuQcl/YbtyA6mx8+xaxSfZdfliXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713218461; c=relaxed/simple;
-	bh=OuOjxrr9d4igXHLfiAaXk5p8621IyBgWwfXXhIQPqkg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=E09/mmCWMf5A3Q7Sz7DPRREHjOAdfnb7DTPQvjCS49qZH/w7BXzC2WOmE3dQlsZe52OTt2U1npzev5i1Hl99+3Hgd30sT1FhR9K6P/a20VbbvF9kFmL6wjZN2nX/RljO/1nlAUFATBD2qX16pTPgspa3gHTBxDuHWcNHbhzS+Ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZjO73m+C; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1713218789; c=relaxed/simple;
+	bh=OicLi7OIUIM8R5E7YLSXlX9bsxcGZ0l3ZMvEOcBn8MM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hG3QanZXoRe1BLyZ4ugSkUMjHF9RWoxMGWiFgv66WPFaLQCdWECUeBXD/02K0Q8WG71ZYicNrwu9DkJWq6mnvTK1SZvh/r4Ks6fUP5ja4jAW2oY6xoHxjYLxJlX3X/9h46saVTcIk8nFFIyERgOGUTN3enu61y6bTvdZOLJm9yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3Xdl/3B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZjO73m+C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713218458;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Pn75UcaY+PceDozkI+RoC7uoQxNylB8TA3sSZBM5C1A=;
-	b=ZjO73m+CcJOk66/q189AaKKvo54bkMSycASLoxnVdd1JcpTxfkgS/PlkWbT4/Ito3hoekx
-	icx9wHJr6Mex7ByiCB+wGrpUhCIVVSJ7///Swgx0Y6MrYQnAb+7BXIX29EDXt8XqX0bEUx
-	TLyWaeX6nELQBXvzWsR086ai4txb3+Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-350-JpslQOfmNw2DNdjWmtOZBA-1; Mon, 15 Apr 2024 18:00:57 -0400
-X-MC-Unique: JpslQOfmNw2DNdjWmtOZBA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D6AC104B500
-	for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 22:00:57 +0000 (UTC)
-Received: from [172.64.4.10] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B9A75492BC7;
-	Mon, 15 Apr 2024 22:00:56 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
- (6.9.0-rc3, mainline.kernel.org-clang, 72374d71)
-Date: Mon, 15 Apr 2024 22:00:56 -0000
-To: xzhou@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3Xdl/3B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B09C113CC;
+	Mon, 15 Apr 2024 22:06:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713218788;
+	bh=OicLi7OIUIM8R5E7YLSXlX9bsxcGZ0l3ZMvEOcBn8MM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A3Xdl/3BDbRNH9AZ56dL3z76qMGj4skVu3V0hJBQzT7mdqtPHAbWr88C+aelbS1Jy
+	 YAiHhf2fltGwn/nXfe2xs9nDsd0UQ40/Q9HnHxzRDWhPxu3p59SxI86xJFHDZeW/T/
+	 IMGSdT0M5eJPrv7IzY7VCvuAF87yPUZMgbs+UlqZyLUFJY9rEa1cQSFSI5T3y/xlOX
+	 4eWzEd9URwma4zQkYVv1AwjXGF2+Qn+YFN6VPeO1Bakd4Rx18ZWrhLudWF3BGBUlBH
+	 97YHI9vTqA+kZNZHY+FRw3YfFtjAlFymBx894xqrKj0FvnuSVFaetF/HL4Nk1DMtNp
+	 ag/8BwcYDbaSg==
+Date: Mon, 15 Apr 2024 15:06:26 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Memet Zx <zxce3@gnuweeb.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	LLVM Mailing List <llvm@lists.linux.dev>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: Compile Error in Linux 6.9-rc4 with Clang 17.0.6
+Message-ID: <20240415220626.GA77369@dev-arch.thelio-3990X>
+References: <20240415193152.61118-1-zxce3@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <37074.124041518005700861@us-mta-350.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240415193152.61118-1-zxce3@gnuweeb.org>
 
-Hi, we tested your kernel and here are the results:
+On Tue, Apr 16, 2024 at 02:31:52AM +0700, Memet Zx wrote:
+> Hello,
+> 
+> I am writing to report a compile error that I encountered while
+> building the latest Linux kernel (6.9-rc4) with Clang version 17.0.6.
+> The error message is as follows:
+> 
+> ```
+>   LD      vmlinux.o
+> vmlinux.o: warning: objtool: __svm_vcpu_run+0x13c: BP used as a scratch register
+> vmlinux.o: warning: objtool: __svm_sev_es_vcpu_run+0x32: BP used as a scratch register
+> vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__969_123_ip_vs_rr_init6()
+> vmlinux.o: warning: objtool: .text.jffs2_erase_pending_blocks: unexpected end of section
+> vmlinux.o: warning: objtool: .text.ocfs2_validate_and_adjust_move_goal: unexpected end of section
+> vmlinux.o: warning: objtool: .text.__ocfs2_move_extents_range: unexpected end of section
+> vmlinux.o: warning: objtool: .text.csio_ln_fdmi_rhba_cbfn: unexpected end of section
+> vmlinux.o: warning: objtool: .text.jme_check_link: unexpected end of section
+> vmlinux.o: warning: objtool: .text.vhci_coredump_hdr: unexpected end of section
+>   OBJCOPY modules.builtin.modinfo
+> llvm-objcopy-17: error: SHT_STRTAB string table section [index 1173270] is non-null terminated
+> make[5]: *** [scripts/Makefile.vmlinux_o:73: modules.builtin.modinfo] Error 1
+> make[4]: *** [Makefile:1141: vmlinux_o] Error 2
+> make[3]: *** [debian/rules:74: build-arch] Error 2
+> dpkg-buildpackage: error: make -f debian/rules binary subprocess returned exit status 2
+> make[2]: *** [scripts/Makefile.package:121: bindeb-pkg] Error 2
+> make[1]: *** [/workspaces/greentea/linux/Makefile:1541: bindeb-pkg] Error 2
+> make: *** [Makefile:240: __sub-make] Error 2
+> ```
+> 
+> The build process was terminated with the above error message.
+> I have also noticed several warnings related to objtool,
+> which may be related to the issue.
+> 
+> The compiler version I used:
+> 
+> ```
+> Ubuntu clang version 17.0.6 (++20231208085846+6009708b4367-1~exp1~20231208085949.74)
+> Target: x86_64-pc-linux-gnu
+> Thread model: posix
+> InstalledDir: /usr/bin
+> ```
+> 
+> The commit I used is:
+> 
+> ```
+> commit 0bbac3facb5d6cc0171c45c9873a2dc96bea9680 (grafted, HEAD -> master, origin/master, origin/HEAD)
+> Author: Linus Torvalds <torvalds@linux-foundation.org>
+> Date:   Sun Apr 14 13:38:39 2024 -0700
+> 
+>     Linux 6.9-rc4
+> ```
+> 
+> And the .config is attached at the end of this email.
+> 
+> I would appreciate it if you could look into this issue and provide
+> a fix or workaround.
+> 
+> Thank you for your attention to this matter.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thanks for the report. Unfortunately, I cannot reproduce this with your
+configuration on 6.9-rc4 with either kernel.org LLVM 17.0.6 [1] or
+Debian LLVM 17.0.6 [2]. Is this completely reproducible on your side? Is
+this something that just started happening with the 6.9 cycle? What is
+your build command, as I might just be missing something?
 
+[1]: https://mirrors.edge.kernel.org/pub/tools/llvm/
+[2]: ++20231208085813+6009708b4367-1~exp1~20231208085906.81, should be
+     the same source version and configuration you are using.
 
-Kernel information:
-    Commit message: Merge tag 'pull-sysfs-annotation-fix' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/viro/vfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1252454655
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1252454655-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/310
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: blktests block/024 failed
-            URL: https://issues.redhat.com/browse/RHEL-8130
-            Affected tests:
-                Storage - blktests - blk - upstream [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-
-
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
