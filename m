@@ -1,60 +1,60 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4822A73196
-	for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 13:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADAA73500
+	for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 13:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713188626; cv=none; b=FybVvo0R+w7lG+x2uLPHQGFfvZAi8F+BqVR3taNmvlX7d+URvhMRxIz3Ov3DHbLGfoKS+yzszJch/vJej53z7tZcGj0Yd28ZH+ipUr/3tTF0gaS0pAr8C3SLh7caVvz+AabCDRFu5IJeZxS+Ai/1RQBVOSIeSYHJIzfRmDTZW6I=
+	t=1713188628; cv=none; b=MASfedj+1eYeIDX6Soa4vws39Hd5RzkZJ+BKU7g/f3qIsrM1m4cLmfIQpL7s075dU0fHrX/zdMvODtaIAwWL9mAN4JG/zT5ubILq3/RxNbx24NlrLnlwtEWywGd+js9yPlhrq2ViMMMe+IapxUd/ghdu0VCNhJ9zBE/NLkcQybU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713188626; c=relaxed/simple;
-	bh=1nhb3jw7O3vo+Q1yYITSJyXawnDO9HmcRluk2RC5w90=;
+	s=arc-20240116; t=1713188628; c=relaxed/simple;
+	bh=DjhqN6uLLmaO0gK4cFxXLWasuDQpZ92MoMZriVngnew=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LDl7KxgNoMq6agmaWME8KoIWBvy4qv6CGVpFQ3ntLgQ9BL32LS68XZWOQfR6gUhTd/tGPWvIaZalbU8NUo7kXM9lxCzUDeHeVWdiSrvkj112jYyS20/DMELH4+6/PdFavMf8DS3O5T1y6MkfdoIp7j6iFVKI8bAnw8BZgZtdllM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AT2dhmh1; arc=none smtp.client-ip=209.85.208.178
+	 In-Reply-To:To:Cc; b=jUMkkB0xNTsj7IMRNCF4WUi4sFO2iL3oaRsi7osgGEf5hBvIhMOpZtKCEyuLPROB2KeL/i7JNSRBhRRezvjtANKixJjkfwUvBexDr/9nfdmOkevaajRaDli7bbWuhK/FG5Q/aXUywMHHxhz44CxjQBHzj1frc7r8Pto58FVkJGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AV5+iyOI; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AT2dhmh1"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d094bc2244so36792581fa.1
-        for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 06:43:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AV5+iyOI"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2d895138ce6so37883291fa.0
+        for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 06:43:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713188621; x=1713793421; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1713188624; x=1713793424; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q8lNjG/No25ZANDGQXmAOMK04KuDpOTLh1J0drT4jfU=;
-        b=AT2dhmh1caYvi4bXSqxZGw9Z0Riy7FOte2JmUMVD5zLzvzhZEv0thrKtLARF8j1+Bp
-         ivTaIblTR/ot5DZ00YpuSPixKcMoB+ctrpfxso2rtvEK/k1ZE5NlZ3Of/gjil9SY454w
-         rM1FfpznN4klieVyM6FNGlg+wP0bfSEut7kfn9Sf5UEhoK+dCxk0aCivvUHUeHH+cRpj
-         CjDs+JPa44zcm7scsl1QNjV/Svhu0ihTSvCv0i8CBwKQhqN8UQ5mJ7Gp3YM0zamoruQ/
-         TimEoY+oZMo19g2ap7w6HCWFsTNiqFsYOYkobzQAlq2e3CZmCBSO0HB6OW8shddO+i2L
-         lMpg==
+        bh=UwkkSUi1b63q//pF6FQeQvdmd+qn9ODc8sgiig3GYAI=;
+        b=AV5+iyOIR3iSqVnD1xNIQ0+mAFfpAPLchaGO7tlBgvg+frsniOHeTVBl2Vl8Wrwwja
+         FgqDnuCoZZoxxB11HeirXlx361//7UVgoECBarzvG/xalIVkNIyZcJlEA9SWU9xDUyD6
+         SoDwbGC7LoRoCnXIlCGsTm+eVi8yIGhRx+3qBf/fFtoNs8fsO69itilevD9XJraC0db2
+         cly8AL7Eu/iO2nVRNImsE9PtI3RjhxcE7Q/wE8O5lYiI/iVaE//2ey+Po7ihsAo8NR0J
+         /D2FwGKVKmIV+z7+Q7700pzJyKDUpYFKmNh/UbK+4wRgNrE3jwvSELO7lKOeoWI3C3vF
+         MjkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713188621; x=1713793421;
+        d=1e100.net; s=20230601; t=1713188624; x=1713793424;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q8lNjG/No25ZANDGQXmAOMK04KuDpOTLh1J0drT4jfU=;
-        b=S7elxzEL+0xOpyIUldJfktEMk2jmkdkv8WdVNIgTnuAWExRJyXUFDJx52nP+Tbw20V
-         iOAe3a9dIAFsTt91vDCVFEroKEA1qyCW9w1rM6Ka2RaIH/v/N2aEcGljEKXd5Ggugp8T
-         NNOgCrEDZZMSxGjEVWCcpyy/QKqmovyr3arW4WzJxePhTkmsFhiefe7q/L+ruJCkO7+u
-         0zgGkFqpabC7VBD0794cLXWtDOG5gwVnrPkDPrHaK0v7lUloGf1Ftm0XaAqcWR7fjHEC
-         zJj2SqrS3cc9gJGEBhsq1/PHfegUHi6sDerXdqrFYwIxWBzgCGXZ4ia9Oz8qku0LHOWU
-         VJgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVY/oH+dsi/euQfS2z9STCvFab2f+F9rPIIF0/BguxnLOaXENvawTmnFY1cfGDS4yShj8C5YKvT+rnm2x+mhgg3+cqI8w==
-X-Gm-Message-State: AOJu0YwM6DVEHcqOGPOFKRdOk/nPxrVKYO3NjXOarMOYPHqaDbY7opWU
-	ivcK8ojnPYhlxUCyWqmeGrBHi+dnU7KgmrDLRkocFoqp2q7ZHC32hh/wyoDOdq0=
-X-Google-Smtp-Source: AGHT+IGo7bFwMxX0c0/beDus30CyZnDzEYgVvbNopcHy0cEnr37w+xR0wx7uA0cQzHF9dSA7wvwe7w==
-X-Received: by 2002:a2e:961a:0:b0:2da:a8c:3cfa with SMTP id v26-20020a2e961a000000b002da0a8c3cfamr5311412ljh.51.1713188617497;
-        Mon, 15 Apr 2024 06:43:37 -0700 (PDT)
+        bh=UwkkSUi1b63q//pF6FQeQvdmd+qn9ODc8sgiig3GYAI=;
+        b=umKK132ra4JIFR29+aAlsVyCGfRLF3TxD60VmuyqTIREfswHMe+LAcWLyfJEIBtZlM
+         sGh+7UFZt0iYp52oGwCkN5y5EtjOoYY/fn0czxevzELwO9geOzJ9k1mdYaIbBMdesK1J
+         8F2boCnwT8afq8MkNLNq6LqlGiyLwqY2jTObAkU8e9E9IJkATAkqZro/Lf9x17WNMCUh
+         ht+TUea2EuAFcOEBDtjphWz/21L25y6HbfcSCgZtN0RNEpP8sMAAycQyNwTjMaBII2aT
+         ZILAmBmT40AT36pmaZrwJQS/aiym80fj/vN5er/D1zdEpY0/f3Lk+jofwAfddqaasrF/
+         pNEg==
+X-Forwarded-Encrypted: i=1; AJvYcCWQkdpZq0tSOR3L3Mnte9CnNPg71tZQNspIpdKvrySX1o841xaUcC/dGEEV/TjLBh//ICGg2RHrXNYxWDHN1qXIqlQ/Hw==
+X-Gm-Message-State: AOJu0YxgEiXO1JHYgp5QX4HTV+DxgpfSspYC3WQDbgIXP8+ZQH1vdJUq
+	ZkApqIYH42N4oKY1G+2VuzQ/XqR/wQcC4Tulx6JL6UdutdYIvaXAk+tPDH8xF5c=
+X-Google-Smtp-Source: AGHT+IHCajOj0FuGEo04PJviti82GD44O7FVKp5cCtY8Jd4x5CQ6Bg6wQtmRbFu2KIZ47oJzjEbhUA==
+X-Received: by 2002:a05:651c:231:b0:2d8:36ee:350d with SMTP id z17-20020a05651c023100b002d836ee350dmr6285867ljn.16.1713188624523;
+        Mon, 15 Apr 2024 06:43:44 -0700 (PDT)
 Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id p11-20020a2eb98b000000b002d43737e2d7sm1297988ljp.30.2024.04.15.06.43.36
+        by smtp.gmail.com with ESMTPSA id p11-20020a2eb98b000000b002d43737e2d7sm1297988ljp.30.2024.04.15.06.43.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 06:43:36 -0700 (PDT)
+        Mon, 15 Apr 2024 06:43:44 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 15 Apr 2024 15:43:24 +0200
-Subject: [PATCH v5 05/10] ARM: mm: Rewrite cacheflush vtables in CFI safe C
+Date: Mon, 15 Apr 2024 15:43:28 +0200
+Subject: [PATCH v5 09/10] ARM: hw_breakpoint: Handle CFI breakpoints
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240415-arm32-cfi-v5-5-ff11093eeccc@linaro.org>
+Message-Id: <20240415-arm32-cfi-v5-9-ff11093eeccc@linaro.org>
 References: <20240415-arm32-cfi-v5-0-ff11093eeccc@linaro.org>
 In-Reply-To: <20240415-arm32-cfi-v5-0-ff11093eeccc@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -75,1300 +75,120 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.13.0
 
-Instead of defining all cache flush operations with an assembly
-macro in proc-macros.S, provide an explicit struct cpu_cache_fns
-for each CPU cache type in mm/cache.c.
+This registers a breakpoint handler for the new breakpoint type
+(0x03) inserted by LLVM CLANG for CFI breakpoints.
 
-As a side effect from rewriting the vtables in C, we can
-avoid the aliasing for the "louis" cache callback, instead we
-can just assign the NN_flush_kern_cache_all() function to the
-louis callback in the C vtable.
+If we are in permissive mode, just print a backtrace and continue.
 
-As the louis cache callback is called explicitly (not through the
-vtable) if we only have one type of cache support compiled in, we
-need an ifdef quirk for this in the !MULTI_CACHE case.
+Example with CONFIG_CFI_PERMISSIVE enabled:
 
-Feroceon and XScale have some dma mapping quirk, in this case we
-can just define two structs and assign all but one callback to the
-main implementation; since each of them invoked define_cache_functions
-twice they require MULTI_CACHE by definition so the compiled-in
-shortcut is not used on these variants.
+> echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
+lkdtm: Performing direct entry CFI_FORWARD_PROTO
+lkdtm: Calling matched prototype ...
+lkdtm: Calling mismatched prototype ...
+CFI failure at lkdtm_indirect_call+0x40/0x4c (target: 0x0; expected type: 0x00000000)
+WARNING: CPU: 1 PID: 112 at lkdtm_indirect_call+0x40/0x4c
+CPU: 1 PID: 112 Comm: sh Not tainted 6.8.0-rc1+ #150
+Hardware name: ARM-Versatile Express
+(...)
+lkdtm: FAIL: survived mismatched prototype function call!
+lkdtm: Unexpected! This kernel (6.8.0-rc1+ armv7l) was built with CONFIG_CFI_CLANG=y
 
+As you can see the LKDTM test fails, but I expect that this would be
+expected behaviour in the permissive mode.
+
+We are currently not implementing target and type for the CFI
+breakpoint as this requires additional operand bundling compiler
+extensions.
+
+CPUs without breakpoint support cannot handle breakpoints naturally,
+in these cases the permissive mode will not work, CFI will fall over
+on an undefined instruction:
+
+Internal error: Oops - undefined instruction: 0 [#1] PREEMPT ARM
+CPU: 0 PID: 186 Comm: ash Tainted: G        W          6.9.0-rc1+ #7
+Hardware name: Gemini (Device Tree)
+PC is at lkdtm_indirect_call+0x38/0x4c
+LR is at lkdtm_CFI_FORWARD_PROTO+0x30/0x6c
+
+This is reasonable I think: it's the best CFI can do to ascertain
+the the control flow is not broken on these CPUs.
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Tested-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/include/asm/glue-cache.h |  28 +-
- arch/arm/mm/Makefile              |   1 +
- arch/arm/mm/cache-b15-rac.c       |   1 +
- arch/arm/mm/cache-fa.S            |   8 -
- arch/arm/mm/cache-nop.S           |   8 -
- arch/arm/mm/cache-v4.S            |   8 -
- arch/arm/mm/cache-v4wb.S          |   8 -
- arch/arm/mm/cache-v4wt.S          |   8 -
- arch/arm/mm/cache-v6.S            |   8 -
- arch/arm/mm/cache-v7.S            |  25 --
- arch/arm/mm/cache-v7m.S           |   8 -
- arch/arm/mm/cache.c               | 663 ++++++++++++++++++++++++++++++++++++++
- arch/arm/mm/proc-arm1020.S        |   6 -
- arch/arm/mm/proc-arm1020e.S       |   6 -
- arch/arm/mm/proc-arm1022.S        |   6 -
- arch/arm/mm/proc-arm1026.S        |   6 -
- arch/arm/mm/proc-arm920.S         |   5 -
- arch/arm/mm/proc-arm922.S         |   6 -
- arch/arm/mm/proc-arm925.S         |   6 -
- arch/arm/mm/proc-arm926.S         |   6 -
- arch/arm/mm/proc-arm940.S         |   6 -
- arch/arm/mm/proc-arm946.S         |   6 -
- arch/arm/mm/proc-feroceon.S       |  27 --
- arch/arm/mm/proc-macros.S         |  18 --
- arch/arm/mm/proc-mohawk.S         |   6 -
- arch/arm/mm/proc-xsc3.S           |   6 -
- arch/arm/mm/proc-xscale.S         |  57 +---
- 27 files changed, 688 insertions(+), 259 deletions(-)
+ arch/arm/include/asm/hw_breakpoint.h |  1 +
+ arch/arm/kernel/hw_breakpoint.c      | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
-diff --git a/arch/arm/include/asm/glue-cache.h b/arch/arm/include/asm/glue-cache.h
-index 724f8dac1e5b..4186fbf7341f 100644
---- a/arch/arm/include/asm/glue-cache.h
-+++ b/arch/arm/include/asm/glue-cache.h
-@@ -118,6 +118,10 @@
- # define MULTI_CACHE 1
- #endif
+diff --git a/arch/arm/include/asm/hw_breakpoint.h b/arch/arm/include/asm/hw_breakpoint.h
+index 62358d3ca0a8..e7f9961c53b2 100644
+--- a/arch/arm/include/asm/hw_breakpoint.h
++++ b/arch/arm/include/asm/hw_breakpoint.h
+@@ -84,6 +84,7 @@ static inline void decode_ctrl_reg(u32 reg,
+ #define ARM_DSCR_MOE(x)			((x >> 2) & 0xf)
+ #define ARM_ENTRY_BREAKPOINT		0x1
+ #define ARM_ENTRY_ASYNC_WATCHPOINT	0x2
++#define ARM_ENTRY_CFI_BREAKPOINT	0x3
+ #define ARM_ENTRY_SYNC_WATCHPOINT	0xa
  
-+#ifdef CONFIG_CPU_CACHE_NOP
-+#  define MULTI_CACHE 1
-+#endif
+ /* DSCR monitor/halting bits. */
+diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
+index dc0fb7a81371..ce7c152dd6e9 100644
+--- a/arch/arm/kernel/hw_breakpoint.c
++++ b/arch/arm/kernel/hw_breakpoint.c
+@@ -17,6 +17,7 @@
+ #include <linux/perf_event.h>
+ #include <linux/hw_breakpoint.h>
+ #include <linux/smp.h>
++#include <linux/cfi.h>
+ #include <linux/cpu_pm.h>
+ #include <linux/coresight.h>
+ 
+@@ -903,6 +904,32 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
+ 	watchpoint_single_step_handler(addr);
+ }
+ 
++#ifdef CONFIG_CFI_CLANG
++static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
++{
++	/* TODO: implementing target and type requires compiler work */
++	unsigned long target = 0;
++	u32 type = 0;
 +
- #if defined(CONFIG_CPU_V7M)
- #  define MULTI_CACHE 1
- #endif
-@@ -126,29 +130,15 @@
- #error Unknown cache maintenance model
- #endif
- 
--#ifndef __ASSEMBLER__
--static inline void nop_flush_icache_all(void) { }
--static inline void nop_flush_kern_cache_all(void) { }
--static inline void nop_flush_kern_cache_louis(void) { }
--static inline void nop_flush_user_cache_all(void) { }
--static inline void nop_flush_user_cache_range(unsigned long a,
--		unsigned long b, unsigned int c) { }
--
--static inline void nop_coherent_kern_range(unsigned long a, unsigned long b) { }
--static inline int nop_coherent_user_range(unsigned long a,
--		unsigned long b) { return 0; }
--static inline void nop_flush_kern_dcache_area(void *a, size_t s) { }
--
--static inline void nop_dma_flush_range(const void *a, const void *b) { }
--
--static inline void nop_dma_map_area(const void *s, size_t l, int f) { }
--static inline void nop_dma_unmap_area(const void *s, size_t l, int f) { }
--#endif
--
- #ifndef MULTI_CACHE
- #define __cpuc_flush_icache_all		__glue(_CACHE,_flush_icache_all)
- #define __cpuc_flush_kern_all		__glue(_CACHE,_flush_kern_cache_all)
-+/* This function only has a dedicated assembly callback on the v7 cache */
-+#ifdef CONFIG_CPU_CACHE_V7
- #define __cpuc_flush_kern_louis		__glue(_CACHE,_flush_kern_cache_louis)
++	switch (report_cfi_failure(regs, instruction_pointer(regs), &target, type)) {
++	case BUG_TRAP_TYPE_BUG:
++		die("Oops - CFI", regs, 0);
++		break;
++	case BUG_TRAP_TYPE_WARN:
++		/* Skip the breaking instruction */
++		instruction_pointer(regs) += 4;
++		break;
++	default:
++		die("Unknown CFI error", regs, 0);
++		break;
++	}
++}
 +#else
-+#define __cpuc_flush_kern_louis		__glue(_CACHE,_flush_kern_cache_all)
++static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
++{
++}
 +#endif
- #define __cpuc_flush_user_all		__glue(_CACHE,_flush_user_cache_all)
- #define __cpuc_flush_user_range		__glue(_CACHE,_flush_user_cache_range)
- #define __cpuc_coherent_kern_range	__glue(_CACHE,_coherent_kern_range)
-diff --git a/arch/arm/mm/Makefile b/arch/arm/mm/Makefile
-index cc8255fdf56e..17665381be96 100644
---- a/arch/arm/mm/Makefile
-+++ b/arch/arm/mm/Makefile
-@@ -45,6 +45,7 @@ obj-$(CONFIG_CPU_CACHE_V7)	+= cache-v7.o
- obj-$(CONFIG_CPU_CACHE_FA)	+= cache-fa.o
- obj-$(CONFIG_CPU_CACHE_NOP)	+= cache-nop.o
- obj-$(CONFIG_CPU_CACHE_V7M)	+= cache-v7m.o
-+obj-y				+= cache.o
- 
- obj-$(CONFIG_CPU_COPY_V4WT)	+= copypage-v4wt.o
- obj-$(CONFIG_CPU_COPY_V4WB)	+= copypage-v4wb.o
-diff --git a/arch/arm/mm/cache-b15-rac.c b/arch/arm/mm/cache-b15-rac.c
-index 9c1172f26885..6f63b90f9e1a 100644
---- a/arch/arm/mm/cache-b15-rac.c
-+++ b/arch/arm/mm/cache-b15-rac.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2015-2016 Broadcom
-  */
- 
-+#include <linux/cfi_types.h>
- #include <linux/err.h>
- #include <linux/spinlock.h>
- #include <linux/io.h>
-diff --git a/arch/arm/mm/cache-fa.S b/arch/arm/mm/cache-fa.S
-index c3642d5daf38..5799961c2668 100644
---- a/arch/arm/mm/cache-fa.S
-+++ b/arch/arm/mm/cache-fa.S
-@@ -245,11 +245,3 @@ SYM_FUNC_END(fa_dma_map_area)
- SYM_TYPED_FUNC_START(fa_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(fa_dma_unmap_area)
--
--	.globl	fa_flush_kern_cache_louis
--	.equ	fa_flush_kern_cache_louis, fa_flush_kern_cache_all
--
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions fa
-diff --git a/arch/arm/mm/cache-nop.S b/arch/arm/mm/cache-nop.S
-index 56e94091a55f..593b7a50dd9d 100644
---- a/arch/arm/mm/cache-nop.S
-+++ b/arch/arm/mm/cache-nop.S
-@@ -14,9 +14,6 @@ SYM_TYPED_FUNC_START(nop_flush_kern_cache_all)
- 	ret	lr
- SYM_FUNC_END(nop_flush_kern_cache_all)
- 
--	.globl nop_flush_kern_cache_louis
--	.equ nop_flush_kern_cache_louis, nop_flush_icache_all
--
- SYM_TYPED_FUNC_START(nop_flush_user_cache_all)
- 	ret	lr
- SYM_FUNC_END(nop_flush_user_cache_all)
-@@ -46,11 +43,6 @@ SYM_TYPED_FUNC_START(nop_dma_map_area)
- 	ret	lr
- SYM_FUNC_END(nop_dma_map_area)
- 
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions nop
--
- SYM_TYPED_FUNC_START(nop_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(nop_dma_unmap_area)
-diff --git a/arch/arm/mm/cache-v4.S b/arch/arm/mm/cache-v4.S
-index 22d9c9d9e0d7..0b8d92fed1a4 100644
---- a/arch/arm/mm/cache-v4.S
-+++ b/arch/arm/mm/cache-v4.S
-@@ -146,11 +146,3 @@ SYM_FUNC_END(v4_dma_unmap_area)
- SYM_TYPED_FUNC_START(v4_dma_map_area)
- 	ret	lr
- SYM_FUNC_END(v4_dma_map_area)
--
--	.globl	v4_flush_kern_cache_louis
--	.equ	v4_flush_kern_cache_louis, v4_flush_kern_cache_all
--
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions v4
-diff --git a/arch/arm/mm/cache-v4wb.S b/arch/arm/mm/cache-v4wb.S
-index 0d97b594e23f..d341cc8ee93a 100644
---- a/arch/arm/mm/cache-v4wb.S
-+++ b/arch/arm/mm/cache-v4wb.S
-@@ -255,11 +255,3 @@ SYM_FUNC_END(v4wb_dma_map_area)
- SYM_TYPED_FUNC_START(v4wb_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(v4wb_dma_unmap_area)
--
--	.globl	v4wb_flush_kern_cache_louis
--	.equ	v4wb_flush_kern_cache_louis, v4wb_flush_kern_cache_all
--
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions v4wb
-diff --git a/arch/arm/mm/cache-v4wt.S b/arch/arm/mm/cache-v4wt.S
-index eee6d8f06b4d..97720812924e 100644
---- a/arch/arm/mm/cache-v4wt.S
-+++ b/arch/arm/mm/cache-v4wt.S
-@@ -202,11 +202,3 @@ SYM_FUNC_END(v4wt_dma_unmap_area)
- SYM_TYPED_FUNC_START(v4wt_dma_map_area)
- 	ret	lr
- SYM_FUNC_END(v4wt_dma_map_area)
--
--	.globl	v4wt_flush_kern_cache_louis
--	.equ	v4wt_flush_kern_cache_louis, v4wt_flush_kern_cache_all
--
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions v4wt
-diff --git a/arch/arm/mm/cache-v6.S b/arch/arm/mm/cache-v6.S
-index 5c7549a49db5..86affd60d6d4 100644
---- a/arch/arm/mm/cache-v6.S
-+++ b/arch/arm/mm/cache-v6.S
-@@ -298,11 +298,3 @@ SYM_TYPED_FUNC_START(v6_dma_unmap_area)
- 	bne	v6_dma_inv_range
- 	ret	lr
- SYM_FUNC_END(v6_dma_unmap_area)
--
--	.globl	v6_flush_kern_cache_louis
--	.equ	v6_flush_kern_cache_louis, v6_flush_kern_cache_all
--
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions v6
-diff --git a/arch/arm/mm/cache-v7.S b/arch/arm/mm/cache-v7.S
-index 5908dd54de47..170b9ac72331 100644
---- a/arch/arm/mm/cache-v7.S
-+++ b/arch/arm/mm/cache-v7.S
-@@ -456,28 +456,3 @@ SYM_TYPED_FUNC_START(v7_dma_unmap_area)
- 	bne	v7_dma_inv_range
- 	ret	lr
- SYM_FUNC_END(v7_dma_unmap_area)
--
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions v7
--
--	/* The Broadcom Brahma-B15 read-ahead cache requires some modifications
--	 * to the v7_cache_fns, we only override the ones we need
--	 */
--#ifndef CONFIG_CACHE_B15_RAC
--	globl_equ	b15_flush_kern_cache_all,	v7_flush_kern_cache_all
--#endif
--	globl_equ	b15_flush_icache_all,		v7_flush_icache_all
--	globl_equ	b15_flush_kern_cache_louis,	v7_flush_kern_cache_louis
--	globl_equ	b15_flush_user_cache_all,	v7_flush_user_cache_all
--	globl_equ	b15_flush_user_cache_range,	v7_flush_user_cache_range
--	globl_equ	b15_coherent_kern_range,	v7_coherent_kern_range
--	globl_equ	b15_coherent_user_range,	v7_coherent_user_range
--	globl_equ	b15_flush_kern_dcache_area,	v7_flush_kern_dcache_area
--
--	globl_equ	b15_dma_map_area,		v7_dma_map_area
--	globl_equ	b15_dma_unmap_area,		v7_dma_unmap_area
--	globl_equ	b15_dma_flush_range,		v7_dma_flush_range
--
--	define_cache_functions b15
-diff --git a/arch/arm/mm/cache-v7m.S b/arch/arm/mm/cache-v7m.S
-index 5a62b9a224e1..4e670697eabc 100644
---- a/arch/arm/mm/cache-v7m.S
-+++ b/arch/arm/mm/cache-v7m.S
-@@ -447,11 +447,3 @@ SYM_TYPED_FUNC_START(v7m_dma_unmap_area)
- 	bne	v7m_dma_inv_range
- 	ret	lr
- SYM_FUNC_END(v7m_dma_unmap_area)
--
--	.globl	v7m_flush_kern_cache_louis
--	.equ	v7m_flush_kern_cache_louis, v7m_flush_kern_cache_all
--
--	__INITDATA
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions v7m
-diff --git a/arch/arm/mm/cache.c b/arch/arm/mm/cache.c
-new file mode 100644
-index 000000000000..e6fbc599c9ed
---- /dev/null
-+++ b/arch/arm/mm/cache.c
-@@ -0,0 +1,663 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * This file defines C prototypes for the low-level cache assembly functions
-+ * and populates a vtable for each selected ARM CPU cache type.
-+ */
-+
-+#include <linux/types.h>
-+#include <asm/cacheflush.h>
-+
-+#ifdef CONFIG_CPU_CACHE_V4
-+void v4_flush_icache_all(void);
-+void v4_flush_kern_cache_all(void);
-+void v4_flush_user_cache_all(void);
-+void v4_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void v4_coherent_kern_range(unsigned long, unsigned long);
-+int v4_coherent_user_range(unsigned long, unsigned long);
-+void v4_flush_kern_dcache_area(void *, size_t);
-+void v4_dma_map_area(const void *, size_t, int);
-+void v4_dma_unmap_area(const void *, size_t, int);
-+void v4_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns v4_cache_fns __initconst = {
-+	.flush_icache_all = v4_flush_icache_all,
-+	.flush_kern_all = v4_flush_kern_cache_all,
-+	.flush_kern_louis = v4_flush_kern_cache_all,
-+	.flush_user_all = v4_flush_user_cache_all,
-+	.flush_user_range = v4_flush_user_cache_range,
-+	.coherent_kern_range = v4_coherent_kern_range,
-+	.coherent_user_range = v4_coherent_user_range,
-+	.flush_kern_dcache_area = v4_flush_kern_dcache_area,
-+	.dma_map_area = v4_dma_map_area,
-+	.dma_unmap_area = v4_dma_unmap_area,
-+	.dma_flush_range = v4_dma_flush_range,
-+};
-+#endif
-+
-+/* V4 write-back cache "V4WB" */
-+#ifdef CONFIG_CPU_CACHE_V4WB
-+void v4wb_flush_icache_all(void);
-+void v4wb_flush_kern_cache_all(void);
-+void v4wb_flush_user_cache_all(void);
-+void v4wb_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void v4wb_coherent_kern_range(unsigned long, unsigned long);
-+int v4wb_coherent_user_range(unsigned long, unsigned long);
-+void v4wb_flush_kern_dcache_area(void *, size_t);
-+void v4wb_dma_map_area(const void *, size_t, int);
-+void v4wb_dma_unmap_area(const void *, size_t, int);
-+void v4wb_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns v4wb_cache_fns __initconst = {
-+	.flush_icache_all = v4wb_flush_icache_all,
-+	.flush_kern_all = v4wb_flush_kern_cache_all,
-+	.flush_kern_louis = v4wb_flush_kern_cache_all,
-+	.flush_user_all = v4wb_flush_user_cache_all,
-+	.flush_user_range = v4wb_flush_user_cache_range,
-+	.coherent_kern_range = v4wb_coherent_kern_range,
-+	.coherent_user_range = v4wb_coherent_user_range,
-+	.flush_kern_dcache_area = v4wb_flush_kern_dcache_area,
-+	.dma_map_area = v4wb_dma_map_area,
-+	.dma_unmap_area = v4wb_dma_unmap_area,
-+	.dma_flush_range = v4wb_dma_flush_range,
-+};
-+#endif
-+
-+/* V4 write-through cache "V4WT" */
-+#ifdef CONFIG_CPU_CACHE_V4WT
-+void v4wt_flush_icache_all(void);
-+void v4wt_flush_kern_cache_all(void);
-+void v4wt_flush_user_cache_all(void);
-+void v4wt_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void v4wt_coherent_kern_range(unsigned long, unsigned long);
-+int v4wt_coherent_user_range(unsigned long, unsigned long);
-+void v4wt_flush_kern_dcache_area(void *, size_t);
-+void v4wt_dma_map_area(const void *, size_t, int);
-+void v4wt_dma_unmap_area(const void *, size_t, int);
-+void v4wt_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns v4wt_cache_fns __initconst = {
-+	.flush_icache_all = v4wt_flush_icache_all,
-+	.flush_kern_all = v4wt_flush_kern_cache_all,
-+	.flush_kern_louis = v4wt_flush_kern_cache_all,
-+	.flush_user_all = v4wt_flush_user_cache_all,
-+	.flush_user_range = v4wt_flush_user_cache_range,
-+	.coherent_kern_range = v4wt_coherent_kern_range,
-+	.coherent_user_range = v4wt_coherent_user_range,
-+	.flush_kern_dcache_area = v4wt_flush_kern_dcache_area,
-+	.dma_map_area = v4wt_dma_map_area,
-+	.dma_unmap_area = v4wt_dma_unmap_area,
-+	.dma_flush_range = v4wt_dma_flush_range,
-+};
-+#endif
-+
-+/* Faraday FA526 cache */
-+#ifdef CONFIG_CPU_CACHE_FA
-+void fa_flush_icache_all(void);
-+void fa_flush_kern_cache_all(void);
-+void fa_flush_user_cache_all(void);
-+void fa_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void fa_coherent_kern_range(unsigned long, unsigned long);
-+int fa_coherent_user_range(unsigned long, unsigned long);
-+void fa_flush_kern_dcache_area(void *, size_t);
-+void fa_dma_map_area(const void *, size_t, int);
-+void fa_dma_unmap_area(const void *, size_t, int);
-+void fa_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns fa_cache_fns __initconst = {
-+	.flush_icache_all = fa_flush_icache_all,
-+	.flush_kern_all = fa_flush_kern_cache_all,
-+	.flush_kern_louis = fa_flush_kern_cache_all,
-+	.flush_user_all = fa_flush_user_cache_all,
-+	.flush_user_range = fa_flush_user_cache_range,
-+	.coherent_kern_range = fa_coherent_kern_range,
-+	.coherent_user_range = fa_coherent_user_range,
-+	.flush_kern_dcache_area = fa_flush_kern_dcache_area,
-+	.dma_map_area = fa_dma_map_area,
-+	.dma_unmap_area = fa_dma_unmap_area,
-+	.dma_flush_range = fa_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_CACHE_V6
-+void v6_flush_icache_all(void);
-+void v6_flush_kern_cache_all(void);
-+void v6_flush_user_cache_all(void);
-+void v6_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void v6_coherent_kern_range(unsigned long, unsigned long);
-+int v6_coherent_user_range(unsigned long, unsigned long);
-+void v6_flush_kern_dcache_area(void *, size_t);
-+void v6_dma_map_area(const void *, size_t, int);
-+void v6_dma_unmap_area(const void *, size_t, int);
-+void v6_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns v6_cache_fns __initconst = {
-+	.flush_icache_all = v6_flush_icache_all,
-+	.flush_kern_all = v6_flush_kern_cache_all,
-+	.flush_kern_louis = v6_flush_kern_cache_all,
-+	.flush_user_all = v6_flush_user_cache_all,
-+	.flush_user_range = v6_flush_user_cache_range,
-+	.coherent_kern_range = v6_coherent_kern_range,
-+	.coherent_user_range = v6_coherent_user_range,
-+	.flush_kern_dcache_area = v6_flush_kern_dcache_area,
-+	.dma_map_area = v6_dma_map_area,
-+	.dma_unmap_area = v6_dma_unmap_area,
-+	.dma_flush_range = v6_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_CACHE_V7
-+void v7_flush_icache_all(void);
-+void v7_flush_kern_cache_all(void);
-+void v7_flush_kern_cache_louis(void);
-+void v7_flush_user_cache_all(void);
-+void v7_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void v7_coherent_kern_range(unsigned long, unsigned long);
-+int v7_coherent_user_range(unsigned long, unsigned long);
-+void v7_flush_kern_dcache_area(void *, size_t);
-+void v7_dma_map_area(const void *, size_t, int);
-+void v7_dma_unmap_area(const void *, size_t, int);
-+void v7_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns v7_cache_fns __initconst = {
-+	.flush_icache_all = v7_flush_icache_all,
-+	.flush_kern_all = v7_flush_kern_cache_all,
-+	.flush_kern_louis = v7_flush_kern_cache_louis,
-+	.flush_user_all = v7_flush_user_cache_all,
-+	.flush_user_range = v7_flush_user_cache_range,
-+	.coherent_kern_range = v7_coherent_kern_range,
-+	.coherent_user_range = v7_coherent_user_range,
-+	.flush_kern_dcache_area = v7_flush_kern_dcache_area,
-+	.dma_map_area = v7_dma_map_area,
-+	.dma_unmap_area = v7_dma_unmap_area,
-+	.dma_flush_range = v7_dma_flush_range,
-+};
-+
-+/* Special quirky cache flush function for Broadcom B15 v7 caches */
-+void b15_flush_kern_cache_all(void);
-+
-+struct cpu_cache_fns b15_cache_fns __initconst = {
-+	.flush_icache_all = v7_flush_icache_all,
-+#ifdef CONFIG_CACHE_B15_RAC
-+	.flush_kern_all = b15_flush_kern_cache_all,
-+#else
-+	.flush_kern_all = v7_flush_kern_cache_all,
-+#endif
-+	.flush_kern_louis = v7_flush_kern_cache_louis,
-+	.flush_user_all = v7_flush_user_cache_all,
-+	.flush_user_range = v7_flush_user_cache_range,
-+	.coherent_kern_range = v7_coherent_kern_range,
-+	.coherent_user_range = v7_coherent_user_range,
-+	.flush_kern_dcache_area = v7_flush_kern_dcache_area,
-+	.dma_map_area = v7_dma_map_area,
-+	.dma_unmap_area = v7_dma_unmap_area,
-+	.dma_flush_range = v7_dma_flush_range,
-+};
-+#endif
-+
-+/* The NOP cache is just a set of dummy stubs that by definition does nothing */
-+#ifdef CONFIG_CPU_CACHE_NOP
-+void nop_flush_icache_all(void);
-+void nop_flush_kern_cache_all(void);
-+void nop_flush_user_cache_all(void);
-+void nop_flush_user_cache_range(unsigned long start, unsigned long end, unsigned int flags);
-+void nop_coherent_kern_range(unsigned long start, unsigned long end);
-+int nop_coherent_user_range(unsigned long, unsigned long);
-+void nop_flush_kern_dcache_area(void *kaddr, size_t size);
-+void nop_dma_map_area(const void *start, size_t size, int flags);
-+void nop_dma_unmap_area(const void *start, size_t size, int flags);
-+void nop_dma_flush_range(const void *start, const void *end);
-+
-+struct cpu_cache_fns nop_cache_fns __initconst = {
-+	.flush_icache_all = nop_flush_icache_all,
-+	.flush_kern_all = nop_flush_kern_cache_all,
-+	.flush_kern_louis = nop_flush_kern_cache_all,
-+	.flush_user_all = nop_flush_user_cache_all,
-+	.flush_user_range = nop_flush_user_cache_range,
-+	.coherent_kern_range = nop_coherent_kern_range,
-+	.coherent_user_range = nop_coherent_user_range,
-+	.flush_kern_dcache_area = nop_flush_kern_dcache_area,
-+	.dma_map_area = nop_dma_map_area,
-+	.dma_unmap_area = nop_dma_unmap_area,
-+	.dma_flush_range = nop_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_CACHE_V7M
-+void v7m_flush_icache_all(void);
-+void v7m_flush_kern_cache_all(void);
-+void v7m_flush_user_cache_all(void);
-+void v7m_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void v7m_coherent_kern_range(unsigned long, unsigned long);
-+int v7m_coherent_user_range(unsigned long, unsigned long);
-+void v7m_flush_kern_dcache_area(void *, size_t);
-+void v7m_dma_map_area(const void *, size_t, int);
-+void v7m_dma_unmap_area(const void *, size_t, int);
-+void v7m_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns v7m_cache_fns __initconst = {
-+	.flush_icache_all = v7m_flush_icache_all,
-+	.flush_kern_all = v7m_flush_kern_cache_all,
-+	.flush_kern_louis = v7m_flush_kern_cache_all,
-+	.flush_user_all = v7m_flush_user_cache_all,
-+	.flush_user_range = v7m_flush_user_cache_range,
-+	.coherent_kern_range = v7m_coherent_kern_range,
-+	.coherent_user_range = v7m_coherent_user_range,
-+	.flush_kern_dcache_area = v7m_flush_kern_dcache_area,
-+	.dma_map_area = v7m_dma_map_area,
-+	.dma_unmap_area = v7m_dma_unmap_area,
-+	.dma_flush_range = v7m_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM1020
-+void arm1020_flush_icache_all(void);
-+void arm1020_flush_kern_cache_all(void);
-+void arm1020_flush_user_cache_all(void);
-+void arm1020_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm1020_coherent_kern_range(unsigned long, unsigned long);
-+int arm1020_coherent_user_range(unsigned long, unsigned long);
-+void arm1020_flush_kern_dcache_area(void *, size_t);
-+void arm1020_dma_map_area(const void *, size_t, int);
-+void arm1020_dma_unmap_area(const void *, size_t, int);
-+void arm1020_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm1020_cache_fns __initconst = {
-+	.flush_icache_all = arm1020_flush_icache_all,
-+	.flush_kern_all = arm1020_flush_kern_cache_all,
-+	.flush_kern_louis = arm1020_flush_kern_cache_all,
-+	.flush_user_all = arm1020_flush_user_cache_all,
-+	.flush_user_range = arm1020_flush_user_cache_range,
-+	.coherent_kern_range = arm1020_coherent_kern_range,
-+	.coherent_user_range = arm1020_coherent_user_range,
-+	.flush_kern_dcache_area = arm1020_flush_kern_dcache_area,
-+	.dma_map_area = arm1020_dma_map_area,
-+	.dma_unmap_area = arm1020_dma_unmap_area,
-+	.dma_flush_range = arm1020_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM1020E
-+void arm1020e_flush_icache_all(void);
-+void arm1020e_flush_kern_cache_all(void);
-+void arm1020e_flush_user_cache_all(void);
-+void arm1020e_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm1020e_coherent_kern_range(unsigned long, unsigned long);
-+int arm1020e_coherent_user_range(unsigned long, unsigned long);
-+void arm1020e_flush_kern_dcache_area(void *, size_t);
-+void arm1020e_dma_map_area(const void *, size_t, int);
-+void arm1020e_dma_unmap_area(const void *, size_t, int);
-+void arm1020e_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm1020e_cache_fns __initconst = {
-+	.flush_icache_all = arm1020e_flush_icache_all,
-+	.flush_kern_all = arm1020e_flush_kern_cache_all,
-+	.flush_kern_louis = arm1020e_flush_kern_cache_all,
-+	.flush_user_all = arm1020e_flush_user_cache_all,
-+	.flush_user_range = arm1020e_flush_user_cache_range,
-+	.coherent_kern_range = arm1020e_coherent_kern_range,
-+	.coherent_user_range = arm1020e_coherent_user_range,
-+	.flush_kern_dcache_area = arm1020e_flush_kern_dcache_area,
-+	.dma_map_area = arm1020e_dma_map_area,
-+	.dma_unmap_area = arm1020e_dma_unmap_area,
-+	.dma_flush_range = arm1020e_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM1022
-+void arm1022_flush_icache_all(void);
-+void arm1022_flush_kern_cache_all(void);
-+void arm1022_flush_user_cache_all(void);
-+void arm1022_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm1022_coherent_kern_range(unsigned long, unsigned long);
-+int arm1022_coherent_user_range(unsigned long, unsigned long);
-+void arm1022_flush_kern_dcache_area(void *, size_t);
-+void arm1022_dma_map_area(const void *, size_t, int);
-+void arm1022_dma_unmap_area(const void *, size_t, int);
-+void arm1022_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm1022_cache_fns __initconst = {
-+	.flush_icache_all = arm1022_flush_icache_all,
-+	.flush_kern_all = arm1022_flush_kern_cache_all,
-+	.flush_kern_louis = arm1022_flush_kern_cache_all,
-+	.flush_user_all = arm1022_flush_user_cache_all,
-+	.flush_user_range = arm1022_flush_user_cache_range,
-+	.coherent_kern_range = arm1022_coherent_kern_range,
-+	.coherent_user_range = arm1022_coherent_user_range,
-+	.flush_kern_dcache_area = arm1022_flush_kern_dcache_area,
-+	.dma_map_area = arm1022_dma_map_area,
-+	.dma_unmap_area = arm1022_dma_unmap_area,
-+	.dma_flush_range = arm1022_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM1026
-+void arm1026_flush_icache_all(void);
-+void arm1026_flush_kern_cache_all(void);
-+void arm1026_flush_user_cache_all(void);
-+void arm1026_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm1026_coherent_kern_range(unsigned long, unsigned long);
-+int arm1026_coherent_user_range(unsigned long, unsigned long);
-+void arm1026_flush_kern_dcache_area(void *, size_t);
-+void arm1026_dma_map_area(const void *, size_t, int);
-+void arm1026_dma_unmap_area(const void *, size_t, int);
-+void arm1026_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm1026_cache_fns __initconst = {
-+	.flush_icache_all = arm1026_flush_icache_all,
-+	.flush_kern_all = arm1026_flush_kern_cache_all,
-+	.flush_kern_louis = arm1026_flush_kern_cache_all,
-+	.flush_user_all = arm1026_flush_user_cache_all,
-+	.flush_user_range = arm1026_flush_user_cache_range,
-+	.coherent_kern_range = arm1026_coherent_kern_range,
-+	.coherent_user_range = arm1026_coherent_user_range,
-+	.flush_kern_dcache_area = arm1026_flush_kern_dcache_area,
-+	.dma_map_area = arm1026_dma_map_area,
-+	.dma_unmap_area = arm1026_dma_unmap_area,
-+	.dma_flush_range = arm1026_dma_flush_range,
-+};
-+#endif
-+
-+#if defined(CONFIG_CPU_ARM920T) && !defined(CONFIG_CPU_DCACHE_WRITETHROUGH)
-+void arm920_flush_icache_all(void);
-+void arm920_flush_kern_cache_all(void);
-+void arm920_flush_user_cache_all(void);
-+void arm920_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm920_coherent_kern_range(unsigned long, unsigned long);
-+int arm920_coherent_user_range(unsigned long, unsigned long);
-+void arm920_flush_kern_dcache_area(void *, size_t);
-+void arm920_dma_map_area(const void *, size_t, int);
-+void arm920_dma_unmap_area(const void *, size_t, int);
-+void arm920_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm920_cache_fns __initconst = {
-+	.flush_icache_all = arm920_flush_icache_all,
-+	.flush_kern_all = arm920_flush_kern_cache_all,
-+	.flush_kern_louis = arm920_flush_kern_cache_all,
-+	.flush_user_all = arm920_flush_user_cache_all,
-+	.flush_user_range = arm920_flush_user_cache_range,
-+	.coherent_kern_range = arm920_coherent_kern_range,
-+	.coherent_user_range = arm920_coherent_user_range,
-+	.flush_kern_dcache_area = arm920_flush_kern_dcache_area,
-+	.dma_map_area = arm920_dma_map_area,
-+	.dma_unmap_area = arm920_dma_unmap_area,
-+	.dma_flush_range = arm920_dma_flush_range,
-+};
-+#endif
-+
-+#if defined(CONFIG_CPU_ARM922T) && !defined(CONFIG_CPU_DCACHE_WRITETHROUGH)
-+void arm922_flush_icache_all(void);
-+void arm922_flush_kern_cache_all(void);
-+void arm922_flush_user_cache_all(void);
-+void arm922_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm922_coherent_kern_range(unsigned long, unsigned long);
-+int arm922_coherent_user_range(unsigned long, unsigned long);
-+void arm922_flush_kern_dcache_area(void *, size_t);
-+void arm922_dma_map_area(const void *, size_t, int);
-+void arm922_dma_unmap_area(const void *, size_t, int);
-+void arm922_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm922_cache_fns __initconst = {
-+	.flush_icache_all = arm922_flush_icache_all,
-+	.flush_kern_all = arm922_flush_kern_cache_all,
-+	.flush_kern_louis = arm922_flush_kern_cache_all,
-+	.flush_user_all = arm922_flush_user_cache_all,
-+	.flush_user_range = arm922_flush_user_cache_range,
-+	.coherent_kern_range = arm922_coherent_kern_range,
-+	.coherent_user_range = arm922_coherent_user_range,
-+	.flush_kern_dcache_area = arm922_flush_kern_dcache_area,
-+	.dma_map_area = arm922_dma_map_area,
-+	.dma_unmap_area = arm922_dma_unmap_area,
-+	.dma_flush_range = arm922_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM925T
-+void arm925_flush_icache_all(void);
-+void arm925_flush_kern_cache_all(void);
-+void arm925_flush_user_cache_all(void);
-+void arm925_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm925_coherent_kern_range(unsigned long, unsigned long);
-+int arm925_coherent_user_range(unsigned long, unsigned long);
-+void arm925_flush_kern_dcache_area(void *, size_t);
-+void arm925_dma_map_area(const void *, size_t, int);
-+void arm925_dma_unmap_area(const void *, size_t, int);
-+void arm925_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm925_cache_fns __initconst = {
-+	.flush_icache_all = arm925_flush_icache_all,
-+	.flush_kern_all = arm925_flush_kern_cache_all,
-+	.flush_kern_louis = arm925_flush_kern_cache_all,
-+	.flush_user_all = arm925_flush_user_cache_all,
-+	.flush_user_range = arm925_flush_user_cache_range,
-+	.coherent_kern_range = arm925_coherent_kern_range,
-+	.coherent_user_range = arm925_coherent_user_range,
-+	.flush_kern_dcache_area = arm925_flush_kern_dcache_area,
-+	.dma_map_area = arm925_dma_map_area,
-+	.dma_unmap_area = arm925_dma_unmap_area,
-+	.dma_flush_range = arm925_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM926T
-+void arm926_flush_icache_all(void);
-+void arm926_flush_kern_cache_all(void);
-+void arm926_flush_user_cache_all(void);
-+void arm926_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm926_coherent_kern_range(unsigned long, unsigned long);
-+int arm926_coherent_user_range(unsigned long, unsigned long);
-+void arm926_flush_kern_dcache_area(void *, size_t);
-+void arm926_dma_map_area(const void *, size_t, int);
-+void arm926_dma_unmap_area(const void *, size_t, int);
-+void arm926_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm926_cache_fns __initconst = {
-+	.flush_icache_all = arm926_flush_icache_all,
-+	.flush_kern_all = arm926_flush_kern_cache_all,
-+	.flush_kern_louis = arm926_flush_kern_cache_all,
-+	.flush_user_all = arm926_flush_user_cache_all,
-+	.flush_user_range = arm926_flush_user_cache_range,
-+	.coherent_kern_range = arm926_coherent_kern_range,
-+	.coherent_user_range = arm926_coherent_user_range,
-+	.flush_kern_dcache_area = arm926_flush_kern_dcache_area,
-+	.dma_map_area = arm926_dma_map_area,
-+	.dma_unmap_area = arm926_dma_unmap_area,
-+	.dma_flush_range = arm926_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM940T
-+void arm940_flush_icache_all(void);
-+void arm940_flush_kern_cache_all(void);
-+void arm940_flush_user_cache_all(void);
-+void arm940_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm940_coherent_kern_range(unsigned long, unsigned long);
-+int arm940_coherent_user_range(unsigned long, unsigned long);
-+void arm940_flush_kern_dcache_area(void *, size_t);
-+void arm940_dma_map_area(const void *, size_t, int);
-+void arm940_dma_unmap_area(const void *, size_t, int);
-+void arm940_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm940_cache_fns __initconst = {
-+	.flush_icache_all = arm940_flush_icache_all,
-+	.flush_kern_all = arm940_flush_kern_cache_all,
-+	.flush_kern_louis = arm940_flush_kern_cache_all,
-+	.flush_user_all = arm940_flush_user_cache_all,
-+	.flush_user_range = arm940_flush_user_cache_range,
-+	.coherent_kern_range = arm940_coherent_kern_range,
-+	.coherent_user_range = arm940_coherent_user_range,
-+	.flush_kern_dcache_area = arm940_flush_kern_dcache_area,
-+	.dma_map_area = arm940_dma_map_area,
-+	.dma_unmap_area = arm940_dma_unmap_area,
-+	.dma_flush_range = arm940_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_ARM946E
-+void arm946_flush_icache_all(void);
-+void arm946_flush_kern_cache_all(void);
-+void arm946_flush_user_cache_all(void);
-+void arm946_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void arm946_coherent_kern_range(unsigned long, unsigned long);
-+int arm946_coherent_user_range(unsigned long, unsigned long);
-+void arm946_flush_kern_dcache_area(void *, size_t);
-+void arm946_dma_map_area(const void *, size_t, int);
-+void arm946_dma_unmap_area(const void *, size_t, int);
-+void arm946_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns arm946_cache_fns __initconst = {
-+	.flush_icache_all = arm946_flush_icache_all,
-+	.flush_kern_all = arm946_flush_kern_cache_all,
-+	.flush_kern_louis = arm946_flush_kern_cache_all,
-+	.flush_user_all = arm946_flush_user_cache_all,
-+	.flush_user_range = arm946_flush_user_cache_range,
-+	.coherent_kern_range = arm946_coherent_kern_range,
-+	.coherent_user_range = arm946_coherent_user_range,
-+	.flush_kern_dcache_area = arm946_flush_kern_dcache_area,
-+	.dma_map_area = arm946_dma_map_area,
-+	.dma_unmap_area = arm946_dma_unmap_area,
-+	.dma_flush_range = arm946_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_XSCALE
-+void xscale_flush_icache_all(void);
-+void xscale_flush_kern_cache_all(void);
-+void xscale_flush_user_cache_all(void);
-+void xscale_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void xscale_coherent_kern_range(unsigned long, unsigned long);
-+int xscale_coherent_user_range(unsigned long, unsigned long);
-+void xscale_flush_kern_dcache_area(void *, size_t);
-+void xscale_dma_map_area(const void *, size_t, int);
-+void xscale_dma_unmap_area(const void *, size_t, int);
-+void xscale_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns xscale_cache_fns __initconst = {
-+	.flush_icache_all = xscale_flush_icache_all,
-+	.flush_kern_all = xscale_flush_kern_cache_all,
-+	.flush_kern_louis = xscale_flush_kern_cache_all,
-+	.flush_user_all = xscale_flush_user_cache_all,
-+	.flush_user_range = xscale_flush_user_cache_range,
-+	.coherent_kern_range = xscale_coherent_kern_range,
-+	.coherent_user_range = xscale_coherent_user_range,
-+	.flush_kern_dcache_area = xscale_flush_kern_dcache_area,
-+	.dma_map_area = xscale_dma_map_area,
-+	.dma_unmap_area = xscale_dma_unmap_area,
-+	.dma_flush_range = xscale_dma_flush_range,
-+};
-+
-+/* The 80200 A0 and A1 need a special quirk for dma_map_area() */
-+void xscale_80200_A0_A1_dma_map_area(const void *, size_t, int);
-+
-+struct cpu_cache_fns xscale_80200_A0_A1_cache_fns __initconst = {
-+	.flush_icache_all = xscale_flush_icache_all,
-+	.flush_kern_all = xscale_flush_kern_cache_all,
-+	.flush_kern_louis = xscale_flush_kern_cache_all,
-+	.flush_user_all = xscale_flush_user_cache_all,
-+	.flush_user_range = xscale_flush_user_cache_range,
-+	.coherent_kern_range = xscale_coherent_kern_range,
-+	.coherent_user_range = xscale_coherent_user_range,
-+	.flush_kern_dcache_area = xscale_flush_kern_dcache_area,
-+	.dma_map_area = xscale_80200_A0_A1_dma_map_area,
-+	.dma_unmap_area = xscale_dma_unmap_area,
-+	.dma_flush_range = xscale_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_XSC3
-+void xsc3_flush_icache_all(void);
-+void xsc3_flush_kern_cache_all(void);
-+void xsc3_flush_user_cache_all(void);
-+void xsc3_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void xsc3_coherent_kern_range(unsigned long, unsigned long);
-+int xsc3_coherent_user_range(unsigned long, unsigned long);
-+void xsc3_flush_kern_dcache_area(void *, size_t);
-+void xsc3_dma_map_area(const void *, size_t, int);
-+void xsc3_dma_unmap_area(const void *, size_t, int);
-+void xsc3_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns xsc3_cache_fns __initconst = {
-+	.flush_icache_all = xsc3_flush_icache_all,
-+	.flush_kern_all = xsc3_flush_kern_cache_all,
-+	.flush_kern_louis = xsc3_flush_kern_cache_all,
-+	.flush_user_all = xsc3_flush_user_cache_all,
-+	.flush_user_range = xsc3_flush_user_cache_range,
-+	.coherent_kern_range = xsc3_coherent_kern_range,
-+	.coherent_user_range = xsc3_coherent_user_range,
-+	.flush_kern_dcache_area = xsc3_flush_kern_dcache_area,
-+	.dma_map_area = xsc3_dma_map_area,
-+	.dma_unmap_area = xsc3_dma_unmap_area,
-+	.dma_flush_range = xsc3_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_MOHAWK
-+void mohawk_flush_icache_all(void);
-+void mohawk_flush_kern_cache_all(void);
-+void mohawk_flush_user_cache_all(void);
-+void mohawk_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void mohawk_coherent_kern_range(unsigned long, unsigned long);
-+int mohawk_coherent_user_range(unsigned long, unsigned long);
-+void mohawk_flush_kern_dcache_area(void *, size_t);
-+void mohawk_dma_map_area(const void *, size_t, int);
-+void mohawk_dma_unmap_area(const void *, size_t, int);
-+void mohawk_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns mohawk_cache_fns __initconst = {
-+	.flush_icache_all = mohawk_flush_icache_all,
-+	.flush_kern_all = mohawk_flush_kern_cache_all,
-+	.flush_kern_louis = mohawk_flush_kern_cache_all,
-+	.flush_user_all = mohawk_flush_user_cache_all,
-+	.flush_user_range = mohawk_flush_user_cache_range,
-+	.coherent_kern_range = mohawk_coherent_kern_range,
-+	.coherent_user_range = mohawk_coherent_user_range,
-+	.flush_kern_dcache_area = mohawk_flush_kern_dcache_area,
-+	.dma_map_area = mohawk_dma_map_area,
-+	.dma_unmap_area = mohawk_dma_unmap_area,
-+	.dma_flush_range = mohawk_dma_flush_range,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_FEROCEON
-+void feroceon_flush_icache_all(void);
-+void feroceon_flush_kern_cache_all(void);
-+void feroceon_flush_user_cache_all(void);
-+void feroceon_flush_user_cache_range(unsigned long, unsigned long, unsigned int);
-+void feroceon_coherent_kern_range(unsigned long, unsigned long);
-+int feroceon_coherent_user_range(unsigned long, unsigned long);
-+void feroceon_flush_kern_dcache_area(void *, size_t);
-+void feroceon_dma_map_area(const void *, size_t, int);
-+void feroceon_dma_unmap_area(const void *, size_t, int);
-+void feroceon_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns feroceon_cache_fns __initconst = {
-+	.flush_icache_all = feroceon_flush_icache_all,
-+	.flush_kern_all = feroceon_flush_kern_cache_all,
-+	.flush_kern_louis = feroceon_flush_kern_cache_all,
-+	.flush_user_all = feroceon_flush_user_cache_all,
-+	.flush_user_range = feroceon_flush_user_cache_range,
-+	.coherent_kern_range = feroceon_coherent_kern_range,
-+	.coherent_user_range = feroceon_coherent_user_range,
-+	.flush_kern_dcache_area = feroceon_flush_kern_dcache_area,
-+	.dma_map_area = feroceon_dma_map_area,
-+	.dma_unmap_area = feroceon_dma_unmap_area,
-+	.dma_flush_range = feroceon_dma_flush_range,
-+};
-+
-+void feroceon_range_flush_kern_dcache_area(void *, size_t);
-+void feroceon_range_dma_map_area(const void *, size_t, int);
-+void feroceon_range_dma_flush_range(const void *, const void *);
-+
-+struct cpu_cache_fns feroceon_range_cache_fns __initconst = {
-+	.flush_icache_all = feroceon_flush_icache_all,
-+	.flush_kern_all = feroceon_flush_kern_cache_all,
-+	.flush_kern_louis = feroceon_flush_kern_cache_all,
-+	.flush_user_all = feroceon_flush_user_cache_all,
-+	.flush_user_range = feroceon_flush_user_cache_range,
-+	.coherent_kern_range = feroceon_coherent_kern_range,
-+	.coherent_user_range = feroceon_coherent_user_range,
-+	.flush_kern_dcache_area = feroceon_range_flush_kern_dcache_area,
-+	.dma_map_area = feroceon_range_dma_map_area,
-+	.dma_unmap_area = feroceon_dma_unmap_area,
-+	.dma_flush_range = feroceon_range_dma_flush_range,
-+};
-+#endif
-diff --git a/arch/arm/mm/proc-arm1020.S b/arch/arm/mm/proc-arm1020.S
-index a3f99e1c1186..6194ff0d6057 100644
---- a/arch/arm/mm/proc-arm1020.S
-+++ b/arch/arm/mm/proc-arm1020.S
-@@ -361,12 +361,6 @@ SYM_TYPED_FUNC_START(arm1020_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm1020_dma_unmap_area)
- 
--	.globl	arm1020_flush_kern_cache_louis
--	.equ	arm1020_flush_kern_cache_louis, arm1020_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm1020
--
- 	.align	5
- ENTRY(cpu_arm1020_dcache_clean_area)
- #ifndef CONFIG_CPU_DCACHE_DISABLE
-diff --git a/arch/arm/mm/proc-arm1020e.S b/arch/arm/mm/proc-arm1020e.S
-index 64c63eb5d830..1e14f824384e 100644
---- a/arch/arm/mm/proc-arm1020e.S
-+++ b/arch/arm/mm/proc-arm1020e.S
-@@ -348,12 +348,6 @@ SYM_TYPED_FUNC_START(arm1020e_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm1020e_dma_unmap_area)
- 
--	.globl	arm1020e_flush_kern_cache_louis
--	.equ	arm1020e_flush_kern_cache_louis, arm1020e_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm1020e
--
- 	.align	5
- ENTRY(cpu_arm1020e_dcache_clean_area)
- #ifndef CONFIG_CPU_DCACHE_DISABLE
-diff --git a/arch/arm/mm/proc-arm1022.S b/arch/arm/mm/proc-arm1022.S
-index e170497353ae..6710514bf34f 100644
---- a/arch/arm/mm/proc-arm1022.S
-+++ b/arch/arm/mm/proc-arm1022.S
-@@ -347,12 +347,6 @@ SYM_TYPED_FUNC_START(arm1022_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm1022_dma_unmap_area)
- 
--	.globl	arm1022_flush_kern_cache_louis
--	.equ	arm1022_flush_kern_cache_louis, arm1022_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm1022
--
- 	.align	5
- ENTRY(cpu_arm1022_dcache_clean_area)
- #ifndef CONFIG_CPU_DCACHE_DISABLE
-diff --git a/arch/arm/mm/proc-arm1026.S b/arch/arm/mm/proc-arm1026.S
-index 4b5a4849ad85..2a2545b98295 100644
---- a/arch/arm/mm/proc-arm1026.S
-+++ b/arch/arm/mm/proc-arm1026.S
-@@ -342,12 +342,6 @@ SYM_TYPED_FUNC_START(arm1026_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm1026_dma_unmap_area)
- 
--	.globl	arm1026_flush_kern_cache_louis
--	.equ	arm1026_flush_kern_cache_louis, arm1026_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm1026
--
- 	.align	5
- ENTRY(cpu_arm1026_dcache_clean_area)
- #ifndef CONFIG_CPU_DCACHE_DISABLE
-diff --git a/arch/arm/mm/proc-arm920.S b/arch/arm/mm/proc-arm920.S
-index fbf8937eae85..db7d09698372 100644
---- a/arch/arm/mm/proc-arm920.S
-+++ b/arch/arm/mm/proc-arm920.S
-@@ -313,11 +313,6 @@ SYM_TYPED_FUNC_START(arm920_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm920_dma_unmap_area)
- 
--	.globl	arm920_flush_kern_cache_louis
--	.equ	arm920_flush_kern_cache_louis, arm920_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm920
- #endif /* !CONFIG_CPU_DCACHE_WRITETHROUGH */
- 
- 
-diff --git a/arch/arm/mm/proc-arm922.S b/arch/arm/mm/proc-arm922.S
-index ccfff2b65f49..bbd0ba1683de 100644
---- a/arch/arm/mm/proc-arm922.S
-+++ b/arch/arm/mm/proc-arm922.S
-@@ -315,12 +315,6 @@ SYM_TYPED_FUNC_START(arm922_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm922_dma_unmap_area)
- 
--	.globl	arm922_flush_kern_cache_louis
--	.equ	arm922_flush_kern_cache_louis, arm922_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm922
--
- #endif /* !CONFIG_CPU_DCACHE_WRITETHROUGH */
- 
- ENTRY(cpu_arm922_dcache_clean_area)
-diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
-index d0f73242f70a..7ecc95aa0546 100644
---- a/arch/arm/mm/proc-arm925.S
-+++ b/arch/arm/mm/proc-arm925.S
-@@ -370,12 +370,6 @@ SYM_TYPED_FUNC_START(arm925_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm925_dma_unmap_area)
- 
--	.globl	arm925_flush_kern_cache_louis
--	.equ	arm925_flush_kern_cache_louis, arm925_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm925
--
- ENTRY(cpu_arm925_dcache_clean_area)
- #ifndef CONFIG_CPU_DCACHE_WRITETHROUGH
- 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean D entry
-diff --git a/arch/arm/mm/proc-arm926.S b/arch/arm/mm/proc-arm926.S
-index 00f953dee122..2aa42e330786 100644
---- a/arch/arm/mm/proc-arm926.S
-+++ b/arch/arm/mm/proc-arm926.S
-@@ -333,12 +333,6 @@ SYM_TYPED_FUNC_START(arm926_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm926_dma_unmap_area)
- 
--	.globl	arm926_flush_kern_cache_louis
--	.equ	arm926_flush_kern_cache_louis, arm926_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm926
--
- ENTRY(cpu_arm926_dcache_clean_area)
- #ifndef CONFIG_CPU_DCACHE_WRITETHROUGH
- 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean D entry
-diff --git a/arch/arm/mm/proc-arm940.S b/arch/arm/mm/proc-arm940.S
-index 7e32ec271e8a..533c924948db 100644
---- a/arch/arm/mm/proc-arm940.S
-+++ b/arch/arm/mm/proc-arm940.S
-@@ -271,12 +271,6 @@ SYM_TYPED_FUNC_START(arm940_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm940_dma_unmap_area)
- 
--	.globl	arm940_flush_kern_cache_louis
--	.equ	arm940_flush_kern_cache_louis, arm940_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm940
--
- 	.type	__arm940_setup, #function
- __arm940_setup:
- 	mov	r0, #0
-diff --git a/arch/arm/mm/proc-arm946.S b/arch/arm/mm/proc-arm946.S
-index 4fc883572e19..210d468d316a 100644
---- a/arch/arm/mm/proc-arm946.S
-+++ b/arch/arm/mm/proc-arm946.S
-@@ -314,12 +314,6 @@ SYM_TYPED_FUNC_START(arm946_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(arm946_dma_unmap_area)
- 
--	.globl	arm946_flush_kern_cache_louis
--	.equ	arm946_flush_kern_cache_louis, arm946_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions arm946
--
- ENTRY(cpu_arm946_dcache_clean_area)
- #ifndef CONFIG_CPU_DCACHE_WRITETHROUGH
- 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean D entry
-diff --git a/arch/arm/mm/proc-feroceon.S b/arch/arm/mm/proc-feroceon.S
-index ee936c23cac5..16d0b7a600fa 100644
---- a/arch/arm/mm/proc-feroceon.S
-+++ b/arch/arm/mm/proc-feroceon.S
-@@ -416,33 +416,6 @@ SYM_TYPED_FUNC_START(feroceon_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(feroceon_dma_unmap_area)
- 
--	.globl	feroceon_flush_kern_cache_louis
--	.equ	feroceon_flush_kern_cache_louis, feroceon_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions feroceon
--
--.macro range_alias basename
--	.globl feroceon_range_\basename
--	.type feroceon_range_\basename , %function
--	.equ feroceon_range_\basename , feroceon_\basename
--.endm
--
--/*
-- * Most of the cache functions are unchanged for this case.
-- * Export suitable alias symbols for the unchanged functions:
-- */
--	range_alias flush_icache_all
--	range_alias flush_user_cache_all
--	range_alias flush_kern_cache_all
--	range_alias flush_kern_cache_louis
--	range_alias flush_user_cache_range
--	range_alias coherent_kern_range
--	range_alias coherent_user_range
--	range_alias dma_unmap_area
--
--	define_cache_functions feroceon_range
--
- 	.align	5
- ENTRY(cpu_feroceon_dcache_clean_area)
- #if defined(CONFIG_CACHE_FEROCEON_L2) && \
-diff --git a/arch/arm/mm/proc-macros.S b/arch/arm/mm/proc-macros.S
-index c0acfeac3e84..e388c4cc0c44 100644
---- a/arch/arm/mm/proc-macros.S
-+++ b/arch/arm/mm/proc-macros.S
-@@ -320,24 +320,6 @@ ENTRY(\name\()_processor_functions)
- #endif
- .endm
- 
--.macro define_cache_functions name:req
--	.align 2
--	.type	\name\()_cache_fns, #object
--ENTRY(\name\()_cache_fns)
--	.long	\name\()_flush_icache_all
--	.long	\name\()_flush_kern_cache_all
--	.long   \name\()_flush_kern_cache_louis
--	.long	\name\()_flush_user_cache_all
--	.long	\name\()_flush_user_cache_range
--	.long	\name\()_coherent_kern_range
--	.long	\name\()_coherent_user_range
--	.long	\name\()_flush_kern_dcache_area
--	.long	\name\()_dma_map_area
--	.long	\name\()_dma_unmap_area
--	.long	\name\()_dma_flush_range
--	.size	\name\()_cache_fns, . - \name\()_cache_fns
--.endm
--
- .macro globl_equ x, y
- 	.globl	\x
- 	.equ	\x, \y
-diff --git a/arch/arm/mm/proc-mohawk.S b/arch/arm/mm/proc-mohawk.S
-index 519b7ff2c589..1d4b54f9bf7a 100644
---- a/arch/arm/mm/proc-mohawk.S
-+++ b/arch/arm/mm/proc-mohawk.S
-@@ -298,12 +298,6 @@ SYM_TYPED_FUNC_START(mohawk_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(mohawk_dma_unmap_area)
- 
--	.globl	mohawk_flush_kern_cache_louis
--	.equ	mohawk_flush_kern_cache_louis, mohawk_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions mohawk
--
- ENTRY(cpu_mohawk_dcache_clean_area)
- 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean D entry
- 	add	r0, r0, #CACHE_DLINESIZE
-diff --git a/arch/arm/mm/proc-xsc3.S b/arch/arm/mm/proc-xsc3.S
-index f08b3fce4c95..0d496fda1afb 100644
---- a/arch/arm/mm/proc-xsc3.S
-+++ b/arch/arm/mm/proc-xsc3.S
-@@ -343,12 +343,6 @@ SYM_TYPED_FUNC_START(xsc3_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(xsc3_dma_unmap_area)
- 
--	.globl	xsc3_flush_kern_cache_louis
--	.equ	xsc3_flush_kern_cache_louis, xsc3_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions xsc3
--
- ENTRY(cpu_xsc3_dcache_clean_area)
- 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean L1 D line
- 	add	r0, r0, #CACHELINESIZE
-diff --git a/arch/arm/mm/proc-xscale.S b/arch/arm/mm/proc-xscale.S
-index 3e427db18d5b..c7c94b83ba1f 100644
---- a/arch/arm/mm/proc-xscale.S
-+++ b/arch/arm/mm/proc-xscale.S
-@@ -393,6 +393,20 @@ SYM_TYPED_FUNC_START(xscale_dma_map_area)
- 	b	xscale_dma_flush_range
- SYM_FUNC_END(xscale_dma_map_area)
- 
-+/*
-+ * On stepping A0/A1 of the 80200, invalidating D-cache by line doesn't
-+ * clear the dirty bits, which means that if we invalidate a dirty line,
-+ * the dirty data can still be written back to external memory later on.
-+ *
-+ * The recommended workaround is to always do a clean D-cache line before
-+ * doing an invalidate D-cache line, so on the affected processors,
-+ * dma_inv_range() is implemented as dma_flush_range().
-+ *
-+ * See erratum #25 of "Intel 80200 Processor Specification Update",
-+ * revision January 22, 2003, available at:
-+ *     http://www.intel.com/design/iio/specupdt/273415.htm
-+ */
 +
  /*
-  *	dma_map_area(start, size, dir)
-  *	- start	- kernel virtual start address
-@@ -416,49 +430,6 @@ SYM_TYPED_FUNC_START(xscale_dma_unmap_area)
- 	ret	lr
- SYM_FUNC_END(xscale_dma_unmap_area)
- 
--	.globl	xscale_flush_kern_cache_louis
--	.equ	xscale_flush_kern_cache_louis, xscale_flush_kern_cache_all
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions xscale
--
--/*
-- * On stepping A0/A1 of the 80200, invalidating D-cache by line doesn't
-- * clear the dirty bits, which means that if we invalidate a dirty line,
-- * the dirty data can still be written back to external memory later on.
-- *
-- * The recommended workaround is to always do a clean D-cache line before
-- * doing an invalidate D-cache line, so on the affected processors,
-- * dma_inv_range() is implemented as dma_flush_range().
-- *
-- * See erratum #25 of "Intel 80200 Processor Specification Update",
-- * revision January 22, 2003, available at:
-- *     http://www.intel.com/design/iio/specupdt/273415.htm
-- */
--.macro a0_alias basename
--	.globl xscale_80200_A0_A1_\basename
--	.type xscale_80200_A0_A1_\basename , %function
--	.equ xscale_80200_A0_A1_\basename , xscale_\basename
--.endm
--
--/*
-- * Most of the cache functions are unchanged for these processor revisions.
-- * Export suitable alias symbols for the unchanged functions:
-- */
--	a0_alias flush_icache_all
--	a0_alias flush_user_cache_all
--	a0_alias flush_kern_cache_all
--	a0_alias flush_kern_cache_louis
--	a0_alias flush_user_cache_range
--	a0_alias coherent_kern_range
--	a0_alias coherent_user_range
--	a0_alias flush_kern_dcache_area
--	a0_alias dma_flush_range
--	a0_alias dma_unmap_area
--
--	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
--	define_cache_functions xscale_80200_A0_A1
--
- ENTRY(cpu_xscale_dcache_clean_area)
- 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean D entry
- 	add	r0, r0, #CACHELINESIZE
+  * Called from either the Data Abort Handler [watchpoint] or the
+  * Prefetch Abort Handler [breakpoint] with interrupts disabled.
+@@ -932,6 +959,9 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
+ 	case ARM_ENTRY_SYNC_WATCHPOINT:
+ 		watchpoint_handler(addr, fsr, regs);
+ 		break;
++	case ARM_ENTRY_CFI_BREAKPOINT:
++		hw_breakpoint_cfi_handler(regs);
++		break;
+ 	default:
+ 		ret = 1; /* Unhandled fault. */
+ 	}
 
 -- 
 2.44.0
