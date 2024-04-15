@@ -1,152 +1,126 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5675013A87E
-	for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 18:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F546CDAD;
+	Mon, 15 Apr 2024 18:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713205719; cv=none; b=HDafFLLeu1je0CEQafUkKaDpK90nEGyPPC7j49Yf2+e+0aaai6q6jKDjEKMNVtNcpAa1n+u/F4cJDXPBhF2Ius420MDpSsSDi50qnYsgyKFohMSePetFHlBdpEESqZNaSLtWhc6jAK6L29CQpU+JqdAIG9wg5/6TwL/2E53xK1k=
+	t=1713206097; cv=none; b=b6YAQ6C57U5KSY5j3gNr9NRXHLVpbqG4mzoOv+WTq9ke7w3xF/g0j6yBJDB2EsG6M/vga9m5Z7ikJ2b4yUSMQvXS/ykKUcZdDXz0qiNySzWKnU8lZ9N8rTDcHLF0Wfc6iGsYdadZ0DBahcQwr8LZVpf8z9X+hrTd1+F+g7igtZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713205719; c=relaxed/simple;
-	bh=4IaXarYUXpxYCg+9pmqyG/50QxJWM9J7LtrSTXLIMJA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MRkpyrJT+EfiUQiHC3L/GS9sav1z/xMUg1hjUpC4MxfxeC64fDuE47DjPK1y/eJe5ZXjkkimWO6JmDwp8enS/+dwVjxDjXRVRGV/vGpL2yT50JMC+yYuuco9A1+0Dwg8nQFbl1/qXITK+OuHeO2VI0+adQmsLfcRuFjdlkS9zXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=U+C2uslC; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1713206097; c=relaxed/simple;
+	bh=YZH/atVIAYwOgZAv0EyU2gQHng+Fq0POPGoznJw55LU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rC/tdCfHjYfM9LOBrYvNa/TXQ4OsM0i6FJRKwE+yA9jYcBkKhD7n+ud8ddp5shPTQzKKDrDsvkQX967mtN9BuWsde8B0Ru1mqJ08Wm1q3eRdo+McSXlk5k5z7+qAshshD/8fjpUyZzDaWhxBXr++Wafmy1LK6oGQTvGsvgHJE+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kx9jaLbp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="U+C2uslC"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2a475bdd4a6so1981025a91.2
-        for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 11:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713205718; x=1713810518; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yAq4RH8QyUKSZD7HeQ0W2c2SC+MgWA2yhvwhd1FAErE=;
-        b=U+C2uslCHd6EAUytCPRfpDnUIeyr++dZojMDO1w/6yuKGdHSC35I/2AUe7O9sYtPlu
-         GaA8XY9/l5QcaYFL+UfU8JQANFIfO0KSfNlsYnfKtCxrXZf5+SivdG6GBT1HymO3cWws
-         dpncrbKXWDbMb/Cph1C/hmgs6AnhHfhSP8DKI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713205718; x=1713810518;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yAq4RH8QyUKSZD7HeQ0W2c2SC+MgWA2yhvwhd1FAErE=;
-        b=sc/+QuUCsiUz1OMQsgU38StQzTEqyALOIauEHzJvpKg6erAmRvlx+AmB+4eqHKEmMK
-         +ZhGtK/RzHBycCAJXdudOyyGnVhnmFc/KU3brq63pWfDF6G0ZZ0iK4jBxRDGjeVezJau
-         zjYeCycVI1BuojZJVnerhlvgTzmFpOnXfOreZkECmB6TK2ld/Y2BcI1nXMSaUHXZueD+
-         dVsTWq3LFNxbwlAogEXxNCcdS+0ZWhf1cxHyAMlynCaiYq+RyGxEXQQVKAuCAboumHjs
-         y71ejWgg06D5gVCCgylgLnz5E67p25rCiTCpuYdO3b0ULvpA4BexsNK0vOvD8c6jfLeL
-         spBA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVejNEv6yc9+hNlhQGf2DjEXh9nczAkepzDvvMu7RdPNHrUlynJIxhxY5FWcQefO85BnR3OwpoVAacO+K9FvlWYzucNA==
-X-Gm-Message-State: AOJu0Yyf9eMMKGY0FHTn/foXZPtp/lnMs03sbGJe3WP9UMRQBRBJMYK3
-	p6VFjc5tE8P8NeF2DOs39cWbQaxhXFEjcDBbuq9WraUDB1mRbtkZ6Yz92ICCIg==
-X-Google-Smtp-Source: AGHT+IEYFs7fnXkSELd0hZrVih1BisoxrSCEEdxjz9aIBiqqyuW6IhT9v58YdP08kVYsR/hIWnkrIQ==
-X-Received: by 2002:a17:90a:a014:b0:2a2:37ed:24d5 with SMTP id q20-20020a17090aa01400b002a237ed24d5mr9504791pjp.2.1713205717610;
-        Mon, 15 Apr 2024 11:28:37 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id o7-20020a17090a3d4700b002aa783c7749sm225542pjf.41.2024.04.15.11.28.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 11:28:37 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kx9jaLbp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BBEC113CC;
+	Mon, 15 Apr 2024 18:34:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713206097;
+	bh=YZH/atVIAYwOgZAv0EyU2gQHng+Fq0POPGoznJw55LU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Kx9jaLbpgTmXlDRddFpH5Cqez/VbrskyTYinmQ6kzQl1Yt1UbPLMYCtAYmNiu6+OK
+	 fvtEd3RpFM2tua6vm7bMbwnoUSYuxJq51uEvllGSUuXbX47VtFbjJAUPRuIiHwI6E1
+	 g+hcntAT6c5nHMJEcy0Y40tmKSa8wN748M5SwIiplQjTgeGtSRc1wDMiLnfQDlrSGX
+	 3NlTZVUSUt/pExK17d1NgtsZGLN+szbIXsxc+f8QkfsM2IukKblooLx6OedYnW1jrZ
+	 ghDjnaN9donwfKk7UGkeEo7MGg8lkLWHSvcUDvRGGwfSEo4QzcyQvkHdFdggDo4MSq
+	 /AxJtyAJP8gWw==
+Date: Mon, 15 Apr 2024 11:34:54 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Marco Elver <elver@google.com>, Justin Stitt <justinstitt@google.com>,
 	Andrey Konovalov <andreyknvl@gmail.com>,
 	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	linux-kernel@vger.kernel.org,
+	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] ubsan: Add awareness of signed integer overflow traps
-Date: Mon, 15 Apr 2024 11:28:35 -0700
-Message-Id: <20240415182832.work.932-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] ubsan: Add awareness of signed integer overflow traps
+Message-ID: <20240415183454.GB1011455@dev-arch.thelio-3990X>
+References: <20240415182832.work.932-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2297; i=keescook@chromium.org;
- h=from:subject:message-id; bh=4IaXarYUXpxYCg+9pmqyG/50QxJWM9J7LtrSTXLIMJA=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmHXHTHDcH/rU4DwAuIfF+PqCgsKiEy9TvwjM08
- XaKWEaXez6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZh1x0wAKCRCJcvTf3G3A
- Jl3xD/45m2S6t9LECpdwfjbODqtOouLN0wH8zb51Op56fbm9xeMQ7e80mdvP9yjErlwPLyih6Nq
- WfX0zqyYp/Gw0CjTr1zZjJogFYt4k333uYlpI6JCqDJhZllXGNRInNm/dGGBADxaV7X0Mco9ATn
- u1gG/Q44QaBb2Knh1jm/NJ0fp1SdQe5NlYnx7lGJ4CpDwrugHDoxhJSEMyuW4IVcfMEENgEm3dy
- VvCXyvJlBwu7CbYMiP7RQP/n8libLaaZGbEbuf1NvtUdTBh5VSe+ZHyijtjWHzd/6idddE9Lhze
- Eu3oEPod5bbwDi/hBLQGpUNs2hdz2cryApPLcojSwYjOFxey2dzxr7bXv3SPXhXwQikMYB8nIKt
- DhLJgg9T+HsQyPnWVR9a3eTKSvJHKlzrGEaGGLiruPfM2CTPaWNnjpjSCw3xLVS/OprkO8xYwCY
- +JDjW4Yz4coVscDJMVx8JtEpxa3a3XefNYfvSlSBLpe0VUkkuO77Des8sdKZ5H2kVBr1YC7RVsu
- 7zd6Lwv25OlcbntxMxul7cqG8NL8jo1CYaIIly768LWa0eDPEWB5VWTbErLWxYnZ65TmBzCUdvL
- YTAAneczLiTe+5u0Ga/AQUDykSyQPvWgaEpnR3boeAtTqqqgyFPlxN33mThPUwoh6qMbGBa8XEk
- E/kf3ER sCidHZYA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240415182832.work.932-kees@kernel.org>
 
-On arm64, UBSAN traps can be decoded from the trap instruction. Add the
-add, sub, and mul overflow trap codes now that CONFIG_UBSAN_SIGNED_WRAP
-exists. Seen under clang 19:
+On Mon, Apr 15, 2024 at 11:28:35AM -0700, Kees Cook wrote:
+> On arm64, UBSAN traps can be decoded from the trap instruction. Add the
+> add, sub, and mul overflow trap codes now that CONFIG_UBSAN_SIGNED_WRAP
+> exists. Seen under clang 19:
+> 
+>   Internal error: UBSAN: unrecognized failure code: 00000000f2005515 [#1] PREEMPT SMP
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Closes: https://lore.kernel.org/lkml/20240411-fix-ubsan-in-hardening-config-v1-0-e0177c80ffaa@kernel.org
+> Fixes: 557f8c582a9b ("ubsan: Reintroduce signed overflow sanitizer")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-  Internal error: UBSAN: unrecognized failure code: 00000000f2005515 [#1] PREEMPT SMP
+As I mentioned, CONFIG_UBSAN_SIGNED_INTEGER_WRAP needs to be
+CONFIG_UBSAN_SIGNED_WRAP. I applied this change with that fix up and the
+warning now becomes:
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://lore.kernel.org/lkml/20240411-fix-ubsan-in-hardening-config-v1-0-e0177c80ffaa@kernel.org
-Fixes: 557f8c582a9b ("ubsan: Reintroduce signed overflow sanitizer")
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Cc: Marco Elver <elver@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: kasan-dev@googlegroups.com
-Cc: linux-hardening@vger.kernel.org
----
- lib/ubsan.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+  Internal error: UBSAN: integer subtraction overflow: 00000000f2005515 [#1] PREEMPT SMP
 
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index 5fc107f61934..ad32beb8c058 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -44,9 +44,10 @@ const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
- 	case ubsan_shift_out_of_bounds:
- 		return "UBSAN: shift out of bounds";
- #endif
--#ifdef CONFIG_UBSAN_DIV_ZERO
-+#if defined(CONFIG_UBSAN_DIV_ZERO) || defined(CONFIG_UBSAN_SIGNED_INTEGER_WRAP)
- 	/*
--	 * SanitizerKind::IntegerDivideByZero emits
-+	 * SanitizerKind::IntegerDivideByZero and
-+	 * SanitizerKind::SignedIntegerOverflow emit
- 	 * SanitizerHandler::DivremOverflow.
- 	 */
- 	case ubsan_divrem_overflow:
-@@ -77,6 +78,19 @@ const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
- 		return "UBSAN: alignment assumption";
- 	case ubsan_type_mismatch:
- 		return "UBSAN: type mismatch";
-+#endif
-+#ifdef CONFIG_UBSAN_SIGNED_INTEGER_WRAP
-+	/*
-+	 * SanitizerKind::SignedIntegerOverflow emits
-+	 * SanitizerHandler::AddOverflow, SanitizerHandler::SubOverflow,
-+	 * or SanitizerHandler::MulOverflow.
-+	 */
-+	case ubsan_add_overflow:
-+		return "UBSAN: integer addition overflow";
-+	case ubsan_sub_overflow:
-+		return "UBSAN: integer subtraction overflow";
-+	case ubsan_mul_overflow:
-+		return "UBSAN: integer multiplication overflow";
- #endif
- 	default:
- 		return "UBSAN: unrecognized failure code";
--- 
-2.34.1
+So:
 
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+> Cc: Marco Elver <elver@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: kasan-dev@googlegroups.com
+> Cc: linux-hardening@vger.kernel.org
+> ---
+>  lib/ubsan.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/ubsan.c b/lib/ubsan.c
+> index 5fc107f61934..ad32beb8c058 100644
+> --- a/lib/ubsan.c
+> +++ b/lib/ubsan.c
+> @@ -44,9 +44,10 @@ const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
+>  	case ubsan_shift_out_of_bounds:
+>  		return "UBSAN: shift out of bounds";
+>  #endif
+> -#ifdef CONFIG_UBSAN_DIV_ZERO
+> +#if defined(CONFIG_UBSAN_DIV_ZERO) || defined(CONFIG_UBSAN_SIGNED_INTEGER_WRAP)
+>  	/*
+> -	 * SanitizerKind::IntegerDivideByZero emits
+> +	 * SanitizerKind::IntegerDivideByZero and
+> +	 * SanitizerKind::SignedIntegerOverflow emit
+>  	 * SanitizerHandler::DivremOverflow.
+>  	 */
+>  	case ubsan_divrem_overflow:
+> @@ -77,6 +78,19 @@ const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
+>  		return "UBSAN: alignment assumption";
+>  	case ubsan_type_mismatch:
+>  		return "UBSAN: type mismatch";
+> +#endif
+> +#ifdef CONFIG_UBSAN_SIGNED_INTEGER_WRAP
+> +	/*
+> +	 * SanitizerKind::SignedIntegerOverflow emits
+> +	 * SanitizerHandler::AddOverflow, SanitizerHandler::SubOverflow,
+> +	 * or SanitizerHandler::MulOverflow.
+> +	 */
+> +	case ubsan_add_overflow:
+> +		return "UBSAN: integer addition overflow";
+> +	case ubsan_sub_overflow:
+> +		return "UBSAN: integer subtraction overflow";
+> +	case ubsan_mul_overflow:
+> +		return "UBSAN: integer multiplication overflow";
+>  #endif
+>  	default:
+>  		return "UBSAN: unrecognized failure code";
+> -- 
+> 2.34.1
+> 
