@@ -1,127 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8BF37163;
-	Mon, 15 Apr 2024 23:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07D9158D8B
+	for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 23:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.211.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713222879; cv=none; b=dULjfegCUO5iPq9qFskjp4lCgkDM/VVsKAuhKX9BcWZW1o4WQAjjiOURc3n6jfWi+AA1J2khcX7D7DgBmhxWtk8TC8X3urG/NsKebG1L27KI9FTvNDludMVZvoLOjBAIL+dthzKsA8Trl5A1CPBI21/FGXzpBy00W8ZRzwbrg/k=
+	t=1713222996; cv=none; b=u1OjGp4Y0m4PUiCkbt3AG/nddbZ102qK9w1ds7cEgU0vDe55vV0R6uIwFdN53gPaJJ+DCC+na5/FESPJk4lkA22oVeBE5SZtwFNAvv2niiun7544owYYb+yMLEOnfF9pOGu4YEu3vRiA4OTzMyyMHHHLTCtRt2gjmFk+1Srl2JY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713222879; c=relaxed/simple;
-	bh=B0ohxadzXuYc46QiPLYinV5+kx/92YHtWDUJ2Lur2j4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DuDIgW1CsMHU7IQWuTQDDU8gX6bKdOhkMPIyxOV9ZIr7/fk6LQSeRLcx7QHpya5YLgErNdNBY6snD5xq24mVYRKmGzQvOIf4p1wADJixBerqz4j0BsGNcvPcjvdNDjf6vM1x568Mj2e1TACeFYhQY+Hhzsf1zw3R0d0h7/1aXMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=goUCVwM9; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713222996; c=relaxed/simple;
+	bh=cjNzCOCAgp7wk5rP3LcGF3i1psOeuFAFhFvE4h5tBg4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mnwS+Rbp6J/4Zhp+Eu5PgCC/POCdZmzRii4eY+xyKgp+0oGvJj+Kc4psiEBMIdx3ChOCEojxtp7hgmHDv8Fwz36jrdp776qOy/Aw2hvWYQGZ+MtdOY3Z+582nxluX4oeg08P8g4H1md9fsTXI/3COkYWgT39o9GA8rlo8E36gpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=WEjfpgX1; arc=none smtp.client-ip=51.81.211.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="goUCVwM9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713222877; x=1744758877;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B0ohxadzXuYc46QiPLYinV5+kx/92YHtWDUJ2Lur2j4=;
-  b=goUCVwM9s/D2SNTgUeMSvlHgkyiDVuz4Hr+p4vO446AZ8DeUHF4k9Xgd
-   QJARQ+r1N3X8ClfH0wgdbsONkHrl3MHUXrrrEIZ7NYA0wLN1XPx9jplkf
-   RCdqMZEhzzTbs2CxQYPaQKng8rJlMJ+aZKLkAFekp3AxnfysdXPGhqljB
-   Mrb/LOjGx9z3wBYjRxC7/Q00Ax8fZZgh742EaJRopIKMlEWFyUcxxHJCH
-   zwin0tzy/JDbtVDmp5+2KlblOagUGA+LrzZ+oDOMu52/5Jn1PP5KZxFVO
-   62lGdn9by2A3RdNNXOmBMtu1gGCt6CSBU3CaDmvKd8rovkVWvKjsvG+47
-   w==;
-X-CSE-ConnectionGUID: cMdYdJZ7Rt+U0eZMciaobQ==
-X-CSE-MsgGUID: rQIv0E8MRhqWFMnMofRT7w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="8806360"
-X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
-   d="scan'208";a="8806360"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 16:14:37 -0700
-X-CSE-ConnectionGUID: aoSUlE0dTAGqhaLfvJOHrw==
-X-CSE-MsgGUID: SfUI2RBURjOBXVhcSzeofQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
-   d="scan'208";a="26486337"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 15 Apr 2024 16:13:03 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rwVVU-0004hs-2r;
-	Mon, 15 Apr 2024 23:13:00 +0000
-Date: Tue, 16 Apr 2024 07:12:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jocelyn Falempe <jfalempe@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org
-Subject: [drm-misc:for-linux-next 5/9]
- drivers/gpu/drm/drm_fb_dma_helper.c:164:5: warning: no previous prototype
- for function 'drm_fb_dma_get_scanout_buffer'
-Message-ID: <202404160702.2kFuK6Qq-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="WEjfpgX1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=default; t=1713222994;
+	bh=cjNzCOCAgp7wk5rP3LcGF3i1psOeuFAFhFvE4h5tBg4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=WEjfpgX1F2yN0XkjeYIL+so1/ETNefmWXraEdqEQsxdDlO2Z9grew7e9HzfUgpuVe
+	 LUEMWe4zZQ/N5fxZ0Yau7U8QyKvuF9EplR/Nz6x8W7rsTpo/hyIUWmN0jW9/b2/yDL
+	 sy5jgt3xBQ5kixjXqc45T/MHZHv6LINi3oqUuwdj2oMtzNs7k3mBVVCrgKtSajYw44
+	 miAMXNsZwS6oVMMM80v4qLuTyTzLc0XdqUHmW8Is07gctAvDZqLP82WwndKU0iPoSH
+	 lqYSeH9mZz8M3baKif4GIXquMh1fYfMv1+Q8IQAy9DVYDIn3NrtxPHZOS7ZbHpieFW
+	 m42XbkLJU4t2A==
+Received: from localhost.localdomain (unknown [182.253.126.243])
+	by gnuweeb.org (Postfix) with ESMTPSA id 0E3B624AE2E;
+	Tue, 16 Apr 2024 06:16:30 +0700 (WIB)
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	Memet Zx <zxce3@gnuweeb.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	LLVM Mailing List <llvm@lists.linux.dev>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: Compile Error in Linux 6.9-rc4 with Clang 17.0.6
+Date: Tue, 16 Apr 2024 06:16:22 +0700
+Message-Id: <555ac4427590d16c@cgk003-biznet-home.gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240415220626.GA77369@dev-arch.thelio-3990X>
+References: <20240415193152.61118-1-zxce3@gnuweeb.org> <20240415220626.GA77369@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
-head:   7b0062036c3b71b4a69e244ecf0502c06c4cf5f0
-commit: 879b3b6511fe92b1b93dfc543961347289a8aeaa [5/9] drm/fb_dma: Add generic get_scanout_buffer() for drm_panic
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240416/202404160702.2kFuK6Qq-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240416/202404160702.2kFuK6Qq-lkp@intel.com/reproduce)
+On Mon, 15 Apr 2024 15:06:26 -0700, Nathan Chancellor wrote:
+> Thanks for the report. Unfortunately, I cannot reproduce this with your
+> configuration on 6.9-rc4 with either kernel.org LLVM 17.0.6 [1] or
+> Debian LLVM 17.0.6 [2]. Is this completely reproducible on your side? Is
+> this something that just started happening with the 6.9 cycle? What is
+> your build command, as I might just be missing something?
+> 
+> [1]: https://mirrors.edge.kernel.org/pub/tools/llvm/
+> [2]: ++20231208085813+6009708b4367-1~exp1~20231208085906.81, should be
+>      the same source version and configuration you are using.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404160702.2kFuK6Qq-lkp@intel.com/
+Hi,
 
-All warnings (new ones prefixed by >>):
+Thank you for your response!
 
-   In file included from drivers/gpu/drm/drm_fb_dma_helper.c:12:
-   In file included from include/drm/drm_damage_helper.h:35:
-   In file included from include/drm/drm_atomic_helper.h:31:
-   In file included from include/drm/drm_crtc.h:32:
-   In file included from include/drm/drm_modes.h:33:
-   In file included from include/drm/drm_connector.h:32:
-   In file included from include/drm/drm_util.h:35:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/gpu/drm/drm_fb_dma_helper.c:164:5: warning: no previous prototype for function 'drm_fb_dma_get_scanout_buffer' [-Wmissing-prototypes]
-     164 | int drm_fb_dma_get_scanout_buffer(struct drm_plane *plane,
-         |     ^
-   drivers/gpu/drm/drm_fb_dma_helper.c:164:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     164 | int drm_fb_dma_get_scanout_buffer(struct drm_plane *plane,
-         | ^
-         | static 
-   2 warnings generated.
---
->> drivers/gpu/drm/drm_fb_dma_helper.c:166: warning: Function parameter or struct member 'sb' not described in 'drm_fb_dma_get_scanout_buffer'
->> drivers/gpu/drm/drm_fb_dma_helper.c:166: warning: Excess function parameter 'drm_scanout_buffer' description in 'drm_fb_dma_get_scanout_buffer'
+I am here to respond on behalf of Memet Zx.
 
+I was following Memet's build before he reported this issue. I tried
+to reproduce the error on my server, but I couldn't reproduce it as
+well. It seems the error is specific to Memet's environment.
 
-vim +/drm_fb_dma_get_scanout_buffer +164 drivers/gpu/drm/drm_fb_dma_helper.c
+FWIW, my build commands are as follows:
+```
+  wget https://apt.llvm.org/llvm.sh -O /tmp/llvm.sh;
+  sudo bash /tmp/llvm.sh 17;
+  sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-17 400;
+  sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-17 400;
 
-   152	
-   153	/**
-   154	 * drm_fb_dma_get_scanout_buffer - Provide a scanout buffer in case of panic
-   155	 * @plane: DRM primary plane
-   156	 * @drm_scanout_buffer: scanout buffer for the panic handler
-   157	 * Returns: 0 or negative error code
-   158	 *
-   159	 * Generic get_scanout_buffer() implementation, for drivers that uses the
-   160	 * drm_fb_dma_helper. It won't call vmap in the panic context, so the driver
-   161	 * should make sure the primary plane is vmapped, otherwise the panic screen
-   162	 * won't get displayed.
-   163	 */
- > 164	int drm_fb_dma_get_scanout_buffer(struct drm_plane *plane,
-   165					  struct drm_scanout_buffer *sb)
- > 166	{
+  export LLVM=-17;
+  export LLVM_IAS=1;
+
+  # Fill .config file with Memet's config file.
+
+  make -j$(nproc) olddefconfig;
+  make -j$(nproc) bindeb-pkg;
+```
+
+The steps above are the same as Memet's, but I didn't face the issue.
+So yeah, it seems to be specific to Memet's environment. I'll discuss
+this further with Memet off-list.
+
+My server survived in the OBJCOPY step, unlike Memet's, and it
+finished the debian packaging without fatal errors (despite it shows
+warnings):
+
+```
+    GEN     .tmp_initcalls.lds
+    LD      vmlinux.o
+  ld.lld-17: warning: lib/maple_tree.c:4162:0: stack frame size (1040) exceeds limit (1024) in function 'mas_wr_modify'
+  ld.lld-17: warning: arch/x86/kvm/hyperv.c:2002:0: stack frame size (1320) exceeds limit (1024) in function 'kvm_hv_flush_tlb'
+  ld.lld-17: warning: drivers/infiniband/sw/siw/siw_qp_tx.c:1019:0: stack frame size (1192) exceeds limit (1024) in function 'siw_qp_sq_process'
+  ld.lld-17: warning: fs/select.c:976:0: stack frame size (1080) exceeds limit (1024) in function 'do_sys_poll'
+  ld.lld-17: warning: drivers/net/wireless/ath/ath9k/ar9003_paprd.c:918:0: stack frame size (1064) exceeds limit (1024) in function 'ar9003_paprd_create_curve'
+  ld.lld-17: warning: drivers/net/wireguard/allowedips.c:259:0: stack frame size (1128) exceeds limit (1024) in function 'wg_allowedips_free'
+  ld.lld-17: warning: drivers/net/wireguard/allowedips.c:57:0: stack frame size (1080) exceeds limit (1024) in function 'root_free_rcu'
+  ld.lld-17: warning: drivers/gpu/drm/radeon/radeon_cs.c:670:0: stack frame size (1152) exceeds limit (1024) in function 'radeon_cs_ioctl'
+  ld.lld-17: warning: drivers/edac/sb_edac.c:3078:0: stack frame size (1032) exceeds limit (1024) in function 'sbridge_mce_output_error'
+  ld.lld-17: warning: drivers/crypto/ccp/ccp-ops.c:633:0: stack frame size (1032) exceeds limit (1024) in function 'ccp_run_aes_gcm_cmd'
+  ld.lld-17: warning: drivers/virtio/virtio_balloon.c:493:0: stack frame size (1064) exceeds limit (1024) in function 'update_balloon_stats_func'
+  ld.lld-17: warning: drivers/virtio/virtio_balloon.c:530:0: stack frame size (1224) exceeds limit (1024) in function 'init_vqs'
+  ld.lld-17: warning: lib/zstd/compress/huf_compress.c:219:0: stack frame size (1336) exceeds limit (1024) in function 'HUF_readCTable'
+  ld.lld-17: warning: drivers/xen/gntdev.c:991:0: stack frame size (1048) exceeds limit (1024) in function 'gntdev_ioctl'
+  ld.lld-17: warning: drivers/mtd/nftlcore.c:675:0: stack frame size (1064) exceeds limit (1024) in function 'nftl_writeblock'
+  vmlinux.o: warning: objtool: __svm_vcpu_run+0x13c: BP used as a scratch register
+  vmlinux.o: warning: objtool: __svm_sev_es_vcpu_run+0x32: BP used as a scratch register
+  vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__969_123_ip_vs_rr_init6()
+  vmlinux.o: warning: objtool: .text.jffs2_erase_pending_blocks: unexpected end of section
+  vmlinux.o: warning: objtool: .text.ocfs2_validate_and_adjust_move_goal: unexpected end of section
+  vmlinux.o: warning: objtool: .text.__ocfs2_move_extents_range: unexpected end of section
+  vmlinux.o: warning: objtool: .text.csio_ln_fdmi_rhba_cbfn: unexpected end of section
+  vmlinux.o: warning: objtool: .text.jme_check_link: unexpected end of section
+  vmlinux.o: warning: objtool: .text.vhci_coredump_hdr: unexpected end of section
+    OBJCOPY modules.builtin.modinfo
+    GEN     modules.builtin
+    MODPOST vmlinux.symvers
+    UPD     include/generated/utsversion.h
+    CC      init/version-timestamp.o
+    LD      .tmp_vmlinux.kallsyms1
+    NM      .tmp_vmlinux.kallsyms1.syms
+    KSYMS   .tmp_vmlinux.kallsyms1.S
+    AS      .tmp_vmlinux.kallsyms1.S
+    LD      .tmp_vmlinux.kallsyms2
+    NM      .tmp_vmlinux.kallsyms2.syms
+    KSYMS   .tmp_vmlinux.kallsyms2.S
+    AS      .tmp_vmlinux.kallsyms2.S
+    LD      vmlinux
+```
+
+We will send a follow up if we find that it's related to LLVM. But for
+now let's assume something is wrong with Memet's server environment.
+
+Thank you!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ammar Faizi
