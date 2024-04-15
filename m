@@ -1,43 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D31529414;
-	Mon, 15 Apr 2024 15:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611F0811FF;
+	Mon, 15 Apr 2024 16:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713195670; cv=none; b=SfcWY8DshH3Dw8jX1SuxGiM8tHHbL5BaIq1+llL/BJs8E8Alj2MBAe9IhvH8Q45mwSvM3V04B8OkVoPk6Bqqo/yw/rXJFluColOMpZTDnWx3G1TY3NwrnyO14X2nO/Ub3E5ZQRAfczdk5CSmrzvCwL3V5aIi2xBZQtP0lfOzKEw=
+	t=1713197637; cv=none; b=m1itN27CN4Gx+TodAZKSev3WvWO0y6Z7zb4ldTPQaMdvPhc665f+6emLkRKAOGhJcLKug4jNH3Abd9WkQWpEK+BUS52o2Qut9p/m2GDihAIRjwS1SAkT3sODj0/3PDmGtOP98lqFbFpbxUWa5N3nSRwIoyDiV81JiaI4L9RakNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713195670; c=relaxed/simple;
-	bh=N2K0841GuIJ8SV/t+zW+SSNdUh4znSgAVrClu7AbEKA=;
+	s=arc-20240116; t=1713197637; c=relaxed/simple;
+	bh=KKu+vZ2OEGjFvRiDZlnd/RfKG7AThwSN7L1inFyOabE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OKN29OQw20apaVWaEh0raW3GYe6Y9rXOexyQ8z1tobha4DcaUj3l8TBmXRjsVoQVZGw2T/3QH60KH6C6rD8NK+dbhYz4q07mBIeiIdVvC6q8j1+5j81bDmECnN5CYnnJKc9RPtYZAh2qkqo/Rs8jI6B9LszvhUH0XSi2itn2y/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HCY/+aPN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wm7qFr0GDN1ukCcAsO/rkOa5g1AghorikcOE1ZB3GE7A+LH42G2pkNYWKu8CjJJ0DYlMmPGzBxrTJLXipfgwqlYYus8ridP50+MboiuxoJbH9lqSVx3mHMZkxWUeZl6CnGDE/GQm4VxqT/spfvUQGbCpoHXj+w3HB7jQvdIjv/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CftzDQ2p; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HCY/+aPN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F40C2BD10;
-	Mon, 15 Apr 2024 15:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713195669;
-	bh=N2K0841GuIJ8SV/t+zW+SSNdUh4znSgAVrClu7AbEKA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HCY/+aPNDzJ3kJ0ach2dL/tLmcZjIQh+avVO7xzHj1/b2dgaU+m8zBywLawHqUTid
-	 Xk5dnjF85kQCG+Vxq49+wj9+qoNNF+j8YbexTvtUrW7LWE37UGgLM1Q0OrH/sujYTB
-	 kEwHOh5+tu9UTJEGwgCeRBvfyJ9CYr6QJuVNr54i+U9etjkKf5fea/8wRcl5TY2W9i
-	 lN4u3LYkAEGJDwZOwJoyQkMgIAqVfVEEF3Oi5TDeFLipa0vnK5uVRXAbAutJ1ZDWnC
-	 TtWt1ppQJUeKPo0dzmjvuRiPxC6vDJ9yBN5iK/NYa3Iu4K8B7JZXjj6TYyKsPbuXfp
-	 5HJuEnQIk2MdQ==
-Date: Mon, 15 Apr 2024 08:41:07 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: Mark ksft_exit_fail_perror() as __noreturn
-Message-ID: <20240415154107.GA1538232@dev-arch.thelio-3990X>
-References: <20240414062653.666919-1-usama.anjum@collabora.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CftzDQ2p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713197636; x=1744733636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KKu+vZ2OEGjFvRiDZlnd/RfKG7AThwSN7L1inFyOabE=;
+  b=CftzDQ2plWDqNEYLurL+Z6xvrWEwBFRCWO8kiYBy5Iq5MvycRT1Lk2Od
+   ccynVJY3QC1h8ugaIe8CSABDLAT65DBjaQhDYzO2eFmr7JjnWWaaHQbB5
+   bTSm+17eKVC/Xx2LekDLv4scCTd5eA+I/L6yFu8G+t3D6OnAX8BtmP1Ob
+   cUeZM1zo9dowXsKEVFqz87utaWBAtTtilfW/C0Sumbs1b8zXwe1uemaUK
+   qPws5sFwPIOT8xAIVNg2pM3klKwTbzd1+yoeR1CgL8/DFgOG7cAksTppw
+   uFkxV97YftpBtJOyEUMSNkQL1/LJN+qZZPu3fU6ZkLsPkTkfYZjEJoCmv
+   w==;
+X-CSE-ConnectionGUID: POCOXb4QQCSzNJR+OwLw0Q==
+X-CSE-MsgGUID: fD1Nn4ogTL6cbWIjv1gljg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="8468334"
+X-IronPort-AV: E=Sophos;i="6.07,203,1708416000"; 
+   d="scan'208";a="8468334"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 09:13:55 -0700
+X-CSE-ConnectionGUID: r9v/WhZ6T22EvgOoCIENRw==
+X-CSE-MsgGUID: 43M0YHyiRCK8MFjVlbeidw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,203,1708416000"; 
+   d="scan'208";a="22050906"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 15 Apr 2024 09:13:51 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rwOxp-0004Nu-0J;
+	Mon, 15 Apr 2024 16:13:49 +0000
+Date: Tue, 16 Apr 2024 00:13:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cristian Marussi <cristian.marussi@arm.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	sudeep.holla@arm.com, cristian.marussi@arm.com,
+	jassisinghbrar@gmail.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	jonathan.cameron@huawei.com
+Subject: Re: [PATCH v4 2/2] mailbox: arm_mhuv3: Add driver
+Message-ID: <202404152338.axJTOvpQ-lkp@intel.com>
+References: <20240412192801.554464-3-cristian.marussi@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,45 +68,196 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240414062653.666919-1-usama.anjum@collabora.com>
+In-Reply-To: <20240412192801.554464-3-cristian.marussi@arm.com>
 
-On Sun, Apr 14, 2024 at 11:26:53AM +0500, Muhammad Usama Anjum wrote:
-> Let the compilers (clang) know that this function would just call
-> exit() and would never return. It is needed to avoid false positive
-> static analysis errors. All similar functions calling exit()
-> unconditionally have been marked as __noreturn.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Hi Cristian,
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+kernel test robot noticed the following build warnings:
 
-> ---
-> This patch has been suggested [1] and tested on top of the following
-> patches:
-> - f07041728422 ("selftests: add ksft_exit_fail_perror()") which is
->   in kselftest tree already
-> - ("kselftest: Mark functions that unconditionally call exit() as
->   __noreturn") would appear in tip/timers/urgent
-> 
-> [1] https://lore.kernel.org/all/8254ab4d-9cb6-402e-80dd-d9ec70d77de5@linuxfoundation.org
-> ---
->  tools/testing/selftests/kselftest.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-> index 050c5fd018400..b43a7a7ca4b40 100644
-> --- a/tools/testing/selftests/kselftest.h
-> +++ b/tools/testing/selftests/kselftest.h
-> @@ -372,7 +372,7 @@ static inline __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
->  	exit(KSFT_FAIL);
->  }
->  
-> -static inline void ksft_exit_fail_perror(const char *msg)
-> +static inline __noreturn void ksft_exit_fail_perror(const char *msg)
->  {
->  #ifndef NOLIBC
->  	ksft_exit_fail_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
-> -- 
-> 2.39.2
-> 
-> 
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on soc/for-next linus/master v6.9-rc4 next-20240415]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Marussi/dt-bindings-mailbox-arm-mhuv3-Add-bindings/20240415-094106
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240412192801.554464-3-cristian.marussi%40arm.com
+patch subject: [PATCH v4 2/2] mailbox: arm_mhuv3: Add driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240415/202404152338.axJTOvpQ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 8b3b4a92adee40483c27f26c478a384cd69c6f05)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240415/202404152338.axJTOvpQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404152338.axJTOvpQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/mailbox/arm_mhuv3.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/mailbox/arm_mhuv3.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/mailbox/arm_mhuv3.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/mailbox/arm_mhuv3.c:374:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_bmask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_bmask)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
+     374 |         writel_relaxed_bitmask(0x1, &mhu->pbx->dbcw[priv->ch_idx].int_en, tfr_ack);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:219:12: note: expanded from macro 'writel_relaxed_bitmask'
+     219 |                 _rval |= FIELD_PREP(_bmask, _value);                    \
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:449:22: note: expanded from macro 'compiletime_assert'
+     449 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:437:23: note: expanded from macro '_compiletime_assert'
+     437 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:429:9: note: expanded from macro '__compiletime_assert'
+     429 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:384:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_bmask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_bmask)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
+     384 |         writel_relaxed_bitmask(0x0, &mhu->pbx->dbcw[priv->ch_idx].int_en, tfr_ack);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:219:12: note: expanded from macro 'writel_relaxed_bitmask'
+     219 |                 _rval |= FIELD_PREP(_bmask, _value);                    \
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:449:22: note: expanded from macro 'compiletime_assert'
+     449 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:437:23: note: expanded from macro '_compiletime_assert'
+     437 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:429:9: note: expanded from macro '__compiletime_assert'
+     429 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:387:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_bmask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_bmask)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
+     387 |         writel_relaxed_bitmask(0x1, &mhu->pbx->dbcw[priv->ch_idx].int_clr, tfr_ack);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:219:12: note: expanded from macro 'writel_relaxed_bitmask'
+     219 |                 _rval |= FIELD_PREP(_bmask, _value);                    \
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:449:22: note: expanded from macro 'compiletime_assert'
+     449 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:437:23: note: expanded from macro '_compiletime_assert'
+     437 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:429:9: note: expanded from macro '__compiletime_assert'
+     429 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:579:4: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_bmask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_bmask)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
+     579 |                         writel_relaxed_bitmask(0x1, &dbcw[i].int_clr, tfr_ack);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:219:12: note: expanded from macro 'writel_relaxed_bitmask'
+     219 |                 _rval |= FIELD_PREP(_bmask, _value);                    \
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:449:22: note: expanded from macro 'compiletime_assert'
+     449 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:437:23: note: expanded from macro '_compiletime_assert'
+     437 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +374 drivers/mailbox/arm_mhuv3.c
+
+   368	
+   369	static void mhuv3_doorbell_tx_startup(struct mhuv3 *mhu, struct mbox_chan *chan)
+   370	{
+   371		struct mhuv3_mbox_chan_priv *priv = chan->con_priv;
+   372	
+   373		/* Enable Transfer Acknowledgment events */
+ > 374		writel_relaxed_bitmask(0x1, &mhu->pbx->dbcw[priv->ch_idx].int_en, tfr_ack);
+   375	}
+   376	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
