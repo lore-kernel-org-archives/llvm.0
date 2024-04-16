@@ -1,68 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46179132C1F;
-	Tue, 16 Apr 2024 18:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA513134CD0
+	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 18:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713290822; cv=none; b=rrsLcerXHvMVjT6LIOkVESrFsTNZvid78Lv/KWDnynirh5shdKgjVpvc+RyBz7YaUZXOAOvsvO6RP2mYjhof53x2A04o4IuX1HZhA6ahS7IKNF10QPmXBOsNAObWD+A2vmR3LnlJFmshRdQjAr2pUOQFsLlrXJVXliKQ/jXWeKU=
+	t=1713291152; cv=none; b=c3eJCs/led+azkojJ8/VqUyapavodvKfJCasa9dTvcqzfTqj3/yOfDtOaIoDlrAxDJ5NYlBYmEuadnYWoVklGI6RI1oLZxb3a7HzcSJ56v1f/Y5z4it1nYlLG4nWUer2GXp82BGBUyhhId2MbAK3ZggUiC1fXT/4z/4AGbfeN/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713290822; c=relaxed/simple;
-	bh=5ufwuoQ7wYW3mFGBQOtNQPMyFrpm82r1gQs4C7T3JGE=;
+	s=arc-20240116; t=1713291152; c=relaxed/simple;
+	bh=o/Pz18+RKaep+hg8mtEP9kW2B/vTbdfUmQG+bVJKW20=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qL/kruFmKOcsNuo+7O2z3FWdme0CddnNmLa1PpqUJhbItiVT694pvP9M+74mbmA0goqAG2k/X0jQzcQAoa9f4R9HwDuQcTNdJgEGL+yXbqLEXE9a8pvR5H4IiPqBeZFivjCg32yZ+JmaomSy4UT2KsP5q0FVwswSDVjZpnNyyPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XpXoAUhb; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=u7XnZITyRgd9HE+0iw4m6Su+ZTMrojhQ31VNW4+U6yTMw11ZkPwjq4R1kYIxgAjICBrhwhBiH9nAKR3krDjHOktkjAyBtXsm58R01ELYaANOW5Yt43ZdqFdI2+R6gOZHW2ax2anBwGAqhTh/v5dy5SCdlVMScKUAAgkJ8yFTMWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CdmzNivi; arc=none smtp.client-ip=209.85.210.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XpXoAUhb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713290820; x=1744826820;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5ufwuoQ7wYW3mFGBQOtNQPMyFrpm82r1gQs4C7T3JGE=;
-  b=XpXoAUhbaYVSIJMyBRk+VoQoziDwQCmXtxDkTNVmkSuS2J777XrR16ZI
-   0mAh31FygIY6TajbhNJDAxmJOjF66zUCaRr2LeO3nzhg6grR2kQYD/6jP
-   CWCL1NL68OvdXK+VvuVInkuE0n1Brz5XX84CfxmBVgK2PNyn1mEOUH0yR
-   TCYVt9hNCsB9D6gtig7Klts07g2ESDVQQJ7xNZiUjQ5LBopUn0S8chQ58
-   vm2MDVbhnU3AJDeVO0mZ1RilKVRCfbO31qjS+NVNRdhecmc8WImXvGUcY
-   hcdcYIiluirum8hv9UG1z51O93SmfeDizy+h2cIdHEWbrrgUmDEwcoZoW
-   Q==;
-X-CSE-ConnectionGUID: PqF2GURUSe2+4IcfcD+zlQ==
-X-CSE-MsgGUID: ufy4kqnHRn2y5I7qPgu2YA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8971124"
-X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="8971124"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 11:06:45 -0700
-X-CSE-ConnectionGUID: PiBmxWpmRQ2GZIqyP8RL1A==
-X-CSE-MsgGUID: 8FoCqq/eR7eL2z1pqwrSbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="45626755"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 11:06:43 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rwnCa-00000004mZi-2PMR;
-	Tue, 16 Apr 2024 21:06:40 +0300
-Date: Tue, 16 Apr 2024 21:06:40 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [pdx86-platform-drivers-x86:review-hans 40/59]
- drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared
- function 'writeq'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <Zh6-MCW_szrniAnb@smile.fi.intel.com>
-References: <202404161050.NSNJAxvX-lkp@intel.com>
- <Zh53z2VOwRFTYhVK@smile.fi.intel.com>
- <20240416150916.GA2715839@dev-arch.thelio-3990X>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CdmzNivi"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6ea2ac4607aso2575267a34.3
+        for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 11:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713291149; x=1713895949; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iKA01nHZWWeCUMwezGVKQPv6dB8WRSswCOMzscXKYBI=;
+        b=CdmzNiviLLN000QM5P0A0PpUfiscnBOM6yx13vQU41hmt1fBM4sEvkHF3MpvCByzbB
+         Cid4XgKdzUmsVvNxyHpJLPW7gdW9uE+IHprkfN9Mi2feKoZAnlhdJmTd7rOTuiSDbcJI
+         +IfyZ4EjBboh/d8g+ZR8Gc0BPMEP5Re7em58aEgQnmT6BPhx4segw/bJXKWbITZqw5+9
+         7S4BPoLQNpNyMBoIBNli9iaeavUWMOhW7h30z7Fo8AFm6n9JQhqL1d1VPvOfVgl2Vegh
+         ONLbJjkdzrhf6N8N32OMNb4JMCushzAWHZQP2hNW5ODQW+dhf0v7oK13/3cfahEc4Q7D
+         Xh9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713291149; x=1713895949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iKA01nHZWWeCUMwezGVKQPv6dB8WRSswCOMzscXKYBI=;
+        b=Wk8KhHb4V3Cj3LpQXDbEYTcSfjMgAacJ0QDA10/7FJ3257s4w3g6HSxUT1J1NlyhDs
+         vz3SlcMJ7+VMIK+n5O+WDH1x6KtYNQZcOCw0pNFyMW6ogshQ1Qq03NnBX1Rs42FoI7ty
+         uRzqGigxdkcngeQuwSXn+HcTu0OE0zuQIWn4Hiinhuwqq+q0ysVeQlM5IpD4xssouCos
+         myHhpCaxa4fiyEiim25rRhHmBn4hjGlgfDwxnlNHvFzwbogajhRLD9C5c2u1fzPipBrr
+         6wGP1Cf3Y2/17VYEBVguKoluaGSGxjqBP1E3VpM2L9DPok1cQTFfsq43hJ7d1fHUBmJQ
+         EtcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGtjJCxD2+6GhJa+fHp53ipGEpBdYuR9LbDBVBz5Hjsaj4YBaJnQs6EE8F5FdNS3SBq5L5FAVtbKFH/uRddRMOufvarQ==
+X-Gm-Message-State: AOJu0YwLTrNoWWk6Ruhra+dGm4ooXEmL+RSzHstc8XZ5TIgRcUccgulH
+	+cyaSdtIylf8+vUUdgaSTokOC9joIoTVnft3hApKlyfyaKDn3VUE
+X-Google-Smtp-Source: AGHT+IEsvpJ9PHMdwG/Acyze2YUbjWscWF8ldU9oec4TpSg6OiR2NDXpJYNLstl4DLb3bNX7ulcKpA==
+X-Received: by 2002:a9d:4d95:0:b0:6eb:7bc3:12a5 with SMTP id u21-20020a9d4d95000000b006eb7bc312a5mr7305200otk.32.1713291148792;
+        Tue, 16 Apr 2024 11:12:28 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id c25-20020a05620a135900b0078edf6393edsm3676965qkl.73.2024.04.16.11.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Apr 2024 11:12:28 -0700 (PDT)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 028C71200077;
+	Tue, 16 Apr 2024 14:12:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Tue, 16 Apr 2024 14:12:27 -0400
+X-ME-Sender: <xms:ir8eZgbEqxjfyHkI9qB6eRHZtvYXA4CtzwbfjRa8Q9nQWC1N5sjDCg>
+    <xme:ir8eZrb2vQTeWI0X7Cgm8I1_h9eZ_azk6RYDQZwGdjAgFWUPWz2sMDBoBJpE1i8mN
+    _PnYtt-AwnaAXB2RA>
+X-ME-Received: <xmr:ir8eZq_nseswGJfnz61rVpvbjRq6ebg_nJ6t-u9aaEFSnOUchA8Tr1r6beQs5Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejiedgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeethfejhfekjeffueegieejudegjeetveeuhfelhfevvdfgfeekkeevkeel
+    veekgfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhgnhhurdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgv
+    shhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehhe
+    ehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:ir8eZqpLHs0k5ul5Kl4J28dibHTNjP5Vh5cyp9QHQJQd6yPUbs_FNg>
+    <xmx:ir8eZrq33PYRO9PrGL2Yfs8a7lJGFjsKKbnSWmqOANo95-kfzbZrTQ>
+    <xmx:ir8eZoTyaZUzqZWAFPHRd6_-J5x-ZoqDEyCPR7Fw_thdspTrBtD85Q>
+    <xmx:ir8eZrprTEoLpgQxmH34yK7TRsic4zq1awIzCuzXq0KRGHL30-39mg>
+    <xmx:ir8eZg7He--6XEZRAbQoK6NRHu9hhc_fg22dV2jkYR8ZhJ7QNBonEKn4>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Apr 2024 14:12:26 -0400 (EDT)
+Date: Tue, 16 Apr 2024 11:12:07 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	"Bj\"orn Roy Baron" <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <Zh6_d1T48qpANoCk@boqun-archlinux>
+References: <20240322233838.868874-1-boqun.feng@gmail.com>
+ <ZgFVnar3nS4F8eIX@FVFF77S0Q05N>
+ <ZgHly_fioG7X4wGE@boqun-archlinux>
+ <20240409105015.GC21779@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,48 +121,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240416150916.GA2715839@dev-arch.thelio-3990X>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20240409105015.GC21779@noisy.programming.kicks-ass.net>
 
-On Tue, Apr 16, 2024 at 08:09:16AM -0700, Nathan Chancellor wrote:
-> On Tue, Apr 16, 2024 at 04:06:23PM +0300, Andy Shevchenko wrote:
-> > On Tue, Apr 16, 2024 at 10:35:55AM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
-> > > head:   0aae4c44b032b5ede39405dfc62900adc467f362
-> > > commit: 2dc77993cb5eb311d6bb5584d30c3d1d42d9fa4a [40/59] platform/x86/amd/pmc: Add AMD MP2 STB functionality
-> > > config: i386-randconfig-011-20240416 (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/config)
-> > > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/reproduce)
+On Tue, Apr 09, 2024 at 12:50:15PM +0200, Peter Zijlstra wrote:
+> On Mon, Mar 25, 2024 at 01:59:55PM -0700, Boqun Feng wrote:
+> > On Mon, Mar 25, 2024 at 10:44:45AM +0000, Mark Rutland wrote:
+> > [...]
+> > > > 
+> > > > * I choose to re-implement atomics in Rust `asm` because we are still
+> > > >   figuring out how we can make it easy and maintainable for Rust to call
+> > > >   a C function _inlinely_ (Gary makes some progress [2]). Otherwise,
+> > > >   atomic primitives would be function calls, and that can be performance
+> > > >   bottleneck in a few cases.
 > > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202404161050.NSNJAxvX-lkp@intel.com/
+> > > I don't think we want to maintain two copies of each architecture's atomics.
+> > > This gets painful very quickly (e.g. as arm64's atomics get patched between
+> > > LL/SC and LSE forms).
 > > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > > >> drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> > >       94 |         writeq(mp2->dma_addr, mp2->mmio + AMD_C2P_MSG1);
-> > >          |         ^
-> > >    drivers/platform/x86/amd/pmc/mp2_stb.c:267:45: warning: shift count >= width of type [-Wshift-count-overflow]
-> > >      267 |         rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> > >          |                                                    ^~~~~~~~~~~~~~~~
-> > >    include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-> > >       77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-> > >          |                                                      ^ ~~~
-> > >    1 warning and 1 error generated.
 > > 
-> > This is bogus, but can perhaps be 'fixed" with GENMASK((n) - 1, 0).
+> > No argument here ;-)
 > 
-> The second warning only appears because of the first error; if the first
-> error is fixed, I suspect the second one won't appear (although I have
-> not actually checked it).
+> Didn't we talk about bindgen being able to convert inline C functions
+> into equivalent inline Rust functions? ISTR that getting stuck on Rust
 
-Is it confirmed? Because to me it looks not obvious at all ==> complier can be
-amended as well in warning reporting
+Yes, we did.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> not having a useful inline asm.
+> 
 
+Mostly two features were missing: 1) asm goto and 2) memory operands,
+#1 gets implemented[1] by Gary, and should be available in Rust 1.78
+(plan to release at May 2, 2024); For #2, my understanding is that
+arch-specific effort is needed (since different architectures may have
+different contraints on memory operands), I haven't yet found anyone is
+working on this.
 
+(background explanation for broader audience: in GCC's inline asm, you
+can specify an memory location, other than a register location, as an
+input or output of an asm block's operand[2], but current Rust inline
+asm doesn't provide this functionality, by default, without option
+"pure", "nomem", etc, every asm block in Rust can be thought as a C asm
+block with "memory" clobber)
+
+That being said, if you look at the link I shared or this gist from
+Gary:
+
+	https://gist.github.com/nbdd0121/d4bf7dd7f9b6d6b50fa18b1092f45a3c
+
+there is another way (yeah, we probably also have discussed this
+previously), basically what it does is compiling the functions in a C
+file as LLVM IR, so that Rust can call these functions at LLVM IR level.
+This in theory is doing some local LTO, and I've tested that it works
+for asm blocks. We still need to tweak our build system to make this
+work, but should it work, it would mean that Rust can call a C function
+in a pretty efficient way.
+
+> But fixing all that in a hurry seems like the much saner path forward.
+
+So a sane plan to me is wiring our atomics into Rust functions via what
+Mark has (i.e. starting off as FFI calls), then we can switch to the
+"local LTO" approach when it's ready. In case that "local LTO" needs
+more work and we do have performance need, we can always either 1)
+manually implement some primitives in Rust asm, or 2) look into how
+bindgen or other tools can translate simple C functions (asm blocks)
+into Rust.
+
+Regards,
+Boqun
+
+[1]: https://github.com/rust-lang/rust/pull/119365
+[2]: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html#index-m-in-constraint
