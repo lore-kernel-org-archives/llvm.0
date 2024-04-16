@@ -1,68 +1,68 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFDB1327FB
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 17:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46179132C1F;
+	Tue, 16 Apr 2024 18:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713288485; cv=none; b=qq3iDm/wNgOVFrNsgqGoC1qKZEtO3dFpWpliqGunI/WsFLjRef75ML9H2j02IF4oiHfYVa1eAH19niksHJa2j0TsKAN5TsVRFq13Ttf4ZKsSe6vK6SPu9t8JeNaNTibrJ3pGlWt7KGGBBE/+H7+4AgjPSw73Uqq4onVrk3V9NGQ=
+	t=1713290822; cv=none; b=rrsLcerXHvMVjT6LIOkVESrFsTNZvid78Lv/KWDnynirh5shdKgjVpvc+RyBz7YaUZXOAOvsvO6RP2mYjhof53x2A04o4IuX1HZhA6ahS7IKNF10QPmXBOsNAObWD+A2vmR3LnlJFmshRdQjAr2pUOQFsLlrXJVXliKQ/jXWeKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713288485; c=relaxed/simple;
-	bh=P9tX21C2H32XeRZpclyE1jUdcQxT5hx7EiLUM0Xs90o=;
+	s=arc-20240116; t=1713290822; c=relaxed/simple;
+	bh=5ufwuoQ7wYW3mFGBQOtNQPMyFrpm82r1gQs4C7T3JGE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZvdWRHdi62cHm/MPFtbTyIvV3KVJMqby4rAD+LABt1Rb/wau2rgJGRKquPmCix3sYIg7092DJCrSmQ1XUOHY9SyZm4zQgFM6ta2e1kao96xYiU3UzolMd8rmsRg+GDydldOWf2Qf8P2qN0NYJUgnIlUOWq8pg5Ppc+VWj9TOxCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LSxGXYj3; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=qL/kruFmKOcsNuo+7O2z3FWdme0CddnNmLa1PpqUJhbItiVT694pvP9M+74mbmA0goqAG2k/X0jQzcQAoa9f4R9HwDuQcTNdJgEGL+yXbqLEXE9a8pvR5H4IiPqBeZFivjCg32yZ+JmaomSy4UT2KsP5q0FVwswSDVjZpnNyyPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XpXoAUhb; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LSxGXYj3"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e3ca546d40so33931385ad.3
-        for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 10:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713288484; x=1713893284; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbYixWM2CqQRL1wOMDrzHbCtgA+kuvvqBpiFHzx5mPI=;
-        b=LSxGXYj3vvFL3zAEzMSrJdJbEWXdo4G3TYdk0dwV9/DqXLMgMy79amAOFhqKtqUhiX
-         j9u/SFrkk5ibISUsvO2NqC+a6MFcJqC+zD4mzjoxFDzTDxcmdjJh1N62ewSaQ94JkmEZ
-         0y4FOEaJx2XIh9nfImjtRdriuLu2l7t1n37QA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713288484; x=1713893284;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CbYixWM2CqQRL1wOMDrzHbCtgA+kuvvqBpiFHzx5mPI=;
-        b=OGWChYkh4HY0Pqq94WTId+L0jJaLzku6ssVwCE8Zisy0maPIczt/49ZwhuqMRN1hDg
-         qElakOgkOnRNLtSWTGNP84kX4mloT+k0EhXGIeJYUmfabIQVk2yG0NU5Ief+Iy70yes+
-         lmzKnb1z/Kx71RehLeRHR/EVPTyyQMDH5itBRxnSU4FVVJsXDHoS9H5pDI/QT3m5ObvZ
-         KipVeml+gb60G5RvI25ju/t8Hjp9ixJYeS8Xd2mkVHOC3NKruNJq69yRb0/FVKeFlMHE
-         HYwnHVmkb57Ai+TqydP0TGi3C+xrczcpOHvXaoE2D2c7XaTCIpLArbhKQ3E5fDwnSewU
-         +4bg==
-X-Forwarded-Encrypted: i=1; AJvYcCUohY9WdGPlVDlt9wEnT8nMTAz/vwQXSFq4gXwV3jh92mUjEX1pW2e7BwWgfvOP//aJrUlyT6vV2D2h5PXue2UJLBX8Zg==
-X-Gm-Message-State: AOJu0YzEdrvtKZ+i5Rcn7fT/jadFWohg1mzg4lIQy6nl/S/Fme93J152
-	12M3sLSPo2AWnM23vT3nH7F9u4kKVXPD7V1U9RkbtYlyqsdbTjjy6uzjkRX/0g==
-X-Google-Smtp-Source: AGHT+IHbN76rCh1Qe3W01Nc2eeKTGXKJ8Gpa83X/WpafmSVHalfqd6xohNVPAcA7T0vL3gX2KQ5VZA==
-X-Received: by 2002:a17:90b:3bc7:b0:2a2:672f:ef6d with SMTP id ph7-20020a17090b3bc700b002a2672fef6dmr10647646pjb.49.1713288483774;
-        Tue, 16 Apr 2024 10:28:03 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h16-20020a17090a051000b002a2e4b593cdsm11862530pjh.51.2024.04.16.10.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 10:28:03 -0700 (PDT)
-Date: Tue, 16 Apr 2024 10:28:02 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Yang Yingliang <yangyingliang@huawei.com>, kernel@collabora.com,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests: exec: make binaries position independent
-Message-ID: <202404161027.63F4D4FDEB@keescook>
-References: <20240416152831.3199999-1-usama.anjum@collabora.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XpXoAUhb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713290820; x=1744826820;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5ufwuoQ7wYW3mFGBQOtNQPMyFrpm82r1gQs4C7T3JGE=;
+  b=XpXoAUhbaYVSIJMyBRk+VoQoziDwQCmXtxDkTNVmkSuS2J777XrR16ZI
+   0mAh31FygIY6TajbhNJDAxmJOjF66zUCaRr2LeO3nzhg6grR2kQYD/6jP
+   CWCL1NL68OvdXK+VvuVInkuE0n1Brz5XX84CfxmBVgK2PNyn1mEOUH0yR
+   TCYVt9hNCsB9D6gtig7Klts07g2ESDVQQJ7xNZiUjQ5LBopUn0S8chQ58
+   vm2MDVbhnU3AJDeVO0mZ1RilKVRCfbO31qjS+NVNRdhecmc8WImXvGUcY
+   hcdcYIiluirum8hv9UG1z51O93SmfeDizy+h2cIdHEWbrrgUmDEwcoZoW
+   Q==;
+X-CSE-ConnectionGUID: PqF2GURUSe2+4IcfcD+zlQ==
+X-CSE-MsgGUID: ufy4kqnHRn2y5I7qPgu2YA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8971124"
+X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
+   d="scan'208";a="8971124"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 11:06:45 -0700
+X-CSE-ConnectionGUID: PiBmxWpmRQ2GZIqyP8RL1A==
+X-CSE-MsgGUID: 8FoCqq/eR7eL2z1pqwrSbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
+   d="scan'208";a="45626755"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 11:06:43 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rwnCa-00000004mZi-2PMR;
+	Tue, 16 Apr 2024 21:06:40 +0300
+Date: Tue, 16 Apr 2024 21:06:40 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [pdx86-platform-drivers-x86:review-hans 40/59]
+ drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared
+ function 'writeq'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <Zh6-MCW_szrniAnb@smile.fi.intel.com>
+References: <202404161050.NSNJAxvX-lkp@intel.com>
+ <Zh53z2VOwRFTYhVK@smile.fi.intel.com>
+ <20240416150916.GA2715839@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,24 +71,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240416152831.3199999-1-usama.anjum@collabora.com>
+In-Reply-To: <20240416150916.GA2715839@dev-arch.thelio-3990X>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Apr 16, 2024 at 08:28:29PM +0500, Muhammad Usama Anjum wrote:
-> The -static overrides the -pie and binaries aren't position independent
-> anymore. Use -static-pie instead which would produce a static and
-> position independent binary. This has been caught by clang's warnings:
+On Tue, Apr 16, 2024 at 08:09:16AM -0700, Nathan Chancellor wrote:
+> On Tue, Apr 16, 2024 at 04:06:23PM +0300, Andy Shevchenko wrote:
+> > On Tue, Apr 16, 2024 at 10:35:55AM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
+> > > head:   0aae4c44b032b5ede39405dfc62900adc467f362
+> > > commit: 2dc77993cb5eb311d6bb5584d30c3d1d42d9fa4a [40/59] platform/x86/amd/pmc: Add AMD MP2 STB functionality
+> > > config: i386-randconfig-011-20240416 (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/config)
+> > > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202404161050.NSNJAxvX-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > > >> drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> > >       94 |         writeq(mp2->dma_addr, mp2->mmio + AMD_C2P_MSG1);
+> > >          |         ^
+> > >    drivers/platform/x86/amd/pmc/mp2_stb.c:267:45: warning: shift count >= width of type [-Wshift-count-overflow]
+> > >      267 |         rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+> > >          |                                                    ^~~~~~~~~~~~~~~~
+> > >    include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+> > >       77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> > >          |                                                      ^ ~~~
+> > >    1 warning and 1 error generated.
+> > 
+> > This is bogus, but can perhaps be 'fixed" with GENMASK((n) - 1, 0).
 > 
->   clang: warning: argument unused during compilation: '-pie'
->   [-Wunused-command-line-argument]
-> 
-> Tested with both gcc and clang after this change.
-> 
-> Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> The second warning only appears because of the first error; if the first
+> error is fixed, I suspect the second one won't appear (although I have
+> not actually checked it).
 
-Thanks for this!
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Is it confirmed? Because to me it looks not obvious at all ==> complier can be
+amended as well in warning reporting
 
 -- 
-Kees Cook
+With Best Regards,
+Andy Shevchenko
+
+
