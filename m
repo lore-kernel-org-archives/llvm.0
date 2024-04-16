@@ -1,115 +1,129 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh3-smtp.messagingengine.com (wfhigh3-smtp.messagingengine.com [64.147.123.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD4F12A177
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 12:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B4312BE8C;
+	Tue, 16 Apr 2024 12:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713271350; cv=none; b=MWrUpOa3FjJeR9SmNzaKJvuujHdZ4qaumPZzRVomevkNMPl4oJzeNYsxnjtn0+UN85n0UDMWy0VFF+o+/0d7nhfnkc0uFsa3IYwqr7bBcO4ZqwBmS9//oDXUtLRdhFgydAFWWf5H5RbP4pzSVHpF/8Jx+Ew4slfY51kqrEMgxzE=
+	t=1713271494; cv=none; b=LHzvOOZhwZhGmkOr1EhPstR3wjdfZqwqDIcgpmGCUGBnjvkOFKPqZGfng/xQh35KP7mJ2M+Pz6D9NLzGPrLTYXmM/uTl8nhTdBdOXkgag5OTSL/lIZObQUwyL8m5DJx4rOxh+ZWF5ADxEPuxjp5ilbUUKvt105DGEl+Nomv1rxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713271350; c=relaxed/simple;
-	bh=7vKkklm2j+8MBw3agiSUc9CHX8zKs9lEzFNQV7tgc7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eXuozQHVcXaAw+n7AQ623Pycc4SjduzrcKzAiHl2H1qVVR/yTPk4B/epoyrd/ifGyp8/ixBKCzvMen+8OfGXL6zthzJCNYQpY7Vn0h1UlyqYE963X7XjSNiXP45v6lUbr/TaXfcEy+nsZuft8xmX8+WGd60f+esCFn/hX7NDI/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KcJCCbRd; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1713271494; c=relaxed/simple;
+	bh=eGEqkDoDAbn8qTwoaTu0Qw3WSxz0Od5NaS3D29YNg3g=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=Q79B1PSvjq9hQISJzRoyyzWw9SgM86dmtX5y6M0Td/EVz9ZwTpp7wrNx0gPuFFr7pMD5fi8S2BJadqBQCYWMfLDjvC0bqhxwDlqIrAYxKYUsfsnU7nKTkGsJtgHVaabXmYKl8W8ipH0cV6x6AFY+7qjsOHr1VXo757oVtq9jzio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pVcTVtmj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LZ+aO9Qj; arc=none smtp.client-ip=64.147.123.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KcJCCbRd"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a44f2d894b7so483281766b.1
-        for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 05:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713271347; x=1713876147; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mUOtU228tYtJyPue/rn/IW891GZXpSSOmG4AvHGZ5go=;
-        b=KcJCCbRd9qjgVE3mXciCag3j7x/Eb2atC0r/l4/puSRUbDnQIT7UyNRX4RqyjleQrj
-         e5UfMxT3TSFfEUq4esmZbjS2fRNunJ1nJyHnFGtsk5QZztgE7tyYilXa0BPP7TedITjL
-         yZE1uL1HsCqua76DdPAmjIgD3iIZAI6ahfjfo9c1OnggyjJlFgIfZ18Tnfm0T7Izc1ms
-         6Nm39zg06ibeAoAOmaGDUn1LfSlRc70ZnCmlFLBM9COTHoLH33HVcL6MFYLDY4H6Le1w
-         mP9mYZgOhlxyk14ywCCS5EuiKSoq93GdZ1BSZqkRbga5bXkNTdIPhM5NMTsG4Ovz3m89
-         HseQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713271347; x=1713876147;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mUOtU228tYtJyPue/rn/IW891GZXpSSOmG4AvHGZ5go=;
-        b=iIOI6EGmHVEL3TB9K5lzrj73GiUbyAuzuPUm6Aa64OQAnpymQFWpMH0UM2iG2rNvVS
-         V0v4vl/8TxuhlQOER/sZVXTU3n8FvGfJl4Tc+lGabvLI/FvwI7DXnvba9kJYkG2SRQTL
-         cgJv6PRsB0wkH/q0a1UTWKYPHHKI57dKI/baNcl6sqHNZFxZNbRuEQ1k7aeR7gcwJWct
-         pYY7YdAGTHQ2X1JKY9/xpCAaz2c1ArXVnolK2dOUTEzSnzjqAcNhvkE3UeBV+C0xCX0T
-         B+NSthAtTbWTZxDwphbGRxE81aaftuEek4XliWXaJHdrFK9yI8mPbtA5KUDfeMFj9xs4
-         6qgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXccXb78GCe/pYpHEFiG7nkr/FhUxW8lqJyHGh47W3w2QQgExFFIceF0Y4sVANpQQ4gZzbcHkelSTrVchgwB6RfaI7oDg==
-X-Gm-Message-State: AOJu0YyR22zbroQI1c6bOhh0e2mMVO0y81VqPz8tMaG8/1pliApt/+DJ
-	yy7f4PRJRntO/LIZoKKIirCD8yYKQlInX+cuIIKDNNzueG79qqO0WO7ns9iSJ+o=
-X-Google-Smtp-Source: AGHT+IFJ6u/xajiCUpxE33tmeqjHHiAL2wmL+dnoci+VQnEehXgtJ/Q5xPBX57jTU1Obt4QXb9tI5g==
-X-Received: by 2002:a17:907:940e:b0:a52:277d:c1c9 with SMTP id dk14-20020a170907940e00b00a52277dc1c9mr12180603ejc.50.1713271347185;
-        Tue, 16 Apr 2024 05:42:27 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id go36-20020a1709070da400b00a51fea47897sm6775453ejc.214.2024.04.16.05.42.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 05:42:26 -0700 (PDT)
-Date: Tue, 16 Apr 2024 15:42:23 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jeff Xu <jeffxu@chromium.org>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: powerpc: io-defs.h:43:1: error: performing pointer arithmetic on
- a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-Message-ID: <402a5e3b-bdb5-40a4-8a44-2de497849c3f@moroto.mountain>
-References: <CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com>
- <3d139886-9549-4384-918a-2d18480eb758@app.fastmail.com>
- <f7d8cd55-5a14-4391-884f-0b072790fa41@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pVcTVtmj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LZ+aO9Qj"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 3E4D31800087;
+	Tue, 16 Apr 2024 08:44:51 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 16 Apr 2024 08:44:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1713271490; x=1713357890; bh=oGZePYwsWO
+	VhZKwH1GR51uFtjQyrsePZBjAOKUqbZLs=; b=pVcTVtmjxtvFC8kZ6qWmyHaaED
+	A6Exub6aGKVWfpb15KefIzyAAo1IB5Chf40nbQOjw7PrcPMHTpOkSRpDcFzEd0Z/
+	mZttWXvB6AXzwTtAvh2QklgFD68b6ksl+D9ypUOIdqe+uzYREbrXW5/O5zZzKZzg
+	22hsTFNROsWN8vUY0DP2W3LRfW5SCwpw4mn7hWZ/qj2ZD19CLJos9zFd2UF3DGcf
+	DmOrQR39bYMJ3rr7TgKOjF5Qmz+JTvOiiaPLoHBoKYbVFGSZXlrBXQiFgYzd8lT3
+	a33Lfw1ZwuIGb9ZG+xCRvWdAvSDU5K5gqw4O23biWpFix0sQgheizH4gRt+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1713271490; x=1713357890; bh=oGZePYwsWOVhZKwH1GR51uFtjQyr
+	sePZBjAOKUqbZLs=; b=LZ+aO9Qjhayseh7KTOjsLZkbnBOwOEQj3s8KcX/3hfdE
+	v7C0qB709QB7wBB2oSO8LmwWo9Cye1x5tYAEwLyB6OlBT9vTNq/Cyz9zI+ioMKuq
+	hyg/mAxBW6q84OwQi3ntHm/joLEbIxaBNdfbXUq1IOzSOBMfLICSXGnpN/Ge2I+O
+	0CPHFT7T9ovFOeoUQRFuW2JsMcpA3WXvpbRQVuCsfl0X5w4+nFJ1XJPhXOVwYO/q
+	RHgsze+mfkthHIMJvJ4r0CGYq4iOY+qhX66izKUH+BuKTC+C9tzz233RhXATsPQ7
+	15E9Pyae0B10xoei8RqTD3wiIbcCdZLeeY5tT7sU7A==
+X-ME-Sender: <xms:wnIeZm6-5_rExLHO91NOsIHVOjfOUXbE_O-G6yFMIfb9ecbdFjlKNg>
+    <xme:wnIeZv4EIUOoc2ZAAj3Rd8KcMKbNGSl2qP3lRayou9yz5u52YB39QBwBlAHPdPdPE
+    nfunvuGgH6q78NTpQ8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejhedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:wnIeZlesExV9ephhROrmbSVBPchUpIPf3YRMIcHa6-ACWe1cb7CjOQ>
+    <xmx:wnIeZjL3TT24ypPUBq7j4n963rrL3zTTbM-rXz2Wdk9TieuLKsf90Q>
+    <xmx:wnIeZqLwpKAnNG9gB65Y1vHTpVZPpwLuqxVkCKHyXvqY67CL2HQODA>
+    <xmx:wnIeZkydqmjP-uNJAp2G9iV1cZeyUZa9fTzPP7MPFJntwTeDW88OIg>
+    <xmx:wnIeZsgZ7SC0ArpdgCdu8qbzOypXw1O2n8V_Wy1pe1FGoSeiEGIGvx_S>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 74B5FB6008F; Tue, 16 Apr 2024 08:44:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f7d8cd55-5a14-4391-884f-0b072790fa41@app.fastmail.com>
+Message-Id: <d409712b-6fca-4571-8fe0-1da8c4ab769b@app.fastmail.com>
+In-Reply-To: <402a5e3b-bdb5-40a4-8a44-2de497849c3f@moroto.mountain>
+References: 
+ <CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com>
+ <3d139886-9549-4384-918a-2d18480eb758@app.fastmail.com>
+ <f7d8cd55-5a14-4391-884f-0b072790fa41@app.fastmail.com>
+ <402a5e3b-bdb5-40a4-8a44-2de497849c3f@moroto.mountain>
+Date: Tue, 16 Apr 2024 14:44:30 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Dan Carpenter" <dan.carpenter@linaro.org>
+Cc: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ "open list" <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org,
+ "Linux Regressions" <regressions@lists.linux.dev>,
+ linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ "Anders Roxell" <anders.roxell@linaro.org>,
+ "Kees Cook" <keescook@chromium.org>,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ clang-built-linux <llvm@lists.linux.dev>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: powerpc: io-defs.h:43:1: error: performing pointer arithmetic on a null
+ pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+Content-Type: text/plain
 
-On Tue, Apr 16, 2024 at 01:55:57PM +0200, Arnd Bergmann wrote:
-> On Tue, Apr 16, 2024, at 13:01, Arnd Bergmann wrote:
-> > On Tue, Apr 16, 2024, at 11:32, Naresh Kamboju wrote:
-> >> The Powerpc clang builds failed due to following warnings / errors on the
-> >> Linux next-20240416 tag.
-> >>
-> >> Powerpc:
-> >>  - tqm8xx_defconfig + clang-17 - Failed
-> >>  - allnoconfig + clang-17 - Failed
-> >>  - tinyconfig + clang-17 - Failed
-> >>
-> >> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > I'm not sure why this showed up now, but there is a series from
-> > in progress that will avoid this in the future, as the same
-> > issue is present on a couple of other architectures.
-> >
-> 
-> I see now, it was introduced by my patch to turn on -Wextra
-> by default. I had tested that patch on all architectures
-> with allmodconfig and defconfig, but I did not test any
-> powerpc configs with PCI disabled.
+On Tue, Apr 16, 2024, at 14:42, Dan Carpenter wrote:
+> On Tue, Apr 16, 2024 at 01:55:57PM +0200, Arnd Bergmann wrote:
+>> On Tue, Apr 16, 2024, at 13:01, Arnd Bergmann wrote:
+>> > On Tue, Apr 16, 2024, at 11:32, Naresh Kamboju wrote:
+>> >> The Powerpc clang builds failed due to following warnings / errors on the
+>> >> Linux next-20240416 tag.
+>> >>
+>> >> Powerpc:
+>> >>  - tqm8xx_defconfig + clang-17 - Failed
+>> >>  - allnoconfig + clang-17 - Failed
+>> >>  - tinyconfig + clang-17 - Failed
+>> >>
+>> >> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>> >
+>> > I'm not sure why this showed up now, but there is a series from
+>> > in progress that will avoid this in the future, as the same
+>> > issue is present on a couple of other architectures.
+>> >
+>> 
+>> I see now, it was introduced by my patch to turn on -Wextra
+>> by default. I had tested that patch on all architectures
+>> with allmodconfig and defconfig, but I did not test any
+>> powerpc configs with PCI disabled.
+>
+> I think this warning is clang specific as well...  (Maybe clang was
+> included in all architectures but I'm not sure).
 
-I think this warning is clang specific as well...  (Maybe clang was
-included in all architectures but I'm not sure).
+Yes, I did test with both gcc and clang where supported.
 
-regards,
-dan carpenter
-
+     Arnd
