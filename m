@@ -1,90 +1,103 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF22130ADA
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 15:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E4F13048E
+	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 15:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713280983; cv=none; b=tSyGXHsykcQAoId4QxDxZcppw1YOPXZc1r0oZIvDt3kAXaTasBlSfrSh3sXyZOaxA2bWQ4LIdl/nj1kboxAJZ8QM/2fWy7siXg15e37P++7Bwwjr99ikAWcEjfxz2lOVr1hLmcO+Nbh0W0Lp2sOSwlNfSDWMc2/+AEvbBxI1khc=
+	t=1713280999; cv=none; b=nKkSIlvQ92+sx/KHM2az7E9YmRDamf+SdRsYlhN5BCsfiiA3YpKSQnFuHMiAv25KAmnly2X4FJEDAJEEtvOhxXqBAlg90fA0SwFuaST0RnonoQLTTrDOOKD5uNh4vSw+ZrjVKKy2vrJxKeELPLzyTU0LocKyLBv6O920X92qdPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713280983; c=relaxed/simple;
-	bh=VgjJ1sQnYJM7vPGFLgOyl5MiheSdj8kCxc/E8B7aS+o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=T1iLOyqwdNt5pwa7o7dkyxkr/50lciCZEpw+MqvEshP3ezBwQAJU7s1UmA6Rxyt5R5qPq2o5Q470rlZe8mbB1jyo+lMXKMr4CMkQrllkmOPMDW/88vJRtpo1iR3qT96DlLb58/7C0eg9+jqwFU+airiZbnK1I+A/uNl3oakaDQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ttR1ECF8; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1713280999; c=relaxed/simple;
+	bh=bLU73jHksihFb5Kkaq6O4l8bW9c2Gyah+VFZw8edoJs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eDa2Imw90zqM0xP8+Q6h6Ev26Z3W7+FNj6qstV163L21lbmNsTeeM8I+llyAui1k1KxqIMsRsSD4XYHOMxFRnYGLeuIVFO0f/hd/U1e9uy6qd9dnCoYgamaZhV2mFxCYHAgtdkkylSsoWjMHi8YvD/BNpq//y3Foq+KCM7R2twg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BTfJMlxr; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ttR1ECF8"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1e604136b6dso23205125ad.1
-        for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 08:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713280982; x=1713885782; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zno1kdsfWaJ1DeTq0hPq9ZAZ6Z0lEil6bV0PacUdpzY=;
-        b=ttR1ECF8fN9oFHHH8b5nZwGrLuqN+4GMnl9tTXb6oqYXXd4vgZzBF3bnYCQn50rexv
-         Tt+Kj614nbxdZ9yXt7svhONVq04YpjNbQnCshf3Clu0ZY7eMnglnuYx68XLr2qvPQ4Fx
-         JqOpKbbOt08P3YXkd+cKW5rOQUThIxLAzdgcvdXbyubuKLQu16cqeO5yZQyPmhhyG6ii
-         jz0iEtxhVnxsS/Ebat5+u3meendGuZy8Fd4rbG0LI4e7d5Ss5LAK93BY4TBsIUqdKZV1
-         vF07WicR/p7tiEpq3Xm7UI5Fr58rPavlzZWfMeFQ0uDxweEVs4b49gDW/ASvw3RyiVzl
-         3vGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713280982; x=1713885782;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zno1kdsfWaJ1DeTq0hPq9ZAZ6Z0lEil6bV0PacUdpzY=;
-        b=Ef1O0MvW8/exis8tCC71wi0gHYDhZCwnzHrBUoZ07CgEFKR84mvJIwWieOnc8ZyPga
-         XlIdcy0kW6WphmPWrcDIcI+onwukLQnn0zaNkNnj+NdAQhXO54K/h+n7Vh43hr4ur8AI
-         6KB4WUwTEqHPa5r2w9uYYU1UfJWDiECLfqc3kMco2e9GRkp228Aca6nQ/d310kWvgUL+
-         1XatDoIBqjaxgBca6CmOrpL5UYpQ8pbdP3njS7bOzdug1qC0N8Baj3HpdyD15EkIz3DT
-         4F6NZEFg/ZuUU9Bsk/rj9yzamgBG6CLo1q6C41s8Uw7N5XgHQu6jWz66Q0aGH6yLhC6S
-         riVw==
-X-Forwarded-Encrypted: i=1; AJvYcCVgQyRI7IpM7/6uYVPeGgyiPBxJGY5hCy68Lln2RFWxyKbgUJchxYe7ZrzPNGRSFeQ6e2fBobOmRYCdMqrDxjfe/1I1Kw==
-X-Gm-Message-State: AOJu0YyeLsGEPJBlO/p6xnXao6WHGLK1hApHqJxUs4oWpOU9EYjW+OXf
-	742F3+X3ynSCu+okDZaJboRo0c7Zor4LJ++D9tJQWI6xnJ+pJWzhCZVvGLvZyJkANwWHi28SDE/
-	cpA==
-X-Google-Smtp-Source: AGHT+IHT1pC5s1cugeqIXTNqxkxUA1cuAiRf5voHQMAwSwbg8G3jOgahsrnw3GT8HRend6+dNGkM2RXcehg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:1d2:b0:1e4:5896:55fe with SMTP id
- e18-20020a17090301d200b001e4589655femr374739plh.4.1713280981894; Tue, 16 Apr
- 2024 08:23:01 -0700 (PDT)
-Date: Tue, 16 Apr 2024 08:23:00 -0700
-In-Reply-To: <20240416151048.1682352-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BTfJMlxr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713280996;
+	bh=bLU73jHksihFb5Kkaq6O4l8bW9c2Gyah+VFZw8edoJs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BTfJMlxrRUDfa89Wuw0pdzkeWXI73KDxPeb0+H0wN5gDq9ooJz7F6f3QNHmFQuZai
+	 2n1++yqBqRg95Xpi2EZcdFrPnWpKNLmSYBQ/62l3V7fgXZ6uILFDXJt8pG9A3vO7yX
+	 NXd3iasStbJAfwIn0vlx3uNQQ7u8EGDEEbdmN9rOPuYVVs22KSVUEkw9K2gUAhaumr
+	 SGULr/XhBI2hFFaedtgljvNBEKBQ3kc5dbMLfgCkb3MSxE04EoykkQKsOQzNGaUnPh
+	 DqQNnRVau+C72nJcOViHK4pXv+LgdJa+Qk+ifgG5wN2D7t+OqTwlMnhsfqZYeEAupK
+	 0+hs2EjeWWGlg==
+Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6248F37804B2;
+	Tue, 16 Apr 2024 15:23:12 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: kernel@collabora.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] selftests: exec: make binaries position independent
+Date: Tue, 16 Apr 2024 20:23:39 +0500
+Message-Id: <20240416152341.3186853-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20240416151048.1682352-1-kuba@kernel.org>
-Message-ID: <Zh6X1NkQJd6ETTo7@google.com>
-Subject: Re: [PATCH net] selftests: kselftest_harness: fix Clang warning about
- zero-length format
-From: Sean Christopherson <seanjc@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, shuah@kernel.org, keescook@chromium.org, 
-	usama.anjum@collabora.com, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 16, 2024, Jakub Kicinski wrote:
-> Apparently it's more legal to pass the format as NULL, than
-> it is to use an empty string. Clang complains about empty
-> formats:
-> 
-> ./../kselftest_harness.h:1207:30: warning: format string is empty
-> [-Wformat-zero-length]
->  1207 |            diagnostic ? "%s" : "", diagnostic);
->       |                                 ^~
-> 1 warning generated.
-> 
-> Reported-by: Sean Christopherson <seanjc@google.com>
-> Link: https://lore.kernel.org/all/20240409224256.1581292-1-seanjc@google.com
-> Fixes: 378193eff339 ("selftests: kselftest_harness: let PASS / FAIL provide diagnostic")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The -static overrides the -pie and binaries aren't position independent
+anymore. Use -static-pie instead which would produce a static and
+position independent binary. This has been caught by clang's warnings:
 
-Thanks Jakub!
+  clang: warning: argument unused during compilation: '-pie'
+  [-Wunused-command-line-argument]
 
-Tested-by: Sean Christopherson <seanjc@google.com>
+Tested with both gcc and clang after this change.
+
+Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/exec/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index fb4472ddffd81..01940d9165d67 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS = -Wall
++CFLAGS = -Wall #-Wunused-command-line-argument
+ CFLAGS += -Wno-nonnull
+ CFLAGS += -D_GNU_SOURCE
+ 
+@@ -29,8 +29,8 @@ $(OUTPUT)/execveat.denatured: $(OUTPUT)/execveat
+ 	cp $< $@
+ 	chmod -x $@
+ $(OUTPUT)/load_address_4096: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -pie -static $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -static-pie $< -o $@
+ $(OUTPUT)/load_address_2097152: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -pie -static $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -static-pie $< -o $@
+ $(OUTPUT)/load_address_16777216: load_address.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -pie -static $< -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -static-pie $< -o $@
+-- 
+2.39.2
+
