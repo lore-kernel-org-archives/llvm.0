@@ -1,181 +1,144 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from wfhigh4-smtp.messagingengine.com (wfhigh4-smtp.messagingengine.com [64.147.123.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF41C12C558
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 13:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F01F12CD9A;
+	Tue, 16 Apr 2024 14:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713275499; cv=none; b=kc6Jw6KpqS7efp2gxy/kTaVL26+jcBqHAs64ztxtOpdB0yiLacUrDPVsBZcldP0Aqk8IA5aQXlNXKFZBJa973bPYl18OtfYRUNMZkT8xcNYkmA/ntM64sgSUwSa3FAUvtRtOjdaELJxkNTZtADBR9G7FNoZISM86RpZtAFNDT9M=
+	t=1713276895; cv=none; b=RLEXdfAnQgY5Z7NtsPek2RNaJX/VoVwlWbRgYP5kD2mMOlUDPnR80hZpTs46EnIfPzF9bHk3Oxj4U5KyRkJSG1eF0T74IdZHd55F50+J2GMgD6M7dakcDIAY83g4oKzdQOkrl4I169GqcPQtRBpjV2WmNLEV9aQBNCDbCLdC5vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713275499; c=relaxed/simple;
-	bh=QTAfbFgev3L2ptUAejaAhMPjhDL+4HSJM2/BMHHV6F8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HmRVey1csSav4Nm8UoSPCr/nZP+7r7qORU9YqtKZ0bTgds7w/OGbAI6tiKwUbO+qir9MnlNqcem3OVUc3EkkBK2Hs7vDsOfiH0qEaTa/vKrsibwv4wtnIpdZJEVg1TfmCyJMUnEtOhGeYG88Vru2FPci1ZJqdZV2OzvQaTALwRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HIMJNuCg; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1713276895; c=relaxed/simple;
+	bh=ykb7W4k1sAQJ+bAaSvIxWtB7tBpsRi36G1ivw8abnYc=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=mKkN2fjFkyzMl7YagLN79OuKVlJdpiR8JbqHAvw+mlX40LBgHyRU3KmhzegM7sksF9zIy2xzCxAg227doMMl3zuF/nAIwGkBGy1jqHFpM1hx+WIT0eF96DuvSOaDOXYdE0ZctcZoPl25K6GzKfpBnd1cxeTmJMwzKj7LRtrsQhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=PhuHidJG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DwJzTEWO; arc=none smtp.client-ip=64.147.123.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HIMJNuCg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713275496;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=KzEshGm05jYMH47Ft2QC8UnffG1g9JyMRcoOm48fEmc=;
-	b=HIMJNuCgwnQcASo5ZNE2X1EJh/aOIkR0ldDIEHZb6r+5+ra2x4rA4Wl/+qrFuAahmBgtIf
-	HZg4GbQcXS6OUq2JuFhbQz6b9Wd+QFr3pJYDYSTr9jX8dwpSiQZcQWLX9iiX5VzT1s8kdn
-	mSF7cLMhV0+Seehs46cn1DJJpDaElrY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-206-LeUNaErNNoiG9h-OBl5rTQ-1; Tue, 16 Apr 2024 09:51:33 -0400
-X-MC-Unique: LeUNaErNNoiG9h-OBl5rTQ-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3479b511725so1788145f8f.3
-        for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 06:51:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713275492; x=1713880292;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KzEshGm05jYMH47Ft2QC8UnffG1g9JyMRcoOm48fEmc=;
-        b=TJ/u/VwY3JAUEqh87a1JofVe9i5fksHaHbV8iFR7vj73+jKgNbf0jh3U+qzbA0Njf0
-         EtxjOrTHDYax1RMVYP/UNi1vISptDQniEfS2mwh0kYwi9v5UI77+mdZl/pOtZZI84Ov9
-         DlRSMrmPXiKouwN3A0QxmwLKeVivYCfQV+hGBE1qfZUHaCQ66enCGZ5jegx2HLi3pksU
-         ZHcUgMGfsz9roL1zaVjLCH9FXniQWpA/Mz8oJmEtkrsP4wdMyawMcg2fctNRGnBxZR15
-         Qog5EIuuO/BTEmHIIcEmOSAws3kk9Eh5za+JaV0WdPhWtUwrXltZ14E5ewcR5tA42iS+
-         wDAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmF1ykOdCKK5xkDFD/hny+BNc7Ly4u6cCJrPvmJ7j+zY8V9/Gh1i6PO7b7ae+47i/e3m5dix+OOFzEXIymJdkMxMFqDQ==
-X-Gm-Message-State: AOJu0Yx+yZpupZGAoi6v0/p6qlRt94HPtey31o2bpUqaNJ1PIQacHVzZ
-	27DVG/PBKJK/jYGYjP1QkgwQJahUptfGBVNwqGMqscpvthrA3IZ1+3ZwwYlhtXzrPFXQt1aNQiq
-	iUUtR7mv7vNG++TNsclMCb13E+FlZiY48olAorBrSQG+vKIa0EoI=
-X-Received: by 2002:a5d:4589:0:b0:33e:c316:2a51 with SMTP id p9-20020a5d4589000000b0033ec3162a51mr7672078wrq.27.1713275492283;
-        Tue, 16 Apr 2024 06:51:32 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHCjzlADbwFv44JQkrB/ikEE61jxFMn3dfaESPXQ+nqH0EMS1bqqdCY2S0qlAv8mMtQKQ6YEg==
-X-Received: by 2002:a5d:4589:0:b0:33e:c316:2a51 with SMTP id p9-20020a5d4589000000b0033ec3162a51mr7672063wrq.27.1713275491857;
-        Tue, 16 Apr 2024 06:51:31 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c718:6400:7621:b88a:e99e:2fa8? (p200300cbc71864007621b88ae99e2fa8.dip0.t-ipconnect.de. [2003:cb:c718:6400:7621:b88a:e99e:2fa8])
-        by smtp.gmail.com with ESMTPSA id s4-20020a5d5104000000b00346f9071405sm12624395wrt.21.2024.04.16.06.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Apr 2024 06:51:31 -0700 (PDT)
-Message-ID: <c82af143-b620-44d9-8647-f52096b851ab@redhat.com>
-Date: Tue, 16 Apr 2024 15:51:30 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="PhuHidJG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DwJzTEWO"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id CF4801800101;
+	Tue, 16 Apr 2024 10:14:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 16 Apr 2024 10:14:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1713276890; x=1713363290; bh=KPzLCaHC/p
+	j+3rFajrw0i7S4P/VVkta4Rje0fImd0yQ=; b=PhuHidJG8VxEaleWcSvfT8RrHw
+	TcYpy++V74uv3QKWGOlpgpgf+SyQ5ZMUDqJLv+ieUMsuc8Pmtiq++dNE663y9Uad
+	LvrAN0HOtT2qs+A/f4aq+nVonFlt/VwdOkU2nanJjNa82ewBH8oB5aLebg7I9L9Q
+	MQ35Lsqa1E3jBtPSDHEtJJYSzPk0kEH2oNsZ+DH7YzOAgG77pfREDjIKDZK0OlU1
+	ykJdeMBcVae2QG9+ALYmi6W5QL9dT2t1oSscxO7e/VEwRsVmEZ0C2f4Zbh9vjVw+
+	W7IpXT1f6uaR8m9elp7Eg6QbzlD/0IGMBHFJTDDTj/YgkNWa9g2+6a+UOAVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1713276890; x=1713363290; bh=KPzLCaHC/pj+3rFajrw0i7S4P/VV
+	kta4Rje0fImd0yQ=; b=DwJzTEWOX2Hls51YomwtsnXC6I5vZWVj1oEjCmZqd/w4
+	/BM9dctAypC3VAh4Oz4mY5kcs6zSW8fe8cAZRgBLT55bjA2fqIDMNe6WGNO2KRuZ
+	Jjr3ZtAKKxCedEfxYPU1bazquw118noVHXdS6lyH410qPjgoLUJXE2hO07NqjAt5
+	8Hcs44ULBFzJak5+kCEL52Xk8RDeQY0GcG2jRLdtWqv3OJ6v8QIdpm0CMDrt/K9C
+	lY5NoW7RWgLaOzRd+eqlsZnc4LwI2mzdxNykJ4pUQ57VU7MJEG9gzAjvcCM/7O3x
+	+JWWrL+wX7/DQoBETaXJDPd5ndEqTBtJtmv+W+8xsA==
+X-ME-Sender: <xms:2YceZu_9FAGe-i--NPJBjTauDg4-xAMAVlOrBJWlSnTxBehLXUMBrw>
+    <xme:2YceZuv0XvSwYl4vAievAi7JTw5_AaEV7n6fXPf18ycEShQkYrYU6dPt2DAOsblIh
+    ToZh9ydfmQU-UcyyMw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejiedgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepjefgfedvgeejvdefudeuhfdtkeekvdeutefhuedthfegheelhefgleegkeeg
+    fedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpledqrhgtuddrhhhofienucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
+    nhgusgdruggv
+X-ME-Proxy: <xmx:2YceZkDCfeab0TH3Rh4rtEyIiKkxkyFwGMeh0KhkrA8Z-8I_Zrv9Lg>
+    <xmx:2YceZmeh9PfcIdkLlyAu37QlSmb6WwmJGzajGP1ht8Sm6W1ISJE9JQ>
+    <xmx:2YceZjMHY7VsWd--NWcw8lykhNRgNv1dGhRV0DRqXmRT61crZRn5tw>
+    <xmx:2YceZgl_jJEJ48Yw1zTDgQy343q-1jmB_Ot2bgzrRZnmalhMKV2YPQ>
+    <xmx:2oceZkHMtcdYQbblFmKJRiK8IHeY1PlJ_So2eHwdnopd4LyDrH0TSmH7>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 4BA4BB6008D; Tue, 16 Apr 2024 10:14:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
- but not used
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Ryan Roberts <ryan.roberts@arm.com>, linux-arch
- <linux-arch@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+Message-Id: <53d194db-c7d4-4026-9fbb-3b41de545849@app.fastmail.com>
+In-Reply-To: <c82af143-b620-44d9-8647-f52096b851ab@redhat.com>
+References: 
+ <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
+ <c82af143-b620-44d9-8647-f52096b851ab@redhat.com>
+Date: Tue, 16 Apr 2024 16:14:29 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "David Hildenbrand" <david@redhat.com>,
+ "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ "Ryan Roberts" <ryan.roberts@arm.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
  linux-kernel <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
  clang-built-linux <llvm@lists.linux.dev>
-References: <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set but not
+ used
+Content-Type: text/plain
 
-On 16.04.24 12:26, Miguel Ojeda wrote:
-> Hi David, Arnd, LoongArch,
-> 
-> In a linux-next defconfig LLVM=1 build today I got:
-> 
->      ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
-> but not used [-Werror,-Wunused-but-set-parameter]
->        629 |                 pte_t *ptep, unsigned int nr, unsigned long address)
->            |                        ^
-> 
-> Indeed, in loongarch, `__tlb_remove_tlb_entry` does not do anything.
-> This seems the same that Arnd reported for arm64:
-> 
->      https://lore.kernel.org/all/20240221154549.2026073-1-arnd@kernel.org/
-> 
-> So perhaps the loongarch's one should also be changed into an static inline?
+On Tue, Apr 16, 2024, at 15:51, David Hildenbrand wrote:
+> On 16.04.24 12:26, Miguel Ojeda wrote:
+>> Hi David, Arnd, LoongArch,
+>> 
+>> In a linux-next defconfig LLVM=1 build today I got:
+>> 
+>>      ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
+>> but not used [-Werror,-Wunused-but-set-parameter]
+>>        629 |                 pte_t *ptep, unsigned int nr, unsigned long address)
+>>            |                        ^
+>> 
+>> Indeed, in loongarch, `__tlb_remove_tlb_entry` does not do anything.
+>> This seems the same that Arnd reported for arm64:
+>> 
+>>      https://lore.kernel.org/all/20240221154549.2026073-1-arnd@kernel.org/
+>> 
+>> So perhaps the loongarch's one should also be changed into an static inline?
+>
+> 4d5bf0b6183f79ea361dd506365d2a471270735c is already part of v6.9-rc1. How come
+> we see that only now on linux-next?
 
-4d5bf0b6183f79ea361dd506365d2a471270735c is already part of v6.9-rc1. How come
-we see that only now on linux-next?
+Andrew merged my patch to enable -Wextra yesterday, and it appears
+that this one fell through the cracks with my testing, either I
+missed the combination of loongarch with clang, or I last tested
+it before your patches got merged.
 
-I assume we should see the same on upstream Linux with LLVM=1, correct?
+> I assume we should see the same on upstream Linux with LLVM=1, correct?
 
-If so, we should likely just drop that completely and rely on the asm-generic one:
+On upstream, it only shows up with 'make W=1'.
 
-diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
-index da7a3b5b9374a..e071f5e9e8580 100644
---- a/arch/loongarch/include/asm/tlb.h
-+++ b/arch/loongarch/include/asm/tlb.h
-@@ -132,8 +132,6 @@ static __always_inline void invtlb_all(u32 op, u32 info, u64 addr)
-                 );
-  }
-  
--#define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
--
-  static void tlb_flush(struct mmu_gather *tlb);
-  
-  #define tlb_flush tlb_flush
+> If so, we should likely just drop that completely and rely on the 
+> asm-generic one:
+>
+> diff --git a/arch/loongarch/include/asm/tlb.h 
+> b/arch/loongarch/include/asm/tlb.h
+> index da7a3b5b9374a..e071f5e9e8580 100644
+> --- a/arch/loongarch/include/asm/tlb.h
+> +++ b/arch/loongarch/include/asm/tlb.h
+> @@ -132,8 +132,6 @@ static __always_inline void invtlb_all(u32 op, u32 
+> info, u64 addr)
+>                  );
+>   }
+>  
+> -#define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
+> -
+>   static void tlb_flush(struct mmu_gather *tlb);
 
+Yes, this looks like the best solution, and I can confirm that this
+addresses the warning on linux-next.
 
-
-Thanks!
-
--- 
-Cheers,
-
-David / dhildenb
-
+Tested-by: Arnd Bergmann <arnd@arndb.de>
