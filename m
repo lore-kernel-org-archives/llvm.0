@@ -1,68 +1,60 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC151C10
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 00:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DE75227;
+	Tue, 16 Apr 2024 01:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713228390; cv=none; b=nL4ajnaoPksr+TRu1r4+R+ZuMRR1BSSiog7R8mMNaUXWXtOTgFbo1NsnbVmyITydWIlT8NckshNWtPJ+b1Thwy/LHJ5ahI4heRNgmhLtHe/w1C17nTdObwRur6zoXwh7opOwMtrp03//Wrc5nwL+FO9SuV4vJg4ZOPMPKuCFx9o=
+	t=1713231743; cv=none; b=qjkAVwAttNsCMfYOkmy4U+ky8CJLtSAlQfWJAIebKjsJa7o2LUWDGxp8nQSXZaJNxfIdXqsPMZlahPlPzEoJXKEiPjqebIe7QyHY2n/G+ppr6eWEpJHIDQ/BbULvsahbu5JcK6RBemsdA8UoywBFGh5lsLtKofhWKwnbeZKpUC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713228390; c=relaxed/simple;
-	bh=015eEwhLzWafHkc0BsCRogWYfs3SqoEKVTXAAy/Fhf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pdNGnz3UmRxvRuENG+s+z0IyOF/D62rxjB4waLI82LF70e+RJW5PBzOH0FuaXlnrycGUVT6/XiMsxGd1BWNZrZi2IH74eUNXjx/fubki0RufCfA0w4aq6wNd/coAGjFfDEk+VmyOJLmLczeHyj0nlNCgEgGBF/fMX4Vmm81EAn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EqrA2q42; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1713231743; c=relaxed/simple;
+	bh=8Ph1M2gLwclZUwobrKRtWjpUrWJqo6CN0Wc+gtnA0Uo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OvLyccteiukNGHrkk8sNrGEaIIN7u8csEnwVdaTHMY5zXSi3iXb/3AgQMpYupboxtXAsh1JvLaHZLrWdiF837P/FrSUPoJFjXBSwspVn3omeOGITiSiSysh31HOZP9nWJIjDb4wawjfy/odvvYEjCkDdfYDvR0AgcyicF59zCss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WaoiDdUE; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EqrA2q42"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e51398cc4eso36781685ad.2
-        for <llvm@lists.linux.dev>; Mon, 15 Apr 2024 17:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713228388; x=1713833188; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SarbV9gzd7Ext5uREk+cO+VjFEa4L7Rs/CELnpCJsv8=;
-        b=EqrA2q42hASulL2nno3yc0Dax0iqhov9zGbjSYmEpN8Zwq4jBvtz2wB8QLZo3W/7fk
-         W+zJTQ3833vaMwZZCd1wduILN86uMJkJeLRe4VowWXd9bd2ejygCDlHVrWZuGUGc3fxB
-         cOpO7UH5pzUt8oQS99eh8M7BywwKpOBEYoDaE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713228388; x=1713833188;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SarbV9gzd7Ext5uREk+cO+VjFEa4L7Rs/CELnpCJsv8=;
-        b=CRe7YF1CzywYYjVAYCFpCD2OcYNVcHNmfMkRxIEANA7ZvecFf680c5FIlUlOcSDg7W
-         TmFTgD3Dglh8bxLv7qVzwIJeX6AGDd2hXt+MaviL4JKoU4ni5pQXG+88GNJB6ke/n9OX
-         FHKPr5gpAj5isdaJNc48avcPMOyYb5HPnZ70pqIQNOhGF0pjf3BjWvAT16C8IjM6eIE3
-         WLh68T0bZOTJ+wkKuuHu3DVO1lKwNfrc+n8ta1kM+ILsvpxsfmlKkbKodU8uq1Z0S0vf
-         G4sUmikDKTeZMKk3Gjw1Zrt5tYSryP4UYvl+PGUyXhbBOH5twDg5jF42BWyUCIGDVLYr
-         YnXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXxZEnlf/eHRA2meklcrG9Z0vbsXKvhorY+gALE9G+NqJkRFhZ2iITBtj/0tNymimL9KJXA20pqGB4X1CbIXn7WZsawSw==
-X-Gm-Message-State: AOJu0YyCWAxBuEh+jKO71EyaUswWCW6MEWHHUmEBA0qrqdSuveUUjhc0
-	SgvBW/6XsCKKf4dniZiV1lrH9aJjpTlPxQ9JgbQBZInV8LeDU8XZwR8rWP+ddQ==
-X-Google-Smtp-Source: AGHT+IHX1mELGRta6OeQsH8t8lp3e5H1mp/8L3cNAf/ZlRUnfUwX1Jl3r6/rRS9SAEK7dC+5kIawkw==
-X-Received: by 2002:a17:902:82c4:b0:1e4:b4f5:5cfa with SMTP id u4-20020a17090282c400b001e4b4f55cfamr11411241plz.27.1713228388653;
-        Mon, 15 Apr 2024 17:46:28 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id im22-20020a170902bb1600b001e3d2314f4bsm8688355plb.132.2024.04.15.17.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 17:46:28 -0700 (PDT)
-Date: Mon, 15 Apr 2024 17:46:27 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Marco Elver <elver@google.com>, Justin Stitt <justinstitt@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] ubsan: Add awareness of signed integer overflow traps
-Message-ID: <202404151738.AC6F6C210@keescook>
-References: <20240415182832.work.932-kees@kernel.org>
- <20240415183454.GB1011455@dev-arch.thelio-3990X>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WaoiDdUE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713231741; x=1744767741;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8Ph1M2gLwclZUwobrKRtWjpUrWJqo6CN0Wc+gtnA0Uo=;
+  b=WaoiDdUEzJxo2HPRVlIUdDDPpvFZqTxPN3AsR1nmVsUImP0KWpGxpwRv
+   vmX/wcoJIBUTCjQcTQUL2VE0OLLdniCABxCzjJq/81ezncPzdAtixUiHJ
+   n/AeUWv/yzbCp3DcYQ6t1wngKp+3AusU+XcCpIP3J8b5pc1ymEzF+tBUW
+   6u4IEZi06dd0MyyKXTZM4a+in5w1YQUm6Q+qNN9MLCVocYBhjdrfycviF
+   CNFrpMk0NNc5GoR17LnKkqpXhksYHR0w3gsSBG2jtOFaOWPlCb3ajjmJv
+   gEXbEmywxq/XmIKrkUSr75utZDy39Nj49eExkOnUJXI3YRxwHNOqePqw5
+   A==;
+X-CSE-ConnectionGUID: 6D575we+SXy6rkf3bMncAg==
+X-CSE-MsgGUID: j1PKsFl6TsieNDgMIJmKSQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="8479713"
+X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
+   d="scan'208";a="8479713"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 18:42:20 -0700
+X-CSE-ConnectionGUID: 4RqMBrBuQ5ewjs+FQopNNw==
+X-CSE-MsgGUID: Sy328VxlTYyHU9qqCH5Ltw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,204,1708416000"; 
+   d="scan'208";a="22178837"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 15 Apr 2024 18:42:19 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rwXpw-0004pC-37;
+	Tue, 16 Apr 2024 01:42:16 +0000
+Date: Tue, 16 Apr 2024 09:41:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Julien Panis <jpanis@baylibre.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Jacob Keller <jacob.e.keller@intel.com>
+Subject: [net-next:main 17/18]
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c:478:9: warning: cast to smaller
+ integer type 'enum am65_cpsw_tx_buf_type' from 'void *'
+Message-ID: <202404160955.THhpKGGa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,37 +63,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240415183454.GB1011455@dev-arch.thelio-3990X>
 
-On Mon, Apr 15, 2024 at 11:34:54AM -0700, Nathan Chancellor wrote:
-> On Mon, Apr 15, 2024 at 11:28:35AM -0700, Kees Cook wrote:
-> > On arm64, UBSAN traps can be decoded from the trap instruction. Add the
-> > add, sub, and mul overflow trap codes now that CONFIG_UBSAN_SIGNED_WRAP
-> > exists. Seen under clang 19:
-> > 
-> >   Internal error: UBSAN: unrecognized failure code: 00000000f2005515 [#1] PREEMPT SMP
-> > 
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Closes: https://lore.kernel.org/lkml/20240411-fix-ubsan-in-hardening-config-v1-0-e0177c80ffaa@kernel.org
-> > Fixes: 557f8c582a9b ("ubsan: Reintroduce signed overflow sanitizer")
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> As I mentioned, CONFIG_UBSAN_SIGNED_INTEGER_WRAP needs to be
-> CONFIG_UBSAN_SIGNED_WRAP. I applied this change with that fix up and the
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git main
+head:   bb72159c0ad193bbaa842e41316f0f6b6972e821
+commit: 8acacc40f7337527ff84cd901ed2ef0a2b95b2b6 [17/18] net: ethernet: ti: am65-cpsw: Add minimal XDP support
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240416/202404160955.THhpKGGa-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240416/202404160955.THhpKGGa-lkp@intel.com/reproduce)
 
-Whoops; thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404160955.THhpKGGa-lkp@intel.com/
 
-> warning now becomes:
-> 
->   Internal error: UBSAN: integer subtraction overflow: 00000000f2005515 [#1] PREEMPT SMP
+All warnings (new ones prefixed by >>):
 
-Perfecto. :)
+   In file included from drivers/net/ethernet/ti/am65-cpsw-nuss.c:8:
+   In file included from include/linux/bpf_trace.h:5:
+   In file included from include/trace/events/xdp.h:8:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm64/include/asm/cacheflush.h:11:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/ti/am65-cpsw-nuss.c:478:9: warning: cast to smaller integer type 'enum am65_cpsw_tx_buf_type' from 'void *' [-Wvoid-pointer-to-enum-cast]
+     478 |         return (enum am65_cpsw_tx_buf_type)k3_cppi_desc_pool_desc_info(tx_chn->desc_pool,
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     479 |                                                                        desc_idx);
+         |                                                                        ~~~~~~~~~
+   6 warnings generated.
 
-> So:
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Thanks!
+vim +478 drivers/net/ethernet/ti/am65-cpsw-nuss.c
+
+   467	
+   468	static enum am65_cpsw_tx_buf_type am65_cpsw_nuss_buf_type(struct am65_cpsw_tx_chn *tx_chn,
+   469								  dma_addr_t desc_dma)
+   470	{
+   471		struct cppi5_host_desc_t *desc_tx;
+   472		int desc_idx;
+   473	
+   474		desc_tx = k3_cppi_desc_pool_dma2virt(tx_chn->desc_pool, desc_dma);
+   475		desc_idx = am65_cpsw_nuss_desc_idx(tx_chn->desc_pool, desc_tx,
+   476						   tx_chn->dsize_log2);
+   477	
+ > 478		return (enum am65_cpsw_tx_buf_type)k3_cppi_desc_pool_desc_info(tx_chn->desc_pool,
+   479									       desc_idx);
+   480	}
+   481	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
