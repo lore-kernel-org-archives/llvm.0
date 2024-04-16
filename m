@@ -1,105 +1,88 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10AD75808
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 09:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB518526E;
+	Tue, 16 Apr 2024 10:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713259986; cv=none; b=QURBX8+Zb5ro1HjM017jwd/k7K62TZC93VV+ouuupxXmKBuv2So9mAOW6Lm2w3Uskax05m+4v3ukkklokHf76HSodCZ7Ztioculw7ZUfmKFdGXvKE38Tv+UV/H2HsVkfZXy7Xp4qscy8I9Z1NzxA//5ljrZywdVWliGgFw4VjB8=
+	t=1713263277; cv=none; b=X0ZGrYxQmYWhwjWsOthLazasU4tctJ+an6nvMD9IFoc03zMxcXTFt4ZlLQmopsD5902oa5WUoNK04O6WMfGsZPUnh3R7GUajXWKGQhGamYtAs+XzZHOyevtGNDlgLmof9eKmPB7mdI6NoXJFr0LKuGF9VIzARoXOO+X7w09eYV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713259986; c=relaxed/simple;
-	bh=0Gl50EmCLVOMt6kqv6vYCIWrekR2zOz/+FuL5NWpOck=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=RBcFZ232fLyKIAOCPAGKZPBPznKEOIBLeCBAHDzV3UFcjUsK93gCul/yNXJ0pzM8yCUbFaTZUVclGG1yn60WRf3yUlf686emEtzxA7SgCMqa/OTej3JUFApfNIpKAx1881EUDNCgp/VUdvbP/DbZP1VQyJ/HT1fGK/LvYVh6N9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BCvdH2AK; arc=none smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1713263277; c=relaxed/simple;
+	bh=MLsdr7kD3zzTJKBErjYyRBFMSvmh3TMK8QeAykYBK+I=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=q58BC4AlkQdUqwbJNAblpCud9U0MKroe96GsMlt0PUcbnp7e4PLtedw0XgMyLNCniFL6gs0TfIgU4V+0Ih/LUOeWSbQy1eXEY9sZfHjYRBmb3cjq9S+r73+yRykwuhE4fz5vFobyRs3QZmKMQqq7dCR7mI4fv0ByGucoEhPI49s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkOifWpO; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BCvdH2AK"
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-4daa8e14afbso1378457e0c.3
-        for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 02:33:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkOifWpO"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso3187791a12.2;
+        Tue, 16 Apr 2024 03:27:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713259984; x=1713864784; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1713263275; x=1713868075; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Ndrnd625fhH+o+1Q6bsYpoaFuC2gIYmA4glyfnWSIIc=;
-        b=BCvdH2AKhfPH7LqmFE+u9BdmVChzqLYC7vY0v38JWjUXgBL8HEeuMI0KfMbpCdNBKr
-         rRaNL3CKUz7eRrAmXr26SlDl5zW62pbirgAsS1uyEsWFEA6BOxrzRDvI2iOesMRMnw6b
-         GeWOM9+BX7lMhoebZNnNzXP95ufQ+0w+qTcRVWfW/Dm9E8QnEdApyITBpYh2GwRwQanX
-         xVm2uhSm+6dsmwKUD6Z4kZB2xSFR7s5UP1tM5t2wCwJJmxUxuS377uUAg0G23ZwZBzpk
-         nsHOock1Tfn67rsAOipV/wnbYGJenrUD5MYnFAutzLSTaQLu7JoSnZztRFkrmcYKwWit
-         1W1Q==
+        bh=/cIoa81DXO6MS6g+ZMtYagosHO4PwrAmNMYS0AM8V8c=;
+        b=nkOifWpOVhuNgrOfRyluUtWBBFnG1Sv/M4W0EiBzZ6vWAbCoU/FUcW2ZoFL+fNdbra
+         UWvdy1bCLie4LFy/ZI4+F1IbF/hRNDyris52FH8TqwSkjOktVPY51V05HMw0i7xl1LyT
+         H9qVG7NEEz9NxgeBOh15lUkGna/EnSwRQAx/YwASOEOqPVqA/gDtvsnzmS/QzVYqUVNI
+         3MN05qSZ3ChsegSy713wOhU8pPBERBS3OwK9uJAry/m4OLOta89+D+33mcc1+FZiaqSW
+         eUWeKavQOd3eEpEkj7mT2dsuQC3E5df2h33fuLbnbsa6Q+4kkHqsT39U43SdusuDWKe/
+         yW6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713259984; x=1713864784;
+        d=1e100.net; s=20230601; t=1713263275; x=1713868075;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ndrnd625fhH+o+1Q6bsYpoaFuC2gIYmA4glyfnWSIIc=;
-        b=KXH9747yuVPl566eFFoY8MjXMhayaoaBl7BgMjIDmb1TCRRwodF7PwgCUlq1IdwKao
-         w8qyFimXmbLoOH7c+R83MErwJyxSIDfKl8+/2H6OD3mIrLYk9xAzkVZoWStrU6UV40/w
-         ThAtAK3LhEn9TL4ehkfZ2IqtdZcy69YqQfkfX6Fpjc+xrWJc/Tw/J3hidm7a/YeZbxJj
-         Cx14NJ/Fx5XUbm6p6jhirGFIrhZb67/UGMLgWzHJ/kd/LzbbBJ9P9upFvYDEX/0ftBQB
-         9mkgG4WPHJw46IxcrNYfxZveE7+NME6gAOHbw6sejuuaWKbpP2drm35qTnmV2/LKKRBc
-         RulQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW9GMMQEx5dOudn2D/pqRQfGNIFmhU/EWbs2JlwbgcSsufx48Y6waNcwmE7YosT3+/vR7oRr4EwBHaQSEH3k2ENxiFFuQ==
-X-Gm-Message-State: AOJu0Yw4KE3c7ZZAVM2RD2LGQYaVlXsN5TdB5pd3ydE9YhDx2L8c4fqS
-	GDl7xTz9SNdraFlPpQJ/W6WkWAqmculUVe+1aAYqm/rQ047rfm6qgXQrGei33uX41egFIEdhpKb
-	UMthmzp3wy5aV0vAGf8ebvzX27mFsWKjb1SBSiQ==
-X-Google-Smtp-Source: AGHT+IG8D9vuAHmYC+KaM43JW5eMv7zVIbneQHVp8QBSV8dIrkMNPPOSsaQF76mhGJzEt5W5Jxc6s2f74IzVPZ0IMx8=
-X-Received: by 2002:a05:6122:31a9:b0:4da:aabe:6f6c with SMTP id
- ch41-20020a05612231a900b004daaabe6f6cmr10367344vkb.7.1713259983821; Tue, 16
- Apr 2024 02:33:03 -0700 (PDT)
+        bh=/cIoa81DXO6MS6g+ZMtYagosHO4PwrAmNMYS0AM8V8c=;
+        b=G/C08gYlu4UD5jLvCxV7kIWRiNi8TJsKL9jFC5FrWA30MeqmPEEerqfvL5RLY6N6fu
+         n3MSlYeu6/Or2B5YCTXdJdw9j1bu3ksYd4OWSb+QrG09q1HAgWfoE6eggXUBlUg0GKdf
+         5c5siG+eHyik/Gj0rX83qUyy4vwv8B0dbQWrODnS7Zv4FVil28XfPUsNMG3FgiTHkZtd
+         ab3JY4n8dCgksYTOZG9A0pqkj142t0/dvSlE/qy8nxFCEJK4hLvL8dLY7bDIK3HpKU1V
+         Mo/smqvlaKMz1aYl38K1VuCTNLopAg0JgCX1XqKM+B64q+o5H28FQ8/7CkgVOyOla6D4
+         5iOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWa2cBZyo0s9GzckoIvqI0OBgtx0Tl3fm5mTH85ynsBM48fmIDWOrrcrTWPnTGpZt5C+Rwo719EZi6BScEiL8Xg1QiO633IafM2Bw2bRUTdrXycsC6lEvOiIEWYuPXH1Q==
+X-Gm-Message-State: AOJu0Yx5lPYgRzQd3X43z+If7b+m2cLbaA96BxceuMTSblGX0haugW0W
+	AJNjIEnauBO0eaoYe7sy1apGUF35l8AVn9hC/FsdI9R2RA6XM8n1MvbPYvpShiEgnmQgaY7qaoT
+	eSWnjRVezxN/KhRTXMiuzXy5T/5I=
+X-Google-Smtp-Source: AGHT+IEQCW1Umn5/jxfj5DsIuaZ2+exXuJmvDw88NBcTFIdc6HQg6SZiheR6MqEF6Ri8xe0SbEpGiX0n8YxTyu0/8v4=
+X-Received: by 2002:a17:90a:8b05:b0:2a7:40ba:48bc with SMTP id
+ y5-20020a17090a8b0500b002a740ba48bcmr10112056pjn.6.1713263275084; Tue, 16 Apr
+ 2024 03:27:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 16 Apr 2024 15:02:52 +0530
-Message-ID: <CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com>
-Subject: powerpc: io-defs.h:43:1: error: performing pointer arithmetic on a
- null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-To: open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
-	Jeff Xu <jeffxu@chromium.org>, Kees Cook <keescook@chromium.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 16 Apr 2024 12:26:57 +0200
+Message-ID: <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
+Subject: ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set but
+ not used
+To: david@redhat.com, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Ryan Roberts <ryan.roberts@arm.com>, 
+	linux-arch <linux-arch@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev, 
+	clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-The Powerpc clang builds failed due to following warnings / errors on the
-Linux next-20240416 tag.
+Hi David, Arnd, LoongArch,
 
-Powerpc:
- - tqm8xx_defconfig + clang-17 - Failed
- - allnoconfig + clang-17 - Failed
- - tinyconfig + clang-17 - Failed
+In a linux-next defconfig LLVM=1 build today I got:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+    ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
+but not used [-Werror,-Wunused-but-set-parameter]
+      629 |                 pte_t *ptep, unsigned int nr, unsigned long address)
+          |                        ^
 
-Build log:
---------
-In file included from arch/powerpc/kernel/ptrace/ptrace.c:19:
-In file included from include/linux/syscalls.h:93:
-In file included from include/trace/syscall.h:7:
-In file included from include/linux/trace_events.h:9:
-In file included from include/linux/hardirq.h:11:
-In file included from arch/powerpc/include/asm/hardirq.h:6:
-In file included from include/linux/irq.h:20:
-In file included from include/linux/io.h:14:
-In file included from arch/powerpc/include/asm/io.h:672:
-arch/powerpc/include/asm/io-defs.h:43:1: error: performing pointer
-arithmetic on a null pointer has undefined behavior
-[-Werror,-Wnull-pointer-arithmetic]
-   43 | DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   44 |                  (p, b, c), pio, p)
-      |                  ~~~~~~~~~~~~~~~~~~
+Indeed, in loongarch, `__tlb_remove_tlb_entry` does not do anything.
+This seems the same that Arnd reported for arm64:
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240416/testrun/23495171/suite/build/test/clang-17-tqm8xx_defconfig/details/
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2fAvI3mKJ0dTHcazPrLl2zNF9JO/
+    https://lore.kernel.org/all/20240221154549.2026073-1-arnd@kernel.org/
 
---
-Linaro LKFT
-https://lkft.linaro.org
+So perhaps the loongarch's one should also be changed into an static inline?
+
+I hope that helps!
+
+Cheers,
+Miguel
