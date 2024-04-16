@@ -1,157 +1,103 @@
-Received: from wfout3-smtp.messagingengine.com (wfout3-smtp.messagingengine.com [64.147.123.146])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5BD12CD91;
-	Tue, 16 Apr 2024 14:42:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F48F130AEC
+	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 14:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713278564; cv=none; b=Bea7GJ2lpsuBHZJVJpIN3i6wR1pxYlO+FpuFZgmS2aC7gt5XaE1zjCqxjHmAXYLXzGeQxAN5ZkCzJ8HmNYK7/6Ohjgblw+qoTjqiq93iSfr81o+qEiJkSndJ+ktajxqssnLtRxePjOmxNPaSLRfynXfJeVOMETml/MQ3lwkmW7s=
+	t=1713278983; cv=none; b=dyL3dBvNsgzamrnWVa4DDNtwfvIi4udQOYCWtxMGO+cof8q13RUZEP9GLrOQNqiFaHI2qtPq49IhccJaz35iERZiU/Xw69ZJb8qFCzx/CjafM6N+4AWEjml/mMRArmX/anWQSpqgI8xUp2H4r+pRvIIVBykk65UVG0fXzlendy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713278564; c=relaxed/simple;
-	bh=jFF48U5d7FJuJgGfabTZlxC/tyfPeIxVSv12aazwzJY=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=W8ZmDuYpQkULVGprPC9D3ugW34oBLPQzSbxn3Ck4yRwVLfLIB1Ui1Z4nWGHnMXoI0LNsd5t2JeDIc7N/rH3gtEzAa3aqgToR+AMux9+zGM+0y0B+9zT8JQSVBogHKnki4aOApgkDh611vbZZ9ubHL9OQzlHa56olNpD0etOC/oE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Og8X5hEf; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NSbEcRhq; arc=none smtp.client-ip=64.147.123.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1713278983; c=relaxed/simple;
+	bh=7ARtCr6gtBIZWPixhMOKo/+c9HV56ed5oMvKe8ko6Dw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fBJ7pmRf7M+3C5YNASwrP61L578SnpbuXHKtSKEBXxnTEVN2A0IIJB9nrbRJZ5NfVl9qXVcaNeOyQodhFr8robijj5pURUL1Zlh3mck2FAPpbtczkXUmVqclms3Y26Mas//07srTxRpL667RGtSrjiixrO6Ye7+AltvYtZ7yWM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ieHvonwV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Og8X5hEf";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NSbEcRhq"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id 9BF481C0008E;
-	Tue, 16 Apr 2024 10:42:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 16 Apr 2024 10:42:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1713278561; x=1713364961; bh=EdTvxSTwIs
-	Cxj3jYXy+//PQXrEdBAi8RS3AAbJKHaD8=; b=Og8X5hEfJiYR+7b1Mybt5cziAA
-	C+BUeLrF/QnMaUmfO5wdRbKUJX/VglMq0UsNIqURNvqzTldhjeWHdCnqVAZSSJq8
-	tjeOjvK9Rv5hOWXqQqnPRwxqncNjBkWx26vZtl7OmS9VAcXoxEJot1lA365hRyX0
-	LRkuN6QTdEheQO4Jh59GIKBy03msAnzqaUzZB7lOohM009VxfuYG3EK0AUnbd1yY
-	kQLosTJ/Dv/yvISIEAycfP/8k2iMA2wI4lT+30Lr3FM8PJ2mM5iKHNczjR5sgVG4
-	n0NDeC5CxYpCGHG+shU2QsjF4QUQEImYEg01Kga8XF9p2xCkF5lFtlqxuGyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1713278561; x=1713364961; bh=EdTvxSTwIsCxj3jYXy+//PQXrEdB
-	Ai8RS3AAbJKHaD8=; b=NSbEcRhqiUQ2qtOcPCtssyQwO4Dt0iMmvTqMXH9Xl8ps
-	BwhwrIxoyLQ2aSlt7kUZeK1IzsvwVEYFWxPTHtnwLgvEneEOmIlKccQKo60hrvX/
-	Lfg71CggAF8v4vRIqvA0AI9dRpIVZM34JbkzD9eKgwVLxhI+2A+lh4sXgE552zhK
-	z0lkjaNJTfT/OLszaqAn4nFP1dv/b8Hk43ugdxdz2mYd195nrMb/q735yldccmlm
-	eCItp32K7Ne/a4PbGa+Lbb+/9bZnr2CTTkukuIFTjJj9Zmd4hMCos0IA+OA9exvV
-	qD7+8XhJdPPKHpQl1w2OK1VKXvJ3TG9N7FSpW04JGQ==
-X-ME-Sender: <xms:YI4eZlg3l50XB2848NYs1NfY34dZjIpCUcwBiBeKMtk33Y1Vv28LEw>
-    <xme:YI4eZqC8MZIMWTWZ3G2WV9UofOYvtv1YnZ6gqurspjJASR2J4b8CG02BQHt5S-4Mz
-    HVPFEdCNReKJi8arfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejiedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepieeguedvkeehveduieetgedugfejheeugffhtedtvdetueetkefhheduhfet
-    gfdvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
-    rhhnuggsrdguvg
-X-ME-Proxy: <xmx:YI4eZlFohYniIbITPsFO8zlCJt32z0piFeMs_oScyNqzrhXUjtxGOA>
-    <xmx:YI4eZqScFRdcSKvZwCyHhHAw2rqJUS-UNEPFzEdPM6yDdNVhl_dmDQ>
-    <xmx:YI4eZizOYhoYm1N16P_cbmofAOJ2K-sBl4h1TSwkZDBQPs8cjwjkfA>
-    <xmx:YI4eZg7tw7r3VMqMuY8giuSpEhqn186PuibUiERmVKlXgGvZNIFWCA>
-    <xmx:YY4eZpkiIfEPNI903k57ptZ1yYF8bAY0Kdml1oeSejNaNeXemQ5YIKu5>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A89DDB6008D; Tue, 16 Apr 2024 10:42:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ieHvonwV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713278981;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Kro/6N3hNJUz0mvlhxtTHwRpm8U0aOExj9xAbQAp3R0=;
+	b=ieHvonwVSJkZWoB2OlzBUdZLxG2uDjJa4fHAanMMk8T/AKrtti5/ROQwcr6LTgXkyMA0Es
+	Fo+9sXAGj49zv0O8PP2mmBgzPbjn9iS45ITrazok/qHnEBhCNVJ4K7/RGkV9N8znYpWhE9
+	uPWNI95XBgBjfkYcc49Uh1aUP8xhta0=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-488-F48Bfbb7NgShjBLlx_GDCQ-1; Tue,
+ 16 Apr 2024 10:49:35 -0400
+X-MC-Unique: F48Bfbb7NgShjBLlx_GDCQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 860931C4C3A0;
+	Tue, 16 Apr 2024 14:49:34 +0000 (UTC)
+Received: from t14s.redhat.com (unknown [10.39.194.131])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C9847492BD4;
+	Tue, 16 Apr 2024 14:49:31 +0000 (UTC)
+From: David Hildenbrand <david@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: kvm@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	llvm@lists.linux.dev,
+	David Hildenbrand <david@redhat.com>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v1] LoongArch/tlb: fix "error: parameter 'ptep' set but not used" due to __tlb_remove_tlb_entry()
+Date: Tue, 16 Apr 2024 16:49:26 +0200
+Message-ID: <20240416144926.599101-1-david@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
-In-Reply-To: <31b4e05d-62c6-44cd-8038-7ac8d21320c3@arm.com>
-References: <202404141807.LgsqXPY5-lkp@intel.com>
- <31b4e05d-62c6-44cd-8038-7ac8d21320c3@arm.com>
-Date: Tue, 16 Apr 2024 16:42:18 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ryan Roberts" <ryan.roberts@arm.com>,
- "kernel test robot" <yujie.liu@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- "Andrew Morton" <akpm@linux-foundation.org>, llvm@lists.linux.dev,
- "Linux Memory Management List" <linux-mm@kvack.org>
-Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
- '-static-libsan'?
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-On Tue, Apr 16, 2024, at 16:33, Ryan Roberts wrote:
-> On 16/04/2024 08:42, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   7efd0a74039fb6b584be2cb91c1d0ef0bd796ee1
->> commit: c652df8a4a9d7853fa1100b244024fd6f1a9c18a selftests: link libasan statically for tests with -fsanitize=address
->> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
->> 
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <yujie.liu@intel.com>
->> | Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
->> 
->> All errors (new ones prefixed by >>):
->> 
->> # tools/testing/selftests/fchmodat2$ make CC=clang
->> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan -isystem usr/include     fchmodat2_test.c  -o tools/testing/selftests/fchmodat2/fchmodat2_test
->> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
->> make: *** [../lib.mk:181: tools/testing/selftests/fchmodat2/fchmodat2_test] Error 1
->> 
->> # tools/testing/selftests/openat2$ make CC=clang
->> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan     openat2_test.c helpers.c helpers.h  -o tools/testing/selftests/openat2/openat2_test
->> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
->> clang: error: cannot specify -o when generating multiple output files
->> make: *** [../lib.mk:181: tools/testing/selftests/openat2/openat2_test] Error 1
->> 
->
-> Hi Arnd,
->
-> This change went in quite a while ago and is on;y just blowing up. I saw your
-> comment in another thread [1] that Andrew merged your change to set -Wextra.
-> Perhaps that's what has caused this to show up only now? *although I don't
-> actually see -Wextra in the command line).
->
-> I guess the problem is that `-static-libasan` is only supported by gcc. But I'm
-> Makefile-illiterate. Can anyone advise on what's the best way to make this
-> argument gcc-only?
+With LLVM=1 and W=1 we get:
 
-Thanks for letting me know about the problem, I had indeed missed
-build-testing any of tools/testing, so this might not be
-the only problem there.
+  ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
+  but not used [-Werror,-Wunused-but-set-parameter]
 
-I'm not entirely sure how much of the Kbuild infrastructure we
-can rely on here. If the .config file gets included, this should
-work:
+We fixed a similar issue via Arnd in the introducing commit, missed the
+loongarch variant. Turns out, there is no need for loongarch to have a
+custom variant, so let's just drop it and rely on the asm-generic one.
 
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -1,6 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
+Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Closes: https://lkml.kernel.org/r/CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com
+Fixes: 4d5bf0b6183f ("mm/mmu_gather: add tlb_remove_tlb_entries()")
+Tested-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ arch/loongarch/include/asm/tlb.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
+index da7a3b5b9374a..e071f5e9e8580 100644
+--- a/arch/loongarch/include/asm/tlb.h
++++ b/arch/loongarch/include/asm/tlb.h
+@@ -132,8 +132,6 @@ static __always_inline void invtlb_all(u32 op, u32 info, u64 addr)
+ 		);
+ }
  
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-+ifdef CONFIG_CC_IS_GCC
-+CFLAGS += -static-libasan
-+else
-+CFLAGS += -static-libsan
-+endif
-+
- TEST_GEN_PROGS := fchmodat2_test
+-#define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
+-
+ static void tlb_flush(struct mmu_gather *tlb);
  
- include ../lib.mk
+ #define tlb_flush tlb_flush
+-- 
+2.44.0
 
-Alternatively, if the cc-option macro is available, you could
-try this one
-
-CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan) 
-
-     Arnd
