@@ -1,180 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B90D6E612
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 21:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C0A13AA3E;
+	Tue, 16 Apr 2024 23:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713303707; cv=none; b=pUjGqWZFDTweW2WSr6ixCl2Rg9uf9FhAnRNWcxft0ckYw0jqUoM6rAJ+VnG40//RZWOifUY6atTSNIKr2P3MpTfNso5cpmGafda452BxvBEVHJTufMXz3ouqtOgkWk+6NdwZ4+4vOiz89IEvXSwLM7WSOBEzqXhgjJj+UxydFLQ=
+	t=1713310109; cv=none; b=OFcvLyRVq7euYux0jzQqB5LxMAuucYftWZRT6+2ybIywI4MPM8XSedUOLNNtPIJ1BeNFoSKx9Za8EMdRTRbjGWLH7QJEIUDrNvK7YyQichoJKZFhs3MpMKzM700GRq/vk2AVTglXFoSbmcz5dsqoNTj4+NJQPKoM99L62kgu6Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713303707; c=relaxed/simple;
-	bh=PQVbgqskud7ONxRU7rL/K5aC9KgJQ+VzLzhSllxz1ew=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eLyhnHuQn37Cr0ZI4k4huKfece6QEfOpU2KKmjMjE2HxAWPCKI+u5NsG4ediSoKt96kUWg48gM1bMCUwqRVtDUbTj94j9fPlSsckNGMy8dmWaVHITRuzTzOkq+94qqVMNsVbcmpniwf7PS2Aq9q7e3yw+H13u90UjZdQoVwGBDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HQHKBWbZ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1713310109; c=relaxed/simple;
+	bh=RWjT95QphPZ5AOknCIiCxI3mE5E53bV0YbYg4KQf3RQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L16XBF97GHrlQaHQ0wZUp2MzemU939VUotOynTpy4TK/3R6b0u8hPhB1iuRzzRBppsv80WQkTCVrmctItjzEfhhYDQ9vqmMh+3uAqSRGn3R6WhRKza0jxyQXF3Hy/xsFhzRuzKxG1W1CDODAdhnW1DG0N26GtzUV6qF4eGqvz7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mGCk0CcU; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HQHKBWbZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713303704;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HJ5n/0efEXk8Ltar0ry5serb/4NMKASI20hy0Kn1dEk=;
-	b=HQHKBWbZU/Bdco/6ABzFtv0XMbpE/it2G/K2xMX3FC18Xw5YHTUUNn5chjSPy+UHLNDwgM
-	cHTAdsrrcJ1et3m2L//97FhlekY4xnotrIDuezdyv7gQMO2c7ET0vfSbuU4Fl+4FFGBm5o
-	W5eBjQYPzy81G9ZcpGVxnbyyZlwuDTM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-220-GjN6zPwFNSmiBhANTUyq3Q-1; Tue, 16 Apr 2024 17:41:43 -0400
-X-MC-Unique: GjN6zPwFNSmiBhANTUyq3Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA88380171B
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 21:41:42 +0000 (UTC)
-Received: from [172.64.5.36] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D4BAF1C060A6;
-	Tue, 16 Apr 2024 21:41:41 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 204): Test report for master
- (6.9.0-rc4, mainline.kernel.org-clang, cef27048)
-Date: Tue, 16 Apr 2024 21:41:41 -0000
-To: xzhou@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mGCk0CcU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713310108; x=1744846108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RWjT95QphPZ5AOknCIiCxI3mE5E53bV0YbYg4KQf3RQ=;
+  b=mGCk0CcUYrR4fyB8x5zSWhgnsCarPMZBRR2ezw1jtIRS7SLl7g73JmAA
+   ydDZGCh/mx8QFMZcCQltlE14A+SUmMuPIU5/CNRi1KXPSnd8n1bKQ3wS/
+   dSQ+c7Cg/4sRDPHeUDxsrlKHebCEKMKpc1gRNPkHUXmZevULeO1urhHui
+   E9ahow5iDe2TZrIBc1xS1s4xiZ84/HiiJDN4zhU8Vi4FMWv8WY9erFJZL
+   tkRjJlJh7lnlj/3aHzCo61PbTQ81FKWgqBaOnC0DnrgaHRylFg0Kt+ANG
+   +uEdYkIAjD2ZhZiRhNbuTAnEq4CPXbDF4w+siVx/t0dHuoIcMELhqux7H
+   A==;
+X-CSE-ConnectionGUID: G1PshlKqSI6SW60NAfgILA==
+X-CSE-MsgGUID: lcIvNnl7RQWgI2QtSSGFRQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="26294547"
+X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
+   d="scan'208";a="26294547"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 16:28:20 -0700
+X-CSE-ConnectionGUID: H/mRELqoQU6ABXfhBxqDvQ==
+X-CSE-MsgGUID: EjFeB3IYQ/2rC9oO8AUjYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
+   d="scan'208";a="22478448"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 16 Apr 2024 16:28:16 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rwsDm-0005qD-2G;
+	Tue, 16 Apr 2024 23:28:14 +0000
+Date: Wed, 17 Apr 2024 07:27:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	linux-kernel@vger.kernel.org,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kate Hsuan <hpa@redhat.com>
+Subject: Re: [PATCH v6 4/5] power: supply: power-supply-leds: Add
+ charging_orange_full_green trigger for RGB LED
+Message-ID: <202404170705.Or8MFKNi-lkp@intel.com>
+References: <20240416053909.256319-5-hpa@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <51277.124041617414300209@us-mta-220.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240416053909.256319-5-hpa@redhat.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Kate,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on lee-leds/for-leds-next linus/master v6.9-rc4]
+[cannot apply to next-20240416]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'bcachefs-2024-04-15' of https://evilpiepirat=
-e.org/git/bcachefs
+url:    https://github.com/intel-lab-lkp/linux/commits/Kate-Hsuan/platform-x86-android-tablets-other-Add-swnode-for-Xiaomi-pad2-indicator-LED/20240416-134240
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20240416053909.256319-5-hpa%40redhat.com
+patch subject: [PATCH v6 4/5] power: supply: power-supply-leds: Add charging_orange_full_green trigger for RGB LED
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240417/202404170705.Or8MFKNi-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404170705.Or8MFKNi-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1253934554
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404170705.Or8MFKNi-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1253934554-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/310
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x]
-        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
-"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
-=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
-:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
-            Affected tests:
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Storage - blktests - blk - upstream [aarch64, s390x]
-                stress: stress-ng - cpu-cache [aarch64, s390x]
-                stress: stress-ng - memory [aarch64, s390x]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> drivers/power/supply/power_supply_leds.c:42:3: error: implicit declaration of function 'led_mc_trigger_event' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   led_mc_trigger_event(psy->charging_orange_full_green_trig,
+                   ^
+   drivers/power/supply/power_supply_leds.c:42:3: note: did you mean 'led_trigger_event'?
+   include/linux/leds.h:489:6: note: 'led_trigger_event' declared here
+   void led_trigger_event(struct led_trigger *trigger,  enum led_brightness event);
+        ^
+   1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64]
-    Storage - blktests - blk - upstream [x86_64]
-    Storage - blktests - nvme-tcp - upstream [x86_64]
-    Storage - swraid scsi_raid [x86_64]
-    stress: stress-ng - cpu-cache [x86_64]
-    stress: stress-ng - memory [x86_64]
+vim +/led_mc_trigger_event +42 drivers/power/supply/power_supply_leds.c
 
+    21	
+    22	static void power_supply_update_bat_leds(struct power_supply *psy)
+    23	{
+    24		union power_supply_propval status;
+    25		unsigned int intensity_green[3] = {255, 0, 0};
+    26		unsigned int intensity_orange[3] = {128, 0, 255};
+    27		unsigned int intensity_red[3] = {0, 0, 255};
+    28	
+    29		if (power_supply_get_property(psy, POWER_SUPPLY_PROP_STATUS, &status))
+    30			return;
+    31	
+    32		dev_dbg(&psy->dev, "%s %d\n", __func__, status.intval);
+    33	
+    34		switch (status.intval) {
+    35		case POWER_SUPPLY_STATUS_FULL:
+    36			led_trigger_event(psy->charging_full_trig, LED_FULL);
+    37			led_trigger_event(psy->charging_trig, LED_OFF);
+    38			led_trigger_event(psy->full_trig, LED_FULL);
+    39			/* Going from blink to LED on requires a LED_OFF event to stop blink */
+    40			led_trigger_event(psy->charging_blink_full_solid_trig, LED_OFF);
+    41			led_trigger_event(psy->charging_blink_full_solid_trig, LED_FULL);
+  > 42			led_mc_trigger_event(psy->charging_orange_full_green_trig,
+    43					     intensity_green,
+    44					     ARRAY_SIZE(intensity_green),
+    45					     LED_FULL);
+    46			break;
+    47		case POWER_SUPPLY_STATUS_CHARGING:
+    48			led_trigger_event(psy->charging_full_trig, LED_FULL);
+    49			led_trigger_event(psy->charging_trig, LED_FULL);
+    50			led_trigger_event(psy->full_trig, LED_OFF);
+    51			led_trigger_blink(psy->charging_blink_full_solid_trig, 0, 0);
+    52			led_mc_trigger_event(psy->charging_orange_full_green_trig,
+    53					     intensity_orange,
+    54					     ARRAY_SIZE(intensity_orange),
+    55					     LED_FULL);
+    56			break;
+    57		default:
+    58			led_trigger_event(psy->charging_full_trig, LED_OFF);
+    59			led_trigger_event(psy->charging_trig, LED_OFF);
+    60			led_trigger_event(psy->full_trig, LED_OFF);
+    61			led_trigger_event(psy->charging_blink_full_solid_trig,
+    62				LED_OFF);
+    63			led_mc_trigger_event(psy->charging_orange_full_green_trig,
+    64					     intensity_red,
+    65					     ARRAY_SIZE(intensity_red),
+    66					     LED_OFF);
+    67			break;
+    68		}
+    69	}
+    70	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
