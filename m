@@ -1,118 +1,88 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B2F12DDBD;
-	Tue, 16 Apr 2024 14:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A986D1AB;
+	Tue, 16 Apr 2024 15:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713279331; cv=none; b=aiLiB/PeQg956ghMycWMvjc6zxQmruy3EK7mUiOd4wV+fzJRnSnoLAkw1e6fHokcJBCaIPwQPzh+FQIBGVcX/DSvrJOdA+DDh21qNLLHNBKnzH5nm6T6WrDgM1PeEqRy2PbiWg8H19iODbyr2UyZstwmmK4xRVkc6Bp9ThWQYSs=
+	t=1713280159; cv=none; b=CJ1qXcWWDQs+4T1GbTiv5bIR5qMTgAHE/s8BdZi3ZTKPgpkZWXCFiPdG12mzbGyvP4rmLnXThtUsYZOnfUJCWYsmk7ThVwa7t+D3cDmWbdoNyts09H1hyhUMkB7x2S6XqTfbXMilw8v4CsY3Iqz2uYhMS6PbWP6au+3MTy6EI2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713279331; c=relaxed/simple;
-	bh=Uz7Nl2h8Q5NpEAnmsy2/2F2O6MebLTqV7M29DdRZjC4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JxI54b/tAnXkc3GLI9X9Ct9v79RjxjfaS3ckcLFgFWyJ1meC/lhQ4a3ul2UeJHo+Ish2n1lzM8LNF0wdQXw2q04CE/4EL13mwfp0JfLv0Np4jjJ8R8z6FXvYtkdW1rdTk1+8rul7uT+il665RsZeHKJOdxMz25M/QiX5hEu2dYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 315B1339;
-	Tue, 16 Apr 2024 07:55:56 -0700 (PDT)
-Received: from [10.1.39.189] (XHFQ2J9959.cambridge.arm.com [10.1.39.189])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2444D3F792;
-	Tue, 16 Apr 2024 07:55:27 -0700 (PDT)
-Message-ID: <50ff8268-7c9f-4493-a733-f24801e19da9@arm.com>
-Date: Tue, 16 Apr 2024 15:55:25 +0100
+	s=arc-20240116; t=1713280159; c=relaxed/simple;
+	bh=xaEEHBks3jzzeUOM15L3mtzrj0847tMHm5HZ1i4bIkw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hWh38hDG+aFNXzkaxBgDmpcelH/4m4EKkr4XppaUCqLtHK+swYkIZDSOlaHotIJcjfYfzOCEmb67YnvFeTcAmqJPTbJ9s1FIxSOWdgKznppP5ZigBdlPGZweGvhnNI8Ga166NeokS1HmmQT2cvyCiYNjNqnzhMkPXjeAZ89G/vQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BiO2OvNr; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BiO2OvNr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F4BC113CE;
+	Tue, 16 Apr 2024 15:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713280158;
+	bh=xaEEHBks3jzzeUOM15L3mtzrj0847tMHm5HZ1i4bIkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BiO2OvNrhoobR1cw6ZRn+k3zHND9lL7C13tNCjUtNKDyxTc8oXQgr93cTwRoqrVQM
+	 UYR65eSKbX0iX4epo1RaDHyK/eL7buJ2UNpb1WWV3vikbhS2Csn028njDizijUIIsM
+	 2OEdsxeRD2Tj1A5LQcfbTlEyKGP5uBeR780o8nyT3YqsP1XgH/69t7P8gwkBVRKyHW
+	 eM17KI5dwvC8VvW7WifgDOcC0eF4j5tqQT7LqRs5XR30xnLvd1cHP71MxSOvLajQYz
+	 pTvwijHKRFsj18fxvMl/f9dXjvNse1YKzVb9LD9qBC7A1PnGlwAjZLE3i8Mk5xxtbx
+	 FuqWY3EdJkV9g==
+Date: Tue, 16 Apr 2024 08:09:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: kernel test robot <lkp@intel.com>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [pdx86-platform-drivers-x86:review-hans 40/59]
+ drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared
+ function 'writeq'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <20240416150916.GA2715839@dev-arch.thelio-3990X>
+References: <202404161050.NSNJAxvX-lkp@intel.com>
+ <Zh53z2VOwRFTYhVK@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
- '-static-libsan'?
-Content-Language: en-GB
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <yujie.liu@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>
-References: <202404141807.LgsqXPY5-lkp@intel.com>
- <31b4e05d-62c6-44cd-8038-7ac8d21320c3@arm.com>
- <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zh53z2VOwRFTYhVK@smile.fi.intel.com>
 
-On 16/04/2024 15:42, Arnd Bergmann wrote:
-> On Tue, Apr 16, 2024, at 16:33, Ryan Roberts wrote:
->> On 16/04/2024 08:42, kernel test robot wrote:
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>> head:   7efd0a74039fb6b584be2cb91c1d0ef0bd796ee1
->>> commit: c652df8a4a9d7853fa1100b244024fd6f1a9c18a selftests: link libasan statically for tests with -fsanitize=address
->>> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
->>>
->>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>> the same patch/commit), kindly add following tags
->>> | Reported-by: kernel test robot <yujie.liu@intel.com>
->>> | Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
->>>
->>> All errors (new ones prefixed by >>):
->>>
->>> # tools/testing/selftests/fchmodat2$ make CC=clang
->>> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan -isystem usr/include     fchmodat2_test.c  -o tools/testing/selftests/fchmodat2/fchmodat2_test
->>> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
->>> make: *** [../lib.mk:181: tools/testing/selftests/fchmodat2/fchmodat2_test] Error 1
->>>
->>> # tools/testing/selftests/openat2$ make CC=clang
->>> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan     openat2_test.c helpers.c helpers.h  -o tools/testing/selftests/openat2/openat2_test
->>> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
->>> clang: error: cannot specify -o when generating multiple output files
->>> make: *** [../lib.mk:181: tools/testing/selftests/openat2/openat2_test] Error 1
->>>
->>
->> Hi Arnd,
->>
->> This change went in quite a while ago and is on;y just blowing up. I saw your
->> comment in another thread [1] that Andrew merged your change to set -Wextra.
->> Perhaps that's what has caused this to show up only now? *although I don't
->> actually see -Wextra in the command line).
->>
->> I guess the problem is that `-static-libasan` is only supported by gcc. But I'm
->> Makefile-illiterate. Can anyone advise on what's the best way to make this
->> argument gcc-only?
+On Tue, Apr 16, 2024 at 04:06:23PM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 16, 2024 at 10:35:55AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
+> > head:   0aae4c44b032b5ede39405dfc62900adc467f362
+> > commit: 2dc77993cb5eb311d6bb5584d30c3d1d42d9fa4a [40/59] platform/x86/amd/pmc: Add AMD MP2 STB functionality
+> > config: i386-randconfig-011-20240416 (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/config)
+> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202404161050.NSNJAxvX-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> > >> drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >       94 |         writeq(mp2->dma_addr, mp2->mmio + AMD_C2P_MSG1);
+> >          |         ^
+> >    drivers/platform/x86/amd/pmc/mp2_stb.c:267:45: warning: shift count >= width of type [-Wshift-count-overflow]
+> >      267 |         rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+> >          |                                                    ^~~~~~~~~~~~~~~~
+> >    include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+> >       77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> >          |                                                      ^ ~~~
+> >    1 warning and 1 error generated.
 > 
-> Thanks for letting me know about the problem, I had indeed missed
-> build-testing any of tools/testing, so this might not be
-> the only problem there.
-> 
-> I'm not entirely sure how much of the Kbuild infrastructure we
-> can rely on here. If the .config file gets included, this should
-> work:
-> 
-> --- a/tools/testing/selftests/fchmodat2/Makefile
-> +++ b/tools/testing/selftests/fchmodat2/Makefile
-> @@ -1,6 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0-or-later
->  
-> -CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-> +CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-> +ifdef CONFIG_CC_IS_GCC
-> +CFLAGS += -static-libasan
-> +else
-> +CFLAGS += -static-libsan
-> +endif
-> +
->  TEST_GEN_PROGS := fchmodat2_test
->  
->  include ../lib.mk
-> 
-> Alternatively, if the cc-option macro is available, you could
-> try this one
-> 
-> CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan) 
-> 
->      Arnd
+> This is bogus, but can perhaps be 'fixed" with GENMASK((n) - 1, 0).
 
-Thanks! I'll give this a try. Although I can't actually find any mention of
--static-libsan in the clang manual. I believe I read somewhere that static
-linking is default for clang, so worst case, I guess we just leave it out
-(presumably that's effectively been the case so far anyway).
+The second warning only appears because of the first error; if the first
+error is fixed, I suspect the second one won't appear (although I have
+not actually checked it).
+
+Cheers,
+Nathan
