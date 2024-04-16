@@ -1,225 +1,97 @@
-Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B89763F1;
-	Tue, 16 Apr 2024 11:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73DE127B7A
+	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 11:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713265326; cv=none; b=YdkJTflB9EBZMqMPTUPcjktQm4rRWdhRK1FwDNcAPpiTISwI+H8E7ZqHJipIGNoT/HJcmVXuS5V5CsTCE0y+6MtTfHqazwUQ2Q8VFktHrHWPl8epg3fgKSB4IUfFEDCg+wvL0fQARAHs5iqLD235+7EBkha7v5JIzygJH2H/jGk=
+	t=1713265805; cv=none; b=DxbsJm8/R5z0R7tS+c+iNfwQD8BqAysu4BD4Zn7CxB7h1GMorcpP6E4pqB7GRF0CSN2yRs/vm9B4JHfAizQPmP1ipx5n2VY/BUWQJDdpTr8CGwetx7OgdKFV3Hw2uolq6oPJF1yN8NWPNBvVT4GjmUp820Qo2JpNBI5W+xPNgNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713265326; c=relaxed/simple;
-	bh=2vrUTW6+WcHv+DgzAcm9LFf6YmCXBn2YtJKqYcs7wxo=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=V/cBaXjIgXgMqIGp4j14bQ6l6VacmSqvVQ+Q3FR6CH882lzqh6hkaiYzY+giNo57d18hPFXL4wH10/WagxzHsFz/60i6kHh6tmBLiIlirjLodk4bae6bKx4MDiMJtXsNFGRJzQx3E38c7unfo14fUXBqO7dD2IYYWDXz6f0pWwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=HbDKskit; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OgWQBOga; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="HbDKskit";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OgWQBOga"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id A0623114011E;
-	Tue, 16 Apr 2024 07:02:02 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 16 Apr 2024 07:02:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1713265322; x=1713351722; bh=Zk60bWbrel
-	joGat0WtfbefJblBLK6E0eub+WvGF0SQM=; b=HbDKskitWj9XmebUrXWe+Yy5eN
-	3nGz9gIRgp4xDsxGLdoBktSMz64WxXhyAcZhJ08gU1lXksV2N5VW2JU7ChpqIDIf
-	c4GnSeH5jFAPBEVW9vm+Yeqdp6Qynv/uvO7oufK2N11Qsvh+349Sos6KLCOi71Lj
-	TLSTyUjXu7yYqS+taHLfhQt5A31XEPvzV0ffixqP7uyszvyEt0+29L3KnQ9IaVlj
-	VUDUnRKVJTQxm+Y3Iw7+ZnSo3gNdXdX+i3oI1kn9KH3k1zURvfziI8XgDuVi69Xc
-	1U7yAzwKQeJmSCEXWynAFWiASIWS/xoNsou4x0gpjgnUcIFDxyGh6l0b6Lqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1713265322; x=1713351722; bh=Zk60bWbreljoGat0WtfbefJblBLK
-	6E0eub+WvGF0SQM=; b=OgWQBOgaXnXDm5d6p7LLC2FcZeJdIUUk7D8N/8LAdWzQ
-	b2HaAMqdQDEAmNiBuf3nM/WP0cVxsl+3C1a7eFO7ieE8S0TNMlMbJBSaez0okP/+
-	X/1G63wOkFllnO9O2UfeaqMb2+dAWxnNAFSfRUfCh/BYWjb4b9bQog9z5O3bM8Np
-	lZ0ud3tzLCtDNvQDKzlF8RMCmJbiuoTCEBtYp/ibB6kBKW17hii2hhC65oyjkfJZ
-	TKjez9JWLcQ6tR/tJ4sIfJIkPXFhzpmA6wSLOd8WPrXl/G0WUAbw9WkRzhNQ0PTI
-	OV3BzdevM7UdaD2C4EEOzoL3g4gX4d8RybJTnxD21g==
-X-ME-Sender: <xms:qloeZgevYlSYamvN8FpLEHbJx9OAazGHte8yuhsKb2h4ObsHCnj9nQ>
-    <xme:qloeZiPsrku04fHUFUKHMWbigf9b4jNgii9MF_F1ZsrTrjxv3PtAfElVhngcNPydB
-    eCGll9HJdZZFEgPz5A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejhedguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:qloeZhhVRmPJRpPHgYgp81YRLa0Nu2yK8OLZLyZz2kiET15nqMhMXA>
-    <xmx:qloeZl83afwa1bkGrYxT60jHi4QHQOGtYwhTA353OxKaVjV4JpwIfw>
-    <xmx:qloeZsuxY6rnmjKKjvugyA_ObPxL_vnocWJ9e8XAR3kZb3CSr2FcAQ>
-    <xmx:qloeZsGxOZDhT1CxpUzz-EPwMpoYLG29dF8oszhc4uRRpAh_Qo_Jew>
-    <xmx:qloeZsFEfjETAS5RZ62CiwM-mzcDHWozQ_gk0DgU-z57iYj7mR6zGrEn>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 05DC2B6008F; Tue, 16 Apr 2024 07:02:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	s=arc-20240116; t=1713265805; c=relaxed/simple;
+	bh=DGnXGWBZ6/NHWbsu+aI1H9Su1DSjbVK/pq0pcF7oTHQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=kL/O+iE3MelfZCUVaN9DWwgxneOSNNHRbdmokOZaefjAgIpue2c8OQQz1WFJVT5YVhSOQy1Vp1iPpXvJ7scEY4LLxJXzORjsEvCiPjTYKrtdy7ZAg6vgROifRNKVaq+elQyg+sgOY1A9ilVhooB2nHVXCYLZH7naD1OIM9Z3tEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-255-LPfE2IzbO0utuOqpskCb8A-1; Tue, 16 Apr 2024 12:09:55 +0100
+X-MC-Unique: LPfE2IzbO0utuOqpskCb8A-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 16 Apr
+ 2024 12:09:27 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Tue, 16 Apr 2024 12:09:27 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Segher Boessenkool' <segher@kernel.crashing.org>, Naresh Kamboju
+	<naresh.kamboju@linaro.org>
+CC: Nathan Chancellor <nathan@kernel.org>, Anders Roxell
+	<anders.roxell@linaro.org>, Linux Regressions <regressions@lists.linux.dev>,
+	Arnd Bergmann <arnd@arndb.de>, clang-built-linux <llvm@lists.linux.dev>,
+	"Nick Desaulniers" <ndesaulniers@google.com>, open list
+	<linux-kernel@vger.kernel.org>, "lkft-triage@lists.linaro.org"
+	<lkft-triage@lists.linaro.org>, Aneesh Kumar K.V <aneesh.kumar@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, Dan Carpenter
+	<dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>
+Subject: RE: powerpc: io-defs.h:43:1: error: performing pointer arithmetic on
+ a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+Thread-Topic: powerpc: io-defs.h:43:1: error: performing pointer arithmetic on
+ a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+Thread-Index: AQHaj+s965G0tAMqzUOctdh7rJqb8rFqvAFg
+Date: Tue, 16 Apr 2024 11:09:26 +0000
+Message-ID: <1d0de2bee67643bfa5a561e70133db75@AcuMS.aculab.com>
+References: <CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com>
+ <20240416103819.GQ19790@gate.crashing.org>
+In-Reply-To: <20240416103819.GQ19790@gate.crashing.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <3d139886-9549-4384-918a-2d18480eb758@app.fastmail.com>
-In-Reply-To: 
- <CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com>
-References: 
- <CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com>
-Date: Tue, 16 Apr 2024 13:01:40 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
- "open list" <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org,
- "Linux Regressions" <regressions@lists.linux.dev>,
- linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: "Anders Roxell" <anders.roxell@linaro.org>,
- "Dan Carpenter" <dan.carpenter@linaro.org>,
- clang-built-linux <llvm@lists.linux.dev>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- "Jeff Xu" <jeffxu@chromium.org>, "Kees Cook" <keescook@chromium.org>,
- "Niklas Schnelle" <schnelle@linux.ibm.com>
-Subject: Re: powerpc: io-defs.h:43:1: error: performing pointer arithmetic on a null
- pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-Content-Type: text/plain
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 16, 2024, at 11:32, Naresh Kamboju wrote:
-> The Powerpc clang builds failed due to following warnings / errors on the
-> Linux next-20240416 tag.
->
-> Powerpc:
->  - tqm8xx_defconfig + clang-17 - Failed
->  - allnoconfig + clang-17 - Failed
->  - tinyconfig + clang-17 - Failed
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+From: Segher Boessenkool
+> Sent: 16 April 2024 11:38
+>=20
+> On Tue, Apr 16, 2024 at 03:02:52PM +0530, Naresh Kamboju wrote:
+> > In file included from arch/powerpc/include/asm/io.h:672:
+> > arch/powerpc/include/asm/io-defs.h:43:1: error: performing pointer
+> > arithmetic on a null pointer has undefined behavior
+> > [-Werror,-Wnull-pointer-arithmetic]
+>=20
+> It is not UB, but just undefined: the program is meaningless.
+>=20
+> It is not a null pointer but even a null pointer constant here.  It
+> matters in places, including here.
+>=20
+> It would help if the warnings were more correct :-(
 
-I'm not sure why this showed up now, but there is a series from
-in progress that will avoid this in the future, as the same
-issue is present on a couple of other architectures.
+Isn't it only a problem because the NULL pointer isn't required to
+be the all-zero bit pattern?
 
-The broken definitions are in the !CONFIG_PCI path of
+So when do we get a warning from using memset() on a structure
+that contains pointers? Since it is equally buggy.
 
-#ifndef CONFIG_PCI
-#define _IO_BASE        0
-#define _ISA_MEM_BASE   0
-#define PCI_DRAM_OFFSET 0
-#elif defined(CONFIG_PPC32)
-#define _IO_BASE        isa_io_base
-#define _ISA_MEM_BASE   isa_mem_base
-#define PCI_DRAM_OFFSET pci_dram_offset
-#else
-#define _IO_BASE        pci_io_base
-#define _ISA_MEM_BASE   isa_mem_base
-#define PCI_DRAM_OFFSET 0
-#endif
+Has anyone ever seen a system where NULL wasn't 'all zeros'?
+I've used a system where the 'native' invalid pointer was 'all ones',
+but even there the C code used 'all zeros'.
 
-Once the series is merged, the !PCI case can disable
-CONFIG_HAS_IOPORT and move all references to it into #ifdef
-sections, something like the (incomplete) patch below.
+=09David
 
-It looks like regardless of this, powerpc can also just set
-_IO_BASE to ISA_IO_BASE unconditionally, but I could be missing
-something there.
-
-     Arnd
-
----
-diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-index 08c550ed49be..29e002b9316c 100644
---- a/arch/powerpc/include/asm/io.h
-+++ b/arch/powerpc/include/asm/io.h
-@@ -36,11 +36,8 @@ extern struct pci_dev *isa_bridge_pcidev;
-  * bases. Most of this file only uses _IO_BASE though which we
-  * define properly based on the platform
-  */
--#ifndef CONFIG_PCI
--#define _IO_BASE	0
--#define _ISA_MEM_BASE	0
--#define PCI_DRAM_OFFSET 0
--#elif defined(CONFIG_PPC32)
-+#ifdef CONFIG_HAS_IOPORT
-+#ifdef CONFIG_PPC32
- #define _IO_BASE	isa_io_base
- #define _ISA_MEM_BASE	isa_mem_base
- #define PCI_DRAM_OFFSET	pci_dram_offset
-@@ -486,8 +483,7 @@ static inline u64 __raw_rm_readq(volatile void __iomem *paddr)
-  * to port it over
-  */
- 
--#ifdef CONFIG_PPC32
 -
-+#if defined(CONFIG_PPC32) && defined(CONFIG_HAS_IOPORT)
- #define __do_in_asm(name, op)				\
- static inline unsigned int name(unsigned int port)	\
- {							\
-@@ -534,7 +530,7 @@ __do_out_asm(_rec_outb, "stbx")
- __do_out_asm(_rec_outw, "sthbrx")
- __do_out_asm(_rec_outl, "stwbrx")
- 
--#endif /* CONFIG_PPC32 */
-+#endif /* CONFIG_PPC32 && CONFIG_HAS_IOPORT */
- 
- /* The "__do_*" operations below provide the actual "base" implementation
-  * for each of the defined accessors. Some of them use the out_* functions
-@@ -577,6 +573,7 @@ __do_out_asm(_rec_outl, "stwbrx")
- #define __do_readq_be(addr)	in_be64(PCI_FIX_ADDR(addr))
- #endif /* !defined(CONFIG_EEH) */
- 
-+#ifdef CONFIG_HAS_IOPORT
- #ifdef CONFIG_PPC32
- #define __do_outb(val, port)	_rec_outb(val, port)
- #define __do_outw(val, port)	_rec_outw(val, port)
-@@ -592,6 +589,7 @@ __do_out_asm(_rec_outl, "stwbrx")
- #define __do_inw(port)		readw((PCI_IO_ADDR)_IO_BASE + port);
- #define __do_inl(port)		readl((PCI_IO_ADDR)_IO_BASE + port);
- #endif /* !CONFIG_PPC32 */
-+#endif
- 
- #ifdef CONFIG_EEH
- #define __do_readsb(a, b, n)	eeh_readsb(PCI_FIX_ADDR(a), (b), (n))
-@@ -606,12 +604,14 @@ __do_out_asm(_rec_outl, "stwbrx")
- #define __do_writesw(a, b, n)	_outsw(PCI_FIX_ADDR(a),(b),(n))
- #define __do_writesl(a, b, n)	_outsl(PCI_FIX_ADDR(a),(b),(n))
- 
-+#ifdef CONFIG_HAS_IOPORT
- #define __do_insb(p, b, n)	readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
- #define __do_insw(p, b, n)	readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
- #define __do_insl(p, b, n)	readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
- #define __do_outsb(p, b, n)	writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
- #define __do_outsw(p, b, n)	writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
- #define __do_outsl(p, b, n)	writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-+#endif
- 
- #define __do_memset_io(addr, c, n)	\
- 				_memset_io(PCI_FIX_ADDR(addr), c, n)
-@@ -689,6 +689,8 @@ static inline void name at					\
- #define writesb writesb
- #define writesw writesw
- #define writesl writesl
-+
-+#ifdef CONFIG_HAS_IOPORT
- #define inb inb
- #define inw inw
- #define inl inl
-@@ -701,6 +703,8 @@ static inline void name at					\
- #define outsb outsb
- #define outsw outsw
- #define outsl outsl
-+#endif
-+
- #ifdef __powerpc64__
- #define readq	readq
- #define writeq	writeq
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
+
