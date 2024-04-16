@@ -1,88 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A986D1AB;
-	Tue, 16 Apr 2024 15:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D9E130A53;
+	Tue, 16 Apr 2024 15:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713280159; cv=none; b=CJ1qXcWWDQs+4T1GbTiv5bIR5qMTgAHE/s8BdZi3ZTKPgpkZWXCFiPdG12mzbGyvP4rmLnXThtUsYZOnfUJCWYsmk7ThVwa7t+D3cDmWbdoNyts09H1hyhUMkB7x2S6XqTfbXMilw8v4CsY3Iqz2uYhMS6PbWP6au+3MTy6EI2Y=
+	t=1713280252; cv=none; b=bAMSXi6xiDVZ+46Ukg1dVofLS0fkuToesjcHjXrXMINcNxMpuvAKer5QLGY9iis3I/QHyk0d42O4fP/R2pdMBrb/5CeF2L1wkeNvCRDCmwdgk2isftZINEpfqEGLG1iHusfyfd+7N+ubZd+doZLAAevxG7sCCKsWJDP7r5H3Qik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713280159; c=relaxed/simple;
-	bh=xaEEHBks3jzzeUOM15L3mtzrj0847tMHm5HZ1i4bIkw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hWh38hDG+aFNXzkaxBgDmpcelH/4m4EKkr4XppaUCqLtHK+swYkIZDSOlaHotIJcjfYfzOCEmb67YnvFeTcAmqJPTbJ9s1FIxSOWdgKznppP5ZigBdlPGZweGvhnNI8Ga166NeokS1HmmQT2cvyCiYNjNqnzhMkPXjeAZ89G/vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BiO2OvNr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713280252; c=relaxed/simple;
+	bh=gBhQjR8yERzBtR2F1oH15eDu+jFh9H2wAEw6XnlibhI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PCn77OZXYQ5s/HUiLpoKRTx7szqjsuDRe8bXBPL1BhGi0+cJIL6i1irRkMPTkJlhIbue+s71IYMYpVBAYOMX+Bhw6DBdqtrXfig6U18dMEt89bbYnpboCBNpFe3r6s9eZi2N+FfNWPRq2GaqGWuO9G3/obrC+wUe4so9IkJLz9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L65O9/Zc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BiO2OvNr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F4BC113CE;
-	Tue, 16 Apr 2024 15:09:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L65O9/Zc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A43C32783;
+	Tue, 16 Apr 2024 15:10:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713280158;
-	bh=xaEEHBks3jzzeUOM15L3mtzrj0847tMHm5HZ1i4bIkw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BiO2OvNrhoobR1cw6ZRn+k3zHND9lL7C13tNCjUtNKDyxTc8oXQgr93cTwRoqrVQM
-	 UYR65eSKbX0iX4epo1RaDHyK/eL7buJ2UNpb1WWV3vikbhS2Csn028njDizijUIIsM
-	 2OEdsxeRD2Tj1A5LQcfbTlEyKGP5uBeR780o8nyT3YqsP1XgH/69t7P8gwkBVRKyHW
-	 eM17KI5dwvC8VvW7WifgDOcC0eF4j5tqQT7LqRs5XR30xnLvd1cHP71MxSOvLajQYz
-	 pTvwijHKRFsj18fxvMl/f9dXjvNse1YKzVb9LD9qBC7A1PnGlwAjZLE3i8Mk5xxtbx
-	 FuqWY3EdJkV9g==
-Date: Tue, 16 Apr 2024 08:09:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [pdx86-platform-drivers-x86:review-hans 40/59]
- drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared
- function 'writeq'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <20240416150916.GA2715839@dev-arch.thelio-3990X>
-References: <202404161050.NSNJAxvX-lkp@intel.com>
- <Zh53z2VOwRFTYhVK@smile.fi.intel.com>
+	s=k20201202; t=1713280251;
+	bh=gBhQjR8yERzBtR2F1oH15eDu+jFh9H2wAEw6XnlibhI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=L65O9/ZcjKoGSTyRtXFSeOUn5fZulsRGtFjMV2kWXNKUs9u8xAQJhU2xE2hIbvkNT
+	 SMxsKYBsI5cN8ymAvcqks0HcXawUQG2Uok8Qs7Jmqkpv5UGF9uAZELEU3q94cy+eay
+	 Magtte9Jd/0iIxe1TSJ4IvGqwz8B3eRQp9bhI2UwJZLUXFmKdSerIKzo+BW32O7ngB
+	 dJbx7pPOF/Ag0Q8JuVxagxyyPUAdKA70qkjWeECmZDzSoAGTTPl8NWr3SMjpb3yo9j
+	 0LFQUgi/BoY6s9kPD8BUsRWSQJyNr506oDRnSEsz7cuSgVQFrXMHeeS1s0J3hhKitD
+	 qlRCrSIKdBs9g==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	shuah@kernel.org,
+	keescook@chromium.org,
+	usama.anjum@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net] selftests: kselftest_harness: fix Clang warning about zero-length format
+Date: Tue, 16 Apr 2024 08:10:48 -0700
+Message-ID: <20240416151048.1682352-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zh53z2VOwRFTYhVK@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 16, 2024 at 04:06:23PM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 16, 2024 at 10:35:55AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
-> > head:   0aae4c44b032b5ede39405dfc62900adc467f362
-> > commit: 2dc77993cb5eb311d6bb5584d30c3d1d42d9fa4a [40/59] platform/x86/amd/pmc: Add AMD MP2 STB functionality
-> > config: i386-randconfig-011-20240416 (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/config)
-> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202404161050.NSNJAxvX-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >       94 |         writeq(mp2->dma_addr, mp2->mmio + AMD_C2P_MSG1);
-> >          |         ^
-> >    drivers/platform/x86/amd/pmc/mp2_stb.c:267:45: warning: shift count >= width of type [-Wshift-count-overflow]
-> >      267 |         rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> >          |                                                    ^~~~~~~~~~~~~~~~
-> >    include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-> >       77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-> >          |                                                      ^ ~~~
-> >    1 warning and 1 error generated.
-> 
-> This is bogus, but can perhaps be 'fixed" with GENMASK((n) - 1, 0).
+Apparently it's more legal to pass the format as NULL, than
+it is to use an empty string. Clang complains about empty
+formats:
 
-The second warning only appears because of the first error; if the first
-error is fixed, I suspect the second one won't appear (although I have
-not actually checked it).
+./../kselftest_harness.h:1207:30: warning: format string is empty
+[-Wformat-zero-length]
+ 1207 |            diagnostic ? "%s" : "", diagnostic);
+      |                                 ^~
+1 warning generated.
 
-Cheers,
-Nathan
+Reported-by: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/all/20240409224256.1581292-1-seanjc@google.com
+Fixes: 378193eff339 ("selftests: kselftest_harness: let PASS / FAIL provide diagnostic")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+---
+CC: shuah@kernel.org
+CC: keescook@chromium.org
+CC: usama.anjum@collabora.com
+CC: linux-kselftest@vger.kernel.org
+CC: llvm@lists.linux.dev
+---
+ tools/testing/selftests/kselftest.h         | 10 ++++++----
+ tools/testing/selftests/kselftest_harness.h |  2 +-
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 541bf192e30e..4eca3fd1292c 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -288,15 +288,17 @@ void ksft_test_result_code(int exit_code, const char *test_name,
+ 	}
+ 
+ 	/* Docs seem to call for double space if directive is absent */
+-	if (!directive[0] && msg[0])
++	if (!directive[0] && msg)
+ 		directive = " #  ";
+ 
+-	va_start(args, msg);
+ 	printf("%s %u %s%s", tap_code, ksft_test_num(), test_name, directive);
+ 	errno = saved_errno;
+-	vprintf(msg, args);
++	if (msg) {
++		va_start(args, msg);
++		vprintf(msg, args);
++		va_end(args);
++	}
+ 	printf("\n");
+-	va_end(args);
+ }
+ 
+ static inline int ksft_exit_pass(void)
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 4fd735e48ee7..adb15cae79ab 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -1202,7 +1202,7 @@ void __run_test(struct __fixture_metadata *f,
+ 		diagnostic = "unknown";
+ 
+ 	ksft_test_result_code(t->exit_code, test_name,
+-			      diagnostic ? "%s" : "", diagnostic);
++			      diagnostic ? "%s" : NULL, diagnostic);
+ }
+ 
+ static int test_harness_run(int argc, char **argv)
+-- 
+2.44.0
+
