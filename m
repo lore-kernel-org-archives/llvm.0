@@ -1,85 +1,125 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0129C12CD91;
-	Tue, 16 Apr 2024 14:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D7D1DFE1;
+	Tue, 16 Apr 2024 14:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713277985; cv=none; b=dFhYeWKcLoZLOsv3r6/YJb3TNztPGBCwQEDY/UtrsKa+1mvgqqMRmdDdpogt9kjWu3lrxw7l2BP81zwASYE+xGaE0c7Ym2Xfr6653ajY1KBFPHfOxb/iL3sgC9ot0lcR+Ludma0j+5hCQQtdqDSIlR4CYsXwzNJET5LDK5BDKz4=
+	t=1713278493; cv=none; b=tzSA1mVFZz8ScW8hhsPZfF+Y9AZn5U7qv/QjzmuYgUAOHvdpxQK5ytuSuigyP3GUMAl7PeLle36p/TCM/hwaM8HpElhWyO/Pjd/UDJ+rIUy4sLjUWnPbA79UZNfDqx3/1uawOT4hQMiDz6/9r+1Ba3aMfrQih3lQkp/EH/JRqUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713277985; c=relaxed/simple;
-	bh=l5m29NIiX6i9/9OYQJmF2WeFnvO1SUvcqsKMNMHrFjg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tT32nPITSt0dz8PxL3RXYJ1FHygCICEsHMgRkNhfs7AUxdrGYQFMTz69DaZb8Zp87gQ5UQ69M2waL9RhHQoW2hHyslws+ZW0XYJKi2JkmGQHfn2cvNZeN+TNZ+BbKOdoyRrHXBYqDfYn+Lj72FpnkuPViMH2h7EqH203fyiOiw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99A1B339;
-	Tue, 16 Apr 2024 07:33:31 -0700 (PDT)
-Received: from [10.1.39.189] (XHFQ2J9959.cambridge.arm.com [10.1.39.189])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07D043F738;
-	Tue, 16 Apr 2024 07:33:01 -0700 (PDT)
-Message-ID: <31b4e05d-62c6-44cd-8038-7ac8d21320c3@arm.com>
-Date: Tue, 16 Apr 2024 15:33:00 +0100
+	s=arc-20240116; t=1713278493; c=relaxed/simple;
+	bh=QFSr4wVV/e7e8YSqnMvX38E0a06A53lGWX69D6/6jlg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rn7AHQRrevDnkWXqV5IuPxOHQb8H/Jgv6qkXnRp2oiUgJf5RwzRvl3ABUsZdcutekusGWDKLjq1pb9Y+FvnHUqE1qtg4eKnrT6v3Gi+Y1j0iZCFvwnZ/VZAQ1KPFhcpRzSvh5YVPhtal0tBv2tOHH+MHKSQlAlr8zcKoyImKqVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qDfLa4/S; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qDfLa4/S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01027C2BD10;
+	Tue, 16 Apr 2024 14:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713278493;
+	bh=QFSr4wVV/e7e8YSqnMvX38E0a06A53lGWX69D6/6jlg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qDfLa4/SoBzVXvSPIGArjAyJwzvANkOpG+6enMa8kj0JbCrzyogzIIGdAf1i7TnAY
+	 tRdNhNSWae+F75GkcxfRVrAtYCBBfglk7WyCyvWs8xTzxIEY6MvDZx7wvgoRF+EYAQ
+	 63/i43I/YJPVus+Gn81W8sXBXmeTeerG/3q2xZhN6kZKu0O6cpPy3JeqlK8IByOWNB
+	 lR0Bco6TLZ7DO+9CubDRAqQ8kgWyNZAPguiRFeW/ayvJWUh/sBTebjC1do0FpuLr9f
+	 iSNJWsllCVIsSQLTCc7aEAaZgoIdbctB30QVe0sAMutbkyCvZdUxF3WhAggBsPuQ0A
+	 mgGkgVDXABywA==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2da888330b2so44643821fa.2;
+        Tue, 16 Apr 2024 07:41:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWMPFNOGhCSizajIoGxxpsVHA+aL41xiWWJ3kchbsVDwxSiBZAxJ5kvr3LQrcl62hsTMfbDAj6/91hlALWBZN+vtdKmDLDa+P90g/EXmNSr4U3bVhqRUByTPmo3r1BDGQ==
+X-Gm-Message-State: AOJu0YyclGOwrgpQ+PvpJXI9zQouCarcrynxOZercU2XQr8orMWRoga2
+	n/ic/wF/SurB2LcUMdKosf6oT9d0anQXDedeI9uOoxuwDjEFBtw6DBWCBkVXFgumSR3He5qNZ7N
+	j2x89TQb0g8UBViTMOuTCAU8fpG0=
+X-Google-Smtp-Source: AGHT+IGN2nz/xTDmRgoYKeTLq3wairO+eDlQiHnk3PLxMapmMED08oZsVrPb0CIY2mj+wK+zCdR/PWSsYeNurFFvENw=
+X-Received: by 2002:a2e:9ed4:0:b0:2d9:fd90:af57 with SMTP id
+ h20-20020a2e9ed4000000b002d9fd90af57mr9292681ljk.51.1713278491369; Tue, 16
+ Apr 2024 07:41:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
- '-static-libsan'?
-Content-Language: en-GB
-To: kernel test robot <yujie.liu@intel.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>
-References: <202404141807.LgsqXPY5-lkp@intel.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <202404141807.LgsqXPY5-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
+ <c82af143-b620-44d9-8647-f52096b851ab@redhat.com> <53d194db-c7d4-4026-9fbb-3b41de545849@app.fastmail.com>
+In-Reply-To: <53d194db-c7d4-4026-9fbb-3b41de545849@app.fastmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 16 Apr 2024 22:41:22 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7dw_44kWC5ph=Bia6i=fjUh8HxA6b4=vtZ8oQx_Br1aw@mail.gmail.com>
+Message-ID: <CAAhV-H7dw_44kWC5ph=Bia6i=fjUh8HxA6b4=vtZ8oQx_Br1aw@mail.gmail.com>
+Subject: Re: ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
+ but not used
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: David Hildenbrand <david@redhat.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	WANG Xuerui <kernel@xen0n.name>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Linux-Arch <linux-arch@vger.kernel.org>, 
+	Linux-MM <linux-mm@kvack.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	loongarch@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-+ Arnd
+On Tue, Apr 16, 2024 at 10:14=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
+>
+> On Tue, Apr 16, 2024, at 15:51, David Hildenbrand wrote:
+> > On 16.04.24 12:26, Miguel Ojeda wrote:
+> >> Hi David, Arnd, LoongArch,
+> >>
+> >> In a linux-next defconfig LLVM=3D1 build today I got:
+> >>
+> >>      ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
+> >> but not used [-Werror,-Wunused-but-set-parameter]
+> >>        629 |                 pte_t *ptep, unsigned int nr, unsigned lo=
+ng address)
+> >>            |                        ^
+> >>
+> >> Indeed, in loongarch, `__tlb_remove_tlb_entry` does not do anything.
+> >> This seems the same that Arnd reported for arm64:
+> >>
+> >>      https://lore.kernel.org/all/20240221154549.2026073-1-arnd@kernel.=
+org/
+> >>
+> >> So perhaps the loongarch's one should also be changed into an static i=
+nline?
+> >
+> > 4d5bf0b6183f79ea361dd506365d2a471270735c is already part of v6.9-rc1. H=
+ow come
+> > we see that only now on linux-next?
+>
+> Andrew merged my patch to enable -Wextra yesterday, and it appears
+> that this one fell through the cracks with my testing, either I
+> missed the combination of loongarch with clang, or I last tested
+> it before your patches got merged.
+>
+> > I assume we should see the same on upstream Linux with LLVM=3D1, correc=
+t?
+>
+> On upstream, it only shows up with 'make W=3D1'.
+>
+> > If so, we should likely just drop that completely and rely on the
+> > asm-generic one:
+> >
+> > diff --git a/arch/loongarch/include/asm/tlb.h
+> > b/arch/loongarch/include/asm/tlb.h
+> > index da7a3b5b9374a..e071f5e9e8580 100644
+> > --- a/arch/loongarch/include/asm/tlb.h
+> > +++ b/arch/loongarch/include/asm/tlb.h
+> > @@ -132,8 +132,6 @@ static __always_inline void invtlb_all(u32 op, u32
+> > info, u64 addr)
+> >                  );
+> >   }
+> >
+> > -#define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
+> > -
+> >   static void tlb_flush(struct mmu_gather *tlb);
+>
+> Yes, this looks like the best solution, and I can confirm that this
+> addresses the warning on linux-next.
+Emmm, this should be removed in the first place because x86 removed it
+at 5.12...
 
-On 16/04/2024 08:42, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   7efd0a74039fb6b584be2cb91c1d0ef0bd796ee1
-> commit: c652df8a4a9d7853fa1100b244024fd6f1a9c18a selftests: link libasan statically for tests with -fsanitize=address
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <yujie.liu@intel.com>
-> | Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> # tools/testing/selftests/fchmodat2$ make CC=clang
-> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan -isystem usr/include     fchmodat2_test.c  -o tools/testing/selftests/fchmodat2/fchmodat2_test
-> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
-> make: *** [../lib.mk:181: tools/testing/selftests/fchmodat2/fchmodat2_test] Error 1
-> 
-> # tools/testing/selftests/openat2$ make CC=clang
-> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan     openat2_test.c helpers.c helpers.h  -o tools/testing/selftests/openat2/openat2_test
-> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
-> clang: error: cannot specify -o when generating multiple output files
-> make: *** [../lib.mk:181: tools/testing/selftests/openat2/openat2_test] Error 1
-> 
-
-Hi Arnd,
-
-This change went in quite a while ago and is on;y just blowing up. I saw your
-comment in another thread [1] that Andrew merged your change to set -Wextra.
-Perhaps that's what has caused this to show up only now? *although I don't
-actually see -Wextra in the command line).
-
-I guess the problem is that `-static-libasan` is only supported by gcc. But I'm
-Makefile-illiterate. Can anyone advise on what's the best way to make this
-argument gcc-only?
-
-Thanks,
-Ryan
-
-[1]
-https://lore.kernel.org/linux-mm/53d194db-c7d4-4026-9fbb-3b41de545849@app.fastmail.com/
+Huacai
+>
+> Tested-by: Arnd Bergmann <arnd@arndb.de>
