@@ -1,134 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B881C06;
-	Tue, 16 Apr 2024 19:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE9F132C23;
+	Tue, 16 Apr 2024 19:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713295294; cv=none; b=L4ZX3ehAv4zl+hQzs2iIBYS+lSRD84sIe47kcnMoQjO851iYJM/XdZ5N8J8MwWjy5S7zH5VL96Pyqrpep3tyOb9u5F2T/cLOBCd+0hKDyykXZ1zRhDwQW/MlqgWkJ5FBsKFQqZTOz5De4BcdGDDA0N1qt/77VU/B2VtdgZy9C5g=
+	t=1713295502; cv=none; b=CInxUSMw1s1Q5YFYDm/fBnD7bc9n1Cse3IPvmJ8QZpX/3N8Yk9aFOqpI9GemzEq0wE9+CgtapxGhTQKzVOjr0JCPVt8CPsMKE6TSwrj+lvAzkm6okPbN/SBv4fpijMaQ1VmJ//9+Phqii8BXweorVADczPpnsKzRgw22TvuVzvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713295294; c=relaxed/simple;
-	bh=fkQwf84l6mJCSno8vjhQKM7Vl2JN33rSup5ihy2cx2E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ce0qkpr2BtIAEUtRtWRQb6+nrTcqQ6E0JkFi8MnGbLkd0rfCFhb2znImm3TirhNtOrsQH42g7iNIjx99zspMYFL8qv63LNI1eQiDfOSlbOzI7mnQMk7QWxv9fuEX+ulFXr5en8CrFbXzGDfFg18Q/PKGUGyICJCtmIVBhBUHRIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LV+rHMf4; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1713295502; c=relaxed/simple;
+	bh=7ffRkoqd8Raf8fUSuuAKNPwc8vUdDnYdW+Q6ugXQYuM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NsN+YA1TlKH9rkug52JR8HZhFnPQwkPa4OJZ+L9QR6uMG82h+PGbqRlirJfCpvIycTwGPkDtnjp8Bmh2m9UatACAnrXx30+kIaB03ijVUt/Qy5YqUtPuMzG4rGUGM9gvn/qu0Q3G968syLiD+qDYyuBTkc5ImFa0TxW5IUV8NZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HZxSa4oO; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LV+rHMf4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713295293; x=1744831293;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fkQwf84l6mJCSno8vjhQKM7Vl2JN33rSup5ihy2cx2E=;
-  b=LV+rHMf47TymQZub8MemWJOgGqaCbBcm3c4YY9r46dfpCUR21HCcqer2
-   PGoOme/0zr7nYAgTo6xPjDh3TKVjhHyF4HYIVtta7O4L2kOKdovToeYey
-   XFkWWtA5rHfE8yStyD1s0EHmKrIdYrWClL1BkHKGtAPyY0LueuePe/DfC
-   WRrSwHXQN1SkvwXNrIInyCcV4oFQRZqe7r3zlDYK1s4sf9ANPAqxUXDza
-   U4uewCqWiVqtWOwsSQDuw+k//XXMIcq1c69Ph6kf+1HIbxtYEqc7szMjs
-   mnnkv8KwmRvXMq+8Hd9y7FLaodIvC7ILc3U1e4/uFlkO+vADLZ6agANDG
-   A==;
-X-CSE-ConnectionGUID: n8eiK2sqSMuZG2eNq6KJYw==
-X-CSE-MsgGUID: cpgNAkoZRBecnQfaN7CLeA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="19317847"
-X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="19317847"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:21:31 -0700
-X-CSE-ConnectionGUID: cCu+bmAzSrOprlVqRDg41A==
-X-CSE-MsgGUID: /aflxn7sSrKVEngPOHNA/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="45649795"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:21:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rwoMv-00000004nn8-2yyQ;
-	Tue, 16 Apr 2024 22:21:25 +0300
-Date: Tue, 16 Apr 2024 22:21:25 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [pdx86-platform-drivers-x86:review-hans 40/59]
- drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared
- function 'writeq'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <Zh7PtQXB2Y5kd78-@smile.fi.intel.com>
-References: <202404161050.NSNJAxvX-lkp@intel.com>
- <Zh53z2VOwRFTYhVK@smile.fi.intel.com>
- <20240416150916.GA2715839@dev-arch.thelio-3990X>
- <Zh6-MCW_szrniAnb@smile.fi.intel.com>
- <20240416181715.GA509518@dev-arch.thelio-3990X>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HZxSa4oO"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2a4b457769eso2895992a91.2;
+        Tue, 16 Apr 2024 12:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713295500; x=1713900300; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7ffRkoqd8Raf8fUSuuAKNPwc8vUdDnYdW+Q6ugXQYuM=;
+        b=HZxSa4oOR4vcRudhdaWXhhRzVf5ctF9uPD2O73/ON4hI94arsPMMitnJoXjcig+BjI
+         Eb6sRFginhtLJ9fE/qeyf18Vzcj8r+ObdyJSZeDknWvVh0XrTQGHgV5dbUZEUVV/H2S5
+         upiD6lG/wGcXPWMkNMecjf/IUtbuQ+jxgx7jgGsIZAafnRVYhGISVPk6RVpmHWu+qagh
+         k2JjVqw3Za8tKVFD41ZnELB5ysuzU8NwXeaxVcNecW0Y5WLmVzG36mQN9URmWuTI3s0W
+         JDRLzPK1E//pLG4eoQbWOmd5vrw3HNgKqahSkh3YZXpiCJdQa4r2LfZgP4YP52yU9t81
+         be7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713295500; x=1713900300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7ffRkoqd8Raf8fUSuuAKNPwc8vUdDnYdW+Q6ugXQYuM=;
+        b=HyjjmnYSSN/4aJ7HKKO0hRd4QCzeh+e8H5u/8PS+Cn/V0hBjIUd9M+dxHFuz09gInA
+         U1yzjI5c2zgPFdNWT1pWN5IcZY1eg8vpVqqTYhCkDO8VA9J4k5o3cH5sw2J2Z7bkqGNk
+         JkmTc7z4pB3s7IsGOJAHXWH7gc0vm8pOfCxO1PZ5hadZN/FJpnhLUU4rkV5zh8dBVmiY
+         LsUuOJqrCvnKvL5ICnMO43xBACHWUkD02tfFcY8zUJTTgrhYdoFdTuNM11DOg8PDYHnq
+         sjJRnQzME51zGXhT6JC2G/jUXFSsBkjXrw6MO9E3F/jZHAJIsSb5HZkHKAkJS/SDlMNO
+         f6wQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXgRtPne3vyAE8rnqxGgcBEFu9KweeNCay4gVFKnt1QK0efrJiGNLJ/c73cJcVPhXYgbbcMXbXVpli/byMbmwF3C1MaQWBTTX+GmRyLhntW1EEJM+nPhRumgraW9//9Uw==
+X-Gm-Message-State: AOJu0Yyb6XKAuukDv18KclAmeBC2uT7abEhvk+EwZ+jtlTUQsdQaqZ0A
+	PbyuawLRhq215xkocNzREZ6BjhExCj+NPknPmokz0ZXhMzxujubKLhzTp8q/soctM6uuNHRmA9g
+	tjDVsy9dskjNe73sntA7BSR2Jz+4=
+X-Google-Smtp-Source: AGHT+IEacr+WK0M3ZF4z2ZTYY1pegpjK4L93Kit6rRktM90mWV0eYXk2xPvWNjCZQ+q0OF2du9cQzMc/KnT2IjI0uzI=
+X-Received: by 2002:a17:90b:4b4e:b0:29c:582d:bade with SMTP id
+ mi14-20020a17090b4b4e00b0029c582dbademr11298028pjb.2.1713295500304; Tue, 16
+ Apr 2024 12:25:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240416181715.GA509518@dev-arch.thelio-3990X>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240416144926.599101-1-david@redhat.com>
+In-Reply-To: <20240416144926.599101-1-david@redhat.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 16 Apr 2024 21:24:01 +0200
+Message-ID: <CANiq72kACt+FfeYXJxfQpmGH=uPqkDA0oprfnebw52VSKyn7kQ@mail.gmail.com>
+Subject: Re: [PATCH v1] LoongArch/tlb: fix "error: parameter 'ptep' set but
+ not used" due to __tlb_remove_tlb_entry()
+To: David Hildenbrand <david@redhat.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-arch@vger.kernel.org, loongarch@lists.linux.dev, llvm@lists.linux.dev, 
+	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 16, 2024 at 11:17:15AM -0700, Nathan Chancellor wrote:
-> On Tue, Apr 16, 2024 at 09:06:40PM +0300, Andy Shevchenko wrote:
-> > On Tue, Apr 16, 2024 at 08:09:16AM -0700, Nathan Chancellor wrote:
-> > > On Tue, Apr 16, 2024 at 04:06:23PM +0300, Andy Shevchenko wrote:
-> > > > On Tue, Apr 16, 2024 at 10:35:55AM +0800, kernel test robot wrote:
-> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
-> > > > > head:   0aae4c44b032b5ede39405dfc62900adc467f362
-> > > > > commit: 2dc77993cb5eb311d6bb5584d30c3d1d42d9fa4a [40/59] platform/x86/amd/pmc: Add AMD MP2 STB functionality
-> > > > > config: i386-randconfig-011-20240416 (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/config)
-> > > > > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > > > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240416/202404161050.NSNJAxvX-lkp@intel.com/reproduce)
-> > > > > 
-> > > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > > > the same patch/commit), kindly add following tags
-> > > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202404161050.NSNJAxvX-lkp@intel.com/
-> > > > > 
-> > > > > All errors (new ones prefixed by >>):
-> > > > > 
-> > > > > >> drivers/platform/x86/amd/pmc/mp2_stb.c:94:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> > > > >       94 |         writeq(mp2->dma_addr, mp2->mmio + AMD_C2P_MSG1);
-> > > > >          |         ^
-> > > > >    drivers/platform/x86/amd/pmc/mp2_stb.c:267:45: warning: shift count >= width of type [-Wshift-count-overflow]
-> > > > >      267 |         rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> > > > >          |                                                    ^~~~~~~~~~~~~~~~
-> > > > >    include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-> > > > >       77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-> > > > >          |                                                      ^ ~~~
-> > > > >    1 warning and 1 error generated.
-> > > > 
-> > > > This is bogus, but can perhaps be 'fixed" with GENMASK((n) - 1, 0).
-> > > 
-> > > The second warning only appears because of the first error; if the first
-> > > error is fixed, I suspect the second one won't appear (although I have
-> > > not actually checked it).
-> > 
-> > Is it confirmed? Because to me it looks not obvious at all ==> complier can be
-> > amended as well in warning reporting
-> 
-> Yes, I see no error or warning with the following diff on top of
-> 2dc77993cb5eb311d6bb5584d30c3d1d42d9fa4a. I am not saying that is not an
-> issue that should be addressed, I am just explaining why the warning is
-> showing up at all.
+On Tue, Apr 16, 2024 at 4:49=E2=80=AFPM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> With LLVM=3D1 and W=3D1 we get:
 
-Yes and this is confusing.
+Hmm... I didn't need W=3D1 to trigger it (LLVM 18.1.2).
 
-> It happens with -Warray-bounds occasionally as well.
+> Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 
-There is a ternary that definitely makes it never happen. How does compiler
-miss that?
+Thanks, looks good to me -- built-tested:
 
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-
+Cheers,
+Miguel
