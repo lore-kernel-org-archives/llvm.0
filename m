@@ -1,103 +1,130 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E4F13048E
-	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 15:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0991311A8
+	for <llvm@lists.linux.dev>; Tue, 16 Apr 2024 15:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713280999; cv=none; b=nKkSIlvQ92+sx/KHM2az7E9YmRDamf+SdRsYlhN5BCsfiiA3YpKSQnFuHMiAv25KAmnly2X4FJEDAJEEtvOhxXqBAlg90fA0SwFuaST0RnonoQLTTrDOOKD5uNh4vSw+ZrjVKKy2vrJxKeELPLzyTU0LocKyLBv6O920X92qdPs=
+	t=1713281042; cv=none; b=oNYUaTQ/W6hVGFgzo3Od34jPDVoTDxnl6r8sQYNXbpwhd/sWnWXjURrMU/bOrXM6OvT8BqLuZQxIdTp1CccwLsMZeIpNhmah/iQjjF3Yt7ujhvRDWaZLIyyIKCSO1VY7DTZxt0zD90kOqxzMVWZqwIQkkOGY83BULRxPQcknjCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713280999; c=relaxed/simple;
-	bh=bLU73jHksihFb5Kkaq6O4l8bW9c2Gyah+VFZw8edoJs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eDa2Imw90zqM0xP8+Q6h6Ev26Z3W7+FNj6qstV163L21lbmNsTeeM8I+llyAui1k1KxqIMsRsSD4XYHOMxFRnYGLeuIVFO0f/hd/U1e9uy6qd9dnCoYgamaZhV2mFxCYHAgtdkkylSsoWjMHi8YvD/BNpq//y3Foq+KCM7R2twg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BTfJMlxr; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1713281042; c=relaxed/simple;
+	bh=2Apvcqo+npWh1kmd85nRE49yYcpp9IRrnNWCH7LYGvc=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=CydUxbyX1xAiXdJbVEDKEoh6VaknINgK2A64gLLzLO7LR2fKNpmgOgn892nmNxYO5xWAgO4U/AwiL8dUeQ/hJ7JDYvR5pTD/xwFBGQnODG/EYOeAO1Shj8O7+9OmbZB3tJWycpyGT7pfRenkyCbaCxvudlTyT/exkJpKkiMS5iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=n0QqIdjD; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BTfJMlxr"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="n0QqIdjD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713280996;
-	bh=bLU73jHksihFb5Kkaq6O4l8bW9c2Gyah+VFZw8edoJs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=BTfJMlxrRUDfa89Wuw0pdzkeWXI73KDxPeb0+H0wN5gDq9ooJz7F6f3QNHmFQuZai
-	 2n1++yqBqRg95Xpi2EZcdFrPnWpKNLmSYBQ/62l3V7fgXZ6uILFDXJt8pG9A3vO7yX
-	 NXd3iasStbJAfwIn0vlx3uNQQ7u8EGDEEbdmN9rOPuYVVs22KSVUEkw9K2gUAhaumr
-	 SGULr/XhBI2hFFaedtgljvNBEKBQ3kc5dbMLfgCkb3MSxE04EoykkQKsOQzNGaUnPh
-	 DqQNnRVau+C72nJcOViHK4pXv+LgdJa+Qk+ifgG5wN2D7t+OqTwlMnhsfqZYeEAupK
-	 0+hs2EjeWWGlg==
-Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	s=mail; t=1713281039;
+	bh=2Apvcqo+npWh1kmd85nRE49yYcpp9IRrnNWCH7LYGvc=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=n0QqIdjDQiB1FXr0EtttGGHeNKXeZtHLAleO/pCRthxUbmSVtrizxk4BYcNAKEU2B
+	 FL+Lzc69N/Ua7AHimjjANaJIMGMAOEYi5r1DCqIHk/CkwlW1Qv3eP7JZ8YO7WqbKCc
+	 e/W2f//K7UXs29HOlpul66kdtaKIBWtKdv1syqWSnPwp16jkpye9U+9DBfJ4kkxQ1R
+	 5IkEVdjEXfI8It5xQK6poaFR8PtxgswJzNJmKPUILisjzCaDBgYVruXOttnn/a7WGx
+	 do44YksV2OAGykNkgcj3vwbFiwXpH/stC7dpBLlnedeBVUrfzBzo7jW2gLJ93SfU+V
+	 20fWLeunP2tAg==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6248F37804B2;
-	Tue, 16 Apr 2024 15:23:12 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel@collabora.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] selftests: exec: make binaries position independent
-Date: Tue, 16 Apr 2024 20:23:39 +0500
-Message-Id: <20240416152341.3186853-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CED1337804B2;
+	Tue, 16 Apr 2024 15:23:56 +0000 (UTC)
+Message-ID: <dffe0854-b242-472f-aaa6-6281721d95d5@collabora.com>
+Date: Tue, 16 Apr 2024 20:24:29 +0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, netdev@vger.kernel.org,
+ edumazet@google.com, pabeni@redhat.com,
+ Sean Christopherson <seanjc@google.com>, shuah@kernel.org,
+ keescook@chromium.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net] selftests: kselftest_harness: fix Clang warning about
+ zero-length format
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+References: <20240416151048.1682352-1-kuba@kernel.org>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240416151048.1682352-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The -static overrides the -pie and binaries aren't position independent
-anymore. Use -static-pie instead which would produce a static and
-position independent binary. This has been caught by clang's warnings:
+On 4/16/24 8:10 PM, Jakub Kicinski wrote:
+> Apparently it's more legal to pass the format as NULL, than
+> it is to use an empty string. Clang complains about empty
+> formats:
+> 
+> ./../kselftest_harness.h:1207:30: warning: format string is empty
+> [-Wformat-zero-length]
+>  1207 |            diagnostic ? "%s" : "", diagnostic);
+>       |                                 ^~
+> 1 warning generated.
+> 
+> Reported-by: Sean Christopherson <seanjc@google.com>
+> Link: https://lore.kernel.org/all/20240409224256.1581292-1-seanjc@google.com
+> Fixes: 378193eff339 ("selftests: kselftest_harness: let PASS / FAIL provide diagnostic")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-  clang: warning: argument unused during compilation: '-pie'
-  [-Wunused-command-line-argument]
+> ---
+> ---
+> CC: shuah@kernel.org
+> CC: keescook@chromium.org
+> CC: usama.anjum@collabora.com
+> CC: linux-kselftest@vger.kernel.org
+> CC: llvm@lists.linux.dev
+> ---
+>  tools/testing/selftests/kselftest.h         | 10 ++++++----
+>  tools/testing/selftests/kselftest_harness.h |  2 +-
+>  2 files changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index 541bf192e30e..4eca3fd1292c 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -288,15 +288,17 @@ void ksft_test_result_code(int exit_code, const char *test_name,
+>  	}
+>  
+>  	/* Docs seem to call for double space if directive is absent */
+> -	if (!directive[0] && msg[0])
+> +	if (!directive[0] && msg)
+>  		directive = " #  ";
+>  
+> -	va_start(args, msg);
+>  	printf("%s %u %s%s", tap_code, ksft_test_num(), test_name, directive);
+>  	errno = saved_errno;
+> -	vprintf(msg, args);
+> +	if (msg) {
+> +		va_start(args, msg);
+> +		vprintf(msg, args);
+> +		va_end(args);
+> +	}
+>  	printf("\n");
+> -	va_end(args);
+>  }
+>  
+>  static inline int ksft_exit_pass(void)
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index 4fd735e48ee7..adb15cae79ab 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -1202,7 +1202,7 @@ void __run_test(struct __fixture_metadata *f,
+>  		diagnostic = "unknown";
+>  
+>  	ksft_test_result_code(t->exit_code, test_name,
+> -			      diagnostic ? "%s" : "", diagnostic);
+> +			      diagnostic ? "%s" : NULL, diagnostic);
+>  }
+>  
+>  static int test_harness_run(int argc, char **argv)
 
-Tested with both gcc and clang after this change.
-
-Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/exec/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index fb4472ddffd81..01940d9165d67 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--CFLAGS = -Wall
-+CFLAGS = -Wall #-Wunused-command-line-argument
- CFLAGS += -Wno-nonnull
- CFLAGS += -D_GNU_SOURCE
- 
-@@ -29,8 +29,8 @@ $(OUTPUT)/execveat.denatured: $(OUTPUT)/execveat
- 	cp $< $@
- 	chmod -x $@
- $(OUTPUT)/load_address_4096: load_address.c
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -pie -static $< -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000 -static-pie $< -o $@
- $(OUTPUT)/load_address_2097152: load_address.c
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -pie -static $< -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x200000 -static-pie $< -o $@
- $(OUTPUT)/load_address_16777216: load_address.c
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -pie -static $< -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-z,max-page-size=0x1000000 -static-pie $< -o $@
 -- 
-2.39.2
-
+BR,
+Muhammad Usama Anjum
