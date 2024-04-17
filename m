@@ -1,113 +1,184 @@
-Received: from wfhigh6-smtp.messagingengine.com (wfhigh6-smtp.messagingengine.com [64.147.123.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D857925619;
-	Wed, 17 Apr 2024 18:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E872C19D;
+	Wed, 17 Apr 2024 19:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713380264; cv=none; b=AXNwEZYwSJOh+UdAvRlJWUwJUX6DAsnnpK/zC2dQtNw8AzMwD0LPrbxlEL6d6Mucwd3YevfnbjWipi3E6g/BaMbIUY3jHAXXdYoP+OlADBaW2fY2sfxMUSosqb5IOKdQXqTZ7ZYPKl5LmxfbcmdI6+e+c/XDnClK7z2ap4XnUDA=
+	t=1713383387; cv=none; b=lSFPnf7pLCgRec9Ts45An4EM206lypVPGbrk5Wsy5KOAxxNwOjMEBwTa1AGxr46jZkZH5OMB4A9VdLfU9uA9UKfqlvJ5PV9n85DNUggBIuSu04hrP+sQXLO+TV5j3MzzK9s5irqI19HmGy1XHibR+c5c8dcnFxN1To5YWIoXiX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713380264; c=relaxed/simple;
-	bh=mukMXfRaH5+NMZIb5Xef9x+qYy3bjdENrO6zRsPJYd8=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=Taz5V8UMrbOtO0Jy4YOmA7wKtm3Pd4De5v6Q4+XhUbVFL2GKg9gmwzAbAES8/rjXGjdbDwtW4ybbg5REVgkiOX0Yjfsm+U4ZyMtqdC/zsl2ciW+joyKXdfZSW8iR7iBaaGwy1sptIZedwFzWAYjvp+J2uQdEqCzxpdzJjW9Ollk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=rOw5ijSY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SS6ODAj0; arc=none smtp.client-ip=64.147.123.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1713383387; c=relaxed/simple;
+	bh=S7JlLxeut6x1KWTpxGEHLu6tTGDE+NbAJLWh5S/S8aA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sRctczzz4cp459/QmTsTsgCIaTdNFUYshedGXZBO0VL0ojlCpCjJbIqj6x+i6pGSy3+NOxE5j0Y++TuEEq14XJcGJ60wxF6DDP2w5nIAHYtjJMrm+sKUWG9LDsehWT7f8CvR3QITbNo3wdp74Vd6HimBOhuOFJrxG7q8FWCAb80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OjJbvxeD; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="rOw5ijSY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SS6ODAj0"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 391E818000E1;
-	Wed, 17 Apr 2024 14:57:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 17 Apr 2024 14:57:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1713380260; x=1713466660; bh=OxvFic6ocJ
-	NdAQ1CbbZKQNKjRdfB7w7LA61IzvHtWvY=; b=rOw5ijSYBZv1I1XhE3WvVyJHq6
-	X0lgHu9QGkRqpdOQufnm1KZl7XXp5zwDrzcQVV6RWg2hvTqQHKuWRVLOff3H8RlX
-	BU4QBHhPtVV17o3v4kV7HcvoiNG4WMl+ERnyS12aK4Pzv+YU5xCsgoPZTNFftQNE
-	SNXPElt/3CV5ggr3m2yO368rpPKMiIVecDvxfZKFtm4/s/nw9eutA+xIXir3mIGs
-	2w8XWxmxsyyKKkKv/1Yxc4CdpnhyuKl32GsP1q/DvK3DMc2vozS9bhRKR4IYHQO4
-	CkBVg1XxyQANUWil5N2AqRg3C8/IP1bomUg//U6v6GQZkDFQDH72O9ipB3Zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1713380260; x=1713466660; bh=OxvFic6ocJNdAQ1CbbZKQNKjRdfB
-	7w7LA61IzvHtWvY=; b=SS6ODAj0UBa+zx3QqFbG/EHR30M0oqWRwWJGiNsN/m0V
-	EyUOTD48mHRW+TpTHsr+eMaDeNgLEcuRqwIkMW/UcGd/DapLZCKGihRx6H+gge2P
-	rB5/qOuuy2IAqgzrx3wzzVpP9bWEqmTJymAGYEtPg1uL2xKhaOkOrHDKtag0FCqZ
-	3X4fPXqQQ6G+JBB53oeFfSYgYntdcUrJsEglGyoLzDXCTGPLbzAB92J5pQp4wi7N
-	kRq55E8eKZxDWvRqlaiVwP7Wcm1hOqk4TG2q1x2XlD1mtaegYeQcg6hJL8XpeFRE
-	+XyM6vTX+rly007dnPuJ3MU9Xc3suhxd8V17xvnT0g==
-X-ME-Sender: <xms:pBsgZrDh-2pb37X5fawSDSV5ZBxjvnIAyt3BYosHh_UeBb__kiUbrQ>
-    <xme:pBsgZhhUOdB_jMqVHjtNE8waKOGL7IsepZDTS1DsTtFj9NNJX0YlSoxoctW0aufTU
-    o-F5mLXfDHfI20u-qI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejkedgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:pBsgZmm2dnejA125rIL6MlKgbatUPlX0L7kZGN_TUiCtCXnTrgi4Uw>
-    <xmx:pBsgZtxsHQHOaqqN4hcb-R5oHpz1LJHxxGY-MFRZ7aWM_UbqBEwqDA>
-    <xmx:pBsgZgTGaEhfdqxWh3Hmco2HaBJ7joP5PpU299mR6t3008CbL3gnFQ>
-    <xmx:pBsgZgaEGnvgx1bo_wz4bjzo3fqxN-dYSPXHtXO4-5_G1SeqgEOuLQ>
-    <xmx:pBsgZnJZbBb1Bju-n99SXpn0PZeOH6pJEHZa7U8I3M9xNZcrv1q4eZG5>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 467B6B6008D; Wed, 17 Apr 2024 14:57:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OjJbvxeD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713383386; x=1744919386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S7JlLxeut6x1KWTpxGEHLu6tTGDE+NbAJLWh5S/S8aA=;
+  b=OjJbvxeDEIBLWNSsgNZ8jJU8FNXsLtRoWKXvnbIHlu3iJF87sAq2ZQg1
+   0xjzkmKXWTr8KlsI34VCg+ZoWMNUksPtcCXKirAZHUpkHflleXbVjNaTP
+   1IwgGL9w9gSETI1VuJMlGDVRDczTTM9sG/Cl1sRB4PvB22i/tMIfSa0wY
+   Elbe/vThHPDQG0h4c61tcAWrtUiZhAu9rQWa7wVjKzmh25Q9A0uSYzPCP
+   lXQEmAsPus0HW+/oLEKKjGqEMqv3PlI1an71OJwXxd/mR4n3mUn3Mm+WB
+   XBnD2jLsHqjunGwH04nLIuT62E0WSe4lscNYLoaYPJieNnXKollZux5ml
+   g==;
+X-CSE-ConnectionGUID: qFD+yTCHTeqy+0Fw9KbLdA==
+X-CSE-MsgGUID: cDIfLWWuQCyi0tBWN3hrpA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="9055355"
+X-IronPort-AV: E=Sophos;i="6.07,210,1708416000"; 
+   d="scan'208";a="9055355"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 12:49:45 -0700
+X-CSE-ConnectionGUID: 5BVBRTY9TROBMxm7LNxmUA==
+X-CSE-MsgGUID: kffHsbaVTrezpol5G+TesQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,209,1708416000"; 
+   d="scan'208";a="22774902"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 17 Apr 2024 12:49:40 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rxBHm-0006wO-0I;
+	Wed, 17 Apr 2024 19:49:38 +0000
+Date: Thu, 18 Apr 2024 03:49:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel_team@skhynix.com, akpm@linux-foundation.org,
+	ying.huang@intel.com, vernhao@tencent.com,
+	mgorman@techsingularity.net, hughd@google.com, willy@infradead.org,
+	david@redhat.com, peterz@infradead.org, luto@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, rjgolo@gmail.com
+Subject: Re: [PATCH v9 7/8] mm: add folio_put_mgen() to deliver migrc's
+ generation number to pcp or buddy
+Message-ID: <202404180327.oqZWEtEn-lkp@intel.com>
+References: <20240417071847.29584-8-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <46329c2f-dc04-4533-a958-bfe6b9a1fa0e@app.fastmail.com>
-In-Reply-To: 
- <20240417-s390-drivers-fix-cast-function-type-v1-3-fd048c9903b0@kernel.org>
-References: 
- <20240417-s390-drivers-fix-cast-function-type-v1-0-fd048c9903b0@kernel.org>
- <20240417-s390-drivers-fix-cast-function-type-v1-3-fd048c9903b0@kernel.org>
-Date: Wed, 17 Apr 2024 20:57:19 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
- "Alexander Gordeev" <agordeev@linux.ibm.com>
-Cc: "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>, wintera@linux.ibm.com,
- twinkler@linux.ibm.com, linux-s390@vger.kernel.org,
- Netdev <netdev@vger.kernel.org>, llvm@lists.linux.dev,
- patches@lists.linux.dev
-Subject: Re: [PATCH 3/3] s390/netiucv: Remove function pointer cast
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240417071847.29584-8-byungchul@sk.com>
 
-On Wed, Apr 17, 2024, at 20:24, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR) after enabling
-> -Wcast-function-type-strict by default:
->
->   drivers/s390/net/netiucv.c:1716:18: error: cast from 'void (*)(const 
-> void *)' to 'void (*)(struct device *)' converts to incompatible 
-> function type [-Werror,-Wcast-function-type-strict]
->    1716 |                 dev->release = (void (*)(struct device 
-> *))kfree;
->         |                                
-> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
->
-> Add a standalone function to fix the warning properly, which addresses
-> the root of the warning that these casts are not safe for kCFI. The
-> comment is not really relevant after this change, so remove it.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Byungchul,
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 0bbac3facb5d6cc0171c45c9873a2dc96bea9680]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/x86-tlb-add-APIs-manipulating-tlb-batch-s-arch-data/20240417-152211
+base:   0bbac3facb5d6cc0171c45c9873a2dc96bea9680
+patch link:    https://lore.kernel.org/r/20240417071847.29584-8-byungchul%40sk.com
+patch subject: [PATCH v9 7/8] mm: add folio_put_mgen() to deliver migrc's generation number to pcp or buddy
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240418/202404180327.oqZWEtEn-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240418/202404180327.oqZWEtEn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404180327.oqZWEtEn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/page_alloc.c:19:
+   In file included from include/linux/mm.h:2230:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page_alloc.c:44:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   mm/page_alloc.c:2812:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    2812 |         __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:2934:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    2934 |                 __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:4575:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    4575 |         __count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   In file included from mm/page_alloc.c:58:
+>> mm/internal.h:1404:9: error: call to '__compiletime_assert_368' declared with 'error' attribute: BUILD_BUG failed
+    1404 |         return xchg(&current->mgen, 0);
+         |                ^
+   include/linux/atomic/atomic-instrumented.h:4758:2: note: expanded from macro 'xchg'
+    4758 |         raw_xchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:12:18: note: expanded from macro 'raw_xchg'
+      12 | #define raw_xchg arch_xchg
+         |                  ^
+   arch/riscv/include/asm/cmpxchg.h:145:23: note: expanded from macro 'arch_xchg'
+     145 |         (__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));   \
+         |                              ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:437:2: note: expanded from macro '_compiletime_assert'
+     437 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:430:4: note: expanded from macro '__compiletime_assert'
+     430 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:124:1: note: expanded from here
+     124 | __compiletime_assert_368
+         | ^
+   In file included from mm/page_alloc.c:58:
+>> mm/internal.h:1404:9: error: call to '__compiletime_assert_368' declared with 'error' attribute: BUILD_BUG failed
+   include/linux/atomic/atomic-instrumented.h:4758:2: note: expanded from macro 'xchg'
+    4758 |         raw_xchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:12:18: note: expanded from macro 'raw_xchg'
+      12 | #define raw_xchg arch_xchg
+         |                  ^
+   arch/riscv/include/asm/cmpxchg.h:145:23: note: expanded from macro 'arch_xchg'
+     145 |         (__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));   \
+         |                              ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:437:2: note: expanded from macro '_compiletime_assert'
+     437 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:430:4: note: expanded from macro '__compiletime_assert'
+     430 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:124:1: note: expanded from here
+     124 | __compiletime_assert_368
+         | ^
+   6 warnings and 2 errors generated.
+
+
+vim +1404 mm/internal.h
+
+  1401	
+  1402	static inline unsigned int hand_over_task_mgen(void)
+  1403	{
+> 1404		return xchg(&current->mgen, 0);
+  1405	}
+  1406	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
