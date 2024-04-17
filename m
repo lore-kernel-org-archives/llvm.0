@@ -1,69 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74FD1851;
-	Wed, 17 Apr 2024 06:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7034D657DC;
+	Wed, 17 Apr 2024 06:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713334670; cv=none; b=I1bP0w1/mZ5SxaxOExuI86vsdH/OTNA63+fIIrruijLgNgXu/4M9+f3zzYqd96BdfxzW3gJ07pTHoikdhl/i+DKcvzmEdkn5rMN+8vU+fJc3YbLmcBvttYdQXtFGOTIo9lY+UwLk3oKfClq0wsawJOu3Zs68LwxVCoCmTIChQfo=
+	t=1713336726; cv=none; b=dmJRHG0irAnTrrr64tpmFzjuFrQDoxCs427Na64ur+U0CndURd8jTObKNuv6P+cHKFtoGitg+iGcIYWA4YQplMWk0h9s0qb5f+HI5s8lfJUof/1NK69/0EuJ6rSFHhtHFLx5nhHEd2YESCHasVOlfd6NrhaNI6kX96CexosQFDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713334670; c=relaxed/simple;
-	bh=w42aKlhS0gcP36dJaMyx5AB9fm5TuxlheUjjF+LgHsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JEcL3ZvckghlP48UYyHaJiF8PuEAVe70dBTvF8EQ2HznXrxa1QrX6ZGDQdRj8/NeAMkIiG473SCRPE7gcmrObK0yz9xEYP+ATzdvxWB0xwLmKX6LMhbbL54Sh8OqKGo66KmT1jIbYPbUTRn57r4/qP1e1nCz9ZXUUz2qy1jC5+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sh5mrPfe; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1713336726; c=relaxed/simple;
+	bh=CvIdPHaOI8Reyzbo0LmpE6o4IQi9OnZB+9Q8i8/Qhyw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LC/lImp9i54D5g3DVaSZsxctynDvSXyEQhYgCHwYQwk/h39WV9NbUD4bGUxgQ8G7doveWtAeUWsc8qmJFVKT50AwyXePw+YV/Mxoablhx9lyfTr3zXuI7NO/mjtnxhnkgjaopiB419uJsYql5R0+Cu/i+CZCFAPJRHx3bvkiB1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PxSj1zR+; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sh5mrPfe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PxSj1zR+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713334669; x=1744870669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w42aKlhS0gcP36dJaMyx5AB9fm5TuxlheUjjF+LgHsc=;
-  b=Sh5mrPfeCWT32U7qkUmejNiFjdwdHvipftj3wZi+Rbro6WCDE9gXCiHy
-   4hbd8Yc+69zw7pmLOy+kS8Qfho5BvtFfVSYPIGTczfdR/YEPPnZIDY5cL
-   gjFQIrd65Os/Q6AsAFStbOFnvqQvkxU9pUhVrdquUzbd39L3ENrkS8I3y
-   H/cnL1xvkNFQJLmGR7Lor8A/h9DFXMlwpvGa4qIWTf4QiRlx3KQ8kmzQL
-   C/IA8kqLzAGPLzLSmfYxvfyQjta+e5SXMnCWy+1k1RKy3wyXd+KDfioh8
-   GCnPz4FwMGbpGitQ2L5BIyX61RmjdLO9nv0NhAQf4a7rOM9XN57tz4KyD
-   g==;
-X-CSE-ConnectionGUID: gVnAiq6/TbiyjBMu18YUUw==
-X-CSE-MsgGUID: GUp2Y/P2RU+Ug05MWO0SSA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="11750876"
+  t=1713336725; x=1744872725;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CvIdPHaOI8Reyzbo0LmpE6o4IQi9OnZB+9Q8i8/Qhyw=;
+  b=PxSj1zR+xt1czHEFHSum6vWPLp6bAKH0oCCi1FiKzNqvarHrNSSaF1kR
+   ImY/3Oj/vZSpuscFVtS5A1mTEQDwFq/+wa5HzSVsiNpcSm0qG6Y+OE+1d
+   VtyTSBN1v3YPpOJoZlhNoLq/JmJXCEGN8dMdhS+/wqZ1a6bm7TwzmX/Y6
+   KH4QXqllq9NTQvVXjLWq1CCpe+yILox1l4yfbcjjEstjIpNvpjIYiy1ej
+   3ccUxR6INwohXv2BplWmbny/smc4vlDbluLoPp/WKXf80BABO8DGiw0Bh
+   h6dVWGVjB0DmODuYfd8KzTMnxWxOV0G6f7XOwAaHSuD9TCmYws5QekvOU
+   A==;
+X-CSE-ConnectionGUID: 92/knbiVS+q5+63qngD3Lg==
+X-CSE-MsgGUID: 5DzFp21NRYixvOcbZj8fpQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8692682"
 X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
-   d="scan'208";a="11750876"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 23:17:48 -0700
-X-CSE-ConnectionGUID: imgM1LG1QZyQQQFDxbqDqA==
-X-CSE-MsgGUID: VdZm10H+T8Ok8H03lXuMzQ==
+   d="scan'208";a="8692682"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 23:52:04 -0700
+X-CSE-ConnectionGUID: x08bGG1IRiicNkK6N9CgKQ==
+X-CSE-MsgGUID: wKWaf+ypStuBbyzDrD+OMg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
-   d="scan'208";a="23109144"
+   d="scan'208";a="22519870"
 Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 16 Apr 2024 23:17:44 -0700
+  by orviesa009.jf.intel.com with ESMTP; 16 Apr 2024 23:52:02 -0700
 Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rwyc2-0006Cc-1J;
-	Wed, 17 Apr 2024 06:17:42 +0000
-Date: Wed, 17 Apr 2024 14:17:30 +0800
+	id 1rwz8S-0006EK-0M;
+	Wed, 17 Apr 2024 06:51:24 +0000
+Date: Wed, 17 Apr 2024 14:50:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>
+To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v9 1/4] bpf: make common crypto API for TC/XDP
- programs
-Message-ID: <202404171409.EgchVGya-lkp@intel.com>
-References: <20240416204004.3942393-2-vadfed@meta.com>
+	Michael Shavit <mshavit@google.com>
+Subject: [jgunthorpe:smmuv3_newapi 9/42]
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:371:13: warning: stack
+ frame size (2112) exceeds limit (2048) in
+ 'arm_smmu_v3_write_cd_test_s1_clear'
+Message-ID: <202404171412.CA3RzI5S-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,52 +64,145 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240416204004.3942393-2-vadfed@meta.com>
 
-Hi Vadim,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bpf-make-common-crypto-API-for-TC-XDP-programs/20240417-044349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240416204004.3942393-2-vadfed%40meta.com
-patch subject: [PATCH bpf-next v9 1/4] bpf: make common crypto API for TC/XDP programs
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240417/202404171409.EgchVGya-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404171409.EgchVGya-lkp@intel.com/reproduce)
+tree:   https://github.com/jgunthorpe/linux smmuv3_newapi
+head:   e7d4a8ffc0a84de43bbe7e1c04b3445253eb5e65
+commit: 8c3648084db09e85ab1e20e54099454dd0737a22 [9/42] iommu/arm-smmu-v3: Add unit tests for arm_smmu_write_entry
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240417/202404171412.CA3RzI5S-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404171412.CA3RzI5S-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404171409.EgchVGya-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404171412.CA3RzI5S-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/crypto.c:53: warning: Function parameter or struct member 'siv_len' not described in 'bpf_crypto_ctx'
+   In file included from drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:6:
+   In file included from include/linux/io-pgtable.h:6:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:371:13: warning: stack frame size (2112) exceeds limit (2048) in 'arm_smmu_v3_write_cd_test_s1_clear' [-Wframe-larger-than]
+     371 | static void arm_smmu_v3_write_cd_test_s1_clear(struct kunit *test)
+         |             ^
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:383:13: warning: stack frame size (2176) exceeds limit (2048) in 'arm_smmu_v3_write_cd_test_s1_change_asid' [-Wframe-larger-than]
+     383 | static void arm_smmu_v3_write_cd_test_s1_change_asid(struct kunit *test)
+         |             ^
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:424:13: warning: stack frame size (3584) exceeds limit (2048) in 'arm_smmu_v3_write_cd_test_sva_clear' [-Wframe-larger-than]
+     424 | static void arm_smmu_v3_write_cd_test_sva_clear(struct kunit *test)
+         |             ^
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c:436:13: warning: stack frame size (3584) exceeds limit (2048) in 'arm_smmu_v3_write_cd_test_sva_release' [-Wframe-larger-than]
+     436 | static void arm_smmu_v3_write_cd_test_sva_release(struct kunit *test)
+         |             ^
+   9 warnings generated.
 
 
-vim +53 kernel/bpf/crypto.c
+vim +/arm_smmu_v3_write_cd_test_s1_clear +371 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-test.c
 
-    37	
-    38	/**
-    39	 * struct bpf_crypto_ctx - refcounted BPF crypto context structure
-    40	 * @type:	The pointer to bpf crypto type
-    41	 * @tfm:	The pointer to instance of crypto API struct.
-    42	 * @rcu:	The RCU head used to free the crypto context with RCU safety.
-    43	 * @usage:	Object reference counter. When the refcount goes to 0, the
-    44	 *		memory is released back to the BPF allocator, which provides
-    45	 *		RCU safety.
-    46	 */
-    47	struct bpf_crypto_ctx {
-    48		const struct bpf_crypto_type *type;
-    49		void *tfm;
-    50		u32 siv_len;
-    51		struct rcu_head rcu;
-    52		refcount_t usage;
-  > 53	};
-    54	
+   370	
+ > 371	static void arm_smmu_v3_write_cd_test_s1_clear(struct kunit *test)
+   372	{
+   373		struct arm_smmu_cd cd = {};
+   374		struct arm_smmu_cd cd_2;
+   375	
+   376		arm_smmu_test_make_s1_cd(&cd_2, 1997);
+   377		arm_smmu_v3_test_cd_expect_non_hitless_transition(
+   378			test, &cd, &cd_2, NUM_EXPECTED_SYNCS(2));
+   379		arm_smmu_v3_test_cd_expect_non_hitless_transition(
+   380			test, &cd_2, &cd, NUM_EXPECTED_SYNCS(2));
+   381	}
+   382	
+ > 383	static void arm_smmu_v3_write_cd_test_s1_change_asid(struct kunit *test)
+   384	{
+   385		struct arm_smmu_cd cd = {};
+   386		struct arm_smmu_cd cd_2;
+   387	
+   388		arm_smmu_test_make_s1_cd(&cd, 778);
+   389		arm_smmu_test_make_s1_cd(&cd_2, 1997);
+   390		arm_smmu_v3_test_cd_expect_hitless_transition(test, &cd, &cd_2,
+   391							      NUM_EXPECTED_SYNCS(1));
+   392		arm_smmu_v3_test_cd_expect_hitless_transition(test, &cd_2, &cd,
+   393							      NUM_EXPECTED_SYNCS(1));
+   394	}
+   395	
+   396	static void arm_smmu_test_make_sva_cd(struct arm_smmu_cd *cd, unsigned int asid)
+   397	{
+   398		struct arm_smmu_device smmu = {
+   399			.features = ARM_SMMU_FEAT_STALLS | ARM_SMMU_FEAT_ATTR_TYPES_OVR
+   400		};
+   401		struct arm_smmu_master master = {
+   402			.smmu = &smmu,
+   403		};
+   404		struct mm_struct mm = {
+   405			.pgd = (void *)0xdaedbeefdeadbeefULL,
+   406		};
+   407	
+   408		arm_smmu_make_sva_cd(cd, &master, &mm, asid);
+   409	}
+   410	
+   411	static void arm_smmu_test_make_sva_release_cd(struct arm_smmu_cd *cd,
+   412						      unsigned int asid)
+   413	{
+   414		struct arm_smmu_device smmu = {
+   415			.features = ARM_SMMU_FEAT_STALLS | ARM_SMMU_FEAT_ATTR_TYPES_OVR
+   416		};
+   417		struct arm_smmu_master master = {
+   418			.smmu = &smmu,
+   419		};
+   420	
+   421		arm_smmu_make_sva_cd(cd, &master, NULL, asid);
+   422	}
+   423	
+ > 424	static void arm_smmu_v3_write_cd_test_sva_clear(struct kunit *test)
+   425	{
+   426		struct arm_smmu_cd cd = {};
+   427		struct arm_smmu_cd cd_2;
+   428	
+   429		arm_smmu_test_make_sva_cd(&cd_2, 1997);
+   430		arm_smmu_v3_test_cd_expect_non_hitless_transition(
+   431			test, &cd, &cd_2, NUM_EXPECTED_SYNCS(2));
+   432		arm_smmu_v3_test_cd_expect_non_hitless_transition(
+   433			test, &cd_2, &cd, NUM_EXPECTED_SYNCS(2));
+   434	}
+   435	
+ > 436	static void arm_smmu_v3_write_cd_test_sva_release(struct kunit *test)
+   437	{
+   438		struct arm_smmu_cd cd;
+   439		struct arm_smmu_cd cd_2;
+   440	
+   441		arm_smmu_test_make_sva_cd(&cd, 1997);
+   442		arm_smmu_test_make_sva_release_cd(&cd_2, 1997);
+   443		arm_smmu_v3_test_cd_expect_hitless_transition(test, &cd, &cd_2,
+   444							      NUM_EXPECTED_SYNCS(2));
+   445		arm_smmu_v3_test_cd_expect_hitless_transition(test, &cd_2, &cd,
+   446							      NUM_EXPECTED_SYNCS(2));
+   447	}
+   448	
 
 -- 
 0-DAY CI Kernel Test Service
