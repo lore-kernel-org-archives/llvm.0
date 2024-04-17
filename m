@@ -1,67 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E872C19D;
-	Wed, 17 Apr 2024 19:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F171E869;
+	Wed, 17 Apr 2024 20:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713383387; cv=none; b=lSFPnf7pLCgRec9Ts45An4EM206lypVPGbrk5Wsy5KOAxxNwOjMEBwTa1AGxr46jZkZH5OMB4A9VdLfU9uA9UKfqlvJ5PV9n85DNUggBIuSu04hrP+sQXLO+TV5j3MzzK9s5irqI19HmGy1XHibR+c5c8dcnFxN1To5YWIoXiX4=
+	t=1713386573; cv=none; b=QftcFIC31Ekhj8Jab3VZrAEuynSoEIRjmGYvS1ZZ8Pw+TB368xMnpli2cnUIAGaTxFu4YJb2oKNBgrPE/xJi2vBatWZEkgYyLN5YBWWwLe1dmTP2WSRH1U0pGVsU2LZ1tnzRAonmruI3ilgU7JpFRyLg62/nHzh/735/U4vyEZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713383387; c=relaxed/simple;
-	bh=S7JlLxeut6x1KWTpxGEHLu6tTGDE+NbAJLWh5S/S8aA=;
+	s=arc-20240116; t=1713386573; c=relaxed/simple;
+	bh=ZWfUWZmE+yUAL2efBx5DYACbocPFFiJdjtPZB4NfRfE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sRctczzz4cp459/QmTsTsgCIaTdNFUYshedGXZBO0VL0ojlCpCjJbIqj6x+i6pGSy3+NOxE5j0Y++TuEEq14XJcGJ60wxF6DDP2w5nIAHYtjJMrm+sKUWG9LDsehWT7f8CvR3QITbNo3wdp74Vd6HimBOhuOFJrxG7q8FWCAb80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OjJbvxeD; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=kvE0qqAbFy8VlvbiLLCmuP64byF6ZyY1He6qePCM8Tut/CW8FbTJ4T5Fde68ZW5twtIhIkPEvbYLtrGX+zryqXm0rDsEbdpXpi3F6LKMmKvCvCzBBcmXy/8o8Qk6wuB5/EypE0KrSG4KwP1i38Hx+6I2YQbOPPIw2pl8Jb48yUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iFcEyxHI; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OjJbvxeD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iFcEyxHI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713383386; x=1744919386;
+  t=1713386571; x=1744922571;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=S7JlLxeut6x1KWTpxGEHLu6tTGDE+NbAJLWh5S/S8aA=;
-  b=OjJbvxeDEIBLWNSsgNZ8jJU8FNXsLtRoWKXvnbIHlu3iJF87sAq2ZQg1
-   0xjzkmKXWTr8KlsI34VCg+ZoWMNUksPtcCXKirAZHUpkHflleXbVjNaTP
-   1IwgGL9w9gSETI1VuJMlGDVRDczTTM9sG/Cl1sRB4PvB22i/tMIfSa0wY
-   Elbe/vThHPDQG0h4c61tcAWrtUiZhAu9rQWa7wVjKzmh25Q9A0uSYzPCP
-   lXQEmAsPus0HW+/oLEKKjGqEMqv3PlI1an71OJwXxd/mR4n3mUn3Mm+WB
-   XBnD2jLsHqjunGwH04nLIuT62E0WSe4lscNYLoaYPJieNnXKollZux5ml
+  bh=ZWfUWZmE+yUAL2efBx5DYACbocPFFiJdjtPZB4NfRfE=;
+  b=iFcEyxHI9EIxMNvuBaM7F0om0RHBSiG2CQmJbw6OXAu7XfYvBOt6JFbz
+   RGdlY4fPw317ReeeC/qfOwLM/0HhaqSakijB4nwOKAfqmdPAAMiAOdVvD
+   bvo4aVQ42QZLwIUI/zN/mX+XYThjBWN0JtHiKWK9JbMdfiN6pDWOBdu3Y
+   9OS4yAiuXDcnlHkKxkj28vjqHDhhZ0V3rqH1aH87RDMHvn2Z82vtj8cDf
+   Ye5bFv6iP4UFagqaBPpuD3H2ipJpM5VHt4M7BWxdLzIo9Kldt9jszupa/
+   J1rBGR3rKQcMm0F/pWHKAPU5y0Wh1p4Cudyj/GQyuSpwNuJPf8Wia1YGo
    g==;
-X-CSE-ConnectionGUID: qFD+yTCHTeqy+0Fw9KbLdA==
-X-CSE-MsgGUID: cDIfLWWuQCyi0tBWN3hrpA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="9055355"
+X-CSE-ConnectionGUID: Fwz8uhT6SB+x3jKptB7KHg==
+X-CSE-MsgGUID: nOwOdyOETdGdsd6cv5mg9Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="20326077"
 X-IronPort-AV: E=Sophos;i="6.07,210,1708416000"; 
-   d="scan'208";a="9055355"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 12:49:45 -0700
-X-CSE-ConnectionGUID: 5BVBRTY9TROBMxm7LNxmUA==
-X-CSE-MsgGUID: kffHsbaVTrezpol5G+TesQ==
+   d="scan'208";a="20326077"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 13:42:50 -0700
+X-CSE-ConnectionGUID: 3buo29SMSwa8/nehV08Sng==
+X-CSE-MsgGUID: fiIZIF5dQoWDJjaaSaPJHw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,209,1708416000"; 
-   d="scan'208";a="22774902"
+X-IronPort-AV: E=Sophos;i="6.07,210,1708416000"; 
+   d="scan'208";a="22825594"
 Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 17 Apr 2024 12:49:40 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 17 Apr 2024 13:42:47 -0700
 Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rxBHm-0006wO-0I;
-	Wed, 17 Apr 2024 19:49:38 +0000
-Date: Thu, 18 Apr 2024 03:49:36 +0800
+	id 1rxC7A-0006yq-20;
+	Wed, 17 Apr 2024 20:42:44 +0000
+Date: Thu, 18 Apr 2024 04:42:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel_team@skhynix.com, akpm@linux-foundation.org,
-	ying.huang@intel.com, vernhao@tencent.com,
-	mgorman@techsingularity.net, hughd@google.com, willy@infradead.org,
-	david@redhat.com, peterz@infradead.org, luto@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, rjgolo@gmail.com
-Subject: Re: [PATCH v9 7/8] mm: add folio_put_mgen() to deliver migrc's
- generation number to pcp or buddy
-Message-ID: <202404180327.oqZWEtEn-lkp@intel.com>
-References: <20240417071847.29584-8-byungchul@sk.com>
+	Aubin Constans <aubin.constans@microchip.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH v1 4/5] mmc: atmel-mci: Incapsulate used to be a platform
+ data into host structure
+Message-ID: <202404180428.bZDYDFAE-lkp@intel.com>
+References: <20240417165708.2965612-5-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,114 +70,173 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240417071847.29584-8-byungchul@sk.com>
+In-Reply-To: <20240417165708.2965612-5-andriy.shevchenko@linux.intel.com>
 
-Hi Byungchul,
+Hi Andy,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 0bbac3facb5d6cc0171c45c9873a2dc96bea9680]
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.9-rc4 next-20240417]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/x86-tlb-add-APIs-manipulating-tlb-batch-s-arch-data/20240417-152211
-base:   0bbac3facb5d6cc0171c45c9873a2dc96bea9680
-patch link:    https://lore.kernel.org/r/20240417071847.29584-8-byungchul%40sk.com
-patch subject: [PATCH v9 7/8] mm: add folio_put_mgen() to deliver migrc's generation number to pcp or buddy
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240418/202404180327.oqZWEtEn-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240418/202404180327.oqZWEtEn-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/mmc-atmel-mci-Get-rid-of-platform-data-leftovers/20240418-005915
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20240417165708.2965612-5-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 4/5] mmc: atmel-mci: Incapsulate used to be a platform data into host structure
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240418/202404180428.bZDYDFAE-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240418/202404180428.bZDYDFAE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404180327.oqZWEtEn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404180428.bZDYDFAE-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/page_alloc.c:19:
-   In file included from include/linux/mm.h:2230:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/page_alloc.c:44:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   mm/page_alloc.c:2812:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    2812 |         __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
-     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   mm/page_alloc.c:2934:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    2934 |                 __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
-     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   mm/page_alloc.c:4575:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    4575 |         __count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
-     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   In file included from mm/page_alloc.c:58:
->> mm/internal.h:1404:9: error: call to '__compiletime_assert_368' declared with 'error' attribute: BUILD_BUG failed
-    1404 |         return xchg(&current->mgen, 0);
-         |                ^
-   include/linux/atomic/atomic-instrumented.h:4758:2: note: expanded from macro 'xchg'
-    4758 |         raw_xchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:12:18: note: expanded from macro 'raw_xchg'
-      12 | #define raw_xchg arch_xchg
-         |                  ^
-   arch/riscv/include/asm/cmpxchg.h:145:23: note: expanded from macro 'arch_xchg'
-     145 |         (__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));   \
-         |                              ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:437:2: note: expanded from macro '_compiletime_assert'
-     437 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:430:4: note: expanded from macro '__compiletime_assert'
-     430 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:124:1: note: expanded from here
-     124 | __compiletime_assert_368
-         | ^
-   In file included from mm/page_alloc.c:58:
->> mm/internal.h:1404:9: error: call to '__compiletime_assert_368' declared with 'error' attribute: BUILD_BUG failed
-   include/linux/atomic/atomic-instrumented.h:4758:2: note: expanded from macro 'xchg'
-    4758 |         raw_xchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:12:18: note: expanded from macro 'raw_xchg'
-      12 | #define raw_xchg arch_xchg
-         |                  ^
-   arch/riscv/include/asm/cmpxchg.h:145:23: note: expanded from macro 'arch_xchg'
-     145 |         (__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));   \
-         |                              ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:437:2: note: expanded from macro '_compiletime_assert'
-     437 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:430:4: note: expanded from macro '__compiletime_assert'
-     430 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:124:1: note: expanded from here
-     124 | __compiletime_assert_368
-         | ^
-   6 warnings and 2 errors generated.
+>> drivers/mmc/host/atmel-mci.c:378: warning: Function parameter or struct member 'pdata' not described in 'atmel_mci'
 
 
-vim +1404 mm/internal.h
+vim +378 drivers/mmc/host/atmel-mci.c
 
-  1401	
-  1402	static inline unsigned int hand_over_task_mgen(void)
-  1403	{
-> 1404		return xchg(&current->mgen, 0);
-  1405	}
-  1406	
+65e8b083fc8ec3 Haavard Skinnemoen 2008-07-30  245  
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  246  /**
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  247   * struct atmel_mci - MMC controller state shared between all slots
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  248   * @lock: Spinlock protecting the queue and associated data.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  249   * @regs: Pointer to MMIO registers.
+796211b7953bd1 Ludovic Desroches  2011-08-11  250   * @sg: Scatterlist entry currently being processed by PIO or PDC code.
+f51874b7ec92cb Lee Jones          2020-07-01  251   * @sg_len: Size of the scatterlist
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  252   * @pio_offset: Offset into the current scatterlist entry.
+7a90dcc2d7ceb6 Ludovic Desroches  2012-05-16  253   * @buffer: Buffer used if we don't have the r/w proof capability. We
+7a90dcc2d7ceb6 Ludovic Desroches  2012-05-16  254   *      don't have the time to switch pdc buffers so we have to use only
+7a90dcc2d7ceb6 Ludovic Desroches  2012-05-16  255   *      one buffer for the full transaction.
+7a90dcc2d7ceb6 Ludovic Desroches  2012-05-16  256   * @buf_size: size of the buffer.
+f51874b7ec92cb Lee Jones          2020-07-01  257   * @buf_phys_addr: buffer address needed for pdc.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  258   * @cur_slot: The slot which is currently using the controller.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  259   * @mrq: The request currently being processed on @cur_slot,
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  260   *	or NULL if the controller is idle.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  261   * @cmd: The command currently being sent to the card, or NULL.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  262   * @data: The data currently being transferred, or NULL if no data
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  263   *	transfer is in progress.
+796211b7953bd1 Ludovic Desroches  2011-08-11  264   * @data_size: just data->blocks * data->blksz.
+65e8b083fc8ec3 Haavard Skinnemoen 2008-07-30  265   * @dma: DMA client state.
+65e8b083fc8ec3 Haavard Skinnemoen 2008-07-30  266   * @data_chan: DMA channel being used for the current data transfer.
+f51874b7ec92cb Lee Jones          2020-07-01  267   * @dma_conf: Configuration for the DMA slave
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  268   * @cmd_status: Snapshot of SR taken upon completion of the current
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  269   *	command. Only valid when EVENT_CMD_COMPLETE is pending.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  270   * @data_status: Snapshot of SR taken upon completion of the current
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  271   *	data transfer. Only valid when EVENT_DATA_COMPLETE or
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  272   *	EVENT_DATA_ERROR is pending.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  273   * @stop_cmdr: Value to be loaded into CMDR when the stop command is
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  274   *	to be sent.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  275   * @tasklet: Tasklet running the request state machine.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  276   * @pending_events: Bitmask of events flagged by the interrupt handler
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  277   *	to be processed by the tasklet.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  278   * @completed_events: Bitmask of events which the state machine has
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  279   *	processed.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  280   * @state: Tasklet state.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  281   * @queue: List of slots waiting for access to the controller.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  282   * @need_clock_update: Update the clock rate before the next request.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  283   * @need_reset: Reset controller before next request.
+24011f346471f7 Ludovic Desroches  2012-05-16  284   * @timer: Timer to balance the data timeout error flag which cannot rise.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  285   * @mode_reg: Value of the MR register.
+74791a2dc8dc2a Nicolas Ferre      2009-12-14  286   * @cfg_reg: Value of the CFG register.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  287   * @bus_hz: The rate of @mck in Hz. This forms the basis for MMC bus
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  288   *	rate and timeout calculations.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  289   * @mapbase: Physical address of the MMIO registers.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  290   * @mck: The peripheral bus clock hooked up to the MMC controller.
+d9faa6e8381c3a Andy Shevchenko    2024-04-17  291   * @dev: Device associated with the MMC controller.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  292   * @slot: Slots sharing this MMC controller.
+796211b7953bd1 Ludovic Desroches  2011-08-11  293   * @caps: MCI capabilities depending on MCI version.
+796211b7953bd1 Ludovic Desroches  2011-08-11  294   * @prepare_data: function to setup MCI before data transfer which
+796211b7953bd1 Ludovic Desroches  2011-08-11  295   * depends on MCI capabilities.
+796211b7953bd1 Ludovic Desroches  2011-08-11  296   * @submit_data: function to start data transfer which depends on MCI
+796211b7953bd1 Ludovic Desroches  2011-08-11  297   * capabilities.
+796211b7953bd1 Ludovic Desroches  2011-08-11  298   * @stop_transfer: function to stop data transfer which depends on MCI
+796211b7953bd1 Ludovic Desroches  2011-08-11  299   * capabilities.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  300   *
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  301   * Locking
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  302   * =======
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  303   *
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  304   * @lock is a softirq-safe spinlock protecting @queue as well as
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  305   * @cur_slot, @mrq and @state. These must always be updated
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  306   * at the same time while holding @lock.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  307   *
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  308   * @lock also protects mode_reg and need_clock_update since these are
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  309   * used to synchronize mode register updates with the queue
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  310   * processing.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  311   *
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  312   * The @mrq field of struct atmel_mci_slot is also protected by @lock,
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  313   * and must always be written at the same time as the slot is added to
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  314   * @queue.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  315   *
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  316   * @pending_events and @completed_events are accessed using atomic bit
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  317   * operations, so they don't need any locking.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  318   *
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  319   * None of the fields touched by the interrupt handler need any
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  320   * locking. However, ordering is important: Before EVENT_DATA_ERROR or
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  321   * EVENT_DATA_COMPLETE is set in @pending_events, all data-related
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  322   * interrupts must be disabled and @data_status updated with a
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  323   * snapshot of SR. Similarly, before EVENT_CMD_COMPLETE is set, the
+25985edcedea63 Lucas De Marchi    2011-03-30  324   * CMDRDY interrupt must be disabled and @cmd_status updated with a
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  325   * snapshot of SR, and before EVENT_XFER_COMPLETE can be set, the
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  326   * bytes_xfered field of @data must be written. This is ensured by
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  327   * using barriers.
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  328   */
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  329  struct atmel_mci {
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  330  	spinlock_t		lock;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  331  	void __iomem		*regs;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  332  
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  333  	struct scatterlist	*sg;
+bdbc5d0c60f3e9 Terry Barnaby      2013-04-08  334  	unsigned int		sg_len;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  335  	unsigned int		pio_offset;
+7a90dcc2d7ceb6 Ludovic Desroches  2012-05-16  336  	unsigned int		*buffer;
+7a90dcc2d7ceb6 Ludovic Desroches  2012-05-16  337  	unsigned int		buf_size;
+7a90dcc2d7ceb6 Ludovic Desroches  2012-05-16  338  	dma_addr_t		buf_phys_addr;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  339  
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  340  	struct atmel_mci_slot	*cur_slot;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  341  	struct mmc_request	*mrq;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  342  	struct mmc_command	*cmd;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  343  	struct mmc_data		*data;
+796211b7953bd1 Ludovic Desroches  2011-08-11  344  	unsigned int		data_size;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  345  
+65e8b083fc8ec3 Haavard Skinnemoen 2008-07-30  346  	struct atmel_mci_dma	dma;
+65e8b083fc8ec3 Haavard Skinnemoen 2008-07-30  347  	struct dma_chan		*data_chan;
+e2b35f3dbfc080 Viresh Kumar       2012-02-01  348  	struct dma_slave_config	dma_conf;
+65e8b083fc8ec3 Haavard Skinnemoen 2008-07-30  349  
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  350  	u32			cmd_status;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  351  	u32			data_status;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  352  	u32			stop_cmdr;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  353  
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  354  	struct tasklet_struct	tasklet;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  355  	unsigned long		pending_events;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  356  	unsigned long		completed_events;
+c06ad2580dca4e Haavard Skinnemoen 2008-07-31  357  	enum atmel_mci_state	state;
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  358  	struct list_head	queue;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  359  
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  360  	bool			need_clock_update;
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  361  	bool			need_reset;
+24011f346471f7 Ludovic Desroches  2012-05-16  362  	struct timer_list	timer;
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  363  	u32			mode_reg;
+74791a2dc8dc2a Nicolas Ferre      2009-12-14  364  	u32			cfg_reg;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  365  	unsigned long		bus_hz;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  366  	unsigned long		mapbase;
+7d2be0749a5909 Haavard Skinnemoen 2008-06-30  367  	struct clk		*mck;
+d9faa6e8381c3a Andy Shevchenko    2024-04-17  368  	struct device		*dev;
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  369  
+e20b1c52f08695 Andy Shevchenko    2024-04-17  370  	struct mci_slot_pdata	pdata[ATMCI_MAX_NR_SLOTS];
+2c96a293bbd6b3 Ludovic Desroches  2011-08-11  371  	struct atmel_mci_slot	*slot[ATMCI_MAX_NR_SLOTS];
+796211b7953bd1 Ludovic Desroches  2011-08-11  372  
+796211b7953bd1 Ludovic Desroches  2011-08-11  373  	struct atmel_mci_caps   caps;
+796211b7953bd1 Ludovic Desroches  2011-08-11  374  
+796211b7953bd1 Ludovic Desroches  2011-08-11  375  	u32 (*prepare_data)(struct atmel_mci *host, struct mmc_data *data);
+796211b7953bd1 Ludovic Desroches  2011-08-11  376  	void (*submit_data)(struct atmel_mci *host, struct mmc_data *data);
+796211b7953bd1 Ludovic Desroches  2011-08-11  377  	void (*stop_transfer)(struct atmel_mci *host);
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17 @378  };
+965ebf33ea5afb Haavard Skinnemoen 2008-09-17  379  
 
 -- 
 0-DAY CI Kernel Test Service
