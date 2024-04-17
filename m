@@ -1,61 +1,60 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507D71272A6
-	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 08:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C181272A6
+	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 08:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713342663; cv=none; b=J5siCZPuo45TC3cOYSSWsQqhwGB04etkdZ+s7QSAfch6QiK4oSV68lIlHIlKXzELm4ArgJbrjBdwBjyo1AgnBxtpNpPEmOQHjFriA9gynDADDPd1Uec/q9XkKO0ssb8JPTOP3lGMPQf1yvqrmPDJpWgBeDb5uqd0PW8zAxm59RY=
+	t=1713342664; cv=none; b=X+cJo30rBwpsIwe8qVmujWVMS297vRyuE7fWy5+usXk6tVHY8TQ4mW0PAt/+INgMOhhphSS2Q/ua532nilM9/1bQC0U4G5I22ozhr2JtL+7pvWJcRh8gtJv0JmJg6zYuCPzFkqizip5yr4j6ujaT7mqbePcmFG+OjRHkUr0iqWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713342663; c=relaxed/simple;
-	bh=BNFdvBSweRsP5yvo3LDzy/S5LF2sUKq1AA+bn058AAc=;
+	s=arc-20240116; t=1713342664; c=relaxed/simple;
+	bh=DHod4R95dmfxlATUYg8PEHh9KCB9O2la9voBWAdmE2E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Yd8fv/nB4KXSWbXb1JeCgrYu5rovvFrQgiy4eXDseihcogWmKNgXcDf2QHV1M8aHesDUfOpxqe/Tr+1lQZ8ga1HD4abqWhx//ftgmjR5gYYBqLpCQuMG4nXOMEXV1uBTv03ORdizF/6mJP58d1JLOmuTd5brMrgRSGPBX1uvdQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WjcPRwo9; arc=none smtp.client-ip=209.85.167.51
+	 In-Reply-To:To:Cc; b=uGW0uw0OaHr3dSO5fShS7ds8LiR3+2MjqF3SBaYkOHoNupkTycO7g/u2dChBTCWvkzcAOUxT7Y8zEu2D7D/k2q9gx9k1uPovQ7aDXpP3pGOjQeor/wQbWaHge2Q/iG5FrJXqYpWr6cOPx+ym9IlF4+CTYRbPVIwGCAGg57/nxaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AvnDUlwe; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WjcPRwo9"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-516d68d7a8bso545513e87.1
-        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 01:31:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AvnDUlwe"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5176f217b7bso9410963e87.0
+        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 01:31:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713342659; x=1713947459; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1713342661; x=1713947461; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XDN5FRmJQobK+MX9/UAQHb6uzGwTwVFq2SIWEuBGTZ8=;
-        b=WjcPRwo9IHxFrDisJylUvJvYWmYIBf5dHrzEzzigyddnH6Kv2UUSvlvs3VCimgc8VK
-         oXG2+LkqcsP+Jt8CQUev0JXPsziDVkHVDfa1JPxuLRTsMSsepyULv9v8w9gdb1k24EJQ
-         XLj/sPS4FYbTVe4XqWS626ou5hbA1ckbFBqIWI+T1arpWlHzoDG0yRjDhYKa7XaeRReI
-         HK9M7I5fJX2m3okRwMCaceXeDTi2fFc7it+pbyL8C/gWIu1hC78DY69bhWuGcN9xKdfR
-         SXZI2CBqApCg2ktVtH4At24SJ5TpRWpi8v1+WSSP5Y3jczu/empjPPoTy4OL7e4frcWg
-         YZRw==
+        bh=B8O1l9DG1nr6tC/T09XllcDqc2JZrTHVCm6s1PJNYaY=;
+        b=AvnDUlweYbv8jdAhevinsiiiSl3H6d/vDlDqDJVrB5J4TWeTGbWJaCfDdXJQXqvT7k
+         p/UVzRarFyVdMWFxpn35QYsLvo1C/KPvaUOxn1KSqoYC7Ia48XtjSxEECBBfEC1EhCfQ
+         9WHXJIrnKH+Go/jWAhnlho5ElK8gcElwW19xttiBNjakJefoVd9WkOvXkBp/MQ5d3A1j
+         JgJCcOXVNl29mBP8KlGWvhW9hhur90KK/Fzuf2hiksExFahGZQj89q5YuU9Skr3jR8zg
+         B9h4vaJI6oH1ALaj07trdKWSh3Gc0Kaju5fJ+DAqTgRvrVqjph1Zc78cGuLCDsPkv3sS
+         jVPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713342659; x=1713947459;
+        d=1e100.net; s=20230601; t=1713342661; x=1713947461;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XDN5FRmJQobK+MX9/UAQHb6uzGwTwVFq2SIWEuBGTZ8=;
-        b=hhRlThUzKEwpZlDGF2c9EI2SRwFLOLdJH0IPoZgO84Xm1IVuBt6WrMTMVqrq2HQ96l
-         /VyjKzjpPZ1rDBHfoppWGcgE36fyXZOxmwOtnml3ExPxsGC+iTG3HzZZaMjDodg2r5uI
-         YcjPahQj2gfE6zKWEaABf2N7YoMRPA34S4GfkVbODbpxp1fxNUaAAgCzo4IFW/qKP6SX
-         XUXeMYHliYrvXH+dequ2LHkqVujYcvqH+gklfaVjDeI9gCyHTB6+BcE8FrPMb+UxAsee
-         Ckfn04f+h1uhsDUhWqc0oEe9WeLLZwGcdTEXXP2WTQGhP8exM1ssQxWjxh9XNS4mFfK5
-         J2VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUgScAmYq80vqDREf2+w9OhSKxRVJ3tCjaQBRfbPTiDnIUPcWGqYf6GdOI8HDmJ3npNjEOgP3o7tTlpQ3lW4ocyd+M6Sg==
-X-Gm-Message-State: AOJu0YwRzryg0ybVLAaj681LqkNhoO+DWhGV/KjhBT4EMeD/PEMSU/t8
-	6DMOTwR68Zx5IF3R3hxdqVdrgR1fBrL5F77YYzfEoJJtr34c8gFUU2D13ZMFrPM=
-X-Google-Smtp-Source: AGHT+IFN9dfO6OYwpHh3pMr+v9jNyhnNAh1I4U8fQQyEks8csQyV0TYep99DGgx87ndn1C/nkgViVw==
-X-Received: by 2002:ac2:5050:0:b0:516:ac69:3bf5 with SMTP id a16-20020ac25050000000b00516ac693bf5mr1488979lfm.0.1713342659374;
-        Wed, 17 Apr 2024 01:30:59 -0700 (PDT)
+        bh=B8O1l9DG1nr6tC/T09XllcDqc2JZrTHVCm6s1PJNYaY=;
+        b=Gh7HLNMTZDXLOQUcuLl+q5ewKOGpf8Sdi2xv/vz4p0Dbjd21zHYpaDMz39q9r42SiF
+         +mjCr3cIlPaIyHkCwxmrFV23SdBFvZDr5lpFU/Tdg4q66TLHeyKpU0tD+Hns+KFz1n1j
+         afXhCmRGV2+3ZfmKnEaPVgA5xe7hpFTLpkvLUxuRwKOiNnUeZUwVFCneVJg6vvp0hOFi
+         U6i+sYiJ5oTNW6bMKCyygbDse5ssWQYes3Lq/M6tY3z4E6NWaIsSbu4Q4Q2Q/L7QvubX
+         EAHyLg4fS8a/UKYMNNFd/UlFrIozt7+6uDlqMC8OQqzUATSN6PIW7uNOdNoBXbqgfDyg
+         gU5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUVHMHAWkZ1a3YPhU/fKxo8J/PdPIJ3Ak5fY0gVWsrFALGSGrAUx8+b4HLLrTc95j5Aur/QWoBPtTrjER79Bx5646A3iQ==
+X-Gm-Message-State: AOJu0YxnjTHY8UGdJeiXkxbkc24MNG8eCqDCtwIIUmRsp7o1eofKgZz4
+	Jyo7il8+2vWn5DgYaCQJLdUQRqNDd7eNhWjw4M4fgJAB0A3sCKgZTMQ/agjlKfU=
+X-Google-Smtp-Source: AGHT+IGUnZrEIHfBBbG4EyQF/+1ZV+ejt2IYqs6beIEUlrR/J6flJei6ybRM4DwGnqlKSCUa7KsxEg==
+X-Received: by 2002:a05:6512:2c9b:b0:518:c382:3216 with SMTP id dw27-20020a0565122c9b00b00518c3823216mr8556361lfb.34.1713342661519;
+        Wed, 17 Apr 2024 01:31:01 -0700 (PDT)
 Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b00516d2489f16sm1873151lfl.260.2024.04.17.01.30.57
+        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b00516d2489f16sm1873151lfl.260.2024.04.17.01.30.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Apr 2024 01:30:58 -0700 (PDT)
+        Wed, 17 Apr 2024 01:30:59 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 17 Apr 2024 10:30:50 +0200
-Subject: [PATCH v6 01/11] ARM: bugs: Check in the vtable instead of defined
- aliases
+Date: Wed, 17 Apr 2024 10:30:51 +0200
+Subject: [PATCH v6 02/11] ARM: ftrace: Define ftrace_stub_graph
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240417-arm32-cfi-v6-1-6486385eb136@linaro.org>
+Message-Id: <20240417-arm32-cfi-v6-2-6486385eb136@linaro.org>
 References: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
 In-Reply-To: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -76,58 +75,33 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.13.0
 
-Instead of checking if cpu_check_bugs() exist, check for this
-callback directly in the CPU vtable: this is better because the
-function is just a define to the vtable entry and this is why
-the code works. But we want to be able to specify a proper
-function for cpu_check_bugs() so look into the vtable instead.
-
-In bugs.c assign PROC_VTABLE(switch_mm) instead of
-assigning cpu_do_switch_mm where again this is just a define
-into the vtable: this makes it possible to make
-cpu_do_switch_mm() into a real function.
+Several architectures defines this stub for the graph tracer,
+and it is needed for CFI, as it needs a separate symbol for it.
+The trick from include/asm-generic/vmlinux.lds.h to define
+ftrace_stub_graph to ftrace_stub isn't working when using CFI.
+Commit 883bbbffa5a4 contains the details.
 
 Tested-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/kernel/bugs.c     | 2 +-
- arch/arm/mm/proc-v7-bugs.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/kernel/entry-ftrace.S | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/kernel/bugs.c b/arch/arm/kernel/bugs.c
-index 087bce6ec8e9..35d39efb51ed 100644
---- a/arch/arm/kernel/bugs.c
-+++ b/arch/arm/kernel/bugs.c
-@@ -7,7 +7,7 @@
- void check_other_bugs(void)
- {
- #ifdef MULTI_CPU
--	if (cpu_check_bugs)
-+	if (PROC_VTABLE(check_bugs))
- 		cpu_check_bugs();
- #endif
- }
-diff --git a/arch/arm/mm/proc-v7-bugs.c b/arch/arm/mm/proc-v7-bugs.c
-index 8bc7a2d6d6c7..ea3ee2bd7b56 100644
---- a/arch/arm/mm/proc-v7-bugs.c
-+++ b/arch/arm/mm/proc-v7-bugs.c
-@@ -87,14 +87,14 @@ static unsigned int spectre_v2_install_workaround(unsigned int method)
- 	case SPECTRE_V2_METHOD_HVC:
- 		per_cpu(harden_branch_predictor_fn, cpu) =
- 			call_hvc_arch_workaround_1;
--		cpu_do_switch_mm = cpu_v7_hvc_switch_mm;
-+		PROC_VTABLE(switch_mm) = cpu_v7_hvc_switch_mm;
- 		spectre_v2_method = "hypervisor";
- 		break;
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index 3e7bcaca5e07..bc598e3d8dd2 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -271,6 +271,10 @@ ENTRY(ftrace_stub)
+ 	ret	lr
+ ENDPROC(ftrace_stub)
  
- 	case SPECTRE_V2_METHOD_SMC:
- 		per_cpu(harden_branch_predictor_fn, cpu) =
- 			call_smc_arch_workaround_1;
--		cpu_do_switch_mm = cpu_v7_smc_switch_mm;
-+		PROC_VTABLE(switch_mm) = cpu_v7_smc_switch_mm;
- 		spectre_v2_method = "firmware";
- 		break;
- 	}
++ENTRY(ftrace_stub_graph)
++	ret	lr
++ENDPROC(ftrace_stub_graph)
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ 
+ 	__INIT
 
 -- 
 2.44.0
