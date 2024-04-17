@@ -1,83 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FA98F54;
-	Wed, 17 Apr 2024 03:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583B842AA3;
+	Wed, 17 Apr 2024 04:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713323919; cv=none; b=r8P+NA+6b8X4cbz9aChuMuW0ud/kEy5GdR+U/OAH7OMIfTnYJa4dTGJlX/QLAfYDRgG9qTSIKUn2yQvrN0vllYL029R4GPLFoKY7GQYOW6NVEi/2xBl4zJTek85K72VwvbjHl09h/MakS44FvByNTx1opSwYnzYjyVtgw7NuhKE=
+	t=1713327627; cv=none; b=GeBd6Cp3L9E/aRnCGVGhd167MebWzbpjpAPcv46uLR169sWXJEPnVnHG2KXKmtRci+EdKZrsZhdGodIobV7NxICioL3sJYIB/4oKBV+btfyGqxrsKoebMP/9GqQVVSvgFviC4ffad0oxy+qs1dzJoE8NlnGgSwJcAHAP0CvfM24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713323919; c=relaxed/simple;
-	bh=QROgXz5UDuoxzxyfomvlU9PtVelcpq1hfiHqc4D5Rl0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SpdWEdy9ipzN4E7UtHI1h33Wvdi8EBXuwybgHqsPtWpDaIKgscWbktvhjKKn5l3zRLyfcUJQk5mllzWJvmrAc6WQgqoKGmHpe8Jvd7LQ7glZG+zsnJTYBKlZQkNH+aE46enytHiug3iOiGcjtR4PlMjWf/TT1cFnyEFIdX/BnM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kqLw8Z27; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713327627; c=relaxed/simple;
+	bh=eP9CiB0rVmK0Jtt5Y4CBVHAELD9KxtAHPblOt+Tr8S8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rWuXgxlh4rJ8Gsw7455W3wkpmjdDLwctMtkteKB3DZJWAqT3yjL1Mkdr3ONSUOtxIPoYWTMI/AfIxQ1hJBhehJQGOnfF1Sk5VVO1+hYUsN3m29vHC/MfoHHfJCNaTGAcuS7YnS1ens+GCcmxv1kFynTLLRZqFuTGsnHfZ0jH4lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GW74/1SU; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kqLw8Z27"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC323C3277B;
-	Wed, 17 Apr 2024 03:18:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713323918;
-	bh=QROgXz5UDuoxzxyfomvlU9PtVelcpq1hfiHqc4D5Rl0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kqLw8Z27o9tczw3gVr+DQw78bY/vuXNieAm6RyqMBwaTqF/7X62dbj+UjOxE3ttnL
-	 2ZHQRFwFQ527o1zHAoWGxPRsSChSta5s3Qdo8utMdB0p8CyQwhT8DI8Kd7jhYvuiG7
-	 33RNm5tlzJ02TMnUvv20OfOTueGMJK1t/sON/wuc5oqLkuzcny3J/WV6W4QMOb8rMo
-	 cM6UPl1gX0DIebasc6xLyZzMu+E5mqXOzHmwGQCtfDXO/i/uHJ0HVlY00nqjPICMG1
-	 JcBGCdqzs/ZVRCDuJKxwrLWIJsYfpOFoN/8QpAdGI35eTR2Dpr6eF/R4ItNr8donPs
-	 ySgxiuYSJOLuw==
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a554afec54eso114987366b.1;
-        Tue, 16 Apr 2024 20:18:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXfXXPfKafiVplT1mWzaVfXHuNX+Dvx+kFItLKQPKyphSs0NDAZT0PNBqtfGd+euI/U3gkXYOXguDdbl8XE3OmP3uYSKXPgZvKALiBlMwxihBHVRAiIUc4wEutfWE0r8g==
-X-Gm-Message-State: AOJu0Yxb42lFozCoW8TpsDjhIXpY1vz8YROvP1GL9vsN4/bHqKyTOBum
-	gOY1/gGspJUlfT0O73qc5I4Z9M7p9FYMS+PoeYn0nmG7/hgBG/mJyVeEBqbUZs4QTaf92Y+bAQh
-	um4wLanfpUhyADO9Ei/s4/wjJs/w=
-X-Google-Smtp-Source: AGHT+IGAV0JKt0Q8Wt6Fx+5t3raYHvV2CbyQ2onGWJZvBZMtZILfGwV4qyHAs5ucw4zU1joYNfqugznQTR7cPZhmh20=
-X-Received: by 2002:a17:907:1c0d:b0:a4e:7a36:4c38 with SMTP id
- nc13-20020a1709071c0d00b00a4e7a364c38mr13676826ejc.20.1713323917285; Tue, 16
- Apr 2024 20:18:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GW74/1SU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713327626; x=1744863626;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eP9CiB0rVmK0Jtt5Y4CBVHAELD9KxtAHPblOt+Tr8S8=;
+  b=GW74/1SUWphaWpUwtKuvQfmVb+lXQeXfC8+H9J37FiNaB7gLAlT7cpEY
+   u8Xr3RfRpPzeI49oi825ZyQ8jKId3d0AIZVTOInpGgpp/qjuu8TMjCHXn
+   zqVsKkixp2b9PbA18NMipVqc7McKlTQNAQlFfvauOa6QOpW/37sRNvlLg
+   KFDFl2O+O0Bx/bBXwY8HL+dyO8Q3cZh3u+YEhakkUkDLpzJd+AQh1cMqQ
+   l0ATDk9eGdUgTDmM2D2+Xx61vJPMAEhZwILp9SWY99iI+uPht3U2lD6CF
+   86wGyZQpiMJqujZiJ5kByt7AZegEZWs6s49TgD2dop/JVEXJVLJYwL2My
+   w==;
+X-CSE-ConnectionGUID: r0lATCRQRxaeCXNdJ12UbQ==
+X-CSE-MsgGUID: kCV1eowvQtimGiW7H0asTQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8727248"
+X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
+   d="scan'208";a="8727248"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 21:20:23 -0700
+X-CSE-ConnectionGUID: yy0uzlT5T06h2v68mKmbig==
+X-CSE-MsgGUID: 76kdptNeS0ilm+ZYkDwsFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
+   d="scan'208";a="59912377"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 16 Apr 2024 21:20:22 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rwwmS-00067e-0O;
+	Wed, 17 Apr 2024 04:20:20 +0000
+Date: Wed, 17 Apr 2024 12:19:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH 4/4] kbuild: use $(src) instead of $(srctree)/$(src) for
+ source directory
+Message-ID: <202404171200.q4osYsl7-lkp@intel.com>
+References: <20240416121838.95427-5-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240416144926.599101-1-david@redhat.com> <CANiq72kACt+FfeYXJxfQpmGH=uPqkDA0oprfnebw52VSKyn7kQ@mail.gmail.com>
-In-Reply-To: <CANiq72kACt+FfeYXJxfQpmGH=uPqkDA0oprfnebw52VSKyn7kQ@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 17 Apr 2024 11:18:27 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5mt0GaaZ3s44CYb4aKqYeDYm+Q16hY__FdQ6xYJh+bgg@mail.gmail.com>
-Message-ID: <CAAhV-H5mt0GaaZ3s44CYb4aKqYeDYm+Q16hY__FdQ6xYJh+bgg@mail.gmail.com>
-Subject: Re: [PATCH v1] LoongArch/tlb: fix "error: parameter 'ptep' set but
- not used" due to __tlb_remove_tlb_entry()
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-arch@vger.kernel.org, loongarch@lists.linux.dev, llvm@lists.linux.dev, 
-	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240416121838.95427-5-masahiroy@kernel.org>
 
-Queued for loongarch-fixes, thanks.
+Hi Masahiro,
 
-Huacai
+kernel test robot noticed the following build errors:
 
-On Wed, Apr 17, 2024 at 3:25=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Tue, Apr 16, 2024 at 4:49=E2=80=AFPM David Hildenbrand <david@redhat.c=
-om> wrote:
-> >
-> > With LLVM=3D1 and W=3D1 we get:
->
-> Hmm... I didn't need W=3D1 to trigger it (LLVM 18.1.2).
->
-> > Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
->
-> Thanks, looks good to me -- built-tested:
->
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> Tested-by: Miguel Ojeda <ojeda@kernel.org>
->
-> Cheers,
-> Miguel
+[auto build test ERROR on masahiroy-kbuild/for-next]
+[cannot apply to masahiroy-kbuild/fixes wireless-next/main wireless/main linus/master v6.9-rc4 next-20240416]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/arch-use-obj-instead-of-src-for-preprocessed-linker-scripts/20240416-202308
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+patch link:    https://lore.kernel.org/r/20240416121838.95427-5-masahiroy%40kernel.org
+patch subject: [PATCH 4/4] kbuild: use $(src) instead of $(srctree)/$(src) for source directory
+config: arm64-randconfig-004-20240417 (https://download.01.org/0day-ci/archive/20240417/202404171200.q4osYsl7-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404171200.q4osYsl7-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404171200.q4osYsl7-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error: couldn't read rust/doctests_kernel_generated.rs: No such file or directory (os error 2)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
