@@ -1,60 +1,60 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A33129E88
-	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 08:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C53B139F
+	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 08:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713342666; cv=none; b=jTFXxZVpyrpusicepu7Y6V78IS8SVeTSaKtroKXi5BFqEqQn0x4kwp9uU6TsHh+xD/5QyUHxIH87PmBIsayArZw0YbwctKRrO6NUXQ9wybq74p1H/UE0R8wKsNhKrR+KYF4yDrEXX3oweIyo3CNDJikmNP/KMWtoRdlEBInwKkg=
+	t=1713342670; cv=none; b=rBUhL4nIWzHDPGPyDHpFusQZT82XKEEdhVQsms5Lj8J7/UYyoL6pi+2aj81TrDiDM3jqYp7/xUZjZvadvUsANhVv51dMVfmdQepYVwYqQJwxd4mqSAWi0M1kqr23joxIcNmTBWTPEfz4CMPMLtHFuJOEXceoeqSfTBFfQATN7ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713342666; c=relaxed/simple;
-	bh=RiaAdhkxss8WwH90lNcPx9GjWOJRJr7rpQVVoo9QjSQ=;
+	s=arc-20240116; t=1713342670; c=relaxed/simple;
+	bh=57qF1jKo3BSDHeS8siXf9fNk2J3CajFjNKEEPxcgvQM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HxthOHPSyrZkYRdCSsqQjSlCNpj3po1Iu9AwwDWhb+4Zq5bnZtL7Kx7gy9g3shWgCBdei3Dxfmf/y+UEZiTxQSjjblrpewjhMajYjhUuBUD/pgxPZnrz15+23BcmiZKapYKT+kZ5jT4XATWC0o4pq/NYtMOmSmy+4Zc3JxT1hHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MlIzzw0W; arc=none smtp.client-ip=209.85.167.47
+	 In-Reply-To:To:Cc; b=QElkJAkmFKcrBQVMF/RZFeCP5MD5Alewk89PzgeH/Y1dCwbX6EBTk4p2tw9XOhccXLfIl4IeuSUGM1Z2DpJyawh3Mm/plvIY+ZBvpI7TMANYYcWsmvKaD7bHYnQgvxD2qLvgSVyDdqGTXgzU/DJbZzcptBZKkGmt9eG+B+lKLVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tygB+b4Y; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MlIzzw0W"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-516d264d0e4so609839e87.0
-        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 01:31:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tygB+b4Y"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-516d1c8dc79so6814555e87.1
+        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 01:31:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713342663; x=1713947463; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1713342666; x=1713947466; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3RTNeV4li+DU0s3fUIcbK2lqyEFO9l8a9eRKgSj1QCA=;
-        b=MlIzzw0WLc/6hLNZjTdRtVCfUmEeD0mEpmmcYEhE9Ma0Pr8sTpgEH1bZZhvq7Ihyw7
-         Qgzs2gQcrHl4LeBvnB7YbSxVcH5719HyBJCRY7oEA4PmfIQjFLWul6ZXpvCwb1cLY5HY
-         7CxTQHfE6RoICaMrYJemI7dOilJiFXOZkBIRYjamaN9yT1O2bqhzxbcg3BsV0wk2+Z8E
-         ntlSn19zl19pR+Y+47nLsviGjBf6FGrS8ILiHKdeows3B/UsJ4PcdwIyVHITpOO8kF1K
-         ds2A0wkKe3pyfXjuwuGYUU/kc90s6rW5yIqwBs9yoSU+jO5KD4UC4g+52k3PMK5VZn9q
-         R1Mw==
+        bh=CXHI6Nsz1rAVeXFpM1eB04t0yjhK7F1Xu95evrEKmZs=;
+        b=tygB+b4YoHq8hHzkD3pdg4UxAHStsBaeptj7YTQPpYVCci1sqDLww9WV8w2/mpcMqs
+         TdnUvz2vusliZav0seg0/5SmoQ3VLK9bKqJ6imnFq6v/tAyYsHcVSt1F4d4k0uN5xhy+
+         aWpHAwELksQ6VKEGz6mwgQqQDao6PKTyPnO0/+i1j6rpJUWMhpqXX1ZNuuWLUJqxg351
+         gvpjvXkeS+uN5RSOVj9NAxAoKC633Neb5FWYlzZnv6oN2+HBZcxJEICQBYhkSjAFm1Nq
+         oKa3nZpJzQOYT3aJbByJkXguepy/NqN1tMc2+2uIxlSqXFvPklRwFTDCquVHWwurcdkN
+         qZTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713342663; x=1713947463;
+        d=1e100.net; s=20230601; t=1713342666; x=1713947466;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3RTNeV4li+DU0s3fUIcbK2lqyEFO9l8a9eRKgSj1QCA=;
-        b=jDwnZUn22fxw9TwEt65WdtdbeHqe6BxysVE0ZC39giK6zsBCWGzabdMX0U8bwQNw7I
-         mM+ae2X2xpifxbOOhgVqJn33dxbYthpv1hy5J7rjoKXV+70GwCUXcTLbyT7RYsxleph9
-         UzOcCaL93Z22a8oUQGEMZucM6NhYHx/KjED51kpUH4unMu6JY+pi1N0vlL9CYwsAPQhS
-         3DSPM8x/pPLocZJvh0OdgaJwhS9be5Ao+zKoOL+KTSC4jVQxlMOYOrLLuEzSlly07eJB
-         1WpIYFIjKO3ENU0OaVG0haX45f9T+yO5q7YQGJEsAfLhe4ScfZK1VoGOqKPaHnkdsMTl
-         5SZw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBYcDpKvivN4igrtzYgaDC1J7Cj5PbyogkuWeHnjEjP2NwibPWewCTXpzzbsJ9jOjDeSXEfQpyUCPCfWc7hHLuxks0tg==
-X-Gm-Message-State: AOJu0YwRMK23+r+I+5/p45R1lLQgNlOtTrYGTRpzRihfZPSysLHrzQKn
-	o1oTObi4NH0pkFx0setSrfBbqjR4Y7snMjOmpwZ397+qW4lsPiQFYSCi+8s/th4=
-X-Google-Smtp-Source: AGHT+IGaCEpUV5qToIMOby2ovQc+vfHFLnSrHEOUd6ByDdfhtdPcFX3SOi0owEePYdwyja9bM/fNtQ==
-X-Received: by 2002:ac2:4d91:0:b0:518:f4e9:201c with SMTP id g17-20020ac24d91000000b00518f4e9201cmr1377207lfe.16.1713342662647;
-        Wed, 17 Apr 2024 01:31:02 -0700 (PDT)
+        bh=CXHI6Nsz1rAVeXFpM1eB04t0yjhK7F1Xu95evrEKmZs=;
+        b=nY5H27NaHpF5c/MmUzl7NKlsp90iEe4+bR2JRSiSN5lxQNntjyFaoHFBxGL0WNKpVL
+         4D2Y9GJS5jxZ4mpoEddr97/euaavKUqVLetOsFQmvLXpauSB5oBxjm302sUo3DQpv1yz
+         hxpzIAh/qUDxXshaOjyngT5A1vEBiNWx8m5nyd2+xqx+5hS9CNVy0dJDlutNDWDZqyK3
+         95shqL/suE5XwtwlyiDwCuBHG+VL9pQFjLAJyvNmR4fi20ZxaUmBqGmBegsb5j7o2hmk
+         x/ZRmom9f1lrH4VYOtF+RAAhICf2a85ED1toSNxhQMP24bAT7+Fyd+/RHa+PXPME2pd7
+         okjw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxEQUBNMYP3DFbxJxwsXB1af0gdBZfGAo1lSqOapCXKzjKrknlQ0QEFwdT5i9REc+l7AF5Y/erNMF9a6LNF21GVWtmiw==
+X-Gm-Message-State: AOJu0YwHBpIEzF88ehdImWdvBkrhZ1FAcVwLm2lmWxpDfsEq5QLviqHk
+	gOv/bWxgPwwGpNWn5edrvlnrj+S5tI9FrUZeia/k5tE8MEUBOqLItwd9z5DvKqM=
+X-Google-Smtp-Source: AGHT+IHB8JCX6D6ARLtFbTFppzo86HK5yM6Uifs8urhKBhLeAmtBKFR3966aqUEppyYYtX8U6nusCA==
+X-Received: by 2002:ac2:41ca:0:b0:516:cebc:f294 with SMTP id d10-20020ac241ca000000b00516cebcf294mr10328987lfi.16.1713342665726;
+        Wed, 17 Apr 2024 01:31:05 -0700 (PDT)
 Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b00516d2489f16sm1873151lfl.260.2024.04.17.01.31.01
+        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b00516d2489f16sm1873151lfl.260.2024.04.17.01.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Apr 2024 01:31:02 -0700 (PDT)
+        Wed, 17 Apr 2024 01:31:04 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 17 Apr 2024 10:30:52 +0200
-Subject: [PATCH v6 03/11] ARM: mm: Make tlbflush routines CFI safe
+Date: Wed, 17 Apr 2024 10:30:54 +0200
+Subject: [PATCH v6 05/11] ARM: mm: Use symbol alias for two cache functions
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240417-arm32-cfi-v6-3-6486385eb136@linaro.org>
+Message-Id: <20240417-arm32-cfi-v6-5-6486385eb136@linaro.org>
 References: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
 In-Reply-To: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -75,440 +75,533 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.13.0
 
-From: Ard Biesheuvel <ardb@kernel.org>
+The cache functions to flush user cache (*_flush_user_cache_all)
+and coherent kernel range (*_coherent_kern_range) are in many
+cases just a branch to the corresponfing userspace or kernelspace
+function. These functions also have the same arguments.
 
-Instead of avoiding CFI entirely on the TLB flush helpers, reorganize
-the code so that the CFI machinery can deal with it. The important
-things to take into account are:
-- functions in asm called indirectly from C need to be defined using
-  SYM_TYPED_FUNC_START()
-- a reference to the asm function needs to be visible to the compiler,
-  in order to get it to emit the typeid symbol.
+Simplify these two by using SYM_FUNC_ALIAS() in all affected sites.
 
-The latter means that defining the cpu_tlb_fns structs is best done from
-C code, so that the references in the static initializers will be
-visible to the compiler.
+The NOP cache has very many similar calls which are just returns,
+but it would be confusing to use aliases here, so leave all the
+explicit returns and drop a comment on why we are not using aliases.
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Tested-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/mm/Makefile      |  1 +
- arch/arm/mm/proc-macros.S | 15 ---------
- arch/arm/mm/tlb-fa.S      | 12 +++----
- arch/arm/mm/tlb-v4.S      | 15 +++++----
- arch/arm/mm/tlb-v4wb.S    | 12 +++----
- arch/arm/mm/tlb-v4wbi.S   | 12 +++----
- arch/arm/mm/tlb-v6.S      | 12 +++----
- arch/arm/mm/tlb-v7.S      | 14 +++-----
- arch/arm/mm/tlb.c         | 84 +++++++++++++++++++++++++++++++++++++++++++++++
- 9 files changed, 119 insertions(+), 58 deletions(-)
+ arch/arm/mm/cache-fa.S      | 8 ++------
+ arch/arm/mm/cache-nop.S     | 4 ++++
+ arch/arm/mm/cache-v4.S      | 4 +---
+ arch/arm/mm/cache-v4wb.S    | 8 ++------
+ arch/arm/mm/cache-v4wt.S    | 8 ++------
+ arch/arm/mm/cache-v6.S      | 4 +---
+ arch/arm/mm/cache-v7.S      | 4 +---
+ arch/arm/mm/proc-arm1020.S  | 8 ++------
+ arch/arm/mm/proc-arm1020e.S | 8 ++------
+ arch/arm/mm/proc-arm1022.S  | 8 ++------
+ arch/arm/mm/proc-arm1026.S  | 8 ++------
+ arch/arm/mm/proc-arm920.S   | 8 ++------
+ arch/arm/mm/proc-arm922.S   | 8 ++------
+ arch/arm/mm/proc-arm925.S   | 8 ++------
+ arch/arm/mm/proc-arm926.S   | 8 ++------
+ arch/arm/mm/proc-arm940.S   | 8 ++------
+ arch/arm/mm/proc-arm946.S   | 8 ++------
+ arch/arm/mm/proc-feroceon.S | 8 ++------
+ arch/arm/mm/proc-mohawk.S   | 8 ++------
+ arch/arm/mm/proc-xsc3.S     | 8 ++------
+ arch/arm/mm/proc-xscale.S   | 4 +---
+ 21 files changed, 40 insertions(+), 108 deletions(-)
 
-diff --git a/arch/arm/mm/Makefile b/arch/arm/mm/Makefile
-index 71b858c9b10c..cc8255fdf56e 100644
---- a/arch/arm/mm/Makefile
-+++ b/arch/arm/mm/Makefile
-@@ -62,6 +62,7 @@ obj-$(CONFIG_CPU_TLB_FEROCEON)	+= tlb-v4wbi.o	# reuse v4wbi TLB functions
- obj-$(CONFIG_CPU_TLB_V6)	+= tlb-v6.o
- obj-$(CONFIG_CPU_TLB_V7)	+= tlb-v7.o
- obj-$(CONFIG_CPU_TLB_FA)	+= tlb-fa.o
-+obj-y				+= tlb.o
- 
- obj-$(CONFIG_CPU_ARM7TDMI)	+= proc-arm7tdmi.o
- obj-$(CONFIG_CPU_ARM720T)	+= proc-arm720.o
-diff --git a/arch/arm/mm/proc-macros.S b/arch/arm/mm/proc-macros.S
-index e43f6d716b4b..c0acfeac3e84 100644
---- a/arch/arm/mm/proc-macros.S
-+++ b/arch/arm/mm/proc-macros.S
-@@ -338,21 +338,6 @@ ENTRY(\name\()_cache_fns)
- 	.size	\name\()_cache_fns, . - \name\()_cache_fns
- .endm
- 
--.macro define_tlb_functions name:req, flags_up:req, flags_smp
--	.type	\name\()_tlb_fns, #object
--	.align 2
--ENTRY(\name\()_tlb_fns)
--	.long	\name\()_flush_user_tlb_range
--	.long	\name\()_flush_kern_tlb_range
--	.ifnb \flags_smp
--		ALT_SMP(.long	\flags_smp )
--		ALT_UP(.long	\flags_up )
--	.else
--		.long	\flags_up
--	.endif
--	.size	\name\()_tlb_fns, . - \name\()_tlb_fns
--.endm
--
- .macro globl_equ x, y
- 	.globl	\x
- 	.equ	\x, \y
-diff --git a/arch/arm/mm/tlb-fa.S b/arch/arm/mm/tlb-fa.S
-index def6161ec452..85a6fe766b21 100644
---- a/arch/arm/mm/tlb-fa.S
-+++ b/arch/arm/mm/tlb-fa.S
-@@ -15,6 +15,7 @@
+diff --git a/arch/arm/mm/cache-fa.S b/arch/arm/mm/cache-fa.S
+index c3642d5daf38..6fe06608f34e 100644
+--- a/arch/arm/mm/cache-fa.S
++++ b/arch/arm/mm/cache-fa.S
+@@ -52,9 +52,7 @@ SYM_FUNC_END(fa_flush_icache_all)
+  *	Clean and invalidate all cache entries in a particular address
+  *	space.
   */
- #include <linux/linkage.h>
- #include <linux/init.h>
-+#include <linux/cfi_types.h>
- #include <asm/assembler.h>
- #include <asm/asm-offsets.h>
- #include <asm/tlbflush.h>
-@@ -31,7 +32,7 @@
-  *	- mm    - mm_struct describing address space
+-SYM_TYPED_FUNC_START(fa_flush_user_cache_all)
+-	b	fa_flush_kern_cache_all
+-SYM_FUNC_END(fa_flush_user_cache_all)
++SYM_FUNC_ALIAS(fa_flush_user_cache_all, fa_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -113,9 +111,7 @@ SYM_FUNC_END(fa_flush_user_cache_range)
+  *	- start  - virtual start address
+  *	- end	 - virtual end address
   */
- 	.align	4
--ENTRY(fa_flush_user_tlb_range)
-+SYM_TYPED_FUNC_START(fa_flush_user_tlb_range)
- 	vma_vm_mm ip, r2
- 	act_mm	r3				@ get current->active_mm
- 	eors	r3, ip, r3			@ == mm ?
-@@ -46,9 +47,10 @@ ENTRY(fa_flush_user_tlb_range)
- 	blo	1b
- 	mcr	p15, 0, r3, c7, c10, 4		@ data write barrier
+-SYM_TYPED_FUNC_START(fa_coherent_kern_range)
+-	b	fa_coherent_user_range
+-SYM_FUNC_END(fa_coherent_kern_range)
++SYM_FUNC_ALIAS(fa_coherent_kern_range, fa_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/cache-nop.S b/arch/arm/mm/cache-nop.S
+index 56e94091a55f..cd191aa90313 100644
+--- a/arch/arm/mm/cache-nop.S
++++ b/arch/arm/mm/cache-nop.S
+@@ -6,6 +6,10 @@
+ 
+ #include "proc-macros.S"
+ 
++/*
++ * These are all open-coded instead of aliased, to make clear
++ * what is going on here: all functions are stubbed out.
++ */
+ SYM_TYPED_FUNC_START(nop_flush_icache_all)
  	ret	lr
-+SYM_FUNC_END(fa_flush_user_tlb_range)
- 
- 
--ENTRY(fa_flush_kern_tlb_range)
-+SYM_TYPED_FUNC_START(fa_flush_kern_tlb_range)
- 	mov	r3, #0
- 	mcr	p15, 0, r3, c7, c10, 4		@ drain WB
- 	bic	r0, r0, #0x0ff
-@@ -60,8 +62,4 @@ ENTRY(fa_flush_kern_tlb_range)
- 	mcr	p15, 0, r3, c7, c10, 4		@ data write barrier
- 	mcr	p15, 0, r3, c7, c5, 4		@ prefetch flush (isb)
- 	ret	lr
--
--	__INITDATA
--
--	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
--	define_tlb_functions fa, fa_tlb_flags
-+SYM_FUNC_END(fa_flush_kern_tlb_range)
-diff --git a/arch/arm/mm/tlb-v4.S b/arch/arm/mm/tlb-v4.S
-index b962b4e75158..09ff69008d94 100644
---- a/arch/arm/mm/tlb-v4.S
-+++ b/arch/arm/mm/tlb-v4.S
-@@ -11,6 +11,7 @@
+ SYM_FUNC_END(nop_flush_icache_all)
+diff --git a/arch/arm/mm/cache-v4.S b/arch/arm/mm/cache-v4.S
+index 22d9c9d9e0d7..f7b7e498d3b6 100644
+--- a/arch/arm/mm/cache-v4.S
++++ b/arch/arm/mm/cache-v4.S
+@@ -28,9 +28,7 @@ SYM_FUNC_END(v4_flush_icache_all)
+  *
+  *	- mm	- mm_struct describing address space
   */
- #include <linux/linkage.h>
- #include <linux/init.h>
-+#include <linux/cfi_types.h>
- #include <asm/assembler.h>
- #include <asm/asm-offsets.h>
- #include <asm/tlbflush.h>
-@@ -27,7 +28,7 @@
-  *	- mm    - mm_struct describing address space
+-SYM_TYPED_FUNC_START(v4_flush_user_cache_all)
+-	b	v4_flush_kern_cache_all
+-SYM_FUNC_END(v4_flush_user_cache_all)
++SYM_FUNC_ALIAS(v4_flush_user_cache_all, v4_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+diff --git a/arch/arm/mm/cache-v4wb.S b/arch/arm/mm/cache-v4wb.S
+index 0d97b594e23f..19fae44b89cd 100644
+--- a/arch/arm/mm/cache-v4wb.S
++++ b/arch/arm/mm/cache-v4wb.S
+@@ -66,9 +66,7 @@ SYM_FUNC_END(v4wb_flush_icache_all)
+  *	Clean and invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(v4wb_flush_user_cache_all)
+-	b	v4wb_flush_kern_cache_all
+-SYM_FUNC_END(v4wb_flush_user_cache_all)
++SYM_FUNC_ALIAS(v4wb_flush_user_cache_all, v4wb_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -151,9 +149,7 @@ SYM_FUNC_END(v4wb_flush_kern_dcache_area)
+  *	- start  - virtual start address
+  *	- end	 - virtual end address
+  */
+-SYM_TYPED_FUNC_START(v4wb_coherent_kern_range)
+-	b	v4wb_coherent_user_range
+-SYM_FUNC_END(v4wb_coherent_kern_range)
++SYM_FUNC_ALIAS(v4wb_coherent_kern_range, v4wb_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/cache-v4wt.S b/arch/arm/mm/cache-v4wt.S
+index eee6d8f06b4d..5be76ff861d7 100644
+--- a/arch/arm/mm/cache-v4wt.S
++++ b/arch/arm/mm/cache-v4wt.S
+@@ -56,9 +56,7 @@ SYM_FUNC_END(v4wt_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(v4wt_flush_user_cache_all)
+-	b	v4wt_flush_kern_cache_all
+-SYM_FUNC_END(v4wt_flush_user_cache_all)
++SYM_FUNC_ALIAS(v4wt_flush_user_cache_all, v4wt_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -109,9 +107,7 @@ SYM_FUNC_END(v4wt_flush_user_cache_range)
+  *	- start  - virtual start address
+  *	- end	 - virtual end address
+  */
+-SYM_TYPED_FUNC_START(v4wt_coherent_kern_range)
+-	b	v4wt_coherent_user_range
+-SYM_FUNC_END(v4wt_coherent_kern_range)
++SYM_FUNC_ALIAS(v4wt_coherent_kern_range, v4wt_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/cache-v6.S b/arch/arm/mm/cache-v6.S
+index 5c7549a49db5..a590044b7282 100644
+--- a/arch/arm/mm/cache-v6.S
++++ b/arch/arm/mm/cache-v6.S
+@@ -116,9 +116,7 @@ SYM_FUNC_END(v6_flush_user_cache_range)
+  *	It is assumed that:
+  *	- the Icache does not read data from the write buffer
+  */
+-SYM_TYPED_FUNC_START(v6_coherent_kern_range)
+-	b	v6_coherent_user_range
+-SYM_FUNC_END(v6_coherent_kern_range)
++SYM_FUNC_ALIAS(v6_coherent_kern_range, v6_coherent_user_range)
+ 
+ /*
+  *	v6_coherent_user_range(start,end)
+diff --git a/arch/arm/mm/cache-v7.S b/arch/arm/mm/cache-v7.S
+index 5908dd54de47..6c0bc756d29a 100644
+--- a/arch/arm/mm/cache-v7.S
++++ b/arch/arm/mm/cache-v7.S
+@@ -260,9 +260,7 @@ SYM_FUNC_END(v7_flush_user_cache_range)
+  *	It is assumed that:
+  *	- the Icache does not read data from the write buffer
+  */
+-SYM_TYPED_FUNC_START(v7_coherent_kern_range)
+-	b	v7_coherent_user_range
+-SYM_FUNC_END(v7_coherent_kern_range)
++SYM_FUNC_ALIAS(v7_coherent_kern_range, v7_coherent_user_range)
+ 
+ /*
+  *	v7_coherent_user_range(start,end)
+diff --git a/arch/arm/mm/proc-arm1020.S b/arch/arm/mm/proc-arm1020.S
+index a3f99e1c1186..379628e8ef4e 100644
+--- a/arch/arm/mm/proc-arm1020.S
++++ b/arch/arm/mm/proc-arm1020.S
+@@ -127,9 +127,7 @@ SYM_FUNC_END(arm1020_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(arm1020_flush_user_cache_all)
+-	b	arm1020_flush_kern_cache_all
+-SYM_FUNC_END(arm1020_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm1020_flush_user_cache_all, arm1020_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -201,9 +199,7 @@ SYM_FUNC_END(arm1020_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm1020_coherent_kern_range)
+-	b	arm1020_coherent_user_range
+-SYM_FUNC_END(arm1020_coherent_kern_range)
++SYM_FUNC_ALIAS(arm1020_coherent_kern_range, arm1020_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm1020e.S b/arch/arm/mm/proc-arm1020e.S
+index 64c63eb5d830..b5846fbea040 100644
+--- a/arch/arm/mm/proc-arm1020e.S
++++ b/arch/arm/mm/proc-arm1020e.S
+@@ -127,9 +127,7 @@ SYM_FUNC_END(arm1020e_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(arm1020e_flush_user_cache_all)
+-	b	arm1020e_flush_kern_cache_all
+-SYM_FUNC_END(arm1020e_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm1020e_flush_user_cache_all, arm1020e_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -198,9 +196,7 @@ SYM_FUNC_END(arm1020e_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm1020e_coherent_kern_range)
+-	b	arm1020e_coherent_user_range
+-SYM_FUNC_END(arm1020e_coherent_kern_range)
++SYM_FUNC_ALIAS(arm1020e_coherent_kern_range, arm1020e_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm1022.S b/arch/arm/mm/proc-arm1022.S
+index e170497353ae..c40b268cc274 100644
+--- a/arch/arm/mm/proc-arm1022.S
++++ b/arch/arm/mm/proc-arm1022.S
+@@ -127,9 +127,7 @@ SYM_FUNC_END(arm1022_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(arm1022_flush_user_cache_all)
+-	b	arm1022_flush_kern_cache_all
+-SYM_FUNC_END(arm1022_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm1022_flush_user_cache_all, arm1022_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -197,9 +195,7 @@ SYM_FUNC_END(arm1022_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm1022_coherent_kern_range)
+-	b	arm1022_coherent_user_range
+-SYM_FUNC_END(arm1022_coherent_kern_range)
++SYM_FUNC_ALIAS(arm1022_coherent_kern_range, arm1022_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm1026.S b/arch/arm/mm/proc-arm1026.S
+index 4b5a4849ad85..7ef2c6d88dc0 100644
+--- a/arch/arm/mm/proc-arm1026.S
++++ b/arch/arm/mm/proc-arm1026.S
+@@ -127,9 +127,7 @@ SYM_FUNC_END(arm1026_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(arm1026_flush_user_cache_all)
+-	b	arm1026_flush_kern_cache_all
+-SYM_FUNC_END(arm1026_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm1026_flush_user_cache_all, arm1026_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -192,9 +190,7 @@ SYM_FUNC_END(arm1026_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm1026_coherent_kern_range)
+-	b	arm1026_coherent_user_range
+-SYM_FUNC_END(arm1026_coherent_kern_range)
++SYM_FUNC_ALIAS(arm1026_coherent_kern_range, arm1026_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm920.S b/arch/arm/mm/proc-arm920.S
+index fbf8937eae85..eb89a322a534 100644
+--- a/arch/arm/mm/proc-arm920.S
++++ b/arch/arm/mm/proc-arm920.S
+@@ -116,9 +116,7 @@ SYM_FUNC_END(arm920_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(arm920_flush_user_cache_all)
+-	b	arm920_flush_kern_cache_all
+-SYM_FUNC_END(arm920_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm920_flush_user_cache_all, arm920_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -179,9 +177,7 @@ SYM_FUNC_END(arm920_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm920_coherent_kern_range)
+-	b	arm920_coherent_user_range
+-SYM_FUNC_END(arm920_coherent_kern_range)
++SYM_FUNC_ALIAS(arm920_coherent_kern_range, arm920_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm922.S b/arch/arm/mm/proc-arm922.S
+index ccfff2b65f49..035a1d1a26b0 100644
+--- a/arch/arm/mm/proc-arm922.S
++++ b/arch/arm/mm/proc-arm922.S
+@@ -118,9 +118,7 @@ SYM_FUNC_END(arm922_flush_icache_all)
+  *	Clean and invalidate all cache entries in a particular
+  *	address space.
+  */
+-SYM_TYPED_FUNC_START(arm922_flush_user_cache_all)
+-	b	arm922_flush_kern_cache_all
+-SYM_FUNC_END(arm922_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm922_flush_user_cache_all, arm922_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -181,9 +179,7 @@ SYM_FUNC_END(arm922_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm922_coherent_kern_range)
+-	b	arm922_coherent_user_range
+-SYM_FUNC_END(arm922_coherent_kern_range)
++SYM_FUNC_ALIAS(arm922_coherent_kern_range, arm922_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
+index d0f73242f70a..2510722647b4 100644
+--- a/arch/arm/mm/proc-arm925.S
++++ b/arch/arm/mm/proc-arm925.S
+@@ -151,9 +151,7 @@ SYM_FUNC_END(arm925_flush_icache_all)
+  *	Clean and invalidate all cache entries in a particular
+  *	address space.
+  */
+-SYM_TYPED_FUNC_START(arm925_flush_user_cache_all)
+-	b	arm925_flush_kern_cache_all
+-SYM_FUNC_END(arm925_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm925_flush_user_cache_all, arm925_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -227,9 +225,7 @@ SYM_FUNC_END(arm925_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm925_coherent_kern_range)
+-	b	arm925_coherent_user_range
+-SYM_FUNC_END(arm925_coherent_kern_range)
++SYM_FUNC_ALIAS(arm925_coherent_kern_range, arm925_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm926.S b/arch/arm/mm/proc-arm926.S
+index 00f953dee122..dac4a22369ba 100644
+--- a/arch/arm/mm/proc-arm926.S
++++ b/arch/arm/mm/proc-arm926.S
+@@ -117,9 +117,7 @@ SYM_FUNC_END(arm926_flush_icache_all)
+  *	Clean and invalidate all cache entries in a particular
+  *	address space.
+  */
+-SYM_TYPED_FUNC_START(arm926_flush_user_cache_all)
+-	b	arm926_flush_kern_cache_all
+-SYM_FUNC_END(arm926_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm926_flush_user_cache_all, arm926_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -190,9 +188,7 @@ SYM_FUNC_END(arm926_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm926_coherent_kern_range)
+-	b	arm926_coherent_user_range
+-SYM_FUNC_END(arm926_coherent_kern_range)
++SYM_FUNC_ALIAS(arm926_coherent_kern_range, arm926_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm940.S b/arch/arm/mm/proc-arm940.S
+index 7e32ec271e8a..7c2268059536 100644
+--- a/arch/arm/mm/proc-arm940.S
++++ b/arch/arm/mm/proc-arm940.S
+@@ -81,9 +81,7 @@ SYM_FUNC_END(arm940_flush_icache_all)
+ /*
+  *	flush_user_cache_all()
+  */
+-SYM_TYPED_FUNC_START(arm940_flush_user_cache_all)
+-	b	arm940_flush_kern_cache_all
+-SYM_FUNC_END(arm940_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm940_flush_user_cache_all, arm940_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -134,9 +132,7 @@ SYM_FUNC_END(arm940_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm940_coherent_kern_range)
+-	b	arm940_flush_kern_dcache_area
+-SYM_FUNC_END(arm940_coherent_kern_range)
++SYM_FUNC_ALIAS(arm940_coherent_kern_range, arm940_flush_kern_dcache_area)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-arm946.S b/arch/arm/mm/proc-arm946.S
+index 4fc883572e19..3955be1f4521 100644
+--- a/arch/arm/mm/proc-arm946.S
++++ b/arch/arm/mm/proc-arm946.S
+@@ -88,9 +88,7 @@ SYM_FUNC_END(arm946_flush_icache_all)
+ /*
+  *	flush_user_cache_all()
+  */
+-SYM_TYPED_FUNC_START(arm946_flush_user_cache_all)
+-	b	arm946_flush_kern_cache_all
+-SYM_FUNC_END(arm946_flush_user_cache_all)
++SYM_FUNC_ALIAS(arm946_flush_user_cache_all, arm946_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -168,9 +166,7 @@ SYM_FUNC_END(arm946_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
+  */
+-SYM_TYPED_FUNC_START(arm946_coherent_kern_range)
+-	b	arm946_coherent_user_range
+-SYM_FUNC_END(arm946_coherent_kern_range)
++SYM_FUNC_ALIAS(arm946_coherent_kern_range, arm946_coherent_user_range)
+ 
+ /*
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-feroceon.S b/arch/arm/mm/proc-feroceon.S
+index ee936c23cac5..9b1570ea6858 100644
+--- a/arch/arm/mm/proc-feroceon.S
++++ b/arch/arm/mm/proc-feroceon.S
+@@ -136,9 +136,7 @@ SYM_FUNC_END(feroceon_flush_icache_all)
+  *	address space.
   */
  	.align	5
--ENTRY(v4_flush_user_tlb_range)
-+SYM_TYPED_FUNC_START(v4_flush_user_tlb_range)
- 	vma_vm_mm ip, r2
- 	act_mm	r3				@ get current->active_mm
- 	eors	r3, ip, r3				@ == mm ?
-@@ -40,6 +41,7 @@ ENTRY(v4_flush_user_tlb_range)
- 	cmp	r0, r1
- 	blo	1b
- 	ret	lr
-+SYM_FUNC_END(v4_flush_user_tlb_range)
+-SYM_TYPED_FUNC_START(feroceon_flush_user_cache_all)
+-	b	feroceon_flush_kern_cache_all
+-SYM_FUNC_END(feroceon_flush_user_cache_all)
++SYM_FUNC_ALIAS(feroceon_flush_user_cache_all, feroceon_flush_kern_cache_all)
  
  /*
-  *	v4_flush_kern_tlb_range(start, end)
-@@ -50,10 +52,11 @@ ENTRY(v4_flush_user_tlb_range)
-  *	- start - virtual address (may not be aligned)
-  *	- end   - virtual address (may not be aligned)
-  */
-+#ifdef CONFIG_CFI_CLANG
-+SYM_TYPED_FUNC_START(v4_flush_kern_tlb_range)
-+	b	.v4_flush_kern_tlb_range
-+SYM_FUNC_END(v4_flush_kern_tlb_range)
-+#else
- .globl v4_flush_kern_tlb_range
- .equ v4_flush_kern_tlb_range, .v4_flush_kern_tlb_range
--
--	__INITDATA
--
--	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
--	define_tlb_functions v4, v4_tlb_flags
-+#endif
-diff --git a/arch/arm/mm/tlb-v4wb.S b/arch/arm/mm/tlb-v4wb.S
-index 9348bba7586a..04e46c359e75 100644
---- a/arch/arm/mm/tlb-v4wb.S
-+++ b/arch/arm/mm/tlb-v4wb.S
-@@ -11,6 +11,7 @@
-  */
- #include <linux/linkage.h>
- #include <linux/init.h>
-+#include <linux/cfi_types.h>
- #include <asm/assembler.h>
- #include <asm/asm-offsets.h>
- #include <asm/tlbflush.h>
-@@ -27,7 +28,7 @@
-  *	- mm    - mm_struct describing address space
+  *	flush_kern_cache_all()
+@@ -206,9 +204,7 @@ SYM_FUNC_END(feroceon_flush_user_cache_range)
+  *	- end	- virtual end address
   */
  	.align	5
--ENTRY(v4wb_flush_user_tlb_range)
-+SYM_TYPED_FUNC_START(v4wb_flush_user_tlb_range)
- 	vma_vm_mm ip, r2
- 	act_mm	r3				@ get current->active_mm
- 	eors	r3, ip, r3				@ == mm ?
-@@ -43,6 +44,7 @@ ENTRY(v4wb_flush_user_tlb_range)
- 	cmp	r0, r1
- 	blo	1b
- 	ret	lr
-+SYM_FUNC_END(v4wb_flush_user_tlb_range)
+-SYM_TYPED_FUNC_START(feroceon_coherent_kern_range)
+-	b	feroceon_coherent_user_range
+-SYM_FUNC_END(feroceon_coherent_kern_range)
++SYM_FUNC_ALIAS(feroceon_coherent_kern_range, feroceon_coherent_user_range)
  
  /*
-  *	v4_flush_kern_tlb_range(start, end)
-@@ -53,7 +55,7 @@ ENTRY(v4wb_flush_user_tlb_range)
-  *	- start - virtual address (may not be aligned)
-  *	- end   - virtual address (may not be aligned)
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-mohawk.S b/arch/arm/mm/proc-mohawk.S
+index 519b7ff2c589..0a94cb0464d8 100644
+--- a/arch/arm/mm/proc-mohawk.S
++++ b/arch/arm/mm/proc-mohawk.S
+@@ -100,9 +100,7 @@ SYM_FUNC_END(mohawk_flush_icache_all)
+  *	Clean and invalidate all cache entries in a particular
+  *	address space.
   */
--ENTRY(v4wb_flush_kern_tlb_range)
-+SYM_TYPED_FUNC_START(v4wb_flush_kern_tlb_range)
- 	mov	r3, #0
- 	mcr	p15, 0, r3, c7, c10, 4		@ drain WB
- 	bic	r0, r0, #0x0ff
-@@ -64,8 +66,4 @@ ENTRY(v4wb_flush_kern_tlb_range)
- 	cmp	r0, r1
- 	blo	1b
- 	ret	lr
--
--	__INITDATA
--
--	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
--	define_tlb_functions v4wb, v4wb_tlb_flags
-+SYM_FUNC_END(v4wb_flush_kern_tlb_range)
-diff --git a/arch/arm/mm/tlb-v4wbi.S b/arch/arm/mm/tlb-v4wbi.S
-index d4f9040a4111..502dfe5628a3 100644
---- a/arch/arm/mm/tlb-v4wbi.S
-+++ b/arch/arm/mm/tlb-v4wbi.S
-@@ -11,6 +11,7 @@
-  */
- #include <linux/linkage.h>
- #include <linux/init.h>
-+#include <linux/cfi_types.h>
- #include <asm/assembler.h>
- #include <asm/asm-offsets.h>
- #include <asm/tlbflush.h>
-@@ -26,7 +27,7 @@
-  *	- mm    - mm_struct describing address space
-  */
- 	.align	5
--ENTRY(v4wbi_flush_user_tlb_range)
-+SYM_TYPED_FUNC_START(v4wbi_flush_user_tlb_range)
- 	vma_vm_mm ip, r2
- 	act_mm	r3				@ get current->active_mm
- 	eors	r3, ip, r3			@ == mm ?
-@@ -43,8 +44,9 @@ ENTRY(v4wbi_flush_user_tlb_range)
- 	cmp	r0, r1
- 	blo	1b
- 	ret	lr
-+SYM_FUNC_END(v4wbi_flush_user_tlb_range)
- 
--ENTRY(v4wbi_flush_kern_tlb_range)
-+SYM_TYPED_FUNC_START(v4wbi_flush_kern_tlb_range)
- 	mov	r3, #0
- 	mcr	p15, 0, r3, c7, c10, 4		@ drain WB
- 	bic	r0, r0, #0x0ff
-@@ -55,8 +57,4 @@ ENTRY(v4wbi_flush_kern_tlb_range)
- 	cmp	r0, r1
- 	blo	1b
- 	ret	lr
--
--	__INITDATA
--
--	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
--	define_tlb_functions v4wbi, v4wbi_tlb_flags
-+SYM_FUNC_END(v4wbi_flush_kern_tlb_range)
-diff --git a/arch/arm/mm/tlb-v6.S b/arch/arm/mm/tlb-v6.S
-index 1d91e49b2c2d..8256a67ac654 100644
---- a/arch/arm/mm/tlb-v6.S
-+++ b/arch/arm/mm/tlb-v6.S
-@@ -9,6 +9,7 @@
-  */
- #include <linux/init.h>
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- #include <asm/asm-offsets.h>
- #include <asm/assembler.h>
- #include <asm/page.h>
-@@ -32,7 +33,7 @@
-  *	- the "Invalidate single entry" instruction will invalidate
-  *	  both the I and the D TLBs on Harvard-style TLBs
-  */
--ENTRY(v6wbi_flush_user_tlb_range)
-+SYM_TYPED_FUNC_START(v6wbi_flush_user_tlb_range)
- 	vma_vm_mm r3, r2			@ get vma->vm_mm
- 	mov	ip, #0
- 	mmid	r3, r3				@ get vm_mm->context.id
-@@ -56,6 +57,7 @@ ENTRY(v6wbi_flush_user_tlb_range)
- 	blo	1b
- 	mcr	p15, 0, ip, c7, c10, 4		@ data synchronization barrier
- 	ret	lr
-+SYM_FUNC_END(v6wbi_flush_user_tlb_range)
+-SYM_TYPED_FUNC_START(mohawk_flush_user_cache_all)
+-	b	mohawk_flush_kern_cache_all
+-SYM_FUNC_END(mohawk_flush_user_cache_all)
++SYM_FUNC_ALIAS(mohawk_flush_user_cache_all, mohawk_flush_kern_cache_all)
  
  /*
-  *	v6wbi_flush_kern_tlb_range(start,end)
-@@ -65,7 +67,7 @@ ENTRY(v6wbi_flush_user_tlb_range)
-  *	- start - start address (may not be aligned)
-  *	- end   - end address (exclusive, may not be aligned)
+  *	flush_kern_cache_all()
+@@ -161,9 +159,7 @@ SYM_FUNC_END(mohawk_flush_user_cache_range)
+  *	- start	- virtual start address
+  *	- end	- virtual end address
   */
--ENTRY(v6wbi_flush_kern_tlb_range)
-+SYM_TYPED_FUNC_START(v6wbi_flush_kern_tlb_range)
- 	mov	r2, #0
- 	mcr	p15, 0, r2, c7, c10, 4		@ drain write buffer
- 	mov	r0, r0, lsr #PAGE_SHIFT		@ align address
-@@ -85,8 +87,4 @@ ENTRY(v6wbi_flush_kern_tlb_range)
- 	mcr	p15, 0, r2, c7, c10, 4		@ data synchronization barrier
- 	mcr	p15, 0, r2, c7, c5, 4		@ prefetch flush (isb)
- 	ret	lr
--
--	__INIT
--
--	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
--	define_tlb_functions v6wbi, v6wbi_tlb_flags
-+SYM_FUNC_END(v6wbi_flush_kern_tlb_range)
-diff --git a/arch/arm/mm/tlb-v7.S b/arch/arm/mm/tlb-v7.S
-index 35fd6d4f0d03..f1aa0764a2cc 100644
---- a/arch/arm/mm/tlb-v7.S
-+++ b/arch/arm/mm/tlb-v7.S
-@@ -10,6 +10,7 @@
-  */
- #include <linux/init.h>
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- #include <asm/assembler.h>
- #include <asm/asm-offsets.h>
- #include <asm/page.h>
-@@ -31,7 +32,7 @@
-  *	- the "Invalidate single entry" instruction will invalidate
-  *	  both the I and the D TLBs on Harvard-style TLBs
-  */
--ENTRY(v7wbi_flush_user_tlb_range)
-+SYM_TYPED_FUNC_START(v7wbi_flush_user_tlb_range)
- 	vma_vm_mm r3, r2			@ get vma->vm_mm
- 	mmid	r3, r3				@ get vm_mm->context.id
- 	dsb	ish
-@@ -57,7 +58,7 @@ ENTRY(v7wbi_flush_user_tlb_range)
- 	blo	1b
- 	dsb	ish
- 	ret	lr
--ENDPROC(v7wbi_flush_user_tlb_range)
-+SYM_FUNC_END(v7wbi_flush_user_tlb_range)
+-SYM_TYPED_FUNC_START(mohawk_coherent_kern_range)
+-	b	mohawk_coherent_user_range
+-SYM_FUNC_END(mohawk_coherent_kern_range)
++SYM_FUNC_ALIAS(mohawk_coherent_kern_range, mohawk_coherent_user_range)
  
  /*
-  *	v7wbi_flush_kern_tlb_range(start,end)
-@@ -67,7 +68,7 @@ ENDPROC(v7wbi_flush_user_tlb_range)
-  *	- start - start address (may not be aligned)
-  *	- end   - end address (exclusive, may not be aligned)
+  *	coherent_user_range(start, end)
+diff --git a/arch/arm/mm/proc-xsc3.S b/arch/arm/mm/proc-xsc3.S
+index f08b3fce4c95..b2d907d748e9 100644
+--- a/arch/arm/mm/proc-xsc3.S
++++ b/arch/arm/mm/proc-xsc3.S
+@@ -157,9 +157,7 @@ SYM_FUNC_END(xsc3_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
   */
--ENTRY(v7wbi_flush_kern_tlb_range)
-+SYM_TYPED_FUNC_START(v7wbi_flush_kern_tlb_range)
- 	dsb	ish
- 	mov	r0, r0, lsr #PAGE_SHIFT		@ align address
- 	mov	r1, r1, lsr #PAGE_SHIFT
-@@ -86,9 +87,4 @@ ENTRY(v7wbi_flush_kern_tlb_range)
- 	dsb	ish
- 	isb
- 	ret	lr
--ENDPROC(v7wbi_flush_kern_tlb_range)
--
--	__INIT
--
--	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
--	define_tlb_functions v7wbi, v7wbi_tlb_flags_up, flags_smp=v7wbi_tlb_flags_smp
-+SYM_FUNC_END(v7wbi_flush_kern_tlb_range)
-diff --git a/arch/arm/mm/tlb.c b/arch/arm/mm/tlb.c
-new file mode 100644
-index 000000000000..42359793120b
---- /dev/null
-+++ b/arch/arm/mm/tlb.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright 2024 Google LLC
-+// Author: Ard Biesheuvel <ardb@google.com>
-+
-+#include <linux/types.h>
-+#include <asm/tlbflush.h>
-+
-+#ifdef CONFIG_CPU_TLB_V4WT
-+void v4_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
-+void v4_flush_kern_tlb_range(unsigned long, unsigned long);
-+
-+struct cpu_tlb_fns v4_tlb_fns __initconst = {
-+	.flush_user_range	= v4_flush_user_tlb_range,
-+	.flush_kern_range	= v4_flush_kern_tlb_range,
-+	.tlb_flags		= v4_tlb_flags,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_TLB_V4WB
-+void v4wb_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
-+void v4wb_flush_kern_tlb_range(unsigned long, unsigned long);
-+
-+struct cpu_tlb_fns v4wb_tlb_fns __initconst = {
-+	.flush_user_range	= v4wb_flush_user_tlb_range,
-+	.flush_kern_range	= v4wb_flush_kern_tlb_range,
-+	.tlb_flags		= v4wb_tlb_flags,
-+};
-+#endif
-+
-+#if defined(CONFIG_CPU_TLB_V4WBI) || defined(CONFIG_CPU_TLB_FEROCEON)
-+void v4wbi_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
-+void v4wbi_flush_kern_tlb_range(unsigned long, unsigned long);
-+
-+struct cpu_tlb_fns v4wbi_tlb_fns __initconst = {
-+	.flush_user_range	= v4wbi_flush_user_tlb_range,
-+	.flush_kern_range	= v4wbi_flush_kern_tlb_range,
-+	.tlb_flags		= v4wbi_tlb_flags,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_TLB_V6
-+void v6wbi_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
-+void v6wbi_flush_kern_tlb_range(unsigned long, unsigned long);
-+
-+struct cpu_tlb_fns v6wbi_tlb_fns __initconst = {
-+	.flush_user_range	= v6wbi_flush_user_tlb_range,
-+	.flush_kern_range	= v6wbi_flush_kern_tlb_range,
-+	.tlb_flags		= v6wbi_tlb_flags,
-+};
-+#endif
-+
-+#ifdef CONFIG_CPU_TLB_V7
-+void v7wbi_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
-+void v7wbi_flush_kern_tlb_range(unsigned long, unsigned long);
-+
-+struct cpu_tlb_fns v7wbi_tlb_fns __initconst = {
-+	.flush_user_range	= v7wbi_flush_user_tlb_range,
-+	.flush_kern_range	= v7wbi_flush_kern_tlb_range,
-+	.tlb_flags		= IS_ENABLED(CONFIG_SMP) ? v7wbi_tlb_flags_smp
-+							 : v7wbi_tlb_flags_up,
-+};
-+
-+#ifdef CONFIG_SMP_ON_UP
-+/* This will be run-time patched so the offset better be right */
-+static_assert(offsetof(struct cpu_tlb_fns, tlb_flags) == 8);
-+
-+asm("	.pushsection	\".alt.smp.init\", \"a\"		\n" \
-+    "	.align		2					\n" \
-+    "	.long		v7wbi_tlb_fns + 8 - .			\n" \
-+    "	.long "  	__stringify(v7wbi_tlb_flags_up) "	\n" \
-+    "	.popsection						\n");
-+#endif
-+#endif
-+
-+#ifdef CONFIG_CPU_TLB_FA
-+void fa_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
-+void fa_flush_kern_tlb_range(unsigned long, unsigned long);
-+
-+struct cpu_tlb_fns fa_tlb_fns __initconst = {
-+	.flush_user_range	= fa_flush_user_tlb_range,
-+	.flush_kern_range	= fa_flush_kern_tlb_range,
-+	.tlb_flags		= fa_tlb_flags,
-+};
-+#endif
+-SYM_TYPED_FUNC_START(xsc3_flush_user_cache_all)
+-	b	xsc3_flush_kern_cache_all
+-SYM_FUNC_END(xsc3_flush_user_cache_all)
++SYM_FUNC_ALIAS(xsc3_flush_user_cache_all, xsc3_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
+@@ -221,9 +219,7 @@ SYM_FUNC_END(xsc3_flush_user_cache_range)
+  *	Note: single I-cache line invalidation isn't used here since
+  *	it also trashes the mini I-cache used by JTAG debuggers.
+  */
+-SYM_TYPED_FUNC_START(xsc3_coherent_kern_range)
+-	b	xsc3_coherent_user_range
+-SYM_FUNC_END(xsc3_coherent_kern_range)
++SYM_FUNC_ALIAS(xsc3_coherent_kern_range, xsc3_coherent_user_range)
+ 
+ SYM_TYPED_FUNC_START(xsc3_coherent_user_range)
+ 	bic	r0, r0, #CACHELINESIZE - 1
+diff --git a/arch/arm/mm/proc-xscale.S b/arch/arm/mm/proc-xscale.S
+index 3e427db18d5b..05d9ed952983 100644
+--- a/arch/arm/mm/proc-xscale.S
++++ b/arch/arm/mm/proc-xscale.S
+@@ -199,9 +199,7 @@ SYM_FUNC_END(xscale_flush_icache_all)
+  *	Invalidate all cache entries in a particular address
+  *	space.
+  */
+-SYM_TYPED_FUNC_START(xscale_flush_user_cache_all)
+-	b	xscale_flush_kern_cache_all
+-SYM_FUNC_END(xscale_flush_user_cache_all)
++SYM_FUNC_ALIAS(xscale_flush_user_cache_all, xscale_flush_kern_cache_all)
+ 
+ /*
+  *	flush_kern_cache_all()
 
 -- 
 2.44.0
