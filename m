@@ -1,106 +1,55 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE7D147C72
-	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 16:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0514171099;
+	Wed, 17 Apr 2024 17:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713370075; cv=none; b=VENRzVi9FgdCOjMvgOj35Wp6G45NlEs2NjCsCJB6QDTugAHfil4Xdv3hn8zMASBEDc/ow6eqKxg/43EQ0HlqYiDvVRXP9estspgiO8JEwK6EO/9MZHduCfcYoHH5XZKM6IcI051EG25j80/EcQaY8yiAtG0oY32K6huLcIUVwn4=
+	t=1713373928; cv=none; b=jARXfdIdnpHt/E2OrZE/dlbB51yQU8cOeSq4853jPEQRc5xYgitC5Lv7lM7HLXpMfmKqRTBNNM3kkVSH8lK2bhlqxjJf5zNUS1EshmswUPFGri/R5KUelUi6gyhqERFwm9TQPsfKxiOliFyicKD1yaxMLhHidDagwh86o2zqnps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713370075; c=relaxed/simple;
-	bh=CQbouKF6TmFvPaEviWNdSnywfj9tnXssXppxPfpOkUI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JbSgfv8E5owV8ucJhvKK77AiHZwTvggpe7B+Dff5PELzfmpugmcs1KzxLZXB3Z9o5SWhCg0rwCLnymujxiK0Ld6MMuWKEefxSIDh/RhVCzDFw0EFA5/Fq0FLzcdXnweADeHHLjIHW0dlHUiks/R7NOc6f3G645m8ZDJ2vTKART8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B002339;
-	Wed, 17 Apr 2024 09:08:21 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B64F3F792;
-	Wed, 17 Apr 2024 09:07:52 -0700 (PDT)
-From: Ryan Roberts <ryan.roberts@arm.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel test robot <yujie.liu@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] selftests: Fix asan linkage to work with clang
-Date: Wed, 17 Apr 2024 17:07:40 +0100
-Message-Id: <20240417160740.2019530-1-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1713373928; c=relaxed/simple;
+	bh=Ngmd4BE+uLFutb7aXZWf16icIoWGI3EyNo90wGKobhY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VlLG9/7w/ofUqOj85yb7grgH79i2V8DfbzHTZrE/JYUatqoPIDXfBnIzREzCfDY7MZc+HwjzgAJlV9V8+ysJnuUGggpx81ymUIm3wUQqHqcWOo0HZ0WskSIlQ9VWObVh2z7V/8b0QRBXGZuRv1dddE2+ZRuTp4T0AiEoXtQeW0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bpSZP5e2; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bpSZP5e2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F09BC072AA;
+	Wed, 17 Apr 2024 17:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713373928;
+	bh=Ngmd4BE+uLFutb7aXZWf16icIoWGI3EyNo90wGKobhY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=bpSZP5e2NimQ13JaAcOW3gtmCK9xlIy3bXB64SAHh2A70pom5RGNHaNUuaWyCHghT
+	 T8j6FbCnVEAjp2wdsUiwUy+sc1pioef5NN9yiK/x3IFDXTyfP7ji0T6bUpkW9Ndeqk
+	 42FB3EPpBjiEoQJvdO1klGihFcC4QCCtwAeC9srp1Z1/giWEh24T2WEy3GSIJoESmr
+	 tuTmv0FsBfsAK+r4A5AldEII8vIYcdVvRG93Zc0mnbkmATjE+VJ9ofWnOzd6k0qeWv
+	 GJ0y9GhstG/rSzoFXqOCaZM4/pyzDz9SyRaO1F3/dQk44mx4G1YrmUKELuBBpG4wrC
+	 VW+qxBeAndIGA==
+Date: Wed, 17 Apr 2024 10:12:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: conor@kernel.org, ojeda@kernel.org
+Subject: Prebuilt LLVM 18.1.4 uploaded
+Message-ID: <20240417171206.GA1819161@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Both fchmodat2 and openat2 statically link against libasan (for
-explanation of why, look at the fixes commit). This is done using
-`-static-libasan`. However, it turns out that clang uses a different
-option, `-static-libsan`. This caused clang to fail to compile the
-tests.
+Hi all,
 
-Fix this by using cc-option to figure out which variant to use.
+I have built and uploaded LLVM 18.1.4 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-While we are at it, stop passing helpers.h as a compilation unit. This
-was causing another clang error due to name conflict with helpers.c's
-object file. This header shouldn't be directly compiled anyway.
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 18.x
+series is no longer supported.
 
-Fixes: c652df8a4a9d ("selftests: link libasan statically for tests with -fsanitize=address")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
----
-
-Applies on v6.9-rc4.
-
-Thanks,
-Ryan
-
- tools/testing/selftests/fchmodat2/Makefile | 5 ++++-
- tools/testing/selftests/openat2/Makefile   | 7 +++++--
- 2 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-index 71ec34bf1501..a68bb5a00797 100644
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -1,6 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
-+# We need this for the "cc-option" macro.
-+include ../../../build/Build.include
-
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-+CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
- TEST_GEN_PROGS := fchmodat2_test
-
- include ../lib.mk
-diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-index 254d676a2689..02af9b6ca5eb 100644
---- a/tools/testing/selftests/openat2/Makefile
-+++ b/tools/testing/selftests/openat2/Makefile
-@@ -1,8 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
-+# We need this for the "cc-option" macro.
-+include ../../../build/Build.include
-
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
-+CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
- TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
-
- include ../lib.mk
-
--$(TEST_GEN_PROGS): helpers.c helpers.h
-+$(TEST_GEN_PROGS): helpers.c
---
-2.25.1
-
+Cheers,
+Nathan
