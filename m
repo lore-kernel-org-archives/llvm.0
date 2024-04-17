@@ -1,124 +1,124 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432231411E0;
-	Wed, 17 Apr 2024 15:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9AD146D77;
+	Wed, 17 Apr 2024 15:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713366675; cv=none; b=HwYAcgUJuRAXLjRvIV3pIIX0oxd5Xg19JUMFtpedEDsHbncbvk5tmbg2Jr3xCJ2qHvbnVM9yrrA6e4DXrKIjFmiilu/taZJ7deCGIl/TUnLPFhdXgkHfE6YTC+p0eckMMVokcEO2n3DEHVDGiRGE6m4+5p1O9Y6jnuFeO4TWKto=
+	t=1713367451; cv=none; b=CQJb+WgkIpi6tKeguCao4X6w82uwAJQyU8l7wNW+XIJiTxFvT6TueyibCiBHiHfq4p4jB5FXXQW8BA8BshR5w9mDqvXnLDYQnGvvMaeC+2+2IPeUn6g4VtH2mCBGAc0Zx9VgKC7wAwt7gR30qcaPGgjPGuy4YAShWxYSM7C5TPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713366675; c=relaxed/simple;
-	bh=YGwAjQ6Hwll5MFLaD9jsL+3cLXc+yqGURfoQiR/7mW0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bELg+JxtTsfsSNC/9fXPvSb34YZ9sN6yGgk4HSJXrPEdewGoBxnqePNnWYWCeJgfDs7K3depwG7t/Z2a/kJ7rSaoIfRc7qyNORA0rR+1PDoyNdfOnf8JTOJCDljIIDSb2fx392YAA6fjk/FABQCU4OcU1x/Pms08ThF4XxQF6SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4679B2F;
-	Wed, 17 Apr 2024 08:11:40 -0700 (PDT)
-Received: from [10.1.37.181] (XHFQ2J9959.cambridge.arm.com [10.1.37.181])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 66D213F738;
-	Wed, 17 Apr 2024 08:11:11 -0700 (PDT)
-Message-ID: <1f384d41-4c65-4efb-a171-26b54dacfb30@arm.com>
-Date: Wed, 17 Apr 2024 16:11:10 +0100
+	s=arc-20240116; t=1713367451; c=relaxed/simple;
+	bh=dBpaf0LdjkMsh0JtjJlm/DSn8jHNFrkYbQ4msFH2NTI=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=V5x9lxVF1VXnG/bJ5CcmRXXqsV0dHxgz57cJ82V+mZzEFY0TSTCs7orsCAcU176VSQ7A07yj3Wc0HlxBmn5e0tzQ09642t3kTDhOle5x2eqqxeIlRjMFg1ZZCqiLfK22R57Q9v6Saui3jySzaeH02BamZY6bxr6kDGssOjKDUe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NV2uyAog; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VRn1Nbo9; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NV2uyAog";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VRn1Nbo9"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id D69051140141;
+	Wed, 17 Apr 2024 11:24:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 17 Apr 2024 11:24:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1713367448; x=1713453848; bh=glbLQI16xk
+	GfNWJMZSibCWp76MpxWEXe4pp1qP1DFG8=; b=NV2uyAogy0VEIB/buZECVpOkFj
+	clawIWQsU22GdyqvHSWkp3QXCEjH5NKEtGbffAAUNvim6QB/fp6vAVKSoDh9D/rD
+	Eh0X10NcEL2vm75TFswthx69RdVLAFUSr8MXQ7J5BV3REgGQBDtnGY6H1eCnE/Tk
+	uuAatkMwbF2HVVPSqwDyuSgQ+bvOB//WmF9tRyy5/WpjZLkhuxdnQ1ASkAWKzojW
+	FHZU1qelP9xG6IAaMjEWTikKYHbAsiA9SE6nJh9Sf2MlVygHUl9U1asT7aJ0hvkX
+	5OC3NLpjEDfbYpT/bY7wrG5IfaOsjdRtf1I9gsqv9FHfjjsJAPF1gK3j/crg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1713367448; x=1713453848; bh=glbLQI16xkGfNWJMZSibCWp76Mpx
+	WEXe4pp1qP1DFG8=; b=VRn1Nbo9siLDyEAdYXhVFRT4jCfCLLB0mVg4miS+kI8G
+	bKXT6IjcI62H7tGBIoGIYWnYmsY0RjiYtPcRqlBUl6+f55ZqHz2+3/y2BWjMfVRI
+	lgBULGU50220tuj9IAi3hlKLvFiTVxSmcarVqONI/ybtto0N+8o1YP+XcVCDctdE
+	Ym+7RmoxPzI09FPSmyW8he31S/edGlBlcx0u9Tp7bAodocsg3/grxt68w0dmZWw5
+	GCvdMeBxSALYGvL/SJNZPPEXU1aAuRdmFE/H4cZCkcheJxyphfBn8TBsEWQC8LL9
+	FpCn/gnPi5ya9yiAhTICBOKwuX5rd6QqiBzW64Q1/Q==
+X-ME-Sender: <xms:mOkfZmbyBxPDSDJl7H0MZi9gZeVx9KioE9CI2D08IPLWOzLaycTsZg>
+    <xme:mOkfZpb1J3C_ewuyzWRLF23KZjOx8I-m-LLMzbUFnFLU1-YJuI9FHvmT8RStOMMcF
+    9e0DEfQsS3gqgS_Zqo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejkedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:mOkfZg-tUBnZW_ZoRft1BrPudAfKJrwZ4Mu_1L5vBBZ_77Ycfi7UNg>
+    <xmx:mOkfZoqVjBPX0y_h5QWg6M8Hjmbvt5fiWjgZp4eo93RfqiuHUafbOw>
+    <xmx:mOkfZhpssWR8lcmgZOXdyP_QRcdi4fd68X9oUiVGeBl1pRNP1zAFSg>
+    <xmx:mOkfZmT_iPvxx4iguY6k8T3f6DD_uokpAEcy9SR1zsnNCWdHW8FaLA>
+    <xmx:mOkfZie9jqZ2fRj4UxDOluoHND8QrdzNsG917UcAYZCZxsmMDXz9PI0Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 59617B6008F; Wed, 17 Apr 2024 11:24:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
- '-static-libsan'?
-Content-Language: en-GB
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <yujie.liu@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>
+Message-Id: <e95bb670-7c20-496f-80e1-8b1891816764@app.fastmail.com>
+In-Reply-To: <1f384d41-4c65-4efb-a171-26b54dacfb30@arm.com>
 References: <202404141807.LgsqXPY5-lkp@intel.com>
  <31b4e05d-62c6-44cd-8038-7ac8d21320c3@arm.com>
  <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <1f384d41-4c65-4efb-a171-26b54dacfb30@arm.com>
+Date: Wed, 17 Apr 2024 17:23:47 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Ryan Roberts" <ryan.roberts@arm.com>,
+ "kernel test robot" <yujie.liu@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "Andrew Morton" <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+ "Linux Memory Management List" <linux-mm@kvack.org>
+Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
+ '-static-libsan'?
+Content-Type: text/plain
 
-On 16/04/2024 15:42, Arnd Bergmann wrote:
-> On Tue, Apr 16, 2024, at 16:33, Ryan Roberts wrote:
->> On 16/04/2024 08:42, kernel test robot wrote:
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>> head:   7efd0a74039fb6b584be2cb91c1d0ef0bd796ee1
->>> commit: c652df8a4a9d7853fa1100b244024fd6f1a9c18a selftests: link libasan statically for tests with -fsanitize=address
->>> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
->>>
->>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>> the same patch/commit), kindly add following tags
->>> | Reported-by: kernel test robot <yujie.liu@intel.com>
->>> | Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
->>>
->>> All errors (new ones prefixed by >>):
->>>
->>> # tools/testing/selftests/fchmodat2$ make CC=clang
->>> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan -isystem usr/include     fchmodat2_test.c  -o tools/testing/selftests/fchmodat2/fchmodat2_test
->>> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
->>> make: *** [../lib.mk:181: tools/testing/selftests/fchmodat2/fchmodat2_test] Error 1
->>>
->>> # tools/testing/selftests/openat2$ make CC=clang
->>> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan     openat2_test.c helpers.c helpers.h  -o tools/testing/selftests/openat2/openat2_test
->>> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
->>> clang: error: cannot specify -o when generating multiple output files
->>> make: *** [../lib.mk:181: tools/testing/selftests/openat2/openat2_test] Error 1
->>>
->>
->> Hi Arnd,
->>
->> This change went in quite a while ago and is on;y just blowing up. I saw your
->> comment in another thread [1] that Andrew merged your change to set -Wextra.
->> Perhaps that's what has caused this to show up only now? *although I don't
->> actually see -Wextra in the command line).
->>
->> I guess the problem is that `-static-libasan` is only supported by gcc. But I'm
->> Makefile-illiterate. Can anyone advise on what's the best way to make this
->> argument gcc-only?
-> 
-> Thanks for letting me know about the problem, I had indeed missed
-> build-testing any of tools/testing, so this might not be
-> the only problem there.
-> 
-> I'm not entirely sure how much of the Kbuild infrastructure we
-> can rely on here. If the .config file gets included, this should
-> work:
+On Wed, Apr 17, 2024, at 17:11, Ryan Roberts wrote:
+> On 16/04/2024 15:42, Arnd Bergmann wrote:
+>> On Tue, Apr 16, 2024, at 16:33, Ryan Roberts wrote:
+>> 
+>> I'm not entirely sure how much of the Kbuild infrastructure we
+>> can rely on here. If the .config file gets included, this should
+>> work:
+>
+> Thanks for the pointers. Unfortunately neither don't works as we don't have any
+> of the Kbuild infrastructure.
+>
+> I'm not really sure what to do here. The best I've come up with so far is to
+> just remove asan from these binaries. They are pretty simple selftests. I'm not
+> sure its adding a whole lot of value anyway.
+>
+> Does anyone have any advice?
+>
 
-Thanks for the pointers. Unfortunately neither don't works as we don't have any
-of the Kbuild infrastructure.
+>> Alternatively, if the cc-option macro is available, you could
+>> try this one
+>> 
+>> CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan) 
 
-I'm not really sure what to do here. The best I've come up with so far is to
-just remove asan from these binaries. They are pretty simple selftests. I'm not
-sure its adding a whole lot of value anyway.
+I had another look at this and found example code in
+tools/thermal/tmon/Makefile that you should be able to adapt.
+Apparently the cc-option macro is not provided by default, but
+there is a copy you can include:
 
-Does anyone have any advice?
-
-> 
-> --- a/tools/testing/selftests/fchmodat2/Makefile
-> +++ b/tools/testing/selftests/fchmodat2/Makefile
-> @@ -1,6 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0-or-later
->  
-> -CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-> +CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-> +ifdef CONFIG_CC_IS_GCC
-> +CFLAGS += -static-libasan
-> +else
-> +CFLAGS += -static-libsan
-> +endif
-> +
->  TEST_GEN_PROGS := fchmodat2_test
->  
->  include ../lib.mk
-> 
-> Alternatively, if the cc-option macro is available, you could
-> try this one
-> 
-> CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan) 
-> 
->      Arnd
-
+# We need this for the "cc-option" macro.
+include ../../build/Build.include
+WARNFLAGS=-Wall -Wshadow -W -Wformat -Wimplicit-function-declaration -Wimplicit-int
+override CFLAGS+= $(call cc-option,-O3,-O1) ${WARNFLAGS}
+# Add "-fstack-protector" only if toolchain supports it.
+override CFLAGS+= $(call cc-option,-fstack-protector-strong)
