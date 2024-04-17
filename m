@@ -1,165 +1,124 @@
-Received: from CWXP265CU007.outbound.protection.outlook.com (mail-ukwestazon11020002.outbound.protection.outlook.com [52.101.195.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C66313F436
-	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 14:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.2
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713362410; cv=fail; b=XwkIKO3MWDj+RoH8VnwHeCAgROu7sgLbZAHpWm+a6ZCu9t3ETrCaSG+AVdLrQY/7Ls4s+57SfNhr3RduSRCRiVXdYvxYqzigNGjR6IONIAE3kKcgdEMugG9Q8Vxeem810FIeaLeZ1wwxmEo4on4el54pJejJSTLJ6DeJUwZadnM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713362410; c=relaxed/simple;
-	bh=c+2cPfiKdmqItc1U++Gkv8oFKkJSnPw3JRGesN/U7FY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kxbKpFdXAOA24oXrigZi1RVql8ywOYH82sJiqZLlWF52e0yVRulzRJDq9cgD78K71azPVyTl2sWy8/+eykaJwBCqEGN72RE4uuAuoF9D3dXTMasL0Ri4xo2lZZXWjstrshZ3lRROA8FOh7vRuEWTw2E3doUiBliyMVB3gyEplQk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=GP5bnuov; arc=fail smtp.client-ip=52.101.195.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="GP5bnuov"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dlZQLxyV7++hIWEJ674CugnbI2aDfMyQ5dJb1fbGI7l3JueUmUxNkAJHm92N8lLKSbcQ9jOvx7rFGmb1mXe/Kzt/0dE563nKiB9brkCoi7O9keU2JSLvFTwGWoNJGO/Te18vGAFph9rpqec4n8K2LZk4rI+/FOCyAnn+c4ZNVCTd1xm2wPcCZAKzIQUxbXzBWej0HQRIHbSFyHaia/94jryIjrbtAnTA4lMcOcWCk1z6EAtSnk7PoueVmSmlnuGgcHPXnTz0MLb5a+WbBCJdoBle3Mic6/LaHZhS74K/MKO1Xp2sX0n65RwnRYrpRt/+e4kT9ruluwPO0tERZesiUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wAua78zv2/Iq0lRc62CxLWhcx14Ku5QTZt3ma5IJ1DY=;
- b=heggTbfrTeHzeDKg3fcJLnKkF/yJ7CgRHHCSQ7W5afljFmws/C5oC+oDrGONHmvJBgSFAad6JJxfLs6Glc2i/nEflp68ICkTvE1lDSTNH0YLRVJjPkPHYtbTniMGGHgr/rEf4KvRz0EpyMxoN8YgIpp9rBRUNJqiWEbZI6GPgD7LRRHizbVypcI41/hD6ItO87ycYmV6zQ4Mh9zSyDmpbfnFxquS0cDLEW2uskrqnOD3uTUCQRUkSK38GX6JdzNPqN3npF58/OQaysAGhIpWAxgfGpMpz4PhZBNl2BPITsyOC9k/2NihpFu06dtuR9q5gMVkvkh3opXQJlkdbHSG6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wAua78zv2/Iq0lRc62CxLWhcx14Ku5QTZt3ma5IJ1DY=;
- b=GP5bnuov9M9USAGCChpalIlGNTCLm9sDAU6ZB9VviEdYjdjhB2q/EfjaQ0Rdhja3A4kKuqbHWUaEtnPxgGCGc2x8hDtUKISKb/paVj+RkogbZp6oCihQOZHQodJntE6k0zY/Ds4m7Hl+bJe+a7mSpfVFrIO84o2krTV8oVkQky4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWLP265MB5426.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1c7::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.37; Wed, 17 Apr
- 2024 14:00:04 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7%4]) with mapi id 15.20.7472.037; Wed, 17 Apr 2024
- 14:00:04 +0000
-Date: Wed, 17 Apr 2024 15:00:01 +0100
-From: Gary Guo <gary@garyguo.net>
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-riscv@lists.infradead.org, Conor Dooley
- <conor.dooley@microchip.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
- <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
- Feng <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
- <bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 1/1] RISC-V: enable building 64-bit kernels with rust
- support
-Message-ID: <20240417150001.37e48479@eugeo>
-In-Reply-To: <20240409-silencer-book-ce1320f06aab@spud>
-References: <20240409-unsaddle-skittle-c93eb77732bb@spud>
-	<20240409-silencer-book-ce1320f06aab@spud>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0497.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1ab::16) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432231411E0;
+	Wed, 17 Apr 2024 15:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713366675; cv=none; b=HwYAcgUJuRAXLjRvIV3pIIX0oxd5Xg19JUMFtpedEDsHbncbvk5tmbg2Jr3xCJ2qHvbnVM9yrrA6e4DXrKIjFmiilu/taZJ7deCGIl/TUnLPFhdXgkHfE6YTC+p0eckMMVokcEO2n3DEHVDGiRGE6m4+5p1O9Y6jnuFeO4TWKto=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713366675; c=relaxed/simple;
+	bh=YGwAjQ6Hwll5MFLaD9jsL+3cLXc+yqGURfoQiR/7mW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bELg+JxtTsfsSNC/9fXPvSb34YZ9sN6yGgk4HSJXrPEdewGoBxnqePNnWYWCeJgfDs7K3depwG7t/Z2a/kJ7rSaoIfRc7qyNORA0rR+1PDoyNdfOnf8JTOJCDljIIDSb2fx392YAA6fjk/FABQCU4OcU1x/Pms08ThF4XxQF6SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4679B2F;
+	Wed, 17 Apr 2024 08:11:40 -0700 (PDT)
+Received: from [10.1.37.181] (XHFQ2J9959.cambridge.arm.com [10.1.37.181])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 66D213F738;
+	Wed, 17 Apr 2024 08:11:11 -0700 (PDT)
+Message-ID: <1f384d41-4c65-4efb-a171-26b54dacfb30@arm.com>
+Date: Wed, 17 Apr 2024 16:11:10 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB5426:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0cb95bfb-9829-49bd-4b84-08dc5ee6aeb3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	pj0Kg5v5aWQv7Alfqh0o/P5Vq5woenmDeBR+sGjrg/Qe47hZaLKeZorly5fKosIB/XgQFgL6xunm9CGjmMVyonEuJA+02Bf8f7gQ66pXfcOGwyFre9dNGcDf6kVWy5YN7/2cd5VLg91rV7lWTRug1H+t9FrOMy8EtEMCe9OdbPxqjnr9hxaqgeuVgcmZTVvf0zXOsXT9aCskfNZpdx+h/rvKf5p3E2ifqoNa8T3reYJp/oJU9kgeL18MIx4JTnVQ39jbTMeG+3DvqS2p9Xs9ikMFoKt3rU9Fmqj0MMQjVuV3BXNKykgpfBVvL1uQBN6Dw0fa5GK7SxlVOj2Puy/C5wgzgjA2Ac6wQtxrpZRLHFEAYEoyF5qnAN5wgRRHsoI0M4raCVBqbz1jKc0eL4F+36nlCRPs7BSuDOFjBAMubx61M+O5gAyijink8/dl7nzd7mELMtoJeNwfWWCM/ZH9bX4GEta2M2AsYkk+aBsb5QHfOeBFZ8NLuW0qIL6pihysDjMDdgoixbpPIq68Wyxoj918xcqdKhTQh6U5c+28RGrHg39cy+Hp5nwvwwPB19Y++VF3lMfW5SVcCVr2n+aYIgIQgcy3yNpI9l6Eyfjqvr0upnHdckIKb++L5NJ+HkJnlBZ0MS8hlNjWRMQIDd1/QI8pO9dLRFDCWNApq9Sasek=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(366007)(376005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?79LdlXS6zVAo1FKEkwI4clqlNbPHDQUi7OfAuxXDXA11QVpG/1bN9tdgq7fA?=
- =?us-ascii?Q?44v9iKJvNIUVAOOu9QdhPaJltrH+FI8K5B9WD3oghscqJ6OYz6qNcdMVg9Xn?=
- =?us-ascii?Q?dPfKmNB3MEJLYsov4ofBL1mxHPgP5m5g9R/PMAy8iInfaW5SvO0DMRGJ6NCn?=
- =?us-ascii?Q?LN7LyQe/AsaNfS8mR3qAvQEt2egoJK8RryIb3E3bn1iyEQJ2H6mvwitW7NhT?=
- =?us-ascii?Q?A39/qcGVQHJIUmRdlyyI3ApmTHZbiae12wfJSn1bXat5u+/5P/fRqqwypF7Z?=
- =?us-ascii?Q?SgxuWw20lehwWtHWZmXtvuImvF595DCQQW+a6147Xfy408pMp534OC6/ihGs?=
- =?us-ascii?Q?wGhuawe8q8sg6yXoeW9+t1+k4CafC8bos6+4S25Knm6+QcFO6aV6PyrZPKFB?=
- =?us-ascii?Q?jBuM1t/7ROWCEcXqKAGe6IAliGXHSSC/ES90K3sXJ4Pt00K0kiFUKzO9qSfW?=
- =?us-ascii?Q?wNIHQ7piZXxYkITyma1GLiremdJ2vTJ0kN858+byzK5TWoXDAKYoqlurin+z?=
- =?us-ascii?Q?wqe9eYq9e2OETjgNjfo9qzCSUUaBedKbzniSgvxn0qlIQBcQ+KJXbB+gKhrg?=
- =?us-ascii?Q?CLMN+67UJYegAgyIXPxYUv1wS/yj4svbSvhKl8bf6FbNYm4JYvi08UNB7SFW?=
- =?us-ascii?Q?Xc1o7x7IgsRjEJIzhTz7bmZurSuXMNOKp8DBqvf2Lm9Sq2eIWXioBEEuQiEL?=
- =?us-ascii?Q?5WGyQwc/KblHLc5nqFkahc4/4utwfllRgzvdNtaR8msUd69Y5hKP2tgDZ386?=
- =?us-ascii?Q?D9KfpfmBg6sO16TRFMx9Mz+WaUlRJDN0348OkneCH/YKD7ziM98cKlB+eWEM?=
- =?us-ascii?Q?JaZLc3zB8VDxoDSAPIwQuiMnih/zkzuj2TmzrpkB6Gi7XTfijPT+1WK1J7vc?=
- =?us-ascii?Q?BN7oShiabDDwV2BPKU02FNQWMUmgHOeon/eFO2yy8OCBIFrwVTsA88kLQwuJ?=
- =?us-ascii?Q?SFstiRTW90nr17i5GlUezwJy+TiUoACt+H2Vy+umyiwrASJ+yZerGTIczoE0?=
- =?us-ascii?Q?sC3oEgqjWyE4IST8haJ9ZlbZCLU1gDEpY2UtrgNOtnhG3nlfyfVA8Q8xW4/9?=
- =?us-ascii?Q?oFs4FWZH9zjEwek9NLGLeGBaY1eISWFxIDieaFEFW6ZlXDyXCwtgtxXh5vwm?=
- =?us-ascii?Q?cdoL7HvSluz82X88yxzwPRuwgcDrejjiwEAuUD7IJGLGYk/+Za1HZLP9bI0h?=
- =?us-ascii?Q?Q9AwDmINxE2u+c2Ed9ue/9+e/eG9xkvOutn8xxML8/UoS4fqvCK6ESdD54gn?=
- =?us-ascii?Q?Q4Si4hAv02WmMyUTGprj4131qomg0Kad+ROJSAA3Mk2K2j8xEAMd8HR2VTnT?=
- =?us-ascii?Q?GlF291zojJ7poOi/Y0FxLFWq9gJAhRIjfVU2oFN7LdtLl7KRe9c9JM6Ab0LO?=
- =?us-ascii?Q?LEaLfmSG8HxeZk/km2xzPaJ9UJEEBSJ5tz5UagbaKCbMJon9KsC5msVfrNWt?=
- =?us-ascii?Q?+VeLla8NOeKUSJtMtVEvRDJgffQ7ye5sKk/lc3OTNMZEfA+7AsSJ3UHySpA2?=
- =?us-ascii?Q?w6F03x6MKHl3SVTkfrpdcDTg9sMqSSQ9U7SlSwfTsShwRM8VKahLsNNViiya?=
- =?us-ascii?Q?637RfUvfXf83pAqs36x+Slo6Hk3FMCgZH2X2L0JG?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0cb95bfb-9829-49bd-4b84-08dc5ee6aeb3
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2024 14:00:04.7674
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NhYt1pFBHz2tK1NL95wZhgtVC8Z/2q9NWLligH6U/v0FdACGrr4/cb0hSGbdKwBLgcTs1+NEPMhbJ0yrr2ND/A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB5426
+User-Agent: Mozilla Thunderbird
+Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
+ '-static-libsan'?
+Content-Language: en-GB
+To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <yujie.liu@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+ Linux Memory Management List <linux-mm@kvack.org>
+References: <202404141807.LgsqXPY5-lkp@intel.com>
+ <31b4e05d-62c6-44cd-8038-7ac8d21320c3@arm.com>
+ <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue,  9 Apr 2024 18:25:16 +0100
-Conor Dooley <conor@kernel.org> wrote:
-
-> From: Miguel Ojeda <ojeda@kernel.org>
+On 16/04/2024 15:42, Arnd Bergmann wrote:
+> On Tue, Apr 16, 2024, at 16:33, Ryan Roberts wrote:
+>> On 16/04/2024 08:42, kernel test robot wrote:
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>>> head:   7efd0a74039fb6b584be2cb91c1d0ef0bd796ee1
+>>> commit: c652df8a4a9d7853fa1100b244024fd6f1a9c18a selftests: link libasan statically for tests with -fsanitize=address
+>>> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+>>>
+>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>> the same patch/commit), kindly add following tags
+>>> | Reported-by: kernel test robot <yujie.liu@intel.com>
+>>> | Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
+>>>
+>>> All errors (new ones prefixed by >>):
+>>>
+>>> # tools/testing/selftests/fchmodat2$ make CC=clang
+>>> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan -isystem usr/include     fchmodat2_test.c  -o tools/testing/selftests/fchmodat2/fchmodat2_test
+>>> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
+>>> make: *** [../lib.mk:181: tools/testing/selftests/fchmodat2/fchmodat2_test] Error 1
+>>>
+>>> # tools/testing/selftests/openat2$ make CC=clang
+>>> clang -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan     openat2_test.c helpers.c helpers.h  -o tools/testing/selftests/openat2/openat2_test
+>>> clang: error: unknown argument '-static-libasan'; did you mean '-static-libsan'?
+>>> clang: error: cannot specify -o when generating multiple output files
+>>> make: *** [../lib.mk:181: tools/testing/selftests/openat2/openat2_test] Error 1
+>>>
+>>
+>> Hi Arnd,
+>>
+>> This change went in quite a while ago and is on;y just blowing up. I saw your
+>> comment in another thread [1] that Andrew merged your change to set -Wextra.
+>> Perhaps that's what has caused this to show up only now? *although I don't
+>> actually see -Wextra in the command line).
+>>
+>> I guess the problem is that `-static-libasan` is only supported by gcc. But I'm
+>> Makefile-illiterate. Can anyone advise on what's the best way to make this
+>> argument gcc-only?
 > 
-> The rust modules work on 64-bit RISC-V, with no twiddling required.
-> Select HAVE_RUST and provide the required flags to kbuild so that the
-> modules can be used. The Makefile and Kconfig changes are lifted from
-> work done by Miguel in the Rust-for-Linux tree, hence his authorship.
-> Following the rabbit hole, the Makefile changes originated in a script,
-> created based on config files originally added by Gary, hence his
-> co-authorship.
+> Thanks for letting me know about the problem, I had indeed missed
+> build-testing any of tools/testing, so this might not be
+> the only problem there.
+> 
+> I'm not entirely sure how much of the Kbuild infrastructure we
+> can rely on here. If the .config file gets included, this should
+> work:
 
-Thanks for sending the patch!
+Thanks for the pointers. Unfortunately neither don't works as we don't have any
+of the Kbuild infrastructure.
 
-> 32-bit is broken in core rust code, so support is limited to 64-bit:
-> ld.lld: error: undefined symbol: __udivdi3
+I'm not really sure what to do here. The best I've come up with so far is to
+just remove asan from these binaries. They are pretty simple selftests. I'm not
+sure its adding a whole lot of value anyway.
 
-I wouldn't call the core rust code broken :)
-
-The missing symbol here should be easily stubbed by changing the
-redirect-intrinsics in rust/Makefile and adding a stub in
-compiler_builtins.rs. Although we probably instead of panicking, want
-to redirect the division to kernel division routine (IIRC the division
-is used for formatting integers, which is a legit use of division).
+Does anyone have any advice?
 
 > 
-> As 64-bit RISC-V is now supported, add it to the arch support table.
+> --- a/tools/testing/selftests/fchmodat2/Makefile
+> +++ b/tools/testing/selftests/fchmodat2/Makefile
+> @@ -1,6 +1,12 @@
+>  # SPDX-License-Identifier: GPL-2.0-or-later
+>  
+> -CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
+> +CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
+> +ifdef CONFIG_CC_IS_GCC
+> +CFLAGS += -static-libasan
+> +else
+> +CFLAGS += -static-libsan
+> +endif
+> +
+>  TEST_GEN_PROGS := fchmodat2_test
+>  
+>  include ../lib.mk
 > 
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  Documentation/rust/arch-support.rst | 1 +
->  arch/riscv/Kconfig                  | 1 +
->  arch/riscv/Makefile                 | 7 +++++++
->  scripts/generate_rust_target.rs     | 6 ++++++
->  4 files changed, 15 insertions(+)
+> Alternatively, if the cc-option macro is available, you could
+> try this one
+> 
+> CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan) 
+> 
+>      Arnd
+
