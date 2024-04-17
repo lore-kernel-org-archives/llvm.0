@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD0D184F;
-	Wed, 17 Apr 2024 01:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B387747F;
+	Wed, 17 Apr 2024 03:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713317126; cv=none; b=Vs5F4nlVZknL0AxNiKFBmYu24CD152M/AIaYXdwFm7L7elMWbEWDj1Xqp2HieitOcAWGAW3mQkakaCwFY2VUSPn9MQbsszKEiAzollY6iTQxWUHEMd85D7PJ7BL7CXe2DGQLUARo2j7DlcuQHjAkQuN8aL/uOWnKgJPFAzqfidg=
+	t=1713323238; cv=none; b=rsVlhQygY8Tj5dt0Mpd8xqg6fDHSbpLt1ZP/7IKhZ4BwVSCzSakjYADonGuO71fkvlBstfyDpOw8cOpszvz8EMK59mXBgHg8t09S/G4tP0bDz23Yp3xnmS4t8YtHdybLjQDrIw8DGtLUaXwd0oy/uZyxp9FAyB2g4LY+yywhBpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713317126; c=relaxed/simple;
-	bh=SifNgk6MOylzLGjpF5LbD3QpijD39SXzUerpdQvNNWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nc8+6V6kNfUHHkbBIaw3Uuc3MAv1HpVqvvV97PbtECEEYW4VzBeDnRevPXLebUFPcOnRW15+Wes5ZG2sb+6bbAqnYfDKROLe5TQztXMwcf+HKBlmzM72yd87RA14mLRp0wZv8ZXzHpgQW7i5MMbDf4JvzUauWmsKj7pQz+++49I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A9CXU70o; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1713323238; c=relaxed/simple;
+	bh=j9nshaIORGuE610NnMjpGfqzlb1Bfz8aY7WRMFfNLc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cFPN+eIKk1T/DMryE+i9IDdYJRcKvXWQ1HUYj6kKEdrNhsBb4GEfqWBYlGENzmYVCOWhbgdWVdMd0tRL7Te4US9credxbXeGQ3QtZSVX35RPq0TaHjmMRKXxMw+18VtHi7Jyj2WpMRqIIzTZQCgIqQLvjqUOrnR08OqwjF5EAks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9SV3VCI; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A9CXU70o"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9SV3VCI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713317124; x=1744853124;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SifNgk6MOylzLGjpF5LbD3QpijD39SXzUerpdQvNNWg=;
-  b=A9CXU70ooITcC/8KDa67Ro9marnEAUvMACuddm8akoCisXsdbeM4Rp6T
-   yxh76chY/QXZpLVopZy8gzVcHJNEYn8TJlKfoS+Baz3N9+LOZvlt1F4gH
-   NEl7U0UuMSFl9xjoKuMOGha+zenxRXfFvqQWFghqUwkB18IIxUKo+bEbB
-   bVRZy4NH7lkQb4rFdATtG3//k0JudajK63FhK4qoAif+9ysBPsHHeZUNp
-   FAa4wExLiasQAK6lsaitP3CMNKw7TeVceauOwCGwfvbaD96tz5f6lrtEU
-   wgk0uQno9XXk3Dy/r9pKXXMPDWUHWItFF/I39PAtIMACvPECK/4ificTO
-   A==;
-X-CSE-ConnectionGUID: nHrwW75+Qoq1SgHuZl8hZA==
-X-CSE-MsgGUID: kXhBgr/eQimQ5qoWgwnH/Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8911581"
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="8911581"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 18:25:23 -0700
-X-CSE-ConnectionGUID: DQUm0QaISiegqb6Fxi0eqg==
-X-CSE-MsgGUID: OFj1QP6gTmODO7bZAwKFlg==
+  t=1713323237; x=1744859237;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j9nshaIORGuE610NnMjpGfqzlb1Bfz8aY7WRMFfNLc8=;
+  b=M9SV3VCIPWGnbGTYmidaqaqOa9KOkrrAzmPeG64O7TgLHX8EUjpWN10P
+   EUoqtoxmBdfRDBmRr3whM0vbCxSZkfFbR5VdEVUmezPagU/Gd4Jlz4neQ
+   11T2Kd4ulfezWsmr3k3pzToFwC5tStOWb0E/SA0qBcLyalDkOFWD06Yp3
+   T4kgPcIzXWy+Zltf2q55gz4xrSe+gzuiGZHa6YfeTpd9r5HJ7SMKYry66
+   B14KNzY6K8hYx287ubghxapeJ8bFmdBd5T99/kXyBvIUiLK3zqniLY3qW
+   tNVVEoDObQCArbkgC3kajc03/M7Ej3JXa1ham8cYQoxxWkVPSqoa02kWB
+   Q==;
+X-CSE-ConnectionGUID: mKI1jRBFQ4ibzTwedxoexA==
+X-CSE-MsgGUID: 4G5M3NOLQpCyYASvhHQmfA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8721182"
+X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
+   d="scan'208";a="8721182"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 20:07:16 -0700
+X-CSE-ConnectionGUID: fKKpmX5sTxu0Xir/0wFgiQ==
+X-CSE-MsgGUID: Js6du7JHR+aJjTwVbMLMNw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="22855228"
+X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
+   d="scan'208";a="22340676"
 Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 16 Apr 2024 18:25:21 -0700
+  by orviesa010.jf.intel.com with ESMTP; 16 Apr 2024 20:07:15 -0700
 Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rwu33-0005vs-30;
-	Wed, 17 Apr 2024 01:25:17 +0000
-Date: Wed, 17 Apr 2024 09:24:29 +0800
+	id 1rwvdf-00064K-2B;
+	Wed, 17 Apr 2024 03:07:11 +0000
+Date: Wed, 17 Apr 2024 11:07:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Geetha sowjanya <gakula@marvell.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kuba@kernel.org,
-	davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
-	sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-	hkelam@marvell.com
-Subject: Re: [net-next PATCH 3/9] octeontx2-pf: Create representor netdev
-Message-ID: <202404170922.RBiIclFT-lkp@intel.com>
-References: <20240416050616.6056-4-gakula@marvell.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Jeongjun Park <aha310510@gmail.com>
+Subject: [akpm-mm:mm-unstable 16/409] lib/bootconfig.c:909: warning:
+ expecting prototype for _xbc_exit(). Prototype was for xbc_exit() instead
+Message-ID: <202404171107.X3xWzt1i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,110 +63,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240416050616.6056-4-gakula@marvell.com>
 
-Hi Geetha,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Geetha-sowjanya/octeontx2-pf-Refactoring-RVU-driver/20240416-131052
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240416050616.6056-4-gakula%40marvell.com
-patch subject: [net-next PATCH 3/9] octeontx2-pf: Create representor netdev
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240417/202404170922.RBiIclFT-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404170922.RBiIclFT-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   6723e3b1a668df6b8f305dea8fb62789155d965f
+commit: 408d784e0b9f1a6e30c262b48e1b29aff69690f4 [16/409] bootconfig-use-memblock_free_late-to-free-xbc-memory-to-buddy-fix
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240417/202404171107.X3xWzt1i-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404171107.X3xWzt1i-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404170922.RBiIclFT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404171107.X3xWzt1i-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/marvell/octeontx2/nic/rep.c:167:7: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     167 |                 if (register_netdev(ndev)) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/octeontx2/nic/rep.c:181:9: note: uninitialized use occurs here
-     181 |         return err;
-         |                ^~~
-   drivers/net/ethernet/marvell/octeontx2/nic/rep.c:167:3: note: remove the 'if' if its condition is always false
-     167 |                 if (register_netdev(ndev)) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     168 |                         dev_err(priv->dev, "PFVF reprentator registration failed\n");
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     169 |                         free_netdev(ndev);
-         |                         ~~~~~~~~~~~~~~~~~~
-     170 |                         ndev->netdev_ops = NULL;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~
-     171 |                         goto exit;
-         |                         ~~~~~~~~~~
-     172 |                 }
-         |                 ~
-   drivers/net/ethernet/marvell/octeontx2/nic/rep.c:137:17: note: initialize the variable 'err' to silence this warning
-     137 |         int rep_id, err;
-         |                        ^
-         |                         = 0
-   1 warning generated.
+>> lib/bootconfig.c:909: warning: expecting prototype for _xbc_exit(). Prototype was for xbc_exit() instead
 
 
-vim +167 drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+vim +909 lib/bootconfig.c
 
-   131	
-   132	int rvu_rep_create(struct otx2_nic *priv)
-   133	{
-   134		int rep_cnt = priv->rep_cnt;
-   135		struct net_device *ndev;
-   136		struct rep_dev *rep;
-   137		int rep_id, err;
-   138		u16 pcifunc;
-   139	
-   140		priv->reps = devm_kcalloc(priv->dev, rep_cnt, sizeof(struct rep_dev), GFP_KERNEL);
-   141		if (!priv->reps)
-   142			return -ENOMEM;
-   143	
-   144		for (rep_id = 0; rep_id < rep_cnt; rep_id++) {
-   145			ndev = alloc_etherdev(sizeof(*rep));
-   146			if (!ndev) {
-   147				dev_err(priv->dev, "PFVF representor:%d creation failed\n", rep_id);
-   148				err = -ENOMEM;
-   149				goto exit;
-   150			}
-   151	
-   152			rep = netdev_priv(ndev);
-   153			priv->reps[rep_id] = rep;
-   154			rep->mdev = priv;
-   155			rep->netdev = ndev;
-   156			rep->rep_id = rep_id;
-   157	
-   158			ndev->min_mtu = OTX2_MIN_MTU;
-   159			ndev->max_mtu = priv->hw.max_mtu;
-   160			pcifunc = priv->rep_pf_map[rep_id];
-   161			rep->pcifunc = pcifunc;
-   162	
-   163			snprintf(ndev->name, sizeof(ndev->name), "r%dp%dv%d", rep_id,
-   164				 rvu_get_pf(pcifunc), (pcifunc & RVU_PFVF_FUNC_MASK));
-   165	
-   166			eth_hw_addr_random(ndev);
- > 167			if (register_netdev(ndev)) {
-   168				dev_err(priv->dev, "PFVF reprentator registration failed\n");
-   169				free_netdev(ndev);
-   170				ndev->netdev_ops = NULL;
-   171				goto exit;
-   172			}
-   173		}
-   174		err = rvu_rep_napi_init(priv);
-   175		if (err)
-   176			goto exit;
-   177	
-   178		return 0;
-   179	exit:
-   180		rvu_rep_free_netdev(priv);
-   181		return err;
-   182	}
-   183	
+f3668cde856299 Masami Hiramatsu 2021-09-17  899  
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  900  /**
+408d784e0b9f1a Andrew Morton    2024-04-16  901   * _xbc_exit() - Clean up all parsed bootconfig
+408d784e0b9f1a Andrew Morton    2024-04-16  902   * @early: in early xbc init error
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  903   *
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  904   * This clears all data structures of parsed bootconfig on memory.
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  905   * If you need to reuse xbc_init() with new boot config, you can
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  906   * use this.
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  907   */
+115d4d08aeb942 Masami Hiramatsu 2021-09-17  908  void __init xbc_exit(void)
+76db5a27a827c2 Masami Hiramatsu 2020-01-11 @909  {
+4ee1b4cac23665 Masami Hiramatsu 2021-09-17  910  	xbc_free_mem(xbc_data, xbc_data_size);
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  911  	xbc_data = NULL;
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  912  	xbc_data_size = 0;
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  913  	xbc_node_num = 0;
+4ee1b4cac23665 Masami Hiramatsu 2021-09-17  914  	xbc_free_mem(xbc_nodes, sizeof(struct xbc_node) * XBC_NODE_MAX);
+a91e4f12ffc42f Masami Hiramatsu 2020-02-07  915  	xbc_nodes = NULL;
+ead1e19ad905b9 Masami Hiramatsu 2020-09-21  916  	brace_index = 0;
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  917  }
+76db5a27a827c2 Masami Hiramatsu 2020-01-11  918  
+
+:::::: The code at line 909 was first introduced by commit
+:::::: 76db5a27a827c2c89e5120a3d486472da847863b bootconfig: Add Extra Boot Config support
+
+:::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
 -- 
 0-DAY CI Kernel Test Service
