@@ -1,60 +1,61 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5208C139F
-	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 08:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E471D7EF0F
+	for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 08:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713342675; cv=none; b=vC9DL9S34YUFWTsJ5wor1rVoozhXxfZYrN02c0YnpTzWzTumwnFFdTT4DX1DF9evUVc3uktKYmXi4i13+AsIMCn0NDTTfsfyqxU3cMvdT/uYpkvrlPtxDzdUxo8T9GrGQG5Z3wAPzxIQYQID1B1tNQOALFX1ZVxJci6YgIMk6Ag=
+	t=1713342676; cv=none; b=bkQv9ZVawkFmmUtBmfShDjuO9MwjeKlgAzLJWbC4ViuKJqf2JJzyEnDnDK40mM9QTvu5LbO6fIdLAyVbYQscMgEnRVHBW58QH+G9DPh6BQ5Usl4Nz2AOhc3swXZTYB1a/4Jixuh5Y7KW0Ebt2dVyYjZDnc9foj/OavybR+qOhIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713342675; c=relaxed/simple;
-	bh=DjhqN6uLLmaO0gK4cFxXLWasuDQpZ92MoMZriVngnew=;
+	s=arc-20240116; t=1713342676; c=relaxed/simple;
+	bh=7O3Om7ips7szRQxRgx+RW7NvKEbAxZva25/bAWcwIds=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AmX5SXNaCYkBLqZfeHLIgnsfrUJXDTePeUuNnbSFfs3WhVN89DDDIJn+xTHxBdQZBj54lE1X5RX0KM95uFj2YN3aFQqJAGX0Sae2i8hbCoQ6Wfp3iY+G+1ObwxxAMSQXWQGI93/Ns6GJ0SLsZjF/ZRRY/GwH9xevrekxd7QYIyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yOA3lvI/; arc=none smtp.client-ip=209.85.167.47
+	 In-Reply-To:To:Cc; b=Y1UNDgxrhMR9p0UKPeQI0WzjyTCx07u+wTdgb+MuLYVTgkVk04k3iCBAli9IohGUijvMPab2N9RekhZ6XotKZt1s0A+dbr4lpUHPZ+oY4LqozPGx7UB3BB/rMTkvXMQTqJQHI4PkeD5x4e4+dS4GMATBgPoch48AXvIem24ae5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fBV8DfdU; arc=none smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yOA3lvI/"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-518a56cdbcfso6348613e87.2
-        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 01:31:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fBV8DfdU"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-518a3e0d2e4so506384e87.0
+        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 01:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713342671; x=1713947471; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1713342673; x=1713947473; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UwkkSUi1b63q//pF6FQeQvdmd+qn9ODc8sgiig3GYAI=;
-        b=yOA3lvI/kxkG2XRXFqu8DtKqpdHnovXE+jxPqaGiqdB+WVPvt5PhtITZaJnkdBza5v
-         +RGyRBz50DewkjT93IBD1XRruXDVkK/SsDxD/Zn8eCt3xovmY0DP/5ToPrIA9Gtf6/oQ
-         i1f9oVFTwHhQR8Y4Of9j16NmvamWxYRYAHPscg13USIxL7zg8lJOGjDPy68a9sEsNXFo
-         qifnG8+VxD787AjeOPU0CjhB97LpmdB0n6jgzg8zw6cUCfPg8HmXw8GKplTXu3MDwlvy
-         oKfm4tyxvwrOmzj1mMQ5hlN1FAFkV//PO1p++RRuhfKKvXT0pcoj+C4kJdVOpjB7ecIW
-         armw==
+        bh=Y70OTHVL5ivIan0b4DqgD01dRiya5SKhfRNunxoXdLs=;
+        b=fBV8DfdURIZTufhwJtSNKxCm+J8kNzt0WS2PRllSqOKE6hH+oHykjRw/rhPekOXRHG
+         iVb5X0ePBCGUz+42IERmzGYZSh3HqQ4NzD7wxMqV72nJ/zWXCwWYERuTI+A4AgIZkI4i
+         2CVMi9BbO7XZ9QGhSwQwZq80Yz8ta4TXrc23p8LFZXml5Z7ixoHIIlgy7F5Fa6jmvGfV
+         sW+88g0GFWLATXr4pDCThAhLn5oDhTIUdTRP+r72Boc1QVPOIrajGjuACrljO7NIi2XY
+         L8cyVb941a31KbnNw6fWGkHp0BY9+xAZTKPI+YgfgoCsqskSp8d0fN1yOHLh7PUww6NN
+         /Abg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713342671; x=1713947471;
+        d=1e100.net; s=20230601; t=1713342673; x=1713947473;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UwkkSUi1b63q//pF6FQeQvdmd+qn9ODc8sgiig3GYAI=;
-        b=kA6OJBBX65zBMwcSZLH5MMuCFDk0zGt6zT08slZ615dfoc85Y1Hal58uWPI+Pqvkrf
-         CSLx3tPIjSDLbykzV96olILZ7WA+unQTNa1+5t7J6sbZ4gs6e+3cB9Vkud5Ioef/O+U2
-         G/eHQt/HR2A3GphhwlXBxaooXTItnNw1o3Y9KM5vwzPKhmYR6B3LJxOY/BNDaG9HR6uj
-         gA/gQtOFkV8GLFtqbgkd3WrUZIZxmK8JBeWvu2AmO6d2eedm54rzFhyVdcwBBXUtd8Ek
-         RVF+mA9YSwmdU/Zq8akFloOetFZxMEbNCMugXDQX9KhjkmqH2e8OzZ3/0VBQhvo1CKwu
-         s9mw==
-X-Forwarded-Encrypted: i=1; AJvYcCXys6vprZXUj1vYlHE1d5JhhNUMapDIAQLYMePTSFydzkb8ZXszR2XCq1hYv09qmYV0o/ZM9tIuiZjr1pvxD621DTfMHQ==
-X-Gm-Message-State: AOJu0YxdOZEqsLNn1Xp2ihzSBZLELe+N4pSiniD825zU5L77exEwvNaI
-	UXENjDJpkyvr0xsBFuepyrqyMQuzvBbp0yRweENFtF3TYFPgaCvOLv6qkyBA2EQ=
-X-Google-Smtp-Source: AGHT+IGr9O5BADfALuCrm8PgEkRaX6wyHRxFeFfamSkMxNmouBFAbLin2v4slwtR3yl475frxdmYYQ==
-X-Received: by 2002:a19:5f1e:0:b0:516:a686:8ae1 with SMTP id t30-20020a195f1e000000b00516a6868ae1mr11893073lfb.62.1713342671638;
-        Wed, 17 Apr 2024 01:31:11 -0700 (PDT)
+        bh=Y70OTHVL5ivIan0b4DqgD01dRiya5SKhfRNunxoXdLs=;
+        b=SZ988RZx6wnfzrRe81882R+t1I7LC865XvLJgrznh41AJBopmOFcXjO9Tis5hKONOQ
+         pohlWHAqFu33t1eAUwsjgQ166xwb/7BTnvx7GtjiNnBC8FSMUCYqb/NEHkMqcXwct+cJ
+         R1+3XVpLCBkQ2DC3bF7VgU5dFqd/DKB8TpxhR9uTipp+0Up1DH+KYHG4lClHOHrF2t1j
+         9uzgXU5jKRD70Bw/QEUgSUvNOCxUjXq44zH4d5KiliWAry462vB5M1nsXQ5zAVkBSJNo
+         q4FbCaedXM/ZUzEjYis4avqtf6wYJJuTUI20JAppJXLfhCm4NDouLpOyK6nwApNrJUtc
+         Agtg==
+X-Forwarded-Encrypted: i=1; AJvYcCV1HXgxAOsVCz4DFCv6kWQjvIb4b1+WUTYP16C0B5lhBkprRlvdOwoXdKoW//cr5hkP9iSXEMAf0CDiWs3SdCbwcUWJew==
+X-Gm-Message-State: AOJu0YxGVpoyHIhP+2DxiU41Agdt3MXYipykvBkub1d58Wjj1KbGofXI
+	Gdlu/FzdX82hIByxkThnARVRk/J9aWZPL0mSix8y1XdwgB55Pj1Xqo80Tk3L7FCefjynIi5hBW4
+	o
+X-Google-Smtp-Source: AGHT+IGN7KshMjL76IO2W7gDdx8lXhyK3hvTNv94FJbHVjszon/A15j/oB2hQ+dAApW8hZTk3vdPCQ==
+X-Received: by 2002:a19:e005:0:b0:519:1ff0:27 with SMTP id x5-20020a19e005000000b005191ff00027mr1281203lfg.22.1713342673217;
+        Wed, 17 Apr 2024 01:31:13 -0700 (PDT)
 Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b00516d2489f16sm1873151lfl.260.2024.04.17.01.31.10
+        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b00516d2489f16sm1873151lfl.260.2024.04.17.01.31.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Apr 2024 01:31:11 -0700 (PDT)
+        Wed, 17 Apr 2024 01:31:12 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 17 Apr 2024 10:30:59 +0200
-Subject: [PATCH v6 10/11] ARM: hw_breakpoint: Handle CFI breakpoints
+Date: Wed, 17 Apr 2024 10:31:00 +0200
+Subject: [PATCH v6 11/11] ARM: Support CLANG CFI
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,7 +64,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240417-arm32-cfi-v6-10-6486385eb136@linaro.org>
+Message-Id: <20240417-arm32-cfi-v6-11-6486385eb136@linaro.org>
 References: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
 In-Reply-To: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -75,120 +76,32 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.13.0
 
-This registers a breakpoint handler for the new breakpoint type
-(0x03) inserted by LLVM CLANG for CFI breakpoints.
+Support Control Flow Integrity (CFI) when compiling with
+CLANG.
 
-If we are in permissive mode, just print a backtrace and continue.
+In the as-of-writing LLVM CLANG implementation (v17)
+the 32-bit ARM platform is supported by the generic CFI
+implementation, which isn't tailored specifically for ARM32
+but works well enough to enable the feature.
 
-Example with CONFIG_CFI_PERMISSIVE enabled:
-
-> echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
-lkdtm: Performing direct entry CFI_FORWARD_PROTO
-lkdtm: Calling matched prototype ...
-lkdtm: Calling mismatched prototype ...
-CFI failure at lkdtm_indirect_call+0x40/0x4c (target: 0x0; expected type: 0x00000000)
-WARNING: CPU: 1 PID: 112 at lkdtm_indirect_call+0x40/0x4c
-CPU: 1 PID: 112 Comm: sh Not tainted 6.8.0-rc1+ #150
-Hardware name: ARM-Versatile Express
-(...)
-lkdtm: FAIL: survived mismatched prototype function call!
-lkdtm: Unexpected! This kernel (6.8.0-rc1+ armv7l) was built with CONFIG_CFI_CLANG=y
-
-As you can see the LKDTM test fails, but I expect that this would be
-expected behaviour in the permissive mode.
-
-We are currently not implementing target and type for the CFI
-breakpoint as this requires additional operand bundling compiler
-extensions.
-
-CPUs without breakpoint support cannot handle breakpoints naturally,
-in these cases the permissive mode will not work, CFI will fall over
-on an undefined instruction:
-
-Internal error: Oops - undefined instruction: 0 [#1] PREEMPT ARM
-CPU: 0 PID: 186 Comm: ash Tainted: G        W          6.9.0-rc1+ #7
-Hardware name: Gemini (Device Tree)
-PC is at lkdtm_indirect_call+0x38/0x4c
-LR is at lkdtm_CFI_FORWARD_PROTO+0x30/0x6c
-
-This is reasonable I think: it's the best CFI can do to ascertain
-the the control flow is not broken on these CPUs.
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
 Tested-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- arch/arm/include/asm/hw_breakpoint.h |  1 +
- arch/arm/kernel/hw_breakpoint.c      | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 31 insertions(+)
+ arch/arm/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/include/asm/hw_breakpoint.h b/arch/arm/include/asm/hw_breakpoint.h
-index 62358d3ca0a8..e7f9961c53b2 100644
---- a/arch/arm/include/asm/hw_breakpoint.h
-+++ b/arch/arm/include/asm/hw_breakpoint.h
-@@ -84,6 +84,7 @@ static inline void decode_ctrl_reg(u32 reg,
- #define ARM_DSCR_MOE(x)			((x >> 2) & 0xf)
- #define ARM_ENTRY_BREAKPOINT		0x1
- #define ARM_ENTRY_ASYNC_WATCHPOINT	0x2
-+#define ARM_ENTRY_CFI_BREAKPOINT	0x3
- #define ARM_ENTRY_SYNC_WATCHPOINT	0xa
- 
- /* DSCR monitor/halting bits. */
-diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
-index dc0fb7a81371..ce7c152dd6e9 100644
---- a/arch/arm/kernel/hw_breakpoint.c
-+++ b/arch/arm/kernel/hw_breakpoint.c
-@@ -17,6 +17,7 @@
- #include <linux/perf_event.h>
- #include <linux/hw_breakpoint.h>
- #include <linux/smp.h>
-+#include <linux/cfi.h>
- #include <linux/cpu_pm.h>
- #include <linux/coresight.h>
- 
-@@ -903,6 +904,32 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
- 	watchpoint_single_step_handler(addr);
- }
- 
-+#ifdef CONFIG_CFI_CLANG
-+static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
-+{
-+	/* TODO: implementing target and type requires compiler work */
-+	unsigned long target = 0;
-+	u32 type = 0;
-+
-+	switch (report_cfi_failure(regs, instruction_pointer(regs), &target, type)) {
-+	case BUG_TRAP_TYPE_BUG:
-+		die("Oops - CFI", regs, 0);
-+		break;
-+	case BUG_TRAP_TYPE_WARN:
-+		/* Skip the breaking instruction */
-+		instruction_pointer(regs) += 4;
-+		break;
-+	default:
-+		die("Unknown CFI error", regs, 0);
-+		break;
-+	}
-+}
-+#else
-+static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
-+{
-+}
-+#endif
-+
- /*
-  * Called from either the Data Abort Handler [watchpoint] or the
-  * Prefetch Abort Handler [breakpoint] with interrupts disabled.
-@@ -932,6 +959,9 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
- 	case ARM_ENTRY_SYNC_WATCHPOINT:
- 		watchpoint_handler(addr, fsr, regs);
- 		break;
-+	case ARM_ENTRY_CFI_BREAKPOINT:
-+		hw_breakpoint_cfi_handler(regs);
-+		break;
- 	default:
- 		ret = 1; /* Unhandled fault. */
- 	}
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index b14aed3a17ab..df7bd07ad0d4 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -35,6 +35,7 @@ config ARM
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
++	select ARCH_SUPPORTS_CFI_CLANG
+ 	select ARCH_SUPPORTS_HUGETLBFS if ARM_LPAE
+ 	select ARCH_SUPPORTS_PER_VMA_LOCK
+ 	select ARCH_USE_BUILTIN_BSWAP
 
 -- 
 2.44.0
