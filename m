@@ -1,84 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B099A13C3F9;
-	Wed, 17 Apr 2024 21:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868163B185;
+	Wed, 17 Apr 2024 22:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713390842; cv=none; b=PsmZCtv5iOONTEZcInN1q0GOUQ2BgrqwOlma/6yqFqFbRwoAxtB9FflBrkabaSQAnfrbhyrBlkqltaQPG/RB/0/K32JuBWg7MlcwLH4kXkDZBXBRNZ8jSQ2InamlmeV6ol0VIq2QaxfHavA6mVcxxHXC47LFGUr4KD3iLQCmSxE=
+	t=1713393802; cv=none; b=YLUtdfXtxkHGgUVAaxVtlMR06ovHsDDTlOHf2tuUa5S8PPfX78tnh8DlqcyHdGW0ReIQ206wY3JBLxIxbt1rEVSoSCSEXOKQV75TqDpzB8qdfvZTZRKd1yKXrPm+sxCHxMIv03jk+kARYpUYBCEPqZKhlhDxf29u7mytVMblK8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713390842; c=relaxed/simple;
-	bh=y/oIuT0t5fQdzfr7m5A1SD/C2aOn4sapsexfuFNbY9A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qDd66lJiwvBbs2qyQ2tBfXSPP+/fNddUzT+WrmDbKU1W6FsGHIxzt7pG7ym30e7lHddF6j307jfZOFTkTT0vkY2TnNFvhKiNwmTebh4ztNbywNaQkB6UDIn6Lh8NLjlr5uroilQtMDDBKJcjA6ZqJ2Cyi/rNybZJIIcbri/+rgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uma00F9J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713393802; c=relaxed/simple;
+	bh=PanJIARLDI1x/47HPf1NBh2mzXDKK9VMUDhFNmwsF8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SlAGXz41VW4Ee/1f/wEx5tTJ105U6Xv7zYLxJhwb0O6sTro34eYj4pVMTLnO3/j49GiFArUaGUK/QP6VEjAqwjtmwyV8cWY6Z6II1DXBqePcZ7T65nqWJPKE3mQyouyrcCCiQzHLE1/1Zca5w6Ssl2jnk3LXIWuNNYquC8+jhq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OO5nsRdP; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uma00F9J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5350C4AF08;
-	Wed, 17 Apr 2024 21:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713390842;
-	bh=y/oIuT0t5fQdzfr7m5A1SD/C2aOn4sapsexfuFNbY9A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Uma00F9JLR/MDDk8Ai4ss95HRMdT+/3/4abNgJvFKaR+uQOI07KPlMMMwnPDJHtrL
-	 twPGdo+SrIY+zn0ogxQob6IJxEQp6VUHInw+8Nj93souXMgPXJWyR5zrkQIFYOPFlc
-	 o9Xq5uHoy3u7EBoLly1bWdX6+gdOs5orvNsgW6lFyc/MX7nMOgZuLKzZ4G2YBHqdCn
-	 Ilxj2xiUfPiP03tLDXUHCc76yM4x9nzQWM96/mznvTUcMtPAV3Ww7JqIsF6hZKFnXL
-	 8cKlRqwuuf6u6wRZaaJIrh6vlr5kNW/Iu7j9i0Y40IWw6bWFsYRTL7hprddMUFgaB/
-	 HtzgAjksBrGSA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 17 Apr 2024 14:53:46 -0700
-Subject: [PATCH 2/2] x86/purgatory: Enable orphan section warnings
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OO5nsRdP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713393801; x=1744929801;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PanJIARLDI1x/47HPf1NBh2mzXDKK9VMUDhFNmwsF8g=;
+  b=OO5nsRdPBIsQMxmYodUbTC8N9eeMf9cgiyLx1oIvuEjiJcklDK7CjQpx
+   oPr8xClWa7/vun54dY9m4rBSSjEtjYr1T26w3SaTapAg9VxevE/ovHZPm
+   HGzHtI9YFlrazTFIZN6ERRDVYQRHvJpHNOtiSRiM/Jo1f2RwTGV+gNTdf
+   odTi4KfZtTCT1tMObXl93sWj+Oe6/J4eSewsS53nvYhNRPhY5H/Gl6VTP
+   KXVC5Qk+8FVBZzPxiYWQLO4tUv2fSdzYvJCVLCZbnX5K7Z1xXIVAFuSUv
+   156WXhENSHqa8oI57Pp+vrWJwEHFIye/veigZwYLkoqzU5z/dZEa+J7OL
+   w==;
+X-CSE-ConnectionGUID: i2Rolay/Q4+FK+OBovwfIQ==
+X-CSE-MsgGUID: 6Nna23FQRBa38iYuwCmH0w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="8775695"
+X-IronPort-AV: E=Sophos;i="6.07,210,1708416000"; 
+   d="scan'208";a="8775695"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 15:37:41 -0700
+X-CSE-ConnectionGUID: Lsekb7BNS6ON6lJ9BYjysw==
+X-CSE-MsgGUID: xYdndFv6TPC3dmiqaxQ3bw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,210,1708416000"; 
+   d="scan'208";a="23371906"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 17 Apr 2024 15:37:40 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rxDuH-00073Y-2n;
+	Wed, 17 Apr 2024 22:37:34 +0000
+Date: Thu, 18 Apr 2024 06:37:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm:zii 20/80] drivers/net/dsa/xrs700x/xrs700x.c:714:37: warning:
+ unused variable 'xrs700x_phylink_mac_ops'
+Message-ID: <202404180637.BlcK3tlN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240417-x86-fix-kexec-with-llvm-18-v1-2-5383121e8fb7@kernel.org>
-References: <20240417-x86-fix-kexec-with-llvm-18-v1-0-5383121e8fb7@kernel.org>
-In-Reply-To: <20240417-x86-fix-kexec-with-llvm-18-v1-0-5383121e8fb7@kernel.org>
-To: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
- dave.hansen@linux.intel.com
-Cc: x86@kernel.org, hpa@zytor.com, ndesaulniers@google.com, 
- morbo@google.com, justinstitt@google.com, song@kernel.org, 
- ribalda@chromium.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1061; i=nathan@kernel.org;
- h=from:subject:message-id; bh=y/oIuT0t5fQdzfr7m5A1SD/C2aOn4sapsexfuFNbY9A=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGkKLt8PhWsHZx2oyzv68Upp7qGDh1ebxX3UNlt6Ss81t
- fKyWh93RykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZgIpxPDP7vJTiUzA7wNrmd/
- cGS8+5dXT+uqyd9JTzwfT9//UJmB+z8jw1mOjeoPI0Mr/CfITf4gf5en9bnT2/hr/FFWV97LuRW
- o8QEA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Now that the purgatory has a linker script that explicitly describes all
-of its sections, turn on orphan section warnings for it so that new
-sections do not appear without notice.
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git zii
+head:   151b88b21c8ef27598749fb5f240a15a32bef669
+commit: 055235891082f2adc943a9f7abfdd4931b6a1911 [20/80] net: dsa: xrs700x: provide own phylink MAC operations
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240418/202404180637.BlcK3tlN-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240418/202404180637.BlcK3tlN-lkp@intel.com/reproduce)
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/purgatory/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404180637.BlcK3tlN-lkp@intel.com/
 
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index dfc030a4cca9..a6c8239abcba 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -17,7 +17,7 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS -D__NO_FORTIFY
- # When linking purgatory.ro with -r unresolved symbols are not checked,
- # also link a purgatory.chk binary without -r to check for unresolved symbols.
- PURGATORY_LDFLAGS := -z nodefaultlib
--LDFLAGS_purgatory.ro := -r $(PURGATORY_LDFLAGS) -T
-+LDFLAGS_purgatory.ro := --orphan-handling=$(CONFIG_LD_ORPHAN_WARN_LEVEL) -r $(PURGATORY_LDFLAGS) -T
- LDFLAGS_purgatory.chk := -e purgatory_start $(PURGATORY_LDFLAGS)
- targets += purgatory.ro purgatory.chk
- 
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/dsa/xrs700x/xrs700x.c:7:
+   In file included from include/net/dsa.h:11:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/net/dsa/xrs700x/xrs700x.c:7:
+   In file included from include/net/dsa.h:11:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/dsa/xrs700x/xrs700x.c:7:
+   In file included from include/net/dsa.h:11:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/dsa/xrs700x/xrs700x.c:7:
+   In file included from include/net/dsa.h:11:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/net/dsa/xrs700x/xrs700x.c:714:37: warning: unused variable 'xrs700x_phylink_mac_ops' [-Wunused-const-variable]
+     714 | static const struct phylink_mac_ops xrs700x_phylink_mac_ops = {
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   8 warnings generated.
+
+
+vim +/xrs700x_phylink_mac_ops +714 drivers/net/dsa/xrs700x/xrs700x.c
+
+   713	
+ > 714	static const struct phylink_mac_ops xrs700x_phylink_mac_ops = {
+   715		.mac_config		= xrs700x_mac_config,
+   716		.mac_link_down		= xrs700x_mac_link_down,
+   717		.mac_link_up		= xrs700x_mac_link_up,
+   718	};
+   719	
 
 -- 
-2.44.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
