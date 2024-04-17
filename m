@@ -1,124 +1,128 @@
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9AD146D77;
-	Wed, 17 Apr 2024 15:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306BC14884A;
+	Wed, 17 Apr 2024 15:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713367451; cv=none; b=CQJb+WgkIpi6tKeguCao4X6w82uwAJQyU8l7wNW+XIJiTxFvT6TueyibCiBHiHfq4p4jB5FXXQW8BA8BshR5w9mDqvXnLDYQnGvvMaeC+2+2IPeUn6g4VtH2mCBGAc0Zx9VgKC7wAwt7gR30qcaPGgjPGuy4YAShWxYSM7C5TPk=
+	t=1713369163; cv=none; b=p/Sgxl4/G/FvYtDWCqcjpc/g7q4gPSQip56NR+DCQVV/Jl8Q/O/G6zPfug7Ac2B4l8mLXnAAV/lONQZNevyxWhLKr8i5VC9WneEP3FTH1N8yNoJnH2Y22G/FBqaNob2T9lwh3JFXkz37MhWrsROSodgFDWsU0Rh3y8NbUxqEk84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713367451; c=relaxed/simple;
-	bh=dBpaf0LdjkMsh0JtjJlm/DSn8jHNFrkYbQ4msFH2NTI=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=V5x9lxVF1VXnG/bJ5CcmRXXqsV0dHxgz57cJ82V+mZzEFY0TSTCs7orsCAcU176VSQ7A07yj3Wc0HlxBmn5e0tzQ09642t3kTDhOle5x2eqqxeIlRjMFg1ZZCqiLfK22R57Q9v6Saui3jySzaeH02BamZY6bxr6kDGssOjKDUe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NV2uyAog; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VRn1Nbo9; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NV2uyAog";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VRn1Nbo9"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id D69051140141;
-	Wed, 17 Apr 2024 11:24:08 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 17 Apr 2024 11:24:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1713367448; x=1713453848; bh=glbLQI16xk
-	GfNWJMZSibCWp76MpxWEXe4pp1qP1DFG8=; b=NV2uyAogy0VEIB/buZECVpOkFj
-	clawIWQsU22GdyqvHSWkp3QXCEjH5NKEtGbffAAUNvim6QB/fp6vAVKSoDh9D/rD
-	Eh0X10NcEL2vm75TFswthx69RdVLAFUSr8MXQ7J5BV3REgGQBDtnGY6H1eCnE/Tk
-	uuAatkMwbF2HVVPSqwDyuSgQ+bvOB//WmF9tRyy5/WpjZLkhuxdnQ1ASkAWKzojW
-	FHZU1qelP9xG6IAaMjEWTikKYHbAsiA9SE6nJh9Sf2MlVygHUl9U1asT7aJ0hvkX
-	5OC3NLpjEDfbYpT/bY7wrG5IfaOsjdRtf1I9gsqv9FHfjjsJAPF1gK3j/crg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1713367448; x=1713453848; bh=glbLQI16xkGfNWJMZSibCWp76Mpx
-	WEXe4pp1qP1DFG8=; b=VRn1Nbo9siLDyEAdYXhVFRT4jCfCLLB0mVg4miS+kI8G
-	bKXT6IjcI62H7tGBIoGIYWnYmsY0RjiYtPcRqlBUl6+f55ZqHz2+3/y2BWjMfVRI
-	lgBULGU50220tuj9IAi3hlKLvFiTVxSmcarVqONI/ybtto0N+8o1YP+XcVCDctdE
-	Ym+7RmoxPzI09FPSmyW8he31S/edGlBlcx0u9Tp7bAodocsg3/grxt68w0dmZWw5
-	GCvdMeBxSALYGvL/SJNZPPEXU1aAuRdmFE/H4cZCkcheJxyphfBn8TBsEWQC8LL9
-	FpCn/gnPi5ya9yiAhTICBOKwuX5rd6QqiBzW64Q1/Q==
-X-ME-Sender: <xms:mOkfZmbyBxPDSDJl7H0MZi9gZeVx9KioE9CI2D08IPLWOzLaycTsZg>
-    <xme:mOkfZpb1J3C_ewuyzWRLF23KZjOx8I-m-LLMzbUFnFLU1-YJuI9FHvmT8RStOMMcF
-    9e0DEfQsS3gqgS_Zqo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejkedgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:mOkfZg-tUBnZW_ZoRft1BrPudAfKJrwZ4Mu_1L5vBBZ_77Ycfi7UNg>
-    <xmx:mOkfZoqVjBPX0y_h5QWg6M8Hjmbvt5fiWjgZp4eo93RfqiuHUafbOw>
-    <xmx:mOkfZhpssWR8lcmgZOXdyP_QRcdi4fd68X9oUiVGeBl1pRNP1zAFSg>
-    <xmx:mOkfZmT_iPvxx4iguY6k8T3f6DD_uokpAEcy9SR1zsnNCWdHW8FaLA>
-    <xmx:mOkfZie9jqZ2fRj4UxDOluoHND8QrdzNsG917UcAYZCZxsmMDXz9PI0Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 59617B6008F; Wed, 17 Apr 2024 11:24:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	s=arc-20240116; t=1713369163; c=relaxed/simple;
+	bh=kuX3OcKWgILgSLAxfzh2AQyYp1j6PjeGzoP26JTex64=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JguTLacoZQV8Xxv8ucUyetzqoEOfkiom6FNXY/kTtmBv4CANTnsszcBt+6EXqMukUUI8WBh9UC/J7UTsRJt4gorJwpp6bzkO+/2snZc5fKlZSwAFaGfWKREuZC9H1oODaOHF+WJbUfKGXhabRo7TDNxG9DImdorwoXdAsK0HriU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4185B339;
+	Wed, 17 Apr 2024 08:53:07 -0700 (PDT)
+Received: from [10.1.37.181] (XHFQ2J9959.cambridge.arm.com [10.1.37.181])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 670BD3F792;
+	Wed, 17 Apr 2024 08:52:38 -0700 (PDT)
+Message-ID: <28b20153-62d8-40f2-9305-60943696d4a1@arm.com>
+Date: Wed, 17 Apr 2024 16:52:36 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <e95bb670-7c20-496f-80e1-8b1891816764@app.fastmail.com>
-In-Reply-To: <1f384d41-4c65-4efb-a171-26b54dacfb30@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
+ '-static-libsan'?
+Content-Language: en-GB
+To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <yujie.liu@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+ Linux Memory Management List <linux-mm@kvack.org>
 References: <202404141807.LgsqXPY5-lkp@intel.com>
  <31b4e05d-62c6-44cd-8038-7ac8d21320c3@arm.com>
  <a5516289-96b6-41f4-8cbb-6c34c7bf7996@app.fastmail.com>
  <1f384d41-4c65-4efb-a171-26b54dacfb30@arm.com>
-Date: Wed, 17 Apr 2024 17:23:47 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ryan Roberts" <ryan.roberts@arm.com>,
- "kernel test robot" <yujie.liu@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- "Andrew Morton" <akpm@linux-foundation.org>, llvm@lists.linux.dev,
- "Linux Memory Management List" <linux-mm@kvack.org>
-Subject: Re: clang: error: unknown argument '-static-libasan'; did you mean
- '-static-libsan'?
-Content-Type: text/plain
+ <e95bb670-7c20-496f-80e1-8b1891816764@app.fastmail.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <e95bb670-7c20-496f-80e1-8b1891816764@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 17, 2024, at 17:11, Ryan Roberts wrote:
-> On 16/04/2024 15:42, Arnd Bergmann wrote:
->> On Tue, Apr 16, 2024, at 16:33, Ryan Roberts wrote:
->> 
->> I'm not entirely sure how much of the Kbuild infrastructure we
->> can rely on here. If the .config file gets included, this should
->> work:
->
-> Thanks for the pointers. Unfortunately neither don't works as we don't have any
-> of the Kbuild infrastructure.
->
-> I'm not really sure what to do here. The best I've come up with so far is to
-> just remove asan from these binaries. They are pretty simple selftests. I'm not
-> sure its adding a whole lot of value anyway.
->
-> Does anyone have any advice?
->
+On 17/04/2024 16:23, Arnd Bergmann wrote:
+> On Wed, Apr 17, 2024, at 17:11, Ryan Roberts wrote:
+>> On 16/04/2024 15:42, Arnd Bergmann wrote:
+>>> On Tue, Apr 16, 2024, at 16:33, Ryan Roberts wrote:
+>>>
+>>> I'm not entirely sure how much of the Kbuild infrastructure we
+>>> can rely on here. If the .config file gets included, this should
+>>> work:
+>>
+>> Thanks for the pointers. Unfortunately neither don't works as we don't have any
+>> of the Kbuild infrastructure.
+>>
+>> I'm not really sure what to do here. The best I've come up with so far is to
+>> just remove asan from these binaries. They are pretty simple selftests. I'm not
+>> sure its adding a whole lot of value anyway.
+>>
+>> Does anyone have any advice?
+>>
+> 
+>>> Alternatively, if the cc-option macro is available, you could
+>>> try this one
+>>>
+>>> CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan) 
+> 
+> I had another look at this and found example code in
+> tools/thermal/tmon/Makefile that you should be able to adapt.
+> Apparently the cc-option macro is not provided by default, but
+> there is a copy you can include:
+> 
+> # We need this for the "cc-option" macro.
+> include ../../build/Build.include
+> WARNFLAGS=-Wall -Wshadow -W -Wformat -Wimplicit-function-declaration -Wimplicit-int
+> override CFLAGS+= $(call cc-option,-O3,-O1) ${WARNFLAGS}
+> # Add "-fstack-protector" only if toolchain supports it.
+> override CFLAGS+= $(call cc-option,-fstack-protector-strong)
 
->> Alternatively, if the cc-option macro is available, you could
->> try this one
->> 
->> CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan) 
+Ahh thanks! That sorted it:
 
-I had another look at this and found example code in
-tools/thermal/tmon/Makefile that you should be able to adapt.
-Apparently the cc-option macro is not provided by default, but
-there is a copy you can include:
+diff --git a/tools/testing/selftests/fchmodat2/Makefile
+b/tools/testing/selftests/fchmodat2/Makefile
+index 71ec34bf1501..a68bb5a00797 100644
+--- a/tools/testing/selftests/fchmodat2/Makefile
++++ b/tools/testing/selftests/fchmodat2/Makefile
+@@ -1,6 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
++# We need this for the "cc-option" macro.
++include ../../../build/Build.include
 
-# We need this for the "cc-option" macro.
-include ../../build/Build.include
-WARNFLAGS=-Wall -Wshadow -W -Wformat -Wimplicit-function-declaration -Wimplicit-int
-override CFLAGS+= $(call cc-option,-O3,-O1) ${WARNFLAGS}
-# Add "-fstack-protector" only if toolchain supports it.
-override CFLAGS+= $(call cc-option,-fstack-protector-strong)
+-CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan
+$(KHDR_INCLUDES)
++CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
++CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
+ TEST_GEN_PROGS := fchmodat2_test
+
+ include ../lib.mk
+diff --git a/tools/testing/selftests/openat2/Makefile
+b/tools/testing/selftests/openat2/Makefile
+index 254d676a2689..02af9b6ca5eb 100644
+--- a/tools/testing/selftests/openat2/Makefile
++++ b/tools/testing/selftests/openat2/Makefile
+@@ -1,8 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
++# We need this for the "cc-option" macro.
++include ../../../build/Build.include
+
+-CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan
++CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
++CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
+ TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
+
+ include ../lib.mk
+
+-$(TEST_GEN_PROGS): helpers.c helpers.h
++$(TEST_GEN_PROGS): helpers.c
+
+
+I'll tidy this up and send it out.
+
+Thanks,
+Ryan
+
+
