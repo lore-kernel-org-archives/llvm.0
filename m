@@ -1,149 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE3E58119
-	for <llvm@lists.linux.dev>; Thu, 18 Apr 2024 05:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F727172F
+	for <llvm@lists.linux.dev>; Thu, 18 Apr 2024 06:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713419868; cv=none; b=J3mrjcM0y6OqaAG8D6dy4mvysrBjekIgbZ3KZHOc7wAx2O9fPvzkitgX6tnRd8Akz/L5a0o+LhafuKOR2rCprHSWcRj2Un4MziWl3RdLxUDEYXME0ohBQgyF0KmWeH7W7Achr3e+kGW8NpGn7hzbamVceELHccz6NnY/GEkOq4I=
+	t=1713421606; cv=none; b=LyqKo0c2ZUbo1g5I8RJ3XxU0qXWeoaOl6hwmcOu1zoykH+IS43P4bzmTrLz6Tb/CY71eiO+4QaY3K3Mnd0RDBhxQWx96ENVU5GYLG2gZAK6zEwv/C/MTG5VH1nSMg4ZirsZpFAsFntMZD9/Vs+aUonHd0arcUHqGEsPTCitG2QY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713419868; c=relaxed/simple;
-	bh=FSWfeJRVhpivjhcZOKtr/RECIGZFZ6Lvd8suprQ2zlc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pxumxanFvgeadu0Hf++cKZ4kshub6PnJjVsH09LoBZmEbtwA7r7f5EUTkGB/L7VjizXjgE++MsxBXv2ZYW7xxCVet0feUveUW8JXGV3KSXTdAVyDKedT2Q/NE3sxdhXW33BGXkzxpBp8aDtyiWymuy6Z5wibEPbZKc7VQi5HlT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PIb/x+yi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1713421606; c=relaxed/simple;
+	bh=pLZXFcRFsA6pmkWp5sQ8IB/qtz8jCZmegUqL5nF557A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kJPqx6tAZXdM0T7cg3XGJCzhgi/J26r12Mr/fxwbAST3zPwXUHwywZHLm+pubhdDW3ZImVZPZOwKIqpQd370zdeJny3Usub4D6ZYbKtXijyAvOciuxX0jeSo1mJFnVXRsNu3ZWGe/w15JQ2hqTbyK/CdSkIBttof9wTEfkYenVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=JqJwQVAL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PIb/x+yi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713419866;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WnN76fVoeHJRKOHHPsuZPbIKbYuzDGfrYAq34ct/Ccs=;
-	b=PIb/x+yisoY2Up2KefHLTe8qQtOw0rshL65+xSCD4lrgWwD9qAg36FazNx6sSwmjKppYVe
-	mtvImtOMmIWma7S4e7lwLB8Mzg0xs19HEJaQ2QaeQk7NxotxP3WwULMxnhjiRdyIvGe0m4
-	gas8tibb3L7I5ZnbEkHmSNEATvaVTKo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-624-YBZG9CdKOb6Q-JYKY86FSg-1; Thu, 18 Apr 2024 01:57:45 -0400
-X-MC-Unique: YBZG9CdKOb6Q-JYKY86FSg-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-416e58bdc1eso2857175e9.3
-        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 22:57:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713419864; x=1714024664;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WnN76fVoeHJRKOHHPsuZPbIKbYuzDGfrYAq34ct/Ccs=;
-        b=POuBbv762lwscezew99ZIoKTTjojLRZY7G+1kvUkOwuc0SrJf6j9qVHsI936+Wkh44
-         3UsDJciu4LgEdIEPpMwIk2Uobap0WNqtfVJMNqZsYRWrin0hPgYZeiTEnksHy4vpG2SH
-         ufQLI/S8CXkzV4sEzp7IEVpbeJUydK9RwDj/Jr19HkxsKt4NlV+ZDGmqkEkhVatshGgX
-         KG0eiFrEfUxoxU90gD+UzFIwV1Ll6kQDUWf5JHncn5J7vDsMf0vdytvZYgCtL3anWuJW
-         Qa54Zk4lxU8kQBCRXP0JghNLpkrLcK/2FbyXhpMwCts7x+vKUczGYeRSs6iYLi1MiSEJ
-         i74g==
-X-Forwarded-Encrypted: i=1; AJvYcCXdmu0ER1Iti6wVjOCsbfjbxy46rxF0eM4bED+HRUrZ0kmB0JOcv+WUswLqdHbJeAcQpVaXKdDMgW367qE7osLGh73Tow==
-X-Gm-Message-State: AOJu0YyMZBF/DyNv5ST4S0egsTpU3MEW0bB8JjFTZTcH1fHhQhMaOeje
-	XFHVAgPelskh9De4pVMYP6VjmESDvbpykEvY1juZY53hejPju/BINQjzOyB1H17vNQ8Ig/Q4Jdc
-	p1QHWjIjZhUEMxZxX9iRd/dTEQ4P79cmse3/i8l57sJLiQv8yH58=
-X-Received: by 2002:a05:600c:198f:b0:416:3f85:d49 with SMTP id t15-20020a05600c198f00b004163f850d49mr1207756wmq.18.1713419864124;
-        Wed, 17 Apr 2024 22:57:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEivO//bEq/fkCuEybbkIrJpkIdU2CyNNJe3O+FwYgdnqOOzAsnV3tmnt1D2t9sOwRhRe4I5g==
-X-Received: by 2002:a05:600c:198f:b0:416:3f85:d49 with SMTP id t15-20020a05600c198f00b004163f850d49mr1207738wmq.18.1713419863732;
-        Wed, 17 Apr 2024 22:57:43 -0700 (PDT)
-Received: from [192.168.0.9] (ip-109-43-177-117.web.vodafone.de. [109.43.177.117])
-        by smtp.gmail.com with ESMTPSA id g18-20020adfa492000000b0033e9d9f891csm909663wrb.58.2024.04.17.22.57.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Apr 2024 22:57:43 -0700 (PDT)
-Message-ID: <00054ec1-66c2-46e3-917f-cd5a43ffe4cd@redhat.com>
-Date: Thu, 18 Apr 2024 07:57:42 +0200
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="JqJwQVAL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1713421602;
+	bh=VM1ymWJhdLE7PRVRkuPaTY1phwPDbzmFe8XcgWwS6dU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=JqJwQVALTUJ0ydw1mHTTPSfihUx/qu9thHoYIV1R4WKlzvOWHn3Wsm6cU99tCgS7u
+	 +t2ToXrZOldNQz3HgQF9MTCbaF2Tb6Yeol7Db0ng5i4CJz/oqMpYm3KBry4nBCcf+j
+	 7QpB+fhA2N56J4jqYGht5ofqSxFI1GeY/5Pgw1x2lHOqqfZNQy/ASlMDjNA4UbHXu0
+	 GtLre/te4326SSiVbtF1xUORjssL0I6C0DCkGild3E43pwbMHh7Lq82K8ILcI9FRqR
+	 1NiZiKgnDNcGAE49ubVdQvoK1fMHwTqi5FqL7jpdTgPDZHOSCzSeqYxiMuSZRE4E8a
+	 7qVZyJCQiDy1Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VKnqN6d03z4wx6;
+	Thu, 18 Apr 2024 16:26:40 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Naresh Kamboju
+ <naresh.kamboju@linaro.org>, linux-kernel@vger.kernel.org, linuxppc-dev
+ <linuxppc-dev@lists.ozlabs.org>, "Aneesh Kumar K . V"
+ <aneesh.kumar@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, Kees
+ Cook <keescook@chromium.org>, Niklas Schnelle <schnelle@linux.ibm.com>,
+ clang-built-linux <llvm@lists.linux.dev>, Nick Desaulniers
+ <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Jeff Xu
+ <jeffxu@chromium.org>, "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, Dan
+ Carpenter <dan.carpenter@linaro.org>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Baoquan He
+ <bhe@redhat.com>, "Mike Rapoport (IBM)" <rppt@kernel.org>
+Subject: Re: [PATCH] powerpc: drop port I/O helpers for CONFIG_HAS_IOPORT=n
+In-Reply-To: <20240416153331.1617772-1-arnd@kernel.org>
+References: <20240416153331.1617772-1-arnd@kernel.org>
+Date: Thu, 18 Apr 2024 16:26:40 +1000
+Message-ID: <878r1bb2zj.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] s390/netiucv: Remove function pointer cast
-To: Nathan Chancellor <nathan@kernel.org>, akpm@linux-foundation.org,
- arnd@arndb.de, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
-Cc: borntraeger@linux.ibm.com, svens@linux.ibm.com, wintera@linux.ibm.com,
- twinkler@linux.ibm.com, linux-s390@vger.kernel.org, netdev@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-References: <20240417-s390-drivers-fix-cast-function-type-v1-0-fd048c9903b0@kernel.org>
- <20240417-s390-drivers-fix-cast-function-type-v1-3-fd048c9903b0@kernel.org>
-From: Thomas Huth <thuth@redhat.com>
-Autocrypt: addr=thuth@redhat.com; keydata=
- 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
-In-Reply-To: <20240417-s390-drivers-fix-cast-function-type-v1-3-fd048c9903b0@kernel.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 17/04/2024 20.24, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR) after enabling
-> -Wcast-function-type-strict by default:
-> 
->    drivers/s390/net/netiucv.c:1716:18: error: cast from 'void (*)(const void *)' to 'void (*)(struct device *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->     1716 |                 dev->release = (void (*)(struct device *))kfree;
->          |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 error generated.
-> 
-> Add a standalone function to fix the warning properly, which addresses
-> the root of the warning that these casts are not safe for kCFI. The
-> comment is not really relevant after this change, so remove it.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/s390/net/netiucv.c | 14 ++++++--------
->   1 file changed, 6 insertions(+), 8 deletions(-)
+Arnd Bergmann <arnd@kernel.org> writes:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Calling inb()/outb() on powerpc when CONFIG_PCI is disabled causes
+> a NULL pointer dereference, which is bad for a number of reasons.
+>
+> After my patch to turn on -Werror in linux-next, this caused a
+> compiler-time warning with clang:
+>
+> In file included from arch/powerpc/include/asm/io.h:672:
+> arch/powerpc/include/asm/io-defs.h:43:1: error: performing pointer
+> arithmetic on a null pointer has undefined behavior
+> [-Werror,-Wnull-pointer-arithmetic]
+>    43 | DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    44 |                  (p, b, c), pio, p)
+>       |                  ~~~~~~~~~~~~~~~~~~
+>
+> In this configuration, CONFIG_HAS_IOPORT is already disabled, and all
+> drivers that use inb()/outb() should now depend on that (some patches are
+> still in the process of getting marged).
+>
+> Hide all references to inb()/outb() in the powerpc code and the definitions
+> when HAS_IOPORT is disabled to remove the possible NULL pointer access.
+> The same should happin in asm-generic in the near future, but for now
+> the empty inb() macros are still defined to ensure the generic version
+> does not get pulled in.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> --
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+This needs a small fixup:
+
+diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
+index 86c212fcbc0c..60c80d0baf40 100644
+--- a/arch/powerpc/include/asm/io.h
++++ b/arch/powerpc/include/asm/io.h
+@@ -692,6 +692,7 @@ static inline void name at                                  \
+ #define writesw writesw
+ #define writesl writesl
+
++#ifdef CONFIG_HAS_IOPORT
+ #define inb inb
+ #define inw inw
+ #define inl inl
+@@ -704,6 +705,8 @@ static inline void name at                                  \
+ #define outsb outsb
+ #define outsw outsw
+ #define outsl outsl
++#endif // CONFIG_HAS_IOPORT
++
+ #ifdef __powerpc64__
+ #define readq  readq
+ #define writeq writeq
 
 
+I'm running it through some randconfig builds now.
+
+cheers
