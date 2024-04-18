@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B903A27E;
-	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1C83BB3D;
+	Thu, 18 Apr 2024 02:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713403829; cv=none; b=EdIP5JiIx8PYOfkbbfBEvSN2Cl5685C6xmicDB8qYcVeOQL8fPfnM5JPUrsWlvYZYTIyCxYK6wZH4Ztv77qOVBCf9H4Bhz2ObXsfwBCa0kAUGM0DwoiTMNCaMsa9UNX6MySDDZXvh/SFM2NMa15Wvzprja1dGZU8qbqaUWasJt4=
+	t=1713406228; cv=none; b=UTOhH4zQtq1gWcE8cDZChCjKiJeyuC72P89WtZzp9igMMC/6laQjAmEE05p9DKbZ26ISazqEVQmLMIFsTtkVaqTwcK8qUEggudBl24XfUAaPpoufo6h521F7XVreTE7gKtmNurmBdHKh+vdsBMWC1u5n1Y4dh5rGWxZFKwdl9Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713403829; c=relaxed/simple;
-	bh=37D7Qm9pn82o9Kl06A8JCo2MtQzsjr0UlaxhfTbtgIs=;
+	s=arc-20240116; t=1713406228; c=relaxed/simple;
+	bh=RAGC14c8Q1nFc1rexV5dELq1NYAVyKJAmwHd8XkO/3Q=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=krApiA6KSVVZXQ1E8E2jzUPVNW+tQj+UaPWQKRQY3b6g0pfcvFcI8HbnNszahB6pHzkhPMMEVVbS1vZxg8yXkiCPz9FUjxeLqv3Ln+AFrR4qYGoJ0ShYH/Wu+Es/w2QhYg1LZyTGqMJJirObwjW7DWHZMSSmSZmZXDsiQ3L0pNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7B/Cum6; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ChRUcx51NgdyDBkLLlHxRKUSppu9UuLKFs77ffS33RrljSB61wrVmzObWvhJljVV0uSvsRlquJPONMO+iLsATBC91Wq/fYqGHldC9k8OH21P+ZvSE5V7VHQfpzsOVrVstLjjpiAw4mc+T2+2F8Jz0qtq8MLKxvbempbeLB+Jods=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZL200nNP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7B/Cum6"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79F66C3277B;
-	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZL200nNP"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56918C32783;
+	Thu, 18 Apr 2024 02:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713403829;
-	bh=37D7Qm9pn82o9Kl06A8JCo2MtQzsjr0UlaxhfTbtgIs=;
+	s=k20201202; t=1713406228;
+	bh=RAGC14c8Q1nFc1rexV5dELq1NYAVyKJAmwHd8XkO/3Q=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=d7B/Cum6/5GIc5W+gqWZSDXuaJYBJuaCQJ5LIC2MAEBunR6+lqNYB76tZTYFov26U
-	 C92F06GJmdi/vxgUXXU2fZeOX1XzvsUnUSf7qIuPe16krdmDkgmCn7kVfdAcZKQxvi
-	 gOsALURSB8lPoiDCZFvUYkXfZKhE0aqzewVFKz1st/GhD1aUW3cAcMJUWjMHw2AMq/
-	 6ub3zT6RprqN96AUNnupw+Zhx/LGl0ijwIBFocRIN6Z/+ZLFFpTLeoot3raR4x53BK
-	 n6AyTbWQB1MuTS07wS6WQZcuGKAna0vnxSl/m+SOJ8uH1j8q2wRRVj2RX1eomNJjYb
-	 eJrE3iF6WBleQ==
+	b=ZL200nNPgfts9CYklTGCBByTb5/Q7SAoubfAXD1em6rPGk72YL4L/UyifMj04HZm7
+	 llICGwX0Bu3X/sDKbXBNhzYsdr6v5W1YpSiC8ayFll071gHWZ38mrcRPGK9JTYvqPJ
+	 J/OfBCS0eZGZ5KEwSDP6nJkhNHpFlv+O7bi+W025u7/DjbmpmDOfBMGP8/aXBtcc6x
+	 JyZvhotDIQ0W8kHVtUkHGxovTY6AQf0u1Zm40eQoTnpLbiHaUc+veo2KXSalzf3Ggx
+	 tW7nIg3bqaDfCJJDD9EL/009CEOMXk43UC3DSZa3O7cODQxLb5Gai/5rPX1DccafmJ
+	 1td38/cbpLO2Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6735AC43617;
-	Thu, 18 Apr 2024 01:30:29 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4169AC4361C;
+	Thu, 18 Apr 2024 02:10:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,42 +37,41 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: adopt BPF's approach to quieter builds
+Subject: Re: [PATCH net] selftests: kselftest_harness: fix Clang warning about
+ zero-length format
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171340382940.22183.477575234617803213.git-patchwork-notify@kernel.org>
-Date: Thu, 18 Apr 2024 01:30:29 +0000
-References: <20240411190534.444918-1-kuba@kernel.org>
-In-Reply-To: <20240411190534.444918-1-kuba@kernel.org>
+ <171340622826.10413.6848935617606326222.git-patchwork-notify@kernel.org>
+Date: Thu, 18 Apr 2024 02:10:28 +0000
+References: <20240416151048.1682352-1-kuba@kernel.org>
+In-Reply-To: <20240416151048.1682352-1-kuba@kernel.org>
 To: Jakub Kicinski <kuba@kernel.org>
-Cc: shuah@kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, seanjc@google.com, shuah@kernel.org,
+ keescook@chromium.org, usama.anjum@collabora.com,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 
 Hello:
 
-This patch was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 11 Apr 2024 12:05:34 -0700 you wrote:
-> selftest build is fairly noisy, it's easy to miss warnings.
-> It's standard practice to add alternative messages in
-> the Makefile. I was grepping for existing solutions,
-> and found that bpf already has the right knobs.
+On Tue, 16 Apr 2024 08:10:48 -0700 you wrote:
+> Apparently it's more legal to pass the format as NULL, than
+> it is to use an empty string. Clang complains about empty
+> formats:
 > 
-> Move them to lib.mk and adopt in net.
-> Convert the basic rules in lib.mk.
+> ./../kselftest_harness.h:1207:30: warning: format string is empty
+> [-Wformat-zero-length]
+>  1207 |            diagnostic ? "%s" : "", diagnostic);
+>       |                                 ^~
+> 1 warning generated.
 > 
 > [...]
 
 Here is the summary with links:
-  - selftests: adopt BPF's approach to quieter builds
-    https://git.kernel.org/netdev/net-next/c/6fc6d7f59376
+  - [net] selftests: kselftest_harness: fix Clang warning about zero-length format
+    https://git.kernel.org/netdev/net/c/caed8eba2215
 
 You are awesome, thank you!
 -- 
