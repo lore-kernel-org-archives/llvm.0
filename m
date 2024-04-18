@@ -1,173 +1,119 @@
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5591D4D9E8
-	for <llvm@lists.linux.dev>; Thu, 18 Apr 2024 16:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AA016C864;
+	Thu, 18 Apr 2024 17:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713456797; cv=none; b=Qpf7IPqnCiCledsGPY0txWC3V83E6Hb/mUxj+I0zSI4k7Cp9CkyP7PfPcDkfW9CgJ1M1muIeCM6Od4ODW9tuDdrTAe+vsrz3n3Qk+VnvEfyTP689CUFFvj8Kh0hcki/Jreks7JjpnD2t1GWMj5UHVbOKkypN/SO1Gaiiv8fCMVU=
+	t=1713462736; cv=none; b=IhA4Chy/XpKsI9FBPgq/nOApn2hM71xA2LFUSQti+C1BTCdJeK/gNEhrp4I16ZKor+vf5yZ8rpcYYNfgFvNPqcp/TuiZDXe+RYZdGaw5rkl3luYlvQ3ukRP0WZQqGoKQ39bQhXOSbajvmklyI3jxo1zGthPT+iXjWpU3xDR69WE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713456797; c=relaxed/simple;
-	bh=2j/tt4FELoPXxu6oGT+wYXft/Bc5Co0wfQzS4n8qNeY=;
+	s=arc-20240116; t=1713462736; c=relaxed/simple;
+	bh=FuurGdaMgzX2x9p9hW7DG1u1zyapQ60UbXomusCQDWw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ixVy47v0MrRYtGQV4qR4DDknIA0lGlQRPFSpxoQtz9OsvIXLCqKY3wDMfGbP2xc4EJsdcBud8IM6qXDa5uXzi9gLa2hjFJuBGKEH5/Q4v4Yd3HuPODtRtTYkve+0tS5vrZ2qWNStIz9YEL/7VYXjWHiVQ7WRgIsJ/5lwbdNzgPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ki5tzj/W; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=uvLGWe0QT8CsAy7lKUKbtGRkpj7MmrJm2HeNxC6/YCHHpIH4LoC8GYHwUFU99z8hKdj+KAu3vI2hdw3A+ctr113jAHF/8zcfvu4+fxLrhPa4OeukvfEdNcHD+4vijkU4m20JRRMq5Jew5BEhix5CIwP/Cg/qjQUqICDBtWp9HWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B1gWsDdC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ki5tzj/W"
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5aa2a74c238so645312eaf.3
-        for <llvm@lists.linux.dev>; Thu, 18 Apr 2024 09:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713456795; x=1714061595; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zKNKGkkmrlcOgstwo6bpkjzluuNRmELeIU3IiJZdw0o=;
-        b=ki5tzj/WGFRzKxnQYns4i5gyF1TH1E8hnOH21kILP9tLDg0yc4i1KRVC80GZ7rro7+
-         GBrZ/IJeM4XLHIzhAmVXXGKHKOJNclcsGTGXwITsVC+nSYhRWvL+RxLL4dXMGPtWiVC4
-         Fb3fz1Z1fY36LL/saaPasDS4WAD7gw3MxiObJ4SKXpk8oSu/alx7CfU5+448ldXsBPHK
-         xYQy+2qj9STkSb5lgnZv2IrfTapONKFwg5r9O/ZGQ+aahmxQx6ibyjLwLGrQtWRkVsO3
-         o0uK94z9VsSzQP0Y1OjIxfe4t9MFPnSI2xZZKVNaaDhiPBZOXZAVUSrGPinGoQxniyFU
-         Vs4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713456795; x=1714061595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zKNKGkkmrlcOgstwo6bpkjzluuNRmELeIU3IiJZdw0o=;
-        b=T3Y4EmbrE9nauohsOcErYYvYhlTOdu3/Dlsj5ewTP7YZP8dQ/xg9IF8k9UfNPSpQNi
-         heYUrQDc0jIb4IIQb+tIu6FcZAJ3WpaW9jYhmp3mDE7coLNW1QbX2CUHSViwbJtuEskt
-         MoCdJvTZtIR2i+JMyLYThFZQv66GT1OYx7ws8I/2Oz6HZ5ufNWcoV1ywzMLWTaVB1Z1u
-         4eOpyqrOIbMJHVQDsiB8IS5M4VWKY2rx74ronx1D3MG01KP6L3j6hqjVFq6OzdzOXzyz
-         jzyryUR2kuIsNapVaFceVEJdDjtjRDxLpImwmbAuP+3hqFVteHZDo1WzveIApSrrjoFw
-         45Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCUCJTLmiEbBWntV0YsWw25sOQ/vW38pSOZYsvO7/UlforK7Yv8QpWom8cBlPfBntkPIdJN1kpcKjjlxK0/E1v38ASUmDA==
-X-Gm-Message-State: AOJu0YwLwRJAYZyWEimJAHJVi5yfXFjzLw6EKG+2JvR1nqg0r7woxg1Z
-	1UYe6iNzZk0/4ploSF63blpfn2nU703vIdBzKDijydVTj8xZCq1Lwm4mCPFRjkMM9GglL8GEFY8
-	UpzZ3rbFGGMMq85JDhPPt7SR/JOBwUDRrGWCg
-X-Google-Smtp-Source: AGHT+IEnHMmlOEYAlvEhzyPYXh7ES0tIP0u5S7vvI8f1doPoN/CpwPJqbDSVgC6bEnJM62YQznYdKFetw+fXFXQ6gFw=
-X-Received: by 2002:a05:6359:100f:b0:183:c2e1:9b4a with SMTP id
- ib15-20020a056359100f00b00183c2e19b4amr3609059rwb.18.1713456795007; Thu, 18
- Apr 2024 09:13:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B1gWsDdC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A1BC4AF09;
+	Thu, 18 Apr 2024 17:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713462736;
+	bh=FuurGdaMgzX2x9p9hW7DG1u1zyapQ60UbXomusCQDWw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B1gWsDdCM5chwfVvYQ7F1WiUne5F3k72zs6SUwyzDGG3ytxhuFQVregWM3Mxansm7
+	 +ht/aj0M3ydyimFo84Yh/Rpt0cqRZA59WPhuiBRzfU1M7gV/SnyRG6o0bH5IoceeFw
+	 ZJOAojA5PmIECZMYbeMYXK5OIlaKQeVjU4kq6D/pvA89TNd0zFKZwgP4jKT+JaN0kU
+	 qM/FtnjswkoWbARZBmCiotULJEIeVyaugwBAWEQo0+FpSQi3uPgamSBPVDIGDA1wrt
+	 0egIIyTkEeMOWpfxjwav2jQdH/G0q3Gaj0UkKGb8kdcUuzLwZ+W67XUWQdBnGeW8TG
+	 Jfxxrpz5yu1qA==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-518e2283bd3so1745937e87.1;
+        Thu, 18 Apr 2024 10:52:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUB440ATsJJQwT9GzOmVbPQwSKmyMkN49lPdgm+AxcdTEEOkfErXy4wAwW40tTCabkkgiPaG7exxeFb+/t3AeZgLI3tanlHS86UggLKJQeUhvZx4YjHCxf6iRXNO+o=
+X-Gm-Message-State: AOJu0YzzcgcYXeQGPBrLmcs4wMkbOp9Cb7lP4r2BDg9IOPMQVQS6sjZa
+	jYxTHuLZN8JNU1Qx+8tByTOlGLJ9DriwqSRkMAqaKpRqSBU+XXOrUAMTVoP0HlMfFDQZMapUIbk
+	Cgd5+/WD5cEYt1ZT6Mbfry+xIOwk=
+X-Google-Smtp-Source: AGHT+IFgOoZ35fIoBRDwtYB/gUP3OwO3ayk4YzHoyfLfTWb9cECzk627m65adD5U6JRBjMeAd8GzGefyc7XUTyMezvE=
+X-Received: by 2002:a19:9148:0:b0:519:a55:7ee7 with SMTP id
+ y8-20020a199148000000b005190a557ee7mr2561185lfj.26.1713462734773; Thu, 18 Apr
+ 2024 10:52:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org> <20240417-arm32-cfi-v6-10-6486385eb136@linaro.org>
-In-Reply-To: <20240417-arm32-cfi-v6-10-6486385eb136@linaro.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 18 Apr 2024 09:12:36 -0700
-Message-ID: <CABCJKufKoDOrPUpKFXBnoNEuQ8gJ7d1zHn=H-gtLoLX=02viUA@mail.gmail.com>
-Subject: Re: [PATCH v6 10/11] ARM: hw_breakpoint: Handle CFI breakpoints
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Russell King <linux@armlinux.org.uk>, Kees Cook <keescook@chromium.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev
+References: <20240417-x86-fix-kexec-with-llvm-18-v1-0-5383121e8fb7@kernel.org>
+ <46343CD5-24D6-46BF-92A7-0B0FA0E6937D@alien8.de> <CAKwvOd=3Jrzju++=Ve61=ZdeshxUM=K3-bGMNREnGOQgNw=aag@mail.gmail.com>
+ <CAMj1kXH+rNU4pa0ywcgkohXBu4G+iCXML_s9WVJW03ZRwtwW-w@mail.gmail.com>
+In-Reply-To: <CAMj1kXH+rNU4pa0ywcgkohXBu4G+iCXML_s9WVJW03ZRwtwW-w@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 18 Apr 2024 19:52:03 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE_1STgZot48Fb_AKb1omMqDFg=65LcFjNAW+6vrLfpBQ@mail.gmail.com>
+Message-ID: <CAMj1kXE_1STgZot48Fb_AKb1omMqDFg=65LcFjNAW+6vrLfpBQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] x86/purgatory: Avoid kexec runtime warning with LLVM 18
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Borislav Petkov <bp@alien8.de>, Arthur Eubanks <aeubanks@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, morbo@google.com, 
+	justinstitt@google.com, song@kernel.org, ribalda@chromium.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+	ns <0n-s@users.noreply.github.com>, Fangrui Song <maskray@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Thu, 18 Apr 2024 at 17:59, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Thu, 18 Apr 2024 at 17:44, Nick Desaulniers <ndesaulniers@google.com> =
+wrote:
+> >
+> > On Thu, Apr 18, 2024 at 4:15=E2=80=AFAM Borislav Petkov <bp@alien8.de> =
+wrote:
+> > > How much of this silliness should we expect now for other parts of th=
+e kernel?
+> >
+> > Looks like ARCH=3Dpowerpc sets -mcmodel=3Dlarge for modules and ARCH=3D=
+um
+> > does for the whole kernel. So that LLVM change may have implications
+> > for those 2 other architectures.  Not sure we've had any bug reports
+> > or breakage in CI yet, like we have for x86+kexec.
+> >
+> > > Can we turn this off?
+> >
+> > Maybe we need to revisit
+> > commit e16c2983fba0 ("x86/purgatory: Change compiler flags from
+> > -mcmodel=3Dkernel to -mcmodel=3Dlarge to fix kexec relocation errors")
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?id=3De16c2983fba0fa6763e43ad10916be35e3d8dc05
+> >
+> > at least the -mcmodel=3Dkernel addition (since that patch added a few
+> > additional compiler flags that still LGTM).
+> >
+> ...
+>
+> > + Fangrui, Ard, who might know of alternative solutions to
+> > -mcmodel=3Dlarge for e16c2983fba0.
+> >
+>
+> I think it would be better to use -mcmodel=3Dsmall -fpic. As Nick
+> explains, the large code model is really more suitable for executables
+> that span a large memory range. The issue with the purgatory seems to
+> be that it can be placed anywhere in memory, not that it is very big.
+>
+> -mcmodel=3Dsmall -fpic is what user space typically uses, so it is much
+> less likely to create problems.
+>
+> Note that I have been looking into whether we can build the entire
+> kernel with -fpic (for various reasons). There are some issues to
+> resolve there, mostly related to per-CPU variables and the per-CPU
+> stack protector, but beyond that, things work happily and the number
+> of boot time relocations drops dramatically, due to the use of
+> RIP-relative references. So for the purgatory, I wouldn't expect too
+> many surprises.
+>
 
-On Wed, Apr 17, 2024 at 1:31=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> This registers a breakpoint handler for the new breakpoint type
-> (0x03) inserted by LLVM CLANG for CFI breakpoints.
->
-> If we are in permissive mode, just print a backtrace and continue.
->
-> Example with CONFIG_CFI_PERMISSIVE enabled:
->
-> > echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
-> lkdtm: Performing direct entry CFI_FORWARD_PROTO
-> lkdtm: Calling matched prototype ...
-> lkdtm: Calling mismatched prototype ...
-> CFI failure at lkdtm_indirect_call+0x40/0x4c (target: 0x0; expected type:=
- 0x00000000)
-> WARNING: CPU: 1 PID: 112 at lkdtm_indirect_call+0x40/0x4c
-> CPU: 1 PID: 112 Comm: sh Not tainted 6.8.0-rc1+ #150
-> Hardware name: ARM-Versatile Express
-> (...)
-> lkdtm: FAIL: survived mismatched prototype function call!
-> lkdtm: Unexpected! This kernel (6.8.0-rc1+ armv7l) was built with CONFIG_=
-CFI_CLANG=3Dy
->
-> As you can see the LKDTM test fails, but I expect that this would be
-> expected behaviour in the permissive mode.
->
-> We are currently not implementing target and type for the CFI
-> breakpoint as this requires additional operand bundling compiler
-> extensions.
->
-> CPUs without breakpoint support cannot handle breakpoints naturally,
-> in these cases the permissive mode will not work, CFI will fall over
-> on an undefined instruction:
->
-> Internal error: Oops - undefined instruction: 0 [#1] PREEMPT ARM
-> CPU: 0 PID: 186 Comm: ash Tainted: G        W          6.9.0-rc1+ #7
-> Hardware name: Gemini (Device Tree)
-> PC is at lkdtm_indirect_call+0x38/0x4c
-> LR is at lkdtm_CFI_FORWARD_PROTO+0x30/0x6c
->
-> This is reasonable I think: it's the best CFI can do to ascertain
-> the the control flow is not broken on these CPUs.
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Tested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  arch/arm/include/asm/hw_breakpoint.h |  1 +
->  arch/arm/kernel/hw_breakpoint.c      | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 31 insertions(+)
->
-> diff --git a/arch/arm/include/asm/hw_breakpoint.h b/arch/arm/include/asm/=
-hw_breakpoint.h
-> index 62358d3ca0a8..e7f9961c53b2 100644
-> --- a/arch/arm/include/asm/hw_breakpoint.h
-> +++ b/arch/arm/include/asm/hw_breakpoint.h
-> @@ -84,6 +84,7 @@ static inline void decode_ctrl_reg(u32 reg,
->  #define ARM_DSCR_MOE(x)                        ((x >> 2) & 0xf)
->  #define ARM_ENTRY_BREAKPOINT           0x1
->  #define ARM_ENTRY_ASYNC_WATCHPOINT     0x2
-> +#define ARM_ENTRY_CFI_BREAKPOINT       0x3
->  #define ARM_ENTRY_SYNC_WATCHPOINT      0xa
->
->  /* DSCR monitor/halting bits. */
-> diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpo=
-int.c
-> index dc0fb7a81371..ce7c152dd6e9 100644
-> --- a/arch/arm/kernel/hw_breakpoint.c
-> +++ b/arch/arm/kernel/hw_breakpoint.c
-> @@ -17,6 +17,7 @@
->  #include <linux/perf_event.h>
->  #include <linux/hw_breakpoint.h>
->  #include <linux/smp.h>
-> +#include <linux/cfi.h>
->  #include <linux/cpu_pm.h>
->  #include <linux/coresight.h>
->
-> @@ -903,6 +904,32 @@ static void breakpoint_handler(unsigned long unknown=
-, struct pt_regs *regs)
->         watchpoint_single_step_handler(addr);
->  }
->
-> +#ifdef CONFIG_CFI_CLANG
-> +static void hw_breakpoint_cfi_handler(struct pt_regs *regs)
-> +{
-> +       /* TODO: implementing target and type requires compiler work */
-> +       unsigned long target =3D 0;
-> +       u32 type =3D 0;
-> +
-> +       switch (report_cfi_failure(regs, instruction_pointer(regs), &targ=
-et, type)) {
+Replacing -mcmodel=3Dlarge in PURGATORY_CFLAGS with
 
-Nit: To make the error message a bit cleaner, you can use
-report_cfi_failure_noaddr(...) instead, and maybe you can expand the
-comment to explain why target information isn't trivially available
-right now?
+--mcmodel=3Dsmall -fpic -fvisibility=3Dhidden
 
-Sami
+seems to do the trick for me.
