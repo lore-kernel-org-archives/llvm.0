@@ -1,75 +1,99 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEA615E5AB;
-	Thu, 18 Apr 2024 11:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25025145B34
+	for <llvm@lists.linux.dev>; Thu, 18 Apr 2024 13:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713438944; cv=none; b=qk5+24qXMG9CEsIKJ7xNuGFJkCG+S1FBCXC1t59uBIdGD7guSBQWJfsY8iO3NF/EHwyGYBz/sJ8JeLJX51FaNmBNllOeCCNAW0V2kMc8yBFzm1RhMTc+4x8RMN0/wsrCROAXA78e/k9bt+kE7CDJlwHzAOx4mSEEHN60wYktzME=
+	t=1713445299; cv=none; b=NKCs3HBYMmLEtVq1w+oFPc3OKPBoGMDK04Kj37MAdXAy8LC9VOnApS3b6Jy0RVMLtWjo9U5KqEuLuGZ7bGy8PIRQczX1aehwYjUW4C5Ynnf/6Gy1vVqlZQV639OVpq2Z5u2V7VmUOYHuhRMHmGUy0g41EF0wgY3udY58zr+dMo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713438944; c=relaxed/simple;
-	bh=p/1VN5Ulog7SUvFAyS3pCuUF74jV5BsFRqhBTaFyrX4=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Qk5FJ82314dgO3GLlYC4A/4Os0ijjFC+Hm+eBq23HEzDaU558fImk0YULAbDm+9OAGA6j+6jFxhVuf8zwrjrCwzhW58wQgNIBNwzag3sHdIsahxSc3kNq504HoSbs7Bk2yyqhUjqSnDWhJMEVwyne74hwTD9HgGozTJphtH4W4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 85F2940E024C;
-	Thu, 18 Apr 2024 11:15:40 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 2p-1DjKTukcD; Thu, 18 Apr 2024 11:15:36 +0000 (UTC)
-Received: from [127.0.0.1] (dynamic-176-005-029-198.176.5.pool.telefonica.de [176.5.29.198])
+	s=arc-20240116; t=1713445299; c=relaxed/simple;
+	bh=/XJcPlw0F03P3amsg0KmHILuo/lC6Cw5M2DfUOpYyuc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Bd5qFzFoIMWba6AQhhd9I+b5igxeqJInaAgN9/CGa2J7AcjvTOjqqOk3bl7hxJlAz50aduyZI2ahlV7FOKTORtVFU1jxiUj6zat6OG5vso2DyM0j9nHOx9xH1qBRvPqAfdPitm/MPdmf2zNl4W5UNlol6MyWx+OxbuOYN2qgIds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=q9TFzCh7; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="q9TFzCh7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1713445289;
+	bh=vNeZ/qdX3LOH0LHZJhAOcqMpEwfgHMqhf2DU3H1Xszg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=q9TFzCh7EhJg+m9fj6qudX6Ks+Uct3uWBknTCV37uU8cbakd81QmCpmVRG0NOIxQ5
+	 uNQKi+KMBjdkP9ELAPneTQiXG4RWeLhPSORHg+e8+iojKQsMo6Vww7EZd4Vo8nYxXj
+	 i9C+ou7rNcmrbkiJh9KKLdHzBGmSWTBXLplv230qwENBOzJZa0EmJhDvcx7MlY6f+x
+	 Kxij9OwVQI817aMiTT0xC/Q13B2je9ictqe0EMnSezFUNR9C4h+0VWvJD9vykrSyNe
+	 Xx2VRrYHX09AAOcTymVN0OEteduzRVIKXU3HOEjff+X4D+7mpxgl26SJk8w/e/NwSp
+	 b5yKqkqbp1D7w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ACA9B40E0177;
-	Thu, 18 Apr 2024 11:15:14 +0000 (UTC)
-Date: Thu, 18 Apr 2024 13:14:35 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com
-CC: x86@kernel.org, hpa@zytor.com, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, song@kernel.org, ribalda@chromium.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev,
- ns <0n-s@users.noreply.github.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_0/2=5D_x86/purgatory=3A_Avoi?=
- =?US-ASCII?Q?d_kexec_runtime_warning_with_LLVM_18?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20240417-x86-fix-kexec-with-llvm-18-v1-0-5383121e8fb7@kernel.org>
-References: <20240417-x86-fix-kexec-with-llvm-18-v1-0-5383121e8fb7@kernel.org>
-Message-ID: <46343CD5-24D6-46BF-92A7-0B0FA0E6937D@alien8.de>
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VKyZw5zyrz4wyx;
+	Thu, 18 Apr 2024 23:01:28 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+ linux-kernel@vger.kernel.org, linuxppc-dev
+ <linuxppc-dev@lists.ozlabs.org>, "Aneesh Kumar K . V"
+ <aneesh.kumar@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, Kees
+ Cook <keescook@chromium.org>, Niklas Schnelle <schnelle@linux.ibm.com>,
+ clang-built-linux <llvm@lists.linux.dev>, Nick Desaulniers
+ <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Jeff Xu
+ <jeffxu@chromium.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Dan
+ Carpenter <dan.carpenter@linaro.org>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Baoquan He
+ <bhe@redhat.com>, Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH] powerpc: drop port I/O helpers for CONFIG_HAS_IOPORT=n
+In-Reply-To: <59473eb6-1707-4bbf-85a3-ba4835f3ee7f@app.fastmail.com>
+References: <20240416153331.1617772-1-arnd@kernel.org>
+ <878r1bb2zj.fsf@mail.lhotse>
+ <59473eb6-1707-4bbf-85a3-ba4835f3ee7f@app.fastmail.com>
+Date: Thu, 18 Apr 2024 23:01:25 +1000
+Message-ID: <8734ribza2.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On April 17, 2024 11:53:44 PM GMT+02:00, Nathan Chancellor <nathan@kernel=
-=2Eorg> wrote:
->Hi all,
+"Arnd Bergmann" <arnd@arndb.de> writes:
+> On Thu, Apr 18, 2024, at 08:26, Michael Ellerman wrote:
+>> Arnd Bergmann <arnd@kernel.org> writes:
 >
->After LLVM commit d8a04398f949 ("Reland [X86] With large code model, put
->functions into =2Eltext with large section flag (#73037)") [1], which
->landed in the 18=2Ex cycle, there is a runtime warning when loading a
->kernel via kexec due to the presence of two text sections (=2Etext and
->=2Eltext)=2E
+>> @@ -692,6 +692,7 @@ static inline void name at                          
+>>         \
+>>  #define writesw writesw
+>>  #define writesl writesl
+>>
+>> +#ifdef CONFIG_HAS_IOPORT
+>>  #define inb inb
+>>  #define inw inw
+>>  #define inl inl
+>> @@ -704,6 +705,8 @@ static inline void name at                          
+>>         \
+>>  #define outsb outsb
+>>  #define outsw outsw
+>>  #define outsl outsl
+>> +#endif // CONFIG_HAS_IOPORT
+>> +
+>>  #ifdef __powerpc64__
+>>  #define readq  readq
+>>  #define writeq writeq
+>
+> I had included this at first, but then I still ran into
+> the same warnings because it ends up pulling in the
+> generic outsb() etc from include/asm-generic/io.h
+> that relies on setting a non-NULL PCI_IOBASE.
 
-How much of this silliness should we expect now for other parts of the ker=
-nel?
+Yes you're right. The above fixes the gcc build, but not clang.
 
-Can we turn this off?
+So I think I'll just cherry pick f0a816fb12da ("/dev/port: don't compile
+file operations without CONFIG_DEVPORT") into my next and then apply
+this. But will see if there's any other build failures over night.
 
-Why does llvm enforce =2Eltext for large code models and why gcc doesn't d=
-o that? Why does llvm need to do that, what requirement dictates that?
-
-Thx=2E
-
---=20
-Sent from a small device: formatting sucks and brevity is inevitable=2E 
+cheers
