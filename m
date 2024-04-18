@@ -1,111 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265FD8F66;
-	Thu, 18 Apr 2024 03:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F3854F92;
+	Thu, 18 Apr 2024 05:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713409407; cv=none; b=dLQaXfdzMlZDGhEWrQIgNOuAJPzIMKlJmzir68nb/BC0QhcTaHUZcSeQrVfhOt9iMpSetsLpfFh9dLZtXngpJQOFeLvTJLkVmHQIFJQO230Xoe0GmUDXtzKHmKf56NuQNTJ2ylSYGjZaZoQhsuf8nP8+wdGWCii2NtE/L5W8Wyw=
+	t=1713418822; cv=none; b=e9ZfYdtpmQNhgbWeshdXzCB73Ri0e6fxFhnuIOJWP1NcekmnmdtQqMWrLNro+5TAnuWCs1pz2/TO5cIgTgY5ya9PHpJl5JvDAFeStOIr0TKZ+MJST4l8dCKn7obdCHOvYTR00MVlfOSmpQliMc87IUpHupcMVq8D5ZODuNtClo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713409407; c=relaxed/simple;
-	bh=kfEJQjTwgGJh4Zkx43Z0VD1r+pL2rJMimsZzyjREVEM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=idbxgrIsfyS/1CyxhANwP59PhrAA7nkhxu0xyZQ2ermbCrKljh5KOAhva0SIVVADTWhU5jurGaLCbweT0OL7tZl4p1dNZjqOYxfQQZibJneayX6xGCxa5qsE2JGRF9JfAsPXF0ubJ2VOJ2aUNIn0FFqHw6cG+5sELUrsM6/CU58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DyuRU+nb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713418822; c=relaxed/simple;
+	bh=bTjx8rndt/PSO/6dNSTUflavw32jLsFtA0qjmagKIOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g2kg+tcjMU+N3l5kPANk6jMJQyaKVcCAHi4jnj29ziUbVOe+TqLcXWxvjIqTdCpsNiqvJsbrPUmYkWqeShce1SSDQr5y7cCm9MV4B/uE6lRwb9QRkp098MhX5FBNA07K8SZ8MRSmFUb9icBS2/KJD0OR9EamtXsI1V7l7bzX4M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e5w+MLyp; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DyuRU+nb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1774C072AA;
-	Thu, 18 Apr 2024 03:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713409406;
-	bh=kfEJQjTwgGJh4Zkx43Z0VD1r+pL2rJMimsZzyjREVEM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DyuRU+nbBlfEefDgkjYMaeHuZxrD+lMlRPMalkQi5IC69YYTWZ6zEdir/RupkAap0
-	 17RzMJVBVaskBzoD8lhK/LtZy2kUP7k21+CDiY0gBXnPmT64owTkQbxHdf0JyAPAYx
-	 tx0a4zLTnGo0CFjFFObQkeT4Qn82jY+d6vAZT/fd9qDpC/vddsmWPQ9f5r1pkH+Cb2
-	 yh2V+NoEvWckhqYS09yUlUYUkVb0oMebHG0BQarTzSCq4o2/7SwOGQyDEXewhte9Sg
-	 Lhmm69YwKDOmE0MM0CShULZ5v9DJpyzWisMvETTr/zB7h29YiU62z1Gam5322XaIMS
-	 pcQhx3sXD225A==
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a555b203587so28960266b.3;
-        Wed, 17 Apr 2024 20:03:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVBIskmZolVqDZTf6MiIO/0JbY/9vbjwI6mrPnXPxlL3RxIlwtEDZnjWTAZD6e6/h893CFyjw1aZdm6vM1r1RIEHYJTCSbsKnTA2OgI/8p3I4sshkKEhuqG4UTE8dDAiw==
-X-Gm-Message-State: AOJu0Yw+CW6+a8FG88BlNj6rmg9zYkeJjrPw0EuzDd81vovJ1cHgfJS0
-	U6qeL7Ql2J4Rwbo+6+jLfWMpNj3a1Q7OMtFxc+AuHlbdiTWmu7D3i4Yd90FCbnErLf9+uwl9y1l
-	+l1PxcKwMopRseqhXKCBsyuaslMA=
-X-Google-Smtp-Source: AGHT+IEGnzxcLzKogVMafWt/io2wledXtCG2nYVIAR7Lu4aQp3Gm16la5nxK3JKrgyWlsMhlzCjZG627hEMlqWAR0dk=
-X-Received: by 2002:a17:906:f8da:b0:a55:596b:c9ca with SMTP id
- lh26-20020a170906f8da00b00a55596bc9camr830982ejb.39.1713409405224; Wed, 17
- Apr 2024 20:03:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e5w+MLyp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713418820; x=1744954820;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bTjx8rndt/PSO/6dNSTUflavw32jLsFtA0qjmagKIOI=;
+  b=e5w+MLypU0FtYLWzw/otZVFEuIJWNzvoAByALf+Z47vJBhw3mmnsOrMX
+   QSOnw5aakW9PAv5N1WlAaww9NU/PcSGe0lCGYV7MPx8gMZBG35rWrUB5h
+   iCDZgFunMd39OYR/Ik58VlFUe+M/nbHu7ptk90EbJ+sg3RwI4Bgj/XHAw
+   kNG8PyS0fm4OlBhWw7YC9l6Fy2l2KAkatudL9RGtne9ihwZdYgzK/lKLB
+   3BeP3jszrqWIejXPC84mRHxUcCzQI4I/SFJMz/3e4Zx1X+YOkl7hcpdPv
+   4FBgY5RDbGj96MmlWJXYLxJ445aSDTcACwwzycMJMs6XYYPMJVC1uourn
+   Q==;
+X-CSE-ConnectionGUID: PgfAB2bwQ1CzFgw0W4N6nA==
+X-CSE-MsgGUID: XDKsifYRQZCfjQWgbxSJHg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="19549966"
+X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
+   d="scan'208";a="19549966"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 22:40:19 -0700
+X-CSE-ConnectionGUID: ofsmR+8sRcG/x+ClL/kPeQ==
+X-CSE-MsgGUID: QhL2448uQ9S0pi825yf5Fw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
+   d="scan'208";a="22958156"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 17 Apr 2024 22:40:14 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rxKVF-0007Ls-1r;
+	Thu, 18 Apr 2024 05:40:10 +0000
+Date: Thu, 18 Apr 2024 13:39:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Woojung Huh <woojung.huh@microchip.com>,
+	Arun Ramadoss <arun.ramadoss@microchip.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Russell King <linux@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	UNGLinuxDriver@microchip.com,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH net-next v1 3/4] net: phy: realtek: provide TimeSync data
+ path delays for RTL8211E
+Message-ID: <202404181340.89g7TIG1-lkp@intel.com>
+References: <20240417164316.1755299-4-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240416144926.599101-1-david@redhat.com> <CANiq72kACt+FfeYXJxfQpmGH=uPqkDA0oprfnebw52VSKyn7kQ@mail.gmail.com>
- <CAAhV-H5mt0GaaZ3s44CYb4aKqYeDYm+Q16hY__FdQ6xYJh+bgg@mail.gmail.com> <20240417135834.ddaa9c038a8a8af2bd9e39aa@linux-foundation.org>
-In-Reply-To: <20240417135834.ddaa9c038a8a8af2bd9e39aa@linux-foundation.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 18 Apr 2024 11:03:18 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4O6_9Ukgz-GrPcWTq3cAN2c1OkXQWRbUgMR2ZwUuQQHA@mail.gmail.com>
-Message-ID: <CAAhV-H4O6_9Ukgz-GrPcWTq3cAN2c1OkXQWRbUgMR2ZwUuQQHA@mail.gmail.com>
-Subject: Re: [PATCH v1] LoongArch/tlb: fix "error: parameter 'ptep' set but
- not used" due to __tlb_remove_tlb_entry()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, David Hildenbrand <david@redhat.com>, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-arch@vger.kernel.org, 
-	loongarch@lists.linux.dev, llvm@lists.linux.dev, 
-	Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240417164316.1755299-4-o.rempel@pengutronix.de>
 
-Hi, Andrew,
+Hi Oleksij,
 
-On Thu, Apr 18, 2024 at 4:58=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Wed, 17 Apr 2024 11:18:27 +0800 Huacai Chen <chenhuacai@kernel.org> wr=
-ote:
->
-> > On Wed, Apr 17, 2024 at 3:25=E2=80=AFAM Miguel Ojeda
-> > <miguel.ojeda.sandonis@gmail.com> wrote:
-> > >
-> > > On Tue, Apr 16, 2024 at 4:49=E2=80=AFPM David Hildenbrand <david@redh=
-at.com> wrote:
-> > > >
-> > > > With LLVM=3D1 and W=3D1 we get:
-> > >
-> > > Hmm... I didn't need W=3D1 to trigger it (LLVM 18.1.2).
-> > >
-> > > > Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-> > >
-> > > Thanks, looks good to me -- built-tested:
-> > >
-> > > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> > > Tested-by: Miguel Ojeda <ojeda@kernel.org>
-> > >
-> >
-> > Queued for loongarch-fixes, thanks.
-> >
->
-> (top-posting repaired so I can sensibly reply to this.  Please avoid
-> top-posting!)
-Sorry, I only top-posting with "Queued ...", "Applied ..." because I
-saw others do like this. If this is also unacceptable, I will not do
-it again.
+kernel test robot noticed the following build warnings:
 
->
-> I'd rather carry this in mm.git with your ack please.  Otherwise mm.git
-> won't compile without it and if I retain this patch we'll get
-> duplicate-patch emails from Stephen and I won't be able to merge
-> mm.git's mm-nonmm-stable tree into Linus until loongarch-fixes has
-> merged.
-loongarch-next always merges loongarch-fixes, so when I apply a patch
-it will be in linux-next. Now this patch I have already applied to
-loongarch-fixes and loongarch-next. In future, I will give an Acked-by
-for you if needed.
+[auto build test WARNING on net-next/main]
 
-Huacai
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/net-phy-Add-TimeSync-delay-query-support-to-PHYlib-API/20240418-004607
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240417164316.1755299-4-o.rempel%40pengutronix.de
+patch subject: [PATCH net-next v1 3/4] net: phy: realtek: provide TimeSync data path delays for RTL8211E
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240418/202404181340.89g7TIG1-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240418/202404181340.89g7TIG1-lkp@intel.com/reproduce)
 
->
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404181340.89g7TIG1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/phy/realtek.c:278:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   drivers/net/phy/realtek.c:278:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
+
+
+vim +278 drivers/net/phy/realtek.c
+
+   245	
+   246	static int rtl8211e_get_timesync_data_path_delays(struct phy_device *phydev,
+   247							  struct phy_timesync_delay *tsd)
+   248	{
+   249		phydev_warn(phydev, "Time stamping is not supported\n");
+   250	
+   251		switch (phydev->interface) {
+   252		case PHY_INTERFACE_MODE_RGMII:
+   253		case PHY_INTERFACE_MODE_RGMII_RXID:
+   254		case PHY_INTERFACE_MODE_RGMII_TXID:
+   255		case PHY_INTERFACE_MODE_RGMII_ID:
+   256			/* The values are measured with RTL8211E and LAN8841 as link
+   257			 * partners and confirmed with i211 to be in sane range.
+   258			 */
+   259			if (phydev->speed == SPEED_1000) {
+   260				tsd->tx_min_delay_ns = 326;
+   261				tsd->rx_min_delay_ns = 406;
+   262				return 0;
+   263			} else if (phydev->speed == SPEED_100) {
+   264				tsd->tx_min_delay_ns = 703;
+   265				tsd->rx_min_delay_ns = 621;
+   266				return 0;
+   267			} else if (phydev->speed == SPEED_10) {
+   268				/* This value is suspiciously big, with atypical
+   269				 * shift to Egress side. This value is confirmed
+   270				 * by measuring RGMII-PHY-PHY-RGMII path delay.
+   271				 * Similar results are confirmed with LAN8841 and i211
+   272				 * as link partners.
+   273				 */
+   274				tsd->tx_min_delay_ns = 920231;
+   275				tsd->rx_min_delay_ns = 1674;
+   276				return 0;
+   277			}
+ > 278		default:
+   279			break;
+   280		}
+   281	
+   282		phydev_warn(phydev, "Not tested or not supported modes for path delay values\n");
+   283	
+   284		return -EOPNOTSUPP;
+   285	}
+   286	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
