@@ -1,68 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90A9152E12;
-	Thu, 18 Apr 2024 09:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626A815AAAD;
+	Thu, 18 Apr 2024 09:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713432820; cv=none; b=as0LcRwbhfOj1eDswH8gP6xuYyW0BFDdZB1fwt7Z/prhBIl6t0iWp66eskGZJDm8i6yh3Dgo9CCeYfBZ2xdhBY4BR2cqc2+6sX2qtkQfgglME2mGp6rHmjYFpy2Kw+fW35Tv9Zy291vvaaQLhl29HOArnx5mUKLqL5lCHenHYes=
+	t=1713434095; cv=none; b=BHw0meIJxoNSTgxeFK5PkBIAzRVre1SUgWh7Z3zKMmddQUQIu9hMPqNqloBnFo7UpJ7W71iQY/kP3pnFtoeDqOE5rNSFNQ93Tg4MaIZp5+TexgmkczVoXdJshpw8OnEFxH4IUsH17dLM2Kg6BRYgse/J4I15+juo91sIaAlagfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713432820; c=relaxed/simple;
-	bh=E0biilYrIbmIjH3B+Vc73MXIyGjCLEOCwMUtZLWWAh8=;
+	s=arc-20240116; t=1713434095; c=relaxed/simple;
+	bh=9I8hH459E4/yCH911llo33KhdbxdMW+TcQhVfoAbi38=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jFlxiwdjtLHb0bs/z3SBTDRCercIa9777yp7t7vbIiJC6RgVfnZEXZ2pQVZ44YT21a1YZ/j/v/N0FVkheQy7NHDuKHxEkmHuCvn/ZQGIRaYFxgOiqREHX6WHtwkeU6rdCRQDTzDIUxE8vpJ6kWszTKSpj7hSpQqDkQnxdTFRhbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j0oy+b4K; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=mFggmuGUDH2sQQ8hS6sdWeniu3URvwn4rSeMKjfPZs8VTQof3xmMiaQCx+kV4RA6kS4gIpzlg4tR0NzKiDCGBFKaHzGpjSYlIqM2XNta3MJ1XIxAhADkxtsOYgAYtalvQUvr56T4oEQB7ltd3keRprxkni/0ZUHITS/7RHEMTmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=n24fMwNu; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j0oy+b4K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713432819; x=1744968819;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E0biilYrIbmIjH3B+Vc73MXIyGjCLEOCwMUtZLWWAh8=;
-  b=j0oy+b4KY9aGnaWIvwzWCeGhyQIBrH4P0Pf7Pgqvpe79MI2EDFw3eAoq
-   Z4rJaauzo4/lX/SuXlWZdvelykORPwxg1rRjvzQlLVrICirGKoVYXT9Zp
-   JPGNfHzMZcvuIXnPrPLi/Wgae7JByoR7GPtTXFjmBtqr0WXZVLR3h3XqH
-   DjdXDq0J2oElGN7qgncNwZs5bMDmSNtNAekkhTlI/UiwAhlmpJE2S8zxr
-   ClBqvDiijefyi4q0EA/Rgoy8ha8g3B2+32Riz4Z8ScklxSoqc/S7yuITE
-   4d6AKMaHRWnHkMKb6kHoFklYnMgPHt4ZsXvEG6hpkxS6Ax/JW7cmTibVB
-   g==;
-X-CSE-ConnectionGUID: WvM9aLdUS4isn0sII6egGg==
-X-CSE-MsgGUID: NJm2A/WkQ3+eGZMAUSOsNA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="19529247"
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="19529247"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2024 02:33:38 -0700
-X-CSE-ConnectionGUID: qDdLuTCaQ/iJkG+SFZJSrA==
-X-CSE-MsgGUID: A2YnpKPSSuaRUJmdDI7L4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="22795965"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2024 02:33:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rxO95-00000000HiX-38KV;
-	Thu, 18 Apr 2024 12:33:31 +0300
-Date: Thu, 18 Apr 2024 12:33:31 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Aubin Constans <aubin.constans@microchip.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: Re: [PATCH v1 4/5] mmc: atmel-mci: Incapsulate used to be a platform
- data into host structure
-Message-ID: <ZiDo618dp5EWnwPc@smile.fi.intel.com>
-References: <20240417165708.2965612-5-andriy.shevchenko@linux.intel.com>
- <202404180428.bZDYDFAE-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="n24fMwNu"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43I9dEp3025374;
+	Thu, 18 Apr 2024 09:54:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=ijedH553tLeWMy89yyjaizY100lbOCvInR7Snt27o1k=;
+ b=n24fMwNuPSe2T6DqezjKBq80RVACVJAWe4I7pTrlkr0hjnojWwO+Uc4D+vWkVELF+pDK
+ 601JcpJDye0GbdXH18Jv6rE5oFUYCmQpwP5SkupNRCdqK4SI8yf7BoFb01A8aSoluiXy
+ K1455uI8u1ONkfbtdLaWh1uAeCWx4OEONVlo6D6AdrJwNq9C8ys7no0mm1N4fF2SaBdB
+ jUPoNmwDlB1eqcNgi0MUc8yTlxKK6lBcvceDep6q9I90QwWCIFe3q70BWaS5h2uKkTqi
+ F53Rd9g3K57yBfaMudZOOde/xnSsoKOOTsLTvmPKxpMJTpjOT3UOKGq8wlU+eelClIez gg== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xk12cg13k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Apr 2024 09:54:46 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43I7YWqT018152;
+	Thu, 18 Apr 2024 09:54:46 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xg4ctj4xr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Apr 2024 09:54:45 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43I9seCa31326840
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 18 Apr 2024 09:54:42 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 999102004E;
+	Thu, 18 Apr 2024 09:54:40 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 50D252004B;
+	Thu, 18 Apr 2024 09:54:40 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.60])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu, 18 Apr 2024 09:54:40 +0000 (GMT)
+Date: Thu, 18 Apr 2024 11:54:38 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, arnd@arndb.de, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        wintera@linux.ibm.com, twinkler@linux.ibm.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 1/3] s390/vmlogrdr: Remove function pointer cast
+Message-ID: <20240418095438.6056-A-hca@linux.ibm.com>
+References: <20240417-s390-drivers-fix-cast-function-type-v1-0-fd048c9903b0@kernel.org>
+ <20240417-s390-drivers-fix-cast-function-type-v1-1-fd048c9903b0@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,42 +71,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202404180428.bZDYDFAE-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20240417-s390-drivers-fix-cast-function-type-v1-1-fd048c9903b0@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QjeqBBTYqMOd1_oCSuGV29-ZglmEKbWE
+X-Proofpoint-ORIG-GUID: QjeqBBTYqMOd1_oCSuGV29-ZglmEKbWE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-18_08,2024-04-17_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 mlxlogscore=999 suspectscore=0 impostorscore=0 clxscore=1011
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404180069
 
-On Thu, Apr 18, 2024 at 04:42:07AM +0800, kernel test robot wrote:
-> Hi Andy,
+On Wed, Apr 17, 2024 at 11:24:35AM -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR) after enabling
+> -Wcast-function-type-strict by default:
 > 
-> kernel test robot noticed the following build warnings:
+>   drivers/s390/char/vmlogrdr.c:746:18: error: cast from 'void (*)(const void *)' to 'void (*)(struct device *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>     746 |                 dev->release = (void (*)(struct device *))kfree;
+>         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   1 error generated.
 > 
-> [auto build test WARNING on soc/for-next]
-> [also build test WARNING on linus/master v6.9-rc4 next-20240417]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Add a standalone function to fix the warning properly, which addresses
+> the root of the warning that these casts are not safe for kCFI. The
+> comment is not really relevant after this change, so remove it.
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/mmc-atmel-mci-Get-rid-of-platform-data-leftovers/20240418-005915
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-> patch link:    https://lore.kernel.org/r/20240417165708.2965612-5-andriy.shevchenko%40linux.intel.com
-> patch subject: [PATCH v1 4/5] mmc: atmel-mci: Incapsulate used to be a platform data into host structure
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20240418/202404180428.bZDYDFAE-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240418/202404180428.bZDYDFAE-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202404180428.bZDYDFAE-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/mmc/host/atmel-mci.c:378: warning: Function parameter or struct member 'pdata' not described in 'atmel_mci'
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/s390/char/vmlogrdr.c | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
 
-Indeed. I'll fix this in next version, but will wait for others to comment on
-the real code and approach in general.
+> @@ -736,14 +740,7 @@ static int vmlogrdr_register_device(struct vmlogrdr_priv_t *priv)
+>  		dev->driver = &vmlogrdr_driver;
+>  		dev->groups = vmlogrdr_attr_groups;
+>  		dev_set_drvdata(dev, priv);
+> -		/*
+> -		 * The release function could be called after the
+> -		 * module has been unloaded. It's _only_ task is to
+> -		 * free the struct. Therefore, we specify kfree()
+> -		 * directly here. (Probably a little bit obfuscating
+> -		 * but legitime ...).
+> -		 */
 
--- 
-With Best Regards,
-Andy Shevchenko
+Why is the comment not relevant after this change? Or better: why is it not
+valid before this change, which is why the code was introduced a very long
+time ago? Any reference?
 
-
+I've seen the warning since quite some time, but didn't change the code
+before sure that this doesn't introduce the bug described in the comment.
