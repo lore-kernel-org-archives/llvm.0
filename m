@@ -1,162 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F3854F92;
-	Thu, 18 Apr 2024 05:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9270828DB7
+	for <llvm@lists.linux.dev>; Thu, 18 Apr 2024 05:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713418822; cv=none; b=e9ZfYdtpmQNhgbWeshdXzCB73Ri0e6fxFhnuIOJWP1NcekmnmdtQqMWrLNro+5TAnuWCs1pz2/TO5cIgTgY5ya9PHpJl5JvDAFeStOIr0TKZ+MJST4l8dCKn7obdCHOvYTR00MVlfOSmpQliMc87IUpHupcMVq8D5ZODuNtClo0=
+	t=1713419778; cv=none; b=N1VPuIc6fJneQx9JuwhwPPgdfb4tvwRmVGjYPa9RSQY+EIancsGalQQ8ReroQLfaSzLsuAwD6cxz+lWv4rjpxm9zTZGeK4GMePdB3xVfgU3q2OsoZFGb8FOwJZHaaMV0IoYp02APEaxrJ7F+EAB/UnsDiK3v+ANtNoiUGQTQ39E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713418822; c=relaxed/simple;
-	bh=bTjx8rndt/PSO/6dNSTUflavw32jLsFtA0qjmagKIOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g2kg+tcjMU+N3l5kPANk6jMJQyaKVcCAHi4jnj29ziUbVOe+TqLcXWxvjIqTdCpsNiqvJsbrPUmYkWqeShce1SSDQr5y7cCm9MV4B/uE6lRwb9QRkp098MhX5FBNA07K8SZ8MRSmFUb9icBS2/KJD0OR9EamtXsI1V7l7bzX4M4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e5w+MLyp; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713419778; c=relaxed/simple;
+	bh=T2kwc1WvGHMhE8zFhURGOBEJFlGN7YGjjoFLzP8/xaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ze+pjGNnYmGa3GZa29r/c9SV+TGB4HSK0oanpgI4lkJ9dufEerSorZAH2easAIazLa/rOGWuD53tXBD9emoks2r0y3QMDTfP1on1sILh/CO1CPBMTuJw8AO8LI2iwMvoeM2EZA2uk7+7va6x83IfHZ0f0MqG3yOOVJKESt3/msw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AvunwUFA; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e5w+MLyp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713418820; x=1744954820;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bTjx8rndt/PSO/6dNSTUflavw32jLsFtA0qjmagKIOI=;
-  b=e5w+MLypU0FtYLWzw/otZVFEuIJWNzvoAByALf+Z47vJBhw3mmnsOrMX
-   QSOnw5aakW9PAv5N1WlAaww9NU/PcSGe0lCGYV7MPx8gMZBG35rWrUB5h
-   iCDZgFunMd39OYR/Ik58VlFUe+M/nbHu7ptk90EbJ+sg3RwI4Bgj/XHAw
-   kNG8PyS0fm4OlBhWw7YC9l6Fy2l2KAkatudL9RGtne9ihwZdYgzK/lKLB
-   3BeP3jszrqWIejXPC84mRHxUcCzQI4I/SFJMz/3e4Zx1X+YOkl7hcpdPv
-   4FBgY5RDbGj96MmlWJXYLxJ445aSDTcACwwzycMJMs6XYYPMJVC1uourn
-   Q==;
-X-CSE-ConnectionGUID: PgfAB2bwQ1CzFgw0W4N6nA==
-X-CSE-MsgGUID: XDKsifYRQZCfjQWgbxSJHg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="19549966"
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="19549966"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 22:40:19 -0700
-X-CSE-ConnectionGUID: ofsmR+8sRcG/x+ClL/kPeQ==
-X-CSE-MsgGUID: QhL2448uQ9S0pi825yf5Fw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="22958156"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 17 Apr 2024 22:40:14 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rxKVF-0007Ls-1r;
-	Thu, 18 Apr 2024 05:40:10 +0000
-Date: Thu, 18 Apr 2024 13:39:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Woojung Huh <woojung.huh@microchip.com>,
-	Arun Ramadoss <arun.ramadoss@microchip.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Russell King <linux@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	UNGLinuxDriver@microchip.com,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH net-next v1 3/4] net: phy: realtek: provide TimeSync data
- path delays for RTL8211E
-Message-ID: <202404181340.89g7TIG1-lkp@intel.com>
-References: <20240417164316.1755299-4-o.rempel@pengutronix.de>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AvunwUFA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713419776;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=9mcSObTo+oSWNvrNt/RyyYqkoVTt6UuZm188jFrkTJc=;
+	b=AvunwUFA48eq/4tbTu3D87aLQcjcJHJTBSbUNft1Rjuqm/NoRp5IpzNWwubBqDVM5KD1CH
+	YqeHmLpJvMYoi5yD6EOyGJY2rtvoL/zc2QhOW03MlWjoG9WEWQjPp0oh8BsezhSFK2M5zx
+	FxNePA/bm+vgzE9GbjQvBxF9Uqcja/0=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-XKrBBWbWPxWYvPPVV_sv2g-1; Thu, 18 Apr 2024 01:56:14 -0400
+X-MC-Unique: XKrBBWbWPxWYvPPVV_sv2g-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2d9f829d4dbso3849031fa.2
+        for <llvm@lists.linux.dev>; Wed, 17 Apr 2024 22:56:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713419773; x=1714024573;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9mcSObTo+oSWNvrNt/RyyYqkoVTt6UuZm188jFrkTJc=;
+        b=EfX+aOvsWcrPQJ7pGAVMzxOHG6p0viCdYJ+iNbAIuynnCF/e4XgE/NonjXC57xBmZn
+         0sDPUYdKiccr2RB4NIVsCGQCzZR8LBd8TPJLFQURGQ0mV8+yi8ej+N2MBqaPrydFS5N3
+         ylRbSeVzpzMYwLkrdDQsgoHHrb//XGrYiDsm7HIhzexMt2pwR+whtXpiDXs4P9rk/D8j
+         2ho0tyfkajOsxT+sCJmDRPtuvfG9BpghJKZohl4t11eNrdazhF1q3kyPWp4lNQKRARTH
+         2e130GBgfPCjpfox43Am6Xeyk/FLnK8RNNEy0q7QkpMgVC9mFr7nIJFy6k2jjvN3d6c6
+         AqiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUh8aAd+vJYFLAkTvoxNYAUVLMLJ/83FfhXoHmIw6zTsd9SUsS7lrj1nPw7X0pnOUVfu1JOIclROqqMHEGxysTwm+084A==
+X-Gm-Message-State: AOJu0YyLFNb1qjIuXHo17zAh+Kamp/Hrratp80HgvmVpl62U5BenfLgn
+	eiw88DHdkIgEWmefBAf86Qt+D9yMEi1qFe/Wc7SV468HAKHOmt/g9lx7FqYr4vvv55O3IJjjdCK
+	sj1VSFpz2T7lSaU1jeSJ4rkz+HBVZyFhhpeeAeojnLdW8pQc584k=
+X-Received: by 2002:a05:651c:1254:b0:2d6:cbf2:ed2b with SMTP id h20-20020a05651c125400b002d6cbf2ed2bmr811166ljh.30.1713419773469;
+        Wed, 17 Apr 2024 22:56:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF6wl6xDkB0h+hgBhFpKeE0sOq4AODM9qZgArdknucZK1JTj4BUtVGhHSuiP1giuuphVfA1+w==
+X-Received: by 2002:a05:651c:1254:b0:2d6:cbf2:ed2b with SMTP id h20-20020a05651c125400b002d6cbf2ed2bmr811158ljh.30.1713419773091;
+        Wed, 17 Apr 2024 22:56:13 -0700 (PDT)
+Received: from [192.168.0.9] (ip-109-43-177-117.web.vodafone.de. [109.43.177.117])
+        by smtp.gmail.com with ESMTPSA id m25-20020a05600c3b1900b0041816c3049csm1386709wms.11.2024.04.17.22.56.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Apr 2024 22:56:12 -0700 (PDT)
+Message-ID: <8a9e9d8d-bb70-4b71-95a4-963c7364bac7@redhat.com>
+Date: Thu, 18 Apr 2024 07:56:11 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240417164316.1755299-4-o.rempel@pengutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] s390/vmlogrdr: Remove function pointer cast
+To: Nathan Chancellor <nathan@kernel.org>, akpm@linux-foundation.org,
+ arnd@arndb.de, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
+Cc: borntraeger@linux.ibm.com, svens@linux.ibm.com, wintera@linux.ibm.com,
+ twinkler@linux.ibm.com, linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20240417-s390-drivers-fix-cast-function-type-v1-0-fd048c9903b0@kernel.org>
+ <20240417-s390-drivers-fix-cast-function-type-v1-1-fd048c9903b0@kernel.org>
+From: Thomas Huth <thuth@redhat.com>
+Autocrypt: addr=thuth@redhat.com; keydata=
+ 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
+In-Reply-To: <20240417-s390-drivers-fix-cast-function-type-v1-1-fd048c9903b0@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Oleksij,
+On 17/04/2024 20.24, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR) after enabling
+> -Wcast-function-type-strict by default:
+> 
+>    drivers/s390/char/vmlogrdr.c:746:18: error: cast from 'void (*)(const void *)' to 'void (*)(struct device *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>      746 |                 dev->release = (void (*)(struct device *))kfree;
+>          |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1 error generated.
+> 
+> Add a standalone function to fix the warning properly, which addresses
+> the root of the warning that these casts are not safe for kCFI. The
+> comment is not really relevant after this change, so remove it.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   drivers/s390/char/vmlogrdr.c | 13 +++++--------
+>   1 file changed, 5 insertions(+), 8 deletions(-)
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Thomas Huth <thuth@redhat.com>
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/net-phy-Add-TimeSync-delay-query-support-to-PHYlib-API/20240418-004607
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240417164316.1755299-4-o.rempel%40pengutronix.de
-patch subject: [PATCH net-next v1 3/4] net: phy: realtek: provide TimeSync data path delays for RTL8211E
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240418/202404181340.89g7TIG1-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240418/202404181340.89g7TIG1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404181340.89g7TIG1-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/phy/realtek.c:278:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/net/phy/realtek.c:278:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   1 warning generated.
-
-
-vim +278 drivers/net/phy/realtek.c
-
-   245	
-   246	static int rtl8211e_get_timesync_data_path_delays(struct phy_device *phydev,
-   247							  struct phy_timesync_delay *tsd)
-   248	{
-   249		phydev_warn(phydev, "Time stamping is not supported\n");
-   250	
-   251		switch (phydev->interface) {
-   252		case PHY_INTERFACE_MODE_RGMII:
-   253		case PHY_INTERFACE_MODE_RGMII_RXID:
-   254		case PHY_INTERFACE_MODE_RGMII_TXID:
-   255		case PHY_INTERFACE_MODE_RGMII_ID:
-   256			/* The values are measured with RTL8211E and LAN8841 as link
-   257			 * partners and confirmed with i211 to be in sane range.
-   258			 */
-   259			if (phydev->speed == SPEED_1000) {
-   260				tsd->tx_min_delay_ns = 326;
-   261				tsd->rx_min_delay_ns = 406;
-   262				return 0;
-   263			} else if (phydev->speed == SPEED_100) {
-   264				tsd->tx_min_delay_ns = 703;
-   265				tsd->rx_min_delay_ns = 621;
-   266				return 0;
-   267			} else if (phydev->speed == SPEED_10) {
-   268				/* This value is suspiciously big, with atypical
-   269				 * shift to Egress side. This value is confirmed
-   270				 * by measuring RGMII-PHY-PHY-RGMII path delay.
-   271				 * Similar results are confirmed with LAN8841 and i211
-   272				 * as link partners.
-   273				 */
-   274				tsd->tx_min_delay_ns = 920231;
-   275				tsd->rx_min_delay_ns = 1674;
-   276				return 0;
-   277			}
- > 278		default:
-   279			break;
-   280		}
-   281	
-   282		phydev_warn(phydev, "Not tested or not supported modes for path delay values\n");
-   283	
-   284		return -EOPNOTSUPP;
-   285	}
-   286	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
