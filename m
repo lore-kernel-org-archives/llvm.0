@@ -1,114 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A75713C9D4;
-	Fri, 19 Apr 2024 20:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E5C2AF01
+	for <llvm@lists.linux.dev>; Fri, 19 Apr 2024 21:25:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713558381; cv=none; b=pC/oQ8lYhlrbXH0HBqfqLYLg/75m/OykY6xQJouP8ZdH53gRfGhiGWD+B5QalceAlJR6REo0NvpmXTv87WZRPC1LXE/H1hloddfSG4YkjVW1awCVC/8Z/ZEp9qL2ypdMWniKzb9vvao56AggvtcvFHbMPvNzKqjNlfd6Kd1chl8=
+	t=1713561954; cv=none; b=IJiL3lblDrnkfSDXY3naPgH4DCMZbw94xEfDEfdsTJa+Aw7VVNHt8TyE9fIEo+yMmINRgSyVgj/ee7+Dei3L//bspi0ihfBYpLwb45C8Xo43l8zuY6nxvpQlbH9C8mQ2bGWEKbEHbbqyYhc5kPlmlxDAwDOm6yO2b5NjgA75S7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713558381; c=relaxed/simple;
-	bh=hJHiYlh6RgmCtT1SWtYdTDepC+QfgangQ3WVqVBf3GU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nSvPHX/Dq8uypgxGmsTCiCZtqiUzWL77Z2MlulbeW+/XoQ4Gmq+uHuJ2MX88rYWB0Y8bPAZj/K384e8FqT+ky8Chu7omrnKiw18SKXqZzPCilnAOMYcF83Klmi1JFdj0fY7vqmRQjLoOBWQiPF6bpQTF+EOO9tS8yMddNn9aR9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h5+C8KWj; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713561954; c=relaxed/simple;
+	bh=vdPqvjvp0I55H/kPKaC9POdMg/dILXclWjR6OVGkHwM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sYlEIFFhSym1D1HXWe8dJi9A3gXErp2XYGRp/dGDwnvNh4rYiJlDIewVg6g80EMJlT3PACl9KgWniEBBAFXoEIQsFykJgJWgI3Bb12h3s9rA5Y0yqqTsq5shVjmYDHnPwMWdIZjnhbGVWrDX7yNCwBUBVsmElyn3PmdAFqDCxn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xUEyqaqO; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h5+C8KWj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713558379; x=1745094379;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hJHiYlh6RgmCtT1SWtYdTDepC+QfgangQ3WVqVBf3GU=;
-  b=h5+C8KWjl3Y3ajx01nDz8FetAjbcUUsVjoV3eTy+U866lZKsJsnVjLiq
-   fIZJ9/RVkX8y0r0Ib5KutppZUTno1TtYH9KTqjxXg8LUZ5mkGMqWoqDoN
-   8aya+vHtnGO///D6h+Z9GoHn7lnukwD9eGNfjRWnTTetj3szHtfvr+idd
-   sDjMHtJiMtJKY64+AEjc1op9LTS5h7TMnThcX15YQoRIw65pHAsifhKcC
-   bnKC8kouLL86U7PZfqTRnGS4FbJGJEZApqK1a7JM5TUGvtRLfqKDjQ4Bz
-   69Dzvs8J0GJXxUvLgNVa3060Nkg4pLzo736XD9Qa1iwwIqw1YJNcMIHIo
-   g==;
-X-CSE-ConnectionGUID: pzkhdaApSXWaS+Mj+4hKFQ==
-X-CSE-MsgGUID: VKH2dIIHT2STQqJsWtBr/g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11049"; a="20318722"
-X-IronPort-AV: E=Sophos;i="6.07,214,1708416000"; 
-   d="scan'208";a="20318722"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 13:26:18 -0700
-X-CSE-ConnectionGUID: 0SM63I7GT0yNb52t7BVZyg==
-X-CSE-MsgGUID: kKcSAKdOQSyEeozL+jhdRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,214,1708416000"; 
-   d="scan'208";a="28085618"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 19 Apr 2024 13:26:16 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rxuoH-000ARY-2V;
-	Fri, 19 Apr 2024 20:26:13 +0000
-Date: Sat, 20 Apr 2024 04:25:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:guest-tdx-fixes 23/23] drivers/char/tpm/tpm2-cmd.c:780:6:
- error: expected identifier or '('
-Message-ID: <202404200452.shcukBfQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xUEyqaqO"
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-47ba916248dso908822137.0
+        for <llvm@lists.linux.dev>; Fri, 19 Apr 2024 14:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1713561952; x=1714166752; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sEu4wbiT412MBnzFpbDu6wJ2Weav8pvJrIlVBHck39g=;
+        b=xUEyqaqOifemFNXWRbdUkfuNOg/VrhKK+CkqPgct0SbYqjuJ+e4hcqshL7JMCYQ3ik
+         QdbrWhobKNLxQ59kLjPVNroqfLTetWbeQ48ElHZMhHB50/dFoGumU1/HE5mp8E8NtJIX
+         vYD18GY/b6y4ql0TSS1owpM+sWqC5Ebrdu5prUG5LN06BIRZ9NGF5CR3RI+MXJNZ+uSr
+         AerWYVqsK7eu6IxRMU+UEFPxsh0ym3x2ot5GHYEKqBNPNi6Svc3vVq9q5nzpPBARKCGt
+         gB6q7PrM1byg4gPPHVn35Or+0V8mAepsi1unq28VswFRauNQi0JtJ7jlACwzfVw9PTup
+         IZMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713561952; x=1714166752;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sEu4wbiT412MBnzFpbDu6wJ2Weav8pvJrIlVBHck39g=;
+        b=XnNDBgVQANsQPGjkAWf6UD4Ds/CuTOnWKoedfL83YeyHBpCdqqQ7fH/om15Um+RvUj
+         tYXPZZt20lIFLA1NlPuupLyhCQNcwHG9HICyc9k5Z9eEMknhC/7bcTHlo1iA2Icg2CDk
+         Shw8/habhchFjzml+J31uoDjTdkVMM+J8XXI6HtCxqfYr/iLkX/MtMYjKjoRwRx6oHNg
+         PeXvydA7eLBEHBIub7R90z5HAjK3lXfuPV3h8Ss+nDBoObWOkCjJZn5IgDeRmk4n87sB
+         UsTcNaOwPWwK9Gj2NBON0kTvx+RQ3PzLOav4DVwQbucH85JCXMnptaVlsfqE+6Pilj55
+         6kFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW5ecZRihFMxJCx863J5gwORGVkxKzXlZDBkVMCYkEwZuvK48BV2ZGakL+tB81X/a5kD9ZkfpDhfMynnzvXfhaHLWBYpg==
+X-Gm-Message-State: AOJu0YxnwwsXD+d71hzBz3Ub6aSa0IKcK6maez8+spl6ZLAZY6fwnOhZ
+	nWRZZLdR9QsbNJhspB7qJdwxkZwBaJsUr8/qVpKK62M6fh98lzj/A0wklYNLMIQlwpBJGjgfg89
+	YxJGHG5lQ1wCuq3muWnwEFey7MxYfjGT9uUGd
+X-Google-Smtp-Source: AGHT+IFP+dDpW3y5utmSn9SXuAHfPkyXxr+l0bDP3AP8COYLPC/sOLeXnUzy1SzNuk0GIFzWeOuJOWpb8b4rYiRqb3c=
+X-Received: by 2002:a05:6102:c07:b0:47a:472a:a5f1 with SMTP id
+ x7-20020a0561020c0700b0047a472aa5f1mr4787821vss.0.1713561951522; Fri, 19 Apr
+ 2024 14:25:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
+ <20240417-arm32-cfi-v6-10-6486385eb136@linaro.org> <CABCJKufKoDOrPUpKFXBnoNEuQ8gJ7d1zHn=H-gtLoLX=02viUA@mail.gmail.com>
+ <CACRpkdYZWXO2Z9qAQX7Q1Y9S+crNi=81g-+W207PtrYXfgmdvw@mail.gmail.com>
+In-Reply-To: <CACRpkdYZWXO2Z9qAQX7Q1Y9S+crNi=81g-+W207PtrYXfgmdvw@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 19 Apr 2024 14:25:13 -0700
+Message-ID: <CABCJKueFBC98v1aA2R=Z=Tqj=kvRb6FGW8CUYGv9-d5WUrMxGg@mail.gmail.com>
+Subject: Re: [PATCH v6 10/11] ARM: hw_breakpoint: Handle CFI breakpoints
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>, Kees Cook <keescook@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel/tdx.git guest-tdx-fixes
-head:   c4646a88b2e25d777404d7f29fe093031e75456d
-commit: c4646a88b2e25d777404d7f29fe093031e75456d [23/23] x86/tdx: Preserve shared bit on mprotect()
-config: i386-buildonly-randconfig-002-20240420 (https://download.01.org/0day-ci/archive/20240420/202404200452.shcukBfQ-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240420/202404200452.shcukBfQ-lkp@intel.com/reproduce)
+On Fri, Apr 19, 2024 at 5:56=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
+.org> wrote:
+>
+> On Thu, Apr 18, 2024 at 6:13=E2=80=AFPM Sami Tolvanen <samitolvanen@googl=
+e.com> wrote:
+>
+> > > +       switch (report_cfi_failure(regs, instruction_pointer(regs), &=
+target, type)) {
+> >
+> > Nit: To make the error message a bit cleaner, you can use
+> > report_cfi_failure_noaddr(...) instead,
+>
+> OK, fixed it!
+>
+> > and maybe you can expand the
+> > comment to explain why target information isn't trivially available
+> > right now?
+>
+> Sure, but I guess I would need you to explain it to me so I don't get
+> it wrong :D
+>
+> Is it correct to say:
+>
+> "TODO: To be able to properly extract target information the compiler
+> needs to be extended with operand bundling lowering into the 32-bit
+> ARM targets, and currently no compiler has implemented this."
+>
+> ?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404200452.shcukBfQ-lkp@intel.com/
+I think operand bundles are specific to the LLVM implementation, so
+they're probably not worth mentioning. I would just mention that the
+reason we can't trivially figure out the target address and the
+expected type hash when handling KCFI traps on 32-bit ARM is that the
+current compilers don't generate a stable instruction sequence for
+KCFI checks that would allow us to decode the instructions preceding
+the trap and look up which registers were used.
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/char/tpm/tpm2-cmd.c:14:
-   In file included from drivers/char/tpm/tpm.h:28:
-   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-     167 |         int mapping_size;
-         |             ^
->> drivers/char/tpm/tpm2-cmd.c:780:6: error: expected identifier or '('
-     780 |         u32 cc_mask;
-         |             ^
-   arch/x86/include/asm/coco.h:28:17: note: expanded from macro 'cc_mask'
-      28 | #define cc_mask 0
-         |                 ^
->> drivers/char/tpm/tpm2-cmd.c:783:10: error: expression is not assignable
-     783 |         cc_mask = 1 << TPM2_CC_ATTR_VENDOR | GENMASK(15, 0);
-         |         ~~~~~~~ ^
-   1 warning and 2 errors generated.
-
-
-vim +780 drivers/char/tpm/tpm2-cmd.c
-
-58472f5cd4f6ff Jarkko Sakkinen 2016-11-10  777  
-58472f5cd4f6ff Jarkko Sakkinen 2016-11-10  778  int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
-58472f5cd4f6ff Jarkko Sakkinen 2016-11-10  779  {
-85b93bbd1c9768 Julien Gomes    2023-02-08 @780  	u32 cc_mask;
-58472f5cd4f6ff Jarkko Sakkinen 2016-11-10  781  	int i;
-58472f5cd4f6ff Jarkko Sakkinen 2016-11-10  782  
-85b93bbd1c9768 Julien Gomes    2023-02-08 @783  	cc_mask = 1 << TPM2_CC_ATTR_VENDOR | GENMASK(15, 0);
-
-:::::: The code at line 780 was first introduced by commit
-:::::: 85b93bbd1c9768d09adebbe9f33bab0d4ec94404 tpm: add vendor flag to command code validation
-
-:::::: TO: Julien Gomes <julien@arista.com>
-:::::: CC: Jarkko Sakkinen <jarkko@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sami
