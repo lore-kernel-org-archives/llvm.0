@@ -1,130 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3222483CD1;
-	Fri, 19 Apr 2024 12:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5478B85C62
+	for <llvm@lists.linux.dev>; Fri, 19 Apr 2024 12:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713529268; cv=none; b=IjQ2Af5HYE0MBayTOPy45bHZM9cigYuZDw+7b/xp/yJrgeqvaP6jgT1PSM8s11ET490+3aBRK83w5h319SJgADzGcSJuj1g5FER4a8G/hZtVDvS0vjhWBBL8qZ+Io4sMFuF2PWZPxLWKdTiUnNgE8j/cSdKmPm1g5vyG5dg8DYs=
+	t=1713531407; cv=none; b=f2PAhTDHZT4aWqLlJNpLFMYwaTXm9c1gc6OAuctf18H49qijCdt+DI80CrH0/rXo5/JaYnZyvejA1fjTfHrFpW2pRUJdwbDaYeUMzWbWxMKw2ogq5sm6lNJ4D2KzMWUpGbQWdGRsf0F9uSqY7KWoM3Qvn6Rg+JpEBmiaP/oSECs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713529268; c=relaxed/simple;
-	bh=uhdxFZeWKaT44wbbmePzXoHI40n5M1uKEIqSSEAisDM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Q+IUZIWTe0XIcFtYqrYdBiW27z4yctwHskVin52DHU2O6W/bn4Oh/OYfLgdzCtvWqRPd9SJK8CQd2cksbzN4VA6thZf1NeAR+pH5Q51Waac2Pwfll4+NJBBLcvDBMhDFk06FtrACjaPLoHgo4EyrDoZro0lmP2YHRhNSwh5FMeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e5PIeDna; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713531407; c=relaxed/simple;
+	bh=Z1E7x/rsFacwyozNP0MLeIZz5peYHrE/SUN3CzUJKD8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z0u37LKIodiXcpD18xx30AC7NNG+FuMSiHr6migUUFggHwQtz0xeXjkvE4KIprfXfAFD6IZ8w2kRxMGJ05QsrnIAtgVvdtFIfHMzph9ZoXa9HInxaa/5stFs0rzYEzxPWDXT5A+teGf/z2Dk6uUd1zszLEvZhFwTL8CIVo6QNL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XdvzC2fc; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e5PIeDna"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713529266; x=1745065266;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uhdxFZeWKaT44wbbmePzXoHI40n5M1uKEIqSSEAisDM=;
-  b=e5PIeDnatB4QRMOUYFy0CzdW77NbEdHSV+lzG64tQegnqXoDV/m1MHbL
-   c8+XjWhM1WpTWfhdIVI2WJwP5QJNj3XCg16jPuEmj4NebKS00Im+eyqsT
-   hwHla/L/wWqsNKKDb6Pr6Sed0eyKkxGUuvTAD/ET9H195Fzq2z0UdUmi3
-   YVPBHKEumeRN8HS1d2MvhSH8DTYbvWHTaoRVOawXk3NGYssEKDxGBf4wO
-   +Zl9UE+jk7ixwAxKW2ZHOP7/Pjj1J1Y9sC0eJlJe4f/PhfebUjG6YlaIq
-   b2IbLEsy1X4XwwqA70Joq3Yq28eNQxtTKn+ItKjypN+caBOcGOOs0GHln
-   A==;
-X-CSE-ConnectionGUID: 0mIGwV0GQGejrf2NRc7hWg==
-X-CSE-MsgGUID: K97pe3c7RSK/BU56qzEYlQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="8987627"
-X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="8987627"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 05:20:52 -0700
-X-CSE-ConnectionGUID: PzRNU5bcRY2aTO8P0Tv2XA==
-X-CSE-MsgGUID: IX0i+GmwSs2bz+hgJy7Uxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
-   d="scan'208";a="28091630"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 19 Apr 2024 05:20:52 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rxnEX-000A1W-1s;
-	Fri, 19 Apr 2024 12:20:49 +0000
-Date: Fri, 19 Apr 2024 20:19:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:bhi-fixes 5/5]
- ./arch/x86/include/generated/asm/syscalls_64.h:61:1: error: type specifier
- missing, defaults to 'int'; ISO C99 and later do not support implicit int
-Message-ID: <202404192021.XXwb0Rqd-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XdvzC2fc"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dbed179f0faso2084319276.1
+        for <llvm@lists.linux.dev>; Fri, 19 Apr 2024 05:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713531405; x=1714136205; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p8br1ykgfrm1f/EqxeumN4XQgZaMfGLB4cLhcgiUlHE=;
+        b=XdvzC2fcRe4iN89Z2c2aipzem9BO0Ox8BcXwnOaY5Lv+nPDKGvhDi0uq1F8rKGUChq
+         ShuQCbFED5GQ+qYattSQRtPiCf8BNbueTy1ullXlpGsLPg54l5WG13cwsbv0TByQ0zLm
+         uqQc6e2ICjGIHsBHLgcZFICcIRHzOOLPUDN5LO9EqjLMjEneRXvwGtOMs7PwwZ1dQBdY
+         D7UA+fzTvWekdpFIfKytIP6+keKX/pJ0gKKSeTTEQjHBfRHMHHB3wcvMhMn84vBY4ODN
+         uLpGS7a1AVDM9M8fdNDJH3PP18kwv650pfyhPWmU2NWxQq+VnVSjSDDjEiHqazgoc1hn
+         Vq4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713531405; x=1714136205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p8br1ykgfrm1f/EqxeumN4XQgZaMfGLB4cLhcgiUlHE=;
+        b=wFFdP7+IU35uhgqrr+qHyCPlykXp3poOL5rl4TkLbWveoF5M3DM5UEFfv8HjyB2hwS
+         VFwzTB6ei2veo1XxabuLwURittbMt87M2cn0WQr26x89Z6JXDvQKMWTqUhORNkcxJEGj
+         kArABHEjpmI8pUuLF9R39m/593iZOPFdjsUTkAdjx9fqQ+2T4iP7B7b5vLudX3VYvq1u
+         Tc0MTQWnyJQDJSVcAZA46vC6iRw9xxRAYaHsZQV5Yny+kmPBPvJmmpA3rB9eWYlC/crM
+         Zgv3BqSDY8dCcLhSqHnVg+GZdaLF1rEn8LChheo43F35nAfT023gvVE85wEFlponLObd
+         l8pw==
+X-Forwarded-Encrypted: i=1; AJvYcCXw/ICmO3r+2TCMi6qHszB5J0kAXm23hqVpq2aKVcsByD/Cy2Ec/C2syygoD3mgDz/FGL9EQn097yO+Qh3GUUJVntBT/w==
+X-Gm-Message-State: AOJu0YycGxFpDzPYJ5NMcv315eogQZ2Enk8whTy1+TJs/U++DGseOjVi
+	2NJ70QQ+Xg1dvgAIjdIHbReRrTdkRyxwaFQxwl57H0bhDQyrYYeJNNSMZbxDfVYa3m2PEEfbosh
+	/gEmFaiBDGUpn2w3Y5789mQ+s8i9K+QTUjysJnA==
+X-Google-Smtp-Source: AGHT+IF1FbnmZtyf1vtMltI7gQM2rorsgZfcslzU9ACfcrNtv225QR1oV5Dh8OeROcqg8LBerOwfZHfkoxjBSirKqPg=
+X-Received: by 2002:a25:818e:0:b0:dcb:df38:1c20 with SMTP id
+ p14-20020a25818e000000b00dcbdf381c20mr1525310ybk.24.1713531405248; Fri, 19
+ Apr 2024 05:56:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240417-arm32-cfi-v6-0-6486385eb136@linaro.org>
+ <20240417-arm32-cfi-v6-10-6486385eb136@linaro.org> <CABCJKufKoDOrPUpKFXBnoNEuQ8gJ7d1zHn=H-gtLoLX=02viUA@mail.gmail.com>
+In-Reply-To: <CABCJKufKoDOrPUpKFXBnoNEuQ8gJ7d1zHn=H-gtLoLX=02viUA@mail.gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 19 Apr 2024 14:56:33 +0200
+Message-ID: <CACRpkdYZWXO2Z9qAQX7Q1Y9S+crNi=81g-+W207PtrYXfgmdvw@mail.gmail.com>
+Subject: Re: [PATCH v6 10/11] ARM: hw_breakpoint: Handle CFI breakpoints
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Russell King <linux@armlinux.org.uk>, Kees Cook <keescook@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git bhi-fixes
-head:   477bedf59d1fe82d8ad1014e8e7f4a50d4e68c1f
-commit: 477bedf59d1fe82d8ad1014e8e7f4a50d4e68c1f [5/5] fix
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20240419/202404192021.XXwb0Rqd-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240419/202404192021.XXwb0Rqd-lkp@intel.com/reproduce)
+On Thu, Apr 18, 2024 at 6:13=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404192021.XXwb0Rqd-lkp@intel.com/
+> > +       switch (report_cfi_failure(regs, instruction_pointer(regs), &ta=
+rget, type)) {
+>
+> Nit: To make the error message a bit cleaner, you can use
+> report_cfi_failure_noaddr(...) instead,
 
-All errors (new ones prefixed by >>):
+OK, fixed it!
 
-   In file included from arch/x86/um/sys_call_table_64.c:22:
-   ./arch/x86/include/generated/asm/syscalls_64.h:61:20: error: expected parameter declarator
-   __SYSCALL_NORETURN(60, sys_exit)
-                      ^
-   ./arch/x86/include/generated/asm/syscalls_64.h:61:20: error: expected ')'
-   ./arch/x86/include/generated/asm/syscalls_64.h:61:19: note: to match this '('
-   __SYSCALL_NORETURN(60, sys_exit)
-                     ^
->> ./arch/x86/include/generated/asm/syscalls_64.h:61:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Werror,-Wimplicit-int]
-   __SYSCALL_NORETURN(60, sys_exit)
-   ^
-   int
-   ./arch/x86/include/generated/asm/syscalls_64.h:61:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   __SYSCALL_NORETURN(60, sys_exit)
-                     ^
-                                  void
-   ./arch/x86/include/generated/asm/syscalls_64.h:61:33: error: expected ';' after top level declarator
-   __SYSCALL_NORETURN(60, sys_exit)
-                                   ^
-                                   ;
-   ./arch/x86/include/generated/asm/syscalls_64.h:232:20: error: expected parameter declarator
-   __SYSCALL_NORETURN(231, sys_exit_group)
-                      ^
-   ./arch/x86/include/generated/asm/syscalls_64.h:232:20: error: expected ')'
-   ./arch/x86/include/generated/asm/syscalls_64.h:232:19: note: to match this '('
-   __SYSCALL_NORETURN(231, sys_exit_group)
-                     ^
-   ./arch/x86/include/generated/asm/syscalls_64.h:232:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Werror,-Wimplicit-int]
-   __SYSCALL_NORETURN(231, sys_exit_group)
-   ^
-   int
-   ./arch/x86/include/generated/asm/syscalls_64.h:232:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   __SYSCALL_NORETURN(231, sys_exit_group)
-                     ^
-                                         void
-   ./arch/x86/include/generated/asm/syscalls_64.h:232:40: error: expected ';' after top level declarator
-   __SYSCALL_NORETURN(231, sys_exit_group)
-                                          ^
-                                          ;
-   In file included from arch/x86/um/sys_call_table_64.c:30:
-   ./arch/x86/include/generated/asm/syscalls_64.h:61:24: error: use of undeclared identifier 'sys_exit'
-   __SYSCALL_NORETURN(60, sys_exit)
-                          ^
-   arch/x86/um/sys_call_table_64.c:33:32: error: invalid application of 'sizeof' to an incomplete type 'const sys_call_ptr_t[]' (aka 'long (*const[])(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)')
-   int syscall_table_size = sizeof(sys_call_table);
-                                  ^~~~~~~~~~~~~~~~
-   12 errors generated.
+> and maybe you can expand the
+> comment to explain why target information isn't trivially available
+> right now?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sure, but I guess I would need you to explain it to me so I don't get
+it wrong :D
+
+Is it correct to say:
+
+"TODO: To be able to properly extract target information the compiler
+needs to be extended with operand bundling lowering into the 32-bit
+ARM targets, and currently no compiler has implemented this."
+
+?
+
+Yours,
+Linus Walleij
