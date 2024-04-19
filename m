@@ -1,112 +1,130 @@
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DAC5576D;
-	Fri, 19 Apr 2024 12:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A37AD35;
+	Fri, 19 Apr 2024 12:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713529177; cv=none; b=GxH6MbCpv7eqOkM5cVqpy3Wh9aEXn6lPhu4LqHfNQ5bZVFT1YFRQWM7Ji84ujQJipR7U4jMFWeKjvtDwGG/88cWrQ1xe0CSuqgAhjbv49TZpQ9mZtN4bKY8WJhDeaQhmoFT29fLdvolSb8mf3rPEF+jUOzUBkfNk9gJsbrpjYso=
+	t=1713529255; cv=none; b=Co8ShAb6EnfNXvMPeUsFfDoo9umOUY4S/0zKpMxLMSvaWhWlpQyhaVpnTTLttYs3g4pC6i8ZDwblgYnh/uNqOiXX/ZxNCOAd4eVZJJBjPCp/jA1oyf18/NA8G8WoXFwUy5Fd/86Xor2qEwNecxV4wn+QdfeHtjoIjq22Xu0BCVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713529177; c=relaxed/simple;
-	bh=/whT3z5v9d3GECrMYWOwGgUqcTc+ApynIFFO5vcP1Xs=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=o/aV/i4xP/ZgiU8s1zW3JpuNsSpfZxqXauM+00PfhJgw8fIuWwdxqTx3KvwhYDF9lBKxHdOegoRaXXlzeqmbg6Puophti9mPu1oFg51g3DIg2eM0YD7XSORPhW0AK95e+EPdUq1qoq+fXTdCOYDXpTAyRePgbvI1zHUlBpOXnEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Q8D9jSci; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LJ+aFUpS; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1713529255; c=relaxed/simple;
+	bh=6xBnzCLa//+DsQYGaLlm/n5/5rucgxU+termpR/7ER4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UhYDOaLqusHj4vTILEpj2FH7ZbXuAAfkzfRJ88jRPC2+QJp4svUANitHKbQ28OEM0rirS1/zK2ZfkabZO9qjmIo7PVp3BUWydtXH2ReJVgMGoZaQkoAKuqH6BjuDYn5rpFKNALNVfCK2izz1IK9PimMHoSCw8cFSD0xBvrrViBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fMHs48tP; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Q8D9jSci";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LJ+aFUpS"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 1C7EE1380259;
-	Fri, 19 Apr 2024 08:19:35 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 19 Apr 2024 08:19:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1713529175; x=1713615575; bh=cDH8lSOwI7
-	lw/vz2NbBtbId2tyQzUWt6KQXELxMEHy4=; b=Q8D9jScilsyTTkkRTPio2R0RLa
-	GUt2L596HnWUE/TmLTpOeT7sHgLL+4puXyQtARJIsfUxFxR4GTjKsdXsexU7wjWW
-	oyXrJQdnValZh3rxULoh+V2btb080ZF1iyVGPfRMv3hGKdiiFXX4JfrvbdI612iF
-	xgBTkGg6EQhrHDmE2rdBfJS+hNQKalWNeWsL1U0pLxOusxc+ornlUPtFtN/SE/p+
-	/jPGAz0/XtezFzRxJ8/ioIn2S5G0IgOvgAbD1zFKU9b7fOdlGdSEG15l4sAOtJtt
-	YyK93/7VG5PEDSMd//O3trOFtU4zlI6T6rv98a9jexn3FHbn77CVJF8zgJyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1713529175; x=1713615575; bh=cDH8lSOwI7lw/vz2NbBtbId2tyQz
-	UWt6KQXELxMEHy4=; b=LJ+aFUpSEHrpfuBbCzFEhbMkQD6iR2ON1ev8jNB8A2xM
-	J3ImrKAVdi/z17wRrGgAUHkOPz3pYDeLzyfFpoWviARbmZ/+3lv/BE8n0f7d3IFz
-	+0hwwoLj4zecQ0Gg7DpAcM41FLvNnHcgpkez/8Pm3Az+vrnCGEYaJnz6YfewPhA5
-	/XE4JTiao0TxaiKUmdyulWbKjmElHuTgbOE1zsd0XprASqQwEpw/wWYNa+ycBjw8
-	65F8unQMW7LaJ/7qVPI9HHdUie8diXWV95WfyvTRmSBYrQjlLDn4GgccpFrxubkW
-	dt39IBmVb+ltgQKvIRVDp1T00DxIYROi15vkyJhd/A==
-X-ME-Sender: <xms:VmEiZrlxdEOI8gTifpquVy8mQaJpR4ulGqY7UGMHukyx7aHbFJPM2w>
-    <xme:VmEiZu29QuNk3x7WzIt6d9VRjg9j_W1c9q93vQW6ueBjyhAY4HSxZNhjL_QVJLyAY
-    DstQl-jRDWgsIKu5UQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudekvddghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:VmEiZhok6k2kXj6ApBIuWNDTlOdFW_lnM5D8ZZiBR324TJMOijHXdg>
-    <xmx:VmEiZjkn_KFN3T-QUtxOXxeewTe3iVRTf9fzq6WQptTVCNqJSoBaag>
-    <xmx:VmEiZp2taVa-TXQmYmaSMD-iJJS76rTSzaD3cU46i9W_hKI6KL_-ZQ>
-    <xmx:VmEiZiuWnHCQct7gBlnvPxMNQYJxqpeEMDTzzN2ZS4kfxoPtC-UIpQ>
-    <xmx:V2EiZnPDWLdSVOyi0UFi11nHl9ZTEptBbmQpY-7-2xEcfkHwjiB_RtnC>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id AF7C3B6008D; Fri, 19 Apr 2024 08:19:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fMHs48tP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713529253; x=1745065253;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6xBnzCLa//+DsQYGaLlm/n5/5rucgxU+termpR/7ER4=;
+  b=fMHs48tPqYbAeqP3tBc30njKiJXi+CQzEmHb8bS6fWBj5OWklxMVMKHg
+   eVHYsLnBsCg9k3i6We50HXdGhJ4eJkJ34QSBm2Atp3PWVOrv9ixmJvoh3
+   QSURwE+J+1A78iTIKEL+6BVVhM3bSoOuWMgGja0DVkVcWW2V2Y0VBItRw
+   KBYmurEzY3kKZEgghpqzVjhYdwerbex5vjLX45FeG2lNDbGjrkofDnElp
+   jvuCQZ1FhhA+9MFJqfRWyl1IYXndtQQ9PUZeG5E2es15nwEYEDDnIldJx
+   afSm/O1Vt6fgdfRumznpoy42uu+WdE8t+mtffJjpomfs6JhGSgafP1nr+
+   A==;
+X-CSE-ConnectionGUID: vfAbhNbwTDekFD8Ae+fzQQ==
+X-CSE-MsgGUID: OSNe7zG5SneLJTT2Bv9/AA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11047"; a="12960600"
+X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
+   d="scan'208";a="12960600"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 05:20:53 -0700
+X-CSE-ConnectionGUID: JyDrWnyhTIO0aeYfPzatYg==
+X-CSE-MsgGUID: YnbtquaRT36l7s2BlMJS1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,213,1708416000"; 
+   d="scan'208";a="23936711"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 19 Apr 2024 05:20:51 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rxnEX-000A1U-1l;
+	Fri, 19 Apr 2024 12:20:49 +0000
+Date: Fri, 19 Apr 2024 20:20:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:bhi-fixes 5/5]
+ ./arch/x86/include/generated/asm/syscalls_64.h:61:24: error: use of
+ undeclared identifier 'sys_exit'
+Message-ID: <202404192055.POZkulIt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <1509513f-0423-4834-9e77-b0c2392a4260@app.fastmail.com>
-In-Reply-To: <20240419121506.23824-A-hca@linux.ibm.com>
-References: 
- <20240417-s390-drivers-fix-cast-function-type-v1-0-fd048c9903b0@kernel.org>
- <20240417-s390-drivers-fix-cast-function-type-v1-1-fd048c9903b0@kernel.org>
- <20240418095438.6056-A-hca@linux.ibm.com>
- <20240418102549.6056-B-hca@linux.ibm.com>
- <20240418145121.GA1435416@dev-arch.thelio-3990X>
- <20240418151501.6056-C-hca@linux.ibm.com>
- <798df2d7-b13f-482a-8d4a-106c6492af01@app.fastmail.com>
- <20240419121506.23824-A-hca@linux.ibm.com>
-Date: Fri, 19 Apr 2024 14:19:14 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Heiko Carstens" <hca@linux.ibm.com>,
- "Alexandra Winter" <wintera@linux.ibm.com>,
- "Thorsten Winkler" <twinkler@linux.ibm.com>
-Cc: "Nathan Chancellor" <nathan@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>, gor@linux.ibm.com,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
- Netdev <netdev@vger.kernel.org>, llvm@lists.linux.dev,
- patches@lists.linux.dev
-Subject: Re: [PATCH 1/3] s390/vmlogrdr: Remove function pointer cast
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Apr 19, 2024, at 14:15, Heiko Carstens wrote:
->
-> Plus we need to fix the potential bug you introduced with commit
-> 42af6bcbc351 ("tty: hvc-iucv: fix function pointer casts"). But at
-> least this is also iucv_bus related.
->
-> Alexandra, Thorsten, any objections if CONFIG_IUCV would be changed so
-> it can only be compiled in or out, but not as a module anymore?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git bhi-fixes
+head:   477bedf59d1fe82d8ad1014e8e7f4a50d4e68c1f
+commit: 477bedf59d1fe82d8ad1014e8e7f4a50d4e68c1f [5/5] fix
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240419/202404192055.POZkulIt-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240419/202404192055.POZkulIt-lkp@intel.com/reproduce)
 
-You can also just drop the iucv_exit() function, making the
-module non-removable when it has an init function but no exit.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404192055.POZkulIt-lkp@intel.com/
 
-     Arnd
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/um/sys_call_table_64.c:22:
+>> ./arch/x86/include/generated/asm/syscalls_64.h:61:20: error: expected parameter declarator
+      61 | __SYSCALL_NORETURN(60, sys_exit)
+         |                    ^
+>> ./arch/x86/include/generated/asm/syscalls_64.h:61:20: error: expected ')'
+   ./arch/x86/include/generated/asm/syscalls_64.h:61:19: note: to match this '('
+      61 | __SYSCALL_NORETURN(60, sys_exit)
+         |                   ^
+>> ./arch/x86/include/generated/asm/syscalls_64.h:61:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+      61 | __SYSCALL_NORETURN(60, sys_exit)
+         | ^
+         | int
+>> ./arch/x86/include/generated/asm/syscalls_64.h:61:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+      61 | __SYSCALL_NORETURN(60, sys_exit)
+         |                   ^            
+         |                                void
+>> ./arch/x86/include/generated/asm/syscalls_64.h:61:33: error: expected ';' after top level declarator
+      61 | __SYSCALL_NORETURN(60, sys_exit)
+         |                                 ^
+         |                                 ;
+   ./arch/x86/include/generated/asm/syscalls_64.h:232:20: error: expected parameter declarator
+     232 | __SYSCALL_NORETURN(231, sys_exit_group)
+         |                    ^
+   ./arch/x86/include/generated/asm/syscalls_64.h:232:20: error: expected ')'
+   ./arch/x86/include/generated/asm/syscalls_64.h:232:19: note: to match this '('
+     232 | __SYSCALL_NORETURN(231, sys_exit_group)
+         |                   ^
+   ./arch/x86/include/generated/asm/syscalls_64.h:232:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     232 | __SYSCALL_NORETURN(231, sys_exit_group)
+         | ^
+         | int
+   ./arch/x86/include/generated/asm/syscalls_64.h:232:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+     232 | __SYSCALL_NORETURN(231, sys_exit_group)
+         |                   ^                   
+         |                                       void
+   ./arch/x86/include/generated/asm/syscalls_64.h:232:40: error: expected ';' after top level declarator
+     232 | __SYSCALL_NORETURN(231, sys_exit_group)
+         |                                        ^
+         |                                        ;
+   In file included from arch/x86/um/sys_call_table_64.c:30:
+>> ./arch/x86/include/generated/asm/syscalls_64.h:61:24: error: use of undeclared identifier 'sys_exit'
+      61 | __SYSCALL_NORETURN(60, sys_exit)
+         |                        ^
+>> arch/x86/um/sys_call_table_64.c:33:32: error: invalid application of 'sizeof' to an incomplete type 'const sys_call_ptr_t[]' (aka 'long (*const[])(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)')
+      33 | int syscall_table_size = sizeof(sys_call_table);
+         |                                ^~~~~~~~~~~~~~~~
+   12 errors generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
