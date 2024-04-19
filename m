@@ -1,133 +1,91 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4665C130A5B
-	for <llvm@lists.linux.dev>; Fri, 19 Apr 2024 16:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EB784FCE;
+	Fri, 19 Apr 2024 17:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713545242; cv=none; b=Qlxq8ZvME49k2rX5HrW45j3fRbdBAm/j1B0/VglMC4Jqxb9QjHJUjs12XvmTgvIAQaj8BJQwmjD/WrIccYVzix9kN7bN74yK4w6WALjpA5xv895rmYdCoeJ/tzncYfHKX+8CzkC7TnIaE+KKmSb1n/+du/ukyjxSoo9BMmeg5lQ=
+	t=1713547298; cv=none; b=LozMnLkwus/7a59E76DMMqsX3mLI5Nk/cO3u1HCMn1j48qVQgQFxrCzQxOiso8b/RVaCJ50NTjdJJHHX7huMdHhWyRF4tpBPi9WoI894ehLEn7IIledAkk5st8QnPII29jy4DUD3K31c63S/I6JwRaYbeVF0ZPfyk+bIFCCRFb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713545242; c=relaxed/simple;
-	bh=/cWriL0gpomcNV4/dkArYyL2fH82NBZljvxafQI6YEw=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=OYVNk1SYG42xNF+vKxZZjIMfFkObNimIWS6v+sBeFCBwt4Ot3EvV478SLAHNjRknfRC9jSkFuxsYdzjoEku2hD1CsrenNYbnn0pad0zHvKD5JAyzaUj+Tf9ktJfRlIa5yu3maF47uFg622GW5Aa1E4olrnV2SOqEPW0nzLMJFLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BABU4UIT; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1713547298; c=relaxed/simple;
+	bh=K/WcS0sIVwmm8eOY3xJGuQIRvwltHr+29qsLGxDEmZM=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NwJzGj4UZNbMF1qm2pEqU1VBz9o9mlPfbhre/sG+8Ygkb+i/bjsT8bOGvtSg2vxF1yGzamixGZL/qSBaHEjvVSIuAbDvTQvCgfuVfdpnEvuvTw8LkuTfh8BuNS/+epsvpxJF2MNex5rPr6SqIyTkyajUK6LDLLqdwzdlEbPGypM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j7M5oD2t; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BABU4UIT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713545237;
-	bh=/cWriL0gpomcNV4/dkArYyL2fH82NBZljvxafQI6YEw=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=BABU4UITtYORljBaZHuAEXOvOyUUWjNWYCNOfkEO2wrw5VIWeEyd7fiiOG67YNej8
-	 TnoV0TKEcEnWoqf+TgRnZfbjtLyl+RnAGYQ72ko9BcpWUWuruqlfvh/ShrsHhfQ5oc
-	 gqpUp6AzfLUw89Xx/nquyarXQbngnUeZoaqH1A8IjoBfnfFYfqyJfyaQPL35vVJiN+
-	 DXT9AYbB2Y0PbXV4zkU39/97g7Vb8bmnHWJ9gXkp63A2U44DdUxKs59h1C7OQLtNyd
-	 7IeExC6QvZOZpkhcDK0vbnk0qGfYYUec+UiE5KMJc1CfQKjlbc/R+KqiOjBNe99Nwp
-	 jzxeHkELyAdtQ==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 17FB73782153;
-	Fri, 19 Apr 2024 16:47:11 +0000 (UTC)
-Message-ID: <536650e2-62f4-40a7-8667-6e303e3a9828@collabora.com>
-Date: Fri, 19 Apr 2024 21:47:26 +0500
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j7M5oD2t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713547297; x=1745083297;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=K/WcS0sIVwmm8eOY3xJGuQIRvwltHr+29qsLGxDEmZM=;
+  b=j7M5oD2tily2knA2GIHwypZhIJ9BYiDBFKnjeupFizbgwjiWp8ALze5+
+   3/m61x/h8vlL1jTj0JE87eB3HS76Ta00iVqf1gjzyp7JGqsV1rTWnAoQL
+   218lFc7NTbmGhb6QnJZ3/h0YAbrlZaxezd9GG5m1nqTETrq+1HnjD3sv0
+   Zf6vVoH7MlEQJMHuWRqLCS08Foy9wNyiV8TjK9Le8MIi4Es8s9Yd8owB9
+   /qsbg11rmTJDncmafMaMv7q7Z0KBmnL8ROkhEbhnJnxbrN+e4Zv8vb3zx
+   FuVaixJZXMCS0UerwOzqdtt6huCeNJSVlxlXINLdQGpMXKSuDRa92O8AD
+   Q==;
+X-CSE-ConnectionGUID: IWXsC0LxQM+Syt+a+vOyeg==
+X-CSE-MsgGUID: 0icq4lXUQuW0B9dhnTZfzQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11049"; a="26675887"
+X-IronPort-AV: E=Sophos;i="6.07,214,1708416000"; 
+   d="scan'208";a="26675887"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2024 10:21:36 -0700
+X-CSE-ConnectionGUID: GCiqD8/KSB2nesfhLc+mgA==
+X-CSE-MsgGUID: obgfAmMqQn+H0EHgSOGGzA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,214,1708416000"; 
+   d="scan'208";a="27849019"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 19 Apr 2024 10:21:35 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rxrvY-000ALo-2e;
+	Fri, 19 Apr 2024 17:21:32 +0000
+Date: Sat, 20 Apr 2024 01:21:09 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [jfern:sched/dlserver.update_h_nr 9790/30000] clang: error:
+ unsupported option '-mhard-float' for target 'x86_64-linux-gnu'
+Message-ID: <202404200101.G1qe0YI3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- kernel test robot <yujie.liu@intel.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] selftests: Fix asan linkage to work with clang
-To: Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20240417160740.2019530-1-ryan.roberts@arm.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240417160740.2019530-1-ryan.roberts@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for the fix.
+TO: Guenter Roeck <linux@roeck-us.net>
+CC: Drew Davenport <ddavenport@chromium.org>
+CC: Harry Wentland <harry.wentland@amd.com>
+CC: Alex Deucher <alexander.deucher@amd.com>
 
-On 4/17/24 9:07 PM, Ryan Roberts wrote:
-> Both fchmodat2 and openat2 statically link against libasan (for
-> explanation of why, look at the fixes commit). This is done using
-> `-static-libasan`. However, it turns out that clang uses a different
-> option, `-static-libsan`. This caused clang to fail to compile the
-> tests.
-> 
-> Fix this by using cc-option to figure out which variant to use.
-> 
-> While we are at it, stop passing helpers.h as a compilation unit. This
-> was causing another clang error due to name conflict with helpers.c's
-> object file. This header shouldn't be directly compiled anyway.
-> 
-> Fixes: c652df8a4a9d ("selftests: link libasan statically for tests with -fsanitize=address")
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Closes: https://lore.kernel.org/r/202404141807.LgsqXPY5-lkp@intel.com/
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Hi Guenter,
 
-> ---
-> 
-> Applies on v6.9-rc4.
-> 
-> Thanks,
-> Ryan
-> 
->  tools/testing/selftests/fchmodat2/Makefile | 5 ++++-
->  tools/testing/selftests/openat2/Makefile   | 7 +++++--
->  2 files changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-> index 71ec34bf1501..a68bb5a00797 100644
-> --- a/tools/testing/selftests/fchmodat2/Makefile
-> +++ b/tools/testing/selftests/fchmodat2/Makefile
-> @@ -1,6 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0-or-later
-> +# We need this for the "cc-option" macro.
-> +include ../../../build/Build.include
-> 
-> -CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-> +CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-> +CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
->  TEST_GEN_PROGS := fchmodat2_test
-> 
->  include ../lib.mk
-> diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-> index 254d676a2689..02af9b6ca5eb 100644
-> --- a/tools/testing/selftests/openat2/Makefile
-> +++ b/tools/testing/selftests/openat2/Makefile
-> @@ -1,8 +1,11 @@
->  # SPDX-License-Identifier: GPL-2.0-or-later
-> +# We need this for the "cc-option" macro.
-> +include ../../../build/Build.include
-> 
-> -CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan
-> +CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
-> +CFLAGS += $(call cc-option, -static-libasan) $(call cc-option, -static-libsan)
->  TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
-> 
->  include ../lib.mk
-> 
-> -$(TEST_GEN_PROGS): helpers.c helpers.h
-> +$(TEST_GEN_PROGS): helpers.c
-> --
-> 2.25.1
-> 
-> 
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git sched/dlserver.update_h_nr
+head:   4e843586ff1b3b77e5244d0128facac6330490a4
+commit: 1e40ce02c2fbc0ac783bc9c38e5e678e2fe56f51 [9790/30000] BACKPORT/UPSTREAM: drm/amd/display: Enable building new display engine with KCOV enabled
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240420/202404200101.G1qe0YI3-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240420/202404200101.G1qe0YI3-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404200101.G1qe0YI3-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> clang: error: unsupported option '-mhard-float' for target 'x86_64-linux-gnu'
 
 -- 
-BR,
-Muhammad Usama Anjum
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
