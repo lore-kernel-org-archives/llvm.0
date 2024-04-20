@@ -1,185 +1,208 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1056411713
-	for <llvm@lists.linux.dev>; Sat, 20 Apr 2024 17:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26872205E16;
+	Sat, 20 Apr 2024 19:08:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713633089; cv=none; b=u8dC4On0K/gsqWfSbrN9/19RUecBIBNZhhFZsKbYWj4xI1hj2TZbndwWmSx/20DellMUmdHadITkTOW40CzRzNSVlJ/DNy7y1b8DsAG4RS3abS2+dDN3/xnbk0w64bkL2OHCHAdHe1RkLhJuIu2yuZ/vpYk/aD4/FK+yM8zr1iM=
+	t=1713640117; cv=none; b=GmyQ1XHr/PNNtOEOWqdhqWI+ItkVgpGEj6wFvn7rMg++4QVv2A/RQHPa5tl1Cmnj6EPPvM/qfuAice8CwjFYP9PlZ92kef86oamr343Qm20NxgJc8DrMR6LFxpxF3erw9+NOnCuiHuW6tSOKV+RtahkFuxVdfJ0CWRoUfWD5Lxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713633089; c=relaxed/simple;
-	bh=rnBr2ByqkOfHm1bUscqguCFBJWaYDgOY+7hmMFJ3ifE=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OcRHAeNY/LCqv3p3SlT0S0yEet+um/BqpVff0QGzoFIwH+juIcvxnzVo4i1T7+QCuIFFIfIuJYuet8W03jJOaPE5rypmSU7iciEBrR/HtArHhH+0A5H321CIeIKkMasjU1/DxQT8LJb/1xi9ZJAYJKBquHc6jPdkHSU9uV1XViQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dsS+cBEj; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1713640117; c=relaxed/simple;
+	bh=DAWRxBbWwkIdn3sqEiU4w/Wb8Qe6Fk/DbaiAUfMnst8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P8F5NdfZmDeHVji2kf+HHYQjVFD4lzJ5PhoJE5LcjzFc1jEHkfaZbAtIfH3k3owwyzPTfVJhbhh2KYQqxLgTy50oYI+/mPPRVRlZFIJMdvqTybkZfK0IBveLyoWkO9+9d8YCKkPcbgwvinuCb3RhRXYLa+fZHSxqkeVhliBWv5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MKzfkxtc; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dsS+cBEj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713633087;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Q5ClM94WrLx0+IYtDnp1mAWVjawxRQVlZFwyl356lE4=;
-	b=dsS+cBEjlsYnDkkkEW1NctZhjaprdcmhemK906qR4dL8CmV9hR5oHGkJjMVv6tYMmu+Tir
-	vD8LEii17D2WeyskkuevqdPnbty5Y4pXSaQ+n/ncMEzJM6d4a/hgI+CK5ls10qjzz8azh8
-	WIUVoiT5uMcSgxlZwz/pAwp+82gLwMc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-689--EItVxoJOBWSsy-lP3qY1w-1; Sat, 20 Apr 2024 13:11:25 -0400
-X-MC-Unique: -EItVxoJOBWSsy-lP3qY1w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2778A834FB1
-	for <llvm@lists.linux.dev>; Sat, 20 Apr 2024 17:11:25 +0000 (UTC)
-Received: from [172.64.13.14] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D5199400059;
-	Sat, 20 Apr 2024 17:11:24 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 15 of 204): Test report for master
- (6.9.0-rc4, mainline.kernel.org-clang, 4b6b5132)
-Date: Sat, 20 Apr 2024 17:11:24 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MKzfkxtc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713640116; x=1745176116;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DAWRxBbWwkIdn3sqEiU4w/Wb8Qe6Fk/DbaiAUfMnst8=;
+  b=MKzfkxtc7c8vXtWhKonznoQ2RLWjohjfiChYW7WXjs7qEkiBAMAuY9mR
+   D3d99z2aLTphSBG4+W+G7JeUKh0lHyJU1sdb3sOh79+GBGNJ6TlDaxWvY
+   hxxqD0EgfT6GAbvYBmdnoHZzF1Zx+DDLiapBTrEx6N1bcwvN3pwjOz4be
+   /xPuHLsmC7fpJzilBU71yj9QbYlCViqVWmwax4v6ZwK5dmc1U6MkZwWpN
+   dlH39Pcn+oF7g/kAcb1X6gXWxdpcTCTWQfbeGUa6BfguBbBBgbgByMXqG
+   ljxO8paYob/GoAll8wGAkoac2+7lJOFznQw62QD5dXy8X0l7iyuhwKToF
+   Q==;
+X-CSE-ConnectionGUID: Fwzrf/j4SPCXyug72vbPrQ==
+X-CSE-MsgGUID: cEYIbR5fRuuy+yJf/TPCfg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11050"; a="13064047"
+X-IronPort-AV: E=Sophos;i="6.07,217,1708416000"; 
+   d="scan'208";a="13064047"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2024 12:08:35 -0700
+X-CSE-ConnectionGUID: cJ9Qkz74RXu81siqOtt3yg==
+X-CSE-MsgGUID: EjS+I7MQTmicvy6dYuLD2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,217,1708416000"; 
+   d="scan'208";a="24249702"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 20 Apr 2024 12:08:28 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ryG4X-000BQl-1h;
+	Sat, 20 Apr 2024 19:08:25 +0000
+Date: Sun, 21 Apr 2024 03:07:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dharma Balasubiramani <dharma.b@microchip.com>,
+	"dmitry . baryshkov @ linaro . org" <dmitry.baryshkov@linaro.org>,
+	"andrzej . hajda @ intel . com" <andrzej.hajda@intel.com>,
+	"neil . armstrong @ linaro . org" <neil.armstrong@linaro.org>,
+	"rfoss @ kernel . org" <rfoss@kernel.org>,
+	"Laurent . pinchart @ ideasonboard . com" <Laurent.pinchart@ideasonboard.com>,
+	"jonas @ kwiboo . se" <jonas@kwiboo.se>,
+	"jernej . skrabec @ gmail . com" <jernej.skrabec@gmail.com>,
+	"maarten . lankhorst @ linux . intel . com" <maarten.lankhorst@linux.intel.com>,
+	"mripard @ kernel . org" <mripard@kernel.org>,
+	"tzimmermann @ suse . de" <tzimmermann@suse.de>,
+	"airlied @ gmail . com" <airlied@gmail.com>,
+	"daniel @ ffwll . ch" <daniel@ffwll.ch>,
+	"robh+dt @ kernel . org" <robh+dt@kernel.org>,
+	"krzysztof . kozlowski+dt @ linaro . org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt @ kernel . org" <conor+dt@kernel.org>,
+	"linux @ armlinux . org . uk" <linux@armlinux.org.uk>,
+	"Nicolas . Ferre @ microchip . com" <Nicolas.Ferre@microchip.com>,
+	"alexandre . belloni @ bootlin . com" <alexandre.belloni@bootlin.com>,
+	"claudiu . beznea @ tuxon . dev" <claudiu.beznea@tuxon.dev>,
+	"Manikandan . M @ microchip . com" <Manikandan.M@microchip.com>,
+	"arnd @ arndb . de" <arnd@arndb.de>,
+	"geert+renesas @ glider . be" <geert+renesas@glider.be>,
+	"Jason @ zx2c4 . com" <Jason@zx2c4.com>,
+	"mpe @ ellerman . id . au" <mpe@ellerman.id.au>,
+	"gerg @ linux-m68k . org" <gerg@linux-m68k.org>,
+	"rdunlap @ infradead . org" <rdunlap@infradead.org>,
+	"vbabka @ suse . cz" <vbabka@suse.cz>,
+	"dri-devel @ lists . freedesktop . org" <dri-devel@lists.freedesktop.org>,
+	"devicetree @ vger . kernel . org" <devicetree@vger.kernel.org>,
+	"linux-kernel @ vger . kernel . org" <linux-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v7 2/4] drm/bridge: add lvds controller support for sam9x7
+Message-ID: <202404210232.jI4lxq3k-lkp@intel.com>
+References: <20240418085725.373797-3-dharma.b@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <07801.124042013112500287@us-mta-689.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240418085725.373797-3-dharma.b@microchip.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Dharma,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v6.9-rc4 next-20240419]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'pwm/for-6.9-rc5-fixes' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/ukleinek/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Dharma-Balasubiramani/dt-bindings-display-bridge-add-sam9x75-lvds-binding/20240418-170157
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240418085725.373797-3-dharma.b%40microchip.com
+patch subject: [PATCH v7 2/4] drm/bridge: add lvds controller support for sam9x7
+config: arm-at91_dt_defconfig (https://download.01.org/0day-ci/archive/20240421/202404210232.jI4lxq3k-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240421/202404210232.jI4lxq3k-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1257460512
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404210232.jI4lxq3k-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1257460512-x86_64-kernel-debug_upt_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1257460512-x86_64-kernel-debug_upt_23
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, x86_64]
-        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
-"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
-=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
-:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
-            Affected tests:
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Storage - blktests - blk - upstream [aarch64, x86_64]
-                stress: stress-ng - cpu-cache [aarch64, x86_64]
-                stress: stress-ng - memory [aarch64, x86_64]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+   In file included from drivers/gpu/drm/bridge/microchip-lvds.c:17:
+   In file included from include/linux/phy/phy.h:17:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/bridge/microchip-lvds.c:199:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     199 |         if (ret < 0) {
+         |             ^~~
+   drivers/gpu/drm/bridge/microchip-lvds.c:154:9: note: initialize the variable 'ret' to silence this warning
+     154 |         int ret;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
+vim +/ret +199 drivers/gpu/drm/bridge/microchip-lvds.c
 
+   148	
+   149	static int mchp_lvds_probe(struct platform_device *pdev)
+   150	{
+   151		struct device *dev = &pdev->dev;
+   152		struct mchp_lvds *lvds;
+   153		struct device_node *port;
+   154		int ret;
+   155	
+   156		if (!dev->of_node)
+   157			return -ENODEV;
+   158	
+   159		lvds = devm_kzalloc(&pdev->dev, sizeof(*lvds), GFP_KERNEL);
+   160		if (!lvds)
+   161			return -ENOMEM;
+   162	
+   163		lvds->dev = dev;
+   164	
+   165		lvds->regs = devm_ioremap_resource(lvds->dev,
+   166				platform_get_resource(pdev, IORESOURCE_MEM, 0));
+   167		if (IS_ERR(lvds->regs))
+   168			return PTR_ERR(lvds->regs);
+   169	
+   170		lvds->pclk = devm_clk_get(lvds->dev, "pclk");
+   171		if (IS_ERR(lvds->pclk))
+   172			return dev_err_probe(lvds->dev, PTR_ERR(lvds->pclk),
+   173					"could not get pclk_lvds\n");
+   174	
+   175		port = of_graph_get_remote_node(dev->of_node, 1, 0);
+   176		if (!port) {
+   177			dev_err(dev,
+   178				"can't find port point, please init lvds panel port!\n");
+   179			return -ENODEV;
+   180		}
+   181	
+   182		lvds->panel = of_drm_find_panel(port);
+   183		of_node_put(port);
+   184	
+   185		if (IS_ERR(lvds->panel))
+   186			return -EPROBE_DEFER;
+   187	
+   188		lvds->panel_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
+   189	
+   190		if (IS_ERR(lvds->panel_bridge))
+   191			return PTR_ERR(lvds->panel_bridge);
+   192	
+   193		lvds->bridge.of_node = dev->of_node;
+   194		lvds->bridge.type = DRM_MODE_CONNECTOR_LVDS;
+   195		lvds->bridge.funcs = &mchp_lvds_bridge_funcs;
+   196	
+   197		dev_set_drvdata(dev, lvds);
+   198		devm_pm_runtime_enable(dev);
+ > 199		if (ret < 0) {
+   200			dev_err(lvds->dev, "failed to enable pm runtime: %d\n", ret);
+   201			return ret;
+   202		}
+   203	
+   204		drm_bridge_add(&lvds->bridge);
+   205	
+   206		return 0;
+   207	}
+   208	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
