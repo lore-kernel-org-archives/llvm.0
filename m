@@ -1,493 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FBF134DE;
-	Sat, 20 Apr 2024 13:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1056411713
+	for <llvm@lists.linux.dev>; Sat, 20 Apr 2024 17:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713619898; cv=none; b=uOhvdCPUHBtEai/01e5MDVnGpvPvpP9JTVsRqELDf7RWhQvc71/d6SkvZhFqq1h07cG4KKAyjgvJm/QGKttysCA+rPYrnt5zHMKCCIBUuvBU+BgFALMTPgnO/bzY/Jei/MZeCrhdgSfb6SlWq9R1FnlHexiwimpDBo5Uj1G5ik0=
+	t=1713633089; cv=none; b=u8dC4On0K/gsqWfSbrN9/19RUecBIBNZhhFZsKbYWj4xI1hj2TZbndwWmSx/20DellMUmdHadITkTOW40CzRzNSVlJ/DNy7y1b8DsAG4RS3abS2+dDN3/xnbk0w64bkL2OHCHAdHe1RkLhJuIu2yuZ/vpYk/aD4/FK+yM8zr1iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713619898; c=relaxed/simple;
-	bh=tmhZtPGAMr8IPvH/Y1+N/5MfnmXVAVT5PIqfKmNr22w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rilm64P8LCAVoGuSx1Udvhdxgj2NGTI8njajSsWtLu00adeoj0QSh5TwXtGtz5sWmRy67qQcHabYH6iBNdqF/5oTmNOmuy2jpA9O+0kisreh+Rn+25rdehzqczvUF/g4f98egwTtrif5V7UxZ3oNxB5kjQvfr8Xrq948+ju+yPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nP6qjt4o; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713633089; c=relaxed/simple;
+	bh=rnBr2ByqkOfHm1bUscqguCFBJWaYDgOY+7hmMFJ3ifE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OcRHAeNY/LCqv3p3SlT0S0yEet+um/BqpVff0QGzoFIwH+juIcvxnzVo4i1T7+QCuIFFIfIuJYuet8W03jJOaPE5rypmSU7iciEBrR/HtArHhH+0A5H321CIeIKkMasjU1/DxQT8LJb/1xi9ZJAYJKBquHc6jPdkHSU9uV1XViQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dsS+cBEj; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nP6qjt4o"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713619896; x=1745155896;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tmhZtPGAMr8IPvH/Y1+N/5MfnmXVAVT5PIqfKmNr22w=;
-  b=nP6qjt4oc2zkASnxsKl89jCkt9veC/9obtnJ5cmNzqV8tEjxrKRMDdh+
-   EutFGIoOJL1XPGfKWkcHynNp+rBC7WYQlHpkexITlrBr5kStziMNaOgtI
-   nJ4u0wuVO4jBTaZllJdNqfYjpLVrtxfvA1GfdyUJ+BPgeNV5akptRrec3
-   7ZfFcLG++jB+yEVBy8hBJy7tmR+I3vJKLfYz1bcq89yDTIfZwysZl5vXF
-   EW+KajGa/JHEOH5C9hhGJLeaH1z4F0+MnXZvgmj4GrcaRC6UtZL8byI33
-   6UTI0bwZbXdPlsspX3rwm6li458PsH/wWeRvLcnU2YJMFwwi9pNmRFgO0
-   A==;
-X-CSE-ConnectionGUID: 9ZIVA7XwSTu4SURj9zUX7A==
-X-CSE-MsgGUID: k4XRx9o8RrmoqlS22kda+g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11050"; a="34612375"
-X-IronPort-AV: E=Sophos;i="6.07,216,1708416000"; 
-   d="scan'208";a="34612375"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2024 06:31:35 -0700
-X-CSE-ConnectionGUID: MTplHLvsSlCZyANNLR9QPg==
-X-CSE-MsgGUID: D3O6Ao35QGaQh/mXOoUBDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,216,1708416000"; 
-   d="scan'208";a="54520269"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 20 Apr 2024 06:31:33 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ryAoU-000B6e-16;
-	Sat, 20 Apr 2024 13:31:30 +0000
-Date: Sat, 20 Apr 2024 21:30:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xu Lu <luxu.kernel@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 2/2] riscv: Use Zawrs to accelerate IPI to idle cpu
-Message-ID: <202404202129.uQmgTDG1-lkp@intel.com>
-References: <20240418114942.52770-3-luxu.kernel@bytedance.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dsS+cBEj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713633087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Q5ClM94WrLx0+IYtDnp1mAWVjawxRQVlZFwyl356lE4=;
+	b=dsS+cBEjlsYnDkkkEW1NctZhjaprdcmhemK906qR4dL8CmV9hR5oHGkJjMVv6tYMmu+Tir
+	vD8LEii17D2WeyskkuevqdPnbty5Y4pXSaQ+n/ncMEzJM6d4a/hgI+CK5ls10qjzz8azh8
+	WIUVoiT5uMcSgxlZwz/pAwp+82gLwMc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-689--EItVxoJOBWSsy-lP3qY1w-1; Sat, 20 Apr 2024 13:11:25 -0400
+X-MC-Unique: -EItVxoJOBWSsy-lP3qY1w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2778A834FB1
+	for <llvm@lists.linux.dev>; Sat, 20 Apr 2024 17:11:25 +0000 (UTC)
+Received: from [172.64.13.14] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D5199400059;
+	Sat, 20 Apr 2024 17:11:24 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 15 of 204): Test report for master
+ (6.9.0-rc4, mainline.kernel.org-clang, 4b6b5132)
+Date: Sat, 20 Apr 2024 17:11:24 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240418114942.52770-3-luxu.kernel@bytedance.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Message-Id: <07801.124042013112500287@us-mta-689.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Xu,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v6.9-rc2]
-[cannot apply to linus/master v6.9-rc4 v6.9-rc3 next-20240419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Lu/riscv-process-Introduce-idle-thread-using-Zawrs-extension/20240418-195356
-base:   v6.9-rc2
-patch link:    https://lore.kernel.org/r/20240418114942.52770-3-luxu.kernel%40bytedance.com
-patch subject: [RFC 2/2] riscv: Use Zawrs to accelerate IPI to idle cpu
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240420/202404202129.uQmgTDG1-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240420/202404202129.uQmgTDG1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404202129.uQmgTDG1-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:11:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:23:
->> drivers/media/platform/mediatek/vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
-   drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:206:52: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     206 |         ret = vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   6 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_m2m.c:17:
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.h:12:
-   In file included from include/media/v4l2-ctrls.h:14:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_m2m.c:20:
->> drivers/media/platform/mediatek/vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
-   5 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_intr.c:10:
-   In file included from drivers/media/platform/mediatek/vcodec/common/../decoder/mtk_vcodec_dec_drv.h:10:
-   In file included from drivers/media/platform/mediatek/vcodec/common/../decoder/../common/mtk_vcodec_cmn_drv.h:12:
-   In file included from include/media/v4l2-ctrls.h:14:
-   In file included from include/media/media-request.h:20:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_intr.c:10:
-   In file included from drivers/media/platform/mediatek/vcodec/common/../decoder/mtk_vcodec_dec_drv.h:12:
-   In file included from drivers/media/platform/mediatek/vcodec/common/../decoder/../common/mtk_vcodec_fw_priv.h:6:
-   In file included from drivers/media/platform/mediatek/vcodec/common/../decoder/../common/mtk_vcodec_fw.h:9:
->> drivers/media/platform/mediatek/vcodec/common/../decoder/../common/../../vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
-   5 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/mediatek/vpu/mtk_vpu.c:9:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/vpu/mtk_vpu.c:20:
->> drivers/media/platform/mediatek/vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
->> drivers/media/platform/mediatek/vpu/mtk_vpu.c:299:9: warning: comparison of different enumeration types ('enum ipi_id' and 'enum ipi_message_type') [-Wenum-compare]
-     299 |         if (id < IPI_MAX && handler) {
-         |             ~~ ^ ~~~~~~~
-   drivers/media/platform/mediatek/vpu/mtk_vpu.c:322:31: warning: comparison of different enumeration types ('enum ipi_id' and 'enum ipi_message_type') [-Wenum-compare]
-     322 |         if (id <= IPI_VPU_INIT || id >= IPI_MAX ||
-         |                                   ~~ ^  ~~~~~~~
-   7 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/venc_vp8_if.c:8:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/venc_vp8_if.c:12:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/../mtk_vcodec_enc_drv.h:12:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/../../common/mtk_vcodec_fw_priv.h:6:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/../../common/mtk_vcodec_fw.h:9:
->> drivers/media/platform/mediatek/vcodec/encoder/venc/../../common/../../vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
-   5 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c:9:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c:13:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/../mtk_vcodec_enc_drv.h:12:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/../../common/mtk_vcodec_fw_priv.h:6:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/venc/../../common/mtk_vcodec_fw.h:9:
->> drivers/media/platform/mediatek/vcodec/encoder/venc/../../common/../../vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
-   drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c:596:29: warning: conditional expression between different enumeration types ('enum scp_ipi_id' and 'enum ipi_id') [-Wenum-compare-conditional]
-     596 |         inst->vpu_inst.id = is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
-         |                                    ^ ~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c:9:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:19:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c:13:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.h:14:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h:12:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/../common/mtk_vcodec_fw_priv.h:6:
-   In file included from drivers/media/platform/mediatek/vcodec/encoder/../common/mtk_vcodec_fw.h:9:
->> drivers/media/platform/mediatek/vcodec/encoder/../common/../../vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
-   5 warnings and 1 error generated.
---
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_if.c:10:
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/../vdec_drv_if.h:11:
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/../mtk_vcodec_dec.h:11:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:19:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_if.c:10:
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/../vdec_drv_if.h:11:
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/../mtk_vcodec_dec.h:14:
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/../mtk_vcodec_dec_drv.h:12:
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/../../common/mtk_vcodec_fw_priv.h:6:
-   In file included from drivers/media/platform/mediatek/vcodec/decoder/vdec/../../common/mtk_vcodec_fw.h:9:
->> drivers/media/platform/mediatek/vcodec/decoder/vdec/../../common/../../vpu/mtk_vpu.h:63:2: error: redefinition of enumerator 'IPI_MAX'
-      63 |         IPI_MAX,
-         |         ^
-   arch/riscv/include/asm/smp.h:29:2: note: previous definition is here
-      29 |         IPI_MAX
-         |         ^
-   5 warnings and 1 error generated.
-..
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/IPI_MAX +63 drivers/media/platform/mediatek/vpu/mtk_vpu.h
+Kernel information:
+    Commit message: Merge tag 'pwm/for-6.9-rc5-fixes' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/ukleinek/linux
 
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  11  
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  12  /**
-0f02beec61875e drivers/media/platform/mtk-vpu/mtk_vpu.h      Hans Verkuil   2021-03-11  13   * DOC: VPU
-0f02beec61875e drivers/media/platform/mtk-vpu/mtk_vpu.h      Hans Verkuil   2021-03-11  14   *
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  15   * VPU (video processor unit) is a tiny processor controlling video hardware
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  16   * related to video codec, scaling and color format converting.
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  17   * VPU interfaces with other blocks by share memory and interrupt.
-0f02beec61875e drivers/media/platform/mtk-vpu/mtk_vpu.h      Hans Verkuil   2021-03-11  18   */
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  19  
-bfb1b99802ef16 drivers/media/platform/mediatek/vpu/mtk_vpu.h Arnd Bergmann  2024-02-24  20  typedef void (*ipi_handler_t) (void *data,
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  21  			       unsigned int len,
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  22  			       void *priv);
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  23  
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  24  /**
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  25   * enum ipi_id - the id of inter-processor interrupt
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  26   *
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  27   * @IPI_VPU_INIT:	 The interrupt from vpu is to notfiy kernel
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  28   *			 VPU initialization completed.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  29   *			 IPI_VPU_INIT is sent from VPU when firmware is
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  30   *			 loaded. AP doesn't need to send IPI_VPU_INIT
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  31   *			 command to VPU.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  32   *			 For other IPI below, AP should send the request
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  33   *			 to VPU to trigger the interrupt.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  34   * @IPI_VDEC_H264:	 The interrupt from vpu is to notify kernel to
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  35   *			 handle H264 vidoe decoder job, and vice versa.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  36   *			 Decode output format is always MT21 no matter what
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  37   *			 the input format is.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  38   * @IPI_VDEC_VP8:	 The interrupt from is to notify kernel to
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  39   *			 handle VP8 video decoder job, and vice versa.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  40   *			 Decode output format is always MT21 no matter what
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  41   *			 the input format is.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  42   * @IPI_VDEC_VP9:	 The interrupt from vpu is to notify kernel to
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  43   *			 handle VP9 video decoder job, and vice versa.
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  44   *			 Decode output format is always MT21 no matter what
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  45   *			 the input format is.
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  46   * @IPI_VENC_H264:	 The interrupt from vpu is to notify kernel to
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  47   *			 handle H264 video encoder job, and vice versa.
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  48   * @IPI_VENC_VP8:	 The interrupt fro vpu is to notify kernel to
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  49   *			 handle VP8 video encoder job,, and vice versa.
-737ea6cfd22631 drivers/media/platform/mtk-vpu/mtk_vpu.h      Minghsiu Tsai  2016-09-08  50   * @IPI_MDP:		 The interrupt from vpu is to notify kernel to
-737ea6cfd22631 drivers/media/platform/mtk-vpu/mtk_vpu.h      Minghsiu Tsai  2016-09-08  51   *			 handle MDP (Media Data Path) job, and vice versa.
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  52   * @IPI_MAX:		 The maximum IPI number
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  53   */
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  54  
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  55  enum ipi_id {
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  56  	IPI_VPU_INIT = 0,
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  57  	IPI_VDEC_H264,
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  58  	IPI_VDEC_VP8,
-e2818a59f7ca42 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-09-02  59  	IPI_VDEC_VP9,
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  60  	IPI_VENC_H264,
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  61  	IPI_VENC_VP8,
-737ea6cfd22631 drivers/media/platform/mtk-vpu/mtk_vpu.h      Minghsiu Tsai  2016-09-08  62  	IPI_MDP,
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03 @63  	IPI_MAX,
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  64  };
-3003a180ef6b94 drivers/media/platform/mtk-vpu/mtk_vpu.h      Andrew-CT Chen 2016-05-03  65  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1257460512
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1257460512-x86_64-kernel-debug_upt_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1257460512-x86_64-kernel-debug_upt_23
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
+"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
+=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
+:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
+            Affected tests:
+                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
+_64]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                stress: stress-ng - memory [aarch64, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
