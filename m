@@ -1,107 +1,111 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782563A8D2
-	for <llvm@lists.linux.dev>; Sun, 21 Apr 2024 18:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE86A45974;
+	Sun, 21 Apr 2024 23:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713724123; cv=none; b=cuC9ZEn5BsvSRfomPtlANOHE9+Bg7fQ428S8GbzbYks7SPOmfuMS2idlJ4q6N8BmLIUrvt+0X0UOfsAGSXS4vISKEL2xx3IFsUq9TLkDdgSPvJQuvI69C5rNITujc73XH79zIw3aKqkY/h0WTh7EKU9r1EyXVxxa53JEm2BPmRI=
+	t=1713742907; cv=none; b=g//TH5yfC7Vn8xyZJ8YfjNNotLE8/2Az7cWIrNsYl/ZZuFSCkslaK6sNVElMI7ro6QeGLo5iXHq8hLsBiGsL1H4ShDwB2FW4Y8or55hVSUESN21j5YhOt+dbgovC98Z3APMlwzWnLcFiEPw2PoXliJak4sNunDAdu4vvJUWoVqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713724123; c=relaxed/simple;
-	bh=7O3Om7ips7szRQxRgx+RW7NvKEbAxZva25/bAWcwIds=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ly/aUWCfoct1XihNxEV83LGZVK9KtXaNdTnmV8IRRf1L7sHwyGLV2LkFTqiPhbQ2LXR/c0aa6yuozfIsPIchWKwRokHi0duVmrSh6STlVU4ee/uI/Z69LnKRixa5ttTlJoXTlPo9MwZuZvoMEoz7BRqiarVbDzvcR0OuLebRI4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ruACXAH8; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1713742907; c=relaxed/simple;
+	bh=WnNruZHN5BfmR5CGYtYlhIR4IYem4T78amG2rTz85JI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kK0BzEsHv4fHjYdOVySo5KJz8T6vksHM9luDiqOqbE1POFAuZt7zEeqgvfxX9BPzUASBi/HHSrm0zXD1fuBs9QUH2X9qwOjpHLU8s8943xICsmKMn11eRAom+qsZdCjdNw4duM6Gi5mWXMTehEzfbMQieXSYfPAuwMBVyLDVPRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=atDhHXO3; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ruACXAH8"
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51ab4ee9df8so3153981e87.1
-        for <llvm@lists.linux.dev>; Sun, 21 Apr 2024 11:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713724120; x=1714328920; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y70OTHVL5ivIan0b4DqgD01dRiya5SKhfRNunxoXdLs=;
-        b=ruACXAH8oOAxocslIZI64vJ9Gjz2Jjl/kwiIZ2+K02arzX19rKuQ3eKLhuP49UCPOg
-         LzYchtkJtyRwVa3OW7wtgJYdTJKfjhENVkLVrBbTU0jciCQUEJ6/SPJP9hzEuJOtWp/J
-         jhGNEKB+SfCXD8BQGlUzAfHQROw9zum+w9TlXhSiw6HO4AnRD3yAtBFs6s1KXLSxlo17
-         LNPnewYOgPpnAsWv79/Wtxbhce+ybFAw3peGrMUW3XP1FOuzQ3/FfhdwKDZ2Iqzw6lLv
-         hrKyIQIjbB0byjkSCT0cHwK2bhNUP059Xmb/AnVsig6VkS6TTrH67RBzPIVOjBhXeMnl
-         JWwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713724120; x=1714328920;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y70OTHVL5ivIan0b4DqgD01dRiya5SKhfRNunxoXdLs=;
-        b=xIt+b+yguV0dWRb/5Dv5sD5iIMUC9jgif2E3U+CGPO4aPQup1z4lNpDewlgykDl2zB
-         ZD/Ng3q7msNMHV80wCdq39tucRdcwnVjHDlpIhlMWvYljQjs/f5hVsWNwrBcZLsyUFbv
-         +Ua2II/eeAYZTk9oqEMMhTOBk+iyV5X+0BACDlIPvmGviT0YOyUlDXufypbdU/XZxJDL
-         B8Ds+RvWsZHnsANUKTKFPyF+f+CLyi6cNm80tKjWje3jjlbX+SR9anRDg3LYXXOD6Mp8
-         yPj+lPUzU1nCZSmRBDryJHH04HzycYogHVLAzgo7E2oH3mHj0PgC4LpD/BChMxdcxa6E
-         +kYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX5tJ2mzoaOqojhU6sMD1vokfujbiF/U0xTMNqM18gy30Wrcl5ZR0uXJFlXP/7SLaNioWTgA5LNkFZH+HkRwaA3VhlPwg==
-X-Gm-Message-State: AOJu0YztplVjgifOZiucfZ/xYNhdKPBPWJJg8rEJlkPi9prpLVnhMXXk
-	bFZWUOZeqCATw/ZJX3nRD8lc5pGs5sZhaqBIjyNNFMtxmQXb+2gJhJ89aoqAhKU=
-X-Google-Smtp-Source: AGHT+IH7reJlxAOcCyXD+MSHuuDYG0YRVdcMUSgTIS46/BdvW/4HC0w9owbY9Cg+Mub5s+Jo3qDzbA==
-X-Received: by 2002:a05:6512:3054:b0:516:e8b1:177d with SMTP id b20-20020a056512305400b00516e8b1177dmr6437575lfb.65.1713724119734;
-        Sun, 21 Apr 2024 11:28:39 -0700 (PDT)
-Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id s14-20020a19770e000000b005188ea5d2b5sm1549641lfc.303.2024.04.21.11.28.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Apr 2024 11:28:39 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sun, 21 Apr 2024 20:28:37 +0200
-Subject: [PATCH v7 11/11] ARM: Support CLANG CFI
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="atDhHXO3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713742905; x=1745278905;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WnNruZHN5BfmR5CGYtYlhIR4IYem4T78amG2rTz85JI=;
+  b=atDhHXO33/4FA+OZYTEXakVmpoK8C8v8ppJWg8NSjuIDAK9415m+Lq/X
+   w9kPcnU8Xlygnt5KAbuZI5lNf93TZtth8Q0OEtJKzTafwHfJy1pFFaJ1I
+   +nIz42ij82yWLaPHuyQBAA5v6YYnhGPaOBOzqb12HH8vrVPTWOxzCWnJS
+   pGaaSHiva36kffZpkpJQ9EjRa8Y82iIdNXPohJdp7ckMqQ/IiDDC7k30X
+   uaw8bnZrVZaSyFD48mm0x3ebbejxlvIn1DrZQLH4P3OG//vdbEMr4uhpD
+   tGZrGban4eoHBvjtCQkUjDAvgs2Mi6m/Vk2tfOoaxV4hOkKsYOUFq/EeB
+   A==;
+X-CSE-ConnectionGUID: W0IxuKRcS5G2OuwvUFyCAw==
+X-CSE-MsgGUID: uoM5kbZ6S+CG7uU4UID5sQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11051"; a="9185217"
+X-IronPort-AV: E=Sophos;i="6.07,219,1708416000"; 
+   d="scan'208";a="9185217"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2024 16:41:42 -0700
+X-CSE-ConnectionGUID: cAppcaLeRKmQAaziG5be9Q==
+X-CSE-MsgGUID: bU2HJ+53Re2lysGtY5Q9sQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,219,1708416000"; 
+   d="scan'208";a="23871861"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 21 Apr 2024 16:41:41 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rygoV-000CDS-0V;
+	Sun, 21 Apr 2024 23:41:39 +0000
+Date: Mon, 22 Apr 2024 07:40:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [frederic-dynticks:task/work 5/6]
+ include/linux/sched/isolation.h:88:52: warning: non-void function does not
+ return a value
+Message-ID: <202404220757.sIAJ9dw8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240421-arm32-cfi-v7-11-6e132a948cc8@linaro.org>
-References: <20240421-arm32-cfi-v7-0-6e132a948cc8@linaro.org>
-In-Reply-To: <20240421-arm32-cfi-v7-0-6e132a948cc8@linaro.org>
-To: Russell King <linux@armlinux.org.uk>, 
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
- Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Support Control Flow Integrity (CFI) when compiling with
-CLANG.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git task/work
+head:   4bf6e6afb803e5862efb2cc8f2585d10e2f597f2
+commit: b5ed7ff8dcb5e3c63e9e3efd32f62ee871ba3f1e [5/6] sched/isolation: Introduce isolated task work
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240422/202404220757.sIAJ9dw8-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240422/202404220757.sIAJ9dw8-lkp@intel.com/reproduce)
 
-In the as-of-writing LLVM CLANG implementation (v17)
-the 32-bit ARM platform is supported by the generic CFI
-implementation, which isn't tailored specifically for ARM32
-but works well enough to enable the feature.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404220757.sIAJ9dw8-lkp@intel.com/
 
-Tested-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index b14aed3a17ab..df7bd07ad0d4 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -35,6 +35,7 @@ config ARM
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
- 	select ARCH_SUPPORTS_ATOMIC_RMW
-+	select ARCH_SUPPORTS_CFI_CLANG
- 	select ARCH_SUPPORTS_HUGETLBFS if ARM_LPAE
- 	select ARCH_SUPPORTS_PER_VMA_LOCK
- 	select ARCH_USE_BUILTIN_BSWAP
+   In file included from kernel/time/hrtimer.c:41:
+>> include/linux/sched/isolation.h:88:52: warning: non-void function does not return a value [-Wreturn-type]
+      88 | static inline int isolated_task_work_queue(void) { }
+         |                                                    ^
+   kernel/time/hrtimer.c:1655:7: warning: variable 'expires_in_hardirq' set but not used [-Wunused-but-set-variable]
+    1655 |         bool expires_in_hardirq;
+         |              ^
+   kernel/time/hrtimer.c:278:20: warning: unused function 'is_migration_base' [-Wunused-function]
+     278 | static inline bool is_migration_base(struct hrtimer_clock_base *base)
+         |                    ^~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:653:19: warning: unused function 'hrtimer_hres_active' [-Wunused-function]
+     653 | static inline int hrtimer_hres_active(void)
+         |                   ^~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:1894:20: warning: unused function '__hrtimer_peek_ahead_timers' [-Wunused-function]
+    1894 | static inline void __hrtimer_peek_ahead_timers(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
+
+
+vim +88 include/linux/sched/isolation.h
+
+    85	
+    86	extern void isolated_task_work_init(struct task_struct *tsk);
+    87	#else
+  > 88	static inline int isolated_task_work_queue(void) { }
+    89	static inline void isolated_task_work_init(struct task_struct *tsk) { }
+    90	#endif /* CONFIG_NO_HZ_FULL && CONFIG_HAVE_POSIX_CPU_TIMERS_TASK_WORK */
+    91	
 
 -- 
-2.44.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
