@@ -1,146 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBA5152522;
-	Mon, 22 Apr 2024 15:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA1915380B
+	for <llvm@lists.linux.dev>; Mon, 22 Apr 2024 16:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713798458; cv=none; b=lZStGpzPva3pYUVwtAAlfonVZC8aAM2gtFIxnpk68qaHWDNUOmVJIN9+WSy/bJzY5mYWF9nIdKvgwrZkueBr8PgHkne5mupFx+Q4d3/V54TCwkAJ07eMOiOXFOjvHJvqKblv8TZzo/3DzfT6FYbfj6q7rbXlhMI1sR7xTkEd/J0=
+	t=1713802876; cv=none; b=YfvT2HsOPoqaB3ZkFnofNAFuCRRi1EmyUX7MVh5ediBFZZ1cKYU9BhAjCigVfb8LhS70yM0GeSLxhoK09OL8JUn2We4KjH/yWzhTmbq8qg3a5h7AE5eoqZMq63GtK9QohtVcDyhCmtWyTz4sOShxrWlrAGLVdv5Isxr5hVdTEeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713798458; c=relaxed/simple;
-	bh=LECIaM91Psb2dm6DqMQro75OTIDA04zgrtVeFPRAHT8=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ENPpl/9tpDX+djUTT5ro+QQKrweMrKYFdfoDkK2l8TNaFVFtSoxZDP6SRuoV8NdfZrFQZUVQwna4+XF8l3b+QkxXrZim7+/igBjHB+IJAUu4BoDY4M8U7nA7ex7IKt06bg4CvOdh8qjDjAEYYZsBkykGBKBZOad3FlgHDfc58tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iWcVBVLh; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713802876; c=relaxed/simple;
+	bh=0UobfBGE+SyjW5hpf/zsJLUNrWOzqshbd4AmR8Z7g9Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pxVuzuz5JFs4i7h6yNn3E963D3usjnCvW0XNf3QwiahWcJ0t3+SRjoMa+Iua16L0q+M5b7xlaj00G9PxSW8t3YBFALBlIl1oAk5gAZzCesgiUOUZmEVao1ZObUr3TdePIYA9Kyu2psmZUi/UqXH9FdtlsaAVEBveCED7kWoCqvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZIMCKvpL; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iWcVBVLh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713798455; x=1745334455;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=LECIaM91Psb2dm6DqMQro75OTIDA04zgrtVeFPRAHT8=;
-  b=iWcVBVLhJQ4VKnDi/e9fSHG7gE0ZK7M+CJEE9kaZw+3fcgignaN0K+w7
-   jRIdyGQjon8985cu4waO/AuG2BE3Jg48hp7tpyBAr13TIrXitfqPMUjrc
-   s3cMPs1z1MqLQaYZLHabhkaZBM/h+KpkQaFK6NqYMaK4RxbWOtwEpa445
-   iw/I7CANL4nT74xXX79rzEaC0/rZxKW8m0/Mn6UdexdOjDAWieJhdYKlV
-   +6C4FV3ZyP5dy8TApjTRn+Cmd81GYl8jBhH7pBWvcbKF82/CKziHkBG+H
-   VXUDTNnbwvqe2iQYF3T4UPJrbxreXkL9VGcyZffpRvnVVoWN91JmmoCO0
-   A==;
-X-CSE-ConnectionGUID: Iq4OWtYxTP2MhI5DJtDTsQ==
-X-CSE-MsgGUID: TO/Baj3jQE2fBT7Ma+V4bA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="26857189"
-X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
-   d="scan'208";a="26857189"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 08:07:34 -0700
-X-CSE-ConnectionGUID: GycNDFl9RumH7RszF16mnw==
-X-CSE-MsgGUID: fsvjIUCJTd+rP7rTH1H7RA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
-   d="scan'208";a="61492949"
-Received: from lkp-server01.sh.intel.com (HELO 01437695816f) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 22 Apr 2024 08:07:33 -0700
-Received: from kbuild by 01437695816f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ryvGU-00003c-0b;
-	Mon, 22 Apr 2024 15:07:30 +0000
-Date: Mon, 22 Apr 2024 23:07:05 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/4] virtio_balloon: introduce memory allocation stall
- counter
-Message-ID: <202404222241.599OtAGQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZIMCKvpL"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43MFfaaI008025;
+	Mon, 22 Apr 2024 16:21:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=BeB6ld/0x9MpnPNJNCXzKwtz17XBbhkY2cn9Yw1AGC8=; b=ZI
+	MCKvpLQmoLhxmEjIgFn4mexrYRZ9l6voRX8g2Zwukc2crYxm8nuv/dFZ4yDLUoJb
+	GpfeUs7CrET0JYFfXIG6HIVLkS6oe1HNFYgdLwFGbHJD74TZDSJavzuPGWW9H77N
+	EexLlBUKDZ90/0OlZ3OAnbRe7p9ofYj+iEMyPtmiQ005ZHuvWCS+V+TkhxLzXJnZ
+	NCv1c+yqZ0G+ceH0r2FZPcuM1017vTHFBmU+X2NCBHj0X4u5eDtJK14DF6sC424d
+	i/9T2RBZf/fZxix+Wtz/sIN9eMi0rrf+n+rlmIC9Fmu9LmoIwdbVky8aMBqx/RPH
+	MWUEhp4RTAEoJOjubQwg==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xm4qdd2a2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Apr 2024 16:21:05 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43MGL2X7027898
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Apr 2024 16:21:02 GMT
+Received: from [10.227.110.203] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 22 Apr
+ 2024 09:21:01 -0700
+Message-ID: <9fc9866b-b2fb-40ee-97ea-0e819f05dc15@quicinc.com>
+Date: Mon, 22 Apr 2024 09:21:01 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH wireless v2] wifi: ath10k: Fix an error code problem in
+ ath10k_dbg_sta_write_peer_debug_trigger()
+Content-Language: en-US
+To: Su Hui <suhui@nfschina.com>, <kvalo@kernel.org>, <jjohnson@kernel.org>,
+        <nathan@kernel.org>, <ndesaulniers@google.com>, <morbo@google.com>,
+        <justinstitt@google.com>
+CC: <c_mkenna@qti.qualcomm.com>, <linux-wireless@vger.kernel.org>,
+        <ath10k@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, <kernel-janitors@vger.kernel.org>
+References: <20240422034243.938962-1-suhui@nfschina.com>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20240422034243.938962-1-suhui@nfschina.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0A8r2vmO4FIBEAzjcwXp__E0KoBsziKC
+X-Proofpoint-ORIG-GUID: 0A8r2vmO4FIBEAzjcwXp__E0KoBsziKC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-22_09,2024-04-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=762 bulkscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404220069
 
-In-Reply-To: <20240422074254.1440457-4-pizhenwei@bytedance.com>
-References: <20240422074254.1440457-4-pizhenwei@bytedance.com>
-TO: zhenwei pi <pizhenwei@bytedance.com>
-TO: linux-kernel@vger.kernel.org
-TO: linux-mm@kvack.org
-TO: virtualization@lists.linux.dev
-CC: mst@redhat.com
-CC: david@redhat.com
-CC: jasowang@redhat.com
-CC: xuanzhuo@linux.alibaba.com
-CC: akpm@linux-foundation.org
-CC: zhenwei pi <pizhenwei@bytedance.com>
+On 4/21/2024 8:42 PM, Su Hui wrote:
+> Clang Static Checker (scan-build) Warning:
+> drivers/net/wireless/ath/ath10k/debugfs_sta.c:line 429, column 3
+> Value stored to 'ret' is never read.
+> 
+> Return 'ret' rather than 'count' when 'ret' stores an error code.
+> By the way, remove some useless code.
+> 
+> Fixes: ee8b08a1be82 ("ath10k: add debugfs support to get per peer tids log via tracing")
+> Signed-off-by: Su Hui <suhui@nfschina.com>Acked-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 
-Hi zhenwei,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.9-rc5 next-20240422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/zhenwei-pi/virtio_balloon-separate-vm-events-into-a-function/20240422-154406
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240422074254.1440457-4-pizhenwei%40bytedance.com
-patch subject: [PATCH v2 3/4] virtio_balloon: introduce memory allocation stall counter
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240422/202404222241.599OtAGQ-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240422/202404222241.599OtAGQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404222241.599OtAGQ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/virtio/virtio_balloon.c:9:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2254:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/virtio/virtio_balloon.c:340:37: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-     340 |                 stall += events[ALLOCSTALL_NORMAL - ZONE_NORMAL + zid];
-         |                                 ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +340 drivers/virtio/virtio_balloon.c
-
-   318	
-   319	/* Return the number of entries filled by vm events */
-   320	static inline unsigned int update_balloon_vm_stats(struct virtio_balloon *vb,
-   321							   unsigned int start)
-   322	{
-   323	#ifdef CONFIG_VM_EVENT_COUNTERS
-   324		unsigned long events[NR_VM_EVENT_ITEMS];
-   325		unsigned int idx = start;
-   326		unsigned int zid;
-   327		unsigned long stall = 0;
-   328	
-   329		all_vm_events(events);
-   330		update_stat(vb, idx++, VIRTIO_BALLOON_S_SWAP_IN,
-   331			    pages_to_bytes(events[PSWPIN]));
-   332		update_stat(vb, idx++, VIRTIO_BALLOON_S_SWAP_OUT,
-   333			    pages_to_bytes(events[PSWPOUT]));
-   334		update_stat(vb, idx++, VIRTIO_BALLOON_S_MAJFLT, events[PGMAJFAULT]);
-   335		update_stat(vb, idx++, VIRTIO_BALLOON_S_MINFLT, events[PGFAULT]);
-   336		update_stat(vb, idx++, VIRTIO_BALLOON_S_OOM_KILL, events[OOM_KILL]);
-   337	
-   338		/* sum all the stall events */
-   339		for (zid = 0; zid < MAX_NR_ZONES; zid++)
- > 340			stall += events[ALLOCSTALL_NORMAL - ZONE_NORMAL + zid];
-   341	
-   342		update_stat(vb, idx++, VIRTIO_BALLOON_S_ALLOC_STALL, stall);
-   343	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
