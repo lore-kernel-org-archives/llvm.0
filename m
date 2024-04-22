@@ -1,203 +1,146 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49BB53CF65
-	for <llvm@lists.linux.dev>; Mon, 22 Apr 2024 14:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713796502; cv=fail; b=qR0gssD1R4Kq1c0rFTrb/SgybUUb/6ruOHhg+d7aWFOL9b6LgU2DusyP6lmGjbKpr5qdbQs3irdbS3uYxQEwoHosVmD0co0BX2kgfT24sIWZ/72p3FSiRfY4IWSuGPfcfgbYTleITsEtbggQl5sTa9B+6fybZODb7cLZnvCSrRg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713796502; c=relaxed/simple;
-	bh=yofH+Y73fmGXwyTRD8/dUy+fjoUFunfNPGRB5rcF+js=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Z7/U3GyOX6GjsTXrTjkvvrUHhypTOp533nW6xYhInuaAXY+Oe2hUytLqC10N79NgHvjPwhxt4vPx5o62WFcnUv8osdsweMCx3ZhVxqKsYQaciirJ4ABwL2CdnVVJ4V3EbqjSzfKg0+k45NDe8QPfgBgF3bpG0IytIfm98kBvnk8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=rz2vkW5v; arc=fail smtp.client-ip=40.107.92.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBA5152522;
+	Mon, 22 Apr 2024 15:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713798458; cv=none; b=lZStGpzPva3pYUVwtAAlfonVZC8aAM2gtFIxnpk68qaHWDNUOmVJIN9+WSy/bJzY5mYWF9nIdKvgwrZkueBr8PgHkne5mupFx+Q4d3/V54TCwkAJ07eMOiOXFOjvHJvqKblv8TZzo/3DzfT6FYbfj6q7rbXlhMI1sR7xTkEd/J0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713798458; c=relaxed/simple;
+	bh=LECIaM91Psb2dm6DqMQro75OTIDA04zgrtVeFPRAHT8=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ENPpl/9tpDX+djUTT5ro+QQKrweMrKYFdfoDkK2l8TNaFVFtSoxZDP6SRuoV8NdfZrFQZUVQwna4+XF8l3b+QkxXrZim7+/igBjHB+IJAUu4BoDY4M8U7nA7ex7IKt06bg4CvOdh8qjDjAEYYZsBkykGBKBZOad3FlgHDfc58tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iWcVBVLh; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="rz2vkW5v"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=caoFtHGyf5b61hTgK7MzjsdVUt5pprX13eRtPBuYQYu48Zg982/GVFJYj1DyKD3hybxSNUDXDU6QFHj0h8UOXQT+xgJRzmDj0mrOi9JN1bZeXPnD++AwiqFo+bbMuWlZO45EbC8UP7sgHsumzUbt8YM6RZGh3whiulJMMq7C7rGjRQW2wGYZyrYzVdvS2zNA8NtnSBls6HwmYZYw7YIcLPokVG23chYq5kJTHcPi+Y8oxvIL1vhaFAAsiCi8+Gt/tmp2NZVc3wwRAEcojDIzdIWmX4RAL8QDi/OYwi54mR5gZOtHXooKqhuOZEiuLadum+VfqaE73hgfpshwJxzLUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nkIZ2St2At/SGQvWXNajfcL0FCyooz9fnBUgP6XV8X4=;
- b=gMpvrbMZS/IZOJ/ZKO087oalbccSGfxhdl7GIoPE/bYKqwSud1/lvzcYRh0mMOrOCtzKcT6avIbtVayyNxfuKnBA/g7Hs68k2P74gDTqDz9puNNJ2692YCiUh7qo3hPEVq5ef7WRANKH7Y8Jphn20T8TzAssEfwrkqE4+hhMuVzGWCDWTT/Tlrae1ZgsT4parsqbYPW1h0Gt7QKztT6XVvyrkBdMCzEMTj87bG3o1kiTj0Jfa7OLhpDlnoBGxeJcZKfDLIXFOkAP7ZB1HNi6S4QvUQYEJ89m+8UFm0C412QIrWJ/0ujGfxxO7Op0ViajmoSsfSwEAfxn790c6V5zFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nkIZ2St2At/SGQvWXNajfcL0FCyooz9fnBUgP6XV8X4=;
- b=rz2vkW5vFRbeq3RR3zYDqg6v/HE/caDq3jpqT0aasAfHxKB3pYb03ka6IHGuePk45uDj8BN9rIFeYP6YHv7edrVUgfRfpy3/4qCwyJ2AKlAy+iDyBFLt8Qk0CIAbn3W93RZ9rlTBfjgmgpQEQdw3YZ5v4gCRhhBBLv3HIYyvu2OeSn2474FHp0KDEDOL4JmGVO9K4xg7QgAQP0xOM1OhPGOu75e5XxAfpCDdFGNES6zYtipZ/ljDM24ZFnKub4yVluoS1Yp2f+Y0Apa49zu4EtFxSWypJ1TQ0xm/1hmAnxhFytqYUVTZAIACYNHs4wnSVClyFZQ8uBGH89zVFIfjKw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- DM4PR12MB8557.namprd12.prod.outlook.com (2603:10b6:8:18b::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7472.44; Mon, 22 Apr 2024 14:34:57 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::dc5c:2cf1:d5f5:9753]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::dc5c:2cf1:d5f5:9753%6]) with mapi id 15.20.7472.044; Mon, 22 Apr 2024
- 14:34:57 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: mm: fix unused and uninitialized variable
- warning
-Date: Mon, 22 Apr 2024 09:59:08 -0400
-X-Mailer: MailMate (1.14r6028)
-Message-ID: <CC621D9C-2D1B-4CB7-A5E0-ACE0850E6B0D@nvidia.com>
-In-Reply-To: <20240416162658.3353622-1-usama.anjum@collabora.com>
-References: <20240416162658.3353622-1-usama.anjum@collabora.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_48CB3BC0-7E89-479D-988D-8B56AF4CB946_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1PR13CA0270.namprd13.prod.outlook.com
- (2603:10b6:208:2ba::35) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iWcVBVLh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713798455; x=1745334455;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=LECIaM91Psb2dm6DqMQro75OTIDA04zgrtVeFPRAHT8=;
+  b=iWcVBVLhJQ4VKnDi/e9fSHG7gE0ZK7M+CJEE9kaZw+3fcgignaN0K+w7
+   jRIdyGQjon8985cu4waO/AuG2BE3Jg48hp7tpyBAr13TIrXitfqPMUjrc
+   s3cMPs1z1MqLQaYZLHabhkaZBM/h+KpkQaFK6NqYMaK4RxbWOtwEpa445
+   iw/I7CANL4nT74xXX79rzEaC0/rZxKW8m0/Mn6UdexdOjDAWieJhdYKlV
+   +6C4FV3ZyP5dy8TApjTRn+Cmd81GYl8jBhH7pBWvcbKF82/CKziHkBG+H
+   VXUDTNnbwvqe2iQYF3T4UPJrbxreXkL9VGcyZffpRvnVVoWN91JmmoCO0
+   A==;
+X-CSE-ConnectionGUID: Iq4OWtYxTP2MhI5DJtDTsQ==
+X-CSE-MsgGUID: TO/Baj3jQE2fBT7Ma+V4bA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="26857189"
+X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
+   d="scan'208";a="26857189"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 08:07:34 -0700
+X-CSE-ConnectionGUID: GycNDFl9RumH7RszF16mnw==
+X-CSE-MsgGUID: fsvjIUCJTd+rP7rTH1H7RA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,220,1708416000"; 
+   d="scan'208";a="61492949"
+Received: from lkp-server01.sh.intel.com (HELO 01437695816f) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 22 Apr 2024 08:07:33 -0700
+Received: from kbuild by 01437695816f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ryvGU-00003c-0b;
+	Mon, 22 Apr 2024 15:07:30 +0000
+Date: Mon, 22 Apr 2024 23:07:05 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 3/4] virtio_balloon: introduce memory allocation stall
+ counter
+Message-ID: <202404222241.599OtAGQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|DM4PR12MB8557:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd8a434d-7101-46bc-b826-08dc62d961c7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?JWNkKTIP5ylNJ+yC+JCSsVdt7sw4xIoJshn67IXjQUmkUsAfSN9rKuxSoSAp?=
- =?us-ascii?Q?8st33WwaBGi78giY1rCBIGUVdeNPzPeQgFtEXnFOfcCob67aukagzXOQOA6o?=
- =?us-ascii?Q?d5+U5PQ+7Ptcs3TSN4H7xj5Me0OlUZWWS99yqajb7xj0M1lLjTEahZw5oXAN?=
- =?us-ascii?Q?jfNVLqSKUMdFfPxHFdjHAc2ZGuIc5c4VxoUkuxckksAWavA3j87+a+xrS6GW?=
- =?us-ascii?Q?kTT5JaJEiXdWCNHuuh3covDGT2K6yrgVl0LxWl3gZSniH/BPEPDFuHwdVB/Q?=
- =?us-ascii?Q?tptQIenlCCNZEWD65FkvNjlQ1iFPzzTJS3RhV07cUEExC/N7rMevgHH+xl6a?=
- =?us-ascii?Q?KYwkAT9qVmIM51i/hVuCTCCjBJF2AEpUZ1RN/3APItio+c/9z31livsQ7//p?=
- =?us-ascii?Q?DiLcnZfTjPOg30JiyR6VIobcfjcCjh5T1WORblOAMjLZD8W5ZcZa7zPCZppg?=
- =?us-ascii?Q?JOMAPiEHH0vKaDKqLGpGH0C93Dnv6LH9bf1cgUzdRF04cc+usMm+5h6eN4QI?=
- =?us-ascii?Q?4Qjnm6b+ijr0QOX8z6d7zSt8qq2Q+HnxPLiBM2yKetgxyQo4D4NdIUlGB0Yj?=
- =?us-ascii?Q?EybLItsAm6DLyw5NSsy1XaNeuW8MpoP1p7ZBcCoQS6YGHDLKjElQvUb3u+7x?=
- =?us-ascii?Q?hrtgOr1cKXo2u3szwUkpGXi11mXpLrbnvKChw0BVBCcps1ajosmx0IdAEY30?=
- =?us-ascii?Q?PedHXVA3MVm1MP1YhXRRVLwf7JT5fJHLaqt76iAsF0izyGvOIn9SFjtboX2L?=
- =?us-ascii?Q?8yt5AyEmY1bGUvDLP5WOHNVXNAzT7mXxC6lQcpjbTR9I5EINqIU145loYLbd?=
- =?us-ascii?Q?J8ulyrSf9TSAOGP8FtyRBxeWAihH8iGXgNoSjrjl3ynIQaUJ7+xA77DEfw5P?=
- =?us-ascii?Q?mwnb/1RY2f2vbjBBvmyam+5nQ/RCgn55nYi2aCW0HhfOACChBbT7Q7pR9qYN?=
- =?us-ascii?Q?GBq2KtlwQJYPJ9DzJZ1vahlzux6TRbmQKLMfozPc4gD+JYq7C4SOm61Jag+F?=
- =?us-ascii?Q?PXfNDITT9meogMMl67tjo8KG72lBt6R3ZommIWGa7NUqwQ0+2Ba59Z7MX+wu?=
- =?us-ascii?Q?iRguUQHVJUhvzwJ6JoWPjtLhtPNiyOmf2gdT8wT8TvTdJQsCNcFXtynyRiCM?=
- =?us-ascii?Q?1geWRev6WQntps4C/3cP5l7pGA1A5ZkvZKobLqAAkwIBMqFsGUAigRVCaSHF?=
- =?us-ascii?Q?GpCk0NpcTOwe6sZCo7UkO7GI0zEPAYHCLg1qwiIzJhRNan5pYZ78MqCebHq0?=
- =?us-ascii?Q?+h+b9Q1FfzQF+kXUJA60rthq5QqZ0ifFr+qVRZNocg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(7416005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?5cMXCA2IJL/hW/Wc6rz7nIt8nlQnTj3FDLj6VQlguvkw9/gU4GVD8RUo/yEe?=
- =?us-ascii?Q?Gop+X/xMrXomCOfm8hSlwgjzQSruilZVlRjTnAYrFx1hK476h7Wac6Hkz6FK?=
- =?us-ascii?Q?qASLiHCwE/dfdfTUEV+nP/Af9MsLB3qGDI3A2xTkBZlLxnguGG9wygH6cwb3?=
- =?us-ascii?Q?f7dAuEWLingzxQ90DrBMHaBbinZtZEqjenaia7/RfdasudgGOUzgjjcSVaa6?=
- =?us-ascii?Q?9tESVwaKkt9sHF1jCPaJz2wFpbLSlH7aHFlAPxMK9jRAMbrFK73kNn4zKSJV?=
- =?us-ascii?Q?zdGUbDFiU9QXQWZc+kHXmAPuDl09PhhuRE7ySilUzf7d7bfwCN+vcPo8SmBQ?=
- =?us-ascii?Q?wZeZtU1+MF9a4tG4qJAb6heGIN1hdPsE+as8T9fw3criFNB5OKtxw4T5vjVp?=
- =?us-ascii?Q?UbXnAFvP+POpS6w6I4mzCUYZVneID3h6OMScqnpXP6eFOApla3SU7nZHNp8K?=
- =?us-ascii?Q?2gBSNw4xtl7krOAwzIIiWc56UShk1daISgtI+2/2PIm+uuMvJxpXXirzLf4C?=
- =?us-ascii?Q?Bqlnl6lVt06s63In31gr526RJKaF/TWoxCVW7RZLdflQR9KVLun13d3+EzX+?=
- =?us-ascii?Q?7zP1Qz6uc+vCtXsmRqCxmea525es/YSJJXSJS+iDX+tZChZ5xQ5+jF6DnV7O?=
- =?us-ascii?Q?Tlc3XQCM3eG0KDRhWMmZxmxRrLrUEbB8DcMswv+FzOUb1vO+FVHFoHUMfeFm?=
- =?us-ascii?Q?ttGTBjYIMXqhoIY70KFrpornPws6w7IBDUBi0lPPLqN4inIGDHTsypMqQu21?=
- =?us-ascii?Q?vNukcb9aEqY6jd27hS0wThsBJjKVaeHWZQuWvPLKy97LlW2dBO46Wi/RbG91?=
- =?us-ascii?Q?dsXntDCt3Ne1SWhpG4klAbo5Y1YDy7q/Ew/eqtoWsz5i8SQzLyHAVU4AofWT?=
- =?us-ascii?Q?JMb371bfA5QinkAQcvPDiJ+VrSHUqBQBjuWvtpUsig72dAfhaEj2xmnXBlHi?=
- =?us-ascii?Q?0bVfsaHdWNt04HpjCVBMD8SDcszwRbAAM2k2CUxwqRygRDEpk6Zojl1r6u7g?=
- =?us-ascii?Q?NF1zl9SKx2wRbLPHR2gdbB708D8tPmJcxXDPR07mWfP3pPaCy6bk3bxPtUQU?=
- =?us-ascii?Q?7isLAMInaDm1D8W6AUaKONf0wkt9wTzFZ91VVlHrlcXwRHphdqLO0djj/yix?=
- =?us-ascii?Q?orD3I9LulVq9L4dSNO45SP+2+MVoM0sv6gjNJlShI6DUbwfqyv6MGGnLGpR0?=
- =?us-ascii?Q?u1aM/CAa/Xxf+fhIXQoaA0dLsVyrhEkHVo/1jkdQz+KzVMAIBuzW8LoJBQwA?=
- =?us-ascii?Q?MuJk+JyrbnuJFdfHTntljUx3ZQC9UOZf0r9rzjxIAT9qBK+XsoJi6Nm/dCjn?=
- =?us-ascii?Q?akrpboF2a6DRddi4C6mjYbM8lOJhXn7Umedp5s0jLkRR15/sD8IzencA3FJi?=
- =?us-ascii?Q?8Vomgo0psw0p2B4ERDWay8kRbw7LI4FiThnaDF8RoywK/rDFK6dYU0SGXs/p?=
- =?us-ascii?Q?Wb20z4abSc8LcwyahaXwBC7ximBmPseNUnZOSRt58ygcBsyybDs/2MPUKnjD?=
- =?us-ascii?Q?UKQKO+KRDnOe9lKaRgjD2qRgTvuqgiopyqtKVSdg7LREP2+eB2cbN72RR0XH?=
- =?us-ascii?Q?2q3JFXutP/Hn7b9pgQQTyV7kZMNPFUfydQjA7juK?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd8a434d-7101-46bc-b826-08dc62d961c7
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2024 14:34:56.9002
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gcKYQsM3gM/aWId+q4zimMmvsx5Do2V5z/0lhy7s8ffatFXREN9H57f3cTZu33pt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8557
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---=_MailMate_48CB3BC0-7E89-479D-988D-8B56AF4CB946_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240422074254.1440457-4-pizhenwei@bytedance.com>
+References: <20240422074254.1440457-4-pizhenwei@bytedance.com>
+TO: zhenwei pi <pizhenwei@bytedance.com>
+TO: linux-kernel@vger.kernel.org
+TO: linux-mm@kvack.org
+TO: virtualization@lists.linux.dev
+CC: mst@redhat.com
+CC: david@redhat.com
+CC: jasowang@redhat.com
+CC: xuanzhuo@linux.alibaba.com
+CC: akpm@linux-foundation.org
+CC: zhenwei pi <pizhenwei@bytedance.com>
 
-On 16 Apr 2024, at 12:26, Muhammad Usama Anjum wrote:
+Hi zhenwei,
 
-> Fix the warnings by initializing and marking the variable as unused.
-> I've caught the warnings by using clang.
->
-> split_huge_page_test.c:303:6: warning: variable 'dummy' set but not use=
-d [-Wunused-but-set-variable]
->   303 |         int dummy;
->       |             ^
-> split_huge_page_test.c:343:3: warning: variable 'dummy' is uninitialize=
-d when used here [-Wuninitialized]
->   343 |                 dummy +=3D *(*addr + i);
->       |                 ^~~~~
-> split_huge_page_test.c:303:11: note: initialize the variable 'dummy' to=
- silence this warning
->   303 |         int dummy;
->       |                  ^
->       |                   =3D 0
-> 2 warnings generated.
->
-> Fixes: fc4d182316bd ("mm: huge_memory: enable debugfs to split huge pag=
-es to any order")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-LGTM. Thanks. Reviewed-by: Zi Yan <ziy@nvidia.com>
+kernel test robot noticed the following build warnings:
 
---
-Best Regards,
-Yan, Zi
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master v6.9-rc5 next-20240422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---=_MailMate_48CB3BC0-7E89-479D-988D-8B56AF4CB946_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
+url:    https://github.com/intel-lab-lkp/linux/commits/zhenwei-pi/virtio_balloon-separate-vm-events-into-a-function/20240422-154406
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240422074254.1440457-4-pizhenwei%40bytedance.com
+patch subject: [PATCH v2 3/4] virtio_balloon: introduce memory allocation stall counter
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240422/202404222241.599OtAGQ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7089c359a3845323f6f30c44a47dd901f2edfe63)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240422/202404222241.599OtAGQ-lkp@intel.com/reproduce)
 
------BEGIN PGP SIGNATURE-----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404222241.599OtAGQ-lkp@intel.com/
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmYmbSwPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUQ1MP/iC7xLfLjN9Qmlbjf8QP7EYroAKz7uTgH0aj
-RPGQnC1e4RBMGmct5k/8U2NrqRFDs9UrbXv+Lv0bvt3vvn3R97aDAXvHRjqyOwGj
-OTDsPDYsgIv26/uKQOd7N5/+3yKa+BRpiH5siGtvf/0Q3+Khhc5Krxyx9eZW2cle
-9CkAxmWoE3MN8bMEWZDGxyAXnKAmNNihlwtntAkBj2VF2zL+Qb8lezHFUojtvcIG
-WihNYJZbtBpcWEkaAxAYRniKflXe1dP7X9NeSctsp36XYDGeQ9JFkPSeq4qIFGo9
-yYtoGz5Fj7giiKbi1wwVjflKNrQmBommm807cZh6U0pT4ZGBx1hrcW1TnNultzk3
-6zewtyfZ8PAKuyMyK5U8am9x4Wx/jZN6eO3ZQ71hXR+vcZfae1ekzydb8gzLC3sI
-hHbXr+jmmp5RjeaaM+q+T19YNUoKwWMriEqsZUwvBAf/hzsjJr1E02DjydQ40Bdo
-gxom/vPBAc2poUCHwJB0/AA9P1wuyDzakUAiVXzszySZiUs8krxpouw2PncSQ+aN
-tcRqLrwXP87rLckbayiEYyGqEiUiyS9Clcz9WlGzNAxy+JHQJs13X2aa8gd4mVWa
-jRS74KM9otQ3+TKl38m6smny4xEfPBIuvWnGGQdMp5PZ8wdgB6QASEzt/XU6kR2w
-9onacvIS
-=yXTU
------END PGP SIGNATURE-----
+All warnings (new ones prefixed by >>):
 
---=_MailMate_48CB3BC0-7E89-479D-988D-8B56AF4CB946_=--
+   In file included from drivers/virtio/virtio_balloon.c:9:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2254:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/virtio/virtio_balloon.c:340:37: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+     340 |                 stall += events[ALLOCSTALL_NORMAL - ZONE_NORMAL + zid];
+         |                                 ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +340 drivers/virtio/virtio_balloon.c
+
+   318	
+   319	/* Return the number of entries filled by vm events */
+   320	static inline unsigned int update_balloon_vm_stats(struct virtio_balloon *vb,
+   321							   unsigned int start)
+   322	{
+   323	#ifdef CONFIG_VM_EVENT_COUNTERS
+   324		unsigned long events[NR_VM_EVENT_ITEMS];
+   325		unsigned int idx = start;
+   326		unsigned int zid;
+   327		unsigned long stall = 0;
+   328	
+   329		all_vm_events(events);
+   330		update_stat(vb, idx++, VIRTIO_BALLOON_S_SWAP_IN,
+   331			    pages_to_bytes(events[PSWPIN]));
+   332		update_stat(vb, idx++, VIRTIO_BALLOON_S_SWAP_OUT,
+   333			    pages_to_bytes(events[PSWPOUT]));
+   334		update_stat(vb, idx++, VIRTIO_BALLOON_S_MAJFLT, events[PGMAJFAULT]);
+   335		update_stat(vb, idx++, VIRTIO_BALLOON_S_MINFLT, events[PGFAULT]);
+   336		update_stat(vb, idx++, VIRTIO_BALLOON_S_OOM_KILL, events[OOM_KILL]);
+   337	
+   338		/* sum all the stall events */
+   339		for (zid = 0; zid < MAX_NR_ZONES; zid++)
+ > 340			stall += events[ALLOCSTALL_NORMAL - ZONE_NORMAL + zid];
+   341	
+   342		update_stat(vb, idx++, VIRTIO_BALLOON_S_ALLOC_STALL, stall);
+   343	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
