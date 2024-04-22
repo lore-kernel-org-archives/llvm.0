@@ -1,169 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB98B8462
-	for <llvm@lists.linux.dev>; Mon, 22 Apr 2024 03:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 273DE4C97
+	for <llvm@lists.linux.dev>; Mon, 22 Apr 2024 03:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713755484; cv=none; b=JNcEDa7VKUg61v2vMrHzdiMUKzYtmoQqUymBEg0E74ybEPcQ2VDr7mwe9qvcsD1/qVyvazfxAUt7F6TGosP6kMyT+QoFM7w22K7vt3atyGJpDpqaSpYvnDinHQdI8bmuJpLcJoeKJWd9XsuEdfYYpgKUaaErbD3y+vOKb41u5Zo=
+	t=1713756800; cv=none; b=WeoMqRMOrpSTmCFsO/s8hl+HLHr3P0aoCq+aIeG+IG51fYc/1ztsRJcMGmFu4ZKls+BVjnkD6BBssRyfAnIdN4+ubvsH1lOGd4LWCxIy+F+vtHpF7Npc8CGrP980e4dMLChVxo+/SdlW/RgRA9J2Hm/E7dkEEFesm5NfbSlaSOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713755484; c=relaxed/simple;
-	bh=0hL9pb4GMXPDQFPUPdJXqcZliszew7V4oQ6yizAuzT4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PVfGUozQDujtGvCDiuqJkDQBll/v3/GVdQ701co2d508tJrCwbOrfgt/fphqq9TcoGAzuiIuQahwcxSpTb63b/v9BQBw4IjGJ1diHxHSravAZu/o4Hac/5a2EqmqNjwjXOZEWujYSz6wuaQDzGoXm/mscR5R8V2/xdWO6m9m/9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dWZz5ceu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dWZz5ceu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713755481;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=hiegHDIuelrq9Uhb7cXQNHX39ICeCE585GVpiFjjuuQ=;
-	b=dWZz5ceuj3MVCAHNu8d35R284FIcqGEpdg8wouNcfxbC+MNU2QLPuoqWUDr1+9qSbK+NEF
-	6UQLtC2bKPWA5dvbBh8SxJ6JCWc/rDNpLnI9vI/GRUtavbmbvdeBCbJ6GaTZS7bFe5lHyK
-	oppuU5uhKbmi8HAllaITURIxTqo/YeI=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-401-k2gIkaUqPdyAt33jxctp-Q-1; Sun,
- 21 Apr 2024 23:11:20 -0400
-X-MC-Unique: k2gIkaUqPdyAt33jxctp-Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E16171C00049
-	for <llvm@lists.linux.dev>; Mon, 22 Apr 2024 03:11:19 +0000 (UTC)
-Received: from [172.64.13.14] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9D83049F1F;
-	Mon, 22 Apr 2024 03:11:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 204): Test report for master
- (6.9.0-rc4, mainline.kernel.org-clang, 48cf398f)
-Date: Mon, 22 Apr 2024 03:11:19 -0000
-To: llvm@lists.linux.dev
+	s=arc-20240116; t=1713756800; c=relaxed/simple;
+	bh=zI6AXceJfEK/L8fmn63vHcXTweS/N0utaLuM9iw/3cc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type; b=Wp2wgfE+qaLzfYEfQaYpOMqzVVK0Sz5SadlN27NmQCssFqONBI0sJe1wqitEqxPY/Voy0ckeK/viHg1dH4fmhiP8TounbN3BcUhtxsoJnsX18E0qEg2yq4LNI1dyllxOnRZED8Z1Jfx1mg84lf2J0snyieCJ7T8PX9uk/5one2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from [172.30.11.106] (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 0B5136068094E;
+	Mon, 22 Apr 2024 11:32:43 +0800 (CST)
+Message-ID: <6d311a40-05b9-3958-673d-e4c4d154ce4f@nfschina.com>
+Date: Mon, 22 Apr 2024 11:32:43 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
-Message-Id: <57088.124042123112000515@us-mta-401.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH wireless] wifi: ath10k: Fix an error code problem in
+ ath10k_dbg_sta_write_peer_debug_trigger()
+Content-Language: en-US
+To: Jeff Johnson <quic_jjohnson@quicinc.com>, kvalo@kernel.org,
+ jjohnson@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+ morbo@google.com, justinstitt@google.com
+Cc: c_mkenna@qti.qualcomm.com, linux-wireless@vger.kernel.org,
+ ath10k@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+In-Reply-To: <a4c2cb8c-dd80-457f-82b5-2eb58a9b55b5@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On 2024/4/19 23:09, Jeff Johnson wrote:
+> On 4/17/2024 1:17 AM, Su Hui wrote:
+>>   	u8 peer_debug_trigger;
+>> -	int ret;
+>> +	int ret = 0;
+> this is unnecessary since this will be written in all paths that lead to the
+> return that reads it
+Yes, this is my fault. I will remove this in v2 patch.
+>>   
+>>   	if (kstrtou8_from_user(user_buf, count, 0, &peer_debug_trigger))
+>>   		return -EINVAL;
+>> @@ -432,14 +432,12 @@ ath10k_dbg_sta_write_peer_debug_trigger(struct file *file,
+>>   
+>>   	ret = ath10k_wmi_peer_set_param(ar, arsta->arvif->vdev_id, sta->addr,
+>>   					ar->wmi.peer_param->debug, peer_debug_trigger);
+>> -	if (ret) {
+>> +	if (ret)
+>>   		ath10k_warn(ar, "failed to set param to trigger peer tid logs for station ret: %d\n",
+>>   			    ret);
+>> -		goto out;
+>> -	}
+>>   out:
+>>   	mutex_unlock(&ar->conf_mutex);
+>> -	return count;
+>> +	return ret ?: count;
+>>   }
+>>   
+>>   static const struct file_operations fops_peer_debug_trigger = {
+> I'd suggest as an alternate solution that this function is a good candidate
+> for the the cleanup.h functionality. By scoping the mutex_lock() you can
+> simply return at each error location, and remove the explicit mutex_unlock().
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+like guard(mutex)(&ar->conf_mutex)?
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Maybe I can send a separate patch for this,  because there are more than 
+one candidates
 
-Kernel information:
-    Commit message: Merge tag 'char-misc-6.9-rc5' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/gregkh/char-misc
+for the cleanup.h functionality.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1261963231
+> But I'd accept this with the initializer change removed as well since I don't
+> think ath10k has any cleanup.h usages yet.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
-"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
-=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
-:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
-            Affected tests:
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-                stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-                xfstests - btrfs [aarch64]
-                xfstests - ext4 [aarch64]
-                xfstests - xfs [aarch64]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
+I will send v2 patch soon , thanks for your reply!
 
+Su Hui
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
