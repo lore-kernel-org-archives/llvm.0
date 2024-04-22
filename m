@@ -1,128 +1,91 @@
-Received: from wfout8-smtp.messagingengine.com (wfout8-smtp.messagingengine.com [64.147.123.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A5A1865C
-	for <llvm@lists.linux.dev>; Mon, 22 Apr 2024 06:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DB23BBCC;
+	Mon, 22 Apr 2024 06:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713765624; cv=none; b=Kuis0VwG34dJW6EPPjU+mOlzNqxW3EZ7eIwdZskC+qr5Ih0S5ltPXmDUklEGkr/EXOfugD15lld45c0WPdIIuqrKY+oolYbPvsJZL22CDWV0JaWn/p6wvGgoSjehjHhbzGVG/zrO/WRmL0z5QAEdh69BuYrykFlpt+K1ZvkTiS8=
+	t=1713768811; cv=none; b=KcJlMJCu1LsocF2HiDdtAkBHMSw+lJuutQq9qCNI6GBuQGwrUovvqfcgrDxrxCIEUyp6FJuKrYeHkZusyx3Iz5TFZbs7GoPTLER3MnPxql6edtAKGGbjfBU7/ocFAFs20ul8z75xGT15oCGUgUW+hruowuKSgb/m/ytzMh9n+Eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713765624; c=relaxed/simple;
-	bh=fntBX7jG73XROJLdtV1h5hQLpcafzN9e7OJLuEDtd8g=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=tgpM8q67OGlsWNn/QOFkcSxP0dOxz+M+vDNEqKx/ocwAxeC7I4AjMjLArPlRRRZU1Q23yGY3f1yV3am78IqWBeUdmYlIma1F+x937IwgMXnJqSzVZwaRe8g6iSGX7dmT8WPCcTH46Q/oyrkdtT7qhRfrT7BpCRHxI9fe5bhayjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GgqOQfjc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UbSK8AXY; arc=none smtp.client-ip=64.147.123.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1713768811; c=relaxed/simple;
+	bh=BQ5lv0ySOhngt6oiBldECYAUh+70HIqFEVh7ZrhT2SU=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=J1D5ORC2uPtrk8PDmBcgBUYh4mEtKiyag31WWD38JhllUdzcLyumqSEAUdeb6PJ5jkkyFCp8CLEBAMaDMetkSJO1iz5PLWd4VQ8jiwcE1FD8atXDlrMDnrzQwKpZdIPgDkqRGHdjtgrLA4yzXdw8dNRzTLw9gmwR2ze7SE3+cpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cui0MaRt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GgqOQfjc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UbSK8AXY"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id 36DE21C0012A;
-	Mon, 22 Apr 2024 02:00:20 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Mon, 22 Apr 2024 02:00:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1713765619; x=1713852019; bh=jlTDzABU5z
-	cPj3xza1UZisDPCiNpKwgpkl8MjcwAbtQ=; b=GgqOQfjcpJZKFpgLgnWQYgtVne
-	DoBj2Pi2v7umYbtLR4hbnKvD0fiQvVByEs8OOmBQN58cWtl6LEWZz/T2IhHdhS7X
-	djpSq6cneqZwW//OI0vmgBDX60aJK1gxb9hmHFeo5SpvaMxyKJI3NEAnONEwLzAR
-	aiRXY2/wnWZMcwebny674V02UxtIKYG1tC3vwEB9JMEo4xYW+DBCRU6HdTEKdix/
-	PDRY/DZxMC8cfyxnzn249CCUDIszstMGoJbhP5G5wIjdy7te1ZcLnaN/XPpjeC1v
-	ptgXz9/4LtRITz7I9zfBkFiMlu1CjUqlHWbdRpvFiSECD/5/qi/ADaCWzbYg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1713765619; x=1713852019; bh=jlTDzABU5zcPj3xza1UZisDPCiNp
-	Kwgpkl8MjcwAbtQ=; b=UbSK8AXY+Q6/iMnyeLcqhWWTQNtvc2QXqg0JEgNGzlKR
-	94c9IvAHI2VA8XpKRVxlvrvuZ4nCoBJlmQYrqCx4qwFnTzNw5S6Yzd+TDqTrHAOY
-	cG+rVjhWP+UaW0BDK9gr6ZpP/X/F1bxZAAHnaPW0fuejiZUKQDT0vx7WrgkDxaBl
-	N15WSrwERt/hNWizltGass0Nx9HWvR/0sVdFDW2RodzsOIhlEfDynnhEbPPdHsOp
-	y8Y/0mh06f4CRav6OGDrfxZMUxJMmU7og75a+II59GblZCtjh4+Hbb+pdjx/pIZO
-	i5RhosyD9tn13aCuJTTA+Q96Jl1ssbjgth3oGcbSBA==
-X-ME-Sender: <xms:8_wlZljDwOpTIqPKzbQjjBgYgJFgLXp5S0mcjhMoSUSDBfcMfyDIig>
-    <xme:8_wlZqBYqtA97HyNrGtRrTfI0p_D2_ozyZ8gtBiPlBpvkNgNQmcKosvL5p7lf6q4V
-    y26RVdIyxaHb7wcO_Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudekkedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:8_wlZlHUB0-SrKuvoA3yC0rulbq269hM2jX87szHmpm41R-b0Ol6WQ>
-    <xmx:8_wlZqSYpeycPH5tXRoOZsjtgp0FMkYjEjr2B5KPJHNopZN0wN72DQ>
-    <xmx:8_wlZiwaGbWHWNe57tXO_Khnl1UL7neKACUd5jedCeMJVLQlvKsc8g>
-    <xmx:8_wlZg5JqnIDQgQs3N353to2xd93scVeGRv3OWBNClEjBI9jkzoL0Q>
-    <xmx:8_wlZhlzCO3_Mr330VUkyW6TkHKTSLwnP8a8JSq42Bv1w47NCooTCdd0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 243DEB6008D; Mon, 22 Apr 2024 02:00:19 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cui0MaRt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF79BC116B1;
+	Mon, 22 Apr 2024 06:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713768810;
+	bh=BQ5lv0ySOhngt6oiBldECYAUh+70HIqFEVh7ZrhT2SU=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=Cui0MaRtDe2xqQ3NEwHoiaqNEPh9QZrdEiUYskHiBgjzUxclmHsmCP6ag5nGU84bM
+	 3b5x6NxZdfPeMvegaO7mkU3QgMxZobmAm2oln8xkQM/Oy8/+Oucf2IgnmG/TyB/Wn7
+	 iQdcRWT2PJLWTmUDU6bWMGk2/fV7G6TSzKe1IoWdNnlo3yMEBweewQVG1KrgHX1Sf7
+	 td471aBOw8drLYvbX6PKTOaVitHwsw9ADZoAa5l91FQdSWkWxrU3MP5yynDhnSBkIW
+	 O8yLZoEwnTC68ASfkWblx7Spb7MGUF+NSjqs1Yv/Qw45PpGMdE8ky27RWo8/FkcZUT
+	 on4t2PTh/wcSQ==
+From: Kalle Valo <kvalo@kernel.org>
+To: Su Hui <suhui@nfschina.com>
+Cc: quic_jjohnson@quicinc.com,  jjohnson@kernel.org,  nathan@kernel.org,
+  ndesaulniers@google.com,  morbo@google.com,  justinstitt@google.com,
+  c_mkenna@qti.qualcomm.com,  linux-wireless@vger.kernel.org,
+  ath10k@lists.infradead.org,  linux-kernel@vger.kernel.org,
+  llvm@lists.linux.dev,  kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH wireless v2] wifi: ath10k: Fix an error code problem in
+ ath10k_dbg_sta_write_peer_debug_trigger()
+References: <20240422034243.938962-1-suhui@nfschina.com>
+Date: Mon, 22 Apr 2024 09:53:26 +0300
+In-Reply-To: <20240422034243.938962-1-suhui@nfschina.com> (Su Hui's message of
+	"Mon, 22 Apr 2024 11:42:44 +0800")
+Message-ID: <878r15j3bt.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <88672789-9e23-4310-9315-9659d661d1d4@app.fastmail.com>
-In-Reply-To: <20240421-arm32-cfi-v7-7-6e132a948cc8@linaro.org>
-References: <20240421-arm32-cfi-v7-0-6e132a948cc8@linaro.org>
- <20240421-arm32-cfi-v7-7-6e132a948cc8@linaro.org>
-Date: Mon, 22 Apr 2024 08:00:18 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Walleij" <linus.walleij@linaro.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Sami Tolvanen" <samitolvanen@google.com>,
- "Kees Cook" <keescook@chromium.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Ard Biesheuvel" <ardb@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v7 07/11] ARM: mm: Type-annotate all per-processor assembly
- routines
 Content-Type: text/plain
 
-On Sun, Apr 21, 2024, at 20:28, Linus Walleij wrote:
-> Type tag the remaining per-processor assembly using the CFI
-> symbol macros, in addition to those that were previously tagged
-> for cache maintenance calls.
+Su Hui <suhui@nfschina.com> writes:
+
+> Clang Static Checker (scan-build) Warning:
+> drivers/net/wireless/ath/ath10k/debugfs_sta.c:line 429, column 3
+> Value stored to 'ret' is never read.
 >
-> This will be used to finally provide proper C prototypes for
-> all these calls as well so that CFI can be made to work.
+> Return 'ret' rather than 'count' when 'ret' stores an error code.
+> By the way, remove some useless code.
 >
-> Tested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
-The patch looks fine to me:
-
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-
+> Fixes: ee8b08a1be82 ("ath10k: add debugfs support to get per peer tids log via tracing")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
 > ---
->  arch/arm/mm/proc-arm1020.S   | 24 ++++++++++------
->  arch/arm/mm/proc-arm1020e.S  | 24 ++++++++++------
->  arch/arm/mm/proc-arm1022.S   | 24 ++++++++++------
->  arch/arm/mm/proc-arm1026.S   | 24 ++++++++++------
->  arch/arm/mm/proc-arm720.S    | 25 +++++++++++------
->  arch/arm/mm/proc-arm740.S    | 26 ++++++++++++-----
->  arch/arm/mm/proc-arm7tdmi.S  | 34 +++++++++++++++--------
->  arch/arm/mm/proc-arm920.S    | 31 ++++++++++++---------
->  arch/arm/mm/proc-arm922.S    | 23 +++++++++------
->  arch/arm/mm/proc-arm925.S    | 22 +++++++++------
->  arch/arm/mm/proc-arm926.S    | 31 +++++++++++++--------
->  arch/arm/mm/proc-arm940.S    | 21 +++++++++-----
->  arch/arm/mm/proc-arm946.S    | 21 +++++++++-----
->  arch/arm/mm/proc-arm9tdmi.S  | 26 ++++++++++++-----
+> v2:
+>  - remove the initializer change.
+>
+>  drivers/net/wireless/ath/ath10k/debugfs_sta.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/net/wireless/ath/ath10k/debugfs_sta.c b/drivers/net/wireless/ath/ath10k/debugfs_sta.c
+> index 394bf3c32abf..c1198e9027ae 100644
+> --- a/drivers/net/wireless/ath/ath10k/debugfs_sta.c
+> +++ b/drivers/net/wireless/ath/ath10k/debugfs_sta.c
+> @@ -432,14 +432,12 @@ ath10k_dbg_sta_write_peer_debug_trigger(struct file *file,
+>  
+>  	ret = ath10k_wmi_peer_set_param(ar, arsta->arvif->vdev_id, sta->addr,
+>  					ar->wmi.peer_param->debug, peer_debug_trigger);
+> -	if (ret) {
+> +	if (ret)
+>  		ath10k_warn(ar, "failed to set param to trigger peer tid logs for station ret: %d\n",
+>  			    ret);
+> -		goto out;
+> -	}
 
-I wonder if we should use the opportunity to clean out the
-unused cores. Most of the above are not part of any SoC
-in the kernel, the only ones that are actually used are
-arm720 and arm92x, the arm10 variants are supported by
-integrator but that is not really useful by itself.
+Minimal changes with one logical change per patch, please. I'll remove
+this part in the pending branch.
 
-       Arnd
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
