@@ -1,108 +1,131 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF474594A
-	for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 07:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F6F1CAA2;
+	Tue, 23 Apr 2024 07:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713856805; cv=none; b=N/hUgXKmmmmhAa4Zt1BAJzZ6p9xvJHIuNEbxZ+B+mOAOqccY4M4TcMenR0/RrqUUQ310qV0nTegEwnFCruvcfHntrL0YkviK3cu/akK6GlIf6GZ+Qi9JFyABCzUEl85b/ha4J0sh1NOz3/ZiL/0M35jI3GmbCC3w7L+87TkK3qQ=
+	t=1713857671; cv=none; b=tnYWNSjoG7IACwdvkFlb2VOc5JT/B8+OFzv9Y3M/EBp1IgDK/UCuQumv9zzCSLh3y5eRKAivFI+SOe6Cdd/xwfBWzMeKU904oCkLrOmqGN4RdK7PorTMoUVLhtZq9HKi1FxCYX/squyNWSr4Es3IJJIFoAae+q+dM/Jl88zm/Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713856805; c=relaxed/simple;
-	bh=5EFy6cfMwFmHnjgQpm4RBFQE5+gn/Hlic4CiXbZ1D40=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sF9VsEG6ND1yJgQUlHlFXDG7GhvbN2sVAvFf+99H2wSj/lwCcNDv82C4rWeXKQvwhHbo7VXw/AxZ8OY9WAHTP3eop7++mpKsl2VYhvNicDfyksgMLH3B5Mm3DZOicO1e8AL/EEgHr28OarSLiXuQItujVnNCjdfnjNyfiV+IH3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WcNx2OfU; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1713857671; c=relaxed/simple;
+	bh=rsjaTFtx8348euuafPffUlSsi6BwUWE6TeBUbrJ6wCw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MDhZyHYQDZc9jlYTcYGK4JIoGHeGV6zOn2JUGwnfdsKwSVaID4oPd/2SBJw0nOZl8YKEWGneqXvMQADAPAo5HRvk6om91bShXkZok3bcOEJ1PxbG5OORJ653LSAztHWJ8EiJoBxnZa3KHjbOtyklZpzOgl3dyQDwSuNCy5k3qus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BG24f1lJ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WcNx2OfU"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-51b2f105829so2597018e87.3
-        for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 00:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713856802; x=1714461602; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e2+fP+WCYTyDxKS3W+3hZz5PIukWlL21rabu7CTA5No=;
-        b=WcNx2OfUAKQ98GcvzUD9mtRev8ml20mBJqfxc5sYABSm3HENcmCTn0bXiIoeCS5TKc
-         ICuWDEw6xvtzoctmJXYZ/OKjKAgYSHrWJV3edL0nKXqxSbkfmrl+TgZwDa/AncwhEO7X
-         bUrFYT2VG7tHX4RD4XQ183d+n/uERSF5DGGb4v9fgwf5rUzMgfYocmvetL0Omuy/CqWF
-         fUpxblGjJXc+/poofWoIu+xBaKJn+3hzkztnF3n60NfSUI/VtQf62RivB4GMt3SxBkRH
-         J/BGbGx+C97ScOd7D83oFzEJBzmnEQHQ+fAvZ5UstVCg6EJkbmpiMOSK81VtqLiJMBMD
-         J/ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713856802; x=1714461602;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e2+fP+WCYTyDxKS3W+3hZz5PIukWlL21rabu7CTA5No=;
-        b=bRWYlUz0r3+n4zgeorSqTmWJB7+Yw2Q5PCbVVLKRAOydaUZGoi5fdkzoDhCLg/751v
-         fgLmyIe+94Mf4QOsOlwnKxOusfFr7of4zbyuwZnjWM8PGcMpuHyS0YlSiXrzoFf70lqP
-         maD2M4v4Sh/KRNPhs5GMTTPSBLAtT6k4FyTRhwbCNjIxSTu4/Vt5j5KGiK8+lc9mlCGe
-         0bYA3e3e/ecilWwqXe3iCzLmbgi0fZI95zRWVRydfQHirJRe9v3q0hY3wjM0hbpYyCIi
-         08+lQBOtIIvRTtG8Kcny8JyYotdlrJbfcxkmZWxBVeW+q6RJCgYPl1Xq/sIZ7f0AzVPl
-         Tlhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZzRfybOdQoRppmP3Oq+6xARcjFUOBM3AhBmp2LxMx7xmIXWHBic7xxUqJ8ImjB0xB/MeehcN+cLaKuly8nwPltZVt2g==
-X-Gm-Message-State: AOJu0YxkKE+C7OGmcRdxb9gEGFuUgHm7rzIIsmzJme2j1bTR/KG0yvCQ
-	cW3DLektg6VYdjeHIDFddtifwAdWZ5/t4AFTJ8S+l8dZUlKQt9yEQLtA4pooYd8=
-X-Google-Smtp-Source: AGHT+IGYz0O62y4kgrI0kWzdSwgcaeiQ4LZsRCR58iHsSexVvxjWUgtSPaI4/EwWyEIORXWgiQ0WFg==
-X-Received: by 2002:a05:6512:2203:b0:518:9183:864f with SMTP id h3-20020a056512220300b005189183864fmr12028932lfu.34.1713856802326;
-        Tue, 23 Apr 2024 00:20:02 -0700 (PDT)
-Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id f13-20020a056512360d00b0051ad4552454sm1307588lfs.148.2024.04.23.00.20.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 00:20:01 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 23 Apr 2024 09:19:55 +0200
-Subject: [PATCH v8 9/9] ARM: Support CLANG CFI
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BG24f1lJ"
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43N6YHSc017465;
+	Tue, 23 Apr 2024 07:34:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=MA6f4FuIjJi9F9IQBzC8zuD52Y6zja9gJ48dXbUrcEw=;
+ b=BG24f1lJ0o18OnQs8wGZxCZaOuY645GTXGGm0YfgpBotc8wSafE4v3E0us4mFhsP08Yp
+ j/9owU2mbdov29VWp5FVpdLol8jK1JdrxgRdVwupNiWXa8JbaWW43IlXkZQ2u7CxztYH
+ tsmrvMZvSRK8VrDolEoBcsWpNv+wUGHZlfqViczEX0otiddu72gzWjTdxg1np0u24fm+
+ zhBCvUvtXT5HrEPQxAyKh/yH2R8fOFPUxd7/+17b7EF95CQFVv/nrmjWe9uQIF0So2C8
+ D7osYcIQP1BMbgmwN1pxAXH9HBabvB47ZyQcVHl8JrJ0AIPw9ZxSjVSKeiJS8fQqN9Ly aA== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xp7thg3cw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Apr 2024 07:34:20 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43N4kF93015302;
+	Tue, 23 Apr 2024 07:34:19 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xmshm451m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Apr 2024 07:34:19 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43N7YC7d18940368
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 23 Apr 2024 07:34:14 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8A2DE2004D;
+	Tue, 23 Apr 2024 07:34:12 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5B1F220067;
+	Tue, 23 Apr 2024 07:34:12 +0000 (GMT)
+Received: from [9.152.224.141] (unknown [9.152.224.141])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 23 Apr 2024 07:34:12 +0000 (GMT)
+Message-ID: <3b836dbb-98a1-484a-b88c-4beff45f2685@linux.ibm.com>
+Date: Tue, 23 Apr 2024 09:34:12 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] s390/vmlogrdr: Remove function pointer cast
+To: Heiko Carstens <hca@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: Thorsten Winkler <twinkler@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, llvm@lists.linux.dev,
+        patches@lists.linux.dev
+References: <20240417-s390-drivers-fix-cast-function-type-v1-0-fd048c9903b0@kernel.org>
+ <20240417-s390-drivers-fix-cast-function-type-v1-1-fd048c9903b0@kernel.org>
+ <20240418095438.6056-A-hca@linux.ibm.com>
+ <20240418102549.6056-B-hca@linux.ibm.com>
+ <20240418145121.GA1435416@dev-arch.thelio-3990X>
+ <20240418151501.6056-C-hca@linux.ibm.com>
+ <798df2d7-b13f-482a-8d4a-106c6492af01@app.fastmail.com>
+ <20240419121506.23824-A-hca@linux.ibm.com>
+ <1509513f-0423-4834-9e77-b0c2392a4260@app.fastmail.com>
+ <20240419141244.23824-B-hca@linux.ibm.com>
+Content-Language: en-US
+From: Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <20240419141244.23824-B-hca@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240423-arm32-cfi-v8-9-08f10f5d9297@linaro.org>
-References: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
-In-Reply-To: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
-To: Russell King <linux@armlinux.org.uk>, 
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
- Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.13.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: h2w07tsfKsJgwyplVoK3Dm8wnf87Tl2Q
+X-Proofpoint-GUID: h2w07tsfKsJgwyplVoK3Dm8wnf87Tl2Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-23_04,2024-04-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=539 clxscore=1011
+ lowpriorityscore=0 adultscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404230020
 
-Support Control Flow Integrity (CFI) when compiling with
-CLANG.
 
-In the as-of-writing LLVM CLANG implementation (v17)
-the 32-bit ARM platform is supported by the generic CFI
-implementation, which isn't tailored specifically for ARM32
-but works well enough to enable the feature.
 
-Tested-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+On 19.04.24 16:12, Heiko Carstens wrote:
+> On Fri, Apr 19, 2024 at 02:19:14PM +0200, Arnd Bergmann wrote:
+>> On Fri, Apr 19, 2024, at 14:15, Heiko Carstens wrote:
+>>>
+>>> Plus we need to fix the potential bug you introduced with commit
+>>> 42af6bcbc351 ("tty: hvc-iucv: fix function pointer casts"). But at
+>>> least this is also iucv_bus related.
+>>>
+>>> Alexandra, Thorsten, any objections if CONFIG_IUCV would be changed so
+>>> it can only be compiled in or out, but not as a module anymore?
+>>
+>> You can also just drop the iucv_exit() function, making the
+>> module non-removable when it has an init function but no exit.
+> 
+> Right, that's better, and also what I did back then for the zfcp
+> module for the same reason.
+> 
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index b14aed3a17ab..df7bd07ad0d4 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -35,6 +35,7 @@ config ARM
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
- 	select ARCH_SUPPORTS_ATOMIC_RMW
-+	select ARCH_SUPPORTS_CFI_CLANG
- 	select ARCH_SUPPORTS_HUGETLBFS if ARM_LPAE
- 	select ARCH_SUPPORTS_PER_VMA_LOCK
- 	select ARCH_USE_BUILTIN_BSWAP
+Heiko,
+as discussed f2f: 'no module' or 'non-removable module'
+both options are fine with me. I would prefer non-removable.
+Both are better than calling removed functions.
 
--- 
-2.44.0
+This also applies to patches 2 and 3 of this series:
+drivers/s390/net/smsgiucv_app.c
+drivers/s390/net/netiucv.c
 
+Thank you
+Alexandra
