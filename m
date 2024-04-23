@@ -1,157 +1,289 @@
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2075.outbound.protection.outlook.com [40.107.212.75])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7288D13D635
-	for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 17:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713891791; cv=fail; b=Z/CdAVNbLN7zNtsZmSx5ZjNGboOfBKruaVnjlvJFrNF8rp/93NCrn8IpkXgumUi9ak8FxSEG38pXzh7maQw132HJCdGZZRV03wqYfEvzoIYgURiL9SAkZWD12qrkc/IhlRsO7eFLlFasd18XfACK0lATCct2d/Xd+nQbLBXHQF4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713891791; c=relaxed/simple;
-	bh=iwuTuz5bePMysFQar9rpkTJLiXInLrDemg8z3SG1PwU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VLRIo4Yxl21W/6UHcf2y4CTkvi+cX9VC9zSALbe7tAhFdVqj4c3HZFRJ7WvPfuw1WqG3rfFAnzE144iSJgFE1FL0ohUMlj0VVhsJoyRQjiPV/8hV1nnCo9NMtWtmomnEJw3WJQYnGatM8wuHC1PK6cyqpByB1zAoQLAmJ85z9Z0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mJR3sRrA; arc=fail smtp.client-ip=40.107.212.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F389813DBA8;
+	Tue, 23 Apr 2024 17:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713893444; cv=none; b=OUTMJf49gkAjEbOShl3wgQCaEXmekzmFwkGbCZhaCtJbltO/Td6BYeZXlpyJ9+JgvS1/uEPHC6uxvYcYwSlW8VbkS/DU2h8HMz/FMGXbqxTiAbHBUwr4i9x9WFdsquaajARwY9PBASel7Lt8GD/sdFgUuQNVyH5P1yS9tv+MRXY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713893444; c=relaxed/simple;
+	bh=RS+GGEtDBQg8LrwA6C1lcvm5Hw1kZHanyJ/exQ7nr0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=U6ZN+D4r+msVNH+1Ls469rXEsHL9IasXj+eyvKcWtqZaf4Tkqrs7TlP5Fgy8iTWyet1Mi4VXwow5tIKIEC1XN6uDG5a6V8Jct7ivhcvcGU9lxC5opzQXjZTltppI0uAYebfw6EpDBJjO2ybMp0om7HQxdumzJ6jpaFSfCGYZ3Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ar+Zmkd/; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mJR3sRrA"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fygC7iS4DAc5HnbCPZmMNXflDU4LrICv9wQ9NVsLZTkqN7v7SjzW39++9pvYXLjDjsUiOckcUvawmCSF71iamRyYBrlhk0/OCsCfa9qfaWzNrcCPD6wd1F6J3CRU2ogfNzdbrrp+X5u7hSv5XsMNnevvbNsmNx6oqiapLBB9xHSkwuXBHbfsVKXHjSMY1cUVu0iQqRzuJblLvNZvAEMZtUt8X5pcvkXP2rUbGh1b98UZ/iTtnWqwCbAcC2T8JMpmfuaxLtaJfoz+7T7JZzUYH5zqXf+rKV8bslWuImPI8XrBFUYYWeU8+EHWBOhts6y1jHSb7ZzGSpuXpKQO6GuqTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=inasnDcjE9yIFjtrMw+cvl05bZaoFfhLxYwkIjGylAM=;
- b=JAJ+ucm8W4iTtx07Kb0OnYu77h90CanXRmuy4hFgabuHlgkcGZOJzFJ7ADWxph57Ysz3T50STJ76IkmNItRWwQ8Qi+AD9Hpamf/AY6Q4uQn32DPaJTLmGf2utnG7k0S2QWgG8LDUtcsfE6hk3Pip3fWLo7CP41EOMBPazHcFbc/PAgSMTg/5rj11YDIIKme7K1ZiqUDKf1h00TEdPsNdnel/ZcPeVl1O0DF1m43hrAI2HCPhKV6sXyvvS8CLqkDGlABLJQlcFsqD3I4IiEP9FHrGAZGqRjKcYAbhQxzmoq4BPQalx7arLgskxxmdgD7dKw1unPKWP/OWHZ0JjJi1NQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=inasnDcjE9yIFjtrMw+cvl05bZaoFfhLxYwkIjGylAM=;
- b=mJR3sRrAmsaYS5mCgcAxFjIyAM+N7tm1o07E7AMRqDQuIBs2Z6DzjoxEJVgZFVcuTH2T8YMrNVE7vHvWDah/7RlCnnjn4s6J0C3TXIvwIYyTAEJxstaigh42zyFDXxUWFnjUfUfed66GAEfWHuxG1Sn4VmMy4I4SXaJ2iEgDmsw=
-Received: from BN9P220CA0024.NAMP220.PROD.OUTLOOK.COM (2603:10b6:408:13e::29)
- by SJ0PR12MB6880.namprd12.prod.outlook.com (2603:10b6:a03:485::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Tue, 23 Apr
- 2024 17:03:03 +0000
-Received: from BN3PEPF0000B06F.namprd21.prod.outlook.com
- (2603:10b6:408:13e:cafe::37) by BN9P220CA0024.outlook.office365.com
- (2603:10b6:408:13e::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7495.35 via Frontend
- Transport; Tue, 23 Apr 2024 17:03:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B06F.mail.protection.outlook.com (10.167.243.74) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7519.0 via Frontend Transport; Tue, 23 Apr 2024 17:03:03 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 23 Apr
- 2024 12:03:01 -0500
-Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Tue, 23 Apr 2024 12:03:00 -0500
-From: Tanmay Shah <tanmay.shah@amd.com>
-To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>, <nathan@kernel.org>,
-	<ndesaulniers@google.com>, <morbo@google.com>, <justinstitt@google.com>,
-	<tanmay.shah@amd.com>
-CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, kernel test robot <lkp@intel.com>
-Subject: [PATCH] drivers: remoteproc: xlnx: fix uninitialize variable use
-Date: Tue, 23 Apr 2024 10:02:11 -0700
-Message-ID: <20240423170210.1035957-1-tanmay.shah@amd.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ar+Zmkd/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713893443; x=1745429443;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RS+GGEtDBQg8LrwA6C1lcvm5Hw1kZHanyJ/exQ7nr0U=;
+  b=ar+Zmkd/FLn4XNMvtDnFjW0GjFNaMVOE7z1ZaxsQqwKzwXkp80oQO7U1
+   0fbn7110lwybqr0KP37KDr5lOcjilLPRkBmOLXOzkgd5hLAM6810NSyOe
+   o7dR1sv+VdUtNnswMfvy404eq0aHVfM63wI5tmjgZwC19xpHNi1NhQN0C
+   dvsM/d4cgKOUNa29DUlXIdl82/etQ68rG8TVyX4hWWQhbFqhvziyhTgKo
+   ztIm0MVFjTlFdyGr8axOzOH4oko2DY5ZYn3B/zvZwqEptLBX9kEsnDZrv
+   cDjoPU0AbqXR4amEepb2TO4Bo4RgLY2ke5B7lat9XJN512F4y/dj0fFbE
+   w==;
+X-CSE-ConnectionGUID: vkcajDl3SN60Guq5LNaSUQ==
+X-CSE-MsgGUID: mXsxuaWsQ2+aK+x9T1PvXQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="31986945"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="31986945"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 10:30:42 -0700
+X-CSE-ConnectionGUID: 54G9DmbPSfWsDI2ySUlbCA==
+X-CSE-MsgGUID: X2njQoydQBeul12oedQARw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="24411498"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 23 Apr 2024 10:30:39 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rzJyX-0000Ol-1U;
+	Tue, 23 Apr 2024 17:30:37 +0000
+Date: Wed, 24 Apr 2024 01:30:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jon Hunter <jonathanh@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jonhunter:tegra/for-next 1/5]
+ arch/arm64/kvm/emulate-nested.c:2186:33: error: call to undeclared function
+ 'kvm_auth_eretax'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202404240126.wbYVyRds-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: tanmay.shah@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06F:EE_|SJ0PR12MB6880:EE_
-X-MS-Office365-Filtering-Correlation-Id: fc5a1c92-6e21-42f1-4255-08dc63b73cd7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uCt0W5e+4lIJ2EHbfML4A7cyeuiWqor9sKu+AKu/nKx64gso9j8Q7Ux5t9ZD?=
- =?us-ascii?Q?cTJ5nrLn6oJsj1iBZs2dj7sLHSysKipqkpJ8ayU/fLDZ6i6lysFY21P2tRyG?=
- =?us-ascii?Q?eFMiGN+6Vxz/6TFueQsdFBtxneXBZsgQ5Un2N8Us6ya0EBtlHVI/UVwnSkqb?=
- =?us-ascii?Q?QGThkIqEtzqM8fUugxFWiIE4dwVVWAERPlkV3VKt3sX01MBivC/+EB9tGbc9?=
- =?us-ascii?Q?higLZ4XVv4TTOF5zV2wORGcOZ6GtIVE0WXWUwaBWbBNMmMSKy3BdeEZcVPYh?=
- =?us-ascii?Q?8YEX0MnnJITFXmqdGkpvXah2rlOA75sLydDMXUP75h8vaovp0rjxMXg5qgEP?=
- =?us-ascii?Q?QYd7QVJwwf/mcct2Mi7w3EqGgGBRAl6jNkHQN13Kktb2+NVlFdUYYI1h2N/U?=
- =?us-ascii?Q?aVCXMYNJ+ZcvNBKLa4gxpt5Va4tuCnkxyIAJK4IcIEs5rSo1j1q04nmyb9U+?=
- =?us-ascii?Q?gBWGnPPROcqn9neBB+p10wXmqTpwLrQ1+1hSBF0I1xEY6dZSt22nH0Avxwz2?=
- =?us-ascii?Q?bg1W2fRx9Qnagyh6T4pRXj38TQzsZBS7gnOrXjgqAfuyYr9raPlYrp7/Pk4w?=
- =?us-ascii?Q?bCXqlz8xWw4LpOiSTvAusY9KdjiwIySm672a1oPiwir4HYr26gAnn4DVKUEo?=
- =?us-ascii?Q?FmLDQpWoN0gPIW3+71BvBH6aZUgO9tFEnutu7VgoJt4k8lHwI6MLF5hBEEOw?=
- =?us-ascii?Q?zByijbvWOYNQGGeTvl9UX2DQHMRvlgZXH9QvucLYq6NWMjPWkIxbFvNl+y1B?=
- =?us-ascii?Q?oLxMqVyZa0ld2auDFjXWKzqB9YJiYph+Fqt6ZlQzYOPMm8nFZNxzPnwhvT82?=
- =?us-ascii?Q?il1uPL1BHiBP5ba8goE8zc7kvxK6b7+KDWIEXyE/rXH5cd+Cf11abP1RMV2w?=
- =?us-ascii?Q?OGwp4Kp2aqjqimaGnj8zfqAVZaxAfN+M0Xrbw9oGaxAJiEBcXuZmIejp1YDX?=
- =?us-ascii?Q?2R6Fw97yE8GafXupbyc0RicVjs9uqowHqUAm72kPqCKqMlKbUIOKbcMVHUgK?=
- =?us-ascii?Q?u5tqDeNtuGZ0XYM8fSHgB7K1BCI7AQoJVXpqxPDNskOCe6XUgiwAiVc/r9Mj?=
- =?us-ascii?Q?EdwDrnR5e6GO9K4NueDjHkXrklQX+AYtZ+ZJpeXm60xKFppxPyPFezTlHYil?=
- =?us-ascii?Q?MSUyXCTgD0Cw8MSi6ujCHg3XBcQHk3tNj4rdA2jbHp1YIdKz7r6bXuWAoqEg?=
- =?us-ascii?Q?bvOrj81lwebk2p+YJ0pSU8m4Hj4x1/JbtDRJROSTf1JyQw3pPX8bp5tZvcoj?=
- =?us-ascii?Q?/Rkbx3LzllI3gXGqQXYeUt5PnJB4kbqNkX3rZWHtEuJYbGkdD++rqkFcc+yT?=
- =?us-ascii?Q?oehd8u01MMcNUqhW0aEOgmOf0snMtYoXk6uBbnX0Mogg7B+KzwJhrDeQxFT6?=
- =?us-ascii?Q?ucB1Sfs=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(376005)(36860700004)(7416005)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2024 17:03:03.0204
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc5a1c92-6e21-42f1-4255-08dc63b73cd7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B06F.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6880
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fix following warning for clang compiler with W=1 option:
-initialize the variable 'ret' to silence this warning
-     907 |         int ret, i;
-         |                ^
-         |                 = 0
+tree:   https://github.com/jonhunter/linux tegra/for-next
+head:   f8e094daab02151fe59eb3563ae57558ca50a47f
+commit: 12000af23affc31be8359cd8c5af850058b2a173 [1/5] Revert "KVM: arm64: nv: Add emulation for ERETAx instructions"
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240424/202404240126.wbYVyRds-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240424/202404240126.wbYVyRds-lkp@intel.com/reproduce)
 
-Fixes: a6b974b40f94 ("drivers: remoteproc: xlnx: Add Versal and Versal-NET support")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202404231839.oHiY9Lw8-lkp@intel.com/
-Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
----
- drivers/remoteproc/xlnx_r5_remoteproc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404240126.wbYVyRds-lkp@intel.com/
 
-diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
-index a6d8ac7394e7..d98940d7ef8f 100644
---- a/drivers/remoteproc/xlnx_r5_remoteproc.c
-+++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-@@ -904,7 +904,7 @@ static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
- {
- 	struct device *dev = cluster->dev;
- 	struct zynqmp_r5_core *r5_core;
--	int ret, i;
-+	int ret = -EINVAL, i;
- 
- 	r5_core = cluster->r5_cores[0];
- 
+All errors (new ones prefixed by >>):
 
-base-commit: e99fcac055b3325283d6c5c61a117651fb147686
+   In file included from arch/arm64/kvm/emulate-nested.c:8:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2254:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/emulate-nested.c:2186:33: error: call to undeclared function 'kvm_auth_eretax'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2186 |         if (esr_iss_is_eretax(esr) && !kvm_auth_eretax(vcpu, &elr)) {
+         |                                        ^
+   5 warnings and 1 error generated.
+--
+   In file included from arch/arm64/kvm/hyp/vhe/switch.c:7:
+   In file included from arch/arm64/kvm/hyp/include/hyp/switch.h:10:
+   In file included from arch/arm64/kvm/hyp/include/hyp/adjust_pc.h:13:
+   In file included from arch/arm64/include/asm/kvm_emulate.h:14:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2254:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/hyp/vhe/switch.c:247:35: error: call to undeclared function 'kvm_auth_eretax'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     247 |                 if (!(vcpu_has_ptrauth(vcpu) && kvm_auth_eretax(vcpu, &elr)))
+         |                                                 ^
+   arch/arm64/kvm/hyp/vhe/switch.c:263:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     263 |         [ESR_ELx_EC_CP15_32]            = kvm_hyp_handle_cp15_32,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:264:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     264 |         [ESR_ELx_EC_SYS64]              = kvm_hyp_handle_sysreg,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:265:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     265 |         [ESR_ELx_EC_SVE]                = kvm_hyp_handle_fpsimd,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:266:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     266 |         [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:267:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     267 |         [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:268:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     268 |         [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:269:29: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     269 |         [ESR_ELx_EC_WATCHPT_LOW]        = kvm_hyp_handle_watchpt_low,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:270:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     270 |         [ESR_ELx_EC_ERET]               = kvm_hyp_handle_eret,
+         |                                           ^~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:271:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     271 |         [ESR_ELx_EC_MOPS]               = kvm_hyp_handle_mops,
+         |                                           ^~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/vhe/switch.c:262:28: note: previous initialization is here
+     262 |         [0 ... ESR_ELx_EC_MAX]          = NULL,
+         |                                           ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+   14 warnings and 1 error generated.
+
+
+vim +/kvm_auth_eretax +2186 arch/arm64/kvm/emulate-nested.c
+
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2172  
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2173  void kvm_emulate_nested_eret(struct kvm_vcpu *vcpu)
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2174  {
+213b3d1ea1612c Marc Zyngier 2024-04-19  2175  	u64 spsr, elr, esr;
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2176  
+95537f06b9e826 Marc Zyngier 2024-04-19  2177  	/*
+95537f06b9e826 Marc Zyngier 2024-04-19  2178  	 * Forward this trap to the virtual EL2 if the virtual
+95537f06b9e826 Marc Zyngier 2024-04-19  2179  	 * HCR_EL2.NV bit is set and this is coming from !EL2.
+95537f06b9e826 Marc Zyngier 2024-04-19  2180  	 */
+95537f06b9e826 Marc Zyngier 2024-04-19  2181  	if (forward_traps(vcpu, HCR_NV))
+95537f06b9e826 Marc Zyngier 2024-04-19  2182  		return;
+95537f06b9e826 Marc Zyngier 2024-04-19  2183  
+213b3d1ea1612c Marc Zyngier 2024-04-19  2184  	/* Check for an ERETAx */
+213b3d1ea1612c Marc Zyngier 2024-04-19  2185  	esr = kvm_vcpu_get_esr(vcpu);
+213b3d1ea1612c Marc Zyngier 2024-04-19 @2186  	if (esr_iss_is_eretax(esr) && !kvm_auth_eretax(vcpu, &elr)) {
+213b3d1ea1612c Marc Zyngier 2024-04-19  2187  		/*
+213b3d1ea1612c Marc Zyngier 2024-04-19  2188  		 * Oh no, ERETAx failed to authenticate.  If we have
+213b3d1ea1612c Marc Zyngier 2024-04-19  2189  		 * FPACCOMBINE, deliver an exception right away.  If we
+213b3d1ea1612c Marc Zyngier 2024-04-19  2190  		 * don't, then let the mangled ELR value trickle down the
+213b3d1ea1612c Marc Zyngier 2024-04-19  2191  		 * ERET handling, and the guest will have a little surprise.
+213b3d1ea1612c Marc Zyngier 2024-04-19  2192  		 */
+213b3d1ea1612c Marc Zyngier 2024-04-19  2193  		if (kvm_has_pauth(vcpu->kvm, FPACCOMBINE)) {
+213b3d1ea1612c Marc Zyngier 2024-04-19  2194  			esr &= ESR_ELx_ERET_ISS_ERETA;
+213b3d1ea1612c Marc Zyngier 2024-04-19  2195  			esr |= FIELD_PREP(ESR_ELx_EC_MASK, ESR_ELx_EC_FPAC);
+213b3d1ea1612c Marc Zyngier 2024-04-19  2196  			kvm_inject_nested_sync(vcpu, esr);
+213b3d1ea1612c Marc Zyngier 2024-04-19  2197  			return;
+213b3d1ea1612c Marc Zyngier 2024-04-19  2198  		}
+213b3d1ea1612c Marc Zyngier 2024-04-19  2199  	}
+213b3d1ea1612c Marc Zyngier 2024-04-19  2200  
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2201  	preempt_disable();
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2202  	kvm_arch_vcpu_put(vcpu);
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2203  
+dd0717a998f77f Marc Zyngier 2024-04-19  2204  	spsr = __vcpu_sys_reg(vcpu, SPSR_EL2);
+dd0717a998f77f Marc Zyngier 2024-04-19  2205  	spsr = kvm_check_illegal_exception_return(vcpu, spsr);
+213b3d1ea1612c Marc Zyngier 2024-04-19  2206  	if (!esr_iss_is_eretax(esr))
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2207  		elr = __vcpu_sys_reg(vcpu, ELR_EL2);
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2208  
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2209  	trace_kvm_nested_eret(vcpu, elr, spsr);
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2210  
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2211  	/*
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2212  	 * Note that the current exception level is always the virtual EL2,
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2213  	 * since we set HCR_EL2.NV bit only when entering the virtual EL2.
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2214  	 */
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2215  	*vcpu_pc(vcpu) = elr;
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2216  	*vcpu_cpsr(vcpu) = spsr;
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2217  
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2218  	kvm_arch_vcpu_load(vcpu, smp_processor_id());
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2219  	preempt_enable();
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2220  }
+47f3a2fc765ae2 Jintack Lim  2023-02-09  2221  
+
+:::::: The code at line 2186 was first introduced by commit
+:::::: 213b3d1ea1612c6d26153be446923831c4534689 KVM: arm64: nv: Handle ERETA[AB] instructions
+
+:::::: TO: Marc Zyngier <maz@kernel.org>
+:::::: CC: Marc Zyngier <maz@kernel.org>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
