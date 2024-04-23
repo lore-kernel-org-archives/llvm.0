@@ -1,178 +1,198 @@
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D130F1CD18;
-	Tue, 23 Apr 2024 00:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713831532; cv=fail; b=CdN4/r5U0oWWwhOcf4Pv6SGMHSzUHdQLsXPAZ8X5l2aGMoFuntGsiiPGIvB8IddI2d4c9A/MnEwD8S3V8GnAegA2I2/QHeMhfhHNU4UvFdjUL8OyzfB4z4FHg4bLbdewcccd8wvlmbH+gmHIOr1wIprYgVKaumVfomwDT7awL80=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713831532; c=relaxed/simple;
-	bh=8fXtGCb5VCixjKLMloWpJEuxZNtqHuih5H85WiwqDYM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=RaeV8oW//X0s2OOOv/UEINwbqS1hkgPv+p6GXqaYjs7pL/2UjYKR5X3zxB7w9rhYjBZhBAfS4i9wWcLM8+ORcHI4RN6eefwsHW43OvWSkbyglVLPum88gF4OnUsOlb/+ROMs+cB4wM8JvyrGEILN/jNINaKJdRvxTA+RPYLfAVE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=G1k9STT4; arc=fail smtp.client-ip=40.107.223.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20599184
+	for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 00:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713832318; cv=none; b=MBxwkq6S382rDg2LJydTDv0AWmim/Pc8xfJ47EEShiUwR3+4YZfDGwzvHWFQkcabSDTogDlFT20mum29MEVNDu51z1/TSOlAwk6uhCzXGV0757KAYmIcjnH2LXpmS/NmK7PB/L8pyV3MG7+b4+dNCI8jQ8mclNqPc3r5oKKYA5M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713832318; c=relaxed/simple;
+	bh=Bq5/S+/AKi+8P7NmtIAE7fI1CjwXESilLP2aFiMNcGM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MiuRcePNJESassiKFX6sA6rNtRq5hnpSr1xou/GUVEkdTu9uFKqAjurbZdVx8BliSsOVe5hTVLs9EX8DUiNYwJjgsTakE5uGLCkgWUcFgwidXbdl0B6lSFW5tUi+lXR8s8cyquHKmbW0ZaDtR67Z8mkECJzFtNlFWsFeQHzrGTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SsavQ9V7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="G1k9STT4"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hayau5Wu0MDTetmzCj9km+jFYogjdVHNqlkJwDYsR//8+NeO4pRGxiTCrxfG48XY4wi1Xyp+bhe4b00WQvIIBgjFai8jhN0In5pEyvf/csQrTR1TKDf116mZESbpgu4LqVlMgeAXLgB2JQv+Y73zh6jFbQGg1R5IY8766VTAODcLTamFSeuN31OW7SQYOpDv+BcjwRzL/Ig3PGRghB504Ozt/035Fd1dCA+jiIjOumREypwG/Pc3FvQ2iwvPow+beXXzhGgxrkbN0hZn2l4rgY9iVfjtLjlf/3ipFE3zF1lZcw5R1zhLOWJ+Bj4cf1rF2EVQIEstirjo7qcLrPQplQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iSP0A4dnDfYE7yIsaRsJ4UOULqHEO5czRqdcMFOKmhE=;
- b=TGynlP9bgrV5orC+hdebU2wLC2J9p1Mv1WnEGAmx4C07/YCIIKZT/SxqxznTu1Rd/I4h152YRXAUCVoH6HDOoNXY9gtNr7w48epWkrY2MUPUdBY04YlCC9B6uTk0EjLcerYqT5JJgfxCyKCgsqlEycg9n8tX2i4pbgo76Zcfablr1xG3rI9kbE8HO6pk/SDYQEOHsVP7zVvfM5Lzjif0rKv1qhIT8rPd63UuIKz+BrM6P7dyUVIH/+5+v+hBkcJsLrB3FKgqDICoPpslbDq3OebX3dG212azxnO18EvDjWtGqVT7/4q+EDoqDqp7LIL/yGe/wGil5DilqdAAiTDYtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iSP0A4dnDfYE7yIsaRsJ4UOULqHEO5czRqdcMFOKmhE=;
- b=G1k9STT4gb/Sql7H72KgvFj64IPZHCq803y8cQ10+NDTkB8gBuyJhlp2CCLluYa10jxgY7TMsHrOHry69frPu0ocBkIjDvc4fCxZvygx4XdiFF4mMSBFA8AdBzD3hTE/yE0gcm6gWVCwYYeAiaPKO65gNgPXDoxPvadJkPE9NY+/Kr33EsrDiumU/aD6i2deEkXkiZrjxsNm6pOqW0T8smRh0gLv7l7Z6ue42hBNSoBXKHE1afm3IXeSkfFSb/L/bIs1xrUcn1Dhxj5jhvBNdJqXsYIhfwD/OZwbuWqUcj1AVxgfk759aV6qK/BRcH0QTU+UR0wDV0IQQAlZWocgRA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com (2603:10b6:5:1c7::26)
- by DS0PR12MB8454.namprd12.prod.outlook.com (2603:10b6:8:15e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Tue, 23 Apr
- 2024 00:18:48 +0000
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::6aec:dbca:a593:a222]) by DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::6aec:dbca:a593:a222%5]) with mapi id 15.20.7472.044; Tue, 23 Apr 2024
- 00:18:47 +0000
-Date: Mon, 22 Apr 2024 21:18:46 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jijie Shao <shaojijie@huawei.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 0/6] Fix mlx5 write combining support on new ARM64
- cores
-Message-ID: <20240423001846.GA434811@nvidia.com>
-References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-X-ClientProxiedBy: MN2PR16CA0049.namprd16.prod.outlook.com
- (2603:10b6:208:234::18) To DM6PR12MB3849.namprd12.prod.outlook.com
- (2603:10b6:5:1c7::26)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SsavQ9V7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713832315;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6rH0cCTRw1g9w+pfKNle4pPRH0N5MOp+pCetrOZAf2s=;
+	b=SsavQ9V7EzMlbDGMb6/kipskvMnTvZN3K9Nfrz3ketAs5YJDAiChTehhME/AfBRYxuJKlR
+	BsOpyPoJ5XZvw/Flol60638r0jO5jVZ24Ufz6PfvZOokOLk5uwsgcUi7+tnoHxABcOwtDW
+	+sH6MubVVZZAs6gtxY5TYEks6Zz5BLU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-624-upNksTgYN3iIkqQl8cc9Wg-1; Mon, 22 Apr 2024 20:31:53 -0400
+X-MC-Unique: upNksTgYN3iIkqQl8cc9Wg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1865118065AA
+	for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 00:31:53 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C82BF492BC6;
+	Tue, 23 Apr 2024 00:31:52 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 15 of 204): Test report for master
+ (6.9.0-rc5, mainline.kernel.org-clang, 4d200843)
+Date: Tue, 23 Apr 2024 00:31:52 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3849:EE_|DS0PR12MB8454:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff240891-ee22-4ce0-6ad7-08dc632af1c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KIQyRpmxnMtiiXYgO2Y02qcU70ObJThv8quvUeaStimnxUwMKxSQ4kDobpg7?=
- =?us-ascii?Q?HQLN9m/tE1ZqNISfEEHQe14gdcMxRI9QHeD8rMWcA6PpH2pVmGJwQVTngdSu?=
- =?us-ascii?Q?/QQSX6Bx0qIvDokRyOYxfSaujcw7biT5kFcRHIl/8r+R3dWC47oafW7YLcce?=
- =?us-ascii?Q?lzHNjeNvttVOO/nQ/bFQdInJN49topRxfQx23pMnCOKh2ImgZgwVuJPL/TRv?=
- =?us-ascii?Q?zhRVIkhg9IFeVO/G4CNBSMd6ybiplp9GzbsLzyRKHSjf5f2pSE22cd5s1ec+?=
- =?us-ascii?Q?B4DNSOf6vCNMe6wbTm4Kd7wzptVwwR5pA69IJtbMrgd1kUH1yji8slKXxdUq?=
- =?us-ascii?Q?79oEXT7VwEohfFyKcPdCdqb0EKCGLlpi/9chVX7KlwKcxCGPGYEztdL6TRls?=
- =?us-ascii?Q?PDfRtSVN7VDkk4JXGTcnbgjE/kVTCWc16idc0skcW50dgmCc4F2qXmgm32II?=
- =?us-ascii?Q?5WOI4bDbVS7ro+HFMIWqcDwq3Eid7HLMftKwQqZZBrE+0uFA8DyqZaRI0/ch?=
- =?us-ascii?Q?E3qy41M2C2K27TvG/z9wE1DQnn4n+lytqCbiGSZ0w/Cm9cIsbpjMCbNyK7UN?=
- =?us-ascii?Q?A6RJhjTexgxXR6xLODI4/xgPCWJU7T4fQvfJiNYZqttDt4JDhSLleHIyGrIe?=
- =?us-ascii?Q?c6v/6LzYHiCZiWP6Mpy/6EcgeudV+l7djn9S+bYNBVatbbivh4vf/sHXXutK?=
- =?us-ascii?Q?Ks+ne7lyB5V6apUPWDqmdUmJBVE2E4BNGah5iZHFxYUxIc+R94Je25n2G5lt?=
- =?us-ascii?Q?cX9rZkr3+aM4uzsiU2lIpCdKMnagoO2+vOmS0M+2Fk+D1jQPbq7/tcXmejMC?=
- =?us-ascii?Q?lLf1NZchO9cz3ElfmTVsTSSOaOEof4HyM0MhpkNQ3AHwJnGILBo1KbGSHWmb?=
- =?us-ascii?Q?zsJV+i3uWYA+WVnGLcxGB/Gj2lLrToodFfiKGXl4tZEmheefftKyGqbws+Po?=
- =?us-ascii?Q?jCFsvF2qtFoVTyiXqi41sHtR95vMmhvaMSda4qK7KLzYTyOInwWQ1pwSN1cI?=
- =?us-ascii?Q?ZtCqvhEvRBxWok7sPUsI0jJuC5rJ5rf5m3wL6oD+uyaU2F6a4WHo6qne4Mlj?=
- =?us-ascii?Q?hL8ghqRRZXGpZ2kBWW+83TNFGZOlJCVEzy6ZxSJNoG6ra6kdSuRjzBc1U8JU?=
- =?us-ascii?Q?ApbUBEShrECKoin7xBABJeTU+HUrkRO3Fz3MStFPGjlNWbmzeJ3snthcLlEz?=
- =?us-ascii?Q?kOu9Qr6QYJ7XAbh/7cFme+C2kli01cO25UPiuls6IJKX9GW1OkL52pGzBEFK?=
- =?us-ascii?Q?Z4ZBzfCkvWVsmx3NJQpd27UsBSs1Ys7pn6ARgU5yHp8fBaSiwZLl9EapRvyF?=
- =?us-ascii?Q?01t6akX0YUA/j9TtI1fArMjc?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007)(921011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?gfQuwXtUSmBbv5CJTKJnYG4e7HiIN/fSQzPZL92HLGU81ITEb+KYfAyeffDZ?=
- =?us-ascii?Q?lYUJDvYzXAgh66+0D0tM4MEBhkzFctiTKERbVWqcz7nvEbww9cZFJjbecSNV?=
- =?us-ascii?Q?aIrckiEXV6nOXst0NjWrmTf/sH/wajVg6h2k6W43I9FQrkg08wjuidsGNvJI?=
- =?us-ascii?Q?1MrPDvXwShGHT3OCaB6NPXYK+i/IDjdJQD8Jqn4FhGlb6FS3qUFXldiKBZHg?=
- =?us-ascii?Q?ywa+KQr4Kwwg/E3Xd9AJe6xC32b5vgWM3522XldyxwK7L2TrrjJ1/lTlz09N?=
- =?us-ascii?Q?kmN1XcUNAjHwvfkcNaN06lq4FKpRU7L3CWuiHY9gn1ypHNoCn83AkeIBKcYN?=
- =?us-ascii?Q?qtEEoUNqQ83t7zzydsXBGqUkn2IWkXTa6YeJivTvUDdC4+eA2TsidTczj5po?=
- =?us-ascii?Q?BfgWt5NchQfoO4ofB40fzRtSQakbJ/nDeXCTY/yiL6WZiCyRicDZqOc9RS01?=
- =?us-ascii?Q?MvBfb5aQipBL7wJVJqn8uBRUwGNVNEr/p6bROJpmnkMzX2mXZZX0fw1b3WZI?=
- =?us-ascii?Q?LEy3YHIIyT8oP+Z2oTVJKChUFeyTIQhhvFE8stx98llXfI7rNvvKm2JnaE0M?=
- =?us-ascii?Q?7ZS+nztMdGAj56E3FEMFWAA78KP+U5xG42WDVPgirfSSyfeaBwuXhS1GaM3c?=
- =?us-ascii?Q?2ySJJv6gGxxfWqiiCedBHTynR7c5kX8mS+uHy3mjXrzcNQqzFXHL4sMjzR7H?=
- =?us-ascii?Q?gATqDX6bm+JDo64sav1G63CrQ1044RPURQwhmccutN+IsUh8mbMlE2iY6QHa?=
- =?us-ascii?Q?1p2ZyIg/GDrgImQiVmIApWevxJtUmoxJgpLhUPceCWvPcv3Ltc1JroegSpAd?=
- =?us-ascii?Q?kj2uS8v8p30ewFwCXbLeim/qG0yodguMstI2G+Jmh7u/rCwNFzuEP5lZxLHc?=
- =?us-ascii?Q?Zwqj28MDO+5NtP8Qv4AoV15u1TzK+dKXXp9nnJsP60C92BtecjYB450DcADK?=
- =?us-ascii?Q?zwK9m6ROZSZdxbltuxMswu3aBNy7RlueO25qexvumHx8zjsYa3+zI8jMmBOo?=
- =?us-ascii?Q?wiFRViubvpoF2hHb80q6rrz0IA5VpXOG1C+e8I5bqSJa5oH0cf2dUYrVk+Es?=
- =?us-ascii?Q?xLq4nDU5cJBTdqDDC0kJVPWwu4sZpC7Jxjxa42GScIMAno0PcltXwbvnfnFF?=
- =?us-ascii?Q?3OSYJ2Ca/pZXc5eKKI2TkHaufqNoSUbwuT4vTODoVEwpPnHpkxMS4Ii2jsPb?=
- =?us-ascii?Q?dFBdUK7zTykJDRXtVioESpOMertou3EsA98ruWpEsZThfP/pgw8RhekFVL6B?=
- =?us-ascii?Q?opMsjuAMuPIWEiuou81Q3Xxryo4fzQmDteAVcMF2/KMmwFOawo/KkDWwXY3j?=
- =?us-ascii?Q?ovCufFsiEfZILF/BLlvcIcdx8FerofErVfdy1JGWhAsIb+MgvZ+pgFPb9JvF?=
- =?us-ascii?Q?TkxpZPTNcSEF+gwD6idHxdL9aaghZPZV6gt4NVypk5d8PDdkLNyDMwaEJ7m6?=
- =?us-ascii?Q?1w5qkL1ccc8d6x3o7CLaZO92MepEPzC97xXBN8Sxl8yTdlPVdSnWG5Ed4YX/?=
- =?us-ascii?Q?ztYRZftgBYDetWgeZei8lVSHJyOz/ofFWdIBqO1XV4v8vf8Foh52Vej/7Y4c?=
- =?us-ascii?Q?Sb/thZTTNnAd8p8li6g7Z6gaPHx9GgOXYlysDZVk?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff240891-ee22-4ce0-6ad7-08dc632af1c8
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3849.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2024 00:18:47.7819
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RWckTwIs86dtruzzLMHOiG0ytkwl/H02OxJCn5iFUmwOaNmhxijnt2c+/aYuTpfi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8454
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Message-Id: <68087.124042220315300629@us-mta-624.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 11, 2024 at 01:46:13PM -0300, Jason Gunthorpe wrote:
-> Jason Gunthorpe (6):
->   x86: Stop using weak symbols for __iowrite32_copy()
->   s390: Implement __iowrite32_copy()
->   s390: Stop using weak symbols for __iowrite64_copy()
->   arm64/io: Provide a WC friendly __iowriteXX_copy()
->   net: hns3: Remove io_stop_wc() calls after __iowrite64_copy()
->   IB/mlx5: Use __iowrite64_copy() for write combining stores
+Hi, we tested your kernel and here are the results:
 
-Applied to rdma's for-next thanks all
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Jason
+
+Kernel information:
+    Commit message: Merge tag 'docs-6.9-fixes2' of git://git.lwn.net/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1263269646
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1263269646-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/310
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1263269646-x86_64-kernel_upt_52
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/310
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
+"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
+=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
+:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
+            Affected tests:
+                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
+_64]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, s390x]
+                stress: stress-ng - cpu-cache [aarch64, s390x]
+                stress: stress-ng - memory [aarch64, s390x]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    machineinfo [x86_64]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+    Storage - blktests - blk - upstream [x86_64]
+    Storage - blktests - nvme-tcp - upstream [x86_64]
+    Storage - swraid scsi_raid [x86_64]
+    stress: stress-ng - cpu-cache [x86_64]
+    stress: stress-ng - memory [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
