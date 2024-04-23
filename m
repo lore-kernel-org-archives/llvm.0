@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4499452F71;
-	Tue, 23 Apr 2024 07:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9B557880;
+	Tue, 23 Apr 2024 09:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713859101; cv=none; b=hPKr4EhHoAacCfxRNJnD75jeFv1qGRo0UxCkTMsSZX+mWDfGb+5fdJaAeZnwBnlztuWW7d0H4RZ1pG5OVRVm4SzuceSBA9JJhlrNnNQ7r25JkEb4pZGqnmif2+0ZL6cWRXWo3ijHTUM1XWACj+g9VRNJcAzJtjwn0HRYHRskKWI=
+	t=1713862824; cv=none; b=ZVAQKqd2KmyRsrcIsCLKYbwpmpojNuskiZSzXeLmhoT1ScUHz2gsM3NXsfoPCei/IF0jTLF8mEzMmiNxv80LB61gDJukb2mz6n6/Bcuzz+6Qh/dGwejK4CAT+qtXCcmGGiyJjmPo0zs6WDT6tF53I3zHbyqCIc4wg3LKg/P2qAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713859101; c=relaxed/simple;
-	bh=yOfnuZYzcvCFto48cquaJwaRYnVGj+RXuaNnnjy8KBk=;
+	s=arc-20240116; t=1713862824; c=relaxed/simple;
+	bh=ZygaaiwMIs+eSq/9t/tXMMP08KMtapZjy/g2WygoLJg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=faCGWYu7VUCywEf6iQNxOIUzg6CRDDoO673JnZqWTOCFKnbj4mYjB56vRAW4xNrIE1+gjvFZXe0RLECRGJ0zT9sqWEAhM1A1gV2DaXbWWvDIsygJe9lY/H1vYpPJPqFwnLgE4mxwAu95hKEvc429/SU+LjDdcJcAiCyOSryMBIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nIKQTdpd; arc=none smtp.client-ip=198.175.65.9
+	 Content-Disposition; b=cXc8ryHl+3HkIpynq2i6XjpD4Jxq9yjCVWOfQTGkWry/PcjSJLBJczCJv8OjMXFYg4QxfXlL6zUjW9EdajK+EzeOKRcLCfc4lUBqRnKxac4zcsWSoF+2eNUyvJg+bOErG6kmaV7Emm1kHMYWH12rgMnHjV29IJ+9KI4NNPzyRRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AmGyK/Wm; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nIKQTdpd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AmGyK/Wm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713859100; x=1745395100;
+  t=1713862822; x=1745398822;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yOfnuZYzcvCFto48cquaJwaRYnVGj+RXuaNnnjy8KBk=;
-  b=nIKQTdpdZhjPZ76cccah38u+OikJpy5lU8CYJPBL+6U+qiKRY036EZ2v
-   9kOgrxtJXSjKGH2jL2ughEDxnIF+MH7+13jcWEbiK7sgvY+4RoDdPh488
-   5uUfGzt58PnuX0SlqO9w/6ejufI/CYPitsgKBp6w4XzO5cLgyio0R4kpv
-   DQBiyhzEyxkgsP95hmlhm8IUsESLZaAcols9OUUTU+aGEdEVLk2K87yzb
-   XUvrp+SXtwdGcVxnoWPO8jpTJ9/v8kfFxuEcGk+KUWM6XDyqQeb/W3XwM
-   0k1OENADHS3bKCT7TmwwtPZek8pH1Zjd1RAQ9HqnK6qChaFSisgkEZ00S
-   w==;
-X-CSE-ConnectionGUID: 8beeOomuT92iKkCAMS4vTg==
-X-CSE-MsgGUID: JRx4kkL7TDaHkPlVUaERJw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="31920310"
+  bh=ZygaaiwMIs+eSq/9t/tXMMP08KMtapZjy/g2WygoLJg=;
+  b=AmGyK/Wmgyk8gvnnGEvz9QzKybORdyXKd+eAk0GCovibcpkyA1CchHcb
+   A6fYe58ZcAf7ZYpmkm8DeUsyDLqb7/g3Htc18HrNCw4Nw0v5+B4tXUHGu
+   AkhOHZ914KQMGd7HtYmokXvmnK3qIHyEOHoHgRLsAbM78QXIxT70E6hoA
+   CPMyDBei14b1wSyHJPVomB9+qeqkEwUx+SP9KMm3n4Qz/NOsZDXLgU6Qi
+   aEZilfHq/4l8miSekfhew46MvZj2bcouWi/6REH6faDpG7IyPIHpyRtFZ
+   iuxAysfoyvEILVumxwvuwbSqDB6N3z8UPk+Lt4l9SH8VvQxu/av6QXVXT
+   Q==;
+X-CSE-ConnectionGUID: CtBCbIVzSlyjanj/711/yQ==
+X-CSE-MsgGUID: FUHZvO7qQ6K88sxXtLAthw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="26950560"
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="31920310"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 00:58:20 -0700
-X-CSE-ConnectionGUID: ospN8u+iRwO+GAkHkns80A==
-X-CSE-MsgGUID: +72KZSbqSZOlOaKYYRKNBw==
+   d="scan'208";a="26950560"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 02:00:21 -0700
+X-CSE-ConnectionGUID: kO+u+q1IQX2tQ/mwkmaXcw==
+X-CSE-MsgGUID: MINtFSJETT2xmDeJWdLKrA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="55487002"
+   d="scan'208";a="24914831"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 23 Apr 2024 00:58:18 -0700
+  by orviesa008.jf.intel.com with ESMTP; 23 Apr 2024 02:00:20 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rzB2e-000020-1W;
-	Tue, 23 Apr 2024 07:58:16 +0000
-Date: Tue, 23 Apr 2024 15:57:40 +0800
+	id 1rzC0f-00003s-1t;
+	Tue, 23 Apr 2024 09:00:17 +0000
+Date: Tue, 23 Apr 2024 16:59:44 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 335/438] arch/mips/kernel/vpe.c:856:2: warning:
- expression result unused
-Message-ID: <202404231509.m8XUwqdQ-lkp@intel.com>
+Subject: [axboe-block:rw_iter 335/438] arch/mips/kernel/vpe.c:856:5: error:
+ expected ';' after expression
+Message-ID: <202404231629.iwUVnBep-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,22 +65,22 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
 head:   89db07f28b15def984eadebee7eb8f15891a6390
 commit: e5578d903b7d06069b56cfbe17988a10578ae897 [335/438] arch/mips: convert to read/write iterators
-config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20240423/202404231509.m8XUwqdQ-lkp@intel.com/config)
+config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20240423/202404231629.iwUVnBep-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240423/202404231509.m8XUwqdQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240423/202404231629.iwUVnBep-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404231509.m8XUwqdQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404231629.iwUVnBep-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   arch/mips/kernel/vpe.c:856:5: error: expected ';' after expression
+>> arch/mips/kernel/vpe.c:856:5: error: expected ';' after expression
            ret !copy_from_iter_full(v->pbuffer + v->len, count, from);
               ^
               ;
->> arch/mips/kernel/vpe.c:856:2: warning: expression result unused [-Wunused-value]
+   arch/mips/kernel/vpe.c:856:2: warning: expression result unused [-Wunused-value]
            ret !copy_from_iter_full(v->pbuffer + v->len, count, from);
            ^~~
    arch/mips/kernel/vpe.c:856:6: warning: expression result unused [-Wunused-value]
