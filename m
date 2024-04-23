@@ -1,190 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDD5200135;
-	Mon, 22 Apr 2024 23:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830370; cv=none; b=oSQvABPcztkzyMK3xQHKJOVBsJxo/WIBD21NUHlZazK/w53OL+OknVnHmXKLHjTcC/QMYDkUY4z/eC70GFLE9SMg1NDvxTFeSYHy3idpms57D77pzKEs7QEMSvp9VKAGMc6gk/nY1UfKXf4b3m8JTB3zbm1n1kYFjO4FUICnr54=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830370; c=relaxed/simple;
-	bh=WQkBgi+Eaxxbb+FX/HL3Sm6zB6RvXwCNsTnQSDnjwh0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ov6i21VRcwJjWzMSFiVu2GBVzNH3tFHE9SCAICRoyfv7mgFWB9oustzLo+XRnFv7+C+GGEoV9v9k14u9JmUZajBCt1iCIJTzQwft0QeiWLck7DS2IBgy6ZI/+A7eizuiKD41xPLUxy2ItIrVW56CMgeVI77yamWMhLPCBPC5/QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PUalQGtV; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D130F1CD18;
+	Tue, 23 Apr 2024 00:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713831532; cv=fail; b=CdN4/r5U0oWWwhOcf4Pv6SGMHSzUHdQLsXPAZ8X5l2aGMoFuntGsiiPGIvB8IddI2d4c9A/MnEwD8S3V8GnAegA2I2/QHeMhfhHNU4UvFdjUL8OyzfB4z4FHg4bLbdewcccd8wvlmbH+gmHIOr1wIprYgVKaumVfomwDT7awL80=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713831532; c=relaxed/simple;
+	bh=8fXtGCb5VCixjKLMloWpJEuxZNtqHuih5H85WiwqDYM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=RaeV8oW//X0s2OOOv/UEINwbqS1hkgPv+p6GXqaYjs7pL/2UjYKR5X3zxB7w9rhYjBZhBAfS4i9wWcLM8+ORcHI4RN6eefwsHW43OvWSkbyglVLPum88gF4OnUsOlb/+ROMs+cB4wM8JvyrGEILN/jNINaKJdRvxTA+RPYLfAVE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=G1k9STT4; arc=fail smtp.client-ip=40.107.223.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PUalQGtV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B93C2BD11;
-	Mon, 22 Apr 2024 23:59:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830370;
-	bh=WQkBgi+Eaxxbb+FX/HL3Sm6zB6RvXwCNsTnQSDnjwh0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PUalQGtVZ2p8HusG8Yvl6SWn9N0nLNr42bA3qV2NGCm6PS09Qik3oJbM55l2RcVvb
-	 IWdtE5IyO7T1BTaLiVhPMAYc+U3LfBDhhOE58sYJLFeb5IRUW6paFBFKaVuRXXhYAL
-	 kiCYQFsqG4nczWlrv380KAeoyte+zbekMKi/WZN+s1K34rQSa37LDs4WqTi/hiUvVY
-	 1favd+A4g39Nzw/kX21QEkY2ZxXLWs8TgFRBJHIPVFYDa3C+GOSalaztmd1AJqoMJZ
-	 z5S7VSq4/hMGPa4rlgobl3lo+mEvnCIH47lA+/l4AtE9CApBK6JtN8F6SUcC2HITEs
-	 mhHrdCS/oR9XA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: John Stultz <jstultz@google.com>,
-	Lee Jones <joneslee@google.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sasha Levin <sashal@kernel.org>,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.19 6/7] selftests: timers: Fix valid-adjtimex signed left-shift undefined behavior
-Date: Mon, 22 Apr 2024 19:20:38 -0400
-Message-ID: <20240422232040.1616527-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422232040.1616527-1-sashal@kernel.org>
-References: <20240422232040.1616527-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="G1k9STT4"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Hayau5Wu0MDTetmzCj9km+jFYogjdVHNqlkJwDYsR//8+NeO4pRGxiTCrxfG48XY4wi1Xyp+bhe4b00WQvIIBgjFai8jhN0In5pEyvf/csQrTR1TKDf116mZESbpgu4LqVlMgeAXLgB2JQv+Y73zh6jFbQGg1R5IY8766VTAODcLTamFSeuN31OW7SQYOpDv+BcjwRzL/Ig3PGRghB504Ozt/035Fd1dCA+jiIjOumREypwG/Pc3FvQ2iwvPow+beXXzhGgxrkbN0hZn2l4rgY9iVfjtLjlf/3ipFE3zF1lZcw5R1zhLOWJ+Bj4cf1rF2EVQIEstirjo7qcLrPQplQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iSP0A4dnDfYE7yIsaRsJ4UOULqHEO5czRqdcMFOKmhE=;
+ b=TGynlP9bgrV5orC+hdebU2wLC2J9p1Mv1WnEGAmx4C07/YCIIKZT/SxqxznTu1Rd/I4h152YRXAUCVoH6HDOoNXY9gtNr7w48epWkrY2MUPUdBY04YlCC9B6uTk0EjLcerYqT5JJgfxCyKCgsqlEycg9n8tX2i4pbgo76Zcfablr1xG3rI9kbE8HO6pk/SDYQEOHsVP7zVvfM5Lzjif0rKv1qhIT8rPd63UuIKz+BrM6P7dyUVIH/+5+v+hBkcJsLrB3FKgqDICoPpslbDq3OebX3dG212azxnO18EvDjWtGqVT7/4q+EDoqDqp7LIL/yGe/wGil5DilqdAAiTDYtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iSP0A4dnDfYE7yIsaRsJ4UOULqHEO5czRqdcMFOKmhE=;
+ b=G1k9STT4gb/Sql7H72KgvFj64IPZHCq803y8cQ10+NDTkB8gBuyJhlp2CCLluYa10jxgY7TMsHrOHry69frPu0ocBkIjDvc4fCxZvygx4XdiFF4mMSBFA8AdBzD3hTE/yE0gcm6gWVCwYYeAiaPKO65gNgPXDoxPvadJkPE9NY+/Kr33EsrDiumU/aD6i2deEkXkiZrjxsNm6pOqW0T8smRh0gLv7l7Z6ue42hBNSoBXKHE1afm3IXeSkfFSb/L/bIs1xrUcn1Dhxj5jhvBNdJqXsYIhfwD/OZwbuWqUcj1AVxgfk759aV6qK/BRcH0QTU+UR0wDV0IQQAlZWocgRA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB3849.namprd12.prod.outlook.com (2603:10b6:5:1c7::26)
+ by DS0PR12MB8454.namprd12.prod.outlook.com (2603:10b6:8:15e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Tue, 23 Apr
+ 2024 00:18:48 +0000
+Received: from DM6PR12MB3849.namprd12.prod.outlook.com
+ ([fe80::6aec:dbca:a593:a222]) by DM6PR12MB3849.namprd12.prod.outlook.com
+ ([fe80::6aec:dbca:a593:a222%5]) with mapi id 15.20.7472.044; Tue, 23 Apr 2024
+ 00:18:47 +0000
+Date: Mon, 22 Apr 2024 21:18:46 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jijie Shao <shaojijie@huawei.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 0/6] Fix mlx5 write combining support on new ARM64
+ cores
+Message-ID: <20240423001846.GA434811@nvidia.com>
+References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+X-ClientProxiedBy: MN2PR16CA0049.namprd16.prod.outlook.com
+ (2603:10b6:208:234::18) To DM6PR12MB3849.namprd12.prod.outlook.com
+ (2603:10b6:5:1c7::26)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.312
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3849:EE_|DS0PR12MB8454:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff240891-ee22-4ce0-6ad7-08dc632af1c8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?KIQyRpmxnMtiiXYgO2Y02qcU70ObJThv8quvUeaStimnxUwMKxSQ4kDobpg7?=
+ =?us-ascii?Q?HQLN9m/tE1ZqNISfEEHQe14gdcMxRI9QHeD8rMWcA6PpH2pVmGJwQVTngdSu?=
+ =?us-ascii?Q?/QQSX6Bx0qIvDokRyOYxfSaujcw7biT5kFcRHIl/8r+R3dWC47oafW7YLcce?=
+ =?us-ascii?Q?lzHNjeNvttVOO/nQ/bFQdInJN49topRxfQx23pMnCOKh2ImgZgwVuJPL/TRv?=
+ =?us-ascii?Q?zhRVIkhg9IFeVO/G4CNBSMd6ybiplp9GzbsLzyRKHSjf5f2pSE22cd5s1ec+?=
+ =?us-ascii?Q?B4DNSOf6vCNMe6wbTm4Kd7wzptVwwR5pA69IJtbMrgd1kUH1yji8slKXxdUq?=
+ =?us-ascii?Q?79oEXT7VwEohfFyKcPdCdqb0EKCGLlpi/9chVX7KlwKcxCGPGYEztdL6TRls?=
+ =?us-ascii?Q?PDfRtSVN7VDkk4JXGTcnbgjE/kVTCWc16idc0skcW50dgmCc4F2qXmgm32II?=
+ =?us-ascii?Q?5WOI4bDbVS7ro+HFMIWqcDwq3Eid7HLMftKwQqZZBrE+0uFA8DyqZaRI0/ch?=
+ =?us-ascii?Q?E3qy41M2C2K27TvG/z9wE1DQnn4n+lytqCbiGSZ0w/Cm9cIsbpjMCbNyK7UN?=
+ =?us-ascii?Q?A6RJhjTexgxXR6xLODI4/xgPCWJU7T4fQvfJiNYZqttDt4JDhSLleHIyGrIe?=
+ =?us-ascii?Q?c6v/6LzYHiCZiWP6Mpy/6EcgeudV+l7djn9S+bYNBVatbbivh4vf/sHXXutK?=
+ =?us-ascii?Q?Ks+ne7lyB5V6apUPWDqmdUmJBVE2E4BNGah5iZHFxYUxIc+R94Je25n2G5lt?=
+ =?us-ascii?Q?cX9rZkr3+aM4uzsiU2lIpCdKMnagoO2+vOmS0M+2Fk+D1jQPbq7/tcXmejMC?=
+ =?us-ascii?Q?lLf1NZchO9cz3ElfmTVsTSSOaOEof4HyM0MhpkNQ3AHwJnGILBo1KbGSHWmb?=
+ =?us-ascii?Q?zsJV+i3uWYA+WVnGLcxGB/Gj2lLrToodFfiKGXl4tZEmheefftKyGqbws+Po?=
+ =?us-ascii?Q?jCFsvF2qtFoVTyiXqi41sHtR95vMmhvaMSda4qK7KLzYTyOInwWQ1pwSN1cI?=
+ =?us-ascii?Q?ZtCqvhEvRBxWok7sPUsI0jJuC5rJ5rf5m3wL6oD+uyaU2F6a4WHo6qne4Mlj?=
+ =?us-ascii?Q?hL8ghqRRZXGpZ2kBWW+83TNFGZOlJCVEzy6ZxSJNoG6ra6kdSuRjzBc1U8JU?=
+ =?us-ascii?Q?ApbUBEShrECKoin7xBABJeTU+HUrkRO3Fz3MStFPGjlNWbmzeJ3snthcLlEz?=
+ =?us-ascii?Q?kOu9Qr6QYJ7XAbh/7cFme+C2kli01cO25UPiuls6IJKX9GW1OkL52pGzBEFK?=
+ =?us-ascii?Q?Z4ZBzfCkvWVsmx3NJQpd27UsBSs1Ys7pn6ARgU5yHp8fBaSiwZLl9EapRvyF?=
+ =?us-ascii?Q?01t6akX0YUA/j9TtI1fArMjc?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007)(921011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?gfQuwXtUSmBbv5CJTKJnYG4e7HiIN/fSQzPZL92HLGU81ITEb+KYfAyeffDZ?=
+ =?us-ascii?Q?lYUJDvYzXAgh66+0D0tM4MEBhkzFctiTKERbVWqcz7nvEbww9cZFJjbecSNV?=
+ =?us-ascii?Q?aIrckiEXV6nOXst0NjWrmTf/sH/wajVg6h2k6W43I9FQrkg08wjuidsGNvJI?=
+ =?us-ascii?Q?1MrPDvXwShGHT3OCaB6NPXYK+i/IDjdJQD8Jqn4FhGlb6FS3qUFXldiKBZHg?=
+ =?us-ascii?Q?ywa+KQr4Kwwg/E3Xd9AJe6xC32b5vgWM3522XldyxwK7L2TrrjJ1/lTlz09N?=
+ =?us-ascii?Q?kmN1XcUNAjHwvfkcNaN06lq4FKpRU7L3CWuiHY9gn1ypHNoCn83AkeIBKcYN?=
+ =?us-ascii?Q?qtEEoUNqQ83t7zzydsXBGqUkn2IWkXTa6YeJivTvUDdC4+eA2TsidTczj5po?=
+ =?us-ascii?Q?BfgWt5NchQfoO4ofB40fzRtSQakbJ/nDeXCTY/yiL6WZiCyRicDZqOc9RS01?=
+ =?us-ascii?Q?MvBfb5aQipBL7wJVJqn8uBRUwGNVNEr/p6bROJpmnkMzX2mXZZX0fw1b3WZI?=
+ =?us-ascii?Q?LEy3YHIIyT8oP+Z2oTVJKChUFeyTIQhhvFE8stx98llXfI7rNvvKm2JnaE0M?=
+ =?us-ascii?Q?7ZS+nztMdGAj56E3FEMFWAA78KP+U5xG42WDVPgirfSSyfeaBwuXhS1GaM3c?=
+ =?us-ascii?Q?2ySJJv6gGxxfWqiiCedBHTynR7c5kX8mS+uHy3mjXrzcNQqzFXHL4sMjzR7H?=
+ =?us-ascii?Q?gATqDX6bm+JDo64sav1G63CrQ1044RPURQwhmccutN+IsUh8mbMlE2iY6QHa?=
+ =?us-ascii?Q?1p2ZyIg/GDrgImQiVmIApWevxJtUmoxJgpLhUPceCWvPcv3Ltc1JroegSpAd?=
+ =?us-ascii?Q?kj2uS8v8p30ewFwCXbLeim/qG0yodguMstI2G+Jmh7u/rCwNFzuEP5lZxLHc?=
+ =?us-ascii?Q?Zwqj28MDO+5NtP8Qv4AoV15u1TzK+dKXXp9nnJsP60C92BtecjYB450DcADK?=
+ =?us-ascii?Q?zwK9m6ROZSZdxbltuxMswu3aBNy7RlueO25qexvumHx8zjsYa3+zI8jMmBOo?=
+ =?us-ascii?Q?wiFRViubvpoF2hHb80q6rrz0IA5VpXOG1C+e8I5bqSJa5oH0cf2dUYrVk+Es?=
+ =?us-ascii?Q?xLq4nDU5cJBTdqDDC0kJVPWwu4sZpC7Jxjxa42GScIMAno0PcltXwbvnfnFF?=
+ =?us-ascii?Q?3OSYJ2Ca/pZXc5eKKI2TkHaufqNoSUbwuT4vTODoVEwpPnHpkxMS4Ii2jsPb?=
+ =?us-ascii?Q?dFBdUK7zTykJDRXtVioESpOMertou3EsA98ruWpEsZThfP/pgw8RhekFVL6B?=
+ =?us-ascii?Q?opMsjuAMuPIWEiuou81Q3Xxryo4fzQmDteAVcMF2/KMmwFOawo/KkDWwXY3j?=
+ =?us-ascii?Q?ovCufFsiEfZILF/BLlvcIcdx8FerofErVfdy1JGWhAsIb+MgvZ+pgFPb9JvF?=
+ =?us-ascii?Q?TkxpZPTNcSEF+gwD6idHxdL9aaghZPZV6gt4NVypk5d8PDdkLNyDMwaEJ7m6?=
+ =?us-ascii?Q?1w5qkL1ccc8d6x3o7CLaZO92MepEPzC97xXBN8Sxl8yTdlPVdSnWG5Ed4YX/?=
+ =?us-ascii?Q?ztYRZftgBYDetWgeZei8lVSHJyOz/ofFWdIBqO1XV4v8vf8Foh52Vej/7Y4c?=
+ =?us-ascii?Q?Sb/thZTTNnAd8p8li6g7Z6gaPHx9GgOXYlysDZVk?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff240891-ee22-4ce0-6ad7-08dc632af1c8
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3849.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2024 00:18:47.7819
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RWckTwIs86dtruzzLMHOiG0ytkwl/H02OxJCn5iFUmwOaNmhxijnt2c+/aYuTpfi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8454
 
-From: John Stultz <jstultz@google.com>
+On Thu, Apr 11, 2024 at 01:46:13PM -0300, Jason Gunthorpe wrote:
+> Jason Gunthorpe (6):
+>   x86: Stop using weak symbols for __iowrite32_copy()
+>   s390: Implement __iowrite32_copy()
+>   s390: Stop using weak symbols for __iowrite64_copy()
+>   arm64/io: Provide a WC friendly __iowriteXX_copy()
+>   net: hns3: Remove io_stop_wc() calls after __iowrite64_copy()
+>   IB/mlx5: Use __iowrite64_copy() for write combining stores
 
-[ Upstream commit 076361362122a6d8a4c45f172ced5576b2d4a50d ]
+Applied to rdma's for-next thanks all
 
-The struct adjtimex freq field takes a signed value who's units are in
-shifted (<<16) parts-per-million.
-
-Unfortunately for negative adjustments, the straightforward use of:
-
-  freq = ppm << 16 trips undefined behavior warnings with clang:
-
-valid-adjtimex.c:66:6: warning: shifting a negative signed value is undefined [-Wshift-negative-value]
-        -499<<16,
-        ~~~~^
-valid-adjtimex.c:67:6: warning: shifting a negative signed value is undefined [-Wshift-negative-value]
-        -450<<16,
-        ~~~~^
-..
-
-Fix it by using a multiply by (1 << 16) instead of shifting negative values
-in the valid-adjtimex test case. Align the values for better readability.
-
-Reported-by: Lee Jones <joneslee@google.com>
-Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: John Stultz <jstultz@google.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Link: https://lore.kernel.org/r/20240409202222.2830476-1-jstultz@google.com
-Link: https://lore.kernel.org/lkml/0c6d4f0d-2064-4444-986b-1d1ed782135f@collabora.com/
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../testing/selftests/timers/valid-adjtimex.c | 73 +++++++++----------
- 1 file changed, 36 insertions(+), 37 deletions(-)
-
-diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-index 48b9a803235a8..d13ebde203221 100644
---- a/tools/testing/selftests/timers/valid-adjtimex.c
-+++ b/tools/testing/selftests/timers/valid-adjtimex.c
-@@ -21,9 +21,6 @@
-  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  *   GNU General Public License for more details.
-  */
--
--
--
- #include <stdio.h>
- #include <stdlib.h>
- #include <time.h>
-@@ -62,45 +59,47 @@ int clear_time_state(void)
- #define NUM_FREQ_OUTOFRANGE 4
- #define NUM_FREQ_INVALID 2
- 
-+#define SHIFTED_PPM (1 << 16)
-+
- long valid_freq[NUM_FREQ_VALID] = {
--	-499<<16,
--	-450<<16,
--	-400<<16,
--	-350<<16,
--	-300<<16,
--	-250<<16,
--	-200<<16,
--	-150<<16,
--	-100<<16,
--	-75<<16,
--	-50<<16,
--	-25<<16,
--	-10<<16,
--	-5<<16,
--	-1<<16,
-+	 -499 * SHIFTED_PPM,
-+	 -450 * SHIFTED_PPM,
-+	 -400 * SHIFTED_PPM,
-+	 -350 * SHIFTED_PPM,
-+	 -300 * SHIFTED_PPM,
-+	 -250 * SHIFTED_PPM,
-+	 -200 * SHIFTED_PPM,
-+	 -150 * SHIFTED_PPM,
-+	 -100 * SHIFTED_PPM,
-+	  -75 * SHIFTED_PPM,
-+	  -50 * SHIFTED_PPM,
-+	  -25 * SHIFTED_PPM,
-+	  -10 * SHIFTED_PPM,
-+	   -5 * SHIFTED_PPM,
-+	   -1 * SHIFTED_PPM,
- 	-1000,
--	1<<16,
--	5<<16,
--	10<<16,
--	25<<16,
--	50<<16,
--	75<<16,
--	100<<16,
--	150<<16,
--	200<<16,
--	250<<16,
--	300<<16,
--	350<<16,
--	400<<16,
--	450<<16,
--	499<<16,
-+	    1 * SHIFTED_PPM,
-+	    5 * SHIFTED_PPM,
-+	   10 * SHIFTED_PPM,
-+	   25 * SHIFTED_PPM,
-+	   50 * SHIFTED_PPM,
-+	   75 * SHIFTED_PPM,
-+	  100 * SHIFTED_PPM,
-+	  150 * SHIFTED_PPM,
-+	  200 * SHIFTED_PPM,
-+	  250 * SHIFTED_PPM,
-+	  300 * SHIFTED_PPM,
-+	  350 * SHIFTED_PPM,
-+	  400 * SHIFTED_PPM,
-+	  450 * SHIFTED_PPM,
-+	  499 * SHIFTED_PPM,
- };
- 
- long outofrange_freq[NUM_FREQ_OUTOFRANGE] = {
--	-1000<<16,
--	-550<<16,
--	550<<16,
--	1000<<16,
-+	-1000 * SHIFTED_PPM,
-+	 -550 * SHIFTED_PPM,
-+	  550 * SHIFTED_PPM,
-+	 1000 * SHIFTED_PPM,
- };
- 
- #define LONG_MAX (~0UL>>1)
--- 
-2.43.0
-
+Jason
