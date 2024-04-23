@@ -1,66 +1,82 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1403E140368
-	for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 19:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E819E18B04;
+	Tue, 23 Apr 2024 22:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713900766; cv=none; b=VRHqzVsMzEG5yyJPEybxVHpBb2ljBbu32JcafjDgmDygrAtkGeyeLsO1k9bFa5Nx1hvAUzMAluBe6ncYd1Da2rtA0gx2A4O9lFHGkvSJQhXSSgX9v00Y/dRDvVrE2N/yuYLbVbc8q6AKqKUn63gD/+c82xPfpCVRVbMaaFoUo8U=
+	t=1713912716; cv=none; b=WodrYjJDlGwunCzi+H6CovYVqSbnyBZQeFO+UZ6KJgB2VSyiz7Xw3/OyTN8VeKOpiRtDfthhtORjZ9Gg2mGQ8a2SB1ot3mHubXapXemwPbx9WWSX8wbCO26T4cEfymqbWhOruGdDO5RUBHjnz5yQvsoksHRk/PgrpfbOFlbbEZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713900766; c=relaxed/simple;
-	bh=Yg9JT0GPJ5FCanV1IVJLCalS6j631626ieKfDNZIsrE=;
+	s=arc-20240116; t=1713912716; c=relaxed/simple;
+	bh=mznsmpZGIdBKgMqGdAUj/EZ/hJtwZ06FnB1V1izwzhk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cbHo/Sp96xZpKu7M8aUkETIBJSPocUDlaec8rCQasIHtvI7KBKb+dZShxuR5PRFhwIuh1ei371J5MSONxefyxpq9SgeGV0AVSR5CaV6baeLcfSuLk+CDcCWYGnlYyz7JqHZyJNFN4CIMAfVkIaeV4uJuRNY/CfTd5CAK3d2Ng10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uEjolXSX; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=eBciHailmIM0kGV4e4uuKp30gSF1G59LV8rCYgGyAROUDwBpxVzzG1FnKOsiXI03SUNW5VmSgN0qCIEBWsiyW5r86391b08hONq1x4oKPjqkj8iJgY0zTz1PSYaJ/r+5JZa2iniZkkZogdJkbJb3KMkjIm/9jsAlsziizBnNvVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kx4VgeKk; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uEjolXSX"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e3e84a302eso42177495ad.0
-        for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 12:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713900763; x=1714505563; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGaS/zfSaOemq/5va4z7SgRNYZdnHSSpsk3opQQf4+o=;
-        b=uEjolXSXGwHU8bFjCX9AKMfGRYlsFBFlYBpzkAri8o3mS9TgV9heGPFlJDLeKyMmVg
-         FdMe/ncw7QFQuZB3CtmMBWuVIuYiIGi6yed3GIWwgHGhg4YvgoSMVu6AK9x0NaVSqK0m
-         bwZUroZJABQTAecVg89xbXZPfl3vHMKxUPRVF7vHO8mFgz55ncxyvyI+6ZnpjSJUTaGP
-         a4F9Nf1PsuoYXAfPQ2C6Ix8Ig8NZ0UQkIFZ2m0rQtSuvNztY7UcrE1dWcLHhEbg5F7Hz
-         HDEUNTzdqQAvGvFShgCLC8+zQWxUOGlqhdeMnGJdE+8b1JuwOkjEN+7Y0Ld0KdpKQWv8
-         XvzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713900763; x=1714505563;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eGaS/zfSaOemq/5va4z7SgRNYZdnHSSpsk3opQQf4+o=;
-        b=nX0fbPTCgdRZXMxPKzRqRNGiVefLkPOiWfd1KKkQ1JA/SrVdv4fIFTvkSwb3xkjQyF
-         gUSeA4M5aFSYlYhkTyAjt/E2CE301wHtzusUrOmPeqEpjvIOxKHc920DLtF/oR2JyJ3x
-         ev1QnT8m+5r5nKTBdA7pcWDaTNF/fH9HsHGpuiRnxgN2EqcttmZUgvIr8tb/F6muA+3n
-         PP3JncIZHo+Do2/CQs4ZW/aKjLdLye1kraTxkr7dnh3DUunvO3a0VqT1F0ChvUev90Z2
-         xps1oG9yjzMbrnZd87EEPwoqeJtaPiMyXYXFOkhOHC0SKmuTfGvD5iUjSOBDkjJM/aFA
-         2voA==
-X-Forwarded-Encrypted: i=1; AJvYcCWrU61+eQfGAu6peAtgUPDaZb8aYUio4dxIoXEfZXxEgcbbaCBW7ZX8g/kU6VSOEhmTih7rbb0MAZFZVZRP8Kn3d0hA1w==
-X-Gm-Message-State: AOJu0Yx3DsV/PXTfRKVWCE6gulvAqd5SbSQyMFcEukoOe521jVsRMPi2
-	uXphzB7oqgF6I2hFvGoW24LZaOVUj/91RtJTPwWxjzWOuW+Vt2KcAG4qp3iljTk=
-X-Google-Smtp-Source: AGHT+IE7HckQKrB7EekRQpTfXp8JNrKSb1ZYBxmPz3IOLyDMxafIxaoffEuDaKvno/obq55gOhpMuQ==
-X-Received: by 2002:a17:902:cf11:b0:1e9:55f:f3be with SMTP id i17-20020a170902cf1100b001e9055ff3bemr533792plg.43.1713900763238;
-        Tue, 23 Apr 2024 12:32:43 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:951d:44de:e424:2887])
-        by smtp.gmail.com with ESMTPSA id w19-20020a1709027b9300b001e435fa2521sm10401699pll.249.2024.04.23.12.32.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 12:32:42 -0700 (PDT)
-Date: Tue, 23 Apr 2024 13:32:40 -0600
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: Tanmay Shah <tanmay.shah@amd.com>
-Cc: andersson@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com,
-	linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] drivers: remoteproc: xlnx: fix uninitialize variable use
-Message-ID: <ZigM2KORFbsJgHEW@p14s>
-References: <20240423170210.1035957-1-tanmay.shah@amd.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kx4VgeKk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713912715; x=1745448715;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mznsmpZGIdBKgMqGdAUj/EZ/hJtwZ06FnB1V1izwzhk=;
+  b=Kx4VgeKkNxUDhwSSr1P5TK7L9c7iPhqght2SeA9sQy/5ZQ6zZ+kh7Azu
+   1yWtY0sL8eTQjaOnquRCscduSsiSFTjsoXtBWFoOVDZk2UynHSBIPCZrG
+   lWJMqlkxFvR1TMlvETCBoXrkgxMNYwFfAqAgtKqkxnQQIxEZyjREIsZh7
+   bOk9kXSj06UoLLaZLvYX9SCVXPzCyVXBSLCuE6HuZ8XJnpLaiP1+T7EkM
+   zVvFdjU14k4ZZ6zoqDn+9KeYvWmW9zHeuZu1I+YWYq7FsdUY0GCnkBbsQ
+   BBTOdeiuj+QMPl8gGsTQzv+Ql8S8+TQsX3RiHQbu8sXNGvjIDRysYGJol
+   g==;
+X-CSE-ConnectionGUID: V+c2HnE7TN6TmAWcezN8zg==
+X-CSE-MsgGUID: OwF6mKrcRleAPVu8Dd6fXA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="20218394"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="20218394"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 15:51:54 -0700
+X-CSE-ConnectionGUID: 4vpTSJ/BT0WzosPs6zKsoA==
+X-CSE-MsgGUID: lwCZffPLR/SpYCqnMxTVow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="24557021"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 23 Apr 2024 15:51:47 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rzOzI-0000bA-2C;
+	Tue, 23 Apr 2024 22:51:44 +0000
+Date: Wed, 24 Apr 2024 06:51:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Frank Li <Frank.Li@nxp.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev, linux-amlogic@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+	Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Yue Wang <yue.wang@amlogic.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Xiaowei Song <songxiaowei@hisilicon.com>
+Subject: Re: [PATCH v2 2/4] PCI: dwc: Remove unused of_gpio.h
+Message-ID: <202404240649.QgY8lto8-lkp@intel.com>
+References: <20240423172208.2723892-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,42 +85,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240423170210.1035957-1-tanmay.shah@amd.com>
+In-Reply-To: <20240423172208.2723892-3-andriy.shevchenko@linux.intel.com>
 
-On Tue, Apr 23, 2024 at 10:02:11AM -0700, Tanmay Shah wrote:
-> Fix following warning for clang compiler with W=1 option:
-> initialize the variable 'ret' to silence this warning
->      907 |         int ret, i;
->          |                ^
->          |                 = 0
-> 
-> Fixes: a6b974b40f94 ("drivers: remoteproc: xlnx: Add Versal and Versal-NET support")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202404231839.oHiY9Lw8-lkp@intel.com/
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
-> ---
->  drivers/remoteproc/xlnx_r5_remoteproc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> index a6d8ac7394e7..d98940d7ef8f 100644
-> --- a/drivers/remoteproc/xlnx_r5_remoteproc.c
-> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> @@ -904,7 +904,7 @@ static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
->  {
->  	struct device *dev = cluster->dev;
->  	struct zynqmp_r5_core *r5_core;
-> -	int ret, i;
-> +	int ret = -EINVAL, i;
->
+Hi Andy,
 
-Applied - thanks,
-Mathieu
+kernel test robot noticed the following build errors:
 
->  	r5_core = cluster->r5_cores[0];
->  
-> 
-> base-commit: e99fcac055b3325283d6c5c61a117651fb147686
-> -- 
-> 2.25.1
-> 
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus mani-mhi/mhi-next linus/master v6.9-rc5 next-20240423]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/PCI-aardvark-Remove-unused-of_gpio-h/20240424-012448
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20240423172208.2723892-3-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v2 2/4] PCI: dwc: Remove unused of_gpio.h
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240424/202404240649.QgY8lto8-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240424/202404240649.QgY8lto8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404240649.QgY8lto8-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/controller/dwc/pci-dra7xx.c:262:2: error: implicit declaration of function 'chained_irq_enter' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           chained_irq_enter(chip, desc);
+           ^
+>> drivers/pci/controller/dwc/pci-dra7xx.c:284:2: error: implicit declaration of function 'chained_irq_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           chained_irq_exit(chip, desc);
+           ^
+   drivers/pci/controller/dwc/pci-dra7xx.c:284:2: note: did you mean 'chained_irq_enter'?
+   drivers/pci/controller/dwc/pci-dra7xx.c:262:2: note: 'chained_irq_enter' declared here
+           chained_irq_enter(chip, desc);
+           ^
+   2 errors generated.
+
+
+vim +/chained_irq_enter +262 drivers/pci/controller/dwc/pci-dra7xx.c
+
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  252  
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  253  static void dra7xx_pcie_msi_irq_handler(struct irq_desc *desc)
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  254  {
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  255  	struct irq_chip *chip = irq_desc_get_chip(desc);
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  256  	struct dra7xx_pcie *dra7xx;
+60b3c27fb9b92b drivers/pci/controller/dwc/pci-dra7xx.c Serge Semin            2022-06-24  257  	struct dw_pcie_rp *pp;
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  258  	struct dw_pcie *pci;
+09b2d20349e37a drivers/pci/dwc/pci-dra7xx.c            Vignesh R              2017-12-29  259  	unsigned long reg;
+d21faba11693c1 drivers/pci/controller/dwc/pci-dra7xx.c Marc Zyngier           2021-08-02  260  	u32 bit;
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  261  
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27 @262  	chained_irq_enter(chip, desc);
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  263  
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  264  	pp = irq_desc_get_handler_data(desc);
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  265  	pci = to_dw_pcie_from_pp(pp);
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  266  	dra7xx = to_dra7xx_pcie(pci);
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  267  
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  268  	reg = dra7xx_pcie_readl(dra7xx, PCIECTRL_DRA7XX_CONF_IRQSTATUS_MSI);
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  269  	dra7xx_pcie_writel(dra7xx, PCIECTRL_DRA7XX_CONF_IRQSTATUS_MSI, reg);
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  270  
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  271  	switch (reg) {
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  272  	case MSI:
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27  273  		dra7xx_pcie_handle_msi_irq(pp);
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  274  		break;
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  275  	case INTA:
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  276  	case INTB:
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  277  	case INTC:
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  278  	case INTD:
+d21faba11693c1 drivers/pci/controller/dwc/pci-dra7xx.c Marc Zyngier           2021-08-02  279  		for_each_set_bit(bit, &reg, PCI_NUM_INTX)
+d21faba11693c1 drivers/pci/controller/dwc/pci-dra7xx.c Marc Zyngier           2021-08-02  280  			generic_handle_domain_irq(dra7xx->irq_domain, bit);
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  281  		break;
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  282  	}
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  283  
+9a5595ab21a9d1 drivers/pci/controller/dwc/pci-dra7xx.c Vignesh Raghavendra    2020-03-27 @284  	chained_irq_exit(chip, desc);
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  285  }
+47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  286  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
