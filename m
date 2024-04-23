@@ -1,61 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BB560279;
-	Tue, 23 Apr 2024 10:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D641824A7;
+	Tue, 23 Apr 2024 11:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713867172; cv=none; b=TkmeC11T24fQPkoxVB7UScw4noB3E5rxCKrKoLATPmr+W6xRaMIcmsnr8F1DH94Qk9vrK0Kco8S+8CmJZEoeGrgtxC6tKMJof5/lepJegFtF1iQ1GxjNLdOtTMefat4WY30vZhG2utGpQrIaQlXUnqd79Se83SuSKLEWpNAL4Rg=
+	t=1713873395; cv=none; b=XDhEefdy+QX0+Di8kRWx0prhdh9a3KC7EUSPKa7/LtQhxNMpv9j8FRMbiS87/hZ+DCCeBtHQGmJNIurzTFZQ/M/rCygQqvJ/MI/1IGf5mExFlALoF1g2owy6NltQQUH4nMLUFFpC9q1AtddtATL+oAsANg2xuJBg8L0xBq9hcAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713867172; c=relaxed/simple;
-	bh=vZKKjmWLRhxb5IhsUVl21dx0btd++91EdMjGvQHTZcc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aphRYF6u44nLXZq4x9KtAUgVIIKOWyyxgawzkj0uUcuRu8TxdriKJQ03Q4E/YLxspmnisC03vIQG+z5ouG25Go49yKrT9bIPoqWQZICU0wqTnFj0tUCEPQEGy6X9HNwNMrGoBv+4HbvzVqwEndaXq79cdqhsGCiaPycF0R8eDzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iuXX4MEf; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1713873395; c=relaxed/simple;
+	bh=p/uf6VYgCKT6JxvSBrFmzJpBlF+YiW1WjAHp1el+N5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a//o84yi0baSr3/iwyCnrM9TZSCJUYXJaL0NXnLlqBlUXKcNLCgJOqOxJHrg9ELjtDQHpoJyPp1/2y4OkNNcm0VZLQDSPkFimfbwrT5E1ia/kLn1HlS3+Np7mieJito5R47feugpDSAbdjuxzVdh14bM5v2g7b++PbrWFtH9GnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l70ZxMLC; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iuXX4MEf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l70ZxMLC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713867170; x=1745403170;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vZKKjmWLRhxb5IhsUVl21dx0btd++91EdMjGvQHTZcc=;
-  b=iuXX4MEfx+xJArMVmgOI0fjYkAIDvl+4yy1VgTUqN11FUwg68jcCBPH1
-   W5MvIA1fl0JhHMi8Czur/qICtKcj6eZ9pmF1IyzpKGbvlxA/W//QVule3
-   l9HTKqxSFa/KxAX3GDGVeZRKRKu8kj003bybybSIRHonCtv/6BB9RAwR5
-   KLM+j0BxGSI6uGyiaCZzGdtl60OaUA/UvNbPVYuL73ANM+yvRjEES1fdO
-   g1UOVq564/jLppz5P1kxljdUaKrf3yGLz6YEts104nCYE0M7e5yQ+k5eM
-   wSNQa6rKlmsqLW7Z9r6mmudu+va4K1ZXQMqypLMunQmNXbJqzgXfIZPDp
-   Q==;
-X-CSE-ConnectionGUID: QuYVWSNVRvK9oOaqp4H7Kw==
-X-CSE-MsgGUID: gqn5zO9eR8yP/8rh7shVAw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9613417"
+  t=1713873394; x=1745409394;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p/uf6VYgCKT6JxvSBrFmzJpBlF+YiW1WjAHp1el+N5I=;
+  b=l70ZxMLCwCNRoVpPZ+6C1OJXBW1NP6oY2Pq1YTRMDENlzci8CzzE9n8N
+   DVB7iUAfVhYTMyBCMcbCRBP2Al10uk6cDKYL+AeT8UXV4Co24b3kVDB9z
+   bCK8HKX8iq0hJVlF5XJ1eR38SbiiZIWFr9i/ySPa4vbcuEec4FcYQsuZr
+   lNMxhmjkoygZdNhANOZj1AgV9LINxiRChBKksICUsmZ0ung2UuyMV8osl
+   zt1BW10YJjFVD0OUqkDGaWHS60qPnNvhz4rNiYVwHGS/+I222MgYruUBU
+   4IemIm7ObGEJNGl1F4AEyGwK4K9F/9ph3Sg0cGbgxTncTduIKHLlPxKUm
+   g==;
+X-CSE-ConnectionGUID: dw50SWbKSLmPyxDlyGumwA==
+X-CSE-MsgGUID: VoM9c3AnR/+KF0hlhsa3tg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9305409"
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="9613417"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 03:12:28 -0700
-X-CSE-ConnectionGUID: TH4a4z0nT1utmuVyX7SEjg==
-X-CSE-MsgGUID: EoVKGZ8uTbaTHOsEW3lMXg==
+   d="scan'208";a="9305409"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 04:56:33 -0700
+X-CSE-ConnectionGUID: hWAL2QWzRY67+bfCqqupIA==
+X-CSE-MsgGUID: nyaBbhdCQVKOIqKg29TI3Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="24370028"
+   d="scan'208";a="55297699"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 23 Apr 2024 03:12:27 -0700
+  by orviesa002.jf.intel.com with ESMTP; 23 Apr 2024 04:56:30 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rzD8T-00006C-03;
-	Tue, 23 Apr 2024 10:12:25 +0000
-Date: Tue, 23 Apr 2024 18:12:00 +0800
+	id 1rzEl9-0000A4-0p;
+	Tue, 23 Apr 2024 11:56:27 +0000
+Date: Tue, 23 Apr 2024 19:56:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tanmay Shah <tanmay.shah@amd.com>
+To: Vadim Fedorenko <vadfed@meta.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: [linux-next:master 6931/7876]
- drivers/remoteproc/xlnx_r5_remoteproc.c:914:11: warning: variable 'ret' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202404231839.oHiY9Lw8-lkp@intel.com>
+	netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v10 1/4] bpf: make common crypto API for TC/XDP
+ programs
+Message-ID: <202404231955.qUkSEasH-lkp@intel.com>
+References: <20240422225024.2847039-2-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,130 +72,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240422225024.2847039-2-vadfed@meta.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   a59668a9397e7245b26e9be85d23f242ff757ae8
-commit: a6b974b40f942b3e51124de588383009f6a42d2d [6931/7876] drivers: remoteproc: xlnx: Add Versal and Versal-NET support
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240423/202404231839.oHiY9Lw8-lkp@intel.com/config)
+Hi Vadim,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bpf-make-common-crypto-API-for-TC-XDP-programs/20240423-070416
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20240422225024.2847039-2-vadfed%40meta.com
+patch subject: [PATCH bpf-next v10 1/4] bpf: make common crypto API for TC/XDP programs
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240423/202404231955.qUkSEasH-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240423/202404231839.oHiY9Lw8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240423/202404231955.qUkSEasH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404231839.oHiY9Lw8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404231955.qUkSEasH-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/remoteproc/xlnx_r5_remoteproc.c:8:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/remoteproc/xlnx_r5_remoteproc.c:914:11: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     914 |         else if (device_is_compatible(dev, "xlnx,zynqmp-r5fss"))
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/remoteproc/xlnx_r5_remoteproc.c:917:6: note: uninitialized use occurs here
-     917 |         if (ret) {
-         |             ^~~
-   drivers/remoteproc/xlnx_r5_remoteproc.c:914:7: note: remove the 'if' if its condition is always true
-     914 |         else if (device_is_compatible(dev, "xlnx,zynqmp-r5fss"))
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     915 |                 ret = zynqmp_r5_get_tcm_node(cluster);
-   drivers/remoteproc/xlnx_r5_remoteproc.c:907:9: note: initialize the variable 'ret' to silence this warning
-     907 |         int ret, i;
-         |                ^
-         |                 = 0
-   6 warnings generated.
+>> kernel/bpf/crypto.c:34: warning: Function parameter or struct member 'reserved' not described in 'bpf_crypto_params'
+   kernel/bpf/crypto.c:55: warning: Function parameter or struct member 'siv_len' not described in 'bpf_crypto_ctx'
 
 
-vim +914 drivers/remoteproc/xlnx_r5_remoteproc.c
+vim +34 kernel/bpf/crypto.c
 
-   890	
-   891	/*
-   892	 * zynqmp_r5_core_init()
-   893	 * Create and initialize zynqmp_r5_core type object
-   894	 *
-   895	 * @cluster: pointer to zynqmp_r5_cluster type object
-   896	 * @fw_reg_val: value expected by firmware to configure RPU cluster mode
-   897	 * @tcm_mode: value expected by fw to configure TCM mode (lockstep or split)
-   898	 *
-   899	 * Return: 0 for success and error code for failure.
-   900	 */
-   901	static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
-   902				       enum rpu_oper_mode fw_reg_val,
-   903				       enum rpu_tcm_comb tcm_mode)
-   904	{
-   905		struct device *dev = cluster->dev;
-   906		struct zynqmp_r5_core *r5_core;
-   907		int ret, i;
-   908	
-   909		r5_core = cluster->r5_cores[0];
-   910	
-   911		/* Maintain backward compatibility for zynqmp by using hardcode TCM address. */
-   912		if (of_find_property(r5_core->np, "reg", NULL))
-   913			ret = zynqmp_r5_get_tcm_node_from_dt(cluster);
- > 914		else if (device_is_compatible(dev, "xlnx,zynqmp-r5fss"))
-   915			ret = zynqmp_r5_get_tcm_node(cluster);
-   916	
-   917		if (ret) {
-   918			dev_err(dev, "can't get tcm, err %d\n", ret);
-   919			return ret;
-   920		}
-   921	
-   922		for (i = 0; i < cluster->core_count; i++) {
-   923			r5_core = cluster->r5_cores[i];
-   924	
-   925			/* Initialize r5 cores with power-domains parsed from dts */
-   926			ret = of_property_read_u32_index(r5_core->np, "power-domains",
-   927							 1, &r5_core->pm_domain_id);
-   928			if (ret) {
-   929				dev_err(dev, "failed to get power-domains property\n");
-   930				return ret;
-   931			}
-   932	
-   933			ret = zynqmp_pm_set_rpu_mode(r5_core->pm_domain_id, fw_reg_val);
-   934			if (ret < 0) {
-   935				dev_err(r5_core->dev, "failed to set RPU mode\n");
-   936				return ret;
-   937			}
-   938	
-   939			if (of_find_property(dev_of_node(dev), "xlnx,tcm-mode", NULL) ||
-   940			    device_is_compatible(dev, "xlnx,zynqmp-r5fss")) {
-   941				ret = zynqmp_pm_set_tcm_config(r5_core->pm_domain_id,
-   942							       tcm_mode);
-   943				if (ret < 0) {
-   944					dev_err(r5_core->dev, "failed to configure TCM\n");
-   945					return ret;
-   946				}
-   947			}
-   948		}
-   949	
-   950		return 0;
-   951	}
-   952	
+    17	
+    18	/* BPF crypto initialization parameters struct */
+    19	/**
+    20	 * struct bpf_crypto_params - BPF crypto initialization parameters structure
+    21	 * @type:	The string of crypto operation type.
+    22	 * @algo:	The string of algorithm to initialize.
+    23	 * @key:	The cipher key used to init crypto algorithm.
+    24	 * @key_len:	The length of cipher key.
+    25	 * @authsize:	The length of authentication tag used by algorithm.
+    26	 */
+    27	struct bpf_crypto_params {
+    28		char type[14];
+    29		u8 reserved[2];
+    30		char algo[128];
+    31		u8 key[256];
+    32		u32 key_len;
+    33		u32 authsize;
+  > 34	};
+    35	
 
 -- 
 0-DAY CI Kernel Test Service
