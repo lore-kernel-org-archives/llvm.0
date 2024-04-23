@@ -1,59 +1,60 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3FC3F8ED
-	for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 07:19:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFC945942
+	for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 07:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713856794; cv=none; b=jMPHNuGz6ZfpEghdfYJACKnsK6yXeCcQX04q13yvPjjJA47B35pZfagVWlXOXVaU1dScrPMs2e/St7Ec52hAn625ZHRGOzkwL32AXuEpE2JjtY8KdrQw0mXDn0xZfQw2YQS3Y2QhVsmThkbBOwxnL5pzyBuLSshB2F42TD7ROWI=
+	t=1713856795; cv=none; b=SOk8SI3NihSPy0pH20sGQF/5X6gcFonhjuByvSaMgZGVjDy6qt8KIqsMJuB68iqYE1dpVLYAdD6fIpnWh8HkmrCerLbeYtPoULU6U/dwlsCRwZe/8kR+69WMfMYm6YiZ+Rj5qk4OJvkBpEHIChSL6jObHTSu99zA/GjuCo/Hs+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713856794; c=relaxed/simple;
-	bh=1UD27NJ793n3sx7Hivw1UkLh2t7/VNuyf9HbzTWUtvE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Gi9yt3j5bEf1ipy+i7TPRpr0FN5WevjuEBf1l/aHFziNtNNjJWN2g3AimeXC8s6VaWeUqxA3uSbfMW5DjnRWA7tM4ZhyvcbsNVl/GMLtJMWA8WG3P41WIAGBQwZwYIbw6OGptvbxckiR17Vnbz09FZ7uedmvP883OUBAN1F7mSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lotu67BF; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1713856795; c=relaxed/simple;
+	bh=UclI+zn2XdPBmikzejzRd3C1xBjlFUlr9xVRQ1JWUk0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=uu+Kq/pAXN5qdA+CTPCtHWi6m8rzvuqYLGhx2UV0fEST32oh2VItx5g4C7kxPlAiWG2aeBIf90Ic1sHBnydxaHnrXvfiPJorJ1Kd4p4X6lu/aCvSzDX2oLFwl5VaW5N9d6oatD8+dFGUYX8sCurkgZGQrSSAcHWMQkx09uiuXm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yVHy8GmI; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lotu67BF"
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-516d1ecaf25so6890602e87.2
-        for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 00:19:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yVHy8GmI"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-51abf1a9332so5183993e87.3
+        for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 00:19:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713856790; x=1714461590; darn=lists.linux.dev;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V/646WGmYqvnzTZ+SBFV2qL4kBK/A/ZS4BPL/z5No1A=;
-        b=lotu67BFsM76TNs2GR0PJHwzZMFRBJ+47qlfeG1baM0HfdHLHxStWi81up4yUAtmYo
-         0E2aVTvnlnf9Vxt+hT9X/UD+Ryoc2ZOoUq2BPrpqxnd8Qqr8iv3X6WH2e5TC1oBkBcU+
-         E9/WFpqWFcEOq+ChjvhA4KwiFvpJzvRqkL0o860wXkxpKP5Y6v1fYIpqG5FFwZcZ+cV6
-         +hLrJj6PwSTMcsoKs5zaN9F+n5/+Ck+g42qKxKq7+j35+P74Irpsu6chOJ7QSt6xyTlw
-         En1bWQIjJPr6jymqOrfxBwE1JEwBrC4MThQuXLXKmFS/Z0n0JqPRYmeg7IqcOxFvc/dB
-         ++HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713856790; x=1714461590;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1713856791; x=1714461591; darn=lists.linux.dev;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=V/646WGmYqvnzTZ+SBFV2qL4kBK/A/ZS4BPL/z5No1A=;
-        b=OdavrpQWI1O/GqQZ7sy8nStWFh1aR/FqyWVi2cHXAEub2LAWTI4nr7I9P81L3apeWP
-         SSYRRHIaWi+JCrCNrUsbXRuUORuHng6USDs+PMV6EixlQfPKLGrqhXeFTNbM1lKQnjYL
-         dppRRVw5tb0wKlxY3tATjpPbs/PqonGaH1bLxj4mTgF+C4bU7FkEZSaD4iIR2yo/Zrsm
-         Kcqalvfzhla5ddg5dFO38rWTAl67lp5jo6wGYqdIJ/zEBOmBeC1EljRTkhlSMbohMIwm
-         JBERpz46odtYdSUB9RDQWhF5LdNlBIdqjkn0N0R4hjQKX6/CQxht0VQuuYnwGrapkogZ
-         eUAw==
-X-Forwarded-Encrypted: i=1; AJvYcCV7JjFAfBZ/3TaZWaD2rO6qD/4PxBrPV+YnoYbvz0jPikywyTIJ9IeYM1ITrW6fgASIntn0DFQlzbNyTQDKKeMa6WRX/Q==
-X-Gm-Message-State: AOJu0YwTS12DSx6qBLZ2p5eFUtrr7CkdaXPPCRHtJTO2j1R4IDhBQXCA
-	5RckHS5YdohVE8atquSFopTN3SN/tsgjUiDrmlIO5o9ycJqhJbM2/dkW/LM8Vjg=
-X-Google-Smtp-Source: AGHT+IGop1wZC6m0k77EbfmuVBJhLZNPt4/i7V+4In+oX0MOWd2bWAsffJWM30AD7pSAlZzhAfnH4Q==
-X-Received: by 2002:a05:6512:3f03:b0:51b:4204:2f53 with SMTP id y3-20020a0565123f0300b0051b42042f53mr3984809lfa.62.1713856790007;
-        Tue, 23 Apr 2024 00:19:50 -0700 (PDT)
+        bh=cREnArPy+AXd2JjBXotX5TCUKGKphV7POaZQ3BUJg6s=;
+        b=yVHy8GmIpIt2w+W0DfXFnv4Mzvjzp0Mg+IqZAQ9P2Vr+AISCAmaEgL4AS6Y8iZKy2e
+         nq89AJdOekgsdVPRyPi97UPsvW8Zq3I/1Tw5HZ2Sri5vQQY4A/hfs0sXC4aH9cBE5WXR
+         GmjeYM2CYNpl7GVFy+NHLlnqC22SOb8nDYkl1E1PyKjOd+s0VN8xCInINbk6S593SQwB
+         5FxxLHkT4nt8zQrGyFQt6JC/plhPcv0uFQ7FTiGgdp4hw208xVptu9oIt1XqvhWgYw9L
+         wPiIadDn4p94FToCTROUUO23E8jmZYplecEK7CPfZRCaQlEIp9jMi457dfjiamwYRq5e
+         DNng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713856791; x=1714461591;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cREnArPy+AXd2JjBXotX5TCUKGKphV7POaZQ3BUJg6s=;
+        b=cuO6J5oOwAsMAHnrj1JjpQu+aPovLTh2CQcjWqz3qLsPdtB4VNP2H+6XZfAINkHiar
+         IFhjYDcl8dEFR1VmwPfYxTcet6l7UWWt6k0LIJt2rVZDCKXc9ZboEhAEz3RI+2AUL8K4
+         eZuvHo38idDASUmppCsbphwFkAzSJLkxF2epTAGbFqrAGmoGVfnSTCgH9JZJNtevN6hw
+         H9ckqBCp3rXaZ9tStEJp4dYpKzn1nh++AkOAXb5aODluXBUgRk8NS5yrcnsHbIXgmHkh
+         /YfiVc85d5u5som5JdyOFXVLANtT7rRkCcrabngmYkuXq+fdtoLrnVxf7a6UFdABrCoG
+         bYOw==
+X-Forwarded-Encrypted: i=1; AJvYcCUwUoMWs5HjMW9uQdrZYWXw7b1q81g8J0CB5gDrQr9hg2ogX/TrccfOvjXt+QVUtvIYXxNwOpMZSVhR1HvJthaMfpRJRw==
+X-Gm-Message-State: AOJu0YwZGOb5m3R076Lw3pE6HYjJ/oXt0xhvVLM1tswhdZo9/49uMIOC
+	Ij3D+O+H7c9oWPVFcrderr/ybOkgPgo4jrwy87qQvNSFCQkiDDBmUYnYCaWQn5o=
+X-Google-Smtp-Source: AGHT+IGQMaew3HQxyCtzU+FerxemRfe5I4Kk3I39040I0vBb7q4Hqp3jiGBzt/QzyQNKk4tJZ6WQqw==
+X-Received: by 2002:a19:8c48:0:b0:51a:db50:ab84 with SMTP id i8-20020a198c48000000b0051adb50ab84mr5908927lfj.42.1713856791490;
+        Tue, 23 Apr 2024 00:19:51 -0700 (PDT)
 Received: from [192.168.1.140] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id f13-20020a056512360d00b0051ad4552454sm1307588lfs.148.2024.04.23.00.19.49
+        by smtp.gmail.com with ESMTPSA id f13-20020a056512360d00b0051ad4552454sm1307588lfs.148.2024.04.23.00.19.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 00:19:49 -0700 (PDT)
+        Tue, 23 Apr 2024 00:19:50 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v8 0/9] CFI for ARM32 using LLVM
-Date: Tue, 23 Apr 2024 09:19:46 +0200
-Message-Id: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
+Date: Tue, 23 Apr 2024 09:19:47 +0200
+Subject: [PATCH v8 1/9] ARM: mm: Make tlbflush routines CFI safe
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,11 +63,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABJhJ2YC/2XQwW7DIAwG4FepOI8JbOOQnfYe0w6EQou0JROZo
- k1V3n1OdyhRjjZ8v/T7puZUS5rVy+mmalrKXKZRBv90UvEaxkvS5SyzAgNkrHU61E8EHXPR7M5
- sMsjWeCX/v2rK5eee9fYu87XM31P9vUcvdtv+pwC0KYvVRnNPiIazYTe8fpQx1Ol5qhe1xSzwo
- Gi6loLQGDtKQV54wAPFhlrbUhQKQMFkE8hFOFBqKPiWktAgpYkt9hbcgboHpd3FFic0Z7E9phR
- jPFBu6a4rb2ciz+hdGizygXYNhV3XbqPJIoSefIx+R9d1/QMtkX8LBQIAAA==
+Message-Id: <20240423-arm32-cfi-v8-1-08f10f5d9297@linaro.org>
+References: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
+In-Reply-To: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
 To: Russell King <linux@armlinux.org.uk>, 
  Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>, 
  Nathan Chancellor <nathan@kernel.org>, 
@@ -76,208 +75,442 @@ Cc: linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.13.0
 
-This is a first patch set to support CLANG CFI (Control Flow
-Integrity) on ARM32.
+From: Ard Biesheuvel <ardb@kernel.org>
 
-For information about what CFI is, see:
-https://clang.llvm.org/docs/ControlFlowIntegrity.html
+Instead of avoiding CFI entirely on the TLB flush helpers, reorganize
+the code so that the CFI machinery can deal with it. The important
+things to take into account are:
+- functions in asm called indirectly from C need to be defined using
+  SYM_TYPED_FUNC_START()
+- a reference to the asm function needs to be visible to the compiler,
+  in order to get it to emit the typeid symbol.
 
-For the kernel KCFI flavor, see:
-https://lwn.net/Articles/898040/
+The latter means that defining the cpu_tlb_fns structs is best done from
+C code, so that the references in the static initializers will be
+visible to the compiler.
 
-The base changes required to bring up KCFI on ARM32 was mostly
-related to the use of custom vtables in the kernel, combined
-with defines to call into these vtable members directly from
-sites where they are used.
-
-We annotate all assembly calls that are called directly from
-C with SYM_TYPED_FUNC_START()/SYM_FUNC_END() so it is easy
-to see while reading the assembly that these functions are
-called from C and can have CFI prototype information prefixed
-to them.
-
-As protype prefix information is just some random bytes, it is
-not possible to "fall through" into an assembly function that
-is tagged with SYM_TYPED_FUNC_START(): there will be some
-binary noise in front of the function so this design pattern
-needs to be explicitly avoided at each site where it occurred.
-
-The approach to binding the calls to C is two-fold:
-
-- Either convert the affected vtable struct to C and provide
-  per-CPU prototypes for all the calls (done for TLB, cache)
-  or:
-
-- Provide prototypes in a special files just for CFI and tag
-  all these functions addressable.
-
-The permissive mode handles the new breakpoint type (0x03) that
-LLVM CLANG is emitting.
-
-To runtime-test the patches:
-- Enable CONFIG_LKDTM
-- echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
-
-The patch set has been booted to userspace on the following
-test platforms:
-
-- Arm Versatile (QEMU)
-- Arm Versatile Express (QEMU)
-- multi_v7 booted on Versatile Express (QEMU)
-- Footbridge Netwinder (SA110 ARMv4)
-- Ux500 (ARMv7 SMP)
-- Gemini (FA526)
-
-I am not saying there will not be corner cases that we need
-to fix in addition to this, but it is enough to get started.
-Looking at what was fixed for arm64 I am a bit weary that
-e.g. BPF might need something to trampoline properly.
-
-But hopefullt people can get to testing it and help me fix
-remaining issues before the final version, or we can fix it
-in-tree.
-
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Tested-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-Changes in v8:
-- Drop aliases for the coherent cache maintenance functions, this
-  will not work because these have different return types, despite
-  the resturn valued is mostly ignored.
-- Picked up Sami's Reviewed-by
-- Drop the already applied ftrace functions patch.
-- Drop the first patch in the series (checking calls using vtable
-  instead of function) it is not needed anymore after doing the
-  deeper fix with tagged symbols.
-- I will update the patches in the patch tracker to this version
-  and they will become the /2 versions.
-- Link to v7: https://lore.kernel.org/r/20240421-arm32-cfi-v7-0-6e132a948cc8@linaro.org
+ arch/arm/mm/Makefile      |  1 +
+ arch/arm/mm/proc-macros.S | 15 ---------
+ arch/arm/mm/tlb-fa.S      | 12 +++----
+ arch/arm/mm/tlb-v4.S      | 15 +++++----
+ arch/arm/mm/tlb-v4wb.S    | 12 +++----
+ arch/arm/mm/tlb-v4wbi.S   | 12 +++----
+ arch/arm/mm/tlb-v6.S      | 12 +++----
+ arch/arm/mm/tlb-v7.S      | 14 +++-----
+ arch/arm/mm/tlb.c         | 84 +++++++++++++++++++++++++++++++++++++++++++++++
+ 9 files changed, 119 insertions(+), 58 deletions(-)
 
-Changes in v7:
-- Use report_cfi_failure_noaddr() when reporting CFI faults.
-- Leave a better comment on what needs to be done to get better
-  target reporting.
-- Link to v6: https://lore.kernel.org/r/20240417-arm32-cfi-v6-0-6486385eb136@linaro.org
+diff --git a/arch/arm/mm/Makefile b/arch/arm/mm/Makefile
+index 71b858c9b10c..cc8255fdf56e 100644
+--- a/arch/arm/mm/Makefile
++++ b/arch/arm/mm/Makefile
+@@ -62,6 +62,7 @@ obj-$(CONFIG_CPU_TLB_FEROCEON)	+= tlb-v4wbi.o	# reuse v4wbi TLB functions
+ obj-$(CONFIG_CPU_TLB_V6)	+= tlb-v6.o
+ obj-$(CONFIG_CPU_TLB_V7)	+= tlb-v7.o
+ obj-$(CONFIG_CPU_TLB_FA)	+= tlb-fa.o
++obj-y				+= tlb.o
+ 
+ obj-$(CONFIG_CPU_ARM7TDMI)	+= proc-arm7tdmi.o
+ obj-$(CONFIG_CPU_ARM720T)	+= proc-arm720.o
+diff --git a/arch/arm/mm/proc-macros.S b/arch/arm/mm/proc-macros.S
+index e43f6d716b4b..c0acfeac3e84 100644
+--- a/arch/arm/mm/proc-macros.S
++++ b/arch/arm/mm/proc-macros.S
+@@ -338,21 +338,6 @@ ENTRY(\name\()_cache_fns)
+ 	.size	\name\()_cache_fns, . - \name\()_cache_fns
+ .endm
+ 
+-.macro define_tlb_functions name:req, flags_up:req, flags_smp
+-	.type	\name\()_tlb_fns, #object
+-	.align 2
+-ENTRY(\name\()_tlb_fns)
+-	.long	\name\()_flush_user_tlb_range
+-	.long	\name\()_flush_kern_tlb_range
+-	.ifnb \flags_smp
+-		ALT_SMP(.long	\flags_smp )
+-		ALT_UP(.long	\flags_up )
+-	.else
+-		.long	\flags_up
+-	.endif
+-	.size	\name\()_tlb_fns, . - \name\()_tlb_fns
+-.endm
+-
+ .macro globl_equ x, y
+ 	.globl	\x
+ 	.equ	\x, \y
+diff --git a/arch/arm/mm/tlb-fa.S b/arch/arm/mm/tlb-fa.S
+index def6161ec452..85a6fe766b21 100644
+--- a/arch/arm/mm/tlb-fa.S
++++ b/arch/arm/mm/tlb-fa.S
+@@ -15,6 +15,7 @@
+  */
+ #include <linux/linkage.h>
+ #include <linux/init.h>
++#include <linux/cfi_types.h>
+ #include <asm/assembler.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/tlbflush.h>
+@@ -31,7 +32,7 @@
+  *	- mm    - mm_struct describing address space
+  */
+ 	.align	4
+-ENTRY(fa_flush_user_tlb_range)
++SYM_TYPED_FUNC_START(fa_flush_user_tlb_range)
+ 	vma_vm_mm ip, r2
+ 	act_mm	r3				@ get current->active_mm
+ 	eors	r3, ip, r3			@ == mm ?
+@@ -46,9 +47,10 @@ ENTRY(fa_flush_user_tlb_range)
+ 	blo	1b
+ 	mcr	p15, 0, r3, c7, c10, 4		@ data write barrier
+ 	ret	lr
++SYM_FUNC_END(fa_flush_user_tlb_range)
+ 
+ 
+-ENTRY(fa_flush_kern_tlb_range)
++SYM_TYPED_FUNC_START(fa_flush_kern_tlb_range)
+ 	mov	r3, #0
+ 	mcr	p15, 0, r3, c7, c10, 4		@ drain WB
+ 	bic	r0, r0, #0x0ff
+@@ -60,8 +62,4 @@ ENTRY(fa_flush_kern_tlb_range)
+ 	mcr	p15, 0, r3, c7, c10, 4		@ data write barrier
+ 	mcr	p15, 0, r3, c7, c5, 4		@ prefetch flush (isb)
+ 	ret	lr
+-
+-	__INITDATA
+-
+-	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+-	define_tlb_functions fa, fa_tlb_flags
++SYM_FUNC_END(fa_flush_kern_tlb_range)
+diff --git a/arch/arm/mm/tlb-v4.S b/arch/arm/mm/tlb-v4.S
+index b962b4e75158..09ff69008d94 100644
+--- a/arch/arm/mm/tlb-v4.S
++++ b/arch/arm/mm/tlb-v4.S
+@@ -11,6 +11,7 @@
+  */
+ #include <linux/linkage.h>
+ #include <linux/init.h>
++#include <linux/cfi_types.h>
+ #include <asm/assembler.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/tlbflush.h>
+@@ -27,7 +28,7 @@
+  *	- mm    - mm_struct describing address space
+  */
+ 	.align	5
+-ENTRY(v4_flush_user_tlb_range)
++SYM_TYPED_FUNC_START(v4_flush_user_tlb_range)
+ 	vma_vm_mm ip, r2
+ 	act_mm	r3				@ get current->active_mm
+ 	eors	r3, ip, r3				@ == mm ?
+@@ -40,6 +41,7 @@ ENTRY(v4_flush_user_tlb_range)
+ 	cmp	r0, r1
+ 	blo	1b
+ 	ret	lr
++SYM_FUNC_END(v4_flush_user_tlb_range)
+ 
+ /*
+  *	v4_flush_kern_tlb_range(start, end)
+@@ -50,10 +52,11 @@ ENTRY(v4_flush_user_tlb_range)
+  *	- start - virtual address (may not be aligned)
+  *	- end   - virtual address (may not be aligned)
+  */
++#ifdef CONFIG_CFI_CLANG
++SYM_TYPED_FUNC_START(v4_flush_kern_tlb_range)
++	b	.v4_flush_kern_tlb_range
++SYM_FUNC_END(v4_flush_kern_tlb_range)
++#else
+ .globl v4_flush_kern_tlb_range
+ .equ v4_flush_kern_tlb_range, .v4_flush_kern_tlb_range
+-
+-	__INITDATA
+-
+-	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+-	define_tlb_functions v4, v4_tlb_flags
++#endif
+diff --git a/arch/arm/mm/tlb-v4wb.S b/arch/arm/mm/tlb-v4wb.S
+index 9348bba7586a..04e46c359e75 100644
+--- a/arch/arm/mm/tlb-v4wb.S
++++ b/arch/arm/mm/tlb-v4wb.S
+@@ -11,6 +11,7 @@
+  */
+ #include <linux/linkage.h>
+ #include <linux/init.h>
++#include <linux/cfi_types.h>
+ #include <asm/assembler.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/tlbflush.h>
+@@ -27,7 +28,7 @@
+  *	- mm    - mm_struct describing address space
+  */
+ 	.align	5
+-ENTRY(v4wb_flush_user_tlb_range)
++SYM_TYPED_FUNC_START(v4wb_flush_user_tlb_range)
+ 	vma_vm_mm ip, r2
+ 	act_mm	r3				@ get current->active_mm
+ 	eors	r3, ip, r3				@ == mm ?
+@@ -43,6 +44,7 @@ ENTRY(v4wb_flush_user_tlb_range)
+ 	cmp	r0, r1
+ 	blo	1b
+ 	ret	lr
++SYM_FUNC_END(v4wb_flush_user_tlb_range)
+ 
+ /*
+  *	v4_flush_kern_tlb_range(start, end)
+@@ -53,7 +55,7 @@ ENTRY(v4wb_flush_user_tlb_range)
+  *	- start - virtual address (may not be aligned)
+  *	- end   - virtual address (may not be aligned)
+  */
+-ENTRY(v4wb_flush_kern_tlb_range)
++SYM_TYPED_FUNC_START(v4wb_flush_kern_tlb_range)
+ 	mov	r3, #0
+ 	mcr	p15, 0, r3, c7, c10, 4		@ drain WB
+ 	bic	r0, r0, #0x0ff
+@@ -64,8 +66,4 @@ ENTRY(v4wb_flush_kern_tlb_range)
+ 	cmp	r0, r1
+ 	blo	1b
+ 	ret	lr
+-
+-	__INITDATA
+-
+-	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+-	define_tlb_functions v4wb, v4wb_tlb_flags
++SYM_FUNC_END(v4wb_flush_kern_tlb_range)
+diff --git a/arch/arm/mm/tlb-v4wbi.S b/arch/arm/mm/tlb-v4wbi.S
+index d4f9040a4111..502dfe5628a3 100644
+--- a/arch/arm/mm/tlb-v4wbi.S
++++ b/arch/arm/mm/tlb-v4wbi.S
+@@ -11,6 +11,7 @@
+  */
+ #include <linux/linkage.h>
+ #include <linux/init.h>
++#include <linux/cfi_types.h>
+ #include <asm/assembler.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/tlbflush.h>
+@@ -26,7 +27,7 @@
+  *	- mm    - mm_struct describing address space
+  */
+ 	.align	5
+-ENTRY(v4wbi_flush_user_tlb_range)
++SYM_TYPED_FUNC_START(v4wbi_flush_user_tlb_range)
+ 	vma_vm_mm ip, r2
+ 	act_mm	r3				@ get current->active_mm
+ 	eors	r3, ip, r3			@ == mm ?
+@@ -43,8 +44,9 @@ ENTRY(v4wbi_flush_user_tlb_range)
+ 	cmp	r0, r1
+ 	blo	1b
+ 	ret	lr
++SYM_FUNC_END(v4wbi_flush_user_tlb_range)
+ 
+-ENTRY(v4wbi_flush_kern_tlb_range)
++SYM_TYPED_FUNC_START(v4wbi_flush_kern_tlb_range)
+ 	mov	r3, #0
+ 	mcr	p15, 0, r3, c7, c10, 4		@ drain WB
+ 	bic	r0, r0, #0x0ff
+@@ -55,8 +57,4 @@ ENTRY(v4wbi_flush_kern_tlb_range)
+ 	cmp	r0, r1
+ 	blo	1b
+ 	ret	lr
+-
+-	__INITDATA
+-
+-	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+-	define_tlb_functions v4wbi, v4wbi_tlb_flags
++SYM_FUNC_END(v4wbi_flush_kern_tlb_range)
+diff --git a/arch/arm/mm/tlb-v6.S b/arch/arm/mm/tlb-v6.S
+index 1d91e49b2c2d..8256a67ac654 100644
+--- a/arch/arm/mm/tlb-v6.S
++++ b/arch/arm/mm/tlb-v6.S
+@@ -9,6 +9,7 @@
+  */
+ #include <linux/init.h>
+ #include <linux/linkage.h>
++#include <linux/cfi_types.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/assembler.h>
+ #include <asm/page.h>
+@@ -32,7 +33,7 @@
+  *	- the "Invalidate single entry" instruction will invalidate
+  *	  both the I and the D TLBs on Harvard-style TLBs
+  */
+-ENTRY(v6wbi_flush_user_tlb_range)
++SYM_TYPED_FUNC_START(v6wbi_flush_user_tlb_range)
+ 	vma_vm_mm r3, r2			@ get vma->vm_mm
+ 	mov	ip, #0
+ 	mmid	r3, r3				@ get vm_mm->context.id
+@@ -56,6 +57,7 @@ ENTRY(v6wbi_flush_user_tlb_range)
+ 	blo	1b
+ 	mcr	p15, 0, ip, c7, c10, 4		@ data synchronization barrier
+ 	ret	lr
++SYM_FUNC_END(v6wbi_flush_user_tlb_range)
+ 
+ /*
+  *	v6wbi_flush_kern_tlb_range(start,end)
+@@ -65,7 +67,7 @@ ENTRY(v6wbi_flush_user_tlb_range)
+  *	- start - start address (may not be aligned)
+  *	- end   - end address (exclusive, may not be aligned)
+  */
+-ENTRY(v6wbi_flush_kern_tlb_range)
++SYM_TYPED_FUNC_START(v6wbi_flush_kern_tlb_range)
+ 	mov	r2, #0
+ 	mcr	p15, 0, r2, c7, c10, 4		@ drain write buffer
+ 	mov	r0, r0, lsr #PAGE_SHIFT		@ align address
+@@ -85,8 +87,4 @@ ENTRY(v6wbi_flush_kern_tlb_range)
+ 	mcr	p15, 0, r2, c7, c10, 4		@ data synchronization barrier
+ 	mcr	p15, 0, r2, c7, c5, 4		@ prefetch flush (isb)
+ 	ret	lr
+-
+-	__INIT
+-
+-	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+-	define_tlb_functions v6wbi, v6wbi_tlb_flags
++SYM_FUNC_END(v6wbi_flush_kern_tlb_range)
+diff --git a/arch/arm/mm/tlb-v7.S b/arch/arm/mm/tlb-v7.S
+index 35fd6d4f0d03..f1aa0764a2cc 100644
+--- a/arch/arm/mm/tlb-v7.S
++++ b/arch/arm/mm/tlb-v7.S
+@@ -10,6 +10,7 @@
+  */
+ #include <linux/init.h>
+ #include <linux/linkage.h>
++#include <linux/cfi_types.h>
+ #include <asm/assembler.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/page.h>
+@@ -31,7 +32,7 @@
+  *	- the "Invalidate single entry" instruction will invalidate
+  *	  both the I and the D TLBs on Harvard-style TLBs
+  */
+-ENTRY(v7wbi_flush_user_tlb_range)
++SYM_TYPED_FUNC_START(v7wbi_flush_user_tlb_range)
+ 	vma_vm_mm r3, r2			@ get vma->vm_mm
+ 	mmid	r3, r3				@ get vm_mm->context.id
+ 	dsb	ish
+@@ -57,7 +58,7 @@ ENTRY(v7wbi_flush_user_tlb_range)
+ 	blo	1b
+ 	dsb	ish
+ 	ret	lr
+-ENDPROC(v7wbi_flush_user_tlb_range)
++SYM_FUNC_END(v7wbi_flush_user_tlb_range)
+ 
+ /*
+  *	v7wbi_flush_kern_tlb_range(start,end)
+@@ -67,7 +68,7 @@ ENDPROC(v7wbi_flush_user_tlb_range)
+  *	- start - start address (may not be aligned)
+  *	- end   - end address (exclusive, may not be aligned)
+  */
+-ENTRY(v7wbi_flush_kern_tlb_range)
++SYM_TYPED_FUNC_START(v7wbi_flush_kern_tlb_range)
+ 	dsb	ish
+ 	mov	r0, r0, lsr #PAGE_SHIFT		@ align address
+ 	mov	r1, r1, lsr #PAGE_SHIFT
+@@ -86,9 +87,4 @@ ENTRY(v7wbi_flush_kern_tlb_range)
+ 	dsb	ish
+ 	isb
+ 	ret	lr
+-ENDPROC(v7wbi_flush_kern_tlb_range)
+-
+-	__INIT
+-
+-	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+-	define_tlb_functions v7wbi, v7wbi_tlb_flags_up, flags_smp=v7wbi_tlb_flags_smp
++SYM_FUNC_END(v7wbi_flush_kern_tlb_range)
+diff --git a/arch/arm/mm/tlb.c b/arch/arm/mm/tlb.c
+new file mode 100644
+index 000000000000..42359793120b
+--- /dev/null
++++ b/arch/arm/mm/tlb.c
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright 2024 Google LLC
++// Author: Ard Biesheuvel <ardb@google.com>
++
++#include <linux/types.h>
++#include <asm/tlbflush.h>
++
++#ifdef CONFIG_CPU_TLB_V4WT
++void v4_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
++void v4_flush_kern_tlb_range(unsigned long, unsigned long);
++
++struct cpu_tlb_fns v4_tlb_fns __initconst = {
++	.flush_user_range	= v4_flush_user_tlb_range,
++	.flush_kern_range	= v4_flush_kern_tlb_range,
++	.tlb_flags		= v4_tlb_flags,
++};
++#endif
++
++#ifdef CONFIG_CPU_TLB_V4WB
++void v4wb_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
++void v4wb_flush_kern_tlb_range(unsigned long, unsigned long);
++
++struct cpu_tlb_fns v4wb_tlb_fns __initconst = {
++	.flush_user_range	= v4wb_flush_user_tlb_range,
++	.flush_kern_range	= v4wb_flush_kern_tlb_range,
++	.tlb_flags		= v4wb_tlb_flags,
++};
++#endif
++
++#if defined(CONFIG_CPU_TLB_V4WBI) || defined(CONFIG_CPU_TLB_FEROCEON)
++void v4wbi_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
++void v4wbi_flush_kern_tlb_range(unsigned long, unsigned long);
++
++struct cpu_tlb_fns v4wbi_tlb_fns __initconst = {
++	.flush_user_range	= v4wbi_flush_user_tlb_range,
++	.flush_kern_range	= v4wbi_flush_kern_tlb_range,
++	.tlb_flags		= v4wbi_tlb_flags,
++};
++#endif
++
++#ifdef CONFIG_CPU_TLB_V6
++void v6wbi_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
++void v6wbi_flush_kern_tlb_range(unsigned long, unsigned long);
++
++struct cpu_tlb_fns v6wbi_tlb_fns __initconst = {
++	.flush_user_range	= v6wbi_flush_user_tlb_range,
++	.flush_kern_range	= v6wbi_flush_kern_tlb_range,
++	.tlb_flags		= v6wbi_tlb_flags,
++};
++#endif
++
++#ifdef CONFIG_CPU_TLB_V7
++void v7wbi_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
++void v7wbi_flush_kern_tlb_range(unsigned long, unsigned long);
++
++struct cpu_tlb_fns v7wbi_tlb_fns __initconst = {
++	.flush_user_range	= v7wbi_flush_user_tlb_range,
++	.flush_kern_range	= v7wbi_flush_kern_tlb_range,
++	.tlb_flags		= IS_ENABLED(CONFIG_SMP) ? v7wbi_tlb_flags_smp
++							 : v7wbi_tlb_flags_up,
++};
++
++#ifdef CONFIG_SMP_ON_UP
++/* This will be run-time patched so the offset better be right */
++static_assert(offsetof(struct cpu_tlb_fns, tlb_flags) == 8);
++
++asm("	.pushsection	\".alt.smp.init\", \"a\"		\n" \
++    "	.align		2					\n" \
++    "	.long		v7wbi_tlb_fns + 8 - .			\n" \
++    "	.long "  	__stringify(v7wbi_tlb_flags_up) "	\n" \
++    "	.popsection						\n");
++#endif
++#endif
++
++#ifdef CONFIG_CPU_TLB_FA
++void fa_flush_user_tlb_range(unsigned long, unsigned long, struct vm_area_struct *);
++void fa_flush_kern_tlb_range(unsigned long, unsigned long);
++
++struct cpu_tlb_fns fa_tlb_fns __initconst = {
++	.flush_user_range	= fa_flush_user_tlb_range,
++	.flush_kern_range	= fa_flush_kern_tlb_range,
++	.tlb_flags		= fa_tlb_flags,
++};
++#endif
 
-Changes in v6:
-- Add a separate patch adding aliases for some cache functions
-  that were just branches to another function.
-- Link to v5: https://lore.kernel.org/r/20240415-arm32-cfi-v5-0-ff11093eeccc@linaro.org
-
-Changes in v5:
-- I started to put the patches into the patch tracker and it
-  rightfully complained that the patches tagging all assembly
-  with CFI symbol type macros and adding C prototypes were
-  too large.
-- Split the two patches annotating assembly into one patch
-  doing the annotation and one patch adding the C prototypes.
-  This is a good split anyway.
-- The first patches from the series are unchanged and in the
-  patch tracker, I resend them anyway and will soon populate
-  the patch tracker with the split patches from this
-  series unless there are more comments.
-- Link to v4: https://lore.kernel.org/r/20240328-arm32-cfi-v4-0-a11046139125@linaro.org
-
-Changes in v4:
-- Rebase on v6.9-rc1
-- Use Ard's patch for converting TLB operation vtables to C
-- Rewrite the cache vtables in C and use SYM_SYM_TYPED_FUNC in the
-  assembly to make CFI work all the way down.
-- Instead of tagging all the delay functions as __nocfi get to the
-  root cause and annotate the loop delay code with SYM_TYPED_FUNC_START()
-  and rewrite it using explicit branches so we get CFI all the way
-  down.
-- Drop the patch turning highmem page accesses into static inlines:
-  this was probably a development artifact since this code does
-  a lot of cache and TLB flusing, and that assembly is now properly
-  annotated.
-- Do not define static inlines tagged __nocfi for all the proc functions,
-  instead provide proper C prototypes in a separate CFI-only file
-  and make these explicitly addressable.
-- Link to v3: https://lore.kernel.org/r/20240311-arm32-cfi-v3-0-224a0f0a45c2@linaro.org
-
-Changes in v3:
-- Use report_cfi_failure() like everyone else in the breakpoint
-  handler.
-- I think we cannot implement target and type for the report callback
-  without operand bundling compiler extensions, so just leaving these as zero.
-- Link to v2: https://lore.kernel.org/r/20240307-arm32-cfi-v2-0-cc74ea0306b3@linaro.org
-
-Changes in v2:
-- Add the missing ftrace graph tracer stub.
-- Enable permissive mode using a breakpoint handler.
-- Link to v1: https://lore.kernel.org/r/20240225-arm32-cfi-v1-0-6943306f065b@linaro.org
-
----
-Ard Biesheuvel (1):
-      ARM: mm: Make tlbflush routines CFI safe
-
-Linus Walleij (8):
-      ARM: mm: Type-annotate all cache assembly routines
-      ARM: mm: Use symbol alias for two cache functions
-      ARM: mm: Rewrite cacheflush vtables in CFI safe C
-      ARM: mm: Type-annotate all per-processor assembly routines
-      ARM: mm: Define prototypes for all per-processor calls
-      ARM: lib: Annotate loop delay instructions for CFI
-      ARM: hw_breakpoint: Handle CFI breakpoints
-      ARM: Support CLANG CFI
-
- arch/arm/Kconfig                     |   1 +
- arch/arm/include/asm/glue-cache.h    |  28 +-
- arch/arm/include/asm/hw_breakpoint.h |   1 +
- arch/arm/kernel/hw_breakpoint.c      |  35 ++
- arch/arm/lib/delay-loop.S            |  16 +-
- arch/arm/mm/Makefile                 |   3 +
- arch/arm/mm/cache-b15-rac.c          |   1 +
- arch/arm/mm/cache-fa.S               |  45 ++-
- arch/arm/mm/cache-nop.S              |  61 ++--
- arch/arm/mm/cache-v4.S               |  53 ++-
- arch/arm/mm/cache-v4wb.S             |  45 ++-
- arch/arm/mm/cache-v4wt.S             |  53 ++-
- arch/arm/mm/cache-v6.S               |  49 ++-
- arch/arm/mm/cache-v7.S               |  74 ++--
- arch/arm/mm/cache-v7m.S              |  53 ++-
- arch/arm/mm/cache.c                  | 663 +++++++++++++++++++++++++++++++++++
- arch/arm/mm/proc-arm1020.S           |  67 ++--
- arch/arm/mm/proc-arm1020e.S          |  68 ++--
- arch/arm/mm/proc-arm1022.S           |  67 ++--
- arch/arm/mm/proc-arm1026.S           |  68 ++--
- arch/arm/mm/proc-arm720.S            |  25 +-
- arch/arm/mm/proc-arm740.S            |  26 +-
- arch/arm/mm/proc-arm7tdmi.S          |  34 +-
- arch/arm/mm/proc-arm920.S            |  74 ++--
- arch/arm/mm/proc-arm922.S            |  67 ++--
- arch/arm/mm/proc-arm925.S            |  64 ++--
- arch/arm/mm/proc-arm926.S            |  73 ++--
- arch/arm/mm/proc-arm940.S            |  67 ++--
- arch/arm/mm/proc-arm946.S            |  63 ++--
- arch/arm/mm/proc-arm9tdmi.S          |  26 +-
- arch/arm/mm/proc-fa526.S             |  24 +-
- arch/arm/mm/proc-feroceon.S          | 103 +++---
- arch/arm/mm/proc-macros.S            |  33 --
- arch/arm/mm/proc-mohawk.S            |  72 ++--
- arch/arm/mm/proc-sa110.S             |  23 +-
- arch/arm/mm/proc-sa1100.S            |  31 +-
- arch/arm/mm/proc-v6.S                |  31 +-
- arch/arm/mm/proc-v7-2level.S         |   8 +-
- arch/arm/mm/proc-v7-3level.S         |   8 +-
- arch/arm/mm/proc-v7.S                |  66 ++--
- arch/arm/mm/proc-v7m.S               |  41 +--
- arch/arm/mm/proc-xsc3.S              |  73 ++--
- arch/arm/mm/proc-xscale.S            | 125 +++----
- arch/arm/mm/proc.c                   | 500 ++++++++++++++++++++++++++
- arch/arm/mm/tlb-fa.S                 |  12 +-
- arch/arm/mm/tlb-v4.S                 |  15 +-
- arch/arm/mm/tlb-v4wb.S               |  12 +-
- arch/arm/mm/tlb-v4wbi.S              |  12 +-
- arch/arm/mm/tlb-v6.S                 |  12 +-
- arch/arm/mm/tlb-v7.S                 |  14 +-
- arch/arm/mm/tlb.c                    |  84 +++++
- 51 files changed, 2300 insertions(+), 969 deletions(-)
----
-base-commit: 43426466485392d6eedc422fdeddd43eb394d8aa
-change-id: 20240115-arm32-cfi-65d60f201108
-
-Best regards,
 -- 
-Linus Walleij <linus.walleij@linaro.org>
+2.44.0
 
