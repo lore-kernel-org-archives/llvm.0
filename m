@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59748156C76;
-	Wed, 24 Apr 2024 06:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F4A1534E0;
+	Wed, 24 Apr 2024 07:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713940086; cv=none; b=rvo0dCwQJtBgCyjoxoW63z7vt7D2hnfEuRmhAbqgrnvtsXw1V4i1ji+2GsdsveVoCq4bKgj35WqDwNU0NBvOFcpuYKArTVsCerMEwwmfpqx9r0nogkc1VChq9VIL4i5kc1ak6B6vigp1Zfny/vEgFzR2WgEMFaEIGhqEKJp0nJA=
+	t=1713944530; cv=none; b=Lo48d+zaZjyS/I9ckhv1hyLXGi2mwbqu197v1rwG5SLoiCYau8Z+t43SrGqKR8hz/qexw351A/FHU78wdSn6UBCyha3OaYAb8RUqA3a82pCZ4WV/dbk5wDJ4WH8oJ0GZ93DiMy0nDeefqSCj02ChZffIO4+4pqlsxDrxQEaNINo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713940086; c=relaxed/simple;
-	bh=A/yU00UYToEMGGAoCjRKkNLmgEdhkdVsgbR/GogUobM=;
+	s=arc-20240116; t=1713944530; c=relaxed/simple;
+	bh=3jSAEAP6h7kLKxNdHKe1wEKkmll4W+mLBzqwPyPus3s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H8X/7hy1wkFekUZmHuOran51iXDQ7CViy+7yFEROBrh2KDDSmwPwvyo8tKBOJuTQmkQL6axP2ei84EWKtLhAc0ZOiOpTciWUWLEMfWCPN8AcBL6WXv0lVa28cG0iaLT6HORcJYmmVPkFTwKovGO5Xqa1tTTuIf5jm+aBCk6xABM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=luZtCrI6; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=sX84tN2L9DKkha5SJehLBKi4BJKcb/kKgJqZFTfz4UC2BTgKCt75kjF8aDl1Nj/MOrdU7HRLPX2g55/hifh1v2b8bCrCbEs5ZjCdVFmHcCfuaKkrifK9N2nuAk4rgvI6vmI1T00Xega0oTcP5i1c0uJUgj5maLxSAzwJ9zZRMR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+ojOGtE; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="luZtCrI6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+ojOGtE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713940085; x=1745476085;
+  t=1713944527; x=1745480527;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=A/yU00UYToEMGGAoCjRKkNLmgEdhkdVsgbR/GogUobM=;
-  b=luZtCrI6NJ4hZoTxyweFuWeoGmj9zIo89mpVjXcs7jQh2OS4iVLFjomw
-   tdC/3pbxr+QHmqIck+/AyKiUBvAAZeWVSBZj09MJ3M9nwgYLz9GsEQAqf
-   0oSLsNrM+6S5m3PUPK7qLBGmugw2aY9ZJZRFqrbRn9mtRbkkQmqtg9KDc
-   oktukNmufnVep9+dAaHIP6KWRRP5+kRLNh3yeM+lxvthq7w4Mg2pti2r5
-   VQudD8G5qA6NlqrHGeQJH3OcwpWV23B2s534ynPOqF2xRobxRxDaPz27M
-   gUFZAwjVOgeRO+OInHqYsb98pfJ6hnBug6l5JZmEmcVdfgJeCM1/gsgY2
-   g==;
-X-CSE-ConnectionGUID: vh/q5lFiStimqTxwmKj9jw==
-X-CSE-MsgGUID: QA/ZaOK0TNSNwLfqvOxhYg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="27009692"
+  bh=3jSAEAP6h7kLKxNdHKe1wEKkmll4W+mLBzqwPyPus3s=;
+  b=Y+ojOGtEXHcSmgFeELayjUZZqxDpIdzNCrol4GXXh8gVQmXJV0iqDjgt
+   XaWaBtu4LWkUUO0ER1eg18EAnXRYUrq3OImyhCJnxMaaRS2IaPnguVsMA
+   l6FwZ09yBOC7bbBG+hs2ZVq5xVvtgANa72moXCNGJAuF/+heJ/Fl/5qOO
+   WooVVOjfM9UX9IXL82AfE1MH4lszu3w40IK1B5XTXNeKdDIoiedOE5vC2
+   qIL74HfHxm+6rd+aefK9fdDErZ9hrnsyhAlMixpqPRz8E6/ZcW48ele8x
+   ygZmoKDTfXfk4Lmzyq0SEDYzcdC+EdmZq+1BmElB1ATtRbd6R8BY/aSmh
+   A==;
+X-CSE-ConnectionGUID: 00w10M6iTw2t4HflVyAhpA==
+X-CSE-MsgGUID: J+yjk57kTCiAyYYtCKcR4Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9390852"
 X-IronPort-AV: E=Sophos;i="6.07,225,1708416000"; 
-   d="scan'208";a="27009692"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 23:28:04 -0700
-X-CSE-ConnectionGUID: AwhU1BzwRhOjwMu5FW138Q==
-X-CSE-MsgGUID: cW/Rgp99T5GE1XfoYNpitQ==
+   d="scan'208";a="9390852"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 00:42:06 -0700
+X-CSE-ConnectionGUID: FALzAmajQ0uuFCSL2eFNuw==
+X-CSE-MsgGUID: ayiWfY4oQPi7bjsQn2obMg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,225,1708416000"; 
-   d="scan'208";a="29265418"
+   d="scan'208";a="24692454"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 23 Apr 2024 23:28:00 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 24 Apr 2024 00:42:02 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rzW6n-0000wm-2Q;
-	Wed, 24 Apr 2024 06:27:57 +0000
-Date: Wed, 24 Apr 2024 14:27:38 +0800
+	id 1rzXGR-000106-2j;
+	Wed, 24 Apr 2024 07:41:59 +0000
+Date: Wed, 24 Apr 2024 15:41:59 +0800
 From: kernel test robot <lkp@intel.com>
 To: Joe Damato <jdamato@fastly.com>, linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org, tariqt@nvidia.com, saeedm@nvidia.com
@@ -56,10 +56,10 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Joe Damato <jdamato@fastly.com>, Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 1/3] net/mlx4: Track RX allocation failures in a
- stat
-Message-ID: <202404241411.3d5OJHs6-lkp@intel.com>
-References: <20240423194931.97013-2-jdamato@fastly.com>
+Subject: Re: [PATCH net-next 2/3] net/mlx4: link NAPI instances to queues and
+ IRQs
+Message-ID: <202404241518.4TvjoN07-lkp@intel.com>
+References: <20240423194931.97013-3-jdamato@fastly.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240423194931.97013-2-jdamato@fastly.com>
+In-Reply-To: <20240423194931.97013-3-jdamato@fastly.com>
 
 Hi Joe,
 
@@ -78,23 +78,23 @@ kernel test robot noticed the following build warnings:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/net-mlx4-Track-RX-allocation-failures-in-a-stat/20240424-035224
 base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240423194931.97013-2-jdamato%40fastly.com
-patch subject: [PATCH net-next 1/3] net/mlx4: Track RX allocation failures in a stat
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240424/202404241411.3d5OJHs6-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20240423194931.97013-3-jdamato%40fastly.com
+patch subject: [PATCH net-next 2/3] net/mlx4: link NAPI instances to queues and IRQs
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240424/202404241518.4TvjoN07-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240424/202404241411.3d5OJHs6-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240424/202404241518.4TvjoN07-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404241411.3d5OJHs6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404241518.4TvjoN07-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
    In file included from include/linux/mm.h:2208:
    include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -119,10 +119,10 @@ All warnings (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      537 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/mellanox/mlx4/en_port.c:35:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
+   In file included from drivers/net/ethernet/mellanox/mlx4/en_cq.c:34:
+   In file included from include/linux/mlx4/cq.h:39:
+   In file included from include/linux/mlx4/device.h:37:
+   In file included from include/linux/if_ether.h:19:
    In file included from include/linux/skbuff.h:28:
    In file included from include/linux/dma-mapping.h:11:
    In file included from include/linux/scatterlist.h:9:
@@ -139,10 +139,10 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
          |                                                      ^
-   In file included from drivers/net/ethernet/mellanox/mlx4/en_port.c:35:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
+   In file included from drivers/net/ethernet/mellanox/mlx4/en_cq.c:34:
+   In file included from include/linux/mlx4/cq.h:39:
+   In file included from include/linux/mlx4/device.h:37:
+   In file included from include/linux/if_ether.h:19:
    In file included from include/linux/skbuff.h:28:
    In file included from include/linux/dma-mapping.h:11:
    In file included from include/linux/scatterlist.h:9:
@@ -156,10 +156,10 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
          |                                                      ^
-   In file included from drivers/net/ethernet/mellanox/mlx4/en_port.c:35:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
+   In file included from drivers/net/ethernet/mellanox/mlx4/en_cq.c:34:
+   In file included from include/linux/mlx4/cq.h:39:
+   In file included from include/linux/mlx4/device.h:37:
+   In file included from include/linux/if_ether.h:19:
    In file included from include/linux/skbuff.h:28:
    In file included from include/linux/dma-mapping.h:11:
    In file included from include/linux/scatterlist.h:9:
@@ -191,54 +191,43 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      735 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
->> drivers/net/ethernet/mellanox/mlx4/en_port.c:167:3: warning: variable 'dropped' is uninitialized when used here [-Wuninitialized]
-     167 |                 dropped += READ_ONCE(ring->dropped);
-         |                 ^~~~~~~
-   drivers/net/ethernet/mellanox/mlx4/en_port.c:154:39: note: initialize the variable 'dropped' to silence this warning
-     154 |         unsigned long packets, bytes, dropped;
-         |                                              ^
-         |                                               = 0
+>> drivers/net/ethernet/mellanox/mlx4/en_cq.c:202:12: warning: variable 'qtype' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     202 |                 else if (cq->type == TX)
+         |                          ^~~~~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlx4/en_cq.c:205:45: note: uninitialized use occurs here
+     205 |                 netif_queue_set_napi(cq->dev, cq->cq_idx, qtype, NULL);
+         |                                                           ^~~~~
+   drivers/net/ethernet/mellanox/mlx4/en_cq.c:202:8: note: remove the 'if' if its condition is always true
+     202 |                 else if (cq->type == TX)
+         |                      ^~~~~~~~~~~~~~~~~~~
+     203 |                         qtype = NETDEV_QUEUE_TYPE_TX;
+   drivers/net/ethernet/mellanox/mlx4/en_cq.c:197:2: note: variable 'qtype' is declared here
+     197 |         enum netdev_queue_type qtype;
+         |         ^
    18 warnings generated.
 
 
-vim +/dropped +167 drivers/net/ethernet/mellanox/mlx4/en_port.c
+vim +202 drivers/net/ethernet/mellanox/mlx4/en_cq.c
 
-   149	
-   150	void mlx4_en_fold_software_stats(struct net_device *dev)
-   151	{
-   152		struct mlx4_en_priv *priv = netdev_priv(dev);
-   153		struct mlx4_en_dev *mdev = priv->mdev;
-   154		unsigned long packets, bytes, dropped;
-   155		int i;
-   156	
-   157		if (!priv->port_up || mlx4_is_master(mdev->dev))
-   158			return;
-   159	
-   160		packets = 0;
-   161		bytes = 0;
-   162		for (i = 0; i < priv->rx_ring_num; i++) {
-   163			const struct mlx4_en_rx_ring *ring = priv->rx_ring[i];
-   164	
-   165			packets += READ_ONCE(ring->packets);
-   166			bytes   += READ_ONCE(ring->bytes);
- > 167			dropped += READ_ONCE(ring->dropped);
-   168		}
-   169		dev->stats.rx_packets = packets;
-   170		dev->stats.rx_bytes = bytes;
-   171		dev->stats.rx_missed_errors = dropped;
-   172	
-   173		packets = 0;
-   174		bytes = 0;
-   175		for (i = 0; i < priv->tx_ring_num[TX]; i++) {
-   176			const struct mlx4_en_tx_ring *ring = priv->tx_ring[TX][i];
-   177	
-   178			packets += READ_ONCE(ring->packets);
-   179			bytes   += READ_ONCE(ring->bytes);
-   180		}
-   181		dev->stats.tx_packets = packets;
-   182		dev->stats.tx_bytes = bytes;
-   183	}
-   184	
+   194	
+   195	void mlx4_en_deactivate_cq(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq)
+   196	{
+   197		enum netdev_queue_type qtype;
+   198	
+   199		if (cq->type != TX_XDP) {
+   200			if (cq->type == RX)
+   201				qtype = NETDEV_QUEUE_TYPE_RX;
+ > 202			else if (cq->type == TX)
+   203				qtype = NETDEV_QUEUE_TYPE_TX;
+   204	
+   205			netif_queue_set_napi(cq->dev, cq->cq_idx, qtype, NULL);
+   206			napi_disable(&cq->napi);
+   207			netif_napi_del(&cq->napi);
+   208		}
+   209	
+   210		mlx4_cq_free(priv->mdev->dev, &cq->mcq);
+   211	}
+   212	
 
 -- 
 0-DAY CI Kernel Test Service
