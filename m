@@ -1,175 +1,181 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DA616C861
-	for <llvm@lists.linux.dev>; Wed, 24 Apr 2024 22:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67FB157467;
+	Wed, 24 Apr 2024 23:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713998435; cv=none; b=ine4r3IFPycWiqvxCf/62dePPwl4ZglsqB0uKjv3HwXccszaeKaPcjbWD9hMudoq/d4+kmLx7dGYegAv68UcRdDYtA7BS7pGXmOJQ656J488+5uLaLwLOSy6l1H3pNqxgSQ1OpETl+olREIc8eJenQHbWJsFXeSSCQElsHJemjI=
+	t=1714001619; cv=none; b=MCzVjkQens6/dWvDKqY7YlfC2xcT07ALX2qtGXIq6y+/E/w0Q8+yG+gS64Pid9p2VSlbZtzXYgps0Oig8+Y7uZilYua183cN1RAmvOgzMDFuOnvn6H7X+xamWh0aKdTp8p97txa64wYaID2fugVlqGoCGUxElgTkmqECJd9PB10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713998435; c=relaxed/simple;
-	bh=S6pSKGU1vZkqsA6JyZACfXvcQXgSDSwKOAh1iNHOK7k=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UDVfwTUIYQx/I1ZI28ckfgd/6hdOLbZkCpu9TniPElJyS/DdCi9pyC7lreb9gnTCWlr5ZSVM2V6G1rrnnHTnj2yeWUf/4rP+QvgP9zRlhUebBjNDD4H8OVpQixKyjEft8kT8d2Mj23sKWDYtQjV+0qIqDv/LN9bnPinBmERgyd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EvEIxpUQ; arc=none smtp.client-ip=209.85.167.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1714001619; c=relaxed/simple;
+	bh=RIgE5n3pL6jeQnQkBJoRkDShHjgY8jnKMIghJf4yJ2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=euFkU1pikNmEWFnxtW7s5MTbhLBBbTcyS7spOcbsM2olbOdo+3oD5w/6Zd9Gr/TeBZRYuqQXSYLtLKvquq2V6Kt2PLBfkiFlKSTseJlBTv4YfkYBEvx1phvJsSf59WZ8n7xqJ00rhE5QWwyfm30uVKH6m30GS/jmAXB7/NEzG4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nUkFi/JU; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EvEIxpUQ"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3c71c7e2d40so145155b6e.3
-        for <llvm@lists.linux.dev>; Wed, 24 Apr 2024 15:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713998432; x=1714603232; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JTbZyDAE7D1exiHp1TgfWwHZGetvSM17QuiylPP4Ugo=;
-        b=EvEIxpUQokCYYTe+ZYksTjoXyhex7nJHap9bIKtgc7cr0HjVzFmHOV9/GX3Oj/3xYM
-         4yZXUHTcNVCTK+g2/EWUMCkZ02ZdhKAoqD+vn709cPtdFsv5hjq4rLI3uBFzqRPi0JzE
-         K/i4rEiLWBeR7bTAK1NjWmNooc6yUSoPglnKw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713998432; x=1714603232;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JTbZyDAE7D1exiHp1TgfWwHZGetvSM17QuiylPP4Ugo=;
-        b=O6re6aBe4NK602tfy1voMRrdTudyaXSoOC9QJRoOFwOfg7du9fWAm3IEDXiHM5HoJG
-         Bt/LEpTCmEf3xshstO45vh0aiQvnVk7j9bbR6MKaMuHczQEGRrn0V9sB+1bgLvok3rwO
-         EIEdG6DFPsq6lDowpUJX8qY4DwRdcGJKTIlTn8e6ih3Ksm08sbZn51jY2xKI1+YupwpI
-         lpg16c8jzVv2DS/tB7kCbuleHN+Ofnp0/Sm77ag5ZVRFYAFhcd8zQnVr+PTZKUGQigg2
-         9vr59iC8+4JGZ0RSXlBnP89vyZuy0BQbZzz17mokMbzhLNfkQfZ7k5dpYNM3m1FFOKJ/
-         2tOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXkda9LV4EU0XQL8FYfJtH9romj98HPaiJHHVu3NiGKoiIDzCeGDGWU9OGpu7fn1C8TS65s/ZqZq6t2ThWCjP5bflU6/g==
-X-Gm-Message-State: AOJu0Yx+aoewlS6y7EsyZlfdw8t5qAwZC/hiZUv2FKZ6u447OISZCSkl
-	HSKrB1aAdhnQ75wp5Yxq9WD1I+SxZ/5ATqK4n7LW/nGiKaC0NPKm9AJr58XhYA==
-X-Google-Smtp-Source: AGHT+IGFUXgAb57/n0ajo0YDZLiplfyraBU1xymIQJvWPzgD5RmxHj274JJqj/jUT26O6h41iVbSbg==
-X-Received: by 2002:a05:6808:6146:b0:3c5:e81a:b5b6 with SMTP id dl6-20020a056808614600b003c5e81ab5b6mr3457731oib.59.1713998432715;
-        Wed, 24 Apr 2024 15:40:32 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q24-20020a637518000000b005dc4b562f6csm11655715pgc.3.2024.04.24.15.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 15:40:32 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Erhard Furtner <erhard_f@mailbox.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ubsan: Avoid i386 UBSAN handler crashes with Clang
-Date: Wed, 24 Apr 2024 15:40:29 -0700
-Message-Id: <20240424224026.it.216-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nUkFi/JU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714001618; x=1745537618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RIgE5n3pL6jeQnQkBJoRkDShHjgY8jnKMIghJf4yJ2s=;
+  b=nUkFi/JUqd5/lhtVtjLzNNRvAoG+uVUwZG/SNhQ2JpYy9E0qG3L8Dy+D
+   7CJSTxz/75+AlMe5aFlPhciXij8cSRjRgwmzUf2wfKwOBLG00E+yo9Ehm
+   aJX0mUDIihqPkZfSzukYVg/Pfgv6nDilOQGh0U4T2nEELWOzJpjQSyfPl
+   7iVQOcAwsxT9rz81x3zO5Ve4lD7W2vBWyMB77F+0yz+1Bob6UpuUoRTi3
+   W7DsPAKHHkLJISgMoe5VOxoLgaYNUU/tFwJjQQ+dOAxSAkUZxyEQRMj9S
+   Wi6gUryWCBYQYWHudxhKulF2yzG89e9tuYpv/X4+j/qtvHjg6TCt/C0bG
+   Q==;
+X-CSE-ConnectionGUID: 3fb+gtnGRUa5f1YvdAim2g==
+X-CSE-MsgGUID: NhXUPsEUQcmUjFZDHSOiqA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9589672"
+X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
+   d="scan'208";a="9589672"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 16:33:37 -0700
+X-CSE-ConnectionGUID: 4g0UrdBoQrilGb7Ep/RgRw==
+X-CSE-MsgGUID: K1w0tqhpQZ+bEtHASv2FDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
+   d="scan'208";a="24916325"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 24 Apr 2024 16:33:35 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rzm7I-0001m2-0t;
+	Wed, 24 Apr 2024 23:33:32 +0000
+Date: Thu, 25 Apr 2024 07:32:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Longfang Liu <liulongfang@huawei.com>, alex.williamson@redhat.com,
+	jgg@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+	jonathan.cameron@huawei.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linuxarm@openeuler.org, liulongfang@huawei.com
+Subject: Re: [PATCH v5 4/5] hisi_acc_vfio_pci: register debugfs for hisilicon
+ migration driver
+Message-ID: <202404250711.4mzD3Fe0-lkp@intel.com>
+References: <20240424085721.12760-5-liulongfang@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3862; i=keescook@chromium.org;
- h=from:subject:message-id; bh=S6pSKGU1vZkqsA6JyZACfXvcQXgSDSwKOAh1iNHOK7k=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmKYpdOvL4ycJZMfmelPH56Xu+0zUCHN/li7yDD
- JlCQAIXtpKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZimKXQAKCRCJcvTf3G3A
- JsthD/4qvBqX1FE7+CepCN/bUSsdc70zA3IoR9J74pMA+cDoufvy18SuqrI0QlPCbAV5PeKztge
- gzibb8xd36rAisAJKA0utmRkVAydrRwbmjUFVD79yBBujbfyNlK8mqPsmCr12I9QlHdXgxxmzxE
- A5WfXC0Mbp3BegjRlKorI0bVF+zZWYjG97ThyMxlUrdcabHqXdWFd9SG1iQ97Ee0Za9QRRRyTbn
- YdM2Zslm2eF4PHkTiUJkeJphrHtXmEVaC14vmKIcjDJ2QneeeP+Pg84whwO6ACNLtMWA9Gd3/F4
- h2zrUXv0HRIS/0lxYFm9jJyRfUndtgLpAA5jHq8vVuwYFys9z0e/TRGt3HNdbXmZzqJLkd3lW7U
- A13vTr2W7Btz+q7N23001OYIcFSqsnNpu8njFOauxcB/Pc9iNywTi03uFpjYQUyy/mfTp1bgV7x
- Hk4rNT49RY+kiA3pt5TZ9+aT9n+raRjt80v/j8TD4x1zi6/p0nT/0EG6ObbiJv2GdzF9a/AcgDB
- 3Um3HWzzyCD2aL/HebIwG30sZZ2gbPO8cGU7REXohAIk7OWKGavgZLd1ggwZoNGk5dhd0V03o0K
- zn98pxzl3fqDdXgn1zZXrpNUj7pk2e4a/s0FsZNdqV2jYJ1Khhu7Ncyqsjkelvd9ho56XocxX4e
- fljUYFZ Og7QZA1w==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240424085721.12760-5-liulongfang@huawei.com>
 
-When generating Runtime Calls, Clang doesn't respect the -mregparm=3
-option used on i386. Hopefully this will be fixed correctly in Clang 19:
-https://github.com/llvm/llvm-project/pull/89707
-but we need to fix this for earlier Clang versions today. Force the
-calling convention to use non-register arguments.
+Hi Longfang,
 
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Closes: https://github.com/KSPP/linux/issues/350
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Cc: Marco Elver <elver@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: llvm@lists.linux.dev
-Cc: kasan-dev@googlegroups.com
-Cc: linux-hardening@vger.kernel.org
- v2:
-   - use email address in Reported-by
-   - link to upstream llvm bug in ubsan.h comment
-   - drop needless /**/
-   - explicitly test Clang version
- v1: https://lore.kernel.org/lkml/20240424162942.work.341-kees@kernel.org/
----
- lib/ubsan.h | 41 +++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/lib/ubsan.h b/lib/ubsan.h
-index 50ef50811b7c..07e37d4429b4 100644
---- a/lib/ubsan.h
-+++ b/lib/ubsan.h
-@@ -124,19 +124,32 @@ typedef s64 s_max;
- typedef u64 u_max;
- #endif
- 
--void __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
--void __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
--void __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
--void __ubsan_handle_negate_overflow(void *_data, void *old_val);
--void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
--void __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
--void __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
--void __ubsan_handle_out_of_bounds(void *_data, void *index);
--void __ubsan_handle_shift_out_of_bounds(void *_data, void *lhs, void *rhs);
--void __ubsan_handle_builtin_unreachable(void *_data);
--void __ubsan_handle_load_invalid_value(void *_data, void *val);
--void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
--					 unsigned long align,
--					 unsigned long offset);
-+/*
-+ * When generating Runtime Calls, Clang doesn't respect the -mregparm=3
-+ * option used on i386: https://github.com/llvm/llvm-project/issues/89670
-+ * Fix this for earlier Clang versions by forcing the calling convention
-+ * to use non-register arguments.
-+ */
-+#if defined(CONFIG_X86_32) && \
-+    defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 190000
-+# define ubsan_linkage asmlinkage
-+#else
-+# define ubsan_linkage
-+#endif
-+
-+void ubsan_linkage __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_negate_overflow(void *_data, void *old_val);
-+void ubsan_linkage __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
-+void ubsan_linkage __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
-+void ubsan_linkage __ubsan_handle_out_of_bounds(void *_data, void *index);
-+void ubsan_linkage __ubsan_handle_shift_out_of_bounds(void *_data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_builtin_unreachable(void *_data);
-+void ubsan_linkage __ubsan_handle_load_invalid_value(void *_data, void *val);
-+void ubsan_linkage __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
-+						       unsigned long align,
-+						       unsigned long offset);
- 
- #endif
+[auto build test ERROR on awilliam-vfio/next]
+[also build test ERROR on linus/master v6.9-rc5 next-20240424]
+[cannot apply to awilliam-vfio/for-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Longfang-Liu/hisi_acc_vfio_pci-extract-public-functions-for-container_of/20240424-170806
+base:   https://github.com/awilliam/linux-vfio.git next
+patch link:    https://lore.kernel.org/r/20240424085721.12760-5-liulongfang%40huawei.com
+patch subject: [PATCH v5 4/5] hisi_acc_vfio_pci: register debugfs for hisilicon migration driver
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240425/202404250711.4mzD3Fe0-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240425/202404250711.4mzD3Fe0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404250711.4mzD3Fe0-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:9:
+   In file included from include/linux/hisi_acc_qm.h:10:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:1370:46: error: too few arguments provided to function-like macro invocation
+    1370 |         dev_err("mailbox cmd channel state is OK!\n");
+         |                                                     ^
+   include/linux/dev_printk.h:143:9: note: macro 'dev_err' defined here
+     143 | #define dev_err(dev, fmt, ...) \
+         |         ^
+>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:1370:2: error: use of undeclared identifier 'dev_err'; did you mean '_dev_err'?
+    1370 |         dev_err("mailbox cmd channel state is OK!\n");
+         |         ^~~~~~~
+         |         _dev_err
+   include/linux/dev_printk.h:50:6: note: '_dev_err' declared here
+      50 | void _dev_err(const struct device *dev, const char *fmt, ...);
+         |      ^
+>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:1370:2: warning: expression result unused [-Wunused-value]
+    1370 |         dev_err("mailbox cmd channel state is OK!\n");
+         |         ^~~~~~~
+   6 warnings and 2 errors generated.
+
+
+vim +1370 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+
+  1345	
+  1346	static int hisi_acc_vf_debug_cmd(struct seq_file *seq, void *data)
+  1347	{
+  1348		struct device *vf_dev = seq->private;
+  1349		struct vfio_pci_core_device *core_device = dev_get_drvdata(vf_dev);
+  1350		struct vfio_device *vdev = &core_device->vdev;
+  1351		struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
+  1352		struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+  1353		u64 value;
+  1354		int ret;
+  1355	
+  1356		mutex_lock(&hisi_acc_vdev->enable_mutex);
+  1357		ret = hisi_acc_vf_debug_check(seq, vdev);
+  1358		if (ret) {
+  1359			mutex_unlock(&hisi_acc_vdev->enable_mutex);
+  1360			return ret;
+  1361		}
+  1362	
+  1363		value = readl(vf_qm->io_base + QM_MB_CMD_SEND_BASE);
+  1364		if (value == QM_MB_CMD_NOT_READY) {
+  1365			mutex_unlock(&hisi_acc_vdev->enable_mutex);
+  1366			dev_err(vf_dev, "mailbox cmd channel not ready!\n");
+  1367			return -EINVAL;
+  1368		}
+  1369		mutex_unlock(&hisi_acc_vdev->enable_mutex);
+> 1370		dev_err("mailbox cmd channel state is OK!\n");
+  1371	
+  1372		return 0;
+  1373	}
+  1374	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
