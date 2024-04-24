@@ -1,487 +1,228 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AAE13A269
-	for <llvm@lists.linux.dev>; Wed, 24 Apr 2024 03:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713927887; cv=none; b=A9cvlL+VZFqXayzuGhiC2tGLVADOJfIQAPzOYgbZmz5Zz468vEmX1T6oVR8oi6tanvDhvBulbk4qCLWvC3QwWCKsvh8EgtyrhSlcP7pUX3BICFug50q+sf9APrRC4lYH6vm2ZdDp1PSYcSqKDjCntx7Nlnt5nFOLNYgYnFeNfk0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713927887; c=relaxed/simple;
-	bh=DLSnqQWFNhsmNhmwIVAHYm2cxdz6iSLfLbXnpiWK8+g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rt7yXAcQyAsgvDtMWQwHIPQ1K/mI17ruOGhvm8WjHEvVmOcj7Ltdl1+tNm+MeCvaM5iW7BUT+x6ysbpPnjI7Xo1f0Tmmvrfxi6mRUpKJsm9uQME8axb/I0kF49Y1x/nknds/curtDrcjzXfKDrqyEmeID/KkxNSA3iS3LNxKwFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NB6oh4Fd; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954BB86277
+	for <llvm@lists.linux.dev>; Wed, 24 Apr 2024 04:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.156.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713931539; cv=fail; b=WCU6XYdu53kmmdz7fRqxt+CRb0FcNsRJGzGoeQGGCiS4eJj+YVrt923WZ4+F9fMCBgXHKHtYkFmixAcNaM/1Z7hTWb4PNi1OhN0YCMt/S4blvNlq3yx3J/X2PWeMywOeNmTjUClJZT/MtXMfZvatnwDmkqT/wbps/EhrKEWoNmw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713931539; c=relaxed/simple;
+	bh=pHur2yB3hUe0UyECrtA9Jp418Je/GDJrcElRNSfAy34=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=qm7ulR2/sINpek4voChr89rOm3898B3ym9Pj80hvDSclVK5UTTJnPzrWBVpVCq1h0R37P5pFCADGiTsrYKsRQKoRRw4i92/kGscwj8tJ9ikhyaaq9FMEhHwvSh8hpgQRthOGhpsI2b832L3mhZaTx7MBR3C6kYfDLkBgbK0jHL0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=vHt1dJv4; arc=fail smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NB6oh4Fd"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ed32341906so6110950b3a.1
-        for <llvm@lists.linux.dev>; Tue, 23 Apr 2024 20:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713927884; x=1714532684; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nJK6rlBTwrl5+F7GmNYjslMW26wt9PKz5lFbq7Hde/w=;
-        b=NB6oh4FdF5B2ZG9qhMGTYb2sTGi5/5DpSxAU+bYq2epfd91LvgE3tCTl2NtXSDhs8c
-         dYBbRGGEP7qyacImaHQdynBTOcPfdhdxvPFN/1E7w+z5QhQ4zkp0XJSWNE+FekZk//ED
-         Z9ixU6EoPLU5D8g6BCeVg4UfXSCuAwyfFtfo0QyktUvMIQsQSyd2aVhJVzEcvq+Aga/J
-         CDsjJjBdFe/F63aoOg3IPU9tfWP6OEq9RmmLC2FMxp6Knl9XBXnzl+pF4/fN7SeLXlpQ
-         ZrtP3E5jRtMx5hDVDBSDsWQ+2JXkElx3YP0x2mIMwwbivgn/kdM5O/0U1O7FA3/kS5pc
-         eooQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713927884; x=1714532684;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nJK6rlBTwrl5+F7GmNYjslMW26wt9PKz5lFbq7Hde/w=;
-        b=uhxiveIx5cYtBJDf/g9QwUteKMffqe1NW3NMNYEjP1O+mDYFEOXuzfgwzoErDwE4Ne
-         oq2FZZ5Jih37TrDXk41lKAAOHN7r/W/kU4xYr7zEyfg2RDLElmibOv6z/QiUaDq8Lpzs
-         iAsV3pVI6wesUhLWVAcvFO7a4ru+nN6fELtnUbdHierf/wUuAnFCjJB1/Cg7pt06Tb4M
-         8lVmE414W/Nlwf1m/2rcia0DQiGwuozx2HPW2WDZZQrKpeVGkCxMZPcycaZYRUA2r3PI
-         xh3RFOFtcGqeSRxBLwNXZbQP6hkspcxVAAbjwsbNWY2iOEu/EFIqbyRWqYjZNMPhrd2M
-         yIEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWr1U5h84w7EORkDj+yz6fFKtfBlOKpvTKMhxq1rcmVVZCyCqcKs5WsU011YddwcqZ9UQpDrtfbh/enU2B+1Sz9vBZzSw==
-X-Gm-Message-State: AOJu0YynvNUGnXYFsU9aGw3gt0irLlt1nL34hbBC1UJK7ZTgkniiHI4/
-	KMO8h0PuhIpAFiicTUKbKe7KjWLsLEFvkPc3p9KdzDMEs98pdaJ8
-X-Google-Smtp-Source: AGHT+IGeRJdowyIH+vkUD5gvL4pos+YYG8nBYcIvrsliVpzZbGk7P4qwgrFJVEJTCKiWzFU7UaiWDA==
-X-Received: by 2002:a05:6a00:2294:b0:6ea:d004:33c9 with SMTP id f20-20020a056a00229400b006ead00433c9mr1725820pfe.30.1713927884203;
-        Tue, 23 Apr 2024 20:04:44 -0700 (PDT)
-Received: from [192.168.255.10] ([43.132.141.20])
-        by smtp.gmail.com with ESMTPSA id fe17-20020a056a002f1100b006ed7684304dsm10396753pfb.61.2024.04.23.20.04.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 20:04:43 -0700 (PDT)
-Message-ID: <9fda900c-4b77-44b1-8185-47754bcda508@gmail.com>
-Date: Wed, 24 Apr 2024 11:04:39 +0800
+	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="vHt1dJv4"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43O0qbcs022581;
+	Tue, 23 Apr 2024 21:05:28 -0700
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3xmd7gmdec-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Apr 2024 21:05:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gq0GEaXCX30psGGRQjQ9/N904AETXBUc48x4Ase3CQ/94mf1OgrotLuHqXvX03aXj/n8AyurzsZ/FLTUs0bwjdAd2Mga2C6qkuPFyEhlyuGgDbgxw3BeeaFowcx9iWCRXLKEhVou5VQMyN6CmxIepfaXMezdgGObM3GHNUhyKAUZhRqBoN0vga35S4q8xmQikLDXJ7hDeI/bWHR5PReQos5Uo4I9PLR3WN/bfrlB6MueFzDQ/wOpumFoxObfzZRi1mO040yNbyIokEcVOlN74p9ZloVURCMB8Hpb2G7iZU+pRpbygCDNjE13IRvPBa7xsPpMsV/cVVe+//dckBFfeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pHur2yB3hUe0UyECrtA9Jp418Je/GDJrcElRNSfAy34=;
+ b=k0BXC/i7uNYaUFCSWqbz8JZSghl4DQ+hr0s2Nl0O6052afO6iagbR50yJvadLZ2aVRFYWu/OqouiTlQ7mdDy7XMWQ3bEdrCGwaAQWT4qgfolED1HugdiwtlvQFPgYXcwqKTl9CfbGbFRO8fX/faMyDbkJHoTHIph1Aup7EpXSqyXBUF5Q7X/2d8S3GZO8bFt/VlO+nWKgtWsbX4or0Klw2OpekDGbcEw8vFAHNyEdmqFrvdUYdXn1rO5++eGEpBxRBJ40zQnA2z0cDfv2MRs0a1kTeiex+jEbue7BvMZ6OejUjvNlUb143Uz9+2etkYgSF2WS4Gm2j2zcVmaPVcYbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pHur2yB3hUe0UyECrtA9Jp418Je/GDJrcElRNSfAy34=;
+ b=vHt1dJv4CKXpSZFi9/9Rw7WxqKiIVyByAxHcRUovZeBPvn25oi4yEw7FrlIlL0fbCmn2XdScettj2L3WB3ruuQ6Q5tHod5j/yT6+xkkCC3xJ8a+wOF1tVQtmZT8Rnsc9BI81IjZQ0LzcD8iiHcL/30T6pqymdf55aKQdFqQB5o0=
+Received: from CH0PR18MB4339.namprd18.prod.outlook.com (2603:10b6:610:d2::17)
+ by BL1PR18MB4119.namprd18.prod.outlook.com (2603:10b6:208:31a::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Wed, 24 Apr
+ 2024 04:05:25 +0000
+Received: from CH0PR18MB4339.namprd18.prod.outlook.com
+ ([fe80::61a0:b58d:907c:16af]) by CH0PR18MB4339.namprd18.prod.outlook.com
+ ([fe80::61a0:b58d:907c:16af%5]) with mapi id 15.20.7472.044; Wed, 24 Apr 2024
+ 04:05:24 +0000
+From: Geethasowjanya Akula <gakula@marvell.com>
+To: Su Hui <suhui@nfschina.com>, Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>, Jerin Jacob <jerinj@marvell.com>,
+        Hariprasad Kelam <hkelam@marvell.com>,
+        Subbaraya Sundeep Bhatta
+	<sbhatta@marvell.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org"
+	<kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com"
+	<ndesaulniers@google.com>,
+        "morbo@google.com" <morbo@google.com>,
+        "justinstitt@google.com" <justinstitt@google.com>
+CC: Suman Ghosh <sumang@marvell.com>,
+        "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        "kernel-janitors@vger.kernel.org"
+	<kernel-janitors@vger.kernel.org>
+Subject: RE: [EXTERNAL] [PATCH net] octeontx2-af: fix the double free in
+ rvu_npc_freemem()
+Thread-Topic: [EXTERNAL] [PATCH net] octeontx2-af: fix the double free in
+ rvu_npc_freemem()
+Thread-Index: AQHale8echJ0ENQhBEqBSWB8BTqVhLF2zRXA
+Date: Wed, 24 Apr 2024 04:05:24 +0000
+Message-ID: 
+ <CH0PR18MB4339B5AE1813587AA743C78ACD102@CH0PR18MB4339.namprd18.prod.outlook.com>
+References: <20240424022724.144587-1-suhui@nfschina.com>
+In-Reply-To: <20240424022724.144587-1-suhui@nfschina.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH0PR18MB4339:EE_|BL1PR18MB4119:EE_
+x-ms-office365-filtering-correlation-id: 6035d852-aa9c-4f9f-bc87-08dc6413c4a7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ =?utf-8?B?Z0Fpb0Q0czgrTFgrbGFCbnJkUzhQamlpaVEraS9lclI5ZTg0T1RUam11bSsw?=
+ =?utf-8?B?QTY0aXJXUlBTdER2RE1RNTRTbWpNbSsydzlER2ViYlNrWHU1UHhSQUpnL0VS?=
+ =?utf-8?B?Q0ZZODlVc05LOEJQRjdaSXo2V3dVTG1WVDFZVDRrUjMxZnZKb2tkelp0Mjly?=
+ =?utf-8?B?dW51dHljK29OS01hQXRjMGZXSzFiMDdQMTZCR0pFbmYrU2hFSnN1M3BMUDhv?=
+ =?utf-8?B?RlVDMkx6Y3BqZnZPdkVvMFNIb2JweittS25VWHc0eUFEUkdwcytmL3gwWERC?=
+ =?utf-8?B?RkxXVHl6ZDVodHNOeUE2UmI2WDlBdCtUSnJJL3B2YTJ0bEtpK3M4dlNQZUtX?=
+ =?utf-8?B?UVFqc3lOcEJ3TGkxRWRsVHM4Q2tEenA2SEZOSGZ5NHg3blFnN3grT3paL01m?=
+ =?utf-8?B?enJzN0MzbzhlY3JBM0FpYXRBb0NLUG1XQkh2QldnSXN4SUdrMzhuQ3U4L0RG?=
+ =?utf-8?B?Q3hpdUxVZG9sS0Qwb2NkdlVEa3FnZ3RrUXc2QWVDVE16WHBnM2grZmZNTmw2?=
+ =?utf-8?B?bDFFVDdIODVnTEZVRFhuRnE4RE9CcXdWL3FGZSthYmVZZGcvKzJWK3MzZVd0?=
+ =?utf-8?B?WDdRVkdqdFlhZjBYenYzenZtbGdVRFdPQXRDU1B0ejgyZk9jRjlxSWs0Njd0?=
+ =?utf-8?B?ZkFDYVpuUkZXUDFYWlJlRGlrQ2JQMmI5TDRiSCtjcjVrNDV2ckNVbTRMcmVv?=
+ =?utf-8?B?VUNRaVJEcDdNakwzY3dacDB6RVdRNUNLais5dk9QWk1TczMxamRvQUJMVFlx?=
+ =?utf-8?B?eUx0cGZYTmVFOTMwSTdDelNzcG9VZGZWMzFJM2V6QUFkOVNYTWFLOGZvNzNH?=
+ =?utf-8?B?ODRNeVRYQmRGTHBIRWRONXk0RXB4UC9sTFJvbXdRQUcxVWE5NGNxMnYzTWph?=
+ =?utf-8?B?UjZ6LytLMGs5REtyOTdjTEd0UG42QWZCOEJHZFpHVEt4SE1yNFhQS1FYWWNi?=
+ =?utf-8?B?cVNPVFFNbDAxMFpmaDFHMW9zNFJuclc5UzlYcHljaFhxNGZhbXFIdWsvVW9l?=
+ =?utf-8?B?VHV5TTlrdER3c3k4Rmd5THJxQjFQc0NlS0srTFJrMnEvaHBtTzhEaEExWUo4?=
+ =?utf-8?B?QUtFZVpTOWZxS2hsVWw0VEZYT2Nwdld1a0R1YkJ1WXAyM3o5QXBqODZIRytT?=
+ =?utf-8?B?dkxOaGtrVXFwaENIQ1kweTA0OFJqTGdPQzh0U0tHM0tOY0VDT0Y3ZEY3TUlR?=
+ =?utf-8?B?aGxuYWMxVnFHNE9Jck9oUndCTXNLZUVHRkdxZ0MyZWJudHAzT3pucEdaOTEr?=
+ =?utf-8?B?bVNOYkFBemxWU1VacFpMV0dta0RVVDQwT3lVR08xaStPVUhpOXQ5R2M1Y0oz?=
+ =?utf-8?B?TXBNS3NXN2tYMXhBUjlrYU1wMFFEUUZFUjNNTFFIS3ZybWluakZJeWVWakNR?=
+ =?utf-8?B?U2plSDhEaXlVNWMzaHU2aklJMEFlL1pUYThBZDcyOCtDelNHMGRaazV6bDdh?=
+ =?utf-8?B?em5ZemhaVFhxamtIMCtxRkVrYzVCMTBHd1NOL21XUHVobzFhSEo4OWxmVTE3?=
+ =?utf-8?B?REdJK3JKK3VYK0FRWjhaVFl0R3ExZ2NWWndncWxacS9KeWpuRzk0Ymduc1dY?=
+ =?utf-8?B?YlBmTjRqS0ppdE5idDZsemJ0TS9kUjhPSFliWm9VbVVTNnVWS0ZWZ01JZkRX?=
+ =?utf-8?B?ODQ1bjMvWmFhYkRvc2s0VWUvc1YzOXAyZXU1TDlFSmFVSG5UcitNZjlWL0xT?=
+ =?utf-8?B?Sm1KVEMwSmVNQmlIN3JDQmJZUkIvVVM5VUlSc0MvU0ZzYVJPMC8xbHZJdXZu?=
+ =?utf-8?B?SzJ5bmE3ZWpnNWs5ZGNCYzBwdnFnTTdab0lPWE9hSm50d05SalNpOGJyTjZH?=
+ =?utf-8?Q?2Y9Ai8APwOWW92JB2VlZ46j/DbV/5XsgH2/ZM=3D?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR18MB4339.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(366007)(38070700009)(921011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?eTQycEJYczBYc0plYXFRNmJjTW5jTDUyQWZsNFE0b0RWVjZNMXUwWHpmeFhE?=
+ =?utf-8?B?Wi8vZ3dXSTV5cDRCa1p5RnZKWjRTR0p1VGpEaW5VVjAwT0ttWGNBZlBwaW1R?=
+ =?utf-8?B?ZFJGVklIQVVsa0NMTmRrZ1FORGVjam1RcHVVazVZandGY0VkM1AvaTl6SkJW?=
+ =?utf-8?B?ejkvTk4rQTZSVlYwWVZSNS9ya3hZcjdiS2VXWGgzMXNDTjdkQkFjUmJHSTQx?=
+ =?utf-8?B?VlF0M1JndzNvOEJpdUQ4RFR6RlljYjNHRFJYemtTUEZOamx0NEZ0VEtqQmNy?=
+ =?utf-8?B?M20raGxtdmgzNytUQlZLcEpnT1FGWWl1TWVUVjZIR3JVNnlNNHdxMkg2bEFJ?=
+ =?utf-8?B?NGY4TW5qYzdPUE80UmloT2lSdllZZUJQcmlCUnpLNkNLOG5qUlZydGdIRzJr?=
+ =?utf-8?B?aWhJcnFJenpuMXljelROVE5hTzlKbDc4MXpST2E2a3B6aDFwT2REM1hsdCsy?=
+ =?utf-8?B?b3kvVWpnN0w2NHY3djhCNG9Ea0ptV3VmUHFMRWJsU0FEeXZGa3lLeTdNUWsz?=
+ =?utf-8?B?L0k2R3kxNXZ6NC9IelBycUZaSDZlNVZlRk4vM3NtN0NjWUg1bkxFempZV1o3?=
+ =?utf-8?B?enRCMW5seEduMVNLYzh3WEYxZGlUZlEvd3dHeWZYcjJ0a3dUcnRHTFpaOUFy?=
+ =?utf-8?B?Mjl6alhwZGE3dHg2cGZNYlZTWTBXSGQ0MVdnckZHQWdUWU9mNXRaU0M4NFVv?=
+ =?utf-8?B?R0RJaGpRRkNqNDdBUTZSUXVNVTQvWXBUK1RTdnA0N1FUdTl2TzQ4T3RYc1g0?=
+ =?utf-8?B?eUZ1R1BrSmpUVTZxcnBya0tIRWc4ZFl0aGZRdDJxTm42NE9QTllMY0xMSnZ2?=
+ =?utf-8?B?aFlhamdVdFdwUUJTTGRiU1BXQ1lyTDhCN1dYeGZWSzU0cU84MkpSWEN5b1hV?=
+ =?utf-8?B?SzRoR0ZPam5US0FIR3JXY1lSOE5EZHdIVGZZbGZxd1h6Y0JvUDRyWGEyRE94?=
+ =?utf-8?B?cW92ZENZbFlpZzJyUktFVzlNbnJ0a3ZEaUJEVE1DS3FpeFJXbTJ4Z2NpWWFs?=
+ =?utf-8?B?UDhZaGdhZmNLdDVmdUJxZUpSaWg0QVNJS1lHcXhYZlI2Vm1pVUpQUnArSlM4?=
+ =?utf-8?B?bnluY2dkZFBmSnRZckdCcjNxbTNUMmZicUpjZW0yNHVBVkt5alN4VzRPMXNa?=
+ =?utf-8?B?VldqcEVHZ3dzZmlQeFFBam9JdFhDbEhTMmN3ZStpZzVwdkRsYWJGeWxXSEJV?=
+ =?utf-8?B?S2VUcmJBcElTM01mRzZYTDJzVnY4MXY1QjVHaTVMWU9pTFNkYWJSVC9pekdT?=
+ =?utf-8?B?REhaZ01ia2RySC95WG1CVGF3MEQ3aERvN2RrQWpJWUQvNnNDWTVrMlc2Mzhm?=
+ =?utf-8?B?VVhlcllZSnlrSEQ4d2lQTDJNamVWdkpYMTJjNVdOMEJtZWNON09Ea1VYdlZr?=
+ =?utf-8?B?YnRka285WStqck9wNzV3Z3pUVXNEMVZWemQrQUlReEZmTzBHak1SUkl2TUxZ?=
+ =?utf-8?B?elVTYjE4aXp4ckdFNXFnR2d2aEFPbCsyTmx0cTBIcjVYZGlCWUFtcjlIN2cx?=
+ =?utf-8?B?b0xudnM4NjdnaWxrbjRsc0hSSW9RNVcyckk0UXB6SDdsejNPTk4xdndmQzl5?=
+ =?utf-8?B?UDFzcExBR1NyWDRKemt3Z1Y0dG1CajlXSW9aTnRXdlk0Q1JMNEEvTkVLQ3dl?=
+ =?utf-8?B?Nkw2MTZoRkR2SkhDVnRCSng3M3dNOWN5Znk0VXJUcThMbTVNZ1UvL0ErK3py?=
+ =?utf-8?B?Z2h3VTY0WHA0TUxyUXo0WTU5RHNtUGo2MnhNUmFzalE3SHJnZStKeTZ3ajc4?=
+ =?utf-8?B?YUxoK0dpNlU0aDV6bVRVTk5YMmpuaUJMME1IdTJuVklHaHpnZ044WDdEeFUr?=
+ =?utf-8?B?Z0MzQU42OVNHOWFVSWFXMWhtOTZWa25KR28rK1FHMkVNL3MzU2ttNkF1Q2pp?=
+ =?utf-8?B?NTUwVzk4THNYSm9ucG1QclgzY1AwYkNnTlU4MXltR3AveHpkMmtmaW9mUkRX?=
+ =?utf-8?B?eE0rdXJpWHlSZm1wZzdIN00vakRJQS95ZU1lRGo4RndTY2c2d2M4bXRWT0Q4?=
+ =?utf-8?B?T2tZQnBveVg3eGs5SDd0YklQVlNVNURCdmJrekZrNllpK1BTZW9rVGlseGVV?=
+ =?utf-8?B?ZXdyOUJWdXNFeFdweThVTHZtbXdsakJWcXlHTGo0OU5NSytvUU0wbVFhYnc0?=
+ =?utf-8?Q?JCXc=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs/zh_CN: Add dev-tools/kcov Chinese translation
-To: Haoyang Liu <tttturtleruss@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240423142357.3906-1-tttturtleruss@hust.edu.cn>
-Content-Language: en-US
-From: Alex Shi <seakeel@gmail.com>
-In-Reply-To: <20240423142357.3906-1-tttturtleruss@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR18MB4339.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6035d852-aa9c-4f9f-bc87-08dc6413c4a7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2024 04:05:24.6102
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ETSnHu1310E7fveJs9lBK2uivYOmByo9+GXhcDokSfjEfn3tQ7WxfsMEPp6ESH+VYvwJrNrIJ9MzxyYIxPPUkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR18MB4119
+X-Proofpoint-ORIG-GUID: -VzQHOC1tEcHhOmdMPidkl4LAWYAt4BM
+X-Proofpoint-GUID: -VzQHOC1tEcHhOmdMPidkl4LAWYAt4BM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-24_01,2024-04-23_02,2023-05-22_02
 
-
-
-On 4/23/24 10:23 PM, Haoyang Liu wrote:
-> Translate dev-tools/kcov into Chinese and add it in
-> dev-tools/zh_CN/index.rst.
-> 
-> Signed-off-by: Haoyang Liu <tttturtleruss@hust.edu.cn>
-> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
-> ---
->  .../translations/zh_CN/dev-tools/index.rst    |   2 +-
->  .../translations/zh_CN/dev-tools/kcov.rst     | 359 ++++++++++++++++++
->  2 files changed, 360 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/translations/zh_CN/dev-tools/kcov.rst
-> 
-> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
-> index 51e5b3e724c1..fa900f5beb68 100644
-> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
-> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
-> @@ -22,6 +22,7 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->     sparse
->     gcov
->     kasan
-> +   kcov
->     ubsan
->     kmemleak
->     gdb-kernel-debugging
-> @@ -29,7 +30,6 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->  Todolist:
->  
->   - coccinelle
-> - - kcov
->   - kcsan
->   - kfence
->   - kgdb
-> diff --git a/Documentation/translations/zh_CN/dev-tools/kcov.rst b/Documentation/translations/zh_CN/dev-tools/kcov.rst
-> new file mode 100644
-> index 000000000000..629154df7121
-> --- /dev/null
-> +++ b/Documentation/translations/zh_CN/dev-tools/kcov.rst
-> @@ -0,0 +1,359 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +.. include:: ../disclaimer-zh_CN.rst
-> +
-> +:Original: Documentation/dev-tools/kcov.rst
-> +:Translator: 刘浩阳 Haoyang Liu <tttturtleruss@hust.edu.cn>
-> +
-> +KCOV: 用于模糊测试的代码覆盖率
-> +==============================
-> +
-> +KCOV 以一种适用于覆盖率引导的模糊测试的形式收集和暴露内核代码覆盖率信息。
-> +一个正在运行的内核的覆盖率数据可以通过 ``kcov`` 调试文件导出。覆盖率的收集是基
-> +于任务启用的，因此 KCOV 可以精确捕获单个系统调用的覆盖率。
-> +
-> +要注意的是 KCOV 不是为了收集尽可能多的覆盖率数据。而是为了收集相对稳定的覆盖率
-> +，这是系统调用输入的函数。为了完成这个目标，它不收集软硬中断的覆盖率（除非移除
-> +覆盖率收集被启用，见下文）以及内核中固有的不确定部分的覆盖率（如调度器，锁定）
-> +
-> +除了收集代码覆盖率，KCOV 还收集操作数比较的覆盖率。见 "操作数比较收集" 一节
-> +查看详细信息。
-> +
-> +除了从系统调用处理器收集覆盖率数据，KCOV 还从后台内核或软中断任务中执行的内核
-> +被标注的部分收集覆盖率。见 "远程覆盖率收集" 一节查看详细信息。
-> +
-> +先决条件
-> +--------
-> +
-> +KCOV 依赖编译器插桩，要求 GCC 6.1.0 及更高版本或者内核支持的任意版本的 Clang。
-> +
-> +收集操作数比较的覆盖率需要 GCC 8+ 或者 Clang。
-> +
-> +为了启用 KCOV，需要使用如下参数配置内核::
-> +
-> +        CONFIG_KCOV=y
-> +
-> +为了启用操作数比较覆盖率的收集，使用如下参数::
-
-“比较操作数” 看起来更好一些， 而不是"操作数比较"
-
-> +
-> +    CONFIG_KCOV_ENABLE_COMPARISONS=y
-> +
-> +覆盖率数据只会在调试文件系统被挂载后才可以获取::
-> +
-> +        mount -t debugfs none /sys/kernel/debug
-> +
-> +覆盖率收集
-> +----------
-> +
-> +下面的程序演示了如何使用 KCOV 在一个测试程序中收集单个系统调用的覆盖率：
-> +
-> +.. code-block:: c
-> +
-> +    #include <stdio.h>
-> +    #include <stddef.h>
-> +    #include <stdint.h>
-> +    #include <stdlib.h>
-> +    #include <sys/types.h>
-> +    #include <sys/stat.h>
-> +    #include <sys/ioctl.h>
-> +    #include <sys/mman.h>
-> +    #include <unistd.h>
-> +    #include <fcntl.h>
-> +    #include <linux/types.h>
-> +
-> +    #define KCOV_INIT_TRACE			_IOR('c', 1, unsigned long)
-> +    #define KCOV_ENABLE			_IO('c', 100)
-> +    #define KCOV_DISABLE			_IO('c', 101)
-> +    #define COVER_SIZE			(64<<10)
-> +
-> +    #define KCOV_TRACE_PC  0
-> +    #define KCOV_TRACE_CMP 1
-> +
-> +    int main(int argc, char **argv)
-> +    {
-> +	int fd;
-> +	unsigned long *cover, n, i;
-> +
-> +	/* 单个文件描述符允许
-> +	 * 在单线程上收集覆盖率。
-> +	 */
-> +	fd = open("/sys/kernel/debug/kcov", O_RDWR);
-> +	if (fd == -1)
-> +		perror("open"), exit(1);
-> +	/* 设置跟踪模式和跟踪大小。 */
-> +	if (ioctl(fd, KCOV_INIT_TRACE, COVER_SIZE))
-> +		perror("ioctl"), exit(1);
-> +	/* 映射内核空间和用户空间共享的缓冲区。 */
-> +	cover = (unsigned long*)mmap(NULL, COVER_SIZE * sizeof(unsigned long),
-> +				     PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +	if ((void*)cover == MAP_FAILED)
-> +		perror("mmap"), exit(1);
-> +	/* 在当前线程中启用覆盖率收集。 */
-> +	if (ioctl(fd, KCOV_ENABLE, KCOV_TRACE_PC))
-> +		perror("ioctl"), exit(1);
-> +	/* 在调用 ioctl() 之后重置覆盖率。 */
-> +	__atomic_store_n(&cover[0], 0, __ATOMIC_RELAXED);
-> +	/* 调用目标系统调用。 */
-> +	read(-1, NULL, 0);
-> +	/* 读取收集到的 PC 的数目。 */
-> +	n = __atomic_load_n(&cover[0], __ATOMIC_RELAXED);
-> +	for (i = 0; i < n; i++)
-> +		printf("0x%lx\n", cover[i + 1]);
-> +	/* 在当前线程上禁用覆盖率收集。在这之后
-> +	 * 可以在其他线程上收集覆盖率
-> +	 */
-> +	if (ioctl(fd, KCOV_DISABLE, 0))
-> +		perror("ioctl"), exit(1);
-> +	/* 释放资源 */
-> +	if (munmap(cover, COVER_SIZE * sizeof(unsigned long)))
-> +		perror("munmap"), exit(1);
-> +	if (close(fd))
-> +		perror("close"), exit(1);
-> +	return 0;
-> +    }
-> +
-> +在使用 ``addr2line`` 传输后，程序输出应该如下所示::
-> +
-> +    SyS_read
-> +    fs/read_write.c:562
-> +    __fdget_pos
-> +    fs/file.c:774
-> +    __fget_light
-> +    fs/file.c:746
-> +    __fget_light
-> +    fs/file.c:750
-> +    __fget_light
-> +    fs/file.c:760
-> +    __fdget_pos
-> +    fs/file.c:784
-> +    SyS_read
-> +    fs/read_write.c:562
-> +
-> +如果一个程序需要从多个线程收集覆盖率（独立地）。那么每个线程都需要单独打开
-> +``/sys/kernel/debug/kcov``。
-> +
-> +接口的细粒度允许高效的创建测试进程。即，一个父进程打开了
-> +``/sys/kernel/debug/kcov``，启用了追踪模式，映射了覆盖率缓冲区，然后在一个循
-> +环中创建了子进程。这个子进程只需要启用覆盖率收集即可（当一个线程退出时将自动禁
-> +用覆盖率收集）。
-> +
-> +操作数比较收集
-
-ditto 
-
-others LGTM
-
-Reviewed-by: Alex Shi <alexs@kernel.org>
-
-> +--------------
-> +
-> +操作数比较收集和覆盖率收集类似：
-> +
-> +.. code-block:: c
-> +
-> +    /* 包含和上文一样的头文件和宏定义。 */
-> +
-> +    /* 每次记录的 64 位字的数量。 */
-> +    #define KCOV_WORDS_PER_CMP 4
-> +
-> +    /*
-> +     * 收集的比较种类的格式。
-> +     *
-> +     * 0 比特表示是否是一个编译时常量。
-> +     * 1 & 2 比特包含参数大小的 log2 值，最大 8 字节。
-> +     */
-> +
-> +    #define KCOV_CMP_CONST          (1 << 0)
-> +    #define KCOV_CMP_SIZE(n)        ((n) << 1)
-> +    #define KCOV_CMP_MASK           KCOV_CMP_SIZE(3)
-> +
-> +    int main(int argc, char **argv)
-> +    {
-> +	int fd;
-> +	uint64_t *cover, type, arg1, arg2, is_const, size;
-> +	unsigned long n, i;
-> +
-> +	fd = open("/sys/kernel/debug/kcov", O_RDWR);
-> +	if (fd == -1)
-> +		perror("open"), exit(1);
-> +	if (ioctl(fd, KCOV_INIT_TRACE, COVER_SIZE))
-> +		perror("ioctl"), exit(1);
-> +	/*
-> +	* 注意缓冲区指针的类型是 uint64_t*，因为所有的
-> +	* 比较操作数都被提升为 uint64_t 类型。
-> +	*/
-> +	cover = (uint64_t *)mmap(NULL, COVER_SIZE * sizeof(unsigned long),
-> +				     PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +	if ((void*)cover == MAP_FAILED)
-> +		perror("mmap"), exit(1);
-> +	/* 注意这里是 KCOV_TRACE_CMP 而不是 KCOV_TRACE_PC。 */
-> +	if (ioctl(fd, KCOV_ENABLE, KCOV_TRACE_CMP))
-> +		perror("ioctl"), exit(1);
-> +	__atomic_store_n(&cover[0], 0, __ATOMIC_RELAXED);
-> +	read(-1, NULL, 0);
-> +	/* 读取收集到的比较操作数的数量。 */
-> +	n = __atomic_load_n(&cover[0], __ATOMIC_RELAXED);
-> +	for (i = 0; i < n; i++) {
-> +		uint64_t ip;
-> +
-> +		type = cover[i * KCOV_WORDS_PER_CMP + 1];
-> +		/* arg1 和 arg2 - 比较的两个操作数。 */
-> +		arg1 = cover[i * KCOV_WORDS_PER_CMP + 2];
-> +		arg2 = cover[i * KCOV_WORDS_PER_CMP + 3];
-> +		/* ip - 调用者的地址。 */
-> +		ip = cover[i * KCOV_WORDS_PER_CMP + 4];
-> +		/* 操作数的大小。 */
-> +		size = 1 << ((type & KCOV_CMP_MASK) >> 1);
-> +		/* is_const - 当操作数是一个编译时常量时为真。*/
-> +		is_const = type & KCOV_CMP_CONST;
-> +		printf("ip: 0x%lx type: 0x%lx, arg1: 0x%lx, arg2: 0x%lx, "
-> +			"size: %lu, %s\n",
-> +			ip, type, arg1, arg2, size,
-> +		is_const ? "const" : "non-const");
-> +	}
-> +	if (ioctl(fd, KCOV_DISABLE, 0))
-> +		perror("ioctl"), exit(1);
-> +	/* 释放资源。 */
-> +	if (munmap(cover, COVER_SIZE * sizeof(unsigned long)))
-> +		perror("munmap"), exit(1);
-> +	if (close(fd))
-> +		perror("close"), exit(1);
-> +	return 0;
-> +    }
-> +
-> +注意 KCOV 的模式（代码覆盖率收集或操作数比较收集）是互斥的。
-> +
-> +远程覆盖率收集
-> +--------------
-> +
-> +除了从用户空间进程发布的系统调用句柄收集覆盖率数据以外，KCOV 也可以从部分在其
-> +他上下文中执行的内核中收集覆盖率 - 称为“远程”覆盖率。
-> +
-> +使用 KCOV 收集远程覆盖率要求：
-> +
-> +1. 修改内核源码并使用 ``kcov_remote_start`` 和 ``kcov_remote_stop`` 来标注要收集
-> +   覆盖率的代码片段。
-> +
-> +2. 在用户空间的收集覆盖率的进程应使用 ``KCOV_REMOTE_ENABLE`` 而不是 ``KCOV_ENABLE``。
-> +
-> +``kcov_remote_start`` 和 ``kcov_remote_stop`` 的标注以及 ``KCOV_REMOTE_ENABLE``
-> +ioctl 都接受可以识别特定覆盖率收集片段的句柄。句柄的使用方式取决于匹配代码片段执
-> +行的上下文。
-> +
-> +KCOV 支持在如下上下文中收集远程覆盖率：
-> +
-> +1. 全局内核后台任务。这些任务是内核启动时创建的数量有限的实例（如，每一个
-> +   USB HCD 产生一个 USB ``hub_event`` 工作器）。
-> +
-> +2. 局部内核后台任务。这些任务通常是由于用户空间进程与某些内核接口进行交互时产
-> +   生的，并且通常在进程退出时会被停止（如，vhost 工作器）。
-> +
-> +3. 软中断。
-> +
-> +对于 #1 和 #3，必须选择一个独特的全局句柄并将其传递给对应的
-> +``kcov_remote_start`` 调用。一个用户空间进程必须将该句柄存储在
-> +``kcov_remote_arg`` 结构体的 ``handle`` 数组字段中并将其传递给
-> +``KCOV_REMOTE_ENABLE``。这会将使用的 KCOV 设备附加到由此句柄引用的代码片段。多个全局
-> +句柄标识的不同代码片段可以一次性传递。
-> +
-> +对于 #2，用户空间进程必须通过 ``kcov_remote_arg`` 结构体的 ``common_handle`` 字段
-> +传递一个非零句柄。这个通用句柄将会被保存在当前 ``task_struct`` 结构体的
-> +``kcov_handle`` 字段中并且需要通过自定义内核代码的修改来传递给新创建的本地任务
-> +。这些任务需要在 ``kcov_remote_start`` 和 ``kcov_remote_stop`` 标注中依次使用传递过来的
-> +句柄。
-> +
-> +KCOV 对全局句柄和通用句柄均遵循一个预定义的格式。每一个句柄都是一个 ``u64`` 整形
-> +。当前，只有最高位和低四位字节被使用。第 4-7 字节是保留位并且值必须为 0。
-> +
-> +对于全局句柄，最高位的字节表示该句柄属于的子系统的标识。比如，KCOV 使用 ``1``
-> +表示 USB 子系统类型。全局句柄的低 4 字节表示子系统中任务实例的标识。比如，每一
-> +个 ``hub_event`` 工作器使用 USB 总线号作为任务实例的标识。
-> +
-> +对于通用句柄，使用一个保留值 ``0`` 作为子系统标识，因为这些句柄不属于一个特定
-> +的子系统。通用句柄的低 4 字节用于识别有用户进程生成的所有本地句柄的集合实例，
-> +该进程将通用句柄传递给 ``KCOV_REMOTE_ENABLE``。
-> +
-> +实际上，如果只从系统中的单个用户空间进程收集覆盖率，那么可以使用任意值作为通用
-> +句柄的实例标识。然而，如果通用句柄被多个用户空间进程使用，每个进程必须使用唯一
-> +的实例标识。一个选择是使用进程标识作为通用句柄实例的标识。
-> +
-> +下面的程序演示了如何使用 KCOV 从一个由进程产生的本地任务和处理 USB 总线的全局
-> +任务 #1 收集覆盖率：
-> +
-> +.. code-block:: c
-> +
-> +    /* 包含和上文一样的头文件和宏定义。 */
-> +
-> +    struct kcov_remote_arg {
-> +	__u32		trace_mode;
-> +	__u32		area_size;
-> +	__u32		num_handles;
-> +	__aligned_u64	common_handle;
-> +	__aligned_u64	handles[0];
-> +    };
-> +
-> +    #define KCOV_INIT_TRACE			_IOR('c', 1, unsigned long)
-> +    #define KCOV_DISABLE			_IO('c', 101)
-> +    #define KCOV_REMOTE_ENABLE		_IOW('c', 102, struct kcov_remote_arg)
-> +
-> +    #define COVER_SIZE	(64 << 10)
-> +
-> +    #define KCOV_TRACE_PC	0
-> +
-> +    #define KCOV_SUBSYSTEM_COMMON	(0x00ull << 56)
-> +    #define KCOV_SUBSYSTEM_USB	(0x01ull << 56)
-> +
-> +    #define KCOV_SUBSYSTEM_MASK	(0xffull << 56)
-> +    #define KCOV_INSTANCE_MASK	(0xffffffffull)
-> +
-> +    static inline __u64 kcov_remote_handle(__u64 subsys, __u64 inst)
-> +    {
-> +	if (subsys & ~KCOV_SUBSYSTEM_MASK || inst & ~KCOV_INSTANCE_MASK)
-> +		return 0;
-> +	return subsys | inst;
-> +    }
-> +
-> +    #define KCOV_COMMON_ID	0x42
-> +    #define KCOV_USB_BUS_NUM	1
-> +
-> +    int main(int argc, char **argv)
-> +    {
-> +	int fd;
-> +	unsigned long *cover, n, i;
-> +	struct kcov_remote_arg *arg;
-> +
-> +	fd = open("/sys/kernel/debug/kcov", O_RDWR);
-> +	if (fd == -1)
-> +		perror("open"), exit(1);
-> +	if (ioctl(fd, KCOV_INIT_TRACE, COVER_SIZE))
-> +		perror("ioctl"), exit(1);
-> +	cover = (unsigned long*)mmap(NULL, COVER_SIZE * sizeof(unsigned long),
-> +				     PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +	if ((void*)cover == MAP_FAILED)
-> +		perror("mmap"), exit(1);
-> +
-> +	/* 通过通用句柄和 USB 总线 #1 启用代码覆盖率收集。 */
-> +	arg = calloc(1, sizeof(*arg) + sizeof(uint64_t));
-> +	if (!arg)
-> +		perror("calloc"), exit(1);
-> +	arg->trace_mode = KCOV_TRACE_PC;
-> +	arg->area_size = COVER_SIZE;
-> +	arg->num_handles = 1;
-> +	arg->common_handle = kcov_remote_handle(KCOV_SUBSYSTEM_COMMON,
-> +							KCOV_COMMON_ID);
-> +	arg->handles[0] = kcov_remote_handle(KCOV_SUBSYSTEM_USB,
-> +						KCOV_USB_BUS_NUM);
-> +	if (ioctl(fd, KCOV_REMOTE_ENABLE, arg))
-> +		perror("ioctl"), free(arg), exit(1);
-> +	free(arg);
-> +
-> +	/*
-> +	 * 在这里用户需要触发执行一个内核代码段
-> +	 * 该代码段要么使用通用句柄标识
-> +	 * 要么触发了一些 USB 总线 #1 上的一些活动。
-> +	 */
-> +	sleep(2);
-> +
-> +	n = __atomic_load_n(&cover[0], __ATOMIC_RELAXED);
-> +	for (i = 0; i < n; i++)
-> +		printf("0x%lx\n", cover[i + 1]);
-> +	if (ioctl(fd, KCOV_DISABLE, 0))
-> +		perror("ioctl"), exit(1);
-> +	if (munmap(cover, COVER_SIZE * sizeof(unsigned long)))
-> +		perror("munmap"), exit(1);
-> +	if (close(fd))
-> +		perror("close"), exit(1);
-> +	return 0;
-> +    }
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU3UgSHVpIDxzdWh1aUBu
+ZnNjaGluYS5jb20+DQo+IFNlbnQ6IFdlZG5lc2RheSwgQXByaWwgMjQsIDIwMjQgNzo1NyBBTQ0K
+PiBUbzogU3VuaWwgS292dnVyaSBHb3V0aGFtIDxzZ291dGhhbUBtYXJ2ZWxsLmNvbT47IExpbnUg
+Q2hlcmlhbg0KPiA8bGNoZXJpYW5AbWFydmVsbC5jb20+OyBHZWV0aGFzb3dqYW55YSBBa3VsYSA8
+Z2FrdWxhQG1hcnZlbGwuY29tPjsNCj4gSmVyaW4gSmFjb2IgPGplcmluakBtYXJ2ZWxsLmNvbT47
+IEhhcmlwcmFzYWQgS2VsYW0NCj4gPGhrZWxhbUBtYXJ2ZWxsLmNvbT47IFN1YmJhcmF5YSBTdW5k
+ZWVwIEJoYXR0YQ0KPiA8c2JoYXR0YUBtYXJ2ZWxsLmNvbT47IGRhdmVtQGRhdmVtbG9mdC5uZXQ7
+IGVkdW1hemV0QGdvb2dsZS5jb207DQo+IGt1YmFAa2VybmVsLm9yZzsgcGFiZW5pQHJlZGhhdC5j
+b207IG5hdGhhbkBrZXJuZWwub3JnOw0KPiBuZGVzYXVsbmllcnNAZ29vZ2xlLmNvbTsgbW9yYm9A
+Z29vZ2xlLmNvbTsganVzdGluc3RpdHRAZ29vZ2xlLmNvbQ0KPiBDYzogU3UgSHVpIDxzdWh1aUBu
+ZnNjaGluYS5jb20+OyBTdW1hbiBHaG9zaCA8c3VtYW5nQG1hcnZlbGwuY29tPjsNCj4gbmV0ZGV2
+QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGx2bUBsaXN0
+cy5saW51eC5kZXY7DQo+IGtlcm5lbC1qYW5pdG9yc0B2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVj
+dDogW0VYVEVSTkFMXSBbUEFUQ0ggbmV0XSBvY3Rlb250eDItYWY6IGZpeCB0aGUgZG91YmxlIGZy
+ZWUgaW4NCj4gcnZ1X25wY19mcmVlbWVtKCkNCj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiBDbGFuZyBzdGF0
+aWMgY2hlY2tlcihzY2FuLWJ1aWxkKSB3YXJuaW5n77yaDQo+IGRyaXZlcnMvbmV0L2V0aGVybmV0
+L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2dV9ucGMuYzpsaW5lIDIxODQsIGNvbHVtbiAyDQo+IEF0
+dGVtcHQgdG8gZnJlZSByZWxlYXNlZCBtZW1vcnkuDQo+IA0KPiBucGNfbWNhbV9yc3Jjc19kZWlu
+aXQoKSBoYXMgcmVsZWFzZWQgJ21jYW0tPmNvdW50ZXJzLmJtYXAnLiBEZWxldGVkIHRoaXMNCj4g
+cmVkdW5kYW50IGtmcmVlKCkgdG8gZml4IHRoaXMgZG91YmxlIGZyZWUgcHJvYmxlbS4NCj4gDQo+
+IEZpeGVzOiBkZDc4NDI4Nzg2MzMgKCJvY3Rlb250eDItYWY6IEFkZCBuZXcgZGV2bGluayBwYXJh
+bSB0byBjb25maWd1cmUNCj4gbWF4aW11bSB1c2FibGUgTklYIGJsb2NrIExGcyIpDQo+IFNpZ25l
+ZC1vZmYtYnk6IFN1IEh1aSA8c3VodWlAbmZzY2hpbmEuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMv
+bmV0L2V0aGVybmV0L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2dV9ucGMuYyB8IDEgLQ0KPiAgMSBm
+aWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25l
+dC9ldGhlcm5ldC9tYXJ2ZWxsL29jdGVvbnR4Mi9hZi9ydnVfbnBjLmMNCj4gYi9kcml2ZXJzL25l
+dC9ldGhlcm5ldC9tYXJ2ZWxsL29jdGVvbnR4Mi9hZi9ydnVfbnBjLmMNCj4gaW5kZXggYmU3MDlm
+ODNmMzMxLi5lOGI3M2I5ZDc1ZTMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbmV0L2V0aGVybmV0
+L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2dV9ucGMuYw0KPiArKysgYi9kcml2ZXJzL25ldC9ldGhl
+cm5ldC9tYXJ2ZWxsL29jdGVvbnR4Mi9hZi9ydnVfbnBjLmMNCj4gQEAgLTIxODEsNyArMjE4MSw2
+IEBAIHZvaWQgcnZ1X25wY19mcmVlbWVtKHN0cnVjdCBydnUgKnJ2dSkNCj4gDQo+ICAJa2ZyZWUo
+cGtpbmQtPnJzcmMuYm1hcCk7DQo+ICAJbnBjX21jYW1fcnNyY3NfZGVpbml0KHJ2dSk7DQo+IC0J
+a2ZyZWUobWNhbS0+Y291bnRlcnMuYm1hcCk7DQo+ICAJaWYgKHJ2dS0+a3B1X3ByZmxfYWRkcikN
+Cj4gIAkJaW91bm1hcChydnUtPmtwdV9wcmZsX2FkZHIpOw0KPiAgCWVsc2UNCj4gLS0NCj4gMi4z
+MC4yDQpSZXZpZXdlZC1ieTogR2VldGhhIHNvd2phbnlhIDxnYWt1bGFAbWFydmVsbC5jb20+DQoN
+Cg==
