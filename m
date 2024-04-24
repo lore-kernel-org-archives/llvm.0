@@ -1,244 +1,221 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA7F1F5E6;
-	Wed, 24 Apr 2024 04:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713931801; cv=none; b=UOoc15IY90YFwH2I2Xpln5+3f1XmHLR1Z+ofl33cQSUDrwyiLRGXLYSMA7wfsD2+klTDI9QXShF7CTqqAwaHEvw0fHn11uqh5ky/q6BZxyoAfAfcQnQSvUxMBYaPDXg7Suz8FSHOtahRsWnlN770YqWHUs3SkNCVPhVa33MFbx8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713931801; c=relaxed/simple;
-	bh=oyd/enotYtq58AEjmjGTsRumDDWbIaXPxVvzysfMTZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kzA1TAa+zMB58c1Ii7w6v+2S650RnJQYtAWzGe+3jOAarUpdtopZXcg5yGX3gArXTHr7/rBgFmU15HnEP0cLjBgoYRqcaSlpY/2WTDU5yt3Q3zPPIgj/IspC5v/kBFXVlhp5GPG1FEF9LTWZnc81oUqeWa6aUn1ThVZ0F/07RkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f/Ow9sgX; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEDA328DB
+	for <llvm@lists.linux.dev>; Wed, 24 Apr 2024 04:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.156.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713934659; cv=fail; b=PNL2Uswojc57sj1evjj3fr5YyDVLpR/S4yrzd7iZ61wSGwhERuCqHz5ik/RkwuvCWE6YXvWhLXP8kkDZExKfhkE0JZXHYi4yASQYR+QpZVi5ZHwZuU+GZpmAbgjwf8IjCiNxlHnv/lu+iS7lypm2jG4Ork469XfNpwBQWNjboQQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713934659; c=relaxed/simple;
+	bh=JVrKW4bNdLQneX2vQUkBOzxfHOQ9y33I48I+zQfq2i4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ldtY/lVWxhb8ZkWtmgU3OQHRP+Wk8opz1J5MzY/3JCsU3+rNXiPPSWw8SShb75VTdjY/xGOaFQ0c35gV92uVRgAucHyfvoBrYM3SWpSJQPx59bbCAdc8OM/GUQYjX5WUskwn+cu0sB+YMGP8UVXBdlsx7uGBWH30//wBUtiqgmU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=KBAeczAP; arc=fail smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f/Ow9sgX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713931799; x=1745467799;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oyd/enotYtq58AEjmjGTsRumDDWbIaXPxVvzysfMTZw=;
-  b=f/Ow9sgXcshrlW/2CtReqJPUorhaIe3P+06Ei+xPeFrzGE2Ud7eUI6E7
-   rv/f/diwvCCMAB+A1IGepf+u3w4JuPp9hJ56BYnAH2x0pwI54YDjK3LqJ
-   LubgbQ6sWoRkXd/XiX6VZpidXhVtgJqp2Cu1DRZCDuUXWpD5l/uE2rdQY
-   vqyRWeExsZ+OFWkgkTI5shC9fOvPBrHUB7Rdqwhb9jg/mVD6NLjT+6yHR
-   SK8BJ4CjGvjKmGqz5/e6xr5ZHqo1TVWOreL/5g7FerhpAykmvFOhqPnVL
-   FSZmLHiZxXPlwJgpnTRku4BA6zBsEY9zQAHpYz5FT8k6rbOkFcXZWkksR
-   g==;
-X-CSE-ConnectionGUID: GKVA5n9jT761IU/d4SFJ9Q==
-X-CSE-MsgGUID: 75pa1SCIQySNXW2kjZg8jg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9662688"
-X-IronPort-AV: E=Sophos;i="6.07,225,1708416000"; 
-   d="scan'208";a="9662688"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 21:09:59 -0700
-X-CSE-ConnectionGUID: ANrqot/tRsa+9KD0PF5Z3g==
-X-CSE-MsgGUID: kj7gW2WGTRuoNoQl8Z4mQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,225,1708416000"; 
-   d="scan'208";a="55540102"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 23 Apr 2024 21:09:58 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rzTxC-0000qW-1f;
-	Wed, 24 Apr 2024 04:09:54 +0000
-Date: Wed, 24 Apr 2024 12:09:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ast-bpf:arena_lock 4/6] kernel/bpf/verifier.c:19612:38: warning:
- unused variable 'new_prog'
-Message-ID: <202404241142.tjyl6oGE-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="KBAeczAP"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43O0qaXl022561;
+	Tue, 23 Apr 2024 21:57:30 -0700
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2169.outbound.protection.outlook.com [104.47.73.169])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3xmd7gmh31-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Apr 2024 21:57:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ngzukK3OHozIxrYSZ66pZAa6TSNM0njXMC+M19c9qG5cOdXnHKO/1t8Sz7N0ZO2daZZ8X4azcerRXlF3yO3FiciP0kw3VppTTb70zVU8WIzfpGSe601uHE4Z30rvVl+IdJ1b+ZgElmqImEYiZJp/SoQ0g5VEyWIhfEynS92oeS3g9CKgvUNhfMx2qqThItHsWhS3sNWIDZH4dlYuPb4cLa5J7RoDEvreLw+5Pmx2pWNiKS0E7qH+e85YJLX9yKpAX9GgEf+KG1hVmpo9N6KxVWGD9xBPf2KBOpjegBDkNrq6LhtGuvJOkLWTEgHQq/i7JMvm5+PkJUnzhSg4EBrXYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JVrKW4bNdLQneX2vQUkBOzxfHOQ9y33I48I+zQfq2i4=;
+ b=OoqTuKfkTwNrf3aHsN0T9fe9hmoS2CjR1aGTx+EiZ7IQYPiLZP4o69cFpNMnUMOfM4OLIpg+ElmoZP/WKs8pfcE9NVF/QKVhB0TvkPVeRqvw8XM1He55GKkO63MB8k4NfSuc4L2iDgcFH1gxCsqEHPQRHvxm2QlNI5kYUoVOY49PfFTbltg9BfMOIhgAyUVGWL+ldrgTQ9GCCz3AXRn3eA7xkEXGBVHRZpfJvbwLAOjxbX05/DJnP9H1Bzzyzyc1GmY/s5G2i8pX3oThn3+hqgnuw/XcPs9rLVak2oyLffFtfUBL8bb9g2VVyGDrmBnZ+YmhMLMhxln7m+LJrz9xlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JVrKW4bNdLQneX2vQUkBOzxfHOQ9y33I48I+zQfq2i4=;
+ b=KBAeczAP60bFC4ixJkjyXyJTs53vbKftrfN8EoCP+h/wN0fVCyq3XeOUNU7yAX5gz56xde9qDJI9h2l3ZDh15cPPOO63zuXTwcz/SXQkV8eTwRWyIHzVOPjUU7dHfBuc7LOef2X/J2aeEBhN7UdA4MV30FZmYMzzn4BWMtL6Nnk=
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com (2603:10b6:510:ea::22)
+ by CH3PR18MB5548.namprd18.prod.outlook.com (2603:10b6:610:1a8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Wed, 24 Apr
+ 2024 04:57:26 +0000
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::eeed:4f:2561:f916]) by PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::eeed:4f:2561:f916%5]) with mapi id 15.20.7452.049; Wed, 24 Apr 2024
+ 04:57:25 +0000
+From: Hariprasad Kelam <hkelam@marvell.com>
+To: Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>,
+        Su Hui
+	<suhui@nfschina.com>
+CC: Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Linu Cherian
+	<lcherian@marvell.com>,
+        Geethasowjanya Akula <gakula@marvell.com>,
+        Jerin
+ Jacob <jerinj@marvell.com>,
+        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com"
+	<edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "nathan@kernel.org"
+	<nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "morbo@google.com" <morbo@google.com>,
+        "justinstitt@google.com"
+	<justinstitt@google.com>,
+        Suman Ghosh <sumang@marvell.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: ] Re: [PATCH net] octeontx2-af: fix the double free in
+ rvu_npc_freemem()
+Thread-Topic: ] Re: [PATCH net] octeontx2-af: fix the double free in
+ rvu_npc_freemem()
+Thread-Index: AQHalgPm/eDubODqs0aQDZSekpMRQA==
+Date: Wed, 24 Apr 2024 04:57:25 +0000
+Message-ID: 
+ <PH0PR18MB4474BFBF06C699039D669D2ADE102@PH0PR18MB4474.namprd18.prod.outlook.com>
+References: <20240424022724.144587-1-suhui@nfschina.com>
+ <CAH-L+nMUhn0n=RmDTi0_5iXAsP=tkr-AbwnYoCnQ+_Q9apW98w@mail.gmail.com>
+In-Reply-To: 
+ <CAH-L+nMUhn0n=RmDTi0_5iXAsP=tkr-AbwnYoCnQ+_Q9apW98w@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR18MB4474:EE_|CH3PR18MB5548:EE_
+x-ms-office365-filtering-correlation-id: 2a1afc4e-67e7-462e-2e46-08dc641b08d2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ =?utf-8?B?MXVaL0ZhakNKdVdWb0Raa2FlelhYMFgxNFdiazNINjJ2aWN3dTJHaGFJSHVR?=
+ =?utf-8?B?cC95N3BxUVJ6S2dXZDV1SklZbHRMa0xTZE5mK3FvTExuR21hOHFQOEpRdytN?=
+ =?utf-8?B?cndycXQzK3NTc3RabmY3NjRUL09hQk9yUmdldmJ0M0tvUlNRd2xha0Rhb1Uw?=
+ =?utf-8?B?eGRBOThOTmRHdEJTUEtkMUp1VjZ2SGFMR1BITWN5cFhBSmR4emdoRlY5MVE5?=
+ =?utf-8?B?UnVVZmhWQlFVdVJqMDUwa2xqWEVja2JUUU1FYVRYK1hxcDA2dGZ3MjBOejBK?=
+ =?utf-8?B?MTZpZ2VoeW1YVFZNUEtrRTVzb0RSZGJXZjBuaTAzMVFwbUtLcVIwUks5SUh5?=
+ =?utf-8?B?bFB2WXJkMFV3N01IKzZQb1owWEZacVMzME0vMEh3MmYwZVdRcWhtRklxMTBl?=
+ =?utf-8?B?N1FDNnBjL3l6cURub0U0d1dyZGVUdjF2bC9jUWlreUNjaXVXekpvKzFubmhI?=
+ =?utf-8?B?ai9BSmJ4ZURkdW1wUm4vRlViWUZiam43ZllHYVJBakwyZHVlbmppMlJid2xL?=
+ =?utf-8?B?M0FoVkVTd01FSkdsTHNibFJER2VkK3JzN2NxeFlVd1ltaDZ5N3F4U1NnN2Zn?=
+ =?utf-8?B?YUxaTUhZMHlSZEJIdU9HWnE3MmloUllacHA1ZWJPSUhSVEdwVFc2T0Q5MkI1?=
+ =?utf-8?B?dGRiQUlHWU9IbEI5SmNDOWZITTVsOGEwOGFvYVk3cDVvQ1dzNjhpeHJrajdk?=
+ =?utf-8?B?V3JUcEFxSWNxa3hObloxbFpjQ3RoZTg2b3RhQk1aa2s0MlBEeWo5eENFTkJO?=
+ =?utf-8?B?ZnhnbjRzRkhPbTlIMzlwd091SEg5amdEdC9VOXNQMzNCbmR0Yi9rK0lpSzNr?=
+ =?utf-8?B?R1hleWlQUDJvZVdvNmNyaThWdDZ0L3lJakhSSDlxdHhma2VmQmw4bmpHb0d3?=
+ =?utf-8?B?OGhMbzF3MGpVWTFqSnFUeFJIaXJCS3BGcjQ3TTVxamppMmJaVEhNc3lIdlpG?=
+ =?utf-8?B?VEx6NjFGTEpFNkNWTkZIcW1zZ3czZkwwSjM1MkJIb0JndGdZK1lndE91bzFr?=
+ =?utf-8?B?NEJsS1hONE1Odk1NREJUVU5ubG1qVWhwUTY4bzBiT01QNzlsRXZTSk9Ta2Ra?=
+ =?utf-8?B?VnRpd1d1eVNYQ3ZOZ1V5MDB1aGlNajlqVmc4SXo3QlBHbnJLQUtNcjVvMDhD?=
+ =?utf-8?B?ZGNWT1hOeEZyZ1ErbE5MYnh3blJYSWozdUFnYlhZbld6TC9hWVYvc0dQcTV4?=
+ =?utf-8?B?YjZKdVFJWVJwVXRoT09PTThFekgxMmY5cEZxcFprajJGazNTYzVib2Nvd1Jx?=
+ =?utf-8?B?djNMRVRrZ2tvL21RcU5YZjZnMldzNENiQVN0ZHdkR0pSelZlQ1hkcDcvTzFT?=
+ =?utf-8?B?clRoM0svUlEyY1VsL25UYnkxUzJ2ZUlDZUJ1TUsrRHJGWWQzcTk1ODJ3d2dj?=
+ =?utf-8?B?RUtZWFRKckpsM2VJUlM3Y3lnaHdzYW0zdzRVeUJnaHpKSG0yS2xOK0UrMUZE?=
+ =?utf-8?B?Qjl4c3RHRW50V3RCdjdLb0NHN05jcW9jRVhnU2lqZlNkSFhTZjhQWTcwR2Z4?=
+ =?utf-8?B?UCtDdTh0MUhMMVE4MVgxWlpTVUc2T2hRYVIxVzdJRGxpaUVQektZY0hiSXRv?=
+ =?utf-8?B?MDZWbGZsbjJUZjlGVjN3cUpqcmp6TndERUZPR1JzaGRuYVhESGlMUEQxSytD?=
+ =?utf-8?B?ZDNJaUZDK0F2TXhucDNSK2pxYWlVQnlCbDBmbHFKK3RJdldHaTRjdk90ZGhq?=
+ =?utf-8?B?OVBlYUhldk5KRml6K25Yd1BMQmFKSlJ2OG1Ub3VQcWtsTEJYaFJvaE5KZWZH?=
+ =?utf-8?B?K0tjNlVzaEJpU3p6dGlwOE9PSnlMQ2sxdFZ4VVpFOURKN1JQWDVGWS9PdWJK?=
+ =?utf-8?B?cXpBVHc4Ylk1YjdGUDFOZz09?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR18MB4474.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005)(7416005)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?MDE1cnlaL2RodjBFa3lHVXhGZjZnR080ZzJCQXJad0ZwZ2dTRDB5Si9IOWJI?=
+ =?utf-8?B?ZWxYbHNMcnJoNzBmS3VPbXRsU3JFTEs0enZNcW5nUFVQMUYvcmZSMHFrSVRq?=
+ =?utf-8?B?UnptbFV4bExkNHRkV0F0QTVzdTY1d0czczQ1U1hYNGZaaXZBeVlWNmxXWnor?=
+ =?utf-8?B?YzNaZjN6UGtFV2pITHQxQ0lRbDR0a1k4eTJZdWZ5eXFuKzdvK0EyU05vK0xY?=
+ =?utf-8?B?ZEk1TGdGMCt4RG1JQ2V3eGFpSENzRGlXejJnamIrcE5NcDFxSHo5b2J1cmlD?=
+ =?utf-8?B?bWRmNENoNzd1QkU4c0lsNjBBWDIvSVdYam9Kek5jRlFLMkZzTHRqRkJSZzJm?=
+ =?utf-8?B?TXk1aDFQRUwrOU01YjQ1NVNZS3U1L0lNVEpLc0V6cjUrVllFRlRza285VDRT?=
+ =?utf-8?B?NU9HUmp3L3drWkJ6dFd4UzgwQk1seUhiaHVuemY5YWJRQjRjaHMxdjIyYjAx?=
+ =?utf-8?B?N1BLTUdaYUF4NE1ORUxhdmlRaFJWWHBSTzlSTlRDbDE2SkE3M3NYcXBRbjly?=
+ =?utf-8?B?SkpTUDZTRjJzKzcyRWkvT3hVcVNrb3QxY09Gek05cUlza0VjRnlTK1dVQi84?=
+ =?utf-8?B?SXRBVDl3UWEyK2NsVXQ0WFdnRm95TTVscDduTnE5Q3o4QzBucWk3c1FYZTVP?=
+ =?utf-8?B?WGVjaHQ3NnZjZTBkSERXMW5vRkdETHovamFabnNUYm1TNnRMcTA2WXhwLzZT?=
+ =?utf-8?B?Y1ppb1NxS3JjdFhJV0xPRDlHQmxJeUhubzQrUmJWN1pvaGlrMEZ0T2IrSUJz?=
+ =?utf-8?B?Ynh3UWQ1YVBvTUoxNzVsRkxKQ2NkK051dUV3cFYrM2tSQm5hL21MM3czbC81?=
+ =?utf-8?B?YWxkR0luZmVCTjNXYkNXbldQVU5aWTFJRGNiQXkzZ1lnVFpFWGhleTVsUzln?=
+ =?utf-8?B?VlE5VHB0dERXbStJcHI2S3M1Z25DSGpRV2FLODFvbDgxckIxbzk1eTlEaVNZ?=
+ =?utf-8?B?V2hHUHFjdjlxQ0FGL0NJYlhRbEZ6UEtERHFDNUpWenI0YktOMUVKdnpzYnJ6?=
+ =?utf-8?B?YTZZQ3ZKdzYzU2J1NC9IQjVkQXV0dHRrYk5FOXdaUXd2aStKNElKZnlYUXpu?=
+ =?utf-8?B?WE15Q0VUcW1aV1F2YWpzTjZaOFJncCtIakF3end4YkpPNW91NnJXYndMRGJh?=
+ =?utf-8?B?SEZHcmIvdTBFS0xtZFpjS0J2ZW1KYkMraW45Y2YvS3ZxSWdYTkFyYWVScGRv?=
+ =?utf-8?B?d0FrU3BZQ05rMjYrdkpZTXZhY09sbmd1NVlETzZmaGRaZWdrZ2x3VGlMbkRU?=
+ =?utf-8?B?Tk1ZcTNydHRCeWozQzlzL1hUSWlCd2JydDgzYWE2MERZOGh0RFFKbTlDRER0?=
+ =?utf-8?B?YVd5UkRxVFR1TzY4a05ZNnM1cjhHUE5yTVJyWXdlU3MrS0JVdnJ6UjR5LzIy?=
+ =?utf-8?B?akZlRDRzME13SVFtTGFsQkR2QUhWUmNHZTZMRWFsem9sWDlEVDVhVmNyR2xM?=
+ =?utf-8?B?dloxeGFJeDhXT0xCY0FCNUhreWxmOURUQ210N01HSkdPdlVzS0x3Uk9ocTky?=
+ =?utf-8?B?WVUxMXdQUXU4dGlWQTBUUEVNbjhXYWFqcC91UEF6cVp1UWJmTXZFbXRkRzJz?=
+ =?utf-8?B?dVUxeXlSVGFkaXFpQ1NnWE5aVUd6K0JuU3Z1MDJRZUliT1FSYWJISHBLcVV2?=
+ =?utf-8?B?Vi95S24wa00xK2pkcnNZZ0RYMzdrTnBwYmRQTjIvT3djTUxRYklHVWFNMHJN?=
+ =?utf-8?B?dUtHQmFaK0ROV3RpRDVEVVZuUFVPYlovQjlmYlYzRzc2bWRJd3NRRkQzM3Nl?=
+ =?utf-8?B?WTdCb21rUHVpc2JyR1YzUWRCT2VjSWlWa3JWTVhOUWp6cFdRRy9GaERNd2Nt?=
+ =?utf-8?B?M2h2R1MrbitDMlM4cHhwam1zOC9SV2ZmQmI2SzFmUjlVZFVmV0Z1M0hyUFhk?=
+ =?utf-8?B?SFVKLzdUVjhhMG9aVXFwTDBQRzc1ZWQ2by83VE5vZ2xLSTdlM1o1dVdCSHpw?=
+ =?utf-8?B?eGdNZ3JpMTk0UVpUNU9wZUJRbC9CZENRZU9ySEFYUUxiM2FZYnIwMTlXL0hy?=
+ =?utf-8?B?WXAxNCtHREVVSnlOZnUxRStwbnRQQTU2R20yZ3FjaExpSnZRS2dvTUhNWmY2?=
+ =?utf-8?B?VXBYR2dFSlJNK2NXRC9NMG9oMFdjY1QyT05aRGZQNUkzUTZUUzBtZmpUQWc1?=
+ =?utf-8?Q?AGNw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR18MB4474.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a1afc4e-67e7-462e-2e46-08dc641b08d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2024 04:57:25.4048
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LCqVrnUOrpPaQ2tEUIfFvY9lUKCTbexY9lhj1tF7a2OUK+YHRIybdoJ9+TiN8/3Es2UGA79bbNzSDig40Blm2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR18MB5548
+X-Proofpoint-ORIG-GUID: NBJfAzw-Sf9AyOnsGvwljoTBMPe7cvm_
+X-Proofpoint-GUID: NBJfAzw-Sf9AyOnsGvwljoTBMPe7cvm_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-24_02,2024-04-23_02,2023-05-22_02
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git arena_lock
-head:   fb85e409be9065c7c625d38be4d436f83a68b016
-commit: 8988284bf2a0e3930e83b40b8cf83714c186438f [4/6] bpf: Introduce bpf_lock.
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240424/202404241142.tjyl6oGE-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240424/202404241142.tjyl6oGE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404241142.tjyl6oGE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-          |                                        ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10534:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10534 |                 regs[BPF_REG_0].type = PTR_TO_TCP_SOCK | ret_flag;
-          |                                        ~~~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10538:37: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10538 |                 regs[BPF_REG_0].type = PTR_TO_MEM | ret_flag;
-          |                                        ~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10560:38: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10560 |                         regs[BPF_REG_0].type = PTR_TO_MEM | ret_flag;
-          |                                                ~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10564:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10564 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC | MEM_RCU;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:10572:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10572 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | ret_flag;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:10586:40: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    10586 |                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | ret_flag;
-          |                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~
-   kernel/bpf/verifier.c:11330:21: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11330 |         case PTR_TO_BTF_ID | MEM_ALLOC:
-          |              ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11785:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11785 |                         if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11790:43: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11790 |                         } else if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU)) {
-          |                                                  ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11830:25: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11830 |                                    (dynptr_arg_type & MEM_UNINIT)) {
-          |                                     ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:11850:26: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11850 |                         if (!(dynptr_arg_type & MEM_UNINIT)) {
-          |                               ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:11877:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11877 |                             reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11881:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11881 |                         if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC) && !reg->ref_obj_id) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11891:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11891 |                             reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11895:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11895 |                         if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC) && !reg->ref_obj_id) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11904:36: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11904 |                         if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:11927:37: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    11927 |                                 if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-          |                                                   ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12172:19: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12172 |                                 if (reg->type & MEM_RCU) {
-          |                                     ~~~~~~~~~ ^ ~~~~~~~
-   include/linux/bpf_verifier.h:476:12: note: expanded from macro 'bpf_for_each_reg_in_vstate_mask'
-     476 |                                 (void)(__expr);                          \
-         |                                        ^~~~~~
-   kernel/bpf/verifier.c:12172:19: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12172 |                                 if (reg->type & MEM_RCU) {
-          |                                     ~~~~~~~~~ ^ ~~~~~~~
-   include/linux/bpf_verifier.h:481:12: note: expanded from macro 'bpf_for_each_reg_in_vstate_mask'
-     481 |                                 (void)(__expr);                          \
-         |                                        ^~~~~~
-   kernel/bpf/verifier.c:12336:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12336 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12346:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12346 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12365:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12365 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_TRUSTED;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   kernel/bpf/verifier.c:12377:42: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12377 |                                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_UNTRUSTED;
-          |                                                        ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:12394:39: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12394 |                                 regs[BPF_REG_0].type = PTR_TO_MEM | type_flag;
-          |                                                        ~~~~~~~~~~ ^ ~~~~~~~~~
-   kernel/bpf/verifier.c:12954:20: warning: bitwise operation between different enumeration types ('const enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    12954 |         if (ptr_reg->type & PTR_MAYBE_NULL) {
-          |             ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:17576:31: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    17576 |                         *prev_type = PTR_TO_BTF_ID | PTR_UNTRUSTED;
-          |                                      ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:18034:38: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    18034 |                 aux->btf_var.reg_type = PTR_TO_MEM | MEM_RDONLY;
-          |                                         ~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:18053:41: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    18053 |                 aux->btf_var.reg_type = PTR_TO_BTF_ID | MEM_PERCPU;
-          |                                         ~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:18070:38: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    18070 |                 aux->btf_var.reg_type = PTR_TO_MEM | MEM_RDONLY;
-          |                                         ~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:19013:22: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    19013 |                 case PTR_TO_BTF_ID | PTR_UNTRUSTED:
-          |                      ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:19020:22: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    19020 |                 case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
-          |                      ~~~~~~~~~~~~~ ^ ~~~~~~~~~
->> kernel/bpf/verifier.c:19612:38: warning: unused variable 'new_prog' [-Wunused-variable]
-    19612 |         struct bpf_prog *prog = env->prog, *new_prog;
-          |                                             ^~~~~~~~
->> kernel/bpf/verifier.c:19616:18: warning: unused variable 'insn_buf' [-Wunused-variable]
-    19616 |         struct bpf_insn insn_buf[32];
-          |                         ^~~~~~~~
->> kernel/bpf/verifier.c:19617:9: warning: unused variable 'cnt' [-Wunused-variable]
-    19617 |         int i, cnt, delta = 0;
-          |                ^~~
->> kernel/bpf/verifier.c:19617:14: warning: unused variable 'delta' [-Wunused-variable]
-    19617 |         int i, cnt, delta = 0;
-          |                     ^~~~~
-   kernel/bpf/verifier.c:20720:51: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20720 |                         } else if (arg->arg_type == (ARG_PTR_TO_DYNPTR | MEM_RDONLY)) {
-          |                                                      ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/verifier.c:20725:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20725 |                                 if (arg->arg_type & PTR_MAYBE_NULL)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:20732:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20732 |                                 if (arg->arg_type & PTR_MAYBE_NULL)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:20734:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20734 |                                 if (arg->arg_type & PTR_UNTRUSTED)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:20736:23: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    20736 |                                 if (arg->arg_type & PTR_TRUSTED)
-          |                                     ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   103 warnings generated.
-
-
-vim +/new_prog +19612 kernel/bpf/verifier.c
-
- 19609	
- 19610	static int do_lock_fixups(struct bpf_verifier_env *env)
- 19611	{
- 19612		struct bpf_prog *prog = env->prog, *new_prog;
- 19613		struct bpf_insn *insn = prog->insnsi;
- 19614		const struct bpf_kfunc_desc *desc;
- 19615		const int insn_cnt = prog->len;
- 19616		struct bpf_insn insn_buf[32];
- 19617		int i, cnt, delta = 0;
- 19618	
- 19619		for (i = 0; i < insn_cnt;) {
- 19620			if (insn->code != (BPF_JMP | BPF_CALL))
- 19621				goto next_insn;
- 19622			if (insn->src_reg == BPF_PSEUDO_CALL)
- 19623				goto next_insn;
- 19624			if (insn->src_reg != BPF_PSEUDO_KFUNC_CALL)
- 19625				goto next_insn;
- 19626	
- 19627			if (!insn->imm) {
- 19628				verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
- 19629				return -EINVAL;
- 19630			}
- 19631	
- 19632			desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
- 19633			if (!desc) {
- 19634				verbose(env, "verifier internal error: kernel function descriptor not found for func_id %u\n",
- 19635					insn->imm);
- 19636				return -EFAULT;
- 19637			}
- 19638	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+DQoNCj4gT24gV2VkLCBBcHIgMjQsIDIwMjQgYXQgNzo1OOKAr0FNIFN1IEh1aSA8c3VodWlAbmZz
+Y2hpbmEuY29tPiB3cm90ZToNCj4gPg0KPiA+IENsYW5nIHN0YXRpYyBjaGVja2VyKHNjYW4tYnVp
+bGQpIHdhcm5pbmfvvJoNCj4gPiBkcml2ZXJzL25ldC9ldGhlcm5ldC9tYXJ2ZWxsL29jdGVvbnR4
+Mi9hZi9ydnVfbnBjLmM6bGluZSAyMTg0LCBjb2x1bW4gMg0KPiA+IEF0dGVtcHQgdG8gZnJlZSBy
+ZWxlYXNlZCBtZW1vcnkuDQo+ID4NCj4gPiBucGNfbWNhbV9yc3Jjc19kZWluaXQoKSBoYXMgcmVs
+ZWFzZWQgJ21jYW0tPmNvdW50ZXJzLmJtYXAnLiBEZWxldGVkDQo+IHRoaXMNCj4gPiByZWR1bmRh
+bnQga2ZyZWUoKSB0byBmaXggdGhpcyBkb3VibGUgZnJlZSBwcm9ibGVtLg0KPiA+DQo+ID4gRml4
+ZXM6IGRkNzg0Mjg3ODYzMyAoIm9jdGVvbnR4Mi1hZjogQWRkIG5ldyBkZXZsaW5rIHBhcmFtIHRv
+IGNvbmZpZ3VyZQ0KPiBtYXhpbXVtIHVzYWJsZSBOSVggYmxvY2sgTEZzIikNCj4gPiBTaWduZWQt
+b2ZmLWJ5OiBTdSBIdWkgPHN1aHVpQG5mc2NoaW5hLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEhhcmlw
+cmFzYWQgS2VsYW0gPGhrZWxhbUBtYXJ2ZWxsLmNvbT4NCj4gDQo+IExHVE0NCj4gUmV2aWV3ZWQt
+Ynk6IEthbGVzaCBBUCA8a2FsZXNoLWFuYWtrdXIucHVyYXlpbEBicm9hZGNvbS5jb20+DQo+ID4g
+LS0tDQo+ID4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2dV9u
+cGMuYyB8IDEgLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPiA+DQo+ID4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2
+dV9ucGMuYw0KPiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2
+dV9ucGMuYw0KPiA+IGluZGV4IGJlNzA5ZjgzZjMzMS4uZThiNzNiOWQ3NWUzIDEwMDY0NA0KPiA+
+IC0tLSBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2dV9ucGMu
+Yw0KPiA+ICsrKyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L21hcnZlbGwvb2N0ZW9udHgyL2FmL3J2
+dV9ucGMuYw0KPiA+IEBAIC0yMTgxLDcgKzIxODEsNiBAQCB2b2lkIHJ2dV9ucGNfZnJlZW1lbShz
+dHJ1Y3QgcnZ1ICpydnUpDQo+ID4NCj4gPiAgICAgICAgIGtmcmVlKHBraW5kLT5yc3JjLmJtYXAp
+Ow0KPiA+ICAgICAgICAgbnBjX21jYW1fcnNyY3NfZGVpbml0KHJ2dSk7DQo+ID4gLSAgICAgICBr
+ZnJlZShtY2FtLT5jb3VudGVycy5ibWFwKTsNCj4gPiAgICAgICAgIGlmIChydnUtPmtwdV9wcmZs
+X2FkZHIpDQo+ID4gICAgICAgICAgICAgICAgIGlvdW5tYXAocnZ1LT5rcHVfcHJmbF9hZGRyKTsN
+Cj4gPiAgICAgICAgIGVsc2UNCj4gPiAtLQ0KPiA+IDIuMzAuMg0KPiA+DQo+ID4NCj4gDQo+IA0K
+PiAtLQ0KPiBSZWdhcmRzLA0KPiBLYWxlc2ggQSBQDQo=
