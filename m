@@ -1,60 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F71417BB9;
-	Wed, 24 Apr 2024 19:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8A47443E;
+	Wed, 24 Apr 2024 19:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713986613; cv=none; b=r7Q3TJEiHlD0FrGEIR/JBmfC1qGIlenkybWSVxDQvQNQrqTJzhaWEcSDFUMGx6LiBLftdHhi5e1FTbANwV5xnclLfS756bFyPm7u9ZMjVhrZ54KUqq9mD8Vohh42u/+RnVy2d2oD7Wnja0Erobwg8/IcPar/EOEuOATo/4CCavk=
+	t=1713986815; cv=none; b=Axj5Q/S/wRQ7rnBBDgb+HOav42hozE9v4zBb3q5i4WqJoq/BVT88VtLH62ycMrlVJfw3kucfXSdmmPM0tSaV46CM6y6iKWvrEU7K6AvxVLT6PU5g93zLovM53Mjp07Hg33A5FIGh2TQUXAswlk+flq+rXb/80LUgDN1I7/1AY5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713986613; c=relaxed/simple;
-	bh=a3S0pRuLWCK4cT6IPeARX7L4MZ/Pic3Y3rETSh9aGH4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OhQ++25GlbvX1ZDkbbGV6SPDPchGZKeGKF7eZm8KdefDaGLMiO9/fSBomJqnmkrmyBHKW4Zj2nlfCoGC/KNsbYO8V4ec8DG/atcw1Gj0SvTDCE9Zq0o/7wx3FbwlyFcexOXbSLt8Vk6ecX8ULIZbGF9f/AQ5jEet4oPb9GLFaes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oe7hZ/44; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713986815; c=relaxed/simple;
+	bh=EW8udX9Ng9evM5jbTXaEGg0ld8CqmmVMrgh5R0QINjU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o7RBr8eDBpCY6OeuLp9VgPpqlr/9FMmjdh8dkxEASAbGZ3FwDgC4zXuSr3SgXgFAgnljYT2q/mF37K4xbwgUo+lyMICxrWS58FcSACmaR92DKNModzX5IoEzH+hLxFhsxVYMU4ZYd4pnl2p0+CKzfxcL/Q+OyUhvFJ6/64sOqFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/TlF1tj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oe7hZ/44"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713986611; x=1745522611;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a3S0pRuLWCK4cT6IPeARX7L4MZ/Pic3Y3rETSh9aGH4=;
-  b=Oe7hZ/44LUovRYyHekCMOq70qppEAB7y+uSHTTkHGQE8CHDjUzCfc7H+
-   dDaZ6BYw3RZ/0w4XSc+pmWYmmfGMesPtDs9xbiA2h/nmNkuGyQQvnQ96a
-   JCn4Vg+Lu0IAFzmDovZ4W9l3W5iCzd17dKSNKfGlR9uvXx80CeoyB9uml
-   QltJhiljM6Cb/Lv0HEeYzKmnasg+TC3fVDBxEoguGihLw0pD8b/p2sm0a
-   i+i4Re2GykicyfZ2Mybi4CmbYWITWuCgshTibqaWUpbpZNDms4ELdzjQt
-   uu+5E8b6+vKsD1qPjcU81PAg8QdTCxM/2p4FSMQFh6toRGGanOBmKHWKU
-   Q==;
-X-CSE-ConnectionGUID: rZBxYGE9RVGG75h9Py5NxQ==
-X-CSE-MsgGUID: CSqypGL4TGSY4QB1uAwxPA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9569389"
-X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
-   d="scan'208";a="9569389"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 12:23:30 -0700
-X-CSE-ConnectionGUID: 0hhcslXwSYaFMEwtxsm6rA==
-X-CSE-MsgGUID: PSJZ+t1DRTCOrKA221S2/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
-   d="scan'208";a="56001562"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 24 Apr 2024 12:23:28 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rziDG-0001aI-0O;
-	Wed, 24 Apr 2024 19:23:26 +0000
-Date: Thu, 25 Apr 2024 03:23:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jianbo Liu <jianbol@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>
-Subject: [leon-rdma:rdma-next 9/11]
- drivers/net/ethernet/mellanox/mlx5/core/wc.c:409:23: error: no member named
- 'parent_mdev' in 'struct mlx5_priv'
-Message-ID: <202404250335.1fx0Fixl-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/TlF1tj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 341AAC113CD;
+	Wed, 24 Apr 2024 19:26:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713986814;
+	bh=EW8udX9Ng9evM5jbTXaEGg0ld8CqmmVMrgh5R0QINjU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B/TlF1tjeeucQdZZnUWu3Lt2Nqw/ehtB4X//jzu2ZN+FoZcb/OH8mdbYs32TLDFMJ
+	 5f8xqSWt0SA4hJK90XI0dQX4nLt4evSE33DtPvlF9ZOXr9lqXTJ3ihERkaPuhq54Lg
+	 mat6KQL3EF+Z6ItGqyXQap0LglfWLsTVnNSi2gnjOr/OGw9l6TwcVLMXF9HU7Mmjtc
+	 ZnI29A4BZnpebvp9W6mVMCE3a7uexoD0NrMiQt8zA3siuDGM2x9jy03Xx7/p9ZmiCC
+	 vf0FDIv6t9cAhUdSeFZO3H9sG3w9ZsOpYTi/V1hx0I/B3nsem3v1fdnD5KAo+N8CwA
+	 PLmnDqsGv4vSw==
+Date: Wed, 24 Apr 2024 12:26:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ubsan: Avoid i386 UBSAN handler crashes with Clang
+Message-ID: <20240424192652.GA3341665@dev-arch.thelio-3990X>
+References: <20240424162942.work.341-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,153 +47,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240424162942.work.341-kees@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   b037a9b68f9d91e3dd0fc7dc7ad916ad5a6fa8b2
-commit: 2aefb0d55636a2b5744a6588d9bebcf782d17b28 [9/11] net/mlx5: Reimplement write combining test
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240425/202404250335.1fx0Fixl-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240425/202404250335.1fx0Fixl-lkp@intel.com/reproduce)
+Hi Kees,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404250335.1fx0Fixl-lkp@intel.com/
+On Wed, Apr 24, 2024 at 09:29:43AM -0700, Kees Cook wrote:
+> When generating Runtime Calls, Clang doesn't respect the -mregparm=3
+> option used on i386. Hopefully this will be fixed correctly in Clang 19:
+> https://github.com/llvm/llvm-project/pull/89707
+> but we need to fix this for earlier Clang versions today. Force the
+> calling convention to use non-register arguments.
+> 
+> Reported-by: ernsteiswuerfel
 
-Note: the leon-rdma/rdma-next HEAD b037a9b68f9d91e3dd0fc7dc7ad916ad5a6fa8b2 builds fine.
-      It only hurts bisectability.
+FWIW, I think this can be
 
-All errors (new ones prefixed by >>):
+  Reported-by: Erhard Furtner <erhard_f@mailbox.org>
 
-   In file included from drivers/net/ethernet/mellanox/mlx5/core/wc.c:4:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/mellanox/mlx5/core/wc.c:4:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/mellanox/mlx5/core/wc.c:4:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/mellanox/mlx5/core/wc.c:5:
-   In file included from include/linux/mlx5/transobj.h:36:
-   In file included from include/linux/mlx5/driver.h:38:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/mellanox/mlx5/core/wc.c:409:23: error: no member named 'parent_mdev' in 'struct mlx5_priv'
-     409 |                 parent = mdev->priv.parent_mdev;
-         |                          ~~~~~~~~~~ ^
-   17 warnings and 1 error generated.
+since it has been used in the kernel before, the reporter is well known
+:)
 
+> Closes: https://github.com/KSPP/linux/issues/350
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> Cc: Marco Elver <elver@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: llvm@lists.linux.dev
+> Cc: kasan-dev@googlegroups.com
+> Cc: linux-hardening@vger.kernel.org
+> ---
+>  lib/ubsan.h | 41 +++++++++++++++++++++++++++--------------
+>  1 file changed, 27 insertions(+), 14 deletions(-)
+> 
+> diff --git a/lib/ubsan.h b/lib/ubsan.h
+> index 50ef50811b7c..978828f6099d 100644
+> --- a/lib/ubsan.h
+> +++ b/lib/ubsan.h
+> @@ -124,19 +124,32 @@ typedef s64 s_max;
+>  typedef u64 u_max;
+>  #endif
+>  
+> -void __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
+> -void __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
+> -void __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
+> -void __ubsan_handle_negate_overflow(void *_data, void *old_val);
+> -void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
+> -void __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
+> -void __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
+> -void __ubsan_handle_out_of_bounds(void *_data, void *index);
+> -void __ubsan_handle_shift_out_of_bounds(void *_data, void *lhs, void *rhs);
+> -void __ubsan_handle_builtin_unreachable(void *_data);
+> -void __ubsan_handle_load_invalid_value(void *_data, void *val);
+> -void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
+> -					 unsigned long align,
+> -					 unsigned long offset);
+> +/*
+> + * When generating Runtime Calls, Clang doesn't respect the -mregparm=3
+> + * option used on i386. Hopefully this will be fixed correctly in Clang 19:
+> + * https://github.com/llvm/llvm-project/pull/89707
+> + * but we need to fix this for earlier Clang versions today. Force the
 
-vim +409 drivers/net/ethernet/mellanox/mlx5/core/wc.c
+It may be better to link to the tracking issue upstream instead of the
+pull request just in case someone comes up with an alternative fix (not
+that I think your change is wrong or anything but it seems like that
+happens every so often).
 
-   382	
-   383	bool mlx5_wc_support_get(struct mlx5_core_dev *mdev)
-   384	{
-   385		struct mlx5_core_dev *parent = NULL;
-   386	
-   387		if (!MLX5_CAP_GEN(mdev, bf)) {
-   388			mlx5_core_dbg(mdev, "BlueFlame not supported\n");
-   389			goto out;
-   390		}
-   391	
-   392		if (!MLX5_CAP_GEN(mdev, log_max_sq)) {
-   393			mlx5_core_dbg(mdev, "SQ not supported\n");
-   394			goto out;
-   395		}
-   396	
-   397		if (mdev->wc_state != MLX5_WC_STATE_UNINITIALIZED)
-   398			/* No need to lock anything as we perform WC test only
-   399			 * once for whole device and was already done.
-   400			 */
-   401			goto out;
-   402	
-   403		mutex_lock(&mdev->wc_state_lock);
-   404	
-   405		if (mdev->wc_state != MLX5_WC_STATE_UNINITIALIZED)
-   406			goto unlock;
-   407	
-   408		if (mlx5_core_is_sf(mdev))
- > 409			parent = mdev->priv.parent_mdev;
+I also get leary of the version information in the comment, even though
+I don't doubt this will be fixed in clang 19.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> + * calling convention to use non-register arguments.
+> + */
+> +#if defined(__clang__) && defined(CONFIG_X86_32)
+
+While __clang__ is what causes CONFIG_CC_IS_CLANG to get set and there
+is some existing use of it throughout the kernel, I think
+CONFIG_CC_IS_CLANG makes it easier to audit the workarounds that we
+have, plus this will be presumably covered to
+
+  CONFIG_CLANG_VERSION < 190000
+
+when the fix actually lands. This file is not expected to be used
+outside of the kernel, right? That is the only thing I could think of
+where this distinction would actually matter.
+
+> +# define ubsan_linkage asmlinkage
+
+Heh, clever...
+
+> +#else
+> +# define ubsan_linkage /**/
+
+Why is this defined as a comment rather than just nothing?
+
+> +#endif
+> +
+> +void ubsan_linkage __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
+> +void ubsan_linkage __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
+> +void ubsan_linkage __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
+> +void ubsan_linkage __ubsan_handle_negate_overflow(void *_data, void *old_val);
+> +void ubsan_linkage __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
+> +void ubsan_linkage __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
+> +void ubsan_linkage __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
+> +void ubsan_linkage __ubsan_handle_out_of_bounds(void *_data, void *index);
+> +void ubsan_linkage __ubsan_handle_shift_out_of_bounds(void *_data, void *lhs, void *rhs);
+> +void ubsan_linkage __ubsan_handle_builtin_unreachable(void *_data);
+> +void ubsan_linkage __ubsan_handle_load_invalid_value(void *_data, void *val);
+> +void ubsan_linkage __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
+> +						       unsigned long align,
+> +						       unsigned long offset);
+>  
+>  #endif
+> -- 
+> 2.34.1
+> 
+> 
