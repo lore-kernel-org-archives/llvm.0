@@ -1,90 +1,228 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DA56E605
-	for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 09:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0C537140;
+	Thu, 25 Apr 2024 09:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714035779; cv=none; b=OKxbNIsTHSizpuAy8W9xf/6ln+sQNZHve7KPtuBh+fEj1be3CBFVXYlU4+BBW7KmJ5gTb/DGYfscWvrNmU5V79CxHfrypXQfRx4IocJPBBgQoXB4v8xB4uRONjfJaF7zsgvEvv4gxDA7kOhMpBhriiq7AMhhrvu8VfBo1DqPhHE=
+	t=1714037457; cv=none; b=eiX2e2z6nRVkBIMf2tWI/iLyVOIkTmA3NyG9kl+6A2AACtDvia8fwSj489unz6QCkRhwdlS50hCFix0oU+qroyPv3Vr9ORXs223+coJgJnUvW3/xsTEm6Helo3/iChHKnU77OTFs7Ql1SQiBZrNqylcLhO87XHrdx0JiQCQF5cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714035779; c=relaxed/simple;
-	bh=W7mC5WuQrqbjlEo+atEH7kcmysOPPGuDwpb/k2zZ//4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dkhGH9A/cpcMMrNHomhTXzDOv1ZCc7vwV1m6rnPxLZlp0THdUH5SfhnDPPz8dK8JKJkPT7cQU/H79ZfjVKdPTRP9UNYRq34EDuEqxDMo8szc5v7eLqzN8OALhwwBTSWVg1ogzUeBV8RFLgqyJ8yHpYSWGXGHPIM2w+ePqCldBjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OGeWKU2V; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714037457; c=relaxed/simple;
+	bh=BidwcMZvw8hOvIN0VNzLTIwSisk6VgByY2ElyypLUNs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RC5JlCwkfWoygg61jYCislNYsfbcDprEQcoANh8tu24NKjgCXjUpBs28TX0g9BPdE+r7xZsgzbGMZjErczTMndH55vbw1+JXPKb9KCK5qWtmStagp80v7WPVU5GmHl/SHywwNBXxUSEhDWfYh+UjV3rKmGytcC9YpPOZHlT8A7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PgXlwjHz; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OGeWKU2V"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5dbf7b74402so545610a12.0
-        for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 02:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714035777; x=1714640577; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A1wjs4SavXGnazssug9F+cXfiFMfy+d6wFHXe7CeUJE=;
-        b=OGeWKU2VkhMlxNly+VACWqsal54xuoWP9bIplmQS5ngYtjiXGw7dXzh5o/Bpb3UvLD
-         GRyCUTE14gWBEbJvQ5s9pb40ZmeTJsZNEB1ojbTNQISBXYcJ+oQIPa9jgY2egu5mv/2I
-         iHx5at0tliPwK5abbB+00CIxe3kracjpdP3koOAzuu6kHjc2+rHZmQCRT9K8HKXRltsd
-         D6H2SvMIcxCdnniFZPvZscIcqB5MU7Ick/j5ssCE/Qcz/92L3NI8BHOOh80DReYpbSWW
-         J9V83vg1H2k5EcaPdVx7g/EDoxsl7v0Dpf6L1txQ/h1z9sWzMFf8kohRWy+1UP+x3jMG
-         LZ4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714035777; x=1714640577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A1wjs4SavXGnazssug9F+cXfiFMfy+d6wFHXe7CeUJE=;
-        b=EZMSsLBrurlvzum28iMA9+DLbcVLiiiIN/LNtHyF2lLafE2egejRmd35s06JEgaJai
-         GsSyWxwKabWsl4H8eDInSbJvm74D1DTDKvFZG47slqNz34jJHQPxvB7wikoP7p8gsY82
-         169fR7BL0Zx4EBWaPT4IaPN/bRpqu1jxusdlx3zO+BoY3gUIqFx3HvhIwy+vNG19CNGQ
-         7ybkAt6+g7YWtoMxsJ4Cdc7SK0MJ3oknH+cw7G5mmJmwqpjMAgm2Vf0LrV/X/G1Uhlrc
-         2obB0IwWuaWFOBHOst0Mvbs+EBoKFinBsjY/cnQ3FMc8TJfvBWLxF814IPKinxxpGrPp
-         nkTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWGwFldz/xUMKzQXkXszEBesMrw0vx4hSVANLM4yvDGmn64JaIwIdh4rcZEKm9Fm0TjZS5yV+ou30SBNIEKAwbWQEZ+Aw==
-X-Gm-Message-State: AOJu0YzZeQ2bpa5uZXBysXb4R2uI/rg5P0CayBd9HSWkwaV+JTtheW5o
-	voSZFO4Fo2N+cGDAGVk1Hsau+tQD0vHhrbyeWomRAp4FQroSZk/DwDt8AicD3t8pAQoslzCoZCs
-	ZU5CGxwXSIGOFMaEY6L7a9woJ/Mc=
-X-Google-Smtp-Source: AGHT+IG2cmnz6emFDz7lQp2KPETZK7BFwCLTK8VO7MaLGjWuFwq/87lzEtLoInfK6L39CtOjWMtSsiVer6P7L7hXQxE=
-X-Received: by 2002:a17:90a:9313:b0:2af:2978:bd59 with SMTP id
- p19-20020a17090a931300b002af2978bd59mr4509955pjo.6.1714035777134; Thu, 25 Apr
- 2024 02:02:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PgXlwjHz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714037456; x=1745573456;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BidwcMZvw8hOvIN0VNzLTIwSisk6VgByY2ElyypLUNs=;
+  b=PgXlwjHzNZPObJJrN/9XPMFjPZrAf75xUCwX/3f0XKNM79m2OTwKkJLm
+   OzU6oAzoY8B6SdWPKMIrrRLvMUyNLnFu3QG/hev4EfhshiRTUS7mdHzbP
+   DmxQKI2/zUVeo3PQZGysGi7yoJ2FRTAek/Vjcrk9aHEPjTAiItMe1q3iR
+   djM4f1gsBxs2g3QGec4y0xt1BCAqQS4b/BPywfOAQo5tJiFvok8Vr2uML
+   BGa/P7jrqLeQilc+SDG0jVG/XFTY3TiacC904Oo+4RI+DssXrCXF3CtvG
+   ebd9VR2emUq3GyTqRdX2HfAtv9A0gK3/FCx4o3RHvRB34LmeFx3uPCfp8
+   w==;
+X-CSE-ConnectionGUID: KiXztGbuQmy6eCn06XiDHA==
+X-CSE-MsgGUID: ZDOZ9ClzRve85jB8ShODHw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="13495976"
+X-IronPort-AV: E=Sophos;i="6.07,228,1708416000"; 
+   d="scan'208";a="13495976"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:30:55 -0700
+X-CSE-ConnectionGUID: 6Lpm9UTlRXC1Pzb3vKTFXg==
+X-CSE-MsgGUID: eDqDKVkqQ2CEowjwPnckpQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,228,1708416000"; 
+   d="scan'208";a="29472185"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 25 Apr 2024 02:30:52 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rzvRK-0002Dm-10;
+	Thu, 25 Apr 2024 09:30:50 +0000
+Date: Thu, 25 Apr 2024 17:30:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	willemdebruijn.kernel@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 4/4] net: add heuristic for enabling TCP
+ fraglist GRO
+Message-ID: <202404251744.Tq24y05K-lkp@intel.com>
+References: <20240424180458.56211-5-nbd@nbd.name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1713875158.git.siyanteng@loongson.cn> <81ab8f4ee8eea1d7a67de0595ec964614c5e2e00.1713875158.git.siyanteng@loongson.cn>
-In-Reply-To: <81ab8f4ee8eea1d7a67de0595ec964614c5e2e00.1713875158.git.siyanteng@loongson.cn>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 25 Apr 2024 11:01:51 +0200
-Message-ID: <CANiq72mdhwadg_PCBkz6fTcYBTr-gHFY9N9JFL2B_uFuMgtzXg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] docs/zh_CN/rust: Update the translation of
- arch-support to 6.9-rc4
-To: Yanteng Si <siyanteng@loongson.cn>
-Cc: ojeda@kernel.org, corbet@lwn.net, alex.gaynor@gmail.com, 
-	wedsonaf@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@samsung.com, 
-	aliceryhl@google.com, nathan@kernel.org, ndesaulniers@google.com, 
-	morbo@google.com, justinstitt@google.com, alexs@kernel.org, dzm91@hust.edu.cn, 
-	linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240424180458.56211-5-nbd@nbd.name>
 
-On Tue, Apr 23, 2024 at 3:07=E2=80=AFPM Yanteng Si <siyanteng@loongson.cn> =
-wrote:
->
-> +``loongarch``  Maintained        -
+Hi Felix,
 
-We had a recent rendering fix here that you may want to consider:
+kernel test robot noticed the following build errors:
 
-https://lore.kernel.org/rust-for-linux/20240324010915.3089934-1-tim.chenbw@=
-gmail.com/
+[auto build test ERROR on net-next/main]
 
-Thanks for this Yanteng!
+url:    https://github.com/intel-lab-lkp/linux/commits/Felix-Fietkau/net-move-skb_gro_receive_list-from-udp-to-core/20240425-060838
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240424180458.56211-5-nbd%40nbd.name
+patch subject: [PATCH net-next 4/4] net: add heuristic for enabling TCP fraglist GRO
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20240425/202404251744.Tq24y05K-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240425/202404251744.Tq24y05K-lkp@intel.com/reproduce)
 
-Cheers,
-Miguel
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404251744.Tq24y05K-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from net/ipv6/tcpv6_offload.c:9:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/ipv6/tcpv6_offload.c:9:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/ipv6/tcpv6_offload.c:9:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> net/ipv6/tcpv6_offload.c:48:7: error: call to undeclared function '__inet6_lookup_established'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           sk = __inet6_lookup_established(net, net->ipv4.tcp_death_row.hashinfo,
+                ^
+   net/ipv6/tcpv6_offload.c:48:7: note: did you mean '__inet_lookup_established'?
+   include/net/inet_hashtables.h:371:14: note: '__inet_lookup_established' declared here
+   struct sock *__inet_lookup_established(struct net *net,
+                ^
+   net/ipv6/tcpv6_offload.c:48:5: error: incompatible integer to pointer conversion assigning to 'struct sock *' from 'int' [-Wint-conversion]
+           sk = __inet6_lookup_established(net, net->ipv4.tcp_death_row.hashinfo,
+              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   12 warnings and 2 errors generated.
+
+
+vim +/__inet6_lookup_established +48 net/ipv6/tcpv6_offload.c
+
+    16	
+    17	static bool tcp6_check_fraglist_gro(struct sk_buff *skb)
+    18	{
+    19		const struct ipv6hdr *hdr = skb_gro_network_header(skb);
+    20		struct net *net = dev_net(skb->dev);
+    21		unsigned int off, hlen, thlen;
+    22		struct tcphdr *th;
+    23		struct sock *sk;
+    24		int iif, sdif;
+    25	
+    26		if (!(skb->dev->features & NETIF_F_GRO_FRAGLIST))
+    27			return false;
+    28	
+    29		inet6_get_iif_sdif(skb, &iif, &sdif);
+    30	
+    31		off = skb_gro_offset(skb);
+    32		hlen = off + sizeof(*th);
+    33		th = skb_gro_header(skb, hlen, off);
+    34		if (unlikely(!th))
+    35			return false;
+    36	
+    37		thlen = th->doff * 4;
+    38		if (thlen < sizeof(*th))
+    39			return false;
+    40	
+    41		hlen = off + thlen;
+    42		if (!skb_gro_may_pull(skb, hlen)) {
+    43			th = skb_gro_header_slow(skb, hlen, off);
+    44			if (unlikely(!th))
+    45				return false;
+    46		}
+    47	
+  > 48		sk = __inet6_lookup_established(net, net->ipv4.tcp_death_row.hashinfo,
+    49						&hdr->saddr, th->source,
+    50						&hdr->daddr, ntohs(th->dest),
+    51						iif, sdif);
+    52		if (!sk)
+    53			return true;
+    54	
+    55		sock_put(sk);
+    56	
+    57		return false;
+    58	}
+    59	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
