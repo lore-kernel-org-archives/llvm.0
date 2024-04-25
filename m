@@ -1,118 +1,222 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0614414D70C;
-	Thu, 25 Apr 2024 19:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9E41553BC
+	for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 21:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714074679; cv=none; b=PzslH1gH4mbxHQnmGpwWXaxAWQO09fetsaXOyfWAXg9/L++5f/cUEL7bkyDyc+6u6mSE8+9iGg78rFZF4Kt+WBNLQ6SGyCmvvQkUs273iO/IqUY01EVn4ra2VTBcanVUOK2VU+3pwQL4U0l+QrBjttl5xgbbiP8hGLe4TwNXXaU=
+	t=1714080373; cv=none; b=jP/Ge9dgXDvvs/rNFSaXXIA2oVj9EMUz26YrEs1R5ksO7d/sWTaemsW098ENawTFU248bVbWzpxI3wLigeMfWseSRQHZvnqjbb69156DpJJtzp4zbfJR0evuGFHFhQsyB/nINgnzYa3nqkMLKIYLi4hcciJ3xbn204N8hrsZjcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714074679; c=relaxed/simple;
-	bh=g/7WY1PNa+eVzC8Vs0EclC277d1TuItoUpmgdey+meg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Q6CScONFJVvNDYj1EQuyEMV2WqkFw3RXI/R6mV/pbb+zIb7mM/ibHOU+ILJPve1zHAuM+fX60jR+Z/VmYceGetPo4GpWKmdCppGfgZ7pLk61Bnp5rOC1hkyBXfmVmyLCWvf0lx+sPmFGX89fEX0BCg+hUMAeeu1Uyq3rTBXV3JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QjegX/Qn; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714080373; c=relaxed/simple;
+	bh=t+4rFxJtH5PLrqfZsiOYsbOBBtiE1VLyVfsCC07K/XM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nvw+I9PEP2Ex5Wi6pneBGxOEiVAbjhk11Qao5ML1ATJqYy5EVrLk0iRoD4igh9EwAQ4d47XxnTvy/XSHlXDUX/POX88sG3d22AmLooWTewltK7uTbTaFrp17s7EuC2p9uXFDMWS80p9bw6enpLtoLlykSkqlsJbCWehiswggbi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=RBLOa5UY; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QjegX/Qn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714074677; x=1745610677;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=g/7WY1PNa+eVzC8Vs0EclC277d1TuItoUpmgdey+meg=;
-  b=QjegX/QnXBhXgkPsdJKK3xvHztak0e/+kZTAQLrNnjzquGdGxXeb/8dx
-   iGdGX6n4uUkmfrjqUimhSjDKwHHUCkI5A3a6FFVY+G1cek727HiMpHW+P
-   w195xRw4UK5yEYKKA0JTWesXhojjjs2lEPYvP/TEji7M9QCB1U9uYBOT0
-   tOd9METSuz3wR8xmkLLPcSGHPzZs+qaQxuZAKOUlXWIShzH/ICVGSWV+5
-   1aAC27O4HKMhfR69jIEjJrEugI7X3ixIQIc8ONYhNkRCCu4xErDHgDX3H
-   EicQ/SWL0B4rtgUiBY7JeFWeSXnEKy8roRvS71jz71EmT1hxVnXyDowDP
-   w==;
-X-CSE-ConnectionGUID: 9xlnJgz4QfePNhIehUMidw==
-X-CSE-MsgGUID: FAA4sdkcRqOx2AVPYBLorg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="20402918"
-X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
-   d="scan'208";a="20402918"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 12:51:16 -0700
-X-CSE-ConnectionGUID: W/CLOaQJRDCbfbhpqI0e0A==
-X-CSE-MsgGUID: G7pC3Cd0RzyWkiKZebrE8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
-   d="scan'208";a="62660915"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 25 Apr 2024 12:51:15 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s057f-0002o4-2g;
-	Thu, 25 Apr 2024 19:51:11 +0000
-Date: Fri, 26 Apr 2024 03:50:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jani Nikula <jani.nikula@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Andrzej Hajda <andrzej.hajda@intel.com>
-Subject: [drm-misc:for-linux-next 2/2]
- drivers/gpu/drm/omapdrm/omap_fb.c:325:2: error: implicit declaration of
- function 'seq_printf' is invalid in C99
-Message-ID: <202404260318.H7uZPwSq-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="RBLOa5UY"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-43969307359so9135511cf.2
+        for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 14:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1714080371; x=1714685171; darn=lists.linux.dev;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C06dX7Gs4f+yDG+Dlzo5bbrJzr6XuAkxYSINyZxsnrM=;
+        b=RBLOa5UYy8J39NXn97ujr7oC/8IO+3Wg9v5NdWJNzj3AMcvyCEcMvHFKd+knUxzJ23
+         7s9A6tEUL6IWOcb4l6UFcQM2231vuTlIZhx72l+AKzYH9UpAjmWwimj/mzXAV1yNpEyl
+         kKP2MACV90R2p0E8oZxPnlc4yfCnyhvWtEoJE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714080371; x=1714685171;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C06dX7Gs4f+yDG+Dlzo5bbrJzr6XuAkxYSINyZxsnrM=;
+        b=Z18doOpdCk74EYedbHvToe+AliSREvwPhW8tqgNne5yHoghhVGFtSsgT5vmpvfvflu
+         4malP7CUggFqn8pPOe2wlBbAiXnWwau6xR56knmzmxL/RXNQPo4fSARX3UBbynkEwvFK
+         kPbuV21G/fJAdrgxj+aNFtsy7nF2XDc2S7b5wlyN/F4PJUvwPpZpGg36AodQc5x6THnQ
+         ObJrPFoNncS9Nt4GPQJtJmC2O3jJD8B60kRAudwJaXTKMLOh2VxiVdCLs54mmf6OuIJm
+         kRvv7zdHzg9DpT4qdmx5rOEQJ+f8ToIscdqa8srqfwKUNv3K0dvQLTomNu+we9hMEhg0
+         ppFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVG8iFgp59wP4GkViX36SONAR53/ukKirUNreVvRVTxUN0Xx20vTip7GvsC7KQNuKcoqsGZ+Xre0nwk4QdkS5vUQ3Yd3w==
+X-Gm-Message-State: AOJu0Yw7e+zJH5TjJW3nD5mj6pzfrUVofajE/hlMku0kIpPSqGwcJPnM
+	O3EQJaVGXtznXZZKboXDNx3vNM5SebcmNywn/VmTfRxX+W8g+ed9V9hiy0FYZg==
+X-Google-Smtp-Source: AGHT+IHVkRUlXpIoBCnmRsjNwdAxJOUNnT4nLYqTiINPWIm3BCvWPUKwcip0SME2q6dYDhR4wEfShA==
+X-Received: by 2002:a05:622a:11c8:b0:43a:7484:d66e with SMTP id n8-20020a05622a11c800b0043a7484d66emr14917qtk.37.1714080370640;
+        Thu, 25 Apr 2024 14:26:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id jt56-20020a05622aa03800b00434ec509ce9sm7352146qtb.46.2024.04.25.14.26.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Apr 2024 14:26:09 -0700 (PDT)
+Message-ID: <112f8951-9df9-46e9-9e31-f856a2aa8f89@broadcom.com>
+Date: Thu, 25 Apr 2024 14:26:06 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] clk: bcm: dvp: Assign ->num before accessing ->hws
+To: Nathan Chancellor <nathan@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-hardening@vger.kernel.org, patches@lists.linux.dev,
+ llvm@lists.linux.dev, stable@vger.kernel.org
+References: <20240425-cbl-bcm-assign-counted-by-val-before-access-v1-0-e2db3b82d5ef@kernel.org>
+ <20240425-cbl-bcm-assign-counted-by-val-before-access-v1-1-e2db3b82d5ef@kernel.org>
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <20240425-cbl-bcm-assign-counted-by-val-before-access-v1-1-e2db3b82d5ef@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000a154010616f26f05"
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
-head:   2bdb481bf7a93c22b9fea8daefa2834aab23a70f
-commit: 9e2b84fb6cd7ee913aa61d461db65c1d6a08dcf2 [2/2] drm/print: drop include seq_file.h
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240426/202404260318.H7uZPwSq-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240426/202404260318.H7uZPwSq-lkp@intel.com/reproduce)
+--000000000000a154010616f26f05
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404260318.H7uZPwSq-lkp@intel.com/
+On 4/25/24 09:55, Nathan Chancellor wrote:
+> Commit f316cdff8d67 ("clk: Annotate struct clk_hw_onecell_data with
+> __counted_by") annotated the hws member of 'struct clk_hw_onecell_data'
+> with __counted_by, which informs the bounds sanitizer about the number
+> of elements in hws, so that it can warn when hws is accessed out of
+> bounds. As noted in that change, the __counted_by member must be
+> initialized with the number of elements before the first array access
+> happens, otherwise there will be a warning from each access prior to the
+> initialization because the number of elements is zero. This occurs in
+> clk_dvp_probe() due to ->num being assigned after ->hws has been
+> accessed:
+> 
+>    UBSAN: array-index-out-of-bounds in drivers/clk/bcm/clk-bcm2711-dvp.c:59:2
+>    index 0 is out of range for type 'struct clk_hw *[] __counted_by(num)' (aka 'struct clk_hw *[]')
+> 
+> Move the ->num initialization to before the first access of ->hws, which
+> clears up the warning.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: f316cdff8d67 ("clk: Annotate struct clk_hw_onecell_data with __counted_by")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/omapdrm/omap_fb.c:325:2: error: implicit declaration of function 'seq_printf' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           seq_printf(m, "fb: %dx%d@%4.4s\n", fb->width, fb->height,
-           ^
-   1 error generated.
-
-
-vim +/seq_printf +325 drivers/gpu/drm/omapdrm/omap_fb.c
-
-b33f34d3d10b9b drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  319  
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  320  #ifdef CONFIG_DEBUG_FS
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  321  void omap_framebuffer_describe(struct drm_framebuffer *fb, struct seq_file *m)
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  322  {
-bcb0b461454c9c drivers/gpu/drm/omapdrm/omap_fb.c Ville Syrjälä 2016-12-14  323  	int i, n = fb->format->num_planes;
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  324  
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05 @325  	seq_printf(m, "fb: %dx%d@%4.4s\n", fb->width, fb->height,
-438b74a5497c36 drivers/gpu/drm/omapdrm/omap_fb.c Ville Syrjälä 2016-12-14  326  			(char *)&fb->format->format);
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  327  
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  328  	for (i = 0; i < n; i++) {
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  329  		seq_printf(m, "   %d: offset=%d pitch=%d, obj: ",
-2ecceeb53b1945 drivers/gpu/drm/omapdrm/omap_fb.c Daniel Stone  2018-03-30  330  				i, fb->offsets[n], fb->pitches[i]);
-3e44255260dc3c drivers/gpu/drm/omapdrm/omap_fb.c Daniel Stone  2018-03-30  331  		omap_gem_describe(fb->obj[i], m);
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  332  	}
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  333  }
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  334  #endif
-f6b6036e56ca17 drivers/staging/omapdrm/omap_fb.c Rob Clark     2012-03-05  335  
-
-:::::: The code at line 325 was first introduced by commit
-:::::: f6b6036e56ca17378dd0294b684db623abd6a901 staging: drm/omap: debugfs for object and fb tracking
-
-:::::: TO: Rob Clark <rob@ti.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Florian
+
+
+--000000000000a154010616f26f05
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAUKYWrzgXgq849s
+IJbpvwLnEyTambbP8FkrJ9OUfDvaMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDQyNTIxMjYxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCCkT2YOHWZStTkE1Hl1y/BiHpjBW38nlXW
+1dJQoej8W8jEjH3qXqKLL8NxJnYuHX4D3+26jqD/KtypmOCMY83aY0YiMxCPF61m6s3kk9XEM9Eh
+6uNIsVdhu2oixFd2Tb+D2DN5mOANPZs9SBa/+E44oJodeosFNAvdAbn7iJsqyBVw5nX/PJx4D8FH
+AnTp2S7lwmwU1/5WyLgaWA21XcL79qIWUUU8BrTPZOv+0eqyJOuz9FhjoSbneF/UHtWD01ULrgJm
+ENgtx3/yOix6C7q9UXdsvyLTHyAKl+vqyAPy2WFDB7ilqjg+KzlaJaO4ALuaod0ohwR6kqhRBsHG
+V4M+
+--000000000000a154010616f26f05--
