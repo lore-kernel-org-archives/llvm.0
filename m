@@ -1,177 +1,271 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2548B4C62
-	for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 00:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB375EEBB;
+	Thu, 25 Apr 2024 02:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714006298; cv=none; b=M8gVbHGpHJpQKbw83Z7aNTlZR6IV4pzXRatcdMruuqTsP/90FYtiaDF0TRQLVaCRhmDEGhv8RkK6Sv4cwSTWNAkBDSvD97oJfMaxIcOKVRCjE5m68xJSRXD2FfvaPxMhqkG+Kv5mO2g9EWH0b2Y0JYjtPJhQECst2DIhGMmTOa8=
+	t=1714010801; cv=none; b=vGK27VVPIhFh2eJ6cxvV0aebhCkEY4NSAK1H9NP1ClBL+bEsxet/HsdURAJqYzwEh0PUYc9WIFa/1ExEnueun1Qym8Hauv3T2RAGCjmH6zLZZ84vqCInnTTOyBIc4AzqbsTou2bKHQZUW5Wv89XEKxd4575bhfkz0HM3MQR/3Hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714006298; c=relaxed/simple;
-	bh=bmA5W59bjOUhXkf7OBLDAHjrT4uFDV4qBxfl5r0BsNw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XHXAmzIzjpvQyoKguGU+N/zN3RKs0fB1uLf6wOLhy5KIVj70c5aB+LWMOHLPHjmdAvMIyQ/6H1u7TejsTEw/eI+0KaoqkB18rNX8yQlqGtM1WHqkT0uUMMRgzXoanQ61ILWeO89PvI6EYrxb2K+RjPzozdNhZ8KygcnF0W3F4Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XPPL6n4c; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1714010801; c=relaxed/simple;
+	bh=tB1cNhvPbDA6tFIgVtq97kIWZQLqfJ0vPrQKJlMGpRQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jGSakuq/VeiCJkJW+CS4xKWgYL7xUlUtGhZBafmNSPf8mf+lyL3FG4xUI3ZEm07e9upUmgVLFJhjHJSni75DFKYDmouG80sFsL2y5IY+IEfa3eBpXBJ/ds46e0RJWAAOcUeApHx3sM7z4ck49t77CpdNeSpHOoDu9+4ymrjgh6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RHHJN/1I; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XPPL6n4c"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714006295;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+NDZDqzPDzd97rkO4DJ//nmK8G6OVJoTlVTgA6K0I4c=;
-	b=XPPL6n4cTe0wAGI0MviVsR6r5yeNdywYvDdjrciyy3E+AENFiCg2wfsGQIMX5X8aMLvGFv
-	pA1bLaBzkR2WUhR0h89StY4cez+aLjC+CY/uHneX69ZFk2wl9gBlW5saA7W8FvcJymGgYP
-	Kp0UIeheO7sRc8Jd3CV9QjjStK7wxm8=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-6-PXRJmHoYNYivBKLlLLWODQ-1; Wed,
- 24 Apr 2024 20:51:33 -0400
-X-MC-Unique: PXRJmHoYNYivBKLlLLWODQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 079E029AC028
-	for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 00:51:33 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B2DF5C13FA3;
-	Thu, 25 Apr 2024 00:51:32 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 204): Test report for master
- (6.9.0-rc5, mainline.kernel.org-clang, e88c4cfc)
-Date: Thu, 25 Apr 2024 00:51:32 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RHHJN/1I"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714010800; x=1745546800;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tB1cNhvPbDA6tFIgVtq97kIWZQLqfJ0vPrQKJlMGpRQ=;
+  b=RHHJN/1IjlS3MLCLQtVhaPk9LpMpanYV7is1+Vjgh9Ijgp2P2tshH1EH
+   oYxzQQLQko7nlHaXWrhQs1iHumJmj4gvfR5NYADMOnMUJoPfpJB7w4ly/
+   K6tM82igDNiTAI7INyrGd3AJbWMhq1hpFrQLRB6Bf1ycZ6RI5rxg0z4q1
+   0qgxz75mDapEItYtRiG8xchHHSVdSuh2a7Ld7GYnbH8U3vUcycoqvL91z
+   EoCA8U5WYdsKXqZ23Q/GZb1FoaWD2+6hFVSHRjUu51O8mWW8lHrBzinbu
+   aVD0g0ZOMDvu+K8r0j5P5B2Dxg3izMGyVW28r9db5f582K7ZEuX5cIEkB
+   w==;
+X-CSE-ConnectionGUID: BaNwMhjlS420T+O+AeALWw==
+X-CSE-MsgGUID: rphHaQkpQqmUrqTBSXWIVA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9501292"
+X-IronPort-AV: E=Sophos;i="6.07,227,1708416000"; 
+   d="scan'208";a="9501292"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 19:06:40 -0700
+X-CSE-ConnectionGUID: NLfvrKN0SOipXXDQbY/BYQ==
+X-CSE-MsgGUID: DXDGZVdZTZCsrRYePgwIow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,228,1708416000"; 
+   d="scan'208";a="25414971"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 24 Apr 2024 19:06:38 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rzoVP-0001qm-2K;
+	Thu, 25 Apr 2024 02:06:35 +0000
+Date: Thu, 25 Apr 2024 10:06:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hverkuil-media-tree:vivid-kthread 28/28]
+ drivers/media/test-drivers/vivid/vivid-kthread-cap.c:755:3: error:
+ incompatible pointer types passing 'unsigned long *' to parameter of type
+ 'uint64_t *' (aka 'unsigned long long *')
+Message-ID: <202404251001.3KAREyKB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <34264.124042420513300206@us-mta-6.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   git://linuxtv.org/hverkuil/media_tree.git vivid-kthread
+head:   404b51a535929c9a450789672159370d1c11d48f
+commit: 404b51a535929c9a450789672159370d1c11d48f [28/28] media: vivid: make the timestamps/seq numbers reliable
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240425/202404251001.3KAREyKB-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240425/202404251001.3KAREyKB-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404251001.3KAREyKB-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All error/warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'for-6.9-rc5-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1266436500
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
-"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
-=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
-:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
-            Affected tests:
-                Filesystem - Loopdev Sanity [aarch64, ppc64le, s390x, x86_6=
-4]
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-                stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [x86_64 (debug)]
-    CKI/restraint [x86_64 (debug)]
-    machineinfo [x86_64 (debug)]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64 (debug)]
-    SELinux Custom Module Setup [x86_64 (debug)]
-    Storage - swraid scsi_raid [x86_64 (debug)]
+>> drivers/media/test-drivers/vivid/vivid-kthread-cap.c:755:3: warning: comparison of distinct pointer types ('typeof ((next_jiffies)) *' (aka 'unsigned long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> drivers/media/test-drivers/vivid/vivid-kthread-cap.c:755:3: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> drivers/media/test-drivers/vivid/vivid-kthread-cap.c:755:3: warning: shift count >= width of type [-Wshift-count-overflow]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   2 warnings and 1 error generated.
+--
+>> drivers/media/test-drivers/vivid/vivid-kthread-out.c:224:3: warning: comparison of distinct pointer types ('typeof ((next_jiffies)) *' (aka 'unsigned long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> drivers/media/test-drivers/vivid/vivid-kthread-out.c:224:3: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> drivers/media/test-drivers/vivid/vivid-kthread-out.c:224:3: warning: shift count >= width of type [-Wshift-count-overflow]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   2 warnings and 1 error generated.
+--
+>> drivers/media/test-drivers/vivid/vivid-kthread-touch.c:128:3: warning: comparison of distinct pointer types ('typeof ((next_jiffies)) *' (aka 'unsigned long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> drivers/media/test-drivers/vivid/vivid-kthread-touch.c:128:3: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> drivers/media/test-drivers/vivid/vivid-kthread-touch.c:128:3: warning: shift count >= width of type [-Wshift-count-overflow]
+                   do_div(next_jiffies, denominator);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   2 warnings and 1 error generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +755 drivers/media/test-drivers/vivid/vivid-kthread-cap.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   660	
+   661	static int vivid_thread_vid_cap(void *data)
+   662	{
+   663		struct vivid_dev *dev = data;
+   664		u64 start_time;
+   665		u64 numerators_since_start;
+   666		u64 buffers_since_start;
+   667		u64 f_time;
+   668		u32 seq_offset = 0;
+   669		unsigned long next_jiffies;
+   670		unsigned long jiffies_since_start;
+   671		unsigned long cur_jiffies;
+   672		unsigned numerator;
+   673		unsigned denominator;
+   674		int dropped_bufs;
+   675	
+   676		dprintk(dev, 1, "Video Capture Thread Start\n");
+   677	
+   678		set_freezable();
+   679	
+   680		/* Resets frame counters */
+   681		dev->cap_seq_count = 0;
+   682		dev->cap_seq_resync = false;
+   683		dev->jiffies_vid_cap = jiffies;
+   684		start_time = ktime_get_ns();
+   685		if (dev->time_wrap)
+   686			dev->time_wrap_offset = dev->time_wrap - start_time;
+   687		else
+   688			dev->time_wrap_offset = 0;
+   689		vivid_cap_update_frame_period(dev);
+   690	
+   691		for (;;) {
+   692			try_to_freeze();
+   693			if (kthread_should_stop())
+   694				break;
+   695	
+   696			if (!mutex_trylock(&dev->mutex)) {
+   697				schedule();
+   698				continue;
+   699			}
+   700	
+   701			cur_jiffies = jiffies;
+   702			if (dev->cap_seq_resync) {
+   703				dev->jiffies_vid_cap = cur_jiffies;
+   704				seq_offset = dev->cap_seq_count + 1;
+   705				dev->cap_seq_count = 0;
+   706				start_time += dev->cap_frame_period * seq_offset;
+   707				vivid_cap_update_frame_period(dev);
+   708				dev->cap_seq_resync = false;
+   709			}
+   710			numerator = dev->timeperframe_vid_cap.numerator;
+   711			denominator = dev->timeperframe_vid_cap.denominator;
+   712	
+   713			if (dev->field_cap == V4L2_FIELD_ALTERNATE)
+   714				denominator *= 2;
+   715	
+   716			/* Calculate the number of jiffies since we started streaming */
+   717			jiffies_since_start = cur_jiffies - dev->jiffies_vid_cap;
+   718			/* Get the number of buffers streamed since the start */
+   719			buffers_since_start = (u64)jiffies_since_start * denominator;
+   720			do_div(buffers_since_start, HZ * numerator);
+   721			f_time = start_time + dev->time_wrap_offset +
+   722				buffers_since_start * dev->cap_frame_period;
+   723	
+   724			/*
+   725			 * After more than 0xf0000000 (rounded down to a multiple of
+   726			 * 'jiffies-per-day' to ease jiffies_to_msecs calculation)
+   727			 * jiffies have passed since we started streaming reset the
+   728			 * counters and keep track of the sequence offset.
+   729			 */
+   730			if (jiffies_since_start > JIFFIES_RESYNC) {
+   731				dev->jiffies_vid_cap = cur_jiffies;
+   732				seq_offset = buffers_since_start;
+   733				buffers_since_start = 0;
+   734			}
+   735			dropped_bufs = buffers_since_start + seq_offset - dev->cap_seq_count;
+   736			dev->cap_seq_count = buffers_since_start + seq_offset;
+   737			dev->vid_cap_seq_count = dev->cap_seq_count - dev->vid_cap_seq_start;
+   738			dev->vbi_cap_seq_count = dev->cap_seq_count - dev->vbi_cap_seq_start;
+   739			dev->meta_cap_seq_count = dev->cap_seq_count - dev->meta_cap_seq_start;
+   740	
+   741			vivid_thread_vid_cap_tick(dev, dropped_bufs, f_time);
+   742			mutex_unlock(&dev->mutex);
+   743	
+   744			/*
+   745			 * Calculate the number of 'numerators' streamed since we started,
+   746			 * including the current buffer.
+   747			 */
+   748			numerators_since_start = ++buffers_since_start * numerator;
+   749	
+   750			/*
+   751			 * Calculate when that next buffer is supposed to start
+   752			 * in jiffies since we started streaming.
+   753			 */
+   754			next_jiffies = numerators_since_start * HZ + denominator - 1;
+ > 755			do_div(next_jiffies, denominator);
+   756			next_jiffies += dev->jiffies_vid_cap;
+   757	
+   758			while (time_is_after_jiffies(next_jiffies) &&
+   759			       !kthread_should_stop())
+   760				schedule();
+   761		}
+   762		dprintk(dev, 1, "Video Capture Thread End\n");
+   763		return 0;
+   764	}
+   765	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
