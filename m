@@ -1,46 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3548114E2FA;
-	Thu, 25 Apr 2024 17:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EFC614B077;
+	Thu, 25 Apr 2024 18:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714067255; cv=none; b=G5NeiZzzIf6bLca52NwWq+BoviAfX+UawbR9uXCbcmpAGVFmxVJd6cszljgmxk02tK36OAElCzMDBy0J7bW+xgyp8uB/vYZEgsczwrB3jaE0gqHDfr6iyiYV4u2e1p3r+2sGFhesPKgFUGtg1qNnq2ti3j152FJKnFVBHSbv0+I=
+	t=1714068999; cv=none; b=QuKy9+Xjpn49IJSliX3pHhvUrTCl6N9t6AneO9YnxCtLdz1WIHo4KFLJjZOKCPSx5Xt31RDp/m9mqTn479W5+yYZQd78QFCk8doqLvnGeUZg7JBaV1tMaZC2uDj+IhY5AsHKLfOXKQQ8f+hRpy5atTZ5G3UBFcEIeMEYmw1TtfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714067255; c=relaxed/simple;
-	bh=BCcJL4EYGgNvGOmYP2zHLkNwqcWvBvq44rPg2J54MjY=;
+	s=arc-20240116; t=1714068999; c=relaxed/simple;
+	bh=osvQDcfth2oHBETtvgsqxTXc9soDQsyNFetTLK7ImU8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C+1h3g5E6Z6JBA49MP2c2NzSlljCvJ4TTrh+DQJ+qZkJc2sv5x9AWYdg5SEPId1VFJaKYDz1EhR4j2rIX7YBVhIFUeFC0Th38E96ku+BMT0aaDkxvEE8hr4CIDIqAXODrkZrudqPDF/x24tAkbSdtYRy6eKDIkXU2TIamM6ikYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JpCaPtHp; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JpCaPtHp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9363C113CC;
-	Thu, 25 Apr 2024 17:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714067254;
-	bh=BCcJL4EYGgNvGOmYP2zHLkNwqcWvBvq44rPg2J54MjY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JpCaPtHpcA9wnwNWxeBgTi2UfOmjEcDJD7emFgUmRckg1E0bVvYne5Kdt8ZHTdjxr
-	 cEAbNpKw1TpsCo2jn8HuHrwhA7R8t+tuMq1FLisbxAbeN2wYxdjegc0XDenkPcLHlw
-	 g49Jf9Rvqls+1eM9flBnsB9MkoGiXq2Rfx+vrJKH336ln4DZpXCdhuTqxajD7/A/DL
-	 4YvSITqRDmdH6OSONWSRAqAJLGbeG6zpezCoh2cNgP9stxejVmNB2vNbX3XrVhAjxS
-	 d+2q3ePXhbTE7gII29FWsvx5nW7Ghc8CzOscb0AZ0fNuOpK9a6CrK33nGrWWFf//Pr
-	 zFb8BIs8ml19Q==
-Date: Thu, 25 Apr 2024 10:47:32 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Cc: Christian Brauner <brauner@kernel.org>, amir73il@gmail.com,
-	hu1.chen@intel.com, miklos@szeredi.hu, malini.bhandaru@intel.com,
-	tim.c.chen@intel.com, mikko.ylinen@intel.com, lizhen.you@intel.com,
-	linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 0/3] overlayfs: Optimize override/revert creds
-Message-ID: <20240425174732.GA270911@dev-arch.thelio-3990X>
-References: <20240403021808.309900-1-vinicius.gomes@intel.com>
- <20240424-befund-unantastbar-9b0154bec6e7@brauner>
- <87a5liy3le.fsf@intel.com>
- <20240425-nullnummer-pastinaken-c8cf2f7c41f3@brauner>
- <87y191wem5.fsf@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cy7ywjmE0hG0diZeEiyD9gaEx//+N6b2v+4yVi+CyOeuHzMAsh8gxpNms4e/1jAZ/dwD+XRmm6pe6eAgZ6JkkTfRJsDyU8baX/bX08A9fQv+NbPoufcmr8BjZi90SevX+apijqu58mF4SqM25LPhqWY9QsJLUIuQ4dVzOXJVTlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41D731007;
+	Thu, 25 Apr 2024 11:17:04 -0700 (PDT)
+Received: from NH27D9T0LF (unknown [10.57.56.86])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 336303F793;
+	Thu, 25 Apr 2024 11:16:32 -0700 (PDT)
+Date: Thu, 25 Apr 2024 20:16:28 +0200
+From: Emanuele Rocca <emanuele.rocca@arm.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: kernel test robot <lkp@intel.com>, Steven Price <steven.price@arm.com>,
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Joey Gouly <joey.gouly@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Christoffer Dall <christoffer.dall@arm.com>,
+	Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev,
+	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+Subject: Re: [PATCH v2 09/14] arm64: Enable memory encrypt for Realms
+Message-ID: <Ziqd_OHm8_rQNuxV@NH27D9T0LF>
+References: <20240412084213.1733764-10-steven.price@arm.com>
+ <202404151003.vkNApJiS-lkp@intel.com>
+ <f11e6d5d-d2b9-400e-96c3-5d1ded827720@arm.com>
+ <5bba262f-6d30-417b-8a6f-fc03b86c47bd@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,43 +49,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87y191wem5.fsf@intel.com>
+In-Reply-To: <5bba262f-6d30-417b-8a6f-fc03b86c47bd@arm.com>
 
-On Thu, Apr 25, 2024 at 10:12:34AM -0700, Vinicius Costa Gomes wrote:
-> Christian Brauner <brauner@kernel.org> writes:
+Hi,
+
+On 2024-04-25 05:29, Suzuki K Poulose wrote:
+> Emmanuele reports that these need to be exported as well, something
+> like:
 > 
-> > On Wed, Apr 24, 2024 at 12:15:25PM -0700, Vinicius Costa Gomes wrote:
-> >> I believe the crash and clang 17 compilation error point to the same
-> >> problem, that in ovl_rename() some 'goto' skips the declaration of the
-> >> (implicit) variable that the guard() macro generates. And it ends up
-> >> doing a revert_creds_light() on garbage memory when ovl_rename()
-> >> returns.
-> >
-> > If this is a compiler bug this warrants at least a comment in the commit
-> > message because right now people will be wondering why that place
-> > doesn't use a guard. Ideally we can just use guards everywhere though
-> > and report this as a bug against clang, I think.
-> >
 > 
-> I am seeing this like a bug/mising feature in gcc (at least in the
-> version I was using), as clang (correctly) refuses to compile the buggy
-> code (I agree with the error).
+> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+> index 229b6d9990f5..de3843ce2aea 100644
+> --- a/arch/arm64/mm/pageattr.c
+> +++ b/arch/arm64/mm/pageattr.c
+> @@ -228,11 +228,13 @@ int set_memory_encrypted(unsigned long addr, int
+> numpages)
+>  {
+>         return __set_memory_encrypted(addr, numpages, true);
+>  }
+> +EXPORT_SYMBOL_GPL(set_memory_encrypted);
+> 
+>  int set_memory_decrypted(unsigned long addr, int numpages)
+>  {
+>         return __set_memory_encrypted(addr, numpages, false);
+>  }
+> +EXPORT_SYMBOL_GPL(set_memory_decrypted);
+> 
+>  #ifdef CONFIG_DEBUG_PAGEALLOC
+>  void __kernel_map_pages(struct page *page, int numpages, int enable
 
-Indeed, your description of the issue and the fact clang refuses to
-compile the problematic code makes me think that
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951 is the relevant GCC
-issue.
+Indeed, without exporting the symbols I was getting this build failure:
 
-As an aside, just in case it comes up in the future, there is a
-potential issue in clang's scope checking where it would attempt to
-validate all labels in a function as potential destinations of 'asm
-goto()' instances in that same function, rather than just the labels
-that the 'asm goto()' could jump to, which can lead to false positive
-errors about jumping past the initialization of a variable declared with
-cleanup.
+ ERROR: modpost: "set_memory_encrypted" [drivers/hv/hv_vmbus.ko] undefined!
+ ERROR: modpost: "set_memory_decrypted" [drivers/hv/hv_vmbus.ko] undefined!
 
-https://github.com/ClangBuiltLinux/linux/issues/1886
-https://github.com/ClangBuiltLinux/linux/issues/2003
+I can now build 6.9-rc1 w/ CCA guest patches if I apply Suzuki's
+changes:
 
-Cheers,
-Nathan
+1) move set_memory_encrypted/decrypted from asm/mem_encrypt.h to
+   asm/set_memory.h
+2) export both symbols in mm/pageattr.c
+
+See diff below.
+
+Thanks,
+  Emanuele
+
+diff --git a/arch/arm64/include/asm/mem_encrypt.h b/arch/arm64/include/asm/mem_encrypt.h
+index 7381f9585321..e47265cd180a 100644
+--- a/arch/arm64/include/asm/mem_encrypt.h
++++ b/arch/arm64/include/asm/mem_encrypt.h
+@@ -14,6 +14,4 @@ static inline bool force_dma_unencrypted(struct device *dev)
+        return is_realm_world();
+ }
+
+-int set_memory_encrypted(unsigned long addr, int numpages);
+-int set_memory_decrypted(unsigned long addr, int numpages);
+ #endif
+diff --git a/arch/arm64/include/asm/set_memory.h b/arch/arm64/include/asm/set_memory.h
+index 0f740b781187..9561b90fb43c 100644
+--- a/arch/arm64/include/asm/set_memory.h
++++ b/arch/arm64/include/asm/set_memory.h
+@@ -14,4 +14,6 @@ int set_direct_map_invalid_noflush(struct page *page);
+ int set_direct_map_default_noflush(struct page *page);
+ bool kernel_page_present(struct page *page);
+
++int set_memory_encrypted(unsigned long addr, int numpages);
++int set_memory_decrypted(unsigned long addr, int numpages);
+ #endif /* _ASM_ARM64_SET_MEMORY_H */
+diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+index 229b6d9990f5..de3843ce2aea 100644
+--- a/arch/arm64/mm/pageattr.c
++++ b/arch/arm64/mm/pageattr.c
+@@ -228,11 +228,13 @@ int set_memory_encrypted(unsigned long addr, int numpages)
+ {
+        return __set_memory_encrypted(addr, numpages, true);
+ }
++EXPORT_SYMBOL_GPL(set_memory_encrypted);
+
+ int set_memory_decrypted(unsigned long addr, int numpages)
+ {
+        return __set_memory_encrypted(addr, numpages, false);
+ }
++EXPORT_SYMBOL_GPL(set_memory_decrypted);
+
+ #ifdef CONFIG_DEBUG_PAGEALLOC
+ void __kernel_map_pages(struct page *page, int numpages, int enable)
