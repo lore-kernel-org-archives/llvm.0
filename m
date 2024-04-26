@@ -1,23 +1,23 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8AF13A268
-	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 07:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF832567F
+	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 07:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714114950; cv=none; b=goiIXTr84aG+gQEh5G5GRG1PBbBqpRiiJk4FPD77EJStLuwd+BACsMTQF1GcKtPRmYAKziAqMMbF3HIN7wkNjj0EWhhmHTLL0FFvZ0ekc906xdjeN1UaaFks+vY1P0V/OKruraNonN8Ta/pWpvrVJvmI8DXXxpkNbFDpTxHuojM=
+	t=1714114965; cv=none; b=B9+WJ1trIz6gCqKQJYjt5/bZjjcbRu9nPg5OsrAwx5CTp5krIRogdsMK6KCV8si5T+Fiyr+HvBKu5Z2wG2yK7rlnQd/ymtQkCHdesdyweKAK2ka6kdWfY1S2KHUQqaWBjb+BPeV1z5+5sG1Hx11k22gjugB7rcfME2OcxXPRb3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714114950; c=relaxed/simple;
-	bh=fSubFCZuzCHzqZTiGxX6f3bOK3HYq69IKsu1L0DWdf0=;
+	s=arc-20240116; t=1714114965; c=relaxed/simple;
+	bh=GaSMvxmMOp8Eji2z5Xo8ZYQH5edYvjro7N4Lgxz2XG8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UkktlSk6F+mFuZ+b46xBtlm251G3bHcQkRoFO6Oai+aEVQ5UTV7x/ptDeG9Q+Bve5YJzXc6aqekwbWqD6tK6AW5IhW+e+O/UYcpG1pLUi078Ly1sJu7TG5M+BmO5wIrVj/WyHO+7qkmfFGdeqglbbRp353pCmVlKBEDmAUv2VRo=
+	 MIME-Version:Content-Type; b=MD7IthBjwblkNqTGQO/L73kTPzv531gBfymU/Xvx3cn1LHvbJwJgX8Yg/d8viP2810dBDcFmRK40ttHEvlc12ncrUffx5fWXe82xaHiu/UxyqCMNZZPRvicW9NloTF7vztzsYtWR68Hmj7Zfdj5tPlbg8Z9O4uq43bKreIYi8Gs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [112.20.112.218])
-	by gateway (Coremail) with SMTP id _____8BxnuuBUStm+FgDAA--.13035S3;
-	Fri, 26 Apr 2024 15:02:25 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8CxCuqSUStmHlkDAA--.1787S3;
+	Fri, 26 Apr 2024 15:02:42 +0800 (CST)
 Received: from localhost.localdomain (unknown [112.20.112.218])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLlV_UStmAwMGAA--.2471S2;
-	Fri, 26 Apr 2024 15:02:25 +0800 (CST)
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxKOSMUStmFAMGAA--.19261S2;
+	Fri, 26 Apr 2024 15:02:37 +0800 (CST)
 From: Yanteng Si <siyanteng@loongson.cn>
 To: ojeda@kernel.org,
 	corbet@lwn.net,
@@ -39,9 +39,9 @@ Cc: Yanteng Si <siyanteng@loongson.cn>,
 	linux-doc@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 3/4] docs/zh_CN/rust: Update the translation of general-information to 6.9-rc4
-Date: Fri, 26 Apr 2024 15:02:12 +0800
-Message-Id: <09fc6c2e0553fb5fae9c91146e1bceb149b6cf71.1714113680.git.siyanteng@loongson.cn>
+Subject: [PATCH v2 4/4] docs/zh_CN/rust: Update the translation of quick-start to 6.9-rc4
+Date: Fri, 26 Apr 2024 15:02:35 +0800
+Message-Id: <aff560c262f255e873c07cc66891cf8140ad433d.1714113680.git.siyanteng@loongson.cn>
 X-Mailer: git-send-email 2.31.4
 In-Reply-To: <cover.1714113680.git.siyanteng@loongson.cn>
 References: <cover.1714113680.git.siyanteng@loongson.cn>
@@ -53,48 +53,145 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8DxLlV_UStmAwMGAA--.2471S2
+X-CM-TRANSID:AQAAf8AxKOSMUStmFAMGAA--.19261S2
 X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrKr13Gr43Cr17uF4ktr43urX_yoWkCFc_uw
-	s7JFZ0yFyUtryIgr48JFnxKr1xZayF9ryF9F1vvas5G34DKws8Ga4DJrZrXayfXr45ur98
-	CasrurnayrsrCosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbhkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
-	XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-	bVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY
-	1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jxvtAUUUUU=
+X-Coremail-Antispam: 1Uk129KBj93XoW3Ar18Kry3Ww18Xw1kKFWfWFX_yoW7ZryDpF
+	yqkr93ur4xAFy8ZryIkFyUuF15Ca95Z342q3WDJa42krs5Jr4kKw4Iyry3Ca17ZayxArW2
+	gF18Zryj9rsakFbCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBlb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6x
+	kI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
+	6rWY6Fy7McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
+	kI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+	c4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26F1j6w1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
+	CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0cVy7UUUUU==
 
-Update to commit ba4abeb13d5e ("docs: rust: Move testing to a
-separate page")
-commit be412baf7240 ("docs: rust: Add rusttest info")
-commit bd9e54a42ce2 ("docs: rust: update Rust docs output path")
+Update to commit 711cbfc71765 ("docs: rust: Clarify that 'rustup
+override' applies to build directory")
+commit 7583ce66ddf7 ("docs: rust: remove `CC=clang` mentions")
+commit 2285eb2f2429 ("docs: rust: clarify what 'rustup override' does")
+commit 8cb40124cf92 ("docs: rust: update instructions for obtaining
+'core' source")
+commit b603c6cc405a ("docs: rust: add command line to rust-analyzer
+section")
+commit 08ab786556ff ("rust: bindgen: upgrade to 0.65.1")
+commit eae90172c5b8 ("docs: rust: add paragraph about finding a
+suitable `libclang`")
+commit 6883b29c6cae ("docs: rust: point directly to the standalone
+installers")
 
 Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
 ---
- Documentation/translations/zh_CN/rust/general-information.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../translations/zh_CN/rust/quick-start.rst   | 50 +++++++++++++------
+ 1 file changed, 34 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/translations/zh_CN/rust/general-information.rst b/Documentation/translations/zh_CN/rust/general-information.rst
-index 6b91dfe1834a..251f6ee2bb44 100644
---- a/Documentation/translations/zh_CN/rust/general-information.rst
-+++ b/Documentation/translations/zh_CN/rust/general-information.rst
-@@ -32,7 +32,7 @@ Rust内核代码使用其内置的文档生成器 ``rustdoc`` 进行记录。
+diff --git a/Documentation/translations/zh_CN/rust/quick-start.rst b/Documentation/translations/zh_CN/rust/quick-start.rst
+index a4b8e8a50a89..8616556ae4d7 100644
+--- a/Documentation/translations/zh_CN/rust/quick-start.rst
++++ b/Documentation/translations/zh_CN/rust/quick-start.rst
+@@ -37,13 +37,18 @@ rustc
+ 需要一个特定版本的Rust编译器。较新的版本可能会也可能不会工作，因为就目前而言，内核依赖
+ 于一些不稳定的Rust特性。
  
- 要在你的网络浏览器中本地阅读该文档，请运行如::
+-如果使用的是 ``rustup`` ，请进入检出的源代码目录并运行::
++如果使用的是 ``rustup`` ，请进入内核编译目录（或者用 ``--path=<build-dir>`` 参数
++来 ``设置`` sub-command)并运行::
  
--	xdg-open rust/doc/kernel/index.html
-+	xdg-open Documentation/output/rust/rustdoc/kernel/index.html
+ 	rustup override set $(scripts/min-tool-version.sh rustc)
  
- 要了解如何编写文档，请看 coding-guidelines.rst 。
+-或者从以下网址获取一个独立的安装程序或安装 ``rustup`` ：
+++这将配置你的工作目录使用正确版本的 ``rustc``，而不影响你的默认工具链。
+ 
+-	https://www.rust-lang.org
++请注意覆盖应用当前的工作目录（和它的子目录）。
++
++如果你使用 ``rustup``， 可以从下面的链接拉取一个单独的安装程序:
++
++	https://forge.rust-lang.org/infra/other-installation-methods.html#standalone
+ 
+ 
+ Rust标准库源代码
+@@ -57,21 +62,23 @@ Rust标准库的源代码是必需的，因为构建系统会交叉编译 ``core
+ 
+ 这些组件是按工具链安装的，因此以后升级Rust编译器版本需要重新添加组件。
+ 
+-否则，如果使用独立的安装程序，可以将Rust仓库克隆到工具链的安装文件夹中::
++否则，如果使用独立的安装程序，可以将Rust源码树下载到安装工具链的文件夹中::
+ 
+-	git clone --recurse-submodules \
+-		--branch $(scripts/min-tool-version.sh rustc) \
+-		https://github.com/rust-lang/rust \
+-		$(rustc --print sysroot)/lib/rustlib/src/rust
++       curl -L "https://static.rust-lang.org/dist/rust-src-$(scripts/min-tool-version.sh rustc).tar.gz" |
++               tar -xzf - -C "$(rustc --print sysroot)/lib" \
++               "rust-src-$(scripts/min-tool-version.sh rustc)/rust-src/lib/" \
++               --strip-components=3
+ 
+-在这种情况下，以后升级Rust编译器版本需要手动更新这个克隆的仓库。
++在这种情况下，以后升级Rust编译器版本需要手动更新这个源代码树（这可以通过移除
++``$(rustc --print sysroot)/lib/rustlib/src/rust`` ，然后重新执行上
++面的命令做到）。
+ 
+ 
+ libclang
+ ********
+ 
+ ``bindgen`` 使用 ``libclang`` （LLVM的一部分）来理解内核中的C代码，这意味着需要安
+-装LLVM；同在开启 ``CC=clang`` 或 ``LLVM=1`` 时编译内核一样。
++装LLVM；同在开启``LLVM=1`` 时编译内核一样。
+ 
+ Linux发行版中可能会有合适的包，所以最好先检查一下。
+ 
+@@ -94,7 +101,20 @@ bindgen
+ 
+ 通过以下方式安装它（注意，这将从源码下载并构建该工具）::
+ 
+-	cargo install --locked --version $(scripts/min-tool-version.sh bindgen) bindgen
++	cargo install --locked --version $(scripts/min-tool-version.sh bindgen) bindgen-cli
++
++``bindgen`` 需要找到合适的 ``libclang`` 才能工作。如果没有找到（或者找到的
++``libclang`` 与应该使用的 ``libclang`` 不同），则可以使用 ``clang-sys``
++理解的环境变量（Rust绑定创建的 ``bindgen`` 用来访问 ``libclang``）:
++
++
++* ``LLVM_CONFIG_PATH`` 可以指向一个 ``llvm-config`` 可执行文件。
++
++* 或者 ``LIBCLANG_PATH`` 可以指向 ``libclang`` 共享库或包含它的目录。
++
++* 或者 ``CLANG_PATH`` 可以指向 ``clang`` 可执行文件。
++
++详情请参阅 ``clang-sys`` 的文档:
+ 
+ 
+ 开发依赖
+@@ -163,7 +183,9 @@ rust-analyzer
+ 一起使用，以实现语法高亮、补全、转到定义和其他功能。
+ 
+ ``rust-analyzer`` 需要一个配置文件， ``rust-project.json``, 它可以由 ``rust-analyzer``
+-Make 目标生成。
++Make 目标生成::
++
++       make LLVM=1 rust-analyzer
+ 
+ 
+ 配置
+@@ -189,10 +211,6 @@ Rust支持（CONFIG_RUST）需要在 ``General setup`` 菜单中启用。在其
+ 
+ 	make LLVM=1
+ 
+-对于不支持完整LLVM工具链的架构，使用::
+-
+-	make CC=clang
+-
+ 使用GCC对某些配置也是可行的，但目前它是非常试验性的。
+ 
  
 -- 
 2.31.4
