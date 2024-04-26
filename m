@@ -1,84 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47E15A109;
-	Fri, 26 Apr 2024 10:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B531585624
+	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 10:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714127482; cv=none; b=GnHEhEDQ/Up0Qu3OU+9dgqFRRtcw7X7bQoFKsBciFMcQrwq/ZdKy/Ivzwj/FKukpT3WJg8f2/pQY9dOStMJt6kCfcR0tJLGz9S2WmoHUh24c1fXBS7/S55jPnvOCTZFd5yQLXE1+G/Sv1+PXzqOpHkgLWx1oHf0KCJBiLUOm2Sc=
+	t=1714127752; cv=none; b=sU49vsvGP0lUbn/79f2upvn5G1QETrWQo6zq/LClko6lFHoLYjp6Rl6eaPmruq/kXrwnJozmDoTVu+63Nnum8Q7SrnhFPLiWOFFDzOLpStB0ILB0/CWYRYqSOQXppU68CIbJeNiZb+0VsOjqyxkfJr7ciboYEsfe/sEpCulQBBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714127482; c=relaxed/simple;
-	bh=M9Mk/1LclGdhJWimwogrI2nrrKOT8uLmGIKZSCfYvHI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=odKfZT/9plY1qjaTWuGKjYfXGoKPjkMGqGFrtsD1OSDBfZP2BS5yY67zJwxJHhWG9ObBEBFIc8k8gZLLTV/Yf+IQ+P0ERUFbr1FlLgY6+W8m+8q91sQOV0UxQ2B1cwC1R7BPSeU6GWkAHM+D25jc+Q2gjHC9AChg0q4SE/45uKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVssEkSN; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVssEkSN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C935DC113CD;
-	Fri, 26 Apr 2024 10:31:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714127481;
-	bh=M9Mk/1LclGdhJWimwogrI2nrrKOT8uLmGIKZSCfYvHI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=tVssEkSN4mreZLlloFd3oP+7+VkHU/QrDtXMKyNrGD3oLEEbH5Yyd01l6r23qCcAl
-	 0aR+A6vh60gnuc9y0Is43qFML3eigsJL92H5eLrl4tlTtEKWAIwq/3eF8hXeHOkalC
-	 Kd2SG+J5Lc+VFqd0qJHGBP0TN9Ewb4y9GXSAY1FWvAJzwUteJe7+n13KeNsubfIGyu
-	 MIjvMT2g+6VWvayx4EZ1RE+fYF04LG62wtMQv2g+njP7XWH2IXmkPOwiM0l+8FqJPN
-	 mfhddeFoMtzhL/t8Pr2xAfZCtSrmd23fRd3splmKAZxu5qCKqXXAtC1rZ/uyYKPfLC
-	 ypv2zWsYIqTvw==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>, Arnaldo Carvalho de Melo
- <acme@redhat.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc: linux-kernel@vger.kernel.org, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@rivosinc.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
- Anders Roxell <anders.roxell@linaro.org>, llvm@lists.linux.dev, Jiri Olsa
- <olsajiri@gmail.com>
-Subject: Re: [PATCH v2] tools/build: Add clang cross-compilation flags to
- feature detection
-In-Reply-To: <ZUOWcXDpCOzxbFW0@krava>
-References: <20231102103252.247147-1-bjorn@kernel.org> <ZUOWcXDpCOzxbFW0@krava>
-Date: Fri, 26 Apr 2024 12:31:17 +0200
-Message-ID: <87o79wxvnu.fsf@all.your.base.are.belong.to.us>
+	s=arc-20240116; t=1714127752; c=relaxed/simple;
+	bh=KbTAaCOP23RX4cDVyVC1f0gyN8yb6XO4hy9Vw4aJ848=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fZ0v91OlB3uEzclNZr5QcnAkjo3TpVYpIk/wm8OUwaeocrB0vQmJJ0CtBGm5mtA+cw0nBbCICUmYjC+s69YOQi/rcewWF4CMkluBqqOLyKrxD6FQk3xHZpI89G0HXmMlZyglafqi8e4zF0xfj2/2pV/KJ4NOno0BmM/sl7Xfvo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.20.112.218])
+	by gateway (Coremail) with SMTP id _____8CxxOqCgytmIWsDAA--.1959S3;
+	Fri, 26 Apr 2024 18:35:46 +0800 (CST)
+Received: from [192.168.100.8] (unknown [112.20.112.218])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxlFZ_gytm0zMGAA--.3023S3;
+	Fri, 26 Apr 2024 18:35:45 +0800 (CST)
+Message-ID: <9cae4c4a-55a6-4c6c-9780-866f796a52c0@loongson.cn>
+Date: Fri, 26 Apr 2024 18:35:43 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] rust: docs: Update the translation of rust to
+ 6.9-rc4
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: ojeda@kernel.org, corbet@lwn.net, alex.gaynor@gmail.com,
+ wedsonaf@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@samsung.com,
+ aliceryhl@google.com, nathan@kernel.org, ndesaulniers@google.com,
+ morbo@google.com, justinstitt@google.com, alexs@kernel.org,
+ dzm91@hust.edu.cn, linux-doc@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+ linux-riscv@lists.infradead.org
+References: <cover.1714113680.git.siyanteng@loongson.cn>
+ <CANiq72meE9txt5b09Y7cUJd-hEqcZX1ZtRc_0YYDZqWQgyo3wA@mail.gmail.com>
+Content-Language: en-US
+From: Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <CANiq72meE9txt5b09Y7cUJd-hEqcZX1ZtRc_0YYDZqWQgyo3wA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxlFZ_gytm0zMGAA--.3023S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7GF1kCr18AFWfKFyrtr1fuFX_yoWkXrb_Aa
+	sYyay7tw1kJF4kCFWfJr43uFs7X3y8Cw1DJr1Iqw17Xr95AFZ7uFZxK34S9F4Iqw4rCr1D
+	Kr10gayS9343uosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
+	Jw1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAF
+	wI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU2G-eUUUUU
 
-Jiri Olsa <olsajiri@gmail.com> writes:
 
-> On Thu, Nov 02, 2023 at 11:32:52AM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
->> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->>=20
->> When a tool cross-build has LLVM=3D1 set, the clang cross-compilation
->> flags are not passed to the feature detection build system. This
->> results in the host's features are detected instead of the targets.
->>=20
->> E.g, triggering a cross-build of bpftool:
->>=20
->>   cd tools/bpf/bpftool
->>   make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-gnu- LLVM=3D1
->>=20
->> would report the host's, and not the target's features.
->>=20
->> Correct the issue by passing the CLANG_CROSS_FLAGS variable to the
->> feature detection makefile.
->>=20
->> Fixes: cebdb7374577 ("tools: Help cross-building with clang")
->> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+在 2024/4/26 15:37, Miguel Ojeda 写道:
+>> v2:
+>> * As Miguel's comments, translate commit 01848eee20c6
+>>    into Chinese, as well as commit 81889e8523e6. By the way,
+>>    these two patches haven't appeared in the doc development
+>>    tree yet, maybe we could consider merging them into the
+>>    rust tree?
+> The former is in `rust-fixes`, which will be sent to Linus for this
+> cycle. So the English docs will be updated sooner than these updates,
+> if that is what you are asking.
+
+Well, it seems that we will have to wait for the doc tree, because the 
+Chinese
+
+translation is now carried out under the doc tree.
+
 >
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> For the other one, it is in the RISC-V tree and I assume it will be
+> sent into the next merge window. I don't know how you normally handle
+> that (i.e. translations being updated at the same time or after a
+> cycle), but either way, I am not sure why you would want them to be
+> merged into the Rust tree?
 
-Waking up the dead!
+I'm thinking that I'm two commits ahead of the doc tree, it doesn't seem 
+to fit
 
-Arnaldo, Jean-Philippe: I'm still stung by what this patch fixes. LMK
-what you need from me/this patch to pick it up.
+merge into the doc tree in this window, and there might be conflicts on
+
+linux-next if I splite the patch out more.
 
 
-Cheers,
-Bj=C3=B6rn
+Thanks,
+
+Yanteng
+
+
+
