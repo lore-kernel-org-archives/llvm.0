@@ -1,186 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23D4335C7
-	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 05:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB99013A247;
+	Fri, 26 Apr 2024 05:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714108897; cv=none; b=d1evotXkmsMeb7uUD39dClOIVEqpoRZuJR7wZd9GYZW6kNg75qXejSpoYg+0Vp7/gQd/CMILEkprcpL8eSganmm/McMiEjHZfJbMAyfajwPzEXiUS3yiRdQzX8nJUrEKSsb+S18IyWtfAdiiaGyL5eBxfHPHcZ+mEOBPFHR9XBc=
+	t=1714108897; cv=none; b=K8sbLC7yjGtsegYHfEzpNjj4cIu2xL8N3BOeWcgV9Ff2NRQ8p1eED/HCwk1gknkNiqUgklx42RqNv1dgujnI1qbNvgACuw6MRNKyzmQ0HCgI8WxnNtjGfa/GmmAItWm8xBmDP6eBH51NQnWaX/39rzeqeWist5e9B3v2lLzuKwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714108897; c=relaxed/simple;
-	bh=lsj2XLV+pz8Tbdone4I3i/cDx0JQnuiJ1OmIfdrFTNs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=i89SG2mXI7QYTx3O6LyTpU4pA6la5gGWN9dI0P1kzx9TBNFfw2q89D1hu9/cHhZo62Tqoj+G8UjzP78WbeBtddRubzF8ubeyNkuDi8szxbEqOixRDxTFcdr9XPfx0KGAiQD1gI7xPMzwirql+k4FGRUN5N3oxI/h/6XKrP7dATc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DzBu+EQ7; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	bh=SLIrhNL07fIq6paa7wR6CFchJgIfijn7oQKw+HQTtDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i8wxhq7bTEgL+fL0TIv62S5+F7ODlqFtZiJ+trIsGjTegQZ19PuUXGpmu8nq6jADWGauFmnLhj+dJZmaLm+ZIxEokBctY7kLIn0GuAik07WJfK7gsHi2ytQfberQwdiJ9nifkE8CGQFdelALM++/LaQ8T+3pYxOMCQJC/pcFGeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M1A81ZX3; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DzBu+EQ7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714108894;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=b23Nv97rsIH8SfNh6hZf/y0dhJL0sk3vt3iU2QYDt50=;
-	b=DzBu+EQ7mJlsya+cMtfIdBs16NM/PocSLomOhh1SBEX88/zWbIb69oWpbtM4dvNMrFWqta
-	JGq0er2IYbGiXLO44BNH38jHWj8RiobHdY+w/KZWOs3vk6vWNrHv1RJORJ4L0m7cSRHwgn
-	gb/tXAbwj8qYdchxr1u2DurFvZYU3UE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-481-SeHBVAgLP7-EUQ6xuP5Azg-1; Fri, 26 Apr 2024 01:21:32 -0400
-X-MC-Unique: SeHBVAgLP7-EUQ6xuP5Azg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 964D78943A4
-	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 05:21:32 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5250D202450D;
-	Fri, 26 Apr 2024 05:21:32 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.9.0-rc5, mainline.kernel.org-clang, c942a0cd)
-Date: Fri, 26 Apr 2024 05:21:32 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M1A81ZX3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714108896; x=1745644896;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SLIrhNL07fIq6paa7wR6CFchJgIfijn7oQKw+HQTtDc=;
+  b=M1A81ZX3IOLBf7xXsMChkP7zYVwmVzzox6nnv36WerYHSB10dCjPJ/eQ
+   TNjuzquZSVNBCT1vFIvuhZrQZtae58MJjDU+g5hWWEQ1T+lqeywIuq+3e
+   ZtkHrVNZIRo1yT+HIDyY74XkwGoyMArZhBGVHTbtmZFGbkmhwHjUo3/Sc
+   s9eZrzdNUdMQI/Afix1kKl/WZXOXZf6o9Rn96oG6gsd305ef89v3d9mUm
+   W8nKNf9gyOwU4jE95ik3kaVJWXxAe+Y/2AFd4osGqsEyrmAW6B92ofOaL
+   cYAUv052+HYh6mYKQnmoWb4kspk2KGid+nUnKZctuie3FCztQqnp/4qA7
+   w==;
+X-CSE-ConnectionGUID: DB18qO9tTS27NPKGaXgF1Q==
+X-CSE-MsgGUID: cGR67/TaSo6orFn4tdlA6A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="32332230"
+X-IronPort-AV: E=Sophos;i="6.07,231,1708416000"; 
+   d="scan'208";a="32332230"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 22:21:36 -0700
+X-CSE-ConnectionGUID: rsm/kYDnQU+En24nwWgodg==
+X-CSE-MsgGUID: zVUPIdL8QPi/qSowTT4xYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,231,1708416000"; 
+   d="scan'208";a="29971707"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 25 Apr 2024 22:21:33 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s0E1a-0003Ik-1N;
+	Fri, 26 Apr 2024 05:21:30 +0000
+Date: Fri, 26 Apr 2024 13:20:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/2] net: dsa: Remove adjust_link paths
+Message-ID: <202404261353.mKEFmDUo-lkp@intel.com>
+References: <20240425185336.2084871-3-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <37990.124042601213200265@us-mta-481.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240425185336.2084871-3-florian.fainelli@broadcom.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Florian,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on net-next/main]
 
-Kernel information:
-    Commit message: Merge tag 'for_linus' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/mst/vhost
+url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Fainelli/net-dsa-Remove-fixed_link_update-member/20240426-025626
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240425185336.2084871-3-florian.fainelli%40broadcom.com
+patch subject: [PATCH net-next 2/2] net: dsa: Remove adjust_link paths
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240426/202404261353.mKEFmDUo-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240426/202404261353.mKEFmDUo-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1268489877
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404261353.mKEFmDUo-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
-"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
-=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
-:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
-            Affected tests:
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-                stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
-        Issue: [upstream] [eln] waived call traces we don't plan to report =
-upstream
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1864
-            Affected tests:
-                Reboot test [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
+All warnings (new ones prefixed by >>):
+
+>> net/dsa/port.c:1600:21: warning: variable 'phydev' set but not used [-Wunused-but-set-variable]
+           struct phy_device *phydev = NULL;
+                              ^
+   1 warning generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
+vim +/phydev +1600 net/dsa/port.c
 
+dd805cf3e80e03 Russell King (Oracle  2023-05-25  1594) 
+8ae674964e67eb Florian Fainelli      2019-12-16  1595  static void dsa_port_phylink_mac_link_down(struct phylink_config *config,
+77373d49de22e8 Ioana Ciornei         2019-05-28  1596  					   unsigned int mode,
+77373d49de22e8 Ioana Ciornei         2019-05-28  1597  					   phy_interface_t interface)
+77373d49de22e8 Ioana Ciornei         2019-05-28  1598  {
+dd0c9855b41310 Russell King (Oracle  2024-04-10  1599) 	struct dsa_port *dp = dsa_phylink_to_port(config);
+0e27921816ad99 Ioana Ciornei         2019-05-28 @1600  	struct phy_device *phydev = NULL;
+77373d49de22e8 Ioana Ciornei         2019-05-28  1601  	struct dsa_switch *ds = dp->ds;
+77373d49de22e8 Ioana Ciornei         2019-05-28  1602  
+57d77986e74287 Vladimir Oltean       2021-10-20  1603  	if (dsa_port_is_user(dp))
+6ca80638b90cec Florian Fainelli      2023-10-23  1604  		phydev = dp->user->phydev;
+0e27921816ad99 Ioana Ciornei         2019-05-28  1605  
+d074ebf637f87c Florian Fainelli      2024-04-25  1606  	if (!ds->ops->phylink_mac_link_down)
+77373d49de22e8 Ioana Ciornei         2019-05-28  1607  		return;
+77373d49de22e8 Ioana Ciornei         2019-05-28  1608  
+77373d49de22e8 Ioana Ciornei         2019-05-28  1609  	ds->ops->phylink_mac_link_down(ds, dp->index, mode, interface);
+77373d49de22e8 Ioana Ciornei         2019-05-28  1610  }
+77373d49de22e8 Ioana Ciornei         2019-05-28  1611  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
