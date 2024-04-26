@@ -1,97 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AE2149E07;
-	Fri, 26 Apr 2024 16:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6781B13D2AC
+	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 16:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714147755; cv=none; b=osJhlwfkk9PXL46I7oNpNnKLT/no2/oz8oZZtVL0LjhUPI/uY2mlLW+rXD/eKGRRgY7Rs1g2pDnqKnCDT74/gAUKp7gijJDugnnigjkliJpC85mt+RTxs/iSbGOyHb0uqp6ZbeXtb4vDPNrvqIqZcURSEMMT7SGWmdC6UwpFKTo=
+	t=1714150118; cv=none; b=DYF3uJ/aWZe1Nx91mXIjmyD5FyBHdoRJ99C0Ck+OdpfROLgitBc/PXM6my9jWg51TeZlWylH9tX86dlYD3ccOtcr46exMl2AJcHCb24xi+6NQ/GmTExSH3T7Ycz7CppoWYLOYTdv9LbGegAEg+NNF3rTNQdPhRCjJc+kpuefIUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714147755; c=relaxed/simple;
-	bh=iRAHtoHflwcOnUe6sMhMbeG7LceMsW1mwUCMgjDsfeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=R+cuQ25GKci8Sx2pGc10YaFZoECOn74Rt6jcOgqxIQRKRWh4TMJrzVaL/+JCVT9Cfm9MetEJBNSLZF3AKUyFnt8vRU2mEgOV7StLUYkC0GXRtqpQS305gWYkobPu8hET5ce3G9qompckdhJYLs7Cv0JmFMcQbwjPnjVR/0wYo6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U5uli2Iz; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714150118; c=relaxed/simple;
+	bh=isJanjft6Ijm3USO7GK2BudIrWLYWU6b2nnmV6911CY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qyPYkL1jayWR9EnXY/BagWnlXa0hqAxGC17Ac1zeKPBiroatZUVvVtc7lo0818GGA6nB8vIaSk61Jdlgc+bcS6irIflbPSMbLxxi9c4vIPk1uzQSLhh4njA65NyDplG3kuYMf38KKgVDxkTveCDGORK+EwYB8nrQWUV3h1LFPbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DaZhP13R; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U5uli2Iz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714147752; x=1745683752;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iRAHtoHflwcOnUe6sMhMbeG7LceMsW1mwUCMgjDsfeM=;
-  b=U5uli2IzHdHJMmssJBP0VkMofgk6dQNFgyWBzJcvNZOs2gPAx8uoRaEd
-   aZO7qHFSwz8eoSdcNjf8eicYsxnw2dDho2Ls1GajBJKKYpp/z5jvFj8I2
-   o6dcVhQZsiHK4koGSYujU/pk6IQpRUWv6LdTT6dGQGiDlOCN34ANC3jXG
-   H7DL5JVcEp6eueT10IUnDyR6Cx3rW9tLRquYa5M1ICR2B3cpL8NP/P8mP
-   tjLlpXFmqlz9alTGgU9TwGxEo0OpzB0ED5EVgPBAP+eX46dIZuAsin9Wr
-   9TRaBFAWcuRrRwJ5q0PoS4ZU3taMInvsJit47MXlnUzaNQGWAdZIOVGPq
-   Q==;
-X-CSE-ConnectionGUID: F9NGZDOsQRCyLti+xWwHoA==
-X-CSE-MsgGUID: 5Fh5l4CZQ2CaBr5vHJq3vQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="12823160"
-X-IronPort-AV: E=Sophos;i="6.07,233,1708416000"; 
-   d="scan'208";a="12823160"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 09:08:57 -0700
-X-CSE-ConnectionGUID: +jd/O8cMTnCf65I4ke6Pgg==
-X-CSE-MsgGUID: v6YLQipRQIy1CYwT+OcYaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,233,1708416000"; 
-   d="scan'208";a="26095526"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 26 Apr 2024 09:08:56 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s0O85-0003uG-1N;
-	Fri, 26 Apr 2024 16:08:53 +0000
-Date: Sat, 27 Apr 2024 00:08:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrey Konovalov <andreyknvl@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/kasan/report.c:143:20: error: unused function
- 'kasan_kunit_test_suite_executing'
-Message-ID: <202404270029.zLvI9vVQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DaZhP13R"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2a2da57ab3aso2083036a91.3
+        for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 09:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714150117; x=1714754917; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JmMXkGy7VPsvwtkKsXV/wpxBJRPdn7aku2j+I7TeRZI=;
+        b=DaZhP13RaZ4TS3MseYdhVfEAQcogSw1wr00klgxNzo7juzc6idVx9x6a9xoi/mVM+C
+         fRMxzmdt7cGxYUVzUndbqjhyJ8bVABdI+6x80JWuQZQXXi1jQna5Psfh0NX1YSm9tjMv
+         3nQxnb69VaBUfB6lPsxETHl9k6Ey8oOrjNg2JvzmJGla0Z63vCt1ggT46Iixj673htCQ
+         2ZjPXF8QTpvpV3rra16zNIpZ8JVK3lDsqV8b/vm2SImR2bpl3lWNLCfi7x6nKF1LcMJg
+         KokK7DFjfgH6wdSxbA0rs6HVMtlTBvzLKSOgGfKsigqC1Hn4VaVechsfMRlbOY8tzBL4
+         cnmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714150117; x=1714754917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JmMXkGy7VPsvwtkKsXV/wpxBJRPdn7aku2j+I7TeRZI=;
+        b=Sc29c3a7SF6BArXxHo3sfIUfPL9GXb0xUStsugLo0wI4NWpxJANxW1SC9/xSd8Bzww
+         3mrdnlFBURBMjb+4a+q9t5UkqJvhTpHWJqLYOD/EpFyVROVRyTsEIvjHpYbNcJHo384d
+         /H64IvrB422qyXbYwekMNWnr6tZEujnPKKPfSJGCzCAkxg2fhlPy6MaxgJVKfX9hBAvb
+         GakI3f/6bN7w8hvdjarBGCkM7It5hh9XSO8d2fwjYwO3hGcXhd49Tzzhhub/tCsDBVVf
+         7zQA3hVzUuZ6rzDInMrkQ6LWWsOCIEO/Cp/If2/Rpdl8pwtHJiROSzN/Qsiw6++uySJk
+         hlCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqIORZwZmOFosA+tSRQq38a9qU2oNjlIKqUJc7lt1g0tS2YPMOQ/rXaaESdIr7DYX1Iowwu3GThuRIN7FzgHNVGYvnSQ==
+X-Gm-Message-State: AOJu0YwqieuMSIEJawyl4zGW9YQ2PgMf96a/jTj81N8cYGNtMfvPuKBa
+	EcHB6YTGqlM+hNvIf8Iv9WIcb18HY45Nc0l9N9cwvdJDgQRq3VDYkyUvdB6Oy0Zn9SDaTLi6W+F
+	XL4cRdH6Qjf1ITVgjcgZpuMmcRXs=
+X-Google-Smtp-Source: AGHT+IGUzYot4aWxYmJQmmtJTaU0cDPgRlNF43MSJ+xR+zOvk17sLDT893O9A18W2SmanyZEbP3mYQ0mJ7tS2z0ZCN8=
+X-Received: by 2002:a17:90a:34c2:b0:2ab:9819:64bc with SMTP id
+ m2-20020a17090a34c200b002ab981964bcmr3011377pjf.32.1714150116642; Fri, 26 Apr
+ 2024 09:48:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1714113680.git.siyanteng@loongson.cn> <CANiq72meE9txt5b09Y7cUJd-hEqcZX1ZtRc_0YYDZqWQgyo3wA@mail.gmail.com>
+ <87zftgnsun.fsf@meer.lwn.net>
+In-Reply-To: <87zftgnsun.fsf@meer.lwn.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 26 Apr 2024 18:47:30 +0200
+Message-ID: <CANiq72mHoh=qgOGPj29hpS7EhVcXi5Q_7GYsycKhYwj3QbsTag@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] rust: docs: Update the translation of rust to 6.9-rc4
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Yanteng Si <siyanteng@loongson.cn>, ojeda@kernel.org, alex.gaynor@gmail.com, 
+	wedsonaf@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@samsung.com, 
+	aliceryhl@google.com, nathan@kernel.org, ndesaulniers@google.com, 
+	morbo@google.com, justinstitt@google.com, alexs@kernel.org, dzm91@hust.edu.cn, 
+	linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c942a0cd3603e34dd2d7237e064d9318cb7f9654
-commit: c8c7016f50c85688d71feea2dba1bd955d5f5358 kasan: fail non-kasan KUnit tests on KASAN reports
-date:   1 year, 5 months ago
-config: x86_64-sof-customedconfig-memory-debug-defconfig (https://download.01.org/0day-ci/archive/20240427/202404270029.zLvI9vVQ-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404270029.zLvI9vVQ-lkp@intel.com/reproduce)
+On Fri, Apr 26, 2024 at 3:42=E2=80=AFPM Jonathan Corbet <corbet@lwn.net> wr=
+ote:
+>
+> I guess I don't see any reason why the translation couldn't go through
+> docs-next as usual?  It will all even out during the merge window,
+> right?  Or am I missing something?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404270029.zLvI9vVQ-lkp@intel.com/
+Yeah, that is what I am thinking as well, although Yanteng is
+mentioning conflicts somewhere, so I may be missing something too.
 
-All errors (new ones prefixed by >>):
-
->> mm/kasan/report.c:143:20: error: unused function 'kasan_kunit_test_suite_executing' [-Werror,-Wunused-function]
-     143 | static inline bool kasan_kunit_test_suite_executing(void) { return false; }
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +/kasan_kunit_test_suite_executing +143 mm/kasan/report.c
-
-   142	
- > 143	static inline bool kasan_kunit_test_suite_executing(void) { return false; }
-   144	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
