@@ -1,222 +1,139 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0E7155749
-	for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 21:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E582F380;
+	Fri, 26 Apr 2024 00:33:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714080395; cv=none; b=mQUqEQtu+upiaqr8p7lDCHveXaq08QBw7jD1eH7z7Njcinp8ZrzvLSU3QD4bGmZB74uJl06rhGz2gBrnB99voAoEIl3EFiJqU7aXEtJSossGsacTPh++9n09cigzmmCKhCTUvDH+FsJRo7mI/rwYv7hxJKHdvHgAaviebbgYKUE=
+	t=1714091607; cv=none; b=HYVhtGzzuMyWpuNNPZAOFzD7dGdXURLh05ByVXT9dNcdY4psEl816Z0Rdvaxi1ID1Zaay0IEQpyKvL2XVVU3o/CI9TQQDkq0ltwkNTMGgihXAwzfCueABzcVDp/t29CGdiU4xc9VQYw+YMaJMhUNH16p/wV4ji7rGAtK9c6QtWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714080395; c=relaxed/simple;
-	bh=n3dkBATiolU7UyldfZyWFRhxjuCmQyOWBAmvSVIGK0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jvU2CCWwQdyz0ux9V5QrDNkJ/a9Fw/M/7f010PZX9w8j2AmED9t3XzByIT/tXkkaNV09RmqhabEf3SnbXtTx9wS9tOOlMP3J703IopY1hSKcFYx259dmDHSJ6KtnZDyqr1/jz/9J4QSQwek0aa3qSDN0H/ttYcHqsYJhA7ccBIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=VbKeStmN; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1714091607; c=relaxed/simple;
+	bh=Nf+U2Bz83MNqocDchiJl1OjjxkiS7h47yk61UeFnBl8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GlWgw0uz7gQAS+6pW5E2Vy7CQjb3b2TtIRZ87KllkcRFZ1LM5RHFgdW6gJKcHQH3m/hvbkMD9OFQXWPKO7Nle7G9unPL0GLjJuNbKuZYH5W9x2HVjxeCEZWzVEPCBlPeEOpEmSfN6HNIO4asFkwulaljTUBsbkReES4QmzQa6YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gCRMFwP4; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="VbKeStmN"
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6a073f10e25so7788776d6.3
-        for <llvm@lists.linux.dev>; Thu, 25 Apr 2024 14:26:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1714080393; x=1714685193; darn=lists.linux.dev;
-        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dGrhuzc1od8Epj32EVwQzZgOz10jp7nqg6adynsi20w=;
-        b=VbKeStmNRuzCjj464dWwt57F4oPk+1Nzjcgunr8YCp/OAVO12dRFbLEg+OXDBFFRKL
-         2NZP2SfVJmpk4DeNjEY4Pfa1PSY7ZwHezFj2qorhjbinkszU5WjJXJsCvddWzkpy38BS
-         St+DFfoyv1BPKvNEn7UpRHmox9Omw86a+cKdA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714080393; x=1714685193;
-        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dGrhuzc1od8Epj32EVwQzZgOz10jp7nqg6adynsi20w=;
-        b=wsGXli5FhQAbLuIDK1ONPoupmp0y5aAuqFlTYoI3ZwZ5HYQXW+25TZvsaULjlbxrOp
-         E1npl5VZ1rpCb+9V6jCCvchSKcFY4DTe7y4NYTXrU5wMmXOdl6dr8PpI4GgyaRJfuz8r
-         dKfldNlemoKlnHArIgo6tc5I/6FLbWt+yBPZIfRQoiAsevKjreLlnhwfTwZqtA7zkbhv
-         VbruC2sjRPKJPMfCZ9IUo8tX7DNio70N0a1aUB9AW60NnqCrzQcn2yadA0Yc6RkEoU70
-         1Gg5OL9HtR2uosjUDAuijTKR/MVHD7yGtywazlgXI7Ri1wOLhXtZZS1rjrcqCG/XZ1CY
-         UeUw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDhpEKCpMCaak+wqi7oOMHlH27yBFyjoktRpB95vF+b+Gs+s9lIHiAzmi98gG74LLWUXyxFNNGogSX0Fa0SHz4w4br2g==
-X-Gm-Message-State: AOJu0Yy1gWmNrVnzlP2ijyOu3Ue0J3m4Nq2MW2w/l3hEWJyZqwxBOxHQ
-	iHVf+LVmSD8vTj9rZ7pqu+0EzcJrEAe7YtRy2KFT5EWTO33Ds8g00fIcfr9RsA==
-X-Google-Smtp-Source: AGHT+IGyPWZWvDFOWPXs5zONJ5jZNE8C7BDorr7QvJCSv/LD/fJkVQmIJ9NpqNvEfkGXmviteDtLGw==
-X-Received: by 2002:ad4:5748:0:b0:6a0:85df:3506 with SMTP id q8-20020ad45748000000b006a085df3506mr1302099qvx.23.1714080393157;
-        Thu, 25 Apr 2024 14:26:33 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i18-20020a0cf392000000b0069b65ce60f2sm7328545qvk.55.2024.04.25.14.26.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Apr 2024 14:26:32 -0700 (PDT)
-Message-ID: <caba838a-35cd-4cf7-a3e3-429275ac76cb@broadcom.com>
-Date: Thu, 25 Apr 2024 14:26:29 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gCRMFwP4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714091607; x=1745627607;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Nf+U2Bz83MNqocDchiJl1OjjxkiS7h47yk61UeFnBl8=;
+  b=gCRMFwP4R3AUJeXrz3lii/FUQ0KyuHOovoYAoC5cfAtCaJv39T/wmMMq
+   FLsHSiwBe9LeefjaiX/pcyHsJO4WSRsxsCmgh65cFUuWp5BRUP7a+qzvc
+   XYEagd6FDixB/F5gMFZWEs/JJpTsuqVjunPjoPlROKnpjRzhJYgLlUDPG
+   ZqnCIBFNIJl5WQ/f5ZYczb3caXtDLJ9rHUYMmxm8hMLHmE+u4AYprpDZ4
+   ejKa5glTNcOx1utZ/alpCzJ6D8lpYaNfTa1gPQwe39R7tfsH0NOKnBAl3
+   hgKKnByJ77kiZxNWcuuRk0sica6S7MYsePsAV03IRJywJYshnFfezIAgT
+   g==;
+X-CSE-ConnectionGUID: noazeaKrS6OalHZzvX5q1Q==
+X-CSE-MsgGUID: mT6wVp+/SRenspW75NJrNw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="27270904"
+X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
+   d="scan'208";a="27270904"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 17:33:26 -0700
+X-CSE-ConnectionGUID: WEGGWKYmQ0KvzmlT10ekOA==
+X-CSE-MsgGUID: 3zTKaR2kReCPY5gGTqbRWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
+   d="scan'208";a="25893760"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 25 Apr 2024 17:33:23 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s09Wj-00033w-0A;
+	Fri, 26 Apr 2024 00:33:21 +0000
+Date: Fri, 26 Apr 2024 08:32:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anatoliy Klymenko <anatoliy.klymenko@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [drm-misc:for-linux-next 4/6]
+ drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: warning: logical not is only
+ applied to the left hand side of this comparison
+Message-ID: <202404260800.7UEcBP6c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] clk: bcm: rpi: Assign ->num before accessing ->hws
-To: Nathan Chancellor <nathan@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-hardening@vger.kernel.org, patches@lists.linux.dev,
- llvm@lists.linux.dev, stable@vger.kernel.org
-References: <20240425-cbl-bcm-assign-counted-by-val-before-access-v1-0-e2db3b82d5ef@kernel.org>
- <20240425-cbl-bcm-assign-counted-by-val-before-access-v1-2-e2db3b82d5ef@kernel.org>
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20240425-cbl-bcm-assign-counted-by-val-before-access-v1-2-e2db3b82d5ef@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000f92adb0616f270a6"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---000000000000f92adb0616f270a6
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
+head:   2bdb481bf7a93c22b9fea8daefa2834aab23a70f
+commit: b0f0469ab662159f182f5af292b71cc5d42468a8 [4/6] drm: xlnx: zynqmp_dpsub: Anounce supported input formats
+config: i386-buildonly-randconfig-006-20240426 (https://download.01.org/0day-ci/archive/20240426/202404260800.7UEcBP6c-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240426/202404260800.7UEcBP6c-lkp@intel.com/reproduce)
 
-On 4/25/24 09:55, Nathan Chancellor wrote:
-> Commit f316cdff8d67 ("clk: Annotate struct clk_hw_onecell_data with
-> __counted_by") annotated the hws member of 'struct clk_hw_onecell_data'
-> with __counted_by, which informs the bounds sanitizer about the number
-> of elements in hws, so that it can warn when hws is accessed out of
-> bounds. As noted in that change, the __counted_by member must be
-> initialized with the number of elements before the first array access
-> happens, otherwise there will be a warning from each access prior to the
-> initialization because the number of elements is zero. This occurs in
-> raspberrypi_discover_clocks() due to ->num being assigned after ->hws
-> has been accessed:
-> 
->    UBSAN: array-index-out-of-bounds in drivers/clk/bcm/clk-raspberrypi.c:374:4
->    index 3 is out of range for type 'struct clk_hw *[] __counted_by(num)' (aka 'struct clk_hw *[]')
-> 
-> Move the ->num initialization to before the first access of ->hws, which
-> clears up the warning.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: f316cdff8d67 ("clk: Annotate struct clk_hw_onecell_data with __counted_by")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404260800.7UEcBP6c-lkp@intel.com/
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: warning: logical not is only applied to the left hand side of this comparison [-Wlogical-not-parentheses]
+     949 |         if (WARN_ON(!layer->mode == ZYNQMP_DPSUB_LAYER_NONLIVE)) {
+         |                     ^            ~~
+   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
+     123 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: note: add parentheses after the '!' to evaluate the comparison first
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: note: add parentheses around left hand side expression to silence this warning
+   1 warning generated.
+
+
+vim +949 drivers/gpu/drm/xlnx/zynqmp_disp.c
+
+   928	
+   929	/**
+   930	 * zynqmp_disp_layer_drm_formats - Return the DRM formats supported by the layer
+   931	 * @layer: The layer
+   932	 * @num_formats: Pointer to the returned number of formats
+   933	 *
+   934	 * NOTE: This function doesn't make sense for live video layers and will
+   935	 * always return an empty list in such cases. zynqmp_disp_live_layer_formats()
+   936	 * should be used to query a list of media bus formats supported by the live
+   937	 * video input layer.
+   938	 *
+   939	 * Return: A newly allocated u32 array that stores all the DRM formats
+   940	 * supported by the layer. The number of formats in the array is returned
+   941	 * through the num_formats argument.
+   942	 */
+   943	u32 *zynqmp_disp_layer_drm_formats(struct zynqmp_disp_layer *layer,
+   944					   unsigned int *num_formats)
+   945	{
+   946		unsigned int i;
+   947		u32 *formats;
+   948	
+ > 949		if (WARN_ON(!layer->mode == ZYNQMP_DPSUB_LAYER_NONLIVE)) {
+   950			*num_formats = 0;
+   951			return NULL;
+   952		}
+   953	
+   954		formats = kcalloc(layer->info->num_formats, sizeof(*formats),
+   955				  GFP_KERNEL);
+   956		if (!formats) {
+   957			*num_formats = 0;
+   958			return NULL;
+   959		}
+   960	
+   961		for (i = 0; i < layer->info->num_formats; ++i)
+   962			formats[i] = layer->info->formats[i].drm_fmt;
+   963	
+   964		*num_formats = layer->info->num_formats;
+   965		return formats;
+   966	}
+   967	
+
 -- 
-Florian
-
-
---000000000000f92adb0616f270a6
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFMtGABPfsbXTHg9
-RQeMU6fJonaJPS3JX+8MoNdYc4QLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDQyNTIxMjYzM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCK0YBP/3IjVDfLsa3wVgMh5v2uU2ptpCUW
-WTnU/W912nzkRiogE25et61Xt3tZJrCX4/gZWZQfXiwwiCcDf8pOQGZZSirKogdi1+yZ2+RshKax
-V+tjoaw9KhHf5nsBLokCd56WB1kl4h6PLoi8okxETWNjXad7KYx7SRlfGiuiAmHDL4B7TF6E6D8d
-vKsPSCFNpM38BkA5zVdRhXIpn0v/s2t7kFbnzHR0YOFnkxOGzgWZQ/yzkpUw9QclcmkU2+xw0BWn
-xWFIhPQhxQ9mYxdj8Z6Muo98BbsrDaR+xJAIRPCBOULQHcoMo02Dv/u8XhImuE8BGaMazazOUmh0
-ZDrj
---000000000000f92adb0616f270a6--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
