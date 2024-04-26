@@ -1,102 +1,97 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E758D18C1F
-	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 15:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AE2149E07;
+	Fri, 26 Apr 2024 16:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714145945; cv=none; b=BKMgX71+6ZdIILrLeW2ypaqU0fkLrFEF9w2k7bu/QNPEXPpNmP8yJsK/NNPlssvlgbNkM9lU0HPT9qkYGrLedbRNDvC/GzsLv8rUcGo/1elzRRwo6Ey95l4IkbPLG51bM7M91fzwODIi1AFpsHpwPBJovG4Vxd13jZBl3KwMQbk=
+	t=1714147755; cv=none; b=osJhlwfkk9PXL46I7oNpNnKLT/no2/oz8oZZtVL0LjhUPI/uY2mlLW+rXD/eKGRRgY7Rs1g2pDnqKnCDT74/gAUKp7gijJDugnnigjkliJpC85mt+RTxs/iSbGOyHb0uqp6ZbeXtb4vDPNrvqIqZcURSEMMT7SGWmdC6UwpFKTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714145945; c=relaxed/simple;
-	bh=oOicBQb26P2us2WSgoCUD13BKZ0dUYvLTrgu60wl+bk=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=HcZjzAluM4hw/miJHtjPG5P3oGX/MRKJ/SthlGNJlmr4YJwiGAaKc3HmOGxJy+WDoTdGXZdy8lS9IVWlHF1abSEAliPKnAkloikjwBfLVAcsGzvIq1ag4lfqoBRIQtP1ABmdMClc+n3B4AKvLw3GN5Ys22KE0bFGOa78csRrXl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mpgf0zhW; arc=none smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1714147755; c=relaxed/simple;
+	bh=iRAHtoHflwcOnUe6sMhMbeG7LceMsW1mwUCMgjDsfeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=R+cuQ25GKci8Sx2pGc10YaFZoECOn74Rt6jcOgqxIQRKRWh4TMJrzVaL/+JCVT9Cfm9MetEJBNSLZF3AKUyFnt8vRU2mEgOV7StLUYkC0GXRtqpQS305gWYkobPu8hET5ce3G9qompckdhJYLs7Cv0JmFMcQbwjPnjVR/0wYo6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U5uli2Iz; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mpgf0zhW"
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-4dac5a3fbeaso756467e0c.3
-        for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 08:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714145943; x=1714750743; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0fHzKICB2TUzI9lFroSAOrJgYaGtzTHDOl9oxitpToo=;
-        b=mpgf0zhWrl8G7Ruw8skI2OK5UGu131fwFe8ATEwOaI5ZYObj5i+rNZpa78ZjNExoMp
-         vvvCoLvPHgcChtWF5bwayMGfHP6b7O0sN7lvSrCAsxJCWHSuZ0tJt3i2c3wc2seGjzMA
-         O2pwCFCT3xC9OrKucuOFXTSRFc9H+ecY76L6FcRJjh2yxRLLPFAXV2AhyvUXakIABusS
-         lY6FI3gnIcw2aOgBmL1prGd/JqLoeaZto27il+vEDGrLzffLJmIS//WDhoCafPjJaKFI
-         dkBPLi5LTRAFJxqcH7XmN8ZH1+cG33TWf6EYsAFoE4EQtha3kSbQIlFOGDw+p/LJSK6S
-         8F1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714145943; x=1714750743;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0fHzKICB2TUzI9lFroSAOrJgYaGtzTHDOl9oxitpToo=;
-        b=UGMNFHikLfpbQPDK0pgnLOUbafTGYIdUf9me0XkZqVG4Elz+eikvn3sFZ8J3fTVGM2
-         dz/rKgZhNXNZtzF7kT+2hv2VA8EUbxoS8n9ogrimmt/BBJu7UKGbMvKyrw1BLSiOf+RX
-         pRk7wwrKHpFVUCOoWAmvnrWuSybbgJse9woKUuS6E+luMpOjFt3c4MfndqhLqum48mW2
-         MurP5SJx8MphfxkDfDF44oWUdxQ5Y+Z9VbwjoRX4s6qVXopeinxz4KDF85F0975G3LHo
-         04UVj2bSMUDxlthLnfjtA/QudkFjXiSlxLIbm8sRN90Nd5OOPwCTwNKr63Od6xtApsEQ
-         RH9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUSgHWCzYVWonF5Cth9UoDt0mA0h1LRFF9Sor6DaGCacqys8xIevf92RaD0naOv+o1D/u76ZaDFVexnB6kCXeOjRVHUUg==
-X-Gm-Message-State: AOJu0YzI3TSiPR1qn16XhjmAWFYpP5NWSGYqQe6iSAPIFOs0bhE1Fp3l
-	VM33+gL1XLeIYi+1i5BCrfvwrZ9EXlZGpxKQOss6Aih0CVcb2dfppl8tGHSSmLyHCHPaQ3KTTTs
-	CHhh7gxHFRY23rtfG8zkAxnxrDC3tbdoV2+AIgQ==
-X-Google-Smtp-Source: AGHT+IE+NCvzne4CcGECeY3GkA4OfEGj5ghhDPxk17Ojz7pXDSDSW3HmPLxFYaVkAQVlixFuEx8/Y06XrCSoUji5M7g=
-X-Received: by 2002:a05:6122:4697:b0:4d3:45a2:ae53 with SMTP id
- di23-20020a056122469700b004d345a2ae53mr3142735vkb.16.1714145942808; Fri, 26
- Apr 2024 08:39:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U5uli2Iz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714147752; x=1745683752;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iRAHtoHflwcOnUe6sMhMbeG7LceMsW1mwUCMgjDsfeM=;
+  b=U5uli2IzHdHJMmssJBP0VkMofgk6dQNFgyWBzJcvNZOs2gPAx8uoRaEd
+   aZO7qHFSwz8eoSdcNjf8eicYsxnw2dDho2Ls1GajBJKKYpp/z5jvFj8I2
+   o6dcVhQZsiHK4koGSYujU/pk6IQpRUWv6LdTT6dGQGiDlOCN34ANC3jXG
+   H7DL5JVcEp6eueT10IUnDyR6Cx3rW9tLRquYa5M1ICR2B3cpL8NP/P8mP
+   tjLlpXFmqlz9alTGgU9TwGxEo0OpzB0ED5EVgPBAP+eX46dIZuAsin9Wr
+   9TRaBFAWcuRrRwJ5q0PoS4ZU3taMInvsJit47MXlnUzaNQGWAdZIOVGPq
+   Q==;
+X-CSE-ConnectionGUID: F9NGZDOsQRCyLti+xWwHoA==
+X-CSE-MsgGUID: 5Fh5l4CZQ2CaBr5vHJq3vQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="12823160"
+X-IronPort-AV: E=Sophos;i="6.07,233,1708416000"; 
+   d="scan'208";a="12823160"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 09:08:57 -0700
+X-CSE-ConnectionGUID: +jd/O8cMTnCf65I4ke6Pgg==
+X-CSE-MsgGUID: v6YLQipRQIy1CYwT+OcYaQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,233,1708416000"; 
+   d="scan'208";a="26095526"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 26 Apr 2024 09:08:56 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s0O85-0003uG-1N;
+	Fri, 26 Apr 2024 16:08:53 +0000
+Date: Sat, 27 Apr 2024 00:08:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrey Konovalov <andreyknvl@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/kasan/report.c:143:20: error: unused function
+ 'kasan_kunit_test_suite_executing'
+Message-ID: <202404270029.zLvI9vVQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 26 Apr 2024 21:08:51 +0530
-Message-ID: <CA+G9fYvy+3XKDu+U-V3dXLsUPm1ybR_vn5djNvxXnXr85U9UhQ@mail.gmail.com>
-Subject: riscv32: mm/init.c:1495:11: error: use of undeclared identifier 'MODULES_VADDR'
-To: open list <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	lkft-triage@lists.linaro.org, linux-riscv <linux-riscv@lists.infradead.org>
-Cc: Mike Rapoport <rppt@kernel.org>, =?UTF-8?Q?Phil_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The Linux next today's tag next-20240426 riscv32 builds failed due to following
-build warnings / errors.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c942a0cd3603e34dd2d7237e064d9318cb7f9654
+commit: c8c7016f50c85688d71feea2dba1bd955d5f5358 kasan: fail non-kasan KUnit tests on KASAN reports
+date:   1 year, 5 months ago
+config: x86_64-sof-customedconfig-memory-debug-defconfig (https://download.01.org/0day-ci/archive/20240427/202404270029.zLvI9vVQ-lkp@intel.com/config)
+compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404270029.zLvI9vVQ-lkp@intel.com/reproduce)
 
-riscv32:
- - rv32-clang-18-defconfig
- - rv32-clang-18-allnoconfig
- - rv32-clang-18-tinyconfig
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404270029.zLvI9vVQ-lkp@intel.com/
 
-Build log:
-----
-arch/riscv/mm/init.c:1495:11: error: use of undeclared identifier
-'MODULES_VADDR'
- 1495 |                 start = MODULES_VADDR;
-      |                         ^
-arch/riscv/mm/init.c:1496:9: error: use of undeclared identifier 'MODULES_END'
- 1496 |                 end = MODULES_END;
-      |                       ^
-2 errors generated.
+All errors (new ones prefixed by >>):
 
-metadata:
- git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
- git_sha: bb7a2467e6beef44a80a17d45ebf2931e7631083
- git_short_log: bb7a2467e6be ("Add linux-next specific files for 20240426")
- git_describe: next-20240426
+>> mm/kasan/report.c:143:20: error: unused function 'kasan_kunit_test_suite_executing' [-Werror,-Wunused-function]
+     143 | static inline bool kasan_kunit_test_suite_executing(void) { return false; }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-steps to reproduce:
- # tuxmake --runtime podman --target-arch riscv --toolchain clang-18
---kconfig defconfig --kconfig-add rv32_defconfig LLVM=1
 
-Links:
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2fdCURo2mABucb6hDzrLnPoTWMx/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240426/testrun/23674184/suite/build/test/rv32-clang-18-defconfig/details/
+vim +/kasan_kunit_test_suite_executing +143 mm/kasan/report.c
 
---
-Linaro LKFT
-https://lkft.linaro.org
+   142	
+ > 143	static inline bool kasan_kunit_test_suite_executing(void) { return false; }
+   144	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
