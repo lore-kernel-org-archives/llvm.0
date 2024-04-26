@@ -1,105 +1,176 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B531585624
-	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 10:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7601144D1A;
+	Fri, 26 Apr 2024 10:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714127752; cv=none; b=sU49vsvGP0lUbn/79f2upvn5G1QETrWQo6zq/LClko6lFHoLYjp6Rl6eaPmruq/kXrwnJozmDoTVu+63Nnum8Q7SrnhFPLiWOFFDzOLpStB0ILB0/CWYRYqSOQXppU68CIbJeNiZb+0VsOjqyxkfJr7ciboYEsfe/sEpCulQBBg=
+	t=1714129133; cv=none; b=GufEk602ImhUaCxoCj8Ll4cHsJ/I3duiZvzGNyKGgOWWl+ZCU2lfIhpM1RPteb4Vn/BHDBfgkS5O5K+SVjrGhj3Hm0lygds1fnOBCeVJQ13PbHh2+7APP+ruNLlGVW3ndus7jmRgl5FmuMfrkhx4OOj7krSzwFA+eAxh8voQURo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714127752; c=relaxed/simple;
-	bh=KbTAaCOP23RX4cDVyVC1f0gyN8yb6XO4hy9Vw4aJ848=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fZ0v91OlB3uEzclNZr5QcnAkjo3TpVYpIk/wm8OUwaeocrB0vQmJJ0CtBGm5mtA+cw0nBbCICUmYjC+s69YOQi/rcewWF4CMkluBqqOLyKrxD6FQk3xHZpI89G0HXmMlZyglafqi8e4zF0xfj2/2pV/KJ4NOno0BmM/sl7Xfvo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [112.20.112.218])
-	by gateway (Coremail) with SMTP id _____8CxxOqCgytmIWsDAA--.1959S3;
-	Fri, 26 Apr 2024 18:35:46 +0800 (CST)
-Received: from [192.168.100.8] (unknown [112.20.112.218])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxlFZ_gytm0zMGAA--.3023S3;
-	Fri, 26 Apr 2024 18:35:45 +0800 (CST)
-Message-ID: <9cae4c4a-55a6-4c6c-9780-866f796a52c0@loongson.cn>
-Date: Fri, 26 Apr 2024 18:35:43 +0800
+	s=arc-20240116; t=1714129133; c=relaxed/simple;
+	bh=huF0ExFgsepJp65/LgFBeJslQGlknYDeyxkOEhJEQXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AibkduKa2ClykPlBhftGM6jpMxaoOka/mxSRSeNNavwS6ejSk66et7G/w4CffEgAl3ToYosJZame6JTjw/1ZOD6MXj0ZZ3daZj1yHD8ebG7Yy+eMIhVU1Fxugl7+4b8hYgMdwDONb6HWPPhndGo9rFtSQpmzHaiRT1oOQpPQatY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UIRiVGIv; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UIRiVGIv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714129131; x=1745665131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=huF0ExFgsepJp65/LgFBeJslQGlknYDeyxkOEhJEQXQ=;
+  b=UIRiVGIvCpQL+kD5F1ou0JjKXW47KjsIpsNy1Bpy+ldjkeIoPDHeTQjt
+   5aPXrq8S524116UZHjkt6MUlpLtVC+iD4khnzixWIDlEzIft7cRtA8wqp
+   e11I3/Ud4455ypvPJdBP55yeeVUgZdPeNh6hlbAgFOMEWNpj79Gj5veRU
+   EH5oeh2TQ/akEUpZG4b1nyN9K7xKaX4brUMF9SwYreBpBgOa0xNNMGH5z
+   3TLveURpBE0+Aelf0yJcZdhSMq4Suc5SpD7KRwUEJiMuzZyHmmxgboRyT
+   GSYsbUbZGD0IcNYV4tAmD5sEkH6Dy0kjl32+lYyezFaqAPWTqy79O4u7y
+   w==;
+X-CSE-ConnectionGUID: qx4FqXVMRxOuq6w41IFAwg==
+X-CSE-MsgGUID: WXUZvcQ+ToCcWmrJd0+7rA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="10392663"
+X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
+   d="scan'208";a="10392663"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 03:58:50 -0700
+X-CSE-ConnectionGUID: sXGMn23tQF2eCCFEw7Rqhw==
+X-CSE-MsgGUID: zKSID86WTWqpID8gkQOvfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
+   d="scan'208";a="62863083"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 26 Apr 2024 03:58:46 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s0JHv-0003ck-2K;
+	Fri, 26 Apr 2024 10:58:43 +0000
+Date: Fri, 26 Apr 2024 18:57:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kanchan Joshi <joshi.k@samsung.com>, axboe@kernel.dk,
+	martin.petersen@oracle.com, kbusch@kernel.org, hch@lst.de,
+	brauner@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	asml.silence@gmail.com, dw@davidwei.uk, io-uring@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+	gost.dev@samsung.com, Kanchan Joshi <joshi.k@samsung.com>
+Subject: Re: [PATCH 10/10] nvme: add separate handling for user integrity
+ buffer
+Message-ID: <202404261859.n3J0awuF-lkp@intel.com>
+References: <20240425183943.6319-11-joshi.k@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] rust: docs: Update the translation of rust to
- 6.9-rc4
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: ojeda@kernel.org, corbet@lwn.net, alex.gaynor@gmail.com,
- wedsonaf@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
- bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@samsung.com,
- aliceryhl@google.com, nathan@kernel.org, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, alexs@kernel.org,
- dzm91@hust.edu.cn, linux-doc@vger.kernel.org,
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
- linux-riscv@lists.infradead.org
-References: <cover.1714113680.git.siyanteng@loongson.cn>
- <CANiq72meE9txt5b09Y7cUJd-hEqcZX1ZtRc_0YYDZqWQgyo3wA@mail.gmail.com>
-Content-Language: en-US
-From: Yanteng Si <siyanteng@loongson.cn>
-In-Reply-To: <CANiq72meE9txt5b09Y7cUJd-hEqcZX1ZtRc_0YYDZqWQgyo3wA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8BxlFZ_gytm0zMGAA--.3023S3
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7GF1kCr18AFWfKFyrtr1fuFX_yoWkXrb_Aa
-	sYyay7tw1kJF4kCFWfJr43uFs7X3y8Cw1DJr1Iqw17Xr95AFZ7uFZxK34S9F4Iqw4rCr1D
-	Kr10gayS9343uosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
-	Jw1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU2G-eUUUUU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240425183943.6319-11-joshi.k@samsung.com>
+
+Hi Kanchan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 24c3fc5c75c5b9d471783b4a4958748243828613]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kanchan-Joshi/block-set-bip_vcnt-correctly/20240426-024916
+base:   24c3fc5c75c5b9d471783b4a4958748243828613
+patch link:    https://lore.kernel.org/r/20240425183943.6319-11-joshi.k%40samsung.com
+patch subject: [PATCH 10/10] nvme: add separate handling for user integrity buffer
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240426/202404261859.n3J0awuF-lkp@intel.com/config)
+compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240426/202404261859.n3J0awuF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404261859.n3J0awuF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/nvme/host/core.c:1014:31: error: member reference base type 'void' is not a structure or union
+    1014 |                         if (bio_integrity(req->bio)->bip_flags &
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~^ ~~~~~~~~~
+   1 error generated.
 
 
-在 2024/4/26 15:37, Miguel Ojeda 写道:
->> v2:
->> * As Miguel's comments, translate commit 01848eee20c6
->>    into Chinese, as well as commit 81889e8523e6. By the way,
->>    these two patches haven't appeared in the doc development
->>    tree yet, maybe we could consider merging them into the
->>    rust tree?
-> The former is in `rust-fixes`, which will be sent to Linus for this
-> cycle. So the English docs will be updated sooner than these updates,
-> if that is what you are asking.
+vim +/void +1014 drivers/nvme/host/core.c
 
-Well, it seems that we will have to wait for the doc tree, because the 
-Chinese
+   971	
+   972	static inline blk_status_t nvme_setup_rw(struct nvme_ns *ns,
+   973			struct request *req, struct nvme_command *cmnd,
+   974			enum nvme_opcode op)
+   975	{
+   976		u16 control = 0;
+   977		u32 dsmgmt = 0;
+   978	
+   979		if (req->cmd_flags & REQ_FUA)
+   980			control |= NVME_RW_FUA;
+   981		if (req->cmd_flags & (REQ_FAILFAST_DEV | REQ_RAHEAD))
+   982			control |= NVME_RW_LR;
+   983	
+   984		if (req->cmd_flags & REQ_RAHEAD)
+   985			dsmgmt |= NVME_RW_DSM_FREQ_PREFETCH;
+   986	
+   987		cmnd->rw.opcode = op;
+   988		cmnd->rw.flags = 0;
+   989		cmnd->rw.nsid = cpu_to_le32(ns->head->ns_id);
+   990		cmnd->rw.cdw2 = 0;
+   991		cmnd->rw.cdw3 = 0;
+   992		cmnd->rw.metadata = 0;
+   993		cmnd->rw.slba =
+   994			cpu_to_le64(nvme_sect_to_lba(ns->head, blk_rq_pos(req)));
+   995		cmnd->rw.length =
+   996			cpu_to_le16((blk_rq_bytes(req) >> ns->head->lba_shift) - 1);
+   997		cmnd->rw.reftag = 0;
+   998		cmnd->rw.apptag = 0;
+   999		cmnd->rw.appmask = 0;
+  1000	
+  1001		if (ns->head->ms) {
+  1002			/*
+  1003			 * If formated with metadata, the block layer always provides a
+  1004			 * metadata buffer if CONFIG_BLK_DEV_INTEGRITY is enabled.  Else
+  1005			 * we enable the PRACT bit for protection information or set the
+  1006			 * namespace capacity to zero to prevent any I/O.
+  1007			 */
+  1008			if (!blk_integrity_rq(req)) {
+  1009				if (WARN_ON_ONCE(!nvme_ns_has_pi(ns->head)))
+  1010					return BLK_STS_NOTSUPP;
+  1011				control |= NVME_RW_PRINFO_PRACT;
+  1012			} else {
+  1013				/* process user-created integrity */
+> 1014				if (bio_integrity(req->bio)->bip_flags &
+  1015						BIP_INTEGRITY_USER) {
+  1016					nvme_setup_user_integrity(ns, req, cmnd,
+  1017								  &control);
+  1018					goto out;
+  1019				}
+  1020			}
+  1021	
+  1022			switch (ns->head->pi_type) {
+  1023			case NVME_NS_DPS_PI_TYPE3:
+  1024				control |= NVME_RW_PRINFO_PRCHK_GUARD;
+  1025				break;
+  1026			case NVME_NS_DPS_PI_TYPE1:
+  1027			case NVME_NS_DPS_PI_TYPE2:
+  1028				control |= NVME_RW_PRINFO_PRCHK_GUARD |
+  1029						NVME_RW_PRINFO_PRCHK_REF;
+  1030				if (op == nvme_cmd_zone_append)
+  1031					control |= NVME_RW_APPEND_PIREMAP;
+  1032				nvme_set_ref_tag(ns, cmnd, req);
+  1033				break;
+  1034			}
+  1035		}
+  1036	out:
+  1037		cmnd->rw.control = cpu_to_le16(control);
+  1038		cmnd->rw.dsmgmt = cpu_to_le32(dsmgmt);
+  1039		return 0;
+  1040	}
+  1041	
 
-translation is now carried out under the doc tree.
-
->
-> For the other one, it is in the RISC-V tree and I assume it will be
-> sent into the next merge window. I don't know how you normally handle
-> that (i.e. translations being updated at the same time or after a
-> cycle), but either way, I am not sure why you would want them to be
-> merged into the Rust tree?
-
-I'm thinking that I'm two commits ahead of the doc tree, it doesn't seem 
-to fit
-
-merge into the doc tree in this window, and there might be conflicts on
-
-linux-next if I splite the patch out more.
-
-
-Thanks,
-
-Yanteng
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
