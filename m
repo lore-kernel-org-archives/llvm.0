@@ -1,230 +1,186 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904EB1849;
-	Fri, 26 Apr 2024 01:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23D4335C7
+	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 05:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714093530; cv=none; b=rIH2A3xm7fhDK1389DaAIgJp/SYkSc3lsSwm9QJocXPeUqbdV0fSGxzyweokWHiMlzVOO6mLV53p2gPnqOhZGERb9R7Lq3hEetTINpUiJ+AaBo3P1TeEwKfcJaYNjovgXeZ8at6fTgfGZp/9Q2vYVJ++iAhE0Inp2DseE0u06uI=
+	t=1714108897; cv=none; b=d1evotXkmsMeb7uUD39dClOIVEqpoRZuJR7wZd9GYZW6kNg75qXejSpoYg+0Vp7/gQd/CMILEkprcpL8eSganmm/McMiEjHZfJbMAyfajwPzEXiUS3yiRdQzX8nJUrEKSsb+S18IyWtfAdiiaGyL5eBxfHPHcZ+mEOBPFHR9XBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714093530; c=relaxed/simple;
-	bh=c+cgKyGnQqEca+cm0wY3QHCRChbiAHCpDcUpHTGNnwI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VW/iow8qzdSqFKbaQK6doRm3rYA8H9v18CK+zAlns/B8tUqPNI0FKciUSvwRi8/6XVKSFObnC1Ym4N7IXcJRXgIOcLsfxoPHbpmXkImNyfuuEzw/XACU8Fbk/Vibb3l1CGCpXqz+Ccsn0atRGu+5L4QewW84XF2tj/IijzTC728=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M7eAzX9v; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714108897; c=relaxed/simple;
+	bh=lsj2XLV+pz8Tbdone4I3i/cDx0JQnuiJ1OmIfdrFTNs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=i89SG2mXI7QYTx3O6LyTpU4pA6la5gGWN9dI0P1kzx9TBNFfw2q89D1hu9/cHhZo62Tqoj+G8UjzP78WbeBtddRubzF8ubeyNkuDi8szxbEqOixRDxTFcdr9XPfx0KGAiQD1gI7xPMzwirql+k4FGRUN5N3oxI/h/6XKrP7dATc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DzBu+EQ7; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M7eAzX9v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714093528; x=1745629528;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c+cgKyGnQqEca+cm0wY3QHCRChbiAHCpDcUpHTGNnwI=;
-  b=M7eAzX9vjCSV8sPZGoXg9hQiQw/vY/mtuCt6ZdLbkqWDa9iXE8qG93lT
-   2E9dBXWp1DDXFG3WuSctao14nfiR750HB5eskATkoYj2Cu/34G9rtTSss
-   LsQ85XZp0f0w3Y6tUpgMeifueFX7j2g8lWmWFYCNSbnc3dB21YnKaZCH4
-   s3GQXHjzY3yEd0xF8K0qDqoJ4j9gHK0/7EDT5pC6dZeugkhZ+MR1DCZYU
-   Paq1/rcwhFyC4tFB7F38etGIWhNMy0NDcvkBaA53mVYXIdOHNrEXEH5i7
-   uot3DoiVYAHuaAAJojK4ODb1yslbrSVbdPt+C0Md9zeDeFV7KH2QvadRF
-   Q==;
-X-CSE-ConnectionGUID: Oz2jGG/EQgCBPER6W42+Hw==
-X-CSE-MsgGUID: NuF1t9UWTcucN0+mL1kiKw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="9686826"
-X-IronPort-AV: E=Sophos;i="6.07,231,1708416000"; 
-   d="scan'208";a="9686826"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 18:05:27 -0700
-X-CSE-ConnectionGUID: pyaqkzkaQ2ybTC9mNQX9Vg==
-X-CSE-MsgGUID: JpZDsBSpSRSqUvn9PsQp9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,231,1708416000"; 
-   d="scan'208";a="25271844"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 25 Apr 2024 18:05:24 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s0A1i-000366-0V;
-	Fri, 26 Apr 2024 01:05:22 +0000
-Date: Fri, 26 Apr 2024 09:04:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anatoliy Klymenko <anatoliy.klymenko@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [drm-misc:for-linux-next 4/6]
- drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: error: logical not is only
- applied to the left hand side of this comparison
-Message-ID: <202404260946.4oZXvHD2-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DzBu+EQ7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714108894;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=b23Nv97rsIH8SfNh6hZf/y0dhJL0sk3vt3iU2QYDt50=;
+	b=DzBu+EQ7mJlsya+cMtfIdBs16NM/PocSLomOhh1SBEX88/zWbIb69oWpbtM4dvNMrFWqta
+	JGq0er2IYbGiXLO44BNH38jHWj8RiobHdY+w/KZWOs3vk6vWNrHv1RJORJ4L0m7cSRHwgn
+	gb/tXAbwj8qYdchxr1u2DurFvZYU3UE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-481-SeHBVAgLP7-EUQ6xuP5Azg-1; Fri, 26 Apr 2024 01:21:32 -0400
+X-MC-Unique: SeHBVAgLP7-EUQ6xuP5Azg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 964D78943A4
+	for <llvm@lists.linux.dev>; Fri, 26 Apr 2024 05:21:32 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5250D202450D;
+	Fri, 26 Apr 2024 05:21:32 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.9.0-rc5, mainline.kernel.org-clang, c942a0cd)
+Date: Fri, 26 Apr 2024 05:21:32 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <37990.124042601213200265@us-mta-481.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
-head:   2bdb481bf7a93c22b9fea8daefa2834aab23a70f
-commit: b0f0469ab662159f182f5af292b71cc5d42468a8 [4/6] drm: xlnx: zynqmp_dpsub: Anounce supported input formats
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240426/202404260946.4oZXvHD2-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240426/202404260946.4oZXvHD2-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404260946.4oZXvHD2-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-   In file included from drivers/gpu/drm/xlnx/zynqmp_disp.c:15:
-   In file included from include/drm/drm_plane.h:33:
-   In file included from include/drm/drm_util.h:36:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/xlnx/zynqmp_disp.c:19:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/xlnx/zynqmp_disp.c:19:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/xlnx/zynqmp_disp.c:19:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: error: logical not is only applied to the left hand side of this comparison [-Werror,-Wlogical-not-parentheses]
-     949 |         if (WARN_ON(!layer->mode == ZYNQMP_DPSUB_LAYER_NONLIVE)) {
-         |                     ^            ~~
-   arch/s390/include/asm/bug.h:54:25: note: expanded from macro 'WARN_ON'
-      54 |         int __ret_warn_on = !!(x);                      \
-         |                                ^
-   drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: note: add parentheses after the '!' to evaluate the comparison first
-   drivers/gpu/drm/xlnx/zynqmp_disp.c:949:14: note: add parentheses around left hand side expression to silence this warning
-   18 errors generated.
+Kernel information:
+    Commit message: Merge tag 'for_linus' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/mst/vhost
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1268489877
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [Rawhide] avc:  denied  { getattr } for  pid=3D79656 comm=3D=
+"selinux-autorel" path=3D"/etc/passwd" dev=3D"dm-0" ino=3D17705170 scontext=
+=3Dsystem_u:system_r:selinux_autorelabel_generator_t:s0 tcontext=3Dsystem_u=
+:object_r:passwd_file_t:s0 tclass=3Dfile permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2275266
+            Affected tests:
+                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
+_64]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+                stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: [upstream] [eln] waived call traces we don't plan to report =
+upstream
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1864
+            Affected tests:
+                Reboot test [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
 
 
-vim +949 drivers/gpu/drm/xlnx/zynqmp_disp.c
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
 
-   928	
-   929	/**
-   930	 * zynqmp_disp_layer_drm_formats - Return the DRM formats supported by the layer
-   931	 * @layer: The layer
-   932	 * @num_formats: Pointer to the returned number of formats
-   933	 *
-   934	 * NOTE: This function doesn't make sense for live video layers and will
-   935	 * always return an empty list in such cases. zynqmp_disp_live_layer_formats()
-   936	 * should be used to query a list of media bus formats supported by the live
-   937	 * video input layer.
-   938	 *
-   939	 * Return: A newly allocated u32 array that stores all the DRM formats
-   940	 * supported by the layer. The number of formats in the array is returned
-   941	 * through the num_formats argument.
-   942	 */
-   943	u32 *zynqmp_disp_layer_drm_formats(struct zynqmp_disp_layer *layer,
-   944					   unsigned int *num_formats)
-   945	{
-   946		unsigned int i;
-   947		u32 *formats;
-   948	
- > 949		if (WARN_ON(!layer->mode == ZYNQMP_DPSUB_LAYER_NONLIVE)) {
-   950			*num_formats = 0;
-   951			return NULL;
-   952		}
-   953	
-   954		formats = kcalloc(layer->info->num_formats, sizeof(*formats),
-   955				  GFP_KERNEL);
-   956		if (!formats) {
-   957			*num_formats = 0;
-   958			return NULL;
-   959		}
-   960	
-   961		for (i = 0; i < layer->info->num_formats; ++i)
-   962			formats[i] = layer->info->formats[i].drm_fmt;
-   963	
-   964		*num_formats = layer->info->num_formats;
-   965		return formats;
-   966	}
-   967	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
