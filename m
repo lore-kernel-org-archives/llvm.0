@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632563D966;
-	Sat, 27 Apr 2024 03:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7528B3BBEC;
+	Sat, 27 Apr 2024 04:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714188446; cv=none; b=tiDpek3bJIAm+4+GOFWovYTgSNJGAFjWxsb+pn+y83f0HMUUxDHP8Ie8QA46pWczyVGI2a7uUTHrnk8BpBqUE/09LP2syn74oZAWJjpYRZPvyQml0ocgD3UkSFEdRgwJ2pyGy0wcf7ux4lv+VhyyvDbd6Es1IaonLY96rcBm88Q=
+	t=1714191508; cv=none; b=P2Wmqsk/1WTMGGXscAVgfUvJ6VVIHIJagYid0Rwoe/sJKOw2xCDA3FZ1DUuGc4aGpY5FrAy3+NVWbRdcCdfrqvW2S1UwMjQnGGxg6puZprtobxhJfPihb2KM096JDMlzokUOnfqIK6lGmAZrngaL+/b2FO3Dwej5yOwG6elU1t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714188446; c=relaxed/simple;
-	bh=bwY3Npzz2Gej71CBmwPkAL8Kw3nLv5f+pJV4aekd1zU=;
+	s=arc-20240116; t=1714191508; c=relaxed/simple;
+	bh=9/tn2G0UzT+pos5SSWjCh/ekHpy90xZIn8Ntu6sbS2s=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dHgp4lm0HDD5iP+/bWb0Guj21cBCdtkpam/qNW793hwozoq96MdhiYXSIG+fggETanuzXk67bsqrDKQO78u/1iWGQApgOqgEf+fCzzHm3XkD7+Ew3SGwmJ5GVZyeBu883IX9yDYB0fjZlmLTvHm7WONucXvkPv4gHNEd5VJIWes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cMTHwVaQ; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=BrXAog/IWibWMCsYkaNh8oFU/T8qr8aKxlfoKGG1IBUhuQHdxdI/jLSnbhKhtRVMHUiFCW122205VYO9If5wYgYn9PoG3p/kLTxh2a81cJHHwdMk6u0vDP4Gl18ea4Pu6CSpgU8bGz8ArOTxa9gSOUcGQKeAL3QAhtqU++j0+W0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ki+H4DIV; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cMTHwVaQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ki+H4DIV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714188444; x=1745724444;
+  t=1714191505; x=1745727505;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bwY3Npzz2Gej71CBmwPkAL8Kw3nLv5f+pJV4aekd1zU=;
-  b=cMTHwVaQ9L3vbBITarulJ+MVVYKyU0wMOoPZtZlpDdlySlW7JAwZMq0i
-   yHnq1aDlR2xUDu50ZmzFar14Jw8ss6JlPKCn6liUIwT+EvDgL++uup0Du
-   faniUZDoy3WwCTbxckI74wvWVUlolbdEogKA3EmYVS3zWpUIpkZNsFdm3
-   n0HyNpgu+pEo3f+zSkNrwBhmMmitCN5SQ4UjKEPyrkE94xsRpSWSv5UFV
-   xVpaCL6RnaGIk91ET+bAmLx1UhzdVXXHYDxMt6/rf4m+bFpUCVYA4hA/F
-   0fBGd3654HZOqrM2GKZNCSlkOTwGb0hO8/hMXKakQkLrg8ub3xp3vMczw
-   w==;
-X-CSE-ConnectionGUID: 3IbyAGH2Q9OlmheGdR04fA==
-X-CSE-MsgGUID: qPgf43k8SGaeRws+lycy7g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="13723660"
+  bh=9/tn2G0UzT+pos5SSWjCh/ekHpy90xZIn8Ntu6sbS2s=;
+  b=ki+H4DIVa2J6dsCD2hg/9lNhCgG+1OhwtyCTunosJNNrdQjh+Zo/QS8y
+   qD+3Y8Oku8dc+of9I7F6bhye+DQCn0MaGwQ8+q7oAo1Jf26Y86PaAuOzw
+   QJl4mS+ZnhX3ou9dZB2kUNgZn38P5RBaj1TeO8VJ2mbAs+/zgq0tcztS9
+   DvDEgdWUuMSzbNWWvL6nylO6zTxfZejMrDOuzXol9fv7EvUV9DkjThECy
+   abWg4QYcdOhWD/8KnxVerrmEF1dlh44qBCcYUV/1aHwcclkU4L6laBO6a
+   BLXO/Ky80d1NxAmPwyMk8SYQhwK8vshcB+RS3Hx9qTnlD42ud8vsJPY+o
+   Q==;
+X-CSE-ConnectionGUID: mcZ2ZhNJTGKW/IV28kldjQ==
+X-CSE-MsgGUID: QTjTo2EjS2KwnRDVVVRJ2w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="21082793"
 X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
-   d="scan'208";a="13723660"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 20:27:24 -0700
-X-CSE-ConnectionGUID: lZc3D/6sQ0avYueMOyLW1g==
-X-CSE-MsgGUID: CDHgIDkfSUOttRYC4EKJ/w==
+   d="scan'208";a="21082793"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 21:18:25 -0700
+X-CSE-ConnectionGUID: U6L3KslTQ0WicT3QfkDltA==
+X-CSE-MsgGUID: I4Vi0DFhSweW+/+y4ch40g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
-   d="scan'208";a="25592948"
+   d="scan'208";a="26012762"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Apr 2024 20:27:22 -0700
+  by orviesa006.jf.intel.com with ESMTP; 26 Apr 2024 21:18:23 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s0Yid-0004bu-2R;
-	Sat, 27 Apr 2024 03:27:19 +0000
-Date: Sat, 27 Apr 2024 11:26:20 +0800
+	id 1s0ZW0-0004eI-31;
+	Sat, 27 Apr 2024 04:18:20 +0000
+Date: Sat, 27 Apr 2024 12:17:57 +0800
 From: kernel test robot <lkp@intel.com>
 To: Timur Tabi <ttabi@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	dri-devel@lists.freedesktop.org, Danilo Krummrich <dakr@redhat.com>
 Subject: [drm-misc:for-linux-next 1/1]
- drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:1266:11: error: label at end
- of compound statement: expected statement
-Message-ID: <202404271146.n4lVV4tO-lkp@intel.com>
+ drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:1267:3: warning: label at end
+ of compound statement is a C23 extension
+Message-ID: <202404271259.rahBUb02-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,25 +67,39 @@ Content-Disposition: inline
 tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
 head:   61ba791c4a7a09a370c45b70a81b8c7d4cf6b2ae
 commit: b58a0bc904ffa091fc020f7fd00e91808fec820e [1/1] nouveau: add command-line GSP-RM registry support
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240427/202404271146.n4lVV4tO-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404271146.n4lVV4tO-lkp@intel.com/reproduce)
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240427/202404271259.rahBUb02-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404271259.rahBUb02-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404271146.n4lVV4tO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404271259.rahBUb02-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:1266:11: error: label at end of compound statement: expected statement
-                   default:
-                           ^
-                            ;
-   1 error generated.
+   In file included from drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:22:
+   In file included from drivers/gpu/drm/nouveau/nvkm/subdev/gsp/priv.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/subdev/gsp.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
+   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
+   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:1267:3: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+    1267 |                 }
+         |                 ^
+   2 warnings generated.
 
 
-vim +1266 drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c
+vim +1267 drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c
 
   1199	
   1200	/**
@@ -154,8 +168,8 @@ vim +1266 drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c
   1263				registry->entries[i].data = str_offset;
   1264				str_offset += reg->vlen;
   1265				break;
-> 1266			default:
-  1267			}
+  1266			default:
+> 1267			}
   1268	
   1269			i++;
   1270			list_del(&reg->head);
