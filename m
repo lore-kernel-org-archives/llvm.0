@@ -1,60 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F693381C7;
-	Sat, 27 Apr 2024 07:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5CB41A89;
+	Sat, 27 Apr 2024 07:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714203870; cv=none; b=jiakg489WE78UhKIukPPbjK1bqg5ZBHn/46zDRAqDYmH5XvhyhIZE3Gp/rrddSVqtJ9+8gCkjuOsv3CWU38gDqzNL67jv4hF5yfYWhocgSNpj4Krj4XTRM7aXXd5qWHYqLgsJBEr9eCQEfXpXi5CVfn3jivW1MSizUxGDkK7VlA=
+	t=1714204471; cv=none; b=HYNiNwCW3ceA47UUv/aH6mgU3Yw3jDGQvVLBuAliMNYpxNqZFIyMhEXzwFOSw1eIbH0y/EeFvqt4hghrE1NAmoFVT+XweS5lapk4g2yrhMrHgShBEZlmMDsmizMhD28VmPAZEzxTl7cpIUMYnam0WdZW7eInE2AqqPupJR6nD14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714203870; c=relaxed/simple;
-	bh=4tx/dnPyRW3DMiEhSDphf7DpC3QL3uIyP/b/AlQmUqU=;
+	s=arc-20240116; t=1714204471; c=relaxed/simple;
+	bh=1ZAdBwzXABGTrwj8FBWHohS1Ohmev1wRz/PycBaSBJw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jl6mLNlXK21lU3LMew6EIk0CAAPtC79p2bgy0JEGNa/yho6Ja4ZzkKWUUtKZMH0HKcBu4sR5ZMig/CEfyhkW/eBLuAeAJI3tNk9xpHHLjGHDxc46Htb99v/BGFnuLG8fiDKbTd/raZ9FpJQPQi1Fsu7GtvW68HaZ7+K9Jw5a76I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DTa49dik; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=VPun2nb9fHSrVjPFGAf4wGrL8bYxCqADwpCY3D+LqgHnRU+wy/o0M9FxFlJBB3fQyVqw3nttSEUabKKXQy44dzMALGlqzuJNEY78ZbrWRhl1my4zPVCc6ohLp7k/T5JrigMcfy2CGnXo3SUI813Vq4vn4JqAoFufzWGaHAtIDbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VMatWt0P; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DTa49dik"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VMatWt0P"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714203868; x=1745739868;
+  t=1714204470; x=1745740470;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4tx/dnPyRW3DMiEhSDphf7DpC3QL3uIyP/b/AlQmUqU=;
-  b=DTa49dikMXDwAXw+XEJSgN3IV14Lvh/2aOz8qX1GZKzdDrNgMkcLXQWz
-   mmHoaF7Ty4lBc9ERYeTu+CXnqaWGONK2wYB2jsrWpG2uu7GgrRohhE2wI
-   Xq01i1lsJje+W0BX9vmcytYkETCfera974hjvBS0vWiVzV2hsKBIxqhcw
-   bwyL5IOyVCkpqLBtC4XdwAb+9FpDahT8u7jA5P5Lbpie4gbm6+qZkqaej
-   D2SfghXNCEEjnd7cQWLDjyzHT0cjqxojjGH2RiIb2BbM++JbNjmKAboQ0
-   6HDOLiFVUoQvkZDOjamjEYoI/Pqrj+J08w0I9+8Je4pZtNxwrQCi0RDWj
-   g==;
-X-CSE-ConnectionGUID: 0thjU9dPTbGWdXEamH2uNA==
-X-CSE-MsgGUID: zwXrdRFAQVOqkTYbQ7+c5A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="10048721"
+  bh=1ZAdBwzXABGTrwj8FBWHohS1Ohmev1wRz/PycBaSBJw=;
+  b=VMatWt0PLZwkRKqIFWuGndXQSCWNrNBklE2T+QIy3hQ0xm0YuyW3HhVl
+   1+hruyU3wvQWxXqNCRHF7TF0kGsO5TWPkAhxRMgZD67RivGg7mSdw1AG9
+   A6Wfh5R8BDUKpWEoIFSyKzseO1P7Qg49DrTWpP1VGfRwlLIYmvmKCv9pm
+   USIbk9ipPmERwDbVu82cNluFQTZKSIt8kPn+jGUjAWgwT6MFJaLgumkND
+   wQoNKzOCTNh1J1IFTfBARvDxfzOmtEUJbWLvwft9AwuT4YaFIZwlV1mIX
+   Fg9MZ1eEl6K+RWMSU90Gkr6/Tomb8rQYbt6q1p26hLEM5cLE6GOWY3O5b
+   w==;
+X-CSE-ConnectionGUID: 5ehb9kHzSpedJDwVt+XNWg==
+X-CSE-MsgGUID: NGusNXzzQZiMWN1cbfh/AQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="9771095"
 X-IronPort-AV: E=Sophos;i="6.07,235,1708416000"; 
-   d="scan'208";a="10048721"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2024 00:44:28 -0700
-X-CSE-ConnectionGUID: /r2CFGmkSJq/X1UZhAbMEQ==
-X-CSE-MsgGUID: bdACoAuWTKiT2XF/sXyEew==
+   d="scan'208";a="9771095"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2024 00:54:29 -0700
+X-CSE-ConnectionGUID: EAmA3dFkT6KOFkebgz/bIA==
+X-CSE-MsgGUID: LlTnjt+pRrGdbsxpefAMgQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,235,1708416000"; 
-   d="scan'208";a="25606418"
+   d="scan'208";a="26136623"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 27 Apr 2024 00:44:26 -0700
+  by orviesa007.jf.intel.com with ESMTP; 27 Apr 2024 00:54:27 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s0cjQ-0004l0-0f;
-	Sat, 27 Apr 2024 07:44:24 +0000
-Date: Sat, 27 Apr 2024 15:43:37 +0800
+	id 1s0ct6-0004la-1P;
+	Sat, 27 Apr 2024 07:54:24 +0000
+Date: Sat, 27 Apr 2024 15:54:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matthew Brost <matthew.brost@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-xe@lists.freedesktop.org, Oak Zeng <oak.zeng@intel.com>
-Subject: [drm-xe:drm-xe-next 12/13]
- drivers/gpu/drm/xe/xe_gt_tlb_invalidation.c:321:15: warning: variable 'end'
- is uninitialized when used here
-Message-ID: <202404271550.YdQqXkUF-lkp@intel.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	David Hildenbrand <david@redhat.com>
+Subject: [akpm-mm:mm-unstable 457/479] arch/s390/kernel/uv.c:196:13: error:
+ call to undeclared function 'page_mapping'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202404271523.VI3HNl2M-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,151 +66,149 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-head:   98ad158e543426561fa5df5c4387d4368601866f
-commit: c4f18703629dd0112641d6974eb295a53c4a4615 [12/13] drm/xe: Add xe_gt_tlb_invalidation_range and convert PT layer to use this
-config: powerpc-randconfig-002-20240427 (https://download.01.org/0day-ci/archive/20240427/202404271550.YdQqXkUF-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   e9efed1822aa2651d4970ee333ac8441557f9e33
+commit: d3559f806797472fd2e79145cd1df9a524728ea0 [457/479] mm: remove page_mapping()
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240427/202404271523.VI3HNl2M-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404271550.YdQqXkUF-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404271523.VI3HNl2M-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404271550.YdQqXkUF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404271523.VI3HNl2M-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/xe/xe_gt_tlb_invalidation.c:9:
-   In file included from drivers/gpu/drm/xe/xe_device.h:12:
-   In file included from include/drm/drm_util.h:35:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:24:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   In file included from arch/s390/kernel/uv.c:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/gpu/drm/xe/xe_gt_tlb_invalidation.c:321:15: warning: variable 'end' is uninitialized when used here [-Wuninitialized]
-     321 |                 end = ALIGN(end, align);
-         |                             ^~~
-   include/linux/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                                 ^
-   include/uapi/linux/const.h:31:51: note: expanded from macro '__ALIGN_KERNEL'
-      31 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                                             ^
-   include/uapi/linux/const.h:32:41: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      32 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                            ^
-   drivers/gpu/drm/xe/xe_gt_tlb_invalidation.c:308:17: note: initialize the variable 'end' to silence this warning
-     308 |                 u64 align, end;
-         |                               ^
-         |                                = 0
-   2 warnings generated.
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/s390/kernel/uv.c:14:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/uv.c:14:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/uv.c:14:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/s390/kernel/uv.c:196:13: error: call to undeclared function 'page_mapping'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     196 |         } else if (page_mapping(page)) {
+         |                    ^
+   arch/s390/kernel/uv.c:196:13: note: did you mean 'page_mapped'?
+   include/linux/mm.h:1299:20: note: 'page_mapped' declared here
+    1299 | static inline bool page_mapped(const struct page *page)
+         |                    ^
+   17 warnings and 1 error generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
+vim +/page_mapping +196 arch/s390/kernel/uv.c
 
-vim +/end +321 drivers/gpu/drm/xe/xe_gt_tlb_invalidation.c
+380d97bd02fca7 Claudio Imbrenda 2021-09-20  182  
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  183  /*
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  184   * Calculate the expected ref_count for a page that would otherwise have no
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  185   * further pins. This was cribbed from similar functions in other places in
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  186   * the kernel, but with some slight modifications. We know that a secure
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  187   * page can not be a huge page for example.
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  188   */
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  189  static int expected_page_refs(struct page *page)
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  190  {
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  191  	int res;
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  192  
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  193  	res = page_mapcount(page);
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  194  	if (PageSwapCache(page)) {
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  195  		res++;
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21 @196  	} else if (page_mapping(page)) {
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  197  		res++;
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  198  		if (page_has_private(page))
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  199  			res++;
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  200  	}
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  201  	return res;
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  202  }
+214d9bbcd3a672 Claudio Imbrenda 2020-01-21  203  
 
-   264	
-   265	/**
-   266	 * xe_gt_tlb_invalidation_range - Issue a TLB invalidation on this GT for an
-   267	 * address range
-   268	 *
-   269	 * @gt: graphics tile
-   270	 * @fence: invalidation fence which will be signal on TLB invalidation
-   271	 * completion, can be NULL
-   272	 * @start: start address
-   273	 * @end: end address
-   274	 * @asid: address space id
-   275	 *
-   276	 * Issue a range based TLB invalidation if supported, if not fallback to a full
-   277	 * TLB invalidation. Completion of TLB is asynchronous and caller can either use
-   278	 * the invalidation fence or seqno + xe_gt_tlb_invalidation_wait to wait for
-   279	 * completion.
-   280	 *
-   281	 * Return: Seqno which can be passed to xe_gt_tlb_invalidation_wait on success,
-   282	 * negative error code on error.
-   283	 */
-   284	int xe_gt_tlb_invalidation_range(struct xe_gt *gt,
-   285					 struct xe_gt_tlb_invalidation_fence *fence,
-   286					 u64 start, u64 end, u32 asid)
-   287	{
-   288		struct xe_device *xe = gt_to_xe(gt);
-   289	#define MAX_TLB_INVALIDATION_LEN	7
-   290		u32 action[MAX_TLB_INVALIDATION_LEN];
-   291		int len = 0;
-   292	
-   293		/* Execlists not supported */
-   294		if (gt_to_xe(gt)->info.force_execlist) {
-   295			if (fence)
-   296				__invalidation_fence_signal(fence);
-   297	
-   298			return 0;
-   299		}
-   300	
-   301		action[len++] = XE_GUC_ACTION_TLB_INVALIDATION;
-   302		action[len++] = 0; /* seqno, replaced in send_tlb_invalidation */
-   303		if (!xe->info.has_range_tlb_invalidation) {
-   304			action[len++] = MAKE_INVAL_OP(XE_GUC_TLB_INVAL_FULL);
-   305		} else {
-   306			u64 orig_start = start;
-   307			u64 length = end - start;
-   308			u64 align, end;
-   309	
-   310			if (length < SZ_4K)
-   311				length = SZ_4K;
-   312	
-   313			/*
-   314			 * We need to invalidate a higher granularity if start address
-   315			 * is not aligned to length. When start is not aligned with
-   316			 * length we need to find the length large enough to create an
-   317			 * address mask covering the required range.
-   318			 */
-   319			align = roundup_pow_of_two(length);
-   320			start = ALIGN_DOWN(start, align);
- > 321			end = ALIGN(end, align);
-   322			length = align;
-   323			while (start + length < end) {
-   324				length <<= 1;
-   325				start = ALIGN_DOWN(orig_start, length);
-   326			}
-   327	
-   328			/*
-   329			 * Minimum invalidation size for a 2MB page that the hardware
-   330			 * expects is 16MB
-   331			 */
-   332			if (length >= SZ_2M) {
-   333				length = max_t(u64, SZ_16M, length);
-   334				start = ALIGN_DOWN(orig_start, length);
-   335			}
-   336	
-   337			xe_gt_assert(gt, length >= SZ_4K);
-   338			xe_gt_assert(gt, is_power_of_2(length));
-   339			xe_gt_assert(gt, !(length & GENMASK(ilog2(SZ_16M) - 1,
-   340							    ilog2(SZ_2M) + 1)));
-   341			xe_gt_assert(gt, IS_ALIGNED(start, length));
-   342	
-   343			action[len++] = MAKE_INVAL_OP(XE_GUC_TLB_INVAL_PAGE_SELECTIVE);
-   344			action[len++] = asid;
-   345			action[len++] = lower_32_bits(start);
-   346			action[len++] = upper_32_bits(start);
-   347			action[len++] = ilog2(length) - ilog2(SZ_4K);
-   348		}
-   349	
-   350		xe_gt_assert(gt, len <= MAX_TLB_INVALIDATION_LEN);
-   351	
-   352		return send_tlb_invalidation(&gt->uc.guc, fence, action, len);
-   353	}
-   354	
+:::::: The code at line 196 was first introduced by commit
+:::::: 214d9bbcd3a67230b932f6cea83c078ab34d9e70 s390/mm: provide memory management functions for protected KVM guests
+
+:::::: TO: Claudio Imbrenda <imbrenda@linux.ibm.com>
+:::::: CC: Christian Borntraeger <borntraeger@de.ibm.com>
 
 -- 
 0-DAY CI Kernel Test Service
