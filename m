@@ -1,25 +1,25 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25C63EA96
-	for <llvm@lists.linux.dev>; Sat, 27 Apr 2024 04:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14AF339ACD
+	for <llvm@lists.linux.dev>; Sat, 27 Apr 2024 04:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.237.72.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714193663; cv=none; b=gikm8DHVxvTbX6RI81n+6fiWktY2/cO7nJn1bPaUaeYXpPROn+0DGmOyrqzFreSXk5BIpGAIAcinOVEv1efpjiu4LWAK5uMnBcPBkyZcb211rBGMTpb3elRegwY2qQMGHaeCSR9Ib/cwvhtQn5/dJlV0cLOWwNLXuOk395vuQLU=
+	t=1714193896; cv=none; b=mA/DdBWWDCkxTvU1Gy1c7Hklvmz5Hab8DX1D+7fOtdc4q0EWIHOKUweIklY2HmvOqxgfKujBn26z9ZaRUFizJK7/BJY55Ob9vtIZdaJZnUBaz4IiYx4RNcaf0oBX4lmuSsz/dJ4sgpSbO9ns/BrjF++FIhgnRHVWh4BOZlG9c64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714193663; c=relaxed/simple;
-	bh=COCIbDZFltGaD84Wal5CSKydsK30X8Hnro6ckdcys30=;
+	s=arc-20240116; t=1714193896; c=relaxed/simple;
+	bh=aM2Luehj5+ffkrgeKoI0aifHQ4Kms4zk+9w4xyw7XR0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wnvwzqu2yrfdaATjXpxzsGNAyzuDyd6RfG2GTWc8bBDkJmJ5iZYu1tE4zh1ecYDvv4qbDtnP2mFjJcR5+IUe9Piv40hM71qEOkCYUKxFwwP7BYtyhIRoSRY5unXuupZzUsyVmr28gFo7G/O3U0kJ5kzs2YsFX1Y2aTW1/LlIIcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=207.46.229.174
+	 In-Reply-To:Content-Type; b=I0rv5xdGn+qmedNY+U4jXBi9AX9BpUdeRH7aC1fntz51V83tE1wEZufVXAvRK/RzZIr4/tB0lJBZSgdEL4TUGgrZgnY+t+wpcSCtaCkcmSxA0Ow/pfACvYOIJl5bw54MietV4Zh2456+jWzi/455AnXktK/EIx7fXlVfWUbi5tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=52.237.72.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.50])
-	by app2 (Coremail) with SMTP id HwEQrABnifjPhCxmSjwKAQ--.48932S2;
-	Sat, 27 Apr 2024 12:53:35 +0800 (CST)
+Received: from hust.edu.cn (unknown [172.16.0.52])
+	by app1 (Coremail) with SMTP id HgEQrAB3V6jHhSxma4p7BQ--.12872S2;
+	Sat, 27 Apr 2024 12:57:43 +0800 (CST)
 Received: from [192.168.130.49] (unknown [61.242.129.158])
-	by gateway (Coremail) with SMTP id _____wB3yDXMhCxmSkY7AQ--.5384S2;
-	Sat, 27 Apr 2024 12:53:34 +0800 (CST)
-Message-ID: <14146b11-9e46-4799-90df-1f40337fc0ca@hust.edu.cn>
-Date: Sat, 27 Apr 2024 12:53:32 +0800
+	by gateway (Coremail) with SMTP id _____wAnAdrFhSxmvgvfAQ--.31060S2;
+	Sat, 27 Apr 2024 12:57:43 +0800 (CST)
+Message-ID: <9ce2bf52-375e-42a7-902c-72de1dc90af2@hust.edu.cn>
+Date: Sat, 27 Apr 2024 12:57:41 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,25 +42,25 @@ From: Dongliang Mu <dzm91@hust.edu.cn>
 In-Reply-To: <cover.1714113680.git.siyanteng@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrABnifjPhCxmSjwKAQ--.48932S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW7Jw45Cry3XF15tFy3Kw4fuFg_yoW8Jr48pF
+X-CM-TRANSID:HgEQrAB3V6jHhSxma4p7BQ--.12872S2
+Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoW7Jw45Cry3XF15tFy3Kw4fuFg_yoW8Jr45pF
 	Z8GFyfJ3Z5trn7Cw1fCF4rZF4fGFs3G3y5Jr12q3s5Jrs8GF1rtrW7t34Y93y8urWxZF4r
-	Zr4rKrZ8uF4rCrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQ0b7Iv0xC_Cr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	Zr4rKrZ8uF4rCrJanT9S1TB71UUUU1DqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQ2b7Iv0xC_Cr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
 	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
-	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
-	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
-	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26F4j6r4UJwAm
-	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
-	IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC20s026xCaFVCjc4AY6r1j
-	6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
-	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU3D73DUUUU
+	v20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
+	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
+	1q6r43M2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
+	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
+	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCY1x0262kKe7AKxVW8ZVWrXwCF04
+	k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUDT5lDUUUU
 X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
 
@@ -83,6 +83,7 @@ Looks good to me.
 
 Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 
+>
 > Yanteng Si (4):
 >    docs/zh_CN/rust: Update the translation of arch-support to 6.9-rc4
 >    docs/zh_CN/rust: Update the translation of coding-guidelines to
