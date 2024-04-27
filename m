@@ -1,188 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7528B3BBEC;
-	Sat, 27 Apr 2024 04:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821EA3C489
+	for <llvm@lists.linux.dev>; Sat, 27 Apr 2024 04:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714191508; cv=none; b=P2Wmqsk/1WTMGGXscAVgfUvJ6VVIHIJagYid0Rwoe/sJKOw2xCDA3FZ1DUuGc4aGpY5FrAy3+NVWbRdcCdfrqvW2S1UwMjQnGGxg6puZprtobxhJfPihb2KM096JDMlzokUOnfqIK6lGmAZrngaL+/b2FO3Dwej5yOwG6elU1t4=
+	t=1714191949; cv=none; b=Jr1LXEUAyvXt2zM5vhJ+riY8JvHvONrjgebSdfsoBXHFOZeCS6AnxPJjNnlLMav5JBv8wct7ZpHtoLpHAIyuP8krhB1VUSHHRxidPLGIvNZTh8LEOawBGJ0Hh9OqwYG/RvZ/IHEDDIJRHOeQt3j+I4/v9ghgHPM4YiTG/cPajD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714191508; c=relaxed/simple;
-	bh=9/tn2G0UzT+pos5SSWjCh/ekHpy90xZIn8Ntu6sbS2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BrXAog/IWibWMCsYkaNh8oFU/T8qr8aKxlfoKGG1IBUhuQHdxdI/jLSnbhKhtRVMHUiFCW122205VYO9If5wYgYn9PoG3p/kLTxh2a81cJHHwdMk6u0vDP4Gl18ea4Pu6CSpgU8bGz8ArOTxa9gSOUcGQKeAL3QAhtqU++j0+W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ki+H4DIV; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ki+H4DIV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714191505; x=1745727505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9/tn2G0UzT+pos5SSWjCh/ekHpy90xZIn8Ntu6sbS2s=;
-  b=ki+H4DIVa2J6dsCD2hg/9lNhCgG+1OhwtyCTunosJNNrdQjh+Zo/QS8y
-   qD+3Y8Oku8dc+of9I7F6bhye+DQCn0MaGwQ8+q7oAo1Jf26Y86PaAuOzw
-   QJl4mS+ZnhX3ou9dZB2kUNgZn38P5RBaj1TeO8VJ2mbAs+/zgq0tcztS9
-   DvDEgdWUuMSzbNWWvL6nylO6zTxfZejMrDOuzXol9fv7EvUV9DkjThECy
-   abWg4QYcdOhWD/8KnxVerrmEF1dlh44qBCcYUV/1aHwcclkU4L6laBO6a
-   BLXO/Ky80d1NxAmPwyMk8SYQhwK8vshcB+RS3Hx9qTnlD42ud8vsJPY+o
-   Q==;
-X-CSE-ConnectionGUID: mcZ2ZhNJTGKW/IV28kldjQ==
-X-CSE-MsgGUID: QTjTo2EjS2KwnRDVVVRJ2w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="21082793"
-X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
-   d="scan'208";a="21082793"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 21:18:25 -0700
-X-CSE-ConnectionGUID: U6L3KslTQ0WicT3QfkDltA==
-X-CSE-MsgGUID: I4Vi0DFhSweW+/+y4ch40g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
-   d="scan'208";a="26012762"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 26 Apr 2024 21:18:23 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s0ZW0-0004eI-31;
-	Sat, 27 Apr 2024 04:18:20 +0000
-Date: Sat, 27 Apr 2024 12:17:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Timur Tabi <ttabi@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, Danilo Krummrich <dakr@redhat.com>
-Subject: [drm-misc:for-linux-next 1/1]
- drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:1267:3: warning: label at end
- of compound statement is a C23 extension
-Message-ID: <202404271259.rahBUb02-lkp@intel.com>
+	s=arc-20240116; t=1714191949; c=relaxed/simple;
+	bh=X2gig5u+4kkxfvwDP2PFggk8gIpIlYRNQFFkvmtEtcg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MX/M+WuaO4ejdSBNinL+dmMrlOc1qd1jy8T8zY5S+OlRdJo9X3c9cE4p45Vnk9czRFec8DvgzIKTuXvsbhwa27hAqc9YgIkUthufgUd8vshOgdLS1BBDz3lBJCjQRbfZUJITn/k3lP4x/fuNy6EU5rPwAVI9UU99v8j4T82n61o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.20.112.218])
+	by gateway (Coremail) with SMTP id _____8CxLOtHfixmW90DAA--.8360S3;
+	Sat, 27 Apr 2024 12:25:43 +0800 (CST)
+Received: from [192.168.100.8] (unknown [112.20.112.218])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxP1VFfixmABcHAA--.4027S3;
+	Sat, 27 Apr 2024 12:25:42 +0800 (CST)
+Message-ID: <f402bf42-98c9-4433-9efc-c3e13b0853e9@loongson.cn>
+Date: Sat, 27 Apr 2024 12:25:40 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] rust: docs: Update the translation of rust to
+ 6.9-rc4
+To: Jonathan Corbet <corbet@lwn.net>,
+ Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+ boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+ benno.lossin@proton.me, a.hindborg@samsung.com, aliceryhl@google.com,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, alexs@kernel.org, dzm91@hust.edu.cn,
+ linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <cover.1714113680.git.siyanteng@loongson.cn>
+ <CANiq72meE9txt5b09Y7cUJd-hEqcZX1ZtRc_0YYDZqWQgyo3wA@mail.gmail.com>
+ <87zftgnsun.fsf@meer.lwn.net>
+Content-Language: en-US
+From: Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <87zftgnsun.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8AxP1VFfixmABcHAA--.4027S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7CF15Zw13WryUCF17Jw4xuFX_yoW8XFykpF
+	sxKa43Kw1DGr1IyF4fur4UZa4Ikr13GF4UJr1DW3s8Cw13XF1SkrWSvw4Y9FWxCrn5Ww1j
+	qr40yrZ3u3Z8ZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUyCb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr4
+	1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+	67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+	8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAv
+	wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+	v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1YL9UUUUU=
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
-head:   61ba791c4a7a09a370c45b70a81b8c7d4cf6b2ae
-commit: b58a0bc904ffa091fc020f7fd00e91808fec820e [1/1] nouveau: add command-line GSP-RM registry support
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240427/202404271259.rahBUb02-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404271259.rahBUb02-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404271259.rahBUb02-lkp@intel.com/
+在 2024/4/26 21:42, Jonathan Corbet 写道:
+> Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> writes:
+>
+>> On Fri, Apr 26, 2024 at 9:00 AM Yanteng Si <siyanteng@loongson.cn> wrote:
+>>> v2:
+>>> * As Miguel's comments, translate commit 01848eee20c6
+>>>    into Chinese, as well as commit 81889e8523e6. By the way,
+>>>    these two patches haven't appeared in the doc development
+>>>    tree yet, maybe we could consider merging them into the
+>>>    rust tree?
+>> The former is in `rust-fixes`, which will be sent to Linus for this
+>> cycle. So the English docs will be updated sooner than these updates,
+>> if that is what you are asking.
+>>
+>> For the other one, it is in the RISC-V tree and I assume it will be
+>> sent into the next merge window. I don't know how you normally handle
+>> that (i.e. translations being updated at the same time or after a
+>> cycle), but either way, I am not sure why you would want them to be
+>> merged into the Rust tree?
+> I guess I don't see any reason why the translation couldn't go through
+> docs-next as usual?  It will all even out during the merge window,
+> right?  Or am I missing something?
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:22:
-   In file included from drivers/gpu/drm/nouveau/nvkm/subdev/gsp/priv.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/subdev/gsp.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/device.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/oclass.h:3:
-   In file included from drivers/gpu/drm/nouveau/include/nvkm/core/os.h:4:
-   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c:1267:3: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
-    1267 |                 }
-         |                 ^
-   2 warnings generated.
+Yes, you're right.
 
 
-vim +1267 drivers/gpu/drm/nouveau/nvkm/subdev/gsp/r535.c
+I mean, in order of order, I should translate these two patches in the 
+next window,
 
-  1199	
-  1200	/**
-  1201	 * build_registry -- create the registry RPC data
-  1202	 * @gsp: gsp pointer
-  1203	 * @registry: pointer to the RPC payload to fill
-  1204	 *
-  1205	 * After all registry key/value pairs have been added, call this function to
-  1206	 * build the RPC.
-  1207	 *
-  1208	 * The registry RPC looks like this:
-  1209	 *
-  1210	 * +-----------------+
-  1211	 * |NvU32 size;      |
-  1212	 * |NvU32 numEntries;|
-  1213	 * +-----------------+
-  1214	 * +----------------------------------------+
-  1215	 * |PACKED_REGISTRY_ENTRY                   |
-  1216	 * +----------------------------------------+
-  1217	 * |Null-terminated key (string) for entry 0|
-  1218	 * +----------------------------------------+
-  1219	 * |Binary/string data value for entry 0    | (only if necessary)
-  1220	 * +----------------------------------------+
-  1221	 *
-  1222	 * +----------------------------------------+
-  1223	 * |PACKED_REGISTRY_ENTRY                   |
-  1224	 * +----------------------------------------+
-  1225	 * |Null-terminated key (string) for entry 1|
-  1226	 * +----------------------------------------+
-  1227	 * |Binary/string data value for entry 1    | (only if necessary)
-  1228	 * +----------------------------------------+
-  1229	 * ... (and so on, one copy for each entry)
-  1230	 *
-  1231	 *
-  1232	 * The 'data' field of an entry is either a 32-bit integer (for type DWORD)
-  1233	 * or an offset into the PACKED_REGISTRY_TABLE (for types BINARY and STRING).
-  1234	 *
-  1235	 * All memory allocated by add_registry() is released.
-  1236	 */
-  1237	static void build_registry(struct nvkm_gsp *gsp, PACKED_REGISTRY_TABLE *registry)
-  1238	{
-  1239		struct registry_list_entry *reg, *n;
-  1240		size_t str_offset;
-  1241		unsigned int i = 0;
-  1242	
-  1243		registry->numEntries = list_count_nodes(&gsp->registry_list);
-  1244		str_offset = struct_size(registry, entries, registry->numEntries);
-  1245	
-  1246		list_for_each_entry_safe(reg, n, &gsp->registry_list, head) {
-  1247			registry->entries[i].type = reg->type;
-  1248			registry->entries[i].length = reg->vlen;
-  1249	
-  1250			/* Append the key name to the table */
-  1251			registry->entries[i].nameOffset = str_offset;
-  1252			memcpy((void *)registry + str_offset, reg->key, reg->klen);
-  1253			str_offset += reg->klen;
-  1254	
-  1255			switch (reg->type) {
-  1256			case REGISTRY_TABLE_ENTRY_TYPE_DWORD:
-  1257				registry->entries[i].data = reg->dword;
-  1258				break;
-  1259			case REGISTRY_TABLE_ENTRY_TYPE_BINARY:
-  1260			case REGISTRY_TABLE_ENTRY_TYPE_STRING:
-  1261				/* If the type is binary or string, also append the value */
-  1262				memcpy((void *)registry + str_offset, reg->binary, reg->vlen);
-  1263				registry->entries[i].data = str_offset;
-  1264				str_offset += reg->vlen;
-  1265				break;
-  1266			default:
-> 1267			}
-  1268	
-  1269			i++;
-  1270			list_del(&reg->head);
-  1271			kfree(reg);
-  1272		}
-  1273	
-  1274		/* Double-check that we calculated the sizes correctly */
-  1275		WARN_ON(gsp->registry_rpc_size != str_offset);
-  1276	
-  1277		registry->size = gsp->registry_rpc_size;
-  1278	}
-  1279	
+because these two patches are not merged into the doc tree yet, and if 
+they are
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+merged into the doc tree, this may cause confusion for readers and 
+reviewers.
+
+
+That's why I mentioned it on the cover letter. Of course, it would be 
+great if the
+
+patch sets were  merged into the doc tree after reviewed.
+
+
+Thanks,
+
+Yanteng
+
+>
+>
+
