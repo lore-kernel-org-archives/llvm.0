@@ -1,58 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9277C1DFD2;
-	Sat, 27 Apr 2024 12:23:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BB75660;
+	Sat, 27 Apr 2024 15:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714220617; cv=none; b=sIz4wsmconKmrQEIAaeInAxaLilMnbX8De7fdEJGfLuvNlXqiGiJL/95Yt/Tia1JxerRsgh2Txfbq2gEXbNQkgbITb60JID8HCRaqnUlOieukqXtRdlePZMX8vdQt2txmDd6DqiYCsPHM3O2GkT8Ydj/f5NlsQmIp3hVfkqpU7E=
+	t=1714232477; cv=none; b=MwC/wyeYWYgpvyo5yNq2oNDC4kq9UsoSH0/2IuihAxc8CLt+1a2Mc3IWGFjH+nVOkcOmz2LsRB9IX3fw6chIPPuLRdIDYHfwGq6tfB3nAUkPO46Y1o7E9QyxT7g4IiHjAPPwYr28uVdooMXuQn8dFbFGLE3DZs83EVDdFNoFgQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714220617; c=relaxed/simple;
-	bh=zrBOzM1NNEumGcrqIdS5fhfRYb5DhMIPnzVbf/lwLAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Es952Czwj+nfFVzS2M2/7xmB8GZYFEHt+8t+t4QbbjCiTrV9q1p0Ot9xTRRcLtqb/JL3joo0V5vLJYMFuh1y3EZ8EOUYLMgpeMcvOxgl2iJh9e8tXhTd0WDd46RZeAv00df+6RXu1AKEG3Sc7brSPjquAQ4jDE5MDsDIEygpndw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W1fwZgLv; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714232477; c=relaxed/simple;
+	bh=cDZ/YZrJdhpH8oV3aKZpwQqURWbg5YebmaBtmSpnGvY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qtt5ff4ZF+lpX0E77DiP1Udvwx+CFnfkmPRnOfPgLWPqXFGe+VaSdwEd+KwXHgLOoQYw7xoyrx8hwjvBMkLLBUAf2JRM5rTkK0fL9Z7y2YE1Ut3VhfyQSsAGKriJEhfAUK/hUrHtlwzmGkntq49dRGEAp5wdyCl/vDXm1MDXpyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ekWvrT/6; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W1fwZgLv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714220615; x=1745756615;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zrBOzM1NNEumGcrqIdS5fhfRYb5DhMIPnzVbf/lwLAo=;
-  b=W1fwZgLv6oOyuo50gZAujcOLrJFTXYQUIgSHDwAwqjXHHoNe47p6Q+RG
-   rdUnFf4/CKi5c/u3zXmeh5hCkz7bMlqMAcnFIT4s5T8biwAWt3opfmeNN
-   giiwiDYIYUgYXUGAGZvgP6KO6yKpWA647xpng/mz8loTBqlQ4dkjYfMn1
-   4U5RJE1r7KdXLLaF9xjVTZHUWxtAXNsW1FcViGlQZSC/GZ2R4ey4K11KB
-   oiaKfIg1QbEJVflAF1KIhpy8yK/PycaPN8DXdM5mFh0wlchhzzrL6hQzL
-   GFutgeQoPpRCPTUkSgsweMIg3Iig5vaC4cQwGKm+I5+CyUHa+4WnY7nia
-   A==;
-X-CSE-ConnectionGUID: 3NwA8bNTQUCdy6jmTJrDQw==
-X-CSE-MsgGUID: dW3Fyl04QVCEYPWOGKN75A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11057"; a="27400283"
-X-IronPort-AV: E=Sophos;i="6.07,235,1708416000"; 
-   d="scan'208";a="27400283"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2024 05:23:35 -0700
-X-CSE-ConnectionGUID: vlP4aEErSFmW4D4BKS4OPQ==
-X-CSE-MsgGUID: qGwOeUGwS72nWiPiBxVNjg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,235,1708416000"; 
-   d="scan'208";a="26171424"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 27 Apr 2024 05:23:33 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s0h5W-0004yQ-2G;
-	Sat, 27 Apr 2024 12:23:30 +0000
-Date: Sat, 27 Apr 2024 20:23:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:uprobes_cow 2/3]
- arch/arm/probes/uprobes/core.c:29:5: error: conflicting types for 'set_swbp'
-Message-ID: <202404272026.UsFT9Wl5-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ekWvrT/6"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=aW42jJP2mA2HtrF1gAeKltBftLD6Bobro6syAcuet0Q=; b=ekWvrT/6oWvYa+lSD+e76K/EeP
+	6aZoNldIe04BFpTVeaWNk+cP9jQiOZ73EEygCTd1CMqQwBXHMa2Z3VuCeSYOWviAxHLcHfkOgYPGi
+	2PaCN4Hh4DfOwcWWIXpD3LFLuPKv8aodKcOmxlntNttJxRea9lgMki2LB5NGfX3mgebANJM5YWfhH
+	qAkVhINTno5Zhvde/7R+85Cf5pWOUN0a6qPC9Q74ehaER7D4edqPfjCAqyi923pxjlTn16tqh+qXr
+	q5B0vpxFxgTmRsYIELRLPIuNnwp2Kfk+xY82LnfucGMTIB5916lCmr1Iigs5uJBRzDNDbafvt63a6
+	PxrEi7Jw==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s0jmr-00000007iR2-2iGY;
+	Sat, 27 Apr 2024 15:16:25 +0000
+Date: Sat, 27 Apr 2024 16:16:25 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	David Hildenbrand <david@redhat.com>
+Subject: Re: [akpm-mm:mm-unstable 457/479] arch/s390/kernel/uv.c:196:13:
+ error: call to undeclared function 'page_mapping'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <Zi0Wye9tY9bofWKh@casper.infradead.org>
+References: <202404271523.VI3HNl2M-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,50 +49,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202404271523.VI3HNl2M-lkp@intel.com>
 
-tree:   https://github.com/davidhildenbrand/linux uprobes_cow
-head:   42ab6aaef9cde61b0c00b5aafe291bda60e362e7
-commit: 204060681d67b845d95d19d8964b62381a46d6a9 [2/3] kernel/events/uprobes: pass VMA to set_swbp(), set_orig_insn() and uprobe_write_opcode()
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240427/202404272026.UsFT9Wl5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404272026.UsFT9Wl5-lkp@intel.com/reproduce)
+On Sat, Apr 27, 2024 at 03:54:08PM +0800, kernel test robot wrote:
+> >> arch/s390/kernel/uv.c:196:13: error: call to undeclared function 'page_mapping'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      196 |         } else if (page_mapping(page)) {
+>          |                    ^
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404272026.UsFT9Wl5-lkp@intel.com/
+Gah.  The removal of page_mapping() is in the s390 tree.
 
-All errors (new ones prefixed by >>):
+commit 259e660d91d0
+Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+Date:   Fri Mar 22 16:11:46 2024 +0000
 
-   arch/arm/probes/uprobes/core.c:29:50: warning: declaration of 'struct vma_area_struct' will not be visible outside of this function [-Wvisibility]
-   int set_swbp(struct arch_uprobe *auprobe, struct vma_area_struct *vma,
-                                                    ^
->> arch/arm/probes/uprobes/core.c:29:5: error: conflicting types for 'set_swbp'
-   int set_swbp(struct arch_uprobe *auprobe, struct vma_area_struct *vma,
-       ^
-   include/linux/uprobes.h:106:12: note: previous declaration is here
-   extern int set_swbp(struct arch_uprobe *aup, struct vm_area_struct *vma, unsigned long vaddr);
-              ^
->> arch/arm/probes/uprobes/core.c:32:38: error: incompatible pointer types passing 'struct vma_area_struct *' to parameter of type 'struct vm_area_struct *' [-Werror,-Wincompatible-pointer-types]
-           return uprobe_write_opcode(auprobe, vma, vaddr,
-                                               ^~~
-   include/linux/uprobes.h:112:84: note: passing argument to parameter 'vma' here
-   extern int uprobe_write_opcode(struct arch_uprobe *auprobe, struct vm_area_struct *vma, unsigned long vaddr, uprobe_opcode_t);
-                                                                                      ^
-   1 warning and 2 errors generated.
+    s390/mm: Convert make_page_secure to use a folio
 
+But we don't want that kind of dependency between the mm and s390 trees,
+so perhaps best to just drop
 
-vim +/set_swbp +29 arch/arm/probes/uprobes/core.c
+commit 48f0b417c0fc
+Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+Date:   Tue Apr 23 23:55:37 2024 +0100
 
-    28	
-  > 29	int set_swbp(struct arch_uprobe *auprobe, struct vma_area_struct *vma,
-    30		     unsigned long vaddr)
-    31	{
-  > 32		return uprobe_write_opcode(auprobe, vma, vaddr,
-    33			   __opcode_to_mem_arm(auprobe->bpinsn));
-    34	}
-    35	
+    mm: remove page_mapping()
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+for now and we can submit it shortly before -rc1?
