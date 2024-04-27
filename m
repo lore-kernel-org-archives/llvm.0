@@ -1,25 +1,25 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB8CE2AF1B
-	for <llvm@lists.linux.dev>; Sat, 27 Apr 2024 04:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25C63EA96
+	for <llvm@lists.linux.dev>; Sat, 27 Apr 2024 04:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714192707; cv=none; b=CeceaAvct7YB128gQjiPWRirVuAv25TCRqB2Rs63pYVl31y4G1GHUFloe2kfowfq9gk9kdlR57R0VbxOqCtBTNDW5V4H7gPcJ0F8qsemWurnOEO+CPB7aKGjnYmVfdA+sdXR5LIk003WD6CY7VUyZ7CZPQ2Y4HOw1qe23vVsqN4=
+	t=1714193663; cv=none; b=gikm8DHVxvTbX6RI81n+6fiWktY2/cO7nJn1bPaUaeYXpPROn+0DGmOyrqzFreSXk5BIpGAIAcinOVEv1efpjiu4LWAK5uMnBcPBkyZcb211rBGMTpb3elRegwY2qQMGHaeCSR9Ib/cwvhtQn5/dJlV0cLOWwNLXuOk395vuQLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714192707; c=relaxed/simple;
-	bh=1e30Vx0x9asTreYv7+Dqpx3STx93SRkQPdmPybsYLUI=;
+	s=arc-20240116; t=1714193663; c=relaxed/simple;
+	bh=COCIbDZFltGaD84Wal5CSKydsK30X8Hnro6ckdcys30=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XWW9etwVkxV+dzkWYY4LvLRvtFebsK5IaNLYk17LJgQN7JT3cVPt094ygzTkMZteVhRuaH+BnfGXKN6OZ/0bV86vqNZEr6KovxkDE/hNi4jiRwFVUy18DVbdhRZVs9hfMf6iWOPjMSIQLZ4/I6EwmZMyZoX/qPpWeGOeChZehac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [112.20.112.218])
-	by gateway (Coremail) with SMTP id _____8CxJvA+gSxm4d0DAA--.15073S3;
-	Sat, 27 Apr 2024 12:38:22 +0800 (CST)
-Received: from [192.168.100.8] (unknown [112.20.112.218])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxc1Y8gSxmpBkHAA--.4284S3;
-	Sat, 27 Apr 2024 12:38:21 +0800 (CST)
-Message-ID: <f49129dd-ed6f-4940-b851-0282fc320234@loongson.cn>
-Date: Sat, 27 Apr 2024 12:38:20 +0800
+	 In-Reply-To:Content-Type; b=Wnvwzqu2yrfdaATjXpxzsGNAyzuDyd6RfG2GTWc8bBDkJmJ5iZYu1tE4zh1ecYDvv4qbDtnP2mFjJcR5+IUe9Piv40hM71qEOkCYUKxFwwP7BYtyhIRoSRY5unXuupZzUsyVmr28gFo7G/O3U0kJ5kzs2YsFX1Y2aTW1/LlIIcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app2 (Coremail) with SMTP id HwEQrABnifjPhCxmSjwKAQ--.48932S2;
+	Sat, 27 Apr 2024 12:53:35 +0800 (CST)
+Received: from [192.168.130.49] (unknown [61.242.129.158])
+	by gateway (Coremail) with SMTP id _____wB3yDXMhCxmSkY7AQ--.5384S2;
+	Sat, 27 Apr 2024 12:53:34 +0800 (CST)
+Message-ID: <14146b11-9e46-4799-90df-1f40337fc0ca@hust.edu.cn>
+Date: Sat, 27 Apr 2024 12:53:32 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,78 +29,72 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 0/4] rust: docs: Update the translation of rust to
  6.9-rc4
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
- boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
- benno.lossin@proton.me, a.hindborg@samsung.com, aliceryhl@google.com,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, alexs@kernel.org, dzm91@hust.edu.cn,
- linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org,
+To: Yanteng Si <siyanteng@loongson.cn>, ojeda@kernel.org, corbet@lwn.net,
+ alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
+ gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+ a.hindborg@samsung.com, aliceryhl@google.com, nathan@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ alexs@kernel.org
+Cc: linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org,
  llvm@lists.linux.dev
 References: <cover.1714113680.git.siyanteng@loongson.cn>
- <CANiq72meE9txt5b09Y7cUJd-hEqcZX1ZtRc_0YYDZqWQgyo3wA@mail.gmail.com>
- <87zftgnsun.fsf@meer.lwn.net>
- <CANiq72mHoh=qgOGPj29hpS7EhVcXi5Q_7GYsycKhYwj3QbsTag@mail.gmail.com>
-Content-Language: en-US
-From: Yanteng Si <siyanteng@loongson.cn>
-In-Reply-To: <CANiq72mHoh=qgOGPj29hpS7EhVcXi5Q_7GYsycKhYwj3QbsTag@mail.gmail.com>
+From: Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <cover.1714113680.git.siyanteng@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8Dxc1Y8gSxmpBkHAA--.4284S3
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrury7tF45tFy7Ar18JF1UArc_yoWDArg_GF
-	Wvyayvyw48JF48Aa12gr4rZwsrtay7uF1xZ34kJ3y2q345AF4DWFW3Krn2gw1vgrWFgF1U
-	GrZ7ZaySkw429osvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb3kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-	JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v2
-	6r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCY1x0262kKe7AKxVWUAV
-	WUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWU
-	tVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-	kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY
-	6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-	vEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-	vjDU0xZFpf9x07jFsjbUUUUU=
+X-CM-TRANSID:HwEQrABnifjPhCxmSjwKAQ--.48932S2
+Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoW7Jw45Cry3XF15tFy3Kw4fuFg_yoW8Jr48pF
+	Z8GFyfJ3Z5trn7Cw1fCF4rZF4fGFs3G3y5Jr12q3s5Jrs8GF1rtrW7t34Y93y8urWxZF4r
+	Zr4rKrZ8uF4rCrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQ0b7Iv0xC_Cr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
+	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
+	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
+	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
+	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26F4j6r4UJwAm
+	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
+	IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU3D73DUUUU
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
 
-在 2024/4/27 00:47, Miguel Ojeda 写道:
-> On Fri, Apr 26, 2024 at 3:42 PM Jonathan Corbet <corbet@lwn.net> wrote:
->> I guess I don't see any reason why the translation couldn't go through
->> docs-next as usual?  It will all even out during the merge window,
->> right?  Or am I missing something?
-> Yeah, that is what I am thinking as well, although Yanteng is
-> mentioning conflicts somewhere, so I may be missing something too.
+On 2024/4/26 14:59, Yanteng Si wrote:
+> v2:
+> * As Miguel's comments, translate commit 01848eee20c6
+>    into Chinese, as well as commit 81889e8523e6. By the way,
+>    these two patches haven't appeared in the doc development
+>    tree yet, maybe we could consider merging them into the
+>    rust tree?
+> * As Dongliang's comments, translation "在... 前添加" other
+>    than "前缀".
 >
-Sorry, I may have made a mistake, there are no conflicts in this patch set.
+> v1:
+> The Chinese version of rust seems to be way behind,
+> even though we did translate to Chinese at the beginning.
+> Let's keep them up to date. :)
 
+Looks good to me.
 
-What I mean is that if I translate these two patches as two separate 
-patches,
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-merge them into the rust tree, and then merge the rest of the patch set into
-
-the doc tree, it might cause a conflict in the linux-next tree, because 
-in order
-
-of order, the two patches have to be applied after this patch set. I'm 
-not sure
-
-I've understood the whole process correctly.
-
-
-Now that the two patches have become part of the patch set, there will be no
-
-conflict no matter which tree is eventually merged into.
-
-
-
-Thanks,
-
-Yanteng
-
+> Yanteng Si (4):
+>    docs/zh_CN/rust: Update the translation of arch-support to 6.9-rc4
+>    docs/zh_CN/rust: Update the translation of coding-guidelines to
+>      6.9-rc4
+>    docs/zh_CN/rust: Update the translation of general-information to
+>      6.9-rc4
+>    docs/zh_CN/rust: Update the translation of quick-start to 6.9-rc4
+>
+>   .../translations/zh_CN/rust/arch-support.rst  | 14 ++++--
+>   .../zh_CN/rust/coding-guidelines.rst          | 12 +++++
+>   .../zh_CN/rust/general-information.rst        |  2 +-
+>   .../translations/zh_CN/rust/quick-start.rst   | 50 +++++++++++++------
+>   4 files changed, 56 insertions(+), 22 deletions(-)
+>
 
