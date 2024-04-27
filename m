@@ -1,437 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B012033C8;
-	Sat, 27 Apr 2024 02:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF23376E1;
+	Sat, 27 Apr 2024 02:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714185206; cv=none; b=Lmt2h+PsDKUXu7Y8AgEZsl2DOV+WdiZNf+3WHT+P2L6NTMg2F2WKq4ohSpENFSVdyWjr6lYxqsSA/o0dboUVW/qRFPQkFk9UauN15yUY3ojQF50bw3nymqseqPE1d0UC2z90HSD7E6KZH870I0MKu/oKUvG1K4lfnHY0XYmuN/c=
+	t=1714185868; cv=none; b=KTKeREXPqmsTKRvBo+paEcwgzs171GPyJd16g/sOMFb94oQ1qtlzbXTcYqQL7jpZ8wsV3mYarfG4zpaBJAMpaALxPrvBB4d3NcyS6U7NfkAYHAJVGYlnGmKsAD8XSn1tGj6YrtfAwsmIZtibruZwnn7QfDF7+RT9VmMJ1VUDIxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714185206; c=relaxed/simple;
-	bh=5MvOBZAcUd8Ix6iKYO00W8YA93vrl4kPOX33+cwe0tM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KfH3XaNLwOVLxg4nVPnHz1LaHAZ1bxj/TONSnyv5NZA9Ob5lPUoys1p+C8bksL8t7nK5wV4HIiasJvm0CXz2isn2jbpEYhCezF65VaNYxtcDB1YOp56WpsDowdNXeNEmzo35Rt/1bdTbE3X33EhSLRpeTt/0JPHo73cmt/gMwq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ig5bz+EL; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1714185868; c=relaxed/simple;
+	bh=qkrYL1LnJX01BbmP4vKe9fzC867vlBxEr4GWvPFQafk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lOaK/AGwLR+VNsPHBNhOViNWfGBc8aI3bEmmqBeFsRw4sys4lc/oeCxifwDifh33jGFgWlQSXqEdGm8xXI3fLCmHFAxTHPbXhjH+TpJhxNj++qPnkVybtw0udRm5GWEpde6YR8hkL3zOnnnRJRfNguDi26wyGPTpTpi1ZLqOmSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ANoO81yk; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ig5bz+EL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ANoO81yk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714185204; x=1745721204;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5MvOBZAcUd8Ix6iKYO00W8YA93vrl4kPOX33+cwe0tM=;
-  b=Ig5bz+ELfysKQXDfjwMyCp9EZzoppYdNZW33ETO6s1n2WBbCBB+3NNpb
-   GjFC62NTGBeM/C+vIwSCczUu84hGKhVoiCmnm1XgBDtrh4H0nxrFxJR55
-   Xuf0bpCJ7FRvu5yOcvbSKVaD9wulFfKXhiAAXp1kNmDQNf7CyUn2hzW85
-   1EI7lX8ySImS9sKZaRmF65VopmkcJE6MxSL5asjwxBPsP+lH6AtIT9RK6
-   MzuACcMV6BI1d4Qec+oWOaCqmr/0/MfpwWQUrPL4WqxhWL9KoRhty8wDL
-   kUE2eVA55dO+LFU8+YI17Q5qZy77b6Ogde9dEI50e96z8YE9ELgeQMpLX
-   w==;
-X-CSE-ConnectionGUID: JP2FA6r/Tdih/AkVyL4GUQ==
-X-CSE-MsgGUID: 3k4eHBqwT02qjNQDI5Zpwg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="10041935"
+  t=1714185865; x=1745721865;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=qkrYL1LnJX01BbmP4vKe9fzC867vlBxEr4GWvPFQafk=;
+  b=ANoO81ykJUVbWQH1VDDFEEPQPzaAsHegDobPkvmh8LX2NVvT34f4PBvc
+   0JSRMUkrsB6eQQiqw7Sxbgxgy5zSseR4/qxUSheXUoi8FPueRXoo3PEVE
+   4OCe8DGkFX2+DjUePmY2ncJeWi7/28qqyCIHGGXABvc6+nDTQKlgS8jUH
+   oPbIlm8RUJVZdSps3mUP4CDueidNS4nKbvDVcM3gTCi/duK4swilQkspr
+   Vd2VVNNIu+0W3r4K4GKycVRhcX2Dle/Rk0nEKvoCP7CjzQK/GdUuCBwv3
+   zSJHBiHy2/qMR/FOoTY3roE3sc9y8EWwDsfyzlfz+V/PA3sSUymGbDiCn
+   A==;
+X-CSE-ConnectionGUID: ikVKoqW0QW+a7ELNh9w2tg==
+X-CSE-MsgGUID: Wh6CldQhSG2fAAzgR3SWbg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="20618537"
 X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
-   d="scan'208";a="10041935"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 19:33:23 -0700
-X-CSE-ConnectionGUID: Sccp0mJtSviHRv03kZw2Vg==
-X-CSE-MsgGUID: 22DAZ0DdQeuvIMlHaeWdTw==
+   d="scan'208";a="20618537"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 19:44:24 -0700
+X-CSE-ConnectionGUID: wrHFTpiOR2i91sUQ1VZIJA==
+X-CSE-MsgGUID: E5sNqbW6QeifjYxcNCZZEA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
-   d="scan'208";a="30395655"
+   d="scan'208";a="25565554"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 26 Apr 2024 19:33:21 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 26 Apr 2024 19:44:22 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s0XsM-0004aO-31;
-	Sat, 27 Apr 2024 02:33:18 +0000
-Date: Sat, 27 Apr 2024 10:33:11 +0800
+	id 1s0Y31-0004b4-0x;
+	Sat, 27 Apr 2024 02:44:19 +0000
+Date: Sat, 27 Apr 2024 10:43:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/optimized_usdt_2 12/15]
- include/uapi/asm-generic/unistd.h:849:11: error: use of undeclared
- identifier '__NR_uprobe'
-Message-ID: <202404271020.JdSvPT5N-lkp@intel.com>
+To: Ramona Gradinariu <ramona.bolboaca13@gmail.com>,
+	linux-kernel@vger.kernel.org, jic23@kernel.org,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	robh@kernel.org, nuno.sa@analog.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ramona Gradinariu <ramona.bolboaca13@gmail.com>
+Subject: Re: [PATCH 3/7] iio: imu: adis16475: Re-define ADIS16475_DATA
+Message-ID: <202404271034.fsyc7qe2-lkp@intel.com>
+References: <20240426135339.185602-4-ramona.bolboaca13@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240426135339.185602-4-ramona.bolboaca13@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/optimized_usdt_2
-head:   554d1563d6bebe03a19f9500907d0b71df555713
-commit: 644d6511fa626aad8f835307c2ce93bb1d1db871 [12/15] uprobe: Add uprobe syscall to speed up uprobe
-config: arm64-randconfig-001-20240427 (https://download.01.org/0day-ci/archive/20240427/202404271020.JdSvPT5N-lkp@intel.com/config)
+Hi Ramona,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v6.9-rc5 next-20240426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ramona-Gradinariu/dt-bindings-iio-imu-Add-ADIS16501-compatibles/20240426-215728
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20240426135339.185602-4-ramona.bolboaca13%40gmail.com
+patch subject: [PATCH 3/7] iio: imu: adis16475: Re-define ADIS16475_DATA
+config: arm-randconfig-004-20240427 (https://download.01.org/0day-ci/archive/20240427/202404271034.fsyc7qe2-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404271020.JdSvPT5N-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404271034.fsyc7qe2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404271020.JdSvPT5N-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404271034.fsyc7qe2-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/pi/map_kernel.c:13:
-   In file included from arch/arm64/include/asm/pgalloc.h:13:
-   In file included from arch/arm64/include/asm/cacheflush.h:11:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
+   In file included from drivers/iio/imu/adis16475.c:16:
+   In file included from include/linux/iio/imu/adis.h:12:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
    In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/arm64/kernel/pi/map_kernel.c:13:
-   In file included from arch/arm64/include/asm/pgalloc.h:13:
-   In file included from arch/arm64/include/asm/cacheflush.h:11:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:23:
-   In file included from arch/arm64/include/asm/ftrace.h:52:
-   In file included from include/linux/compat.h:20:
-   In file included from include/uapi/linux/unistd.h:8:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   6 warnings generated.
---
-   In file included from <stdin>:2:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   1 warning generated.
---
->> clang diag: include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-   clang diag: include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
---
-   In file included from arch/arm64/kernel/hw_breakpoint.c:12:
-   In file included from include/linux/compat.h:20:
-   In file included from include/uapi/linux/unistd.h:8:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   In file included from arch/arm64/kernel/hw_breakpoint.c:15:
-   In file included from include/linux/hw_breakpoint.h:5:
-   In file included from include/linux/perf_event.h:50:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings generated.
---
-   In file included from arch/arm64/kernel/syscall.c:7:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/arm64/kernel/syscall.c:9:
-   In file included from include/linux/syscalls.h:89:
-   In file included from include/uapi/linux/unistd.h:8:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   In file included from arch/arm64/kernel/syscall.c:16:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
-   include/uapi/asm-generic/unistd.h:845:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     845 | #define __NR_uretprobe 462
-         |         ^
-   include/uapi/asm-generic/unistd.h:848:9: note: previous definition is here
-     848 | #define __NR_uretprobe 463
-         |         ^
-   In file included from arch/arm64/kernel/syscall.c:16:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   8 warnings generated.
---
-   In file included from arch/arm64/kernel/fpsimd.c:14:
-   In file included from include/linux/compat.h:20:
-   In file included from include/uapi/linux/unistd.h:8:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   In file included from arch/arm64/kernel/fpsimd.c:26:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/fpsimd.c:208:20: warning: unused function 'sme_free' [-Wunused-function]
-     208 | static inline void sme_free(struct task_struct *t) { }
-         |                    ^~~~~~~~
-   7 warnings generated.
---
-   In file included from arch/arm64/kernel/signal.c:10:
-   In file included from include/linux/compat.h:20:
-   In file included from include/uapi/linux/unistd.h:8:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   In file included from arch/arm64/kernel/signal.c:21:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/arm64/kernel/signal.c:29:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
-   include/uapi/asm-generic/unistd.h:845:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     845 | #define __NR_uretprobe 462
-         |         ^
-   include/uapi/asm-generic/unistd.h:848:9: note: previous definition is here
-     848 | #define __NR_uretprobe 463
-         |         ^
-   In file included from arch/arm64/kernel/signal.c:29:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   8 warnings generated.
---
-   In file included from arch/arm64/kernel/sys.c:12:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/arm64/kernel/sys.c:16:
-   In file included from include/linux/syscalls.h:89:
-   In file included from include/uapi/linux/unistd.h:8:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   In file included from arch/arm64/kernel/sys.c:53:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
-   include/uapi/asm-generic/unistd.h:845:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     845 | #define __NR_uretprobe 462
-         |         ^
-   include/uapi/asm-generic/unistd.h:848:9: note: previous definition is here
-     848 | #define __NR_uretprobe 463
-         |         ^
-   In file included from arch/arm64/kernel/sys.c:53:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
-   In file included from arch/arm64/kernel/sys.c:60:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
-   include/uapi/asm-generic/unistd.h:845:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     845 | #define __NR_uretprobe 462
-         |         ^
-   include/uapi/asm-generic/unistd.h:848:9: note: previous definition is here
-     848 | #define __NR_uretprobe 463
-         |         ^
-   In file included from arch/arm64/kernel/sys.c:60:
-   In file included from arch/arm64/include/asm/unistd.h:48:
-   In file included from arch/arm64/include/uapi/asm/unistd.h:25:
->> include/uapi/asm-generic/unistd.h:848:9: warning: '__NR_uretprobe' macro redefined [-Wmacro-redefined]
-     848 | #define __NR_uretprobe 463
-         |         ^
-   include/uapi/asm-generic/unistd.h:845:9: note: previous definition is here
-     845 | #define __NR_uretprobe 462
-         |         ^
->> include/uapi/asm-generic/unistd.h:849:11: error: use of undeclared identifier '__NR_uprobe'
-     849 | __SYSCALL(__NR_uprobe, sys_uprobe)
-         |           ^
-   10 warnings and 1 error generated.
-..
+>> drivers/iio/imu/adis16475.c:734:34: warning: unused variable 'adis1650x_timeouts' [-Wunused-const-variable]
+     734 | static const struct adis_timeout adis1650x_timeouts = {
+         |                                  ^~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/__NR_uprobe +849 include/uapi/asm-generic/unistd.h
+vim +/adis1650x_timeouts +734 drivers/iio/imu/adis16475.c
 
-   847	
- > 848	#define __NR_uretprobe 463
- > 849	__SYSCALL(__NR_uprobe, sys_uprobe)
-   850	
+fff7352bf7a3ce Nuno Sá 2020-04-13  733  
+fff7352bf7a3ce Nuno Sá 2020-04-13 @734  static const struct adis_timeout adis1650x_timeouts = {
+fff7352bf7a3ce Nuno Sá 2020-04-13  735  	.reset_ms = 260,
+fff7352bf7a3ce Nuno Sá 2020-04-13  736  	.sw_reset_ms = 260,
+fff7352bf7a3ce Nuno Sá 2020-04-13  737  	.self_test_ms = 30,
+fff7352bf7a3ce Nuno Sá 2020-04-13  738  };
+fff7352bf7a3ce Nuno Sá 2020-04-13  739  
 
 -- 
 0-DAY CI Kernel Test Service
