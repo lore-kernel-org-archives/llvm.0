@@ -1,191 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BC1182;
-	Sun, 28 Apr 2024 00:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FB47E8
+	for <llvm@lists.linux.dev>; Sun, 28 Apr 2024 01:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714263003; cv=none; b=Qe818PRxfQASwZYHrCwnf8EFkem3W+AHWeAetj1utVurm8ZOFM/W38NUHAJKa/lxRihSXVZv7WlFgM/pI3N2tH2QDfLFkGz8pkuuX/IJc7DJz7BiXiPOqMiC1zHH2k8bdjUhyFetiieRkq9lkEagQwXtTP4if/10t1r2aoSUpzk=
+	t=1714267896; cv=none; b=HTeyyP9nRhj8KLHHP7ycbD7TZtHbMZm5VDbJQ6890HDitrqkyjrFdY7Ov2GkdSITREAaGu7eefC9iJmb37upyEXlBpTAufTYupwjdwunp+Sy2oniLzLgXNtInas4s2BBaOEz8ttYdOGAWLopgohYUfS2lIROrB6jZLmNf4ZXrYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714263003; c=relaxed/simple;
-	bh=n7P97JrOu/lNVyjAL7ysmJG9MOLo2izZPKuxyNXvE0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ClaSJLbwtV9gfX7JY4SviT44X15nuGgXK7ruDV4OTWBMbf2c6dPPGFX385fp3fiqRAwhY8Ry+66q25LBNT78UynLIeoVGtxny02VoMxMcRjICRskWwrC8jnPlUoQZ/qnQlL7+uOcPquWtyomGUKSaSSU2JBErTdX/b6BbI5DC3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mpBlwPEG; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714267896; c=relaxed/simple;
+	bh=1ZOkDjbTcwYSfatJL45a0R4zVRwHV68R3rKAgse0yac=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=LOY4hh8aHcYzA+JdEe7oSdQ3n4N5NZZlKrlbcapwH0Dx2+banT5SVNIzrp2mgWXPRvBz2lqAQ/hcVlb8L49RU2OsUZyFlp2HhFpszuHI6tHn9aSCOjHbklg88EWjg31njdJPG5d+wIllAgigh/Q/OXuFJcjJ6sS3uxeHSCRYclA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WhppSR3G; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mpBlwPEG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714263002; x=1745799002;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n7P97JrOu/lNVyjAL7ysmJG9MOLo2izZPKuxyNXvE0A=;
-  b=mpBlwPEGwSV7G00206J3x23Z83odCTtKJAgknFEOIFFLiyZbH0z0cOmk
-   9T416ru76lTsQQ8DQZG2XiG00AOVDYysIRLtLnDyJumtVi3faAg/tn2v2
-   o0WjZMlSiVhU/C07+1eVINGwTYYttut91HQYxyLrp9D5AGyxSShKjjaZs
-   XGxh9jcO970pligUKRE+4D07cTbSwF+TQcZgD6URPOlGrHQ1phy8y3jzy
-   HZuEV6j7SSc8ewpfmCjjHJeQEbXQ9681ZYsYoWltW7Yd9xtosR3qgJM4W
-   VgMOQAqeuDTC7+C96CU6ZRSybMaUSs9ULiFPuL6FP9epXdrVY0LJRmDkR
-   w==;
-X-CSE-ConnectionGUID: QS+EpI9rQ06rhUCmPFUrqQ==
-X-CSE-MsgGUID: eqj4Zv8LTJWO7R8L3D2UWQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11057"; a="9825601"
-X-IronPort-AV: E=Sophos;i="6.07,236,1708416000"; 
-   d="scan'208";a="9825601"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2024 17:10:01 -0700
-X-CSE-ConnectionGUID: yi8dPD2FTKWYt8gpWVqWZA==
-X-CSE-MsgGUID: G6lkY1toT3m8UO8s9BN6gw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,236,1708416000"; 
-   d="scan'208";a="25745906"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 27 Apr 2024 17:09:58 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s0s7A-0005eC-1I;
-	Sun, 28 Apr 2024 00:09:56 +0000
-Date: Sun, 28 Apr 2024 08:09:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nava kishore Manne <nava.manne@xilinx.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v6.6_LTS 595/991] ERROR: modpost: module
- fpga-mgr uses symbol dma_buf_attach from namespace DMA_BUF, but does not
- import it.
-Message-ID: <202404280846.yFLoR9CB-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WhppSR3G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714267893;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=L/z/9OMnMt7NypX9zjCMO7kP5qoGUivqLaoS2ba6mHg=;
+	b=WhppSR3G1Hli6mu8rasaxVZMj3x0R2AiReifXff6VmNK9oejJCrK3i6dvrYFV/d2dsvyMx
+	SzY+f/kCNogta1WT/JrRhOMP7Y4VALsUvgZfVdLeS0LFCRjuhKDqQU7KoOdThPVLbdkOAm
+	by9jlUOabdTLppnhDfiQf+7cgyX/K/k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-341-Tp2ujTy-N1KIj8f0AUNiDQ-1; Sat, 27 Apr 2024 21:31:31 -0400
+X-MC-Unique: Tp2ujTy-N1KIj8f0AUNiDQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99FE018065AA
+	for <llvm@lists.linux.dev>; Sun, 28 Apr 2024 01:31:31 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 57728C271A4;
+	Sun, 28 Apr 2024 01:31:31 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
+ (6.9.0-rc5, mainline.kernel.org-clang, 5d12ed4b)
+Date: Sun, 28 Apr 2024 01:31:31 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+Message-Id: <07395.124042721313100189@us-mta-341.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6_LTS
-head:   08ceadacc1da15a77045dee6654f9cd906906271
-commit: dc67651172095c04c4e6e1a64983036f4e654fd2 [595/991] fpga: support loading from a pre-allocated buffer
-config: arm-randconfig-003-20240428 (https://download.01.org/0day-ci/archive/20240428/202404280846.yFLoR9CB-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240428/202404280846.yFLoR9CB-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404280846.yFLoR9CB-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sil-sii8620.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sii9234.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/bochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/cirrus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_mipi_dbi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-w1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/core/cxl_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_mem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_port.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/BusLogic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/elx/efct.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/imm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvme/host/nvme.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-fsl-lib.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-omap2-mcspi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-qup.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/mdio/mdio-bitbang.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/arcnet/rfc1201.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/arcnet/capmode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/arcnet/com90xx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/arcnet/arc-rimi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ethernet/litex/litex_liteeth.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ethernet/smsc/smsc9420.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ethernet/ti/cpsw-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/slip/slhc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ppp/ppp_generic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ppp/ppp_deflate.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/firewire-uapi-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_pruss.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ali1563.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/tuners/tda9887.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/omap_wdt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/twl4030_wdt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/flash/leds-rt4505.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vhost/vringh.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/chrome/cros_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/cxl_pmu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/vdpa.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/ifcvf/ifcvf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/snd-pcm-dmaengine.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-sigmadsp.o
-WARNING: modpost: sound/soc/codecs/snd-soc-tlv320adc3xxx: section mismatch in reference: adc3xxx_i2c_driver+0x8 (section: .data) -> adc3xxx_i2c_remove (section: .exit.text)
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/amd/snd-acp-config.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/stp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/garp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/inet_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tcp_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/raw_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/unix/unix_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ar9331.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_brcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_dsa.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_gswip.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ksz.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_lan9303.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_mtk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_none.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ocelot.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ocelot_8021q.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_qca.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_rtl4_a.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_rtl8_4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_rzn1_a5psw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_trailer.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_xrs700x.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/8021q/8021q.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/nfc/nci/nci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/nfc/nci/nci_spi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/mptcp/mptcp_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/bridge.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/kcm/kcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sctp/sctp_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/tipc/diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/chnl_net.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif_socket.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif_usb.o
->> ERROR: modpost: module fpga-mgr uses symbol dma_buf_attach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module fpga-mgr uses symbol dma_buf_map_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module fpga-mgr uses symbol dma_buf_unmap_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module fpga-mgr uses symbol dma_buf_detach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module fpga-mgr uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module fpga-mgr uses symbol dma_buf_get from namespace DMA_BUF, but does not import it.
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.9-rc6' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/wsa/linux
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1270399734
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
