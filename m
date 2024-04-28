@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE83773530;
-	Sun, 28 Apr 2024 18:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930E66A8A0;
+	Sun, 28 Apr 2024 18:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714327906; cv=none; b=J2YAQZiJokhbe6pyMizT9W0h78KHhisxhuepIb5QHto7pT7RCqn4yHNjQbhjIh4PPbx4OyKjaI/HInuzMBUVRRlPJDoGeSQV8SIDMNFw/K15t22CMdmRczK0AGIXy7U9CQUf1Kn9bPwVs/sba+PaGpvRZAr0Yy4H/UqstgYL5Y8=
+	t=1714330424; cv=none; b=KU3aYYdODze6kfRq0PRz25OTTjNVgP2MSkOT3mRTQnifBe+vvnPVumt03rf4rWTRt3ds+wmQ4GCJwrBW5Z4gGBCDS7J+2orITy+O51v/c/kx4Huh3b2v6vGfv2/ADIJbTlX7kbdup5d2UY0NDyS5pfSNlTrAZy0nLxBZYgALs7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714327906; c=relaxed/simple;
-	bh=hq4tWay3zTxCJG51kYwzKjv0UjEYn9Os1tfxB5I4KKI=;
+	s=arc-20240116; t=1714330424; c=relaxed/simple;
+	bh=fD6u24wbGgdRpvZdXPdyX7+NW4esNaI/DrCwtTCDGy4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OH5Bdo6TDyYlK+MyH/wfryhiUB3QK4w/ghFRlq9mKLGCNaFKk/SLoycUv4uM1wcADLHUXefdC+jdpOlHXEnNmF4y4e6g2vlnQlR08Wa3Z4uIFGITaxf/S2hRjNN7QLFvQlELFHaIIdTZrwDLFixE0W+ln9CPXq6cNjyQ2qSPe3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G2AgAEHE; arc=none smtp.client-ip=198.175.65.11
+	 Content-Disposition; b=kD31ZDhDxNptn22TprE4Lqvt8+6keBA5RhGtDCTKHRg86V6DZc2GWm8heszmEgm+q72VRpZoABN14trPGJUzyFtWzFFDzadGv6UOSNyuydNLoSQILRefLS5+NeyoykZ6FjCo28pGz169zeMqXr2EIv9cbO2kjy7oz8qjeL9i8Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ayz2OlPA; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G2AgAEHE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ayz2OlPA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714327904; x=1745863904;
+  t=1714330423; x=1745866423;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hq4tWay3zTxCJG51kYwzKjv0UjEYn9Os1tfxB5I4KKI=;
-  b=G2AgAEHE/pw+K563TLH3xJoAw+T+DI8wDwOS+n9OIuwbp35vKNwPt8xe
-   ptUcohpTM5l2wilbeaFPnNgjmbQ4ucr91P6eFIrsAfgONzvdOuX/NQV0E
-   YTQzCrFIAckf0Fe6HveBV/Jduxnjm0saWRXDUDWMn9a6wE39e8pQXEXy9
-   OAhoAkO+EJs7F4U7hATlg2oeMkjisqyGypzULqEpd5VVZgoS1XvyInBLR
-   J9NOJJkFIU8w6o8iNWoRGvz6zcamGPICborsFB4ORcQj0QHz+DghO1nND
-   6dy0hP22SfH7zs/bTuuIIdcVhcyhYa6DbczF6eXcu4BGrA9yzS5a9lk6G
+  bh=fD6u24wbGgdRpvZdXPdyX7+NW4esNaI/DrCwtTCDGy4=;
+  b=Ayz2OlPAs7SjKIohTGFQkhlJZiLGz4p6jQvoGysY9CUwuEIflRM/f/we
+   4QnKDCvUqg6gWMcpI3gbSmLmB6DWLdC+m1c6huK8ylRsouLHy6G6hxMgY
+   ww7Xamsac7GnOW94w780w0gyXh7ssWH5otn2UkgZk2LBQkzNCMxx5m5KC
+   4i27xmRoqwu1xsTVlp4o/Q3uvgb87E2RiTMh2VNg8KNcHg88TCke6IxvM
+   wu72efux47CYMm8cF2/d6p9AG3RlyOghzjRqHWMUFOiTjQy4HIo5GvEMi
+   e2ii/IHuNAHmvcm1E4ZU8C7B+cKdDLG8gieZ/kLWA/HvOoIdko6ttYxER
    w==;
-X-CSE-ConnectionGUID: FgzqChGRT7Kb80aX1aAIkw==
-X-CSE-MsgGUID: NP1ITBDkSLqZt77TC4a8MQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11057"; a="20544757"
+X-CSE-ConnectionGUID: xjzmXnyWTR2fL5AOzJ1NJg==
+X-CSE-MsgGUID: S1Pxj7oDTYCaQ2yYHKffqg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11057"; a="13822170"
 X-IronPort-AV: E=Sophos;i="6.07,237,1708416000"; 
-   d="scan'208";a="20544757"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2024 11:11:41 -0700
-X-CSE-ConnectionGUID: dTzemWXKTtuMNRFloJWqlA==
-X-CSE-MsgGUID: glaYrnigTDaQY7QOdhzp1A==
+   d="scan'208";a="13822170"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2024 11:53:43 -0700
+X-CSE-ConnectionGUID: Et21aqYNRKepEItFRn48AQ==
+X-CSE-MsgGUID: FB7Kpu1cS+qiA5r+TUtbRg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,237,1708416000"; 
-   d="scan'208";a="26313813"
+   d="scan'208";a="56812412"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 28 Apr 2024 11:11:39 -0700
+  by orviesa002.jf.intel.com with ESMTP; 28 Apr 2024 11:53:41 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s18zx-0006Xg-14;
-	Sun, 28 Apr 2024 18:11:37 +0000
-Date: Mon, 29 Apr 2024 02:11:16 +0800
+	id 1s19ec-0006Z8-0Y;
+	Sun, 28 Apr 2024 18:53:38 +0000
+Date: Mon, 29 Apr 2024 02:53:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linyunsheng:page_frag_cache_v3 14/16] net/sched/em_meta.c:593:43:
- error: passing 'const struct page_frag_cache *' to parameter of type 'struct
- page_frag_cache *' discards qualifiers
-Message-ID: <202404290256.p4jVY7IB-lkp@intel.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [jic23-iio:testing 6/16] drivers/iio/industrialio-acpi.c:29:
+ warning: Function parameter or struct member 'orientation' not described in
+ 'iio_read_acpi_mount_matrix'
+Message-ID: <202404290216.Uf6waaF1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,105 +64,50 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/gestionlin/linux.git page_frag_cache_v3
-head:   245e8a4d98fee0307884585dbeb3dbb7ee1bf8fa
-commit: 49d60804ba15895c09e4b47eb20fdc8b56ed6878 [14/16] net: replace page_frag with page_frag_cache
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240429/202404290256.p4jVY7IB-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   383e66c0de06c77c053a899a9cbc4a9f0c9a5f65
+commit: 600b6de8062fe195d936971170fd9a57b6fcb57e [6/16] iio: core: Add iio_read_acpi_mount_matrix() helper function
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240429/202404290216.Uf6waaF1-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240429/202404290256.p4jVY7IB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240429/202404290216.Uf6waaF1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404290256.p4jVY7IB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404290216.Uf6waaF1-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from net/sched/em_meta.c:64:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/sched/em_meta.c:64:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/sched/em_meta.c:64:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/sched/em_meta.c:64:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> net/sched/em_meta.c:593:43: error: passing 'const struct page_frag_cache *' to parameter of type 'struct page_frag_cache *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     593 |         dst->value = page_frag_cache_page_offset(&sk->sk_frag);
-         |                                                  ^~~~~~~~~~~~
-   include/linux/page_frag_cache.h:41:80: note: passing argument to parameter 'nc' here
-      41 | static inline unsigned int page_frag_cache_page_offset(struct page_frag_cache *nc)
-         |                                                                                ^
-   7 warnings and 1 error generated.
+>> drivers/iio/industrialio-acpi.c:29: warning: Function parameter or struct member 'orientation' not described in 'iio_read_acpi_mount_matrix'
+>> drivers/iio/industrialio-acpi.c:29: warning: Function parameter or struct member 'acpi_method' not described in 'iio_read_acpi_mount_matrix'
+>> drivers/iio/industrialio-acpi.c:29: warning: Excess function parameter 'matrix' description in 'iio_read_acpi_mount_matrix'
+>> drivers/iio/industrialio-acpi.c:29: warning: Excess function parameter 'method_name' description in 'iio_read_acpi_mount_matrix'
 
 
-vim +593 net/sched/em_meta.c
+vim +29 drivers/iio/industrialio-acpi.c
 
-   584	
-   585	META_COLLECTOR(int_sk_sendmsg_off)
-   586	{
-   587		const struct sock *sk = skb_to_full_sk(skb);
-   588	
-   589		if (!sk) {
-   590			*err = -1;
-   591			return;
-   592		}
- > 593		dst->value = page_frag_cache_page_offset(&sk->sk_frag);
-   594	}
-   595	
+     8	
+     9	/**
+    10	 * iio_read_acpi_mount_matrix() - Read accelerometer mount matrix info from ACPI
+    11	 * @dev:		Device structure
+    12	 * @matrix: 		iio_mount_matrix struct to fill
+    13	 * @method_name:	ACPI method name to read the matrix from, usually "ROTM"
+    14	 *
+    15	 * Try to read the mount-matrix by calling the specified method on the device's
+    16	 * ACPI firmware-node. If the device has no ACPI firmware-node; or the method
+    17	 * does not exist then this will fail silently. This expects the method to
+    18	 * return data in the ACPI "ROTM" format defined by Microsoft:
+    19	 * https://learn.microsoft.com/en-us/windows-hardware/drivers/sensors/sensors-acpi-entries
+    20	 * This is a Microsoft extension and not part of the official ACPI spec.
+    21	 * The method name is configurable because some dual-accel setups define 2 mount
+    22	 * matrices in a single ACPI device using separate "ROMK" and "ROMS" methods.
+    23	 *
+    24	 * Returns: true if the matrix was successfully, false otherwise.
+    25	 */
+    26	bool iio_read_acpi_mount_matrix(struct device *dev,
+    27					struct iio_mount_matrix *orientation,
+    28					char *acpi_method)
+  > 29	{
 
 -- 
 0-DAY CI Kernel Test Service
