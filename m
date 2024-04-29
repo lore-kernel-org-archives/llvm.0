@@ -1,130 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD46127E30;
-	Mon, 29 Apr 2024 17:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CC07E767
+	for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 20:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714413238; cv=none; b=tr9v5UsrfykxF8wa7bWefjTJP9fLPN/Eh7AnK8m7wsUw3MuaVBDyppHdl9dDD4KHMax22elbqj7BW68GqPoQJ5VNanfd/0F19joCu1ADUe+GRJbanEjtHE+VMpXbsimlC7fQnY8QTWN8QRaZT97QKeiEyD5ClctuZSxDfCFAeSE=
+	t=1714422898; cv=none; b=cr2W/glxUQwz+ZqsiOFVh3RvTT8IEla/AmxWKZrcDyLKPS7Ixd/PY7bP5TKeer6AfksTLR+F4xlTmox4sqaKTSHCjAaVYcPsa7u/M4y5sf88RSnZLZ35aaJagVDRozxphGDFr8cdUijGqK7/C0PMHS+kK/m29S22tmuyWahszZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714413238; c=relaxed/simple;
-	bh=3e5YCVBHIgNGltvXksG6o57kgeYIoH07bGWAyMxxodQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JVjkeMLXsVktncowQrXx3EVPhj0Kb9pWU8tuGOHr0qYKezQiJ+tR3erhXx8K5Oqlc7U/VTEUTE8ZSPD7MkonIyq7mbAUESTemDJhowoW215SduSWm+1pRR8iAvvYv7zLPHJCcSPjPr0Rk+QTlvUdyfrBsL5yPkjGbA2bcl9UWeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cYLxJF/S; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714422898; c=relaxed/simple;
+	bh=FJgJcexbKP8Vs2qsQoifsZ/CG9oPAv6wyYJlV8ROmx8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sVsCwHqcV+LDQzaNMUUBy3R3stts1roqagDAfXsfzPtEfZF1/WS76fbgy60dppxbyM+i1kBWLpnioF2Uv3NFUpDzImzRa9DL4LokVsvIifDBwyesLW5lFEBv20zLEOZ2F1H9Rueb5wKdoLqCbmUt9kwjT/kYTPvA+GpvnG8HxhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2xz5nksS; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cYLxJF/S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714413237; x=1745949237;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3e5YCVBHIgNGltvXksG6o57kgeYIoH07bGWAyMxxodQ=;
-  b=cYLxJF/SnX9T+gb6r6rBUJagEzYEbBSA4rGR4NVSh7ksCQnxhdutTGBp
-   kgZfKZaDKZp9D8yGNNeX6d0f06kEM1Nh/zXVVU7HI65PUgq9JwREk7h8V
-   bNd+Oys5cjBXgpgIxZ0A95p4Uvu6UseZ/+XfoB44iyYf3b/aVNfhAj5DI
-   DtMqhSCuE84OCCELcAVE/joqb5JMRBzhVS4Mm/Tcq64LYmkTMbSOm4gEp
-   RFVnj1pUX1aItVTJ4gy8DHC+AuwqzGbqHh6WYA0cFVQ+L/ZTJsbiqFeQT
-   MBlENcagCaD22ate2HQ3UGI/VGig/Y1MFbFxdgGkUiTa7yYGJDC80xhfV
-   A==;
-X-CSE-ConnectionGUID: BBDKG3K+Rt+CM7fQ9Aqghg==
-X-CSE-MsgGUID: 5jP7wgRwRaOQQnP4UrNfVg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="9920169"
-X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="9920169"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 10:53:56 -0700
-X-CSE-ConnectionGUID: 0lROVAQoT+KQBNJpuJNeVA==
-X-CSE-MsgGUID: qn3Om09URwS3ktw4yIBZ9g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="26696950"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 29 Apr 2024 10:53:55 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s1VCK-0007MC-1f;
-	Mon, 29 Apr 2024 17:53:52 +0000
-Date: Tue, 30 Apr 2024 01:53:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:asahi-wip-6.8 1789/2549] error[E0658]: use of unstable
- library feature 'offset_of'
-Message-ID: <202404300119.uJjiyP11-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2xz5nksS"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61bb09d8fecso58066787b3.0
+        for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 13:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714422895; x=1715027695; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9mL2eooEb/7s/U1rMU577fBDSrTqCDNk48ffx+zYIGY=;
+        b=2xz5nksSMWtcE557E8h3Y35hcK+cuxw9LjXvBoZ834iH1jVsL+/A0jz9PuWi/6YJdk
+         rFzwB46ZX90GIDNgjxZ4KagM1FxPNEveKTM5/5P9uwUx8Gf3wVSFyiJBBoaH3A/LOjV9
+         wybJk+oaTt/SQwQPphCSkfQ31b891ewdLX9WBPEvOwXOnxTjNzhrAlIHDVRE0kgSAHkL
+         uo19rAFIKPh/ugnbwJdqLkRiTC7/oioTeM07gmX5AWumqLsF4UaxIfr7+Njlw5vLhBdF
+         137aL1yJcOF1uZMqJDjvG191iCIVOJxwOWK+wHX+2mzy7GjbFhVyDN1Tr1rrOnBQ8WnV
+         bsEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714422895; x=1715027695;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9mL2eooEb/7s/U1rMU577fBDSrTqCDNk48ffx+zYIGY=;
+        b=S6ZUSA6hn6P+tDPYk6zcGcr7gIHMYeiJcQI9fQmDcOzV7d70Kswpg6K2YalmfAYhMD
+         kPGKSwGqU+2prOFyIW4D0ljPegT9m1ZywC4ahW1VTnIL8P2uVn7Ieq8qCi+dHc0gLwcM
+         RYsoN5V7Ymzcl/5K1AClpz+QNYkev/Wn2Pbd5B0nGVLcPn9O1PPL9qeKy2Mt//iwcQce
+         +N6n4tcEe1AfCSJvCiQSWLkQWsDRxfSWnLQSeuiss3vfdp9DR5EU1X9ktc3HDJHJaDD7
+         jB5XT14OhfjcnMB5xjsY7CB/qdHM6CitfFNtO5HBcwehL16yvOjxOy57OA4bpNkiUYAE
+         1+zA==
+X-Forwarded-Encrypted: i=1; AJvYcCUw19nXqBkK5WbpAsilUfyQluRCttW3WrU6MXZgL0dQkBayD+X06Gfz63rkU2mTFzxlcqo5f0aarBjS5BkvCrwcp2+FhQ==
+X-Gm-Message-State: AOJu0YzOMwAKGdNJuLHk6uty0uWsiEAdfZIbvFdlGIywsikK3TOBZYlk
+	IJstwOF2WIzpMI+IOJZv7POndu9AoSL/3MzXWJ8LJFTTR+loxoD6tGhglms1l/uPKATTJbEq0BO
+	8nA==
+X-Google-Smtp-Source: AGHT+IEg/h9s1d+Swx9EJYfMUgBN/ifTzPWb8HrDxhF+oosvBsPlL28UkAI466cJzdn/BGYHBGso4LvRogE=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a81:a142:0:b0:61b:a123:1c53 with SMTP id
+ y63-20020a81a142000000b0061ba1231c53mr168083ywg.4.1714422895519; Mon, 29 Apr
+ 2024 13:34:55 -0700 (PDT)
+Date: Mon, 29 Apr 2024 20:34:36 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+Message-ID: <20240429203441.143607-1-edliaw@google.com>
+Subject: [PATCH] selftests/vDSO: Fix assignment in condition without parentheses
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/AsahiLinux/linux asahi-wip-6.8
-head:   72909db13b2e258b69eae8e33b5af02376829f82
-commit: 25b2644bec0d50b333482f1db86a4f5618eea576 [1789/2549] rust: kernel: Rust 1.77 avoid offset_of stable warnings
-config: x86_64-buildonly-randconfig-003-20240429 (https://download.01.org/0day-ci/archive/20240430/202404300119.uJjiyP11-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240430/202404300119.uJjiyP11-lkp@intel.com/reproduce)
+Fixes clang compiler warnings by adding parentheses:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404300119.uJjiyP11-lkp@intel.com/
+parse_vdso.c:65:9: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+                if (g = h & 0xf0000000)
+                    ~~^~~~~~~~~~~~~~~~
+parse_vdso.c:65:9: note: place parentheses around the assignment to silence this warning
+                if (g = h & 0xf0000000)
+                      ^
+                    (                 )
+parse_vdso.c:65:9: note: use '==' to turn this assignment into an equality comparison
+                if (g = h & 0xf0000000)
+                      ^
+                      ==
 
-All errors (new ones prefixed by >>):
+Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/vDSO/parse_vdso.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> error[E0658]: use of unstable library feature 'offset_of'
-   --> rust/doctests_kernel_generated.rs:4996:1
-   |
-   4996 | / impl_has_work! {
-   4997 | |     impl HasWork<Self> for MyStruct { self.work }
-   4998 | | }
-   | |_^
-   |
-   = note: see issue #106655 <https://github.com/rust-lang/rust/issues/106655> for more information
-   = help: add `#![feature(offset_of)]` to the crate attributes to enable
-   = note: this error originates in the macro `impl_has_work` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0658]: use of unstable library feature 'offset_of'
-   --> rust/doctests_kernel_generated.rs:5077:1
-   |
-   5077 | / impl_has_work! {
-   5078 | |     impl HasWork<MyWorkItem, 1> for MyWorkItem { self.work_field }
-   5079 | | }
-   | |_^
-   |
-   = note: see issue #106655 <https://github.com/rust-lang/rust/issues/106655> for more information
-   = help: add `#![feature(offset_of)]` to the crate attributes to enable
-   = note: this error originates in the macro `impl_has_work` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0658]: use of unstable library feature 'offset_of'
-   --> rust/doctests_kernel_generated.rs:5135:1
-   |
-   5135 | / impl_has_work! {
-   5136 | |     impl HasWork<MyStruct, 17> for MyStruct { self.work_field }
-   5137 | | }
-   | |_^
-   |
-   = note: see issue #106655 <https://github.com/rust-lang/rust/issues/106655> for more information
-   = help: add `#![feature(offset_of)]` to the crate attributes to enable
-   = note: this error originates in the macro `impl_has_work` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0658]: use of unstable library feature 'offset_of'
-   --> rust/doctests_kernel_generated.rs:5200:1
-   |
-   5200 | / impl_has_work! {
-   5201 | |     impl HasWork<Self, 1> for MyStruct { self.work_1 }
-   5202 | |     impl HasWork<Self, 2> for MyStruct { self.work_2 }
-   5203 | | }
-   | |_^
-   |
-   = note: see issue #106655 <https://github.com/rust-lang/rust/issues/106655> for more information
-   = help: add `#![feature(offset_of)]` to the crate attributes to enable
-   = note: this error originates in the macro `impl_has_work` (in Nightly builds, run with -Z macro-backtrace for more info)
-
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 413f75620a35..b9cf771006da 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -62,7 +62,7 @@ static unsigned long elf_hash(const unsigned char *name)
+ 	while (*name)
+ 	{
+ 		h = (h << 4) + *name++;
+-		if (g = h & 0xf0000000)
++		if ((g = h & 0xf0000000))
+ 			h ^= g >> 24;
+ 		h &= ~g;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.44.0.769.g3c40516874-goog
+
