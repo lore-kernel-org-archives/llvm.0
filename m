@@ -1,75 +1,60 @@
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1448663A
-	for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 17:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADD2126F2C;
+	Mon, 29 Apr 2024 17:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714412187; cv=none; b=l9fVQF6hIVlVq4cmZe2EOuSsb0hcsl/D1V5OFKeYTJqbi/137dCm46LoXHUgN8iK9ZY5xXdR7vGy4T+uEPI1soNCiAQasmj3FnKqT/k8Olx1/GXbcXbBD+RnUZ5AzqV8P1WlFmNCe3BDfdsyVlDaPskgomH9vBwu5je9ddTjZKA=
+	t=1714412646; cv=none; b=fjVMjm49DbcZ/eCE6Y5QYMe4a3VkCt9BvaudXD4CeEffDss7HcUt5cHWPyK5SjWASpO6ErsAUJxs07RZ1gIO1wBtvWV2spqyM2ksF9n9codsOtgmLAD7ynPADaAmTCVVP+uJ80IVdA+ZDPcXXAy75x6BZy4+tXRq6IbSMrEW8vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714412187; c=relaxed/simple;
-	bh=F2AZ41y1R6424JjFgSyicWp4fFZ1oOk1ynLixJHhpUE=;
+	s=arc-20240116; t=1714412646; c=relaxed/simple;
+	bh=MUZMSMHIpiOP8dC7+4yHCjtdRf6XBA1Hjwrcb06qLJ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k/l3yuF63svN/8x/dNRjDIo8fu0GrirsEAY442ob+fGNPSLGTpfS2x4j1dVfj1Z8JC/UbUTorMFmYGDOsg0PGmj1rvTe8W/3x47tHxMZbaIEdaGVxCPdyU1NTgykhuwdRkDw49FpXt6WfyTzONc7QlqX3ywgf6Y11wj1Y+LsRoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KAX6A9CF; arc=none smtp.client-ip=209.85.160.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yt1EmmSnTlDlsbWeLLELoCAbAknLJnX/4/fo85uVYI5BkbbwKOkXDarwrfwNkoB2rC7RGhqyu7k5TLIPwh7lul3/MsyfnmUzuRTLEwDjTPJtMKE9Yf76ZPJltXUaFRIsPFRR37sHLd9xm6aHA9uXLsiyYTvVn06FzjHp/acCNyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f+JwkA4L; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KAX6A9CF"
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-23cd15209fdso395251fac.3
-        for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 10:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714412185; x=1715016985; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+a9g8XAN2Fg2Xk7kKiOoerz6VrBxpW3xT1NbWHfL1ig=;
-        b=KAX6A9CF4PGf56ZkILjqllNNecxs85waShIkMuxUh11oOAy3euUsZ6a/mGC3k88lAv
-         0sWNThbMtPhI3+Xb1bNtuzKhHAai4sMc5Gh/sUT5mpCtkq/gVMidbBBuuxmy6wDw9Xpv
-         H9VnMfT/KbFpN/2mkR9Ds9Wsm7K8RkM3cALOc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714412185; x=1715016985;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+a9g8XAN2Fg2Xk7kKiOoerz6VrBxpW3xT1NbWHfL1ig=;
-        b=Qck+vOSkYr0c3UQL9pAtaQLt54aomKjd1GgPBCTfvWlyM0FQqhZ1mztvhDd1oyejTp
-         J1IIhW678m361TJiBD7kTVeYlRg1t25OMd1zdfbO0ytiZlP/S6IjEWi8VKjAfz8mydGy
-         2F1/QSzCmT7Cebg6qaQIZ+5ZDNEAjzc9pCbR95Um4TTs5aNystvlrv0BLvaPAjhWRvAP
-         Somii3I20X7VlOyDkud+RzZ7kSLamuusnDPIzIjlROJ47q1uu8zEwpqQSdg4oyBiTDye
-         1DtlEGQfJS6M58NvMFYwK5xh8N5Zot/oXKnufa0Ny3SiJVNQXpnYVxgP1ngh7xH7r5KR
-         ks0w==
-X-Forwarded-Encrypted: i=1; AJvYcCVxX6Myo+kWbPGssbwgmSWIOJUMSS4Bd7c4BiFpU0jZNA9Gs/Gl+Crc2vy1QMrxVwfmNq/lFlbQRJ7TtPRJavwXdz4R5g==
-X-Gm-Message-State: AOJu0YwjVHs0J3o0Mg1f24CVYHYHCZRfPeHjIo4RB0CSzFlC9jGdC0Jl
-	13iLUNmuiM8y82CxnBdUgBds57++IeBjsD5lnMvpOSU97l1kj6Sq4QBPwXYE+Q==
-X-Google-Smtp-Source: AGHT+IFkeheTXy7RqOcikC0mcBdqOX+uMYNFLcJxynabJyF4Wfd8rC11HWehnWpDbNdIEuOmUrxZAg==
-X-Received: by 2002:a05:6870:e3d2:b0:21e:b8f7:9a1b with SMTP id y18-20020a056870e3d200b0021eb8f79a1bmr12046278oad.25.1714412185006;
-        Mon, 29 Apr 2024 10:36:25 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e131-20020a636989000000b005e43cce33f8sm19368253pgc.88.2024.04.29.10.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 10:36:24 -0700 (PDT)
-Date: Mon, 29 Apr 2024 10:36:23 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Erick Archer <erick.archer@outlook.com>
-Cc: Marek Lindner <mareklindner@neomailbox.ch>,
-	Simon Wunderlich <sw@simonwunderlich.de>,
-	Antonio Quartulli <a@unstable.cc>,
-	Sven Eckelmann <sven@narfation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	b.a.t.m.a.n@lists.open-mesh.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] batman-adv: Add flex array to struct
- batadv_tvlv_tt_data
-Message-ID: <202404291030.F760C26@keescook>
-References: <AS8PR02MB723756E3D1366C4E8FCD14BF8B162@AS8PR02MB7237.eurprd02.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f+JwkA4L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714412641; x=1745948641;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MUZMSMHIpiOP8dC7+4yHCjtdRf6XBA1Hjwrcb06qLJ0=;
+  b=f+JwkA4Lj9Lg09xuP6u6LosR0FHOC1x6Pj7/3eeWbNH9YtVoHAmTHOB+
+   2rXjpxf0DPP1Lsic6o0d6LViIzxUFIkCPgi6pXX94FhgoZK/e5Uo07OkC
+   eYcE/Y/QjcfK9nY5VzHDW7DLhqiWPwO9ZT6gwI6V82keXVhIhXXcXgxd9
+   xHU1tyHxUhhIuAKy/DsJoT9jD34eXzUaEuQxuQgceesJaiFyeHhh6n29e
+   UU/Nt+7b+SBNtCtYwVoaLWPxjYqxDi2SVzoLaXQc8o5qRsDG730Tu4xIE
+   Lf9b/OFzQTP6C/41PWdKD862IAHWdUx4vSeio3ouLtNP7T6WC239qE4zy
+   g==;
+X-CSE-ConnectionGUID: 6shK8VVRSdaeoesDo9BnnQ==
+X-CSE-MsgGUID: P45nsWuiQwyoR/fzyw5yfw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="20705490"
+X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
+   d="scan'208";a="20705490"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 10:43:58 -0700
+X-CSE-ConnectionGUID: q8vDsS95RDK7ltB6Fb5Yuw==
+X-CSE-MsgGUID: Nhpj/b/vQ4ab3kKXuFXekQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
+   d="scan'208";a="26173718"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 29 Apr 2024 10:43:54 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s1V2e-0007Lo-0b;
+	Mon, 29 Apr 2024 17:43:52 +0000
+Date: Tue, 30 Apr 2024 01:42:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 2/4] media: v4l: Support obtaining link frequency via
+ get_mbus_config
+Message-ID: <202404300105.00zkm4JV-lkp@intel.com>
+References: <20240429153704.1005192-3-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,76 +63,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8PR02MB723756E3D1366C4E8FCD14BF8B162@AS8PR02MB7237.eurprd02.prod.outlook.com>
+In-Reply-To: <20240429153704.1005192-3-sakari.ailus@linux.intel.com>
 
-On Fri, Apr 26, 2024 at 07:22:47PM +0200, Erick Archer wrote:
-> The "struct batadv_tvlv_tt_data" uses a dynamically sized set of
-> trailing elements. Specifically, it uses an array of structures of type
-> "batadv_tvlv_tt_vlan_data". So, use the preferred way in the kernel
-> declaring a flexible array [1].
-> 
-> At the same time, prepare for the coming implementation by GCC and Clang
-> of the __counted_by attribute. Flexible array members annotated with
-> __counted_by can have their accesses bounds-checked at run-time via
-> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
-> strcpy/memcpy-family functions). In this case, it is important to note
-> that the attribute used is specifically __counted_by_be since variable
-> "num_vlan" is of type __be16.
-> 
-> The order in which the structure batadv_tvlv_tt_data and the structure
-> batadv_tvlv_tt_vlan_data are defined must be swap to avoid an incomplete
-> type error.
-> 
-> Also, avoid the open-coded arithmetic in memory allocator functions [2]
-> using the "struct_size" macro and use the "flex_array_size" helper to
-> clarify some calculations, when possible.
-> 
-> Moreover, the new structure member also allow us to avoid the open-coded
-> arithmetic on pointers in some situations. Take advantage of this.
-> 
-> This code was detected with the help of Coccinelle, and audited and
-> modified manually.
-> 
-> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#zero-length-and-one-element-arrays [1]
-> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [2]
-> Signed-off-by: Erick Archer <erick.archer@outlook.com>
+Hi Sakari,
 
-Thanks for this! I think the readability is significantly improved.
+kernel test robot noticed the following build errors:
 
-> [...]
-> @@ -3957,17 +3947,18 @@ static void batadv_tt_tvlv_ogm_handler_v1(struct batadv_priv *bat_priv,
->  
->  	num_vlan = ntohs(tt_data->num_vlan);
->  
-> -	if (tvlv_value_len < sizeof(*tt_vlan) * num_vlan)
-> +	flex_size = flex_array_size(tt_data, vlan_data, num_vlan);
-> +	if (tvlv_value_len < flex_size)
->  		return;
->  
-> -	tt_vlan = (struct batadv_tvlv_tt_vlan_data *)(tt_data + 1);
-> -	tt_change = (struct batadv_tvlv_tt_change *)(tt_vlan + num_vlan);
-> -	tvlv_value_len -= sizeof(*tt_vlan) * num_vlan;
-> +	tt_change = (struct batadv_tvlv_tt_change *)(tt_data->vlan_data +
-> +						     num_vlan);
+[auto build test ERROR on 12e3384b874e9f67c3e98ce501561fe5a54a0add]
 
-This is the only part I'm a little worried about. The math all checks
-out, but the compiler may get bothered about performing a pointer
-calculation using the vlan_data flexible array memory. As in, this may
-be calculated as an array offset, since it is the same as:
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-Support-passing-sub-device-argument-to-v4l2_get_link_freq/20240429-234508
+base:   12e3384b874e9f67c3e98ce501561fe5a54a0add
+patch link:    https://lore.kernel.org/r/20240429153704.1005192-3-sakari.ailus%40linux.intel.com
+patch subject: [PATCH v3 2/4] media: v4l: Support obtaining link frequency via get_mbus_config
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240430/202404300105.00zkm4JV-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240430/202404300105.00zkm4JV-lkp@intel.com/reproduce)
 
-	&tt_data->vlan_data[num_vlan]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404300105.00zkm4JV-lkp@intel.com/
 
-Which, for big endian where __counted_by is in effect, the bounds
-checker may throw a fit since we're going past the end of the array. In
-other "multiple trailing flexible array" situations, we've done the
-addressing from the base pointer, since the compiler either knows the
-full allocation size or it knows nothing about it (this case, since it
-came from a "void *" function argument). I would suggest:
+All errors (new ones prefixed by >>):
 
-tt_change = (struct batadv_tvlv_tt_change *)((void *)tt_data + flex_size);
+>> drivers/media/v4l2-core/v4l2-common.c:512:2: error: use of undeclared identifier 'ret'
+           ret = v4l2_subdev_call(sd, pad, get_mbus_config, pad->index,
+           ^
+   drivers/media/v4l2-core/v4l2-common.c:514:6: error: use of undeclared identifier 'ret'
+           if (ret < 0 && ret != -ENOIOCTLCMD)
+               ^
+   drivers/media/v4l2-core/v4l2-common.c:514:17: error: use of undeclared identifier 'ret'
+           if (ret < 0 && ret != -ENOIOCTLCMD)
+                          ^
+   drivers/media/v4l2-core/v4l2-common.c:515:10: error: use of undeclared identifier 'ret'
+                   return ret;
+                          ^
+   4 errors generated.
 
 
--Kees
+vim +/ret +512 drivers/media/v4l2-core/v4l2-common.c
+
+   504	
+   505	s64 __v4l2_get_link_freq_pad(struct media_pad *pad, unsigned int mul,
+   506				      unsigned int div)
+   507	{
+   508		struct v4l2_mbus_config mbus_config = {};
+   509		struct v4l2_subdev *sd;
+   510	
+   511		sd = media_entity_to_v4l2_subdev(pad->entity);
+ > 512		ret = v4l2_subdev_call(sd, pad, get_mbus_config, pad->index,
+   513				       &mbus_config);
+   514		if (ret < 0 && ret != -ENOIOCTLCMD)
+   515			return ret;
+   516	
+   517		return mbus_config.link_freq ?:
+   518			__v4l2_get_link_freq_ctrl(sd->ctrl_handler, mul, div);
+   519	}
+   520	EXPORT_SYMBOL_GPL(__v4l2_get_link_freq_pad);
+   521	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
