@@ -1,60 +1,61 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27837E0F2;
-	Mon, 29 Apr 2024 14:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DA27E583;
+	Mon, 29 Apr 2024 14:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714401527; cv=none; b=WeLf5UejRN/w7Y0j9gQemoOhyG6FgBgZIs5n2KpMFVEV/hXC03Gnb9dvpJ6mwNcq80GDfcMJ9NKGCyU9Z6HS0JMf/4aA2XIoMfw0eYj8WLMJ01kGNF4EQsaokNvc/3fAVXy0rjpA9Ru9P1zzlJcmqkiBualw++mIEEmx3fbTkeM=
+	t=1714401530; cv=none; b=eeVA2VtRFpJyBnaGUb37ZOn7n7eCPpMeGIrkXiu8r7u8+gFw56iICs7TllGIBqNHVCSage3TJ/M/Jr6GsludKT8fMYf/myu6AEnEdirKxrSt7bRWRI2o6fzhzyIDaiv+3PcUbjwSt1/OeRmGd9sgYgWSpqb1l7amSs9bVhGk9Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714401527; c=relaxed/simple;
-	bh=dGXL8ZLg5Uf/FL7djdodZYI/pjGESx0EpYiXOyZkV68=;
+	s=arc-20240116; t=1714401530; c=relaxed/simple;
+	bh=Y+W0V61mGqmIq34pCXlGZXdnHGGS+wQxQbg5Z65y5ik=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=T6XRy1OEpG2wgbKL1d0hFe+4BlErO5D/o00zopCl6iUSVNhKw56tcuTB/6Vxbx3Q0Jy8bEoccqyWiwN6QVTK+1K9A50fQ6WMHN2hWTszAXmZZ4BIiEP66njoovWUUeoAv0hnMiz5ziJWoVlntOZi+MkrhV1DB7IwdttGjPAh2yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQQSIfUD; arc=none smtp.client-ip=198.175.65.10
+	 Content-Disposition; b=P+jfHsRCiP1clnaXzgmJ2REbTMBwgqLVwR6gUY+PWc4uUSZOqowQR5WgWE5CRkuHgOT+oDSpPWr9ZhSVvOjk5TpBxNJRdP7h6JKxgvHU52vuZ9X3COQvHTRVFkAZu2zoY0XuYAtLFi+FPnUY9xLE29umFB+13IvBkhdnY/0aiKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cTdUISNZ; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQQSIfUD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cTdUISNZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714401524; x=1745937524;
+  t=1714401528; x=1745937528;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dGXL8ZLg5Uf/FL7djdodZYI/pjGESx0EpYiXOyZkV68=;
-  b=LQQSIfUDLRbdDfclkDh8HHgxPNW9gGYC5zChDgXK1hB9PCoCQ3i5Y921
-   4NyfdgiGabIs0/V7m1YZ6YkOEwXmurWzrIO+3XDajGCFkcrMAkeDHHoIb
-   7dICjExoBx+t77lX6cY/KOskvTsabNdm++k9abn/ndIxJ9JdfmveKEVr9
-   POweO1S1GTUMzsZTffwEvcKvQ6zPuvU32Ht31legNvHgctDZ1SkUULjp5
-   rJk88aGf70/UY+fUffow/L03cTxt9127elZBk16L3KZOtDxzYno6gMROx
-   pJBmbj0JPxzgccR3PGpAj4HfGIViY7xA+LUporfIEIRMzaiZ2idgXvE38
-   A==;
-X-CSE-ConnectionGUID: 2SwYqrV1T2yY2wlgKSh93Q==
-X-CSE-MsgGUID: SIZTNlc1QVCrFEibFkWoFw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="27514975"
+  bh=Y+W0V61mGqmIq34pCXlGZXdnHGGS+wQxQbg5Z65y5ik=;
+  b=cTdUISNZxa8+aO11D9s7ZNhGPHp2sMAcEkSeRFu/AsUq3WynZzhP8KHp
+   GKbR/PiqwjMKeB82mVH1p+CeFld4074vfmBtllPtCi9UDdTuy0iuC8Mcz
+   Fufh51u/U3cyPGtXB6vhV8jbQOx5a9Y07nEAz069jJ4Yo5hmW4GCl2d+P
+   2/kftfnTLlKi89yZ1CwvRaB5ZHNbLCBNxclGkKFScyMVESDS7H1Cm4x8v
+   En/Y1l4J0oCSDUg6koWqW5Ei8bacvVlVqA35ZOj1cXJfq3AVWNZ8j3UpG
+   bKW6jieczLFBEOCx3eaMAJxGUSHIusqcoMpW2cOpxu6I4gosgF3YWf06H
+   Q==;
+X-CSE-ConnectionGUID: aZruznS5RCe81o3H2iyC2g==
+X-CSE-MsgGUID: P7ZK7fPmTtig5gIrkGQr3g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="27514980"
 X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
-   d="scan'208";a="27514975"
+   d="scan'208";a="27514980"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 07:38:44 -0700
-X-CSE-ConnectionGUID: 1RkGDJJ/SByNa9p3XxY19Q==
-X-CSE-MsgGUID: kgP2k0B1SdK2f6jEzcjBfA==
+X-CSE-ConnectionGUID: FXZXUUVoRSWRwdlsg4RK2Q==
+X-CSE-MsgGUID: Dy8aHkYlRcSNCSQkwybfHg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
-   d="scan'208";a="25999389"
+   d="scan'208";a="25999390"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
   by orviesa010.jf.intel.com with ESMTP; 29 Apr 2024 07:38:43 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s1S9Q-0007Ey-0y;
+	id 1s1S9Q-0007F2-19;
 	Mon, 29 Apr 2024 14:38:40 +0000
-Date: Mon, 29 Apr 2024 22:38:08 +0800
+Date: Mon, 29 Apr 2024 22:38:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Nathan Morrisson <nmorrisson@phytec.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org
-Subject: [sailus-media-tree:ipu6 40/50]
- drivers/media/v4l2-core/v4l2-common.c:512:9: error: implicit declaration of
- function 'v4l2_subdev_call_op' is invalid in C99
-Message-ID: <202404292239.nNxjfKs4-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Wadim Egorov <w.egorov@phytec.de>
+Subject: [linux-next:master 8684/9390] make[4]: *** No rule to make target
+ 'arch/arm64/boot/dts/ti/k3-j784s4-evm-usxgmii-exp1-exp2.dtb', needed by
+ 'arch/arm64/boot/dts/ti/'.
+Message-ID: <202404292222.KkVw8MVg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,112 +65,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://linuxtv.org/sailus/media_tree.git ipu6
-head:   308898eb3af1c6530b122a01a5c4b38931717e70
-commit: 68213f72d8c806ff6968fb30c4bf61fd1257c4a3 [40/50] media: v4l: Support obtaining link frequency via get_mbus_config
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240429/202404292239.nNxjfKs4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240429/202404292239.nNxjfKs4-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   b0a2c79c6f3590b74742cbbc76687014d47972d8
+commit: 9198fbfc14797a3a39c758ac6fb96a2169cbb70d [8684/9390] arm64: dts: ti: am64-phyboard-electra: Add overlay to enable a GPIO fan
+config: arm64-randconfig-001-20240429 (https://download.01.org/0day-ci/archive/20240429/202404292222.KkVw8MVg-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240429/202404292222.KkVw8MVg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404292239.nNxjfKs4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404292222.KkVw8MVg-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/v4l2-core/v4l2-common.c:512:9: error: implicit declaration of function 'v4l2_subdev_call_op' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
-                         ^
-   drivers/media/v4l2-core/v4l2-common.c:512:9: note: did you mean 'v4l2_subdev_cleanup'?
-   include/media/v4l2-subdev.h:1320:6: note: 'v4l2_subdev_cleanup' declared here
-   void v4l2_subdev_cleanup(struct v4l2_subdev *sd);
-        ^
-   drivers/media/v4l2-core/v4l2-common.c:512:33: error: use of undeclared identifier 'pad'
-                   ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
-                                                 ^
-   drivers/media/v4l2-core/v4l2-common.c:512:38: error: use of undeclared identifier 'get_mbus_config'
-                   ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
-                                                      ^
-   drivers/media/v4l2-core/v4l2-common.c:522:19: error: use of undeclared identifier 'v4l2_get_link_freq'; did you mean '__v4l2_get_link_freq'?
-   EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
-                     ^~~~~~~~~~~~~~~~~~
-                     __v4l2_get_link_freq
-   include/linux/export.h:69:48: note: expanded from macro 'EXPORT_SYMBOL_GPL'
-   #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
-                                                          ^
-   include/linux/export.h:65:54: note: expanded from macro '_EXPORT_SYMBOL'
-   #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
-                                                           ^
-   include/linux/export.h:56:16: note: expanded from macro '__EXPORT_SYMBOL'
-           extern typeof(sym) sym;                                 \
-                         ^
-   drivers/media/v4l2-core/v4l2-common.c:467:5: note: '__v4l2_get_link_freq' declared here
-   s64 __v4l2_get_link_freq(struct v4l2_subdev *sd,
-       ^
-   4 errors generated.
-
-
-vim +/v4l2_subdev_call_op +512 drivers/media/v4l2-core/v4l2-common.c
-
-   466	
-   467	s64 __v4l2_get_link_freq(struct v4l2_subdev *sd,
-   468				 struct v4l2_ctrl_handler *handler, unsigned int mul,
-   469				 unsigned int div)
-   470	{
-   471		struct v4l2_ctrl *ctrl;
-   472		s64 freq;
-   473	
-   474		if (!handler && sd)
-   475			handler = sd->ctrl_handler;
-   476	
-   477		ctrl = v4l2_ctrl_find(handler, V4L2_CID_LINK_FREQ);
-   478		if (ctrl) {
-   479			struct v4l2_querymenu qm = { .id = V4L2_CID_LINK_FREQ };
-   480			int ret;
-   481	
-   482			if (ctrl->type == V4L2_CTRL_TYPE_INTEGER64)
-   483				return v4l2_ctrl_g_ctrl_int64(ctrl);
-   484	
-   485			qm.index = v4l2_ctrl_g_ctrl(ctrl);
-   486	
-   487			ret = v4l2_querymenu(handler, &qm);
-   488			if (ret)
-   489				return -ENOENT;
-   490	
-   491			freq = qm.value;
-   492		} else {
-   493			if (!mul || !div)
-   494				return -ENOENT;
-   495	
-   496			ctrl = v4l2_ctrl_find(handler, V4L2_CID_PIXEL_RATE);
-   497			if (!ctrl)
-   498				return -ENOENT;
-   499	
-   500			freq = div_u64(v4l2_ctrl_g_ctrl_int64(ctrl) * mul, div);
-   501	
-   502			pr_warn("%s: Link frequency estimated using pixel rate: result might be inaccurate\n",
-   503				__func__);
-   504			pr_warn("%s: Consider implementing support for V4L2_CID_LINK_FREQ in the transmitter driver\n",
-   505				__func__);
-   506		}
-   507	
-   508		if (freq <= 0 && sd) {
-   509			struct v4l2_mbus_config mbus_config = {};
-   510			int ret;
-   511	
- > 512			ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
-   513						  &mbus_config);
-   514			if (ret < 0)
-   515				return ret;
-   516	
-   517			return mbus_config.link_freq;
-   518		}
-   519	
-   520		return freq > 0 ? freq : -EINVAL;
-   521	}
-   522	EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
-   523	
+>> make[4]: *** No rule to make target 'arch/arm64/boot/dts/ti/k3-j784s4-evm-usxgmii-exp1-exp2.dtb', needed by 'arch/arm64/boot/dts/ti/'.
+   make[4]: Target 'arch/arm64/boot/dts/ti/' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
