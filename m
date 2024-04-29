@@ -1,43 +1,43 @@
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A52F6F061
-	for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 13:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A6C548EC
+	for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 13:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714396724; cv=none; b=jO00DXBw1ubGaY1NtCczXq9XsVBZ3JKfIfPydDXPxsVETarkTX0GTBd6bhP3+0Z8wAYHxk4rCEHr9BmNAEFRicxFozCLGtNYgL3xL1dpkgSCdcK5TQrVrwnbJK9tIlrwUDxXnHhitM8Cw9SorWZEiB5NH3Epc9xbs+CggbkJuLs=
+	t=1714396927; cv=none; b=smx/SM+IKfzPSu7F8n9Jk9zEgNEhhAhBJ7UfrfPVIHI1uiTlUfvWiKQ+332vSZDk+qBJXDc1LF7UjDAj2dYXP3nEvx3rX44rSZ6L9s2bz48v+UHmafDKq4s5Wdc5vnAycfhwPah2s6pRabPOz0lePaAIcEPU31+kqO9I/dLUDTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714396724; c=relaxed/simple;
-	bh=IRWWy2IlvuwaKbyTPLqQo5C301oLUpf7IlQGHaPwJ9k=;
+	s=arc-20240116; t=1714396927; c=relaxed/simple;
+	bh=955t3HJFUiYQNiXDEYirmE1LQn9zNIX1PmNE26WZT7A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ew/ljzvIxGN8HSqEq5xcEmQYiDb8tznGDj0XMPyoQde1hzB+fc5GeUaJDADF/Otp9ArS0+AzDYrSbkbssr5QIA/vdQwGOrYY/QsOBXsiHtezJQjyepl9BGCXHTdOv3R2LVnAEwu56H24EuFTJBbe2ViKg4ruNgXDwu8hOoXojvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=S8PNixbP; arc=none smtp.client-ip=78.32.30.218
+	 Content-Type:Content-Disposition:In-Reply-To; b=B+ghELaPci+gs260dtZ0rJyB7ao8VB3f2P2xGw9XoLAsarivjUYePwLoPKR6KePmLq25uU85SUrtZV3f7kHmS892FrqEaKQSDgN9H3+Po9OoCvLgCpGLIoOC9E8UDgFTKwlkbtvFpwKhl6TqJidaPI7yt7UD0HZl66J10jKqj9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ho3SW2Fk; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="S8PNixbP"
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ho3SW2Fk"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ukVgE4qDqlBDH2cqXY2lOwS2mKM9ytx95cPwf5PU+G8=; b=S8PNixbPxQeQKPGe0J0f5+P+68
-	Zsu5gpzvVxXg0r9x9Zf+DgStHc1+Hd8T9+khCI/LMaLF/8Yyp4fggUmjhx2ZDiQOvGLjpWVnHi6+Q
-	DUOYLTYQ+ixmoLiP5livYM8AOL5tHJBC6ViWzU/GlSaMFndcBcB/8dnvFASoan5QI/G65GHsnfvau
-	KfGwX4PrsgcwKH2PB+CNpElOzjVKX3sZahzu4xzh4ZaGilatFTPjROvPMaVdupzHMC8TxiJwBgr5a
-	YkoBCBg+/W583xm52lGiaeaIaOmQDNgXn1rNi8YVOUPm1GS8ZoeYwA9P7k0emi0dp5DOKyEvZX6g9
-	VB7GpWhg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56856)
+	bh=Q0V+bwE2MZPxe/mUdmO9X05LYA9fpfs7pu2kpKbb22s=; b=ho3SW2Fkv9S3TT+T3XSbTJmrj8
+	DjPo+d7cSIr8K7mempih02oMWaPDSgwXEiJOGvaw8MnmdnJ9qavl8z8KD18+4JbWY+CHQNw7CGgXg
+	hK0QuOJvVPT3zkruIfVGlSxxsUaYHn8pBFU906nblT3YDox+oFPiyxPd+N4iJmkf0kYm75XC5/4Hp
+	HnhUpyjzwzmZ8JKlN/q8HCS9kXZHrNFhERCOYpS9S2Tt4PQczogPJn92Xd0FCOn0GHX1HtStW6h+e
+	+uecjPjNuq1iWf0sC5UrShd91Gz4WAOIsbfU/hGa6OQULB4ObXkTrdu+PZKvq/0BOL37BC9JdRp1C
+	6XF8B2fA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33466)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <linux@armlinux.org.uk>)
-	id 1s1Qtp-0003E1-1Z;
-	Mon, 29 Apr 2024 14:18:29 +0100
+	id 1s1Qx9-0003FJ-39;
+	Mon, 29 Apr 2024 14:21:56 +0100
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1s1Qtp-0000sO-2Z; Mon, 29 Apr 2024 14:18:29 +0100
-Date: Mon, 29 Apr 2024 14:18:28 +0100
+	id 1s1QxA-0000sV-OT; Mon, 29 Apr 2024 14:21:56 +0100
+Date: Mon, 29 Apr 2024 14:21:56 +0100
 From: "Russell King (Oracle)" <linux@armlinux.org.uk>
 To: Linus Walleij <linus.walleij@linaro.org>
 Cc: Sami Tolvanen <samitolvanen@google.com>,
@@ -46,11 +46,9 @@ Cc: Sami Tolvanen <samitolvanen@google.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 04/10] ARM: mm: Type-annotate all cache assembly
- routines
-Message-ID: <Zi+eJM8+ulDBYGrQ@shell.armlinux.org.uk>
-References: <20240415-arm32-cfi-v5-0-ff11093eeccc@linaro.org>
- <20240415-arm32-cfi-v5-4-ff11093eeccc@linaro.org>
+Subject: Re: [PATCH v8 0/9] CFI for ARM32 using LLVM
+Message-ID: <Zi+e9M/f5b/Sto9H@shell.armlinux.org.uk>
+References: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,21 +57,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240415-arm32-cfi-v5-4-ff11093eeccc@linaro.org>
+In-Reply-To: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, Apr 15, 2024 at 03:43:23PM +0200, Linus Walleij wrote:
-> -ENTRY(fa_flush_user_cache_all)
-> -	/* FALLTHROUGH */
-> +SYM_TYPED_FUNC_START(fa_flush_user_cache_all)
-> +	b	fa_flush_kern_cache_all
-> +SYM_FUNC_END(fa_flush_user_cache_all)
+I've applied this to a separate branch, and it should be in
+linux-next by tomorrow.
 
-The thing I don't like about this is that it makes these functions
-less efficient - the early CPUs do _not_ have branch predictors,
-and they flush the pipeline on branches, so rather than just dropping
-rough, this kind of thing introduces pointless multi-cycle delays for
-functionality just to keep CFI happy.
+As mentioned today on a previous iteration of the patch series,
+I'm not all that happy with the introduction of delay-inducing
+branches to solve CFI issues especially on the early CPUs where
+a branch causes the CPUs pipeline to be flushed - thus making
+branches expensive.
+
+Can we make these branches conditional on the use of CFI?
+
+Didn't Ard mention there was a way to do this using symbol aliases?
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
