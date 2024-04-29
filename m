@@ -1,54 +1,60 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A6C548EC
-	for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 13:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27837E0F2;
+	Mon, 29 Apr 2024 14:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714396927; cv=none; b=smx/SM+IKfzPSu7F8n9Jk9zEgNEhhAhBJ7UfrfPVIHI1uiTlUfvWiKQ+332vSZDk+qBJXDc1LF7UjDAj2dYXP3nEvx3rX44rSZ6L9s2bz48v+UHmafDKq4s5Wdc5vnAycfhwPah2s6pRabPOz0lePaAIcEPU31+kqO9I/dLUDTs=
+	t=1714401527; cv=none; b=WeLf5UejRN/w7Y0j9gQemoOhyG6FgBgZIs5n2KpMFVEV/hXC03Gnb9dvpJ6mwNcq80GDfcMJ9NKGCyU9Z6HS0JMf/4aA2XIoMfw0eYj8WLMJ01kGNF4EQsaokNvc/3fAVXy0rjpA9Ru9P1zzlJcmqkiBualw++mIEEmx3fbTkeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714396927; c=relaxed/simple;
-	bh=955t3HJFUiYQNiXDEYirmE1LQn9zNIX1PmNE26WZT7A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B+ghELaPci+gs260dtZ0rJyB7ao8VB3f2P2xGw9XoLAsarivjUYePwLoPKR6KePmLq25uU85SUrtZV3f7kHmS892FrqEaKQSDgN9H3+Po9OoCvLgCpGLIoOC9E8UDgFTKwlkbtvFpwKhl6TqJidaPI7yt7UD0HZl66J10jKqj9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ho3SW2Fk; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1714401527; c=relaxed/simple;
+	bh=dGXL8ZLg5Uf/FL7djdodZYI/pjGESx0EpYiXOyZkV68=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=T6XRy1OEpG2wgbKL1d0hFe+4BlErO5D/o00zopCl6iUSVNhKw56tcuTB/6Vxbx3Q0Jy8bEoccqyWiwN6QVTK+1K9A50fQ6WMHN2hWTszAXmZZ4BIiEP66njoovWUUeoAv0hnMiz5ziJWoVlntOZi+MkrhV1DB7IwdttGjPAh2yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQQSIfUD; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ho3SW2Fk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Q0V+bwE2MZPxe/mUdmO9X05LYA9fpfs7pu2kpKbb22s=; b=ho3SW2Fkv9S3TT+T3XSbTJmrj8
-	DjPo+d7cSIr8K7mempih02oMWaPDSgwXEiJOGvaw8MnmdnJ9qavl8z8KD18+4JbWY+CHQNw7CGgXg
-	hK0QuOJvVPT3zkruIfVGlSxxsUaYHn8pBFU906nblT3YDox+oFPiyxPd+N4iJmkf0kYm75XC5/4Hp
-	HnhUpyjzwzmZ8JKlN/q8HCS9kXZHrNFhERCOYpS9S2Tt4PQczogPJn92Xd0FCOn0GHX1HtStW6h+e
-	+uecjPjNuq1iWf0sC5UrShd91Gz4WAOIsbfU/hGa6OQULB4ObXkTrdu+PZKvq/0BOL37BC9JdRp1C
-	6XF8B2fA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33466)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1s1Qx9-0003FJ-39;
-	Mon, 29 Apr 2024 14:21:56 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1s1QxA-0000sV-OT; Mon, 29 Apr 2024 14:21:56 +0100
-Date: Mon, 29 Apr 2024 14:21:56 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v8 0/9] CFI for ARM32 using LLVM
-Message-ID: <Zi+e9M/f5b/Sto9H@shell.armlinux.org.uk>
-References: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQQSIfUD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714401524; x=1745937524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dGXL8ZLg5Uf/FL7djdodZYI/pjGESx0EpYiXOyZkV68=;
+  b=LQQSIfUDLRbdDfclkDh8HHgxPNW9gGYC5zChDgXK1hB9PCoCQ3i5Y921
+   4NyfdgiGabIs0/V7m1YZ6YkOEwXmurWzrIO+3XDajGCFkcrMAkeDHHoIb
+   7dICjExoBx+t77lX6cY/KOskvTsabNdm++k9abn/ndIxJ9JdfmveKEVr9
+   POweO1S1GTUMzsZTffwEvcKvQ6zPuvU32Ht31legNvHgctDZ1SkUULjp5
+   rJk88aGf70/UY+fUffow/L03cTxt9127elZBk16L3KZOtDxzYno6gMROx
+   pJBmbj0JPxzgccR3PGpAj4HfGIViY7xA+LUporfIEIRMzaiZ2idgXvE38
+   A==;
+X-CSE-ConnectionGUID: 2SwYqrV1T2yY2wlgKSh93Q==
+X-CSE-MsgGUID: SIZTNlc1QVCrFEibFkWoFw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="27514975"
+X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
+   d="scan'208";a="27514975"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 07:38:44 -0700
+X-CSE-ConnectionGUID: 1RkGDJJ/SByNa9p3XxY19Q==
+X-CSE-MsgGUID: kgP2k0B1SdK2f6jEzcjBfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,239,1708416000"; 
+   d="scan'208";a="25999389"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 29 Apr 2024 07:38:43 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s1S9Q-0007Ey-0y;
+	Mon, 29 Apr 2024 14:38:40 +0000
+Date: Mon, 29 Apr 2024 22:38:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org
+Subject: [sailus-media-tree:ipu6 40/50]
+ drivers/media/v4l2-core/v4l2-common.c:512:9: error: implicit declaration of
+ function 'v4l2_subdev_call_op' is invalid in C99
+Message-ID: <202404292239.nNxjfKs4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,22 +63,114 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240423-arm32-cfi-v8-0-08f10f5d9297@linaro.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-I've applied this to a separate branch, and it should be in
-linux-next by tomorrow.
+tree:   git://linuxtv.org/sailus/media_tree.git ipu6
+head:   308898eb3af1c6530b122a01a5c4b38931717e70
+commit: 68213f72d8c806ff6968fb30c4bf61fd1257c4a3 [40/50] media: v4l: Support obtaining link frequency via get_mbus_config
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240429/202404292239.nNxjfKs4-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240429/202404292239.nNxjfKs4-lkp@intel.com/reproduce)
 
-As mentioned today on a previous iteration of the patch series,
-I'm not all that happy with the introduction of delay-inducing
-branches to solve CFI issues especially on the early CPUs where
-a branch causes the CPUs pipeline to be flushed - thus making
-branches expensive.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404292239.nNxjfKs4-lkp@intel.com/
 
-Can we make these branches conditional on the use of CFI?
+All errors (new ones prefixed by >>):
 
-Didn't Ard mention there was a way to do this using symbol aliases?
+>> drivers/media/v4l2-core/v4l2-common.c:512:9: error: implicit declaration of function 'v4l2_subdev_call_op' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
+                         ^
+   drivers/media/v4l2-core/v4l2-common.c:512:9: note: did you mean 'v4l2_subdev_cleanup'?
+   include/media/v4l2-subdev.h:1320:6: note: 'v4l2_subdev_cleanup' declared here
+   void v4l2_subdev_cleanup(struct v4l2_subdev *sd);
+        ^
+   drivers/media/v4l2-core/v4l2-common.c:512:33: error: use of undeclared identifier 'pad'
+                   ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
+                                                 ^
+   drivers/media/v4l2-core/v4l2-common.c:512:38: error: use of undeclared identifier 'get_mbus_config'
+                   ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
+                                                      ^
+   drivers/media/v4l2-core/v4l2-common.c:522:19: error: use of undeclared identifier 'v4l2_get_link_freq'; did you mean '__v4l2_get_link_freq'?
+   EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
+                     ^~~~~~~~~~~~~~~~~~
+                     __v4l2_get_link_freq
+   include/linux/export.h:69:48: note: expanded from macro 'EXPORT_SYMBOL_GPL'
+   #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+                                                          ^
+   include/linux/export.h:65:54: note: expanded from macro '_EXPORT_SYMBOL'
+   #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+                                                           ^
+   include/linux/export.h:56:16: note: expanded from macro '__EXPORT_SYMBOL'
+           extern typeof(sym) sym;                                 \
+                         ^
+   drivers/media/v4l2-core/v4l2-common.c:467:5: note: '__v4l2_get_link_freq' declared here
+   s64 __v4l2_get_link_freq(struct v4l2_subdev *sd,
+       ^
+   4 errors generated.
+
+
+vim +/v4l2_subdev_call_op +512 drivers/media/v4l2-core/v4l2-common.c
+
+   466	
+   467	s64 __v4l2_get_link_freq(struct v4l2_subdev *sd,
+   468				 struct v4l2_ctrl_handler *handler, unsigned int mul,
+   469				 unsigned int div)
+   470	{
+   471		struct v4l2_ctrl *ctrl;
+   472		s64 freq;
+   473	
+   474		if (!handler && sd)
+   475			handler = sd->ctrl_handler;
+   476	
+   477		ctrl = v4l2_ctrl_find(handler, V4L2_CID_LINK_FREQ);
+   478		if (ctrl) {
+   479			struct v4l2_querymenu qm = { .id = V4L2_CID_LINK_FREQ };
+   480			int ret;
+   481	
+   482			if (ctrl->type == V4L2_CTRL_TYPE_INTEGER64)
+   483				return v4l2_ctrl_g_ctrl_int64(ctrl);
+   484	
+   485			qm.index = v4l2_ctrl_g_ctrl(ctrl);
+   486	
+   487			ret = v4l2_querymenu(handler, &qm);
+   488			if (ret)
+   489				return -ENOENT;
+   490	
+   491			freq = qm.value;
+   492		} else {
+   493			if (!mul || !div)
+   494				return -ENOENT;
+   495	
+   496			ctrl = v4l2_ctrl_find(handler, V4L2_CID_PIXEL_RATE);
+   497			if (!ctrl)
+   498				return -ENOENT;
+   499	
+   500			freq = div_u64(v4l2_ctrl_g_ctrl_int64(ctrl) * mul, div);
+   501	
+   502			pr_warn("%s: Link frequency estimated using pixel rate: result might be inaccurate\n",
+   503				__func__);
+   504			pr_warn("%s: Consider implementing support for V4L2_CID_LINK_FREQ in the transmitter driver\n",
+   505				__func__);
+   506		}
+   507	
+   508		if (freq <= 0 && sd) {
+   509			struct v4l2_mbus_config mbus_config = {};
+   510			int ret;
+   511	
+ > 512			ret = v4l2_subdev_call_op(sd, pad, get_mbus_config,
+   513						  &mbus_config);
+   514			if (ret < 0)
+   515				return ret;
+   516	
+   517			return mbus_config.link_freq;
+   518		}
+   519	
+   520		return freq > 0 ? freq : -EINVAL;
+   521	}
+   522	EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
+   523	
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
