@@ -1,131 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514631843;
-	Tue, 30 Apr 2024 00:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BFED53B;
+	Tue, 30 Apr 2024 02:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714438725; cv=none; b=eCs+i8mfJlkvgt0D5Dg2IAigHhz9CCe17X6LY2jkuIjYK3A/ohgRK+Js+JJeJB0Hny86pe+GFlYM9OZLGYE610yC2Wa5MnqEwyKJxLe39WPiDjJdmih3ypz6jDqqDsZoLYEqXRNKCjE8oBWEkXIQGCDWZhZDgJ5dR/hxjG8VYFY=
+	t=1714445710; cv=none; b=Wbjw+cPQ0+Y3ixSJlI74fDrxqaJpVNmd6B11XMqLYE+Gi4ccvFYe4ChTZwjPosNAnj+V0XJUq8guLbaCzUS5bYRZq2MG35HYxLxpd/IHLBZlp9DLy1SuXpD6fy1Tnz6Zvm6outQI+p3Drh/SX4lc/4HaIuEwVwo5O6YGkuYREYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714438725; c=relaxed/simple;
-	bh=kHehVas1TcKHmP1tLsaPMehVMir5kgkjKWlGQ2P0heg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NQWJqzXWZ7OTp4yJu0G0tJzr1H4TxxrhYRtHqbZ5JGPG8zsA0OnOVBPiAlN0bVKzaYdpAlu2B5dwKWJgrZwKJvF+cf5XkXSPAe9acmqkzAJKRcbLip4L6JhGFyZt1zXsr7PXvDI8nTOSTK4Kjura97edK11UrOIoMFxWo/q6aT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I6o3/XI0; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1714445710; c=relaxed/simple;
+	bh=ExWorg8csLev0xgzdbCQ6Dl33M2pKTLdVDyAyE9ASyM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l27SdVqdrTuSJyZGL9+470vZT94bUjOfEOgaTE+OiU+UffLIxcpZPY+yzTbRZAKn55u+RNtJ7PS0U5ik2f9iydcvFXgCNuzE55jfSrOXvBV5K1XlTuPHEotRp/QPpfBTks+FvDPhY2uN7suwlQYkM11LHYCZF5QV+eISeDyLSwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=es3ARhll; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I6o3/XI0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="es3ARhll"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714438724; x=1745974724;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kHehVas1TcKHmP1tLsaPMehVMir5kgkjKWlGQ2P0heg=;
-  b=I6o3/XI0iwABODYEqxQwsT76YPY5i+250ATLNhbzHkBHju4uzvf15QID
-   NiiKxAI0uEaKh37pwIIL+sAVGIGGIMEVbaKMcpOvtG6u10k5/whA6CMvq
-   sxE4BG1WJpdNXkW5BlHFme+ncOGQbtVMcliXcDMfZ/amobKJpCTmxWXOF
-   OrdtcWhGHEIFqXI7EgKU2Zzx8TLzFj8Dlf/5DBrh/O1LsHfU5GXjt4CHU
-   3QoOIiZpd2vAQv3yx1ZOhWzyfii4KGBFNbr7bp/uGVbVstUVbmlhhLqAO
-   T5YBF9IIwj2W/7y+MgGoPyu7cQaz/S4nwv3Q1sVGBWdLrI8d2d2p8JDwb
-   w==;
-X-CSE-ConnectionGUID: ZYedMhB7R1iVX7iAlBYrUA==
-X-CSE-MsgGUID: HUFBU7tSQ/eW4bKvj8U9XQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="13052992"
+  t=1714445709; x=1745981709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ExWorg8csLev0xgzdbCQ6Dl33M2pKTLdVDyAyE9ASyM=;
+  b=es3ARhllIKfGuQ0Vg53Gb7EOSMSRycbMu7fdQhmiQG6i5YoKUd708ai8
+   QAoLBUXLahL96JHliA5BiuyRva5kAfKpxXMIQgUNBGxWOXrPfNoP5oM6o
+   DLVOQTDiaKvdMN2s/fkSaiqbd3Bd8OVxei7MnXNY9ZmQISccZk1BhocIb
+   ZluW7YU9i63WQSdioBseFlCkxEtfVmzmTBSrgrmXqF6zox5ysWP8Eo0gY
+   9s2jbDYUjYvRKakhzWxF8nNrfUvHQOPcFWOSmFEpZPB4AzCzTErQpbrY5
+   dLMQRZcIFjQ2Jd0o/GPBxmau/16vUbaiXbVI7QaU1AJc62OriMnm7bH9Q
+   A==;
+X-CSE-ConnectionGUID: MfmoaEOyS5WB2+f69EVegw==
+X-CSE-MsgGUID: pJzOH6rQTnSMFTmkHrHIXw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="27649046"
 X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="13052992"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 17:58:43 -0700
-X-CSE-ConnectionGUID: u8DfIT0nSd6Wb2wAuqRnHQ==
-X-CSE-MsgGUID: B7uSrbgzQP+AeVWxR0YN5g==
+   d="scan'208";a="27649046"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 19:55:08 -0700
+X-CSE-ConnectionGUID: hjsGboJWRqK0rLAoDpFUKw==
+X-CSE-MsgGUID: uDyaMgUMR9WCv7ZKHDwQ5w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="26148596"
+   d="scan'208";a="26315478"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 29 Apr 2024 17:58:43 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 29 Apr 2024 19:55:06 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s1bpP-0007Zz-35;
-	Tue, 30 Apr 2024 00:58:39 +0000
-Date: Tue, 30 Apr 2024 08:58:08 +0800
+	id 1s1de4-0007e8-0u;
+	Tue, 30 Apr 2024 02:55:04 +0000
+Date: Tue, 30 Apr 2024 10:54:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [pinctrl-samsung:pinctrl-next 3/3]
- drivers/pinctrl/samsung/pinctrl-samsung.c:633:35: warning: variable
- 'drvdata' set but not used
-Message-ID: <202404300825.6lxLwvUY-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 12/12] regulator/core: use rdev->dev.driver_data
+Message-ID: <202404301020.eKVj3WAI-lkp@intel.com>
+References: <0a480abe4913f0169f9693f6f959fbe1a397ae93.1714399603.git.mirq-linux@rere.qmqm.pl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0a480abe4913f0169f9693f6f959fbe1a397ae93.1714399603.git.mirq-linux@rere.qmqm.pl>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git pinctrl-next
-head:   f9c74474797351c60e009ebc59a798fcfd93ee57
-commit: f9c74474797351c60e009ebc59a798fcfd93ee57 [3/3] pinctrl: samsung: support a bus clock
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240430/202404300825.6lxLwvUY-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240430/202404300825.6lxLwvUY-lkp@intel.com/reproduce)
+Hi Michał,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on linus/master v6.9-rc6 next-20240429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Miros-aw/regulator-core-_regulator_get-simplify-error-returns/20240429-225643
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/0a480abe4913f0169f9693f6f959fbe1a397ae93.1714399603.git.mirq-linux%40rere.qmqm.pl
+patch subject: [PATCH v2 12/12] regulator/core: use rdev->dev.driver_data
+config: arm-randconfig-001-20240430 (https://download.01.org/0day-ci/archive/20240430/202404301020.eKVj3WAI-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240430/202404301020.eKVj3WAI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404300825.6lxLwvUY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404301020.eKVj3WAI-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pinctrl/samsung/pinctrl-samsung.c:633:35: warning: variable 'drvdata' set but not used [-Wunused-but-set-variable]
-           struct samsung_pinctrl_drv_data *drvdata;
-                                            ^
-   1 warning generated.
+   In file included from drivers/pinctrl/renesas/pfc-sh73a0.c:12:
+   In file included from include/linux/regulator/driver.h:18:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/pinctrl/renesas/pfc-sh73a0.c:4027:28: error: no member named 'reg_data' in 'struct regulator_dev'
+    4027 |         struct sh_pfc *pfc = reg->reg_data;
+         |                              ~~~  ^
+   drivers/pinctrl/renesas/pfc-sh73a0.c:4060:28: error: no member named 'reg_data' in 'struct regulator_dev'
+    4060 |         struct sh_pfc *pfc = reg->reg_data;
+         |                              ~~~  ^
+   1 warning and 2 errors generated.
 
 
-vim +/drvdata +633 drivers/pinctrl/samsung/pinctrl-samsung.c
+vim +4027 drivers/pinctrl/renesas/pfc-sh73a0.c
 
-   619	
-   620	/*
-   621	 * The samsung_gpio_set_direction() should be called with "bank->slock" held
-   622	 * to avoid race condition.
-   623	 * The calls to gpio_direction_output() and gpio_direction_input()
-   624	 * leads to this function call.
-   625	 */
-   626	static int samsung_gpio_set_direction(struct gpio_chip *gc,
-   627						     unsigned offset, bool input)
-   628	{
-   629		const struct samsung_pin_bank_type *type;
-   630		struct samsung_pin_bank *bank;
-   631		void __iomem *reg;
-   632		u32 data, mask, shift;
- > 633		struct samsung_pinctrl_drv_data *drvdata;
-   634	
-   635		bank = gpiochip_get_data(gc);
-   636		type = bank->type;
-   637		drvdata = bank->drvdata;
-   638	
-   639		reg = bank->pctl_base + bank->pctl_offset
-   640				+ type->reg_offset[PINCFG_TYPE_FUNC];
-   641	
-   642		mask = (1 << type->fld_width[PINCFG_TYPE_FUNC]) - 1;
-   643		shift = offset * type->fld_width[PINCFG_TYPE_FUNC];
-   644		if (shift >= 32) {
-   645			/* Some banks have two config registers */
-   646			shift -= 32;
-   647			reg += 4;
-   648		}
-   649	
-   650		data = readl(reg);
-   651		data &= ~(mask << shift);
-   652		if (!input)
-   653			data |= PIN_CON_FUNC_OUTPUT << shift;
-   654		writel(data, reg);
-   655	
-   656		return 0;
-   657	}
-   658	
+5d5166dc39bcbe drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2012-12-15  4020  
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4021  /* -----------------------------------------------------------------------------
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4022   * VCCQ MC0 regulator
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4023   */
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4024  
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4025  static void sh73a0_vccq_mc0_endisable(struct regulator_dev *reg, bool enable)
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4026  {
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21 @4027  	struct sh_pfc *pfc = reg->reg_data;
+5b46ac3a772363 drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-12-11  4028  	void __iomem *addr = pfc->windows[1].virt + 4;
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4029  	unsigned long flags;
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4030  	u32 value;
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4031  
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4032  	spin_lock_irqsave(&pfc->lock, flags);
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4033  
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4034  	value = ioread32(addr);
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4035  
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4036  	if (enable)
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4037  		value |= BIT(28);
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4038  	else
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4039  		value &= ~BIT(28);
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4040  
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4041  	iowrite32(value, addr);
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4042  
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4043  	spin_unlock_irqrestore(&pfc->lock, flags);
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4044  }
+ea770ad2ec054e drivers/pinctrl/sh-pfc/pfc-sh73a0.c Laurent Pinchart 2013-04-21  4045  
 
 -- 
 0-DAY CI Kernel Test Service
