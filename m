@@ -1,162 +1,88 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95B5128816
-	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 11:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02AF0133402
+	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 11:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714477305; cv=none; b=peDLTtFrm/sOZWshaneyoAuSi+DLO1wGXM4V1LiSRg7dzr/r8UQbLpKAQA9EugbMxn21uosdoustlGpmZKG25SkcBU/iLTLZjCIiPnz7u2S08VvkzCCOIuS5hk4Nvvn9CVHuZOp2RaX40dwWn34wpCkiL/Dt/HuHOB9GL7GaP74=
+	t=1714477541; cv=none; b=Uek+MegoOuLBxnNqdOiagt73+9RGvKu+/GAchmaU6KEEZN29tZ1f2sDRfXcD3U514zD7ir/TljtnKyY/+5TiLPd8MjsSgEaNiwPKrm+/64ApFV7G0iKIaSDIodbY0QC26Cjh5jush/kHz5OoFxs+nA6fMxaw5AOdGwAPo+SxwFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714477305; c=relaxed/simple;
-	bh=5CESrJgRUJ+RhU/49PZDfzui/SUlAR6fZtSHaCCq5Qg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=f2hr4Oap9BNvihounkt17aOQ2D9aQuJSO5ni9LIhc41i+hJnR3rSk1SDlF12McrincmOLoNMswIM+Qj8fMr0Y2bQJPHiRncJ+qU+fforQhZJ52Utdnnv57eD1AVLxvuW31tjITmZ65I5zzpeMXC87my22mupproVQ8y8WfF1Zi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bEaj55xL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1714477541; c=relaxed/simple;
+	bh=nK+N+mDl2huDsaZ0eLZJn+DfNF4KtsWcFtk234snMws=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dNYGMxBN1W3WW3dau0aKQXVvDbEKnEVsIpbixChwAj80SGtXpM1zfw2w6OavcvgbBJtIiACpTZhHmBBPySju8BzoDmEiQr0aYJN1IrnrQBWqFVlZmn6gJ8xfZyO4wC8otHfq8OZsN4DopJeuj6F+WGSFE0ee+BhbBpLygQP8axw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z771BNAT; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bEaj55xL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714477301;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=G4puEUW+GIVvbDRdsxiHFIMtXEBSPcjdWi6sTsauaIU=;
-	b=bEaj55xLbw+ciafEWSXNS7UvcUUOKzmUstU1lI/eJzs8M2SOSq+Yh9rfJJbwejQ+ig8i3e
-	XhBse0UGY3N33/tNa8nanXyQJZoOUxdDEAbARSvryYmvZi43gaL5JQke9kai0SsPwhFHOG
-	yzUX8u84uWTYzFEKHr2huqm/xC2BWsc=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-357-Rw-607LKPlmsAOM4hRE54Q-1; Tue,
- 30 Apr 2024 07:41:40 -0400
-X-MC-Unique: Rw-607LKPlmsAOM4hRE54Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 072CC29ABA0C
-	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 11:41:40 +0000 (UTC)
-Received: from [172.64.5.14] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B341340EE0E;
-	Tue, 30 Apr 2024 11:41:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 5 of 204): Test report for master
- (6.9.0-rc6, mainline.kernel.org-clang, 9e4bc4bc)
-Date: Tue, 30 Apr 2024 11:41:39 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z771BNAT"
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-de603e3072dso1717211276.1
+        for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 04:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714477539; x=1715082339; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nK+N+mDl2huDsaZ0eLZJn+DfNF4KtsWcFtk234snMws=;
+        b=z771BNATXjfnDxs7YR+D/hB+z2Cbrmx1X+iduVvddDMqfrFlfPVywueoOSXkspyovB
+         8Y6xAy2zb07lT8ugUnBUqMqse9FVpI7XN6rxtx69u/ITX5j4GGnINmQsiMnD5dIgVUAQ
+         0kaK08HHsk7LgVOj4FX1NAP76wtj32xOEuF/d4kv6WKTFHCtt2hYYsNYQZpwHhT88BpQ
+         wVAKV9MSZ+X1Wk1iVdPn4xq5eUyK32J8xdVubd4ckfaQyEDN4GQ/rG+MOKis8mZif0Fm
+         FH23c08nYFIWoWCCqQWdQkWGrw4kzQdzfd899r7wbWVBTWuGXLFlxw7LmKEe988x2Kdx
+         Y6zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714477539; x=1715082339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nK+N+mDl2huDsaZ0eLZJn+DfNF4KtsWcFtk234snMws=;
+        b=kzXXjeql7VRcMvJtwGAv1Q+sq1FxvS7CJSyJDLTEkqUxhHSfuFMQjzlf7k1CtxWfxE
+         NOPd2fa90YBh44fjz9qp4L2VxiSZPoQijFqegYuq+bikI6fs7ngkAYSZdaucTaJilUxn
+         xIhOXc3kk3dHpuYOdjU6FEa2mZRSS/u+s++1TbKdi3YRLgXozcY+PrPfH0cOQi/Glr0H
+         gdroF5IyaHA845AzDm/y09Cidsb4deOGlPYJw4jideNEB9QCa52Rxj81lBeFDkShnuDO
+         ITzmBOQEwuBLG7k4AD2kXaDH6scAPv9MyMUaos3eqPAnKMYf8i/qPWkZlI+gT4SQPeWA
+         +H/w==
+X-Forwarded-Encrypted: i=1; AJvYcCV840GlKtobNf3avVzuMIYPpKCjoCnHlSZnoGgqUXoZWJ6AqAQL0ybiNKdIuckMEgDgOBujU3FyXjBDiiLsWegE2adXag==
+X-Gm-Message-State: AOJu0YwZk6BlprhGDOKheU9/nz1JMQCCeWSLq6j6yBmAB8tevhKj0o6+
+	u3oeEHVxmL7+Bn1oj6NKOZLjEOJHSwBPKoNho/M7gNmiVesDL1oe8tqcIfKfd1Tl2+IyDkcQw2+
+	tbZk9uIQllGD57pgVC9SsjF7qeirDBx71CBHpRXyBPnBx/vlS
+X-Google-Smtp-Source: AGHT+IFehx1sXmCfSDXnRKest2hb84R8EduIc0UnR35AIQlk/zrm7wyJE95wrOWmFMKm2TZMb5njJLajVKO9B/f60Wc=
+X-Received: by 2002:a25:7587:0:b0:de5:8427:d669 with SMTP id
+ q129-20020a257587000000b00de58427d669mr10365974ybc.53.1714477538955; Tue, 30
+ Apr 2024 04:45:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <95307.124043007414000129@us-mta-357.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20240430-arm32-cfi-topping-v1-1-4cb6a15552aa@linaro.org> <CAMj1kXEfQYMk-PHBDBJS-LxTcx72+6ZZVffGtnoiHB4KcdoaSQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXEfQYMk-PHBDBJS-LxTcx72+6ZZVffGtnoiHB4KcdoaSQ@mail.gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 30 Apr 2024 13:45:27 +0200
+Message-ID: <CACRpkdYq5SON_ANbEHgvzBuTQd8zkY1M5dEATgzqz1j7W58pdw@mail.gmail.com>
+Subject: Re: [PATCH] ARM: Use conditionals for CFI branches
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.9-2' of git://git.linux-nfs.org/pr=
-ojects/trondmy/linux-nfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1272320007
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] [eln] waived call traces we don't plan to report =
-upstream
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1864
-            Affected tests:
-                Boot test [x86_64 (debug)]
-                Reboot test [x86_64, x86_64 (debug)]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: blktests block/024 failed
-            URL: https://issues.redhat.com/browse/RHEL-8130
-            Affected tests:
-                Storage - blktests - blk - upstream [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+On Tue, Apr 30, 2024 at 11:19=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> w=
+rote:
 
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
+> These functions are only called indirectly if MULTI_CACHE is enabled,
+> right? If so, this could be
+>
+> #if defined(CONFIG_CFI_CLANG) && defined(MULTI_CACHE)
 
+Hm Sami may know better here, but with !MULTI_CACHE the
+functions are indeed called directly, but does that mean the
+compiler will not emit some magic bytes in front of these
+symbols then?
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Yours,
+Linus Walleij
