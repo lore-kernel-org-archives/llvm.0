@@ -1,68 +1,60 @@
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0E138C
-	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 00:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514631843;
+	Tue, 30 Apr 2024 00:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714436274; cv=none; b=BrdjbJTz5EzxPisikBn9jAhDn0YH5HoK/xVrEnWiRIJ4beFo5lW9Za9Mx6f7MCT8uYPeEqL/Ve9DflRv8F3YPYJIlKGJSPUlEDtbgL1SqzNZSAhlHSLnzO4W9ufNNrdgBizlF3MU1osJRgtNTIWbB/Q4zRcc0mhxhHA//x04juM=
+	t=1714438725; cv=none; b=eCs+i8mfJlkvgt0D5Dg2IAigHhz9CCe17X6LY2jkuIjYK3A/ohgRK+Js+JJeJB0Hny86pe+GFlYM9OZLGYE610yC2Wa5MnqEwyKJxLe39WPiDjJdmih3ypz6jDqqDsZoLYEqXRNKCjE8oBWEkXIQGCDWZhZDgJ5dR/hxjG8VYFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714436274; c=relaxed/simple;
-	bh=zcQMVubjuiX7aI5h+1mB/JKiS+LzDcsoiUn13gUVidY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q1Ga2T5YXV8qKFSn8IqEsW39TfDboFsf+yrDZ85/oIWQ96daznXyq5+DvS7gs1olblDuOiFIteJyOu/VSVqs3rRwBAft8F1yCrSjsCPwVQpyIhdLcTOkCAZDcBjeTWRlhIolJtyE8VKeOdtCTMMAFvQQDfjQQuaanzIfnSkQ+OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uhB1CyLb; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1714438725; c=relaxed/simple;
+	bh=kHehVas1TcKHmP1tLsaPMehVMir5kgkjKWlGQ2P0heg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NQWJqzXWZ7OTp4yJu0G0tJzr1H4TxxrhYRtHqbZ5JGPG8zsA0OnOVBPiAlN0bVKzaYdpAlu2B5dwKWJgrZwKJvF+cf5XkXSPAe9acmqkzAJKRcbLip4L6JhGFyZt1zXsr7PXvDI8nTOSTK4Kjura97edK11UrOIoMFxWo/q6aT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I6o3/XI0; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uhB1CyLb"
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-36c481a28e7so6858435ab.0
-        for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 17:17:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714436272; x=1715041072; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wwskn8wHob0aiuWt7oahW5gvmqR22bCIIQzL1vy/1Vk=;
-        b=uhB1CyLb6GuCtdFLQ8zk+FdR22G7c2jKLDVxHANzDLaAxpDuehPtVt+9zoMu53n/JV
-         ECkUZivKb+gVnPt6jqA9w2hZAYibjfJIQSRtzLePTe0VFK9xR4EvNuf2utILnmcyi13M
-         sEzmkVvhQ5cRW9ApItJmbTHVY96N0jrPvlq5gCo9XmLbyAEJ0Pb7e9P6ZmnSZPZ5XEGv
-         u49KqsCMcfCZWGk9T2A+uqVVHWiGevTXSBQhoS73OD6l8ZyJaMKhGl3rMARwGLcZ8cf7
-         tol5HOxV7v0HMbbAPmpye90rZbLGWudoaVf0bqKGxo3MHVGChdGRALw8w2EWGZgUYAQi
-         fHUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714436272; x=1715041072;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wwskn8wHob0aiuWt7oahW5gvmqR22bCIIQzL1vy/1Vk=;
-        b=nwH3mkAL9d3wflfS52UapADDFj9Q80kDmHnIOk6qEIwezb9mp/PsYGAs9pxj3HBQHZ
-         OujlOZvoDExQea3xQZsEMKa4bg54ODcyEJ+ZXs61n8nIaf0cxTzn+pchXv0LkxYymnSX
-         zE6LJ0PSzs0Pj4oa0Lxbg4uFIwuNua0PvGwNBozwavHT5JLa68QomWbtvmYlO2hNFzia
-         0sUhk6nelxgx04VlTedYAMELemaaY5I1d1D4MLLUGvKFlddg62cvbTUqSd+iunpJYMUU
-         AyWvFhP9I4hnSzkldMiw3sG5PSsdhrc+y3dIDQ20sAqfVuYjkzm/x1+4rEgn2NSR3n7u
-         QYyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPEStUEX/yRbofAyqC9CFCdVcimoG5uDLOdFGLTwyIb/BXlLy154OM5rh7SSv8KGCxTtg9tJ01TVkoDn1zj3x6wnSNPw==
-X-Gm-Message-State: AOJu0YwhF4gxcFsz1mNg277rgn3WmX/T0C1FERSVvVJOkebKWfcfeOBK
-	fRzZZKlDL4MFSphyH71EKq+O5CQEr5pmyR8tmfJ9GyaHRRH3cYnP/k2oepRqGg==
-X-Google-Smtp-Source: AGHT+IH9ZpHbIbR+PH37031tfohQuWl2RhYefdfEjAqVtOPnbjU6itGtSPkwvvkahLjNm79OM9oG9g==
-X-Received: by 2002:a05:6e02:1aa3:b0:36c:442f:9590 with SMTP id l3-20020a056e021aa300b0036c442f9590mr1155822ilv.13.1714436272103;
-        Mon, 29 Apr 2024 17:17:52 -0700 (PDT)
-Received: from google.com (195.121.66.34.bc.googleusercontent.com. [34.66.121.195])
-        by smtp.gmail.com with ESMTPSA id bv7-20020a056638448700b004874ea2e03csm2369644jab.124.2024.04.29.17.17.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 17:17:51 -0700 (PDT)
-Date: Tue, 30 Apr 2024 00:17:46 +0000
-From: Justin Stitt <justinstitt@google.com>
-To: Edward Liaw <edliaw@google.com>
-Cc: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, 
-	Andy Lutomirski <luto@mit.edu>, linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/vDSO: Fix assignment in condition without
- parentheses
-Message-ID: <mwrlqn2ddkepz6ayksk562uloq3ksejf3vu4i5xaoz2xnj6cl6@mwuquhhp3lwj>
-References: <20240429203441.143607-1-edliaw@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I6o3/XI0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714438724; x=1745974724;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kHehVas1TcKHmP1tLsaPMehVMir5kgkjKWlGQ2P0heg=;
+  b=I6o3/XI0iwABODYEqxQwsT76YPY5i+250ATLNhbzHkBHju4uzvf15QID
+   NiiKxAI0uEaKh37pwIIL+sAVGIGGIMEVbaKMcpOvtG6u10k5/whA6CMvq
+   sxE4BG1WJpdNXkW5BlHFme+ncOGQbtVMcliXcDMfZ/amobKJpCTmxWXOF
+   OrdtcWhGHEIFqXI7EgKU2Zzx8TLzFj8Dlf/5DBrh/O1LsHfU5GXjt4CHU
+   3QoOIiZpd2vAQv3yx1ZOhWzyfii4KGBFNbr7bp/uGVbVstUVbmlhhLqAO
+   T5YBF9IIwj2W/7y+MgGoPyu7cQaz/S4nwv3Q1sVGBWdLrI8d2d2p8JDwb
+   w==;
+X-CSE-ConnectionGUID: ZYedMhB7R1iVX7iAlBYrUA==
+X-CSE-MsgGUID: HUFBU7tSQ/eW4bKvj8U9XQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="13052992"
+X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
+   d="scan'208";a="13052992"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 17:58:43 -0700
+X-CSE-ConnectionGUID: u8DfIT0nSd6Wb2wAuqRnHQ==
+X-CSE-MsgGUID: B7uSrbgzQP+AeVWxR0YN5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
+   d="scan'208";a="26148596"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 29 Apr 2024 17:58:43 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s1bpP-0007Zz-35;
+	Tue, 30 Apr 2024 00:58:39 +0000
+Date: Tue, 30 Apr 2024 08:58:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [pinctrl-samsung:pinctrl-next 3/3]
+ drivers/pinctrl/samsung/pinctrl-samsung.c:633:35: warning: variable
+ 'drvdata' set but not used
+Message-ID: <202404300825.6lxLwvUY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,53 +63,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240429203441.143607-1-edliaw@google.com>
 
-On Mon, Apr 29, 2024 at 08:34:36PM +0000, Edward Liaw wrote:
-> Fixes clang compiler warnings by adding parentheses:
-> 
-> parse_vdso.c:65:9: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
->                 if (g = h & 0xf0000000)
->                     ~~^~~~~~~~~~~~~~~~
-> parse_vdso.c:65:9: note: place parentheses around the assignment to silence this warning
->                 if (g = h & 0xf0000000)
->                       ^
->                     (                 )
-> parse_vdso.c:65:9: note: use '==' to turn this assignment into an equality comparison
->                 if (g = h & 0xf0000000)
->                       ^
->                       ==
-> 
-> Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
-> Signed-off-by: Edward Liaw <edliaw@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git pinctrl-next
+head:   f9c74474797351c60e009ebc59a798fcfd93ee57
+commit: f9c74474797351c60e009ebc59a798fcfd93ee57 [3/3] pinctrl: samsung: support a bus clock
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240430/202404300825.6lxLwvUY-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240430/202404300825.6lxLwvUY-lkp@intel.com/reproduce)
 
-For readability's sake, I tend to prefer just taking the assignment out
-of the if statement:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404300825.6lxLwvUY-lkp@intel.com/
 
-g = h & 0xf0000000;
-then testing it:
-if (g) ...
+All warnings (new ones prefixed by >>):
 
-but as it stands it's fine and the warning goes away.
+>> drivers/pinctrl/samsung/pinctrl-samsung.c:633:35: warning: variable 'drvdata' set but not used [-Wunused-but-set-variable]
+           struct samsung_pinctrl_drv_data *drvdata;
+                                            ^
+   1 warning generated.
 
-Reviewed-by: Justin Stitt <justinstitt@google.com>
-> ---
->  tools/testing/selftests/vDSO/parse_vdso.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-> index 413f75620a35..b9cf771006da 100644
-> --- a/tools/testing/selftests/vDSO/parse_vdso.c
-> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
-> @@ -62,7 +62,7 @@ static unsigned long elf_hash(const unsigned char *name)
->  	while (*name)
->  	{
->  		h = (h << 4) + *name++;
-> -		if (g = h & 0xf0000000)
-> +		if ((g = h & 0xf0000000))
->  			h ^= g >> 24;
->  		h &= ~g;
->  	}
-> -- 
-> 2.44.0.769.g3c40516874-goog
-> 
+
+vim +/drvdata +633 drivers/pinctrl/samsung/pinctrl-samsung.c
+
+   619	
+   620	/*
+   621	 * The samsung_gpio_set_direction() should be called with "bank->slock" held
+   622	 * to avoid race condition.
+   623	 * The calls to gpio_direction_output() and gpio_direction_input()
+   624	 * leads to this function call.
+   625	 */
+   626	static int samsung_gpio_set_direction(struct gpio_chip *gc,
+   627						     unsigned offset, bool input)
+   628	{
+   629		const struct samsung_pin_bank_type *type;
+   630		struct samsung_pin_bank *bank;
+   631		void __iomem *reg;
+   632		u32 data, mask, shift;
+ > 633		struct samsung_pinctrl_drv_data *drvdata;
+   634	
+   635		bank = gpiochip_get_data(gc);
+   636		type = bank->type;
+   637		drvdata = bank->drvdata;
+   638	
+   639		reg = bank->pctl_base + bank->pctl_offset
+   640				+ type->reg_offset[PINCFG_TYPE_FUNC];
+   641	
+   642		mask = (1 << type->fld_width[PINCFG_TYPE_FUNC]) - 1;
+   643		shift = offset * type->fld_width[PINCFG_TYPE_FUNC];
+   644		if (shift >= 32) {
+   645			/* Some banks have two config registers */
+   646			shift -= 32;
+   647			reg += 4;
+   648		}
+   649	
+   650		data = readl(reg);
+   651		data &= ~(mask << shift);
+   652		if (!input)
+   653			data |= PIN_CON_FUNC_OUTPUT << shift;
+   654		writel(data, reg);
+   655	
+   656		return 0;
+   657	}
+   658	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
