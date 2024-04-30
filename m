@@ -1,61 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2BD38C;
-	Tue, 30 Apr 2024 00:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0E138C
+	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 00:17:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714436024; cv=none; b=YwzkzHw9Yl31ekY0vTqFrOD8Z6+cqEk8AcKXzjauRHwLe7YQsvXSq7e26ciAbRGhEuHal/XPLaxMFtTtCdhQ/eEXli2Kwq6zddy3w4REVQ3/4dJbtJMY98N09zsNwM+mi5tlW4MeO2W3U6t74JPVvsePNFV8ny2laSxjr9nZKos=
+	t=1714436274; cv=none; b=BrdjbJTz5EzxPisikBn9jAhDn0YH5HoK/xVrEnWiRIJ4beFo5lW9Za9Mx6f7MCT8uYPeEqL/Ve9DflRv8F3YPYJIlKGJSPUlEDtbgL1SqzNZSAhlHSLnzO4W9ufNNrdgBizlF3MU1osJRgtNTIWbB/Q4zRcc0mhxhHA//x04juM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714436024; c=relaxed/simple;
-	bh=CAuthUYbFaEBvRfqH4sAFKVD5BWpl1RL0gkZT5B0vWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iZL3+gj2MvqbqhiS4Mo/8NRNTs5AYp6cLlwMn3ih9R+xAaJduCnrSmMv0H0Mp44VwU6JMYPhtcelyA5irzzbVdKk0YgD7JvaT3l6VI+bBNBY1dCaPN4IdkO4w3KnRfIm7AClpPMTJV1T1I0J2BNok/6x7WUyIOGAXM02W9NJh0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SWbkrj+3; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714436274; c=relaxed/simple;
+	bh=zcQMVubjuiX7aI5h+1mB/JKiS+LzDcsoiUn13gUVidY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q1Ga2T5YXV8qKFSn8IqEsW39TfDboFsf+yrDZ85/oIWQ96daznXyq5+DvS7gs1olblDuOiFIteJyOu/VSVqs3rRwBAft8F1yCrSjsCPwVQpyIhdLcTOkCAZDcBjeTWRlhIolJtyE8VKeOdtCTMMAFvQQDfjQQuaanzIfnSkQ+OQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uhB1CyLb; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SWbkrj+3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714436024; x=1745972024;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CAuthUYbFaEBvRfqH4sAFKVD5BWpl1RL0gkZT5B0vWA=;
-  b=SWbkrj+3XiYHCswgHEeErROiVnqmdaWQ8br08vENHh4anAsC0ZQWlNBb
-   inDZmDN12vRY2czN1c5rxvQfpyM9evxfkpo3bM7x+1qYDdlUlgYXEDxgS
-   C89vpYIKMs8O2Zc35W+TXTFU7MANQBsuNw07paIWrcIBYPzql+ynER5AW
-   FoTTkWn37gRLYRiaTbEXbNLZZG77cNTWsftnEsO5Fkaoi8uXUx0Kg7235
-   jid4b3YqQrf13xm1h1p4YN0L0xGQDcsswxnCydx6abJUC7i+YVeyKu12V
-   XYv2TJj+5GpBv8j7DJCtSXt00+AZKZstHrDSZXGgJurkWjeqRKcmrHf1L
-   Q==;
-X-CSE-ConnectionGUID: jNuMI0yyRE+wPYUNRANmOQ==
-X-CSE-MsgGUID: 3wg5jiQDQfipCdU9kCTecQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="10043629"
-X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="10043629"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 17:13:43 -0700
-X-CSE-ConnectionGUID: d3RxB0TcShme3fx1ZNph1w==
-X-CSE-MsgGUID: H9PkcojbQnOzQL2pHbAIRw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="57473209"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Apr 2024 17:13:41 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s1b7q-0007Xk-2Q;
-	Tue, 30 Apr 2024 00:13:38 +0000
-Date: Tue, 30 Apr 2024 08:13:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vasant Hegde <vasant.hegde@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Joerg Roedel <jroedel@suse.de>, Jason Gunthorpe <jgg@nvidia.com>
-Subject: [linux-next:master 8395/9390] drivers/iommu/amd/pasid.c:172:3:
- error: call to undeclared function 'mmu_notifier_unregister'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202404300810.iTQNKCkI-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uhB1CyLb"
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-36c481a28e7so6858435ab.0
+        for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 17:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714436272; x=1715041072; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wwskn8wHob0aiuWt7oahW5gvmqR22bCIIQzL1vy/1Vk=;
+        b=uhB1CyLb6GuCtdFLQ8zk+FdR22G7c2jKLDVxHANzDLaAxpDuehPtVt+9zoMu53n/JV
+         ECkUZivKb+gVnPt6jqA9w2hZAYibjfJIQSRtzLePTe0VFK9xR4EvNuf2utILnmcyi13M
+         sEzmkVvhQ5cRW9ApItJmbTHVY96N0jrPvlq5gCo9XmLbyAEJ0Pb7e9P6ZmnSZPZ5XEGv
+         u49KqsCMcfCZWGk9T2A+uqVVHWiGevTXSBQhoS73OD6l8ZyJaMKhGl3rMARwGLcZ8cf7
+         tol5HOxV7v0HMbbAPmpye90rZbLGWudoaVf0bqKGxo3MHVGChdGRALw8w2EWGZgUYAQi
+         fHUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714436272; x=1715041072;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wwskn8wHob0aiuWt7oahW5gvmqR22bCIIQzL1vy/1Vk=;
+        b=nwH3mkAL9d3wflfS52UapADDFj9Q80kDmHnIOk6qEIwezb9mp/PsYGAs9pxj3HBQHZ
+         OujlOZvoDExQea3xQZsEMKa4bg54ODcyEJ+ZXs61n8nIaf0cxTzn+pchXv0LkxYymnSX
+         zE6LJ0PSzs0Pj4oa0Lxbg4uFIwuNua0PvGwNBozwavHT5JLa68QomWbtvmYlO2hNFzia
+         0sUhk6nelxgx04VlTedYAMELemaaY5I1d1D4MLLUGvKFlddg62cvbTUqSd+iunpJYMUU
+         AyWvFhP9I4hnSzkldMiw3sG5PSsdhrc+y3dIDQ20sAqfVuYjkzm/x1+4rEgn2NSR3n7u
+         QYyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPEStUEX/yRbofAyqC9CFCdVcimoG5uDLOdFGLTwyIb/BXlLy154OM5rh7SSv8KGCxTtg9tJ01TVkoDn1zj3x6wnSNPw==
+X-Gm-Message-State: AOJu0YwhF4gxcFsz1mNg277rgn3WmX/T0C1FERSVvVJOkebKWfcfeOBK
+	fRzZZKlDL4MFSphyH71EKq+O5CQEr5pmyR8tmfJ9GyaHRRH3cYnP/k2oepRqGg==
+X-Google-Smtp-Source: AGHT+IH9ZpHbIbR+PH37031tfohQuWl2RhYefdfEjAqVtOPnbjU6itGtSPkwvvkahLjNm79OM9oG9g==
+X-Received: by 2002:a05:6e02:1aa3:b0:36c:442f:9590 with SMTP id l3-20020a056e021aa300b0036c442f9590mr1155822ilv.13.1714436272103;
+        Mon, 29 Apr 2024 17:17:52 -0700 (PDT)
+Received: from google.com (195.121.66.34.bc.googleusercontent.com. [34.66.121.195])
+        by smtp.gmail.com with ESMTPSA id bv7-20020a056638448700b004874ea2e03csm2369644jab.124.2024.04.29.17.17.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Apr 2024 17:17:51 -0700 (PDT)
+Date: Tue, 30 Apr 2024 00:17:46 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Edward Liaw <edliaw@google.com>
+Cc: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, 
+	Andy Lutomirski <luto@mit.edu>, linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests/vDSO: Fix assignment in condition without
+ parentheses
+Message-ID: <mwrlqn2ddkepz6ayksk562uloq3ksejf3vu4i5xaoz2xnj6cl6@mwuquhhp3lwj>
+References: <20240429203441.143607-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,71 +71,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240429203441.143607-1-edliaw@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   b0a2c79c6f3590b74742cbbc76687014d47972d8
-commit: a5a91e54846d35c234939fb9170e035805353049 [8395/9390] iommu/amd: Add SVA domain support
-config: x86_64-buildonly-randconfig-006-20240430 (https://download.01.org/0day-ci/archive/20240430/202404300810.iTQNKCkI-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240430/202404300810.iTQNKCkI-lkp@intel.com/reproduce)
+On Mon, Apr 29, 2024 at 08:34:36PM +0000, Edward Liaw wrote:
+> Fixes clang compiler warnings by adding parentheses:
+> 
+> parse_vdso.c:65:9: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+>                 if (g = h & 0xf0000000)
+>                     ~~^~~~~~~~~~~~~~~~
+> parse_vdso.c:65:9: note: place parentheses around the assignment to silence this warning
+>                 if (g = h & 0xf0000000)
+>                       ^
+>                     (                 )
+> parse_vdso.c:65:9: note: use '==' to turn this assignment into an equality comparison
+>                 if (g = h & 0xf0000000)
+>                       ^
+>                       ==
+> 
+> Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
+> Signed-off-by: Edward Liaw <edliaw@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404300810.iTQNKCkI-lkp@intel.com/
+For readability's sake, I tend to prefer just taking the assignment out
+of the if statement:
 
-All errors (new ones prefixed by >>):
+g = h & 0xf0000000;
+then testing it:
+if (g) ...
 
->> drivers/iommu/amd/pasid.c:172:3: error: call to undeclared function 'mmu_notifier_unregister'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     172 |                 mmu_notifier_unregister(&sva_pdom->mn, domain->mm);
-         |                 ^
-   drivers/iommu/amd/pasid.c:172:3: note: did you mean 'mmu_notifier_release'?
-   include/linux/mmu_notifier.h:636:20: note: 'mmu_notifier_release' declared here
-     636 | static inline void mmu_notifier_release(struct mm_struct *mm)
-         |                    ^
->> drivers/iommu/amd/pasid.c:195:8: error: call to undeclared function 'mmu_notifier_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     195 |         ret = mmu_notifier_register(&pdom->mn, mm);
-         |               ^
-   drivers/iommu/amd/pasid.c:195:8: note: did you mean 'mmu_notifier_release'?
-   include/linux/mmu_notifier.h:636:20: note: 'mmu_notifier_release' declared here
-     636 | static inline void mmu_notifier_release(struct mm_struct *mm)
-         |                    ^
-   2 errors generated.
+but as it stands it's fine and the warning goes away.
 
-
-vim +/mmu_notifier_unregister +172 drivers/iommu/amd/pasid.c
-
-   166	
-   167	static void iommu_sva_domain_free(struct iommu_domain *domain)
-   168	{
-   169		struct protection_domain *sva_pdom = to_pdomain(domain);
-   170	
-   171		if (sva_pdom->mn.ops)
- > 172			mmu_notifier_unregister(&sva_pdom->mn, domain->mm);
-   173	
-   174		amd_iommu_domain_free(domain);
-   175	}
-   176	
-   177	static const struct iommu_domain_ops amd_sva_domain_ops = {
-   178		.set_dev_pasid = iommu_sva_set_dev_pasid,
-   179		.free	       = iommu_sva_domain_free
-   180	};
-   181	
-   182	struct iommu_domain *amd_iommu_domain_alloc_sva(struct device *dev,
-   183							struct mm_struct *mm)
-   184	{
-   185		struct protection_domain *pdom;
-   186		int ret;
-   187	
-   188		pdom = protection_domain_alloc(IOMMU_DOMAIN_SVA);
-   189		if (!pdom)
-   190			return ERR_PTR(-ENOMEM);
-   191	
-   192		pdom->domain.ops = &amd_sva_domain_ops;
-   193		pdom->mn.ops = &sva_mn;
-   194	
- > 195		ret = mmu_notifier_register(&pdom->mn, mm);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+> ---
+>  tools/testing/selftests/vDSO/parse_vdso.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+> index 413f75620a35..b9cf771006da 100644
+> --- a/tools/testing/selftests/vDSO/parse_vdso.c
+> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
+> @@ -62,7 +62,7 @@ static unsigned long elf_hash(const unsigned char *name)
+>  	while (*name)
+>  	{
+>  		h = (h << 4) + *name++;
+> -		if (g = h & 0xf0000000)
+> +		if ((g = h & 0xf0000000))
+>  			h ^= g >> 24;
+>  		h &= ~g;
+>  	}
+> -- 
+> 2.44.0.769.g3c40516874-goog
+> 
