@@ -1,65 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AB21118C;
-	Tue, 30 Apr 2024 04:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF0617584
+	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 05:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714450874; cv=none; b=l+sPOOOU9K6AznDAvYV59vCrISVjPj0HhtnmhVBNfnVIwbZnaG1UBTa1iEavuqC4CldbRgprWq1wmzurH7KqR9pebRseRr8EICrfEyYT2vjAdZgOI9o4ObU+SC1/hP11E25OlB3eF3IWVd+Hla1Y3wwZt3sA7sPfodiZmveswKs=
+	t=1714455306; cv=none; b=VMhAacRSKsYqd342d/nDYxSq11sq7czE85RaVE9KcGK9m0dQQCTapiQAcASFGRcW6IenXEdROMTnkpf3+aOS7s5a6XXwI50IdiBs6l8pNizTfkxha4M7Q4o02Ro22MZAPYkZ6ABKruw8aglugpoD3Nc7ElkeYwaeXYlt9M/vG7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714450874; c=relaxed/simple;
-	bh=hU07u6vJ9l8n11SuyOXIdCwqdzqefxDRN0xbudc8VGU=;
+	s=arc-20240116; t=1714455306; c=relaxed/simple;
+	bh=0lANZJBk2q8qyeCEkyiuDs1ISrEWT6/wJvz29MPlTds=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OoZvy81QFyBEUOc0Y4A5yJwnvAMjsbDicuidzEw9PFZm+b+qRMetGsF6eSLbcfqZiNSNpS/duTyk84+6fB332dDrRVwT/GnZrj3HLwoJt3ZwmX5dkpuazwltpwB3GnCu84Oh3NrPYpGCfo/wS2MXsgabZfIClBLCzFJ+DCF0LZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HLiXInXE; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=D0DOO2GG41Y46ecQ5BZyS6/OSzqMVL+muEYsgxjYiosbqgRl0MjEV9vozW9XN/+Zr5NAsvxYTOmNBJ+crbAifq2VvNWWYinyfV4QIKe44pA5WI/NG2H9HYlpJuD8xM/tPxZP5OHv2yBIlwEPvCLqzu62T+tk2rFUGQ3aPqbeYCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=H2KfQMIT; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLiXInXE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714450873; x=1745986873;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hU07u6vJ9l8n11SuyOXIdCwqdzqefxDRN0xbudc8VGU=;
-  b=HLiXInXEfCRqQa1sPZoTn9JOmcJ9QsyPx8eHoW0bxzdb3qnX7T2tbuyz
-   gMM9LAkRBxEz4Z/eERQEx/OwHYdtSVe+tnPCC8U26tPUfAfvslSDIB9vJ
-   /xIK3ItZ7VvT1yeOe+3d6yz5bUNwoEMQlSZnc84lZ36KRs6Yv7ReodzbT
-   sGCU4u1AblTMLqEfDSMnz0dkqZI2Tp44PXrbtcqXGHiosDBJdBaqGHgEC
-   1b7836Uh2An5Fe5WZMEMsm7wPR2aKtP6zDzDv0pvI4byxoali9vtuidX6
-   aaQAfT5VRLz8h5E81H1ZswzgdpMs1zLULkxTyrNQeFQ068wKHRlck0Mt4
-   w==;
-X-CSE-ConnectionGUID: Ahnmy4NrTe2pkvunAjBjVQ==
-X-CSE-MsgGUID: HD7cwiT4TkmYQ4inefKnjw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="10673501"
-X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="10673501"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 21:21:12 -0700
-X-CSE-ConnectionGUID: yokDMzv5RnmqzwEuUZaCLg==
-X-CSE-MsgGUID: X32MPSgDSf26GrmfvU/jqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="57197286"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 29 Apr 2024 21:21:09 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s1ezK-0007ia-2a;
-	Tue, 30 Apr 2024 04:21:06 +0000
-Date: Tue, 30 Apr 2024 12:20:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>,
-	netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] net: dsa: Remove adjust_link paths
-Message-ID: <202404301234.CUZfd15j-lkp@intel.com>
-References: <20240429165405.2298962-3-florian.fainelli@broadcom.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="H2KfQMIT"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1eb24e3a2d9so30808465ad.1
+        for <llvm@lists.linux.dev>; Mon, 29 Apr 2024 22:35:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1714455305; x=1715060105; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C86TkJMefuwLFYqPDfjsQaXZDgvqLvjIZeQbeqShpoI=;
+        b=H2KfQMITS6t98muwCctHxwv0h7k4n5Xz+W5EkAIHzkK5K6wn6V8KZnaKdoZ9iZu6lw
+         Ogoes3UStY5391sBwWhfS7zIklXxQQQRSeg5W/uD4DbNO0PMXmb3UGXvXB9DiFsXMJZD
+         QlBvjSyzNcWMNirL2G4PUfYhXbIIwkffFmdEM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714455305; x=1715060105;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C86TkJMefuwLFYqPDfjsQaXZDgvqLvjIZeQbeqShpoI=;
+        b=gadHdyMfrJH3W7SgE1FEpXg3FMyDVMEk+H+Z9bM5hzNDRzKcNwKlU6a4V/X8snApxH
+         z3yp7/N+9/zvWxV9bOKFXGEqTlRs8qrr4kA9MrzSUKlq40Xw7X1dY1iT1IZ1b/aAGpbF
+         lxV1uhn23M8jBqmRejsI5pYl4TvPKjelCUpomzTWAde6Gl1sokZudK+ireoyM0bln7Ox
+         lrI4vQwgTy8zkuPLF9p0KJmiJRfLJAvGScIMUmZcgUj3h4DPW45tfaWdgH+O7hl5A3/Z
+         mBCKrpQ2rbYiwq7RMHxuOCW2deaCI/EoNJ/mQoOFN9toMiso4B5MNQqPwmrc1luBlmnw
+         Aviw==
+X-Forwarded-Encrypted: i=1; AJvYcCXmH6OlBFAv/paidvNuQAekYb0urpXNIcxdUxP//JOENrEuUvLYBbFjz+6WdqmKDeYgplhG8FidGTgCPyj0Dt26AFXh/g==
+X-Gm-Message-State: AOJu0YznVNUQHX118B0Cp08tc5PI7fcn6VIccnD/MY6/q3EDx9R9hz4I
+	XCYcUef/n6EZNM27N0cNhNfxfoMKNW1qRTZM4c9bSIkXHaBVeeLSHbN+IYCf9A==
+X-Google-Smtp-Source: AGHT+IExYVGtME+b7bsTki80m/529C/WFpqN5LWnzvSEWxibnamEqrs4aXGKwGyaazB7ViSXdQpIYA==
+X-Received: by 2002:a17:903:41ca:b0:1eb:1240:1aea with SMTP id u10-20020a17090341ca00b001eb12401aeamr16493520ple.20.1714455305039;
+        Mon, 29 Apr 2024 22:35:05 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id q4-20020a170902edc400b001e29c4b7bd2sm21410591plk.240.2024.04.29.22.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Apr 2024 22:35:04 -0700 (PDT)
+Date: Mon, 29 Apr 2024 22:35:03 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hardening: Refresh KCFI options, add some more
+Message-ID: <202404292233.9A98A7C@keescook>
+References: <20240426222940.work.884-kees@kernel.org>
+ <20240429221650.GA3666021@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,55 +75,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240429165405.2298962-3-florian.fainelli@broadcom.com>
+In-Reply-To: <20240429221650.GA3666021@dev-arch.thelio-3990X>
 
-Hi Florian,
+On Mon, Apr 29, 2024 at 03:16:50PM -0700, Nathan Chancellor wrote:
+> On Fri, Apr 26, 2024 at 03:29:44PM -0700, Kees Cook wrote:
+> [...]
+> > +# Enable Kernel Control Flow Integrity (currently Clang only).
+> > +CONFIG_CFI_CLANG=y
+> > +# CONFIG_CFI_PERMISSIVE is not set
+> 
+> Should this be a part of kernel/configs/hardening.config because RISC-V
+> supports it (and 32-bit ARM will soon too)?
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Fainelli/net-dsa-Remove-fixed_link_update-member/20240430-005631
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240429165405.2298962-3-florian.fainelli%40broadcom.com
-patch subject: [PATCH net-next v2 2/2] net: dsa: Remove adjust_link paths
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240430/202404301234.CUZfd15j-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240430/202404301234.CUZfd15j-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404301234.CUZfd15j-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/dsa/port.c:1603:3: error: use of undeclared identifier 'phydev'
-                   phydev = dp->user->phydev;
-                   ^
-   1 error generated.
-
-
-vim +/phydev +1603 net/dsa/port.c
-
-dd805cf3e80e03 Russell King (Oracle  2023-05-25  1594) 
-8ae674964e67eb Florian Fainelli      2019-12-16  1595  static void dsa_port_phylink_mac_link_down(struct phylink_config *config,
-77373d49de22e8 Ioana Ciornei         2019-05-28  1596  					   unsigned int mode,
-77373d49de22e8 Ioana Ciornei         2019-05-28  1597  					   phy_interface_t interface)
-77373d49de22e8 Ioana Ciornei         2019-05-28  1598  {
-dd0c9855b41310 Russell King (Oracle  2024-04-10  1599) 	struct dsa_port *dp = dsa_phylink_to_port(config);
-77373d49de22e8 Ioana Ciornei         2019-05-28  1600  	struct dsa_switch *ds = dp->ds;
-77373d49de22e8 Ioana Ciornei         2019-05-28  1601  
-57d77986e74287 Vladimir Oltean       2021-10-20  1602  	if (dsa_port_is_user(dp))
-6ca80638b90cec Florian Fainelli      2023-10-23 @1603  		phydev = dp->user->phydev;
-0e27921816ad99 Ioana Ciornei         2019-05-28  1604  
-e9829e26ff2c61 Florian Fainelli      2024-04-29  1605  	if (!ds->ops->phylink_mac_link_down)
-77373d49de22e8 Ioana Ciornei         2019-05-28  1606  		return;
-77373d49de22e8 Ioana Ciornei         2019-05-28  1607  
-77373d49de22e8 Ioana Ciornei         2019-05-28  1608  	ds->ops->phylink_mac_link_down(ds, dp->index, mode, interface);
-77373d49de22e8 Ioana Ciornei         2019-05-28  1609  }
-77373d49de22e8 Ioana Ciornei         2019-05-28  1610  
+Probably yes. I was worried it might be "noisy" for archs that don't
+support it, but frankly if someone is using "make hardening.config" they
+probably want to know about unsupported options. :)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
