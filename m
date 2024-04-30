@@ -1,191 +1,176 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A7F172BD6
-	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 16:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA55417BB15;
+	Tue, 30 Apr 2024 17:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714492854; cv=none; b=pNzKUUb6Px2pebRjs0v93IWImqgEtjSg4NRSCZUS8MK0m9MRDrcwqG+3xulQU4Wf1xg3BGkv0zDO1fG4m8RymgwB4er59c8VWmzIpSNXJeyDipijuv1a9K/BiTGa7VIVcibVVhTCBehv5boiQ/Cx1wM8Iy50RUW8jpj9lzAAk/E=
+	t=1714497582; cv=none; b=u4jCTZDF7B4f+e9giT0YJOUbd6TcxJI+m+IGkrro3ANRTRbk8JHCCCHxH/Lo3OWiP6Pl8DtkIG5RKopYRI5TpN3QoEuOdyzY5FFySwrcm4UAuuCLK3RFhJ8iKoVY0PPKZrgEvYAAW21eZG0VpHBMNHKzoraezFf2ivENGch6KHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714492854; c=relaxed/simple;
-	bh=Xfx7XvvUgfoxwf+vIvlKDaZ8Otj8yVZCtNu1wHF0BgI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WyuIzS2m7I6r8pENnJVVywIhPjpvhoo/d0i4I8zo3TGch90gdrY1cmnPePL9a3VPA0dUoSpbzc52t4x6HUrckAlt41FyCVjOa3BYcr4FVNgMmdGDSQzBgjMyMsGPG/8jKL6bN1qlaEa/zVxFKHkiG7gVnllR7GaGpoW0N5Z4EgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cZW4IaoG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1714497582; c=relaxed/simple;
+	bh=pLJYAxE2tCilx3vouXxgv2mqEXTMWFnXn7gMl1H3HNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HhgV6MHxgEuM9rRC3Z6bTcG68PBriKVTOg4GR/wXjIPJTiQn4R/KGjlJh0hEN+Ut+kkYt0+QKLdjXWbRmrEzwdUH3oJj/ZQUeqJvGeuQ76agAPPy+ttL2WD5zmy0LZ8cuceQNqx/lRnXd7pOcRAHG+2gRAoM1j+zuaOFJsxXd3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OT8jQolW; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cZW4IaoG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714492852;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1ZO83vr7ER28QYVSj/d7U42j2XF+nk3Fz92BefF0l7c=;
-	b=cZW4IaoGOSi1sYhDioEGloWsghM9ncGRTJw75zbIHiflYUM+iqI+XDFsfdP7Xjl9afRkQP
-	6pw26B/lSs9Ep3vL+NtpZ4Bj8+knkmN/SklbS2IO8Anx1n6Qm3vvAKrhRYDhvDUMQpwKDC
-	D7REyXEcVJo6/7wmqms4NwbLa4nEhNw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-_prRF3prM02xMElSLZstDQ-1; Tue, 30 Apr 2024 12:00:48 -0400
-X-MC-Unique: _prRF3prM02xMElSLZstDQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B2A1830D37;
-	Tue, 30 Apr 2024 16:00:48 +0000 (UTC)
-Received: from [172.64.5.14] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id ECEF840C6CC0;
-	Tue, 30 Apr 2024 16:00:47 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
- (6.9.0-rc6, mainline.kernel.org-clang, 98369dcc)
-Date: Tue, 30 Apr 2024 16:00:47 -0000
-To: llvm@lists.linux.dev, shinichiro.kawasaki@wdc.com, yizhan@redhat.com,
- xzhou@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OT8jQolW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714497581; x=1746033581;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pLJYAxE2tCilx3vouXxgv2mqEXTMWFnXn7gMl1H3HNA=;
+  b=OT8jQolW2LGCWvKmfL/TLb26Zxb2nf1tMbPQ6QMRGvB5p0TmXyoBat73
+   Wos/mR+0w8N5XqoeDA3e0bL8B7WJgE6RPIn/8NXPorfvhfxw9ytAJwnS7
+   G9qLKa8bMBdyRzkHKV0/pGnCussjPPic786BIYpUlMoBC+ml+KHtgbruR
+   RN0OxhoIs+KKDXbEh/6L3j8ENO8gl/D4eKJ8u+hv/fBLdtIogSMtl6z3o
+   NCvQN+YGv13JpZXHX4diUspXMKEXleDQiaaPFG2+0UL2Dop7MSeSuAJFz
+   qhhBhVL3KoAocgfti1QsxEcsU8+i0FYJldPIZK4e+GzaYrnjNZdYf4mN6
+   A==;
+X-CSE-ConnectionGUID: Ss+zfjMIR1qYz0u7251usQ==
+X-CSE-MsgGUID: VrHmAmGWQAG6QkSdtG55DQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="21369968"
+X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
+   d="scan'208";a="21369968"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 10:19:40 -0700
+X-CSE-ConnectionGUID: JcxZT10RSzSVeJR3/hnjNg==
+X-CSE-MsgGUID: ncEzuZAOQ1mEJHajPH2RJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
+   d="scan'208";a="26398678"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 30 Apr 2024 10:19:39 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s1r8i-0008Q3-2O;
+	Tue, 30 Apr 2024 17:19:36 +0000
+Date: Wed, 1 May 2024 01:19:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leon Romanovsky <leonro@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [leon-rdma:dma-split-v1 2/17] kernel/dma/mapping.c:877:6: error:
+ call to undeclared function 'cc_platform_has'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202405010138.I3vo5Tp1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <53834.124043012004802161@us-mta-646.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git dma-split-v1
+head:   b66ed91ccee0e8e645a07f54f0e39fe9ff4f03c9
+commit: 0fb1156cba1b25b894e5374c15c3a4f81002c77b [2/17] dma-mapping: query DMA memory type
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240501/202405010138.I3vo5Tp1-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405010138.I3vo5Tp1-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405010138.I3vo5Tp1-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'wq-for-6.9-rc6-fixes' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/tj/wq
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1272672506
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Storage - blktests - nvme-tcp - upstream
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1272672506-aarch64-kernel_upt_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/010
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/011
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/012
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/013
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/018
-                       =E2=9D=8C FAIL nvme-tcp: storage/blktests/nvme/nvme-=
-tcp/tests/nvme/029
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1272672506-x86_64-kernel-debug_upt_32
-        xfstests - ext4
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1272672506-x86_64-kernel-debug_upt_28
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9D=8C FAIL generic/006
-                       =E2=9D=8C FAIL generic/007
-                       =E2=9D=8C FAIL generic/008
-                       =E2=9D=8C FAIL generic/012
-                       =E2=9D=8C FAIL generic/014
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-        Issue: [upstream] [eln] waived call traces we don't plan to report =
-upstream
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1864
-            Affected tests:
-                Boot test [x86_64 (debug)]
-                Reboot test [x86_64, x86_64 (debug)]
-        Issue: xfstests cifsv3.11 generic/344 File exists
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64 (debug)]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [s390x, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+   In file included from kernel/dma/mapping.c:8:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/dma/mapping.c:8:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from kernel/dma/mapping.c:8:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from kernel/dma/mapping.c:8:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> kernel/dma/mapping.c:877:6: error: call to undeclared function 'cc_platform_has'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     877 |         if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
+         |             ^
+>> kernel/dma/mapping.c:877:22: error: use of undeclared identifier 'CC_ATTR_MEM_ENCRYPT'
+     877 |         if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
+         |                             ^
+   13 warnings and 2 errors generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
+vim +/cc_platform_has +877 kernel/dma/mapping.c
 
+   865	
+   866	/**
+   867	 * dma_get_memory_type - get the DMA memory type of a page supplied
+   868	 * @page: page to check
+   869	 * @type: memory type of that page
+   870	 *
+   871	 * Set the memory type related to struct page. Users of this API assume
+   872	 * that whole buffer which is backed by the page has the same memory type.
+   873	 */
+   874	void dma_get_memory_type(struct page *page, struct dma_memory_type *type)
+   875	{
+   876		/* TODO: REwrite this check to rely on specific struct page flags */
+ > 877		if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
