@@ -1,75 +1,59 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD981A38ED
-	for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 21:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2C1CA6F;
+	Tue, 30 Apr 2024 22:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714512337; cv=none; b=NO5QhHru+TvZdizwn+EB6lYG7jqexti3WGhBcCbzb3tzBW46Jx1Dj59A9vW327AOvQQocuGoEcAF7cBo5pOv0ifCr6By9otZGqFagwd51HxY/7BU2zVt1CUlqCUtHN7NJb1Zxcj59PSLDwQThyEgBy4V2isi1AHeHER1pLrSBhY=
+	t=1714516802; cv=none; b=h5D26IJWJ+QaIN+7lf/8bAP1rqJZaU3p09wqnwGCNRvCupL/xMpLpnG/drzVga0QGUmo4wAQP/dvQ+VNV28KRYj1N0apt2oKgrJIJNP9IjYRyL548WRY6BopgEX8pILPZuQkGCyqLAfXNR/m/ej5GufNWszvdnDD1a3L9eQ52ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714512337; c=relaxed/simple;
-	bh=A2BKfjstI0QAqB/arpyjcxV2OCbaaJu3tI5uRAVc04s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TolUgD36Vcb2OGdUwsZYvRJk/0fkwrN08nJ7vavWpBRWwZdishrqYKOmNmmwdUWtX+djnlfT3OCQOgG98U1Mi8OTlje29CHmyS2Na4YTb07TU/uC9B+8R5LmPNP8jtjs8AdMA3ak9vbai6fmp0MXRxuw0/doUN/rxkN6IiZdaQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=H9Et9n5G; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1714516802; c=relaxed/simple;
+	bh=Jv4SOnW54rko3wPIa7Bsmfm/wHYKwlBtotz9xWJXC08=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UCxk+um4xgGqyGXpBsOsIWyTYPGB9vmp6hKWXdBjJw24npO5B8slLgjch85V9zDOBEWfMwxrNFlHk8po5GZNGT4WHLWtMVfDOwzzWgOdIXPtjTcZqDi9gImwNURy43OIWJTwgGheaCst6m7wsGfLA2WgRjOa7hZpinInjoYfulU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hZjHAKBz; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="H9Et9n5G"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f26588dd5eso5294358b3a.0
-        for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 14:25:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714512336; x=1715117136; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yL344saeiEHbqmyOopyOdGQH0USlm3SnC2xCq0SoJLU=;
-        b=H9Et9n5G3DYm9YSfKuR1JfaWWGC45MsuVtZ9thUvLKsLIgYsCy01srDBnwB07vUVRl
-         4dSFbjLVpm/4mopIxTyY9PgIOHpvNthFBLlOJt/LKeUvd+iWdN+spCKKaDuqMvgFtW3h
-         7bzaBoXHbayiGI7mwAMpwEQww8jKKPfajYI6A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714512336; x=1715117136;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yL344saeiEHbqmyOopyOdGQH0USlm3SnC2xCq0SoJLU=;
-        b=vitFQxqA2VVyzPaMryFWrUxQykTY1PdHIQ/tBNM146cPvpxs9aW6VtulR+TTbN90Zk
-         MMrWI3KQq0azc3UxSdGnkg8lCliS3ZMGp4y/Mpg0H2LYY7DSbItxNPFWTRf2O7jZ3T83
-         V29A6aojL4mObrk+CByx+mWs60S7sB8EA/36UX32xgJxQTdadKhLaGywZnZAt4wOMCVV
-         g8VfUXCXcl7p+uQ3D4tK9MvYsKyRxklsnPo6KBXviNo6Eqa8byEA6I4S6cRXrFjW+FaP
-         Nuw/OzXg4quck87OwhjXEQ+hWyzb0px8kNwNifNofRb31xmgi5wPDCkRBXEol9I7J7Lq
-         /ZPA==
-X-Forwarded-Encrypted: i=1; AJvYcCVE0kz9Mn7LrYPJCH59rqwgn0Y/YUs8UtA5SFsVWbEN6XPj2r5/QEv/vHq+DoO3BJpsPZFuFLKpFzknv8HuW/qPEPXMqA==
-X-Gm-Message-State: AOJu0YwdhSWOy+p4H2zxzZ020Y9FNIfQAkWixVWtQhM1qzpLN2PT80NG
-	hUjbXMA+aFH+8R5kdCO4Wbod5Vn0duKVV924m6FtSF8wMmRnRl8qEx8xd0DZxA==
-X-Google-Smtp-Source: AGHT+IFIxVelglvKW5StU7tXy2dZZm6BsDNmXrzU8ELIShBXYB5SRyvBVWCFfa0CxoN7Rk5noHrHnA==
-X-Received: by 2002:a05:6a21:998:b0:1af:4fd7:6c6f with SMTP id li24-20020a056a21099800b001af4fd76c6fmr545627pzb.35.1714512335948;
-        Tue, 30 Apr 2024 14:25:35 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id fb33-20020a056a002da100b006ed14fed3a5sm21507308pfb.154.2024.04.30.14.25.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Apr 2024 14:25:35 -0700 (PDT)
-Date: Tue, 30 Apr 2024 14:25:34 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hardening: Refresh KCFI options, add some more
-Message-ID: <202404301424.FF88864115@keescook>
-References: <20240426222940.work.884-kees@kernel.org>
- <20240430092140.GE40213@noisy.programming.kicks-ass.net>
- <202404301037.9E34D4811@keescook>
- <202404301409.D3BC98D5@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hZjHAKBz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714516800; x=1746052800;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Jv4SOnW54rko3wPIa7Bsmfm/wHYKwlBtotz9xWJXC08=;
+  b=hZjHAKBzDqZBDzv9W8GGOrgzzS5SjyARj3XOc+z9OXbm44H/p7ztJvj5
+   osvqjQ7n8uCO9S6yeHlMr5ubV3Uy+oD7CnaNH2379A8UPpyaZkpv+KQf1
+   H20pP5GdO6HUSRvnkTqTi5RhGiVY1TL7q7ivqaeZGclGLcaCCOspbPRxL
+   KJuP+uQc9G5mRqcaizbp34J1Yh/FkIImmY/dBMZaW1ruHo8qky3UpNCtO
+   60HMFHdMvyJMUfnwAzExqsImByVLvLn2lt5HwRItAVioNfvqvHzXS/M3c
+   WJ4ltk3EQYkQ0HSu4tFNHtQCsLigwi8JpXiplyWG7S8O/P4X6JEOqN2nQ
+   w==;
+X-CSE-ConnectionGUID: a6GqnLE8TJiF/hlnfOmFhQ==
+X-CSE-MsgGUID: Bv2rpyxDTX61GTVEkJig+g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="10470023"
+X-IronPort-AV: E=Sophos;i="6.07,243,1708416000"; 
+   d="scan'208";a="10470023"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 15:39:59 -0700
+X-CSE-ConnectionGUID: oQ5C+Y2ET4KMH6qCAVThgQ==
+X-CSE-MsgGUID: 1h2OEPMTQsC3s+Ki7kRWCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,243,1708416000"; 
+   d="scan'208";a="31325918"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 30 Apr 2024 15:39:58 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s1w8h-0008el-2n;
+	Tue, 30 Apr 2024 22:39:55 +0000
+Date: Wed, 1 May 2024 06:39:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [leon-rdma:dma-split-v1 4/17] arch/powerpc/include/asm/pci.h:49:42:
+ warning: declaration of 'struct dma_map_ops' will not be visible outside of
+ this function
+Message-ID: <202405010612.RhFViKjr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,40 +62,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202404301409.D3BC98D5@keescook>
 
-On Tue, Apr 30, 2024 at 02:15:53PM -0700, Kees Cook wrote:
-> On Tue, Apr 30, 2024 at 10:48:36AM -0700, Kees Cook wrote:
-> > On Tue, Apr 30, 2024 at 11:21:40AM +0200, Peter Zijlstra wrote:
-> > > On Fri, Apr 26, 2024 at 03:29:44PM -0700, Kees Cook wrote:
-> > > 
-> > > > - CONFIG_CFI_CLANG=y for x86 and arm64. (And disable FINEIBT since
-> > > >   it isn't as secure as straight KCFI.)
-> > > 
-> > > Oi ?
-> > 
-> > Same objection I always had[1]: moving the check into the destination
-> > means attacks with control over executable memory contents can just omit
-> > the check.
-> > 
-> > But now that I went to go look I see 0c3e806ec0f9 ("x86/cfi: Add boot
-> > time hash randomization") is only enabled under FINEIBT... seems better
-> > if that were always enabled...
-> 
-> And FINEIBT actually can't be disabled... :|
-> 
-> And as it turns out CFI_CLANG doesn't work at all on v6.9...
-> 
-> [    0.587220] no CFI hash found at: __call_sites+0x339a8/0x34450 ffffffffac20cef8 00 00 00 00 00
-> [    0.588226] WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:1182 __apply_fineibt+0x7a9/0x820
-> ...
-> [    0.619220] SMP alternatives: Something went horribly wrong trying to rewrite the CFI implementation.
-> *hang*
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git dma-split-v1
+head:   b66ed91ccee0e8e645a07f54f0e39fe9ff4f03c9
+commit: c9054c6f609d4d89977171559cd16e48e5fdb8b8 [4/17] dma-mapping: check if IOVA can be used
+config: powerpc-randconfig-001-20240501 (https://download.01.org/0day-ci/archive/20240501/202405010612.RhFViKjr-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405010612.RhFViKjr-lkp@intel.com/reproduce)
 
-Welcome to my TED talk.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405010612.RhFViKjr-lkp@intel.com/
 
-I'll keep debugging this: boots fine on v6.8, but booting v6.9 with
-defconfig+CFI_CLANG _does_ work, so something in my .config broke it...
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/dma/direct.c:10:
+   In file included from include/linux/dma-map-ops.h:12:
+   In file included from include/linux/pci.h:2106:
+>> arch/powerpc/include/asm/pci.h:49:42: warning: declaration of 'struct dma_map_ops' will not be visible outside of this function [-Wvisibility]
+   void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops);
+                                            ^
+   1 warning generated.
+--
+   In file included from kernel/dma/mapping.c:11:
+   In file included from include/linux/dma-map-ops.h:12:
+   In file included from include/linux/pci.h:2106:
+>> arch/powerpc/include/asm/pci.h:49:42: warning: declaration of 'struct dma_map_ops' will not be visible outside of this function [-Wvisibility]
+   void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops);
+                                            ^
+   kernel/dma/mapping.c:877:6: error: call to undeclared function 'cc_platform_has'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
+               ^
+   kernel/dma/mapping.c:877:22: error: use of undeclared identifier 'CC_ATTR_MEM_ENCRYPT'
+           if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
+                               ^
+   1 warning and 2 errors generated.
+
+
+vim +49 arch/powerpc/include/asm/pci.h
+
+^1da177e4c3f41 include/asm-ppc64/pci.h        Linus Torvalds 2005-04-16  47  
+4fc665b88a79a4 arch/powerpc/include/asm/pci.h Becky Bruce    2008-09-12  48  #ifdef CONFIG_PCI
+d276960d9296b6 arch/powerpc/include/asm/pci.h Nick Child     2021-12-16 @49  void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops);
+4fc665b88a79a4 arch/powerpc/include/asm/pci.h Becky Bruce    2008-09-12  50  #else	/* CONFIG_PCI */
+4fc665b88a79a4 arch/powerpc/include/asm/pci.h Becky Bruce    2008-09-12  51  #define set_pci_dma_ops(d)
+4fc665b88a79a4 arch/powerpc/include/asm/pci.h Becky Bruce    2008-09-12  52  #endif
+4fc665b88a79a4 arch/powerpc/include/asm/pci.h Becky Bruce    2008-09-12  53  
+
+:::::: The code at line 49 was first introduced by commit
+:::::: d276960d9296b6a9074795fe60a513abf8474e35 powerpc/kernel: Add __init attribute to eligible functions
+
+:::::: TO: Nick Child <nick.child@ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
