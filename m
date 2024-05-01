@@ -1,152 +1,149 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14C72576B
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 05:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B5D2D627;
+	Wed,  1 May 2024 06:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714540888; cv=none; b=VbP1w6CJMG6ueBfoaE0hiH1j4RmslD1FBQbx5LPzDT2KXQSW2rHidWe2X5HunpN1tK2NVpBeVTMOnvFzu66IsOfrTRkeIxgKgFs5kSpuvBRLq9LMP7IenbTXJwIr1DbBUGVC+t6glzpCcIz3qnxOq1Ts7PNRakLk+TJMxNZc4Mg=
+	t=1714545199; cv=none; b=VorqFvlbPrxnqwhOKHrSaBCZfnIkIwI6XAMOu7nXgAMYhF27dexlhAQUKmTWvSbqXBvmyYr0trjTo8wTvekw0hobGUgw5uI6lwQxpscw/b355U6cwaOG6jl/Klc5P7LCJpktvVo6c3mP7gLOkDhd/u4C5N1NWZ0HYLs7MnMWt1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714540888; c=relaxed/simple;
-	bh=+IhWaxWFQNbQFx+3Ql3mHifWR1d9Z0Dhw1b79UbWnBQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=o6HicOAQroZtyTnfpu1UCDURThapXf4RbD7GRvSjVyir+dqTJuzPsEkeQAtWg8Ac8qTU8opaUJnU60CTnvjdXyNkWtQU9dgiqR9MwAFDNiygdExU05CpfuqiIL/jES4POJjxhsIDS1HwE3nKP+AZyZ6wtzHadPaRWa8cRzYesvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=flDKWxx5; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1714545199; c=relaxed/simple;
+	bh=xnq5nnv/A1CiIYgYO6m3OKjM8n63AgO2pkIc7+Mj3fA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ThQVhdkhjMnT5VmbW9au9RcoM4PheyfyVGpr6BbfJOsPW44LlfO4W1Nx1JUnAQDHuf6dm9foz4dlTB5bzs52DBhZxwy5DwRFFJkow+L9t+/qv6vxkq7Qo/mNllh11enGmrbjlSul4krBhKP93nsztoR/c6+YSINVpE+ymuKJc30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eFpP5KP3; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="flDKWxx5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714540885;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ewl4N8tLhPtFtMH5HlkTPdfw9cDE5XsnXYerZYkiDCw=;
-	b=flDKWxx5NkVUW8VQPvZ4UYjPDuAACdYJN8esq6W6szbDCG0j55+ZonHbBUZAK8HcL3DJ8G
-	NxwlcpX83g8ozUM0vJzzJvtiTlMyqLUDCUOTqocwSKFdavJH/ZSf+3gaXA3MBEGAKemQRD
-	sdhiZyXsx3TUjDYbtKwY6/H/8wVeFjc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-304-Y3lOD3opO9S30Akv6O2gaw-1; Wed, 01 May 2024 01:21:24 -0400
-X-MC-Unique: Y3lOD3opO9S30Akv6O2gaw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EADC9812C58
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 05:21:23 +0000 (UTC)
-Received: from [172.64.5.14] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A552740C6CC0;
-	Wed,  1 May 2024 05:21:23 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 13 of 204): Test report for master
- (6.9.0-rc6, mainline.kernel.org-clang, 18daea77)
-Date: Wed, 01 May 2024 05:21:23 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eFpP5KP3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714545197; x=1746081197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xnq5nnv/A1CiIYgYO6m3OKjM8n63AgO2pkIc7+Mj3fA=;
+  b=eFpP5KP3XEkulPc+qAngq8dGH6ttWmUOZ7bSt1690PW+RbA/LCu1JlvT
+   Vp5wBiODSmaSA0JdDWT3iF4nHL2TX1daO3xGMOyj3WTpcsjkOP2Fshw3n
+   EDUwI8gVor2n4a4I9d08CMu6tzpPtSvWEezSi5Ns+cdnPrMF67PfMdpaz
+   Ne5WDu7q/ctnpzcrZewzjNJ58+kA1/WYDIPbeBeCOimDHJXyVmnxb2895
+   QWSgN+0ByN3z0FDZqTtg/3dNedd3WTkrFeuWaEBDnk+08uLYi99GHZKqN
+   gtNHArSG0HfbhDp3u5pD2lTvYIpjvfjZUMhVz1HFxzzVXPykEBwir/MDN
+   A==;
+X-CSE-ConnectionGUID: 1tBpDAWITnuAgEM/lvD44g==
+X-CSE-MsgGUID: aeTWrFHWSK+NE2QrM19sZA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="10119871"
+X-IronPort-AV: E=Sophos;i="6.07,244,1708416000"; 
+   d="scan'208";a="10119871"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 23:33:14 -0700
+X-CSE-ConnectionGUID: hVU0oOXoS4yRV6mDZOwEZg==
+X-CSE-MsgGUID: iyheqARbSW6Qf3UK9nEz0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,244,1708416000"; 
+   d="scan'208";a="31311967"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 30 Apr 2024 23:33:13 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s23Wg-0008zN-2q;
+	Wed, 01 May 2024 06:33:10 +0000
+Date: Wed, 1 May 2024 14:32:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Norihiko Hama <Norihiko.Hama@alpsalpine.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: [usb:usb-testing 17/35] drivers/usb/storage/usb.c:141:21: error:
+ incompatible pointer types passing 'unsigned int *' to parameter of type
+ 'uint64_t *' (aka 'unsigned long long *')
+Message-ID: <202405011431.PvaZHpRK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <74952.124050101212400347@us-mta-304.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   ac6a205c5bef39d65ecd9f5dd2c1d75652c35405
+commit: 70d66b8e47e6fa031f541291e9dd3d7f0c44b41e [17/35] usb-storage: Optimize scan delay more precisely
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240501/202405011431.PvaZHpRK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405011431.PvaZHpRK-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405011431.PvaZHpRK-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All error/warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1273914524
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [s390x, x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
+>> drivers/usb/storage/usb.c:141:21: warning: comparison of distinct pointer types ('typeof ((delay_ms)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+           unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> drivers/usb/storage/usb.c:141:21: error: incompatible pointer types passing 'unsigned int *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+           unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> drivers/usb/storage/usb.c:141:21: warning: shift count >= width of type [-Wshift-count-overflow]
+           unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   2 warnings and 1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-    kselftests upstream - bpf_test_progs [x86_64 (debug)]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64, x86_64 (debug)]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
+vim +141 drivers/usb/storage/usb.c
 
+   123	
+   124	/**
+   125	 * fixed_point_uint_to_str - format a fixed-point decimal value into a string
+   126	 * @val: The integer value to format, scaled by 10^(@ndecimals).
+   127	 * @ndecimals: Number of decimal places in the fixed-point value.
+   128	 * @str: Where to store the formatted string.
+   129	 * @size: The size of buffer for @str.
+   130	 *
+   131	 * Format a fixed-point decimal value in @val scaled by 10^(@ndecimals)
+   132	 * into a string in @str where to store the formatted string.
+   133	 * The string trailing fractional part '0' is trimmed.
+   134	 *
+   135	 * Returns the number of characters written into @str.
+   136	 */
+   137	static int fixed_point_uint_to_str(unsigned int val, int ndecimals,
+   138					   char *str, int size)
+   139	{
+   140		unsigned int delay_ms = val;
+ > 141		unsigned int rem = do_div(delay_ms, int_pow(10, ndecimals));
+   142		int len;
+   143		char buf[16];
+   144	
+   145		len = scnprintf(buf, sizeof(buf), "%d", delay_ms);
+   146		if (rem) {
+   147			char format[8];
+   148	
+   149			snprintf(format, sizeof(format) - 1, ".%%0%dd", ndecimals);
+   150			len += scnprintf(buf + len, sizeof(buf) - len, format, rem);
+   151			while (buf[--len] == '0')
+   152				buf[len] = '\0';
+   153		}
+   154		return scnprintf(str, size, "%s\n", buf);
+   155	}
+   156	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
