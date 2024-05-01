@@ -1,166 +1,163 @@
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02olkn2022.outbound.protection.outlook.com [40.92.49.22])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748FC85C66
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 13:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.49.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714570575; cv=fail; b=Pz0Jq5+VhDrsT0Clkn0cagZzBzDSCaHiHm3O0EMDHaCjPLj6yNq/p612sY5kze1z3XvK+fr2Rl4xgyRux8RFsmZpN1otNNu7pwr+B7ZrtXBG9lZydi84uYalc35CRfojr40w9wAc3Zvx/EQ+jRg3e0fLZkQ4WEdfMOfmqcMP1GI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714570575; c=relaxed/simple;
-	bh=0krC9nqe9tAz2Y5uucLSW/tbrHWym+bbvQBdc2Ob5OI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=I5ufycY5Aq/I4bRC0WL00dNP+Z4GFf/W1iulaVOpF1Q1pQly4KV6CM0TdE7XYOqRaapejSrbO7lIrpNy9kKl8KYeknjW6C439DrqrKVt3YIJvBKq1QB+Dig50s5BrSl2dlLqFdCOcjreyUhZJxeQ/6Th6AaWzDwsPh4WDqnlnVc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=qsua7jz3; arc=fail smtp.client-ip=40.92.49.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C391758D;
+	Wed,  1 May 2024 13:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714571124; cv=none; b=oHl4/5UYQ2iwc3f/xwOZmrc2i3aJLfoI428OqzWKbGIyimS9+wYi2SU/ISvEBvKhG9tu353s/YayWIaqhSsTl7eNJm7P6h8VyHDMwk95mTfe92/NtiGvkX8/D8tNWAs2ApmJpFca3l4SExyGiHccf/dV6/So9I1k8ipe45Ko6LU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714571124; c=relaxed/simple;
+	bh=QJ2biIJX7GQojTAdufHRLb47yhfWu9vjEK6kJr6yAZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KYDPYwu7QgfliRBYMrJ43yR7Lg/BsQRI6aUZE5kZ6SOQZa52XCnf4sJXIFFPuVKXD1tZQr0cLnbZnBUNWPqchf5hdeCgof5cn8m7gbpM3USUD/Ly9WN4mnsR/49ktHa/UXqozyy4Sbfe2LIHJHWk/Njt5QWbHLc4guQi97gQR9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SzVB1Ac4; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="qsua7jz3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hkJ4pu3/TJ25cCjKFwS8sP+2VtGT0dlY2NtO4i6PYZwmIYs/aQ+bisdjvGgRfiQuw2JJDByTSyEg1TpvZSXZ4UgObPRUKKuizMxlw7mAre5+ampyoiJPqJhJpv/U2IWDFdNvzavFtoMf0kFBAOA8OBmuZK0c1CIaHtFs0s7GiQKJDhToWzqXjAeClUIDqdumHVL8nrGtNYW/zCZJARKVyS8moD/OwWHwqyG1IZod6wO5Rk88jDJCU5M4TkNzr3AO9zvDcd8M1RriA9laNO3m1sDmF51WXmAKqki3oeTmn+BNfsfCCdbghjIA4Qa68y1KJdxeQMvegg0OTWxA1rQZXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QwUI7W7B84/5t41V9y0WKWfNuClSohuetF3peNRBj5U=;
- b=XRrNW+2lPlXas11h6S56FaUzblqkpExpWysa7D7ppBn05bC/UEIg3f/NdZPhIL3czCNF2QgudMCM8DWm+jBwBPsHuVq+fHxxCMJLY8a3rZYK30QlG4qmtdqPpDEmMRFlj7lZG19qk0N7EUmuQcnJvI6/s3CN74Y+PHhzGfXLZOPagB+tbMb9EQ6oLzBOsSt3s7npgnmfzupjQnyV7pcaA2Kn//gx8Y6T/mS5vMFII3+C9xDK3WxH6RgIeiCIX0FHe+q8hBKNYJ9c85wJlOu//IN9qETaM5Y3SpiEDANI/jx3yexaxSE9NmfyJu/7rXjeV2AUrWRYyLGtpAS9PloRWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QwUI7W7B84/5t41V9y0WKWfNuClSohuetF3peNRBj5U=;
- b=qsua7jz3sy89jGaTMktjGRt+AU4ltkgZkhPTI6Yz1Xr9tndVo+eW/+DiW2VRG8VE/Rf/ShlkAFTRFVk+vimZXOr3JPZlnXe96rQcFqdIL2VS5u+qHTQuz17uYK+K5DmYfIDHBQsk2/GyWPkdHa91tOL+vvVIa1SRnOqLA7nIQ39qiL+oZ1bdTRpLxvHxV6+MediuZWEobmOpqkx+w6j/VozuKWTzh/zJP6hncJLsWixy9JEQeqtJ1lX2TqKErTWxwkNtyiVb/cXpgZrju2G1slvkaS8M1F6pITGX82BzozJGCm/CpSWH+aHIz1Oau7E3kqus0FPSdgjy/QXczi93uA==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by AS8PR02MB9910.eurprd02.prod.outlook.com (2603:10a6:20b:619::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.28; Wed, 1 May
- 2024 13:36:09 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7519.035; Wed, 1 May 2024
- 13:36:09 +0000
-Date: Wed, 1 May 2024 15:35:57 +0200
-From: Erick Archer <erick.archer@outlook.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Erick Archer <erick.archer@outlook.com>,
-	Marek Lindner <mareklindner@neomailbox.ch>,
-	Simon Wunderlich <sw@simonwunderlich.de>,
-	Antonio Quartulli <a@unstable.cc>,
-	Sven Eckelmann <sven@narfation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	b.a.t.m.a.n@lists.open-mesh.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] batman-adv: Add flex array to struct
- batadv_tvlv_tt_data
-Message-ID:
- <AS8PR02MB7237099D421106BC1EF10BDB8B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
-References: <AS8PR02MB723756E3D1366C4E8FCD14BF8B162@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <202404291030.F760C26@keescook>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202404291030.F760C26@keescook>
-X-TMN: [aED3kosncXmW/cjt8Yutl1pxaKLbKyeN]
-X-ClientProxiedBy: MA4P292CA0005.ESPP292.PROD.OUTLOOK.COM
- (2603:10a6:250:2d::18) To AS8PR02MB7237.eurprd02.prod.outlook.com
- (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID: <20240501133557.GA2861@titan>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SzVB1Ac4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714571124; x=1746107124;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QJ2biIJX7GQojTAdufHRLb47yhfWu9vjEK6kJr6yAZE=;
+  b=SzVB1Ac4/V30HgJcWLXsowXesNqGFbZ16O6XfBjanm9VlnhOe0vNyt8U
+   9tJSlbNmasYRmLxKMawXlTVOSTXfwsHocVqaIjsVKoDDz72jh1STqX7/Y
+   otWloknEs74ufhhP4RkdazKcFB+VX1nrRvxqoiWfahZnoE88m/ZdpBSF5
+   6yQwX6DAJ8auP5tVvU85ZsGpizERtm0mToX+UNjW2RQicp4KcNQDIJKZX
+   HRo9um7txajygAFITH+UQIcJXWwALlKPX/tXdlr0YAzNX5HIirNNUhaax
+   IEwXZo4en9WBeghvlzV4lrqy02uo08wL0wTsMIiOaI13MCofNEPN1u6X4
+   w==;
+X-CSE-ConnectionGUID: VjmwnNq4Qr2wgyD/fApUKQ==
+X-CSE-MsgGUID: VnMDICpvROy0Ony6EKeHag==
+X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="14120229"
+X-IronPort-AV: E=Sophos;i="6.07,245,1708416000"; 
+   d="scan'208";a="14120229"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2024 06:45:23 -0700
+X-CSE-ConnectionGUID: TRY0XoeERXaHATngVNtNJA==
+X-CSE-MsgGUID: YkbVjH2WQKWouBjzIARDXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,245,1708416000"; 
+   d="scan'208";a="27271458"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 01 May 2024 06:45:21 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s2AGs-0009ZP-12;
+	Wed, 01 May 2024 13:45:18 +0000
+Date: Wed, 1 May 2024 21:45:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>
+Subject: [linux-next:master 9793/10134] drivers/of/of_reserved_mem.c:465:6:
+ warning: variable 'nomap' is uninitialized when used here
+Message-ID: <202405012148.1dCXzomq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|AS8PR02MB9910:EE_
-X-MS-Office365-Filtering-Correlation-Id: e15d07d5-bc9f-490a-9573-08dc69e3a8c7
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|3412199016|440099019|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	PhU/VvkXDVhJbTyK6Hf88iSS5N4f6+AM4DlrMNVg/3NiwCF/5dSeuXk8xUzqQZd94PHsiMwn9IBGSqpGNz4qGhxteW0NADy/jH72LTaVaLXlEPZHrCWtpFHuewLGpCmrec0R2xFZr43cizvd/BCcBfkMmATqWzfofhz8uKkGl1B5zTlqOmmqP9Vs2iUOsFQIjCS5PataqEY8qMWgnasYivxp3z2bQNmdQ5tjELeOZBeZ7xYwtmbWl5utDhVTj/qdd0JYjbhmxdO9yWYlIjsjJ2GPomDIK9/qslURQcj9a3pXJJSlLScFexiWcGod16LoCVw+b3V6ZfKzyYyYKY2oiqR9Pe9SADIJaDSln4SO00QRsPL9X4hXx86EXqy2PAMZInP+cgJpqSEygj9BePt7+Ya/KI9U3oRnJbGq7yFkz4uti18Y7dDR4qlcW6U+yXhJr3CU7TRbL6hz5DxIvGB8Qx48wohfhHHnfaLK60CycWI/watLxFc2odz3khMLP7N7hUhw8iSvd39LDPLEx6g+NqAn9/RBBwuQMNF6bMj616dQMQ4/+tBlxP9E6/NJ96w58x5NwE0Ka6SRbYNFN+fe66bvRTNqRRkolkahN6InjHhwCb2zXYi3KZK0PdxQW0Ql
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?pAvegvZ/7pFCq0DVaCMpi79yK13krMJKxl8RlXEAH+Pr0KlukygmlgNVtwH6?=
- =?us-ascii?Q?VkolgkTxF/T/hXpxq1ilXBFVNQHPyMkm7q9gd4RS7B26cTovj6ifj7Do6JQ3?=
- =?us-ascii?Q?mhm0mZ6BHk+Fq1J4hyPr/aWbasmlX4Rjlkq1SZYAetXmM0CYclIib51BmLhi?=
- =?us-ascii?Q?OBlDxzcb/6GlVnFkuDmfJFvh3c4tlMG3NhErADQRWWXmCORGokpeWlpn3uiv?=
- =?us-ascii?Q?VQNvuyOXic05rxO/4jp3U5wHD/Edu8eLtX/lgDYd93CHsoB7rz1yUKSROoVr?=
- =?us-ascii?Q?8vZ9DxtVEszK/dXViqvxRDa3V1h/URmTnlRYpZJyI7jxmk8Unskzj7ccqGAg?=
- =?us-ascii?Q?nqSofZCe1XiSnCkvaACjIaxQFJjJAeEl8x86n3VnOUBcJVkKnl/NPq1MzXNi?=
- =?us-ascii?Q?aLVEIbqu1qlWGZsfxdDaCS2SRHyvIrK+me7X3vLYeoix52W30X1xMRk861Cy?=
- =?us-ascii?Q?+JWMd/bemrHY/hMlN9f7raeTqcCvZZzK0HS7Ydqye2NF2VEihDXlWflVEfqy?=
- =?us-ascii?Q?AzvPPH6gvJ6oQ7/i0NxS1YhQfmx7BRtZaIsTmcuExRpr+CMM8wIjQ/iG7ea3?=
- =?us-ascii?Q?58IT14nlFo5SIK+oE9RSk7BlMYj2tPXmp521TZGWxVHfvm7wcQ0Xjn7q+lTu?=
- =?us-ascii?Q?di1aN2PKdYauLOX9mVTtyKuFK02SIw6dd9fpVx4DJIxCt3sltjNKSsukeO7l?=
- =?us-ascii?Q?Qi760uqMNmtYMxL9Am+zuYT7FOcbW5kA1e6QTHc5hRP1nf8R8FMJsatu1zdG?=
- =?us-ascii?Q?YOqMyUUXo6HQLz87HnoBgItm7+8Ahx9c0d1bPPD7dJkVOMyWhl0B/gRJw9k7?=
- =?us-ascii?Q?u1Be6pBbB0H0le0Yija3IWvpVFlH071Ph9isg+VwmBPN3QKdJby0Exnyfsbq?=
- =?us-ascii?Q?6/WZe6H4drBzoCS/MkGxNRTFMcmBHaATylTRbUifCFRQXwI/U/qKedAqhCgO?=
- =?us-ascii?Q?NLeFaIEcRgwJsLRqyBMgtA/sOIgW2usjTYwz1uqN7uTQ27a/OX+1CHGVDQ1n?=
- =?us-ascii?Q?rLyQ36j6o5U6ta4eZ9Ae7qVG27gw05OG7xe7d86oH9D01fzD3S9kCzDWe9Ev?=
- =?us-ascii?Q?wMlgdi0X9KaqW0URKBIzGNeXhNAdSIthur23/P15s5CQPMLeBHjxprzfY56r?=
- =?us-ascii?Q?gnbAxDp2XWJw4hsbdx3ey+KuVRm9N8VFAPw/jjTL2nLWTwVz+JLdVlYpIaGh?=
- =?us-ascii?Q?1Be5OhvBpaX3mck4oofQxCFGHC+V9Ll94H81bXq6hj/H7ptIxQDzixOwHhQ3?=
- =?us-ascii?Q?LhfeyHrrM4mK55B8MIJP?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e15d07d5-bc9f-490a-9573-08dc69e3a8c7
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2024 13:36:09.2875
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR02MB9910
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Kees,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f68868ba718e30594165879cc3020607165b0761
+commit: 2acef04ad57cab44b33001542791fc93f81cadf1 [9793/10134] of: reserved_mem: Remove the use of phandle from the reserved_mem APIs
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240501/202405012148.1dCXzomq-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405012148.1dCXzomq-lkp@intel.com/reproduce)
 
-On Mon, Apr 29, 2024 at 10:36:23AM -0700, Kees Cook wrote:
-> On Fri, Apr 26, 2024 at 07:22:47PM +0200, Erick Archer wrote:
-> >  
-> > @@ -3957,17 +3947,18 @@ static void batadv_tt_tvlv_ogm_handler_v1(struct batadv_priv *bat_priv,
-> >  
-> >  	num_vlan = ntohs(tt_data->num_vlan);
-> >  
-> > -	if (tvlv_value_len < sizeof(*tt_vlan) * num_vlan)
-> > +	flex_size = flex_array_size(tt_data, vlan_data, num_vlan);
-> > +	if (tvlv_value_len < flex_size)
-> >  		return;
-> >  
-> > -	tt_vlan = (struct batadv_tvlv_tt_vlan_data *)(tt_data + 1);
-> > -	tt_change = (struct batadv_tvlv_tt_change *)(tt_vlan + num_vlan);
-> > -	tvlv_value_len -= sizeof(*tt_vlan) * num_vlan;
-> > +	tt_change = (struct batadv_tvlv_tt_change *)(tt_data->vlan_data +
-> > +						     num_vlan);
-> 
-> This is the only part I'm a little worried about. The math all checks
-> out, but the compiler may get bothered about performing a pointer
-> calculation using the vlan_data flexible array memory. As in, this may
-> be calculated as an array offset, since it is the same as:
-> 
-> 	&tt_data->vlan_data[num_vlan]
-> 
-> Which, for big endian where __counted_by is in effect, the bounds
-> checker may throw a fit since we're going past the end of the array. In
-> other "multiple trailing flexible array" situations, we've done the
-> addressing from the base pointer, since the compiler either knows the
-> full allocation size or it knows nothing about it (this case, since it
-> came from a "void *" function argument). I would suggest:
-> 
-> tt_change = (struct batadv_tvlv_tt_change *)((void *)tt_data + flex_size);
-> 
-First of all thanks for the review and the great explanation. The change
-looks reasonable to me. I will send a new version with this suggestion.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405012148.1dCXzomq-lkp@intel.com/
 
-Regards,
-Erick
+All warnings (new ones prefixed by >>):
 
+   In file included from drivers/of/of_reserved_mem.c:19:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/of/of_reserved_mem.c:465:6: warning: variable 'nomap' is uninitialized when used here [-Wuninitialized]
+     465 |                                         nomap ? "nomap" : "map",
+         |                                         ^~~~~
+   include/linux/printk.h:530:34: note: expanded from macro 'pr_info'
+     530 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                                         ^~~~~~~~~~~
+   include/linux/printk.h:457:60: note: expanded from macro 'printk'
+     457 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
+     429 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   drivers/of/of_reserved_mem.c:441:13: note: initialize the variable 'nomap' to silence this warning
+     441 |                 bool nomap;
+         |                           ^
+         |                            = 0
+   2 warnings generated.
+
+
+vim +/nomap +465 drivers/of/of_reserved_mem.c
+
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  426  
+3f0c8206644836 Marek Szyprowski   2014-02-28  427  /**
+c8813f7ec01c67 chenqiwu           2020-05-11  428   * fdt_init_reserved_mem() - allocate and init all saved reserved memory regions
+3f0c8206644836 Marek Szyprowski   2014-02-28  429   */
+3f0c8206644836 Marek Szyprowski   2014-02-28  430  void __init fdt_init_reserved_mem(void)
+3f0c8206644836 Marek Szyprowski   2014-02-28  431  {
+3f0c8206644836 Marek Szyprowski   2014-02-28  432  	int i;
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  433  
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  434  	/* check for overlapping reserved regions */
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  435  	__rmem_check_for_overlap();
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  436  
+3f0c8206644836 Marek Szyprowski   2014-02-28  437  	for (i = 0; i < reserved_mem_count; i++) {
+3f0c8206644836 Marek Szyprowski   2014-02-28  438  		struct reserved_mem *rmem = &reserved_mem[i];
+3f0c8206644836 Marek Szyprowski   2014-02-28  439  		unsigned long node = rmem->fdt_node;
+3f0c8206644836 Marek Szyprowski   2014-02-28  440  		int err = 0;
+6f1188b4ac7577 Yue Hu             2020-07-30  441  		bool nomap;
+3f0c8206644836 Marek Szyprowski   2014-02-28  442  
+3f0c8206644836 Marek Szyprowski   2014-02-28  443  		if (rmem->size == 0)
+3f0c8206644836 Marek Szyprowski   2014-02-28  444  			err = __reserved_mem_alloc_size(node, rmem->name,
+3f0c8206644836 Marek Szyprowski   2014-02-28  445  						 &rmem->base, &rmem->size);
+d0b8ed47e83a22 pierre Kuo         2019-02-19  446  		if (err == 0) {
+d0b8ed47e83a22 pierre Kuo         2019-02-19  447  			err = __reserved_mem_init_node(rmem);
+d0b8ed47e83a22 pierre Kuo         2019-02-19  448  			if (err != 0 && err != -ENOENT) {
+d0b8ed47e83a22 pierre Kuo         2019-02-19  449  				pr_info("node %s compatible matching fail\n",
+d0b8ed47e83a22 pierre Kuo         2019-02-19  450  					rmem->name);
+2acef04ad57cab Oreoluwa Babatunde 2024-04-22  451  
+2acef04ad57cab Oreoluwa Babatunde 2024-04-22  452  				nomap = of_get_flat_dt_prop(node, "no-map", NULL) != NULL;
+d0b8ed47e83a22 pierre Kuo         2019-02-19  453  				if (nomap)
+7b25995f5319ad Dong Aisheng       2021-06-11  454  					memblock_clear_nomap(rmem->base, rmem->size);
+3c6867a12a224d Dong Aisheng       2021-06-11  455  				else
+3ecc68349bbab6 Mike Rapoport      2021-11-05  456  					memblock_phys_free(rmem->base,
+3ecc68349bbab6 Mike Rapoport      2021-11-05  457  							   rmem->size);
+aeb9267eb6b1df Martin Liu         2023-02-10  458  			} else {
+aeb9267eb6b1df Martin Liu         2023-02-10  459  				phys_addr_t end = rmem->base + rmem->size - 1;
+aeb9267eb6b1df Martin Liu         2023-02-10  460  				bool reusable =
+aeb9267eb6b1df Martin Liu         2023-02-10  461  					(of_get_flat_dt_prop(node, "reusable", NULL)) != NULL;
+aeb9267eb6b1df Martin Liu         2023-02-10  462  
+6ee7afbabcee4d Geert Uytterhoeven 2023-02-16  463  				pr_info("%pa..%pa (%lu KiB) %s %s %s\n",
+aeb9267eb6b1df Martin Liu         2023-02-10  464  					&rmem->base, &end, (unsigned long)(rmem->size / SZ_1K),
+aeb9267eb6b1df Martin Liu         2023-02-10 @465  					nomap ? "nomap" : "map",
+aeb9267eb6b1df Martin Liu         2023-02-10  466  					reusable ? "reusable" : "non-reusable",
+aeb9267eb6b1df Martin Liu         2023-02-10  467  					rmem->name ? rmem->name : "unknown");
+d0b8ed47e83a22 pierre Kuo         2019-02-19  468  			}
+d0b8ed47e83a22 pierre Kuo         2019-02-19  469  		}
+3f0c8206644836 Marek Szyprowski   2014-02-28  470  	}
+3f0c8206644836 Marek Szyprowski   2014-02-28  471  }
+9dcfee01930e6c Marek Szyprowski   2014-07-14  472  
+
+:::::: The code at line 465 was first introduced by commit
+:::::: aeb9267eb6b1df992e39467a620da8fdf434df54 of: reserved-mem: print out reserved-mem details during boot
+
+:::::: TO: Martin Liu <liumartin@google.com>
+:::::: CC: Rob Herring <robh@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
