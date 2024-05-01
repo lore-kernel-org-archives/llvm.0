@@ -1,228 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869533BB2E;
-	Tue, 30 Apr 2024 22:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BE437E
+	for <llvm@lists.linux.dev>; Wed,  1 May 2024 00:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714517465; cv=none; b=DSVIcXfiwD3LXiaS73IrIrdB3jvw5dTeBG06oduNb2RDG79SxszEEyKOCgRGDy3guzGcHqVfmtETwnmpLz2MZ9dhkakpz/UnKi+mI68RfthBqeijvY0YszgwfV3nlZKB9N2tocPhBM+jzxfiWtO3Zl1B2SAeoEe8upeRwSY1v6A=
+	t=1714522930; cv=none; b=I5L/6dw7ui+c33RIJVgocOsoZCBikD9ntq2bIbu4wS4Ps7A6vH8P6pnJpmwlb8JBIijUAzXs0Pyfx5CbnN5tl5vE4rlon+x/CgSyjWHcjj9/vbrYCLDqlV8uXO0bRX/+TzGym0aZw+5nQT8cJ6nNCKqtyKSYiDQtcQIaFCqX9gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714517465; c=relaxed/simple;
-	bh=WI6e855Kc92SAi9gqKtnj+EkJ3KnHR+2fh4AgnRu2iY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mHgasdatG6v4keGFl/d8hbCPUqsE8gFj8maJJxm284+lvMMm6c/RpZ16Ne6tyr+3ASCoEHe645pAebR7UP5K0LnRYLbSK5FwqSEqA6/PsWyuRVrdGV+vEFFJTTNBHL6LsullFmOOIdqyGQxSAojoHBUWhQeSvZGadYcC2zH+BPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TMALhvsN; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714522930; c=relaxed/simple;
+	bh=X0WM2lVVVkrpkqRH8pWOu5puLWSYx1PKBK2oxI4tuB4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VviZ02Rxw3Y8RCGVVZgnSEl81ZPYeM0iRbC89k5QIHHP9LS1BvHS+WoeaS+EYZxaX+dnEl9zT88O8eaqR1I4RnrXjySmj1I6be0psttiRlKKdTjFFL3P/s4D6PLQnJGrI99jvwOAYJtYgFgIudG3OJC8+Jojh0jekzNnbSclHB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IrF/az12; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TMALhvsN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714517464; x=1746053464;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WI6e855Kc92SAi9gqKtnj+EkJ3KnHR+2fh4AgnRu2iY=;
-  b=TMALhvsNrlcfD/nXj/0eRkh/hpa9ZVPa/4lvho5AIqQNsJRtHow1Reea
-   1ebhd5GUHXWiKy2Fl6uTAensmZ0i9VJ7ueso1Ee4r2g1wmMigMmR3UsAG
-   tOdx5YAe8fGin6DV3sGVtVNUnebcLXC3O57zV19kSkQ9xqowXChtGkpGn
-   gWSCLRrLymH52dlUO/ZBA+dLx4tfVGIwdm/UiAmJ0/02M/0onYFkLE+dX
-   28ds5jwbj3B1O/geKn1sCuuOTPIWrxDbzxovLeID81mmxYT15SLHBZBL8
-   gOACxzLnvtcTiYK1Xvv/xUSDQKjElo1ebhiCDo/AlQfl0P2BoJrMLNzH4
-   g==;
-X-CSE-ConnectionGUID: cIQstBxkRYGTxhZSyDirlg==
-X-CSE-MsgGUID: gA/JjUWgSga7DgfhasP9Ig==
-X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="10790880"
-X-IronPort-AV: E=Sophos;i="6.07,243,1708416000"; 
-   d="scan'208";a="10790880"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 15:51:02 -0700
-X-CSE-ConnectionGUID: FZkSokSlRC6f+NGqNm3JLw==
-X-CSE-MsgGUID: qu5447TjTguXRIksIdWSjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,243,1708416000"; 
-   d="scan'208";a="64102738"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 30 Apr 2024 15:50:59 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s1wJM-0008fJ-0R;
-	Tue, 30 Apr 2024 22:50:56 +0000
-Date: Wed, 1 May 2024 06:50:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Weishi Li <liweishi@kylinos.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, airlied@redhat.com,
-	daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-	gurchetansingh@chromium.org, kraxel@redhat.com,
-	linux-kernel@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, olvaffe@gmail.com, tzimmermann@suse.de,
-	virtualization@lists.linux.dev
-Subject: Re: [PATCH] [PATCH RESEND] drm/virtio: fix memory leak of vbuf
-Message-ID: <202405010653.utlwekew-lkp@intel.com>
-References: <20240429030541.56702-1-liweishi@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IrF/az12"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc743cc50a6so9211578276.2
+        for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 17:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714522928; x=1715127728; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aOeVT5ijOmluYWTqyy0kihWy6E7/FOShE/HltlDIAgs=;
+        b=IrF/az12xQweImItH6oGL8Vz/nRG3q6YCJk1W6cOW/eSFuqcb8lNPusSOFvnFHeTMl
+         +tf8dLgHYbSbTYAdWiR6rG9E6h4gMA+nImNyNgCGpmZEVNoqP5468a6btPcoh9RRxyvP
+         qJ202MN6JFVjg4GIlZXZguAXq/sVCSe5ZGlY5LNW9RJDw0Fgxn+pb5k/fCfans3+FMnX
+         9vAEB8vdXrRt5nt/OTy8m/SzkVgd6BDFDLnENEvLVSWsFuyPffoKTpg6vQpQoIshCeCt
+         N0cWYc7dAKOGn8tu/ER8csgtgZ9LRlLgpXE/gL+L6pK/hiSRPD2d/Si2I/yFq5kH8elD
+         QfNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714522928; x=1715127728;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aOeVT5ijOmluYWTqyy0kihWy6E7/FOShE/HltlDIAgs=;
+        b=Q9Xr0lqOURYZr0O4B9DRqEZnbUKnVcLkQsunw4KCXhvAg9UbWr+V9861boqfngQkFw
+         he874906kuLWmI1NU4++cGqCWA6UuerQ/gWJ8CccKsCVsaPLkHsog4w6k4A6GKeSIdCs
+         biq3AKoxcm+MCnduFAFRqj/o2DAIaVQOnF7ar6qrsYDk2XC+JbBLoON5oKyWxE0UwejT
+         RPk3OEHf9Z5GgZqWUJUkTDB9buMPbBsOioEcNWl7VqRASQKmKbnvwfR8yz9/1yo743C/
+         5ypWA+yobWNhCI9wji2LSIuMqv4eFG0DysaKYACcjYMbSHiQakjGBEKYc9EFNIBMz2E1
+         aBuA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7GPmiQ3C/9tWWyzJ7sSGiAX6XNvy1SqmOhlanTTVdHnBrBZ56/tSV5GnsH8NRetWopw3raUYMbEyE5FJUlgYpCOcM5A==
+X-Gm-Message-State: AOJu0YwsyTyCFeaSTUfAqXhPk7gtJcqusbmr38IXTCJBoJVvRljOP4oU
+	CPPM9Ah5RsO5w84POsBT8nXUUGq8vn0i5wsQsecw/Q9aiCqlEVjt6NMCalIm2YWoCwMSBZFG6cy
+	FWQ==
+X-Google-Smtp-Source: AGHT+IEklaC0M02gKwu0vEYUSv6f+jBLX5i1o80HacxvejQgGQU/HK8rwZXcSzpBPGZ7mCbPiYEdzIATv2o=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a05:6902:2b8c:b0:dd9:1b94:edb5 with SMTP id
+ fj12-20020a0569022b8c00b00dd91b94edb5mr169322ybb.10.1714522928046; Tue, 30
+ Apr 2024 17:22:08 -0700 (PDT)
+Date: Wed,  1 May 2024 00:21:48 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240429030541.56702-1-liweishi@kylinos.cn>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.0.rc0.197.gbae5840b3b-goog
+Message-ID: <20240501002150.1370861-1-edliaw@google.com>
+Subject: [PATCH v2] selftests/vDSO: Fix assignment in condition without parentheses
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andy Lutomirski <luto@mit.edu>, "H. Peter Anvin" <hpa@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Weishi,
+Fixes clang compiler warnings by adding parentheses:
 
-kernel test robot noticed the following build errors:
+parse_vdso.c:65:9: warning: using the result of an assignment as a
+ condition without parentheses [-Wparentheses]
+                if (g = h & 0xf0000000)
+                    ~~^~~~~~~~~~~~~~~~
+parse_vdso.c:65:9: note: place parentheses around the assignment to
+ silence this warning
+                if (g = h & 0xf0000000)
+                      ^
+                    (                 )
+parse_vdso.c:65:9: note: use '==' to turn this assignment into an
+ equality comparison
+                if (g = h & 0xf0000000)
+                      ^
+                      ==
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.9-rc6 next-20240430]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+v2: separated assignment from predicate
+---
+ tools/testing/selftests/vDSO/parse_vdso.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Weishi-Li/drm-virtio-fix-memory-leak-of-vbuf/20240430-132447
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240429030541.56702-1-liweishi%40kylinos.cn
-patch subject: [PATCH] [PATCH RESEND] drm/virtio: fix memory leak of vbuf
-config: hexagon-randconfig-001-20240501 (https://download.01.org/0day-ci/archive/20240501/202405010653.utlwekew-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405010653.utlwekew-lkp@intel.com/reproduce)
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 413f75620a35..fdd38f7e0e43 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -62,7 +62,8 @@ static unsigned long elf_hash(const unsigned char *name)
+ 	while (*name)
+ 	{
+ 		h = (h << 4) + *name++;
+-		if (g = h & 0xf0000000)
++		g = h & 0xf0000000;
++		if (g)
+ 			h ^= g >> 24;
+ 		h &= ~g;
+ 	}
+--
+2.45.0.rc0.197.gbae5840b3b-goog
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405010653.utlwekew-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/virtio/virtgpu_vq.c:29:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/virtio/virtgpu_vq.c:29:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/virtio/virtgpu_vq.c:29:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:474:2: error: expected expression
-           else if (ret < 0) {
-           ^
->> drivers/gpu/drm/virtio/virtgpu_vq.c:503:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:523:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:534:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:556:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:580:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:604:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:635:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:654:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:683:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:704:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:729:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:741:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:767:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:790:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:815:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:889:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:919:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/virtio/virtgpu_vq.c:936:1: error: function definition is not allowed here
-   {
-   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   6 warnings and 20 errors generated.
-
-
-vim +503 drivers/gpu/drm/virtio/virtgpu_vq.c
-
-dc5698e80cf724 Dave Airlie      2013-09-09  492  
-dc5698e80cf724 Dave Airlie      2013-09-09  493  /* just create gem objects for userspace and long lived objects,
-5d883850dc23a5 Rodrigo Siqueira 2018-02-22  494   * just use dma_alloced pages for the queue objects?
-5d883850dc23a5 Rodrigo Siqueira 2018-02-22  495   */
-dc5698e80cf724 Dave Airlie      2013-09-09  496  
-dc5698e80cf724 Dave Airlie      2013-09-09  497  /* create a basic resource */
-dc5698e80cf724 Dave Airlie      2013-09-09  498  void virtio_gpu_cmd_create_resource(struct virtio_gpu_device *vgdev,
-23c897d72ca806 Gerd Hoffmann    2018-10-19  499  				    struct virtio_gpu_object *bo,
-530b28426a94b8 Gerd Hoffmann    2019-03-18  500  				    struct virtio_gpu_object_params *params,
-e2324300f427ff Gerd Hoffmann    2019-08-29  501  				    struct virtio_gpu_object_array *objs,
-530b28426a94b8 Gerd Hoffmann    2019-03-18  502  				    struct virtio_gpu_fence *fence)
-dc5698e80cf724 Dave Airlie      2013-09-09 @503  {
-dc5698e80cf724 Dave Airlie      2013-09-09  504  	struct virtio_gpu_resource_create_2d *cmd_p;
-dc5698e80cf724 Dave Airlie      2013-09-09  505  	struct virtio_gpu_vbuffer *vbuf;
-dc5698e80cf724 Dave Airlie      2013-09-09  506  
-dc5698e80cf724 Dave Airlie      2013-09-09  507  	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
-dc5698e80cf724 Dave Airlie      2013-09-09  508  	memset(cmd_p, 0, sizeof(*cmd_p));
-e2324300f427ff Gerd Hoffmann    2019-08-29  509  	vbuf->objs = objs;
-dc5698e80cf724 Dave Airlie      2013-09-09  510  
-dc5698e80cf724 Dave Airlie      2013-09-09  511  	cmd_p->hdr.type = cpu_to_le32(VIRTIO_GPU_CMD_RESOURCE_CREATE_2D);
-724cfdfd667a28 Gerd Hoffmann    2018-10-19  512  	cmd_p->resource_id = cpu_to_le32(bo->hw_res_handle);
-f9659329f222a6 Gerd Hoffmann    2019-03-18  513  	cmd_p->format = cpu_to_le32(params->format);
-f9659329f222a6 Gerd Hoffmann    2019-03-18  514  	cmd_p->width = cpu_to_le32(params->width);
-f9659329f222a6 Gerd Hoffmann    2019-03-18  515  	cmd_p->height = cpu_to_le32(params->height);
-dc5698e80cf724 Dave Airlie      2013-09-09  516  
-e19d341174b679 Chia-I Wu        2020-02-05  517  	virtio_gpu_queue_fenced_ctrl_buffer(vgdev, vbuf, fence);
-23c897d72ca806 Gerd Hoffmann    2018-10-19  518  	bo->created = true;
-dc5698e80cf724 Dave Airlie      2013-09-09  519  }
-dc5698e80cf724 Dave Airlie      2013-09-09  520  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
