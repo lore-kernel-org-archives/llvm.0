@@ -1,117 +1,165 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25324146D60
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 18:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DAE211C;
+	Wed,  1 May 2024 18:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714586796; cv=none; b=o6ONEYNk3nu8ncjFTDP8RCw1kFlds8rAyUyzb5DpVgD/vFS7XWejQ2c3ShaD1RrbXva0kvLptnN1qM9n/FHZRacmwhOhRE5l8yqA/E7ir2FEBxVIPMZEg5wWj4RHSInMfB89Zxwak1NT5kjCZ5+E8LGkCESph1qMq29ilvxDqCs=
+	t=1714588506; cv=none; b=kRaRACrbowJQm/hEsvwe8vv2kyXFOxqBkaNB1ABw86u2PDEBDXpb8mKYCH2xMwCVmGvNxOOb/6kOhZAMbpqVFA3ndZ+0ntbOW1T0ejmPeddp2XvMTKbJQeTZb9sl7DgOk9BpkLZa/eSx0qmWd59SB69cmHAwJE6ieNT02Qwaj1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714586796; c=relaxed/simple;
-	bh=z08x5qjd5V1B4JjVHfgs6lzO4CUiyLKjxSvmFLnvq3c=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tI1KAma1wTKn0JSlSXWMEu51Q2Dk1V5ik99uLggn2R0HbybwI8vtTTHFf2WycQaBnhaL14WR5yMAYiRUpmqwmViWGgN8Z1SgUHxmlB6FyEivaCwJxY0ChAfJyYRU5BL/2YCJIs1W90MRDW5zxRawrBVl1Cyn8ZlcNg2cIjLj7cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vCgtgpMg; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+	s=arc-20240116; t=1714588506; c=relaxed/simple;
+	bh=fCDzTzZbjGb6uqT6kSzbkYEbmAneq8Yq+jzepX8va1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sTATsrqiQVt7q6JbglX72G3LYMmxnPkhVa+zfgkm7bxNP/ZBoyCEFCXAbDf3p+P4ciPYhRL4Ue944cbj1WWsbr4GZTBf6ojCTfppEgm5DI+ujjELv1sTl1sKKyQ+Ov1zZwdejgiqCIcfeDlbZor/7YHRQD2u29yaUgOx2zck58k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePI5eO3D; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vCgtgpMg"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc64f63d768so13868424276.2
-        for <llvm@lists.linux.dev>; Wed, 01 May 2024 11:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714586794; x=1715191594; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WCQ4ai1VSnRrtyOto1ox1rCCN6vQbsE1tY52jHJBoxo=;
-        b=vCgtgpMgCo5kWg9y1B5S2SRlqpNpxW8/DkHixmLyL0sf67RJ48VwBRQR3o9PHFu8+9
-         rCOon8l3YlfvsyIQ0w4wW3uH9hfeaXNSIP4q4OGhGqomnhtXBK9f/XFYFC8icLcTlAbH
-         4oLs74DmeXgAXyaMOjllzOrylY7MUzXL46RUXCoSCLeXk1KSrSKQWbOCHt2cMuW4VNE7
-         dF9fcJ2FZmxDMEeT0KocWfJVrsJsSJSwudSiuOxOkq7Va65e4S9VI0vT9Dh0OY7t48jf
-         clKO3ANWUFNPLG1vbs/0izR8v6zmBW5kqE8LXJs25zt2WTlqWivupue9bKvw6NZQIybs
-         cmsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714586794; x=1715191594;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WCQ4ai1VSnRrtyOto1ox1rCCN6vQbsE1tY52jHJBoxo=;
-        b=oyaPfYDAm1tleo8Zjzj1fmQLaXnvnQh/HqARcY6861U198fm3du6YB8cNuWgLQLTZu
-         yUf7zRhFeiNUJ6UV6R+jLu8IyGMhl77OrAVcfCD31mL7yYgZLDTjqaWVbeDriqdHT9Te
-         0c9SfAPN2UujoxeUOFusOnEtXcjUjPdsydHBB8aiCyK5A39a7jGKFVotCaGtbY1E4ex4
-         inu1OXtHSHuVnMF8Ubp0SGQsP6d6qST8ocfNbDxcCA7/2YVAoC2k4xX71kF1RK1zTm1T
-         H6CpA14QYZpbdiox7yIkJu2mTHb4M+gMFXjBnGLXzquZ6PoD4VblrAeRQNBCkdu3fm3G
-         m/DA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPBzMQdo0FI1LlWbRA+ip4DbvwxJK4BGPOeRIsCMQz5Cyuw/h8CSYpPVeB1sWxqnkTNgjBdsxoYJnAtGAVAciY0UP5sQ==
-X-Gm-Message-State: AOJu0YwQckEs/ftKPr8kEbd4ionhRtsbod7mlW8sM9L7pME6ZGHkHeuf
-	f08HQqZiTQNwOcHH9+z89V0bzxSO+0mF14kkzielKIq4savHYRu+RE3keur3uOWEPg0Tv+oIPpV
-	p/g==
-X-Google-Smtp-Source: AGHT+IHLJVHdkDpnZk/5+ui/KLYFczURc1pdUu54ubS7wHaSw0Y99fUuvk4v7GXL1YRdvuExXi+ubxEYAnA=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:6902:c11:b0:de6:166f:3250 with SMTP id
- fs17-20020a0569020c1100b00de6166f3250mr1029481ybb.2.1714586794180; Wed, 01
- May 2024 11:06:34 -0700 (PDT)
-Date: Wed,  1 May 2024 18:06:18 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePI5eO3D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714588504; x=1746124504;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fCDzTzZbjGb6uqT6kSzbkYEbmAneq8Yq+jzepX8va1k=;
+  b=ePI5eO3DDxfXrikyicknIXZBIUpVkfchrDIry1ZPXXvjtBGzN2FBD3on
+   +NAzKlJhP5ldOsE/tVPnyQ+yZtdVX5wHIn5fqFWU+niT72+0sXlQG8ads
+   Q2m+QRNZKA+zV360Qe+Hrp7Jq6IkrmpoT9ViXfXOm7iLAjTVEddt6dkkg
+   pyGGMGiob5WVnq4WWMNq9ODugaSo8fEfGOGp1ug/d8j8mI5GFdOWfjwdq
+   M3sUp2qIGeRvdgRi+1aZLOKZUVXvlGJW9G5h6NK0sgdCmH7pxlSXNHeNM
+   QPD5kFJEfslU1HczkBTTzlX8GFFKWbOOgkWmJ+PpTYUZ7R4l5wkVnV7GC
+   A==;
+X-CSE-ConnectionGUID: CfaR/6eURxK4cpAZ5/FIAw==
+X-CSE-MsgGUID: 8uKXjPUOR5OZ+ZksgnltXw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="35720565"
+X-IronPort-AV: E=Sophos;i="6.07,246,1708416000"; 
+   d="scan'208";a="35720565"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2024 11:35:02 -0700
+X-CSE-ConnectionGUID: d+R5C+YhSvKYPrEH+M9+ig==
+X-CSE-MsgGUID: kZzV5MX4TyKLpBwDNOu+9w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,246,1708416000"; 
+   d="scan'208";a="27361187"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 01 May 2024 11:35:00 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s2EnC-0009tG-0C;
+	Wed, 01 May 2024 18:34:58 +0000
+Date: Thu, 2 May 2024 02:34:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kailang Yang <kailang@realtek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>
+Subject: [tiwai-sound:for-linus 1/4] sound/pci/hda/patch_realtek.c:7222:8:
+ error: no member named 'power_hook' in 'struct alc_spec'
+Message-ID: <202405020226.ddBTVUNI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.45.0.rc0.197.gbae5840b3b-goog
-Message-ID: <20240501180622.1676340-1-edliaw@google.com>
-Subject: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for elf_hash
-From: Edward Liaw <edliaw@google.com>
-To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>
-Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes clang compilation warnings by adding explicit unsigned conversion:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-linus
+head:   9b3c22ab3929672b117f5c46d718692abb65da0b
+commit: 1e707769df072757bdcafab158bb159ead73daa4 [1/4] ALSA: hda/realtek - Set GPIO3 to default at S4 state for Thinkpad with ALC1318
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240502/202405020226.ddBTVUNI-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240502/202405020226.ddBTVUNI-lkp@intel.com/reproduce)
 
-parse_vdso.c:206:22: warning: passing 'const char *' to parameter of
- type 'const unsigned char *' converts between pointers to integer types
- where one is of the unique plain 'char' type and the other is not
- [-Wpointer-sign]
-        ver_hash = elf_hash(version);
-                            ^~~~~~~
-parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-static unsigned long elf_hash(const unsigned char *name)
-                                                   ^
-parse_vdso.c:207:46: warning: passing 'const char *' to parameter of
- type 'const unsigned char *' converts between pointers to integer types
- where one is of the unique plain 'char' type and the other is not
- [-Wpointer-sign]
-        ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
-                                                    ^~~~
-parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-static unsigned long elf_hash(const unsigned char *name)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405020226.ddBTVUNI-lkp@intel.com/
 
-Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
-v2: update commit message with correct compiler warning
-v3: fix checkpatch errors and indentation
----
- tools/testing/selftests/vDSO/parse_vdso.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Note: the tiwai-sound/for-linus HEAD 9b3c22ab3929672b117f5c46d718692abb65da0b builds fine.
+      It only hurts bisectability.
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 413f75620a35..9e29ff0657ea 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -203,8 +203,9 @@ void *vdso_sym(const char *version, const char *name)
- 	if (!vdso_info.valid)
- 		return 0;
+All errors (new ones prefixed by >>):
 
--	ver_hash = elf_hash(version);
--	ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
-+	ver_hash = elf_hash((const unsigned char *)version);
-+	ELF(Word) chain = vdso_info.bucket[
-+		elf_hash((const unsigned char *)name) % vdso_info.nbucket];
+   In file included from sound/pci/hda/patch_realtek.c:17:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from sound/pci/hda/patch_realtek.c:17:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from sound/pci/hda/patch_realtek.c:17:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from sound/pci/hda/patch_realtek.c:17:
+   In file included from include/linux/pci.h:2693:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> sound/pci/hda/patch_realtek.c:7222:8: error: no member named 'power_hook' in 'struct alc_spec'
+    7222 |         spec->power_hook = alc287_s4_power_gpio3_default;
+         |         ~~~~  ^
+   7 warnings and 1 error generated.
 
- 	for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
- 		ELF(Sym) *sym = &vdso_info.symtab[chain];
---
-2.45.0.rc0.197.gbae5840b3b-goog
 
+vim +7222 sound/pci/hda/patch_realtek.c
+
+  7214	
+  7215	static void alc287_fixup_lenovo_thinkpad_with_alc1318(struct hda_codec *codec,
+  7216				       const struct hda_fixup *fix, int action)
+  7217	{
+  7218		struct alc_spec *spec = codec->spec;
+  7219	
+  7220		if (action != HDA_FIXUP_ACT_PRE_PROBE)
+  7221			return;
+> 7222		spec->power_hook = alc287_s4_power_gpio3_default;
+  7223		spec->gen.pcm_playback_hook = alc287_alc1318_playback_pcm_hook;
+  7224	}
+  7225	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
