@@ -1,68 +1,75 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE867160887
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 20:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D53B161B53
+	for <llvm@lists.linux.dev>; Wed,  1 May 2024 20:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714593973; cv=none; b=A0j5n/eWquIAosoTI66qATXe2iGgbmwD0ILoKy/YqAJO3icEIxXRCRZLxcRgPdWHJ2VPz3vaFjj4pwNLxCgZ30FAz8xXzax2M5Nc6Q09AqeWjiq8sPVAB4tNRcKaKJAZmClvX1KVzHZXPETv/JN5ARH4DbmFrvq9n10zILejTLI=
+	t=1714594638; cv=none; b=NQFLvNDhDzKplcIePDGcVDYIyuUTnrsadWdEJoH5EHkVCS02KN5kPftOI4imYezc1l2OSDV/2imXmr2sjRhNBB1678qM4oRabRO/to9Szo3kwlp90iR/yyqWua2MQUR3ciNTtLSuhD3qtnXg0yy+Rl/WvQxgc8Tj624DqXCnX54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714593973; c=relaxed/simple;
-	bh=MxqZIuh4IKZCsU3TBM1EeIPccCk29czriRckRt4Zj58=;
+	s=arc-20240116; t=1714594638; c=relaxed/simple;
+	bh=GGpAKEpoycwjSWcYUqnZv8ZhAZUkHxo5m5D9dqJxuNo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hnnqrhVBCtiiDH1bDoHOZg0stDVnbnJ3+g8QZ9Bw9GTQix0P9Hx7LuZ+WLBwk6MRnYRblTt6jeeaWP3OCIPDi4UTqRu+GOdayfnJOajpQbMb7G4zXV0rdYU3kBgQEKZp5WDUnIeP4oGnpqrKGUxkQSIrS5hPgY88bjqjJw8C3FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Fg5ONAnL; arc=none smtp.client-ip=209.85.210.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=bBPcPONoNOoovHaZzgL1HyYMkwZE6HzVbrmOoH/xV8uMAHw7eem8gYL2qgb6CLf5t/dK/793qlwSlWPSac2kfaQxf9wVojaUgwt06ruW6VvgDw7bUXUTKzlG/lZ/RVAJYoBSTQmvwCGHlMGRT80cpVYsRkK53MZ0U1+BC1xcIbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eqTTwRom; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Fg5ONAnL"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6eff2be3b33so6593505b3a.2
-        for <llvm@lists.linux.dev>; Wed, 01 May 2024 13:06:11 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eqTTwRom"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6ed9fc77bbfso5718972b3a.1
+        for <llvm@lists.linux.dev>; Wed, 01 May 2024 13:17:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714593971; x=1715198771; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1714594636; x=1715199436; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y2o4tlUNctY7U6Cr6T8194ul7f2V0l6ukmfj5Y5+0nw=;
-        b=Fg5ONAnLuWcRV/+ZvJ25zkiZMjXEn2hqAXvKSZH410gsKcmEud7HjCHi/Q/s3YC0mq
-         a/IJXfNO8+sydKoh03XSEGArGygDMtjjNkiH+G3qp12RHJzlkcJ8EHNE/8ZUlS5Gj9Pv
-         /8x8SU7jQO2MW1pkrhUbVHekNK7qWsluC3XBs=
+        bh=TzZlykvaZE49hrAwdEmOhVJUm5xEaSWSbmXs/qt6Y88=;
+        b=eqTTwRomnNvkZQiFoHDpxhP9Hh42RWY6dtw464vQMrXb5sLfED4aWWqgr/b8edXT3l
+         qt5EaKa9F1GcZAQhaz3BnAP0vlqG2JDtBaO1IClBZXqXzPULOxbvuHVTibQiEmo1OrX8
+         BV3kh1OfqvWhVhiuPJQns0mz5l0G9BDo7yC0Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714593971; x=1715198771;
+        d=1e100.net; s=20230601; t=1714594636; x=1715199436;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y2o4tlUNctY7U6Cr6T8194ul7f2V0l6ukmfj5Y5+0nw=;
-        b=LrDiRvCKRyu4YiuxhcdFgg4dmP1sOexLX7HZJusivN33bZ2qJKNRDLFCkNwD2lAbdb
-         wGtVxctZuEKWPsVgQpucSpqKqXgfuGwesHNSTmTt33hjE6qp1XOeQoT10TlqnTxYlXw8
-         bnSs491iOyTq9BrchxArEcWFP6Gr7K64YagE/jGYwEL9IuwstFjPXppzhbtXilKsjLUg
-         SfsB+oRvQ1r/i106ak+6SjxDGTF26L31t1Dyon5hZn4vL+FcUuuhPfDj/YT14jJipt/N
-         gD3De9HIcQ/HuBHk7Z1sZLbN0BDAFvakW0evKRAb+mPbbhJsm6kCD4HZrj/8dIkA/fKs
-         25lA==
-X-Forwarded-Encrypted: i=1; AJvYcCWzSqXSMZHTYzK3Cq3RY290u+K1QtOC/7PmZU1G5vw6NSTiQ8sbLtOfZcihy2Jj4xwBYUrgmiBUkp9TES/NOW1ASnyKAw==
-X-Gm-Message-State: AOJu0Yyog84L3X2vFLuP54oU+zNxzaco4/gIOX7LDqdIFxjTZMykGwit
-	m4FIEIRW1TMGcQYrv+U0V34BEVN16Cx8cKx08wsgUzYcsXbkyxqXLcvbrGK6cg==
-X-Google-Smtp-Source: AGHT+IEw1MN7ZWjyOSnwvYGcsH7NwE54BG1k+72eDhYVUcDgtLB0JDZWdDTjdOhh9mn3t7M+X/IQiw==
-X-Received: by 2002:a17:902:c213:b0:1e4:24bc:426e with SMTP id 19-20020a170902c21300b001e424bc426emr3467826pll.28.1714593971355;
-        Wed, 01 May 2024 13:06:11 -0700 (PDT)
+        bh=TzZlykvaZE49hrAwdEmOhVJUm5xEaSWSbmXs/qt6Y88=;
+        b=oBsA/UXcqCbGtu4R6RxrsnlJTpqg4oPppCMO6bUZa7vKWZYqDn0F43L37iS0UOaJxw
+         o2CnPRk2RVAlDV9sHBj9IqDHpywjh4xA/sUCZbjNZjiKqQ2WjeatPrjUy4sdiairFs8O
+         ZuPtHDj9WNrJKJQwLAu//6w4WoLstZT6y3wT069SSNpw3O0ceFyD8mf6LqgozrnUoGpV
+         M/P1mQHu8e1soFqefOvAuCfaBZ69hPSe+gtv5sFkWUJ4Z8XNQO6+JYTGazgcXyIkL4DH
+         XiLr4s59tAKZEPuwn0Pz14E2n7Sq5i1JXGxN7/POmBH1xa6txlwofVwiqS8p+zPPqjuJ
+         3lNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVxveoMEZZpuNOAdRh5mXEBXZDhVa2WLnUlNFJM6y21lGXph+E/mkCNebEO+ul3LmlfyiDyy/CC/+78uLtPtG9fYbxWHA==
+X-Gm-Message-State: AOJu0YwpYrx4cxAkvNb8PRk9KWZUCQ4WKzF2YjAguD39/zw8R/2n/Bh5
+	uq17UfuR/WV1asP1hTpoQ15IaUUoDjQqSnZLerOPhj8Kxf0xpCMbkSAu2Nxpxg==
+X-Google-Smtp-Source: AGHT+IGbzYi1d+ldsT9LN6hCvo5dwU6UWZPN8BaXQ/g+gSm91//aeds7KiSLXD8zvIV8i+uTgvZrTQ==
+X-Received: by 2002:a05:6a21:6d82:b0:1ac:d96a:4fd6 with SMTP id wl2-20020a056a216d8200b001acd96a4fd6mr4640333pzb.23.1714594636355;
+        Wed, 01 May 2024 13:17:16 -0700 (PDT)
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s1-20020a170902a50100b001e0e977f655sm24582522plq.159.2024.05.01.13.06.10
+        by smtp.gmail.com with ESMTPSA id j19-20020aa783d3000000b006eaf3fd91a1sm23012143pfn.62.2024.05.01.13.17.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 May 2024 13:06:10 -0700 (PDT)
-Date: Wed, 1 May 2024 13:06:10 -0700
+        Wed, 01 May 2024 13:17:16 -0700 (PDT)
+Date: Wed, 1 May 2024 13:17:15 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Erick Archer <erick.archer@outlook.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+Cc: Marek Lindner <mareklindner@neomailbox.ch>,
+	Simon Wunderlich <sw@simonwunderlich.de>,
+	Antonio Quartulli <a@unstable.cc>,
+	Sven Eckelmann <sven@narfation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-sctp@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	Justin Stitt <justinstitt@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	b.a.t.m.a.n@lists.open-mesh.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH] sctp: annotate struct sctp_assoc_ids with __counted_by()
-Message-ID: <202405011306.0B9D906F1@keescook>
-References: <AS8PR02MB723728DA244A82D97342D6498B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
+Subject: Re: [PATCH v3] batman-adv: Add flex array to struct
+ batadv_tvlv_tt_data
+Message-ID: <202405011317.9896F210@keescook>
+References: <AS8PR02MB72371F89D188B047410B755E8B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,19 +78,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8PR02MB723728DA244A82D97342D6498B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
+In-Reply-To: <AS8PR02MB72371F89D188B047410B755E8B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
 
-On Wed, May 01, 2024 at 07:01:22PM +0200, Erick Archer wrote:
-> Prepare for the coming implementation by GCC and Clang of the
-> __counted_by attribute. Flexible array members annotated with
-> __counted_by can have their accesses bounds-checked at run-time via
-> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE
-> (for strcpy/memcpy-family functions).
+On Wed, May 01, 2024 at 05:02:42PM +0200, Erick Archer wrote:
+> The "struct batadv_tvlv_tt_data" uses a dynamically sized set of
+> trailing elements. Specifically, it uses an array of structures of type
+> "batadv_tvlv_tt_vlan_data". So, use the preferred way in the kernel
+> declaring a flexible array [1].
 > 
-> Suggested-by: Kees Cook <keescook@chromium.org>
+> At the same time, prepare for the coming implementation by GCC and Clang
+> of the __counted_by attribute. Flexible array members annotated with
+> __counted_by can have their accesses bounds-checked at run-time via
+> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
+> strcpy/memcpy-family functions). In this case, it is important to note
+> that the attribute used is specifically __counted_by_be since variable
+> "num_vlan" is of type __be16.
+> 
+> The following change to the "batadv_tt_tvlv_ogm_handler_v1" function:
+> 
+> -	tt_vlan = (struct batadv_tvlv_tt_vlan_data *)(tt_data + 1);
+> -	tt_change = (struct batadv_tvlv_tt_change *)(tt_vlan + num_vlan);
+> 
+> +	tt_change = (struct batadv_tvlv_tt_change *)((void *)tt_data
+> +						     + flex_size);
+> 
+> is intended to prevent the compiler from generating an "out-of-bounds"
+> notification due to the __counted_by attribute. The compiler can do a
+> pointer calculation using the vlan_data flexible array memory, or in
+> other words, this may be calculated as an array offset, since it is the
+> same as:
+> 
+>         &tt_data->vlan_data[num_vlan]
+> 
+> Therefore, we go past the end of the array. In other "multiple trailing
+> flexible array" situations, this has been solved by addressing from the
+> base pointer, since the compiler either knows the full allocation size
+> or it knows nothing about it (this case, since it came from a "void *"
+> function argument).
+> 
+> The order in which the structure batadv_tvlv_tt_data and the structure
+> batadv_tvlv_tt_vlan_data are defined must be swap to avoid an incomplete
+> type error.
+> 
+> Also, avoid the open-coded arithmetic in memory allocator functions [2]
+> using the "struct_size" macro and use the "flex_array_size" helper to
+> clarify some calculations, when possible.
+> 
+> Moreover, the new structure member also allow us to avoid the open-coded
+> arithmetic on pointers in some situations. Take advantage of this.
+> 
+> This code was detected with the help of Coccinelle, and audited and
+> modified manually.
+> 
+> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#zero-length-and-one-element-arrays [1]
+> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [2]
 > Signed-off-by: Erick Archer <erick.archer@outlook.com>
 
-Thanks!
+Thanks for the tweak!
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
