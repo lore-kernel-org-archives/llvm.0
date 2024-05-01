@@ -1,172 +1,138 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89A11B977
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 19:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B9014A8B
+	for <llvm@lists.linux.dev>; Wed,  1 May 2024 19:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714592237; cv=none; b=XKQjPzUomOKjMMQoynIVUeQ9TA3m367G9cSmEGOX8/lIGCfKtUWAOHtjpiW24BlfE6n/4Vk5tFTqbpcg995F0TQJ7v2NXAGfS9x4Jg1SBm7IfSghv7SDgC/bFFnmemBnNXxht6ikBgvdiEbp5cRGtdRssdMYWC5gf11G1hBTejM=
+	t=1714593283; cv=none; b=nIH/s3pxWN14HNibWhfZfR9u92tmmsru33Ezj4ODw24Jz3rZBfe5++qxb3sJgCuWYgZeY/hFe3yQZjp7EvJ7OG3/ms+T7KCR+qKz7ybJsIm+WEiXPMcpMxoIzk2zEut+b5JFD5doXy/YrVLiz/RwPM/151I/CXz5o+4G7aXpc3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714592237; c=relaxed/simple;
-	bh=NKsknBWYA84MMDw2XbhVDtmpzCAlaQEA3YQRvQXELjc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dO50tSuXT1i/0lYCmXDtACGRw9B2oYfnpTizbUphcvMe6yBgvFjEv36f1MYyyD/xPrFhKJIIvsQs2B0GXmNyGUAEiRl6z2CbTLY4XrZ2NpfROXnenkmocfszv1V8YixLvegAMwz0xUpcsG2y/IBXQ/NZvzw4HKn/E0ZDcq35VDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=J5WaLBGA; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1714593283; c=relaxed/simple;
+	bh=3AFePkdooPErfFu/qbXBokEPm+8+qcbQdefFXCyvhhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qebbmVHPcfGORYTNxY3TjXUTV6sWgeL9QhbQEa4dzNIRXWoh5njG5zjUZ/yAkWSS2fr1H2G7ZLHIqvfRbjRXywKfzY4+weZNHKx/7NZv8bBB4McgNwsZhMNOjhK7i8ZEoHitdPuzN0OH6IWayFOiaz/RK+wGmcStE1cyScy2xkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YPKUTxUG; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="J5WaLBGA"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ed691fb83eso6308003b3a.1
-        for <llvm@lists.linux.dev>; Wed, 01 May 2024 12:37:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YPKUTxUG"
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7dea2de1301so308973239f.3
+        for <llvm@lists.linux.dev>; Wed, 01 May 2024 12:54:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714592235; x=1715197035; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cvFOg5ZGNpEt6TtWRUDGWd1J8Hf8j/pvcf63R1jFypA=;
-        b=J5WaLBGAa85HEp1M3S3SN4+ty41xblTBQb0FwCn5/b24YOhTCFezsnp6ORMS75CsSk
-         2ejv/jKGiHzI2ESFfU0EsCsIGF0qv4iH+LX026ojKa+TJzkuZ3oEKoxptI4HlAZOZAkO
-         tc0Uf+YrvyRYjFdleINNWf/Rku68mb/eHVYHo=
+        d=google.com; s=20230601; t=1714593281; x=1715198081; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o3qjMSjjDTWfiqOEbDNPmH92wnyK6R57JD3befS8Eeg=;
+        b=YPKUTxUGifBFvJie/9X/YVFYmVRNfVUur8L2RR7UNuBv8cDZftn21fDFq024Z3HXmz
+         TQkQHzSrRfesOgnxcrFCyYZIew/aZJdRsHHfB33LLC5CetJNfVeoAZD/QACg8muiv8rQ
+         wC5zPH6wfd5DLMbMdPx8CcEV6lr0bEseJa6wOUgIeA75eQ+N8nJ6kBA4GOqv+bNYiEm6
+         Yb1DfT2Rb08OuLpKxUaWBH3lKyn5gWum/cnAa+fltbUMtU0zBOlQNs+Es0lOworuD4qo
+         I3qpa9855iluRuY8lbKTAd96LYnYD4opSfASG9WlGX4w/gP1kToNXOGfpsuCWdBNix2x
+         752g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714592235; x=1715197035;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cvFOg5ZGNpEt6TtWRUDGWd1J8Hf8j/pvcf63R1jFypA=;
-        b=Nsh/2n9Q5BxtqHSOJvtx5FOUkINHST70m1oZMuIVgBNMXrbmQajKvs9gk3rewQZNT1
-         KvZGzXscpBf+/h2thMTwaaqrZ0QLQx1lO/O9KUscn0pmS5eJnKly0eQDW0Nn0Azp/MKR
-         mRZzJX7GDf9VHn9ztQPEyzPQI+4wNthXSuKb0MRvLUYUXpXTyaihlZwlBJwN04yStVOA
-         7MnFVgKX5FW4O8DQUko/hBhwlrMu88YLRk/aEeBk2V3Yrui36KDv/fC6/WlWo/akldk+
-         sjsmpYCWbtkzyioTYmR5+KU+cS9P9Wfeh7/IRpEVrAW8NV/2i3CMjYR5B0p8Pn9A3o3L
-         jPcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXDC1bV7yZf3be6t2Qc+E5mYIs/F/cTQ2rglOfUPRHd6jqZB3vBeyJRzAz18HOpCeMYqaKcW+Ie3FkaFMdFz9rWcwa/xw==
-X-Gm-Message-State: AOJu0YyaSIQD8lmM7XJeI9A4gGDZsnTrdIJO9Gam23ZHOL0kzmZxn26y
-	ZGlSN/mJPwNEtDO6v48C4iCruj1l1whZbke4a1No+GDOXgR/A83kCwwUtnv0FA==
-X-Google-Smtp-Source: AGHT+IG0ymu3N2wZiVbdkxtYVjzYQ+d8l4Q6OMF22iO5uDx77xWYeuPGSymFUi9RT69ddvd9TyA68w==
-X-Received: by 2002:aa7:8891:0:b0:6ec:fd67:a27e with SMTP id z17-20020aa78891000000b006ecfd67a27emr3826038pfe.1.1714592234975;
-        Wed, 01 May 2024 12:37:14 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e15-20020a62aa0f000000b006ece85910edsm23020718pff.152.2024.05.01.12.37.14
+        d=1e100.net; s=20230601; t=1714593281; x=1715198081;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o3qjMSjjDTWfiqOEbDNPmH92wnyK6R57JD3befS8Eeg=;
+        b=XPtoT8YJPvh4djk6m8UE1F7P90DlOR4mBpEdMhNKhU7wUXCmGHMtT/ezMzEK9DTkxU
+         8pI4DcF3rFRrhNrBVwqAbj0XTtQF24QaaD+cLzzfib2gIbuC5zIEG9p0BfCm19G3qkVZ
+         juFO4crCzh0Q8tCyDhPPttS4LksnGFnt364kUUEQE72tA6qo0tvVaNvPf2hNwmVa2UGX
+         8L6WLyqK9X+iOfJoMcmpMzRxOv7Nl5U/NqSqvNbKoKB/xF5dpJm2+GdALlmnJN0Wm4HV
+         UEZe4QzegJMd4LBYlEsA6HYeU1Qa2ta7TBRMsx/ZINGi/3WBhgTPdEPYXudJmtilCeJa
+         DdIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXLzkGqpi9M2C4PQvDmSZxgXwkTfguBQCJfP3GomXl/GxK9zNHl1sCbXYEh5HavfrGwEiy+t3w0sUOZHrzzq+diXLWCdQ==
+X-Gm-Message-State: AOJu0YxTEa/DcpPMhDS6EoAgvfIJjb4oNazXWLHJdE6co1huajCYlJIm
+	kgmVT8+yuXhteJkJQ5fI2RqrT1ubQTPojB4s7I6v2s29YMsIYKk/jRqvgzVkoQ==
+X-Google-Smtp-Source: AGHT+IFV0Ej1qR/QMLUPSTTY0DQ7vd7qiVQm5fV9ISZXRkhorw2Wgn4KuGk7bnpcpR08pavfAqxO4Q==
+X-Received: by 2002:a5e:c80c:0:b0:7de:ca48:4fab with SMTP id y12-20020a5ec80c000000b007deca484fabmr4093192iol.2.1714593281030;
+        Wed, 01 May 2024 12:54:41 -0700 (PDT)
+Received: from google.com (195.121.66.34.bc.googleusercontent.com. [34.66.121.195])
+        by smtp.gmail.com with ESMTPSA id ci10-20020a0566383d8a00b004874d717cffsm3529346jab.29.2024.05.01.12.54.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 May 2024 12:37:14 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+        Wed, 01 May 2024 12:54:40 -0700 (PDT)
+Date: Wed, 1 May 2024 19:54:35 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Edward Liaw <edliaw@google.com>
+Cc: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, 
+	Andy Lutomirski <luto@mit.edu>, linux-kselftest@vger.kernel.org, kernel-team@android.com, 
 	llvm@lists.linux.dev
-Subject: [PATCH v3] hardening: Enable KCFI and some other options
-Date: Wed,  1 May 2024 12:37:12 -0700
-Message-Id: <20240501193709.make.982-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for
+ elf_hash
+Message-ID: <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
+References: <20240501180622.1676340-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2668; i=keescook@chromium.org;
- h=from:subject:message-id; bh=NKsknBWYA84MMDw2XbhVDtmpzCAlaQEA3YQRvQXELjc=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmMpnoXElRy5mtMZ69Kw4EZfui4YPcwQgqNohUb
- W/mTkIpghGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZjKZ6AAKCRCJcvTf3G3A
- JsBnD/0U7s7b3FztnGuIGzP9bQgbSUdqTfM2A0frprWHDhBLVtapVS6/s1+QDaHAcwUVO3Ed91O
- bhK6QgMIp/BuU8nPESGhEotQjf7KEgj7TeYy9UMR81O1N1aCfJ93m74TGRxM56tf+muQ2h8drgY
- 82GaBYqsdXAzdDQdmI+wk0XRdCcKdqXhTLxLaEOOa0BGPCJ86G63q9QAqx++NR5UoKBv80qEbKZ
- OM8A3tQctaM9g2cyn8QL8pyotMmWbuEwTO2NeM6jiOda+B6XaMQq/iXwXgyvhHA5MMGt8IHu//d
- 9TD5zMGencEKYjk6Ha2PFhL5eo/eWzvdw4qB2eSEQ9FVDO7BO3G7AwszmwW5UwJzn/KmS/O4yTz
- naP1eVzrFnepZQgMnfB2Q8mZcnrcVG0BjKGk+gJrYpowzFakTHlXk63H3ek1kUHU6RbSyxvsO4p
- lnG9ygU6y5uFJRPQyH/MkmRBGsCbq8JFI4g/CEaOIteLp1jQibFSuwuUM2Efy08zvnj6vsxmkRQ
- psMTQkhm3m9nqKLXtPdaxnguKOJkhsRogYcbbRHK0/0YF9K6J2qrySkn0Yat18atruBbAdHb3Bg
- I7bSpMRDjPi8aIs98dz6FoYoefGQE37GFOzXrS4G9dZTXadE6YGR2ksskT9vZnfsAAqqe+13vbk
- 3C+OiPU u935fQCw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240501180622.1676340-1-edliaw@google.com>
 
-Add some stuff that got missed along the way:
+Hi,
 
-- CONFIG_UNWIND_PATCH_PAC_INTO_SCS=y so SCS vs PAC is hardware
-  selectable.
+On Wed, May 01, 2024 at 06:06:18PM +0000, Edward Liaw wrote:
+> Fixes clang compilation warnings by adding explicit unsigned conversion:
+> 
+> parse_vdso.c:206:22: warning: passing 'const char *' to parameter of
+>  type 'const unsigned char *' converts between pointers to integer types
+>  where one is of the unique plain 'char' type and the other is not
+>  [-Wpointer-sign]
+>         ver_hash = elf_hash(version);
+>                             ^~~~~~~
+> parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+> static unsigned long elf_hash(const unsigned char *name)
+>                                                    ^
+> parse_vdso.c:207:46: warning: passing 'const char *' to parameter of
+>  type 'const unsigned char *' converts between pointers to integer types
+>  where one is of the unique plain 'char' type and the other is not
+>  [-Wpointer-sign]
+>         ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
+>                                                     ^~~~
+> parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+> static unsigned long elf_hash(const unsigned char *name)
+> 
+> Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
+> Signed-off-by: Edward Liaw <edliaw@google.com>
 
-- CONFIG_X86_KERNEL_IBT=y while a default, just be sure.
+> ---
+> v2: update commit message with correct compiler warning
+> v3: fix checkpatch errors and indentation
+> ---
+>  tools/testing/selftests/vDSO/parse_vdso.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+> index 413f75620a35..9e29ff0657ea 100644
+> --- a/tools/testing/selftests/vDSO/parse_vdso.c
+> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
+> @@ -203,8 +203,9 @@ void *vdso_sym(const char *version, const char *name)
 
-- CONFIG_CFI_CLANG=y globally.
+Is it possible to just change the types of the parameters of vdso_sym()
+or does that trigger even more warnings on the callsites of vdso_sym()?
 
-- CONFIG_PAGE_TABLE_CHECK=y for userspace mapping sanity.
+Either way, this looks ok to me.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- v3: we don't want to (and can't) turn off FINEIBT
- v2: https://lore.kernel.org/lkml/20240430173657.it.699-kees@kernel.org/
- v1: https://lore.kernel.org/lkml/20240426222940.work.884-kees@kernel.org/
----
- arch/arm64/configs/hardening.config | 1 +
- arch/x86/configs/hardening.config   | 3 +++
- kernel/configs/hardening.config     | 8 ++++++++
- 3 files changed, 12 insertions(+)
+Acked-by: Justin Stitt <justinstitt@google.com>
 
-diff --git a/arch/arm64/configs/hardening.config b/arch/arm64/configs/hardening.config
-index b0e795208998..24179722927e 100644
---- a/arch/arm64/configs/hardening.config
-+++ b/arch/arm64/configs/hardening.config
-@@ -5,6 +5,7 @@ CONFIG_ARM64_SW_TTBR0_PAN=y
- 
- # Software Shadow Stack or PAC
- CONFIG_SHADOW_CALL_STACK=y
-+CONFIG_UNWIND_PATCH_PAC_INTO_SCS=y
- 
- # Pointer authentication (ARMv8.3 and later). If hardware actually supports
- # it, one can turn off CONFIG_STACKPROTECTOR_STRONG with this enabled.
-diff --git a/arch/x86/configs/hardening.config b/arch/x86/configs/hardening.config
-index 7b497f3b7bc3..de319852a1e9 100644
---- a/arch/x86/configs/hardening.config
-+++ b/arch/x86/configs/hardening.config
-@@ -10,5 +10,8 @@ CONFIG_INTEL_IOMMU_DEFAULT_ON=y
- CONFIG_INTEL_IOMMU_SVM=y
- CONFIG_AMD_IOMMU=y
- 
-+# Enforce CET Indirect Branch Tracking in the kernel.
-+CONFIG_X86_KERNEL_IBT=y
-+
- # Enable CET Shadow Stack for userspace.
- CONFIG_X86_USER_SHADOW_STACK=y
-diff --git a/kernel/configs/hardening.config b/kernel/configs/hardening.config
-index 7a5bbfc024b7..47e6564129c3 100644
---- a/kernel/configs/hardening.config
-+++ b/kernel/configs/hardening.config
-@@ -23,6 +23,10 @@ CONFIG_SLAB_FREELIST_HARDENED=y
- CONFIG_SHUFFLE_PAGE_ALLOCATOR=y
- CONFIG_RANDOM_KMALLOC_CACHES=y
- 
-+# Sanity check userspace page table mappings.
-+CONFIG_PAGE_TABLE_CHECK=y
-+CONFIG_PAGE_TABLE_CHECK_ENFORCED=y
-+
- # Randomize kernel stack offset on syscall entry.
- CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
- 
-@@ -81,6 +85,10 @@ CONFIG_SECCOMP_FILTER=y
- # Provides some protections against SYN flooding.
- CONFIG_SYN_COOKIES=y
- 
-+# Enable Kernel Control Flow Integrity (currently Clang only).
-+CONFIG_CFI_CLANG=y
-+# CONFIG_CFI_PERMISSIVE is not set
-+
- # Attack surface reduction: do not autoload TTY line disciplines.
- # CONFIG_LDISC_AUTOLOAD is not set
- 
--- 
-2.34.1
+>  	if (!vdso_info.valid)
+>  		return 0;
+> 
+> -	ver_hash = elf_hash(version);
+> -	ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
+> +	ver_hash = elf_hash((const unsigned char *)version);
+> +	ELF(Word) chain = vdso_info.bucket[
+> +		elf_hash((const unsigned char *)name) % vdso_info.nbucket];
+> 
+>  	for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
+>  		ELF(Sym) *sym = &vdso_info.symtab[chain];
+> --
+> 2.45.0.rc0.197.gbae5840b3b-goog
+> 
 
+Thanks
+Justin
