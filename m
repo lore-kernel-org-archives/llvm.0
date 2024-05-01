@@ -1,150 +1,192 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAA2161B52
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 20:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC934F897;
+	Wed,  1 May 2024 22:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714594926; cv=none; b=ht5qhVXyxJS3hyQZF94JCUzJN9hkGhr/tRmqwvARxe8ST+5rUOjBNmUfu4+aj4sdmGN5zqhvR8tQt2yiaJBzCS+8n/4IUhVq1QgQtBMyBLfQP3+bOuzQT249Wqu4H2FMfECvMq8OdjFEkk1fduPdy8L0cLpgcAJ+DAdsWzDmWWs=
+	t=1714604134; cv=none; b=LJv8vaErXVwB7s3g0zFyX7ny7gqs1QHuImoMm5yB0UrtyiDcboHDk5fFB9a0QO/UGNH/9wgN+IZO8Jj7Q+qbsf0NvYMAv/blxgahFR1GDRKMHpuPrAFFM7BzmzEfkEuttmyFYia+SK/bDGhcGrptVvKY4Gv4Hkef6OoybuPAdUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714594926; c=relaxed/simple;
-	bh=Rl7I4/w66VkXXW1jfowz8Diggq7Cxx9FBc+7jDI5OE4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q2WhhgHjTEbX0+gRYjIVP/h/3TVRWA/1W/GOLYAIgSjXw64hOo82um4jMeZgo+5HO0ctwj4mE7nZExwpSJ0lU2AWTVvSMT/1S/QhLX1r+8LRKbicqbMP9F45ZxMnux2nHoY2pSmZQP40731ANRo40OoryUc1nt92tgKy+ImpjHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l9Y5XvoA; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1714604134; c=relaxed/simple;
+	bh=jj5Po6i6bhNWS4WRCJD7MS6k4QGArNUryRqACxKTrq4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MwKvrpTfjQpASDDfTUcP9spcloIJEvx0r9HQrlzivMfeAIFHWDo0XeNNuBcL+yoh6I7AW/F77vAWB8Hg7YFI7zpFGoBLYdXfoSMG6oyK0XgIEJz/6eTeeu+7LfX2UH2uHYK7s1UDPprKZ4Z1mJO8syj2H0cEpMxsummR95qxt34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OByP5kph; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l9Y5XvoA"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-572aad902baso1292a12.0
-        for <llvm@lists.linux.dev>; Wed, 01 May 2024 13:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714594923; x=1715199723; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ciChv8gSXlzNkgOKOzuvxXr84EIsn6Oq5YU3LMaJYNo=;
-        b=l9Y5XvoAhogc0aw56UK2lPL+rgfVsLdiEY3r5DdfpXcZXOaObrk8iFh0i4pc7XhEdp
-         LYmWJiAk9smHrpo0/tD3XfYlwN39Sdym4v8ezSjdx/FbLJeWzstHF3ZPAYXiOg9v7vA8
-         lGAUZvsAB0kyWI4cvO4fqKIZSN37sEoMrQ6xlYTfaYOtujZsXNxrC2C130zu1IjtPDAv
-         ukU/XCMiptuzFy9ePL4ZartV8jbMEXq39bWf+ioQEY5UdrBCDSX70R7grIl4YIbfNjtF
-         un0S9i+inZ5bPUENF9y3FzKFM0LALtZLVKXhTU4w6gVW31+BD/rd4T3e85mPsucgkIuq
-         z1yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714594923; x=1715199723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ciChv8gSXlzNkgOKOzuvxXr84EIsn6Oq5YU3LMaJYNo=;
-        b=aCjr/YHD5hz3NqqpcX2YZ3gQnlYN+l5B1RG4CKTmHhGB8EoAioPzg+aL8hF44hQHeq
-         mGjGrEXk05A/zbU65E704wXr8nnPR4LdI/0w0zxeIXr0WFJf+lUnraYOIkKi4MuYwHa7
-         vFa4D/lxYJ/o25dMpwcHL21KGrH+cwPiQH6TrgE+gwBSO7cgG1aF/XTSX8AI2tOswQCo
-         pksBXkc+kpCcjGvCPNT3p2Kkp+DQVoVPaf2v7Jj02GcNFj5H8C3UZOiKZMMPIbUgqgSm
-         IFEH0c5N8Kz04a0eSc/Wmy0kypzy4DjOZVgTNHzaGRIiD0nCY+9hF9mNyj3sfPMXX9fc
-         9nLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUnUBcxyTZpu5CnigFbHZU5zaB8iXFK6YoAsxgLOgjVM+8dXixYbwpDee26XeaLazaRiwkFqGi5iOnA/iNFPxOK5JCHjw==
-X-Gm-Message-State: AOJu0YzUXn4mYcozCKuLGH+bkUl1zX+Q9vv5b7bVTx49r0apahJuXHSt
-	3NovWBgZf3VWp3V+M8bakbd2VDC9Xp2NJDjrW8oEM6xwFK7w0Dex0IAyS489O3cNy0dJK6+BonE
-	DCgz+gZ+9gqQJT/knV7NsvHaV19oCk1SMqliC
-X-Google-Smtp-Source: AGHT+IFmvrlSmN5CZ2AzUe/MN5NsP38k4AFUMV92kR3xGNpVWzrF7dMoaN56RroXCDL45dJrMsPtLXoabp7LiNXom+E=
-X-Received: by 2002:a05:6402:54c:b0:572:988f:2f38 with SMTP id
- 4fb4d7f45d1cf-572bba25964mr35884a12.6.1714594923041; Wed, 01 May 2024
- 13:22:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OByP5kph"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D163BC072AA;
+	Wed,  1 May 2024 22:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714604133;
+	bh=jj5Po6i6bhNWS4WRCJD7MS6k4QGArNUryRqACxKTrq4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=OByP5kph77hHZK59VyfQjQvcru7O5KiqstijuGhg6FQIC71EB9PD1vyHeNDvWYRci
+	 WhYHxL8qgo22t9T4vNN9AL71Tj8I4OkhF1kNwjP3qtoqhIdEAolevhw3nOEcXOgttB
+	 Xa+2GzILKMXSqlVRbbXuUcYXcVhPSp/uH7F6PTQohzzmmRb8Bw9L5gdyND+YxppiiZ
+	 XZ6CqlntxQjXDao7EaWVkOr8PfFHlHcgOfanDBuk56ycAf+lzzK2OS44uCAhWzfc+Z
+	 CKrzG/fYUWMQG9VWphAVXSINXc4czpnz3XVbyNrDHVy0Mq8un/LgYFHHmF1L4Ede64
+	 pIqXc0NgiJVtw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 01 May 2024 15:55:25 -0700
+Subject: [PATCH] kbuild: Remove support for Clang's ThinLTO caching
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240501180622.1676340-1-edliaw@google.com> <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
-In-Reply-To: <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
-From: Edward Liaw <edliaw@google.com>
-Date: Wed, 1 May 2024 13:21:35 -0700
-Message-ID: <CAG4es9UxQEMx9gH4-khe39x05ioNbhZpym3G6TcR6aYQYtrj-A@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for elf_hash
-To: Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240501-kbuild-llvm-drop-thinlto-cache-v1-1-c117cc50a24b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFzIMmYC/x3NQQ6DIBBA0auYWTsJEivqVYwLC4NMRDBgTRPj3
+ Uu6fJv/b8iUmDKM1Q2JLs4cQ0FTV6DdElZCNsUghWzFSzS4vT/sDXp/7WhSPPB0HPwZUS/aEdp
+ 2UEqJbpC2hxI5Eln+/gfT/Dw/yr0i4XAAAAA=
+To: masahiroy@kernel.org, morbo@google.com, justinstitt@google.com
+Cc: nicolas@fjasle.eu, keescook@chromium.org, samitolvanen@google.com, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ stable@vger.kernel.org, Yifan Hong <elsk@google.com>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5033; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=jj5Po6i6bhNWS4WRCJD7MS6k4QGArNUryRqACxKTrq4=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGlGJ1IeBmpE54rbSgTM4Fshcjh3cc5jnWSjjwufKwV8O
+ +NS/Mylo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzk2gNGhm8ZAacSNwux9C3p
+ rjWKPB9ZpdiUskzDed3G6yXff7NMncfIsGOroo07H4tWQ/u6BzNOy74pqj9VGn3lROmaazN9Wx3
+ leAE=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, May 1, 2024 at 12:54=E2=80=AFPM Justin Stitt <justinstitt@google.co=
-m> wrote:
->
-> Hi,
->
-> On Wed, May 01, 2024 at 06:06:18PM +0000, Edward Liaw wrote:
-> > Fixes clang compilation warnings by adding explicit unsigned conversion=
-:
-> >
-> > parse_vdso.c:206:22: warning: passing 'const char *' to parameter of
-> >  type 'const unsigned char *' converts between pointers to integer type=
-s
-> >  where one is of the unique plain 'char' type and the other is not
-> >  [-Wpointer-sign]
-> >         ver_hash =3D elf_hash(version);
-> >                             ^~~~~~~
-> > parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-> > static unsigned long elf_hash(const unsigned char *name)
-> >                                                    ^
-> > parse_vdso.c:207:46: warning: passing 'const char *' to parameter of
-> >  type 'const unsigned char *' converts between pointers to integer type=
-s
-> >  where one is of the unique plain 'char' type and the other is not
-> >  [-Wpointer-sign]
-> >         ELF(Word) chain =3D vdso_info.bucket[elf_hash(name) % vdso_info=
-.nbucket];
-> >                                                     ^~~~
-> > parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-> > static unsigned long elf_hash(const unsigned char *name)
-> >
-> > Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
-> > Signed-off-by: Edward Liaw <edliaw@google.com>
->
-> > ---
-> > v2: update commit message with correct compiler warning
-> > v3: fix checkpatch errors and indentation
-> > ---
-> >  tools/testing/selftests/vDSO/parse_vdso.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/=
-selftests/vDSO/parse_vdso.c
-> > index 413f75620a35..9e29ff0657ea 100644
-> > --- a/tools/testing/selftests/vDSO/parse_vdso.c
-> > +++ b/tools/testing/selftests/vDSO/parse_vdso.c
-> > @@ -203,8 +203,9 @@ void *vdso_sym(const char *version, const char *nam=
-e)
->
-> Is it possible to just change the types of the parameters of vdso_sym()
-> or does that trigger even more warnings on the callsites of vdso_sym()?
+There is an issue in clang's ThinLTO caching (enabled for the kernel via
+'--thinlto-cache-dir') with .incbin, which the kernel occasionally uses
+to include data within the kernel, such as the .config file for
+/proc/config.gz. For example, when changing the .config and rebuilding
+vmlinux, the copy of .config in vmlinux does not match the copy of
+.config in the build folder:
 
-It does trigger more warnings on the callsites unfortunately.
+  $ echo 'CONFIG_LTO_NONE=n
+  CONFIG_LTO_CLANG_THIN=y
+  CONFIG_IKCONFIG=y
+  CONFIG_HEADERS_INSTALL=y' >kernel/configs/repro.config
 
->
-> Either way, this looks ok to me.
->
-> Acked-by: Justin Stitt <justinstitt@google.com>
->
-> >       if (!vdso_info.valid)
-> >               return 0;
-> >
-> > -     ver_hash =3D elf_hash(version);
-> > -     ELF(Word) chain =3D vdso_info.bucket[elf_hash(name) % vdso_info.n=
-bucket];
-> > +     ver_hash =3D elf_hash((const unsigned char *)version);
-> > +     ELF(Word) chain =3D vdso_info.bucket[
-> > +             elf_hash((const unsigned char *)name) % vdso_info.nbucket=
-];
-> >
-> >       for (; chain !=3D STN_UNDEF; chain =3D vdso_info.chain[chain]) {
-> >               ELF(Sym) *sym =3D &vdso_info.symtab[chain];
-> > --
-> > 2.45.0.rc0.197.gbae5840b3b-goog
-> >
->
-> Thanks
-> Justin
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 clean defconfig repro.config vmlinux
+  ...
+
+  $ grep CONFIG_HEADERS_INSTALL .config
+  CONFIG_HEADERS_INSTALL=y
+
+  $ scripts/extract-ikconfig vmlinux | grep CONFIG_HEADERS_INSTALL
+  CONFIG_HEADERS_INSTALL=y
+
+  $ scripts/config -d HEADERS_INSTALL
+
+  $ make -kj"$(nproc)" ARCH=x86_64 LLVM=1 vmlinux
+  ...
+    UPD     kernel/config_data
+    GZIP    kernel/config_data.gz
+    CC      kernel/configs.o
+  ...
+    LD      vmlinux
+  ...
+
+  $ grep CONFIG_HEADERS_INSTALL .config
+  # CONFIG_HEADERS_INSTALL is not set
+
+  $ scripts/extract-ikconfig vmlinux | grep CONFIG_HEADERS_INSTALL
+  CONFIG_HEADERS_INSTALL=y
+
+Without '--thinlto-cache-dir' or when using full LTO, this issue does
+not occur.
+
+Benchmarking incremental builds on a few different machines with and
+without the cache shows a 20% increase in incremental build time without
+the cache when measured by touching init/main.c and running 'make all'.
+
+ARCH=arm64 defconfig + CONFIG_LTO_CLANG_THIN=y on an arm64 host:
+
+  Benchmark 1: With ThinLTO cache
+    Time (mean ± σ):     56.347 s ±  0.163 s    [User: 83.768 s, System: 24.661 s]
+    Range (min … max):   56.109 s … 56.594 s    10 runs
+
+  Benchmark 2: Without ThinLTO cache
+    Time (mean ± σ):     67.740 s ±  0.479 s    [User: 718.458 s, System: 31.797 s]
+    Range (min … max):   67.059 s … 68.556 s    10 runs
+
+  Summary
+    With ThinLTO cache ran
+      1.20 ± 0.01 times faster than Without ThinLTO cache
+
+ARCH=x86_64 defconfig + CONFIG_LTO_CLANG_THIN=y on an x86_64 host:
+
+  Benchmark 1: With ThinLTO cache
+    Time (mean ± σ):     85.772 s ±  0.252 s    [User: 91.505 s, System: 8.408 s]
+    Range (min … max):   85.447 s … 86.244 s    10 runs
+
+  Benchmark 2: Without ThinLTO cache
+    Time (mean ± σ):     103.833 s ±  0.288 s    [User: 232.058 s, System: 8.569 s]
+    Range (min … max):   103.286 s … 104.124 s    10 runs
+
+  Summary
+    With ThinLTO cache ran
+      1.21 ± 0.00 times faster than Without ThinLTO cache
+
+While it is unfortunate to take this performance improvement off the
+table, correctness is more important. If/when this is fixed in LLVM, it
+can potentially be brought back in a conditional manner. Alternatively,
+a developer can just disable LTO if doing incremental compiles quickly
+is important, as a full compile cycle can still take over a minute even
+with the cache and it is unlikely that LTO will result in functional
+differences for a kernel change.
+
+Cc: stable@vger.kernel.org
+Fixes: dc5723b02e52 ("kbuild: add support for Clang LTO")
+Reported-by: Yifan Hong <elsk@google.com>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2021
+Reported-by: Masami Hiramatsu <mhiramat@kernel.org>
+Closes: https://lore.kernel.org/r/20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+This is an alternative (and arguably more robust) fix to Yifan's patch
+at https://lore.kernel.org/20240429220756.979347-2-elsk@google.com/.
+---
+ Makefile | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 40fb2ca6fe4c..6b6a4a757062 100644
+--- a/Makefile
++++ b/Makefile
+@@ -942,7 +942,6 @@ endif
+ ifdef CONFIG_LTO_CLANG
+ ifdef CONFIG_LTO_CLANG_THIN
+ CC_FLAGS_LTO	:= -flto=thin -fsplit-lto-unit
+-KBUILD_LDFLAGS	+= --thinlto-cache-dir=$(extmod_prefix).thinlto-cache
+ else
+ CC_FLAGS_LTO	:= -flto
+ endif
+@@ -1477,7 +1476,7 @@ endif # CONFIG_MODULES
+ # Directories & files removed with 'make clean'
+ CLEAN_FILES += vmlinux.symvers modules-only.symvers \
+ 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
+-	       compile_commands.json .thinlto-cache rust/test \
++	       compile_commands.json rust/test \
+ 	       rust-project.json .vmlinux.objs .vmlinux.export.c
+ 
+ # Directories & files removed with 'make mrproper'
+@@ -1783,7 +1782,7 @@ PHONY += compile_commands.json
+ 
+ clean-dirs := $(KBUILD_EXTMOD)
+ clean: rm-files := $(KBUILD_EXTMOD)/Module.symvers $(KBUILD_EXTMOD)/modules.nsdeps \
+-	$(KBUILD_EXTMOD)/compile_commands.json $(KBUILD_EXTMOD)/.thinlto-cache
++	$(KBUILD_EXTMOD)/compile_commands.json
+ 
+ PHONY += prepare
+ # now expand this into a simple variable to reduce the cost of shell evaluations
+
+---
+base-commit: e67572cd2204894179d89bd7b984072f19313b03
+change-id: 20240501-kbuild-llvm-drop-thinlto-cache-f497770692f8
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
