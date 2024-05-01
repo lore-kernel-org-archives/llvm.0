@@ -1,39 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9320F7F;
-	Wed,  1 May 2024 06:50:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A894DA1B;
+	Wed,  1 May 2024 08:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714546239; cv=none; b=EBxIAN/n8xW/Mp6jA7xLXv7cpWvfQlQIlJaE7E/vJlmaoe5aePCIWs+Zb0q3ckKSexKDIHm1visc7CkQg31iyxjhDqSvbK9GnE8VluJSomhaix3jM3hupc2hIwPovzoSjn5kAKBAwU5YSlo/bLeq3LdSMQ8gg0ozzq53x/dUogY=
+	t=1714551448; cv=none; b=nHm/zZ+eOiMPvXTg24cpRoiccgMRhJiLd6MVc9x4qu1QirD1P8iJRcjXWGh/lShRTub9FgrgmuQY5VoSHcHUsVQI6gCNe63GzveYZgg9fzTvSY8S2z8frRFdtIKzbyqlfaZUT0fegUXMN4ZUhX57mD7MMobTK3PPhOPw+SWvy+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714546239; c=relaxed/simple;
-	bh=EBLsOp8i7ZfqayGZ/Gsp812mpw0d+W7wnYXPoz2MiMw=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZIwQl2nXjj/3LNJN6+gqguJvGoP1smE8U4fTL0Rr96C0kh7mYIGxJtyDg3obHikDsSCa46z0sviPj27vljR+H67uIyUX2/ci1U9y4eUUgwEtR4DD2QHQpilKhffrON6uxkiViKogq5hqIq2QunFbxpeAMuFmshjgdQ6hLUSJCeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=j6M2fiZp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714551448; c=relaxed/simple;
+	bh=KOdtGaAloVYRcbgEMvF8HZPdgpnc+UXP5zW3aSPEydU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=un0w1B8WTGQgRYc5UmNDqjfhHYVReGNNKIdu1sSg/r4Jg1pAKMMdsI0GI2SUul0DePf/Q1bpXDQD7ZaF8jdn1Tf73n3HRwR/43Rz0lLHuy3y0ctCWGxI8CA7d57fhBt68xX1ghcLIyLk7CwFHpcr7sqScA81+DJT7/cxnDwlI6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IyecZfCa; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="j6M2fiZp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D588AC113CC;
-	Wed,  1 May 2024 06:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714546239;
-	bh=EBLsOp8i7ZfqayGZ/Gsp812mpw0d+W7wnYXPoz2MiMw=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=j6M2fiZpONXQJ+fkdUhxrgC76XCS3vFfeFn26IWFk4Ym+6fTnhqWaXjn9/IJQ8TIH
-	 4ge4lsY8IcVM/9n+f0PPBFJXEde/JtVRkHRhFiLqG5reMObG0pbonV3XxPSzl9G/wn
-	 KeAZv63PpKx4tyn9JinQM/Bl4wjEChXBlJBBWewA=
-Date: Wed, 1 May 2024 08:50:36 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: kernel test robot <lkp@intel.com>,
-	Norihiko Hama <Norihiko.Hama@alpsalpine.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [usb:usb-testing 17/35] drivers/usb/storage/usb.c:141:21: error:
- incompatible pointer types passing 'unsigned int *' to parameter of type
- 'uint64_t *' (aka 'unsigned long long *')
-Message-ID: <2024050141-remote-mockup-f933@gregkh>
-References: <202405011431.PvaZHpRK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IyecZfCa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714551446; x=1746087446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KOdtGaAloVYRcbgEMvF8HZPdgpnc+UXP5zW3aSPEydU=;
+  b=IyecZfCaS2CgoXGQB3FqUso0s7BhWMXD7sAxaDFXbyMtwBwYsI5S7WZh
+   DavF9/kBsvY0Tt9gIRiCf8Hc5xDaY0Zh4oJuCQ14sYn7iqgSC51R/MZdC
+   xNkf4cvMCLbU2jVE8ibmxZ2vwJzMoccTfWIPkotz8IaivtJaw9OieYV5P
+   84r//MT6fewxaNO6AxTx/Xjur6LHvNKDBWhbJRJ+1Zq6RMxGnU89RJJnT
+   XePNqoBtn67S011VXbckCk2tl/XBOfxdYLblW4qiacOdAsQdwPXNrqZLI
+   xSMjAu7xFhdiMmUO91DhKq4guE3jtVBmFcLMmoLo86wLl74LMCnGTpBna
+   A==;
+X-CSE-ConnectionGUID: giFFe/52S5usJodLc0ZTag==
+X-CSE-MsgGUID: KtqGlOWES9+U219OybkMTA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="20963419"
+X-IronPort-AV: E=Sophos;i="6.07,244,1708416000"; 
+   d="scan'208";a="20963419"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2024 01:17:25 -0700
+X-CSE-ConnectionGUID: fZZQNo1uTyaAS1VxQWRXNQ==
+X-CSE-MsgGUID: Hvg7e5F0SGevV4xMv8rAVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,244,1708416000"; 
+   d="scan'208";a="31435222"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 01 May 2024 01:17:22 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s259T-0009Du-0E;
+	Wed, 01 May 2024 08:17:19 +0000
+Date: Wed, 1 May 2024 16:16:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lyndon Sanche <lsanche@lyndeno.ca>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mario.limonciello@amd.com, pali@kernel.org, W_Armin@gmx.de,
+	srinivas.pandruvada@linux.intel.com, ilpo.jarvinen@linux.intel.com,
+	Matthew Garrett <mjg59@srcf.ucam.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dell.Client.Kernel@dell.com
+Subject: Re: [PATCH v3] platform/x86: dell-laptop: Implement platform_profile
+Message-ID: <202405011636.CDJVLh7l-lkp@intel.com>
+References: <20240429164844.7544-2-lsanche@lyndeno.ca>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,27 +68,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202405011431.PvaZHpRK-lkp@intel.com>
+In-Reply-To: <20240429164844.7544-2-lsanche@lyndeno.ca>
 
-On Wed, May 01, 2024 at 02:32:56PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> head:   ac6a205c5bef39d65ecd9f5dd2c1d75652c35405
-> commit: 70d66b8e47e6fa031f541291e9dd3d7f0c44b41e [17/35] usb-storage: Optimize scan delay more precisely
+Hi Lyndon,
 
-I'm going to drop this commit from my tree now.
+kernel test robot noticed the following build warnings:
 
-But really, it feels odd to have this parsing logic in a random driver
-for something like handling floating point numbers "properly" from
-userspace.  Why isn't this in the core kernel somewhere?  And, as that
-was a rhetorical question, the answer is we probably shouldn't be
-handling floating point number parsing in the kernel...
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.9-rc6 next-20240430]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I understand the quest for handling error time outs "faster" when you
-assume that you know that the error will never happen, but what's the
-odds that it will end up happening...
+url:    https://github.com/intel-lab-lkp/linux/commits/Lyndon-Sanche/platform-x86-dell-laptop-Implement-platform_profile/20240430-135932
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240429164844.7544-2-lsanche%40lyndeno.ca
+patch subject: [PATCH v3] platform/x86: dell-laptop: Implement platform_profile
+config: i386-buildonly-randconfig-001-20240501 (https://download.01.org/0day-ci/archive/20240501/202405011636.CDJVLh7l-lkp@intel.com/config)
+compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405011636.CDJVLh7l-lkp@intel.com/reproduce)
 
-there has to be a better way to do this.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405011636.CDJVLh7l-lkp@intel.com/
 
-thanks,
+All warnings (new ones prefixed by >>):
 
-greg k-h
+>> drivers/platform/x86/dell/dell-laptop.c:2387:5: warning: no previous prototype for function 'thermal_init' [-Wmissing-prototypes]
+    2387 | int thermal_init(void)
+         |     ^
+   drivers/platform/x86/dell/dell-laptop.c:2387:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2387 | int thermal_init(void)
+         | ^
+         | static 
+>> drivers/platform/x86/dell/dell-laptop.c:2418:6: warning: no previous prototype for function 'thermal_cleanup' [-Wmissing-prototypes]
+    2418 | void thermal_cleanup(void)
+         |      ^
+   drivers/platform/x86/dell/dell-laptop.c:2418:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2418 | void thermal_cleanup(void)
+         | ^
+         | static 
+   2 warnings generated.
+
+
+vim +/thermal_init +2387 drivers/platform/x86/dell/dell-laptop.c
+
+  2386	
+> 2387	int thermal_init(void)
+  2388	{
+  2389		int ret;
+  2390		int supported_modes;
+  2391	
+  2392		ret = thermal_get_supported_modes(&supported_modes);
+  2393		if (ret || !supported_modes)
+  2394			return 0;
+  2395	
+  2396		thermal_handler = kzalloc(sizeof(*thermal_handler), GFP_KERNEL);
+  2397		if (!thermal_handler)
+  2398			return -ENOMEM;
+  2399		thermal_handler->profile_get = thermal_platform_profile_get;
+  2400		thermal_handler->profile_set = thermal_platform_profile_set;
+  2401	
+  2402		if (supported_modes & DELL_QUIET)
+  2403			set_bit(PLATFORM_PROFILE_QUIET, thermal_handler->choices);
+  2404		if (supported_modes & DELL_COOL_BOTTOM)
+  2405			set_bit(PLATFORM_PROFILE_COOL, thermal_handler->choices);
+  2406		if (supported_modes & DELL_BALANCED)
+  2407			set_bit(PLATFORM_PROFILE_BALANCED, thermal_handler->choices);
+  2408		if (supported_modes & DELL_PERFORMANCE)
+  2409			set_bit(PLATFORM_PROFILE_PERFORMANCE, thermal_handler->choices);
+  2410	
+  2411		// Clean up but do not fail
+  2412		if (platform_profile_register(thermal_handler))
+  2413			kfree(thermal_handler);
+  2414	
+  2415		return 0;
+  2416	}
+  2417	
+> 2418	void thermal_cleanup(void)
+  2419	{
+  2420		if (thermal_handler) {
+  2421			platform_profile_remove();
+  2422			kfree(thermal_handler);
+  2423		}
+  2424	}
+  2425	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
