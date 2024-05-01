@@ -1,145 +1,127 @@
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04olkn2091.outbound.protection.outlook.com [40.92.75.91])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1DDFBEA
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 17:01:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.75.91
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714582905; cv=fail; b=T1w180rKp0j3oVwJ6LODkIfdnGN8n691i1+qSvWpFTQvutVoLS766KQRrtkpS0qbaRZG2M7K//3BAtn+IjzEZtJpmEqV/qXQTls+kRAF6mCuNQ4aa6zIEt37mwvWA62XnCkCSyRDGvolUy1S/F3a6J6wgxgL2bEHXaUxF1ajvus=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714582905; c=relaxed/simple;
-	bh=pCO5r+p4FvBcSUCl96Nbjhrag6fEjrbxi7uWE7nxdXs=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=os2drOhWR301y//uzrgGHN2LoO2pWdPj1EZuaAoJHArQ6EEfmgIc9Suvu+Sw1zFqL393Y6vuDUvdFNeKHJVHWDP+ro+vNQFuQPKzV7orkhG8zho+QWTn/ffk4DKbtBA1q0pBVAs0cZS1MA/SecJaOHc5i6lEgJKZWneWfSNyBGs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=rOtq+lVV; arc=fail smtp.client-ip=40.92.75.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7971C18E10;
+	Wed,  1 May 2024 17:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714583191; cv=none; b=X/GIXK6lqkaAzkZShDT1urpQXQ4G/aODxc+vV7ibomqQ5R50+nZCiAEv2f5sTovj4csEmU1T4IZT9gHf/MXyv+2rpm9lN6Y0of7rgLJtYZaZvD76KHmFHtqTHxd3PJuUAFxVm+YJ3qaOUYS3KHesmuIINPWgNruohVPVPQIigbQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714583191; c=relaxed/simple;
+	bh=JD4E3TlDnD/zWlNnsd2hoioc4wFvnJ0sOb14GhziA78=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=iLtI0nMLf/Apn65zxbG5D5raahe/Y+gwbup85y7V5g1MhYRnsEcNkjTVpGFRMTLX7UZBc0TNevQYAjwpTvxmCthuJQPd7J97cmd6WDdokhtelZ9Ge7AdaCihFSD+tOPo0hdqg9p4UhW27rcxSMskG0fcDRIMryLrf4z+OdfqB08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=B2SXLdyA; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="rOtq+lVV"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NMZFK5cwR/aUigwBCTDAWLd8/RO0WnrO8I7Q1sRB7aTPFsuNtIX6uywyqBZdT8LnyxvoHOOTKh3BZH8ZlWSIsoigx3A1zRYYJ6iDm81Jg98QbNJs9RZkNZa+sAJChn718qtC5hM+HJd5Or/1KHEu3znF4ZLrgIPGeA3oyQ5Li3p0+Ke2utn1nPKDkg6JlV889z80shJz+YTUhNOnuVbEryi8suJcLIZyZRUej+OB9UsEPR/vSKvW35yY2SBqqCJrYM07L8xVlasLefUCR1bXwXgY2cRyFlSbdlI02kwb4W7ibFVZsvDoitepYDb1B88CAJwjsrv1jcu1uR8HADRyjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u7mlIKZRJgwWXbTjrNqFugqoH0VppYOj/q+IrmvAl4c=;
- b=bQ9IIUpB+s36s/IbS7WILv2cUXDPyvGKNfMaU4pvEbWih4FjhDBErM2y3lIHHI40M/5mYrBlgihpGVsKPxdhosHirOqtsV3+Kw16xjIe7aYFjb16J3BB6UrUQn7Pw5HyqZr8uD4PwNu/7WQMQD9EhL2HW7vK5jA5rkT7hwu90zEkzBHq751XkeNEKpaX6eDRWYMjoPTUacY2jibbJdaTmPUI3S4nFJEwlr5PIuRiChslX3fExHUaGFoRSzfTgm1n4Nb/uwfzrpXRRH5B2/kHsFosHAmBP/rOIJmJj3uEliEPONiJCkSKVlKeOYXA3Wr822yILFSgs2H8OGPFGYfmrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u7mlIKZRJgwWXbTjrNqFugqoH0VppYOj/q+IrmvAl4c=;
- b=rOtq+lVVMdXQN9Zj3JmLQ2FtDNaUQsUqX/2OJbzm9cr/IBzZwfUXqCvuajeepONUBejnw1IqeOjOcA0DoEtxQm1Tvx902LayBIQwjeJreM/MpwwFV47z2Y64AIAlmnADeIj6a3szUhWVL4Nb66w2iryNV1CkS/tjC6gG9lYYxgsg/w56BCXg82dZFA+NGYnt8e4dzG6ev6Lw7NLAOuc9bkrdFHxdjhPPhPteaIVCS4+XkehoCeH1pnj/rhaoc7N1tUC75b/7ub3hMix78GaDVkPAS2NpbZnN3en3i44639Ejb/eocySihOaGEFvGiiPGbAQ8AMrsz0XIXgaZtiXN4A==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by AS8PR02MB6919.eurprd02.prod.outlook.com (2603:10a6:20b:2e7::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.34; Wed, 1 May
- 2024 17:01:40 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7519.035; Wed, 1 May 2024
- 17:01:40 +0000
-From: Erick Archer <erick.archer@outlook.com>
-To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Erick Archer <erick.archer@outlook.com>,
-	linux-sctp@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] sctp: annotate struct sctp_assoc_ids with __counted_by()
-Date: Wed,  1 May 2024 19:01:22 +0200
-Message-ID:
- <AS8PR02MB723728DA244A82D97342D6498B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [a1EBsiubbstgSOqbilm2qzJT1oUFrO2T]
-X-ClientProxiedBy: MA4P292CA0011.ESPP292.PROD.OUTLOOK.COM
- (2603:10a6:250:2d::17) To AS8PR02MB7237.eurprd02.prod.outlook.com
- (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID:
- <20240501170122.4901-1-erick.archer@outlook.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B2SXLdyA"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 441DgKoC024525;
+	Wed, 1 May 2024 17:06:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=LdHuB/Pttr2MzBH59IrCt2SNp2ciL/2HumnTzw4Ae0w=; b=B2
+	SXLdyA4TkWy/rjgL+4Bhzcd9KKibNm7GUj03nltF+qjNH6uuIe7DLW+c0v8pONtE
+	iqdy0EQWY5n/zjkK18ZGmT84XAcO29UnEme5KAH9UtQX97Qk1joSPneqyicD9Oiq
+	Ncai00+dz5dDxoIDwNoxPCqdApeAE2CTYN/PL3afQRPahL95VR7j75YYI1dbulo7
+	qdq/cTr0LMNsdeMU+KDfXWQinz7JzxqHDEDUexWxGwi8X4Exo4bZsOhckXow5pvp
+	mYKLoQe3ejU8Vrrnqhe7gshObICyLXtCE0oN1sjbrL9yr5JSZmCjiHy5U6/7QJ86
+	NrqMUo9Eu+qm+zkdjd5w==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xu199341f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 May 2024 17:06:23 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 441H5lwi025672
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 1 May 2024 17:05:47 GMT
+Received: from [10.71.110.192] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 1 May 2024
+ 10:05:47 -0700
+Message-ID: <e9209693-df0a-406c-87d7-c4437d1f9bae@quicinc.com>
+Date: Wed, 1 May 2024 10:05:46 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|AS8PR02MB6919:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7692cf13-4e20-4313-5678-08dc6a005ed4
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|440099019|3412199016|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	IG3AXHgw2lnDYgVMA9e35ggZBdk5uM8AAlF/FkQyJWehhGUA7qTHMStXQSG7in67iY6Z2uC3pslI1xPg40Ndw1C6BI8LohSFDRL0qZ9AB+ksbPMQwpi66DEaAe56wqrjVrXad6pEIq1qSC6q7x4yVegASqPfdgRp36fHiID0Sln4Jx0zMIK2+fC5qYkhzplaFaIBgY8lq7gUOrirCL+4IFgWBZEomIm0+lrE9HRyrpxHqHIQwXOKQTy/T7gLd1c1csQx+7vhCj10hX4HpzsrxzYOU7mQSJlAz9VZoWXB2q8lSE/xS80pkpj9MKd0mODhTiquubbTV4uQF3Nb5r+QWwP+SFlCpVfV++xl3Wz347XXbj1Q5Un3htJNremCfJaga54ZFG7Xr0BqUUkrGJqF89dw5e+lrZXSYJ0l1h7D2cq8ZSxXsyqoFfN18nUpNcdkyT9icE+1wTLEh4qhv7New9Qa8yr0OxZQQ82HuJkyYZQobWVjKy0lLZpjmnPawjOErK8RByTZrre8ubHVGCr1ISQQ6/tL61AVeKlPgqJfvk0s4a44TTY0y2r5xKSkzAt6/c/+4kUwXy8W0TffmxB2sXrdhIheUDnS/shgSHjrgZOaSnpYlnb0M/MsTlylTqU3
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Tzh4PxgKV0/q3UuDo8LCV7D/INgFcpKruzqxxlQqjzKrJTF0qndO0aqS5HQ8?=
- =?us-ascii?Q?XZ6ob9JRvOAnFoSc2nrdJdEGQEchmneYwjprzYUCVfWuYL2RLxl20/wAoNKv?=
- =?us-ascii?Q?OxrkDsvwQkoVziJEWAma6uWOAHSX/1TwCrVSa/aTzM0BTBM6swXMwqgOSw5b?=
- =?us-ascii?Q?3xyjpSDkpdbe8Qou4G9YHBYs4w2B5Rex7K9+ciGFIZlVcFLdGIG+uK7jCOk/?=
- =?us-ascii?Q?X9Qy+H0UOJCdMzFnn18kL2lB5afBfQ1lCpFTv8Hbt6Jt4FKYyCJS/TQz+CxA?=
- =?us-ascii?Q?hEBJfj9BxCXBG5LeAiC07VsuwxzsA80GdvSkPFiwMQJsIgvQaclZONYdjVRR?=
- =?us-ascii?Q?ocYNmpWCjugLFS6RUHBW+ZC5BS1btRhzPQiUAXz54pZ4mPHIoiSMs1ufaeIx?=
- =?us-ascii?Q?elzU8eG6eANt/WcIC/rNcuB8ISAFRz9m4b3KaZTMJqQTnmi4eu4friFHa2LD?=
- =?us-ascii?Q?E1hMsy5Wg7BKmAlF12/HIOaLeDf8/h+LgcA/qmD0tRU8vn+niP5XkorlrB22?=
- =?us-ascii?Q?1aS8uTOmuA4SvsxE5EzOr2CKf0dLu//Lk9g8qd60jhEEVeBoFlNq/kuqWNOC?=
- =?us-ascii?Q?Us7VmO6JQknBjQVPasrrduGFtPLJgStkRJlbvpXpipDDZyGxm4wN+pti/lst?=
- =?us-ascii?Q?du3PZlKlFbIM/JNiysYfpnw/tLV1npBvKipzhfGFwu2v6cJn4u72KCPQFtM9?=
- =?us-ascii?Q?yNbEqLC0k2W48DLj9azuZJ7hpyiGgG9st239lIsnl4qLU/GgNyNsZUervx5j?=
- =?us-ascii?Q?Zu7kI6T/GTrJE5hw/URMLHw5vUV+87EKAFTdh2Wm/7/HZ0E7DTW1urK/3huG?=
- =?us-ascii?Q?Af5SjP2+4o7g5wqo+rBpR/qPFeB+uJO4mJIkatorvkMgyva0DZmBdIbf3j+B?=
- =?us-ascii?Q?dQD+STl5r+VLm0nO3YXMzejYw2f2yiE7MSZZrprhtYzgbpLuHkU2aQ4bYRiX?=
- =?us-ascii?Q?n/DI5GRD1pBpC74UcfNHrxQYvPS3jewOzjc/HPcB61aK+QmdtDI5DdYT8FrL?=
- =?us-ascii?Q?W8qjLKv4guSqIGe6die3wtTvfQC9S+egivmJ4J3Icw1NzYFk/5vJZH71MA1g?=
- =?us-ascii?Q?bJNycFlWi0QHMf3wbt86R1+4pgupb3evCGYzB8pKQzKWk0EIBPLQWDrNO0Aw?=
- =?us-ascii?Q?f1Q5Hg5i77ODP806HhERHCFcqXYLIGP6OgPkTDbYtMxYk7uI++mfI/D3jsRI?=
- =?us-ascii?Q?Pe9MMuGQawrOMJwOcMIcPIupzt7lKL2roOAm7M7CeBw1cUBbyjitBTg4cpqq?=
- =?us-ascii?Q?Yof2/fID6vAgs3NnIG9d?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7692cf13-4e20-4313-5678-08dc6a005ed4
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2024 17:01:40.5487
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR02MB6919
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linux-next:master 9793/10134]
+ drivers/of/of_reserved_mem.c:465:6: warning: variable 'nomap' is
+ uninitialized when used here
+Content-Language: en-US
+To: "Rob Herring (Arm)" <robh@kernel.org>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+        Linux Memory
+ Management List <linux-mm@kvack.org>
+References: <202405012148.1dCXzomq-lkp@intel.com>
+From: Oreoluwa Babatunde <quic_obabatun@quicinc.com>
+In-Reply-To: <202405012148.1dCXzomq-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: XzY_gQna6a8JqHHzQiijkclqX7N01GD7
+X-Proofpoint-GUID: XzY_gQna6a8JqHHzQiijkclqX7N01GD7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
+ lowpriorityscore=0 mlxscore=0 adultscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2405010121
 
-Prepare for the coming implementation by GCC and Clang of the
-__counted_by attribute. Flexible array members annotated with
-__counted_by can have their accesses bounds-checked at run-time via
-CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE
-(for strcpy/memcpy-family functions).
 
-Suggested-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Erick Archer <erick.archer@outlook.com>
----
- include/uapi/linux/sctp.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Rob,
 
-diff --git a/include/uapi/linux/sctp.h b/include/uapi/linux/sctp.h
-index b7d91d4cf0db..836173e73401 100644
---- a/include/uapi/linux/sctp.h
-+++ b/include/uapi/linux/sctp.h
-@@ -1007,7 +1007,7 @@ enum sctp_sstat_state {
-  */
- struct sctp_assoc_ids {
- 	__u32		gaids_number_of_ids;
--	sctp_assoc_t	gaids_assoc_id[];
-+	sctp_assoc_t	gaids_assoc_id[] __counted_by(gaids_number_of_ids);
- };
- 
- /*
--- 
-2.25.1
+On 5/1/2024 6:45 AM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   f68868ba718e30594165879cc3020607165b0761
+> commit: 2acef04ad57cab44b33001542791fc93f81cadf1 [9793/10134] of: reserved_mem: Remove the use of phandle from the reserved_mem APIs
+> config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240501/202405012148.1dCXzomq-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240501/202405012148.1dCXzomq-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202405012148.1dCXzomq-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from drivers/of/of_reserved_mem.c:19:
+>    In file included from include/linux/mm.h:2208:
+>    include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>      522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>>> drivers/of/of_reserved_mem.c:465:6: warning: variable 'nomap' is uninitialized when used here [-Wuninitialized]
+>      465 |                                         nomap ? "nomap" : "map",
+>          |                                         ^~~~~
+>    include/linux/printk.h:530:34: note: expanded from macro 'pr_info'
+>      530 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+>          |                                         ^~~~~~~~~~~
+>    include/linux/printk.h:457:60: note: expanded from macro 'printk'
+>      457 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>          |                                                            ^~~~~~~~~~~
+>    include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
+>      429 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>          |                                 ^~~~~~~~~~~
+>    drivers/of/of_reserved_mem.c:441:13: note: initialize the variable 'nomap' to silence this warning
+>      441 |                 bool nomap;
+>          |                           ^
+>          |                            = 0
+>    2 warnings generated.
+Would you like me to upload another version to fix this error?
+Should just need to undo a one line change I made while I was
+restructuring the code.
 
+Regards,
+
+Oreoluwa
