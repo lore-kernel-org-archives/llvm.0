@@ -1,112 +1,166 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BE437E
-	for <llvm@lists.linux.dev>; Wed,  1 May 2024 00:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD313C2D
+	for <llvm@lists.linux.dev>; Wed,  1 May 2024 00:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714522930; cv=none; b=I5L/6dw7ui+c33RIJVgocOsoZCBikD9ntq2bIbu4wS4Ps7A6vH8P6pnJpmwlb8JBIijUAzXs0Pyfx5CbnN5tl5vE4rlon+x/CgSyjWHcjj9/vbrYCLDqlV8uXO0bRX/+TzGym0aZw+5nQT8cJ6nNCKqtyKSYiDQtcQIaFCqX9gc=
+	t=1714524684; cv=none; b=RSNLBhsJ+JVOTnvZxz/z7adbDnrvyqX/eSTOEA3NY0sX6p0XrJ7r/b7IpZVqjGCZyuNfJa1zIM/ixpepuJt2HmapJ8o5pRnaFVU/K292M9CXBykeWoCs6Y/8aYTv+dnh6MQr/RUrz7rAVMhNPPoBaFh53bkA6iRgegLsRJPLEY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714522930; c=relaxed/simple;
-	bh=X0WM2lVVVkrpkqRH8pWOu5puLWSYx1PKBK2oxI4tuB4=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VviZ02Rxw3Y8RCGVVZgnSEl81ZPYeM0iRbC89k5QIHHP9LS1BvHS+WoeaS+EYZxaX+dnEl9zT88O8eaqR1I4RnrXjySmj1I6be0psttiRlKKdTjFFL3P/s4D6PLQnJGrI99jvwOAYJtYgFgIudG3OJC8+Jojh0jekzNnbSclHB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IrF/az12; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+	s=arc-20240116; t=1714524684; c=relaxed/simple;
+	bh=hJrwzwEMOxovMoZRxNlyCcANV3z5yT8D38wA2tA6M1U=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=l4NlKrUloOA/rbHiG3rDaxpUmfbEXiAf0D79/rQhuWzMj1eKHqaGPgvRIGXtsAsRnuaF9lqsBEv3kaRyS6sWFiOmgyuZR5jpzOoV8VF1TJz/vHuWnNgXYbEZy89UEvbrQRqAHhSWowmdO2OG/HbpgmCsHCawFf3zlCB23MJt0a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RQBpoY6c; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IrF/az12"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc743cc50a6so9211578276.2
-        for <llvm@lists.linux.dev>; Tue, 30 Apr 2024 17:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714522928; x=1715127728; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aOeVT5ijOmluYWTqyy0kihWy6E7/FOShE/HltlDIAgs=;
-        b=IrF/az12xQweImItH6oGL8Vz/nRG3q6YCJk1W6cOW/eSFuqcb8lNPusSOFvnFHeTMl
-         +tf8dLgHYbSbTYAdWiR6rG9E6h4gMA+nImNyNgCGpmZEVNoqP5468a6btPcoh9RRxyvP
-         qJ202MN6JFVjg4GIlZXZguAXq/sVCSe5ZGlY5LNW9RJDw0Fgxn+pb5k/fCfans3+FMnX
-         9vAEB8vdXrRt5nt/OTy8m/SzkVgd6BDFDLnENEvLVSWsFuyPffoKTpg6vQpQoIshCeCt
-         N0cWYc7dAKOGn8tu/ER8csgtgZ9LRlLgpXE/gL+L6pK/hiSRPD2d/Si2I/yFq5kH8elD
-         QfNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714522928; x=1715127728;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aOeVT5ijOmluYWTqyy0kihWy6E7/FOShE/HltlDIAgs=;
-        b=Q9Xr0lqOURYZr0O4B9DRqEZnbUKnVcLkQsunw4KCXhvAg9UbWr+V9861boqfngQkFw
-         he874906kuLWmI1NU4++cGqCWA6UuerQ/gWJ8CccKsCVsaPLkHsog4w6k4A6GKeSIdCs
-         biq3AKoxcm+MCnduFAFRqj/o2DAIaVQOnF7ar6qrsYDk2XC+JbBLoON5oKyWxE0UwejT
-         RPk3OEHf9Z5GgZqWUJUkTDB9buMPbBsOioEcNWl7VqRASQKmKbnvwfR8yz9/1yo743C/
-         5ypWA+yobWNhCI9wji2LSIuMqv4eFG0DysaKYACcjYMbSHiQakjGBEKYc9EFNIBMz2E1
-         aBuA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7GPmiQ3C/9tWWyzJ7sSGiAX6XNvy1SqmOhlanTTVdHnBrBZ56/tSV5GnsH8NRetWopw3raUYMbEyE5FJUlgYpCOcM5A==
-X-Gm-Message-State: AOJu0YwsyTyCFeaSTUfAqXhPk7gtJcqusbmr38IXTCJBoJVvRljOP4oU
-	CPPM9Ah5RsO5w84POsBT8nXUUGq8vn0i5wsQsecw/Q9aiCqlEVjt6NMCalIm2YWoCwMSBZFG6cy
-	FWQ==
-X-Google-Smtp-Source: AGHT+IEklaC0M02gKwu0vEYUSv6f+jBLX5i1o80HacxvejQgGQU/HK8rwZXcSzpBPGZ7mCbPiYEdzIATv2o=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:6902:2b8c:b0:dd9:1b94:edb5 with SMTP id
- fj12-20020a0569022b8c00b00dd91b94edb5mr169322ybb.10.1714522928046; Tue, 30
- Apr 2024 17:22:08 -0700 (PDT)
-Date: Wed,  1 May 2024 00:21:48 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RQBpoY6c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714524679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GNjQ34HSlk6q8A7mAucqIbZQoIKy60hW70kV8q9hu5U=;
+	b=RQBpoY6c7ndU4nIKudKbMJwicKcJmleLgenzeUewU255/n7AxD6xw/mMicsQqSTRJzUBEq
+	d/VQtRhIRZ45yYhaUeEQbkdEQ5y2wyP67m1pGbtooB6BfqCbdyh49SfEzGmkQ0ifgdZCOo
+	+2UBT0DMMeDWaASbZvuMaIZzCWuuTnQ=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-12-B5MbRSILOfKP7mpNOW4uxw-1; Tue,
+ 30 Apr 2024 20:51:16 -0400
+X-MC-Unique: B5MbRSILOfKP7mpNOW4uxw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B347D3C025BD
+	for <llvm@lists.linux.dev>; Wed,  1 May 2024 00:51:15 +0000 (UTC)
+Received: from [172.64.5.14] (unknown [10.30.32.29])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6C684492BC7;
+	Wed,  1 May 2024 00:51:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 11 of 204): Test report for master
+ (6.9.0-rc6, mainline.kernel.org-clang, b947cc5b)
+Date: Wed, 01 May 2024 00:51:15 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.45.0.rc0.197.gbae5840b3b-goog
-Message-ID: <20240501002150.1370861-1-edliaw@google.com>
-Subject: [PATCH v2] selftests/vDSO: Fix assignment in condition without parentheses
-From: Edward Liaw <edliaw@google.com>
-To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andy Lutomirski <luto@mit.edu>, "H. Peter Anvin" <hpa@linux.intel.com>
-Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <05488.124043020511600179@us-mta-12.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes clang compiler warnings by adding parentheses:
+Hi, we tested your kernel and here are the results:
 
-parse_vdso.c:65:9: warning: using the result of an assignment as a
- condition without parentheses [-Wparentheses]
-                if (g = h & 0xf0000000)
-                    ~~^~~~~~~~~~~~~~~~
-parse_vdso.c:65:9: note: place parentheses around the assignment to
- silence this warning
-                if (g = h & 0xf0000000)
-                      ^
-                    (                 )
-parse_vdso.c:65:9: note: use '==' to turn this assignment into an
- equality comparison
-                if (g = h & 0xf0000000)
-                      ^
-                      ==
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
-Reviewed-by: Justin Stitt <justinstitt@google.com>
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
-v2: separated assignment from predicate
----
- tools/testing/selftests/vDSO/parse_vdso.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Tested-by: CKI Project <cki-project@redhat.com>
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 413f75620a35..fdd38f7e0e43 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -62,7 +62,8 @@ static unsigned long elf_hash(const unsigned char *name)
- 	while (*name)
- 	{
- 		h = (h << 4) + *name++;
--		if (g = h & 0xf0000000)
-+		g = h & 0xf0000000;
-+		if (g)
- 			h ^= g >> 24;
- 		h &= ~g;
- 	}
---
-2.45.0.rc0.197.gbae5840b3b-goog
+Kernel information:
+    Commit message: Merge tag 'erofs-for-6.9-rc7-fixes' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/xiang/erofs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1272097983
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: [upstream] [eln] waived call traces we don't plan to report =
+upstream
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1864
+            Affected tests:
+                Reboot test [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+
+
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
