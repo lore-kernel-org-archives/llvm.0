@@ -1,165 +1,193 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11010001.outbound.protection.outlook.com [52.101.229.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5651F12B77
-	for <llvm@lists.linux.dev>; Thu,  2 May 2024 02:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714615309; cv=none; b=qXQ+FWtTDf1aqNYGMbLYLOJUbWpubQgJUtjDITlLp89Tb9hihdoWzwKHwXShJY3fq6BInKpwHUDBtJfX5+JSaB6CkOYy6UoHIBvemyEQf3m+dDnuoYv/0ADoB/p1uybiXQA5f8uquoGDM3iln4HpIxur4lnxz2riypWYnsch158=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714615309; c=relaxed/simple;
-	bh=lBsGNKGOP8LZqTpa4NKlKnCvn/bCc+IkX4jqaORbGXs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=c7w3sT4gUvjgc4vRclziAlSZN7SaJlEuy5TmcYTxZaVirKZamwxxMRyclfaJf5Zl9ReC9gAdciS/zvhU+mjLwOa9d7Ke9NI/NxC91U4jNryvzOrnA2M65oOk4ZBpAn7e/1hvaCy3R837xVAMf2ZVfScUR5vZYQmBwwMWDomq24s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MphhFCNk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E3C28DA5;
+	Thu,  2 May 2024 08:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.1
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714637058; cv=fail; b=odPwyata0jDAZ6ank49gnES3R8aYZ7zML9oVpqDcCo8oPPpwz8FL1L6SdwP9Vvkr0f8cJncpbURCQvnSA1XsWkoe5/o5/qK9tHNHI6J7tlcjBAn8ilknwGtP1pr4eUZG2mcu9zV8PdeGJghS5p4waNw1rl8S2ppuCcq/j5vAvDw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714637058; c=relaxed/simple;
+	bh=EZWz8m4hL+Iu2jitQsRaLbcpsXo62sDQQkTetqKgyrc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=hBz1u/VfRNEKXI1KXemz+g83kkNgs9GIbTgQWx9Kw8FOAO/lhIBA5bqueSzzXviqOly7y3Gn3atyB8wemxq87UeyK1GXcZ8KJPrgRfsjraaa2Q6k0HK7W3Wqy8vT67rQ8cImDD8sSDgPKG0/P1LyhfupgtlYMfAG5lzsKaaI65c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com; spf=pass smtp.mailfrom=alpsalpine.com; dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b=ahjWxtpf; arc=fail smtp.client-ip=52.101.229.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alpsalpine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpsalpine.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MphhFCNk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714615306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4pi6xWcsCvy1ZhUBEbZUPBdpj6GZmvC3Gab3X1tvihI=;
-	b=MphhFCNkG6lvAQxjAOJUC/DkSIYmPNGhQs0LfsS1+cDsBXaimUdVvGOXRVfYfz3h8G5WD8
-	7GrESSev5uiV4V7yDS7HXSHsj7Qvv3So0wkJFpRKVEEATIa7v4dgJRvOYfYNhIHa6bdqIh
-	w0rba5xKJ8AZI+sOF6nEdnXX9IwC7XY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-294-F-mmvd2BNoGB2bDnv_lXRw-1; Wed,
- 01 May 2024 22:01:44 -0400
-X-MC-Unique: F-mmvd2BNoGB2bDnv_lXRw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9C7BB3C12821
-	for <llvm@lists.linux.dev>; Thu,  2 May 2024 02:01:44 +0000 (UTC)
-Received: from [172.64.5.14] (unknown [10.30.32.29])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B92681C060D0;
-	Thu,  2 May 2024 02:01:43 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
- (6.9.0-rc6, mainline.kernel.org-clang, 01066798)
-Date: Thu, 02 May 2024 02:01:43 -0000
-To: llvm@lists.linux.dev, yiyan@redhat.com, xiawu@redhat.com, bhe@redhat.com
+	dkim=pass (2048-bit key) header.d=alpsalpine.com header.i=@alpsalpine.com header.b="ahjWxtpf"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZQ5AXVdpRDh0GZEobnY5giHCbpVeeFLs7aIhVFzcxNiie2wYGpsJ/W59P4iKL9HOQOEXyC6Fz8rZ6vc7jHmabgWrmFuD9FYN4mNhey1Vf+ecnE8Lato9GduviHBIF5mL4ia4b+muzaMsQqRshgRPeTFfifD741aqBXfIKnnUUCbHZDR5LCRPtv5MjmYzklcDqFm0nDz+etlnAYjrG0+M9HD27CNDEIhMvjgTmjHGTFibtNe/2nSgsUcGu3nZspwZzWd6E0CyDVZP9vuLHiPK34ttKW6kWrS7uUbVQGElMlomHaEpTov02aNCIE/Yp+72ZR34OcParK0QFdsi3QexmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jkAYYaKrs3oFFhzuzMccMS395iJcUgojjlsnamcL/s8=;
+ b=VeTQHhulvF0VlJwlnKumqXpc4Q15eu+LorJiPaPAoQ/d2L1EsEsaoH4SGVSiFlFrCbZlOlVrWp6LX3izjAHDWLQTuzLApLinlCnTx15aqEa+EVtlygbkOCftVy9cwsJBD98rBTGHDyY3fGHCxtJUbyWsTlSA76Kh69X5PMAIatiY4+I2ed4eOp0SmDSmwLRBlbB45f0DXW365SyAKMGE6EQsarXmaPu4B4qx15KFQQDG+wf4bX7J3Y4wNfbKSbg0iavqCJLjJ/NmHlec3La+d066/Ro/2qLKjWK/Hbil9YhirgiFIyV8GHjUTu+FJbf3BMkku+eFgZIr5n2A0LopPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=alpsalpine.com; dmarc=pass action=none
+ header.from=alpsalpine.com; dkim=pass header.d=alpsalpine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alpsalpine.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jkAYYaKrs3oFFhzuzMccMS395iJcUgojjlsnamcL/s8=;
+ b=ahjWxtpfZlK/P2e1Vv22nolpjhfCmby5k/xE34RBgkSD0rTMbHWYNIZeH2IiEYWSRiDYmuPbY/4HGT1ZWr55JL80EbEaHB/mFXp46bwdmqfHtjgpYqV2P9WFK8t+YwY0OhT5hoGpZSAbN9s4M2diK15/k9B1fZMDltDmIa+QF77zygRzJQGaxxY5DlLSlZNsnLLolFvP80S6r0/Djf7Pqtm/+aUMxXmi10w9IUGbwY1uLplmCcZj1RyboBkhwkoynZ4fan/3iIS8ow7quw5grmdLujWW6s0jowU7EyErKEjE8gNh/shiuLYhgCcbtZYFEtPpdwwPoq9DMXN4u1QJLQ==
+Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
+ (2603:1096:400:2ae::14) by TYYPR01MB6895.jpnprd01.prod.outlook.com
+ (2603:1096:400:d2::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Thu, 2 May
+ 2024 08:04:14 +0000
+Received: from TYVPR01MB10781.jpnprd01.prod.outlook.com
+ ([fe80::fe5b:1283:68a6:dacc]) by TYVPR01MB10781.jpnprd01.prod.outlook.com
+ ([fe80::fe5b:1283:68a6:dacc%4]) with mapi id 15.20.7544.023; Thu, 2 May 2024
+ 08:04:14 +0000
+From: Norihiko Hama <norihiko.hama@alpsalpine.com>
+To: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: kernel test robot <lkp@intel.com>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "oe-kbuild-all@lists.linux.dev"
+	<oe-kbuild-all@lists.linux.dev>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>
+Subject: RE: [usb:usb-testing 17/35] drivers/usb/storage/usb.c:141:21: error:
+ incompatible pointer types passing 'unsigned int *' to parameter of type
+ 'uint64_t *' (aka 'unsigned long long *')
+Thread-Topic: [usb:usb-testing 17/35] drivers/usb/storage/usb.c:141:21: error:
+ incompatible pointer types passing 'unsigned int *' to parameter of type
+ 'uint64_t *' (aka 'unsigned long long *')
+Thread-Index: AQHam5F1f0p9ZiVPU06SSJjgDE12SLGB8JoAgAB47YCAASsUQA==
+Date: Thu, 2 May 2024 08:04:14 +0000
+Message-ID:
+ <TYVPR01MB1078177211401B245ED7150B290182@TYVPR01MB10781.jpnprd01.prod.outlook.com>
+References: <202405011431.PvaZHpRK-lkp@intel.com>
+ <2024050141-remote-mockup-f933@gregkh>
+ <3e2a7570-0704-4453-ad0b-68c5806157e5@rowland.harvard.edu>
+In-Reply-To: <3e2a7570-0704-4453-ad0b-68c5806157e5@rowland.harvard.edu>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=alpsalpine.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYVPR01MB10781:EE_|TYYPR01MB6895:EE_
+x-ms-office365-filtering-correlation-id: 7f85a195-5683-4131-2c06-08dc6a7e7514
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ =?utf-7?B?RW1XendiUGZiVXp3bUFVTSstUlZyMHZyWHlRemlMeWFQL3BLT0l1S2dxejlR?=
+ =?utf-7?B?RWJsbXFVbFNzeTIveDc4NTh3WFM5akhDQ09iWWExZWVUNnJXQUZQVWUrLVBE?=
+ =?utf-7?B?QUpBWnlxclpMUystZE8wN0h6QTVUS0dFTmxzZEtSVGo3aDh4aUtyOUc2RDUy?=
+ =?utf-7?B?bHNMOFhhdFUxRnVWb01lbSstQ3ZYRWx3MEMvWE8vcGlOVXV1clBEcFM2eXA=?=
+ =?utf-7?B?NCstY3RSbi9hSXRtaTZUL2VqZHlJNEt4dDhEblMxNEg5b0xzZm0xSVFhbVBh?=
+ =?utf-7?B?RmN0bkJORW54SmRFc1R4UEZ4SjNTMkswTmxqYmtoSm9lRXowMlYxbHdpczQ2?=
+ =?utf-7?B?cTU0TndMQzNYaFZObUFaMystbmZzMGwwNWhncDdDZmlDWlFzWld5ZistMXJ2?=
+ =?utf-7?B?amlYcmRIbDFWNjVjS1NMU1AxWjFPTHlxVGk4U2JlSjhVUzhYUjNVVVkrLWM3?=
+ =?utf-7?B?Z3VuUUN4VmhnQmRETUhCMG1CaElJMGpNRXZ3QlhzTXlxRjkrLTlXWndWWHlJ?=
+ =?utf-7?B?QVBoeU9IWFVmQzJ3eHlnSjE4ZGpjMmpYcVhBazYrLWxRQS9RVGowcjBiSzhr?=
+ =?utf-7?B?b1RmL2NvMXdtY092dWg2ZnhzVFhOVXdpd09OQ2NSN2VWTXJrMlFYWXA3ek1I?=
+ =?utf-7?B?TzJVUHYxcHVUZkkrLWFqRUZMNmZLaFhKQWxvNmFaVXN1WGhxMG9jWGoxWVVr?=
+ =?utf-7?B?QmpaUmNNVDR6N1pXa2lMR2lzUlFhYlBEd25WclNYSistTzJmS1c3R2ZVS1lF?=
+ =?utf-7?B?VnhwZnZqa2lwT1pURnE4NWtuL1NXYmFld2RIKy1ucUozczJ6R1B5N01TVjFH?=
+ =?utf-7?B?YVlIOU1mTXV2b1F2N3N0di96SkF6ek9zN3RYV1FqRUQ2c3N6OER0Vkh4aG5U?=
+ =?utf-7?B?aEFXN09zUHprNWRhVnRmRktTWmRwQ3M1S29nRkJKM1lCNVY2dkQzekNOTG9U?=
+ =?utf-7?B?UmhIa09tVkt1ZXEvOCstdWoyd2I3eTJzQWIrLVdSdE8vRHNaYzBLWkVuN2hO?=
+ =?utf-7?B?VGRNd2JVTFNMNzNXaVhDWWFReEl0S3BCc0dhdlNKVFRrV0lySXppMkMxclhX?=
+ =?utf-7?B?WEI5WldMNjBoV1JoMFdjZlhibmxkdUFiQkM3a1F4MlVrSzloNEF1M0xWeWw2?=
+ =?utf-7?B?NnIyT21ESHA1QkNXYWpxUkJVUzZCbG04UDRtakVJeXVZNnpTcVpDSTdYRy9K?=
+ =?utf-7?B?empOdUhpS1NxMUV3TFZmZ21uWmcwVjJwRnUrLXBiUi9PKy1uTE9vV2RxWFVB?=
+ =?utf-7?B?UE9TSkFMYUxWdDAxYTFxT3FHREU0aGZwNUFCbzNpYXBjRXNUTDB2bnNaTkd1?=
+ =?utf-7?B?WEtBZ3pidGFkOWZUbkVDWE9SckwwVDIvRUZQUEdOREtqMDA1elRaM1FWL2RT?=
+ =?utf-7?B?QXlRMjRkMFd1T0ExbXBneVE4OXYwZWQ4TVcrLXY3NEtFRDZWNDhQekdhZkwx?=
+ =?utf-7?B?djQ0MGFSWnpSaENsZW9lM0lpWTRXR01UWHltOUZ1dnpsNUxDSkRLWGlJa3o3?=
+ =?utf-7?B?NSstZHZrdWtpYXZwMGRWQzRraXE4U2ptTlc2NHM2N3J1ZlhLcjZvbEZOTWIz?=
+ =?utf-7?B?Z1NtRHUycy92U20ycXRjTGFndkNIMTlCazhiQ25GbTFuV3dwTHJZZVRkU1lZ?=
+ =?utf-7?B?OW0xNDZuMGFHdzRLeWNWQWpWc3RFNzZweklPbnZCZ3JKNHJQSGhOQVp0c25m?=
+ =?utf-7?B?QnB4ckVpVWJxeHN2eVpicVI0SWp2OTBNSmtsZnV6aURVRGpvcWdMNlREYk5o?=
+ =?utf-7?B?c1h0VndVeTVWU0x2WU50U0dzVmd3YWxkVndJVlNxMWZFdlE1UldMeVR4YVFa?=
+ =?utf-7?B?RWlkMUpUZWxURmlMR1JiSTRrRENNZklXVTd2c1gySWFYcGxRK0FEMEFQUS0=?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYVPR01MB10781.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-7?B?YWszQUN5dnNQazBVeEFnTUNmT3NLRXdlSlgxTUtkam9tRmthOGNUaUNDZFJp?=
+ =?utf-7?B?ZmRWUjFXc3VnV2FBVHduTVg0ekt1RVZyek9kQVdTQ2ZKTFc5WXFtdGVHeDZF?=
+ =?utf-7?B?dnN2d1pCOUVtenpiZ0hIQTIrLU1ybWM1L1NpUGhReGhHY05ZRkdCb2x5eURQ?=
+ =?utf-7?B?ZHNna1lhUmZ2V0tYVTRLVmVyNUdpZXdFajZFSjR3L3NUbmdTYistTXU5TnJF?=
+ =?utf-7?B?eFhLRm9VcmE0ZDBFY1dPZFhrQWY0TTNpMjJGWFRtRmdKT1ZEMnB3ZG14QVVV?=
+ =?utf-7?B?bUFiOFMrLXVsbjZWb0JwcTJ0Y1VUeEdudFVyY3NZWlhpTE4yaHBHNUY0d0hE?=
+ =?utf-7?B?VEpCaXlacC9jRFdmRkh4MVNIbDBocDJlejRJZGJIeHZmSmRVekRBT0xpTGVM?=
+ =?utf-7?B?QnZrRUJZb01BZUVCdXJnV3hNZW1iM2hmMnNmbWRJaDduMzdZTTlZbHM2bCst?=
+ =?utf-7?B?MEhKYmNYNkc5OHpRdkYxSTV3NXkybjN6UlRlc1hwMEZwSGJkUVAwRkhhWWp3?=
+ =?utf-7?B?Vms1U0taTlRicE9PQ1FnTGNGMUQwRGhxaHlwYnFvYzFURHorLS8zQWVoNzJP?=
+ =?utf-7?B?eWN4YnRBRzZLbEJMdXoxKy05LzRSKy1WWnF6b3dvcDVMNXFaejh2cVRvVGtx?=
+ =?utf-7?B?OVBLd1VQMnpHdFdLOFdUbmp1VEZQc3NpR1NsSlpKcHZkVjQzSEpuTjRYRlo=?=
+ =?utf-7?B?Ky1MTXJwZEdqOVovckpsT1hrelRvUHBVSm9qVXF2N1lkV05lcVY3Rk5nUVpZ?=
+ =?utf-7?B?a3hEWm1TZ1E1S2VwakhWN2p1WnkxVFNmUDJiUVV1bWN2TkVEN0tkMHJmb3RK?=
+ =?utf-7?B?YmFFblM1aTByY2pXbEo0U0N3V1ZUNE9PWGNDbUNta0FGT2xYUXZpdmVLZ3hx?=
+ =?utf-7?B?WEFpZld6YnZiRFYzbEd3VENmYUR5Wm9vaUV1SjdBWnA5cWdENFdoNTE0cUZh?=
+ =?utf-7?B?NmlwNk9NMjM5dlNtb2FIRTBjdnM4M0ZpNm9XTW9jY2ZucUl4SGlHUSstMzZV?=
+ =?utf-7?B?UXg0ZWsvVXNCdTRwSTZqeGxheWxSM0NybWhscU9HbktiRC9jNGpDR04wbFA0?=
+ =?utf-7?B?S1MxQVpINGJoM0FCKy0xT3RBVWpIa3pTa3UwZnNFb1ZTR1o1SkdWdXdnb2pZ?=
+ =?utf-7?B?ZXV2MmVpMVcwUkZGVVhIbnJXclAyWlBLbkFzS1FXQUNLcEErLVNDZVVZKy1P?=
+ =?utf-7?B?RHl1T2dXTmlMdGNjQmhMRUNiNS9NSi9mZ1FqVistWG9QMDdyRGZZcmUyRmdR?=
+ =?utf-7?B?ekh4NUd5ejRmUWp4NGFrTWtqVFpaNFFKcjNVOHBDUkJha1VCeG9PUm5PY09U?=
+ =?utf-7?B?Rk1GUzEzMnlqNDdPOC95ZXZHWmtwWEtHdkpoR2laY1lRc1VORGxET0tGQ0J1?=
+ =?utf-7?B?aHF1QlJ1eHFtUDFPV1ZaMi9adWp3azV5OVBzMVlzdjArLXJZUTYzaXkwbGhv?=
+ =?utf-7?B?OGRNMXVjNTh6bHJ1dkpaRGVUdWV3MWJXYXV1b28xRk1hZFk1U1JUL0dabVQy?=
+ =?utf-7?B?OXlvU2xOQkVScklvY1ZvR3Y3djg4ZFpTdHBUMkRHdFgxMVRjdXhITjRNM2o4?=
+ =?utf-7?B?aktodno2RFppWVZkKy1zb0wxZDJiTTlSa0FpOFVKYzVMTGt5TjhFVERtTEx1?=
+ =?utf-7?B?WjNKVEZCWGhBemNvWmRLdistZmthWHBacDBaa2QyRlVlMlNBMkh1MTliWVpN?=
+ =?utf-7?B?bzJXZ1RwMnZtZlBkNHBIVW9TNGU1TXI2dGplVHRvME9RMFVVTVJJdlk5dlFh?=
+ =?utf-7?B?WnNGVks1Ny81MmhkVy9wUW41VjhVOVVrcHBFaDl4M3FWcE5QdlA1aWhwVEh2?=
+ =?utf-7?B?aFZLeXVlVjR2cDJpQ1E0alBRQXl3eHo4QWcwMU1EWFRBbHUxNU1RZVF6MWV2?=
+ =?utf-7?B?UE1KQlBnb3JkeGlFcTlyMkk1WkRJalVjWXpjcENWKy1oRVU5WThnVVMzekRw?=
+ =?utf-7?B?ZHNOWnJnUEVKQnJ0ODFwM3YzQzduanQ1NWlGV1FPUmZHQ2doYXhKN203MDh6?=
+ =?utf-7?B?WXl2VjlQS0s1djVuR0lhVEEva0Q3Z0xvWWFwS2tPTkVCTmU2Smo5OFR2MUpB?=
+ =?utf-7?B?UTVsTUhnZ3hYcjgrLTNpRTR0em03alEybElqZk8yOWVDZXBhSzU2a25UaGtC?=
+ =?utf-7?B?OUYrLS9mbnhwRXg3TWlDOXUrLU54ZmlDQ09RaHE1NFR0NWhyanA3NWRBSC8z?=
+ =?utf-7?B?ZA==?=
+Content-Type: text/plain; charset="utf-7"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-Message-Id: <96388.124050122014400549@us-mta-294.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: alpsalpine.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYVPR01MB10781.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f85a195-5683-4131-2c06-08dc6a7e7514
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2024 08:04:14.2253
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 57e76998-77bd-4b82-a424-198f46eb2254
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +2k9GAp5h6t8Rk//l3um3CfvS2+8yTA9NaOb+h2ffcWpApeZW4kg/NmHzv/yE37BTy+KUxnGEVwV0dRHAtDVbw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB6895
 
-Hi, we tested your kernel and here are the results:
+On Wed, May 011, 2024 at 11:03 PM +-0900, Alan Stern wrote:
++AD4- On Wed, May 01, 2024 at 08:50:36AM +-0200, Greg Kroah-Hartman wrote:
++AD4- +AD4- On Wed, May 01, 2024 at 02:32:56PM +-0800, kernel test robot wr=
+ote:
++AD4- +AD4- +AD4- tree:   https://git.kernel.org/pub/scm/linux/kernel/git/g=
+regkh/usb.git
++AD4- usb-testing
++AD4- +AD4- +AD4- head:   ac6a205c5bef39d65ecd9f5dd2c1d75652c35405
++AD4- +AD4- +AD4- commit: 70d66b8e47e6fa031f541291e9dd3d7f0c44b41e +AFs-17/=
+35+AF0-
++AD4- +AD4- +AD4- usb-storage: Optimize scan delay more precisely
++AD4- +AD4-
++AD4- Norihiko, another possibility is to use ordinary integers but have us=
+ers add an
++AD4- +ACI-m+ACI- or +ACI-ms+ACI- suffix when they want the value to be int=
+erpreted in milliseconds.
++AD4- So +ACI-5+ACI- means 5 seconds, but +ACI-500ms+ACI- means
++AD4- 500 milliseconds.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'regulator-fix-v6.9-rc6' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/broonie/regulator
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1275006400
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        kdump - kexec-file-load
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1275006400-x86_64-kernel_upt_26
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /kdump/kexec-file-load
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: [upstream] [eln] waived call traces we don't plan to report =
-upstream
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1864
-            Affected tests:
-                Boot test [x86_64]
-                Reboot test [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-
-
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Greg, I'm sorry for my problem.
+Alan, thank you for your proposal.
+I'll change the code based on it although I'm not sure if it's acceptable o=
+r not.
+I'll use only suffix as +ACI-ms+ACI- so that it could be also shown as 'del=
+ay+AF8-use' with unique suffix.
