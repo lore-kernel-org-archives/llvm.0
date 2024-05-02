@@ -1,192 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC934F897;
-	Wed,  1 May 2024 22:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449F912B87;
+	Thu,  2 May 2024 01:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714604134; cv=none; b=LJv8vaErXVwB7s3g0zFyX7ny7gqs1QHuImoMm5yB0UrtyiDcboHDk5fFB9a0QO/UGNH/9wgN+IZO8Jj7Q+qbsf0NvYMAv/blxgahFR1GDRKMHpuPrAFFM7BzmzEfkEuttmyFYia+SK/bDGhcGrptVvKY4Gv4Hkef6OoybuPAdUc=
+	t=1714612690; cv=none; b=Iqm3RYJwjKnwTSTDmxdK1K23a02RJWL4lVfh7b0Zbz/IFKTM4ewARNripPfcYXFT9SNAMT6utNxK8Pcvh/7OkyWj6ZBdV9oEz9QMn11gFNiac/xwPKlJ27Sq0Mu9uh3+zcHcmbwAHJo+JfaYoSxKcxs7xDmhsDwcOqi3g2sStf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714604134; c=relaxed/simple;
-	bh=jj5Po6i6bhNWS4WRCJD7MS6k4QGArNUryRqACxKTrq4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MwKvrpTfjQpASDDfTUcP9spcloIJEvx0r9HQrlzivMfeAIFHWDo0XeNNuBcL+yoh6I7AW/F77vAWB8Hg7YFI7zpFGoBLYdXfoSMG6oyK0XgIEJz/6eTeeu+7LfX2UH2uHYK7s1UDPprKZ4Z1mJO8syj2H0cEpMxsummR95qxt34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OByP5kph; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714612690; c=relaxed/simple;
+	bh=mzFZRCN/DM4D7nhwU2r1r0KjMtywnF6vbmB1PodwWEU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qoedqwBkMfy3+EBtN/esWSWgpv5Np8NyfajF2o09M0kHlTNCNZpEfGMP1AZpIvQ15S2kAUnKRguan6HlxkY99GLJlk46ZbDDTmgG7xnT0qbFqsjYNBdtv6oLqM9sa9gZ0BIUJEnDJaVm21k9+Ek5Trd56W5MMEJJyY6xC9+zIrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/tgc85A; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OByP5kph"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D163BC072AA;
-	Wed,  1 May 2024 22:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714604133;
-	bh=jj5Po6i6bhNWS4WRCJD7MS6k4QGArNUryRqACxKTrq4=;
-	h=From:Date:Subject:To:Cc:From;
-	b=OByP5kph77hHZK59VyfQjQvcru7O5KiqstijuGhg6FQIC71EB9PD1vyHeNDvWYRci
-	 WhYHxL8qgo22t9T4vNN9AL71Tj8I4OkhF1kNwjP3qtoqhIdEAolevhw3nOEcXOgttB
-	 Xa+2GzILKMXSqlVRbbXuUcYXcVhPSp/uH7F6PTQohzzmmRb8Bw9L5gdyND+YxppiiZ
-	 XZ6CqlntxQjXDao7EaWVkOr8PfFHlHcgOfanDBuk56ycAf+lzzK2OS44uCAhWzfc+Z
-	 CKrzG/fYUWMQG9VWphAVXSINXc4czpnz3XVbyNrDHVy0Mq8un/LgYFHHmF1L4Ede64
-	 pIqXc0NgiJVtw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 01 May 2024 15:55:25 -0700
-Subject: [PATCH] kbuild: Remove support for Clang's ThinLTO caching
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/tgc85A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714612688; x=1746148688;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mzFZRCN/DM4D7nhwU2r1r0KjMtywnF6vbmB1PodwWEU=;
+  b=i/tgc85AOEl4iT2s0nvqlGfu34wqtGdAqPoozzsvfzahn6ynwDpDJKR9
+   Hp16g1ueGUhQFBPQtZafYcNutZPv4totJThwXXOhfg7BkFzhjJzJ8Sdv3
+   SSBbB5aFBAoceBQ5DRuEoXmPNXUiz+U62RgqPAp4SmGXd80HCZ8hXYYsD
+   BOXh7dXYoWAjTrgwFDcIEvqh+QERqmrKs7Q0UiCC9g82T57nl480bfY3m
+   YL2dPjNWJZpkSp+e1N7AdE2yn6c0UGntNEsUrx2EAD+d3mXAWvzNZz5/n
+   emgrKlkXmYPxGjrem9ytlzGtthjYOMu+eAg2clPWHzmuuxm0Pu3Ob18+N
+   A==;
+X-CSE-ConnectionGUID: QXqH6rBFQf6lnHvFkws0Zw==
+X-CSE-MsgGUID: PotIiVHtSUWZSIB9E7LZ5g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="10908444"
+X-IronPort-AV: E=Sophos;i="6.07,246,1708416000"; 
+   d="scan'208";a="10908444"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2024 18:18:07 -0700
+X-CSE-ConnectionGUID: r9WbM5N7SbWvsO4uRm42XA==
+X-CSE-MsgGUID: TJ81bCL+Q/6djgXjWEDaVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,246,1708416000"; 
+   d="scan'208";a="27363820"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 01 May 2024 18:18:06 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s2L5H-000AGW-3B;
+	Thu, 02 May 2024 01:18:03 +0000
+Date: Thu, 2 May 2024 09:17:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ira Weiny <ira.weiny@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [weiny2:cxl-cper-testing 5/5] include/linux/cxl-event.h:158:1:
+ error: expected identifier or '('
+Message-ID: <202405020910.9Co46x8J-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240501-kbuild-llvm-drop-thinlto-cache-v1-1-c117cc50a24b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFzIMmYC/x3NQQ6DIBBA0auYWTsJEivqVYwLC4NMRDBgTRPj3
- Uu6fJv/b8iUmDKM1Q2JLs4cQ0FTV6DdElZCNsUghWzFSzS4vT/sDXp/7WhSPPB0HPwZUS/aEdp
- 2UEqJbpC2hxI5Eln+/gfT/Dw/yr0i4XAAAAA=
-To: masahiroy@kernel.org, morbo@google.com, justinstitt@google.com
-Cc: nicolas@fjasle.eu, keescook@chromium.org, samitolvanen@google.com, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- stable@vger.kernel.org, Yifan Hong <elsk@google.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5033; i=nathan@kernel.org;
- h=from:subject:message-id; bh=jj5Po6i6bhNWS4WRCJD7MS6k4QGArNUryRqACxKTrq4=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGlGJ1IeBmpE54rbSgTM4Fshcjh3cc5jnWSjjwufKwV8O
- +NS/Mylo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzk2gNGhm8ZAacSNwux9C3p
- rjWKPB9ZpdiUskzDed3G6yXff7NMncfIsGOroo07H4tWQ/u6BzNOy74pqj9VGn3lROmaazN9Wx3
- leAE=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There is an issue in clang's ThinLTO caching (enabled for the kernel via
-'--thinlto-cache-dir') with .incbin, which the kernel occasionally uses
-to include data within the kernel, such as the .config file for
-/proc/config.gz. For example, when changing the .config and rebuilding
-vmlinux, the copy of .config in vmlinux does not match the copy of
-.config in the build folder:
+tree:   https://github.com/weiny2/linux-kernel.git cxl-cper-testing
+head:   9561664438db543f4d61ee0dde4fa9722239fb13
+commit: 9561664438db543f4d61ee0dde4fa9722239fb13 [5/5] acpi/ghes: Add CXL CPER injection debugfs
+config: i386-buildonly-randconfig-003-20240501 (https://download.01.org/0day-ci/archive/20240502/202405020910.9Co46x8J-lkp@intel.com/config)
+compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240502/202405020910.9Co46x8J-lkp@intel.com/reproduce)
 
-  $ echo 'CONFIG_LTO_NONE=n
-  CONFIG_LTO_CLANG_THIN=y
-  CONFIG_IKCONFIG=y
-  CONFIG_HEADERS_INSTALL=y' >kernel/configs/repro.config
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405020910.9Co46x8J-lkp@intel.com/
 
-  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 clean defconfig repro.config vmlinux
-  ...
+All errors (new ones prefixed by >>):
 
-  $ grep CONFIG_HEADERS_INSTALL .config
-  CONFIG_HEADERS_INSTALL=y
+   In file included from drivers/acpi/acpi_extlog.c:19:
+   In file included from drivers/acpi/apei/apei-internal.h:11:
+>> include/linux/cxl-event.h:158:1: error: expected identifier or '('
+     158 | {
+         | ^
+   include/linux/cxl-event.h:163:1: error: expected identifier or '('
+     163 | {
+         | ^
+   2 errors generated.
 
-  $ scripts/extract-ikconfig vmlinux | grep CONFIG_HEADERS_INSTALL
-  CONFIG_HEADERS_INSTALL=y
 
-  $ scripts/config -d HEADERS_INSTALL
+vim +158 include/linux/cxl-event.h
 
-  $ make -kj"$(nproc)" ARCH=x86_64 LLVM=1 vmlinux
-  ...
-    UPD     kernel/config_data
-    GZIP    kernel/config_data.gz
-    CC      kernel/configs.o
-  ...
-    LD      vmlinux
-  ...
+f64693ceeed628 Ira Weiny 2023-07-13  151  
+f64693ceeed628 Ira Weiny 2023-07-13  152  #ifdef CONFIG_ACPI_APEI_GHES
+f64693ceeed628 Ira Weiny 2023-07-13  153  int cxl_cper_register_work(struct work_struct *work);
+f64693ceeed628 Ira Weiny 2023-07-13  154  int cxl_cper_unregister_work(struct work_struct *work);
+f64693ceeed628 Ira Weiny 2023-07-13  155  int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd);
+f64693ceeed628 Ira Weiny 2023-07-13  156  #else
+f64693ceeed628 Ira Weiny 2023-07-13  157  static inline int cxl_cper_register_work(struct work_struct *work);
+f64693ceeed628 Ira Weiny 2023-07-13 @158  {
+f64693ceeed628 Ira Weiny 2023-07-13  159  	return 0;
+f64693ceeed628 Ira Weiny 2023-07-13  160  }
+f64693ceeed628 Ira Weiny 2023-07-13  161  
 
-  $ grep CONFIG_HEADERS_INSTALL .config
-  # CONFIG_HEADERS_INSTALL is not set
+:::::: The code at line 158 was first introduced by commit
+:::::: f64693ceeed628d8036c8ac75f655bb3292d5bcf acpi/ghes: Process CXL Component Events
 
-  $ scripts/extract-ikconfig vmlinux | grep CONFIG_HEADERS_INSTALL
-  CONFIG_HEADERS_INSTALL=y
+:::::: TO: Ira Weiny <ira.weiny@intel.com>
+:::::: CC: Ira Weiny <ira.weiny@intel.com>
 
-Without '--thinlto-cache-dir' or when using full LTO, this issue does
-not occur.
-
-Benchmarking incremental builds on a few different machines with and
-without the cache shows a 20% increase in incremental build time without
-the cache when measured by touching init/main.c and running 'make all'.
-
-ARCH=arm64 defconfig + CONFIG_LTO_CLANG_THIN=y on an arm64 host:
-
-  Benchmark 1: With ThinLTO cache
-    Time (mean ± σ):     56.347 s ±  0.163 s    [User: 83.768 s, System: 24.661 s]
-    Range (min … max):   56.109 s … 56.594 s    10 runs
-
-  Benchmark 2: Without ThinLTO cache
-    Time (mean ± σ):     67.740 s ±  0.479 s    [User: 718.458 s, System: 31.797 s]
-    Range (min … max):   67.059 s … 68.556 s    10 runs
-
-  Summary
-    With ThinLTO cache ran
-      1.20 ± 0.01 times faster than Without ThinLTO cache
-
-ARCH=x86_64 defconfig + CONFIG_LTO_CLANG_THIN=y on an x86_64 host:
-
-  Benchmark 1: With ThinLTO cache
-    Time (mean ± σ):     85.772 s ±  0.252 s    [User: 91.505 s, System: 8.408 s]
-    Range (min … max):   85.447 s … 86.244 s    10 runs
-
-  Benchmark 2: Without ThinLTO cache
-    Time (mean ± σ):     103.833 s ±  0.288 s    [User: 232.058 s, System: 8.569 s]
-    Range (min … max):   103.286 s … 104.124 s    10 runs
-
-  Summary
-    With ThinLTO cache ran
-      1.21 ± 0.00 times faster than Without ThinLTO cache
-
-While it is unfortunate to take this performance improvement off the
-table, correctness is more important. If/when this is fixed in LLVM, it
-can potentially be brought back in a conditional manner. Alternatively,
-a developer can just disable LTO if doing incremental compiles quickly
-is important, as a full compile cycle can still take over a minute even
-with the cache and it is unlikely that LTO will result in functional
-differences for a kernel change.
-
-Cc: stable@vger.kernel.org
-Fixes: dc5723b02e52 ("kbuild: add support for Clang LTO")
-Reported-by: Yifan Hong <elsk@google.com>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2021
-Reported-by: Masami Hiramatsu <mhiramat@kernel.org>
-Closes: https://lore.kernel.org/r/20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-This is an alternative (and arguably more robust) fix to Yifan's patch
-at https://lore.kernel.org/20240429220756.979347-2-elsk@google.com/.
----
- Makefile | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 40fb2ca6fe4c..6b6a4a757062 100644
---- a/Makefile
-+++ b/Makefile
-@@ -942,7 +942,6 @@ endif
- ifdef CONFIG_LTO_CLANG
- ifdef CONFIG_LTO_CLANG_THIN
- CC_FLAGS_LTO	:= -flto=thin -fsplit-lto-unit
--KBUILD_LDFLAGS	+= --thinlto-cache-dir=$(extmod_prefix).thinlto-cache
- else
- CC_FLAGS_LTO	:= -flto
- endif
-@@ -1477,7 +1476,7 @@ endif # CONFIG_MODULES
- # Directories & files removed with 'make clean'
- CLEAN_FILES += vmlinux.symvers modules-only.symvers \
- 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
--	       compile_commands.json .thinlto-cache rust/test \
-+	       compile_commands.json rust/test \
- 	       rust-project.json .vmlinux.objs .vmlinux.export.c
- 
- # Directories & files removed with 'make mrproper'
-@@ -1783,7 +1782,7 @@ PHONY += compile_commands.json
- 
- clean-dirs := $(KBUILD_EXTMOD)
- clean: rm-files := $(KBUILD_EXTMOD)/Module.symvers $(KBUILD_EXTMOD)/modules.nsdeps \
--	$(KBUILD_EXTMOD)/compile_commands.json $(KBUILD_EXTMOD)/.thinlto-cache
-+	$(KBUILD_EXTMOD)/compile_commands.json
- 
- PHONY += prepare
- # now expand this into a simple variable to reduce the cost of shell evaluations
-
----
-base-commit: e67572cd2204894179d89bd7b984072f19313b03
-change-id: 20240501-kbuild-llvm-drop-thinlto-cache-f497770692f8
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
