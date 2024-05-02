@@ -1,160 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E13516FF3D;
-	Thu,  2 May 2024 17:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6111E86E;
+	Thu,  2 May 2024 21:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714671054; cv=none; b=jWTBrh7khUnZucHbBlVvTaHDJeoEiu4WISlg9da37ASfpRbNwDmsHPp3Y36D6DL3nADB3SK3P3Tb5Z3itRcoyixmgt9UAzpodb4bKRbQmL3871TcfjlT+nAZOK41bht30iKFXeJtgnlYvhLhKD2iBtHEULs14+Wi5ma2/Pk7ugc=
+	t=1714684024; cv=none; b=GO5MRSdpFBt0zntbx+xn135FuxGJp9pZ/zf2Vgv/xHID35VaumKk9r5hQJEt5/abDMUv5Do87DaXlAIqpgWOJDTStmibR+plxcyPbHnjjGGrz9Q6QBB7jCFzFjhd/ZwAgqJcN/VlI85SIiuj9fL/1AxHBP0njqmFWMCZrSlFrsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714671054; c=relaxed/simple;
-	bh=fWGbMKNAvOUN21O1ymW4R6KStRYsViEkha7BTMexEiI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h5N1MtcA0RBRlk7cA7uzjPZZkUZCQV5nhLzFjEw1F5y+Jr85LxI1sNErI+GmA8ZqBeVq7vUIPE0sCZQWsg/15D59MpAxlkCP9o4ZzlCvPeSNf1wwfiJvmOnHMLlG0mXNK50XIAnkap1oF6H0iB8VeKayItIAjyBeoTpZS5z3gpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y6LWaRmE; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714684024; c=relaxed/simple;
+	bh=rjkBg6gUkSwRf+TgXtxDgQ2t24FzbYZEekev+R+BxDc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kfyqGm04PHbjTSHZC+EFbtUcflQHMSzwCafKm9YJagKTwRJxholsXtGMHR3K3+e/D23OU29je2S6sTyfd+Vt+NBMtaj4kvtSBoDV0/DuoWOQe8/D/x9a7XNMNa2OtX9tkKvjJD22vuGPQnlD7y53yUS3txk+C6lncE5wbHQAgt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n0wb9iAw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y6LWaRmE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714671052; x=1746207052;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fWGbMKNAvOUN21O1ymW4R6KStRYsViEkha7BTMexEiI=;
-  b=Y6LWaRmEvEDiEnEx3zgHfuiZlPC5l/eedS/CKl019FEB0RmdTC/05Aau
-   Nr3xLK6Q9jpu1yryRJ7wNOZjWHA5AbclqnifiV9poZdgpvwidpVOsF5Wj
-   jY650IDoXbI1TnMw68DVgXWdes0MF/IzIuBXkjsOkNI3B6plpeg7PHx6b
-   twi7+0KP6EsqEXkHUR8jZ9eGCIUDWSPV1Rf2rYP76DORg+wUmxfMVNC/1
-   XXmFfPe3vjtTzsSCvwI7cQgayo5wT/efZzMsmgFo3ppQ8oEgrOYg62GRs
-   +YeBAfoE2QyLfKzl6cfEa5VqYerfaOUKqIBdqlDbxTWRgjPnrbKTSQzkd
-   w==;
-X-CSE-ConnectionGUID: wyDgSx/ORWmTXBEopMd8yQ==
-X-CSE-MsgGUID: nmeG8NFMSba1Xl6cHKMIrQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="14234379"
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="14234379"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 10:30:52 -0700
-X-CSE-ConnectionGUID: hAw8YDL3TESZ+FqgFuOL0Q==
-X-CSE-MsgGUID: XtDpE+hHTICECrRXXkDGRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="27197934"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 02 May 2024 10:30:49 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s2aGd-000ArU-1j;
-	Thu, 02 May 2024 17:30:47 +0000
-Date: Fri, 3 May 2024 01:29:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jonathan Denose <jdenose@google.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-input@vger.kernel.org, Jonathan Denose <jdenose@google.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jeffery Miller <jefferymiller@google.com>
-Subject: Re: [PATCH] Input: elantech - fix touchpad state on resume for
- Lenovo N24
-Message-ID: <202405030159.u9nJS35h-lkp@intel.com>
-References: <20240501140231.1.Ifa0e25ebf968d8f307f58d678036944141ab17e6@changeid>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n0wb9iAw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA89AC113CC;
+	Thu,  2 May 2024 21:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714684024;
+	bh=rjkBg6gUkSwRf+TgXtxDgQ2t24FzbYZEekev+R+BxDc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=n0wb9iAwpK+XMfBr/FZ4U1DKg5YoFOUoEbTr63KIe4K4V+uV6oWvbzrQeqtP8mSLh
+	 s3O6FRJAbtGMRyRod3rcECmmp3rO6SqFd8q8E6UaVdDJp0ja8BbIgEv/Ez0ACEerK3
+	 UrrSf4hRJJ0VkcmpFz/wcBuibPdGxH1LsFVUpvrtl/u+3Zhfl1aeRppuaFGsEAEgHM
+	 YgvazFudIx7K3DphZr4E3iYSTULNJ0dSbBbgmUch4hdUz4V5jsL5r1u0AOqq4mZNOx
+	 xrejkiKoOu4hN56yYrWy6wA+L+f3RCUfyuOOFUErA7DkJkhGYX5+mB+r6BJzvnDruY
+	 ybI1OvPKH2fkQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Arnaldo Carvalho de Melo
+ <acme@redhat.com>, linux-kernel@vger.kernel.org, =?utf-8?B?QmrDtnJuIFQ=?=
+ =?utf-8?B?w7ZwZWw=?=
+ <bjorn@rivosinc.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ bpf@vger.kernel.org, Anders Roxell <anders.roxell@linaro.org>,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v2] tools/build: Add clang cross-compilation flags to
+ feature detection
+In-Reply-To: <20240429171145.GA241057@myrica>
+References: <20231102103252.247147-1-bjorn@kernel.org>
+ <ZUOWcXDpCOzxbFW0@krava> <87o79wxvnu.fsf@all.your.base.are.belong.to.us>
+ <20240429171145.GA241057@myrica>
+Date: Thu, 02 May 2024 23:07:01 +0200
+Message-ID: <87a5l7x6ru.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240501140231.1.Ifa0e25ebf968d8f307f58d678036944141ab17e6@changeid>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jonathan,
+Jean-Philippe Brucker <jean-philippe@linaro.org> writes:
 
-kernel test robot noticed the following build warnings:
+> On Fri, Apr 26, 2024 at 12:31:17PM +0200, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Jiri Olsa <olsajiri@gmail.com> writes:
+>>=20
+>> > On Thu, Nov 02, 2023 at 11:32:52AM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+>> >> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>> >>=20
+>> >> When a tool cross-build has LLVM=3D1 set, the clang cross-compilation
+>> >> flags are not passed to the feature detection build system. This
+>> >> results in the host's features are detected instead of the targets.
+>> >>=20
+>> >> E.g, triggering a cross-build of bpftool:
+>> >>=20
+>> >>   cd tools/bpf/bpftool
+>> >>   make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-gnu- LLVM=3D1
+>> >>=20
+>> >> would report the host's, and not the target's features.
+>> >>=20
+>> >> Correct the issue by passing the CLANG_CROSS_FLAGS variable to the
+>> >> feature detection makefile.
+>> >>=20
+>> >> Fixes: cebdb7374577 ("tools: Help cross-building with clang")
+>> >> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>> >
+>> > Acked-by: Jiri Olsa <jolsa@kernel.org>
+>>=20
+>> Waking up the dead!
+>>=20
+>> Arnaldo, Jean-Philippe: I'm still stung by what this patch fixes. LMK
+>> what you need from me/this patch to pick it up.
+>
+> I guess the problem is these files don't have a specific tree. Since you
+> mention BPF maybe it should go through the BPF tree, in which case you
+> could resend to the tools/bpf maintainers (and "PATCH bpf" subject prefix)
+>
+> FWIW the change looks good to me:
+>
+> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on dtor-input/for-linus hid/for-next linus/master v6.9-rc6 next-20240502]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Denose/Input-elantech-fix-touchpad-state-on-resume-for-Lenovo-N24/20240501-220739
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-patch link:    https://lore.kernel.org/r/20240501140231.1.Ifa0e25ebf968d8f307f58d678036944141ab17e6%40changeid
-patch subject: [PATCH] Input: elantech - fix touchpad state on resume for Lenovo N24
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240503/202405030159.u9nJS35h-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240503/202405030159.u9nJS35h-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405030159.u9nJS35h-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/input/mouse/elantech.c:1509:61: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned int' [-Wint-conversion]
-                   err = ps2_sendbyte(&psmouse->ps2dev, PSMOUSE_CMD_DISABLE, NULL);
-                                                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   include/linux/libps2.h:64:63: note: passing argument to parameter 'timeout' here
-   int ps2_sendbyte(struct ps2dev *ps2dev, u8 byte, unsigned int timeout);
-                                                                 ^
-   drivers/input/mouse/elantech.c:1515:60: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned int' [-Wint-conversion]
-                   err = ps2_sendbyte(&psmouse->ps2dev, PSMOUSE_CMD_ENABLE, NULL);
-                                                                            ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   include/linux/libps2.h:64:63: note: passing argument to parameter 'timeout' here
-   int ps2_sendbyte(struct ps2dev *ps2dev, u8 byte, unsigned int timeout);
-                                                                 ^
-   2 warnings generated.
+Thanks for the review. Yes, maybe it's a orphan files issue! It does
+seem a bit weird to route it via BPF, since it's just a regular
+cross-build fix -- Not directly related to BPF. Regardless; I'll do a
+respin targetted at *some* tree. ;-)
 
 
-vim +1509 drivers/input/mouse/elantech.c
-
-  1495	
-  1496	/*
-  1497	 * Put the touchpad back into absolute mode when reconnecting
-  1498	 */
-  1499	static int elantech_reconnect(struct psmouse *psmouse)
-  1500	{
-  1501		psmouse_reset(psmouse);
-  1502	
-  1503		if (elantech_detect(psmouse, 0))
-  1504			return -1;
-  1505	
-  1506		if (dmi_check_system(elantech_needs_reenable)) {
-  1507			int err;
-  1508	
-> 1509			err = ps2_sendbyte(&psmouse->ps2dev, PSMOUSE_CMD_DISABLE, NULL);
-  1510	
-  1511			if (err)
-  1512				psmouse_warn(psmouse, "Failed to deactivate mouse on %s: %d\n",
-  1513						psmouse->ps2dev.serio->phys, err);
-  1514	
-  1515			err = ps2_sendbyte(&psmouse->ps2dev, PSMOUSE_CMD_ENABLE, NULL);
-  1516	
-  1517			if (err)
-  1518				psmouse_warn(psmouse, "Failed to reactivate mouse on %s: %d\n",
-  1519						psmouse->ps2dev.serio->phys, err);
-  1520		}
-  1521	
-  1522		if (elantech_set_absolute_mode(psmouse)) {
-  1523			psmouse_err(psmouse,
-  1524				    "failed to put touchpad back into absolute mode.\n");
-  1525			return -1;
-  1526		}
-  1527	
-  1528		return 0;
-  1529	}
-  1530	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bj=C3=B6rn
