@@ -1,171 +1,88 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D621581FD
-	for <llvm@lists.linux.dev>; Fri,  3 May 2024 17:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20965158207
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 17:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714756748; cv=none; b=ohUn9cllX6jkaIohPkE2z+zPJuGap/fZMlo+LIgPfdgZFSVVYq5OkQjJc+VxUoOicqkZvrYGRBeF+xBwnsAipo1kL4nY5ygLDP6YJrvkGdQd950PV8VvKb0n/IBc5uZQ/0KS6Dd/v6Wx3V/Q/ghWpYsQMvD8R+0SGSZO8VeNdZg=
+	t=1714758845; cv=none; b=uRSpc2hUCc7N//o/UeFyUmIFi38qEHxJLTuwVgcqqJwb2u7GcrHxC/+bZgf2IO8HN1qmFIrY+NchYxZZ9nJ8RwCmEYLp2TAaQCBg8B0MXCIjFr3C6fD8NazbiD3L6Yy+we485t2UCFfeNBkFjq600tK8V7oOhjEKvFcHc+X0PJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714756748; c=relaxed/simple;
-	bh=zzz3iQzBIvo8oUdtkf8MNajD0FsADq1mc2by6A/+yhU=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jalP5l/wpA0fateVge0EitOIya4QkAM4Z07vsKU69xGSwQP5oVJll19eV/IjcBUWKPKcHhLrfAVlmQeYvFCEbpUQMJhg+W+xbYJ06qTQa99P3/Rn8ndeb6D8UMhC0SbhfzPWyLWWCKVFitv4HhnGELq/GlFMcITRLHVajfs6RDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=JYGJZo0Y; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1714758845; c=relaxed/simple;
+	bh=MmDr3BQCMFU+IxtuacVnHLexHCTvPtzyWCTkicg3BgI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sz0ItzcrOC2nQx8N8oaoGOxVa6Z8rrNCQxUp6irmHU76k16m8tZ7sBEEB+2ONMY9Uirg07XqnM3gzgraKMeBk49DJ9gGGuuTUe/BLb0bgnorJrKnHkOfDiegcHMHEYJuQ5M3Tbf5BFVt9nUZgHvA/Qcox5cGh4oWZPiRdEFkAN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZctGSkb/; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="JYGJZo0Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1714756744;
-	bh=zzz3iQzBIvo8oUdtkf8MNajD0FsADq1mc2by6A/+yhU=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=JYGJZo0YzUeV50Bvr4IIJXocSMwDl6JCLzxyx1OrR3Z2jZGsCHesxkyHS+xQENh0D
-	 /zN46oR4GzxL6xjYN2N8I2zYIIcCH51WrxMBJtGFP6yyNBmiD+1eD5OM4b0AHMlH3b
-	 ImqTVlJCFQTzkBvi2DfeaBb5NBV2oZVM//YvN8TL1jaKkbrE1hOCNQxuTzAR/QL5j0
-	 S7mrI1HrbixRo2UsbFLwQf7PC1WK3acwBN1i4xvSmB3zMIGexuJMuusXxZCTsa5VTV
-	 lIAT8ezvcw4zf2ibWyOLEq+9oSEeto3dBJwgqksrmiVtvN9Qi5bE6PJ8VMl8gz6ydL
-	 z57Mu+bBWDC7Q==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 435B3378148F;
-	Fri,  3 May 2024 17:19:00 +0000 (UTC)
-Message-ID: <99096ca9-f43b-471e-9a8f-cdd4adf93fba@collabora.com>
-Date: Fri, 3 May 2024 22:18:18 +0500
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZctGSkb/"
+Date: Fri, 3 May 2024 10:53:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1714758840;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x0XQCMnsbYkYwtaS+30vq6EUAn0n4Ulc3+8JbTfZjrU=;
+	b=ZctGSkb/BdmDJ3EmsYgUjqlACWFjy+wtUCPB5wpK9c5hQuQEhXvroesiWdCKe01cerZhl4
+	lZc2TSh3k0fCMjFNX3qYzv8AV5+b9Uo1RSM+OJL5ZuEQ1aSTBZwiQmRr7UjKQO5J6VIddu
+	GriUkbStsO1LOxVEf7YwERAckrj4XkM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Waiman Long <longman@redhat.com>,
+	Yosry Ahmed <yosryahmed@google.com>, Nhat Pham <nphamcs@gmail.com>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/4] selftests/cgroup: fix clang build failures for abs()
+ calls
+Message-ID: <ZjUksIIiiZX_1P06@P9FQF9L96D>
+References: <20240503035105.93280-1-jhubbard@nvidia.com>
+ <20240503035105.93280-2-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Andrei Vagin <avagin@openvz.org>, Andrei Vagin <avagin@gmail.com>,
- Dmitry Safonov <dima@arista.com>, Thomas Gleixner <tglx@linutronix.de>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftest/timerns: fix clang build failures for abs()
- calls
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-References: <20240503032956.89290-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240503032956.89290-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240503035105.93280-2-jhubbard@nvidia.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 5/3/24 8:29 AM, John Hubbard wrote:
+On Thu, May 02, 2024 at 08:51:02PM -0700, John Hubbard wrote:
 > First of all, in order to build with clang at all, one must first apply
 > Valentin Obst's build fix for LLVM [1]. Once that is done, then when
 > building with clang, via:
 > 
 >     make LLVM=1 -C tools/testing/selftests
 > 
-> ...then clang warns about mismatches between the expected and required
-> integer length being supplied to abs(3).
+> ...clang is pickier than gcc, about which version of abs(3) to call,
+> depending on the argument type:
 > 
-> Fix this by using the correct variant of abs(3): labs(3) or llabs(3), in
-> these cases.
+>    int abs(int j);
+>    long labs(long j);
+>    long long llabs(long long j);
+> 
+> ...and this is causing both build failures and warnings, when running:
+> 
+>     make LLVM=1 -C tools/testing/selftests
+> 
+> Fix this by calling labs() in value_close(), because the arguments are
+> unambiguously "long" type.
 > 
 > [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
 > 
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Thanks for fixing!
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-> ---
->  tools/testing/selftests/timens/exec.c       | 6 +++---
->  tools/testing/selftests/timens/timer.c      | 2 +-
->  tools/testing/selftests/timens/timerfd.c    | 2 +-
->  tools/testing/selftests/timens/vfork_exec.c | 4 ++--
->  4 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
-> index e40dc5be2f66..d12ff955de0d 100644
-> --- a/tools/testing/selftests/timens/exec.c
-> +++ b/tools/testing/selftests/timens/exec.c
-> @@ -30,7 +30,7 @@ int main(int argc, char *argv[])
->  
->  		for (i = 0; i < 2; i++) {
->  			_gettime(CLOCK_MONOTONIC, &tst, i);
-> -			if (abs(tst.tv_sec - now.tv_sec) > 5)
-> +			if (labs(tst.tv_sec - now.tv_sec) > 5)
->  				return pr_fail("%ld %ld\n", now.tv_sec, tst.tv_sec);
->  		}
->  		return 0;
-> @@ -50,7 +50,7 @@ int main(int argc, char *argv[])
->  
->  	for (i = 0; i < 2; i++) {
->  		_gettime(CLOCK_MONOTONIC, &tst, i);
-> -		if (abs(tst.tv_sec - now.tv_sec) > 5)
-> +		if (labs(tst.tv_sec - now.tv_sec) > 5)
->  			return pr_fail("%ld %ld\n",
->  					now.tv_sec, tst.tv_sec);
->  	}
-> @@ -70,7 +70,7 @@ int main(int argc, char *argv[])
->  		/* Check that a child process is in the new timens. */
->  		for (i = 0; i < 2; i++) {
->  			_gettime(CLOCK_MONOTONIC, &tst, i);
-> -			if (abs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
-> +			if (labs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
->  				return pr_fail("%ld %ld\n",
->  						now.tv_sec + OFFSET, tst.tv_sec);
->  		}
-> diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
-> index 5e7f0051bd7b..5b939f59dfa4 100644
-> --- a/tools/testing/selftests/timens/timer.c
-> +++ b/tools/testing/selftests/timens/timer.c
-> @@ -56,7 +56,7 @@ int run_test(int clockid, struct timespec now)
->  			return pr_perror("timerfd_gettime");
->  
->  		elapsed = new_value.it_value.tv_sec;
-> -		if (abs(elapsed - 3600) > 60) {
-> +		if (llabs(elapsed - 3600) > 60) {
->  			ksft_test_result_fail("clockid: %d elapsed: %lld\n",
->  					      clockid, elapsed);
->  			return 1;
-> diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
-> index 9edd43d6b2c1..a4196bbd6e33 100644
-> --- a/tools/testing/selftests/timens/timerfd.c
-> +++ b/tools/testing/selftests/timens/timerfd.c
-> @@ -61,7 +61,7 @@ int run_test(int clockid, struct timespec now)
->  			return pr_perror("timerfd_gettime(%d)", clockid);
->  
->  		elapsed = new_value.it_value.tv_sec;
-> -		if (abs(elapsed - 3600) > 60) {
-> +		if (llabs(elapsed - 3600) > 60) {
->  			ksft_test_result_fail("clockid: %d elapsed: %lld\n",
->  					      clockid, elapsed);
->  			return 1;
-> diff --git a/tools/testing/selftests/timens/vfork_exec.c b/tools/testing/selftests/timens/vfork_exec.c
-> index beb7614941fb..5b8907bf451d 100644
-> --- a/tools/testing/selftests/timens/vfork_exec.c
-> +++ b/tools/testing/selftests/timens/vfork_exec.c
-> @@ -32,7 +32,7 @@ static void *tcheck(void *_args)
->  
->  	for (i = 0; i < 2; i++) {
->  		_gettime(CLOCK_MONOTONIC, &tst, i);
-> -		if (abs(tst.tv_sec - now->tv_sec) > 5) {
-> +		if (labs(tst.tv_sec - now->tv_sec) > 5) {
->  			pr_fail("%s: in-thread: unexpected value: %ld (%ld)\n",
->  				args->tst_name, tst.tv_sec, now->tv_sec);
->  			return (void *)1UL;
-> @@ -64,7 +64,7 @@ static int check(char *tst_name, struct timespec *now)
->  
->  	for (i = 0; i < 2; i++) {
->  		_gettime(CLOCK_MONOTONIC, &tst, i);
-> -		if (abs(tst.tv_sec - now->tv_sec) > 5)
-> +		if (labs(tst.tv_sec - now->tv_sec) > 5)
->  			return pr_fail("%s: unexpected value: %ld (%ld)\n",
->  					tst_name, tst.tv_sec, now->tv_sec);
->  	}
-> 
-> base-commit: f03359bca01bf4372cf2c118cd9a987a5951b1c8
-> prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
+Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
 
--- 
-BR,
-Muhammad Usama Anjum
+Thanks!
