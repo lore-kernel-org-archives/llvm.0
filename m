@@ -1,258 +1,215 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1C31AACA
-	for <llvm@lists.linux.dev>; Fri,  3 May 2024 14:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB7A88495;
+	Fri,  3 May 2024 15:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714745361; cv=none; b=C6k3kgkHffScnHuxuSmrJEeA0zCNUtdKTU6kMObwEp5HNJyJ44fZgbXX6idv1AaafzceIXedKqsxfmY6rRCIrAM3I4qIQ6riwC5Lf9yZxMtPWT+DNo1RyuffxgqOkOMmvWcIiQxcWJVPoHZWMqohAuTtSg1bnrVhZspXVoU+1tY=
+	t=1714751644; cv=none; b=MsQnPK6B1C1QEkxwgnFveDow/IDgWdBbp/4gykBybGIO9B2nMaCXD20NVLUNVHl/KQ51uD1S+j4LLo+XJ2xt8bYMBJwO6fe72gzYxGmX8nYt2v+Wo7HW8XDRgXp5qtN7pbDZ59JDOJkPNXFDUPgZIuQsxDBvnZZZpI2lI8carFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714745361; c=relaxed/simple;
-	bh=yzxhMm+OX7Dr7aYseilNZKDnyQLup8KnYfLAkzglVJw=;
+	s=arc-20240116; t=1714751644; c=relaxed/simple;
+	bh=0DSdBrGfJwQVSRGVyv9+hp2FozFXSN8FVWfgaV05P3A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G6X+NFiT9TIx/kGdOHtuZyasgi+QXseA02eYGP1TH2Pyh+h4vZ5d1GZbkz3aqXIS74sgZcveCSdMcgzUIoJr/rCRthQTKRhCTtFlvKS6iSLZIYiLekdtJuBRjLHDxFAJXWWe3CnEUKw3h6WpBBBfbepdvkIB3Alr7sM1gAZndDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ppJJr1aD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=K2Swz6qM; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ppJJr1aD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=K2Swz6qM; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=ueBHH7TOrLH3lmAefia68V+HKyNjdCMzpkzId5QvcI50qv5r2zp6vURhYNQitnzius06YUFSQVhVYy7vDXoRw1nvFQfM+7qZC55un8KudQsqQGS4xdle8NwMRhmer+frZgxi/gDF5aeA2GrClu2JDCZw2X46bcE2HQWTyy8A7H0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHGhsE01; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ppJJr1aD";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="K2Swz6qM";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ppJJr1aD";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="K2Swz6qM"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 8BDD42058F;
-	Fri,  3 May 2024 14:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1714745357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lCLk7Ggx6SE086KTSnCfd61jjTZpX1jQg+IBaAc2Btk=;
-	b=ppJJr1aDg5zyCfKxoPAv0SSHKf7byu4Soibv3aPPxehvtyCLU24K0tOeMK1fpq/qqj95vs
-	7Huq/PJ28xC/3xVLnII9qSxTJ1RcdraPH7+4ontuw+BPYdhfT8CimDx96Mri7um/wZdp2y
-	0ps8IuDnWu9frNbdqy3w1oYfR7Bn77M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1714745357;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lCLk7Ggx6SE086KTSnCfd61jjTZpX1jQg+IBaAc2Btk=;
-	b=K2Swz6qMrqILGKqgotraJ8/X4aWP6k8SUn/TJbAciKo7Ft3XSdSAGar/ZP8Se5nTgEpc3A
-	yp9v4Br4dsQpGnDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1714745357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lCLk7Ggx6SE086KTSnCfd61jjTZpX1jQg+IBaAc2Btk=;
-	b=ppJJr1aDg5zyCfKxoPAv0SSHKf7byu4Soibv3aPPxehvtyCLU24K0tOeMK1fpq/qqj95vs
-	7Huq/PJ28xC/3xVLnII9qSxTJ1RcdraPH7+4ontuw+BPYdhfT8CimDx96Mri7um/wZdp2y
-	0ps8IuDnWu9frNbdqy3w1oYfR7Bn77M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1714745357;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lCLk7Ggx6SE086KTSnCfd61jjTZpX1jQg+IBaAc2Btk=;
-	b=K2Swz6qMrqILGKqgotraJ8/X4aWP6k8SUn/TJbAciKo7Ft3XSdSAGar/ZP8Se5nTgEpc3A
-	yp9v4Br4dsQpGnDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 78D1A13991;
-	Fri,  3 May 2024 14:09:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Wl16HQ3wNGYyEgAAD6G6ig
-	(envelope-from <jack@suse.cz>); Fri, 03 May 2024 14:09:17 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id C2A5DA0A12; Fri,  3 May 2024 16:09:16 +0200 (CEST)
-Date: Fri, 3 May 2024 16:09:16 +0200
-From: Jan Kara <jack@suse.cz>
-To: Baokun Li <libaokun1@huawei.com>
-Cc: Jan Kara <jack@suse.cz>, tytso@mit.edu,
-	syzbot <syzbot+dd43bd0f7474512edc47@syzkaller.appspotmail.com>,
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	ritesh.list@gmail.com, syzkaller-bugs@googlegroups.com,
-	trix@redhat.com, yangerkun <yangerkun@huawei.com>
-Subject: Re: [syzbot] [ext4?] WARNING in mb_cache_destroy
-Message-ID: <20240503140916.zd33jcev7c6fy254@quack3>
-References: <00000000000072c6ba06174b30b7@google.com>
- <0000000000003bf5be061751ae70@google.com>
- <20240502103341.t53u6ya7ujbzkkxo@quack3>
- <dca44ba5-5c33-05ef-d9de-21a84f9d7eaa@huawei.com>
- <20240503102328.cstcauc5qakmk2bg@quack3>
- <9209062c-fa94-33f3-fd89-834a3314c7ed@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHGhsE01"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227E4C116B1;
+	Fri,  3 May 2024 15:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714751643;
+	bh=0DSdBrGfJwQVSRGVyv9+hp2FozFXSN8FVWfgaV05P3A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MHGhsE01zjyJCYivukmJSbyK6Di+0ApiErh5xfZ36fCBhcASsxRpTnun/sLwEB0NH
+	 tdoL880vdVx9fV6HDZvA9JKYCQK8hd0rHziI/Bfuqu7G9Mfe/6qbZqITZz0zZRLdCp
+	 nj5LqxKBcPbK3pFvHgRrXKyq+DDNkuccV4Y3tVUdDTT3PmFXWQn0Xm5NFJdbhDSqtt
+	 juqvU6JoI0BrZcF9/Phu/2E/SO+2qCcv1Q98/cmbSIpVvMNEbuC1OWBBg5S3+pga78
+	 MDpYaGeagpQeaa/24fYbzA64U6b/1CFHAZaUfNVPi6C2mfAWWeoMy2RsGuMfrEdsHD
+	 yMeM/CfZKUrPg==
+Date: Fri, 3 May 2024 08:54:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>, yury.norov@gmail.com
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
+Message-ID: <20240503155401.GA3960118@thelio-3990X>
+References: <20240502092443.6845-2-visitorckw@gmail.com>
+ <202405030808.UsoMKFNP-lkp@intel.com>
+ <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name>
+ <20240503041701.GA3660305@thelio-3990X>
+ <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name>
+ <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9209062c-fa94-33f3-fd89-834a3314c7ed@huawei.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TAGGED_RCPT(0.00)[dd43bd0f7474512edc47];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	RCVD_COUNT_THREE(0.00)[3];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.cz,mit.edu,syzkaller.appspotmail.com,dilger.ca,vger.kernel.org,lists.linux.dev,kernel.org,google.com,gmail.com,googlegroups.com,redhat.com,huawei.com];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:email];
-	RCVD_TLS_LAST(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Spam-Score: -2.30
-X-Spam-Flag: NO
+In-Reply-To: <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
 
-On Fri 03-05-24 19:38:21, Baokun Li wrote:
-> On 2024/5/3 18:23, Jan Kara wrote:
-> > Hi!
-> > 
-> > On Fri 03-05-24 17:51:07, Baokun Li wrote:
-> > > On 2024/5/2 18:33, Jan Kara wrote:
-> > > > On Tue 30-04-24 08:04:03, syzbot wrote:
-> > > > > syzbot has bisected this issue to:
+On Fri, May 03, 2024 at 03:38:59PM +0800, Kuan-Wei Chiu wrote:
+> On Fri, May 03, 2024 at 03:31:26PM +0800, Kuan-Wei Chiu wrote:
+> > On Thu, May 02, 2024 at 09:17:01PM -0700, Nathan Chancellor wrote:
+> > > Hi Kuan-Wei,
+> > > 
+> > > On Fri, May 03, 2024 at 09:34:28AM +0800, Kuan-Wei Chiu wrote:
+> > > > On Fri, May 03, 2024 at 08:49:00AM +0800, kernel test robot wrote:
+> > > > > Hi Kuan-Wei,
 > > > > > 
-> > > > > commit 67d7d8ad99beccd9fe92d585b87f1760dc9018e3
-> > > > > Author: Baokun Li <libaokun1@huawei.com>
-> > > > > Date:   Thu Jun 16 02:13:56 2022 +0000
+> > > > > kernel test robot noticed the following build errors:
 > > > > > 
-> > > > >       ext4: fix use-after-free in ext4_xattr_set_entry
-> > > > So I'm not sure the bisect is correct since the change is looking harmless.
-> > > Yes, the root cause of the problem has nothing to do with this patch,
-> > > and please see the detailed analysis below.
-> > > > But it is sufficiently related that there indeed may be some relationship.
-> > > > Anyway, the kernel log has:
+> > > > > [auto build test ERROR on linus/master]
+> > > > > [also build test ERROR on v6.9-rc6 next-20240502]
+> > > > > [cannot apply to akpm-mm/mm-everything akpm-mm/mm-nonmm-unstable]
+> > > > > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > > > > And when submitting patch, we suggest to use '--base' as documented in
+> > > > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > > > > 
+> > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Kuan-Wei-Chiu/lib-test_bitops-Add-benchmark-test-for-fns/20240502-172638
+> > > > > base:   linus/master
+> > > > > patch link:    https://lore.kernel.org/r/20240502092443.6845-2-visitorckw%40gmail.com
+> > > > > patch subject: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
+> > > > > config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240503/202405030808.UsoMKFNP-lkp@intel.com/config)
+> > > > > compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+> > > > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240503/202405030808.UsoMKFNP-lkp@intel.com/reproduce)
+> > > > > 
+> > > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > > > the same patch/commit), kindly add following tags
+> > > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202405030808.UsoMKFNP-lkp@intel.com/
+> > > > > 
+> > > > > All errors (new ones prefixed by >>):
+> > > > > 
+> > > > > >> lib/test_bitops.c:56:39: error: variable 'tmp' set but not used [-Werror,-Wunused-but-set-variable]
+> > > > >       56 |         static volatile __used unsigned long tmp __initdata;
+> > > > >          |                                              ^
+> > > > >    1 error generated.
+> > > > > 
+> > > > > 
+> > > > > vim +/tmp +56 lib/test_bitops.c
+> > > > > 
+> > > > >     52	
+> > > > >     53	static int __init test_fns(void)
+> > > > >     54	{
+> > > > >     55		static unsigned long buf[10000] __initdata;
+> > > > >   > 56		static volatile __used unsigned long tmp __initdata;
 > > > > 
-> > > > [   44.932900][ T1063] EXT4-fs warning (device loop0): ext4_evict_inode:297: xattr delete (err -12)
-> > > > [   44.943316][ T1063] EXT4-fs (loop0): unmounting filesystem.
-> > > > [   44.949531][ T1063] ------------[ cut here ]------------
-> > > > [   44.955050][ T1063] WARNING: CPU: 0 PID: 1063 at fs/mbcache.c:409 mb_cache_destroy+0xda/0x110
-> > > > 
-> > > > So ext4_xattr_delete_inode() called when removing inode has failed with
-> > > > ENOMEM and later mb_cache_destroy() was eventually complaining about having
-> > > > mbcache entry with increased refcount. So likely some error cleanup path is
-> > > > forgetting to drop mbcache entry reference somewhere but at this point I
-> > > > cannot find where. We'll likely need to play with the reproducer to debug
-> > > > that. Baokun, any chance for looking into this?
-> > > > 
-> > > > 								Honza
-> > > As you guessed, when -ENOMEM is returned in ext4_sb_bread(),
-> > > the reference count of ce is not properly released, as follows.
+> > > > I apologize for causing the compilation failure with clang. I'm not
+> > > > very familiar with clang and I'm not sure why something marked as
+> > > > __used would result in the warning mentioned above. Perhaps clang does
+> > > > not support attribute((used))? Is there a way to work around this
+> > > > issue?
 > > > 
-> > > ext4_create
-> > >   __ext4_new_inode
-> > >    security_inode_init_security
-> > >     ext4_initxattrs
-> > >      ext4_xattr_set_handle
-> > >       ext4_xattr_block_find
-> > >       ext4_xattr_block_set
-> > >        ext4_xattr_block_cache_find
-> > >          ce = mb_cache_entry_find_first
-> > >              __entry_find
-> > >              atomic_inc_not_zero(&entry->e_refcnt)
-> > >          bh = ext4_sb_bread(inode->i_sb, ce->e_value, REQ_PRIO);
-> > >          if (PTR_ERR(bh) == -ENOMEM)
-> > >              return NULL;
+> > > It looks like __attribute__((__used__)) is not enough to stop clang from
+> > > warning, unlike GCC. I can likely fix that in clang if it is acceptable
+> > > to the clang maintainers (although more below on why this might be
+> > > intentional) but the warning will still need to be resolved for older
+> > > versions. Looking at the current clang source code and tests, it looks
+> > > like __attribute__((__unused__)) should silence the warning, which the
+> > > kernel has available as __always_unused or __maybe_unused, depending on
+> > > the context.
 > > > 
-> > > Before merging into commit 67d7d8ad99be("ext4: fix use-after-free
-> > > in ext4_xattr_set_entry"), it will not return early in
-> > > ext4_xattr_ibody_find(),
-> > > so it tries to find it in iboy, fails the check in xattr_check_inode() and
-> > > returns without executing ext4_xattr_block_find(). Thus it will bisect
-> > > the patch, but actually has nothing to do with it.
+> > > $ cat test.c
+> > > void foo(void)
+> > > {
+> > >         int a;
+> > >         a = 1;
+> > > }
 > > > 
-> > > ext4_xattr_ibody_get
-> > >   xattr_check_inode
-> > >    __xattr_check_inode
-> > >     check_xattrs
-> > >      if (end - (void *)header < sizeof(*header) + sizeof(u32))
-> > >        "in-inode xattr block too small"
+> > > void bar(void)
+> > > {
+> > >         static int b;
+> > >         b = 2;
+> > > }
 > > > 
-> > > Here's the patch in testing, I'll send it out officially after it is tested.
-> > > (PS:  I'm not sure if propagating the ext4_xattr_block_cache_find() errors
-> > > would be better.)
-> > Great! Thanks for debugging this! Some comments to your fix below:
+> > > void baz(void)
+> > > {
+> > >         static int c __attribute__((__used__));
+> > >         c = 3;
+> > > }
+> > > 
+> > > void quux(void)
+> > > {
+> > >         static int d __attribute__((__unused__));
+> > >         d = 4;
+> > > }
+> > > 
+> > > void foobar(void)
+> > > {
+> > >         static int e __attribute__((__used__)) __attribute__((__unused__));
+> > >         e = 1;
+> > > }
+> > > 
+> > > $ gcc -Wunused-but-set-variable -c -o /dev/null test.c
+> > > test.c: In function â€˜fooâ€™:
+> > > test.c:3:13: warning: variable â€˜aâ€™ set but not used [-Wunused-but-set-variable]
+> > >     3 |         int a;
+> > >       |             ^
+> > > test.c: In function â€˜barâ€™:
+> > > test.c:9:20: warning: variable â€˜bâ€™ set but not used [-Wunused-but-set-variable]
+> > >     9 |         static int b;
+> > >       |                    ^
+> > > 
+> > > $ clang -fsyntax-only -Wunused-but-set-variable test.c
+> > > test.c:3:6: warning: variable 'a' set but not used [-Wunused-but-set-variable]
+> > >     3 |         int a;
+> > >       |             ^
+> > > test.c:9:13: warning: variable 'b' set but not used [-Wunused-but-set-variable]
+> > >     9 |         static int b;
+> > >       |                    ^
+> > > test.c:15:13: warning: variable 'c' set but not used [-Wunused-but-set-variable]
+> > >    15 |         static int c __attribute__((__used__));
+> > >       |                    ^
+> > > 3 warnings generated.
+> > > 
+> > > I've attached a diff below that resolves the warning for me and it has
+> > > no code generation differences based on objdump. While having used and
+> > > unused attributes together might look unusual, reading the GCC attribute
+> > > manual makes it seem like these attributes fulfill similar yet different
+> > > roles, __unused__ prevents any unused warnings while __used__ forces the
+> > > variable to be emitted:
+> > > 
+> > > https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/Common-Variable-Attributes.html#index-unused-variable-attribute
+> > > 
+> > > A strict reading of that does not make it seem like __used__ implies
+> > > disabling unused warnings, so I can understand why clang's behavior is
+> > > the way that it is.
+> > > 
+> > Thank you for your explanation and providing the solution. I tested the
+> > diff stat you provided, and it works well for me.
 > > 
-> > > diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-> > > index b67a176bfcf9..5c9e751915fd 100644
-> > > --- a/fs/ext4/xattr.c
-> > > +++ b/fs/ext4/xattr.c
-> > > @@ -3113,11 +3113,10 @@ ext4_xattr_block_cache_find(struct inode *inode,
-> > > 
-> > >           bh = ext4_sb_bread(inode->i_sb, ce->e_value, REQ_PRIO);
-> > >           if (IS_ERR(bh)) {
-> > > -            if (PTR_ERR(bh) == -ENOMEM)
-> > > -                return NULL;
-> > > +            if (PTR_ERR(bh) != -ENOMEM)
-> > > +                EXT4_ERROR_INODE(inode, "block %lu read error",
-> > > +                         (unsigned long)ce->e_value);
-> > >               bh = NULL;
-> > > -            EXT4_ERROR_INODE(inode, "block %lu read error",
-> > > -                     (unsigned long)ce->e_value);
-> > >           } else if (ext4_xattr_cmp(header, BHDR(bh)) == 0) {
-> > >               *pce = ce;
-> > >               return bh;
-> > So if we get the ENOMEM error, continuing the iteration seems to be
-> > pointless as we'll likely get it for the following entries as well. I think
-> > the original behavior of aborting the iteration in case of ENOMEM is
-> > actually better. We just have to do mb_cache_entry_put(ea_block_cache, ce)
-> > before returning...
-> > 
-> > 								Honza
-> Returning NULL here would normally attempt to allocate a new
-> xattr_block in ext4_xattr_block_set(), and when ext4_sb_bread() fails,
-> allocating the new block and inserting it would most likely fail as well,
-> so my initial thought was to propagate the error from ext4_sb_bread()
-> to also make ext4_xattr_block_set() fail when ext4_sb_bread() fails.
+> Should I submit an updated version of the patch to the bitmap
+> maintainer, or should this be a separate patch since the patch causing
+> build failure has already been accepted? My instinct is the latter, but
+> I'm concerned it might make git bisection more challenging.
 
-Yes, this would be probably even better solution.
+Yury would be the best person to answer these questions since each
+maintainer is different, some never rebase their trees while others will
+squash simple fixes in to avoid bisection issues and such. I've added
+him to the thread now to chime in (somehow he got dropped? the thread
+starts at https://lore.kernel.org/202405030808.UsoMKFNP-lkp@intel.com/).
 
-> But I noticed that before Ted added the special handling for -ENOMEM,
-> EXT4_ERROR_INODE was called to set the ERROR_FS flag no matter
-> what error ext4_sb_bread() returned, and after we can distinguish
-> between -EIO and -ENOMEM, we don't have to set the ERROR_FS flag
-> in the case of -ENOMEM. So there's this conservative fix now.
+I think the diff in my email should be directly applicable on top of
+your change with no conflicts so he could just squash that in if you are
+both happy with that.
+
+Cheers,
+Nathan
+
+> > > diff --git a/lib/test_bitops.c b/lib/test_bitops.c
+> > > index 5c627b525a48..28c91072cf85 100644
+> > > --- a/lib/test_bitops.c
+> > > +++ b/lib/test_bitops.c
+> > > @@ -53,7 +53,7 @@ static unsigned long order_comb_long[][2] = {
+> > >  static int __init test_fns(void)
+> > >  {
+> > >  	static unsigned long buf[10000] __initdata;
+> > > -	static volatile __used unsigned long tmp __initdata;
+> > > +	static volatile __always_unused __used unsigned long tmp __initdata;
+> > >  	unsigned int i, n;
+> > >  	ktime_t time;
+> > >  
 > 
-> In short, in my personal opinion, for -EIO and -ENOMEM, they should
-> be the same except whether or not the ERROR_FS flag is set.
-> Otherwise, I think adding mb_cache_entry_put() directly is the easiest
-> and most straightforward fix.  Honza, do you have any other thoughts?
-
-Yeah. I'd go for adding mb_cache_entry_put() now as a quick fix and then
-work on propagating the error from ext4_xattr_block_cache_find() as a
-cleaner solution...
-
-								Honza
-
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
