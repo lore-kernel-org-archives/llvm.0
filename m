@@ -1,100 +1,296 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A2222F11
-	for <llvm@lists.linux.dev>; Fri,  3 May 2024 20:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714768825; cv=none; b=EPsNdh3jJBqtc9mFYHaMMLIYRfhHPO6LwR8HMRgCvLosG7R7fi3PaQ3/yDN40WpKKZu7QRFFQt8gDDDz48pQXsbtQiZKT8hUW0iLc/EuzfJAlHtLNuaM3QQIeM1YkE0BpSTQvYrq7qj8g2FvpYe9J2vC53T4Zy7ihZ1rp6YugCw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714768825; c=relaxed/simple;
-	bh=FzWh89LnKN/2rPVaiDqcCRxHJiQvPMtsLZtBAhKO/80=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KMwQrVt8OhqjywX+sjT6okKa8ytFB9PasOpT61Aoypa1MJsFyZE1zh7zqlCgQ+IRg1tKVXyg2v8AgPILkLInb3i+cFNnYipT9TvxYUjetys1t1Y8QwPWPRFut+/xjoGZLZSxTWdApRp9zfmsnrAB80hUr/xrSgJOuTi3R0cHD/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C7TSaun8; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEB223775
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 20:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714769189; cv=fail; b=gLmqqOoeZrvQNcOXgYlE2QGAcXMbTHOiFB8zNt/CgaulaOLM9V5D8BZ+rAyAiGWbeqe1tJApr1tEndasEJsmFkjHNufJnGHnypOpi+CsZsIX5H/JIukCccrbCTFDp//K8eElK/0sK6Hh5/ArzTV3yPdBlTxmxWrClLfp6we/Sd8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714769189; c=relaxed/simple;
+	bh=ZXpH7wUqOqFpygugdVj4Bb4S6oL10ZpLVAwPUagvVyg=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=WU9moCvmTYp/9uy/k5dAxKN5WAwoCt+NOjspCNTHdToxd1k9JelcEihsW5rZFevySXxSBYrwU2tV7D3JZdpzdhhWpSr8Gjl9jdON+6RWJElFMuC2YD2ho9Kc5fFx6HZ2LDVAtVXH4mArYGT8rWbb1+0nYlHmshe7kPPydkjg/Io=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAtIJOfn; arc=fail smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C7TSaun8"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-34e0d8b737eso1475129f8f.1
-        for <llvm@lists.linux.dev>; Fri, 03 May 2024 13:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714768822; x=1715373622; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EDVI2lxNIEoHBnfc+c1mdxSwHaEoO/v2D+NGdQ5K8Ac=;
-        b=C7TSaun8mqvjOFzId3B2xpCk9JWPH+JMlwF16m338hRoixcomTM2lXGpMiiYcqy0Fd
-         OIh39nRljsqhIF//KmExSGOw0UDFwrdS98CbICDNRnApBRLqEaxuXtSqX9PJFMlc4jQd
-         UMH85Hn3hOeVDfBArz8lcE2H4AyIXZ1qd9LT+g72+KoRLW7FD2uGmezKBspEWEtSeQ0s
-         zkvsQ7ogFjcFcLGWAW9eqCT2SmyxeWjFF0qhaJq2YhhPKsXPniIpy/GyLrE48G/KQrh2
-         nIUZ34OU3YDnSq8i7hfdqHTSZdEA1+ABkELXkPfTY0atq9nfLTRUMVsIzWcxwRZP8FVu
-         mUcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714768822; x=1715373622;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EDVI2lxNIEoHBnfc+c1mdxSwHaEoO/v2D+NGdQ5K8Ac=;
-        b=SZvpyO+xTMAO1YPGKaIFocsxrXCttEPxUa3ke9R5hT1R1xFZZ87BlRC6YUcrWKDtjD
-         nvcmS6TtbL7zSh7oEK+EQM32adt6dPYg3eFBf8YQMX3YdSGZkNIRAwml2dameDJRPrKc
-         rY6k9jzlN7iwwlchVkMXb6SEIHB4tWmxC7K0Kv2IASrlzWHCCczB6YrUz63qGnCKw54a
-         pM71Ghc5/Mr3PFMG+yQJOe3KtAiLXh/i9EWO0yu/5LwhrgXiKRbnvQ4S1j5sd/aFa8og
-         iReq5/AN4Bk/29okXtsEbyAkzH2WnTpB5Kurz0igfO+fwPatPbPfKABsNgyXMF5se44B
-         nG+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXylKnhB5OBCp2xUwVlw6ewoEY60OfPbTDSZzXA/FNO+c9JIN003rVSq4MYsEP5J9SNKTzBGkXk/nwAeRgr213n4vRE4A==
-X-Gm-Message-State: AOJu0YxP7J1Fjr2ubV5MjrjX4/naD9STvMobBSEiSeA5MQKzCJDoZu0q
-	tPzr0PNiw3an6NDGjRPTel0687OLjXTQGLmmphXaB+zmFO72+UKUWDGjhVuigJA=
-X-Google-Smtp-Source: AGHT+IFe4iSXZoJhuPdxqGmWEAclAE1SSjrlr58XewUMveIRQamI8LNDgaNu5eHGZFYo5X1d1Xs5ew==
-X-Received: by 2002:a5d:47a7:0:b0:34e:8f88:e1f8 with SMTP id 7-20020a5d47a7000000b0034e8f88e1f8mr2101178wrb.30.1714768822193;
-        Fri, 03 May 2024 13:40:22 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id p17-20020a05600c359100b0041adf358058sm6770889wmq.27.2024.05.03.13.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 13:40:21 -0700 (PDT)
-Date: Fri, 3 May 2024 23:40:18 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Simon Horman <horms@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Shailend Chand <shailend@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] gve: Avoid unnecessary use of comma operator
-Message-ID: <00eaac4f-f8dc-4140-9eec-0c17bc6012aa@moroto.mountain>
-References: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
- <20240503-gve-comma-v1-1-b50f965694ef@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAtIJOfn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714769189; x=1746305189;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ZXpH7wUqOqFpygugdVj4Bb4S6oL10ZpLVAwPUagvVyg=;
+  b=KAtIJOfnXDQdj/9X5mhEsVOXXfzRNBfbVLeB6tExXuIomLuTXOY/4ywo
+   uOYlQks+PU5TgaqdrOnaCUy5ono72FXmYR0GsuMmvn/laDMMMWi2ILBMQ
+   h95J1PDfvJInp7LVLhnkw9m89w5yWdMgihgaeNMhoUxTlxj8Tcj5RxFRx
+   EQb1HSxpRjKLEThQjHEEPbl0cT0lZ1SESH2P26TskxdXSGn/e0MenvF/X
+   UrR0rKUT45xpqoGG74hFgLgEK5b1iMMszpH0KQR56ssCuaL8FQVZjt5jO
+   sKC2Ou9wVMaNYbumHdvvcqFglTKKPF8V7GbYnZnq4tH7P05A0OTCv4m9J
+   Q==;
+X-CSE-ConnectionGUID: WVPQR2pAR1Ce+SmVolPwyQ==
+X-CSE-MsgGUID: CaqENM3qSSqEhbYDNtPjXQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="10718629"
+X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
+   d="scan'208";a="10718629"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 13:46:28 -0700
+X-CSE-ConnectionGUID: S5+nCdzOS7eKKQwmpto90g==
+X-CSE-MsgGUID: jFb2mKXXRV2DfWToNzWi5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
+   d="scan'208";a="27962602"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 May 2024 13:46:28 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 3 May 2024 13:46:27 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Fri, 3 May 2024 13:46:27 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.40) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 3 May 2024 13:46:27 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ipcef/qusVtAQ9K7FleTwIjWz3GJy0M8lvP4Srcos7rCU+DsatmACJyUD6Su/0bznfDh18p94Z+33uUmEBhWEIPSVLWWska03+D4zCN7gPI4CZ0bqf8RS6PjGQxjjXv1dEEcbP9CisyZU82EZ4ruhWFKwMwoElxQ5v6IHI2uLwuN4LM4RHQSU+TJyb2x51CtUE0c8sfIhQM2WF3k5TfZ6AgaybW6WVmBjUf86Ld1UA74ZxZiBMXcihGm89ZxVEa7Zywg7kpZ1NUOL2jjUP8bUPo+FLN1t323vihdd9Uua/s91D3VW8U60n7pnRCCkkyhrrcXcqmap+4mf52An5E1ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VWuDh1BMdBzAw6pMVdl7Rr+jKBCSLa8eLBs9dnZZtIw=;
+ b=P51FAx0lGZxaNJfXDSS1zhICDf3P62GEpk+XKlriecPSwx0dLvOcpgBOSubt9qlhElywa9CCnSywUoaNm8tCwlwoIC0dygxV6aFwvt3dwIatp3bpin2YYxWEEKj8alua7NqjjY3KVOAjKRC1zEfN3cffvkzHn+6vkVp6FMREAvqW4C0QolVGeQ/vdXFpe4acNhj9qPPwTG6+nAsIzDiENnZU5bnkHYFwe+ERSwiIdQFsg4CBTrqKvajmZyJWuC15e9ShUDRw6ZKY4Tfj+0vCeM8htexNx68mZ80/BNa/wdO60CVv40hpSVUTJwsgOck/n3UeuZv+IrA9xq1z5U8afw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by SJ2PR11MB8499.namprd11.prod.outlook.com (2603:10b6:a03:578::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.34; Fri, 3 May
+ 2024 20:46:25 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::b394:287f:b57e:2519]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::b394:287f:b57e:2519%4]) with mapi id 15.20.7544.023; Fri, 3 May 2024
+ 20:46:25 +0000
+Message-ID: <46a6019c-b029-4764-8c66-ad61f4191716@intel.com>
+Date: Fri, 3 May 2024 13:46:22 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+To: John Hubbard <jhubbard@nvidia.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+	<ilpo.jarvinen@linux.intel.com>
+CC: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	"Nick Desaulniers" <ndesaulniers@google.com>, Bill Wendling
+	<morbo@google.com>, Justin Stitt <justinstitt@google.com>, Fenghua Yu
+	<fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>,
+	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20240503023209.80787-1-jhubbard@nvidia.com>
+ <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com>
+ <f908ba74-86c0-409c-854d-9da5f3917b05@nvidia.com>
+ <26f3effc-6ea1-4670-a301-76df3a710fa9@intel.com>
+ <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
+Content-Language: en-US
+From: Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW2PR16CA0036.namprd16.prod.outlook.com (2603:10b6:907::49)
+ To SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240503-gve-comma-v1-1-b50f965694ef@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SJ2PR11MB8499:EE_
+X-MS-Office365-Filtering-Correlation-Id: 16923af6-ad80-4d14-f7f8-08dc6bb21943
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|7416005|1800799015|366007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?VzU5OXI1ZU5vSnVkbkZFaU0ycVNVVWcwc1pibnJYYlhEUEVDSXFrRDNnaDVV?=
+ =?utf-8?B?WjFTK1BlNURUSUJYOElpVTNpaWs3eWh2WXVTR205RHpuWUtKOThsYmZJWExl?=
+ =?utf-8?B?a2kwdGswdzdpOStsS3dYZWVtN0UyMUtLdzZxZGVHQXkvbGdqdXRuMGhlWVhq?=
+ =?utf-8?B?dTljajdXZFpxOHY3bExLUC83QzVUblh6dDJpSDV2dHhMNnZnd3MyS2QwQ1gx?=
+ =?utf-8?B?T2FXZkRwa1JxNVNYd3JvaWV0VEw4MXhkVVZJT0pONGhmcmRlUUFHc1AyUTNU?=
+ =?utf-8?B?bUlFNzhMd0taNTFLMTgrYnNFK2h3MkN1NDdhSTJKV0QxVzJERi8yYWExandk?=
+ =?utf-8?B?MGFnbG1KekxvZGpldVZYL1B5Z25FcFhSSi93K0Q1VUMrN0FsQlhlUHRrV1Fn?=
+ =?utf-8?B?UnBOQ25wNGMreDYrSjVhZUFLWDlpQWc4ZksrNXN3ZWszaUUyTXI2SFA3b2VE?=
+ =?utf-8?B?bi9iS3FkTmFEcEp2Q0VEYmpJU0JBZ0pXMUlZc25HMnJCd3dSQXFvSW1hNXN3?=
+ =?utf-8?B?a21xSlFneTZWN1lqRzdxNHhlSmRDNW9iaVhnY1FFS2QyQ0hqOVRrTEVtZVlJ?=
+ =?utf-8?B?T0NuSTNaeGJGQnowbHhTZlIzVlhRK21RK0RIbytRbFNFd1B0cThKNFBPQW1B?=
+ =?utf-8?B?b0NaT2xFdGZNN3U1ZGhsWWhWT0xPdlg1MFNuSXluZytiejQwb3A3S2cxZERi?=
+ =?utf-8?B?R3gwMW9aQVBzVFc1V3dkSE9ha2ZYVVNTeHJtSVdpdDlWeURLbkpDNDRqQ21P?=
+ =?utf-8?B?VWlZaEpMNHBDTjd4MWNucnhKeStIK1FpMjM2VitPNkE1elA0M1NhdzhuUldr?=
+ =?utf-8?B?cEsrVytJZm5LTzZVU1hCb0gyZC9rQ3pwSk1WQURnZG1jMzVmRUxDTGZQYk5I?=
+ =?utf-8?B?VmpFN09lWlBzYVZMcWduenYveUlVY1dUKzFySlF3a3ZuUTNIWldBZ1VLYmhI?=
+ =?utf-8?B?QWlSS2t2TkovUElLRW1Yb2w0YW14UHBvYlQya1B4ZXVoMWZ1UU9SN2plRi82?=
+ =?utf-8?B?aVdDVzhRZTJDejcxemtBQmVNSWVhdjlqN2wxZ3B3YldEL2ZsNlBwVlZaaFFB?=
+ =?utf-8?B?aUZPQmxBaTRlMnJnL2VlM2V4SytMVGRpTEdSZWp5MWp4bldxbndTR2FXcDZu?=
+ =?utf-8?B?OWV3eHZMV2RaRDV6TytHYkVOYXF4T3lnT0RtWk1wQUVkcmNxZXg1UnJjTWJ0?=
+ =?utf-8?B?cUxPRjFHT3ZGRXIraG1aanRkWVgvUVBaMjFmd3h6WjUzZXJrQmNmRnNtOFVD?=
+ =?utf-8?B?aGZiNzFiMTg4U29uZTVaMCtTZGRQWjlpdTdpUksyS1QyOW5tQXNVTlFUZFln?=
+ =?utf-8?B?S2dHY2JGTEpZY0tvbnB2bDhTUXpTTUhlMDYxVWJ2eHNVRFQ1aXZjVS95bU16?=
+ =?utf-8?B?ZHFKblZ0MWdPamR4SUNJMWdWZlI5VHVySUd6ZDBMekNFMmRpelZJVERXME8x?=
+ =?utf-8?B?bWh3WWdzSks4NFBtNERFS3loWjFQSG1iczYxV0VNNlRsQnl4QVZBSEVXV2xY?=
+ =?utf-8?B?N1E1czZabHNqa0xOYkM5TW9HeVIrRGNpMTg0OHA4amhrOFpOeHkrTTN0eFBt?=
+ =?utf-8?B?SDRrbitkUU0wbm1lZ1M1K1BNSjBUcms4RFZMZmVXOEtYOUdFT013clBQdEkw?=
+ =?utf-8?B?S29SUGZmcXBEdlFNNU85K0hNZHU2Vnhqc0VFK2VldjEycWJQOW1SWkdQUXhq?=
+ =?utf-8?B?eEMwU3pyQkxKOWRUR2o2TTBvTzMzUitnaGhoOFQ0YXpBUU8yYlJabnV3PT0=?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NTl2eDV2aHRLM0p2M2VTYjJCMFFSWG9KMDVBaktpakhEYzBkci9nQ2lMMnFP?=
+ =?utf-8?B?ZWxFYXBuYTVCS251MjkyMURVSkFjSUhkTlM0amE1R3UwelVyRVllbmFlbTBh?=
+ =?utf-8?B?Q2pRV0gyLzlSNm9KbFdNTmVoZ0tFcERUdTN1SXhJWlMyNUY2aGxsRmpBS3VR?=
+ =?utf-8?B?akZ4VnU5U3h2amV1dWQ2Zk50cFlkMEx5M2FjUW5hL1VTeGRoSm05WkE4V040?=
+ =?utf-8?B?M1AyeWRWT0VpWG01eFhMeTlxbEx5TU5PLy9UNUZEOHBLZmVoWFlXZnhYYVFQ?=
+ =?utf-8?B?Rmcza3hlUGZId2lsU3FPdEVSU2s4TWdpRlRETU0zSjRLMG9LM1lXYjVRSUtI?=
+ =?utf-8?B?ZkcrcERHN1QvWkl1WTZwYStlUGNlVU4rU3pHaDU2ZHlHUG11emI2UkpyR1FL?=
+ =?utf-8?B?b2FrZHg5cU94ajRGWmdlaTZNay9SUldJR3A1UFRDdXlrZ1dQNWlrc3pOOWpU?=
+ =?utf-8?B?NDBBdUZwWnZlWEJKT1pvemRNUmUzV0RCRGRLUDU3MjB0dU1VMmluQ3Jrem41?=
+ =?utf-8?B?NWpjZ05wMmo4TElSY05sNVcwbncyRFhzVzBzYkRFT2hqMElWcWw0ZUFqbTF2?=
+ =?utf-8?B?bno3NGNzdFhwMmI5WUxtMjhnK21yRTNub2h0MjFkVyttNXoxajRTd2FYdkJz?=
+ =?utf-8?B?N1o4WG9xZjlMYTI2TnMydklIUjBKQzRnclR4aFZpS0VRb2F3ZkM4WVRSc0sx?=
+ =?utf-8?B?aGJva0s5Syt2VWdGNFRaY05IZHp0V1Zuam5XYWQrQkF1WXNUc3NxTE9XcGVO?=
+ =?utf-8?B?U01ldFFOZnRIL3FxN1NjRG5tbEoxcFU2KzVML0RqS08rTE5ST2NnYi9qa0NG?=
+ =?utf-8?B?eXhDWUkzeWlqVGhMVElsQlR0REVuT1ErYVdzaU1mcEplQkMxNTJKR3FaQjYr?=
+ =?utf-8?B?cjd5OS9ndkRjbHJIdi9oNDQxdUh4UUVuU0ZKYkpOSjJGai9TOFMwZG9UL0xU?=
+ =?utf-8?B?bHFLWEFhQmc4WDJrS3hpZjdYQkUrZWxFdmpSeGh2dHR4NGxrWm5jTld2bDVh?=
+ =?utf-8?B?blVwT2FDQ1JKbFpUNXNtTUJJUUNPVGZSeUNaaVY2bDNnTWhITGJDWkRmS3Bx?=
+ =?utf-8?B?WVJFK1VtZ0gyL1VBMko1NEN2MDdRcGdoU2plZmRFeGYxWUVyZzA5UzZJS1N2?=
+ =?utf-8?B?K3MwbXNyYUh4MzgvZ0I5Y0ZXYXFkcVdCdFhWeDVPRU1kVXZuNlVBS1RhY3o0?=
+ =?utf-8?B?QWlGMWwxL1Fac3J6V0NQNHlqNkpnVE5KSllhRVQ2bU1yMm1VQ01IQk5JMG05?=
+ =?utf-8?B?V28xc1RpcGVsL2lVK2ZPNUd4UTcxYUswSmwySnluOGwzcjNTZEEwMjFLL1pP?=
+ =?utf-8?B?b1pFanBtQllrUlFKaE8ycWZLR2pCdlBJbTNVYlpVeEpvQTVwS0NkdURoL2tt?=
+ =?utf-8?B?T0puMG5XbzZiTjdSM3RIY2ZzbHVBNnVFL1pOdFIySnltVjk3LzFmRFBZVjIx?=
+ =?utf-8?B?ZkV0bzE4N1ZjcXRwYlhya1BjMmFQdWI5WnNERHdoT1MxZkthdXVDelRiVnVz?=
+ =?utf-8?B?TGpUZXlFZUNxc2lTNmI1UStreVgyM2tRRjVUakpBcFo0NGEvbzR2dTN0M3Rk?=
+ =?utf-8?B?TUI2aTR2YW1uaXMvV0hMeWg3VlpLSEw0NmxWYnAwMnBNc1FvU2htT2JsQnhB?=
+ =?utf-8?B?RWxPbUVncUI4ZmNVcmhrOXhOREhhRE55WDNZRzhsVmY1N1MvdEJwWm5MUHpX?=
+ =?utf-8?B?UmF2SENlNlR1YnQ2eGJTL1k2bEtiM29ONGRJNEhhSHdJTWpubS9lenQyL3BS?=
+ =?utf-8?B?WGk1MVI0TWZ0d1UzUUV3Zk1aSzd6VGtqSDhzSlBZa3p6T0tNcVRwU2hMQ0ta?=
+ =?utf-8?B?M3lFbnFZYitOa2Q0RTFTVEE3SGdxdUs5ZUxwc0xGUTBsQjZVMS9YaGNjb3J5?=
+ =?utf-8?B?emZtZzRzL3JaWUZyeGF5K2lwNHc0UGRUTE5IREhLNWxkSVNsQWIzNTh4MGJs?=
+ =?utf-8?B?YnlnemxLU1JxS1BDR2luUFM5enBuemFYeGlZQWUzWlpjUkJUekc3ZXNKSTRS?=
+ =?utf-8?B?bTZERTYyVEhjNUNXaG5WaWo0TkVLaEorWWhOclB5UG9wcmkvdnQ0VUMyVWdz?=
+ =?utf-8?B?QVZOTEpMQ2NYVjBHMkU5V0Jhc0ZEdS9uTWJSb2dkQkJyZkFDRVJNZTFiWC9z?=
+ =?utf-8?B?dU1wNngwazNGS2JBTjVwaW0wVWpRb1JrWDZrdEEzOUN5N2oyd1N1YzYzdVJx?=
+ =?utf-8?B?aWc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16923af6-ad80-4d14-f7f8-08dc6bb21943
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2024 20:46:25.3107
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1bzP8iUNs/CJYR3f2EsSbLGN/wg2YAqaZFMhrIKuhn7EideXeRH+uaq40FdBDwukjMpSGkvBxQ4WMKP8QX34zKhO4farZWSVl0+0QVQvX/Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8499
+X-OriginatorOrg: intel.com
 
-On Fri, May 03, 2024 at 09:31:26PM +0100, Simon Horman wrote:
-> Although it does not seem to have any untoward side-effects,
-> the use of ';' to separate to assignments seems more appropriate than ','.
+Hi John,
+
+On 5/3/2024 12:12 PM, John Hubbard wrote:
+> On 5/3/24 11:37 AM, Reinette Chatre wrote:
+>> On 5/3/2024 9:52 AM, John Hubbard wrote:
+>>> On 5/3/24 1:00 AM, Ilpo Järvinen wrote:
+>>>> On Thu, 2 May 2024, John Hubbard wrote:
+>>> ...
+>>>>> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+>>>>> index d67ffa3ec63a..c873793d016d 100644
+>>>>> --- a/tools/testing/selftests/resctrl/mbm_test.c
+>>>>> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+>>>>> @@ -33,7 +33,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
+>>>>>          avg_bw_imc = sum_bw_imc / 4;
+>>>>>        avg_bw_resc = sum_bw_resc / 4;
+>>>>> -    avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+>>>>> +    avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+>>>>>        avg_diff_per = (int)(avg_diff * 100);
+>>>>>          ret = avg_diff_per > MAX_DIFF_PERCENT;
+>>>>
+>>>> But how are these two cases same after your change when you ended up
+>>>> removing taking the absolute value entirely?
+>>>
+>>> All of the arguments are unsigned integers, so all arithmetic results
+>>> are interpreted as unsigned, so taking the absolute value of that is
+>>> always a no-op.
+>>
+>> It does not seem as though clang can see when values have been casted.
+>> I tried to do so explicitly with a:
+>>       avg_diff = labs((long)avg_bw_resc - avg_bw_imc) / (float)avg_bw_imc;
 > 
+> The subtraction result will get promoted to an unsigned long, before being
+> passed into labs(3).
+> 
+>>
+>> But that still triggers:
+>> warning: taking the absolute value of unsigned type 'unsigned long' has no effect [-Wabsolute-value]
+> 
+> As expected, yes.
+> 
+>>
+>> Looks like we may need to be more explicit types and not rely on casting so much
+>> to make the compiler happy.
+>>
+> 
+> I assumed that this code did not expect to handle negative numbers,
+> because it is using unsigned math throughout.
+> 
+> If you do expect it to handle cases where, for example, this happens:
+> 
+>    avg_bw_imc > avg_bw_resc
 
-Huh.  Interesting.  I wrote a check for that in Smatch.  The only place
-where it would matter would be in an if statement.
+The existing code seems to handle this ok. A sample program with this
+scenario comparing existing computation with your first proposal is
+below:
 
-	if (foo)
-		frob1(),
-	frob2();
+#include <stdio.h>
+#include <stdlib.h>
 
-It's unexpected that frob2() is included in the if statement.  But I
-was never able to find any of these actual bugs so I gave up.
+void main(void) {
+	unsigned long avg_bw_resc = 20000;
+	unsigned long avg_bw_imc = 40000;
+	float avg_diff;
 
-regards,
-dan carpenter
+	/* Existing code */
+	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+	printf("Existing code: avg_diff = %f\n", avg_diff);
 
+	/* Original proposed fix */
+	avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+	printf("Original proposed fix: avg_diff = %f\n", avg_diff);
+}
+
+output:
+Existing code: avg_diff = 0.500000
+Original proposed fix: avg_diff = 461168590192640.000000
+
+> 
+> ...then a proper solution is easy, and looks like this:
+> 
+> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+> index c873793d016d..b87f91a41494 100644
+> --- a/tools/testing/selftests/resctrl/mbm_test.c
+> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+> @@ -17,8 +17,8 @@
+>  static int
+>  show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
+>  {
+> -       unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
+> -       unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
+> +       long avg_bw_imc = 0, avg_bw_resc = 0;
+> +       long sum_bw_imc = 0, sum_bw_resc = 0;
+>         int runs, ret, avg_diff_per;
+>         float avg_diff = 0;
+> 
+> Should I resend the patch with that approach?
+
+ok. That indeed makes the computations easier to understand. I assume
+you intend to fix the snippet in mba_test.c also?
+
+Reinette
