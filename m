@@ -1,326 +1,223 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB3E610C;
-	Fri,  3 May 2024 21:56:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714773364; cv=none; b=fqTNr//S1b67OCnYfCSSsE6ADGOAbX7Bv0a8UJm6FKl6kPammkN7cMkgZjJiKDa+mNsEsMk1w/eLJaNkWrOb1XrliXfSDRHMB2WzPfQfLk8uzZdAjy3XIF7y5WDTK3t4TV2a+uY8E0siyWJCxTibZu1g2PMrZMjEVEUV3VyT7pQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714773364; c=relaxed/simple;
-	bh=7PmDSLqNTmADxMxVOZenNXI5wqituSMPcFCl0oR7ZrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CeUMOanXz5eXaLiAIo8y/Xgtt7IXPAJkG6uLvgPx86kTOO5imRgVOKqYPXzcnYJg1RWuvjw3Ii/f94dyu0xonWxr3DzjRIl4ED2PM0FkQe6dJChkgZOYUKo7prF2hwvYLfbK2PLxjweW7mNA92caCTE1Z88sqfBdBcYFuN15yuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RxHsyatZ; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B515103D
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 22:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714773669; cv=fail; b=sVbrBXQC8YArjZ/ErufU9AyWcQh3jFjx2ZkEyKjIPZuGDnBVcgrVITEWFdiBlvY1TDJPTcLWL1fKmC9bv7LwAt4F2fmiJ/5/TeCvR9lordJtyUEvxnS9GAV7QTs4nc8q0aSQA/kqfzShVRZALCkPE6lgTdZkUOzCX2fZZWzdMWc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714773669; c=relaxed/simple;
+	bh=UH6PmjiPmEI0L9zbQ2r4IaUitoM7zMka7Bu03VRggnI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hLVZ4iKScLUPTMcp0Neagusn58AMH5eI3TS4jeMv5MCy4zzf8F0YkPQ+hYDg+my5od97LdK5cuJi9+xXfbBG1Npr2PKTFP2FP5xp1BhPSvQEvcFLhOmSEhbcLgNly34CLO1wMmHVTS7J8b3w+QdmdWHSEMOba60KGTZG7WM7qu8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OG79JLAq; arc=fail smtp.client-ip=40.107.244.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RxHsyatZ"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-61e0c1ec7e2so22287817b3.0;
-        Fri, 03 May 2024 14:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714773361; x=1715378161; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JNv+Ds7CjHFQHYfPpJwMB8NKq/3+fB1NA+taSkrcqck=;
-        b=RxHsyatZDVyu40z1fwJo7C71mt20fAyfcTMIceqT8V1glUiRY10bK23JgpbLCVTa18
-         51mBOcAyRE74UbCJZ0tLmltqagTyYVHGKG4i+Ffyt9Fih1SCTerxoaJtIByzLLXoy4L5
-         P0g+uwQpyWzvnnCrtY1uB6akj7jaty8+MROhGfjJgvFbLXYMCr/MLFpsgBSMs0AW5aLs
-         jp1dDw5f9658zLliXMG0N0P3E+Nzi7t4aR6i7aW6xalRh7117xps6JsKC7od6EacYrY1
-         XcP8JwvmbcI0rF8YsNpqcSfLWyIMNacGl6Ys+1Jtjhl/XVjbCwpw/mkI7v8bI+qL94q7
-         ibSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714773361; x=1715378161;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JNv+Ds7CjHFQHYfPpJwMB8NKq/3+fB1NA+taSkrcqck=;
-        b=DfXWdeXWU+D3aDwYmOKkk692NicShUt20FXbXN1wMiA/qUC+NpuYqavrwWkj0AOek/
-         OND3j4PHRzacPVNCOPqK3pDZ5G8lZchTLT37AdZMwgi2rCaTOpchnBWxUGlajt9BbjHV
-         I/9nN0SVM3PY5tLehiEIQBc9LKD4kiBzgcVOYBDUstF3R3hK4kXGnpxwptWlfUSPVMFB
-         GANGVnoh1Wv/ilfm/Z5ED2+wWxYK2gdLZ37FXgU5kx6qEgfajn7P0AXvOWY4b37WC5S6
-         1FzBhGrupm67DTq80olLzHue/9cLTgsLG0eEw+uItzomn37ZBIhlLn9mKhvwul4hdyjr
-         nTgg==
-X-Forwarded-Encrypted: i=1; AJvYcCVO1ikefTa8K7z1GGr2mYOzVCfzmLdl9s+cTkm1OcETZJg4vagHZPbymmm13vEYpA2fvSsKfRkMkb50+ZO1bnXxi69xjprllaC4rv8n6kmps/AlSzHNpdDbddM9Ft2I7UHQ9mI=
-X-Gm-Message-State: AOJu0YxEu+P/6jrARfjY67kciMQx1xPK7OW/GFasM7hCyOEbn5Aj2L3i
-	ddW5TT2dC/4aQFCvcAJ4i596W9PXHQBiQJ8EJgUR1uyT91uvtyEG
-X-Google-Smtp-Source: AGHT+IFj/cJXpOBouPvi3qUuqUMd2VVlAeMkkwx/KGMwWtQvUA3Lorb1JkiFvDWOw3PBH7ik8rbFTQ==
-X-Received: by 2002:a0d:d710:0:b0:61b:e2e7:a501 with SMTP id z16-20020a0dd710000000b0061be2e7a501mr4502864ywd.14.1714773361018;
-        Fri, 03 May 2024 14:56:01 -0700 (PDT)
-Received: from localhost ([2607:fb91:18c0:1dd9:5656:2a64:c011:fb02])
-        by smtp.gmail.com with ESMTPSA id jx15-20020a05690c380f00b0061be527b869sm846480ywb.19.2024.05.03.14.55.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 14:56:00 -0700 (PDT)
-Date: Fri, 3 May 2024 14:55:57 -0700
-From: Yury Norov <yury.norov@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>, kernel test robot <lkp@intel.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-Message-ID: <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
-References: <20240502092443.6845-2-visitorckw@gmail.com>
- <202405030808.UsoMKFNP-lkp@intel.com>
- <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name>
- <20240503041701.GA3660305@thelio-3990X>
- <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name>
- <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
- <20240503155401.GA3960118@thelio-3990X>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OG79JLAq"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BU8ULqmI8W+W1oKa3KoZC9o4rxi4qNGl3l/kykFFsPFTzWt7NJG2kO8b/06LvIVW0GuBWtviHReCmL/zr7OuikCtd1E1vO4KiPV8qNh7ZL4xyFFcsvSIfG04csEe20w8yVEwxXeng9PA8L7s4P+PtIUtOzk3r0r8tQJUuPn2vpcFR3r6ye6cQ34axJQ92/GnAaoIOlt3TYpZaAtYEWIC7cbq1L1JhmqNMdAjf+uig+JBVS8pJfMgbFfNN3j4Q7C5Iy4Adn9R05Koa7qNz57LQksYMSG8pW822UC9GKyMbgjh1jjXAI5AvXXCslw3a5I67C9kS32Idjid8MW8xVYKXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2u57zfoJduSdp0Sow1nf2I0kiy7AW2C0Q8aXlIOPWpU=;
+ b=RWPtibLTTWb7ScZ7Zq+s5LPiAKtwHMFgm/cnLgMj/UU5b2xoCiEGnbTIZt+e1202Z5t1tRISFq7ebAXEI2Kt77y3yFjOo6Jn0NmqoDBM/YR7NuJSyYjMj2gskBBp0TkWG/inr6u/mbMWbUu2FvRl7IxvGf2aYvcYmRvJL68l0swDn6or76pTC8T7ENSD69cVZkWe/zSQJusds7Se4AdrpSwNATGLj9t/5zD2VnOdZYElwoV8v3k2YPjn4dxy22Lj5ROsuxVVZW9fjGWVxXP0gbn6WjBjpGxQCD+qUAFQeulakMKcWhhxmuF3mohtSw3caym9qt7IqQ14y+8XMTi/MA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2u57zfoJduSdp0Sow1nf2I0kiy7AW2C0Q8aXlIOPWpU=;
+ b=OG79JLAq+tuHesyWj/bDViQAVlpd94Z/XiodoTuFRM0JR5WV4hj+ZjG19leVBKKd97Y4ziPxuZvfJp3oJ5kcopAXDHwyBit9hSMPb8/MgXnx/t2evZYDLgYUzL0CIBj/6+4o1bFj8WG1ykrExy0q86gMrcMdx6Cz2965Nanc2FTUKleXL7h++yRyuf1HCofbfSfMY4ZUEqbij51qk8EFUFRXlYDZi1GMIzKSY19hEg07DaCcxtjZ46ayM77eNVXMxkAGnMdGt0Rc9nx9EzIrtecPk6rBeMSiJ3LsonnRsAXYJkMCXQqzrwXnGUt1yOg92/O/Ga7aci5QMF/qYcnmMg==
+Received: from CH0PR03CA0029.namprd03.prod.outlook.com (2603:10b6:610:b0::34)
+ by CH3PR12MB8283.namprd12.prod.outlook.com (2603:10b6:610:12a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.28; Fri, 3 May
+ 2024 22:00:45 +0000
+Received: from CH3PEPF00000012.namprd21.prod.outlook.com
+ (2603:10b6:610:b0:cafe::5) by CH0PR03CA0029.outlook.office365.com
+ (2603:10b6:610:b0::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.34 via Frontend
+ Transport; Fri, 3 May 2024 22:00:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CH3PEPF00000012.mail.protection.outlook.com (10.167.244.117) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7519.0 via Frontend Transport; Fri, 3 May 2024 22:00:45 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 3 May 2024
+ 15:00:21 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 3 May 2024
+ 15:00:20 -0700
+Message-ID: <63750681-92b1-4c21-8d58-6a22709822fb@nvidia.com>
+Date: Fri, 3 May 2024 15:00:20 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+To: Reinette Chatre <reinette.chatre@intel.com>,
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	"Nick Desaulniers" <ndesaulniers@google.com>, Bill Wendling
+	<morbo@google.com>, Justin Stitt <justinstitt@google.com>, Fenghua Yu
+	<fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>,
+	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20240503023209.80787-1-jhubbard@nvidia.com>
+ <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com>
+ <f908ba74-86c0-409c-854d-9da5f3917b05@nvidia.com>
+ <26f3effc-6ea1-4670-a301-76df3a710fa9@intel.com>
+ <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
+ <46a6019c-b029-4764-8c66-ad61f4191716@intel.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <46a6019c-b029-4764-8c66-ad61f4191716@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240503155401.GA3960118@thelio-3990X>
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000012:EE_|CH3PR12MB8283:EE_
+X-MS-Office365-Filtering-Correlation-Id: 10703489-1755-4b03-3b2c-08dc6bbc7bb6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|1800799015|36860700004;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dlFFT21sZktYMStIa2dMY2xuL2plVEtNN1dqbExheWtKUVBjbGVQVjVZd2JK?=
+ =?utf-8?B?UWF1cDF0K042R0F0RCt1d0VuTlJUaDMyZktMYXk1aXVLdzVPRGFZakpPbXZH?=
+ =?utf-8?B?VDd6Z3Y4aFpXTDZEaUVyWnVsY0pJZTQ0N2hua0tsSkZUZFVNUWxhS0RFdnhU?=
+ =?utf-8?B?dEhYRkNNa0ZmMitJSWRMdlVueEdBeFdzb1FadTlsRmx0KzJTc1VXcXZIZ09J?=
+ =?utf-8?B?ZjdNWG5Id2hqczBjeUZzVmRyRk4zQ1MrQ2c1aEJPL1FRSGZFdUkvWGhybWpx?=
+ =?utf-8?B?RHVzTmVHbWFsNCtIWmNEdTZvNTJ1eTBNbUJpelYxa2NkL25pRGF0MWM4RXBM?=
+ =?utf-8?B?Q3lXdStvUlpiQWdtYUZFVy81bjh2MDMvWTNnUy9pTzRQRFNaYnZGUFhLaHd4?=
+ =?utf-8?B?OFhjWUJ1SkJoc05tTDI2dHcvc2tiMW5PUHlac2RxekNLR253bWxYYlcwYmVG?=
+ =?utf-8?B?NmNHR1p6U3I4bksvMG05TDJTQytxcmJaeHQvZEN0aENybkVHZHlybnhHS0RL?=
+ =?utf-8?B?NGwzaUkxdlVFQmdBQjNxK3hUbVZjeDlRMGlIbWNlamVJM2JvMEdxaUV0NEFj?=
+ =?utf-8?B?UytYekRuazBiWlI2ZUsrcVcwMUZVcUFsMlE3ZWNpQVJmeXVWcHJZYlJEa09n?=
+ =?utf-8?B?VDVpR2g1eVkxUkEwQXdwQVpzVzNidS9QbjZhTXg0RDVIVXNGZlZaVS8wUEph?=
+ =?utf-8?B?Z3NKVnE0dFB4TkxIeEl5VHpsL1RHdVdJRndJRDdUcjhrczB6dTRFMUl6ejl5?=
+ =?utf-8?B?YlZTWitOMWdoaElJbDNtN2FqaGpMVkMxRzZVeXZKVjNQTmNzV3JCN1NGeEtE?=
+ =?utf-8?B?cUZuajUwNXYyUkRNZVB2Qk1zdnVEWVZZWTc2dVJCZ3lYNExmTFR0K2RQaDVn?=
+ =?utf-8?B?Mm4zKzFqbGJJRkNqakFWbTV6VDl6TWVXS0trYk9tNkZ5S2IwNk55alBlQ3pI?=
+ =?utf-8?B?MDFwclNCeHNzeU00emlpS05aa08zdElJMjJDYVZvaDZGcjJhLzFzTndxemFK?=
+ =?utf-8?B?Yk5qT3dscFBFUlF2aitoREVMSGFmN21hOG1XK3BseUhaM2x5d2EyZk5iV0FI?=
+ =?utf-8?B?K1ZMekNYRFZjcjJiSnk1VWNFYzU5b2t3RG11RE54WDd5ZXpTQ3lCbldCUDg3?=
+ =?utf-8?B?RmVRL2ltR1F6NHNjNVM1V0E0eDNIMCtpOHNMTmV0RU11Zy8xYlZ4Z3dyWDBm?=
+ =?utf-8?B?WkNrcEQrY1Y5a1p1VEJTK0l4NVlUdUtoQVZhWTR5eTlpTkhGU2JDd1NucWx3?=
+ =?utf-8?B?TFVkeVpvd3h6TTdIZ1JpZnc5WGtlOGsxdVNrakJkVEdnM0x3NjVFZmlOMFZr?=
+ =?utf-8?B?NEpZS09BQlJJakZscjBLbC9BWDliZDhFUkJZdmI4YWRBVFRGRWRRN3RUeVh3?=
+ =?utf-8?B?cWc2TkZXYW1GUytxUWVhY1NycDNHd3A3bU9MbW9IcmljRGdDTDJ4Y0t0YzV3?=
+ =?utf-8?B?WUZQTVJuY2JHdXR0MlNickQrSllQSlR2VEp1K2pBS2ViUXVBMXBJVUxYM3JC?=
+ =?utf-8?B?RTRGWlArQU16QndVQno3bXowamd6bGpmeVB1VW9Lem1yMVM5bFZIWnovSlBr?=
+ =?utf-8?B?bHhqU3JnNUFad2xBWFA5S01FY0g3R3Q4SThmZDAwcGRjNGRZZ1R0YStuKysw?=
+ =?utf-8?B?ZWlNN0FGbEQ0Tm1ZeFhqejJQVWs0MnoxOFdXbzJDVUVxeWMrZTJrak5ycVRC?=
+ =?utf-8?B?YlIyR1VoY3kxenJVYWV1aE5sYjRkaUFoS2FWSkFEOEo1aXE0aFVBOVptbGpx?=
+ =?utf-8?B?VWVXTU4yWVI1aW1lVDBZb1pVNUFTVGtPQzIweURjUk1mM2ZwV0RNZW9MbTlT?=
+ =?utf-8?B?a0xuRzJpSXFET3J2d0l6dDd1cUFNcjluU0pUbS8vOTllMUxKWTV6b0I5b1dF?=
+ =?utf-8?Q?2obHMmfvQks9K?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(36860700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2024 22:00:45.1769
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10703489-1755-4b03-3b2c-08dc6bbc7bb6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH3PEPF00000012.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8283
 
-On Fri, May 03, 2024 at 08:54:01AM -0700, Nathan Chancellor wrote:
-> On Fri, May 03, 2024 at 03:38:59PM +0800, Kuan-Wei Chiu wrote:
-> > On Fri, May 03, 2024 at 03:31:26PM +0800, Kuan-Wei Chiu wrote:
-> > > On Thu, May 02, 2024 at 09:17:01PM -0700, Nathan Chancellor wrote:
-> > > > Hi Kuan-Wei,
-> > > > 
-> > > > On Fri, May 03, 2024 at 09:34:28AM +0800, Kuan-Wei Chiu wrote:
-> > > > > On Fri, May 03, 2024 at 08:49:00AM +0800, kernel test robot wrote:
-> > > > > > Hi Kuan-Wei,
-> > > > > > 
-> > > > > > kernel test robot noticed the following build errors:
-> > > > > > 
-> > > > > > [auto build test ERROR on linus/master]
-> > > > > > [also build test ERROR on v6.9-rc6 next-20240502]
-> > > > > > [cannot apply to akpm-mm/mm-everything akpm-mm/mm-nonmm-unstable]
-> > > > > > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > > > > > And when submitting patch, we suggest to use '--base' as documented in
-> > > > > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > > > > > 
-> > > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Kuan-Wei-Chiu/lib-test_bitops-Add-benchmark-test-for-fns/20240502-172638
-> > > > > > base:   linus/master
-> > > > > > patch link:    https://lore.kernel.org/r/20240502092443.6845-2-visitorckw%40gmail.com
-> > > > > > patch subject: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-> > > > > > config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240503/202405030808.UsoMKFNP-lkp@intel.com/config)
-> > > > > > compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-> > > > > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240503/202405030808.UsoMKFNP-lkp@intel.com/reproduce)
-> > > > > > 
-> > > > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > > > > the same patch/commit), kindly add following tags
-> > > > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202405030808.UsoMKFNP-lkp@intel.com/
-> > > > > > 
-> > > > > > All errors (new ones prefixed by >>):
-> > > > > > 
-> > > > > > >> lib/test_bitops.c:56:39: error: variable 'tmp' set but not used [-Werror,-Wunused-but-set-variable]
-> > > > > >       56 |         static volatile __used unsigned long tmp __initdata;
-> > > > > >          |                                              ^
-> > > > > >    1 error generated.
-> > > > > > 
-> > > > > > 
-> > > > > > vim +/tmp +56 lib/test_bitops.c
-> > > > > > 
-> > > > > >     52	
-> > > > > >     53	static int __init test_fns(void)
-> > > > > >     54	{
-> > > > > >     55		static unsigned long buf[10000] __initdata;
-> > > > > >   > 56		static volatile __used unsigned long tmp __initdata;
-> > > > > 
-> > > > > I apologize for causing the compilation failure with clang. I'm not
-> > > > > very familiar with clang and I'm not sure why something marked as
-> > > > > __used would result in the warning mentioned above. Perhaps clang does
-> > > > > not support attribute((used))? Is there a way to work around this
-> > > > > issue?
-> > > > 
-> > > > It looks like __attribute__((__used__)) is not enough to stop clang from
-> > > > warning, unlike GCC. I can likely fix that in clang if it is acceptable
-> > > > to the clang maintainers (although more below on why this might be
-> > > > intentional) but the warning will still need to be resolved for older
-> > > > versions. Looking at the current clang source code and tests, it looks
-> > > > like __attribute__((__unused__)) should silence the warning, which the
-> > > > kernel has available as __always_unused or __maybe_unused, depending on
-> > > > the context.
-> > > > 
-> > > > $ cat test.c
-> > > > void foo(void)
-> > > > {
-> > > >         int a;
-> > > >         a = 1;
-> > > > }
-> > > > 
-> > > > void bar(void)
-> > > > {
-> > > >         static int b;
-> > > >         b = 2;
-> > > > }
-> > > > 
-> > > > void baz(void)
-> > > > {
-> > > >         static int c __attribute__((__used__));
-> > > >         c = 3;
-> > > > }
-> > > > 
-> > > > void quux(void)
-> > > > {
-> > > >         static int d __attribute__((__unused__));
-> > > >         d = 4;
-> > > > }
-> > > > 
-> > > > void foobar(void)
-> > > > {
-> > > >         static int e __attribute__((__used__)) __attribute__((__unused__));
-> > > >         e = 1;
-> > > > }
-> > > > 
-> > > > $ gcc -Wunused-but-set-variable -c -o /dev/null test.c
-> > > > test.c: In function ‘foo’:
-> > > > test.c:3:13: warning: variable ‘a’ set but not used [-Wunused-but-set-variable]
-> > > >     3 |         int a;
-> > > >       |             ^
-> > > > test.c: In function ‘bar’:
-> > > > test.c:9:20: warning: variable ‘b’ set but not used [-Wunused-but-set-variable]
-> > > >     9 |         static int b;
-> > > >       |                    ^
-> > > > 
-> > > > $ clang -fsyntax-only -Wunused-but-set-variable test.c
-> > > > test.c:3:6: warning: variable 'a' set but not used [-Wunused-but-set-variable]
-> > > >     3 |         int a;
-> > > >       |             ^
-> > > > test.c:9:13: warning: variable 'b' set but not used [-Wunused-but-set-variable]
-> > > >     9 |         static int b;
-> > > >       |                    ^
-> > > > test.c:15:13: warning: variable 'c' set but not used [-Wunused-but-set-variable]
-> > > >    15 |         static int c __attribute__((__used__));
-> > > >       |                    ^
-> > > > 3 warnings generated.
-> > > > 
-> > > > I've attached a diff below that resolves the warning for me and it has
-> > > > no code generation differences based on objdump. While having used and
-> > > > unused attributes together might look unusual, reading the GCC attribute
-> > > > manual makes it seem like these attributes fulfill similar yet different
-> > > > roles, __unused__ prevents any unused warnings while __used__ forces the
-> > > > variable to be emitted:
-> > > > 
-> > > > https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/Common-Variable-Attributes.html#index-unused-variable-attribute
-> > > > 
-> > > > A strict reading of that does not make it seem like __used__ implies
-> > > > disabling unused warnings, so I can understand why clang's behavior is
-> > > > the way that it is.
-> > > > 
-> > > Thank you for your explanation and providing the solution. I tested the
-> > > diff stat you provided, and it works well for me.
-> > > 
-> > Should I submit an updated version of the patch to the bitmap
-> > maintainer, or should this be a separate patch since the patch causing
-> > build failure has already been accepted? My instinct is the latter, but
-> > I'm concerned it might make git bisection more challenging.
+On 5/3/24 1:46 PM, Reinette Chatre wrote:
+> Hi John,
+> On 5/3/2024 12:12 PM, John Hubbard wrote:
+>> On 5/3/24 11:37 AM, Reinette Chatre wrote:
+>>> On 5/3/2024 9:52 AM, John Hubbard wrote:
+>>>> On 5/3/24 1:00 AM, Ilpo Järvinen wrote:
+>>>>> On Thu, 2 May 2024, John Hubbard wrote:
+>>>> ...
+...
+>> I assumed that this code did not expect to handle negative numbers,
+>> because it is using unsigned math throughout.
+>>
+>> If you do expect it to handle cases where, for example, this happens:
+>>
+>>     avg_bw_imc > avg_bw_resc
 > 
-> Yury would be the best person to answer these questions since each
-> maintainer is different, some never rebase their trees while others will
-> squash simple fixes in to avoid bisection issues and such. I've added
-> him to the thread now to chime in (somehow he got dropped? the thread
-> starts at https://lore.kernel.org/202405030808.UsoMKFNP-lkp@intel.com/).
+> The existing code seems to handle this ok. A sample program with this
+> scenario comparing existing computation with your first proposal is
+> below:
 > 
-> I think the diff in my email should be directly applicable on top of
-> your change with no conflicts so he could just squash that in if you are
-> both happy with that.
+> #include <stdio.h>
+> #include <stdlib.h>
 > 
-> Cheers,
-> Nathan
+> void main(void) {
+> 	unsigned long avg_bw_resc = 20000;
+> 	unsigned long avg_bw_imc = 40000;
+> 	float avg_diff;
 > 
-> > > > diff --git a/lib/test_bitops.c b/lib/test_bitops.c
-> > > > index 5c627b525a48..28c91072cf85 100644
-> > > > --- a/lib/test_bitops.c
-> > > > +++ b/lib/test_bitops.c
-> > > > @@ -53,7 +53,7 @@ static unsigned long order_comb_long[][2] = {
-> > > >  static int __init test_fns(void)
-> > > >  {
-> > > >  	static unsigned long buf[10000] __initdata;
-> > > > -	static volatile __used unsigned long tmp __initdata;
-> > > > +	static volatile __always_unused __used unsigned long tmp __initdata;
-> > > >  	unsigned int i, n;
-> > > >  	ktime_t time;
+> 	/* Existing code */
+> 	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+> 	printf("Existing code: avg_diff = %f\n", avg_diff);
+> 
+> 	/* Original proposed fix */
+> 	avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+> 	printf("Original proposed fix: avg_diff = %f\n", avg_diff);
+> }
+> 
+> output:
+> Existing code: avg_diff = 0.500000
+> Original proposed fix: avg_diff = 461168590192640.000000
 
-Hi Nathan,
+That seems "a little bit" wrong. haha :)
 
-Thank you for sharing this.
+> 
+>>
+>> ...then a proper solution is easy, and looks like this:
+>>
+>> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+>> index c873793d016d..b87f91a41494 100644
+>> --- a/tools/testing/selftests/resctrl/mbm_test.c
+>> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+>> @@ -17,8 +17,8 @@
+>>   static int
+>>   show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
+>>   {
+>> -       unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
+>> -       unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
+>> +       long avg_bw_imc = 0, avg_bw_resc = 0;
+>> +       long sum_bw_imc = 0, sum_bw_resc = 0;
+>>          int runs, ret, avg_diff_per;
+>>          float avg_diff = 0;
+>>
+>> Should I resend the patch with that approach?
+> 
+> ok. That indeed makes the computations easier to understand. I assume
+> you intend to fix the snippet in mba_test.c also?
+> 
 
-I think this __used __unused thing may confuse readers when spotted in
-a random test code. What do you think if we make it a new macro and
-comment properly to avoid confusion?
+Yes, will do that. Thanks for spotting the bug in the original "fix"!
 
-I did that in the patch below. If you like it, I can prepend the 
-Kuan-Wei's series and fix the test inplace.
-
-Thanks,
-Yury
-
-From 987a021cc76495b32f680507e0c55a105e8edff3 Mon Sep 17 00:00:00 2001
-From: Yury Norov <yury.norov@gmail.com>
-Date: Fri, 3 May 2024 12:12:00 -0700
-Subject: [PATCH] Compiler Attributes: Add __always_used macro
-
-In some cases like performance benchmarking, we need to call a
-function, but don't need to read the returned value. If compiler
-recognizes the function as pure or const, it can remove the function
-invocation, which is not what we want.
-
-To prevent that, the common practice is assigning the return value to
-a temporary static volatile __used variable. This works with GCC, but
-clang still emits Wunused-but-set-variable. To suppress that warning,
-we need to teach clang to do that with the 'unused' attribute.
-
-Nathan Chancellor explained that in details:
-
-  While having used and unused attributes together might look unusual,
-  reading the GCC attribute manual makes it seem like these attributes
-  fulfill similar yet different roles, __unused__ prevents any unused
-  warnings while __used__ forces the variable to be emitted. A strict
-  reading of that does not make it seem like __used__ implies disabling
-  unused warnings
-
-The compiler documentation makes it clear what happens behind the used
-and unused attributes, but the chosen names may confuse readers if such
-combination catches an eye in a random code.
-
-This patch adds __always_used macro, which combines both attributes
-and comments on what happens for those interested in details.
-
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202405030808.UsoMKFNP-lkp@intel.com/
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- include/linux/compiler_attributes.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-index 8bdf6e0918c1..957b2d914119 100644
---- a/include/linux/compiler_attributes.h
-+++ b/include/linux/compiler_attributes.h
-@@ -361,6 +361,18 @@
-  */
- #define __used                          __attribute__((__used__))
- 
-+/*
-+ * The __used attribute guarantees that the attributed variable will be
-+ * always emitted by a compiler. It doesn't prevent the compiler from
-+ * throwing the 'unused' warnings when it can't detect how the variable
-+ * is actually used. It's a compiler implementation details either emit
-+ * the warning in that case or not.
-+ *
-+ * The combination of both 'used' and 'unused' attributes ensures that
-+ * the variable would be emitted, and will not trigger 'unused' warnings.
-+ */
-+#define __always_used			__used __maybe_unused
-+
- /*
-  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-warn_005funused_005fresult-function-attribute
-  * clang: https://clang.llvm.org/docs/AttributeReference.html#nodiscard-warn-unused-result
+thanks,
 -- 
-2.40.1
+John Hubbard
+NVIDIA
 
