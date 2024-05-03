@@ -1,148 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F341CD29;
-	Fri,  3 May 2024 20:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A2222F11
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 20:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714768303; cv=none; b=c/LcFmFRhLBima+QYnzXHpKtuOcyj+LVX/Z9GnCqckonQGSoChLkis6Q/DvcS2UBQDXnBiXSSWrcqhGWOcAvr1+iVQ6nDKJK+zDFdZ/jDVSCBeQ7XqpsP6GrfO8+qwZSA554hDcn+wHP1E2kY7JeZVmmS5io/6hQ+UTY+G5hg/M=
+	t=1714768825; cv=none; b=EPsNdh3jJBqtc9mFYHaMMLIYRfhHPO6LwR8HMRgCvLosG7R7fi3PaQ3/yDN40WpKKZu7QRFFQt8gDDDz48pQXsbtQiZKT8hUW0iLc/EuzfJAlHtLNuaM3QQIeM1YkE0BpSTQvYrq7qj8g2FvpYe9J2vC53T4Zy7ihZ1rp6YugCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714768303; c=relaxed/simple;
-	bh=bcTauFkomv1VILEJF41wZk4z7dvbXuYeoULUQhP2zZk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OzGWSVaqVvkD87KgXVU0yxtbHATt23tg0ttZ7griZ0mskep6+NLP41u8JbA7qUUkp2a+BT0y9PSfLvKGutky9vPF6ukK5RLY2rB8YRVjlokOR+iVsP/NLXtk+BIKgGs68Az93bhOQVk8vI03+TGx17PnJrpsYKKt/LzPegtmVaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W93gt274; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714768825; c=relaxed/simple;
+	bh=FzWh89LnKN/2rPVaiDqcCRxHJiQvPMtsLZtBAhKO/80=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KMwQrVt8OhqjywX+sjT6okKa8ytFB9PasOpT61Aoypa1MJsFyZE1zh7zqlCgQ+IRg1tKVXyg2v8AgPILkLInb3i+cFNnYipT9TvxYUjetys1t1Y8QwPWPRFut+/xjoGZLZSxTWdApRp9zfmsnrAB80hUr/xrSgJOuTi3R0cHD/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C7TSaun8; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W93gt274"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528CCC4AF18;
-	Fri,  3 May 2024 20:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714768302;
-	bh=bcTauFkomv1VILEJF41wZk4z7dvbXuYeoULUQhP2zZk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=W93gt274PAHvzNxwsBcJ3CCeVDGGGfNF+yeyVwqj0nN0wXYGYqVna7KqLAsylNFM0
-	 cWQGae7LwjrM1ci3bTzUYNHoL7jWx1Hw+WkuFHEHNPvWZP9gzf2tbgbxDjHVRYa9IN
-	 9I/m1sgvuzYp7hqBoWtvNARPS0Ic0zo/xsTbAUuULtmV4Hj5vBOQ8GdvAKQgcXh+ZT
-	 SGQfYDPbhnxU9PuYBJkJYkoYy9W84itMv7Axb84bjWhqZIPUCzMXtP8sQYsRdq4yn4
-	 CYOPqlUeJNsg9/yaQQepyOKhXHjBEgb+IigK/aFc4Nso/Igq0UuTULNKce+PQCjL4p
-	 aB0H6BXJmgCqA==
-From: Simon Horman <horms@kernel.org>
-Date: Fri, 03 May 2024 21:31:27 +0100
-Subject: [PATCH net-next 2/2] gve: Use ethtool_sprintf/puts() to fill stats
- strings
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C7TSaun8"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-34e0d8b737eso1475129f8f.1
+        for <llvm@lists.linux.dev>; Fri, 03 May 2024 13:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714768822; x=1715373622; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EDVI2lxNIEoHBnfc+c1mdxSwHaEoO/v2D+NGdQ5K8Ac=;
+        b=C7TSaun8mqvjOFzId3B2xpCk9JWPH+JMlwF16m338hRoixcomTM2lXGpMiiYcqy0Fd
+         OIh39nRljsqhIF//KmExSGOw0UDFwrdS98CbICDNRnApBRLqEaxuXtSqX9PJFMlc4jQd
+         UMH85Hn3hOeVDfBArz8lcE2H4AyIXZ1qd9LT+g72+KoRLW7FD2uGmezKBspEWEtSeQ0s
+         zkvsQ7ogFjcFcLGWAW9eqCT2SmyxeWjFF0qhaJq2YhhPKsXPniIpy/GyLrE48G/KQrh2
+         nIUZ34OU3YDnSq8i7hfdqHTSZdEA1+ABkELXkPfTY0atq9nfLTRUMVsIzWcxwRZP8FVu
+         mUcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714768822; x=1715373622;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EDVI2lxNIEoHBnfc+c1mdxSwHaEoO/v2D+NGdQ5K8Ac=;
+        b=SZvpyO+xTMAO1YPGKaIFocsxrXCttEPxUa3ke9R5hT1R1xFZZ87BlRC6YUcrWKDtjD
+         nvcmS6TtbL7zSh7oEK+EQM32adt6dPYg3eFBf8YQMX3YdSGZkNIRAwml2dameDJRPrKc
+         rY6k9jzlN7iwwlchVkMXb6SEIHB4tWmxC7K0Kv2IASrlzWHCCczB6YrUz63qGnCKw54a
+         pM71Ghc5/Mr3PFMG+yQJOe3KtAiLXh/i9EWO0yu/5LwhrgXiKRbnvQ4S1j5sd/aFa8og
+         iReq5/AN4Bk/29okXtsEbyAkzH2WnTpB5Kurz0igfO+fwPatPbPfKABsNgyXMF5se44B
+         nG+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXylKnhB5OBCp2xUwVlw6ewoEY60OfPbTDSZzXA/FNO+c9JIN003rVSq4MYsEP5J9SNKTzBGkXk/nwAeRgr213n4vRE4A==
+X-Gm-Message-State: AOJu0YxP7J1Fjr2ubV5MjrjX4/naD9STvMobBSEiSeA5MQKzCJDoZu0q
+	tPzr0PNiw3an6NDGjRPTel0687OLjXTQGLmmphXaB+zmFO72+UKUWDGjhVuigJA=
+X-Google-Smtp-Source: AGHT+IFe4iSXZoJhuPdxqGmWEAclAE1SSjrlr58XewUMveIRQamI8LNDgaNu5eHGZFYo5X1d1Xs5ew==
+X-Received: by 2002:a5d:47a7:0:b0:34e:8f88:e1f8 with SMTP id 7-20020a5d47a7000000b0034e8f88e1f8mr2101178wrb.30.1714768822193;
+        Fri, 03 May 2024 13:40:22 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id p17-20020a05600c359100b0041adf358058sm6770889wmq.27.2024.05.03.13.40.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 May 2024 13:40:21 -0700 (PDT)
+Date: Fri, 3 May 2024 23:40:18 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Simon Horman <horms@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Shailend Chand <shailend@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] gve: Avoid unnecessary use of comma operator
+Message-ID: <00eaac4f-f8dc-4140-9eec-0c17bc6012aa@moroto.mountain>
+References: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
+ <20240503-gve-comma-v1-1-b50f965694ef@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240503-gve-comma-v1-2-b50f965694ef@kernel.org>
-References: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
-In-Reply-To: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>
-Cc: Jeroen de Borst <jeroendb@google.com>, 
- Praveen Kaligineedi <pkaligineedi@google.com>, 
- Shailend Chand <shailend@google.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>, 
- netdev@vger.kernel.org, llvm@lists.linux.dev, 
- linux-hardening@vger.kernel.org
-X-Mailer: b4 0.12.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240503-gve-comma-v1-1-b50f965694ef@kernel.org>
 
-Make use of standard helpers to simplify filling in stats strings.
+On Fri, May 03, 2024 at 09:31:26PM +0100, Simon Horman wrote:
+> Although it does not seem to have any untoward side-effects,
+> the use of ';' to separate to assignments seems more appropriate than ','.
+> 
 
-The first two ethtool_puts() changes address the following fortification
-warnings flagged by W=1 builds with clang-18. (The last ethtool_puts
-change does not because the warning relates to writing beyond the first
-element of an array, and gve_gstrings_priv_flags only has one element.)
+Huh.  Interesting.  I wrote a check for that in Smatch.  The only place
+where it would matter would be in an if statement.
 
-.../fortify-string.h:562:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-  562 |                         __read_overflow2_field(q_size_field, size);
-      |                         ^
-.../fortify-string.h:562:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+	if (foo)
+		frob1(),
+	frob2();
 
-Likewise, the same changes resolve the same problems flagged by Smatch.
+It's unexpected that frob2() is included in the if statement.  But I
+was never able to find any of these actual bugs so I gave up.
 
-.../gve_ethtool.c:100 gve_get_strings() error: __builtin_memcpy() '*gve_gstrings_main_stats' too small (32 vs 576)
-.../gve_ethtool.c:120 gve_get_strings() error: __builtin_memcpy() '*gve_gstrings_adminq_stats' too small (32 vs 512)
-
-Compile tested only.
-
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- drivers/net/ethernet/google/gve/gve_ethtool.c | 42 +++++++++++----------------
- 1 file changed, 17 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/ethernet/google/gve/gve_ethtool.c
-index bd7632eed776..31563eeb0a41 100644
---- a/drivers/net/ethernet/google/gve/gve_ethtool.c
-+++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
-@@ -89,42 +89,34 @@ static const char gve_gstrings_priv_flags[][ETH_GSTRING_LEN] = {
- static void gve_get_strings(struct net_device *netdev, u32 stringset, u8 *data)
- {
- 	struct gve_priv *priv = netdev_priv(netdev);
--	char *s = (char *)data;
-+	u8 *s = (char *)data;
- 	int num_tx_queues;
- 	int i, j;
- 
- 	num_tx_queues = gve_num_tx_queues(priv);
- 	switch (stringset) {
- 	case ETH_SS_STATS:
--		memcpy(s, *gve_gstrings_main_stats,
--		       sizeof(gve_gstrings_main_stats));
--		s += sizeof(gve_gstrings_main_stats);
--
--		for (i = 0; i < priv->rx_cfg.num_queues; i++) {
--			for (j = 0; j < NUM_GVE_RX_CNTS; j++) {
--				snprintf(s, ETH_GSTRING_LEN,
--					 gve_gstrings_rx_stats[j], i);
--				s += ETH_GSTRING_LEN;
--			}
--		}
-+		for (i = 0; i < ARRAY_SIZE(gve_gstrings_main_stats); i++)
-+			ethtool_puts(&s, gve_gstrings_main_stats[i]);
- 
--		for (i = 0; i < num_tx_queues; i++) {
--			for (j = 0; j < NUM_GVE_TX_CNTS; j++) {
--				snprintf(s, ETH_GSTRING_LEN,
--					 gve_gstrings_tx_stats[j], i);
--				s += ETH_GSTRING_LEN;
--			}
--		}
-+		for (i = 0; i < priv->rx_cfg.num_queues; i++)
-+			for (j = 0; j < NUM_GVE_RX_CNTS; j++)
-+				ethtool_sprintf(&s, gve_gstrings_rx_stats[j],
-+						i);
-+
-+		for (i = 0; i < num_tx_queues; i++)
-+			for (j = 0; j < NUM_GVE_TX_CNTS; j++)
-+				ethtool_sprintf(&s, gve_gstrings_tx_stats[j],
-+						i);
-+
-+		for (i = 0; i < ARRAY_SIZE(gve_gstrings_adminq_stats); i++)
-+			ethtool_puts(&s, gve_gstrings_adminq_stats[i]);
- 
--		memcpy(s, *gve_gstrings_adminq_stats,
--		       sizeof(gve_gstrings_adminq_stats));
--		s += sizeof(gve_gstrings_adminq_stats);
- 		break;
- 
- 	case ETH_SS_PRIV_FLAGS:
--		memcpy(s, *gve_gstrings_priv_flags,
--		       sizeof(gve_gstrings_priv_flags));
--		s += sizeof(gve_gstrings_priv_flags);
-+		for (i = 0; i < ARRAY_SIZE(gve_gstrings_priv_flags); i++)
-+			ethtool_puts(&s, gve_gstrings_priv_flags[i]);
- 		break;
- 
- 	default:
-
--- 
-2.43.0
+regards,
+dan carpenter
 
