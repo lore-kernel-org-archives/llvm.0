@@ -1,217 +1,239 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05E1150984;
-	Fri,  3 May 2024 10:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1F0150982
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 10:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714731635; cv=none; b=oaT7j0prMVOUIbadL1eNCyZWPw2u3CtlvDRw72Y94mH44UnIzEeMuyR0UzTBg06js0Fz1VGPM55fhondmmpiGHNEZLLKFvxdDBmqzpMcLERSp2l/Is/tEKpp4eAIAj5JUN1GmCY3pMMqscLnmopXOWPgSok1ukEEmbnNRM4294M=
+	t=1714731817; cv=none; b=JIB5RBEndqfG47m6OEg2ulzK/G0dE7tcTrqzJJ5BWRyqgw8w/vkIbCWg5B2BUjZROqmK6BfAGZ7SZ/b8c+Xx0Io8RxQsjC3dPYwQZOkGEFaPYvfCzZ85ifhbbQH1Fz+vOauabBXfxu3Z7R8+aV1VD+wg4Xh2qtYaIlBDwlUMOeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714731635; c=relaxed/simple;
-	bh=24aSrLJ980/RB/v2Nlvzh56b4DixaRTX3cGcyelsRuc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VPrQChEf8ndk3J46w4Q34CAI9eaxHV/zWSZR6aKe2BtMnkZgU3GolKUl2vkxo54uXo+fzc3Y5ZCT+c1DJFETjzurKiwpWXO2UBQgD6z5JlHv9oI7pCRH4iunyAJD2HaRTE4CHJMZaLBmiybIhhZRzVhmTeZgQ4h/N9u7tPJ7oMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKsiSOoD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714731817; c=relaxed/simple;
+	bh=fHtHD+g9ZeMccn+bieIn+XHwW1USx6/ejeg+8z6817o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r+xMg/dxYXJ93cLJmJRNULoU/L5NMZbNINp6ecejrvTp3IFCvbyqSziBzSckMAvCB9fH4YiYdQaPYd3iYLePc+P01UyY6iudTuOOi/uxQnJ0aRYtGKkUZSNITIWfLJjwtRkGJdisj4C0VWZd9NBw1xZff9vAF0CIPfIfjYjSpmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=eHBR2JW9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+IWhWpVd; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=eHBR2JW9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+IWhWpVd; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKsiSOoD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A408C4AF14;
-	Fri,  3 May 2024 10:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714731634;
-	bh=24aSrLJ980/RB/v2Nlvzh56b4DixaRTX3cGcyelsRuc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TKsiSOoDd5jB05QHwZq2d2Q/AzExqeeIX86Wkpemm60/wZPvfSXpIJbcO8UAm7lJx
-	 t9TGE1DNdo7HV/NkQWKlD2iP257cbJW5kClI3UVy2mi2PMDIiLVietNaZzbUqTygjs
-	 lkBnOv1iMS60L7swl/KgZMjmQjZA0oEzWsniVu+vRPWulpyCopmXeL83OzQEbkbR+j
-	 ruXAeB5AmI1ctS6reRcFmCsqtnMn1JJ77QYWrFgM8dW6jQ+BFgKzPUH06pvsd+XqLW
-	 nt/WvQpBW1sq/29YiQ7vgNwTdxj9MhSw2I6bB8wDtSYOHz/jPmoMyUfun4NQHU97UY
-	 Opkyur0NHvqYw==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2dd041acff1so106170711fa.1;
-        Fri, 03 May 2024 03:20:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU1mPA/kuaJpZbhHL2C8d6Go7A9wZtaxoZhVhFDg4xsY1TZVqvRdTIkzoyjpWEl/AmYhCp+tfZTEtg6cuICfhCxvRF7CZMELEOBIR2eMH8w5mWOLkqG9/kuSbSBcwU=
-X-Gm-Message-State: AOJu0YwAtgXlvJCvF5BooA1BT0JNt2BOjX9uFIZGLT/PK7qdbNXBWohV
-	jy0tju6bd4Sb/PkosriyJFO0xNBDGnY80rZ/82Q5iAD9fLKGxb11XXGwbLwZa4LAdsqtdAGBTAo
-	YIMbeo11oyCt8Ik4LZt5Xsz64ntQ=
-X-Google-Smtp-Source: AGHT+IGP+uIRNlslkXUU92myicxqENqhyk49hCdj5sLaZzOrOjfvk8c1FOJPdJcIA1SaaE6JH4OMhhHWlN7aU5J3wms=
-X-Received: by 2002:a2e:9ed4:0:b0:2df:97b1:e21c with SMTP id
- h20-20020a2e9ed4000000b002df97b1e21cmr1464379ljk.31.1714731633251; Fri, 03
- May 2024 03:20:33 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="eHBR2JW9";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+IWhWpVd";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="eHBR2JW9";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+IWhWpVd"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4F6B5337BF;
+	Fri,  3 May 2024 10:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1714731813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fbe1RMkmxuSQr7773iy44PO+z9CJb3ltRRFeG3he+PM=;
+	b=eHBR2JW91Cub5ghh08YZgv0gotBMYgWmUYcxm0nc9ddIdpMtjYHkaYiB/MdBy0g6WtZgj1
+	KZ3g1iVOEgzaZU2saWuY1aBCD3cbRhd4rm9yb1sL0GHhiuWxsFx+COGId8Eoaf8BiZK12n
+	ahBepk7qxjL0DG9Q74e3fsl95DgSY70=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1714731813;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fbe1RMkmxuSQr7773iy44PO+z9CJb3ltRRFeG3he+PM=;
+	b=+IWhWpVd47hr9VNZX2IscVXbEBcjuy7zjRj+/nMQu0vqKOtif3k8gsV8PvkC2ww6YpjlLl
+	QBgO0uEWI3hXBNCQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=eHBR2JW9;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=+IWhWpVd
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1714731813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fbe1RMkmxuSQr7773iy44PO+z9CJb3ltRRFeG3he+PM=;
+	b=eHBR2JW91Cub5ghh08YZgv0gotBMYgWmUYcxm0nc9ddIdpMtjYHkaYiB/MdBy0g6WtZgj1
+	KZ3g1iVOEgzaZU2saWuY1aBCD3cbRhd4rm9yb1sL0GHhiuWxsFx+COGId8Eoaf8BiZK12n
+	ahBepk7qxjL0DG9Q74e3fsl95DgSY70=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1714731813;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fbe1RMkmxuSQr7773iy44PO+z9CJb3ltRRFeG3he+PM=;
+	b=+IWhWpVd47hr9VNZX2IscVXbEBcjuy7zjRj+/nMQu0vqKOtif3k8gsV8PvkC2ww6YpjlLl
+	QBgO0uEWI3hXBNCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 40A2613991;
+	Fri,  3 May 2024 10:23:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 8Lm/DyW7NGZeRAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Fri, 03 May 2024 10:23:33 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id CF584A0A12; Fri,  3 May 2024 12:23:28 +0200 (CEST)
+Date: Fri, 3 May 2024 12:23:28 +0200
+From: Jan Kara <jack@suse.cz>
+To: Baokun Li <libaokun1@huawei.com>
+Cc: Jan Kara <jack@suse.cz>, tytso@mit.edu,
+	syzbot <syzbot+dd43bd0f7474512edc47@syzkaller.appspotmail.com>,
+	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+	ritesh.list@gmail.com, syzkaller-bugs@googlegroups.com,
+	trix@redhat.com, yangerkun <yangerkun@huawei.com>
+Subject: Re: [syzbot] [ext4?] WARNING in mb_cache_destroy
+Message-ID: <20240503102328.cstcauc5qakmk2bg@quack3>
+References: <00000000000072c6ba06174b30b7@google.com>
+ <0000000000003bf5be061751ae70@google.com>
+ <20240502103341.t53u6ya7ujbzkkxo@quack3>
+ <dca44ba5-5c33-05ef-d9de-21a84f9d7eaa@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240501-kbuild-llvm-drop-thinlto-cache-v1-1-c117cc50a24b@kernel.org>
-In-Reply-To: <20240501-kbuild-llvm-drop-thinlto-cache-v1-1-c117cc50a24b@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 3 May 2024 19:19:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATm7dp+vuhNpvw7f50akKGNP0Pp+PQHRC1d3zTAZrmBLg@mail.gmail.com>
-Message-ID: <CAK7LNATm7dp+vuhNpvw7f50akKGNP0Pp+PQHRC1d3zTAZrmBLg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Remove support for Clang's ThinLTO caching
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: morbo@google.com, justinstitt@google.com, nicolas@fjasle.eu, 
-	keescook@chromium.org, samitolvanen@google.com, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
-	Yifan Hong <elsk@google.com>, Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dca44ba5-5c33-05ef-d9de-21a84f9d7eaa@huawei.com>
+X-Spam-Flag: NO
+X-Spam-Score: -2.51
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 4F6B5337BF
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-2.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TAGGED_RCPT(0.00)[dd43bd0f7474512edc47];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_CC(0.00)[suse.cz,mit.edu,syzkaller.appspotmail.com,dilger.ca,vger.kernel.org,lists.linux.dev,kernel.org,google.com,gmail.com,googlegroups.com,redhat.com,huawei.com];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	SUBJECT_HAS_QUESTION(0.00)[]
 
-On Thu, May 2, 2024 at 7:55=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> There is an issue in clang's ThinLTO caching (enabled for the kernel via
-> '--thinlto-cache-dir') with .incbin, which the kernel occasionally uses
-> to include data within the kernel, such as the .config file for
-> /proc/config.gz. For example, when changing the .config and rebuilding
-> vmlinux, the copy of .config in vmlinux does not match the copy of
-> .config in the build folder:
->
->   $ echo 'CONFIG_LTO_NONE=3Dn
->   CONFIG_LTO_CLANG_THIN=3Dy
->   CONFIG_IKCONFIG=3Dy
->   CONFIG_HEADERS_INSTALL=3Dy' >kernel/configs/repro.config
->
->   $ make -skj"$(nproc)" ARCH=3Dx86_64 LLVM=3D1 clean defconfig repro.conf=
-ig vmlinux
->   ...
->
->   $ grep CONFIG_HEADERS_INSTALL .config
->   CONFIG_HEADERS_INSTALL=3Dy
->
->   $ scripts/extract-ikconfig vmlinux | grep CONFIG_HEADERS_INSTALL
->   CONFIG_HEADERS_INSTALL=3Dy
->
->   $ scripts/config -d HEADERS_INSTALL
->
->   $ make -kj"$(nproc)" ARCH=3Dx86_64 LLVM=3D1 vmlinux
->   ...
->     UPD     kernel/config_data
->     GZIP    kernel/config_data.gz
->     CC      kernel/configs.o
->   ...
->     LD      vmlinux
->   ...
->
->   $ grep CONFIG_HEADERS_INSTALL .config
->   # CONFIG_HEADERS_INSTALL is not set
->
->   $ scripts/extract-ikconfig vmlinux | grep CONFIG_HEADERS_INSTALL
->   CONFIG_HEADERS_INSTALL=3Dy
->
-> Without '--thinlto-cache-dir' or when using full LTO, this issue does
-> not occur.
->
-> Benchmarking incremental builds on a few different machines with and
-> without the cache shows a 20% increase in incremental build time without
-> the cache when measured by touching init/main.c and running 'make all'.
->
-> ARCH=3Darm64 defconfig + CONFIG_LTO_CLANG_THIN=3Dy on an arm64 host:
->
->   Benchmark 1: With ThinLTO cache
->     Time (mean =C2=B1 =CF=83):     56.347 s =C2=B1  0.163 s    [User: 83.=
-768 s, System: 24.661 s]
->     Range (min =E2=80=A6 max):   56.109 s =E2=80=A6 56.594 s    10 runs
->
->   Benchmark 2: Without ThinLTO cache
->     Time (mean =C2=B1 =CF=83):     67.740 s =C2=B1  0.479 s    [User: 718=
-.458 s, System: 31.797 s]
->     Range (min =E2=80=A6 max):   67.059 s =E2=80=A6 68.556 s    10 runs
->
->   Summary
->     With ThinLTO cache ran
->       1.20 =C2=B1 0.01 times faster than Without ThinLTO cache
->
-> ARCH=3Dx86_64 defconfig + CONFIG_LTO_CLANG_THIN=3Dy on an x86_64 host:
->
->   Benchmark 1: With ThinLTO cache
->     Time (mean =C2=B1 =CF=83):     85.772 s =C2=B1  0.252 s    [User: 91.=
-505 s, System: 8.408 s]
->     Range (min =E2=80=A6 max):   85.447 s =E2=80=A6 86.244 s    10 runs
->
->   Benchmark 2: Without ThinLTO cache
->     Time (mean =C2=B1 =CF=83):     103.833 s =C2=B1  0.288 s    [User: 23=
-2.058 s, System: 8.569 s]
->     Range (min =E2=80=A6 max):   103.286 s =E2=80=A6 104.124 s    10 runs
->
->   Summary
->     With ThinLTO cache ran
->       1.21 =C2=B1 0.00 times faster than Without ThinLTO cache
->
-> While it is unfortunate to take this performance improvement off the
-> table, correctness is more important. If/when this is fixed in LLVM, it
-> can potentially be brought back in a conditional manner. Alternatively,
-> a developer can just disable LTO if doing incremental compiles quickly
-> is important, as a full compile cycle can still take over a minute even
-> with the cache and it is unlikely that LTO will result in functional
-> differences for a kernel change.
->
-> Cc: stable@vger.kernel.org
-> Fixes: dc5723b02e52 ("kbuild: add support for Clang LTO")
-> Reported-by: Yifan Hong <elsk@google.com>
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2021
-> Reported-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Closes: https://lore.kernel.org/r/20220327115526.cc4b0ff55fc53c97683c3e4d=
-@kernel.org/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi!
 
-Applied to linux-kbuild.
-Thanks.
+On Fri 03-05-24 17:51:07, Baokun Li wrote:
+> On 2024/5/2 18:33, Jan Kara wrote:
+> > On Tue 30-04-24 08:04:03, syzbot wrote:
+> > > syzbot has bisected this issue to:
+> > > 
+> > > commit 67d7d8ad99beccd9fe92d585b87f1760dc9018e3
+> > > Author: Baokun Li <libaokun1@huawei.com>
+> > > Date:   Thu Jun 16 02:13:56 2022 +0000
+> > > 
+> > >      ext4: fix use-after-free in ext4_xattr_set_entry
+> > So I'm not sure the bisect is correct since the change is looking harmless.
+> Yes, the root cause of the problem has nothing to do with this patch,
+> and please see the detailed analysis below.
+> > But it is sufficiently related that there indeed may be some relationship.
+> > Anyway, the kernel log has:
+> > 
+> > [   44.932900][ T1063] EXT4-fs warning (device loop0): ext4_evict_inode:297: xattr delete (err -12)
+> > [   44.943316][ T1063] EXT4-fs (loop0): unmounting filesystem.
+> > [   44.949531][ T1063] ------------[ cut here ]------------
+> > [   44.955050][ T1063] WARNING: CPU: 0 PID: 1063 at fs/mbcache.c:409 mb_cache_destroy+0xda/0x110
+> > 
+> > So ext4_xattr_delete_inode() called when removing inode has failed with
+> > ENOMEM and later mb_cache_destroy() was eventually complaining about having
+> > mbcache entry with increased refcount. So likely some error cleanup path is
+> > forgetting to drop mbcache entry reference somewhere but at this point I
+> > cannot find where. We'll likely need to play with the reproducer to debug
+> > that. Baokun, any chance for looking into this?
+> > 
+> > 								Honza
+> As you guessed, when -ENOMEM is returned in ext4_sb_bread(),
+> the reference count of ce is not properly released, as follows.
+> 
+> ext4_create
+>  __ext4_new_inode
+>   security_inode_init_security
+>    ext4_initxattrs
+>     ext4_xattr_set_handle
+>      ext4_xattr_block_find
+>      ext4_xattr_block_set
+>       ext4_xattr_block_cache_find
+>         ce = mb_cache_entry_find_first
+>             __entry_find
+>             atomic_inc_not_zero(&entry->e_refcnt)
+>         bh = ext4_sb_bread(inode->i_sb, ce->e_value, REQ_PRIO);
+>         if (PTR_ERR(bh) == -ENOMEM)
+>             return NULL;
+> 
+> Before merging into commit 67d7d8ad99be("ext4: fix use-after-free
+> in ext4_xattr_set_entry"), it will not return early in
+> ext4_xattr_ibody_find(),
+> so it tries to find it in iboy, fails the check in xattr_check_inode() and
+> returns without executing ext4_xattr_block_find(). Thus it will bisect
+> the patch, but actually has nothing to do with it.
+> 
+> ext4_xattr_ibody_get
+>  xattr_check_inode
+>   __xattr_check_inode
+>    check_xattrs
+>     if (end - (void *)header < sizeof(*header) + sizeof(u32))
+>       "in-inode xattr block too small"
+> 
+> Here's the patch in testing, I'll send it out officially after it is tested.
+> (PS:  I'm not sure if propagating the ext4_xattr_block_cache_find() errors
+> would be better.)
 
+Great! Thanks for debugging this! Some comments to your fix below:
 
+> diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
+> index b67a176bfcf9..5c9e751915fd 100644
+> --- a/fs/ext4/xattr.c
+> +++ b/fs/ext4/xattr.c
+> @@ -3113,11 +3113,10 @@ ext4_xattr_block_cache_find(struct inode *inode,
+> 
+>          bh = ext4_sb_bread(inode->i_sb, ce->e_value, REQ_PRIO);
+>          if (IS_ERR(bh)) {
+> -            if (PTR_ERR(bh) == -ENOMEM)
+> -                return NULL;
+> +            if (PTR_ERR(bh) != -ENOMEM)
+> +                EXT4_ERROR_INODE(inode, "block %lu read error",
+> +                         (unsigned long)ce->e_value);
+>              bh = NULL;
+> -            EXT4_ERROR_INODE(inode, "block %lu read error",
+> -                     (unsigned long)ce->e_value);
+>          } else if (ext4_xattr_cmp(header, BHDR(bh)) == 0) {
+>              *pce = ce;
+>              return bh;
 
+So if we get the ENOMEM error, continuing the iteration seems to be
+pointless as we'll likely get it for the following entries as well. I think
+the original behavior of aborting the iteration in case of ENOMEM is
+actually better. We just have to do mb_cache_entry_put(ea_block_cache, ce)
+before returning...
 
-> ---
-> This is an alternative (and arguably more robust) fix to Yifan's patch
-> at https://lore.kernel.org/20240429220756.979347-2-elsk@google.com/.
-> ---
->  Makefile | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 40fb2ca6fe4c..6b6a4a757062 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -942,7 +942,6 @@ endif
->  ifdef CONFIG_LTO_CLANG
->  ifdef CONFIG_LTO_CLANG_THIN
->  CC_FLAGS_LTO   :=3D -flto=3Dthin -fsplit-lto-unit
-> -KBUILD_LDFLAGS +=3D --thinlto-cache-dir=3D$(extmod_prefix).thinlto-cache
->  else
->  CC_FLAGS_LTO   :=3D -flto
->  endif
-> @@ -1477,7 +1476,7 @@ endif # CONFIG_MODULES
->  # Directories & files removed with 'make clean'
->  CLEAN_FILES +=3D vmlinux.symvers modules-only.symvers \
->                modules.builtin modules.builtin.modinfo modules.nsdeps \
-> -              compile_commands.json .thinlto-cache rust/test \
-> +              compile_commands.json rust/test \
->                rust-project.json .vmlinux.objs .vmlinux.export.c
->
->  # Directories & files removed with 'make mrproper'
-> @@ -1783,7 +1782,7 @@ PHONY +=3D compile_commands.json
->
->  clean-dirs :=3D $(KBUILD_EXTMOD)
->  clean: rm-files :=3D $(KBUILD_EXTMOD)/Module.symvers $(KBUILD_EXTMOD)/mo=
-dules.nsdeps \
-> -       $(KBUILD_EXTMOD)/compile_commands.json $(KBUILD_EXTMOD)/.thinlto-=
-cache
-> +       $(KBUILD_EXTMOD)/compile_commands.json
->
->  PHONY +=3D prepare
->  # now expand this into a simple variable to reduce the cost of shell eva=
-luations
->
-> ---
-> base-commit: e67572cd2204894179d89bd7b984072f19313b03
-> change-id: 20240501-kbuild-llvm-drop-thinlto-cache-f497770692f8
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+								Honza
 
-
---
-Best Regards
-Masahiro Yamada
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
