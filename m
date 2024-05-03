@@ -1,157 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CA312B89
-	for <llvm@lists.linux.dev>; Fri,  3 May 2024 08:01:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7661367;
+	Fri,  3 May 2024 09:10:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714723265; cv=none; b=B/qmt4ApFnYNiskGV2C9nGE8Svtkr058eZmDZnnusQifG8O0n5IKKkPcCF5rYU5cAVqyYTttbEnaZc0Qfn35d6/qM8XBiz5SnYJf7Dm5hLJxZPzoEWUR6eQKo4GVDncH4CUbuiakEfVdzM34u5NWSEjPn/PUf1tyNdGC1hY7Nsw=
+	t=1714727445; cv=none; b=d4LYlBkGcR1skukfsVQgiMVzA7ReV/ptgs57qKP03MVvN1WOB/mjHlblHF6vLWWvS8ubp4P1se5/I79Zargg0Q0RTSKZzqQaKb2ARMQkzaPkC8AqkCff3/kzTPaE333jZ2CAaf4uGGCWpPzhLzgFLil4/bbjkluZyvUv/7Jhs1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714723265; c=relaxed/simple;
-	bh=TO5f2lnqO/3Ie6pc6C92Bo2q513ZSZunZDH/5RorKxg=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=IXq99IxAVBFCek76g9zZtnAYcAaji7H+J/rXYky7GKSI3P/FoNjPEwP4tOBOdDc/0QPaHlsmrmHDvcFF3IWWc41e0cCSAKOJw33krJLmk1QpI95nIksIEDk/bEcv1NNtQjnIzCEOCyXRUQmeeBBCF2mBzOBO7e38ycNIWqad/+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T9uBq+cA; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1714727445; c=relaxed/simple;
+	bh=WTDd8xTTFTmxmAFyzg5Soj8vzJna+d8YvjaUIxy/+T4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q1M9IqZ3o00shLSAh2egRzhpghwWVPrOwAx4O4Mw1MBsW/BWtntTKI3QlBOGrXQ7bu5mvWFD+x1HHrFZb6Tr0XKanNPTuVgV5tbEEJE0JhfqjMT5hhMNQ5Xw/2//9Hpeb9cMaVmYvOwVO+JYO8tDvJ6d2KFw2opJR2DtpQ3xRiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1q2O5mv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T9uBq+cA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714723264; x=1746259264;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=TO5f2lnqO/3Ie6pc6C92Bo2q513ZSZunZDH/5RorKxg=;
-  b=T9uBq+cA1rmui9crWZLCsB78fVR+z6RqriXCltdSxmWwi+IEOEgzNRon
-   mWTNQ6f8+gMM97pufe5VPYb2+4DnITym7qbwCdyDpwl8+0Wf/RXtDZpqJ
-   YBw+FV3ndg3EMlshph/yymla31AFGlBe9P3o8ApiMZC1YbaoGMFtgW6n4
-   7kC5jMgrWPki9oEjqJzRztEghIgjpvs3ONVDNtwcGLFyVoVnTKptrrbx8
-   i9QUFlExw6u0QGgoBqZzwlgPDkzv0HC/z5iL5ADQSrrysxLKNeEYPqBGs
-   y/2HeSrvrQ8+5j/K6eBdgzhaS54wdTP0SiS8yjioMElzhFzEQoT9JZ9nw
-   g==;
-X-CSE-ConnectionGUID: gjtoelJxRaWfWJrdSwTkeQ==
-X-CSE-MsgGUID: 7woAr0TmTEmsMrSD2aON9A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="10683631"
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="10683631"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 01:01:04 -0700
-X-CSE-ConnectionGUID: IwrodcDXRfODX6qLeczlWw==
-X-CSE-MsgGUID: z+a5zPNGTtSwGUSowE6FSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="64836547"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.56])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 01:01:00 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 3 May 2024 11:00:53 +0300 (EEST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1q2O5mv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F544C116B1;
+	Fri,  3 May 2024 09:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714727444;
+	bh=WTDd8xTTFTmxmAFyzg5Soj8vzJna+d8YvjaUIxy/+T4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F1q2O5mvo3cPCwkLySXkfpwl8YnN9PNkYtfmSoaliKWHUta39eI7uDK7j+8kEZTJO
+	 tvj03MIXG071ielV4jEC94C60aKxnuxD62MM2e/PfK87qi40aCIqLNUI3nxTlkOnSX
+	 Fl9ZbesgzSnk+xqe84bAcTfJjNLEGNkdFeDP1OWv2tX+CgWvXtnoDopQ9X9lO1JRp1
+	 l15rWENKBnB4gDNq+iF7iHrFRkbri1Psr6cWE1GaLyTE4JGuV8POPogUVZrmzfS4g/
+	 A6ELN1TCWKMZUZ/ADK65D2HqZqV02SLjhsEJo5GwpviP0EiVUoOBXRL09OeKlaZdml
+	 OTBD7oRCBzvnQ==
+Date: Fri, 3 May 2024 11:10:38 +0200
+From: Christian Brauner <brauner@kernel.org>
 To: John Hubbard <jhubbard@nvidia.com>
-cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    Fenghua Yu <fenghua.yu@intel.com>, 
-    Reinette Chatre <reinette.chatre@intel.com>, 
-    Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
- abs(), labs() calls
-In-Reply-To: <20240503023209.80787-1-jhubbard@nvidia.com>
-Message-ID: <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com>
-References: <20240503023209.80787-1-jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Kees Cook <keescook@chromium.org>, Valentin Obst <kernel@valentinobst.de>, 
+	linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests/binderfs: use the Makefile's rules, not Make's
+ implicit rules
+Message-ID: <20240503-glossar-notfall-bd7c234c2da7@brauner>
+References: <20240503015820.76394-1-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240503015820.76394-1-jhubbard@nvidia.com>
 
-On Thu, 2 May 2024, John Hubbard wrote:
-
+On Thu, May 02, 2024 at 06:58:20PM -0700, John Hubbard wrote:
 > First of all, in order to build with clang at all, one must first apply
-> Valentin Obst's build fix for LLVM [1]. Furthermore, for this particular
-> resctrl directory, my pending fix [2] must also be applied. Once those
-> fixes are in place, then when building with clang, via:
+> Valentin Obst's build fix for LLVM [1]. Once that is done, then when
+> building with clang, via:
 > 
 >     make LLVM=1 -C tools/testing/selftests
 > 
-> ..two types of warnings occur:
+> ...the following error occurs:
 > 
->     warning: absolute value function 'abs' given an argument of type
->     'long' but has parameter of type 'int' which may cause truncation of
->     value
+>    clang: error: cannot specify -o when generating multiple output files
 > 
->     warning: taking the absolute value of unsigned type 'unsigned long'
->     has no effect
+> This is because clang, unlike gcc, won't accept invocations of this
+> form:
 > 
-> Fix these by:
+>     clang file1.c header2.h
 > 
-> a) using labs() in place of abs(), when long integers are involved, and
+> While trying to fix this, I noticed that:
 > 
-> b) don't call labs() unnecessarily.
+> a) selftests/lib.mk already avoids the problem, and
+> 
+> b) The binderfs Makefile indavertently bypasses the selftests/lib.mk
+> build system, and quitely uses Make's implicit build rules for .c files
+> instead.
+> 
+> The Makefile attempts to set up both a dependency and a source file,
+> neither of which was needed, because lib.mk is able to automatically
+> handle both. This line:
+> 
+>     binderfs_test: binderfs_test.c
+> 
+> ...causes Make's implicit rules to run, which builds binderfs_test
+> without ever looking at lib.mk.
+> 
+> Fix this by simply deleting the "binderfs_test:" Makefile target and
+> letting lib.mk handle it instead.
 > 
 > [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
-> [2] https://lore.kernel.org/all/20240503021712.78601-1-jhubbard@nvidia.com/
 > 
+> Fixes: 6e29225af902 ("binderfs: port tests to test harness infrastructure")
+> Cc: Christian Brauner <brauner@kernel.org>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > ---
->  tools/testing/selftests/resctrl/cmt_test.c | 4 ++--
->  tools/testing/selftests/resctrl/mba_test.c | 2 +-
->  tools/testing/selftests/resctrl/mbm_test.c | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> index a81f91222a89..05a241519ae8 100644
-> --- a/tools/testing/selftests/resctrl/cmt_test.c
-> +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> @@ -40,11 +40,11 @@ static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
->  	int ret;
->  
->  	avg_llc_val = sum_llc_val / num_of_runs;
-> -	avg_diff = (long)abs(cache_span - avg_llc_val);
-> +	avg_diff = (long)(cache_span - avg_llc_val);
->  	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
->  
->  	ret = platform && abs((int)diff_percent) > max_diff_percent &&
-> -	      abs(avg_diff) > max_diff;
-> +	      labs(avg_diff) > max_diff;
->  
->  	ksft_print_msg("%s Check cache miss rate within %lu%%\n",
->  		       ret ? "Fail:" : "Pass:", max_diff_percent);
 
-This seems fine but...
-
-> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-> index 7946e32e85c8..673b2bb800f7 100644
-> --- a/tools/testing/selftests/resctrl/mba_test.c
-> +++ b/tools/testing/selftests/resctrl/mba_test.c
-> @@ -77,7 +77,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
->  
->  		avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
->  		avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
-> -		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-> +		avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
->  		avg_diff_per = (int)(avg_diff * 100);
->  
->  		ksft_print_msg("%s Check MBA diff within %d%% for schemata %u\n",
-> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-> index d67ffa3ec63a..c873793d016d 100644
-> --- a/tools/testing/selftests/resctrl/mbm_test.c
-> +++ b/tools/testing/selftests/resctrl/mbm_test.c
-> @@ -33,7 +33,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
->  
->  	avg_bw_imc = sum_bw_imc / 4;
->  	avg_bw_resc = sum_bw_resc / 4;
-> -	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-> +	avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
->  	avg_diff_per = (int)(avg_diff * 100);
->  
->  	ret = avg_diff_per > MAX_DIFF_PERCENT;
-
-But how are these two cases same after your change when you ended up 
-removing taking the absolute value entirely?
-
-
--- 
- i.
-
+Reviewed-by: Christian Brauner <brauner@kernel.org>
