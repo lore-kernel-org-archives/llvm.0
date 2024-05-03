@@ -1,141 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA05158A3C;
-	Fri,  3 May 2024 19:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C72157E9B
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 19:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714764292; cv=none; b=nQCyvmJDOJfjuVulHByQIs//Y0/poazQKeNNIKbj4n+ScjqJkX37NfUNzdEWvBu34c/vf+UC26Y3r1+0SiYJGY6CgC8kbVn7/LQY9j1+e0fSqRYT4NwQHWBKPzhVI9nzduLvGNnq8u4M9nCZ45nAkObTAIRphCZZUCCv/JVd1TE=
+	t=1714764421; cv=none; b=F6IJZtEDicOn16pd9E3wbeAWFjZrL1eqZXUt6WRbXdOto+vP7764bg2pNJVxnbPOQTOtWngJnxrXrfKfxjEQT1sEjPvFpb880r7Wl8O/GcrP8HgzrMWNpv1MZdCqvzsGakiWgt1Ox2sOl+2fX5OADQilamDiSgDcJDgleDudJTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714764292; c=relaxed/simple;
-	bh=J74U89n7Ds/frvyh5tqzsoNGG9T/gBtCYwTk1HZs67U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RPwFGZz7LyFi6s8ICy76Rw/SQZLLRSFaguekzVKdaBtogLSaANsCsVnPHwk6nzgf1bNfvUYXyhYBTOoV+3zMxjNySHuAP6D8LDKcUWP94HOLOpYe30Jga5Tj8YLyQqsOcAj1CTgTa7AFMk4MuHmNHy7hNu/kmvkVQa2vCEqUKtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PboJNIan; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714764421; c=relaxed/simple;
+	bh=WvNlFxi7iBYAtjMjEa//mHPsqvxt5LdVHnEKn83dCEQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QnR/x8UFPlDkDaSbbocJfRy1Vwg57RgpHmw4ij6nKL1z1P2/GIgHp+WFnqqY8SDgQO9OoXhSrnQKhqd0I2Fn8MJJ79hhCDW0QHHsOyVo4Q4dNogp5n3eTjxzIssqPrNOxaiPGKD04eOS6f0jOG7V+ciaQp7q243NQCS2Ydq9Zhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TXH4zDbb; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PboJNIan"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714764290; x=1746300290;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J74U89n7Ds/frvyh5tqzsoNGG9T/gBtCYwTk1HZs67U=;
-  b=PboJNIanhMj8CE0nZEANs3JDiVgdKImJ5XLxiXmtya62OecsC2tG2wH4
-   EK16FtYmtg5pqBlA/zVvfHxLe+lC0Xo2Rr+RGJjyu2jG3DuStDIo5zovT
-   HKXZi752pYd3i37fUBcRjIs5dCisdYyBsmClQT/pKZNrxbutFAxcxZDu4
-   7fkUrgaiJwVBu3PgxVaErp7roHwRYwKfBX/diGPDTfyod/0hfLxUJyJg0
-   O1my5haC14YcV+uWpn70UznlO8eQJHNmL5M+nEYyxYcjbMnZ0Gs1pr5Cv
-   Xt9P+UpLwoVd3IcTnRBuJAg0boSWdUy6oDpkM0grmF0+dMLWwszTcWSx8
-   w==;
-X-CSE-ConnectionGUID: eMAGQYXjSoSNn2eUUYH52g==
-X-CSE-MsgGUID: t+G25Y/3Rp2Ge/PuGTtLhw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="10432516"
-X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="10432516"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 12:24:50 -0700
-X-CSE-ConnectionGUID: qGnOMDzfTTmJUm7G9CyB6w==
-X-CSE-MsgGUID: tzEGLkq3Rq+WXUsClmUCig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="64975668"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 03 May 2024 12:24:48 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s2yWU-000C2q-0a;
-	Fri, 03 May 2024 19:24:46 +0000
-Date: Sat, 4 May 2024 03:24:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/200-dcp 200/210]
- drivers/gpu/drm/apple/audio.c:413:6: warning: variable 'ret' set but not
- used
-Message-ID: <202405040317.xJ6Ar8ue-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TXH4zDbb"
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7d9c78d7f97so41639f.3
+        for <llvm@lists.linux.dev>; Fri, 03 May 2024 12:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1714764419; x=1715369219; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2KX9yLukoPi6iAtAAYiont6LefTtRljJSxxqAFKOfPw=;
+        b=TXH4zDbb9YGe99OO+/7UR6wzEmhVO4xqVDLvBE/+w9aNuN4Rpx2uJWTQmYrnBSJn+W
+         /adJVKM/GtgZIN0dqQQct0A1rT9OplIqIjl3BrESdu7a7urxjBGGM4bEm1rxVfKu+1tw
+         02S3lS7UdSS7KPNBVXyZGa/3h175puSSIYytk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714764419; x=1715369219;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2KX9yLukoPi6iAtAAYiont6LefTtRljJSxxqAFKOfPw=;
+        b=awsk71tdWJ84PG7a2cTaUswXSTu/P4p0/WAiinM8aXd8mPlL+nlCeL9of1RwRCCEUs
+         fm3kRjm3mDhyw/692XyTa6QtUrF3GzQj07uzW3CfIkcISuf2uttuDS0lz/mbBqrDfy5X
+         W74UbvYGwAM7v8HuD9F1q7Xk1Y8Tbh4P4qog0FVPeHmIoFhBKCFvEPZx1zU5wziZ6EDA
+         2sMdieMSGb82edj9EdYiwlX5sL+cVbvb8XJIM+Dc3LM4QezQIBC9kkaK44k8xZcHEbfY
+         YNBrHaS1CwW5VQR0D4F/TGEUWrw1RAyaIDorShm93dbbj9wO1dTmahNGv+9gda0aO8xB
+         DcvA==
+X-Forwarded-Encrypted: i=1; AJvYcCVe3utyCTfPq8+PVWp1YHvPs6vKDz/PI5lU93ngFVnZp6xfX3oVvyKQ+8gcS2w3gIUtVaDmETf+/mEj2qtN32BtkSFiRQ==
+X-Gm-Message-State: AOJu0YyEPAtUgygvvDl7M47TGQo2akkLjM7C/LnL4tYUNQi3PZA4Vkl0
+	ZDxjf376vOfYjTrcnYrcgAKOo6UlAJVd0tZtyo3YNb7M91dUz0cIykV7S4ecasg=
+X-Google-Smtp-Source: AGHT+IFoJvN6WDjavGp1uTSV43HqVeCXcSZGG+uXNfqWRiXEfwPFUMuzOtNwWJNtKWyqMxEa9EpoIw==
+X-Received: by 2002:a5d:8454:0:b0:7de:e04b:42c3 with SMTP id w20-20020a5d8454000000b007dee04b42c3mr3590661ior.0.1714764419230;
+        Fri, 03 May 2024 12:26:59 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056602150600b007deeb2d7c4csm790790iow.12.2024.05.03.12.26.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 May 2024 12:26:58 -0700 (PDT)
+Message-ID: <66bc5c54-d785-41c9-b0cf-3e6efe78d723@linuxfoundation.org>
+Date: Fri, 3 May 2024 13:26:57 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/resctrl: fix clang build failure: use
+ LOCAL_HDRS
+To: Reinette Chatre <reinette.chatre@intel.com>,
+ John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240503021712.78601-1-jhubbard@nvidia.com>
+ <977ebfe0-4c12-4631-8309-a10d92e33fbd@intel.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <977ebfe0-4c12-4631-8309-a10d92e33fbd@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/AsahiLinux/linux bits/200-dcp
-head:   38ae67fe4628d642a9dc626b9ba75bb2ac4bd701
-commit: 35a895171434f74b9b12efa9c7c3251983586bde [200/210] gpu: drm: apple: Add DCP audio driver
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240504/202405040317.xJ6Ar8ue-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240504/202405040317.xJ6Ar8ue-lkp@intel.com/reproduce)
+On 5/3/24 12:39, Reinette Chatre wrote:
+> 
+> 
+> On 5/2/2024 7:17 PM, John Hubbard wrote:
+>> First of all, in order to build with clang at all, one must first apply
+>> Valentin Obst's build fix for LLVM [1]. Once that is done, then when
+>> building with clang, via:
+>>
+>>      make LLVM=1 -C tools/testing/selftests
+>>
+>> ...the following error occurs:
+>>
+>>     clang: error: cannot specify -o when generating multiple output files
+>>
+>> This is because clang, unlike gcc, won't accept invocations of this
+>> form:
+>>
+>>      clang file1.c header2.h
+>>
+>> Fix this by using selftests/lib.mk facilities for tracking local header
+>> file dependencies: add them to LOCAL_HDRS, leaving only the .c files to
+>> be passed to the compiler.
+>>
+>> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
+>>
+>> Fixes: 8e289f454289 ("selftests/resctrl: Add resctrl.h into build deps")
+>> Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>> ---
+> 
+> Thank you.
+> 
+> Acked-by: Reinette Chatre <reinette.chatre@intel.com>
+> 
+> Reinette
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405040317.xJ6Ar8ue-lkp@intel.com/
+Thank you. Applied to linux-kselftest next for Linux 6.10-rc1
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/apple/audio.c:16:
-   In file included from include/linux/of_dma.h:14:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2188:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/apple/audio.c:207:16: error: call to undeclared function 'snd_interval_rate_bits'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     207 |         return snd_interval_rate_bits(r, hits.rates);
-         |                ^
->> drivers/gpu/drm/apple/audio.c:413:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     413 |         int ret;
-         |             ^
-   6 warnings and 1 error generated.
-
-
-vim +/ret +413 drivers/gpu/drm/apple/audio.c
-
-   407	
-   408	
-   409	static int dcpaud_create_chmap_ctl(struct dcp_audio *dcpaud)
-   410	{
-   411		struct snd_pcm *pcm = dcpaud->substream->pcm;
-   412		struct snd_pcm_chmap *chmap_info;
- > 413		int ret;
-   414	
-   415		ret = snd_pcm_add_chmap_ctls(pcm, SNDRV_PCM_STREAM_PLAYBACK, NULL,
-   416					     dcp_pcm_hw.channels_max, 0, &chmap_info);
-   417	
-   418		chmap_info->kctl->get = dcpaud_chmap_ctl_get;
-   419		chmap_info->chmap = hdmi_codec_8ch_chmaps;
-   420		chmap_info->private_data = dcpaud;
-   421	
-   422		return 0;
-   423	}
-   424	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+thanks,
+-- Shuah
