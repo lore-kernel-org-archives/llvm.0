@@ -1,198 +1,190 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2063.outbound.protection.outlook.com [40.107.236.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9256C18E1E;
-	Fri,  3 May 2024 02:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714704735; cv=none; b=d0BlL2gRMJI6IMFRhCwpNum6LP+pP986OTfXi6WYnZC6UO1AW36VQcyDJo/S3w6i299WzUcPE7hSo/HYFiAPxvBWz7iGSsg3arsUHuZAWiVeNEjZacI21UZWpUsnymJYmqlOcUKYloQheRePwfQ5+1dQJ8E438NTuriBkShSpTw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714704735; c=relaxed/simple;
-	bh=0Pf205u88RUt3zDWjjrsr1oLE34WySUHPBw3G302z4I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mPe4hSvgBe2V39nASQZFL8lg/ZQVPFdb3u82eDEdnfD+odyNGFPgKelphcFkj9KBcUiyMDzZvcyl6c+OMXoSUpfoa8cz1lOIcO/ooQnt4k+lzxDidaJkCZwH78oct1FvCUEsqaLBVPEu/Nu65Gfr3REOtYBXk1ct2/UoF26hFbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hNA0UTMt; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3F518641
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 03:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714705345; cv=fail; b=FMRJ/ZAjeyRu3X8JXsFYVfGsth6yVq420fTDNU/1m9cyP+uP+G0AOH4TcdWEcGQOZi/41wIz6q5TPSwBZBaBCONRxSxIE0Mv85u5v++j3n1FZ0Z74a6bWQuwWHsWOUyc79vE17REr/7bJrTCbqxMYKqBJ9BdpAtPq3ItkgPbe6I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714705345; c=relaxed/simple;
+	bh=EcilZbHOUxZUt2uzG3KUp+Oqnl0D6CdhLInHAwGhDEo=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Q9IkZn8cEuWaRsqM20HTyyZHryIiW9NqImRgzUhiZPstTFYdAddgm8knQA05RO8IzAZg7kjFsouRUl1L2rx1xggxIgRqAaW1uNTs5ySOhP4k61nlSW/4dfnwDecCymrdZ7CDrA8zDsusuiP0R6bbYWl0QNKvSFJipvlc4lR1oEI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=l4pKjKO2; arc=fail smtp.client-ip=40.107.236.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hNA0UTMt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714704734; x=1746240734;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0Pf205u88RUt3zDWjjrsr1oLE34WySUHPBw3G302z4I=;
-  b=hNA0UTMtZMsunCHmagfSepoDipGa++tRI34XXACl/qHxpxPpU3HVR+CO
-   aZN+0Qa2A8uRAjlRPI0VsfgeDoSJRD9lHKvSLYtbfWyE5IyqFDfl7ofIV
-   qYweVakVunI1if34u8POdeuqXlx9/ibNYp1iKkPWkc0KICAZxAl0Y1XDz
-   MiEQcKThH1pSkOPJCEBRJMGMqXViD0njd67QSz2cbPJPd8fc/eInYoW/Z
-   fBzuND1hW7HAkwi6T1EJN+gG3ZhG440s57N3CuG3xpI6nxKO/IlmcyZEJ
-   NombOBghEjhOQnW9GwZcFgva53FXVNnBs+7toIZhUUPQXJ63l0RiThWqU
-   g==;
-X-CSE-ConnectionGUID: 4nn52RrlTJubD0JTqoKpeQ==
-X-CSE-MsgGUID: 34BEmDuVT/yyK2A96xksTw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="10435686"
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="10435686"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 19:52:13 -0700
-X-CSE-ConnectionGUID: xedDZ5ELQs2svZdNnEMRew==
-X-CSE-MsgGUID: Jor1D1gaTBaPYh5VLwlycg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="27412751"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 02 May 2024 19:52:11 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s2j1t-000BFE-0H;
-	Fri, 03 May 2024 02:52:09 +0000
-Date: Fri, 3 May 2024 10:52:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dongsheng Yang <dongsheng.yang@easystack.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Coly Li <colyli@suse.de>
-Subject: [colyli-bcache:for-next 3/3] drivers/md/bcache/btree.c:1774:21:
- warning: variable 'ca' is uninitialized when used here
-Message-ID: <202405031034.WlmParsM-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="l4pKjKO2"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G+4botJ+9AXNZpVm5PZGkVC6wTuArzSuX6IxGr/iXiRszdlrO1w++ixaXmB7p0WdXFp378JebgbtFev5sX/6ogLL9fGiYRFKWNmvISU58MYyez4q0L5FX2Ua4p30zConXRSAa/BPiwDfSLmf3u/Lt74kHhdsuvo6/oV5Ns/jVIy25flVDv2ahCiUvSNUNgQZPpdXiYiv2khL6NucCAsCyThZPT6tzpQyk3riq3MqVxy/EmpdfQBk5XHSfoF93u2VgdOF4qbs2dI3U9qqz4lT3KA4IMd44NSqe0cF34P/Qra2Td+dmFvqp0KNaXlEFI4+cSA8JaFvTZpxPlI/Orvhbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rCPp0AH97sb08pxql46P4dudrUaFEhhFGKmsZYyvLMM=;
+ b=ET3eOSDUCp6rSLjxfz+boaiLihYCT0RRkVpHJ+Ra+zLOs6F0VcgyOjeudi9EEMkfl6lPpTeDqB83OOrgV8UytU/vf5DHUV6gB5nbk1zLotIki3x4xq0ubYMgK+gSDsN0qgdQA6vzcQ5NWBtreu1aSQfa7KxFI/AvAa7scBBgigvrvPuogNP/NbAJwJWT49s3xhfRuZUSF8t5oy9M2d4v2rzp+YhIQu5L55mcFpr9x8WhCnU0k5AEjSILhALbhkeRTlfu9IsuyrL9uae6foDb7Nx+WWrwJkGQ+EphmQoB91NLF3NTTUvNxBTf5fB/x3OLYRHU85bhOnxLljowxoftPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rCPp0AH97sb08pxql46P4dudrUaFEhhFGKmsZYyvLMM=;
+ b=l4pKjKO2EEFcPUvTK9j9f6G1gMUelm6cdXjdL/1UgHkYaG6uJ6yZfrsgFApAsbvgqqzbgDmC0HRSTzZpQGyT5U22Ekp+7lkXvBZNuAKYLAGPniJfdZgLl1qYJuTzWL+4+LtzO1DECMkO7NN+drZXIK9MHeIsSz7mMbrO1jfpO6lpuRNwME7V9nOL7rr/EO7DycjjDJ70Z0VKWZ7l8TvZL9EvYdjXShgKYkb7Xd8EzppG8RXGIRYgk+uaXcRTrUWxIIOKViGny7jR8FBlUuWMtyns4UBSREHm08x9iWj4aqrEcLVphnKaD1kvRe++gsRZXOD1YdjobJT77Ketjdxmzw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by LV8PR12MB9109.namprd12.prod.outlook.com (2603:10b6:408:18a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.28; Fri, 3 May
+ 2024 03:02:16 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7519.035; Fri, 3 May 2024
+ 03:02:16 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: angquan yu <angquan21@gmail.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Yu-cheng Yu <yu-cheng.yu@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	x86@kernel.org,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 0/7] selftests/x86: fix build errors and warnings found via clang
+Date: Thu,  2 May 2024 20:02:07 -0700
+Message-ID: <20240503030214.86681-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0144.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::29) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|LV8PR12MB9109:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb379dc3-9a14-4508-437c-08dc6b1d7071
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|376005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?3Hytt919sBQT1n//ACZBmRN1IJdnvTZ+NUvu6JcoKJp4ikIC242xIyLc11Ha?=
+ =?us-ascii?Q?mBRp3Dv7C2wLOEOzpmTORD2N8CmLtHWuwM3nM/yZvuzwzjJGITPgUqKoqmEC?=
+ =?us-ascii?Q?zrysv+3g8yVrvJC/PbhkibmlOYh0IfOCNbUhXtgTAyV9wLNYCtmFquu54CxI?=
+ =?us-ascii?Q?nFblUrC/7AESLejl1waGYFKvMwcsP4yhcU1U+0ylh0FUrt2QKj6DdLBfsACw?=
+ =?us-ascii?Q?h+BelUxcjXWbgKRNJP0TMGziqBUssZpfwZmrLjJnkZgypNkF1uwf+TAmSgRU?=
+ =?us-ascii?Q?aecDkrjf9LvJKEnGeuR2+dC9xO9/bfih1QSkUUkrowLArH3N628th/G+M5Mw?=
+ =?us-ascii?Q?2R9tO9lYEenbaxVbI/7tkYSfud8pS37zX7L2G2CD20SDvQppBfjQZqW5plmn?=
+ =?us-ascii?Q?6DgBhZ5APTrzml6raUrnysKASdS9KkuSSWgiYH7pBSmEx/cRFHiIXgvDm8MW?=
+ =?us-ascii?Q?wruuvAsEbbsOjRIBXI65TVXuascNCTNnE78gvgpCrsyiqTBkzAX32GIC/u5o?=
+ =?us-ascii?Q?ce3WKTXavPihqZHFGJhMfYDVByIuYJ18b5j0BiygBLlgmidG+7JBbOYtnxq7?=
+ =?us-ascii?Q?8mXTQwZ6iRvwlO3fRxCHf7QQU9jMsivlSI+dKxGtKNrnbiwCFk5z2kutdsNj?=
+ =?us-ascii?Q?EXb34E6j/hT8YnQsVer+HmQk0Bgqijjg5lMDucbv42wpZR4Wk7QaUTF5KVqs?=
+ =?us-ascii?Q?+Ygc7szTM5DQlKWiPaJHNb7gDp7rWYPD7qA0UNSiadfb6IawwsHVjFp8uwjM?=
+ =?us-ascii?Q?OzhH+6fHFlOkykzRqGjMDl43+yyYECKMxabsUlLMRpNMdSoyW13zviwOezu1?=
+ =?us-ascii?Q?1736TAl/pZe6kQ+Uom4TSH/eliErEVfJYH215OAgc8oeCfUvzkTpQaBh+VsC?=
+ =?us-ascii?Q?N5EpdkDEemXf81XpbaQ2w7WSB2lbaLN47WUaXKmejwOokh3FF4yzx4GK89Bu?=
+ =?us-ascii?Q?JTk4BkVgT5ysSs9XGjZkk+4ytoyA6d81UFfyM3w3cf0IES6vqgr4NxbaWc1f?=
+ =?us-ascii?Q?/R2S0UJvOzroJ0qrVHLvPqYcA7pRltKr+uJybZH1DMiQpiO885rBBBGZOjhQ?=
+ =?us-ascii?Q?ScVuM8A5/ER8y8cq+lIgq9VgZcPTAnBmPdGGBMz1bL3UzHX8dLGUdJ43n2jV?=
+ =?us-ascii?Q?lzrGCiVX3f5pnlHZoYPYfR6/miGVP7X9DTZD0rNmEVHd6OQKO1qnYW8yjRWa?=
+ =?us-ascii?Q?3izldFlokl1utma5Ft9jLgmflwW/09UPuvJliBG60AhIo61PRlwba/7nl6Uo?=
+ =?us-ascii?Q?fE2LwjF78oOjhQDZXJ4D/9B6ZweBIPxEMHg3GhN7qQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?jFi27EFDskmwlKKewR034T1ebnvLF7rlD5ecQLqx+3Cgwtm67xpR2ViIL0rb?=
+ =?us-ascii?Q?MRQZ1L6uyQi+sK8vKmTF897Sti2FI7t+1q/TEYUjwVIFrXT0p/OlufsTQhK0?=
+ =?us-ascii?Q?YUSE4edBBcD8tOLGRynM2RXSDrdmyvAtbyr5xi5kbREfFKTUAUlLq5gRD1Qa?=
+ =?us-ascii?Q?p61iUyN1QiGq/2aWdhkvp+/SzH4GCS0ao+f4WFxwdzcfq8k5e9W+HXdfsF+W?=
+ =?us-ascii?Q?1ku8aotqCa58iLiqXfmhohhCr4NhgGfE8cmlAIzjhqYjVy11QbUV7UkUy2HJ?=
+ =?us-ascii?Q?LicZVtXWhiPWnJ/VWLFzedOwdbMSfmkQ2gJwIaoQjWjk/1bBUg0ehGOUCXNm?=
+ =?us-ascii?Q?CFyH9cjJwGRiEGgcpyNfJ8XN1aTwFjpRo/2QDzHImKTHJTNhkcf0xQrsrJBX?=
+ =?us-ascii?Q?OKk3O6ArsHAPfE1POkRF1DY8YWMn1L7u+ggQyzqbgMaCpITc15mwJ6TYjaZ5?=
+ =?us-ascii?Q?e6at/jdDvjxJ3yjq2SC7DsDEflPXdYDK8JoyHUM+Sh+cwSh4LibB5AJeN++e?=
+ =?us-ascii?Q?h52z+68yAsbyJaZHKRl6ctFK1telbpzeF4IoGG1/fGThVueMJtf7HxCob7e0?=
+ =?us-ascii?Q?khFDjtTlv4hQ69UeodfGp0OuPFqt70BklSG79YV00TskKG1eBoS5qduOYEJ4?=
+ =?us-ascii?Q?LLp7fleu+3Fr2WnRDLBCMlvv/O/caESWeh+D8BVh+39IJgDPqIEx3pWkyhY1?=
+ =?us-ascii?Q?X3Yz+voMGjYmZyJrtO/BF8XmZzx8Uyffo83dxyOR3skUgsU/CA4LHUU18qzA?=
+ =?us-ascii?Q?Dtc6UQ9nAQecT+zawlI0FRP1r9Ieja18dJPQ/AHK1C7j9UvxfA1ZvBqD3um3?=
+ =?us-ascii?Q?kT1505PKRgOJtZBZjXIDrSV6BP4NlIKoW4CA1UFd6PD3bkAHFineyghbt7Xc?=
+ =?us-ascii?Q?AXhbe1M8JFeZrzOvkXBblRGwjyvUNAP45Rbo7vTyzPzU58nqHP5LHWuizA1k?=
+ =?us-ascii?Q?/dWVTi6LJttyEd1nAqlJgYdED2V9UBecoCF3vZ8i5M4De2cnez6tQDX03ATN?=
+ =?us-ascii?Q?z21goBBEREIVRFZlpjXlTiqwyeWMB8sh2imn8JnPDfhwKt5zB0WtjWbO3382?=
+ =?us-ascii?Q?Fv6iaatFsIyKdMExS5j4HSGE6sqO9PzpC1uwFj5R8oWa+fn4fK+j3+6Wbfh3?=
+ =?us-ascii?Q?SUeqgzznvK6Jc4aVdnAC4uG8HfdjPlwLuP230JOld8uE1XLfP8dijlj7CxCj?=
+ =?us-ascii?Q?kk2rHmmpJFK0O2kBWsssclSBk20AkSOeQ5PNqbEnVbJSNJLJ10Kf9DdBTPGc?=
+ =?us-ascii?Q?+4mSHcs7hSdPzyhmD2J4NqsCjIMfdVsqMQUwi8lCa+fnZ7e+PBGw5J8QXggM?=
+ =?us-ascii?Q?QvQ+d4U0syUrOQ7pOyY8EtiMNLlLvzzEsSRJRdOK20PYn+5Rqn9dpAfzun2v?=
+ =?us-ascii?Q?PpptNoZvL1ih28NRJqrGl7tBk/Qy2cO5K03UEI+i6XgfjT1PXbWIPSOu+2eh?=
+ =?us-ascii?Q?ReuB0cK/gkZpqPdTc7tNHKRdpo/89f5Y3eUVG0D6kINnlzUvwFYdfw38J+kX?=
+ =?us-ascii?Q?zk0ZguGqdiTggXEPNHb7w5n7ICp6qkAciE1tjEqEKZDpg6Px+xZfBZDy0oqo?=
+ =?us-ascii?Q?huuewpbyFqhay63Y+FG449H1hlxlxtb6ZV5DaOdo?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb379dc3-9a14-4508-437c-08dc6b1d7071
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2024 03:02:16.5424
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A/rcDqWdWAm9j2pqVbEwkhomQaHMQZPXv+nZBsrbzafdi1AojUdDtt+dJ/oQCIc5ImvwiWP5pPhl9Z0aiw20Hw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9109
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/colyli/linux-bcache.git for-next
-head:   f7093093e7a41cc15a90a97581d77d4c4af54cc5
-commit: f7093093e7a41cc15a90a97581d77d4c4af54cc5 [3/3] bcache: allow allocator to invalidate bucket in gc
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240503/202405031034.WlmParsM-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240503/202405031034.WlmParsM-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405031034.WlmParsM-lkp@intel.com/
+Just a bunch of build and warnings fixes that show up when
+building with clang. Some of these depend on each other, so
+I'm sending them as a series.
 
-All warnings (new ones prefixed by >>):
+Enjoy!
 
-   In file included from drivers/md/bcache/btree.c:24:
-   In file included from drivers/md/bcache/bcache.h:181:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/md/bcache/btree.c:1774:21: warning: variable 'ca' is uninitialized when used here [-Wuninitialized]
-    1774 |         for_each_bucket(b, ca)
-         |                            ^~
-   drivers/md/bcache/bcache.h:892:12: note: expanded from macro 'for_each_bucket'
-     892 |         for (b = (ca)->buckets + (ca)->sb.first_bucket;                 \
-         |                   ^~
-   drivers/md/bcache/btree.c:1764:18: note: initialize the variable 'ca' to silence this warning
-    1764 |         struct cache *ca;
-         |                         ^
-         |                          = NULL
-   6 warnings generated.
+thanks,
+John Hubbard
+
+John Hubbard (7):
+  selftests/x86: fix Makefile dependencies to work with clang
+  selftests/x86: build test_FISTTP.c with clang
+  selftests/x86: build fsgsbase_restore.c with clang
+  selftests/x86: build sysret_rip.c with clang
+  selftests/x86: avoid -no-pie warnings from clang during compilation
+  selftests/x86: remove (or use) unused variables and functions
+  selftests/x86: fix printk() format warnings
+
+ tools/testing/selftests/x86/Makefile          | 31 +++++++++++++++----
+ tools/testing/selftests/x86/amx.c             | 16 ----------
+ .../testing/selftests/x86/clang_helpers_32.S  | 11 +++++++
+ .../testing/selftests/x86/clang_helpers_64.S  | 28 +++++++++++++++++
+ tools/testing/selftests/x86/fsgsbase.c        |  6 ----
+ .../testing/selftests/x86/fsgsbase_restore.c  | 11 +++----
+ tools/testing/selftests/x86/sigreturn.c       |  2 +-
+ .../testing/selftests/x86/syscall_arg_fault.c |  1 -
+ tools/testing/selftests/x86/sysret_rip.c      | 20 ++++--------
+ tools/testing/selftests/x86/test_FISTTP.c     |  8 ++---
+ tools/testing/selftests/x86/test_vsyscall.c   | 15 +++------
+ tools/testing/selftests/x86/vdso_restorer.c   |  2 ++
+ 12 files changed, 87 insertions(+), 64 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/clang_helpers_32.S
+ create mode 100644 tools/testing/selftests/x86/clang_helpers_64.S
 
 
-vim +/ca +1774 drivers/md/bcache/btree.c
-
-  1760	
-  1761	static void bch_btree_gc_finish(struct cache_set *c)
-  1762	{
-  1763		struct bucket *b;
-  1764		struct cache *ca;
-  1765		unsigned int i, j;
-  1766		uint64_t *k;
-  1767	
-  1768		mutex_lock(&c->bucket_lock);
-  1769	
-  1770		set_gc_sectors(c);
-  1771		c->gc_mark_valid = 1;
-  1772		c->need_gc	= 0;
-  1773	
-> 1774		for_each_bucket(b, ca)
-  1775			if (b->reclaimable_in_gc)
-  1776				b->reclaimable_in_gc = 0;
-  1777	
-  1778		for (i = 0; i < KEY_PTRS(&c->uuid_bucket); i++)
-  1779			SET_GC_MARK(PTR_BUCKET(c, &c->uuid_bucket, i),
-  1780				    GC_MARK_METADATA);
-  1781	
-  1782		/* don't reclaim buckets to which writeback keys point */
-  1783		rcu_read_lock();
-  1784		for (i = 0; i < c->devices_max_used; i++) {
-  1785			struct bcache_device *d = c->devices[i];
-  1786			struct cached_dev *dc;
-  1787			struct keybuf_key *w, *n;
-  1788	
-  1789			if (!d || UUID_FLASH_ONLY(&c->uuids[i]))
-  1790				continue;
-  1791			dc = container_of(d, struct cached_dev, disk);
-  1792	
-  1793			spin_lock(&dc->writeback_keys.lock);
-  1794			rbtree_postorder_for_each_entry_safe(w, n,
-  1795						&dc->writeback_keys.keys, node)
-  1796				for (j = 0; j < KEY_PTRS(&w->key); j++)
-  1797					SET_GC_MARK(PTR_BUCKET(c, &w->key, j),
-  1798						    GC_MARK_DIRTY);
-  1799			spin_unlock(&dc->writeback_keys.lock);
-  1800		}
-  1801		rcu_read_unlock();
-  1802	
-  1803		c->avail_nbuckets = 0;
-  1804	
-  1805		ca = c->cache;
-  1806		ca->invalidate_needs_gc = 0;
-  1807	
-  1808		for (k = ca->sb.d; k < ca->sb.d + ca->sb.keys; k++)
-  1809			SET_GC_MARK(ca->buckets + *k, GC_MARK_METADATA);
-  1810	
-  1811		for (k = ca->prio_buckets;
-  1812		     k < ca->prio_buckets + prio_buckets(ca) * 2; k++)
-  1813			SET_GC_MARK(ca->buckets + *k, GC_MARK_METADATA);
-  1814	
-  1815		for_each_bucket(b, ca) {
-  1816			c->need_gc	= max(c->need_gc, bucket_gc_gen(b));
-  1817	
-  1818			if (atomic_read(&b->pin))
-  1819				continue;
-  1820	
-  1821			BUG_ON(!GC_MARK(b) && GC_SECTORS_USED(b));
-  1822	
-  1823			if (!GC_MARK(b) || GC_MARK(b) == GC_MARK_RECLAIMABLE)
-  1824				c->avail_nbuckets++;
-  1825		}
-  1826	
-  1827		mutex_unlock(&c->bucket_lock);
-  1828	}
-  1829	
-
+base-commit: f03359bca01bf4372cf2c118cd9a987a5951b1c8
+prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.0
+
