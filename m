@@ -1,223 +1,261 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B515103D
-	for <llvm@lists.linux.dev>; Fri,  3 May 2024 22:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714773669; cv=fail; b=sVbrBXQC8YArjZ/ErufU9AyWcQh3jFjx2ZkEyKjIPZuGDnBVcgrVITEWFdiBlvY1TDJPTcLWL1fKmC9bv7LwAt4F2fmiJ/5/TeCvR9lordJtyUEvxnS9GAV7QTs4nc8q0aSQA/kqfzShVRZALCkPE6lgTdZkUOzCX2fZZWzdMWc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714773669; c=relaxed/simple;
-	bh=UH6PmjiPmEI0L9zbQ2r4IaUitoM7zMka7Bu03VRggnI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=hLVZ4iKScLUPTMcp0Neagusn58AMH5eI3TS4jeMv5MCy4zzf8F0YkPQ+hYDg+my5od97LdK5cuJi9+xXfbBG1Npr2PKTFP2FP5xp1BhPSvQEvcFLhOmSEhbcLgNly34CLO1wMmHVTS7J8b3w+QdmdWHSEMOba60KGTZG7WM7qu8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OG79JLAq; arc=fail smtp.client-ip=40.107.244.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFA059B4E;
+	Fri,  3 May 2024 22:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714774386; cv=none; b=Agu66MkWegDpRFdzeCKF6CCmsY+GFYAv1epYOoPrbuZK9nHKQzUVDyzgV2Io+vucOexuWas+UfnJjy+kChfr21DK+CulRcrSwoNTXqrrHJTh53CVkA/0XpVoUF0L1NcBaNfBOZ52dIu50w/2PIXBhU3844dRS+cjojjrWCZ/NnE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714774386; c=relaxed/simple;
+	bh=Gc7s6Q9EEuX80fywX7p5WZm4BykKe7JvAmnS2kYRvQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PFzF1qKO8IzeK25smC5eOKbDwO91NP+Efk0doUoPIBVOpiXhL98TSyKMS6Hrt7G9KifUo57B1/1V4crStnwMIaBacrzQAvlppiBw+FO8Jj7PviEQAAw8Q46G9HJI2d32eXyAPYCHxWXY7/fVZjXpRXDkESSdfoFrUaU2v4NX274=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BIxJQKuH; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OG79JLAq"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BU8ULqmI8W+W1oKa3KoZC9o4rxi4qNGl3l/kykFFsPFTzWt7NJG2kO8b/06LvIVW0GuBWtviHReCmL/zr7OuikCtd1E1vO4KiPV8qNh7ZL4xyFFcsvSIfG04csEe20w8yVEwxXeng9PA8L7s4P+PtIUtOzk3r0r8tQJUuPn2vpcFR3r6ye6cQ34axJQ92/GnAaoIOlt3TYpZaAtYEWIC7cbq1L1JhmqNMdAjf+uig+JBVS8pJfMgbFfNN3j4Q7C5Iy4Adn9R05Koa7qNz57LQksYMSG8pW822UC9GKyMbgjh1jjXAI5AvXXCslw3a5I67C9kS32Idjid8MW8xVYKXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2u57zfoJduSdp0Sow1nf2I0kiy7AW2C0Q8aXlIOPWpU=;
- b=RWPtibLTTWb7ScZ7Zq+s5LPiAKtwHMFgm/cnLgMj/UU5b2xoCiEGnbTIZt+e1202Z5t1tRISFq7ebAXEI2Kt77y3yFjOo6Jn0NmqoDBM/YR7NuJSyYjMj2gskBBp0TkWG/inr6u/mbMWbUu2FvRl7IxvGf2aYvcYmRvJL68l0swDn6or76pTC8T7ENSD69cVZkWe/zSQJusds7Se4AdrpSwNATGLj9t/5zD2VnOdZYElwoV8v3k2YPjn4dxy22Lj5ROsuxVVZW9fjGWVxXP0gbn6WjBjpGxQCD+qUAFQeulakMKcWhhxmuF3mohtSw3caym9qt7IqQ14y+8XMTi/MA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2u57zfoJduSdp0Sow1nf2I0kiy7AW2C0Q8aXlIOPWpU=;
- b=OG79JLAq+tuHesyWj/bDViQAVlpd94Z/XiodoTuFRM0JR5WV4hj+ZjG19leVBKKd97Y4ziPxuZvfJp3oJ5kcopAXDHwyBit9hSMPb8/MgXnx/t2evZYDLgYUzL0CIBj/6+4o1bFj8WG1ykrExy0q86gMrcMdx6Cz2965Nanc2FTUKleXL7h++yRyuf1HCofbfSfMY4ZUEqbij51qk8EFUFRXlYDZi1GMIzKSY19hEg07DaCcxtjZ46ayM77eNVXMxkAGnMdGt0Rc9nx9EzIrtecPk6rBeMSiJ3LsonnRsAXYJkMCXQqzrwXnGUt1yOg92/O/Ga7aci5QMF/qYcnmMg==
-Received: from CH0PR03CA0029.namprd03.prod.outlook.com (2603:10b6:610:b0::34)
- by CH3PR12MB8283.namprd12.prod.outlook.com (2603:10b6:610:12a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.28; Fri, 3 May
- 2024 22:00:45 +0000
-Received: from CH3PEPF00000012.namprd21.prod.outlook.com
- (2603:10b6:610:b0:cafe::5) by CH0PR03CA0029.outlook.office365.com
- (2603:10b6:610:b0::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.34 via Frontend
- Transport; Fri, 3 May 2024 22:00:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH3PEPF00000012.mail.protection.outlook.com (10.167.244.117) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7519.0 via Frontend Transport; Fri, 3 May 2024 22:00:45 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 3 May 2024
- 15:00:21 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 3 May 2024
- 15:00:20 -0700
-Message-ID: <63750681-92b1-4c21-8d58-6a22709822fb@nvidia.com>
-Date: Fri, 3 May 2024 15:00:20 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BIxJQKuH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714774384; x=1746310384;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Gc7s6Q9EEuX80fywX7p5WZm4BykKe7JvAmnS2kYRvQo=;
+  b=BIxJQKuHn8fJhtrOBP/wLxsI9F7QYUSQPLzeuKQu1apIHZiKNXWFn4gs
+   lezlV6ezIeiZr5Z7w81X0YRwvugV7E3lko2u3DWYZRv5j5bGAri3EqBIH
+   FvvlhajVdslAxcXkqjkyksgYvTXEvZ6F2sUXs+8MhiWV5AXXwmKNRbyxw
+   ViHX/iP0J0VhsoG/FlZaC809R+sYRZkzaAOzlluoQ4ZMb2O2sYP/qwaGA
+   ekJo0DeTiiQT5E4tKl2pKYJIx/BINe1MOIVLk95ti8t17vnHCFIF3CGhz
+   vlgZXiV8Kdbe6QCnpHJxaT4qMvUA9+MoJ8RPCQitcnOZhdtGJxh5jpP4G
+   w==;
+X-CSE-ConnectionGUID: 0xmbXMk9S8e0ATW2Zg5UtA==
+X-CSE-MsgGUID: oe0vLvt0Rj2s7pE6xEUAlg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="10478107"
+X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
+   d="scan'208";a="10478107"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 15:13:02 -0700
+X-CSE-ConnectionGUID: go9CxhAxQhGbbaveqzdP4Q==
+X-CSE-MsgGUID: HFdObqM3RFOb/uR2gyoJWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
+   d="scan'208";a="50769427"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 03 May 2024 15:13:00 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s319G-000C8u-1B;
+	Fri, 03 May 2024 22:12:58 +0000
+Date: Sat, 4 May 2024 06:12:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [kees:wip/v6.9-rc2/unsigned-overflow-sanitizer 30/109]
+ lib/percpu_test.c:118:7: error: use of undeclared identifier 'wrapping_sub'
+Message-ID: <202405040609.gBCLgoz0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
- abs(), labs() calls
-To: Reinette Chatre <reinette.chatre@intel.com>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	"Nick Desaulniers" <ndesaulniers@google.com>, Bill Wendling
-	<morbo@google.com>, Justin Stitt <justinstitt@google.com>, Fenghua Yu
-	<fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>,
-	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20240503023209.80787-1-jhubbard@nvidia.com>
- <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com>
- <f908ba74-86c0-409c-854d-9da5f3917b05@nvidia.com>
- <26f3effc-6ea1-4670-a301-76df3a710fa9@intel.com>
- <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
- <46a6019c-b029-4764-8c66-ad61f4191716@intel.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <46a6019c-b029-4764-8c66-ad61f4191716@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000012:EE_|CH3PR12MB8283:EE_
-X-MS-Office365-Filtering-Correlation-Id: 10703489-1755-4b03-3b2c-08dc6bbc7bb6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|1800799015|36860700004;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dlFFT21sZktYMStIa2dMY2xuL2plVEtNN1dqbExheWtKUVBjbGVQVjVZd2JK?=
- =?utf-8?B?UWF1cDF0K042R0F0RCt1d0VuTlJUaDMyZktMYXk1aXVLdzVPRGFZakpPbXZH?=
- =?utf-8?B?VDd6Z3Y4aFpXTDZEaUVyWnVsY0pJZTQ0N2hua0tsSkZUZFVNUWxhS0RFdnhU?=
- =?utf-8?B?dEhYRkNNa0ZmMitJSWRMdlVueEdBeFdzb1FadTlsRmx0KzJTc1VXcXZIZ09J?=
- =?utf-8?B?ZjdNWG5Id2hqczBjeUZzVmRyRk4zQ1MrQ2c1aEJPL1FRSGZFdUkvWGhybWpx?=
- =?utf-8?B?RHVzTmVHbWFsNCtIWmNEdTZvNTJ1eTBNbUJpelYxa2NkL25pRGF0MWM4RXBM?=
- =?utf-8?B?Q3lXdStvUlpiQWdtYUZFVy81bjh2MDMvWTNnUy9pTzRQRFNaYnZGUFhLaHd4?=
- =?utf-8?B?OFhjWUJ1SkJoc05tTDI2dHcvc2tiMW5PUHlac2RxekNLR253bWxYYlcwYmVG?=
- =?utf-8?B?NmNHR1p6U3I4bksvMG05TDJTQytxcmJaeHQvZEN0aENybkVHZHlybnhHS0RL?=
- =?utf-8?B?NGwzaUkxdlVFQmdBQjNxK3hUbVZjeDlRMGlIbWNlamVJM2JvMEdxaUV0NEFj?=
- =?utf-8?B?UytYekRuazBiWlI2ZUsrcVcwMUZVcUFsMlE3ZWNpQVJmeXVWcHJZYlJEa09n?=
- =?utf-8?B?VDVpR2g1eVkxUkEwQXdwQVpzVzNidS9QbjZhTXg0RDVIVXNGZlZaVS8wUEph?=
- =?utf-8?B?Z3NKVnE0dFB4TkxIeEl5VHpsL1RHdVdJRndJRDdUcjhrczB6dTRFMUl6ejl5?=
- =?utf-8?B?YlZTWitOMWdoaElJbDNtN2FqaGpMVkMxRzZVeXZKVjNQTmNzV3JCN1NGeEtE?=
- =?utf-8?B?cUZuajUwNXYyUkRNZVB2Qk1zdnVEWVZZWTc2dVJCZ3lYNExmTFR0K2RQaDVn?=
- =?utf-8?B?Mm4zKzFqbGJJRkNqakFWbTV6VDl6TWVXS0trYk9tNkZ5S2IwNk55alBlQ3pI?=
- =?utf-8?B?MDFwclNCeHNzeU00emlpS05aa08zdElJMjJDYVZvaDZGcjJhLzFzTndxemFK?=
- =?utf-8?B?Yk5qT3dscFBFUlF2aitoREVMSGFmN21hOG1XK3BseUhaM2x5d2EyZk5iV0FI?=
- =?utf-8?B?K1ZMekNYRFZjcjJiSnk1VWNFYzU5b2t3RG11RE54WDd5ZXpTQ3lCbldCUDg3?=
- =?utf-8?B?RmVRL2ltR1F6NHNjNVM1V0E0eDNIMCtpOHNMTmV0RU11Zy8xYlZ4Z3dyWDBm?=
- =?utf-8?B?WkNrcEQrY1Y5a1p1VEJTK0l4NVlUdUtoQVZhWTR5eTlpTkhGU2JDd1NucWx3?=
- =?utf-8?B?TFVkeVpvd3h6TTdIZ1JpZnc5WGtlOGsxdVNrakJkVEdnM0x3NjVFZmlOMFZr?=
- =?utf-8?B?NEpZS09BQlJJakZscjBLbC9BWDliZDhFUkJZdmI4YWRBVFRGRWRRN3RUeVh3?=
- =?utf-8?B?cWc2TkZXYW1GUytxUWVhY1NycDNHd3A3bU9MbW9IcmljRGdDTDJ4Y0t0YzV3?=
- =?utf-8?B?WUZQTVJuY2JHdXR0MlNickQrSllQSlR2VEp1K2pBS2ViUXVBMXBJVUxYM3JC?=
- =?utf-8?B?RTRGWlArQU16QndVQno3bXowamd6bGpmeVB1VW9Lem1yMVM5bFZIWnovSlBr?=
- =?utf-8?B?bHhqU3JnNUFad2xBWFA5S01FY0g3R3Q4SThmZDAwcGRjNGRZZ1R0YStuKysw?=
- =?utf-8?B?ZWlNN0FGbEQ0Tm1ZeFhqejJQVWs0MnoxOFdXbzJDVUVxeWMrZTJrak5ycVRC?=
- =?utf-8?B?YlIyR1VoY3kxenJVYWV1aE5sYjRkaUFoS2FWSkFEOEo1aXE0aFVBOVptbGpx?=
- =?utf-8?B?VWVXTU4yWVI1aW1lVDBZb1pVNUFTVGtPQzIweURjUk1mM2ZwV0RNZW9MbTlT?=
- =?utf-8?B?a0xuRzJpSXFET3J2d0l6dDd1cUFNcjluU0pUbS8vOTllMUxKWTV6b0I5b1dF?=
- =?utf-8?Q?2obHMmfvQks9K?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2024 22:00:45.1769
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10703489-1755-4b03-3b2c-08dc6bbc7bb6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF00000012.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8283
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/3/24 1:46 PM, Reinette Chatre wrote:
-> Hi John,
-> On 5/3/2024 12:12 PM, John Hubbard wrote:
->> On 5/3/24 11:37 AM, Reinette Chatre wrote:
->>> On 5/3/2024 9:52 AM, John Hubbard wrote:
->>>> On 5/3/24 1:00 AM, Ilpo Järvinen wrote:
->>>>> On Thu, 2 May 2024, John Hubbard wrote:
->>>> ...
-...
->> I assumed that this code did not expect to handle negative numbers,
->> because it is using unsigned math throughout.
->>
->> If you do expect it to handle cases where, for example, this happens:
->>
->>     avg_bw_imc > avg_bw_resc
-> 
-> The existing code seems to handle this ok. A sample program with this
-> scenario comparing existing computation with your first proposal is
-> below:
-> 
-> #include <stdio.h>
-> #include <stdlib.h>
-> 
-> void main(void) {
-> 	unsigned long avg_bw_resc = 20000;
-> 	unsigned long avg_bw_imc = 40000;
-> 	float avg_diff;
-> 
-> 	/* Existing code */
-> 	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-> 	printf("Existing code: avg_diff = %f\n", avg_diff);
-> 
-> 	/* Original proposed fix */
-> 	avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-> 	printf("Original proposed fix: avg_diff = %f\n", avg_diff);
-> }
-> 
-> output:
-> Existing code: avg_diff = 0.500000
-> Original proposed fix: avg_diff = 461168590192640.000000
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git wip/v6.9-rc2/unsigned-overflow-sanitizer
+head:   4eae48ae0df1d1feb751f794fa8495093e36168d
+commit: 42a77f20b876489304c8e46c2b30ccb154d876bf [30/109] include/linux/percpu-defs.h: negated variable: use wrapping_sub()
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240504/202405040609.gBCLgoz0-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240504/202405040609.gBCLgoz0-lkp@intel.com/reproduce)
 
-That seems "a little bit" wrong. haha :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405040609.gBCLgoz0-lkp@intel.com/
 
-> 
->>
->> ...then a proper solution is easy, and looks like this:
->>
->> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
->> index c873793d016d..b87f91a41494 100644
->> --- a/tools/testing/selftests/resctrl/mbm_test.c
->> +++ b/tools/testing/selftests/resctrl/mbm_test.c
->> @@ -17,8 +17,8 @@
->>   static int
->>   show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
->>   {
->> -       unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
->> -       unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
->> +       long avg_bw_imc = 0, avg_bw_resc = 0;
->> +       long sum_bw_imc = 0, sum_bw_resc = 0;
->>          int runs, ret, avg_diff_per;
->>          float avg_diff = 0;
->>
->> Should I resend the patch with that approach?
-> 
-> ok. That indeed makes the computations easier to understand. I assume
-> you intend to fix the snippet in mba_test.c also?
-> 
+All errors (new ones prefixed by >>):
 
-Yes, will do that. Thanks for spotting the bug in the original "fix"!
+   In file included from lib/percpu_test.c:2:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   lib/percpu_test.c:118:7: error: too few arguments provided to function-like macro invocation
+     118 |         ul = this_cpu_sub_return(ulong_counter, ui_one);
+         |              ^
+   include/linux/percpu-defs.h:503:110: note: expanded from macro 'this_cpu_sub_return'
+     503 | #define this_cpu_sub_return(pcp, val)   this_cpu_add_return(pcp, wrapping_sub(typeof(pcp), 0 (typeof(pcp))(val)))
+         |                                                                                                                ^
+   include/linux/overflow.h:125:9: note: macro 'wrapping_sub' defined here
+     125 | #define wrapping_sub(type, a, b)                                \
+         |         ^
+>> lib/percpu_test.c:118:7: error: use of undeclared identifier 'wrapping_sub'
+     118 |         ul = this_cpu_sub_return(ulong_counter, ui_one);
+         |              ^
+   include/linux/percpu-defs.h:503:64: note: expanded from macro 'this_cpu_sub_return'
+     503 | #define this_cpu_sub_return(pcp, val)   this_cpu_add_return(pcp, wrapping_sub(typeof(pcp), 0 (typeof(pcp))(val)))
+         |                                                                  ^
+>> lib/percpu_test.c:118:7: error: use of undeclared identifier 'wrapping_sub'
+   include/linux/percpu-defs.h:503:64: note: expanded from macro 'this_cpu_sub_return'
+     503 | #define this_cpu_sub_return(pcp, val)   this_cpu_add_return(pcp, wrapping_sub(typeof(pcp), 0 (typeof(pcp))(val)))
+         |                                                                  ^
+>> lib/percpu_test.c:118:7: error: use of undeclared identifier 'wrapping_sub'
+   include/linux/percpu-defs.h:503:64: note: expanded from macro 'this_cpu_sub_return'
+     503 | #define this_cpu_sub_return(pcp, val)   this_cpu_add_return(pcp, wrapping_sub(typeof(pcp), 0 (typeof(pcp))(val)))
+         |                                                                  ^
+>> lib/percpu_test.c:118:7: error: use of undeclared identifier 'wrapping_sub'
+   include/linux/percpu-defs.h:503:64: note: expanded from macro 'this_cpu_sub_return'
+     503 | #define this_cpu_sub_return(pcp, val)   this_cpu_add_return(pcp, wrapping_sub(typeof(pcp), 0 (typeof(pcp))(val)))
+         |                                                                  ^
+   5 warnings and 5 errors generated.
 
-thanks,
+
+vim +/wrapping_sub +118 lib/percpu_test.c
+
+623fd8072c7c4d Greg Thelen 2013-11-12   19  
+623fd8072c7c4d Greg Thelen 2013-11-12   20  static int __init percpu_test_init(void)
+623fd8072c7c4d Greg Thelen 2013-11-12   21  {
+623fd8072c7c4d Greg Thelen 2013-11-12   22  	/*
+623fd8072c7c4d Greg Thelen 2013-11-12   23  	 * volatile prevents compiler from optimizing it uses, otherwise the
+623fd8072c7c4d Greg Thelen 2013-11-12   24  	 * +ul_one/-ul_one below would replace with inc/dec instructions.
+623fd8072c7c4d Greg Thelen 2013-11-12   25  	 */
+623fd8072c7c4d Greg Thelen 2013-11-12   26  	volatile unsigned int ui_one = 1;
+623fd8072c7c4d Greg Thelen 2013-11-12   27  	long l = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12   28  	unsigned long ul = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12   29  
+623fd8072c7c4d Greg Thelen 2013-11-12   30  	pr_info("percpu test start\n");
+623fd8072c7c4d Greg Thelen 2013-11-12   31  
+623fd8072c7c4d Greg Thelen 2013-11-12   32  	preempt_disable();
+623fd8072c7c4d Greg Thelen 2013-11-12   33  
+623fd8072c7c4d Greg Thelen 2013-11-12   34  	l += -1;
+623fd8072c7c4d Greg Thelen 2013-11-12   35  	__this_cpu_add(long_counter, -1);
+623fd8072c7c4d Greg Thelen 2013-11-12   36  	CHECK(l, long_counter, -1);
+623fd8072c7c4d Greg Thelen 2013-11-12   37  
+623fd8072c7c4d Greg Thelen 2013-11-12   38  	l += 1;
+623fd8072c7c4d Greg Thelen 2013-11-12   39  	__this_cpu_add(long_counter, 1);
+623fd8072c7c4d Greg Thelen 2013-11-12   40  	CHECK(l, long_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12   41  
+623fd8072c7c4d Greg Thelen 2013-11-12   42  	ul = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12   43  	__this_cpu_write(ulong_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12   44  
+623fd8072c7c4d Greg Thelen 2013-11-12   45  	ul += 1UL;
+623fd8072c7c4d Greg Thelen 2013-11-12   46  	__this_cpu_add(ulong_counter, 1UL);
+623fd8072c7c4d Greg Thelen 2013-11-12   47  	CHECK(ul, ulong_counter, 1);
+623fd8072c7c4d Greg Thelen 2013-11-12   48  
+12a842683d4d60 Kees Cook   2024-01-27   49  	ul += ULONG_MAX;
+12a842683d4d60 Kees Cook   2024-01-27   50  	__this_cpu_add(ulong_counter, ULONG_MAX);
+623fd8072c7c4d Greg Thelen 2013-11-12   51  	CHECK(ul, ulong_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12   52  
+623fd8072c7c4d Greg Thelen 2013-11-12   53  	ul += -(unsigned long)1;
+623fd8072c7c4d Greg Thelen 2013-11-12   54  	__this_cpu_add(ulong_counter, -(unsigned long)1);
+623fd8072c7c4d Greg Thelen 2013-11-12   55  	CHECK(ul, ulong_counter, -1);
+623fd8072c7c4d Greg Thelen 2013-11-12   56  
+623fd8072c7c4d Greg Thelen 2013-11-12   57  	ul = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12   58  	__this_cpu_write(ulong_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12   59  
+623fd8072c7c4d Greg Thelen 2013-11-12   60  	ul -= 1;
+623fd8072c7c4d Greg Thelen 2013-11-12   61  	__this_cpu_dec(ulong_counter);
+623fd8072c7c4d Greg Thelen 2013-11-12   62  	CHECK(ul, ulong_counter, -1);
+623fd8072c7c4d Greg Thelen 2013-11-12   63  	CHECK(ul, ulong_counter, ULONG_MAX);
+623fd8072c7c4d Greg Thelen 2013-11-12   64  
+623fd8072c7c4d Greg Thelen 2013-11-12   65  	l += -ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12   66  	__this_cpu_add(long_counter, -ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12   67  	CHECK(l, long_counter, 0xffffffff);
+623fd8072c7c4d Greg Thelen 2013-11-12   68  
+623fd8072c7c4d Greg Thelen 2013-11-12   69  	l += ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12   70  	__this_cpu_add(long_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12   71  	CHECK(l, long_counter, (long)0x100000000LL);
+623fd8072c7c4d Greg Thelen 2013-11-12   72  
+623fd8072c7c4d Greg Thelen 2013-11-12   73  
+623fd8072c7c4d Greg Thelen 2013-11-12   74  	l = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12   75  	__this_cpu_write(long_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12   76  
+623fd8072c7c4d Greg Thelen 2013-11-12   77  	l -= ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12   78  	__this_cpu_sub(long_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12   79  	CHECK(l, long_counter, -1);
+623fd8072c7c4d Greg Thelen 2013-11-12   80  
+623fd8072c7c4d Greg Thelen 2013-11-12   81  	l = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12   82  	__this_cpu_write(long_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12   83  
+623fd8072c7c4d Greg Thelen 2013-11-12   84  	l += ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12   85  	__this_cpu_add(long_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12   86  	CHECK(l, long_counter, 1);
+623fd8072c7c4d Greg Thelen 2013-11-12   87  
+623fd8072c7c4d Greg Thelen 2013-11-12   88  	l += -ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12   89  	__this_cpu_add(long_counter, -ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12   90  	CHECK(l, long_counter, (long)0x100000000LL);
+623fd8072c7c4d Greg Thelen 2013-11-12   91  
+623fd8072c7c4d Greg Thelen 2013-11-12   92  	l = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12   93  	__this_cpu_write(long_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12   94  
+623fd8072c7c4d Greg Thelen 2013-11-12   95  	l -= ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12   96  	this_cpu_sub(long_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12   97  	CHECK(l, long_counter, -1);
+623fd8072c7c4d Greg Thelen 2013-11-12   98  	CHECK(l, long_counter, ULONG_MAX);
+623fd8072c7c4d Greg Thelen 2013-11-12   99  
+623fd8072c7c4d Greg Thelen 2013-11-12  100  	ul = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12  101  	__this_cpu_write(ulong_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12  102  
+623fd8072c7c4d Greg Thelen 2013-11-12  103  	ul += ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12  104  	__this_cpu_add(ulong_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12  105  	CHECK(ul, ulong_counter, 1);
+623fd8072c7c4d Greg Thelen 2013-11-12  106  
+623fd8072c7c4d Greg Thelen 2013-11-12  107  	ul = 0;
+623fd8072c7c4d Greg Thelen 2013-11-12  108  	__this_cpu_write(ulong_counter, 0);
+623fd8072c7c4d Greg Thelen 2013-11-12  109  
+623fd8072c7c4d Greg Thelen 2013-11-12  110  	ul -= ui_one;
+623fd8072c7c4d Greg Thelen 2013-11-12  111  	__this_cpu_sub(ulong_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12  112  	CHECK(ul, ulong_counter, -1);
+623fd8072c7c4d Greg Thelen 2013-11-12  113  	CHECK(ul, ulong_counter, ULONG_MAX);
+623fd8072c7c4d Greg Thelen 2013-11-12  114  
+623fd8072c7c4d Greg Thelen 2013-11-12  115  	ul = 3;
+623fd8072c7c4d Greg Thelen 2013-11-12  116  	__this_cpu_write(ulong_counter, 3);
+623fd8072c7c4d Greg Thelen 2013-11-12  117  
+623fd8072c7c4d Greg Thelen 2013-11-12 @118  	ul = this_cpu_sub_return(ulong_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12  119  	CHECK(ul, ulong_counter, 2);
+623fd8072c7c4d Greg Thelen 2013-11-12  120  
+623fd8072c7c4d Greg Thelen 2013-11-12  121  	ul = __this_cpu_sub_return(ulong_counter, ui_one);
+623fd8072c7c4d Greg Thelen 2013-11-12  122  	CHECK(ul, ulong_counter, 1);
+623fd8072c7c4d Greg Thelen 2013-11-12  123  
+623fd8072c7c4d Greg Thelen 2013-11-12  124  	preempt_enable();
+623fd8072c7c4d Greg Thelen 2013-11-12  125  
+623fd8072c7c4d Greg Thelen 2013-11-12  126  	pr_info("percpu test done\n");
+623fd8072c7c4d Greg Thelen 2013-11-12  127  	return -EAGAIN;  /* Fail will directly unload the module */
+623fd8072c7c4d Greg Thelen 2013-11-12  128  }
+623fd8072c7c4d Greg Thelen 2013-11-12  129  
+
+:::::: The code at line 118 was first introduced by commit
+:::::: 623fd8072c7c4d77a184bc9e35192acf480c18e4 percpu: add test module for various percpu operations
+
+:::::: TO: Greg Thelen <gthelen@google.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 -- 
-John Hubbard
-NVIDIA
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
