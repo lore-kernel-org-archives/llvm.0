@@ -1,141 +1,90 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2148F47;
-	Fri,  3 May 2024 01:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD1510A1A
+	for <llvm@lists.linux.dev>; Fri,  3 May 2024 01:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714700074; cv=none; b=cjB+PR1dsN2hevvswPacoq/7FnXM1qnDPr0a+8jq+QZNoPwB0KBSsVra4YZjBrFo9K/mhgyj92YkkVaicAJYzzM91mRf9ZQhRy+ffZvXx6z2LOhkd9tQ2HGkazd5Z1yFFA/E//2uovCiHBcaib/WEf+maP5k3PVkkxf8BjpRNH8=
+	t=1714701308; cv=none; b=J0ENyTAvbEwSoJFOXUvwogKDTE9ZWRtH9n4bsfdT+Y9DrVleTf88otu4lq3HnP3Wl8utJFRXpjVBroZnRzDYMuYpGgwm+MwQ5sSFltlMtUO7m1opOYawb+8LNQZTqZfwFJBEwD2fhBtzRx5eWROP4HNWPiqRO1tH2SspHdtablg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714700074; c=relaxed/simple;
-	bh=wZGylVv7MYiGV4tr5gHTFX00Op0Vt/3c+qjBHxVd77g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WL8PR1zLoKT2Wxxr88JHqAvXYMgYZWvzVOZZz5IU2KidMY/daOctsTCcXKRmWd/Cf7SkryAJZkdvzA5Lhz05bJcoRKFsf9m2GGOfgUhlwHEZJzxL0hshImqJp/KPShVdhlmzZwhfj5AskcYA/X4ygTyHc/7XfJgHEZrfqSEqQJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j7gt13UP; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7gt13UP"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5a9ef9ba998so1992706eaf.1;
-        Thu, 02 May 2024 18:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714700072; x=1715304872; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t7uWxHsmpdu9cG8ztu7nlo3aFJFuGgy/zRZAUsrGSEc=;
-        b=j7gt13UPY36OxdI10KxOOUonODNjdJ/fYyuBDUHyASV/EOAAUo2Dww3iddCxwYYxw2
-         nIVYM8LxjVm7Hssjg3p0oK9Fd/QDzK43PPTlzOg0mTqLUf7SmrC/RtuJ9VIEMO4XN/7y
-         N3bCm5c4P8ekVjVYMuz0WC254cVr1+shNOtZuJZt2YE0Oi7jRCL6qBIPqmXlWWdV4rVd
-         fXJk+UhCw5jEeLJofkj7c9CtKzbWMqZeadShKOURknBHPzK3N2YThQTxPnUuLNLVCT+A
-         Krzt8nyfwJpzpKxlTulTtFZV+TCAFB1BjK94grrD9gopKn/7pcTgQP5Rj+9ZXBv5WLpE
-         DkZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714700072; x=1715304872;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t7uWxHsmpdu9cG8ztu7nlo3aFJFuGgy/zRZAUsrGSEc=;
-        b=DQPZQTzPKHq3qpK63xJLCU/6iUZwbOmphxNopvaZwHhw24IHCQACI/RkSa2pwK0u45
-         Xo04Vn7Z/YvWyKYQuTkL2tREd8fXV0Xb463M6szBuLLEBvCXGTsbvxt6lLI3HySNXU6m
-         seoNqYQ7sQlxnQweVBOJ7EjT68e0VUVo9jPTaitR1JVIaC56+CEIIDxDYpQuMgaUFTXZ
-         ojEs96GLiAol56BzRnKEUFt58Zml9/v9KJ733M6U9Fq9nBuihztm1PP/q0xwcZ1eEyTX
-         Ta2M8vi+Cus6GGCYZ+mtQukGllv69Mm6UZ9Tvdl+CvLj3tK8MSBaBKMrgSBtEIsFnveW
-         Frrg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpLRLpBBiUEFXrg8wJj1Oxvk7Ag/bvm29y8wFCJN1v3BVjO3vIbVuZJLTJCFzxI9CmHs/LxLL6MbUzkHlZBGTYpOhjppXWNRFw4Ag4Ug==
-X-Gm-Message-State: AOJu0YwF8OIaerOJwEfCJ8vKMuNXKcXVBNmzvFKRy/sRFhvOr6G4vf3a
-	PCV4Yqn4VjHrzu/3t7kJHzdnvFG3VfTFHRvrt1TyZmvAy3q6grQJ
-X-Google-Smtp-Source: AGHT+IERXCVvSfSfc/vfzoDIvCDs7ijhcijC2Erf4L9K3EB5vg89w43sY1EXt8fv22O4MxsOjZ7PUw==
-X-Received: by 2002:a9d:4c8b:0:b0:6ed:e624:2015 with SMTP id m11-20020a9d4c8b000000b006ede6242015mr1656866otf.2.1714700072040;
-        Thu, 02 May 2024 18:34:32 -0700 (PDT)
-Received: from visitorckw-System-Product-Name ([140.113.216.168])
-        by smtp.gmail.com with ESMTPSA id fi7-20020a056a00398700b006ed007b3596sm1932521pfb.69.2024.05.02.18.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 May 2024 18:34:31 -0700 (PDT)
-Date: Fri, 3 May 2024 09:34:28 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-Message-ID: <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name>
-References: <20240502092443.6845-2-visitorckw@gmail.com>
- <202405030808.UsoMKFNP-lkp@intel.com>
+	s=arc-20240116; t=1714701308; c=relaxed/simple;
+	bh=BZ6f+p90P5mJixOYZNlhavrNUMb9G+1YR3hJY3NcPzc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=k2fpoTOvAbnSPEyyhGxlMbbdRfc6lJL+U1bg2hLP+CBpiI5JOXuJWLlTOEWCQvQvWoAvzJl+EJ3RWae55JfhogUd3LT/3dj/zKD0uoRLJ5GGdlkmKiY9f7jSerBf40WG3vnGi2h/nNIxNzICVpi+ZAjBDp4Ps088jzbW0C1tQqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4VVv3d0nGkzccq7;
+	Fri,  3 May 2024 09:53:49 +0800 (CST)
+Received: from dggpeml500021.china.huawei.com (unknown [7.185.36.21])
+	by mail.maildlp.com (Postfix) with ESMTPS id B27291800B8;
+	Fri,  3 May 2024 09:54:57 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 3 May 2024 09:54:56 +0800
+Message-ID: <cd418415-53ba-225a-8998-dfb832b2e7d3@huawei.com>
+Date: Fri, 3 May 2024 09:54:56 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202405030808.UsoMKFNP-lkp@intel.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [syzbot] [ext4?] WARNING in mb_cache_destroy
+Content-Language: en-US
+To: Jan Kara <jack@suse.cz>, syzbot
+	<syzbot+dd43bd0f7474512edc47@syzkaller.appspotmail.com>
+CC: <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+	<ritesh.list@gmail.com>, <syzkaller-bugs@googlegroups.com>,
+	<trix@redhat.com>, <tytso@mit.edu>, yangerkun <yangerkun@huawei.com>, Baokun
+ Li <libaokun1@huawei.com>
+References: <00000000000072c6ba06174b30b7@google.com>
+ <0000000000003bf5be061751ae70@google.com>
+ <20240502103341.t53u6ya7ujbzkkxo@quack3>
+From: Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20240502103341.t53u6ya7ujbzkkxo@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
 
-On Fri, May 03, 2024 at 08:49:00AM +0800, kernel test robot wrote:
-> Hi Kuan-Wei,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.9-rc6 next-20240502]
-> [cannot apply to akpm-mm/mm-everything akpm-mm/mm-nonmm-unstable]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kuan-Wei-Chiu/lib-test_bitops-Add-benchmark-test-for-fns/20240502-172638
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/20240502092443.6845-2-visitorckw%40gmail.com
-> patch subject: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240503/202405030808.UsoMKFNP-lkp@intel.com/config)
-> compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240503/202405030808.UsoMKFNP-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202405030808.UsoMKFNP-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> lib/test_bitops.c:56:39: error: variable 'tmp' set but not used [-Werror,-Wunused-but-set-variable]
->       56 |         static volatile __used unsigned long tmp __initdata;
->          |                                              ^
->    1 error generated.
-> 
-> 
-> vim +/tmp +56 lib/test_bitops.c
-> 
->     52	
->     53	static int __init test_fns(void)
->     54	{
->     55		static unsigned long buf[10000] __initdata;
->   > 56		static volatile __used unsigned long tmp __initdata;
+On 2024/5/2 18:33, Jan Kara wrote:
+> On Tue 30-04-24 08:04:03, syzbot wrote:
+>> syzbot has bisected this issue to:
+>>
+>> commit 67d7d8ad99beccd9fe92d585b87f1760dc9018e3
+>> Author: Baokun Li <libaokun1@huawei.com>
+>> Date:   Thu Jun 16 02:13:56 2022 +0000
+>>
+>>      ext4: fix use-after-free in ext4_xattr_set_entry
+> So I'm not sure the bisect is correct since the change is looking harmless.
+> But it is sufficiently related that there indeed may be some relationship.
+> Anyway, the kernel log has:
+>
+> [   44.932900][ T1063] EXT4-fs warning (device loop0): ext4_evict_inode:297: xattr delete (err -12)
+> [   44.943316][ T1063] EXT4-fs (loop0): unmounting filesystem.
+> [   44.949531][ T1063] ------------[ cut here ]------------
+> [   44.955050][ T1063] WARNING: CPU: 0 PID: 1063 at fs/mbcache.c:409 mb_cache_destroy+0xda/0x110
+>
+> So ext4_xattr_delete_inode() called when removing inode has failed with
+> ENOMEM and later mb_cache_destroy() was eventually complaining about having
+> mbcache entry with increased refcount. So likely some error cleanup path is
+> forgetting to drop mbcache entry reference somewhere but at this point I
+> cannot find where. We'll likely need to play with the reproducer to debug
+> that. Baokun, any chance for looking into this?
+>
+> 								Honza
 
-I apologize for causing the compilation failure with clang. I'm not
-very familiar with clang and I'm not sure why something marked as
-__used would result in the warning mentioned above. Perhaps clang does
-not support attribute((used))? Is there a way to work around this
-issue?
+Hi Honza,
+
+Sorry for the late reply, the first two days were May Day holidays.
+Thanks for the heads up, I'll take a look at this soon.
 
 Regards,
-Kuan-Wei
-
->     57		unsigned int i, n;
->     58		ktime_t time;
->     59	
->     60		get_random_bytes(buf, sizeof(buf));
->     61		time = ktime_get();
->     62	
->     63		for (n = 0; n < BITS_PER_LONG; n++)
->     64			for (i = 0; i < 10000; i++)
->     65				tmp = fns(buf[i], n);
->     66	
->     67		time = ktime_get() - time;
->     68		pr_err("fns:  %18llu ns\n", time);
->     69	
->     70		return 0;
->     71	}
->     72	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Baokun
