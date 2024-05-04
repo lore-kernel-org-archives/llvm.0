@@ -1,64 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166A669953;
-	Sat,  4 May 2024 18:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361F571747;
+	Sat,  4 May 2024 18:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714845709; cv=none; b=fdtN/MLQ5KkGzjjrhbX3k5iLKioShm4ly5GOxCg0l0RfQiFHaQsXeQLX+tTKbu8S+QjxnNLDEviPgFyAE5yhPyyCbVd8fSmLeLLOFhB+4DpKk+V6gesi7uQEbnFnkKGCRgBgq9EJQpnBZUBUHdtJI54kjMk/LSBwgMrSJmjMNEo=
+	t=1714848287; cv=none; b=Fewf/5yTFEY3n38afOVjG1om/QTvu9hO50zvfdk78HD9U4NkQl2dGHxQJ7qRg+T0VzjQF2regJQuk87Qy8iZbi+CE2ecu083g4lSiZ8irOkcBCyv1sPIXpifGFY5ZbZKMQ04aZA5xeuN+unMFk85klyNXHNbkD7GZlvSfLGk6bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714845709; c=relaxed/simple;
-	bh=wvW6UJrlvAGP4USmTQrRSEKApbgHmopSqmwR4tQPvYY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KQJtL4juA6Sgcv6ctdWjUKr2PCIVpqrXRkefv83b6COz3sQB44lVlRCLPeNpig5HPbYHvmvoPP86LUzyHoD6M349WN0PYtldSbhwImHDH/l18lvPGOthJ7Nk5qbVi/JfQljSZhYD4+w9Gw8/CBlyWsgUrljUxYxvsP0aWg7cbCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bCzaPT6L; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1714848287; c=relaxed/simple;
+	bh=YeP0bgsGBGJPSt2o1V1tiRCIlXkeWM2GwjMibri9IhY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GNMeba9dFKsI0W8UpU16O6CbIq/4wkKStCzbPQJfZexAt741g5IpsPBp0IMNNbLAbalDRvrCdiIBQBplegIt+TGJ4Xr4AGwQPvBxQonBkVqOMV8BWPjp5GigN6Ju1qsyGh+BRBCI6Rzz+hrpDw+1GkeIMJY4x9l3r1ZSfjeRR78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LOuClivj; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bCzaPT6L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LOuClivj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714845708; x=1746381708;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wvW6UJrlvAGP4USmTQrRSEKApbgHmopSqmwR4tQPvYY=;
-  b=bCzaPT6LxGJfR0uMp6zxgcjv+ndszfZkFIMR3ixytvtIUQzehLnh9Joy
-   mLfucqTa+xGCB3kDsycW7Z6WZrVUv9QlRsSCXOy8vk/NZSwkFI+xBSaH7
-   LDA8kCr/jGb/MA4pyeM/Vjzg6p3nSuX/E+OhvsALPomrBqS/hx70H4dQw
-   GdInlGAAAvBnHY7tFdw9aNZzzqsA35hsnd6Lu3C+YNrSve0Rsf5Bu/dGf
-   i3CPJTwVZXFt1j2Hr4r58Wxwmk+rf/YGRMz64b509wTQeVc8G+cFuRoyG
-   0wtBUvIeFPvRHBuKHyiteBb+4ovLTh94KCJ5bIk2UEaPHJk5I9TbeEfqo
+  t=1714848286; x=1746384286;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YeP0bgsGBGJPSt2o1V1tiRCIlXkeWM2GwjMibri9IhY=;
+  b=LOuClivjBJwSVBJSkMDUdkKHJuwZyPM47vT7QYYuvgUoFfKEF+vUOurG
+   +CBJAmNMWymCMeuwIByS7/xqNMYEq3LI6LT6klL3S47wZnnbgW1kB0nqT
+   +PUAgDHs1WtPtADaxpNtL0PnYuK1LicWEzKxJ9tcc14YDNmDNY9N61E//
+   Hcg5+3xR4knZVUb+n8vLsEZstyU5vGukJr34Tkf50TkOEOfDDi3l7ZZ+i
+   RIof0oda5Dhvqn/1y9ExKD9KzluOORi/WHM0ob8hU5OrNIh7s1lCejOXZ
+   CgDONJysMbkflL53dhJHt50F3gbIPT4QYq5QqokNgyUhYFxci5jPAwjaa
    Q==;
-X-CSE-ConnectionGUID: D5GZYts5TYiavOpvgbEQKw==
-X-CSE-MsgGUID: OOahcvR9TtOb5pPkiyaaBw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="10487395"
+X-CSE-ConnectionGUID: RWkJXqpwTC6BKq9bFB8CZA==
+X-CSE-MsgGUID: INfV+z4QTSuSSpHPu3Pysw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="28113164"
 X-IronPort-AV: E=Sophos;i="6.07,254,1708416000"; 
-   d="scan'208";a="10487395"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2024 11:01:47 -0700
-X-CSE-ConnectionGUID: z2nWo+zyTvuXA3N9Y7ajYQ==
-X-CSE-MsgGUID: vi1PQ4tyRHGNSWY8ST9Ecw==
+   d="scan'208";a="28113164"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2024 11:44:45 -0700
+X-CSE-ConnectionGUID: vPJCxT6rRd6KoVrvF2c9dA==
+X-CSE-MsgGUID: 74hSU5XbTp2Owzn2cEO/xw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,254,1708416000"; 
-   d="scan'208";a="32562285"
+   d="scan'208";a="32225668"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 04 May 2024 11:01:42 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 04 May 2024 11:44:44 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s3Jhc-000D2q-03;
-	Sat, 04 May 2024 18:01:40 +0000
-Date: Sun, 5 May 2024 02:01:01 +0800
+	id 1s3KNG-000D4m-0o;
+	Sat, 04 May 2024 18:44:42 +0000
+Date: Sun, 5 May 2024 02:44:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Justin Lai <justinlai0215@realtek.com>, kuba@kernel.org
+To: Alexander Graf <graf@amazon.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	andrew@lunn.ch, jiri@resnulli.us, pkshih@realtek.com,
-	larry.chiu@realtek.com, Justin Lai <justinlai0215@realtek.com>
-Subject: Re: [PATCH net-next v17 12/13] realtek: Update the Makefile and
- Kconfig in the realtek folder
-Message-ID: <202405050111.thv4v0Bl-lkp@intel.com>
-References: <20240502091847.65181-13-justinlai0215@realtek.com>
+	kvm-ppc@vger.kernel.org
+Subject: [agraf-2.6:kvm-kho-gmem-test 26/27] kernel/time/sched_clock.c:76:49:
+ error: call to undeclared function 'read_sysreg'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202405050219.81JETL6w-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,138 +63,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240502091847.65181-13-justinlai0215@realtek.com>
 
-Hi Justin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on horms-ipvs/master]
-[cannot apply to net-next/main linus/master v6.9-rc6 next-20240503]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Justin-Lai/rtase-Add-pci-table-supported-in-this-module/20240502-172835
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
-patch link:    https://lore.kernel.org/r/20240502091847.65181-13-justinlai0215%40realtek.com
-patch subject: [PATCH net-next v17 12/13] realtek: Update the Makefile and Kconfig in the realtek folder
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240505/202405050111.thv4v0Bl-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240505/202405050111.thv4v0Bl-lkp@intel.com/reproduce)
+tree:   https://github.com/agraf/linux-2.6.git kvm-kho-gmem-test
+head:   9a58862a298a63bad21d05191e28b857063bb9dc
+commit: 12b2509463b155fec805d7fb2ecbef3aafbd2414 [26/27] XXX arm: make early time stamps contiguous
+config: mips-vocore2_defconfig (https://download.01.org/0day-ci/archive/20240505/202405050219.81JETL6w-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240505/202405050219.81JETL6w-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405050111.thv4v0Bl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405050219.81JETL6w-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:47:
-   In file included from include/linux/dma-mapping.h:7:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:1970:
-   include/linux/vmstat.h:502:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     502 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     503 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:509:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     509 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     510 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:521:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     521 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     522 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:530:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     530 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     531 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:47:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:47:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:47:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/net/ethernet/realtek/rtase/rtase_main.c:67:10: fatal error: 'net/netdev_queues.h' file not found
-      67 | #include <net/netdev_queues.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~
-   17 warnings and 1 error generated.
+>> kernel/time/sched_clock.c:76:49: error: call to undeclared function 'read_sysreg'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   clocks_calc_mult_shift(&rd->mult, &rd->shift, read_sysreg(cntfrq_el0), NSEC_PER_SEC, 600);
+                                                                 ^
+   kernel/time/sched_clock.c:76:61: error: use of undeclared identifier 'cntfrq_el0'
+                   clocks_calc_mult_shift(&rd->mult, &rd->shift, read_sysreg(cntfrq_el0), NSEC_PER_SEC, 600);
+                                                                             ^
+   kernel/time/sched_clock.c:183:27: warning: variable 'new_epoch' set but not used [-Wunused-but-set-variable]
+           u64 res, wrap, new_mask, new_epoch, cyc, ns;
+                                    ^
+   kernel/time/sched_clock.c:183:43: warning: variable 'ns' set but not used [-Wunused-but-set-variable]
+           u64 res, wrap, new_mask, new_epoch, cyc, ns;
+                                                    ^
+   2 warnings and 2 errors generated.
 
 
-vim +67 drivers/net/ethernet/realtek/rtase/rtase_main.c
+vim +/read_sysreg +76 kernel/time/sched_clock.c
 
-6c114677e472d0 Justin Lai 2024-05-02 @67  #include <net/netdev_queues.h>
-6c114677e472d0 Justin Lai 2024-05-02  68  #include <net/page_pool/helpers.h>
-6c114677e472d0 Justin Lai 2024-05-02  69  #include <net/pkt_cls.h>
-6c114677e472d0 Justin Lai 2024-05-02  70  
+    69	
+    70	static void cd_early_init(void)
+    71	{
+    72		static bool is_initialized;
+    73		struct clock_read_data *rd = &cd.read_data[0];
+    74	
+    75		if (!is_initialized) {
+  > 76			clocks_calc_mult_shift(&rd->mult, &rd->shift, read_sysreg(cntfrq_el0), NSEC_PER_SEC, 600);
+    77			is_initialized = true;
+    78		}
+    79	}
+    80	
 
 -- 
 0-DAY CI Kernel Test Service
