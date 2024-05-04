@@ -1,199 +1,111 @@
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01olkn2044.outbound.protection.outlook.com [40.92.65.44])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9231E871
-	for <llvm@lists.linux.dev>; Sat,  4 May 2024 17:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.65.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714842538; cv=fail; b=mZJIWU9XmRIRIRMUoJBM8G4zbsFyreKLITP+vec+E/0Dc0sfIx2Xg9nLp+69WOIfbtxNIBRjlSDEqkkUSL8R40cTSbx7zYJxUVjYwKkyuG3SDrnrupKIKMMPTrFFPXBoTCtgom6Mj4LOmZoSkHbz5qA75fCqi4kfXsv/S185uw4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714842538; c=relaxed/simple;
-	bh=MoeMOmfNN+q4Zk/jL8nH4mnTUTo9tz0BkC3htba9PUI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=LBGJP5W0o/bjD3E0DHhG3kh6114oYojLfuIMk8nDVOFFB06nQHtoS8TTzLu+8AvkWLuduNcyYN2ilI3TehCOD0mo9ZIltbHBskCu7TrVSAa9eyyaawXTqqW5MjIfGYafZNgMW/6b7/eO33RPZvyGkJDnR3pfbaj1tqJxDCvLGsM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=hdBezUaa; arc=fail smtp.client-ip=40.92.65.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAAC1DDF4;
+	Sat,  4 May 2024 18:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714845708; cv=none; b=Dr6s8qrSpQrj9TejgSi2zIVPGvve6iZdIc3k3/+PwyJP3Hld4S9L1MwJw6SIv2f0i0Gf5MAnEDIxULquuHKBptLCcVfSAFZQ5wJFtb4yhw9KHWqsBMOJC9OR/pV22hsiD6FhOF64cwYq2SHKD+79P7Sfhn++DIAXW0/7WJgbfgQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714845708; c=relaxed/simple;
+	bh=CJyndH132PyZbSDkkvk1fLFsu4IFHGh/caTalDMZGNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=RMD6hxr/vtvXOkJ42PcoSuDTO8KBot9CD7sOOc/Rx4I0hwC/ss3qTTSqqGR0/ym15fldYTIHaZKR7JKU1JSkiN6saiIE8qUvSQzzL+CDTDwv2DgF9ri+tIXY5+4XctS9d2MUHmBKj2eAuvKXP03dZLF6kzlcfWSVpjIBpnAb96A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QQFuzJDq; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="hdBezUaa"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R3gpbNwlx6Km71646pwqF+4RxeBY1tFpGcMFGwHnyEfJcqhzgxlaZ4t/4ToYYdYksHYX9DDLg2AwokkyQVKQBfRpLaeu54e6gge4OeBMKND+NUQYBAC5H7/H0YoNyff7zV4tdTFtZXyQL+BRUXwYlke1PXJumZrCVLYfr+R8+uUzGKksryafPLMCJ5dyE+0BzHkAGvQIcHe//n7PfIXk+0GGuX8r/MUUwVyhpGJOyyOTvdIwXXnD/v6hXXSyMlgBTnWI7EVxqoNFQT07HV3IsnVLzcHhOdtuWIYSGluJ2Ei7PydnYq/C2bfcjecNmyJAB6qS9UTkyf1A5k5VauVufA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cw8nzKpnOVpC5LmgD+kJADa5w994LoR5bUQd6sq39Mg=;
- b=ktFF17cZIc+zTFmv4Dy40THJURLeMWe7uwWwuq77TiU+C/lXr91/Qaf0/xTiDEGmTrbX6Doc4vMpVGjeNZPzkXIiTnqBaD9AB19K1zDhnvNnPWcqrTnWwehywwbpDGgLYAheTMU+IYQskh89lb9DN6AucPAELzfpbFadl1v+Mbe6cMY4i2Dpl9bIJuBbGiQUzxsZzrZvrsuV6YBn2UAvsENRmVAK7GJu/4DY/s0Jihnq+DirmPCha8p7EI9hAslVlsj6ZQ5BAQmxis7oeGB3ElYbOxgFWbxZqqkMk4gen9H+X24jMERjnHpym/OTPiHr+YTjzkgvappc/LFu84zRAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cw8nzKpnOVpC5LmgD+kJADa5w994LoR5bUQd6sq39Mg=;
- b=hdBezUaaNcdkP1o/PMekE0JV+A1y0opkJ1b4fccpMnkWDR0B5lP7oeBPSw7YaNPEWBvimXHQsh3BbHojC/m9Iif0uqE/P3oOApJyuJvFmrMhXVhPxknOwq9YyUiWHBvpRc2P8075yWI9J9BelXmQdXV7GMN7wPI+p3261yaljJ1sQFAc5qYDJtCMWMhjC1/kkJoLwVZOr1yA8kOdcF4wLqnt0lt3lYh/vh89HZmsYgRJxgEUBV0vcLeuz58mFEkOsPlnRdgKnixtdqLLuhZ4LLuQj80EbrWMqxfpfy5bt2FituOONxcdHJoWOLIm479p2M5r614VXD0aFIv9zGyTvg==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by DB5PR02MB10070.eurprd02.prod.outlook.com (2603:10a6:10:489::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.39; Sat, 4 May
- 2024 17:08:52 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7544.036; Sat, 4 May 2024
- 17:08:52 +0000
-Date: Sat, 4 May 2024 19:08:39 +0200
-From: Erick Archer <erick.archer@outlook.com>
-To: Sven Eckelmann <sven@narfation.org>
-Cc: Marek Lindner <mareklindner@neomailbox.ch>,
-	Simon Wunderlich <sw@simonwunderlich.de>,
-	Antonio Quartulli <a@unstable.cc>,
-	"David S.  Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Erick Archer <erick.archer@outlook.com>,
-	b.a.t.m.a.n@lists.open-mesh.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Alexander Lobakin <aleksander.lobakin@intel.com>
-Subject: Re: [PATCH v3] batman-adv: Add flex array to struct
- batadv_tvlv_tt_data
-Message-ID:
- <AS8PR02MB723738E5107C240933E4E0F28B1E2@AS8PR02MB7237.eurprd02.prod.outlook.com>
-References: <AS8PR02MB72371F89D188B047410B755E8B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <3932737.ElGaqSPkdT@sven-l14>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3932737.ElGaqSPkdT@sven-l14>
-X-TMN: [QE19YAEU1vCHNCTe9yt0HLsdoXKNn/cq]
-X-ClientProxiedBy: MA2P292CA0026.ESPP292.PROD.OUTLOOK.COM (2603:10a6:250::12)
- To AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID: <20240504170839.GA3490@titan>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QQFuzJDq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714845707; x=1746381707;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CJyndH132PyZbSDkkvk1fLFsu4IFHGh/caTalDMZGNA=;
+  b=QQFuzJDqtHXLy2FHoABqVldiySMbqV3+VnyXCxcEetSTItsGtT2kL/aC
+   DBi/Chnb/Orevfdtx5tUaL4Hq5dgeLvD5Ikh1HusUQb9DdovGZEXe7q9N
+   hNO8T9WkQ2iiH4H2qeHCuet0ypNdWPm08m7qyStznebB/Ov5c3B8Y9iKa
+   vZOqEQYu28qkaBUlPv8kTJ/dAbI3xULCjbtgcoTbG67Rx0dxji0uzPhbE
+   j3a3JDQPotJ97xKN7NvMY/QElrHzvUh+gSk8uXIDjQnP2KHcUuZpjl059
+   XmILoPsCkZRt7m5dme7w/0FckzF+AdRzqJxI3tMiPKTjEKuVLkuFeTIZV
+   Q==;
+X-CSE-ConnectionGUID: ZNxrkJxOQaOKlVotErVlVA==
+X-CSE-MsgGUID: TF0r+INMQEKw3xh02td9xg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="10487391"
+X-IronPort-AV: E=Sophos;i="6.07,254,1708416000"; 
+   d="scan'208";a="10487391"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2024 11:01:44 -0700
+X-CSE-ConnectionGUID: xVWCS8SfS6C07xy9wRI55g==
+X-CSE-MsgGUID: 87T944gpSAexNbbYJgtjow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,254,1708416000"; 
+   d="scan'208";a="32562282"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 04 May 2024 11:01:42 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s3Jhb-000D2m-36;
+	Sat, 04 May 2024 18:01:39 +0000
+Date: Sun, 5 May 2024 02:01:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Graf <graf@amazon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm-ppc@vger.kernel.org
+Subject: [agraf-2.6:kvm-kho-gmem-test 5/27] include/linux/kexec.h:537:42:
+ warning: declaration of 'struct kimage' will not be visible outside of this
+ function
+Message-ID: <202405050113.Kgjow73K-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|DB5PR02MB10070:EE_
-X-MS-Office365-Filtering-Correlation-Id: eae39119-7b43-47e7-6299-08dc6c5cdf00
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|3412199016|440099019|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	bEi1YuNpgg+gE7nmCzg7q83ItAooLKXjJ5ftGYwihf8eTxawv6f8HpLh5ojK4wipcDExPah6TJEa1M42YzGTnWcmbew8f2oPBtJbP9ULGQVtiNAkqdkWDhtSv+4/q8ZBWODGiDsmb7E+sVqgHOaCrGorPTUGwMgGPVaKr3ob42ojbNNf/Eq2tYTNWESCNTU7IVB1bR9SF4o+XoZ5LRZ5Mgxy3h9nwcvxTY/oxaveq30cqbp1WXLqFTyGdnEuB3pvaTOcZ9lrRCMlhCqmdDrDU1rX6oCm9makQbrITSJRWibbM4EeSvrc+YbqjYWEpBoxGOSSiFTsKu253WBwJnvMoEgmXiOkIjkbVyI3ZRgYgT+OsBX1tQgT2kj5SpraXxmA46vAwO/3s7p1/wJinpbyNg2VioeSmkY8bk7eH2wzAYFhAl2mnxgug9wD1z8eBX8MaNbSUvNF1BMuIcOqTw1kMD76UeBpCofteT0X82e+ukJB4w+mHDLxyThZIn3+xMkEBmskyvP5y3zo3877wCPSa1zkp5WcJCt/iuL6kGAMLoYg6FtDwUI1dLdLFG9YdC25QiAufAl+tMoG3YPGENpDPHSsYeXrlGxbK97ZNkW9uuncMTfeuHIEnGSbv3mbXI4P
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?A2KDuKhXzzvdnmZzLYMMcsvi/I5S+4bP8SbQ1VW0QwvaLR0w2u2BktHv+fyO?=
- =?us-ascii?Q?nOHv7BC9vfFvoVKFQw9mdQypxQs90cqlDFkq4e3dCyGo3dazFjaWBEqQOkm3?=
- =?us-ascii?Q?GUO93SuKhwlJBFhF+y6MeYozQz1oJtL7YuLkRWDeRN7Odk9cFKVEqqfHFSd8?=
- =?us-ascii?Q?jbXDFc+xN6idVgode0wPmx6QWG1Vil+jAKY90WKpWqmZjHPFkEg5mv4DcwrZ?=
- =?us-ascii?Q?Two1B4rC9rWF4wz58NTPo3Gtt6no9u+sUOTzs/H8wvOObS8l9OT88GdQboWu?=
- =?us-ascii?Q?EHxD5iVpWRlZBMbSFbz+07VCi/NUbVoaSrvNoakSn4JU66OvZ5JWYkmRNFHd?=
- =?us-ascii?Q?AkY2jDxL3GHCd3fm40RQSdnZqZtw+GX65C1uQqB0+mTjTLxw9TVgKSnIFIRJ?=
- =?us-ascii?Q?ifAN4dHN/pkeRyktvtNL6VF2sg3l+5JKj5zNEnpR5MyqGJDYU9R11qGhTqGZ?=
- =?us-ascii?Q?xQHdfu7fYgnMm0cKAX5VG6E0qqhwvsuKMKKkqpM6L28Tqk+Pxj1ZDybNQmJv?=
- =?us-ascii?Q?lvH13KpqWyEKdjwO5DpBYzn765yrHpQf0ySscaYOoaiLikbBFe3jSbk5KY1S?=
- =?us-ascii?Q?lGucH1zIc9mWiacg4Vq6/hJPmC5daXfMk1olIsnz+HtlwR/LbRZQ42d8JXld?=
- =?us-ascii?Q?Z2O7c0tao8AZplvhy3vbYfk42Z5Fm7tSZX1VoxCst8wAArSwmKCbPkLThO21?=
- =?us-ascii?Q?0zcQW1Pj6x1yxN2CFqEof8abEWh4cEw9NCIoO1T+b7fsEFE/y55CJgag+VGO?=
- =?us-ascii?Q?ym8ukTm+m/8FhTlw4bhYhRZRFSDo3Jo2i/z/QQw7fiaCzuLznbm7VJe6lstw?=
- =?us-ascii?Q?KZmlRv3GVmMw5D7SEMaHfAh744kdMRw4jJrq5jUcirL/WA8WLqowHqel9VSf?=
- =?us-ascii?Q?qt4fjJQcLOmGDb0DLsa3zQ4mCYIrFJqrhoMBrkYYK8eLCb3UgBOc3SDjiFoW?=
- =?us-ascii?Q?uqympyP2kLb2pTvcUq4l2wpe4lJwH/8Dog0xmHvjC/WpQtXJUAw34oDl01OH?=
- =?us-ascii?Q?10+HHm3t+OSJx4pidCxvx77GftNrNQJqc705FZsxEuGGmSg0koQUewb1oM9r?=
- =?us-ascii?Q?s4UszanKY1lCqp+oMoi2syf1w+06OFcmgqEuDFNq/zi34floNkysPviTcumE?=
- =?us-ascii?Q?oH1BAlk5eEerRKlaklgnxpbCjmfpDgJsf4Yn6aQpUD2+cgmHCJBlCXR7qLIz?=
- =?us-ascii?Q?NXNi8sqCBJHa/NAgKpEcLKjGJOX7906asBhwIVTcpYNh2mzmIRoTkoBv24Wr?=
- =?us-ascii?Q?1ZevmYiV+OTJQy2tWouf?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eae39119-7b43-47e7-6299-08dc6c5cdf00
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2024 17:08:52.2295
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR02MB10070
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Sven,
+tree:   https://github.com/agraf/linux-2.6.git kvm-kho-gmem-test
+head:   9a58862a298a63bad21d05191e28b857063bb9dc
+commit: 4d945e934565554b4f997c57162e833303f56cb0 [5/27] kexec: Add KHO support to kexec file loads
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240505/202405050113.Kgjow73K-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240505/202405050113.Kgjow73K-lkp@intel.com/reproduce)
 
-On Sat, May 04, 2024 at 11:35:38AM +0200, Sven Eckelmann wrote:
-> On Wednesday, 1 May 2024 17:02:42 CEST Erick Archer wrote:
-> > diff --git a/include/uapi/linux/batadv_packet.h b/include/uapi/linux/batadv_packet.h
-> > index 6e25753015df..dfbe30536995 100644
-> > --- a/include/uapi/linux/batadv_packet.h
-> > +++ b/include/uapi/linux/batadv_packet.h
-> [...]
-> > +/**
-> > + * struct batadv_tvlv_tt_data - tt data propagated through the tt tvlv container
-> > + * @flags: translation table flags (see batadv_tt_data_flags)
-> > + * @ttvn: translation table version number
-> > + * @num_vlan: number of announced VLANs. In the TVLV this struct is followed by
-> > + *  one batadv_tvlv_tt_vlan_data object per announced vlan
-> > + * @vlan_data: array of batadv_tvlv_tt_vlan_data objects
-> > + */
-> > +struct batadv_tvlv_tt_data {
-> > +       __u8   flags;
-> > +       __u8   ttvn;
-> > +       __be16 num_vlan;
-> > +       struct batadv_tvlv_tt_vlan_data vlan_data[] __counted_by_be(num_vlan);
-> > +};
-> 
-> Thanks for the updates. But I can't accept this at the moment because 
-> __counted_by_be is used in an uapi header without it being defined
-> include/uapi/linux/stddef.h (and this file is also not included in this 
-> header).
-> 
-> See commit c8248faf3ca2 ("Compiler Attributes: counted_by: Adjust name and 
-> identifier expansion") as an example for the similar __counted_by macro.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405050113.Kgjow73K-lkp@intel.com/
 
-If I understand correctly, the following changes are also needed because
-the annotated struct is defined in a "uapi" header. Sorry if it's a stupid
-question, but I'm new to these topics.
+All warnings (new ones prefixed by >>):
 
-diff --git a/include/uapi/linux/batadv_packet.h b/include/uapi/linux/batadv_packet.h
-index 6e25753015df..41f39d7661c9 100644
---- a/include/uapi/linux/batadv_packet.h
-+++ b/include/uapi/linux/batadv_packet.h
-@@ -9,6 +9,7 @@
+   In file included from kernel/panic.c:15:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/panic.c:25:
+>> include/linux/kexec.h:537:42: warning: declaration of 'struct kimage' will not be visible outside of this function [-Wvisibility]
+     537 | static inline int kho_fill_kimage(struct kimage *image) { return 0; }
+         |                                          ^
+   2 warnings generated.
 
- #include <asm/byteorder.h>
- #include <linux/if_ether.h>
-+#include <linux/stddef.h>
- #include <linux/types.h>
 
- /**
-diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
-index 2ec6f35cda32..58154117d9b0 100644
---- a/include/uapi/linux/stddef.h
-+++ b/include/uapi/linux/stddef.h
-@@ -55,4 +55,12 @@
- #define __counted_by(m)
- #endif
+vim +537 include/linux/kexec.h
 
-+#ifndef __counted_by_le
-+#define __counted_by_le(m)
-+#endif
-+
-+#ifndef __counted_by_be
-+#define __counted_by_be(m)
-+#endif
-+
- #endif /* _UAPI_LINUX_STDDEF_H */
+   534	
+   535	/* egest handover metadata */
+   536	static inline void kho_reserve_scratch(void) { }
+ > 537	static inline int kho_fill_kimage(struct kimage *image) { return 0; }
+   538	static inline int register_kho_notifier(struct notifier_block *nb) { return -EINVAL; }
+   539	static inline int unregister_kho_notifier(struct notifier_block *nb) { return -EINVAL; }
+   540	static inline bool kho_is_active(void) { return false; }
+   541	#endif
+   542	
 
-If this is the right path, can these changes be merged into a
-single patch or is it better to add a previous patch to define
-__counted_by{le,be}?
-
-Regards,
-Erick
-
-> Kind regards,
-> 	Sven
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
