@@ -1,55 +1,55 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446A3FBF3;
-	Sun,  5 May 2024 10:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F0314287;
+	Sun,  5 May 2024 10:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714905856; cv=none; b=f3V8oIPIO6rNnzfjJ2niBU1Y8pT8ElhyNeQVVlTo72PamjtBr7de2osCdjFuMyMR/ylXU05UmQ2eXbIRC1dQ6pBu5tJNB1SK62teJ0Qs/E84gqzZUeAn4v/Og32QgLuGfW3pGkchYdLeHVGxPn6eusDUNgxrdGMaX52K7ovqAfY=
+	t=1714905859; cv=none; b=RWV1qUKxdtwe0F8O+ScgAIme1Rg3ZuuXsz32qpNDlETB8ToGSe69WPwGcY751HUUV8jB0JnyYcclSUporPxS0cZIPeoBmUY12DqoMUV6KQ/7rV/HQsq8VcyHIrasDacBCE+GtCho6fNCj7VjIvRVZ+d1mkxjC/yzazbaSmqdWII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714905856; c=relaxed/simple;
-	bh=KHEhv3zmaRfP0djX9DxadejSI7CWrAi5q8BogsN6Uzg=;
+	s=arc-20240116; t=1714905859; c=relaxed/simple;
+	bh=gCDN8vSpXsgSqp6/aF3SDEonm9JaIJPtc5i44GKRcbo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HXhhc3Td+3lXGbFjkJQ9sWY2V+8ukioL7IHTHRzQ1nUM3WbPoJShlq7cqqxfljCe9giwtFy7pzk2ODl7epJRXGMFd9V9YR65MKdqJAARrFjggGc109oPyzT7e7eqfO/ENQOSaD7suDcP/UihjH+6aMPgNPx/5bYS3UcwV6Ck1F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=npme2n7C; arc=none smtp.client-ip=209.85.215.174
+	 To:Cc:Content-Type; b=O8ZQuKF/hA4FGpdSK4PoEIjIrZATpwHJLPXcu1D5IuBCcBa2JkJWU0FLyzZECk7zKeeoPGHeEPRTgZN/8wUS1oCNSiofSOyBMtXOUJvmBSkKvB2xn3uBPIj0skKNqLZZJ8Vj07w220zMUj5C4dzPpuWt/iUx+1lG0yQ2nRkSs1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=loHE3C+M; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="npme2n7C"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-620e30d8f37so938209a12.2;
-        Sun, 05 May 2024 03:44:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="loHE3C+M"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f4472561f1so998672b3a.0;
+        Sun, 05 May 2024 03:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714905854; x=1715510654; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1714905857; x=1715510657; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KHEhv3zmaRfP0djX9DxadejSI7CWrAi5q8BogsN6Uzg=;
-        b=npme2n7CTKJYwEDlVMy/owf3hmMW8Zrk4H9DGmo3LCWnIZ4SNI7lxfrHgFY1jhZlR6
-         +Zww0cKR29UauDvmCD8YEJAOybQy0qvo5odjaq6+LO8mUkTJ+4YXkPKGPtHgdUL2vSTC
-         debC6MqNmYlqSiA9pxaclg9akH8Lg2qK7I+QNqurOEvwSIUm/1RUwgadWf/KaKanSu7y
-         LPpUs/rmjDyL3FH3831Ym6RNqNXL6md9qtY/CWVlgwBktwMlC9UjT7y4M7pUReTuweEA
-         mKJUC7HaYQfhvuIMPtalQl6IZIrjTdJrwJz5fbaPqfXekN31emeRc3IpICubRMekK1bx
-         kS6A==
+        bh=gCDN8vSpXsgSqp6/aF3SDEonm9JaIJPtc5i44GKRcbo=;
+        b=loHE3C+MkVbv0gnEJ+PybIewh/gkPN4isAJxag6kriYrtWfFSG0s662DwUV7zqbUxE
+         TvDUBezprRe0FZqdtZrNga5iyL6KQ+wZIvRp1MkFt3x2JItA6aQBEZ97G2TwbE+iwxpS
+         BtFVkcjCc1qrjMd32UKMaSEZAzh0yUL0g77J8/4G/R8jBY9eOPoA3Ckj9tgBeZRvaxo7
+         PuUa68QCnrjLX7UbXLksL5hEUCDwTRee4bN8IkqXhYy/6QHfk6dbUsvzmrtg/tkng8pA
+         O8aHb3IQsQ+JOAfYTiljdJKEBF3HpN5NxvF+F26wRlNzmiKcwqrs6hWiSncXAp/bTE6B
+         Bh4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714905854; x=1715510654;
+        d=1e100.net; s=20230601; t=1714905857; x=1715510657;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KHEhv3zmaRfP0djX9DxadejSI7CWrAi5q8BogsN6Uzg=;
-        b=GHOK6TYQmGlRN0Z0tmeQiZnPUh4P3dFTKwOtF+5YLcZpZZK/bov0M3xLeSTP/CUI9W
-         ytjk+yBv80LIrF3WwhV6rwZ9typ92cLAG3ApqJzpAGzzxScPMfKplHCblevNLpoigh/g
-         ZyPa8xQyTfGa7pxx5wcp8vs39ucPlFODeQgUqZqrRlBBa25l54yuhbWceyEAQSkcFfNZ
-         6h/btkuvxuoyuHmTCSVhJ1JE6z3ipFEy98ah0mdiqjzbtCV3XK3t6nLzEPu8hpDNozvk
-         2Usb2mmgGMkXz02Gs/5T+EFLQhv0uR8a5ux1JwVLjPC3AGcTe571dgIxghgwkIOLCWpG
-         NQ9g==
-X-Forwarded-Encrypted: i=1; AJvYcCWQYXQ51WfBgB2j4Ck3KpQycumQaTcsQsRCFg9UxKgNLonxiDWP9+3MPgN53gYs8qBhoFP78uATPMQPL5zOJUKw+NkZOsGOOpmQV3Tg2iJ0DhoKwlwc31Y0R0jjFykAWZWDn9E=
-X-Gm-Message-State: AOJu0Yyf6fZQrGrjJ/oQeShbf+fpimUHUcfl9yNFNvvFbSI0ifavmlV4
-	RndT34TLC8hMdW1YbKlasKXQ9NzV5Vxdn8IyKJNnwFyv05RMEG3Ep6EJj7rffA4nIh3AYi95+pf
-	//b3bbc/QngPe8oEz5VnyLGREPMk=
-X-Google-Smtp-Source: AGHT+IE/KQfFTavx9IjjwIVQyxMZ7eZmWGjgcGO/oqK1nSJ7M3enWhKtOEViDKSlx+ck20q3uRIjXvGpMgTk6YXz/fg=
-X-Received: by 2002:a17:90a:51a5:b0:2b2:d375:3b7c with SMTP id
- u34-20020a17090a51a500b002b2d3753b7cmr6369408pjh.31.1714905854426; Sun, 05
- May 2024 03:44:14 -0700 (PDT)
+        bh=gCDN8vSpXsgSqp6/aF3SDEonm9JaIJPtc5i44GKRcbo=;
+        b=TxFUBejzTnGuqNKBOWpGXmyJaIwYO94MuAiXRHzIbHyDZ0Jgd1nR0v8Q+wzzgzma3G
+         ts6ILve0c98oxRTYaaCli7FU6IbGpUDPKkbed56NNQg1USKhCT8Nb6AfOyeNfM5D+EOf
+         gIeg5/OasmgMnkOCEUCJqWi1QEsx1/j/3fY0xxjRZWc1bCJ4QY1tcRtOOBg9Tkzg6YJa
+         EWrdMh4H35vjex0MKOXMvKVytuE7N3RXXljkgZsncwAmeugrWyRmg+HxYR5J9Ej2bpkz
+         OSCT7q/J6c87T6ct1pg2uoX+nRC6K6cdXnUjiAL8OPhJZKiIfqkg/pXpXXwnR4/rCgkQ
+         GXeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXlwDzHp8tDOw4LOGe6bfzQBOi28pONVgKrRggBgoKgkXa4hc8Owou7Vh4SwIhn/+DmluDzylRj5uuVXzPLgB2unnTGOvRe4u+Ck3WlMN3PBwue1fwfCcxeyLUvCwVdLHLFBmE=
+X-Gm-Message-State: AOJu0YwITWNavrkuyY8FxnEqsZHQRBxkina9qN+RwWmlZEriMsEsWjl2
+	XWjPQMv+N3nHvAD57RVOWSC7zfR7WJGyT4Y2wGtuyUqFK6pl0MOCKURIFb2ezGyLxdOM5Ovcxcf
+	uVC3r4+EeiLEZofv2MtmlCeByYFM=
+X-Google-Smtp-Source: AGHT+IGVLcuJCQO8ZtaVJ6zUtvr+xIexPYoqf1aVfa8AKhUV9aw4qDoRseG4SiaBuv7b625uHalXRpGlahzy5H9xYeU=
+X-Received: by 2002:a05:6a00:8c4:b0:6f3:ea8a:f973 with SMTP id
+ s4-20020a056a0008c400b006f3ea8af973mr11693922pfu.7.1714905857121; Sun, 05 May
+ 2024 03:44:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,41 +59,50 @@ MIME-Version: 1.0
 References: <20240502092443.6845-2-visitorckw@gmail.com> <202405030808.UsoMKFNP-lkp@intel.com>
  <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name> <20240503041701.GA3660305@thelio-3990X>
  <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name> <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
- <20240503155401.GA3960118@thelio-3990X> <ZjVdbavKgDo8a0CZ@yury-ThinkPad> <20240503222338.GA1908482@thelio-3990X>
-In-Reply-To: <20240503222338.GA1908482@thelio-3990X>
+ <20240503155401.GA3960118@thelio-3990X> <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
+In-Reply-To: <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 5 May 2024 12:42:50 +0200
-Message-ID: <CANiq72mJPPp=H6qb7sG1K1hxR3uiHA9+WEVAZkvymSt_dW3CbA@mail.gmail.com>
+Date: Sun, 5 May 2024 12:42:53 +0200
+Message-ID: <CANiq72mYPV_rNFirr1q=hjjz2yDzw98qrwqY5c14G3odt+shcA@mail.gmail.com>
 Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Yury Norov <yury.norov@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Kuan-Wei Chiu <visitorckw@gmail.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, 
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Kuan-Wei Chiu <visitorckw@gmail.com>, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 4, 2024 at 12:23=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
+On Fri, May 3, 2024 at 11:56=E2=80=AFPM Yury Norov <yury.norov@gmail.com> w=
+rote:
 >
-> Adding Miguel as compiler attributes maintainer to make him aware of the
-> change. I think it would be reasonable to have you take it through the
-> bitops tree with your ack so that the test patch can make use of this as
-> the fix for the robot's issue.
+> + * The __used attribute guarantees that the attributed variable will be
 
-Thanks Nathan!
+We should probably mention functions as Nathan said (unless it does
+not work for some reason).
 
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> + * always emitted by a compiler. It doesn't prevent the compiler from
+> + * throwing the 'unused' warnings when it can't detect how the variable
 
-The new macro sounds OK to me. Perhaps we should add some docs to the
-other two attributes about their relationship and/or the existence of
-this new `__always_used` one (so that it is easier to find). And if
-so, then perhaps the docs for `__always_used` can be simplified.
+Nit: "throwing the" -> "throwing" (I think)
 
-> One gotcha that might be worth mentioning is that this combination only
-> works on functions and non-local variables (i.e., static or global).
+Also, perhaps "when ..." -> "when it appears that the variable is not
+used" like in the documentation of the attribute or similar? (e.g. in
+the case that triggered the report, it is really unused, while one
+could read this as the compiler not being able to detect a use
+somewhere).
 
-Yeah, since the `unused` one only applies to that, right?
+> + * is actually used. It's a compiler implementation details either emit
+> + * the warning in that case or not.
+
+Is it an implementation detail or rather that they took different
+alternatives/options on purpose (even if not documented)? If we think
+it is just a consequence of their implementation, perhaps we should
+mention that and what GCC/Clang do today in their latest version, in
+case it changes (so that we know whether we need to remove the macro,
+for instance).
+
+None of the above is a big deal though -- thanks!
 
 Cheers,
 Miguel
