@@ -1,82 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E142D044;
-	Sun,  5 May 2024 14:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DF118C36
+	for <llvm@lists.linux.dev>; Sun,  5 May 2024 15:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714920819; cv=none; b=KLlcPpyxsGO2FrI6JAOOd4yabzK4c54Wh1DZdpAYCpo3mtCCTsnGLC7OtiSR9vdYaGKvb/KW589Cc5JrxdbpaoWSrff6U+9ZxgdYXcO2gw89qp7qkrunrHzg30mrWa37BAY+Vw9z62ff4SiOgN4eMy3QqdIFspR2gXXO2Pb33TM=
+	t=1714922543; cv=none; b=m+ORQUvj+F00/L28wN8Tcghce2XMohhjNk+C1xC/vfTR3MF3wvWhTCR9gMarRenqG7Y4zhE6YhAy4jMtSu06ZkipQfGbnBvm+ksa585r5qKu8cjsJjcFwv///yumXrzyUnzdVX52RevE+JY7sB0tI/6rftlr9hRGjsf7cwEJMpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714920819; c=relaxed/simple;
-	bh=gfr6J8JaI0FQSBkoFj/QKJrcZ1kMMUOIbnAK47RI06o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EmIsiGw1g9BUHSGWroiNhKYv53WyOcoxvDu4hqXwfCB6Y+jcLqvVzJvQzV03NMk5nIOUKxOlmxLxztU1I1Nw/yreR7jPf5hoMLevMVZ0xPYkDY3SEXjwgGek1wVYC8szULaHDN7qVW+85o76WGyuQBH89D4hMdij5y2wacHEEgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rONx/UNK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714922543; c=relaxed/simple;
+	bh=YOzXTa6rAiVOHldd14538pyVa5rmXqDYyMin9bW7Vvw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=InGVuA3qLja+7wSB45dul57rAvEbj4i8MmfQQBcd6A2gE0m+R/U6z83JtA7+cjkHYQhLIxsz+4OIKc0XQ2ehrDDGOn1dGlipyU+wV04SnUa/Iqf8QZvj49m50ze0WznkZcDE54h5DOs0orGCt/6lEQ+s26Ng1aNvXzptzCzKBn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=KAyUL/Kh; arc=none smtp.client-ip=213.160.73.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rONx/UNK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860EDC113CC;
-	Sun,  5 May 2024 14:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714920818;
-	bh=gfr6J8JaI0FQSBkoFj/QKJrcZ1kMMUOIbnAK47RI06o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rONx/UNK4fw/FNu8BIef7/Qx2Wlw4fTdIijYCTe41usY7p1zpLbtpQPrGWntvqCt4
-	 JZrpK422ntuev4jf2Re8uD5+2CSv9rQRsOabscJkzGOD9lav7Gc60718Doxjh6Mfh5
-	 Dq7tAh95kxelOg6WlG+VZ8uaRw4J4AZ8isuh2byflT/yHOoZ0vGmPxgoBIqfA8r9DI
-	 TdrG0ZzlUYLNDRcLO++qP5gHvRJ4iMtUXZF+MeS9/d+PbLM0ok6TtKDKkOXQ6D7/bW
-	 oqz48Ll/XY8wPSvQ0+lZdVAcAXGVHvqHHFiBu5FOl9ArRbhlVQuMk4u3THA/vkPuOq
-	 HBDXDG15zQRRQ==
-Date: Sun, 5 May 2024 23:53:36 +0900
-From: Mark Brown <broonie@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>, linux-sound@vger.kernel.org,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/alsa: fix a build warning: return a value in
- all cases
-Message-ID: <ZjedcAW6ITmo9pXp@finisterre.sirena.org.uk>
-References: <20240504021330.33429-1-jhubbard@nvidia.com>
+	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="KAyUL/Kh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+	s=20121; t=1714922533;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xuJ4u/ouTOrJt02FpiNU5j5yMZJgY6im3scH4wwajxE=;
+	b=KAyUL/Kh/ITipKh9aVVkTMWPz7Nd3C6g1uWP3LQzc+Ugg0RkDLcTp5BaZlW7tvnajUwbGT
+	fc5XyLz2pBTbE/p+ach8JwkkrD8RdoNvXeNYre3fZ+CVLXmHjeRpqJSbT5FzEQqombC3SW
+	qLxsGVAYRKQffO5yBGIIHNz6IotbfnA=
+From: Sven Eckelmann <sven@narfation.org>
+To: Erick Archer <erick.archer@outlook.com>
+Cc: Marek Lindner <mareklindner@neomailbox.ch>,
+ Simon Wunderlich <sw@simonwunderlich.de>, Antonio Quartulli <a@unstable.cc>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Kees Cook <keescook@chromium.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Erick Archer <erick.archer@outlook.com>, b.a.t.m.a.n@lists.open-mesh.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+ Alexander Lobakin <aleksander.lobakin@intel.com>
+Subject:
+ Re: [PATCH v3] batman-adv: Add flex array to struct batadv_tvlv_tt_data
+Date: Sun, 05 May 2024 17:22:10 +0200
+Message-ID: <9977759.T7Z3S40VBb@sven-l14>
+In-Reply-To:
+ <AS8PR02MB723738E5107C240933E4E0F28B1E2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+References:
+ <AS8PR02MB72371F89D188B047410B755E8B192@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <3932737.ElGaqSPkdT@sven-l14>
+ <AS8PR02MB723738E5107C240933E4E0F28B1E2@AS8PR02MB7237.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FQLEYbDtCxwwEBJN"
-Content-Disposition: inline
-In-Reply-To: <20240504021330.33429-1-jhubbard@nvidia.com>
-X-Cookie: lisp, v.:
+Content-Type: multipart/signed; boundary="nextPart12069128.nUPlyArG6x";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
 
+--nextPart12069128.nUPlyArG6x
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: Erick Archer <erick.archer@outlook.com>
+Date: Sun, 05 May 2024 17:22:10 +0200
+Message-ID: <9977759.T7Z3S40VBb@sven-l14>
+MIME-Version: 1.0
 
---FQLEYbDtCxwwEBJN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Saturday, 4 May 2024 19:08:39 CEST Erick Archer wrote:
+[...]
+> > Thanks for the updates. But I can't accept this at the moment because 
+> > __counted_by_be is used in an uapi header without it being defined
+> > include/uapi/linux/stddef.h (and this file is also not included in this 
+> > header).
+> > 
+> > See commit c8248faf3ca2 ("Compiler Attributes: counted_by: Adjust name and 
+> > identifier expansion") as an example for the similar __counted_by macro.
+> 
+> If I understand correctly, the following changes are also needed because
+> the annotated struct is defined in a "uapi" header. Sorry if it's a stupid
+> question, but I'm new to these topics.
 
-On Fri, May 03, 2024 at 07:13:30PM -0700, John Hubbard wrote:
-> dump_config_tree() is declared to return an int, but the compiler cannot
-> prove that it always returns any value at all. This leads to a clang
-> warning, when building via:
+No, it is absolutely no stupid question.
 
-Though given that the function isn't referenced we could also just
-delete it.
+> diff --git a/include/uapi/linux/batadv_packet.h b/include/uapi/linux/batadv_packet.h
+> index 6e25753015df..41f39d7661c9 100644
+> --- a/include/uapi/linux/batadv_packet.h
+> +++ b/include/uapi/linux/batadv_packet.h
+> @@ -9,6 +9,7 @@
+> 
+>  #include <asm/byteorder.h>
+>  #include <linux/if_ether.h>
+> +#include <linux/stddef.h>
+>  #include <linux/types.h>
+> 
+>  /**
 
---FQLEYbDtCxwwEBJN
+This must definitely go into your "original" patch
+
+> diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
+> index 2ec6f35cda32..58154117d9b0 100644
+> --- a/include/uapi/linux/stddef.h
+> +++ b/include/uapi/linux/stddef.h
+> @@ -55,4 +55,12 @@
+>  #define __counted_by(m)
+>  #endif
+> 
+> +#ifndef __counted_by_le
+> +#define __counted_by_le(m)
+> +#endif
+
+If you want to add this (for completeness) then please put it in an extra 
+patch. It is simply not used by batman-adv and I would not be able to find any 
+justification why it should be part of the batman-adv patch.
+
+> +
+> +#ifndef __counted_by_be
+> +#define __counted_by_be(m)
+> +#endif
+> +
+
+This part can be either:
+
+* in the batman-adv patch
+* or together with the __counted_by_le change in an additional patch which is 
+  "in front" of the batman-adv patch (in the patch series).
+
+From my perspective, it is for you to decide - but of course, other 
+maintainers might have a different opinion about it.
+
+>  #endif /* _UAPI_LINUX_STDDEF_H */
+> 
+> If this is the right path, can these changes be merged into a
+> single patch or is it better to add a previous patch to define
+> __counted_by{le,be}?
+
+I don't have a perfect answer here. See the comments above. The file 
+include/uapi/linux/stddef.h doesn't have a specific maintainer (according to 
+./scripts/get_maintainer.pl) - so it should be fine to get modified through 
+the net-next tree.
+
+But maybe Kees Cook has a different opinion about it. At least there are a lot 
+of Signed-off-bys for this file by Kees.
+
+Kind regards,
+	Sven
+--nextPart12069128.nUPlyArG6x
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmY3nXAACgkQJNaLcl1U
-h9DBvAf/Tmp6oAlXkJLinQYYWlHXd/+lMb0PVv5TalZyil2L+ifp0pZbyknBloWc
-k8NEvKofzBymkugbsGsvrTBN9E4dLl2Nr6XHPBoADVT5IQx0mrXZYd6pdyZXYil0
-WaMGDMEDwMDFAkfTdVvvEntz2CRTUFNPVMzCZVmQYM3m0vCjPRY3ibI04z00SASb
-iHwq6VaX9lkIs4knd1XGb8amrWpABwSiZD6iE6MDmD/7xP309WkOpx9jBhy6607h
-PJsgk3k0mkhSTvKXoIN8HYtfIJlpHKzN9mOV2vhh9IlGG6zKa95rIWnq4iAbkTHF
-sxx38aBbSc9GBcSA4yHJJqFg0n6/9g==
-=lp+W
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmY3pCIACgkQXYcKB8Em
+e0ZBhg//Sno8piH1PoF7IE8mPDXalzTPEW5L8W1iX0gbkT0DRJF3ngI31P7iYtLA
+TeYbI1z3YeRD5hNU2J7stFiqwoNbt5wWDmCYNcPoFf5zdimr5XbQYB2CGOVM5hG8
+SexX9t6qndx3MWNj2f83XLfSIJh9Sn+B7mLEFixcsISX8CLAvQZfwkwjNpola13v
+OZm+qoUsCeocQb18bR/XUhqfra69fMN3KRKHSvRg82xZqCox86RP3nukgcNr7Aw0
+mY+RvmuEHzVQezgfkMs7Wz+uSJSGKyXuTSCnkdIhy62kSMIKv9TZhFeIwCQEDWVl
+oCBLAqKXjMPr8sldjBScwkMM9mRAlCUgqD3XlIbZ32y2zCJoX9LsyRD+K6frc2tr
+z0j/9xAfCrYJCvYhXuWFhqak3bc6owQ08NxB0A0ePx0bBCMiz34J3R55BBtGOaTL
+YrXXEuNV79Z3/bI9P/Yk7mRmfuotPYa3p1r4fizuQEYa5294xJUdQkMF6aeH/R1G
+YK3IFiRiLHi0rVu4BvdO3nsVJL2nqa1YZeSRtqFtsKhXb9wdQSxuqaJD7YgQm1T6
+taFnTfK+6v7DXgEvlEdtUMqiKZkZM/pBDJoCZpI+oJHjYii7s0BiaYoDWHRfBwTj
+szbiK24wF/bXmY20iarKe1I1VVaFlhg6N3PXgCWsLJYh6gATkVY=
+=H+es
 -----END PGP SIGNATURE-----
 
---FQLEYbDtCxwwEBJN--
+--nextPart12069128.nUPlyArG6x--
+
+
+
