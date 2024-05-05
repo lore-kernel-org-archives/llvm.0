@@ -1,171 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86173E48F;
-	Sun,  5 May 2024 22:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9162B757E0;
+	Sun,  5 May 2024 22:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714948429; cv=none; b=bfZalWY8WTwjTCpvv9wtsLAFqnG5EAfPeISNVDE6v01l1B6iXzZxBdcMHjdOCZLw6SUccOgd9zjOhn2bJuO4BSuEw56IE7e2xzBsqAbJGwjWofR/xDegFlKbDFH85R2ol/Hb7aOv3wFelMU7iw5PJ63PtmpoayCpaOtAD/K9UAc=
+	t=1714948582; cv=none; b=s0tCDHRn+YSTeIw/yv2CzuSXlivFKFo/RBGoF8yeDqpnwuwPMSqHfQN8HWkCz7GMldNjp5e/r9d+DEoWs5qO0RlNSlYMV9oCaQgJzd8yB+vd3XvUbOEqzJWYovpxiMWJQGRpijS5RYb7cfPSwlwe46CWSDjrRkHAJJHIql2Xz84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714948429; c=relaxed/simple;
-	bh=NVy75iIFNvmIbmRgBWApp4Iv7pImltO4vpHqlAOGIsM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dHlcXAAQTz2cQNH5ttCbWnbtvxWxtkP/0Ep+iusIBxoo+8N0MovOmviJgGH5SOUiy/XAQfY3DZFcOQaOTIK2xxyUnc8fLO0qlRvei2BsRzbslLYTFnf5ydicXQO6JYGWMJmNhnA9erdvDH8Gsz64kLfVmWgk77vEjl8tC0W0j7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oCBuHfQ/; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1714948582; c=relaxed/simple;
+	bh=6DdcTaAGg/9kv6PU0U5dfTC1o4/Oa9oCpynq/HkvFyg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MdwboIfGaKubT9LqCev3OrsWh8AMm9UaR4m+12L2sNwfu5ZfwQViQkp9RSI5DGci4oRfE8YZWI5BtkLcoolekGWA3Sl60Nv10xYsWG5MRN+aDJoOLnaVZmgx9ZkcUyTk8UZv9jCP76mvqfLJBwLJ/qk/XH22kaCrx+WksKm8N7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bkZzbUlR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oCBuHfQ/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714948428; x=1746484428;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NVy75iIFNvmIbmRgBWApp4Iv7pImltO4vpHqlAOGIsM=;
-  b=oCBuHfQ/l6zbnP8Cm9tDPS6JEhXmT0JoRNE8iuN5LTStM0VU3RK4HxCg
-   klV8c2mv52tqOUf4xWLaPv6J6H78GecMSbqxZonDNUZMtgt18F2ZNqsB/
-   3bZa0mMLMWSgzXIf7OR8p5zW5E9YCwueNSX8e3yvPC+eSYd8yEjVOKysV
-   iBWRvC8/AiL548fgwggII3av70PLqMeUcdR0bY78QToZFUJrrGm/tk017
-   BVCMXzv/weybpxsPSv0L+XQ7GrrVWPR/zkwLSx00l7WYOFSIJr/LFs7bl
-   0exoLsZyRVmT6VFAu+tBe7vnMEoF/3V8EcQjnjxPja26XIy5v0B4kMa0W
-   Q==;
-X-CSE-ConnectionGUID: g3UAcoHpRVaszoirj3u7xA==
-X-CSE-MsgGUID: k6eKbKpcR+GLtpkV1nzd0Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="36069678"
-X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
-   d="scan'208";a="36069678"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2024 15:33:47 -0700
-X-CSE-ConnectionGUID: y35fWdOCQJ2bpOe3MIKTYQ==
-X-CSE-MsgGUID: JKlQ5+UFRWiJkvIgE1caGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
-   d="scan'208";a="59174002"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 May 2024 15:33:44 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s3kQQ-0000Fs-0o;
-	Sun, 05 May 2024 22:33:42 +0000
-Date: Mon, 6 May 2024 06:33:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Dustin Howett <dustin@howett.net>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH] platform/chrome: cros_kbd_led_backlight: enable probing
- through EC_FEATURE_PWM_KEYB
-Message-ID: <202405060655.dD06crN0-lkp@intel.com>
-References: <20240505-cros_ec-kbd-led-framework-v1-1-bfcca69013d2@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bkZzbUlR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502F4C113CC;
+	Sun,  5 May 2024 22:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714948582;
+	bh=6DdcTaAGg/9kv6PU0U5dfTC1o4/Oa9oCpynq/HkvFyg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bkZzbUlR5RiWYKmj0+xKiIBrCK6V2XGHNdOfsQMdc7kC5oIk9ujoB87YNhvkJN1UF
+	 JcfJJ3MTUi0+GI8SZ1NIjNoJmCSwTiOl+/H69DHkXDeuU1GeolP/qIal/UgOBagwT/
+	 Tk49pP7TLrNccuT1KdQp5mjeg4Ds7VTS9ESjxQZkC2/AoNjJOoMER7RyQgov8hEorC
+	 WrIPwjlrRXc/tqBVezQGmPp6meCil7wpvacxv6f7YJMAqQLiRgLnwOywCY79fejLLD
+	 vZ3OFwLCPseKuBUDjUcSFYUwCv58YzIwnSwkANcjvTqwCOxXo1uHjO1197ooL6HjP3
+	 ErQiXXbMyXlrg==
+Message-ID: <4f947691-bf25-460b-bc08-da29de3fdaa6@kernel.org>
+Date: Sun, 5 May 2024 23:36:14 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240505-cros_ec-kbd-led-framework-v1-1-bfcca69013d2@weissschuh.net>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH] bpftool, selftests/hid/bpf: fix 29 clang warnings
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ Justin Stitt <justinstitt@google.com>,
+ Peter Hutterer <peter.hutterer@who-t.net>,
+ Jason Gerecke <jason.gerecke@wacom.com>,
+ Joshua Dickens <joshua@joshua-dickens.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+ linux-input@vger.kernel.org, Valentin Obst <kernel@valentinobst.de>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev
+References: <20240505215636.63592-1-jhubbard@nvidia.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20240505215636.63592-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Thomas,
+On 05/05/2024 22:56, John Hubbard wrote:
+> When building either tools/bpf/bpftool, or tools/testing/selftests/hid,
+> (the same Makefile is used for these), clang generates many instances of
+> a warning that is useless here:
+> 
+>     "clang: warning: -lLLVM-17: 'linker' input unused"
+> 
+> Silence this in both locations, by disabling that warning when building
+> with clang.
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  tools/bpf/bpftool/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index e9154ace80ff..c7457921d136 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -133,6 +133,10 @@ CFLAGS += -DUSE_LIBCAP
+>  LIBS += -lcap
+>  endif
+>  
+> +ifneq ($(LLVM),)
+> +    CFLAGS += -Wno-unused-command-line-argument
+> +endif
+Thanks! If possible, I'd rather keep the warning enabled, and fix the
+command line instead. Looking at the error and the Makefile, we may not 
+need the -lLLVM<version> in the CFLAGS at all, but only in $(LIBS). On
+my setup, I can build successfully, without the warnings, with the
+following patch:
 
-kernel test robot noticed the following build errors:
+------
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index b67454b45a49..dfa4f1bebbb3 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -147,7 +147,7 @@ ifeq ($(feature-llvm),1)
+   # If LLVM is available, use it for JIT disassembly
+   CFLAGS  += -DHAVE_LLVM_SUPPORT
+   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+-  CFLAGS  += $(shell $(LLVM_CONFIG) --cflags --libs $(LLVM_CONFIG_LIB_COMPONENTS))
++  CFLAGS  += $(shell $(LLVM_CONFIG) --cflags)
+   LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+------
 
-[auto build test ERROR on 2fbe479c0024e1c6b992184a799055e19932aa48]
+Could you please check whether that works on your side, too?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/platform-chrome-cros_kbd_led_backlight-enable-probing-through-EC_FEATURE_PWM_KEYB/20240505-174413
-base:   2fbe479c0024e1c6b992184a799055e19932aa48
-patch link:    https://lore.kernel.org/r/20240505-cros_ec-kbd-led-framework-v1-1-bfcca69013d2%40weissschuh.net
-patch subject: [PATCH] platform/chrome: cros_kbd_led_backlight: enable probing through EC_FEATURE_PWM_KEYB
-config: x86_64-randconfig-072-20240506 (https://download.01.org/0day-ci/archive/20240506/202405060655.dD06crN0-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240506/202405060655.dD06crN0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405060655.dD06crN0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/platform/chrome/cros_kbd_led_backlight.c:218:42: error: redefinition of 'keyboard_led_drvdata_ec_pwm'
-     218 | static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {};
-         |                                          ^
-   drivers/platform/chrome/cros_kbd_led_backlight.c:184:57: note: previous definition is here
-     184 | static const __maybe_unused struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {
-         |                                                         ^
->> drivers/platform/chrome/cros_kbd_led_backlight.c:240:14: error: use of undeclared identifier 'keyboard_led_drvdata_ec_pwm_mfd'; did you mean 'keyboard_led_drvdata_acpi'?
-     240 |                 drvdata = &keyboard_led_drvdata_ec_pwm_mfd;
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                            keyboard_led_drvdata_acpi
-   drivers/platform/chrome/cros_kbd_led_backlight.c:114:42: note: 'keyboard_led_drvdata_acpi' declared here
-     114 | static const struct keyboard_led_drvdata keyboard_led_drvdata_acpi = {
-         |                                          ^
-   2 errors generated.
-
-
-vim +240 drivers/platform/chrome/cros_kbd_led_backlight.c
-
-   217	
- > 218	static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {};
-   219	
-   220	#endif /* IS_ENABLED(CONFIG_MFD_CROS_EC_DEV) */
-   221	
-   222	static int keyboard_led_is_mfd_device(struct platform_device *pdev)
-   223	{
-   224		if (!IS_ENABLED(CONFIG_MFD_CROS_EC_DEV))
-   225			return 0;
-   226	
-   227		if (!pdev->dev.parent)
-   228			return 0;
-   229	
-   230		return strcmp(pdev->dev.parent->driver->name, "cros-ec-dev") == 0;
-   231	}
-   232	
-   233	static int keyboard_led_probe(struct platform_device *pdev)
-   234	{
-   235		const struct keyboard_led_drvdata *drvdata;
-   236		struct keyboard_led *keyboard_led;
-   237		int error;
-   238	
-   239		if (keyboard_led_is_mfd_device(pdev))
- > 240			drvdata = &keyboard_led_drvdata_ec_pwm_mfd;
-   241		else
-   242			drvdata = device_get_match_data(&pdev->dev);
-   243		if (!drvdata)
-   244			return -EINVAL;
-   245	
-   246		keyboard_led = devm_kzalloc(&pdev->dev, sizeof(*keyboard_led), GFP_KERNEL);
-   247		if (!keyboard_led)
-   248			return -ENOMEM;
-   249		platform_set_drvdata(pdev, keyboard_led);
-   250	
-   251		if (drvdata->init) {
-   252			error = drvdata->init(pdev);
-   253			if (error)
-   254				return error;
-   255		}
-   256	
-   257		keyboard_led->cdev.name = "chromeos::kbd_backlight";
-   258		keyboard_led->cdev.flags |= LED_CORE_SUSPENDRESUME;
-   259		keyboard_led->cdev.max_brightness = drvdata->max_brightness;
-   260		keyboard_led->cdev.brightness_set = drvdata->brightness_set;
-   261		keyboard_led->cdev.brightness_set_blocking = drvdata->brightness_set_blocking;
-   262		keyboard_led->cdev.brightness_get = drvdata->brightness_get;
-   263	
-   264		error = devm_led_classdev_register(&pdev->dev, &keyboard_led->cdev);
-   265		if (error)
-   266			return error;
-   267	
-   268		return 0;
-   269	}
-   270	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Quentin
