@@ -1,104 +1,99 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEA64428
-	for <llvm@lists.linux.dev>; Sun,  5 May 2024 06:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446A3FBF3;
+	Sun,  5 May 2024 10:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714891719; cv=none; b=RPuzRfe3hc5tTtO6KEnrOkJxpxwBnhJ/HrZTWIBdUzFi9ae1wNK+cu67ui325gGh7I/lzRoJpcqfo4LeiJHLzK221HkjFAEpAGBFmnLyT+IfcnBIqeeqLt+6VQ1w26SQPAHBoSE4MY32GnDUIqk5LPxR2hIMzJTUZNKX7PU2WBI=
+	t=1714905856; cv=none; b=f3V8oIPIO6rNnzfjJ2niBU1Y8pT8ElhyNeQVVlTo72PamjtBr7de2osCdjFuMyMR/ylXU05UmQ2eXbIRC1dQ6pBu5tJNB1SK62teJ0Qs/E84gqzZUeAn4v/Og32QgLuGfW3pGkchYdLeHVGxPn6eusDUNgxrdGMaX52K7ovqAfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714891719; c=relaxed/simple;
-	bh=RXOAbrpDgpGLFXAx46orQOJKxD+B8azOxvN9slFpzaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sEEY9jfPRh7jxTSkMAPAa7OvrCtbesw8Yajx6oxyVMpjgX2vdJN2Cugd8bEKiCVmtVJJKwCBFBuTgS/rLt+LhPTAcC+LGGJcXuTfyLQ3TQjEjI0hnHJXY+UEX6U54mhpnJeIS6b5V7baIuIYpRiG99h9ZvP40l5BTgvq3ntY4/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=UEs8YhZf; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1714905856; c=relaxed/simple;
+	bh=KHEhv3zmaRfP0djX9DxadejSI7CWrAi5q8BogsN6Uzg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HXhhc3Td+3lXGbFjkJQ9sWY2V+8ukioL7IHTHRzQ1nUM3WbPoJShlq7cqqxfljCe9giwtFy7pzk2ODl7epJRXGMFd9V9YR65MKdqJAARrFjggGc109oPyzT7e7eqfO/ENQOSaD7suDcP/UihjH+6aMPgNPx/5bYS3UcwV6Ck1F0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=npme2n7C; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UEs8YhZf"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1ecd9dab183so24829945ad.1
-        for <llvm@lists.linux.dev>; Sat, 04 May 2024 23:48:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="npme2n7C"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-620e30d8f37so938209a12.2;
+        Sun, 05 May 2024 03:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714891717; x=1715496517; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jHhjXzZFksYbod+Id4KGQBrNHX5j07+oNfn2k/vQfaE=;
-        b=UEs8YhZfVOQ3C0b0GPe+c42wbQrt7cvZSPRPDoJNBntEwhJWyNRD2+ZxbrBxlWit/W
-         EA88z3KU6a2yMBpHFv6WAKZ4c9tIkH8d+y80Hi94NrlN4NGyEroGdxfWAvhU7oTl8MTm
-         Y9FdJddFa/47FAGuAplNk/tEdEmTKJZo1bGvo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714891717; x=1715496517;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1714905854; x=1715510654; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jHhjXzZFksYbod+Id4KGQBrNHX5j07+oNfn2k/vQfaE=;
-        b=qPA2Vywcv2RGohpRxM/qNAvVRLc2y9XeYWMd5mdN9lyEuLkLQtSur8bAf+j8qDxLsY
-         6lQsRjsGyiPzODGfHw4wnzA55OJXfD4Lq9w0900Sl5madvichuSu7syT3b9g200i2J/8
-         sC5ZpZgNKsKCBrNYukmyO7w7wb7T5+xG8vT8rVU6wbAnhutemXrzylzbrobvq9830pzv
-         XJETfuias6jC0khVOW2mDdMHW+l9oSWUxU/ZhLbCouRu3OF71npKnw3Umc0IGNpVfokr
-         8zN0fPiHxsRlb9hS2ch+6PdSHrZO/W95mZi2MxAaFeZME734KFoC3jCNiPrbZQrqpJOu
-         bCpw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhkx4zOkXL+v1H9hnlFUiGlrf/shGAuuZJZ7npwq3+mfh8XHPYo82MU2Si4kXA+WHxSftPHPNH0Jg3/WXJpsPU+GMQFg==
-X-Gm-Message-State: AOJu0YzXCvsrNHX9vzWDox4LAzSFIyYAsEsnajIrVE4pIpjHPa9aJ5Pa
-	DPeWi2PCUBlyvNK1b4e9dZQlFfOWGVQ4Lip1bVi2haKH0gjmbw0TjLYUS+ceAQ==
-X-Google-Smtp-Source: AGHT+IGHFQZeorrILclN2v4X0ie/TALNwsi+wwr/27nntpfpvsDMRS89bEaJxITb4Y8FGrRf8qcf7Q==
-X-Received: by 2002:a17:902:dac1:b0:1eb:7162:82c7 with SMTP id q1-20020a170902dac100b001eb716282c7mr9274029plx.18.1714891717283;
-        Sat, 04 May 2024 23:48:37 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:8263:3b89:bcee:2ed4])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170903028300b001e7c05cf1a2sm5978407plr.112.2024.05.04.23.48.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 May 2024 23:48:36 -0700 (PDT)
-Date: Sun, 5 May 2024 15:48:32 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org
-Cc: kernel test robot <lkp@intel.com>, Minchan Kim <minchan@kernel.org>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH 08/14] zram: check that backends array has at least one
- backend
-Message-ID: <20240505064832.GC8623@google.com>
-References: <20240503091823.3616962-9-senozhatsky@chromium.org>
- <202405041440.UTBQZAaf-lkp@intel.com>
- <20240504071416.GH14947@google.com>
- <20240504161004.f5a0aab5e5aa1033d4696c20@linux-foundation.org>
- <20240505043957.GA8623@google.com>
- <20240505051305.GB8623@google.com>
+        bh=KHEhv3zmaRfP0djX9DxadejSI7CWrAi5q8BogsN6Uzg=;
+        b=npme2n7CTKJYwEDlVMy/owf3hmMW8Zrk4H9DGmo3LCWnIZ4SNI7lxfrHgFY1jhZlR6
+         +Zww0cKR29UauDvmCD8YEJAOybQy0qvo5odjaq6+LO8mUkTJ+4YXkPKGPtHgdUL2vSTC
+         debC6MqNmYlqSiA9pxaclg9akH8Lg2qK7I+QNqurOEvwSIUm/1RUwgadWf/KaKanSu7y
+         LPpUs/rmjDyL3FH3831Ym6RNqNXL6md9qtY/CWVlgwBktwMlC9UjT7y4M7pUReTuweEA
+         mKJUC7HaYQfhvuIMPtalQl6IZIrjTdJrwJz5fbaPqfXekN31emeRc3IpICubRMekK1bx
+         kS6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714905854; x=1715510654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KHEhv3zmaRfP0djX9DxadejSI7CWrAi5q8BogsN6Uzg=;
+        b=GHOK6TYQmGlRN0Z0tmeQiZnPUh4P3dFTKwOtF+5YLcZpZZK/bov0M3xLeSTP/CUI9W
+         ytjk+yBv80LIrF3WwhV6rwZ9typ92cLAG3ApqJzpAGzzxScPMfKplHCblevNLpoigh/g
+         ZyPa8xQyTfGa7pxx5wcp8vs39ucPlFODeQgUqZqrRlBBa25l54yuhbWceyEAQSkcFfNZ
+         6h/btkuvxuoyuHmTCSVhJ1JE6z3ipFEy98ah0mdiqjzbtCV3XK3t6nLzEPu8hpDNozvk
+         2Usb2mmgGMkXz02Gs/5T+EFLQhv0uR8a5ux1JwVLjPC3AGcTe571dgIxghgwkIOLCWpG
+         NQ9g==
+X-Forwarded-Encrypted: i=1; AJvYcCWQYXQ51WfBgB2j4Ck3KpQycumQaTcsQsRCFg9UxKgNLonxiDWP9+3MPgN53gYs8qBhoFP78uATPMQPL5zOJUKw+NkZOsGOOpmQV3Tg2iJ0DhoKwlwc31Y0R0jjFykAWZWDn9E=
+X-Gm-Message-State: AOJu0Yyf6fZQrGrjJ/oQeShbf+fpimUHUcfl9yNFNvvFbSI0ifavmlV4
+	RndT34TLC8hMdW1YbKlasKXQ9NzV5Vxdn8IyKJNnwFyv05RMEG3Ep6EJj7rffA4nIh3AYi95+pf
+	//b3bbc/QngPe8oEz5VnyLGREPMk=
+X-Google-Smtp-Source: AGHT+IE/KQfFTavx9IjjwIVQyxMZ7eZmWGjgcGO/oqK1nSJ7M3enWhKtOEViDKSlx+ck20q3uRIjXvGpMgTk6YXz/fg=
+X-Received: by 2002:a17:90a:51a5:b0:2b2:d375:3b7c with SMTP id
+ u34-20020a17090a51a500b002b2d3753b7cmr6369408pjh.31.1714905854426; Sun, 05
+ May 2024 03:44:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240505051305.GB8623@google.com>
+References: <20240502092443.6845-2-visitorckw@gmail.com> <202405030808.UsoMKFNP-lkp@intel.com>
+ <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name> <20240503041701.GA3660305@thelio-3990X>
+ <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name> <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
+ <20240503155401.GA3960118@thelio-3990X> <ZjVdbavKgDo8a0CZ@yury-ThinkPad> <20240503222338.GA1908482@thelio-3990X>
+In-Reply-To: <20240503222338.GA1908482@thelio-3990X>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 5 May 2024 12:42:50 +0200
+Message-ID: <CANiq72mJPPp=H6qb7sG1K1hxR3uiHA9+WEVAZkvymSt_dW3CbA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Yury Norov <yury.norov@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Kuan-Wei Chiu <visitorckw@gmail.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On (24/05/05 14:13), Sergey Senozhatsky wrote:
-> On (24/05/05 13:39), Sergey Senozhatsky wrote:
-> [..]
-> > > I guess just pick one if none were selected.
-> 
-> How do I pick one if none were selected? Does Kconfig support
-> something like that?
+On Sat, May 4, 2024 at 12:23=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Adding Miguel as compiler attributes maintainer to make him aware of the
+> change. I think it would be reasonable to have you take it through the
+> bitops tree with your ack so that the test patch can make use of this as
+> the fix for the robot's issue.
 
-This triggers Kconfig error:
+Thanks Nathan!
 
-config ZRAM_EMPTY_BACKENDS_FIXUP
-       bool
-       depends on ZRAM && !ZRAM_BACKEND_LZO && !ZRAM_BACKEND_LZ4 && \
-               !ZRAM_BACKEND_LZ4HC && !ZRAM_BACKEND_ZSTD && \
-               !ZRAM_BACKEND_DEFLATE
-       select ZRAM_BACKEND_LZO
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
+The new macro sounds OK to me. Perhaps we should add some docs to the
+other two attributes about their relationship and/or the existence of
+this new `__always_used` one (so that it is easier to find). And if
+so, then perhaps the docs for `__always_used` can be simplified.
 
-drivers/block/zram/Kconfig:17:error: recursive dependency detected!
-drivers/block/zram/Kconfig:17:  symbol ZRAM_BACKEND_LZO is selected by ZRAM_EMPTY_BACKENDS_FIXUP
-drivers/block/zram/Kconfig:52:  symbol ZRAM_EMPTY_BACKENDS_FIXUP depends on ZRAM_BACKEND_LZO
+> One gotcha that might be worth mentioning is that this combination only
+> works on functions and non-local variables (i.e., static or global).
 
+Yeah, since the `unused` one only applies to that, right?
 
-I'm a little surprised by this - EMPTY_BACKENDS_FIXUP does not depend
-on ZRAM_BACKEND_LZO, it depends on NOT ZRAM_BACKEND_LZO.
-
-Let me Cc linux-kbuild. Kbuild folks, how do I workaround this?
+Cheers,
+Miguel
