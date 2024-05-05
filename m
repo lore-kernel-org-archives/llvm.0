@@ -1,245 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297DE1369AD;
-	Sun,  5 May 2024 21:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714945871; cv=none; b=FltvFZB5G6qGGDxn+MhzlqSKgGa7gJyVlT5Tl3tXG6qDGexRtIERAy+bvILuaGj/OZ6ykDvHzBashPCnd4W2FgtN42qdj0FNGTfRleCIyQNn+zKyiIb9XyxZDH54ThRbFIrSbuwQiY2aTOeuwAU5qdd5+R13YK1PIpzOD3HUgNY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714945871; c=relaxed/simple;
-	bh=YT+J9QjZxk/DASal2Ipud5sdJsJpoFZefTIP00pUHMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=toGerMnchwTpW7zBJnZC6OlapF5rCMaJ7MxsIwNJDZph7R8HW+NN9gxqlKNmUnC8MgH/gQH4GzNv+cmAVCej671uyzqZmQ2gi/Tpfo2s/2TBZdyBJF3iQ70W1KxTEF6LmO8cSYI/zOO25ausnpJ1VGwNkNlYuXHQrRSXTbFk3m0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HSfPUE2v; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B323136E30
+	for <llvm@lists.linux.dev>; Sun,  5 May 2024 21:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714946215; cv=fail; b=VE1d0+092PIuvSDioxI4R3186DbvnYUIqiUGiNP3UUSMIseZcFwjgH0Rb4+MaUqzlJcj3r3h132nnug8bup6Y0lRQi828FZezdfso169u0SSeOL5796Nle2NfVi9LWhMR9nnsXPKImvCbNhTPDSsGrJBi69pVO9UVU+ItIXSrx8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714946215; c=relaxed/simple;
+	bh=fBIm/dbmd9D9h6PDhu33+Fxf8X3zUDO50GVaoK2NJXw=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=jgpiNQ+VgWHsSOoTNzyU6Jeh/LninI30Py0qfX8YhcZFaszu144qRSc7RUQqClyjXFagI31An3GazIBd+xWG663iKE9c7G+Zu+Bpqyw6SjIxBrSwsfjy3zK+XXmhORdfoOnKLz3wNZ4jSJZiwTDQrUmM/EpH7fZ1jX8ebOcik+E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SlD/5RPP; arc=fail smtp.client-ip=40.107.220.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HSfPUE2v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714945868; x=1746481868;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YT+J9QjZxk/DASal2Ipud5sdJsJpoFZefTIP00pUHMc=;
-  b=HSfPUE2vSrqvaRp7m05x3lEn3gZtOri2wkw4KwTcVxtwgT/eJfxH4f/M
-   Ua9+eF15B25guAMGv/hmNU5YY72lDe7iY0mfV4IEUGwNXOZgRMHJYuSDw
-   61lADocQCr0fza7wjdZL4hJ2djv0nwJIfWIfImGDYFK2U+r8qxPW0i53E
-   0eo1ritqWypKMyj5Rg4IHO2oGUyWsCd61yomCVvIlY8vlCjNW1+14ZGz3
-   WWVyCC5tRVwViCj7q5XLaOwtw87c5vefMvOu3MbEyWDHV/OZG6AzqkZD7
-   OYjU7FCle/4K2K5+dQCLE82wI5pa/jSZF0lM1OCC/Rw//A9VR6Pbi6W/t
-   A==;
-X-CSE-ConnectionGUID: zwHQmrsJRluYh1pVWV3M1g==
-X-CSE-MsgGUID: bfBaoyOrSquFjcca7wlKeA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="21233508"
-X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
-   d="scan'208";a="21233508"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2024 14:51:05 -0700
-X-CSE-ConnectionGUID: s4RkDRuWRGucmkZ30Uw/xA==
-X-CSE-MsgGUID: u1NmaSc2TEStfsTd1aBUmA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
-   d="scan'208";a="32482478"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 05 May 2024 14:51:03 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s3jl7-0000Ec-0a;
-	Sun, 05 May 2024 21:51:01 +0000
-Date: Mon, 6 May 2024 05:50:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linyunsheng:page_frag_cache_v3_test 9/9]
- net/rxrpc/conn_object.c:345:26: error: no member named 'va' in 'struct
- page_frag_cache'
-Message-ID: <202405060548.S8Hk8GVg-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SlD/5RPP"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VSmvIyS5He7YAPerOu+COP/5cDLWx/RTwsBCFDwucFH4VQ8OaNH/lUHf8IYxdOZFsxV3wu9Y/0VTd7mMY+cLmxsUrtx2s24h9pyq97oZ026Az4tmjS2PuT5952uIWeOHgpxZm9ctiCZ5dmknH0QzoCeouI9uz48dxKiPhgU/vugzuhmNMtJhtihxPX2AmvAaixM6qlzu5FKwbxmRSdJRtaMjb1Y+Vjr4wnTaiMq+fe5+aFWrvp7wGkTA2qD4Igo/cp8sjpXvSFvT1zC0Mt5zt0+0ESEe4Th61Qb1FTMVc0P+SggHA97i+4ZwZSvjhxIfXEQgjUyCq9r9c3B10Qd0SA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JUJ3ruv+gFeVCXUTDukxioEW4ZF3Y2kRJJo7siZyFUw=;
+ b=a6YcC/SY9Htt7Ee+pfJq9BtUknPG/ULSCLVs6ZGg3ab07yGrlA5iTqsKEBpmYp7x41oOv6U45lNA1uyf1ZQLyzCUbt6TcZhwKaR6bZmYFrTfcUJwdSyOud6ve31hxYQGWS/qb44uq0TfRlHdWl7Qh4Ue6tsA/sByu/+YTP4UfYXuvW8qWhQsq6Mr34PT390auaArsx3Fod59I13BMT1vm0lgccwLrwDP4Y22gYUIOdHXJaBzyeAOul9TO2QH1KK/TnH/YLXfHprVL0R2NwLRq+QGzGzG89Lkhv2MMWgAPbb3K8lDKL7Vi1s13rxnxnEOUtHGyLS3uORwP7deOdjlQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JUJ3ruv+gFeVCXUTDukxioEW4ZF3Y2kRJJo7siZyFUw=;
+ b=SlD/5RPPo/HjmNZOjKo0ROTeW+al3NBACOu79CRcuP2QPqWamfd2Kigw0p+WomcXMWaYvoPSOksRDKmxcZ7U0rQqwyo16YDRtpQ79Dc7SIRruVz9f5qlTgb62t4hnpiSMUR9lIK8lIqzQEo0tV63lr62wTp/41KrdJUJK82cRMmnU20zcPHqLvLsN2bs2qxQRtSEkjOlmkWI05ohn8d6alZbUcsQIrdKIr1fYOf4L2OcUc6DICxDrBnOi9ZY4I/paHM97Bys/50Q2VLKvyQ/xYl1nLQzgF2FshgUesIwSiMgilM4b/4ftA36a0FVvJEhyDDIaL14glcZ16NRU7XTxQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by MW4PR12MB7013.namprd12.prod.outlook.com (2603:10b6:303:218::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Sun, 5 May
+ 2024 21:56:48 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Sun, 5 May 2024
+ 21:56:48 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Peter Hutterer <peter.hutterer@who-t.net>,
+	Jason Gerecke <jason.gerecke@wacom.com>,
+	Joshua Dickens <joshua@joshua-dickens.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH] bpftool, selftests/hid/bpf: fix 29 clang warnings
+Date: Sun,  5 May 2024 14:56:36 -0700
+Message-ID: <20240505215636.63592-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0289.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::24) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|MW4PR12MB7013:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a03d6b2-bf5a-4d0c-4519-08dc6d4e42fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|1800799015|376005|366007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?AuPhHoFdhk/ki3CRNRAnZR2SfQogrW7Bv02RrSPdW/xx2gWwLCSgNp7/9P/e?=
+ =?us-ascii?Q?w7xnox6lBseAB2kvhf0ZKhIn+cVuqZK3tEARYd7DBV8wvsIAMm2P7f16eht7?=
+ =?us-ascii?Q?wkcoucLNy2+fGZdUM0jtnGyGlR6oSg40JlvHkchpPf694nfcaI/Tn/AgB8Fq?=
+ =?us-ascii?Q?GWV3BSLBEaffXlSRRc3AAZUptCURodp9NGP7Bjq6trPS+pUS+hNy07UGR+8N?=
+ =?us-ascii?Q?SDc38yiZoF8xl+jG9VahzBv4zyUKKMFGW2IcuohrBb7gPPQQ5JrYnvU0lkfn?=
+ =?us-ascii?Q?kMUXtyMeNo3l6teDplKGfsILvVQ9P+yrIAcHtfIEJKC5mUoT4+Z9XsLENfG3?=
+ =?us-ascii?Q?zYsjn5FyuhVugPMfZCAz2jI/hvujrd4/c62oQ/RDmmhhwCio1IX3lLBZcREV?=
+ =?us-ascii?Q?Etp4ENQKty+KqSAtLxbQAK+7V3s3c5lvadhirOs4mbOzAY1wN0L/QmblYBhA?=
+ =?us-ascii?Q?mTAlIuPZRQMzI71X4kzdJx+5N6DooFTlfeoARS6+0oQpXvwBYBfxaugJiETT?=
+ =?us-ascii?Q?B32ULFuMG9b0lG9g+X2th0+Djm9uxyqfUwcC2wliiBo6TtQrGWTW1jrpZ7M2?=
+ =?us-ascii?Q?ds0WeuIxd9LSo5hcIEt3xCsd4QDWXQG8MsaHFePLxPzob3MR5s7Jk5fotapJ?=
+ =?us-ascii?Q?ptL4U2jSYvhcKiXgemS28vkOa364jMjyA81wQSBu4KEpd/0lzsBRz0ImeKuH?=
+ =?us-ascii?Q?61OFm590T5V1wdiGPgg8BC99PRKSVUVpsQfbnzONo1RUBMtkpWJJSkYYenCa?=
+ =?us-ascii?Q?j6P4YWw1Lqqv5XOMv8K66IJBV7LjTQwQQl6yJoxuUdj7ZvHWiz+fZW46ctel?=
+ =?us-ascii?Q?rnaWPKZUux0uPrgwuUn3jTIYMr3B4OWMgJDa9Lao0eJJGEdtz/fiG70zpIc9?=
+ =?us-ascii?Q?+bCruwhg6+BhlibGmthIVq5HbZKbKNILpKcwpWwclwZ9Z2Arwhbz0R4ECYFb?=
+ =?us-ascii?Q?IsB/dde7oomEN392IPW5/dtANTQ2/S3TtPEEo4++h+bLMlKSul9bDSZn10eT?=
+ =?us-ascii?Q?95iDMm/+jKNTXUhHacdO6WvvIxvz4/KQ6hrk0AfWqyc3fuHNyKsWsy+L/y9A?=
+ =?us-ascii?Q?a/WbqZDW1ahUZBmahRcn7vXpFFRE1CLDaZZwLo1jHIimL2cj+CjIb+eaytUh?=
+ =?us-ascii?Q?B+NoO5kr/mk24WXN/IqPgzuhrR+BFXOMNJZO5LFJcs/ymxjAk4yLnXrOIS/p?=
+ =?us-ascii?Q?gHmHgtYiHRCkOd247+C58xFlli4iuQzbde54TarTL7SMzKkCU/QBIzgfpqkx?=
+ =?us-ascii?Q?deAXcMWN1kYypQ8QiEaY4iqCIyThRmH1qyjHEN5MQw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+BvI927ZtibyJrrnwUmC+jubUmjksn9AmVBr3dXMDiLjWjwdm0arZh3ArQQG?=
+ =?us-ascii?Q?m21/nN+3FJPTu6W73ZYrrCPXwzRcdAyjN2psLJLE1VmG/YT/mrRYb8UlUo37?=
+ =?us-ascii?Q?vq7LfjaLFEZdvQe8csP11AlG/sxb/F3WFcwqDkAfPYoGnE8+kC600obxqhi3?=
+ =?us-ascii?Q?BYMShrozLIWzjv8Si92n84UtEyRj59Yydh5qDeeSZUo55BnfYhOvkMT6HLeN?=
+ =?us-ascii?Q?XuVfbJqdLkRmiUqyWuJnd1bO1oaCQ74+rt+IvmkrsBiX4dE+8qFlSghPXYvR?=
+ =?us-ascii?Q?ZYLODHW3duAIkCXmcO1Uj6gVzvZUy/AeWpF0U2CD+fAEXYP20IybSOb8jcCe?=
+ =?us-ascii?Q?Dlgya2Dr5BTjKYSU5Hutj3Xa0WsE2rXnlC/K7FzUJ/meaASZjPR9NUTGzBAv?=
+ =?us-ascii?Q?xJJaAb2j7fBUxx1tN/MshsnAokgO+ZcuoJqvvNTU14xIBFDpKisKnEpMiZ9k?=
+ =?us-ascii?Q?lclPTajDdsvz4DXvvCOJJXozsVMFUv/VGEcmJ5tG+F0WMVGoqXDA7dFm+m02?=
+ =?us-ascii?Q?/S1PlfjetZwGd06UJcf/OcLtbEQZPoeHUM2kQTUlUzrpNgNS3Em3xnXs3TUT?=
+ =?us-ascii?Q?FQHVnNAsPz5dON4/0GBJqfWCaUNG/Py2YntrfQBHaIgCgxpYNKSmJzuBZmAY?=
+ =?us-ascii?Q?75jZkNm0bUM/RsUDoJWiA4CYro6JL0AVWXPFYLqlrZJb/dEJCSkEnR2HxwAH?=
+ =?us-ascii?Q?5JhWfU1S/Nx/oD81d+8a/Vm7gkiJyhna9j4phXnc/TPwzG2EUQrsrQBUk0PZ?=
+ =?us-ascii?Q?GCmxYyKJXBxQupGWCwU3BNHssAT+yAFosG3MX8UR6MnME5dCWZCthY19iFEs?=
+ =?us-ascii?Q?O4MKxywEDQY+ysAT2zRbYlRVEDq7ijhNeBq0ePXENaKr8lRk5OAkwSLo6h7+?=
+ =?us-ascii?Q?CmJmvX6hnZZtNgQ8kpwYq80TDDCXMzuGHwIX5Qf6FXr+rcTkfSNDbUkweWIU?=
+ =?us-ascii?Q?AP2D7uT34/diQ0th0pFCfoVeUwET8dkk/wlCKMRBPyww3oc2Bg03ZWQp6+dM?=
+ =?us-ascii?Q?CWb7Xi8Q1ypG8X/dA6eKUqTpqhsnt6fmFvsKT4mCUdyJkE9VWLvmy4vz585J?=
+ =?us-ascii?Q?VvyW9ZRRmr34zPQvyMQAyOoPdJUYhKquhzuQrykX/s3piGs+iqpZaOXifBP2?=
+ =?us-ascii?Q?hun1qh+WuivxNQQ17qIU0vnHxNTaMIYDpVU3IATv5gXJodIRKBYCFkA/so7R?=
+ =?us-ascii?Q?DrXbuLWdU1Y8A5YicIDoLtujEzOq1ax9/0LR81LQ7GFiGxhFQt9trLhFV8Tl?=
+ =?us-ascii?Q?eTF1A0kCnl9fWYSI6AzrnCgQI0fqQttqKAIrFR709WE2Npbl0thcXJGIEI+1?=
+ =?us-ascii?Q?1y/sZgBXITr9HHDT4e1DuMpYh7UXUsbuItU1kTluX3tvz7AaNrbhVVZXA4DQ?=
+ =?us-ascii?Q?6IjzWMgJcC4CUBpjMEazqZ230z1fHNiOnnHXGjCJHHNyhnfRtXXxd9RJYdJk?=
+ =?us-ascii?Q?FfnZhhHIl3N+jTkpTStno1ZnsRjEt+lTx2iOZCpcAnTHXZc4FQBx6/NIDIy/?=
+ =?us-ascii?Q?FmM1OOzmBN7ZPDmN5oK5H7lhkgdd6lMQMLvaWhVLseGbbh78HfXGOO++ap4C?=
+ =?us-ascii?Q?0wjub0+PhCchaAbwb9HwIGyVCoBm93cV8bYxNRoD7shFUDdDoVKbfUTMQeWm?=
+ =?us-ascii?Q?AA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a03d6b2-bf5a-4d0c-4519-08dc6d4e42fc
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2024 21:56:47.9724
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: go32feFVmAO679TObEYITs+g1oVh2JUs+aCNlZMPsJ6KwpQcQnT4lOYM1jjhMjKKIiZ/j00t7gq92psbDTpx0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7013
 
-tree:   https://github.com/gestionlin/linux.git page_frag_cache_v3_test
-head:   128485e995fc7e92dfb438c15e97da66fc1d5240
-commit: 128485e995fc7e92dfb438c15e97da66fc1d5240 [9/9] mm: page_frag: reuse existing space for 'size' and 'pfmemalloc'
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240506/202405060548.S8Hk8GVg-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240506/202405060548.S8Hk8GVg-lkp@intel.com/reproduce)
+When building either tools/bpf/bpftool, or tools/testing/selftests/hid,
+(the same Makefile is used for these), clang generates many instances of
+a warning that is useless here:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405060548.S8Hk8GVg-lkp@intel.com/
+    "clang: warning: -lLLVM-17: 'linker' input unused"
 
-All errors (new ones prefixed by >>):
+Silence this in both locations, by disabling that warning when building
+with clang.
 
-   In file included from net/rxrpc/conn_object.c:10:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/rxrpc/conn_object.c:13:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from net/rxrpc/conn_object.c:13:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from net/rxrpc/conn_object.c:13:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> net/rxrpc/conn_object.c:345:26: error: no member named 'va' in 'struct page_frag_cache'
-     345 |         if (conn->tx_data_alloc.va)
-         |             ~~~~~~~~~~~~~~~~~~~ ^
-   net/rxrpc/conn_object.c:346:60: error: no member named 'va' in 'struct page_frag_cache'
-     346 |                 __page_frag_cache_drain(virt_to_page(conn->tx_data_alloc.va),
-         |                                                      ~~~~~~~~~~~~~~~~~~~ ^
-   arch/s390/include/asm/page.h:231:53: note: expanded from macro 'virt_to_page'
-     231 | #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-         |                                                         ^~~~~
-   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
-      37 | #define __pfn_to_page(pfn)      (vmemmap + (pfn))
-         |                                             ^~~
-   17 warnings and 2 errors generated.
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/bpf/bpftool/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index e9154ace80ff..c7457921d136 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -133,6 +133,10 @@ CFLAGS += -DUSE_LIBCAP
+ LIBS += -lcap
+ endif
+ 
++ifneq ($(LLVM),)
++    CFLAGS += -Wno-unused-command-line-argument
++endif
++
+ include $(wildcard $(OUTPUT)*.d)
+ 
+ all: $(OUTPUT)bpftool
 
-vim +345 net/rxrpc/conn_object.c
-
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  305  
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  306  /*
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  307   * Clean up a dead connection.
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  308   */
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  309  static void rxrpc_clean_up_connection(struct work_struct *work)
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  310  {
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  311  	struct rxrpc_connection *conn =
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  312  		container_of(work, struct rxrpc_connection, destructor);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  313  	struct rxrpc_net *rxnet = conn->rxnet;
-7fa25105b2d32f net/rxrpc/conn_object.c   David Howells 2022-10-21  314  
-9d35d880e0e4a3 net/rxrpc/conn_object.c   David Howells 2022-10-19  315  	ASSERT(!conn->channels[0].call &&
-9d35d880e0e4a3 net/rxrpc/conn_object.c   David Howells 2022-10-19  316  	       !conn->channels[1].call &&
-9d35d880e0e4a3 net/rxrpc/conn_object.c   David Howells 2022-10-19  317  	       !conn->channels[2].call &&
-9d35d880e0e4a3 net/rxrpc/conn_object.c   David Howells 2022-10-19  318  	       !conn->channels[3].call);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  319  	ASSERT(list_empty(&conn->cache_link));
-17926a79320afa net/rxrpc/ar-connection.c David Howells 2007-04-26  320  
-3136ef49a14ccc net/rxrpc/conn_object.c   David Howells 2017-11-24  321  	del_timer_sync(&conn->timer);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  322  	cancel_work_sync(&conn->processor); /* Processing may restart the timer */
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  323  	del_timer_sync(&conn->timer);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  324  
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  325  	write_lock(&rxnet->conn_lock);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  326  	list_del_init(&conn->proc_link);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  327  	write_unlock(&rxnet->conn_lock);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  328  
-17926a79320afa net/rxrpc/ar-connection.c David Howells 2007-04-26  329  	rxrpc_purge_queue(&conn->rx_queue);
-17926a79320afa net/rxrpc/ar-connection.c David Howells 2007-04-26  330  
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  331  	rxrpc_kill_client_conn(conn);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  332  
-e0e4d82f3be60c net/rxrpc/ar-connection.c David Howells 2016-04-07  333  	conn->security->clear(conn);
-2cc800863c49a1 net/rxrpc/conn_object.c   David Howells 2022-10-19  334  	key_put(conn->key);
-fa3492abb64b93 net/rxrpc/conn_object.c   David Howells 2022-11-02  335  	rxrpc_put_bundle(conn->bundle, rxrpc_bundle_put_conn);
-47c810a7984446 net/rxrpc/conn_object.c   David Howells 2022-10-21  336  	rxrpc_put_peer(conn->peer, rxrpc_peer_put_conn);
-0fde882fc9ee9c net/rxrpc/conn_object.c   David Howells 2022-10-21  337  	rxrpc_put_local(conn->local, rxrpc_local_put_kill_conn);
-e0e4d82f3be60c net/rxrpc/ar-connection.c David Howells 2016-04-07  338  
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  339  	/* Drain the Rx queue.  Note that even though we've unpublished, an
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  340  	 * incoming packet could still be being added to our Rx queue, so we
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  341  	 * will need to drain it again in the RCU cleanup handler.
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  342  	 */
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  343  	rxrpc_purge_queue(&conn->rx_queue);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  344  
-49489bb03a5015 net/rxrpc/conn_object.c   David Howells 2024-01-29 @345  	if (conn->tx_data_alloc.va)
-49489bb03a5015 net/rxrpc/conn_object.c   David Howells 2024-01-29  346  		__page_frag_cache_drain(virt_to_page(conn->tx_data_alloc.va),
-49489bb03a5015 net/rxrpc/conn_object.c   David Howells 2024-01-29  347  					conn->tx_data_alloc.pagecnt_bias);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  348  	call_rcu(&conn->rcu, rxrpc_rcu_free_connection);
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  349  }
-3cec055c56958c net/rxrpc/conn_object.c   David Howells 2022-11-25  350  
-
-:::::: The code at line 345 was first introduced by commit
-:::::: 49489bb03a501547450e8fdc6d85d023d8a3b2c4 rxrpc: Do zerocopy using MSG_SPLICE_PAGES and page frags
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
-
+base-commit: f462ae0edd3703edd6f22fe41d336369c38b884b
+prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.0
+
