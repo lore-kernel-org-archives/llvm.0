@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139BA57C9A;
-	Sun,  5 May 2024 15:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B251F1E507;
+	Sun,  5 May 2024 16:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714923398; cv=none; b=BGLjexUaMQmwkZvvPuvKXFBxbCM4FuiDvyD2wnC844gVdbckpxeaUK2rgxaWf0HWcytGumI4EJ0HDt+N8sn3gXXTfnn5Bn88/El3oGxLVofy5ZYpbp+qqGdYFv2T8fEZvCwoNNx10t2lxFErUFuD4bdakvHEclGQ4v180CrKT3s=
+	t=1714927120; cv=none; b=RXLrX843LbUH6kjgjurJItHiYNwjrxPuz/M8mh/HjcN1jCPkgapPfPVUJStkEO8YkHExYJa5G8ExqfQ4jv3gdg9ybgi97W4ZQngO9UfcREoMmp1ySoZ73Z4THWpIR7tPIir5lOzZe3jplOa7pwdjBCYFA2bkcsMFCafETOyESzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714923398; c=relaxed/simple;
-	bh=BWokMerW/cxS4NyxRotKz7gSxuno5iM10HpbYDkJMI0=;
+	s=arc-20240116; t=1714927120; c=relaxed/simple;
+	bh=TPc2fVemOKXRbjMq/UOFzk1pMRUuzvj6Vc0GgJsqTIk=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=awjtIwS3ldo8aGCAHW/KVaCPrlNyy+lPwOY5uHXLtgoe89vDIhiBambEGl7c4HJ3YbmjcAii0isnWbtssqe4nrWLiIekB03n7t+67MlW2i/3ePOj++m/E6Si8VtXtH5AaBgUnKrhZKmNT6fuLPuc1Qo9qeTnDTTOrgoQVLckiT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NO/mnsWE; arc=none smtp.client-ip=198.175.65.20
+	 Content-Disposition; b=pBQKS9Cvaj74Ko5o4rR7hRDEVSRyqrFjQ3xmVQtMi286DBWHXFg3i0TOb+Afw74D0A5EpTzkwX9vH/ki5mES/qxDRKMbiSkehfxIna3hUcF3wmd6joVI/rnMGfE/tA3QlgTU7ize5poJr3bppe5hmVsJD4pG0EqL+J4mrpwwKg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BZN3fkIK; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NO/mnsWE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BZN3fkIK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714923396; x=1746459396;
+  t=1714927119; x=1746463119;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BWokMerW/cxS4NyxRotKz7gSxuno5iM10HpbYDkJMI0=;
-  b=NO/mnsWERIELpceTY4FEhGGp+noG/gNkEthfBNRfIomw2rT3sBwvKkwz
-   N7FRUGk9RgiTr6C4hZ6xb3IOA5J49UUx3VAV/SROUycEUv+vPqUOb8eRk
-   W9uPTRBENHJ4Z7o5Kqm30bu4miSHXI0me8yxfNk885ZKdkRtgaQXRoI+p
-   uYTGmli2puxP6w3iUpuhXFmo3HG+xuZR94z4Ytj3JEkF37idGfYHynlD7
-   0pThFbBz2Px+x0E/1YlwVAVoIC0ahFdypEV23xXeIMAysIXvrRaqmUkfL
-   BvDNYN+Z4Wpf2AiR5lWjtxd2Wc7+m7b4R+/6U2wFklo6mSEsUTEmW2t6s
-   w==;
-X-CSE-ConnectionGUID: 7s6N4pScReGX4lKxlG287A==
-X-CSE-MsgGUID: Dev3EkQEQzGFwjlBYVyBrw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="10501193"
+  bh=TPc2fVemOKXRbjMq/UOFzk1pMRUuzvj6Vc0GgJsqTIk=;
+  b=BZN3fkIK7ak1/hnx1ikfmLdr8h0w6HSLvYJO+RshSCFxMu6w9M9HvPLC
+   EDaqcUGNQX/zAh+72t9PVSOBPpjEMGvUn8+4r6DREnPxPvMaodkDsDwIW
+   0pIeBZA+ImzrGmxmlbdFv149jmyjWTaHTUpJFsuHn/ZXzm6Nbs5e5VYjs
+   EQyJvnYTaK+XQoz1zapPfx5qSGTPeLF2D+dlxHuXmc/1hvDfUBQ5QSUlA
+   rnqlgJc67mk6YJ63o53v6ZCs+GLYxBbtrSAf5Qqq4xBgFnvBkij7lmdjZ
+   vVOK5CLkOtlFbJWM3U+VHYgL0+/GHWWFUz+QR/pLrEynIPlp+jPjUBvkV
+   Q==;
+X-CSE-ConnectionGUID: zq1H0PIVQua7fAww5ElXgA==
+X-CSE-MsgGUID: gaNzflfcRDuRJUGuUgESUw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="10891094"
 X-IronPort-AV: E=Sophos;i="6.07,256,1708416000"; 
-   d="scan'208";a="10501193"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2024 08:36:35 -0700
-X-CSE-ConnectionGUID: w13o7bOPSyqKXin0aHVYCw==
-X-CSE-MsgGUID: LoYoOew9TXWdTOoTRcor7g==
+   d="scan'208";a="10891094"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2024 09:38:38 -0700
+X-CSE-ConnectionGUID: j4gSyj8VS2uZJCSLWCl/vg==
+X-CSE-MsgGUID: HYZjCJwCTbe4pc/fXio33w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,256,1708416000"; 
-   d="scan'208";a="28044263"
+   d="scan'208";a="32746414"
 Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 05 May 2024 08:36:33 -0700
+  by orviesa005.jf.intel.com with ESMTP; 05 May 2024 09:38:37 -0700
 Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s3duh-000012-1F;
-	Sun, 05 May 2024 15:36:31 +0000
-Date: Sun, 5 May 2024 23:36:14 +0800
+	id 1s3esk-00003k-0j;
+	Sun, 05 May 2024 16:38:34 +0000
+Date: Mon, 6 May 2024 00:37:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [arm:zii 35/93] drivers/net/dsa/b53/b53_common.c:2283:3: error:
- field designator 'adjust_link' does not refer to any field in type 'const
- struct dsa_switch_ops'
-Message-ID: <202405052312.ZN4UrG6u-lkp@intel.com>
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:bugfix/syzbot 33/33] fs/f2fs/f2fs.h:3130:17: error: no member
+ named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean
+ 'i_pin_failure'?
+Message-ID: <202405060025.1ExsKTY8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,75 +64,149 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git zii
-head:   b602a1302aefbab72bb6e770c84998f0878536f8
-commit: 3517bea94ef507148072d1ae9b6b1cfc097fa278 [35/93] net: dsa: Remove adjust_link paths
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240505/202405052312.ZN4UrG6u-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240505/202405052312.ZN4UrG6u-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/syzbot
+head:   d7c9e98caf2285d83bf9e839c7398946bbc7deb3
+commit: d7c9e98caf2285d83bf9e839c7398946bbc7deb3 [33/33] f2fs: remove unused GC_FAILURE_PIN
+config: i386-buildonly-randconfig-003-20240505 (https://download.01.org/0day-ci/archive/20240506/202405060025.1ExsKTY8-lkp@intel.com/config)
+compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240506/202405060025.1ExsKTY8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405052312.ZN4UrG6u-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405060025.1ExsKTY8-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/dsa/b53/b53_common.c:2283:3: error: field designator 'adjust_link' does not refer to any field in type 'const struct dsa_switch_ops'
-           .adjust_link            = b53_adjust_link,
-            ^
+   In file included from fs/f2fs/data.c:25:
+>> fs/f2fs/f2fs.h:3130:17: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3130 |         F2FS_I(inode)->i_gc_failures = count;
+         |                        ^~~~~~~~~~~~~
+         |                        i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   fs/f2fs/data.c:2369:10: warning: variable 'index' set but not used [-Wunused-but-set-variable]
+    2369 |         pgoff_t index;
+         |                 ^
+   1 warning and 1 error generated.
+--
+   In file included from fs/f2fs/inline.c:13:
+>> fs/f2fs/f2fs.h:3130:17: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3130 |         F2FS_I(inode)->i_gc_failures = count;
+         |                        ^~~~~~~~~~~~~
+         |                        i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
    1 error generated.
+--
+   In file included from fs/f2fs/file.c:29:
+>> fs/f2fs/f2fs.h:3130:17: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3130 |         F2FS_I(inode)->i_gc_failures = count;
+         |                        ^~~~~~~~~~~~~
+         |                        i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+>> fs/f2fs/file.c:3220:39: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3220 |                 f2fs_i_gc_failures_write(inode, fi->i_gc_failures + 1);
+         |                                                     ^~~~~~~~~~~~~
+         |                                                     i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   fs/f2fs/file.c:3222:10: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3222 |         if (fi->i_gc_failures > sbi->gc_pin_file_threshold) {
+         |                 ^~~~~~~~~~~~~
+         |                 i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   fs/f2fs/file.c:3224:34: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3224 |                           __func__, inode->i_ino, fi->i_gc_failures);
+         |                                                       ^~~~~~~~~~~~~
+         |                                                       i_pin_failure
+   fs/f2fs/f2fs.h:1829:46: note: expanded from macro 'f2fs_warn'
+    1829 |         f2fs_printk(sbi, false, KERN_WARNING fmt, ##__VA_ARGS__)
+         |                                                     ^
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   fs/f2fs/file.c:3288:23: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3288 |         ret = F2FS_I(inode)->i_gc_failures;
+         |                              ^~~~~~~~~~~~~
+         |                              i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   fs/f2fs/file.c:3303:24: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3303 |                 pin = F2FS_I(inode)->i_gc_failures;
+         |                                      ^~~~~~~~~~~~~
+         |                                      i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   6 errors generated.
+--
+   In file included from fs/f2fs/inode.c:16:
+>> fs/f2fs/f2fs.h:3130:17: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3130 |         F2FS_I(inode)->i_gc_failures = count;
+         |                        ^~~~~~~~~~~~~
+         |                        i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+>> fs/f2fs/inode.c:418:7: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+     418 |                 fi->i_gc_failures = le16_to_cpu(ri->i_gc_failures);
+         |                     ^~~~~~~~~~~~~
+         |                     i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   fs/f2fs/inode.c:688:50: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+     688 |                 ri->i_gc_failures = cpu_to_le16(F2FS_I(inode)->i_gc_failures);
+         |                                                                ^~~~~~~~~~~~~
+         |                                                                i_pin_failure
+   include/linux/byteorder/generic.h:90:21: note: expanded from macro 'cpu_to_le16'
+      90 | #define cpu_to_le16 __cpu_to_le16
+         |                     ^
+   include/uapi/linux/byteorder/little_endian.h:36:51: note: expanded from macro '__cpu_to_le16'
+      36 | #define __cpu_to_le16(x) ((__force __le16)(__u16)(x))
+         |                                                   ^
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   3 errors generated.
+--
+   In file included from fs/f2fs/recovery.c:12:
+>> fs/f2fs/f2fs.h:3130:17: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+    3130 |         F2FS_I(inode)->i_gc_failures = count;
+         |                        ^~~~~~~~~~~~~
+         |                        i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+>> fs/f2fs/recovery.c:333:17: error: no member named 'i_gc_failures' in 'struct f2fs_inode_info'; did you mean 'i_pin_failure'?
+     333 |         F2FS_I(inode)->i_gc_failures = le16_to_cpu(raw->i_gc_failures);
+         |                        ^~~~~~~~~~~~~
+         |                        i_pin_failure
+   fs/f2fs/f2fs.h:815:15: note: 'i_pin_failure' declared here
+     815 |         unsigned int i_pin_failure;     /* for gc failure statistic */
+         |                      ^
+   2 errors generated.
 
 
-vim +2283 drivers/net/dsa/b53/b53_common.c
+vim +3130 fs/f2fs/f2fs.h
 
-6ae5834b983ac1 Murali Krishna Policharla 2020-03-27  2272  
-a82f67afe8e297 Florian Fainelli          2017-01-08  2273  static const struct dsa_switch_ops b53_switch_ops = {
-7b314362a2344f Andrew Lunn               2016-08-22  2274  	.get_tag_protocol	= b53_get_tag_protocol,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2275  	.setup			= b53_setup,
-4f6a5caf187ff5 Florian Fainelli          2020-09-09  2276  	.teardown		= b53_teardown,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2277  	.get_strings		= b53_get_strings,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2278  	.get_ethtool_stats	= b53_get_ethtool_stats,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2279  	.get_sset_count		= b53_get_sset_count,
-c7d28c9df292a4 Florian Fainelli          2018-04-25  2280  	.get_ethtool_phy_stats	= b53_get_ethtool_phy_stats,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2281  	.phy_read		= b53_phy_read16,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2282  	.phy_write		= b53_phy_write16,
-967dd82ffc52e9 Florian Fainelli          2016-06-09 @2283  	.adjust_link		= b53_adjust_link,
-dda1c25751fa22 Russell King (Oracle      2022-02-22  2284) 	.phylink_get_caps	= b53_phylink_get_caps,
-79396934e289db Russell King (Oracle      2022-04-29  2285) 	.phylink_mac_select_pcs	= b53_phylink_mac_select_pcs,
-a8e8b98531369c Florian Fainelli          2018-09-05  2286  	.phylink_mac_config	= b53_phylink_mac_config,
-a8e8b98531369c Florian Fainelli          2018-09-05  2287  	.phylink_mac_link_down	= b53_phylink_mac_link_down,
-a8e8b98531369c Florian Fainelli          2018-09-05  2288  	.phylink_mac_link_up	= b53_phylink_mac_link_up,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2289  	.port_enable		= b53_enable_port,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2290  	.port_disable		= b53_disable_port,
-f43a2dbe959703 Florian Fainelli          2017-09-19  2291  	.get_mac_eee		= b53_get_mac_eee,
-f43a2dbe959703 Florian Fainelli          2017-09-19  2292  	.set_mac_eee		= b53_set_mac_eee,
-ff39c2d68679c8 Florian Fainelli          2016-06-09  2293  	.port_bridge_join	= b53_br_join,
-ff39c2d68679c8 Florian Fainelli          2016-06-09  2294  	.port_bridge_leave	= b53_br_leave,
-a8b659e7ff75a6 Vladimir Oltean           2021-02-12  2295  	.port_pre_bridge_flags	= b53_br_flags_pre,
-a8b659e7ff75a6 Vladimir Oltean           2021-02-12  2296  	.port_bridge_flags	= b53_br_flags,
-ff39c2d68679c8 Florian Fainelli          2016-06-09  2297  	.port_stp_state_set	= b53_br_set_stp_state,
-597698f1e00d37 Vivien Didelot            2016-09-22  2298  	.port_fast_age		= b53_br_fast_age,
-a2482d2ce34986 Florian Fainelli          2016-06-09  2299  	.port_vlan_filtering	= b53_vlan_filtering,
-a2482d2ce34986 Florian Fainelli          2016-06-09  2300  	.port_vlan_add		= b53_vlan_add,
-a2482d2ce34986 Florian Fainelli          2016-06-09  2301  	.port_vlan_del		= b53_vlan_del,
-1da6df85c6fbed Florian Fainelli          2016-06-09  2302  	.port_fdb_dump		= b53_fdb_dump,
-1da6df85c6fbed Florian Fainelli          2016-06-09  2303  	.port_fdb_add		= b53_fdb_add,
-1da6df85c6fbed Florian Fainelli          2016-06-09  2304  	.port_fdb_del		= b53_fdb_del,
-ed3af5fd08ebe3 Florian Fainelli          2017-01-30  2305  	.port_mirror_add	= b53_mirror_add,
-ed3af5fd08ebe3 Florian Fainelli          2017-01-30  2306  	.port_mirror_del	= b53_mirror_del,
-5d65b64a3d9701 Florian Fainelli          2019-10-24  2307  	.port_mdb_add		= b53_mdb_add,
-5d65b64a3d9701 Florian Fainelli          2019-10-24  2308  	.port_mdb_del		= b53_mdb_del,
-6ae5834b983ac1 Murali Krishna Policharla 2020-03-27  2309  	.port_max_mtu		= b53_get_max_mtu,
-6ae5834b983ac1 Murali Krishna Policharla 2020-03-27  2310  	.port_change_mtu	= b53_change_mtu,
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2311  };
-967dd82ffc52e9 Florian Fainelli          2016-06-09  2312  
-
-:::::: The code at line 2283 was first introduced by commit
-:::::: 967dd82ffc52e9d8ea0defde094f9a39a3f4eeed net: dsa: b53: Add support for Broadcom RoboSwitch
-
-:::::: TO: Florian Fainelli <f.fainelli@gmail.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+  3126	
+  3127	static inline void f2fs_i_gc_failures_write(struct inode *inode,
+  3128						unsigned int count)
+  3129	{
+> 3130		F2FS_I(inode)->i_gc_failures = count;
+  3131		f2fs_mark_inode_dirty_sync(inode, true);
+  3132	}
+  3133	
 
 -- 
 0-DAY CI Kernel Test Service
