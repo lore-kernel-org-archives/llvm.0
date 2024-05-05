@@ -1,231 +1,141 @@
-Received: from msa.smtpout.orange.fr (smtp-70.smtpout.orange.fr [80.12.242.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E7222611
-	for <llvm@lists.linux.dev>; Sun,  5 May 2024 15:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139BA57C9A;
+	Sun,  5 May 2024 15:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714922713; cv=none; b=DoveSK4n4Q+/B+V2Ocstuxi0jVO3kPB+1bCPURzNrMZ5Ue7hQEtN3/O0dYBJHTuEhpdPhgki3BhJxn+JI3cGxFeTNBMpEZP+wQNXKeVH0SLTaBO8R3IUN24pct/cm8sXG/JV06W5k37X4eMdIndkZdHPF1hhxbbvNy18LJM95F8=
+	t=1714923398; cv=none; b=BGLjexUaMQmwkZvvPuvKXFBxbCM4FuiDvyD2wnC844gVdbckpxeaUK2rgxaWf0HWcytGumI4EJ0HDt+N8sn3gXXTfnn5Bn88/El3oGxLVofy5ZYpbp+qqGdYFv2T8fEZvCwoNNx10t2lxFErUFuD4bdakvHEclGQ4v180CrKT3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714922713; c=relaxed/simple;
-	bh=h1GSfJkP+XpAGve4Yrrj47DZ5Mm63WGc/WQWxHSpP8E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TpA16ZPVu5E5oWKfJfpLo1bhq9PYgLDlJPH8Ytx/8c1kDRwYGYUmL5JyRfMnctTdLfG8cEfU49kF4sy3Bl8G/tN/9g54Rt3FUzL7/LerR67OswDU+cYypX0uAO3J5f5AIhIcDGYPnPQkAZw1TlWAliXJcWavGg2XpIldAVND8wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=IDnxK9HK; arc=none smtp.client-ip=80.12.242.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1714923398; c=relaxed/simple;
+	bh=BWokMerW/cxS4NyxRotKz7gSxuno5iM10HpbYDkJMI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=awjtIwS3ldo8aGCAHW/KVaCPrlNyy+lPwOY5uHXLtgoe89vDIhiBambEGl7c4HJ3YbmjcAii0isnWbtssqe4nrWLiIekB03n7t+67MlW2i/3ePOj++m/E6Si8VtXtH5AaBgUnKrhZKmNT6fuLPuc1Qo9qeTnDTTOrgoQVLckiT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NO/mnsWE; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="IDnxK9HK"
-Received: from [192.168.1.37] ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id 3djUsCqAriGtU3djUsiM9f; Sun, 05 May 2024 17:25:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1714922700;
-	bh=yMjNEPDv2xsuVDvmwEGk6roF3RPmf7R4LsU+11Mt7Pw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=IDnxK9HKNXMrDCOiRXDrSdpkHKN1iGS7Yjn0Iz67xruJmVxfgXOaVghYwqxKPMETU
-	 Siszc0hH6MeY5bF6Z0mA8WyDCJgjQS7MfFtKc7g2JXkWLLEqGT0o1SclcrR2iZ4uqs
-	 HZDEupsiXqRYxY7pAZ2RUlROj+h1Y+LLXki/znkIBP9Z1zMVRJG9TJaGpwkdJ8UPcv
-	 jkBDiBqjiyqTS14QKVZ0MDo0SbGRnd/mgFlrVh7IS+opLPoBZvfBxZSbL3SBdMo01k
-	 Tx0hmXjl45QcY6Q2h7pJ/1Tv5qHpClln2vJtchNajqwmHFQV99VMQ+ZtMKbIvTaV5k
-	 TmFLp+kBFQviA==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 05 May 2024 17:25:00 +0200
-X-ME-IP: 86.243.17.157
-Message-ID: <51a49bae-bd91-428e-b476-f862711453a0@wanadoo.fr>
-Date: Sun, 5 May 2024 17:24:55 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NO/mnsWE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714923396; x=1746459396;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BWokMerW/cxS4NyxRotKz7gSxuno5iM10HpbYDkJMI0=;
+  b=NO/mnsWERIELpceTY4FEhGGp+noG/gNkEthfBNRfIomw2rT3sBwvKkwz
+   N7FRUGk9RgiTr6C4hZ6xb3IOA5J49UUx3VAV/SROUycEUv+vPqUOb8eRk
+   W9uPTRBENHJ4Z7o5Kqm30bu4miSHXI0me8yxfNk885ZKdkRtgaQXRoI+p
+   uYTGmli2puxP6w3iUpuhXFmo3HG+xuZR94z4Ytj3JEkF37idGfYHynlD7
+   0pThFbBz2Px+x0E/1YlwVAVoIC0ahFdypEV23xXeIMAysIXvrRaqmUkfL
+   BvDNYN+Z4Wpf2AiR5lWjtxd2Wc7+m7b4R+/6U2wFklo6mSEsUTEmW2t6s
+   w==;
+X-CSE-ConnectionGUID: 7s6N4pScReGX4lKxlG287A==
+X-CSE-MsgGUID: Dev3EkQEQzGFwjlBYVyBrw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="10501193"
+X-IronPort-AV: E=Sophos;i="6.07,256,1708416000"; 
+   d="scan'208";a="10501193"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2024 08:36:35 -0700
+X-CSE-ConnectionGUID: w13o7bOPSyqKXin0aHVYCw==
+X-CSE-MsgGUID: LoYoOew9TXWdTOoTRcor7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,256,1708416000"; 
+   d="scan'208";a="28044263"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 05 May 2024 08:36:33 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s3duh-000012-1F;
+	Sun, 05 May 2024 15:36:31 +0000
+Date: Sun, 5 May 2024 23:36:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [arm:zii 35/93] drivers/net/dsa/b53/b53_common.c:2283:3: error:
+ field designator 'adjust_link' does not refer to any field in type 'const
+ struct dsa_switch_ops'
+Message-ID: <202405052312.ZN4UrG6u-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] perf/ring_buffer: Prefer struct_size over open coded
- arithmetic
-To: Erick Archer <erick.archer@outlook.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>, Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-References: <AS8PR02MB7237569E4FBE0B26F62FDFDB8B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com>
-Content-Language: en-MW
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <AS8PR02MB7237569E4FBE0B26F62FDFDB8B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Le 05/05/2024 à 16:15, Erick Archer a écrit :
-> This is an effort to get rid of all multiplications from allocation
-> functions in order to prevent integer overflows [1][2].
-> 
-> As the "rb" variable is a pointer to "struct perf_buffer" and this
-> structure ends in a flexible array:
-> 
-> struct perf_buffer {
-> 	[...]
-> 	void	*data_pages[];
-> };
-> 
-> the preferred way in the kernel is to use the struct_size() helper to
-> do the arithmetic instead of the calculation "size + count * size" in
-> the kzalloc_node() functions.
-> 
-> In the "rb_alloc" function defined in the else branch of the macro
-> 
->   #ifndef CONFIG_PERF_USE_VMALLOC
-> 
-> the count in the struct_size helper is the literal "1" since only one
-> pointer to void is allocated. Also, remove the "size" variable as it
-> is no longer needed.
-> 
-> At the same time, prepare for the coming implementation by GCC and Clang
-> of the __counted_by attribute. Flexible array members annotated with
-> __counted_by can have their accesses bounds-checked at run-time via
-> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
-> strcpy/memcpy-family functions). In this case, it is important to note
-> that the logic needs a little refactoring to ensure that the "nr_pages"
-> member is initialized before the first access to the flex array.
-> 
-> In one case, it is only necessary to move the assignment before the
-> array-writing loop while in the other case the assignment needs to be
-> added.
-> 
-> This way, the code is more safer.
-> 
-> This code was detected with the help of Coccinelle, and audited and
-> modified manually.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
-> Link: https://github.com/KSPP/linux/issues/160 [2]
-> Signed-off-by: Erick Archer <erick.archer@outlook.com>
-> ---
-> Changes in v2:
-> - Annotate "struct perf_buffer" with __counted_by() attribute (Kees Cook).
-> - Refactor the logic to gain __counted_by() coverage (Kees Cook).
-> 
-> Previous versions:
-> v1 -> https://lore.kernel.org/linux-hardening/AS8PR02MB72372AB065EA8340D960CCC48B1B2@AS8PR02MB7237.eurprd02.prod.outlook.com/
-> 
-> Hi Peter,
-> 
-> I know that you detest the struct_size() helper, however, as Kees
-> explained in v1, this change improves the robustness of the code.
-> Also, we will gain __counted_by() coverage.
-> 
-> I hope this patch can be applied this time.
-> 
-> Regards,
-> Erick
-> ---
->   kernel/events/internal.h    |  2 +-
->   kernel/events/ring_buffer.c | 14 ++++----------
->   2 files changed, 5 insertions(+), 11 deletions(-)
-> 
-> diff --git a/kernel/events/internal.h b/kernel/events/internal.h
-> index 5150d5f84c03..dc8d39b01adb 100644
-> --- a/kernel/events/internal.h
-> +++ b/kernel/events/internal.h
-> @@ -55,7 +55,7 @@ struct perf_buffer {
->   	void				*aux_priv;
->   
->   	struct perf_event_mmap_page	*user_page;
-> -	void				*data_pages[];
-> +	void				*data_pages[] __counted_by(nr_pages);
->   };
->   
->   extern void rb_free(struct perf_buffer *rb);
-> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-> index 4013408ce012..080537eff69f 100644
-> --- a/kernel/events/ring_buffer.c
-> +++ b/kernel/events/ring_buffer.c
-> @@ -822,9 +822,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
->   	unsigned long size;
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git zii
+head:   b602a1302aefbab72bb6e770c84998f0878536f8
+commit: 3517bea94ef507148072d1ae9b6b1cfc097fa278 [35/93] net: dsa: Remove adjust_link paths
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240505/202405052312.ZN4UrG6u-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240505/202405052312.ZN4UrG6u-lkp@intel.com/reproduce)
 
-Hi,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405052312.ZN4UrG6u-lkp@intel.com/
 
-Should size be size_t?
+All errors (new ones prefixed by >>):
 
->   	int i, node;
->   
-> -	size = sizeof(struct perf_buffer);
-> -	size += nr_pages * sizeof(void *);
-> -
-> +	size = struct_size(rb, data_pages, nr_pages);
->   	if (order_base_2(size) > PAGE_SHIFT+MAX_PAGE_ORDER)
->   		goto fail;
->   
-> @@ -833,6 +831,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
->   	if (!rb)
->   		goto fail;
->   
-> +	rb->nr_pages = nr_pages;
->   	rb->user_page = perf_mmap_alloc_page(cpu);
->   	if (!rb->user_page)
->   		goto fail_user_page;
-> @@ -843,8 +842,6 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
->   			goto fail_data_pages;
->   	}
->   
-> -	rb->nr_pages = nr_pages;
-> -
->   	ring_buffer_init(rb, watermark, flags);
->   
->   	return rb;
-> @@ -916,18 +913,15 @@ void rb_free(struct perf_buffer *rb)
->   struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
->   {
->   	struct perf_buffer *rb;
-> -	unsigned long size;
->   	void *all_buf;
->   	int node;
->   
-> -	size = sizeof(struct perf_buffer);
-> -	size += sizeof(void *);
-> -
->   	node = (cpu == -1) ? cpu : cpu_to_node(cpu);
-> -	rb = kzalloc_node(size, GFP_KERNEL, node);
-> +	rb = kzalloc_node(struct_size(rb, data_pages, 1), GFP_KERNEL, node);
->   	if (!rb)
->   		goto fail;
->   
-> +	rb->nr_pages = nr_pages;
-
-I don't think this is correct.
-
-There is already a logic in place about it a few lines below:
-
-	all_buf = vmalloc_user((nr_pages + 1) * PAGE_SIZE);
-	if (!all_buf)
-		goto fail_all_buf;
-
-	rb->user_page = all_buf;
-	rb->data_pages[0] = all_buf + PAGE_SIZE;
-	if (nr_pages) {					<--- here
-		rb->nr_pages = 1;			<---
-		rb->page_order = ilog2(nr_pages);
-	}
-
-I think that what is needed is to move this block just 2 lines above, 
-(before rb->data_pages[0] = ...)
+>> drivers/net/dsa/b53/b53_common.c:2283:3: error: field designator 'adjust_link' does not refer to any field in type 'const struct dsa_switch_ops'
+           .adjust_link            = b53_adjust_link,
+            ^
+   1 error generated.
 
 
-I'm also wondering what should be done if nr_pages = 0.
+vim +2283 drivers/net/dsa/b53/b53_common.c
 
+6ae5834b983ac1 Murali Krishna Policharla 2020-03-27  2272  
+a82f67afe8e297 Florian Fainelli          2017-01-08  2273  static const struct dsa_switch_ops b53_switch_ops = {
+7b314362a2344f Andrew Lunn               2016-08-22  2274  	.get_tag_protocol	= b53_get_tag_protocol,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2275  	.setup			= b53_setup,
+4f6a5caf187ff5 Florian Fainelli          2020-09-09  2276  	.teardown		= b53_teardown,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2277  	.get_strings		= b53_get_strings,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2278  	.get_ethtool_stats	= b53_get_ethtool_stats,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2279  	.get_sset_count		= b53_get_sset_count,
+c7d28c9df292a4 Florian Fainelli          2018-04-25  2280  	.get_ethtool_phy_stats	= b53_get_ethtool_phy_stats,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2281  	.phy_read		= b53_phy_read16,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2282  	.phy_write		= b53_phy_write16,
+967dd82ffc52e9 Florian Fainelli          2016-06-09 @2283  	.adjust_link		= b53_adjust_link,
+dda1c25751fa22 Russell King (Oracle      2022-02-22  2284) 	.phylink_get_caps	= b53_phylink_get_caps,
+79396934e289db Russell King (Oracle      2022-04-29  2285) 	.phylink_mac_select_pcs	= b53_phylink_mac_select_pcs,
+a8e8b98531369c Florian Fainelli          2018-09-05  2286  	.phylink_mac_config	= b53_phylink_mac_config,
+a8e8b98531369c Florian Fainelli          2018-09-05  2287  	.phylink_mac_link_down	= b53_phylink_mac_link_down,
+a8e8b98531369c Florian Fainelli          2018-09-05  2288  	.phylink_mac_link_up	= b53_phylink_mac_link_up,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2289  	.port_enable		= b53_enable_port,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2290  	.port_disable		= b53_disable_port,
+f43a2dbe959703 Florian Fainelli          2017-09-19  2291  	.get_mac_eee		= b53_get_mac_eee,
+f43a2dbe959703 Florian Fainelli          2017-09-19  2292  	.set_mac_eee		= b53_set_mac_eee,
+ff39c2d68679c8 Florian Fainelli          2016-06-09  2293  	.port_bridge_join	= b53_br_join,
+ff39c2d68679c8 Florian Fainelli          2016-06-09  2294  	.port_bridge_leave	= b53_br_leave,
+a8b659e7ff75a6 Vladimir Oltean           2021-02-12  2295  	.port_pre_bridge_flags	= b53_br_flags_pre,
+a8b659e7ff75a6 Vladimir Oltean           2021-02-12  2296  	.port_bridge_flags	= b53_br_flags,
+ff39c2d68679c8 Florian Fainelli          2016-06-09  2297  	.port_stp_state_set	= b53_br_set_stp_state,
+597698f1e00d37 Vivien Didelot            2016-09-22  2298  	.port_fast_age		= b53_br_fast_age,
+a2482d2ce34986 Florian Fainelli          2016-06-09  2299  	.port_vlan_filtering	= b53_vlan_filtering,
+a2482d2ce34986 Florian Fainelli          2016-06-09  2300  	.port_vlan_add		= b53_vlan_add,
+a2482d2ce34986 Florian Fainelli          2016-06-09  2301  	.port_vlan_del		= b53_vlan_del,
+1da6df85c6fbed Florian Fainelli          2016-06-09  2302  	.port_fdb_dump		= b53_fdb_dump,
+1da6df85c6fbed Florian Fainelli          2016-06-09  2303  	.port_fdb_add		= b53_fdb_add,
+1da6df85c6fbed Florian Fainelli          2016-06-09  2304  	.port_fdb_del		= b53_fdb_del,
+ed3af5fd08ebe3 Florian Fainelli          2017-01-30  2305  	.port_mirror_add	= b53_mirror_add,
+ed3af5fd08ebe3 Florian Fainelli          2017-01-30  2306  	.port_mirror_del	= b53_mirror_del,
+5d65b64a3d9701 Florian Fainelli          2019-10-24  2307  	.port_mdb_add		= b53_mdb_add,
+5d65b64a3d9701 Florian Fainelli          2019-10-24  2308  	.port_mdb_del		= b53_mdb_del,
+6ae5834b983ac1 Murali Krishna Policharla 2020-03-27  2309  	.port_max_mtu		= b53_get_max_mtu,
+6ae5834b983ac1 Murali Krishna Policharla 2020-03-27  2310  	.port_change_mtu	= b53_change_mtu,
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2311  };
+967dd82ffc52e9 Florian Fainelli          2016-06-09  2312  
 
-CJ
+:::::: The code at line 2283 was first introduced by commit
+:::::: 967dd82ffc52e9d8ea0defde094f9a39a3f4eeed net: dsa: b53: Add support for Broadcom RoboSwitch
 
->   	INIT_WORK(&rb->work, rb_free_work);
->   
->   	all_buf = vmalloc_user((nr_pages + 1) * PAGE_SIZE);
+:::::: TO: Florian Fainelli <f.fainelli@gmail.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
