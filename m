@@ -1,108 +1,79 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F0314287;
-	Sun,  5 May 2024 10:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20D21BF3F
+	for <llvm@lists.linux.dev>; Sun,  5 May 2024 13:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714905859; cv=none; b=RWV1qUKxdtwe0F8O+ScgAIme1Rg3ZuuXsz32qpNDlETB8ToGSe69WPwGcY751HUUV8jB0JnyYcclSUporPxS0cZIPeoBmUY12DqoMUV6KQ/7rV/HQsq8VcyHIrasDacBCE+GtCho6fNCj7VjIvRVZ+d1mkxjC/yzazbaSmqdWII=
+	t=1714915274; cv=none; b=YBsf2aVJm4i55JYtrMPgFPjzhbxhbMcL3SRqWeopRqORcDEEq+DPsguOqswRvY5i95NEUJropnK/VSTthsMygHzu5iLzEibRFco7fjvWM221jC0UjJpOK3mHtWV9MfWCr4CxJ3PHPNJlR9uPBQt2kej6n8+drLGc16XZtUQ+bRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714905859; c=relaxed/simple;
-	bh=gCDN8vSpXsgSqp6/aF3SDEonm9JaIJPtc5i44GKRcbo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O8ZQuKF/hA4FGpdSK4PoEIjIrZATpwHJLPXcu1D5IuBCcBa2JkJWU0FLyzZECk7zKeeoPGHeEPRTgZN/8wUS1oCNSiofSOyBMtXOUJvmBSkKvB2xn3uBPIj0skKNqLZZJ8Vj07w220zMUj5C4dzPpuWt/iUx+1lG0yQ2nRkSs1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=loHE3C+M; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="loHE3C+M"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f4472561f1so998672b3a.0;
-        Sun, 05 May 2024 03:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714905857; x=1715510657; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gCDN8vSpXsgSqp6/aF3SDEonm9JaIJPtc5i44GKRcbo=;
-        b=loHE3C+MkVbv0gnEJ+PybIewh/gkPN4isAJxag6kriYrtWfFSG0s662DwUV7zqbUxE
-         TvDUBezprRe0FZqdtZrNga5iyL6KQ+wZIvRp1MkFt3x2JItA6aQBEZ97G2TwbE+iwxpS
-         BtFVkcjCc1qrjMd32UKMaSEZAzh0yUL0g77J8/4G/R8jBY9eOPoA3Ckj9tgBeZRvaxo7
-         PuUa68QCnrjLX7UbXLksL5hEUCDwTRee4bN8IkqXhYy/6QHfk6dbUsvzmrtg/tkng8pA
-         O8aHb3IQsQ+JOAfYTiljdJKEBF3HpN5NxvF+F26wRlNzmiKcwqrs6hWiSncXAp/bTE6B
-         Bh4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714905857; x=1715510657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gCDN8vSpXsgSqp6/aF3SDEonm9JaIJPtc5i44GKRcbo=;
-        b=TxFUBejzTnGuqNKBOWpGXmyJaIwYO94MuAiXRHzIbHyDZ0Jgd1nR0v8Q+wzzgzma3G
-         ts6ILve0c98oxRTYaaCli7FU6IbGpUDPKkbed56NNQg1USKhCT8Nb6AfOyeNfM5D+EOf
-         gIeg5/OasmgMnkOCEUCJqWi1QEsx1/j/3fY0xxjRZWc1bCJ4QY1tcRtOOBg9Tkzg6YJa
-         EWrdMh4H35vjex0MKOXMvKVytuE7N3RXXljkgZsncwAmeugrWyRmg+HxYR5J9Ej2bpkz
-         OSCT7q/J6c87T6ct1pg2uoX+nRC6K6cdXnUjiAL8OPhJZKiIfqkg/pXpXXwnR4/rCgkQ
-         GXeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXlwDzHp8tDOw4LOGe6bfzQBOi28pONVgKrRggBgoKgkXa4hc8Owou7Vh4SwIhn/+DmluDzylRj5uuVXzPLgB2unnTGOvRe4u+Ck3WlMN3PBwue1fwfCcxeyLUvCwVdLHLFBmE=
-X-Gm-Message-State: AOJu0YwITWNavrkuyY8FxnEqsZHQRBxkina9qN+RwWmlZEriMsEsWjl2
-	XWjPQMv+N3nHvAD57RVOWSC7zfR7WJGyT4Y2wGtuyUqFK6pl0MOCKURIFb2ezGyLxdOM5Ovcxcf
-	uVC3r4+EeiLEZofv2MtmlCeByYFM=
-X-Google-Smtp-Source: AGHT+IGVLcuJCQO8ZtaVJ6zUtvr+xIexPYoqf1aVfa8AKhUV9aw4qDoRseG4SiaBuv7b625uHalXRpGlahzy5H9xYeU=
-X-Received: by 2002:a05:6a00:8c4:b0:6f3:ea8a:f973 with SMTP id
- s4-20020a056a0008c400b006f3ea8af973mr11693922pfu.7.1714905857121; Sun, 05 May
- 2024 03:44:17 -0700 (PDT)
+	s=arc-20240116; t=1714915274; c=relaxed/simple;
+	bh=U8Zx21yumKBwvNpxrOL9i9gF2EPUJJL7/L/GmWttG2E=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=XmoJsFDnlywCQk23wWu1SJnCSPJAvvKo+b7Zw4h5IakZfeQMjRMWkcsgz3Zg+RdjSrkd8I3as2VbcTKpubgubk2v3jtH53Rwbezw9usDepivShtFBMoGBsLZayPWhGraxYPgdpWtoZpZRA6DAebG+0rb3b71Hhb3WrnLAO8yqa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-89-FQgjpD-sPLqqUMvw5kHpyg-1; Sun, 05 May 2024 14:21:09 +0100
+X-MC-Unique: FQgjpD-sPLqqUMvw5kHpyg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 5 May
+ 2024 14:20:35 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sun, 5 May 2024 14:20:35 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Justin Stitt' <justinstitt@google.com>, Edward Liaw <edliaw@google.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Shuah Khan
+	<shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, "H. Peter Anvin"
+	<hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel-team@android.com" <kernel-team@android.com>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>
+Subject: RE: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for
+ elf_hash
+Thread-Topic: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for
+ elf_hash
+Thread-Index: AQHanAFdbmzmhwAPx0KMYxInfI6/rrGIpXPg
+Date: Sun, 5 May 2024 13:20:35 +0000
+Message-ID: <b55272cb757743548c789aa8c0efa448@AcuMS.aculab.com>
+References: <20240501180622.1676340-1-edliaw@google.com>
+ <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
+In-Reply-To: <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240502092443.6845-2-visitorckw@gmail.com> <202405030808.UsoMKFNP-lkp@intel.com>
- <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name> <20240503041701.GA3660305@thelio-3990X>
- <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name> <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
- <20240503155401.GA3960118@thelio-3990X> <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
-In-Reply-To: <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 5 May 2024 12:42:53 +0200
-Message-ID: <CANiq72mYPV_rNFirr1q=hjjz2yDzw98qrwqY5c14G3odt+shcA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Kuan-Wei Chiu <visitorckw@gmail.com>, 
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 3, 2024 at 11:56=E2=80=AFPM Yury Norov <yury.norov@gmail.com> w=
-rote:
->
-> + * The __used attribute guarantees that the attributed variable will be
+From: Justin Stitt
+> Sent: 01 May 2024 20:55
+...
+> > static unsigned long elf_hash(const unsigned char *name)
+...
+> Is it possible to just change the types of the parameters of vdso_sym()
+> or does that trigger even more warnings on the callsites of vdso_sym()?
 
-We should probably mention functions as Nathan said (unless it does
-not work for some reason).
+Isn't the problem the definition of elf_hash()?
+A '\0' terminated string really ought to be 'char *' not 'unsigned char *'.
 
-> + * always emitted by a compiler. It doesn't prevent the compiler from
-> + * throwing the 'unused' warnings when it can't detect how the variable
+=09David
 
-Nit: "throwing the" -> "throwing" (I think)
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-Also, perhaps "when ..." -> "when it appears that the variable is not
-used" like in the documentation of the attribute or similar? (e.g. in
-the case that triggered the report, it is really unused, while one
-could read this as the compiler not being able to detect a use
-somewhere).
-
-> + * is actually used. It's a compiler implementation details either emit
-> + * the warning in that case or not.
-
-Is it an implementation detail or rather that they took different
-alternatives/options on purpose (even if not documented)? If we think
-it is just a consequence of their implementation, perhaps we should
-mention that and what GCC/Clang do today in their latest version, in
-case it changes (so that we know whether we need to remove the macro,
-for instance).
-
-None of the above is a big deal though -- thanks!
-
-Cheers,
-Miguel
