@@ -1,60 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8775623A8;
-	Sun,  5 May 2024 06:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEA64428
+	for <llvm@lists.linux.dev>; Sun,  5 May 2024 06:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714891253; cv=none; b=tm8URqp+ER69pN3IUUE1+sL/dOA+nxNvUh49GYx+O1yf14uJmrHLA48ieXm6KJ8P1TAG1EahUbpqLz5gTZI0VWB+jP2ZN9+vVNoZsms7HibJfutKJd6u9wvBClGDAZ7Qq9ckAdT3xW+K5lSXXbBo2pnPfCKLrvEQ2wK6ofZ47U8=
+	t=1714891719; cv=none; b=RPuzRfe3hc5tTtO6KEnrOkJxpxwBnhJ/HrZTWIBdUzFi9ae1wNK+cu67ui325gGh7I/lzRoJpcqfo4LeiJHLzK221HkjFAEpAGBFmnLyT+IfcnBIqeeqLt+6VQ1w26SQPAHBoSE4MY32GnDUIqk5LPxR2hIMzJTUZNKX7PU2WBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714891253; c=relaxed/simple;
-	bh=Xcc8RhRLk28gQ6j0i9uRyr552BLs964LoGEhz9ue+R4=;
+	s=arc-20240116; t=1714891719; c=relaxed/simple;
+	bh=RXOAbrpDgpGLFXAx46orQOJKxD+B8azOxvN9slFpzaY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K2f2WIngg5io83IAPjkXAp/fRU+IDlK324W4ftxRmovAtDxQUWKlHsvruIFF+8MxWYSu5LeKwCnrm491Cyh7Oez34mzCEQYrmHAG5oOeli8ug6XgFuQiqEbipsv268yLXSnCr12igkeJk3GttZtXALF722oX3tDe9vP2e7f+aAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ae0Sh6v+; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=sEEY9jfPRh7jxTSkMAPAa7OvrCtbesw8Yajx6oxyVMpjgX2vdJN2Cugd8bEKiCVmtVJJKwCBFBuTgS/rLt+LhPTAcC+LGGJcXuTfyLQ3TQjEjI0hnHJXY+UEX6U54mhpnJeIS6b5V7baIuIYpRiG99h9ZvP40l5BTgvq3ntY4/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=UEs8YhZf; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ae0Sh6v+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714891252; x=1746427252;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xcc8RhRLk28gQ6j0i9uRyr552BLs964LoGEhz9ue+R4=;
-  b=ae0Sh6v+ouBKdJGcbIrpw+SvJpwFy1QNT93blcTZydyRzlAx3qvkBgXz
-   +zH9e3E0Ss1EINkzsCvrLgE3HGYLMsAljPb9l85ick48wPCJkkTxN17Bz
-   pl74w7RLpw2twz/Rvf6ZVTxp+nkXksCLhWTx9+ddOjxWfinRD4LSUvQP9
-   FqOtSm01uUtLuYoNTLGUqhkvimeOTdjX5maBRftL271/A9JD3BFt4CLHG
-   zE0m/6zJ7g3q9+4q++McjPz8nnGiP0gTxIlpCcIXo2wqIlmJeHJ4CI5fa
-   JRtQ/vlqvnvZdZUZA4O3UpgK0RyMzpIg0qhPAWoC54qyTwhb742ndJL3m
-   g==;
-X-CSE-ConnectionGUID: rpoKFMdJT8ChAfC63CtrHg==
-X-CSE-MsgGUID: tBBTXwHoRs2XyCpRUwegmA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="13597877"
-X-IronPort-AV: E=Sophos;i="6.07,255,1708416000"; 
-   d="scan'208";a="13597877"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2024 23:40:51 -0700
-X-CSE-ConnectionGUID: yyMr83WxTxSnp4b/7SdlIg==
-X-CSE-MsgGUID: XDf+GOiNTQ21gBixMBSDGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,255,1708416000"; 
-   d="scan'208";a="65288782"
-Received: from lkp-server01.sh.intel.com (HELO 123fad1cf874) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 04 May 2024 23:40:49 -0700
-Received: from kbuild by 123fad1cf874 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s3VYF-000020-0J;
-	Sun, 05 May 2024 06:40:47 +0000
-Date: Sun, 5 May 2024 14:39:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/2] platform/x86/intel/ifs: Initialize AMX state for the
- scan test
-Message-ID: <202405051417.5CWuLrhT-lkp@intel.com>
-References: <20240430212508.105117-3-chang.seok.bae@intel.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UEs8YhZf"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1ecd9dab183so24829945ad.1
+        for <llvm@lists.linux.dev>; Sat, 04 May 2024 23:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1714891717; x=1715496517; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jHhjXzZFksYbod+Id4KGQBrNHX5j07+oNfn2k/vQfaE=;
+        b=UEs8YhZfVOQ3C0b0GPe+c42wbQrt7cvZSPRPDoJNBntEwhJWyNRD2+ZxbrBxlWit/W
+         EA88z3KU6a2yMBpHFv6WAKZ4c9tIkH8d+y80Hi94NrlN4NGyEroGdxfWAvhU7oTl8MTm
+         Y9FdJddFa/47FAGuAplNk/tEdEmTKJZo1bGvo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714891717; x=1715496517;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jHhjXzZFksYbod+Id4KGQBrNHX5j07+oNfn2k/vQfaE=;
+        b=qPA2Vywcv2RGohpRxM/qNAvVRLc2y9XeYWMd5mdN9lyEuLkLQtSur8bAf+j8qDxLsY
+         6lQsRjsGyiPzODGfHw4wnzA55OJXfD4Lq9w0900Sl5madvichuSu7syT3b9g200i2J/8
+         sC5ZpZgNKsKCBrNYukmyO7w7wb7T5+xG8vT8rVU6wbAnhutemXrzylzbrobvq9830pzv
+         XJETfuias6jC0khVOW2mDdMHW+l9oSWUxU/ZhLbCouRu3OF71npKnw3Umc0IGNpVfokr
+         8zN0fPiHxsRlb9hS2ch+6PdSHrZO/W95mZi2MxAaFeZME734KFoC3jCNiPrbZQrqpJOu
+         bCpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhkx4zOkXL+v1H9hnlFUiGlrf/shGAuuZJZ7npwq3+mfh8XHPYo82MU2Si4kXA+WHxSftPHPNH0Jg3/WXJpsPU+GMQFg==
+X-Gm-Message-State: AOJu0YzXCvsrNHX9vzWDox4LAzSFIyYAsEsnajIrVE4pIpjHPa9aJ5Pa
+	DPeWi2PCUBlyvNK1b4e9dZQlFfOWGVQ4Lip1bVi2haKH0gjmbw0TjLYUS+ceAQ==
+X-Google-Smtp-Source: AGHT+IGHFQZeorrILclN2v4X0ie/TALNwsi+wwr/27nntpfpvsDMRS89bEaJxITb4Y8FGrRf8qcf7Q==
+X-Received: by 2002:a17:902:dac1:b0:1eb:7162:82c7 with SMTP id q1-20020a170902dac100b001eb716282c7mr9274029plx.18.1714891717283;
+        Sat, 04 May 2024 23:48:37 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:8263:3b89:bcee:2ed4])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170903028300b001e7c05cf1a2sm5978407plr.112.2024.05.04.23.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 May 2024 23:48:36 -0700 (PDT)
+Date: Sun, 5 May 2024 15:48:32 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org
+Cc: kernel test robot <lkp@intel.com>, Minchan Kim <minchan@kernel.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH 08/14] zram: check that backends array has at least one
+ backend
+Message-ID: <20240505064832.GC8623@google.com>
+References: <20240503091823.3616962-9-senozhatsky@chromium.org>
+ <202405041440.UTBQZAaf-lkp@intel.com>
+ <20240504071416.GH14947@google.com>
+ <20240504161004.f5a0aab5e5aa1033d4696c20@linux-foundation.org>
+ <20240505043957.GA8623@google.com>
+ <20240505051305.GB8623@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,60 +73,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240430212508.105117-3-chang.seok.bae@intel.com>
+In-Reply-To: <20240505051305.GB8623@google.com>
 
-Hi Chang,
+On (24/05/05 14:13), Sergey Senozhatsky wrote:
+> On (24/05/05 13:39), Sergey Senozhatsky wrote:
+> [..]
+> > > I guess just pick one if none were selected.
+> 
+> How do I pick one if none were selected? Does Kconfig support
+> something like that?
 
-kernel test robot noticed the following build errors:
+This triggers Kconfig error:
 
-[auto build test ERROR on e67572cd2204894179d89bd7b984072f19313b03]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chang-S-Bae/x86-fpu-Extend-kernel_fpu_begin_mask-to-initialize-AMX-state/20240501-054234
-base:   e67572cd2204894179d89bd7b984072f19313b03
-patch link:    https://lore.kernel.org/r/20240430212508.105117-3-chang.seok.bae%40intel.com
-patch subject: [PATCH 2/2] platform/x86/intel/ifs: Initialize AMX state for the scan test
-config: x86_64-buildonly-randconfig-004-20240505 (https://download.01.org/0day-ci/archive/20240505/202405051417.5CWuLrhT-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240505/202405051417.5CWuLrhT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405051417.5CWuLrhT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/platform/x86/intel/ifs/load.c:9:
->> drivers/platform/x86/intel/ifs/ifs.h:334:2: error: call to undeclared function 'kernel_fpu_begin_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     334 |         kernel_fpu_begin_mask(KFPU_AMX);
-         |         ^
->> drivers/platform/x86/intel/ifs/ifs.h:334:24: error: use of undeclared identifier 'KFPU_AMX'
-     334 |         kernel_fpu_begin_mask(KFPU_AMX);
-         |                               ^
->> drivers/platform/x86/intel/ifs/ifs.h:339:2: error: call to undeclared function 'kernel_fpu_end'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     339 |         kernel_fpu_end();
-         |         ^
-   3 errors generated.
+config ZRAM_EMPTY_BACKENDS_FIXUP
+       bool
+       depends on ZRAM && !ZRAM_BACKEND_LZO && !ZRAM_BACKEND_LZ4 && \
+               !ZRAM_BACKEND_LZ4HC && !ZRAM_BACKEND_ZSTD && \
+               !ZRAM_BACKEND_DEFLATE
+       select ZRAM_BACKEND_LZO
 
 
-vim +/kernel_fpu_begin_mask +334 drivers/platform/x86/intel/ifs/ifs.h
+drivers/block/zram/Kconfig:17:error: recursive dependency detected!
+drivers/block/zram/Kconfig:17:  symbol ZRAM_BACKEND_LZO is selected by ZRAM_EMPTY_BACKENDS_FIXUP
+drivers/block/zram/Kconfig:52:  symbol ZRAM_EMPTY_BACKENDS_FIXUP depends on ZRAM_BACKEND_LZO
 
-   327	
-   328	static inline void ifs_fpu_begin(void)
-   329	{
-   330		/*
-   331		 * The AMX state must be initialized prior to executing In-Field
-   332		 * Scan tests, according to Intel SDM.
-   333		 */
- > 334		kernel_fpu_begin_mask(KFPU_AMX);
-   335	}
-   336	
-   337	static inline void ifs_fpu_end(void)
-   338	{
- > 339		kernel_fpu_end();
-   340	}
-   341	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'm a little surprised by this - EMPTY_BACKENDS_FIXUP does not depend
+on ZRAM_BACKEND_LZO, it depends on NOT ZRAM_BACKEND_LZO.
+
+Let me Cc linux-kbuild. Kbuild folks, how do I workaround this?
