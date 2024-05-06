@@ -1,128 +1,168 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0307113D50E
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 18:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F09413D50E
+	for <llvm@lists.linux.dev>; Mon,  6 May 2024 18:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715019606; cv=none; b=qFXwz1lX/iWdF5aPOrwbGXR9Sof6BBOFHcCt7I7crm4BRAB4ulzwAuzIjaaK401mUdUWLzLGemEClh/eMFjIdsaQUlT00xnJeT4aCLOI/T/tJdTZahTwhtfDLIlsHEC8aNrUXsj+hrkOgqUCRBAGTrkMNA+3504Pu2hP/TWMlfg=
+	t=1715019900; cv=none; b=BXwgHq+V9FyJg4Mx7/rT6wnY3MD5QDlNP9E9sgXT5w+R7my9kqzTNMdLAIshjvXNkUEIEKV5DNchS6xy3MrsSccOMLePjC4SAEdsCoosTLjEQ7KF0qJGrMSOBlaOYgjYnMpT//mPcqc3p7qpmPfPMFa9EgXGwG1EjYDQ+UpS6OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715019606; c=relaxed/simple;
-	bh=29kh0OQhNn8m2tDtlHwrVE2HKUPGcD9TJf7JFu5B20I=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ALm71xZRfM99RPIQqNZHcglLYtWiv32Tsx0lMarRvlKu89FWXBztfYTxWYk/qjs0G98RUxYmmlzvXVxINzwcae88wFDbXcN8ErGXU4YDMMc1MPTfETMCoSrVuxzp6/uYdUd2KzV9CGlNBx3uKMmhs9m2AMiUUXpFNkvM5jWrzKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iyW7x07G; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+	s=arc-20240116; t=1715019900; c=relaxed/simple;
+	bh=GAhjzktko9OJNax9dYX89eovXWodEDQfe816vqcI7KY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ryfGeb+stLIzWHZa4tmxtaNKiQHqPJBcTEr2kqE1sHimZXXifs2pyQkF7O94Gqow38OeGvaJO6mx+GM4F0jEVhns6DmrxzdmTapScdYkuuT7fV5vf4K5EzzTjuk+Nsco+lk8UHqTx+ww/CpybXkKbZpHqM6iLvVNOEli4BIVEFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=dGqovjk8; arc=none smtp.client-ip=80.12.242.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iyW7x07G"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1e45572fb3fso21969495ad.0
-        for <llvm@lists.linux.dev>; Mon, 06 May 2024 11:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715019604; x=1715624404; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PEorNdErbbliX1pJbW2p9S8u6EaFLwcWfv6R20jo+hk=;
-        b=iyW7x07GsNs3pOhnKPzVnEiWo0zFLrGKc/IegTWhfQtBWhrKfDCSJNCrnoLsTWdD9G
-         a0iHnfTiSrbhfgSf9Y6FRJfUFxuca5f/sLyghaQ+Wy/BUOMFZdHuIBHvRJVPvsN3tp1C
-         minbQpT1fC/XAQZAYv/cGWVNWVhjlw8kva9r7STBZOymM5uikxUZt9slFZrt0US1XUCJ
-         Q1AkypAZabWNndKkIIil/0j5Zzkxsnuz7+yjMXRZ1gjmgeA1tA4RkQ94r19ub3z4OZRk
-         TZQCxp4DjOz/HbWrtW2yNCbSCkKVZGA2bjqQO+ADek0+ERP41BLBz3HSpKv4l5UCqkXg
-         mFog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715019604; x=1715624404;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PEorNdErbbliX1pJbW2p9S8u6EaFLwcWfv6R20jo+hk=;
-        b=YrPu81b6q2tepjHbgi/S36MiR/ck+6HwRdipUqREgKtELlj5vr5sWrkAVlXpB6mvlp
-         Hh6s62w9EXiTnTUAM66MnahCV0Fv56cGwRHAyWsvDMEBTUWShVb1opj+HezU5C/loR13
-         2PBgv7VjWXLurBfi6mZwG6okYQENXK8a0nhjblUTZvsmavDh0VLOYL4KNGP5pjrsoh9B
-         DZ13nWIbKvDGujilZ5d8UjpuEOrr0jhm6+aP/MpDT24vSwRkGrXsLnw9oijHsVLaTxJ+
-         ENi1lK+QQc3msBGSIO7kljqzGN+/MGOnR2pu7Siz2p5nmiTbnif4UHVLa6dirz6mgaL6
-         fHFw==
-X-Forwarded-Encrypted: i=1; AJvYcCX7HbnxWHb01hnJFNugHkzJ/JylUOFoPUFJZImNqC4Rt2JUCvQ6bQiq5lKWaHBiZ2WJBQwGZb88rgIkhYGXAvWDRn3DDA==
-X-Gm-Message-State: AOJu0Yzmfa6bkbCANubMmV/7EzqzxTOpFAMATKh5mz0HjAqgWwD+eGte
-	TS3dl1gjngVXtV1EcpJPhz8y8svlTKZlsBLXQZKV1a6t6xJM3koEap5BmrMXe807vQAY1rn1o74
-	y/w==
-X-Google-Smtp-Source: AGHT+IESrbjMUY8Mv1UKtz5WxeKTzz99i+OpRkFhriDD5+V9JAcwp6S8JYlh7Y55BwCk8V/xyJtIzeIlI/M=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a17:902:ec89:b0:1e8:d158:4e13 with SMTP id
- x9-20020a170902ec8900b001e8d1584e13mr796623plg.7.1715019604185; Mon, 06 May
- 2024 11:20:04 -0700 (PDT)
-Date: Mon,  6 May 2024 18:19:49 +0000
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="dGqovjk8"
+Received: from [192.168.1.37] ([86.243.17.157])
+	by smtp.orange.fr with ESMTPA
+	id 4303s7MviME2z4303s0Gms; Mon, 06 May 2024 20:23:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1715019829;
+	bh=vwITn4CstTzZtAQHEM9ECl1VAD7MHWLyJIGr0JqDJWM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=dGqovjk8SpXn+6fzebG7jnal19Q9YCOe4fQ71SJ2pHcDylCc9zwstLn198z9fAnSc
+	 kGLiPW7zOmVLTimp1JWnQC1tfZZEMQzu33s73nO1THQfHx8dDoRKkG5+Cc9CChsFMb
+	 dVLXabdsyBl1aq89K9kkXBeV1W3COUGw9yuGrDNLG7l0zrKsY3+bUbrryxjpIw4kVC
+	 y/cB9NsqVfHOOBjbqphmRvNggJR0/CwzgC/rWrW169SeQvOL9DX7z9pc71BwJo3EFN
+	 klsXlnu3HhSfimK8QjXXheWEkyBwRsHCrKrdQ+sLzOZy9a+mEk4Ly5xI1kxctiuws9
+	 BfpUu8Q9rDsWg==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 06 May 2024 20:23:49 +0200
+X-ME-IP: 86.243.17.157
+Message-ID: <b3509a36-1fbc-4311-853b-bb5e6d25f0ad@wanadoo.fr>
+Date: Mon, 6 May 2024 20:23:43 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
-Message-ID: <20240506181951.1804451-1-edliaw@google.com>
-Subject: [PATCH v4] selftests/vDSO: change elf_hash parameter to signed char
-From: Edward Liaw <edliaw@google.com>
-To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andy Lutomirski <luto@mit.edu>, "H. Peter Anvin" <hpa@linux.intel.com>
-Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] perf/ring_buffer: Prefer struct_size over open coded
+ arithmetic
+To: Kees Cook <keescook@chromium.org>, Erick Archer <erick.archer@outlook.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+References: <AS8PR02MB7237569E4FBE0B26F62FDFDB8B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <51a49bae-bd91-428e-b476-f862711453a0@wanadoo.fr>
+ <AS8PR02MB7237EF9D1962834BE4D2C5F88B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <202405060856.53AFAE4F22@keescook>
+Content-Language: en-MW
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <202405060856.53AFAE4F22@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Fixes clang compilation warnings by changing elf_hash's parameter type
-to char * and casting to unsigned char * inside elf_hash:
+Le 06/05/2024 à 18:23, Kees Cook a écrit :
+> On Sun, May 05, 2024 at 07:31:24PM +0200, Erick Archer wrote:
+>> On Sun, May 05, 2024 at 05:24:55PM +0200, Christophe JAILLET wrote:
+>>> Le 05/05/2024 à 16:15, Erick Archer a écrit :
+>>>> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+>>>> index 4013408ce012..080537eff69f 100644
+>>>> --- a/kernel/events/ring_buffer.c
+>>>> +++ b/kernel/events/ring_buffer.c
+>>>> @@ -822,9 +822,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+>>>>    	unsigned long size;
+>>>
+>>> Hi,
+>>>
+>>> Should size be size_t?
+>>
+>> I'm sorry, but I don't have enough knowledge to answer this question.
+>> The "size" variable is used as a return value by struct_size and as
+>> a parameter to the order_base_2() and kzalloc_node() functions.
+> 
+> For Linux, size_t and unsigned long are the same (currently).
+> Pedantically, yes, this should be size_t, but it's the same.
+> 
+>> [...]
+>>> 	all_buf = vmalloc_user((nr_pages + 1) * PAGE_SIZE);
+>>> 	if (!all_buf)
+>>> 		goto fail_all_buf;
+>>>
+>>> 	rb->user_page = all_buf;
+>>> 	rb->data_pages[0] = all_buf + PAGE_SIZE;
+>>> 	if (nr_pages) {					<--- here
+>>> 		rb->nr_pages = 1;			<---
+>>> 		rb->page_order = ilog2(nr_pages);
+>>> 	}
+>> [...]
+>> I think that we don't need to deal with the "nr_pages = 0" case
+>> since the flex array will always have a length of one.
+>>
+>> Kees, can you help us with this?
+> 
+> Agh, this code hurt my head for a while.
+> 
+> all_buf contains "nr_pages + 1" pages. all_buf gets attached to
+> rb->user_page, and then rb->data_pages[0] points to the second page in
+> all_buf... which means, I guess, that rb->data_pages does only have 1
+> entry.
+> 
+> However, the nr_pages == 0 case is weird. Currently, data_pages[0] will
+> still get set (which points ... off the end of all_buf). If we
+> unconditionally set rb->nr_pages to 1, we're changing the behavior. If
+> we _don't_ set rb->data_pages[0], we're changing the behavior, but I
+> think it's an invalid pointer anyway, so this is the safer change to
+> make. I suspect the right replacement is:
+> 
+> 
+> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+> index 4013408ce012..7d638ce76799 100644
+> --- a/kernel/events/ring_buffer.c
+> +++ b/kernel/events/ring_buffer.c
+> @@ -916,15 +916,11 @@ void rb_free(struct perf_buffer *rb)
+>   struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+>   {
+>   	struct perf_buffer *rb;
+> -	unsigned long size;
+>   	void *all_buf;
+>   	int node;
+>   
+> -	size = sizeof(struct perf_buffer);
+> -	size += sizeof(void *);
+> -
+>   	node = (cpu == -1) ? cpu : cpu_to_node(cpu);
+> -	rb = kzalloc_node(size, GFP_KERNEL, node);
+> +	rb = kzalloc_node(struct_size(rb, nr_pages, 1), GFP_KERNEL, node);
+>   	if (!rb)
+>   		goto fail;
+>   
+> @@ -935,9 +931,9 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+>   		goto fail_all_buf;
+>   
+>   	rb->user_page = all_buf;
+> -	rb->data_pages[0] = all_buf + PAGE_SIZE;
+>   	if (nr_pages) {
+>   		rb->nr_pages = 1;
+> +		rb->data_pages[0] = all_buf + PAGE_SIZE;
+>   		rb->page_order = ilog2(nr_pages);
+>   	}
 
-parse_vdso.c:206:22: warning: passing 'const char *' to parameter of
- type 'const unsigned char *' converts between pointers to integer types
- where one is of the unique plain 'char' type and the other is not
- [-Wpointer-sign]
-        ver_hash = elf_hash(version);
-                            ^~~~~~~
-parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-static unsigned long elf_hash(const unsigned char *name)
-                                                   ^
-parse_vdso.c:207:46: warning: passing 'const char *' to parameter of
- type 'const unsigned char *' converts between pointers to integer types
- where one is of the unique plain 'char' type and the other is not
- [-Wpointer-sign]
-        ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
-                                                    ^~~~
-parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-static unsigned long elf_hash(const unsigned char *name)
+This is also what make the most sense to me.
 
-Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
-v2: updated commit message with correct compiler warning
-v3: fixed checkpatch errors and indentation
-https://lore.kernel.org/all/20240501180622.1676340-1-edliaw@google.com/
-v4: moved the typecast into elf_hash based on libelf
-https://sourceforge.net/p/elftoolchain/code/HEAD/tree/trunk/libelf/elf_hash.c#l47
----
- tools/testing/selftests/vDSO/parse_vdso.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+CJ
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 413f75620a35..33db8abd7d59 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -56,12 +56,15 @@ static struct vdso_info
- } vdso_info;
-
- /* Straight from the ELF specification. */
--static unsigned long elf_hash(const unsigned char *name)
-+static unsigned long elf_hash(const char *name)
- {
- 	unsigned long h = 0, g;
--	while (*name)
-+	const unsigned char *s;
-+
-+	s = (const unsigned char *) name;
-+	while (*s)
- 	{
--		h = (h << 4) + *name++;
-+		h = (h << 4) + *s++;
- 		if (g = h & 0xf0000000)
- 			h ^= g >> 24;
- 		h &= ~g;
---
-2.45.0.rc1.225.g2a3ae87e7f-goog
+>   
+> 
+> 
+> Also, why does rb_alloc() take an "int" nr_pages? The only caller has an
+> unsigned long argument for nr_pages. Nothing checks for >INT_MAX that I
+> can find.
+> 
 
