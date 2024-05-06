@@ -1,150 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from slategray.cherry.relay.mailchannels.net (slategray.cherry.relay.mailchannels.net [23.83.223.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BC1155A2B;
-	Mon,  6 May 2024 19:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715025179; cv=none; b=oTUbrRYVvNT7zRioEaj51ovvVGEq9HS4mKOZldn8jOKWNnLfMDHCVRhnZgBg3NRy/Bc7ktO504EkIS3b1eizATR4EsQf8T7haR7aDJR1ONfWdhTHww6QrOFw6FjFeuCqpDEwIktTOOuYNUrpVmte0AbK0CRi4zxRnVAugeBLDMc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715025179; c=relaxed/simple;
-	bh=vNCnplZOaUO6x92USkHDCOGGh5YehHMZoq5gbySiqXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=S06fGKzu4XcUzXsU4S+QbKJASlvScsLo1tnMwyhxdfVPTM3qq4mugmQyR21bE+IgYaSF85iV54iDvw4+d2eEQ5JiIgC89QnOlUkm5rbD4YLhipRk3iAlV1nbdgXK1hOm1fSjGU3IuTk0NtYPUPaUpgb9HldpVWah70+7jUm+Dh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bm3qJSeX; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8729B56B76
+	for <llvm@lists.linux.dev>; Mon,  6 May 2024 20:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.223.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715026747; cv=pass; b=afVaPUQTtJtzpLwWr5DHMKbNQbnguCu4HBmrlZkyOjX45Zphp31EHySZ4mnFb12DsVAkxgCmpr72cNhNPAL70HgmBHkvxOjuHbnwHYJoWCQF9O0y2VwDdVZDoonagJFBrClL7vLAU7vTLvyeGLuvFLX/ejk/RRHMps1ajuoB5hI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715026747; c=relaxed/simple;
+	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mCwqvJk9ct8mT76B7/8v9d+sreXpu2iEh8XoKPlEM+jFGq9NMxTsunUtrpe4DzOGG4GpeWcu5qKIW+RSa4v09Y94YzzkJx929RWOZOZqBU+DytFR+1vpLONgbh1+1TErWXmsZngjI4LiibiXrJFDIPbDuOJaf7TjjiduQ0QUEaA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=mFMPkPoy; arc=pass smtp.client-ip=23.83.223.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bm3qJSeX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715025178; x=1746561178;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vNCnplZOaUO6x92USkHDCOGGh5YehHMZoq5gbySiqXo=;
-  b=bm3qJSeXY1727lrLz43Xz3m5yKC3T610OJ+I2SNcUlnQS1jUJnsFBOWm
-   Db29koBgZ9AtLdiKqJQa7FjCVYP59E9BqR94pbYlF1aW68i7UA7x+4a9T
-   sSvrbkf3U4kGY/GOnfH7L9ATriBLo0F/iDV3Xbn6Q3/5rXYnD/DKe2SOp
-   jrl48SmB6StDwXsNftMl++PQARjP3AhcoRvL2YCv3HVCNk7/Y8MI8gY1w
-   J/EgT17mY5sGOUI8rl8hBMJOsPnS4H+Lhnq8BaxN1D7quSRGs6gttNU5j
-   8CJ2OqmC3YcA/HNmNA5auZP4IV0bU6KM9maGYVMgRfTe6X9KUqGDeyEQ1
-   w==;
-X-CSE-ConnectionGUID: +oUkBqi7S/e789y+woc9sw==
-X-CSE-MsgGUID: Dypxj45HQZ6u2HCjnH7alA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="14608881"
-X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
-   d="scan'208";a="14608881"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 12:52:58 -0700
-X-CSE-ConnectionGUID: NUbmjKZuQCa7O7R4JzG58w==
-X-CSE-MsgGUID: z7g6SbHXS1u2wMZOg8gIpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
-   d="scan'208";a="65738947"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 06 May 2024 12:52:56 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s44OL-0000zx-26;
-	Mon, 06 May 2024 19:52:53 +0000
-Date: Tue, 7 May 2024 03:52:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [chao:bugfix/syzbot 30/42] fs/f2fs/node.c:1357:1: warning: unused
- label 'out_dec'
-Message-ID: <202405070348.vi2230RC-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="mFMPkPoy"
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id EAFFB43B8B;
+	Mon,  6 May 2024 16:13:39 +0000 (UTC)
+Received: from pdx1-sub0-mail-a205.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 5B03143774;
+	Mon,  6 May 2024 16:13:39 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1715012019; a=rsa-sha256;
+	cv=none;
+	b=vJSMT1kScKcngTQJqRsp9Zz6KDnOhYBfO2uNGDYmM+D/FoSyYpr2cG0V9BMCbSx7zJcPPV
+	3PDpggt2Bx+mlU0Q8jzAXCEDQyM6c7zstuXdMR1re6WZGUg9JjLIXjEWrN4EZFPxyA96ad
+	FrYU+CdTppiuEdx6A5SyoYr/FWGiALJIlYBmcIPD4W5vSOVo4Shy1cbC8BgCE+D+4WsMA8
+	VppsmqehmxHA5qDJMqWaV+cWhMdqye4vkcgmM+jWM0wVBxctf/PHz0XeV9TtDRIVeMMuP2
+	FLfXROyfbZlflPQiTmSM+Nx/cvXJYX9cyqThMvLEukeeuIF6eZaaEJjSXMjdNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1715012019;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
+	b=1remKSxbguFaVYzfns6YSyVY3e67fyIG9Vwp1Dgd5PJO8pAMqHi58NZeQXMKLi9DBL3YGf
+	dCCUgDkGWqJkyep4Xn4f3zdInNnvISEJNPavTeZ3MaDbpmmRXrGX10c7Kef+YVo77IW1JJ
+	fpOTYP5xKGL700XcBXxcmBS+D7T2ZyOTrY3Hez3/CcXPXHCP11KFcdkYzrFbwJrIh2CNyB
+	1tXIPxhJa3O18W37k9YaMvaNs6Zdj/EZ4AY4eS/X6Q65lYfkAXhrsTtgbQVg3A9twg1e3z
+	gCJF4xlEh8YHTBXzpmlOaicZDEIGmXBwUsNKno7szE9cNQdLg9TCj4R6RSFJtw==
+ARC-Authentication-Results: i=1;
+	rspamd-5d55749bb4-bp2gv;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Army-Battle: 0f90245f25a5cde6_1715012019744_1900881551
+X-MC-Loop-Signature: 1715012019744:224400567
+X-MC-Ingress-Time: 1715012019744
+Received: from pdx1-sub0-mail-a205.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.119.153.203 (trex/6.9.2);
+	Mon, 06 May 2024 16:13:39 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a205.dreamhost.com (Postfix) with ESMTPSA id 4VY60L3d1mzDF;
+	Mon,  6 May 2024 09:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1715012019;
+	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=mFMPkPoyJIC1AJUa6jDXzZHagJEjrWf8lHKtiRHodEwj/+t9JHSws24nE4ynOwgSD
+	 I+Nkdp1tM1Kk7WwVseuf1F69iBe3C555gEpo6uts4j9w5FCQbAKrvPkSQhx4TQia3z
+	 mE1RS7+CmhZUV1qfA8EHpU1DuczAtffbGty1OMfesh7FYrcbSxKc1XSWCP0CrngbFJ
+	 jJqqbEdyzWEP/Iea81q8FGQ+20sB9tPyf2FUYv4z5iagY5jr60YxTZpHxduxPdGm9G
+	 zZhRVWJXAs2na2d4vvbcGuWu239JaVa0lh7OLuPsHNSU7ZMbleeDF2CDnLT7ZfNzxf
+	 RKqv4VCFrGr+Q==
+Date: Mon, 6 May 2024 09:13:35 -0700
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	=?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@igalia.com>,
+	"Nysal Jan K . A" <nysal@linux.ibm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/3] selftests/futex: clang-inspired fixes
+Message-ID: <20240506161335.d6vzvsx74xx4mg7p@offworld>
+References: <20240503041843.99136-1-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
+In-Reply-To: <20240503041843.99136-1-jhubbard@nvidia.com>
+User-Agent: NeoMutt/20220429
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/syzbot
-head:   6fd891b7248d0b825dbff6454be21f60c7ba1fb0
-commit: 144ab4eadffa6ed7dfa906c24e27134c78a0b01c [30/42] f2fs: fix to release node block count in error path of f2fs_new_node_page()
-config: x86_64-buildonly-randconfig-005-20240507 (https://download.01.org/0day-ci/archive/20240507/202405070348.vi2230RC-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405070348.vi2230RC-lkp@intel.com/reproduce)
+On Thu, 02 May 2024, John Hubbard wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405070348.vi2230RC-lkp@intel.com/
+>Hi,
+>
+>Here's a few fixes that are part of my effort to get all selftests
+>building cleanly under clang. Plus one that I noticed by inspection.
+>
 
-All warnings (new ones prefixed by >>):
+lgtm - feel free to add:
 
->> fs/f2fs/node.c:1357:1: warning: unused label 'out_dec' [-Wunused-label]
-    1357 | out_dec:
-         | ^~~~~~~~
-   1 warning generated.
-
-
-vim +/out_dec +1357 fs/f2fs/node.c
-
-  1306	
-  1307	struct page *f2fs_new_node_page(struct dnode_of_data *dn, unsigned int ofs)
-  1308	{
-  1309		struct f2fs_sb_info *sbi = F2FS_I_SB(dn->inode);
-  1310		struct node_info new_ni;
-  1311		struct page *page;
-  1312		int err;
-  1313	
-  1314		if (unlikely(is_inode_flag_set(dn->inode, FI_NO_ALLOC)))
-  1315			return ERR_PTR(-EPERM);
-  1316	
-  1317		page = f2fs_grab_cache_page(NODE_MAPPING(sbi), dn->nid, false);
-  1318		if (!page)
-  1319			return ERR_PTR(-ENOMEM);
-  1320	
-  1321		if (unlikely((err = inc_valid_node_count(sbi, dn->inode, !ofs))))
-  1322			goto fail;
-  1323	
-  1324	#ifdef CONFIG_F2FS_CHECK_FS
-  1325		err = f2fs_get_node_info(sbi, dn->nid, &new_ni, false);
-  1326		if (err)
-  1327			goto out_dec;
-  1328	
-  1329		if (unlikely(new_ni.blk_addr != NULL_ADDR)) {
-  1330			err = -EFSCORRUPTED;
-  1331			set_sbi_flag(sbi, SBI_NEED_FSCK);
-  1332			f2fs_handle_error(sbi, ERROR_INVALID_BLKADDR);
-  1333			goto out_dec;
-  1334		}
-  1335	#endif
-  1336		new_ni.nid = dn->nid;
-  1337		new_ni.ino = dn->inode->i_ino;
-  1338		new_ni.blk_addr = NULL_ADDR;
-  1339		new_ni.flag = 0;
-  1340		new_ni.version = 0;
-  1341		set_node_addr(sbi, &new_ni, NEW_ADDR, false);
-  1342	
-  1343		f2fs_wait_on_page_writeback(page, NODE, true, true);
-  1344		fill_node_footer(page, dn->nid, dn->inode->i_ino, ofs, true);
-  1345		set_cold_node(page, S_ISDIR(dn->inode->i_mode));
-  1346		if (!PageUptodate(page))
-  1347			SetPageUptodate(page);
-  1348		if (set_page_dirty(page))
-  1349			dn->node_changed = true;
-  1350	
-  1351		if (f2fs_has_xattr_block(ofs))
-  1352			f2fs_i_xnid_write(dn->inode, dn->nid);
-  1353	
-  1354		if (ofs == 0)
-  1355			inc_valid_inode_count(sbi);
-  1356		return page;
-> 1357	out_dec:
-  1358		dec_valid_node_count(sbi, dn->inode, !ofs);
-  1359	fail:
-  1360		clear_node_page_dirty(page);
-  1361		f2fs_put_page(page, 1);
-  1362		return ERR_PTR(err);
-  1363	}
-  1364	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
