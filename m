@@ -1,142 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF3815B978;
-	Mon,  6 May 2024 22:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70B52232A;
+	Mon,  6 May 2024 22:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715033313; cv=none; b=nYdZSEBNGkDpffg4jEgc6NXqEEz0s+NZVbZwR+8kI58ETZhOBV1GeoNSgwXQbLXPT8o6GB18MqCwNYBjXklZ4bXBsd6gi3+k2XIkL2TOwif5OpL6VW9kK60qTfRCBALz22nBfSOOgzAe7K51N3KHJDMFCQSkGWjUk9+U6nOqIFM=
+	t=1715035648; cv=none; b=PLrsHrSw339vGyp35YKbQgoJ1y4ukxDtMHm+Q1NUF7ddSNp7mowTLu2NR5zkOZIOCR05xOB9/RlBOZrF4w/ldM0Li4WxS0zh0pdnysDq0SO0ld1PFcsDjI01cySdwHiw30ECs97Nn6EJRU09H4p/65FcUhuCZepqd/17TVSkuQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715033313; c=relaxed/simple;
-	bh=IVR3cD90qV8FJEIJlOYyF0vd8ieS/4RwIrooo0SeCUY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kVEI6KS+xsNm9TWoJ0IKHu8p4MwW+H5MJ5y7ihrDjJ/rC7Wbxm2pgJiJfZPq1GxuNvrDFkj9C/HkreT6+yQMJr/B9ZBNvSUy1gp+5uzjeA44uOvXvPxxCSOcHNQRbzYJpyjHnY0VRAd9P8eSaAA4IakCQz+hLmh6ZHLbjn59Dis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UuZeWrNI; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715035648; c=relaxed/simple;
+	bh=xah3eiBvt2IRFNfHQzMpUEiliy3kzKTT1T5VLMfv/Ms=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YUlI3I2wwgxLFmvO4LJfZPWzQfFpN8tcBvqNKBMgVb/FfJY4RVVM7t3kjyovGAxvE+w69jy0gOYCqN5mbD1IbEW9EQnpxeca4f5rdrheAqCxZQuxaxzQGzO5MoXtmuruSXplavWDdXAbKnFHFmYvtghbEFA3S/Vzv1NkQTrx2U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FwK5f46w; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UuZeWrNI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715033312; x=1746569312;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IVR3cD90qV8FJEIJlOYyF0vd8ieS/4RwIrooo0SeCUY=;
-  b=UuZeWrNIZEGuGhcHkxnXgZ7oP9eBs61TwIW3QsPV2kR5ZJMzY0FpDDky
-   PFHrdTqQN9PfKCjHxR768+EyAZJIgWLltA166/ZLtQ03ZjndBirr4tFr0
-   eEJnXIC7Av1hTa9w7D6AHWMxX5O0rHGzVt/greSloqFJpkMSoGi8Oz5Z0
-   8+lteKiVd1kAUJ7yjZqXMEogl91QR89EyeAjzqpGcR/bpYrvm3pHIobW9
-   iKjOMDnvEcSj1zjLu0jdHxXrp4qXajg035M8ouhj3LP7OaOyaGiaqiI7O
-   t5YKNVc3aSywWPaiHe1MY7dy5gGI3KvDmFl8K9chiLaoHiyhKytXvLjVT
-   g==;
-X-CSE-ConnectionGUID: Db9zUysJRQuxM4FCeDrIlQ==
-X-CSE-MsgGUID: Gg9AUzWYSiGEJ+bhyEtmew==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="21354459"
-X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
-   d="scan'208";a="21354459"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 15:08:31 -0700
-X-CSE-ConnectionGUID: 8lLKxjoKTj+jZEvgvFnETw==
-X-CSE-MsgGUID: N8cGphcYQpexCgq8kcrImw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
-   d="scan'208";a="28293505"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 06 May 2024 15:08:29 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s46VX-00015G-0N;
-	Mon, 06 May 2024 22:08:27 +0000
-Date: Tue, 7 May 2024 06:08:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [chao:bugfix/syzbot 40/42] ld.lld: error: duplicate symbol:
- __pfx_f2fs_build_fault_attr
-Message-ID: <202405070648.GAPbgYby-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FwK5f46w"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-de604ca3cfcso2476157276.3;
+        Mon, 06 May 2024 15:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715035646; x=1715640446; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=I5ntu6mt3uy8mRpEVTg+tphF2bUMaNINXCqe+HKq8KM=;
+        b=FwK5f46w0GwtJ6K4/A41Et1G0ZbeATIAZF8fCeYyqe5QYXJghkEmuIaVFbgPvHadND
+         h9xSnIbY6NZoE0hdJPlPUmuqXBppcBImzW3Dt9e2AsKDjNJINYPcHBeNwih+gO/Bgbqd
+         lZrtrx0xuKmRzhDAJZKrEVU3qy4Q1aSVJGZV6YlmYLdh7XlU6w5/hrfYgmMr5xAn8ZpM
+         JOfAZyN3x0ABSpu2LVE2fR2oRgiNvvlsL29XwKkRFsZNwBuHOeAzm6Yx+V1BNALJ6Zax
+         cJE+6wAHxk96Xvs8D7E/1zwLoF9+tznZMPTue5uvf6as7xb8AO/jxXkYla9TDKkgR/9e
+         zRJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715035646; x=1715640446;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I5ntu6mt3uy8mRpEVTg+tphF2bUMaNINXCqe+HKq8KM=;
+        b=Jgx14Zr5mCHHq0WQvAguxkRMMCip79dWaftkBbAT9VGozvkauO9xzL+uSX8wo9uHfx
+         plqLdzsXAMsbWgGbY484IgZxBYe3Y2rzkD/vQ2bvda6NKj0mKcYHSODFPXagY3M673el
+         zIpffxj+udA4CPgPraheR1GqVsjc9uP+qfH8m5czK8a6b6WAlqRHJFBKc9Z/DiXbPEaB
+         5LTjv9iEz3dZHfu+NspyaHklF58oHmdQzpEQw0QqKmuOCGo1LL3r0QSWvsaixhmD0EUL
+         SsGhBGWEf7rfYiVQ1A6BguKOBAvtyHXsQ0klFVd/JGiwf/RMz4qAOnlmpwSVuDNGEP9r
+         ne9w==
+X-Forwarded-Encrypted: i=1; AJvYcCU9WXUqwgEIBUiCyld9evP9Tak9TLu5JVcQm80H3/l3RofnxJIALV77XjhLYOZOzQYUumHcFaLzhJUCJDB1aKf0EL9HKpVXrhgWAI7JV+1B25qagptsiJ/zMpNugiWnhgjSdEw=
+X-Gm-Message-State: AOJu0YxznBuHKNaDjvLhUGiRYisNJbkKAxFmBMkPRhlcEuRzo6gjhv61
+	8/qw1PAKXUN161RS6bB1OISUcMD4O+vTcmaHygOCG2lF1Kr8ZBGds5VGpQ==
+X-Google-Smtp-Source: AGHT+IHUc8DBtbV67fJZi8Y9NrtxoyRynSWwehFJo41jBgIVvNSLEa4TEj4bLVyJeXx9xajuAs55GA==
+X-Received: by 2002:a25:d0d8:0:b0:de5:f817:abe9 with SMTP id h207-20020a25d0d8000000b00de5f817abe9mr12081469ybg.51.1715035645741;
+        Mon, 06 May 2024 15:47:25 -0700 (PDT)
+Received: from localhost ([2601:344:8301:57f0:a110:7baf:6acc:de85])
+        by smtp.gmail.com with ESMTPSA id w13-20020a25918d000000b00de6134b2c3esm2255582ybl.24.2024.05.06.15.47.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 May 2024 15:47:25 -0700 (PDT)
+Date: Mon, 6 May 2024 15:47:24 -0700
+From: Yury Norov <yury.norov@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
+Message-ID: <Zjld/ImGmyBHTLO4@yury-ThinkPad>
+References: <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name>
+ <20240503041701.GA3660305@thelio-3990X>
+ <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name>
+ <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
+ <20240503155401.GA3960118@thelio-3990X>
+ <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
+ <20240503222338.GA1908482@thelio-3990X>
+ <CANiq72mJPPp=H6qb7sG1K1hxR3uiHA9+WEVAZkvymSt_dW3CbA@mail.gmail.com>
+ <20240506175209.GA1425562@thelio-3990X>
+ <CANiq72=mSafSJH1hab57LxYfyj_BD7UOtyAerOT8S41MD-MnAw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72=mSafSJH1hab57LxYfyj_BD7UOtyAerOT8S41MD-MnAw@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/syzbot
-head:   6fd891b7248d0b825dbff6454be21f60c7ba1fb0
-commit: 28a4fc03f837d64c67eeeba5ef226dbed4b369dc [40/42] f2fs: check validation of fault attrs in f2fs_build_fault_attr()
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240507/202405070648.GAPbgYby-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405070648.GAPbgYby-lkp@intel.com/reproduce)
+On Mon, May 06, 2024 at 08:08:41PM +0200, Miguel Ojeda wrote:
+> On Mon, May 6, 2024 at 7:52 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > No, unused can be used with local variables, used cannot.
+> 
+> Yeah, sorry, I meant `used`, i.e. it is that one the one that
+> constraints the combination rather than `unused`.
+> 
+> >From a quick look at the links in `compiler_attributes.h`, `unused`
+> can also be applied to types, while `used` cannot -- it is another
+> difference, but your sentence above already implies it anyway. :)
+> 
+> Thanks for the correction!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405070648.GAPbgYby-lkp@intel.com/
+I have applied the patch in bitmap-for-next this weekend.
 
-All errors (new ones prefixed by >>):
+https://github.com/norov/linux/commit/eb21fc0c96b48d1e779a0ab16f9165a3e0cd76ad
 
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at iostat.c
-   >>>            fs/f2fs/iostat.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at extent_cache.c
-   >>>            fs/f2fs/extent_cache.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at shrinker.c
-   >>>            fs/f2fs/shrinker.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at recovery.c
-   >>>            fs/f2fs/recovery.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at segment.c
-   >>>            fs/f2fs/segment.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at node.c
-   >>>            fs/f2fs/node.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at acl.c
-   >>>            fs/f2fs/acl.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at xattr.c
-   >>>            fs/f2fs/xattr.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at debug.c
-   >>>            fs/f2fs/debug.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: __pfx_f2fs_build_fault_attr
-   >>> defined at dir.c
-   >>>            fs/f2fs/dir.o:(__pfx_f2fs_build_fault_attr)
-   >>> defined at sysfs.c
-   >>>            fs/f2fs/sysfs.o:(.text+0x0)
+Can you guys please take a look at it wrt the last comments? I think
+it's OK. But if not, I will resend it.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Yury
