@@ -1,246 +1,181 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C59B2F2C;
-	Mon,  6 May 2024 15:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE62155A55
+	for <llvm@lists.linux.dev>; Mon,  6 May 2024 16:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715010218; cv=none; b=mXfARlzLHyXReu1NilJSxOQRm4QG1iMSa0E+CUXpfeVD4UPGJdQBrLCR7AeM5tWS4/KKShauFR+qOtAsjcAaNhpOii80i9NjzEZtURNBOSgLb2OiHP+vNtPt9uyUqlINIPX9HAyE/vRdbtoSFDNL1bpYsUgrm96l5MZ8Hkm6GMg=
+	t=1715012599; cv=none; b=bAy97ndY7XRUlGdz0AyoptwLGOC0awDLFq1e+N894RKD2jyg/NQXq+3ThIBqYn0LwMdrwm/kzEYCGj1KagZU41Jigz7eXLoZ6NLueg9yCbailMXhTh2VGfFKCDtBL7vzfLr7C19F/tVI7oT4XujsxV5x7sfEHlrgMm80IlrEfIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715010218; c=relaxed/simple;
-	bh=ARwazpC8M/qH4sFuf4BAsn2h9wj/CWqyQI84Zqh95vg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ukDGteD3FBJsDbvwCRn/M3h2nx7CawEjyXJqMQDJOaE06JQ22PLlW+fW3s/OJSdPfZwk208GtT1+0kClEqpXtt7vXOlSbQVc3+Fj+Ef6Jgb1nfVVmWo7Cxja5FCxAlQ/Dadz4uL22iyEsAveN4EkaxrvyWsCSBUjbl3VuTqi6WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MICHDsFb; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715012599; c=relaxed/simple;
+	bh=LmralNm+INcoHI7lRkYYhgaqtwLlW+YAk6+Qe8w60Hs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dJskzWLAAkypN3sCTJAJUU28DNItXquT0dG5dFgQzEgcGtb71US66IKAiPU7EO62PXLOAeyVqZRtHSOojP9WAUS1kbD2g9CQCYGU5373xYxA79NWMyCq5e28H/tTbeeY7mf1jbtiLer02kDo8oNXgUlccxw/jFQXi/UHgeULSZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=C99jnYUo; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MICHDsFb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715010217; x=1746546217;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ARwazpC8M/qH4sFuf4BAsn2h9wj/CWqyQI84Zqh95vg=;
-  b=MICHDsFbA4s44hOKqhp8KRCX7PSwiUAAhYa4p2anYjMyGDzlpLz0HZBq
-   W4Et/et/5yk1THi+nJeWr0uO1avvpcxhtYF7hpjNyOEga9wLavGtYFnji
-   AhZj4x8Pvo832e47t2uuWotwaMgJ4S4o3sBc/nTYAIPvFtrUZU7MUbtgM
-   QeeTDRCYeVNakLMTTJ3ebXZyc7qUhKFFgixjleDP+D2NEmZUaoDFqX1PN
-   6R7+9lIGGwLAkHsFpELlSw7Am4nrYWgk/pI5hpOrM0qG/AkExbIEAbuWo
-   IR5p2RSeGz15sFwxxM2ga68wHimY26s7JucnSCHW6Ge8svm3qgieOaGmr
-   Q==;
-X-CSE-ConnectionGUID: I9d2E2hESZm4ZmiSTCwyAQ==
-X-CSE-MsgGUID: wzqTytVXR3u6LtE0upnr4w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="10638460"
-X-IronPort-AV: E=Sophos;i="6.07,258,1708416000"; 
-   d="scan'208";a="10638460"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 08:43:36 -0700
-X-CSE-ConnectionGUID: TyokGbAQSlum2Rk9gGwKaw==
-X-CSE-MsgGUID: dSBWuBX9Q1yVm4Rma0BQxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,258,1708416000"; 
-   d="scan'208";a="28193672"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 06 May 2024 08:43:35 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s40V2-0000lP-1M;
-	Mon, 06 May 2024 15:43:32 +0000
-Date: Mon, 6 May 2024 23:43:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mike Rapoport (IBM)" <rppt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:execmem/x86-rox/rfc-v2 21/25]
- arch/x86/kernel/alternative.c:417:17: error: call to undeclared function
- 'module_writable_address'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202405062340.eU4eWKR3-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="C99jnYUo"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f28bb6d747so1369308b3a.3
+        for <llvm@lists.linux.dev>; Mon, 06 May 2024 09:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715012598; x=1715617398; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ko9WKImq7Hf52RsrSv/3I6aINHKA2FDCht5+ZvEf+MA=;
+        b=C99jnYUoVuu+vMqoS+FRm1Gditxas4iEqjZCI+E7CjzUKy/aFj2WowixqjX+wnBpPU
+         zV7OxdVy87D5hjblXxmr+/rZRmTmZjvyTy0fGy5tx4V3YjFmxlCF8KCygYNyTROOFdzL
+         P8jynbl+O3arcswmT1fm+yuajJJpBr28rb20s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715012598; x=1715617398;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ko9WKImq7Hf52RsrSv/3I6aINHKA2FDCht5+ZvEf+MA=;
+        b=Goo91+b5w5lux6mD0/keKaJj37DpLTY8TTGtphDLXcDKSWqe4KrwXjJoKGioTW9Y7t
+         2ozmSk7BgzRLC4+VW8S0vkG7aDkk4CAoFcZSLFrG7RZ95T0rRhL3ynibYnVPRR3m/J/l
+         50xwqzw9ebWq3h/N7TjizTrjMTINTWaOU39FIDuSHM/m8w8Y/EWuO+uk/vhxbwYO/EmZ
+         vCM0+aB5JyNpRPl1V54dDXUr8AbJM1zVZlUsIaUlYi/oExIoBPlOtb1aJaqCs4AhKp+D
+         2SGyag71VxZR4E7XGB/9nxHDg701VoyciHDTNrMbYz399xiNrXCgaDhzkubrrrHRW1xk
+         i+Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCW64QgKwLhuMSgIw8+8toI4zri5p8ZxXP9eQpPEwrp8D89GUGigNCJBsUnPQ3JLdTz+5ciTKNI18Zr4H193Q9qE1o8U0w==
+X-Gm-Message-State: AOJu0YwJMm5jezRtdD03VqNg7K0f236A0plGbYtj95M+JxaO+GwkXtLG
+	ke6rb+BTldhfoqMXX4Xd46oFf18U4iFC7i9xgx/LC3kfsDhHhNN7aDpF3Padcw==
+X-Google-Smtp-Source: AGHT+IHBKdEzGGuJeQi6vNrQbny3eObyZhGrzgxQ5sxwJNu3FZZ7PzBBOuu9uKfhxKRRkHIToQb5DA==
+X-Received: by 2002:a05:6a00:885:b0:6f4:179a:fa5 with SMTP id q5-20020a056a00088500b006f4179a0fa5mr12305611pfj.31.1715012597581;
+        Mon, 06 May 2024 09:23:17 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id c26-20020aa781da000000b006e6b2ba1577sm7892362pfn.138.2024.05.06.09.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 May 2024 09:23:17 -0700 (PDT)
+Date: Mon, 6 May 2024 09:23:15 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Erick Archer <erick.archer@outlook.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] perf/ring_buffer: Prefer struct_size over open coded
+ arithmetic
+Message-ID: <202405060856.53AFAE4F22@keescook>
+References: <AS8PR02MB7237569E4FBE0B26F62FDFDB8B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <51a49bae-bd91-428e-b476-f862711453a0@wanadoo.fr>
+ <AS8PR02MB7237EF9D1962834BE4D2C5F88B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR02MB7237EF9D1962834BE4D2C5F88B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git execmem/x86-rox/rfc-v2
-head:   0caa8ac5e8f2f6de2e75cd2ddd552e8756779944
-commit: 4527045f6e1892edac12176b8d82094c35427cdf [21/25] x86/module: perpare module loading for ROX allocations of text
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240506/202405062340.eU4eWKR3-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240506/202405062340.eU4eWKR3-lkp@intel.com/reproduce)
+On Sun, May 05, 2024 at 07:31:24PM +0200, Erick Archer wrote:
+> On Sun, May 05, 2024 at 05:24:55PM +0200, Christophe JAILLET wrote:
+> > Le 05/05/2024 à 16:15, Erick Archer a écrit :
+> > > diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+> > > index 4013408ce012..080537eff69f 100644
+> > > --- a/kernel/events/ring_buffer.c
+> > > +++ b/kernel/events/ring_buffer.c
+> > > @@ -822,9 +822,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+> > >   	unsigned long size;
+> > 
+> > Hi,
+> > 
+> > Should size be size_t?
+> 
+> I'm sorry, but I don't have enough knowledge to answer this question.
+> The "size" variable is used as a return value by struct_size and as
+> a parameter to the order_base_2() and kzalloc_node() functions.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405062340.eU4eWKR3-lkp@intel.com/
+For Linux, size_t and unsigned long are the same (currently).
+Pedantically, yes, this should be size_t, but it's the same.
 
-All errors (new ones prefixed by >>):
+> [...]
+> > 	all_buf = vmalloc_user((nr_pages + 1) * PAGE_SIZE);
+> >	if (!all_buf)
+> >		goto fail_all_buf;
+> >
+> >	rb->user_page = all_buf;
+> >	rb->data_pages[0] = all_buf + PAGE_SIZE;
+> >	if (nr_pages) {					<--- here
+> >		rb->nr_pages = 1;			<---
+> >		rb->page_order = ilog2(nr_pages);
+> >	}
+> [...]
+> I think that we don't need to deal with the "nr_pages = 0" case
+> since the flex array will always have a length of one.
+> 
+> Kees, can you help us with this?
 
->> arch/x86/kernel/alternative.c:417:17: error: call to undeclared function 'module_writable_address'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     417 |         u8 *wr_instr = module_writable_address(mod, instr);
-         |                        ^
->> arch/x86/kernel/alternative.c:417:6: error: incompatible integer to pointer conversion initializing 'u8 *' (aka 'unsigned char *') with an expression of type 'int' [-Wint-conversion]
-     417 |         u8 *wr_instr = module_writable_address(mod, instr);
-         |             ^          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/alternative.c:500:14: error: call to undeclared function 'module_writable_address'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     500 |                 wr_instr = module_writable_address(mod, instr);
-         |                            ^
->> arch/x86/kernel/alternative.c:500:12: error: incompatible integer to pointer conversion assigning to 'u8 *' (aka 'unsigned char *') from 'int' [-Wint-conversion]
-     500 |                 wr_instr = module_writable_address(mod, instr);
-         |                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/alternative.c:503:18: error: incompatible integer to pointer conversion assigning to 'u8 *' (aka 'unsigned char *') from 'int' [-Wint-conversion]
-     503 |                 wr_replacement = module_writable_address(mod, replacement);
-         |                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 errors generated.
+Agh, this code hurt my head for a while.
+
+all_buf contains "nr_pages + 1" pages. all_buf gets attached to
+rb->user_page, and then rb->data_pages[0] points to the second page in
+all_buf... which means, I guess, that rb->data_pages does only have 1
+entry.
+
+However, the nr_pages == 0 case is weird. Currently, data_pages[0] will
+still get set (which points ... off the end of all_buf). If we
+unconditionally set rb->nr_pages to 1, we're changing the behavior. If
+we _don't_ set rb->data_pages[0], we're changing the behavior, but I
+think it's an invalid pointer anyway, so this is the safer change to
+make. I suspect the right replacement is:
 
 
-vim +/module_writable_address +417 arch/x86/kernel/alternative.c
+diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+index 4013408ce012..7d638ce76799 100644
+--- a/kernel/events/ring_buffer.c
++++ b/kernel/events/ring_buffer.c
+@@ -916,15 +916,11 @@ void rb_free(struct perf_buffer *rb)
+ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+ {
+ 	struct perf_buffer *rb;
+-	unsigned long size;
+ 	void *all_buf;
+ 	int node;
+ 
+-	size = sizeof(struct perf_buffer);
+-	size += sizeof(void *);
+-
+ 	node = (cpu == -1) ? cpu : cpu_to_node(cpu);
+-	rb = kzalloc_node(size, GFP_KERNEL, node);
++	rb = kzalloc_node(struct_size(rb, nr_pages, 1), GFP_KERNEL, node);
+ 	if (!rb)
+ 		goto fail;
+ 
+@@ -935,9 +931,9 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+ 		goto fail_all_buf;
+ 
+ 	rb->user_page = all_buf;
+-	rb->data_pages[0] = all_buf + PAGE_SIZE;
+ 	if (nr_pages) {
+ 		rb->nr_pages = 1;
++		rb->data_pages[0] = all_buf + PAGE_SIZE;
+ 		rb->page_order = ilog2(nr_pages);
+ 	}
+ 
 
-   409	
-   410	/*
-   411	 * Rewrite the "call BUG_func" replacement to point to the target of the
-   412	 * indirect pv_ops call "call *disp(%ip)".
-   413	 */
-   414	static int alt_replace_call(u8 *instr, u8 *insn_buff, struct alt_instr *a,
-   415				    struct module *mod)
-   416	{
- > 417		u8 *wr_instr = module_writable_address(mod, instr);
-   418		void *target, *bug = &BUG_func;
-   419		s32 disp;
-   420	
-   421		if (a->replacementlen != 5 || insn_buff[0] != CALL_INSN_OPCODE) {
-   422			pr_err("ALT_FLAG_DIRECT_CALL set for a non-call replacement instruction\n");
-   423			BUG();
-   424		}
-   425	
-   426		if (a->instrlen != 6 ||
-   427		    wr_instr[0] != CALL_RIP_REL_OPCODE ||
-   428		    wr_instr[1] != CALL_RIP_REL_MODRM) {
-   429			pr_err("ALT_FLAG_DIRECT_CALL set for unrecognized indirect call\n");
-   430			BUG();
-   431		}
-   432	
-   433		/* Skip CALL_RIP_REL_OPCODE and CALL_RIP_REL_MODRM */
-   434		disp = *(s32 *)(wr_instr + 2);
-   435	#ifdef CONFIG_X86_64
-   436		/* ff 15 00 00 00 00   call   *0x0(%rip) */
-   437		/* target address is stored at "next instruction + disp". */
-   438		target = *(void **)(instr + a->instrlen + disp);
-   439	#else
-   440		/* ff 15 00 00 00 00   call   *0x0 */
-   441		/* target address is stored at disp. */
-   442		target = *(void **)disp;
-   443	#endif
-   444		if (!target)
-   445			target = bug;
-   446	
-   447		/* (BUG_func - .) + (target - BUG_func) := target - . */
-   448		*(s32 *)(insn_buff + 1) += target - bug;
-   449	
-   450		if (target == &nop_func)
-   451			return 0;
-   452	
-   453		return 5;
-   454	}
-   455	
-   456	/*
-   457	 * Replace instructions with better alternatives for this CPU type. This runs
-   458	 * before SMP is initialized to avoid SMP problems with self modifying code.
-   459	 * This implies that asymmetric systems where APs have less capabilities than
-   460	 * the boot processor are not handled. Tough. Make sure you disable such
-   461	 * features by hand.
-   462	 *
-   463	 * Marked "noinline" to cause control flow change and thus insn cache
-   464	 * to refetch changed I$ lines.
-   465	 */
-   466	void __init_or_module noinline apply_alternatives(struct alt_instr *start,
-   467							  struct alt_instr *end,
-   468							  struct module *mod)
-   469	{
-   470		struct alt_instr *a;
-   471		u8 *instr, *replacement;
-   472		u8 insn_buff[MAX_PATCH_LEN];
-   473	
-   474		DPRINTK(ALT, "alt table %px, -> %px", start, end);
-   475	
-   476		/*
-   477		 * In the case CONFIG_X86_5LEVEL=y, KASAN_SHADOW_START is defined using
-   478		 * cpu_feature_enabled(X86_FEATURE_LA57) and is therefore patched here.
-   479		 * During the process, KASAN becomes confused seeing partial LA57
-   480		 * conversion and triggers a false-positive out-of-bound report.
-   481		 *
-   482		 * Disable KASAN until the patching is complete.
-   483		 */
-   484		kasan_disable_current();
-   485	
-   486		/*
-   487		 * The scan order should be from start to end. A later scanned
-   488		 * alternative code can overwrite previously scanned alternative code.
-   489		 * Some kernel functions (e.g. memcpy, memset, etc) use this order to
-   490		 * patch code.
-   491		 *
-   492		 * So be careful if you want to change the scan order to any other
-   493		 * order.
-   494		 */
-   495		for (a = start; a < end; a++) {
-   496			int insn_buff_sz = 0;
-   497			u8 *wr_instr, *wr_replacement;
-   498	
-   499			instr = (u8 *)&a->instr_offset + a->instr_offset;
- > 500			wr_instr = module_writable_address(mod, instr);
-   501	
-   502			replacement = (u8 *)&a->repl_offset + a->repl_offset;
-   503			wr_replacement = module_writable_address(mod, replacement);
-   504	
-   505			BUG_ON(a->instrlen > sizeof(insn_buff));
-   506			BUG_ON(a->cpuid >= (NCAPINTS + NBUGINTS) * 32);
-   507	
-   508			/*
-   509			 * Patch if either:
-   510			 * - feature is present
-   511			 * - feature not present but ALT_FLAG_NOT is set to mean,
-   512			 *   patch if feature is *NOT* present.
-   513			 */
-   514			if (!boot_cpu_has(a->cpuid) == !(a->flags & ALT_FLAG_NOT)) {
-   515				optimize_nops_inplace(wr_instr, a->instrlen);
-   516				continue;
-   517			}
-   518	
-   519			DPRINTK(ALT, "feat: %d*32+%d, old: (%pS (%px) len: %d), repl: (%px, len: %d) flags: 0x%x",
-   520				a->cpuid >> 5,
-   521				a->cpuid & 0x1f,
-   522				instr, instr, a->instrlen,
-   523				replacement, a->replacementlen, a->flags);
-   524	
-   525			memcpy(insn_buff, wr_replacement, a->replacementlen);
-   526			insn_buff_sz = a->replacementlen;
-   527	
-   528			if (a->flags & ALT_FLAG_DIRECT_CALL) {
-   529				insn_buff_sz = alt_replace_call(instr, insn_buff, a,
-   530								mod);
-   531				if (insn_buff_sz < 0)
-   532					continue;
-   533			}
-   534	
-   535			for (; insn_buff_sz < a->instrlen; insn_buff_sz++)
-   536				insn_buff[insn_buff_sz] = 0x90;
-   537	
-   538			apply_relocation(insn_buff, a->instrlen, instr, replacement, a->replacementlen);
-   539	
-   540			DUMP_BYTES(ALT, wr_instr, a->instrlen, "%px:   old_insn: ", instr);
-   541			DUMP_BYTES(ALT, replacement, a->replacementlen, "%px:   rpl_insn: ", replacement);
-   542			DUMP_BYTES(ALT, insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
-   543	
-   544			text_poke_early(wr_instr, insn_buff, insn_buff_sz);
-   545		}
-   546	
-   547		kasan_enable_current();
-   548	}
-   549	
+
+Also, why does rb_alloc() take an "int" nr_pages? The only caller has an
+unsigned long argument for nr_pages. Nothing checks for >INT_MAX that I
+can find.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
