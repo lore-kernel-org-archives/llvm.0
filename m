@@ -1,90 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9E2158200;
-	Mon,  6 May 2024 17:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADFD1586C3;
+	Mon,  6 May 2024 18:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715018207; cv=none; b=Mon7HHnVmYMWSoL5kj2v1UzzgPaHskNnhV8pmq+awwVqOBjGDYYsfVA4pG+wZIuYTgpGxD84TmuVMScFP+bP+IIApqRlr6YNZ+Ud9PxlX/URcv+atw3uQluKEM+5dmFNGwtoL8wTgrxP0PlM1JBUcWiXUjO0zpMPQ2g7vdj7ZuU=
+	t=1715018429; cv=none; b=Sb49XzOz/lGFE+wQVyjb2NxsJ67TXmywU3kYpITs2qhKQtbBrTb7mobCfUcZ2QOlwSILuLAcehO5t09efJSTRTK1EcHJUb6olSQ04b69PxXR7cCP1cS5HSjB2vkWUFhzilJq7Mb/YNJ/NVf/AOrezYn77iuvDVoWKSHBY6w4igY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715018207; c=relaxed/simple;
-	bh=9mKo27o9TugRDuPDvKi8KCJG46tdt7CPVGlhj/hGQuM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jD3hvmB+MCGGMaIX34S/+RfvjjekycI9q4PYVr7WvRFZYrFXxI9iHSYMk6v1yRQXa+ka9yrB3r8d55j03aGdBlu9zqIu5OlTm2vDx901Zsuo7JDj/r6CqgVEPrnB7hzl/24uNicZbAwA3i1Sg1pTfukGcCW8wEB0PwhyS54XnZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RE81h80X; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715018429; c=relaxed/simple;
+	bh=no6tilYKngaoTOqfGFWOgA/5oNjItKCJRl53C/eguWs=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=W/uc86Z81hbgidYQ44p8Ud+Va+70P2Qp9wl95/kZLRVYsg33no/vD0QtG8PGnoZjNHR8q3gJW/+ewSYKjoGfPwUMOhAB3GHx3Iu70C97zVPXF+P81F4VMsMxEc/PDeZ5p5s1v6CVhG9Gn6R5QVDpR8uCiW05qV/ujSFE1oWJNTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MtvuysZA; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RE81h80X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0081C116B1;
-	Mon,  6 May 2024 17:56:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715018207;
-	bh=9mKo27o9TugRDuPDvKi8KCJG46tdt7CPVGlhj/hGQuM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RE81h80XEWfTzMbvbgl91Sng1WZHP83i9T4dTDNtFKECcRQVAByctgVnf9dlyDG9G
-	 iB6QJbJCxXHbQFB3wREOI+EkoF42q6ku2IdHNNECmw8UcSQcqbSqma2HZn2MQ5dE3B
-	 umxOeDnKbxxcJI99YJlswFwS3TdUqC4vvwH9zaJvfWa9SnTuApr6eNR8s/NXX/Bps7
-	 k33yCSJDzU1LztFp7bCmMc2kf0tSOu9i5tNAAfdGWaxM+etlJ6GMiLJWgYSMBmcl3C
-	 wrxIIwHw/udpDUPW1NvsVplpbEytKkxpTedLdS6a6dife67/slm+TdbFfmWKORBAH7
-	 xhsY8XMbiYf1Q==
-Date: Mon, 6 May 2024 10:56:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-Message-ID: <20240506175645.GB1425562@thelio-3990X>
-References: <20240502092443.6845-2-visitorckw@gmail.com>
- <202405030808.UsoMKFNP-lkp@intel.com>
- <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name>
- <20240503041701.GA3660305@thelio-3990X>
- <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name>
- <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
- <20240503155401.GA3960118@thelio-3990X>
- <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
- <CANiq72mYPV_rNFirr1q=hjjz2yDzw98qrwqY5c14G3odt+shcA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MtvuysZA"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-792940cc66dso134053885a.1;
+        Mon, 06 May 2024 11:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715018426; x=1715623226; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ewxWon8y3EC8f5KNKIlRB63vgk6021CZpyEJEMa3QaQ=;
+        b=MtvuysZAjzU8J97qoQtzeOX2yKrx2hsvn/bCTWWCVjGa6/Qk34fJDIoamwnFCY2ecy
+         n0WysAmlRtQuXswaKFiMZvtpG7bUDIeWHbgrPQEJLArCR0Z24vnIA+EieEMbChOkTQoW
+         nzUiVwxa/Pj69yWpOBdSCayU7IzJOhcJ/BLs4v52YznAAPNa1LI/PgDRyklNU+tzCv7h
+         2zGai5WAlwi9gV/X1W2rQUV42ogFLEerSnMkmEAwIVHE5Y8ZbRcz6BMNJ0pgMtKXiKkJ
+         3ZmN7v7VbIbvBmjbN4W6BHuTfSAeSjXHp+cqRcHtBvBtG43s1siCuq2TVf23YpCes9vM
+         xV3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715018426; x=1715623226;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ewxWon8y3EC8f5KNKIlRB63vgk6021CZpyEJEMa3QaQ=;
+        b=XYkqNwvXno2C1HQSKF3WiMHqu/lmkrHaYmwBKvSLb+O6X1rk74TmBSnDxi0VATAB+3
+         bi08s8e4YxZFE3Vgu02YYO4/TPPFQD4u6RMRugeOMV2guLTRE7voCwRa9xgs4YxcIVHg
+         ChN2pcgMpAWYu+TAlYkLmUCCzzwYQOGLC1cQrGMFPW6ODXK6EISs8XhNhRQEJiNl+og9
+         9aUai88g5iboyGEDgfwraWzN+HmLMJ87Qc7EELUqTiJlZP5zjA7W4BzCosl90zV3/eLf
+         6gxbr9hEWyquy4qkypX7ym9BWMxcde2XdMdGIgDOkDKmag7jl72h81Ho6kRvF2BZvmU/
+         K75Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUFnEG4EWYnYwxd0koroNfnGzulOrZwhIwYjnXIxG4k1X5rilsZpQ5m8HoIZIq6i6Ynj+OWXpsMUxIYeXQQ74BJVD1eLF16FxWDeae7Gsxn0CQR45BQayZlyS8k
+X-Gm-Message-State: AOJu0YwKKIkBWJsHA1ZDrN/XwzXRbHSF2tChIolmfY95rcm6Af9mYKvd
+	c1Ds6qKPDNwrSqaC5LMiucYn0FU7YUfIYeqPDNLXoSZsmFDNL0/p
+X-Google-Smtp-Source: AGHT+IHwxi+MsesdxS51NMGdi8E37iQPGrsyCgG+iNUpxejrVgz1gYPJSIt1PiQCGOpKWPnlFwfCJg==
+X-Received: by 2002:a05:6214:19e8:b0:69b:17b2:df34 with SMTP id q8-20020a05621419e800b0069b17b2df34mr13732146qvc.63.1715018424782;
+        Mon, 06 May 2024 11:00:24 -0700 (PDT)
+Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
+        by smtp.gmail.com with ESMTPSA id qb17-20020ad44711000000b006a0e585dc77sm3903456qvb.70.2024.05.06.11.00.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 May 2024 11:00:24 -0700 (PDT)
+Date: Mon, 06 May 2024 14:00:24 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: John Hubbard <jhubbard@nvidia.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ richardbgobert@gmail.com
+Cc: "David S . Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Steffen Klassert <steffen.klassert@secunet.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ =?UTF-8?B?QW5kcmVhcyBGw6RyYmVy?= <afaerber@suse.de>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Matthieu Baerts <matttbe@kernel.org>, 
+ Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, 
+ Pravin B Shelar <pshelar@ovn.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
+ zhujun2 <zhujun2@cmss.chinamobile.com>, 
+ Petr Machata <petrm@nvidia.com>, 
+ Ido Schimmel <idosch@nvidia.com>, 
+ Hangbin Liu <liuhangbin@gmail.com>, 
+ Nikolay Aleksandrov <razor@blackwall.org>, 
+ Benjamin Poirier <bpoirier@nvidia.com>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+ Dmitry Safonov <0x7f454c46@gmail.com>, 
+ netdev@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ linux-actions@lists.infradead.org, 
+ mptcp@lists.linux.dev, 
+ dev@openvswitch.org, 
+ Valentin Obst <kernel@valentinobst.de>, 
+ linux-kselftest@vger.kernel.org, 
+ LKML <linux-kernel@vger.kernel.org>, 
+ llvm@lists.linux.dev, 
+ John Hubbard <jhubbard@nvidia.com>
+Message-ID: <66391ab83771c_516de294d7@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240505222639.70317-2-jhubbard@nvidia.com>
+References: <20240505222639.70317-1-jhubbard@nvidia.com>
+ <20240505222639.70317-2-jhubbard@nvidia.com>
+Subject: Re: [PATCH 2/2] selftests/net: fix uninitialized variables
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72mYPV_rNFirr1q=hjjz2yDzw98qrwqY5c14G3odt+shcA@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, May 05, 2024 at 12:42:53PM +0200, Miguel Ojeda wrote:
-> On Fri, May 3, 2024 at 11:56 PM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > + * The __used attribute guarantees that the attributed variable will be
+John Hubbard wrote:
+> When building with clang, via:
 > 
-> We should probably mention functions as Nathan said (unless it does
-> not work for some reason).
-
-Yeah, it should work for functions. I think clarifying it will not work
-for local variables would probably be good as well, since __used__ does
-not work on those like I replied in my other email, but it is not that
-big of a deal.
-
-> > + * is actually used. It's a compiler implementation details either emit
-> > + * the warning in that case or not.
+>     make LLVM=1 -C tools/testing/selftest
 > 
-> Is it an implementation detail or rather that they took different
-> alternatives/options on purpose (even if not documented)? If we think
-> it is just a consequence of their implementation, perhaps we should
-> mention that and what GCC/Clang do today in their latest version, in
-> case it changes (so that we know whether we need to remove the macro,
-> for instance).
+> ...clang warns about three variables that are not initialized in all
+> cases:
+> 
+> 1) The opt_ipproto_off variable is used uninitialized if "testname" is
+> not "ip". This seems like an actual bug.
+> 
+> 2) The addr_len is used uninitialized, but only in the assert case,
+>    which bails out, so this is harmless.
+> 
+> 3) The family variable in add_listener() is only used uninitialized in
+>    the error case (neither IPv4 nor IPv6 is specified), so it's also
+>    harmless.
+> 
+> Fix by initializing each variable.
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  tools/testing/selftests/net/gro.c                 | 3 ++-
+>  tools/testing/selftests/net/ip_local_port_range.c | 2 +-
+>  tools/testing/selftests/net/mptcp/pm_nl_ctl.c     | 2 +-
+>  3 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
+> index 353e1e867fbb..0eb61edaad83 100644
+> --- a/tools/testing/selftests/net/gro.c
+> +++ b/tools/testing/selftests/net/gro.c
+> @@ -110,7 +110,8 @@ static void setup_sock_filter(int fd)
+>  	const int dport_off = tcp_offset + offsetof(struct tcphdr, dest);
+>  	const int ethproto_off = offsetof(struct ethhdr, h_proto);
+>  	int optlen = 0;
+> -	int ipproto_off, opt_ipproto_off;
+> +	int ipproto_off;
+> +	int opt_ipproto_off = 0;
 
-Yeah it is entirely possible that this is not intentional but when
--Wunused-but-set-variable was introduced in Clang, I know there was a
-lot of discussion around making the warning match GCC in certain ways as
-well as breaking from GCC in others. I have not tried to dig up those
-discussions to confirm though.
+This is only intended to be used in the case where the IP proto is not TCP:
 
-Cheers,
-Nathan
+                        BPF_STMT(BPF_LD  + BPF_B   + BPF_ABS, ipproto_off),
++                       BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, IPPROTO_TCP, 2, 0),
++                       BPF_STMT(BPF_LD  + BPF_B   + BPF_ABS, opt_ipproto_off),
+                        BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, IPPROTO_TCP, 0, 5),
+
+In that case the test tries again at a different offset that accounts
+for optional IPv6 extension headers.
+
+This is indeed buggy, in that it might accidentally accept packets
+that should be dropped.
+
+Initializing to 0 compares against against the first byte of the
+Ethernet header. Which is an external argument to the test. So
+safest is to initialize opt_ipproto_off to ipproto_off and just
+repeat the previous check. Perhaps:
+
+@@ -118,6 +118,7 @@ static void setup_sock_filter(int fd)
+        else
+                next_off = offsetof(struct ipv6hdr, nexthdr);
+        ipproto_off = ETH_HLEN + next_off;
++       opt_ipproto_off = ipproto_off;  /* overridden later if may have exthdrs */
