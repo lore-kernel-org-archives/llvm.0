@@ -1,160 +1,281 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0F81422A3
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 09:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13246EB51;
+	Mon,  6 May 2024 11:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714986490; cv=none; b=oQt2CsGBkCyGqJdA5fqcCiBP1aDnbCZ7NW7rWiLG1uqKRWflDbmEiS/14REWvyIboaBm6TqrRAHp0Au00vs8/C7KGE+cxWAVNHSa8bRJ8RnS+bl5ileRwnx6YOMfcYGCAv8HcgbUeDhYq72VUokkSXBtBirpI7YDmTnKSL2VEck=
+	t=1714995559; cv=none; b=FaUvmhJE4w8Xq/lnm0eFLEN0iF4yYglJKRJtz4dgNyhfEQ+tk+SsEKURyHY96adr2QZd406vcqekuuY00p2df0DQAeycwxxBerPKEE+cyq4xpB3727HL/FG7uzVkdswhbIkU3sD2EkZobJa5yLI0FKr+X2DstMnVsgD43YDyNxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714986490; c=relaxed/simple;
-	bh=DJFAb48flUOaIKrGIcEOoLa7PZxItSUWyxVPt3RrdEQ=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=BDe6mIBFEgccJ4bmzYVZPMJFFYfV+btUoiv0L8PCSoUoR7G5VQIVR3rDQ4fHB4ZzAZ+mArJWYZVUMySQsuff86yhO9orgGHfZdm1XlTLlDY+dNwNPn/TaPUXZGRtWvUugbGn1QehwMsn0DH00bKyGsVJgokZvMMQt4BFu6Y2iuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UlWFbY2i; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UlWFbY2i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714986489; x=1746522489;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=DJFAb48flUOaIKrGIcEOoLa7PZxItSUWyxVPt3RrdEQ=;
-  b=UlWFbY2i8Ajr0krrBNPGq9h+LIUgAj7hZPA1TAfRwvRrZUStA4OSNZPZ
-   mfP8Sq2CQLzpua184cIGrlGQcx+xABjYekhSDPgivCt8ZpVJu2lbg3Bui
-   QSl6EN88wbdtjJyHB3S+v4IzHrR1lH6Ljfq0vEHRAELRyT2w12sJ9vK6E
-   AlmxTdG3Ph82IsTBz7nfQoI8cI4y9AIKyPo5g+p8JCHlbuH+/wJEgma45
-   eeAuFTYEcCNskaimUUD/oa0IfB18qSxJgcWncdBVB7oVbSFsYMJSEGKzJ
-   UtKujpM4SF2XJGcoSDYVrQeFp05rJOkMnDRHl5n+1tQyMAKyMC5tZpNpE
-   A==;
-X-CSE-ConnectionGUID: Q5zV3c06RLuyWvvOzn5wYw==
-X-CSE-MsgGUID: aFLWIyNmRaq8nGp3JyB9iA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="14508056"
-X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
-   d="scan'208";a="14508056"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 02:08:08 -0700
-X-CSE-ConnectionGUID: k8ITO01gQfSkX3H3SFK3XQ==
-X-CSE-MsgGUID: r2to3QFHTWug0UPqDwrTMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
-   d="scan'208";a="59297461"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.68])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 02:08:04 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 6 May 2024 12:07:57 +0300 (EEST)
-To: John Hubbard <jhubbard@nvidia.com>
-cc: Reinette Chatre <reinette.chatre@intel.com>, 
-    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-    Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>, 
-    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
- abs(), labs() calls
-In-Reply-To: <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
-Message-ID: <d46b81df-e018-a9bd-1550-31c825c487cf@linux.intel.com>
-References: <20240503023209.80787-1-jhubbard@nvidia.com> <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com> <f908ba74-86c0-409c-854d-9da5f3917b05@nvidia.com> <26f3effc-6ea1-4670-a301-76df3a710fa9@intel.com>
- <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
+	s=arc-20240116; t=1714995559; c=relaxed/simple;
+	bh=FZGGdKQ/lgfW27r0KhDZZdtOmV6Nq5yH7l+nCt+HMHA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=eTDTJjz20lbXAPOhGqcHeEmL9EneP6TROvU90IEUa4/Hytozpf9Ort+Gw9AgQzMQPYMQemt++sdHguutDfF2KJ8BXJeGI8Kh13FJaGH21MsSZd5MRxnABL3krSNI8npVpFioEfecAGOhb4C3kGgJleJVG3Dd2x70mGEklN4UrOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 446Bd0aC52263399, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 446Bd0aC52263399
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 6 May 2024 19:39:00 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Mon, 6 May 2024 19:39:01 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Mon, 6 May 2024 19:39:00 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::1a1:9ae3:e313:52e7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::1a1:9ae3:e313:52e7%5]) with mapi id
+ 15.01.2507.035; Mon, 6 May 2024 19:39:00 +0800
+From: Justin Lai <justinlai0215@realtek.com>
+To: kernel test robot <lkp@intel.com>, "kuba@kernel.org" <kuba@kernel.org>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com"
+	<edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "andrew@lunn.ch"
+	<andrew@lunn.ch>,
+        "jiri@resnulli.us" <jiri@resnulli.us>,
+        Ping-Ke Shih
+	<pkshih@realtek.com>,
+        Larry Chiu <larry.chiu@realtek.com>
+Subject: RE: [PATCH net-next v17 12/13] realtek: Update the Makefile and Kconfig in the realtek folder
+Thread-Topic: [PATCH net-next v17 12/13] realtek: Update the Makefile and
+ Kconfig in the realtek folder
+Thread-Index: AQHanHJwtQlHSOPjc0iBIoHkieL8ZLGG2wqAgAM+1GA=
+Date: Mon, 6 May 2024 11:39:00 +0000
+Message-ID: <261fdf3adbe84127890e6d551ce0d407@realtek.com>
+References: <20240502091847.65181-13-justinlai0215@realtek.com>
+ <202405050111.thv4v0Bl-lkp@intel.com>
+In-Reply-To: <202405050111.thv4v0Bl-lkp@intel.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-626839963-1714985487=:1111"
-Content-ID: <1eef3c65-1a10-d09b-efb0-b3996dc9e99e@linux.intel.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+The problem this time seems to be caused by me not doing a rebase.
+I will modify the reviewer's suggestions in the next version and re-upload
+the next version after rebase.
 
---8323328-626839963-1714985487=:1111
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <910e6218-dd94-5978-7fc6-1c35ae67c9cd@linux.intel.com>
-
-On Fri, 3 May 2024, John Hubbard wrote:
-
-> On 5/3/24 11:37 AM, Reinette Chatre wrote:
-> > On 5/3/2024 9:52 AM, John Hubbard wrote:
-> > > On 5/3/24 1:00 AM, Ilpo J=E4rvinen wrote:
-> > > > On Thu, 2 May 2024, John Hubbard wrote:
-> > > ...
-> > > > > diff --git a/tools/testing/selftests/resctrl/mbm_test.c
-> > > > > b/tools/testing/selftests/resctrl/mbm_test.c
-> > > > > index d67ffa3ec63a..c873793d016d 100644
-> > > > > --- a/tools/testing/selftests/resctrl/mbm_test.c
-> > > > > +++ b/tools/testing/selftests/resctrl/mbm_test.c
-> > > > > @@ -33,7 +33,7 @@ show_bw_info(unsigned long *bw_imc, unsigned lo=
-ng
-> > > > > *bw_resc, size_t span)
-> > > > >  =A0 =A0=A0=A0=A0=A0 avg_bw_imc =3D sum_bw_imc / 4;
-> > > > >  =A0=A0=A0=A0=A0 avg_bw_resc =3D sum_bw_resc / 4;
-> > > > > -=A0=A0=A0 avg_diff =3D (float)labs(avg_bw_resc - avg_bw_imc) / a=
-vg_bw_imc;
-> > > > > +=A0=A0=A0 avg_diff =3D (float)(avg_bw_resc - avg_bw_imc) / avg_b=
-w_imc;
-> > > > >  =A0=A0=A0=A0=A0 avg_diff_per =3D (int)(avg_diff * 100);
-> > > > >  =A0 =A0=A0=A0=A0=A0 ret =3D avg_diff_per > MAX_DIFF_PERCENT;
-> > > >=20
-> > > > But how are these two cases same after your change when you ended u=
-p
-> > > > removing taking the absolute value entirely?
-> > >=20
-> > > All of the arguments are unsigned integers, so all arithmetic results
-> > > are interpreted as unsigned, so taking the absolute value of that is
-> > > always a no-op.
-
-(I see there's a better patch posted already but since there are a few=20
-incorrect claims in this discussion, I'll do for the record type of=20
-reply.)
-
-This discussion now went to a tangent about the warning. My main point is=
-=20
-that logic is not correct after removing labs().
-
-I also disagree with the claim that using labs() on unsigned value is=20
-no-op because labs() takes long so unsigned is just forced into signed=20
-when calling which is why the warning triggers but it's very misleading=20
-warning (see below).
-
-> > It does not seem as though clang can see when values have been casted.
-> > I tried to do so explicitly with a:
-> >   =09avg_diff =3D labs((long)avg_bw_resc - avg_bw_imc) / (float)avg_bw_=
-imc;
->
-> The subtraction result will get promoted to an unsigned long, before bein=
-g
-> passed into labs(3).
->
-> > But that still triggers:
-> > warning: taking the absolute value of unsigned type 'unsigned long' has=
- no
-> > effect [-Wabsolute-value]
+> Hi Justin,
 >=20
-> As expected, yes.
-
-That error message isn't factually correct:
-
-        unsigned long a =3D LONG_MAX;
-        long b;
-
-        a +=3D 2;
-        b =3D (long)a;
-        printf("%llu %lli %lli\n", a, b, labs(a));
-
-Prints (at least when built with gcc):
-
-9223372036854775809 -9223372036854775807 9223372036854775807
-
-labs(LONG_MAX + 1) won't work though since it's not positively presentable=
-=20
-with long and the value is left untouched.
-
---=20
- i.
---8323328-626839963-1714985487=:1111--
+> kernel test robot noticed the following build errors:
+>=20
+> [auto build test ERROR on horms-ipvs/master] [cannot apply to net-next/ma=
+in
+> linus/master v6.9-rc6 next-20240503] [If your patch is applied to the wro=
+ng git
+> tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:
+> https://github.com/intel-lab-lkp/linux/commits/Justin-Lai/rtase-Add-pci-t=
+able-s
+> upported-in-this-module/20240502-172835
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git ma=
+ster
+> patch link:
+> https://lore.kernel.org/r/20240502091847.65181-13-justinlai0215%40realtek=
+.c
+> om
+> patch subject: [PATCH net-next v17 12/13] realtek: Update the Makefile an=
+d
+> Kconfig in the realtek folder
+> config: s390-allmodconfig
+> (https://download.01.org/0day-ci/archive/20240505/202405050111.thv4v0Bl-l
+> kp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project
+> 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+> reproduce (this is a W=3D1 build):
+> (https://download.01.org/0day-ci/archive/20240505/202405050111.thv4v0Bl-l
+> kp@intel.com/reproduce)
+>=20
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes:
+> | https://lore.kernel.org/oe-kbuild-all/202405050111.thv4v0Bl-lkp@intel.
+> | com/
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:=
+47:
+>    In file included from include/linux/dma-mapping.h:7:
+>    In file included from include/linux/device.h:32:
+>    In file included from include/linux/device/driver.h:21:
+>    In file included from include/linux/module.h:19:
+>    In file included from include/linux/elf.h:6:
+>    In file included from arch/s390/include/asm/elf.h:173:
+>    In file included from arch/s390/include/asm/mmu_context.h:11:
+>    In file included from arch/s390/include/asm/pgalloc.h:18:
+>    In file included from include/linux/mm.h:1970:
+>    include/linux/vmstat.h:502:43: warning: arithmetic between different
+> enumeration types ('enum zone_stat_item' and 'enum numa_stat_item')
+> [-Wenum-enum-conversion]
+>      502 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      503 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:509:43: warning: arithmetic between different
+> enumeration types ('enum zone_stat_item' and 'enum numa_stat_item')
+> [-Wenum-enum-conversion]
+>      509 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      510 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:516:36: warning: arithmetic between different
+> enumeration types ('enum node_stat_item' and 'enum lru_list')
+> [-Wenum-enum-conversion]
+>      516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip
+> "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    include/linux/vmstat.h:521:43: warning: arithmetic between different
+> enumeration types ('enum zone_stat_item' and 'enum numa_stat_item')
+> [-Wenum-enum-conversion]
+>      521 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      522 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:530:43: warning: arithmetic between different
+> enumeration types ('enum zone_stat_item' and 'enum numa_stat_item')
+> [-Wenum-enum-conversion]
+>      530 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      531 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:=
+47:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/s390/include/asm/io.h:75:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      547 |         val =3D __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      560 |         val =3D __le16_to_cpu((__le16
+> __force)__raw_readw(PCI_IOBASE + addr));
+>          |
+> ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from
+> macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+>          |
+> ^
+>    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+>      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>          |
+> ^
+>    In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:=
+47:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/s390/include/asm/io.h:75:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      573 |         val =3D __le32_to_cpu((__le32
+> __force)__raw_readl(PCI_IOBASE + addr));
+>          |
+> ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from
+> macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+>          |
+> ^
+>    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+>      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+>          |
+> ^
+>    In file included from drivers/net/ethernet/realtek/rtase/rtase_main.c:=
+47:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/s390/include/asm/io.h:75:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      594 |         __raw_writew((u16 __force)cpu_to_le16(value),
+> PCI_IOBASE + addr);
+>          |
+> ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      604 |         __raw_writel((u32 __force)cpu_to_le32(value),
+> PCI_IOBASE + addr);
+>          |
+> ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:692:20: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      692 |         readsb(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:700:20: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      700 |         readsw(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:708:20: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      708 |         readsl(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:717:21: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      717 |         writesb(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:726:21: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      726 |         writesw(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:735:21: warning: performing pointer arithmeti=
+c
+> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      735 |         writesl(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+> >> drivers/net/ethernet/realtek/rtase/rtase_main.c:67:10: fatal error:
+> >> 'net/netdev_queues.h' file not found
+>       67 | #include <net/netdev_queues.h>
+>          |          ^~~~~~~~~~~~~~~~~~~~~
+>    17 warnings and 1 error generated.
+>=20
+>=20
+> vim +67 drivers/net/ethernet/realtek/rtase/rtase_main.c
+>=20
+> 6c114677e472d0 Justin Lai 2024-05-02 @67  #include
+> <net/netdev_queues.h>
+> 6c114677e472d0 Justin Lai 2024-05-02  68  #include
+> <net/page_pool/helpers.h>
+> 6c114677e472d0 Justin Lai 2024-05-02  69  #include <net/pkt_cls.h>
+> 6c114677e472d0 Justin Lai 2024-05-02  70
+>=20
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
