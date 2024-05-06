@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D00D157499;
-	Mon,  6 May 2024 17:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9E2158200;
+	Mon,  6 May 2024 17:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715017932; cv=none; b=ceHVhuRO0g81fOmLrF+5AGi8RZsBiNKuTfoEpsh46ky4897DWIiBC8TkkiULltjFPX3lkooHttufMYse3ZUClIOV4jUsTwfTrd6UYF9mqmkdcB0YneBlunZEOz+30tAroTGUhuMJmdy5eoKMyoJTTLBTMVt5XddCpm2bpJa0MTw=
+	t=1715018207; cv=none; b=Mon7HHnVmYMWSoL5kj2v1UzzgPaHskNnhV8pmq+awwVqOBjGDYYsfVA4pG+wZIuYTgpGxD84TmuVMScFP+bP+IIApqRlr6YNZ+Ud9PxlX/URcv+atw3uQluKEM+5dmFNGwtoL8wTgrxP0PlM1JBUcWiXUjO0zpMPQ2g7vdj7ZuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715017932; c=relaxed/simple;
-	bh=nRh8dpWji7uY8eJ4RGAFfGFlIL6vXEenXmag2d8In6s=;
+	s=arc-20240116; t=1715018207; c=relaxed/simple;
+	bh=9mKo27o9TugRDuPDvKi8KCJG46tdt7CPVGlhj/hGQuM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EauefInqws9Zm8TmtvcK9Co6086ooAvN1w2OAll4rp550Ziu6eeRqUNTT+37MI0Xje+agUoDR2nOWGCp4KcMt7dqJXe/7sKFGmgvTcc45NseUI+TU0uu4peHdCezaaOKz52mJSaCwBubnEKQiF4P4MomR4bQ+G4wWNTSWcLwjUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pLJbixAP; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=jD3hvmB+MCGGMaIX34S/+RfvjjekycI9q4PYVr7WvRFZYrFXxI9iHSYMk6v1yRQXa+ka9yrB3r8d55j03aGdBlu9zqIu5OlTm2vDx901Zsuo7JDj/r6CqgVEPrnB7hzl/24uNicZbAwA3i1Sg1pTfukGcCW8wEB0PwhyS54XnZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RE81h80X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pLJbixAP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA6D8C4AF65;
-	Mon,  6 May 2024 17:52:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RE81h80X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0081C116B1;
+	Mon,  6 May 2024 17:56:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715017931;
-	bh=nRh8dpWji7uY8eJ4RGAFfGFlIL6vXEenXmag2d8In6s=;
+	s=k20201202; t=1715018207;
+	bh=9mKo27o9TugRDuPDvKi8KCJG46tdt7CPVGlhj/hGQuM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pLJbixAPS7iJw4/Bu7BSb6XEUCh17iRnmwsmuaAkEzweUezDHmrF1x3Jtrmku21dO
-	 v+p8pNWM+QE7jXMUdWsbVR2YGosz1I0Xkd9m1tGVE5S7GcNJ3MjWgAqme0fPnjq/pt
-	 0vZvXAhxda6uReLJ8sR7duR6FCAWEBwTJADc23WLPSBCiA24Jb7iIZFuVnu2RGC356
-	 FenII2FLayRBEomafXN6Vrq/ilwhjfdVAOJuTUd/f2Zewy8LN2Pxjon2RxGZf8x3T3
-	 WQjAkEOdXyxkyhypg1nhpAESGr4QGRQHsWkxnOae0UxjmTjL2XPJAAEJ9HTSBgbY7i
-	 WIYxVm/yUNq9w==
-Date: Mon, 6 May 2024 10:52:09 -0700
+	b=RE81h80XEWfTzMbvbgl91Sng1WZHP83i9T4dTDNtFKECcRQVAByctgVnf9dlyDG9G
+	 iB6QJbJCxXHbQFB3wREOI+EkoF42q6ku2IdHNNECmw8UcSQcqbSqma2HZn2MQ5dE3B
+	 umxOeDnKbxxcJI99YJlswFwS3TdUqC4vvwH9zaJvfWa9SnTuApr6eNR8s/NXX/Bps7
+	 k33yCSJDzU1LztFp7bCmMc2kf0tSOu9i5tNAAfdGWaxM+etlJ6GMiLJWgYSMBmcl3C
+	 wrxIIwHw/udpDUPW1NvsVplpbEytKkxpTedLdS6a6dife67/slm+TdbFfmWKORBAH7
+	 xhsY8XMbiYf1Q==
+Date: Mon, 6 May 2024 10:56:45 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>,
+Cc: Yury Norov <yury.norov@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>,
 	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-Message-ID: <20240506175209.GA1425562@thelio-3990X>
+Message-ID: <20240506175645.GB1425562@thelio-3990X>
 References: <20240502092443.6845-2-visitorckw@gmail.com>
  <202405030808.UsoMKFNP-lkp@intel.com>
  <ZjQ/JOpcdgWZXo0y@visitorckw-System-Product-Name>
@@ -46,8 +45,7 @@ References: <20240502092443.6845-2-visitorckw@gmail.com>
  <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
  <20240503155401.GA3960118@thelio-3990X>
  <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
- <20240503222338.GA1908482@thelio-3990X>
- <CANiq72mJPPp=H6qb7sG1K1hxR3uiHA9+WEVAZkvymSt_dW3CbA@mail.gmail.com>
+ <CANiq72mYPV_rNFirr1q=hjjz2yDzw98qrwqY5c14G3odt+shcA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,18 +55,36 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72mJPPp=H6qb7sG1K1hxR3uiHA9+WEVAZkvymSt_dW3CbA@mail.gmail.com>
+In-Reply-To: <CANiq72mYPV_rNFirr1q=hjjz2yDzw98qrwqY5c14G3odt+shcA@mail.gmail.com>
 
-On Sun, May 05, 2024 at 12:42:50PM +0200, Miguel Ojeda wrote:
-> On Sat, May 4, 2024 at 12:23 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > One gotcha that might be worth mentioning is that this combination only
-> > works on functions and non-local variables (i.e., static or global).
+On Sun, May 05, 2024 at 12:42:53PM +0200, Miguel Ojeda wrote:
+> On Fri, May 3, 2024 at 11:56 PM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > + * The __used attribute guarantees that the attributed variable will be
 > 
-> Yeah, since the `unused` one only applies to that, right?
+> We should probably mention functions as Nathan said (unless it does
+> not work for some reason).
 
-No, unused can be used with local variables, used cannot.
+Yeah, it should work for functions. I think clarifying it will not work
+for local variables would probably be good as well, since __used__ does
+not work on those like I replied in my other email, but it is not that
+big of a deal.
 
-https://godbolt.org/z/1hroMGzb1
+> > + * is actually used. It's a compiler implementation details either emit
+> > + * the warning in that case or not.
+> 
+> Is it an implementation detail or rather that they took different
+> alternatives/options on purpose (even if not documented)? If we think
+> it is just a consequence of their implementation, perhaps we should
+> mention that and what GCC/Clang do today in their latest version, in
+> case it changes (so that we know whether we need to remove the macro,
+> for instance).
+
+Yeah it is entirely possible that this is not intentional but when
+-Wunused-but-set-variable was introduced in Clang, I know there was a
+lot of discussion around making the warning match GCC in certain ways as
+well as breaking from GCC in others. I have not tried to dig up those
+discussions to confirm though.
 
 Cheers,
-Nathatn
+Nathan
