@@ -1,122 +1,163 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573EC2FB6
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 03:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3614C4CB58;
+	Mon,  6 May 2024 05:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714965734; cv=none; b=PoAUthJck+jUI32DvTg+vQB7G6OpOek3n8Lrwg7wA3BsyEwpH7UJNVVMq0bURzPRbge2fbiUcQK6eVjeF7YFem2Ar05l2b7w4jOijNYfiXFHvIjWXAv00aKMWnOpjywI7ANKpNmG3dKiDzAP8EwcHyA+ElaCLFYkAg+mODLCm0A=
+	t=1714972876; cv=none; b=LHYY/yHn1EMpmKUUIsS7loS/vm8njq5ITML7Ui6hFnSNn+UjcRwyEIZEpzqv55ER+/dYHAn2uG0M61994bE2CBIYdXT4M/bfNvgk920T6guMnabKMsKLuV9Dvj9UWJSce/hluubqEVY7J8T3p2lVPhznsYnIfIdl1LC12GxxWbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714965734; c=relaxed/simple;
-	bh=jDX8ASW2qvZ6KlbWPKGaSk28mv6B6mlsXMCBys2++Cg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U2SyBnzjZh4rvUaun71ulzknu/nGSbpmTcYSd6AX79rRMLVr0P2hFyjVAZNoYz1ag2ueBg0rFeXXO6sz0nOUEiRzbaTJDxMWyU1PzdORz67F8lpLax01Nnd2UnaSIeMg871UeTzkaXGsDom3ZAGxwps6zVQPavn1l1H3OUk39mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ZBg2BBSY; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1714972876; c=relaxed/simple;
+	bh=IKlIvjuBn/H754DI9jvJWcFPcdV3jR8qdRnrj4+WI+E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gTNkp4lLt5ir7vVD9cX50esZmzprHcolyE25WBUBhthMgi4Yur3iBO0i4DXRuGC5r0xGmvjcjPFUkAWTrisd5914DK8fQp+95pZ0hZEZ9Foe9s10TIZaltM27fs7pxQVSTDxrIgIM+gW36mQ8iJAeQh4GXgN18mjrs2mW6C3aug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tqHS/vGn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZBg2BBSY"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2b12b52fbe0so973328a91.0
-        for <llvm@lists.linux.dev>; Sun, 05 May 2024 20:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714965733; x=1715570533; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NLj2W08/AlPxLeXkCP61XrllXdJOfYp00hdT7d+0hkI=;
-        b=ZBg2BBSYAeIGErdt9d8D59Xcayc7GQ/zlkV15XWxZTV/nvrrobuQBEeVnj0DJ9YtQ5
-         IkjLKy7+3Q7+sv16QwDB9LqBSpuWk0buffuSVB58rGOFnrP9R3JNsp5NQrgEM0CSlDCd
-         QgRJFHcMx0Z1H9Exa+Z2mv1g39mnIM3EddXVE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714965733; x=1715570533;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NLj2W08/AlPxLeXkCP61XrllXdJOfYp00hdT7d+0hkI=;
-        b=ScPoFzToj+VIAVOusMrSVO5gABnwg1kXsC64KvsJY9wSis5nGC+hk/EAK0ZFe+YpFK
-         fxRBRvnc/iBYTtNl2OHf/QXxBE5LsXxMOmhDzgsz9Im3wbt6BLQREkKiubhLFdyM4VFM
-         6xgLslnke9+Wmv9Nz9gq6GJItZ6cvRPSKa3PbPiIT11W6uIliKJZ7JuJBXZBRre9eNHQ
-         NuzkJ7XaTwUpJu3SCKEWugOQye99SHwW28i5ePGHYE2EFDBlC09g2JCUyZeJTSHy6efj
-         RD52Bg6WZnXbyPohvXuPjvsp+gJHw6wMBd3xjY12En4nIg/3oGeEIZGfK7J5G5HaJeSW
-         WjtA==
-X-Forwarded-Encrypted: i=1; AJvYcCXOv4tQQ7vJ6R8TQVTxKNft+zHy/IY8GI7IVuz0tmlgzCTfgnaJx+KUW6Mnj3wLwg8NIYUgH/cBjZFPsZK+JP4QifMAsA==
-X-Gm-Message-State: AOJu0YwxypkDyMRm5mvp5C7ukgcRH2COGvIbj2xO2l8F+k4wOnQnkm+Z
-	UKotpHOlpRZpdRmRT/KnMeQPEb/yzS5qzaGPLCH9fMUot5x8cA7+NflNeSxIwQ==
-X-Google-Smtp-Source: AGHT+IHdGPyGQrnvWR5Admmi4idMQxhyP5nB96L+iNkf96/MgdQqtZ5qsVJTxOQ1cKRQu2U3zrqpXw==
-X-Received: by 2002:a17:903:8d0:b0:1eb:7ba:a4c3 with SMTP id lk16-20020a17090308d000b001eb07baa4c3mr16253443plb.48.1714965732789;
-        Sun, 05 May 2024 20:22:12 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:8263:3b89:bcee:2ed4])
-        by smtp.gmail.com with ESMTPSA id o7-20020a170902d4c700b001e249903b0fsm7134459plg.256.2024.05.05.20.22.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 May 2024 20:22:12 -0700 (PDT)
-Date: Mon, 6 May 2024 12:22:07 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org
-Cc: kernel test robot <lkp@intel.com>, Minchan Kim <minchan@kernel.org>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH 08/14] zram: check that backends array has at least one
- backend
-Message-ID: <20240506032207.GD8623@google.com>
-References: <20240503091823.3616962-9-senozhatsky@chromium.org>
- <202405041440.UTBQZAaf-lkp@intel.com>
- <20240504071416.GH14947@google.com>
- <20240504161004.f5a0aab5e5aa1033d4696c20@linux-foundation.org>
- <20240505043957.GA8623@google.com>
- <20240505051305.GB8623@google.com>
- <20240505064832.GC8623@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tqHS/vGn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6495C4DDE3;
+	Mon,  6 May 2024 05:21:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714972875;
+	bh=IKlIvjuBn/H754DI9jvJWcFPcdV3jR8qdRnrj4+WI+E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tqHS/vGnvtQgm5ottAK403iYyDc6/kLmsTqJatmTnLywHGL2J4Yx3BQFHn8kIh5py
+	 nAooPFJ/9D/gp80HpsyAE7VLHtgoEXN2oFlLX5jPGy9UcaNhHy63gOMOzCBNTTjYzY
+	 zTp1VSdM3dp9bb6a1cRiUxYBB01w14LtjpGUitKZvmBd////F+XFWc+2WhNuCayL1f
+	 5DKi+xN1JCPwBItgzdC22IH1kLTrDRX9bueAA25gRiT5J7ruCdhav0YQqrZ4kFm33e
+	 GoiquvMi/ejmmVn8rmJXrvcabBTLqBrTOjH9PoG8HDm8g2HgzSTiZfZk5HaOctZgEA
+	 vnVuNTv7yqmXw==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51f99f9e0faso1578351e87.2;
+        Sun, 05 May 2024 22:21:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV1W7V85/XVj4El8kyvsfFjmEkuee56EDnJImbm9uudXxZ42PwCFN3nm23pW928S6DV68BqgCpmsxzsbJo0W800QZa5KgxRSW/aNs6YACyvJ0Aqt3yYe8qZbjXUxKFKAGhba5g=
+X-Gm-Message-State: AOJu0Yz1Xzw1ovyw6ye2uBjtLkWF0G+Zj8eP1OJ6gF9G+odTDWFaNIjA
+	MTNXN0Cih0eZIefl6VCcJsO6HnxbUno+Z6btPRuOd9RTy0g8vt6ksD5lsdsL9GfbWnoYoJJeZ09
+	jBKo+QqT910U1wQH9QCMGsO3KsNQ=
+X-Google-Smtp-Source: AGHT+IHQJhS1znz8gVwOUrqUtv4OQz0bCGrfCQ1loRBZocjB8uJP1gVAFiA08qYh/ghUaXKQtWYvCUkCZIIXeKTn4Jg=
+X-Received: by 2002:ac2:4189:0:b0:51d:aaf7:a92e with SMTP id
+ z9-20020ac24189000000b0051daaf7a92emr6626911lfh.47.1714972874359; Sun, 05 May
+ 2024 22:21:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240505064832.GC8623@google.com>
+References: <20240503091823.3616962-9-senozhatsky@chromium.org>
+ <202405041440.UTBQZAaf-lkp@intel.com> <20240504071416.GH14947@google.com>
+ <20240504161004.f5a0aab5e5aa1033d4696c20@linux-foundation.org>
+ <20240505043957.GA8623@google.com> <20240505051305.GB8623@google.com>
+ <20240505064832.GC8623@google.com> <20240506032207.GD8623@google.com>
+In-Reply-To: <20240506032207.GD8623@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 6 May 2024 14:20:37 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARUBuR3gDtX6GfB7Zv6dydt1+qzBB_XT58wOg3WeCTVvA@mail.gmail.com>
+Message-ID: <CAK7LNARUBuR3gDtX6GfB7Zv6dydt1+qzBB_XT58wOg3WeCTVvA@mail.gmail.com>
+Subject: Re: [PATCH 08/14] zram: check that backends array has at least one backend
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>, Minchan Kim <minchan@kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>, linux-kernel@vger.kernel.org, 
+	linux-block@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On (24/05/05 15:48), Sergey Senozhatsky wrote:
-> On (24/05/05 14:13), Sergey Senozhatsky wrote:
-> > On (24/05/05 13:39), Sergey Senozhatsky wrote:
-> > [..]
-> > > > I guess just pick one if none were selected.
-> > 
-> > How do I pick one if none were selected? Does Kconfig support
-> > something like that?
-> 
-> This triggers Kconfig error:
-> 
-> config ZRAM_EMPTY_BACKENDS_FIXUP
->        bool
->        depends on ZRAM && !ZRAM_BACKEND_LZO && !ZRAM_BACKEND_LZ4 && \
->                !ZRAM_BACKEND_LZ4HC && !ZRAM_BACKEND_ZSTD && \
->                !ZRAM_BACKEND_DEFLATE
->        select ZRAM_BACKEND_LZO
-> 
-> 
-> drivers/block/zram/Kconfig:17:error: recursive dependency detected!
-> drivers/block/zram/Kconfig:17:  symbol ZRAM_BACKEND_LZO is selected by ZRAM_EMPTY_BACKENDS_FIXUP
-> drivers/block/zram/Kconfig:52:  symbol ZRAM_EMPTY_BACKENDS_FIXUP depends on ZRAM_BACKEND_LZO
-> 
-> 
-> I'm a little surprised by this - EMPTY_BACKENDS_FIXUP does not depend
-> on ZRAM_BACKEND_LZO, it depends on NOT ZRAM_BACKEND_LZO.
-> 
-> Let me Cc linux-kbuild. Kbuild folks, how do I workaround this?
+On Mon, May 6, 2024 at 12:22=E2=80=AFPM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> On (24/05/05 15:48), Sergey Senozhatsky wrote:
+> > On (24/05/05 14:13), Sergey Senozhatsky wrote:
+> > > On (24/05/05 13:39), Sergey Senozhatsky wrote:
+> > > [..]
+> > > > > I guess just pick one if none were selected.
+> > >
+> > > How do I pick one if none were selected? Does Kconfig support
+> > > something like that?
+> >
+> > This triggers Kconfig error:
+> >
+> > config ZRAM_EMPTY_BACKENDS_FIXUP
+> >        bool
+> >        depends on ZRAM && !ZRAM_BACKEND_LZO && !ZRAM_BACKEND_LZ4 && \
+> >                !ZRAM_BACKEND_LZ4HC && !ZRAM_BACKEND_ZSTD && \
+> >                !ZRAM_BACKEND_DEFLATE
+> >        select ZRAM_BACKEND_LZO
+> >
+> >
+> > drivers/block/zram/Kconfig:17:error: recursive dependency detected!
+> > drivers/block/zram/Kconfig:17:  symbol ZRAM_BACKEND_LZO is selected by =
+ZRAM_EMPTY_BACKENDS_FIXUP
+> > drivers/block/zram/Kconfig:52:  symbol ZRAM_EMPTY_BACKENDS_FIXUP depend=
+s on ZRAM_BACKEND_LZO
+> >
+> >
+> > I'm a little surprised by this - EMPTY_BACKENDS_FIXUP does not depend
+> > on ZRAM_BACKEND_LZO, it depends on NOT ZRAM_BACKEND_LZO.
+> >
+> > Let me Cc linux-kbuild. Kbuild folks, how do I workaround this?
+>
+> Is this how one does it?
+>
+> config ZRAM_BACKEND_LZO
+>        bool "lzo and lzo-rle compression support"
+>        depends on ZRAM
+>        default y if !ZRAM_BACKEND_LZ4 && !ZRAM_BACKEND_LZ4HC && \
+>                !ZRAM_BACKEND_ZSTD && !ZRAM_BACKEND_DEFLATE
+>        default n
+>        select LZO_COMPRESS
+>        select LZO_DECOMPRESS
+>
+>
+> User still can select N and then we'll have empty backends, but
+> at least default is Y if none of the algorithms were selected.
+> Is it good enough?
 
-Is this how one does it?
+
+I interpret this sentence into:
+
+"randconfig will eventually disable all ZRAM_BACKEND_*,
+causing the build error again.
+Is it good enough, Arnd?"
+
+
+
+Some possible solutions:
+
+
+
+config ZRAM_BACKEND_FORCE_LZO
+        def_bool !ZRAM_BACKEND_LZ4 && !ZRAM_BACKEND_LZ4HC && \
+                 !ZRAM_BACKEND_ZSTD && !ZRAM_BACKEND_DEFLATE
+        depends on ZRAM
+        select ZRAM_BACKEND_LZO
 
 config ZRAM_BACKEND_LZO
-       bool "lzo and lzo-rle compression support"
-       depends on ZRAM
-       default y if !ZRAM_BACKEND_LZ4 && !ZRAM_BACKEND_LZ4HC && \
-               !ZRAM_BACKEND_ZSTD && !ZRAM_BACKEND_DEFLATE
-       default n
-       select LZO_COMPRESS
-       select LZO_DECOMPRESS
+        bool "lzo and lzo-rle compression support"
+        depends on ZRAM
+        select LZO_COMPRESS
+        select LZO_DECOMPRESS
 
 
-User still can select N and then we'll have empty backends, but
-at least default is Y if none of the algorithms were selected.
-Is it good enough?
+OR
+
+
+config ZRAM_BACKEND_FORCE_LZO
+        def_bool !ZRAM_BACKEND_LZ4 && !ZRAM_BACKEND_LZ4HC && \
+                 !ZRAM_BACKEND_ZSTD && !ZRAM_BACKEND_DEFLATE
+
+config ZRAM_BACKEND_LZO
+        bool "lzo and lzo-rle compression support" if !ZRAM_BACKEND_FORCE_L=
+ZO
+        depends on ZRAM
+        default ZRAM_BACKEND_FORCE_LZO
+        select LZO_COMPRESS
+        select LZO_DECOMPRESS
+
+
+
+
+BTW, "default n" you are adding are redundant.
+
+--=20
+Best Regards
+Masahiro Yamada
