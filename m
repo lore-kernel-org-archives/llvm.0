@@ -1,157 +1,241 @@
-Received: from mail-ot1-f73.google.com (mail-ot1-f73.google.com [209.85.210.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E40158D99
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 18:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715021722; cv=none; b=g3Q19PvjGigrTJ9sCpIH9Gm2trZWUp3lc17IMt4RTNl3UmAN9KD/3OPFA/B2d41tX8/RaAG01Ef3hmLu2FdReZjqsftZ5HqoEjfvc0eern9FKLLNExY98zt4bX5yMCjvmDihdYl0gdv/mDFWHVrVhFg1F/qQVMBHRFqR8mvr2M8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715021722; c=relaxed/simple;
-	bh=eQ59GvPtmD0StGAqEgoE1xzghWc3vAliYszQLIkM+hw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DJuKBSzD2/dKnKWhF7PmcV+8mN++IdWdv5i6BZxsNIoUvm8Q6YVTUe7DcqpfmrZAslbjGBfU0wYWZeS+CNhBxgADslMs+dA9oOPf7gQJpLc6kIBy5RfXtQ4Qd3HQYR5TwZsRZmHydTenuxmi872Zwm+wp4TX7P21/rBqFeccTL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R3s/CmUN; arc=none smtp.client-ip=209.85.210.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFEE158D9B;
+	Mon,  6 May 2024 19:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715022143; cv=fail; b=cCaZWZWceoZwu/sUBzeA7VMuGWE6h/Wj0NJ3pcMoP9tYFHOFJnP9HL0CWoFz8q71Wo4ZjOp2Doeo/RXdTbGj22qtefRw8bKeSRj+5ANjeA44wrZ+7O5omqoGVeOZK/S1nMXmeCd0JGbg9r3GNleGF6/9+qDsp441cO75b5y/AGs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715022143; c=relaxed/simple;
+	bh=D6Y0YBQ3003El4EDgEpOTTWJKcePHE4KIGyNWtfE4y8=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=YUkOG9klpUIfWiEIcgQrqro+cFfdcc7Wi8TEBwztvFJCYiEK+NTrUVuTPIzbfrtx7d+mP/XxRwHurMlasChFiaTjjER/7Rl0xdaqSkTSC7ufJAG/8sFPRGxLvWtCrfLHRgs9esqE+OciDoCv5IeVvFOd3MJ1ySr/bKfoo2V7f9I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=r6PADBHC; arc=fail smtp.client-ip=40.107.243.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R3s/CmUN"
-Received: by mail-ot1-f73.google.com with SMTP id 46e09a7af769-6ee50c27298so3435391a34.3
-        for <llvm@lists.linux.dev>; Mon, 06 May 2024 11:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715021720; x=1715626520; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zFb+/j2lVI6dVZBxEog24QJX60eA/cRB1E70DgXCvn4=;
-        b=R3s/CmUNUac0XDO2Z/3q0eUiN3GwGgkaELAEiX8BoTxxKX+91n/gdZTZ+qiZHvvK7N
-         AQj8rNRP1dQWVQvA8+QyBbFkMajtYFBnOsfQ9blYxf74Vdp/mDbCNlA3dAHFqpIhZ/Rm
-         0vg3cQjL9Be63mMT5dnLu1+/QGw5mkwpEHt5SnITNDAA+NJbks4DQXJZrCFpTL8f1F8r
-         NvsP073fwiPZqc1lD8W8MX0WKwMwHojmchKS9eXXm969fUm/5GvkkDu51BKYisDu/P1x
-         p51i/nBWMN58n5Fw00VA2NVtSZg0aGEP7ejQ+IYGjKU3Bg1RVD8kVePuTg4jmV5Ex2Vm
-         M5NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715021720; x=1715626520;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zFb+/j2lVI6dVZBxEog24QJX60eA/cRB1E70DgXCvn4=;
-        b=F7lv15FOe48TIF/jDxKBBhMQ3P3XXFZfcjBvSnxSTq1f3TKlssTH63UwirP//rUfDK
-         AT0ufDyAyKtwCtuN6rsGQFCifSvTyWBKUN0pItu5S+6kqUmsDc/T67Uz2ePXWuZ4j9IA
-         tVfM98m3OxeRIv6S/gG+97BjAsmzqfrT1m8/+jdRVPD4mZNYml/1b6GGQVHFQnuJmaYk
-         BvGBEzC7aRYcXCgEcRSsgNM87z+tJcr3DjiZsN11gj+ZM49C0JIDRgTywwcsEj4WC+gH
-         YbUhH7caBPhQEfoFGcuNKaxI3saFjweZihEj/wp5DDQbsSx5de71ryuMYRFP2KTAdnOn
-         SsXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX2hsdFc81odlsI5GGnMxqH8RYegmB3hdK8+nZco7kGVLq+to3dbBzMsnBVydGHComqWltXeEqOLmyPlqf27bgEcahVkQ==
-X-Gm-Message-State: AOJu0Yz4VZj/EfvWS7cwv1yHvEUw7LxtiOiZ3oq2aettY4JKXSXg6LmO
-	WZMdwJ5RqnYhjqDeg7r1B3zloEr/ItEuW3gBNIzK5GcmJm9WZvCIR88nK+KoNbT994OLVwym2Bb
-	vh1DskcmRM8vrLlCpoN0Dew==
-X-Google-Smtp-Source: AGHT+IFbnnHzpLP5ns+PA8kTWNDTcUvh/TQFs9fuiwaTLC20p8G5kV8pSk6Qj3cnP8mjE1lr7O70D3JP2zRte4Co1g==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:6870:808c:b0:222:1414:d29 with
- SMTP id q12-20020a056870808c00b0022214140d29mr38884oab.8.1715021720357; Mon,
- 06 May 2024 11:55:20 -0700 (PDT)
-Date: Mon, 06 May 2024 18:55:19 +0000
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="r6PADBHC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k2HaYNYTejmBNh5CFyI1++QsZbfOohRDVEyfC8lC0bNzlO4FzONKg6Rwy1cBsdpqY1ZOHZqbtr5/mXsPuXGmc51JHGENt8eCG5CY7LC0O+Uo44/a0LyXEZTxFBxzYlHyTmygXbBPizWxkG+6o9UjFLGTJJ6FooLPya2ZTQo37EwLc1nSaFpJjLsMEz3PDojmFDTJ1n4VYwgzbbly+zGO39HCXcRivk9rsLFB0Eo2Ne5itoL3OVbThnsuy8yJ9Y+Mcum3KPwrcC0WJ3kaJBr0HcHgX3sFmakzX++jfVCigRIcC4IAp+a9bbg5msbyXTYdx+KF1Ik7apRrhL5uIJMI/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vq0M87NzhO/Rv4P5a1urdnmGSGGLoAXkZGrXTiy37b8=;
+ b=n607H3mRcwrHA440j6iEGvm8axnCovDTkTRVLaD4f211DBIqZV+vhW5BuY6F4kx5RfE5HbZn2hnQ/NFPDZEIRxJr4L+lQk0g8oDGxT4/+SZ686HOEAjJ7/yYoIbeR+2rK/V8tuEGSrAK0Hq3x+vAMbmQa+VgDQZKwffWVfb9xGZ8e9sNNuyhC9XZmrng8QVSA+GPWyoU3E9qbOLmymsuVzvje6UsIW+F18uCuvOsJM9Gxl2P8FRextbJTdpU9xeFXgs9aGCCG+BQcciosMEhzBV2aMD04qQ7rctaW/baYeFFRL0Yjw8obmRa44l5ApBv/WW1tG7xmFksuv+kTnkuBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Vq0M87NzhO/Rv4P5a1urdnmGSGGLoAXkZGrXTiy37b8=;
+ b=r6PADBHC/+vDr01UdqmuCp2GDZhcEAngn7k6El3B6StZLJcgCiva25eTUlHlE1hbKsXQyrV13pnftrxKHTD9zSTkNusCZ4cFyPVAaz4WZgpVwkzwWD1FCLr2xNpMDtuJnlc7Ns+dhPwTeJgCfBYs19tMzHdJ3CiCCfIS2LjugO4aD5rkCPzlRCkCys3P8Ci/o9B/USpH0tS8i3dIPn/AeYBHGC2KAZOajROtGjXkLl+/6YONM4tFgWDyrtr16GtU9ulD10x6N3yXknl9NQtuO7XQQa9UleAO4H9Ias8/EeL2WDNCEZS9t+RLYHktZT/TbOWgsPiMeLwTQ3cPFG6ANQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by MW4PR12MB6826.namprd12.prod.outlook.com (2603:10b6:303:20c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Mon, 6 May
+ 2024 19:02:15 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Mon, 6 May 2024
+ 19:02:15 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	Pravin B Shelar <pshelar@ovn.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	zhujun2 <zhujun2@cmss.chinamobile.com>,
+	Petr Machata <petrm@nvidia.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Benjamin Poirier <bpoirier@nvidia.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Dmitry Safonov <0x7f454c46@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-actions@lists.infradead.org,
+	mptcp@lists.linux.dev,
+	dev@openvswitch.org,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v2] selftests/net: fix uninitialized variables
+Date: Mon,  6 May 2024 12:02:04 -0700
+Message-ID: <20240506190204.28497-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR05CA0079.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::20) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAJYnOWYC/x2MQQqAMAwEvyI5G6hFBf2KeIhtqsGi0ooI4t8NH
- meZnQcyJ+EMffFA4kuy7JtCVRbgFtpmRvHKYI2tTWNanGpUB7NLe4wTuRU9x5PQh9AR6cC2BX0 fiYPcf3kY3/cDhjl3DWkAAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1715021719; l=3808;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=eQ59GvPtmD0StGAqEgoE1xzghWc3vAliYszQLIkM+hw=; b=XVVKygfhbc/BJCZeqQmuwfYK+srJRDUiBofzc7JKHYMaXrvrFCIV5PoAd9QhGRY/XOgmGRvF0
- xo/Ugu0sK3RAGr0ImfBUXBRnnyuGe13P17PZRP3P68ZL01qO4fSVZEy
-X-Mailer: b4 0.12.3
-Message-ID: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com>
-Subject: [PATCH] tty: vt: saturate scrollback_delta to avoid overflow
-From: Justin Stitt <justinstitt@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
-	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|MW4PR12MB6826:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee76813a-3484-4c53-d19d-08dc6dff0b21
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|1800799015|376005|366007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?YhTRhNKXsoJ9JejY1P9hcabykamE0dREZkBbjsSIMP62T6sfBtBz4pi9A4Wg?=
+ =?us-ascii?Q?TIaarkw/5Y4HM2fMyfq9cAE0D8d7ZmXYIp9kOJ4wXYHAwjo9P2YUpoeSS1wt?=
+ =?us-ascii?Q?FnIza+badBf7ep3zO8iQkpwDq4ZV196YnsZbGxcA/W08SsZ2sbeFwoXbQvkm?=
+ =?us-ascii?Q?i4yHey0tTuzwsd1s4CWLb0cq0zdCLUZQ8DmY4cV4SGGYSyCc3YH+TKKZLBx4?=
+ =?us-ascii?Q?YGVgoWR1PR3XPiGCkf+iDJRp5tviuvVn96MnLyBDlilU75TOjIQqAgVTRmoZ?=
+ =?us-ascii?Q?m3pkfLzIhJY2+33k8WSbJMcSre/DwQJgVuRYHO+YTKFNwDgUHNk8617G29oq?=
+ =?us-ascii?Q?b89L59dPBRMdm8hweUMWN/b5Ragcna3I1HDwaRo7+rYegPkRsbR4xMCEdwUq?=
+ =?us-ascii?Q?ZqY2pbCJlnzOdoJAtQengyMHaAG8vpqob6n7dqkxhE3yAayq6MEHJmf2hdM7?=
+ =?us-ascii?Q?0/GO3SJ5NEeEnWroitpFey05oPJB16wm2ubNoJY/Bipajfvzuju9BkTjLgMu?=
+ =?us-ascii?Q?UPgFHpadpLteEbCDmrHS2d39C0S8utfQyrB+uSFtIJQFTMKQ6LA0ZLb+pKpR?=
+ =?us-ascii?Q?rZqkM8kok2a4RwCNDIBWD1VXO6W9dO5sAzB8WxrvQlutv6Fxwm32jVsImzgc?=
+ =?us-ascii?Q?WIvbnIN+m7JhD3CAHK620eLb9Xt/7XzXbAjlUOlHjRmdlOZSu07gd7VhYVtx?=
+ =?us-ascii?Q?SkVc0justT3al5U7+bDiP+XxuNEcsxRYP7wK6I0WEaSiwkjfPkTOqP2KXZYO?=
+ =?us-ascii?Q?JHgOWKYMZFawG0rAbtcrH0+xlg9SVvY6BkbwYbRZBKMOGjypROeqTDlmwaj4?=
+ =?us-ascii?Q?VzmRXSY1AA7YIFr4/Mz6m6+Emrn1Wy+jns6wrZ/0JYfk0EDH5YPWw2GRXNqD?=
+ =?us-ascii?Q?UNu7VEyFdOaXye4FnE8I66BbHViKn7mq4Ur4lNVC2DFDs0si0M8WizsoIcSE?=
+ =?us-ascii?Q?AQ6vyKOReLuR3UjBL9/Q0VqJ3vmlBrHv1Yu91GvXh6PoB6MEoBdTGRq/ZUG2?=
+ =?us-ascii?Q?GON7QGJ1rp8//XouvIjHambSd0cVR0sPl7FH80dr7hWnn7e2c2oSZkZ2qd2F?=
+ =?us-ascii?Q?v40lG5lMzOs7YsmlRDW5fREdLe9UqpH80FupEuKb4aEeaXB/P9SOt8jQEpzY?=
+ =?us-ascii?Q?krgIpHkRP3bAxO6/K8cjfVLb5WuQYnZk+CIQync1tzBpPmo42qbEWiR/euPa?=
+ =?us-ascii?Q?/m0OZehUkZa1GkSOo/bOqI+J8ESgl+mp5Cs+jM4DLZIBPmQWEXzuNP0x2jRs?=
+ =?us-ascii?Q?jG+59JFZ1rZk4cK9A/EXstKFM6aQgDjASF+JE7dC/g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?qzpRpBfjibkMgWeT74gnfFe/NRMdmYmkSmEJOl0DundnIw7JPekEpy7HtWge?=
+ =?us-ascii?Q?kSntY/R4sqW8PqMBpk2eQv7olZjTGjACfPtFKw08shmBgGkKOlPhf0NaSB3h?=
+ =?us-ascii?Q?DDSH/36hyvCL4CNdLBY+V+l5zCCQOFhOLs3xeOu2PR5/AEh5NC/XvSE7Ysn/?=
+ =?us-ascii?Q?lspcfwnN1LAZtXedaQv8OuW1Iwwpi/VEbKXBnvR0S9JmhmME5fN0XMt746O3?=
+ =?us-ascii?Q?eUyC30Z8Hdk4PRRAGnveHdBqPBop7MwTDNWfxZoFZ9MA93HQOjOoepxAQoJz?=
+ =?us-ascii?Q?d5Q1KdxdHSXtfT6WJRO0eUVXUbI/+NCPNj6TtcvsRlzA5jl1iZYrgrLXmQvy?=
+ =?us-ascii?Q?93KnNGMibJUmI9fhKiD8Zqmnt2dywAcxHa8F3TADj0SV7LIqX6WXh3+kySHn?=
+ =?us-ascii?Q?dnGfgIX0J8gXPxu2gR0GXlSXJXivtrU3zc7H0t/aMPiCDfrR3WpzBQ7E/DgD?=
+ =?us-ascii?Q?+4OcRU0b92RhhAu2UY9AO+4ln2Q5aFlQ9mo6B3zGqTwYoB1kURGULxmtw0Fg?=
+ =?us-ascii?Q?UEPiMZSNpwfspbJ3ZbeipPrwejhGvQ0dgJ858LqfyDBtDYy9xjgIMzHLXY0Z?=
+ =?us-ascii?Q?eBpvhJ2LDyzYIoj0kRB163Fef9nwPa5kic+88gB/drrbQR0V+7OrpyQEfvnx?=
+ =?us-ascii?Q?UIu/TA+sVmq0SN78jibV/zrSULhW19QaTz93grc4pyEfT2Ve15KgpqM7wUW8?=
+ =?us-ascii?Q?iF5HacHUXJVJbqB90x00KECIrBiA49ozKQs3Wmq5UqHlO+36jV40lFjNJX/A?=
+ =?us-ascii?Q?1053Y96Trmb7CjoIWgd7qh+OLE0q2U7ixHP9ytTg4UamWisyX/S5QJ1lz5ap?=
+ =?us-ascii?Q?oY1dCZ+9P7m252Id6uVR4ISoj2QjXktW/eOUpxV5lwKAUNhN+k216E2gkUJ0?=
+ =?us-ascii?Q?kCaNMGMQ4ikgVJpFtdfF45HBBwwftGf4SG7RLQl7iW5YMEHCyNPhClI0j46Y?=
+ =?us-ascii?Q?soZZTUK1mL2pJWqJNlLI9nyB6DQiPAUN3O3u32YMkEl0YJtlagSImfhijtVm?=
+ =?us-ascii?Q?D0GHqW3nEBRnx4rZ6Kzxd/wxqGxuqRzEs8TRjvtS18Ys+JBXRX3vHJrqiZGy?=
+ =?us-ascii?Q?7TJvw4EXbXwnFuaS0NvizAYfFtn8wxtvF5HDK07nAZQl/sJ09KcY/ex5g4RH?=
+ =?us-ascii?Q?KZ3YRqZIwQCj/mCjzPAzxuIF/XOSLDvBDQPqW137A3DKbKCfD+uIcPM3DgOU?=
+ =?us-ascii?Q?L5r3Z0oLYakbIDw+/5nvieYdfEbooAgGlM0shSSFohIxs1q3jITQDJe4ypW6?=
+ =?us-ascii?Q?hxWQw23CTJ1HVJiQhApOxR8APRcgtt1a6yxM55MrIf+J7zW44sXBogBo/L+i?=
+ =?us-ascii?Q?Ry6Etf4c7VcFhYxy5QndCzXr+FAqy+VW8xenlg4pG/3dzNph0BsZn6bv6nK8?=
+ =?us-ascii?Q?vq+CqqQkgg5BHrHPSc0NmyYxqlCsPm6kIeJJsHzlpOVfbjC9MlBLscpYhJ9n?=
+ =?us-ascii?Q?DW0fJ0l1uc9273No4ojwSmBzUe0iHuqEBiqMuHBag6kJM8KNC1BtFin4jGGF?=
+ =?us-ascii?Q?L8M6wLWS22vICHEqpLuRU/uxQ60Dj3+ZTKMnHquo+a1K/6YI0vB1uOEgP5OD?=
+ =?us-ascii?Q?6UN0DC9+BuM31ate6v/WpepkWbpGbljEw1HpUEnNXx51DUJBA6Lakjm4Uri3?=
+ =?us-ascii?Q?vA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee76813a-3484-4c53-d19d-08dc6dff0b21
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 19:02:15.1725
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rzddJ/OmsmtsPK4ktt4UchpGnqhTYrOfPRYB++pLQeg5cwVYqb3tCY6ntPdPo6t31fIE8ki0lA6NJPIPtrRWfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6826
 
-Using the signed overflow sanitizer with syzkaller produces this UBSAN
-report:
+When building with clang, via:
 
-[   31.304043] ------------[ cut here ]------------
-[   31.304048] UBSAN: signed-integer-overflow in ../drivers/tty/vt/vt.c:309:19
-[   31.304055] -2147483648 + -1073741824 cannot be represented in type 'int'
-[   31.304066] CPU: 1 PID: 3894 Comm: syz-executor Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
-[   31.304073] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[   31.304077] Call Trace:
-[   31.304080]  <TASK>
-[   31.304083]  dump_stack_lvl+0x93/0xd0
-[   31.304177]  handle_overflow+0x171/0x1b0
-[   31.304186]  scrollfront+0xcb/0xd0
-[   31.304196]  tioclinux+0x3cc/0x450
-[   31.304205]  tty_ioctl+0x7fc/0xc00
-[   31.304212]  ? __pfx_tty_ioctl+0x10/0x10
-[   31.304219]  __se_sys_ioctl+0xe0/0x140
-[   31.304228]  do_syscall_64+0xd7/0x1b0
-[   31.304236]  ? arch_exit_to_user_mode_prepare+0x11/0x60
-[   31.304244]  entry_SYSCALL_64_after_hwframe+0x6f/0x77
-[   31.304254] RIP: 0033:0x7fc3902ae539
-[   31.304263] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 8
-[   31.304282] RSP: 002b:00007ffc8a457998 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[   31.304289] RAX: ffffffffffffffda RBX: 00007fc3903e2f80 RCX: 00007fc3902ae539
-[   31.304293] RDX: 0000000020000040 RSI: 000000000000541c RDI: 0000000000000003
-[   31.304297] RBP: 00007fc39030d496 R08: 0000000000000000 R09: 0000000000000000
-[   31.304300] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-[   31.304304] R13: 0000000000000800 R14: 00007fc3903e2f80 R15: 00007fc3903e2f80
-[   31.304310]  </TASK>
-[   31.304371] ---[ end trace ]---
+    make LLVM=1 -C tools/testing/selftest
 
-This is caused by the scrollback_delta overflowing. Historically, the
-signed integer overflow sanitizer did not work in the kernel due to its
-interaction with `-fwrapv` but this has since been changed [1] in the
-newest version of Clang; It being re-enabled in the kernel with Commit
-557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow sanitizer").
+...clang warns about three variables that are not initialized in all
+cases:
 
-Note that it would be difficult to reproduce this bug in a non-fuzzing
-scenario as it requires inputting tons of scroll inputs via keyboard
-before the scheduled console callback has had a chance to update.
-Nonetheless, let's saturate scrollback_delta so it stays clamped to
-integer bounds without wrapping around.
+1) The opt_ipproto_off variable is used uninitialized if "testname" is
+not "ip". Willem de Bruijn pointed out that this is an actual bug, and
+suggested the fix that I'm using here (thanks!).
 
-[1]: https://github.com/llvm/llvm-project/pull/82432
+2) The addr_len is used uninitialized, but only in the assert case,
+   which bails out, so this is harmless.
 
-Closes: https://github.com/KSPP/linux/issues/351
-Signed-off-by: Justin Stitt <justinstitt@google.com>
+3) The family variable in add_listener() is only used uninitialized in
+   the error case (neither IPv4 nor IPv6 is specified), so it's also
+   harmless.
+
+Fix by initializing each variable.
+
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
-Note: I am using Kees' SIO tree as a base:
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=dev/v6.8-rc2/signed-overflow-sanitizer
----
- drivers/tty/vt/vt.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/gro.c                 | 3 +++
+ tools/testing/selftests/net/ip_local_port_range.c | 2 +-
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c     | 2 +-
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 9b5b98dfc8b4..b4768336868e 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -308,7 +308,14 @@ static inline void scrolldelta(int lines)
- 	/* FIXME */
- 	/* scrolldelta needs some kind of consistency lock, but the BKL was
- 	   and still is not protecting versus the scheduled back end */
--	scrollback_delta += lines;
-+
-+	/* saturate scrollback_delta so that it never wraps around */
-+	if (lines > 0 && unlikely(INT_MAX - lines < scrollback_delta))
-+		scrollback_delta = INT_MAX;
-+	else if (lines < 0 && unlikely(INT_MIN - lines > scrollback_delta))
-+		scrollback_delta = INT_MIN;
-+	else
-+		scrollback_delta += lines;
- 	schedule_console_callback();
- }
+diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
+index 353e1e867fbb..6038b96ecee8 100644
+--- a/tools/testing/selftests/net/gro.c
++++ b/tools/testing/selftests/net/gro.c
+@@ -119,6 +119,9 @@ static void setup_sock_filter(int fd)
+ 		next_off = offsetof(struct ipv6hdr, nexthdr);
+ 	ipproto_off = ETH_HLEN + next_off;
  
++	/* Overridden later if exthdrs are used: */
++	opt_ipproto_off = ipproto_off;
++
+ 	if (strcmp(testname, "ip") == 0) {
+ 		if (proto == PF_INET)
+ 			optlen = sizeof(struct ip_timestamp);
+diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools/testing/selftests/net/ip_local_port_range.c
+index 193b82745fd8..29451d2244b7 100644
+--- a/tools/testing/selftests/net/ip_local_port_range.c
++++ b/tools/testing/selftests/net/ip_local_port_range.c
+@@ -359,7 +359,7 @@ TEST_F(ip_local_port_range, late_bind)
+ 		struct sockaddr_in v4;
+ 		struct sockaddr_in6 v6;
+ 	} addr;
+-	socklen_t addr_len;
++	socklen_t addr_len = 0;
+ 	const int one = 1;
+ 	int fd, err;
+ 	__u32 range;
+diff --git a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+index 7426a2cbd4a0..7ad5a59adff2 100644
+--- a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
++++ b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+@@ -1276,7 +1276,7 @@ int add_listener(int argc, char *argv[])
+ 	struct sockaddr_storage addr;
+ 	struct sockaddr_in6 *a6;
+ 	struct sockaddr_in *a4;
+-	u_int16_t family;
++	u_int16_t family = AF_UNSPEC;
+ 	int enable = 1;
+ 	int sock;
+ 	int err;
 
----
-base-commit: 0106679839f7c69632b3b9833c3268c316c0a9fc
-change-id: 20240506-b4-sio-scrollback-delta-dff9aabace26
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
+base-commit: f462ae0edd3703edd6f22fe41d336369c38b884b
+prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
+prerequisite-patch-id: e81ae5ca6c427dde802acd4c1442c82e170c251a
+-- 
+2.45.0
 
