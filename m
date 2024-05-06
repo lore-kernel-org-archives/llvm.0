@@ -1,89 +1,136 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F52B13D2BC
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 23:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB11140E38
+	for <llvm@lists.linux.dev>; Mon,  6 May 2024 23:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715037057; cv=none; b=PZLyK8FhmtUGVAmpzpICFd5l8nIxMe5b9tNarVR9vqEC0mUQ7JRqXvhLHZMWDdOK8QoYZrBrCaJbe2I4NxX08t53KlFteUGPt2a/5de6CXJmOWg1JW2PXrdLF7Gln1kWVNdwMOoahiATKm4dYEyWSXphMAZhwZgIpsGsIjJa7Ys=
+	t=1715037377; cv=none; b=D8inYFuhDXOchuK57+Den/phmdkga6wTN4BPcBdxK9RYMsxnpC/RH0GW0rJ1aY20TGfq/kqTdOVPkELVTZVgJ+CvXk4uCcaaPct+rzJrsmYdvj+04qT7LWLlxR7wMwR7M81+oMPG3FQyb9FHYpOyRXJu2k+mMuVDPECIsi2LuTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715037057; c=relaxed/simple;
-	bh=FCWmkGKtCYFY82UHw0ipUvRiJnRCs/R5WWby7amO1H0=;
+	s=arc-20240116; t=1715037377; c=relaxed/simple;
+	bh=1ddjZ9m1tzyYBd5WiuS216zq0g5W8YVZVCgPVf3SYtY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KonaM6OpMuumXCIamyRLGcIovwwFmMUH/XjXh8ouyjf/8nGCrvRSVb3PjskDjXX0tRdjRiIcl6+U1Tn+KkAqCjaSSThZYzF3CUGE8XZURaa+fDy3DAi0UgPE3QiOzqStSQy9Pq7dHDzksWg9AbXkW5gOBp8/Yp3uZq/XQF4gqOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sXdUAqms; arc=none smtp.client-ip=209.85.208.45
+	 To:Cc:Content-Type; b=bv3Njihi21eSUMwp8Q6LLwQJEZkx8Q9zspKo2vv6BQ+ZmEPGLB3a84UiyvIRjwa7eQVqai4Khr7x6jcmFJ1TuAgpGkHfgGY5OeDp68OZAtZkH5/U+qQlvZ2xniAxnWRPJMzxBkMn/WiiN2OVmv4lxlzj/Gqq8TCfSF+bJelwOgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fq2uwbEf; arc=none smtp.client-ip=209.85.217.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sXdUAqms"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5724736770cso2219a12.1
-        for <llvm@lists.linux.dev>; Mon, 06 May 2024 16:10:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fq2uwbEf"
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-47efc592d9fso597121137.0
+        for <llvm@lists.linux.dev>; Mon, 06 May 2024 16:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715037054; x=1715641854; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1715037375; x=1715642175; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=To7fxBOaNRZwDFrn2W07ozUB1mmlkd6/wYo0eU+RqtA=;
-        b=sXdUAqms24hW5u8FZCgyTQXpMaLbb9fH8v74+ovTSwaCJXnY/BGZb6CwPXbqAXI/UN
-         kKn7j/DZojjvty3QQsgNlTrBi4908AUXUQX87VO5vthcu6j/xfsrdNZdwIiX+t9moD+7
-         yNJoS3aQWcGnkZP6DzEuFHZ2+4phI/3y0yoXulMNwVwFHpuWgx1TPglSu1PuzxP6w+4l
-         dkUNHS2IgoZnp8weY49g4E2DGC61OhWiExOwI/BaWJM0JsFVAqwbOU0CfzJnfVabp7VB
-         9PPBRkbwE72D5JF2O4V3ImiDO4rDnA75xGYz6xC3BGBJAGDUXHZvSWxtOSZfz9UNpe3t
-         zv9w==
+        bh=IWDZWYjkJPURzLw9syztHB0tJ6WcdS29tikCHBiAHac=;
+        b=Fq2uwbEfp2us4RHTEpQDZjQ6EcRaIlQGfAgSgfwndccGf4qHe8L72HL/VRxnS+RZkp
+         edIFqLFp3ENjZ+ZjsJnd1qc9uWlffct4hwu6ynEIXyDFIQ77aho6WxB9RT1Em8BTc/sk
+         AYywLpz6evorqUi+3pq/MwYTD6waTcLOozg3g7HBli33df9aW/uXRecXvk0TAhuBtLSW
+         THAEiS2HU6sl79QFDLCYp389tE0JJ7ALwjgjGGSlLrVyH7y6qLOLJfcOcTddUuBcwlJ+
+         lCbZwAcKt1988+6cw66dN3P6rf1iWKik9czhMDdtXZEB+JOHBZn7BW36m1uFPvKSCF0k
+         Ww1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715037054; x=1715641854;
+        d=1e100.net; s=20230601; t=1715037375; x=1715642175;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=To7fxBOaNRZwDFrn2W07ozUB1mmlkd6/wYo0eU+RqtA=;
-        b=QuSZGcnWgM8AHekeeKJGLKSggx4ejVF6wiarXALzitf7viY/JQdS4pOI/Hg0zLAR2G
-         8660OuTeGPwuC1/2kmPOlgd43hul0DRYHExpwkB3f4S3CM+ZrqEg8s+gs/QrWDY/1a94
-         DzzPZbYcRa8+GyWbW1NEIW2zafzC8cmSTv109DiCY4841T7N0FX93MHuGjj3kNzkKO4f
-         rRpcZoarBPwjYGeybqEsbQhCvPR3p1LoHguolsKuY2PAAIh9oOfNFQrsnE51yonWuN32
-         bpf1yVy6g2A/fOArthIoYhv+fkfY25CuFPQyLfcZM8/WxazGB/+3I6yR5PsfaIOiwtue
-         66Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9ipI/IYitlzfI+rmYWKvTde0PoFJgD7D7BSE3P6BPXR6zWTcqlW8qKaxBE1+na0bRX0dtQ6G/i8qlhW+9gukTgn5tkg==
-X-Gm-Message-State: AOJu0Yymb8VfdXUyAYwFB8xmp/4v+VIzEzBdA8azEenADXuIy2BcD556
-	Wka1cP8Sm2WxDqNJvJP6LuuYHZZqUeG2QoOA8jh5QONbzyt4IaXXNoZK0kXtqJaHPqtR8M3l+4x
-	EwE6bg9ZRE+qweSktmxbXJq/LUyD3n5hRUtXC
-X-Google-Smtp-Source: AGHT+IHGZfGOFMLPDtfPud/GsrF7tdooNnrZe5MoO9klCGmWbiy/B/k6yjkc3wPHejQWyh/ZbyKrPPcGutS3l9Xw+Rg=
-X-Received: by 2002:a05:6402:4304:b0:572:7c06:9c0 with SMTP id
- 4fb4d7f45d1cf-57311c1506amr107766a12.0.1715037053475; Mon, 06 May 2024
- 16:10:53 -0700 (PDT)
+        bh=IWDZWYjkJPURzLw9syztHB0tJ6WcdS29tikCHBiAHac=;
+        b=m5B0j3CacLjDg6drhsRdamyhesQalh8F0EInttqhmRapDB6ZPCDY4b9MQ/NCiuwRv9
+         TH1HsKdvV4YslLjfJwdLnoUZVeWPeSNO1RW7jFZYygKhRToCGWOXJpPpNWitfCIl4TMW
+         IjBPin2UXGBcnqPaP+nlCcYtLJkk2dHKrWaH8Kttm5UWF+Ot65kqLolhR+aEK25t/gN4
+         K+opNt1sox3NUoxwx0HkDI2JY+NzM7PdiLEbjvUsk6j3kBwJ+KWOIGvFEq+A1SaZpyAn
+         yqOc+sh4uD6q6AKm86WYQc0UkEkMeAXXH0oeogT0Adh6E87VAvRVnNLxrpfo9LtEAQ9x
+         9dew==
+X-Forwarded-Encrypted: i=1; AJvYcCUd90EeIJeOFCKbQqsky3dKo4RYK1WPLbOQ+8Gjh9lLiI33yicF+VW/VWWCX81AJAjhRnS1iRbozteNUQtYpdZmfB2NRQ==
+X-Gm-Message-State: AOJu0Yxo/Rzlorkb9bzMo5iteT2SDBpaoNycnvqQM3R3qBReK82C2fg6
+	JfGyiz6IIOQiSRmOmXqGqD8/pIBQ4+0aR0ZX3Fs9xm7hOBnzSwSiA/fabgKYVKi128DjMO8Kg0W
+	aGi287uNqHv8I79qx7ADbFcSxcQPteg2y2noU
+X-Google-Smtp-Source: AGHT+IHFGB9QV4Kb2tsiF9dC+7j50IbRzS/0Q+8vc+LKmoBTd7dx8+Wxwb4ZyuZzUzov+71cd2Ewd+S4Qevus2d5sRQ=
+X-Received: by 2002:a67:f2ca:0:b0:47d:8561:99aa with SMTP id
+ a10-20020a67f2ca000000b0047d856199aamr13797256vsn.4.1715037374718; Mon, 06
+ May 2024 16:16:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240501180622.1676340-1-edliaw@google.com> <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
- <b55272cb757743548c789aa8c0efa448@AcuMS.aculab.com> <CAFhGd8rAW4Mkctq5VkcfVjw_yr=jVdXaWbYXP-vmeVpw7q4ruQ@mail.gmail.com>
- <CAG4es9WYrN_tOV1Uxi_ytO2qDRRZW5_uN=2p3iCg=P0r3mM3Og@mail.gmail.com> <7332ff979f3440bd8362d37d4d1f34b8@AcuMS.aculab.com>
-In-Reply-To: <7332ff979f3440bd8362d37d4d1f34b8@AcuMS.aculab.com>
-From: Edward Liaw <edliaw@google.com>
-Date: Mon, 6 May 2024 16:10:27 -0700
-Message-ID: <CAG4es9Vn2F34UEmyG3upO-frtCZ00DVN8vgK4mRfX2548FKxVw@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for elf_hash
-To: David Laight <David.Laight@aculab.com>
-Cc: Justin Stitt <justinstitt@google.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"kernel-team@android.com" <kernel-team@android.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <20240506-b4-sio-block-ioctl-v1-1-da535cc020dc@google.com>
+In-Reply-To: <20240506-b4-sio-block-ioctl-v1-1-da535cc020dc@google.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Mon, 6 May 2024 16:16:02 -0700
+Message-ID: <CAFhGd8pzJesRvHdHxVfn5gWuwOLwtmtP6Gkuw57vBoQjLmTMiw@mail.gmail.com>
+Subject: Re: [PATCH] block/ioctl: use overflow helper for blkpg_partition fields
+To: Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 6, 2024 at 12:32=E2=80=AFPM David Laight <David.Laight@aculab.c=
-om> wrote:
+On Mon, May 6, 2024 at 4:10=E2=80=AFPM Justin Stitt <justinstitt@google.com=
+> wrote:
 >
+> Running syzkaller with the newly reintroduced signed integer overflow
+> sanitizer shows this report:
 >
-> That makes a lot more sense.
+> [   62.982337] ------------[ cut here ]------------
+> [   62.985692] cgroup: Invalid name
+> [   62.986211] UBSAN: signed-integer-overflow in ../block/ioctl.c:36:46
+> [   62.989370] 9pnet_fd: p9_fd_create_tcp (7343): problem connecting sock=
+et to 127.0.0.1
+> [   62.992992] 9223372036854775807 + 4095 cannot be represented in type '=
+long long'
+> [   62.997827] 9pnet_fd: p9_fd_create_tcp (7345): problem connecting sock=
+et to 127.0.0.1
+> [   62.999369] random: crng reseeded on system resumption
+> [   63.000634] GUP no longer grows the stack in syz-executor.2 (7353): 20=
+002000-20003000 (20001000)
+> [   63.000668] CPU: 0 PID: 7353 Comm: syz-executor.2 Not tainted 6.8.0-rc=
+2-00035-gb3ef86b5a957 #1
+> [   63.000677] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO=
+S 1.16.3-debian-1.16.3-2 04/01/2014
+> [   63.000682] Call Trace:
+> [   63.000686]  <TASK>
+> [   63.000731]  dump_stack_lvl+0x93/0xd0
+> [   63.000919]  __get_user_pages+0x903/0xd30
+> [   63.001030]  __gup_longterm_locked+0x153e/0x1ba0
+> [   63.001041]  ? _raw_read_unlock_irqrestore+0x17/0x50
+> [   63.001072]  ? try_get_folio+0x29c/0x2d0
+> [   63.001083]  internal_get_user_pages_fast+0x1119/0x1530
+> [   63.001109]  iov_iter_extract_pages+0x23b/0x580
+> [   63.001206]  bio_iov_iter_get_pages+0x4de/0x1220
+> [   63.001235]  iomap_dio_bio_iter+0x9b6/0x1410
+> [   63.001297]  __iomap_dio_rw+0xab4/0x1810
+> [   63.001316]  iomap_dio_rw+0x45/0xa0
+> [   63.001328]  ext4_file_write_iter+0xdde/0x1390
+> [   63.001372]  vfs_write+0x599/0xbd0
+> [   63.001394]  ksys_write+0xc8/0x190
+> [   63.001403]  do_syscall_64+0xd4/0x1b0
+> [   63.001421]  ? arch_exit_to_user_mode_prepare+0x3a/0x60
+> [   63.001479]  entry_SYSCALL_64_after_hwframe+0x6f/0x77
+> [   63.001535] RIP: 0033:0x7f7fd3ebf539
+> [   63.001551] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 14 00 00 90 4=
+8 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <=
+48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> [   63.001562] RSP: 002b:00007f7fd32570c8 EFLAGS: 00000246 ORIG_RAX: 0000=
+000000000001
+> [   63.001584] RAX: ffffffffffffffda RBX: 00007f7fd3ff3f80 RCX: 00007f7fd=
+3ebf539
+> [   63.001590] RDX: 4db6d1e4f7e43360 RSI: 0000000020000000 RDI: 000000000=
+0000004
+> [   63.001595] RBP: 00007f7fd3f1e496 R08: 0000000000000000 R09: 000000000=
+0000000
+> [   63.001599] R10: 0000000000000000 R11: 0000000000000246 R12: 000000000=
+0000000
+> [   63.001604] R13: 0000000000000006 R14: 00007f7fd3ff3f80 R15: 00007ffd4=
+15ad2b8
+> ...
+> [   63.018142] ---[ end trace ]---
+>
 
-I sent v4 https://lore.kernel.org/all/20240506181951.1804451-1-edliaw@googl=
-e.com/.
-I updated the commit log to reflect the change but I'm not sure if I
-did it right for the mailing list.  Should I have added --in-reply-to
-this thread?
-
-Edward
+Please note that I had to reconstruct this entire UBSAN report with
+some fancy regex as the actual report on my box had some IO flushing
+issues when running syzkaller with multiple threads. Due to this, this
+report may look weird but I tried my best to put things in
+chronological order.
