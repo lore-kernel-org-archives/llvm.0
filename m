@@ -1,97 +1,108 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DE5156993
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 17:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273A51DA4C
+	for <llvm@lists.linux.dev>; Mon,  6 May 2024 17:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715015392; cv=none; b=KiFj0snDmIXeQmEFPO2fyuoNw4XIzTsjpNAQp3QnyP5+mcUwHk0L00mE0vUv/7zuySRJp3r+t2meviY7LI2joWQk/Gi6WIiauf8L50rdfslXtqJ5dOYLHoRH5SamZ/Tnm17MjQUoDWJ9U1mi9hwYxAQrEFLQNYl2mMK1Ti3PChc=
+	t=1715015775; cv=none; b=iS1CiHP9x813o7dP6LCJ1QNstd/0mc3SEfnTwamWpwSMTic2y3sAo3MhpeneoXC9uki3fKhvHgKPZKECYAVun4kbxRQwM0Lx24TYbqOCOD++7vEBl5+Os8VUPbpJ45LpCo91QxgS0xMZSZKxaJt9KGi9VG8uRG7bddSwfTD76m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715015392; c=relaxed/simple;
-	bh=FPfkrT81hp7EWZ9SSFPVunnBkdnOppvnIkzF9q8A2r0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NeBdH+xaEaiJX/2BQINb/+GxlZnqZjYeVSBsOZIniBQ3KbBXhsIo7riC5oPcubjQlPEPkQTPGUuVjTOyk5moSCKAyzKWSpFfOup597BlXNB8jMT71pCsgtwNJ6tjjqQSGKZJkCPRcJz6wImeV/x64ecXaek/AaQouu7RdmGcWM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kctBthOC; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1715015775; c=relaxed/simple;
+	bh=CH8+eM4S1n20YyEYWl0xkpP7fPFGyFDj7hZD+iuKZ+E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RbMvNr6OtCaS3DqTXK/YiKMe33WuyHqJ/Wf9dT296zIm56keZ6CGSDQLlMBi+xjC9MLIwvQldQH+CPwp8GVFx5kf+a+x8lBHy60J5171hRXNycmecF6kjSeC/rfEAblUBK12zgJ+gcL6N6nlrJPobwv8xI2CAI/T7VoTR05s/O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gYgV/m6B; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kctBthOC"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5d3907ff128so1748408a12.3
-        for <llvm@lists.linux.dev>; Mon, 06 May 2024 10:09:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gYgV/m6B"
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc236729a2bso2243269276.0
+        for <llvm@lists.linux.dev>; Mon, 06 May 2024 10:16:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715015391; x=1715620191; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mdReYnfYpXbw8UTYqzLrE/VJPRPi8vsKw/zSYHi1u0E=;
-        b=kctBthOCWPKvrAf0Yk1WsVC/zKSGoDteeY0tK9/Lk9s37b5L/B4OxJDLqAlzAqFCAU
-         3pG+279PXmoqP2IvYqbt0TN8heavBk1cNuKByAceLqjNoTCZtRI5NUJMANIgnUSTsnBZ
-         QOemJn2BUjUJR4DODq2BAxA2iMWRN2CjUzMyw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715015391; x=1715620191;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1715015773; x=1715620573; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mdReYnfYpXbw8UTYqzLrE/VJPRPi8vsKw/zSYHi1u0E=;
-        b=kaGAO9UK0xlcB9/0desgrKs5tim00XSL5rE1+1fDON3k144WW85XDOQUYmUZ4I5orB
-         a78tqi+RRi9PmLTDK/KhtbDNU5uv9NCybaxJS2ig5OEh5kSojchXo/tywe8at522NI+y
-         eoOQjQ2xFtskNZqC25PAJVnWBXrk+nCA4ZHZEfQfSgG8/SqDqcbQhtNYkgWTzQLJfq5E
-         as95ZBf4o8hOPMM2zYzl5oJzN9IGcZcLn5jBvyH0ij5isWuD61KxgzTKY8IvS6+ZX23K
-         FMby2I8+wyNQU4CvObHGQ7Bj5iDHCFSLR9z18ZyyKU6I8Qj0pftqpaIFru5QKp3OkFTv
-         gDLw==
-X-Forwarded-Encrypted: i=1; AJvYcCU7Kpolf2nTXpKEXLQCujPNtjj2ZOWuz/IkMrmjjYlMt6+f5bOU8JgZuhX5V0SZ68mI3ftX3TUVhOalQV9cPxNKZbrg5Q==
-X-Gm-Message-State: AOJu0YwK4wm+AtNNb0nXAGKgxqI99axwmaJqUl0IRLeB6ltQDLlwcigm
-	ur9KQY/11FMlHqaxTRWSAjU3tp8tRE+2lQvpkmPaphZndklnPMJqtnefToLf+A==
-X-Google-Smtp-Source: AGHT+IGxUieIOzFQ0Mko83hxGUk+gEzoGxA/1Ap+Bl/r+WCemjUK5IeIzFbSjiBsICA7ksrrUH4MtQ==
-X-Received: by 2002:a17:90a:d496:b0:2b4:3679:183e with SMTP id s22-20020a17090ad49600b002b43679183emr10938107pju.21.1715015390728;
-        Mon, 06 May 2024 10:09:50 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id l9-20020a17090add8900b002b269962606sm8407951pjv.30.2024.05.06.10.09.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 10:09:50 -0700 (PDT)
-Date: Mon, 6 May 2024 10:09:49 -0700
-From: Kees Cook <keescook@chromium.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Mark Brown <broonie@kernel.org>, linux-mm@kvack.org,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/exec: build with -fPIE instead of -pie, to
- make clang happy
-Message-ID: <202405061007.F1A46E89@keescook>
-References: <20240504022301.35250-1-jhubbard@nvidia.com>
+        bh=KofGXFo7s9xwEHva7ZrVmJtjldE1ogFbG7iHwKVRDOA=;
+        b=gYgV/m6B6+1daouHwZzoWaJd91kf0e/2zYZkCnwYHVv9ghkeOWwaAfkwD6bGLMisbX
+         jRAFD1ImHZq7yWwL0lxVk+UygqhJdvXT3OIATXmv3he4mBJlFlu/HnIgBnCndd9UGA1g
+         0Zkv4oZlDf4RCfnqjOlk45WyzeHNMxWZB+NsvhmD3dAgg6QbOhqlQJeIhyOVEsK/qyO5
+         htagwpcenxprAHSfXIOaTncL2cxl7kuXfdZtuFgdnYqGlzQemvHu0U5ijlrDGCo/8/vv
+         I9LXOMaohTn3hRtIULibYs9xLEDqzuzIRR1DtpPbaw6DF9aLreL9hIt69/khSc8F7nEK
+         XTdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715015773; x=1715620573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KofGXFo7s9xwEHva7ZrVmJtjldE1ogFbG7iHwKVRDOA=;
+        b=u81HllA19OL37pbXVEbSHa79OUKWqrl97WbqvXsVKvvw5T8gPHES1y680SksgFnmmu
+         jzRBOLuEgBYy0sSwS2w0szvpbXZAdnktPg1DvNpbaSNVpBiLJBwbNnzMXQEqTgLeuocF
+         bdek+Yau0C89Sx9sbFfYa9vZQMbXTuV7722cjO+S10EnoNGxfIesAp5Ga99rQENCU/gb
+         NDtrSkEAfteD3J3EKy6gPwEs+EK+S4PU1aM2mzHjXjK9gq9t+A13LAOIB+9+DMLGiOBF
+         a0P8FhSnZyA1TX21qW2r3h8EcdYjoT7UnNFBnuRNTnMx0+Jp/39asD2zdrhjyQ6j7qKf
+         LbJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXpSu+DQChyT44pYlGHM9W7QK7fwCXAzmjYlIyJq7lImwMBIWiCprHP713G5dJGw6kBJ96JV12jpEsv/niEQUmEZj/+fw==
+X-Gm-Message-State: AOJu0YyF3nVR2SAYqtbilyINDj0FR6mNJC9WjDSuTykDbf8u6aQiFekf
+	p7z6qZonS/uybCTcfStqP4hqwmk+Q3O6bKhAEWL5HHzDpJTjA41INU4rvzLSycmM5vb1BTrOfbM
+	lxC461WYG60Tboe2Qog9IcnkS+9V2QiRpcCr+
+X-Google-Smtp-Source: AGHT+IEzpiV/fRSpmds6fIDkQinopcpDSw1n1WY0/LX7bnm5aatstSpU5088BhxTIMAs0gqkQJ3SCI0XZ85AoTU9WjI=
+X-Received: by 2002:a25:204:0:b0:de6:4ff:3155 with SMTP id 4-20020a250204000000b00de604ff3155mr11865643ybc.16.1715015772984;
+ Mon, 06 May 2024 10:16:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240504022301.35250-1-jhubbard@nvidia.com>
+References: <20240501180622.1676340-1-edliaw@google.com> <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
+ <b55272cb757743548c789aa8c0efa448@AcuMS.aculab.com>
+In-Reply-To: <b55272cb757743548c789aa8c0efa448@AcuMS.aculab.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Mon, 6 May 2024 10:16:00 -0700
+Message-ID: <CAFhGd8rAW4Mkctq5VkcfVjw_yr=jVdXaWbYXP-vmeVpw7q4ruQ@mail.gmail.com>
+Subject: Re: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for elf_hash
+To: David Laight <David.Laight@aculab.com>
+Cc: Edward Liaw <edliaw@google.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"kernel-team@android.com" <kernel-team@android.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 03, 2024 at 07:23:01PM -0700, John Hubbard wrote:
-> clang doesn't deal well with "-pie -static": it warns that -pie is an
-> unused option here. Changing to "-fPIE -static" solves this problem for
-> clang, while keeping the gcc results identical.
-> 
-> The problem is visible when building via:
-> 
->     make LLVM=1 -C tools/testing/selftests
-> 
-> Again: gcc 13 produces identical binaries for all of these programs,
-> both before and after this commit (using "-pie"), and after (using
-> "-fPIE").
-> 
-> Also, the runtime results are the same for both clang and gcc builds.
+On Sun, May 5, 2024 at 6:21=E2=80=AFAM David Laight <David.Laight@aculab.co=
+m> wrote:
+>
+> From: Justin Stitt
+> > Sent: 01 May 2024 20:55
+> ...
+> > > static unsigned long elf_hash(const unsigned char *name)
+> ...
+> > Is it possible to just change the types of the parameters of vdso_sym()
+> > or does that trigger even more warnings on the callsites of vdso_sym()?
+>
+> Isn't the problem the definition of elf_hash()?
+> A '\0' terminated string really ought to be 'char *' not 'unsigned char *=
+'.
 
-Thanks for this! It got solved differently here:
-https://lkml.kernel.org/r/20240416152831.3199999-1-usama.anjum@collabora.com
+Right, although note this comment just about its definition:
 
-Does that work for you as well?
+/* Straight from the ELF specification. */
+static unsigned long elf_hash(const unsigned char *name)
+{
 
--Kees
+which indeed matches [1]
 
--- 
-Kees Cook
+[1]: https://man.freebsd.org/cgi/man.cgi?query=3Delf_hash&sektion=3D3&aprop=
+os=3D0&manpath=3DFreeBSD+7.1-RELEASE
+
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
+>
