@@ -1,233 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812831E492;
-	Mon,  6 May 2024 23:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C3D15B11F
+	for <llvm@lists.linux.dev>; Mon,  6 May 2024 23:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715037010; cv=none; b=XoLoBMHsSV9EgQ62DCqFcexJWI9BaWOw+fqZ1LbCfZSXKQwhyjpGBknzsf8w07W8mly/7ivId6QgptXeLcYlcDGeTE4XAIafJx+kVsFsGE2MGPULIQCHfDdnXrXCKx+f5xs4sUZo2LHGLOyLD4ZLIBIxdhRlfDP1QKVBun5BS18=
+	t=1715037036; cv=none; b=AOSD2JG+PBGtqAULNihmiyYfAqeqUDuG2FLya7g9wWGHCjrupX3gY+DlooWdTp1IUhZcwFQGN1fgpfFygG53EpFaogMHYc5iP0HSKpdnM+tpzuIPB3+EwkoA9V2SiAy/yRhFlIlC9NLtPcZv/7J3jVwkO30OXm2JTN/E/V5g0Hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715037010; c=relaxed/simple;
-	bh=8IFsR4Q0/wEtjUDOeGHgCpfHoPbJWpnC621sA71+9DQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=R/PeylHnFs2ljlwiSwyzE7iSjU4/Mazf6nWDe3Np9uatC5b1wSayQgN2/egc8baA/FdA9TbhZEd9QQP9J63nKPjocxuN8JyPOzqKYhQCNtQHCOXpnneHeKjrjAPue+lOT5NnO1z5fmi0OJ29m/vQaTBCt4twi27Z0QVkHK/tSMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MKorSB5+; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715037036; c=relaxed/simple;
+	bh=kIqH8s12Peez1Ha63AcrGBGXb3oMgek8ZOqH+OM6aL4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=du9I7+yQdVvY+pQrwB90aUU8agR/3IIU4NzR1cOf0d8tgAbwFJJ0hNzWjHHg5DTiTNO6GSZv/pqMqgnQuH544Mb7MZgnNVOUm3jQKml08OJZ6IAznmdiOdQOt6eod1iQRB+3bBcQ5NmHhnDdxgTPKsVhKzmWvAn4D12uMeRjsto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aejiSTl3; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MKorSB5+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715037008; x=1746573008;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8IFsR4Q0/wEtjUDOeGHgCpfHoPbJWpnC621sA71+9DQ=;
-  b=MKorSB5++z9bl4sb63d/wmj+w9VrJTDus4rF+TjQxfij/ZfKJUEqQ6B1
-   BfAbM+yZpYlKjPgPrXao/qaMhzWx0bOmC5Ph7agIKH5aXEY2WwRGaA9u6
-   sFdkabNF45CBTRNlAsHKp08cMgok8jBcwXV2KlgumD5H/5OrQXc4Cziwm
-   PucPb8Sz2WZhsYR05TFNrX5bnXGFWqDT7YA+RfW3vmSlo1pswcl6wdztq
-   y2mJx/6hGbB7OsnNcMsbZtB/noQ2kFKAl+LfG/f798V2k67tzqSVg5DL6
-   aCXQ/Ki9jYNpdLHC0Wzbi0/Rr0uuvKKqSr9d4MMk7pIEdCu5sAyCMtcc5
-   A==;
-X-CSE-ConnectionGUID: QjmEMml3SnuXXtv2kpg5RQ==
-X-CSE-MsgGUID: 44RWFdLcTGa6ryTtB4jh/A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="10968665"
-X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
-   d="scan'208";a="10968665"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 16:10:08 -0700
-X-CSE-ConnectionGUID: T3Do4q8fRl6PmVE7eSkaWg==
-X-CSE-MsgGUID: wUrElg0dRZSmGAS1pF0MtQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
-   d="scan'208";a="59489147"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 06 May 2024 16:10:06 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s47TA-000171-1H;
-	Mon, 06 May 2024 23:10:04 +0000
-Date: Tue, 7 May 2024 07:09:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linyunsheng:page_frag_cache_v3_test_0506 8/11]
- net/rxrpc/conn_object.c:345:24: error: passing 'struct page_frag_cache' to
- parameter of incompatible type 'struct page_frag_cache *'; take the address
- with &
-Message-ID: <202405070703.uZj9fVoB-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aejiSTl3"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61be4b79115so53418947b3.1
+        for <llvm@lists.linux.dev>; Mon, 06 May 2024 16:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715037033; x=1715641833; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aVTeK+PPpIcCC4K8Et9DWqwzsgriwrNP2n+cF7VfKKg=;
+        b=aejiSTl3fsU2wn6EQKfZVTIoYaT+hEz4XcUaIldCtuzpoVv5N3kHrGYoZShei/QNFv
+         CXiBZN2ajpXYl34gAaqcIh60yQIGE9WHBixSxynomJHaB+hMi58SEtWaclOoqEN0HN6Q
+         R4hODrraaZy1jKbT+wVcsqhngAyVKWJr84dV7CWNG9dGzg0DBqQljL3uTchXrK4bkBxF
+         L+He2kOTm/qmbyZmIgPGwpuiDVN8Q4Qfh32LirExZLrmUSQiw7QJ7mmXNUGV2/fL/LPl
+         i015wkZMZ301BSgtObhZ1qM6eWvhd4HHkkfmChJU/L1tJNzpskhZfDYGvIJH+X4sDbNu
+         0QOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715037033; x=1715641833;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aVTeK+PPpIcCC4K8Et9DWqwzsgriwrNP2n+cF7VfKKg=;
+        b=bit9QEWSOIQBT63jpKF/Aet+8HgoliWGCytWsLI+URMy0yoIIY8xFjF1rDxWkfxPV5
+         WuN60iNwPbukY/MUgVeHDhWedkyfvyHslIhhDTFIn2ASW/VMiJh1lJSru1JJspUE2Q8I
+         uQFXoaXrsc1T5LCbu82kMjVkcFQ/oAjP/XeC3kjkOomFpp6rAlD4vbzO3InL6aaUf9UZ
+         0N44IUoNjh8YZgyAUtS7uHM3MRPEk9T81VmjUycpst1QDmDeICbgrxcWF4S3fW8hEDs8
+         i+YolhKMdRbdQ7PUjqg9P8Qj+Va1KqFUXrDuoUBV0wsNZFFxdPIdbZpvFJVKHBYMi2og
+         WwPA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTK37jDHUl33GZjw7sMcPg8EpW1ZCWf3mlc3Ym/q0HqKX7caNseJbKRY9v2xgWWfPpQU0Eo6FyNS+YQWXnVcWO/GwItg==
+X-Gm-Message-State: AOJu0YwCkfIVPufBctgI9DjevVCQG5oh0DMxcihkBDquAKB1aqamI3jd
+	S46d9zOoehWsmIyqXsMhumxyJlEc8w2d4qnkLYZ5wvJhXsz5XddQ0RdnuQv4o1PSZRQnsAZjHGM
+	pcYbvgs1b70lgg0HgSeAlhA==
+X-Google-Smtp-Source: AGHT+IF2zNFukyT8p7wq1ymqZP1R4dIIyH63RYvZYt/QfzEa+yiPKhJv9Eyui+kITd06lvb+8b/KRTq5N7Or7Lpv/Q==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6902:100d:b0:ddd:7581:1380 with
+ SMTP id w13-20020a056902100d00b00ddd75811380mr3803979ybt.11.1715037033677;
+ Mon, 06 May 2024 16:10:33 -0700 (PDT)
+Date: Mon, 06 May 2024 23:10:31 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAGZjOWYC/x2MQQqAIBAAvxJ7bsHEMvpKdEjbraXI0Igg+nvSc
+ WBmHkgUhRJ0xQORLkkS9gxVWYBfxn0mlCkzaKWNqlWDzmB20G3BryjBnxvalniyRjOzgRwekVj uf9oP7/sBTbwINmQAAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1715037032; l=3971;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=kIqH8s12Peez1Ha63AcrGBGXb3oMgek8ZOqH+OM6aL4=; b=yOCnlsYhbcBawdXupFaQ+B7J0DpIGRdob00ZKEgq5/yFaPGqXUV8fr82P6p55Yn32rPhvTGBD
+ dSzQZPLXZtpB8xJ4v7A79F1yhUSY5lDRaAKQ8GG+6chUR4dcwiL8UMA
+X-Mailer: b4 0.12.3
+Message-ID: <20240506-b4-sio-block-ioctl-v1-1-da535cc020dc@google.com>
+Subject: [PATCH] block/ioctl: use overflow helper for blkpg_partition fields
+From: Justin Stitt <justinstitt@google.com>
+To: Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-tree:   https://github.com/gestionlin/linux.git page_frag_cache_v3_test_0506
-head:   99acbf369a16aae2fe03c509c811029881a1ea4d
-commit: 15e685b00ff333b0a5355b5617391bd9b029d953 [8/11] mm: page_frag: avoid caller accessing 'page_frag_cache' directly
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240507/202405070703.uZj9fVoB-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405070703.uZj9fVoB-lkp@intel.com/reproduce)
+Running syzkaller with the newly reintroduced signed integer overflow
+sanitizer shows this report:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405070703.uZj9fVoB-lkp@intel.com/
+[   62.982337] ------------[ cut here ]------------
+[   62.985692] cgroup: Invalid name
+[   62.986211] UBSAN: signed-integer-overflow in ../block/ioctl.c:36:46
+[   62.989370] 9pnet_fd: p9_fd_create_tcp (7343): problem connecting socket to 127.0.0.1
+[   62.992992] 9223372036854775807 + 4095 cannot be represented in type 'long long'
+[   62.997827] 9pnet_fd: p9_fd_create_tcp (7345): problem connecting socket to 127.0.0.1
+[   62.999369] random: crng reseeded on system resumption
+[   63.000634] GUP no longer grows the stack in syz-executor.2 (7353): 20002000-20003000 (20001000)
+[   63.000668] CPU: 0 PID: 7353 Comm: syz-executor.2 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+[   63.000677] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[   63.000682] Call Trace:
+[   63.000686]  <TASK>
+[   63.000731]  dump_stack_lvl+0x93/0xd0
+[   63.000919]  __get_user_pages+0x903/0xd30
+[   63.001030]  __gup_longterm_locked+0x153e/0x1ba0
+[   63.001041]  ? _raw_read_unlock_irqrestore+0x17/0x50
+[   63.001072]  ? try_get_folio+0x29c/0x2d0
+[   63.001083]  internal_get_user_pages_fast+0x1119/0x1530
+[   63.001109]  iov_iter_extract_pages+0x23b/0x580
+[   63.001206]  bio_iov_iter_get_pages+0x4de/0x1220
+[   63.001235]  iomap_dio_bio_iter+0x9b6/0x1410
+[   63.001297]  __iomap_dio_rw+0xab4/0x1810
+[   63.001316]  iomap_dio_rw+0x45/0xa0
+[   63.001328]  ext4_file_write_iter+0xdde/0x1390
+[   63.001372]  vfs_write+0x599/0xbd0
+[   63.001394]  ksys_write+0xc8/0x190
+[   63.001403]  do_syscall_64+0xd4/0x1b0
+[   63.001421]  ? arch_exit_to_user_mode_prepare+0x3a/0x60
+[   63.001479]  entry_SYSCALL_64_after_hwframe+0x6f/0x77
+[   63.001535] RIP: 0033:0x7f7fd3ebf539
+[   63.001551] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+[   63.001562] RSP: 002b:00007f7fd32570c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[   63.001584] RAX: ffffffffffffffda RBX: 00007f7fd3ff3f80 RCX: 00007f7fd3ebf539
+[   63.001590] RDX: 4db6d1e4f7e43360 RSI: 0000000020000000 RDI: 0000000000000004
+[   63.001595] RBP: 00007f7fd3f1e496 R08: 0000000000000000 R09: 0000000000000000
+[   63.001599] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[   63.001604] R13: 0000000000000006 R14: 00007f7fd3ff3f80 R15: 00007ffd415ad2b8
+...
+[   63.018142] ---[ end trace ]---
 
-All errors (new ones prefixed by >>):
+Historically, the signed integer overflow sanitizer did not work in the
+kernel due to its interaction with `-fwrapv` but this has since been
+changed [1] in the newest version of Clang; It being re-enabled in the
+kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+sanitizer").
 
-   In file included from net/rxrpc/conn_object.c:10:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/rxrpc/conn_object.c:13:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from net/rxrpc/conn_object.c:13:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from net/rxrpc/conn_object.c:13:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> net/rxrpc/conn_object.c:345:24: error: passing 'struct page_frag_cache' to parameter of incompatible type 'struct page_frag_cache *'; take the address with &
-     345 |         page_frag_cache_drain(conn->tx_data_alloc);
-         |                               ^~~~~~~~~~~~~~~~~~~
-         |                               &
-   include/linux/page_frag_cache.h:36:52: note: passing argument to parameter 'nc' here
-      36 | void page_frag_cache_drain(struct page_frag_cache *nc);
-         |                                                    ^
-   17 warnings and 1 error generated.
+Let's use check_add_overflow to check for overflow between p.start and
+p.length, as this method won't trigger a UBSAN splat.
 
+[1]: https://github.com/llvm/llvm-project/pull/82432
 
-vim +345 net/rxrpc/conn_object.c
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ block/ioctl.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-   305	
-   306	/*
-   307	 * Clean up a dead connection.
-   308	 */
-   309	static void rxrpc_clean_up_connection(struct work_struct *work)
-   310	{
-   311		struct rxrpc_connection *conn =
-   312			container_of(work, struct rxrpc_connection, destructor);
-   313		struct rxrpc_net *rxnet = conn->rxnet;
-   314	
-   315		ASSERT(!conn->channels[0].call &&
-   316		       !conn->channels[1].call &&
-   317		       !conn->channels[2].call &&
-   318		       !conn->channels[3].call);
-   319		ASSERT(list_empty(&conn->cache_link));
-   320	
-   321		del_timer_sync(&conn->timer);
-   322		cancel_work_sync(&conn->processor); /* Processing may restart the timer */
-   323		del_timer_sync(&conn->timer);
-   324	
-   325		write_lock(&rxnet->conn_lock);
-   326		list_del_init(&conn->proc_link);
-   327		write_unlock(&rxnet->conn_lock);
-   328	
-   329		rxrpc_purge_queue(&conn->rx_queue);
-   330	
-   331		rxrpc_kill_client_conn(conn);
-   332	
-   333		conn->security->clear(conn);
-   334		key_put(conn->key);
-   335		rxrpc_put_bundle(conn->bundle, rxrpc_bundle_put_conn);
-   336		rxrpc_put_peer(conn->peer, rxrpc_peer_put_conn);
-   337		rxrpc_put_local(conn->local, rxrpc_local_put_kill_conn);
-   338	
-   339		/* Drain the Rx queue.  Note that even though we've unpublished, an
-   340		 * incoming packet could still be being added to our Rx queue, so we
-   341		 * will need to drain it again in the RCU cleanup handler.
-   342		 */
-   343		rxrpc_purge_queue(&conn->rx_queue);
-   344	
- > 345		page_frag_cache_drain(conn->tx_data_alloc);
-   346		call_rcu(&conn->rcu, rxrpc_rcu_free_connection);
-   347	}
-   348	
+diff --git a/block/ioctl.c b/block/ioctl.c
+index f505f9c341eb..a66213c88ebb 100644
+--- a/block/ioctl.c
++++ b/block/ioctl.c
+@@ -33,7 +33,8 @@ static int blkpg_do_ioctl(struct block_device *bdev,
+ 	if (op == BLKPG_DEL_PARTITION)
+ 		return bdev_del_partition(disk, p.pno);
+ 
+-	if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
++	if (p.start < 0 || p.length <= 0 ||
++	    check_add_overflow(p.start, p.length, &p.start))
+ 		return -EINVAL;
+ 	/* Check that the partition is aligned to the block size */
+ 	if (!IS_ALIGNED(p.start | p.length, bdev_logical_block_size(bdev)))
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+base-commit: 0106679839f7c69632b3b9833c3268c316c0a9fc
+change-id: 20240506-b4-sio-block-ioctl-78efd742fff4
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
