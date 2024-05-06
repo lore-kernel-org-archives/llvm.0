@@ -1,115 +1,121 @@
-Received: from slategray.cherry.relay.mailchannels.net (slategray.cherry.relay.mailchannels.net [23.83.223.169])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8729B56B76
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 20:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.223.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715026747; cv=pass; b=afVaPUQTtJtzpLwWr5DHMKbNQbnguCu4HBmrlZkyOjX45Zphp31EHySZ4mnFb12DsVAkxgCmpr72cNhNPAL70HgmBHkvxOjuHbnwHYJoWCQF9O0y2VwDdVZDoonagJFBrClL7vLAU7vTLvyeGLuvFLX/ejk/RRHMps1ajuoB5hI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715026747; c=relaxed/simple;
-	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mCwqvJk9ct8mT76B7/8v9d+sreXpu2iEh8XoKPlEM+jFGq9NMxTsunUtrpe4DzOGG4GpeWcu5qKIW+RSa4v09Y94YzzkJx929RWOZOZqBU+DytFR+1vpLONgbh1+1TErWXmsZngjI4LiibiXrJFDIPbDuOJaf7TjjiduQ0QUEaA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=mFMPkPoy; arc=pass smtp.client-ip=23.83.223.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7804EBB;
+	Mon,  6 May 2024 21:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715030770; cv=none; b=T7p1di5RbvTST3YjBSLtmmL3BPPTsSG1qysx0iiLZye4xbxxI66ReZOSJN3XV2A9R98VasSFoKZXyOYjdNi+seAaEAyojAvhIdwxuLAOmngq7gEBmr53o5fPLbMbf+bRPo0lEd13JnKReA5P2b5eeudHHc3+mqk6MuwWFsnK58I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715030770; c=relaxed/simple;
+	bh=m5C2gI0SKqo58my5hF9LMo5sVf2W5A90zO6JgvQNUQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pxW05dL+tgO/qKMNBxdZKvaWo0ZYdh6NVjsUwfLOwASIwE9Oai7bKjlh8hi5/UI0GlFk3C7nX5D4S96QN9qM98JcQhwr68mQ3xsMDaVamCdhiybeJO7Mc3yUQqaj52a0mahkDxf+vsLMbzFpKdxgDJIsOy0zyrqXr07voOMiW7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iLxXDz3Y; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="mFMPkPoy"
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id EAFFB43B8B;
-	Mon,  6 May 2024 16:13:39 +0000 (UTC)
-Received: from pdx1-sub0-mail-a205.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 5B03143774;
-	Mon,  6 May 2024 16:13:39 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1715012019; a=rsa-sha256;
-	cv=none;
-	b=vJSMT1kScKcngTQJqRsp9Zz6KDnOhYBfO2uNGDYmM+D/FoSyYpr2cG0V9BMCbSx7zJcPPV
-	3PDpggt2Bx+mlU0Q8jzAXCEDQyM6c7zstuXdMR1re6WZGUg9JjLIXjEWrN4EZFPxyA96ad
-	FrYU+CdTppiuEdx6A5SyoYr/FWGiALJIlYBmcIPD4W5vSOVo4Shy1cbC8BgCE+D+4WsMA8
-	VppsmqehmxHA5qDJMqWaV+cWhMdqye4vkcgmM+jWM0wVBxctf/PHz0XeV9TtDRIVeMMuP2
-	FLfXROyfbZlflPQiTmSM+Nx/cvXJYX9cyqThMvLEukeeuIF6eZaaEJjSXMjdNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1715012019;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
-	b=1remKSxbguFaVYzfns6YSyVY3e67fyIG9Vwp1Dgd5PJO8pAMqHi58NZeQXMKLi9DBL3YGf
-	dCCUgDkGWqJkyep4Xn4f3zdInNnvISEJNPavTeZ3MaDbpmmRXrGX10c7Kef+YVo77IW1JJ
-	fpOTYP5xKGL700XcBXxcmBS+D7T2ZyOTrY3Hez3/CcXPXHCP11KFcdkYzrFbwJrIh2CNyB
-	1tXIPxhJa3O18W37k9YaMvaNs6Zdj/EZ4AY4eS/X6Q65lYfkAXhrsTtgbQVg3A9twg1e3z
-	gCJF4xlEh8YHTBXzpmlOaicZDEIGmXBwUsNKno7szE9cNQdLg9TCj4R6RSFJtw==
-ARC-Authentication-Results: i=1;
-	rspamd-5d55749bb4-bp2gv;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Army-Battle: 0f90245f25a5cde6_1715012019744_1900881551
-X-MC-Loop-Signature: 1715012019744:224400567
-X-MC-Ingress-Time: 1715012019744
-Received: from pdx1-sub0-mail-a205.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.119.153.203 (trex/6.9.2);
-	Mon, 06 May 2024 16:13:39 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a205.dreamhost.com (Postfix) with ESMTPSA id 4VY60L3d1mzDF;
-	Mon,  6 May 2024 09:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1715012019;
-	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=mFMPkPoyJIC1AJUa6jDXzZHagJEjrWf8lHKtiRHodEwj/+t9JHSws24nE4ynOwgSD
-	 I+Nkdp1tM1Kk7WwVseuf1F69iBe3C555gEpo6uts4j9w5FCQbAKrvPkSQhx4TQia3z
-	 mE1RS7+CmhZUV1qfA8EHpU1DuczAtffbGty1OMfesh7FYrcbSxKc1XSWCP0CrngbFJ
-	 jJqqbEdyzWEP/Iea81q8FGQ+20sB9tPyf2FUYv4z5iagY5jr60YxTZpHxduxPdGm9G
-	 zZhRVWJXAs2na2d4vvbcGuWu239JaVa0lh7OLuPsHNSU7ZMbleeDF2CDnLT7ZfNzxf
-	 RKqv4VCFrGr+Q==
-Date: Mon, 6 May 2024 09:13:35 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	=?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@igalia.com>,
-	"Nysal Jan K . A" <nysal@linux.ibm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] selftests/futex: clang-inspired fixes
-Message-ID: <20240506161335.d6vzvsx74xx4mg7p@offworld>
-References: <20240503041843.99136-1-jhubbard@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iLxXDz3Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715030769; x=1746566769;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m5C2gI0SKqo58my5hF9LMo5sVf2W5A90zO6JgvQNUQc=;
+  b=iLxXDz3YNfE1B8knKI00BDAW48F9Syfc8VQyN9+mLKOqvaraHn4XxsFI
+   RxN2rmQ761sBNADyb08Sy8I40Hwrrn/l8cS2r6xYINt3qva7tBSwIRx45
+   L5BJTHoRFQ6/0mg3Ur5tbl7C1YGbUAFuSrw6+YC2OAEDpPG+bzn893eQB
+   fa6maDHY1pFi+p1hHnwdkNiT2f0Cyg7osMy6WIX/2n6e0brezxooNEEkS
+   G1G1pn5rJjcFDdiS8ViHf9e6BD4NcCT+IWxVuKW5I2wPuQHZqD6j9NTOL
+   bo82aOdOp67Qlqx5CJfC0gaKnr3NC6Hee0nXzSln+bdQXekawhXWC/Ojo
+   w==;
+X-CSE-ConnectionGUID: 35/JA7OVSrGoNqqweJzU3Q==
+X-CSE-MsgGUID: Zq7RU/sARji4HTlqFzehAw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="21957346"
+X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
+   d="scan'208";a="21957346"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 14:26:08 -0700
+X-CSE-ConnectionGUID: dk3ZGl1IQpaL+HtH/3qtCA==
+X-CSE-MsgGUID: r18z21nQTB+E9PWy+U44lw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
+   d="scan'208";a="32763059"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 06 May 2024 14:26:07 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s45qW-00013B-27;
+	Mon, 06 May 2024 21:26:04 +0000
+Date: Tue, 7 May 2024 05:25:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:bugfix/syzbot 40/42] fs/f2fs/f2fs.h:4605:5: warning: no
+ previous prototype for function 'f2fs_build_fault_attr'
+Message-ID: <202405070512.zeqTIFxN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240503041843.99136-1-jhubbard@nvidia.com>
-User-Agent: NeoMutt/20220429
 
-On Thu, 02 May 2024, John Hubbard wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/syzbot
+head:   6fd891b7248d0b825dbff6454be21f60c7ba1fb0
+commit: 28a4fc03f837d64c67eeeba5ef226dbed4b369dc [40/42] f2fs: check validation of fault attrs in f2fs_build_fault_attr()
+config: x86_64-buildonly-randconfig-005-20240507 (https://download.01.org/0day-ci/archive/20240507/202405070512.zeqTIFxN-lkp@intel.com/config)
+compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405070512.zeqTIFxN-lkp@intel.com/reproduce)
 
->Hi,
->
->Here's a few fixes that are part of my effort to get all selftests
->building cleanly under clang. Plus one that I noticed by inspection.
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405070512.zeqTIFxN-lkp@intel.com/
 
-lgtm - feel free to add:
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+   In file included from fs/f2fs/hash.c:18:
+>> fs/f2fs/f2fs.h:4605:5: warning: no previous prototype for function 'f2fs_build_fault_attr' [-Wmissing-prototypes]
+    4605 | int f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned long rate,
+         |     ^
+   fs/f2fs/f2fs.h:4605:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    4605 | int f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned long rate,
+         | ^
+         | static 
+   1 warning generated.
+--
+   In file included from fs/f2fs/node.c:16:
+>> fs/f2fs/f2fs.h:4605:5: warning: no previous prototype for function 'f2fs_build_fault_attr' [-Wmissing-prototypes]
+    4605 | int f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned long rate,
+         |     ^
+   fs/f2fs/f2fs.h:4605:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    4605 | int f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned long rate,
+         | ^
+         | static 
+   fs/f2fs/node.c:1357:1: warning: unused label 'out_dec' [-Wunused-label]
+    1357 | out_dec:
+         | ^~~~~~~~
+   2 warnings generated.
+
+
+vim +/f2fs_build_fault_attr +4605 fs/f2fs/f2fs.h
+
+  4600	
+  4601	#ifdef CONFIG_F2FS_FAULT_INJECTION
+  4602	extern int f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned long rate,
+  4603								unsigned long type);
+  4604	#else
+> 4605	int f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned long rate,
+  4606								unsigned long type)
+  4607	{
+  4608		return 0;
+  4609	}
+  4610	#endif
+  4611	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
