@@ -1,209 +1,184 @@
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2064.outbound.protection.outlook.com [40.107.101.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB78A37C
-	for <llvm@lists.linux.dev>; Tue,  7 May 2024 00:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715041468; cv=fail; b=PbdpQMsQOzrEuKDppLlkq8lhB5Oxb3Db9tG4HweqVE8ZrZREsxQUjox1JcHn8263WqC2EnrDvpv2+PvyycaH3IHjZA6mDx5toV5oWRj27a5O3igdBAsIHtV5Ujg3ny4mzEsHdgoruZl2+bSlAVlV5hzBNZkRdg5Rql5yOUZr1L8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715041468; c=relaxed/simple;
-	bh=umG0Wkit5JLv8Rfjapg+x/UmroSu3T5o8IeOc6JhZwk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=apTXihqWZFNQlOBI+xxTeZEGZNUXuxfWzLjzJW9r+NM4Iw5zEsDJfOXzvGgE8r6o5qAuEMykrN2CHybctC6UY3+QU7KAUMhIgEEB6NHHjPvwpLC3Xzl1OpNm0VdEIzH1BHvGaZLiM/4T7m7/RXbfZlDpE3RAHgWJkCRg9CLR1do=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=iy3TuCbn; arc=fail smtp.client-ip=40.107.101.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964D215A4;
+	Tue,  7 May 2024 01:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715044516; cv=none; b=LETE93K5/+KTILLZvETqzrZCNYLi/c58EpolqJEkugmJO+WxXf9jrRPztUTPN1aLiXZO/rx3E4410IFdN3WKNf4E43fHmfgSSA4RGkLUGS2J/fCbinbqVgM9smZQw07sBrKJzG5zPfptxH3X9QT+iYXYLj5L0WI2Hs1dUuXZsoA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715044516; c=relaxed/simple;
+	bh=OLsXzIeI4ZDqUriHVvAjdZg1TISKUW8ncOtsjZ5bBzU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Vwh6CE8g84KEhW6Rl54KcXLznQrDz3B3wTfJly5kSTK85qnZw+bUKRVQ+BYaZGYdGyIYVp9vZNURgJEkjMUOX/sRnUc4uqN4EX/2smW+aQE0oZ/ZVZj6F22g47Dhnc9j8gsBvVMoztnwAn4/11Y9PHf8o/Ecet2MBiKnpw65RjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eXqXzRkE; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iy3TuCbn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CsgcTn/mNXdc0Sb8C45YS25Fmnzut3da5R+3C1czY/c7ypY5pTj1MHtSWP8jCeITkI8JTlHeDPjRgL/x8qZb32nMC5eX+0gZScv8yMZAiOFWvNdxWC+WBIugrtppVNdXGIU3co0af4zg+ecOKQbMuWmBh4Uz6Wbxa7W4Z1Zivqd1yiRMyFo7aBkOdRZr72e8KXFgZxK/UhxiNPpSTO5lfgLczzx4BQYuP0N8/YiEryj6WncNczUyqnJRyaxQVd9qAm+kiQQ28bK7ov+y523W2VtwK2Y1Z+zVvxLkM7eyYhq+1dT3JuA/0l4WXn8b3es//gsrP4u538UjcuiAUzL26g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XGGOsFm9XeVTgPl/hnPK4I5/jcO4KwRvz/I35mzY1sE=;
- b=lQiAJFDh6eMQKRBJXwSDTsbNwAES1CViSK2+f+un7sV6kWQEB6hmRLyvJGhj9YtyWP3CKJ3cnXXAdAsYB6ULRwtj/3v2Gvp46RgSJB54lYm2TicnVyBzjRw7ZR0bUojBslsAzF8yTyobqZzhdZW0qtEekLcMxcnnKdAN/oPAzG6loB2R8bVgtDfs5w/Dz+n/whoRk4FmimkSvauPL9VfXb3RCVOUNz3h0KBjjjARm29Vp+E7AcjNRe3q1JOuWsfHs6lTaTyy7bkhMdQHmLxdVsdtoy19TdoQpsLGzng/YTkS/HjZ5J0U5fida+gpoKyPf/XyoxT8oRcreDdL0lmEOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XGGOsFm9XeVTgPl/hnPK4I5/jcO4KwRvz/I35mzY1sE=;
- b=iy3TuCbnXmYSpkE9s7DnzEyMAVW9U+eKzmCw2ivlAm5x0Q3S7h2iZ9WnHwyFG3SPrzaGUx0BknuNXqQworW9Nsb4pJ/EKUpm3wjeCXdDlijVHXF94/PEHWdr39MHMQPRcRnWBhBybNUDQtLR2ESwTB7O6cY01HRfEozhKmbq17RKX//qL23YdcrI5BfUwQGJHyavBR5XmeeMsE9jpgSO9Zc7EUrToMGdMdC+NM9Afk8NfQg10iQ9wMcNMFhY8KV5V2fVhlIHOy+GuP6Px90Hs/ioO0F6794fMyvDmCSlIpafgCtQxJ/831Qfn8vcxMFxwRcAF9PSAS1tzFL8+qMClQ==
-Received: from PH7PR17CA0042.namprd17.prod.outlook.com (2603:10b6:510:323::21)
- by SA1PR12MB8917.namprd12.prod.outlook.com (2603:10b6:806:386::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.39; Tue, 7 May
- 2024 00:24:21 +0000
-Received: from SN1PEPF0002BA52.namprd03.prod.outlook.com
- (2603:10b6:510:323:cafe::a0) by PH7PR17CA0042.outlook.office365.com
- (2603:10b6:510:323::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42 via Frontend
- Transport; Tue, 7 May 2024 00:24:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SN1PEPF0002BA52.mail.protection.outlook.com (10.167.242.75) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7544.18 via Frontend Transport; Tue, 7 May 2024 00:24:20 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 6 May 2024
- 17:24:00 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 6 May 2024
- 17:23:59 -0700
-Message-ID: <963feb08-18c9-4891-b85e-e9e4667e40d8@nvidia.com>
-Date: Mon, 6 May 2024 17:23:59 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eXqXzRkE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715044514; x=1746580514;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OLsXzIeI4ZDqUriHVvAjdZg1TISKUW8ncOtsjZ5bBzU=;
+  b=eXqXzRkEzIIuoqo2VJoewWB529KNg+QoU6JelGPzWqf3hCfU9EvLFRLC
+   6P9NdnmKWM6Bs2gMh+2WhQEr2Irk/Wwl0+CVUUYZM3skkTuesatgumcDJ
+   G7JOppzDJoxAtmb/LOcqIHYaMiOR1dyq/zjTUh5GXVegjRjmI2zw+oVWc
+   dRkPOCreiL/gWUSGKBy57mCh8JtVaM7jJROKRpgazsysdTAuh+6OqMJ4G
+   5Y7+GG+Z36XwkVabkmgUjX/gzIZEjTx3H1aERWWgD6hGqMge3MWuNH6f2
+   z5f3jVKGx0MhTAz6AT4KCpHVPpR711dokPR3kSc/XsuDSq9O6ANCvQ2mN
+   A==;
+X-CSE-ConnectionGUID: fLbfcgkXTq2CQThcyMP4Hg==
+X-CSE-MsgGUID: GEps/C/VQwSwbSRdO88tKQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="14628306"
+X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
+   d="scan'208";a="14628306"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 18:15:14 -0700
+X-CSE-ConnectionGUID: gIfqUOt+TcOo8u/aVL4rlg==
+X-CSE-MsgGUID: n59moehxQcO1KQmT0BFsgg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,259,1708416000"; 
+   d="scan'208";a="33150082"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 06 May 2024 18:15:12 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s49QD-0001Bp-29;
+	Tue, 07 May 2024 01:15:09 +0000
+Date: Tue, 7 May 2024 09:14:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:bugfix/syzbot 37/42] ERROR: modpost: "__hexagon_moddi3"
+ [fs/f2fs/f2fs.ko] undefined!
+Message-ID: <202405070945.gnJXIxH6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: exec: make binaries position independent
-To: Fangrui Song <maskray@google.com>, Kees Cook <keescook@chromium.org>
-CC: Muhammad Usama Anjum <usama.anjum@collabora.com>, Eric Biederman
-	<ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, Yang Yingliang
-	<yangyingliang@huawei.com>, <kernel@collabora.com>, <linux-mm@kvack.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20240416152831.3199999-1-usama.anjum@collabora.com>
- <202404161027.63F4D4FDEB@keescook>
- <CAFP8O3Jjkh0U94CbS=epXELMtCBpYt4fGejX3spH4=GdF7zVSw@mail.gmail.com>
- <202405061704.DD3AF674@keescook>
- <CAFP8O3Kx+bVCVQpQJVBrPkjrQO9d5rdcxGGP-Jn6t_Mpc995RA@mail.gmail.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAFP8O3Kx+bVCVQpQJVBrPkjrQO9d5rdcxGGP-Jn6t_Mpc995RA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA52:EE_|SA1PR12MB8917:EE_
-X-MS-Office365-Filtering-Correlation-Id: 86b221c9-650a-4ac0-caae-08dc6e2c0a28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|376005|36860700004|82310400017|1800799015|7416005;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TGVKYnUreDdNdHZHaFM2d0NIL0xBaUIvVnVHOHI4WENFUTN1NGUrZTEyZnJJ?=
- =?utf-8?B?ZDFucUV0UzZKWk1xNjAvcjExRktQbDZ3cWFYakFnK3F5dDZwd2tUR3FHczB3?=
- =?utf-8?B?RWxxSHpsWU5pbUxOenh5L0xmOEFsS3hHNm9ZNDhKdjlvYnRWZmpQeFRXM25q?=
- =?utf-8?B?ZjYva0pub0Rtc2xSYTZydUJHNHRqZXpzVzNta3dKcDVtMFFnalNTcHd5MWh3?=
- =?utf-8?B?WUlSclc1R0xCK3VyK3c4aU5WdTlRQWJ6SytvL1UxemlDenZRaXRpemJDeHZ4?=
- =?utf-8?B?VzgwSEN3MXdOcG5mZW1MYU9DWCtVc3gxOEswLzdpTGhRZkZ3TUJmK2hnOGtQ?=
- =?utf-8?B?ZkttTUZ4V1FMeWs1Zjg2cmR3SE1VVGRnbDcrTHpnVnNzM2x3WDNVaG5Sd1FL?=
- =?utf-8?B?K0QxdDg2Sk00QkFyNExndzU2dW9XQkY3S1B3QTBGeFZlOGlkWDNzVkZpWk5j?=
- =?utf-8?B?WkdEMThjQUV2UFhDcXpYY1VlL2UwWGpPbVlNVUtibWJWMVdqT3ZVU1hIRXA3?=
- =?utf-8?B?UUFHQVg0TjRYbE8rdHA0TFhTZ3NkRUg2SENOSlJtMFFTRDRzYVZNaVhYWXRU?=
- =?utf-8?B?dUpEb2ZnTmhRWnNDdi9GUnEyb09BRDh4eUxSYW9YT1pzWkVVY0prSDJGbGxH?=
- =?utf-8?B?Qi9HaFhpbm1TZStxUmR5WEQydU5lMEY3UElPNmhGanU4TG1WaTBBWmpnaXpt?=
- =?utf-8?B?WlE2akdFZWVVWVA3Tm4weGtXZUxIVEh5Z0JsTERneThLQW1MS0VydG5JQTl1?=
- =?utf-8?B?UmlTMzgyUnVVK2VxcytrSCtzZEZ5Vks5a1JuOHQrcTJBREtkdldJNHNDenVs?=
- =?utf-8?B?MG5ZeW1JMXBUL2FWL2VpVElBY0RmYzh6cFdmSkd4aDlmQWNiRjQrQ0Q2dm8v?=
- =?utf-8?B?SkxocFZzWHpiSGZ5MGZ4VjJUU1d6aEdvUXlHQUtFWHZrOXY3cWM4b29LRGRE?=
- =?utf-8?B?RDE2bGJ6Wjdid1haWlUxQUgrT0poQ2R6OXdob1FmWTEyMEhqQ2wwaHNNendI?=
- =?utf-8?B?N3Rna2Y0NTRRRlZQajdJbk1kVDdYVWpLQ1FxUDhGdi8rZEsvM2lKbGllODFW?=
- =?utf-8?B?ZTN0NFZ4eDFFVHE4V3phRVdzWkV0KzZFaEpVZVhjWjVrM1JQQWhZaERVbVV5?=
- =?utf-8?B?UmEwRG1jQ0t6ZFF5Q1ZVWW5qcUo1b0dYc0VlL200U3hHOUxLNjZId3lLRmQr?=
- =?utf-8?B?WFlGUTI5NlVXSE1sYWt5ZnBCRmdvR202Q1V1cUYzcTEwaHVMUWxMQUh5eVJN?=
- =?utf-8?B?UzJneGRoa01QRDFsdmgyQXpoWWV1aVk1M3prR2dSVGNGUGREbmdkclU3SGxo?=
- =?utf-8?B?SkFQeGRQU1hQdy9kTWdnSEtDNVQvRkdtQ1NpOFhLVFZ5QzU0YUt3Snkwb3BV?=
- =?utf-8?B?U0pJWE9TMStLdlBVZGlzRm1ENXpvREpJSlhCb0IrQXUxcm94anhSc0tZU0cz?=
- =?utf-8?B?WDlUNjBPQXJOZVdiUEdPUFZ5NGpwaWl2eVh6WEtXY2xEOFdYL2xHMVNXL0Vp?=
- =?utf-8?B?WWkzM2dwMmhNdWpuN3BhajJLUDdKc2tzZWVrZThxb253clZ2MDkxWWh0dHha?=
- =?utf-8?B?QTU1UzdFZlgvL3piSnVWNlR6Mm4wK2xqbDdwVnVPTElyN05icjgxT0QrUGQw?=
- =?utf-8?B?NXlNT0hYSDNLdjlxbTdRNDd3S2dDU3FRTGZxRS9MUW9tSlVobnRXckdTSFVH?=
- =?utf-8?B?Z2g0Sm5hTm9pU28rcUI5OERUZVNjc3pqTXFJNE90bFFFUU5FSkQ5Q0hJcnJR?=
- =?utf-8?B?ZlhDV0hEcjRReHNvcDdtL3ZyNWpDdU9ZQjdzcXhySTBjKzVpK1R6QzJVblVJ?=
- =?utf-8?B?TzhENWFxS3JBNFNQSGtmQVZ1c3Ntd3JydVUwaXhQZFpKaVdnbDM1QnZSRmV1?=
- =?utf-8?Q?q8Wa8SbuIP6aS?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(376005)(36860700004)(82310400017)(1800799015)(7416005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2024 00:24:20.6110
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86b221c9-650a-4ac0-caae-08dc6e2c0a28
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002BA52.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8917
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/6/24 5:14 PM, Fangrui Song wrote:
-> On Mon, May 6, 2024 at 5:05 PM Kees Cook <keescook@chromium.org> wrote:
->>
->> On Mon, May 06, 2024 at 04:30:27PM -0700, Fangrui Song wrote:
->>> On Tue, Apr 16, 2024 at 10:28 AM Kees Cook <keescook@chromium.org> wrote:
->>>>
->>>> On Tue, Apr 16, 2024 at 08:28:29PM +0500, Muhammad Usama Anjum wrote:
->>>>> The -static overrides the -pie and binaries aren't position independent
->>>>> anymore. Use -static-pie instead which would produce a static and
->>>>> position independent binary. This has been caught by clang's warnings:
->>>>>
->>>>>    clang: warning: argument unused during compilation: '-pie'
->>>>>    [-Wunused-command-line-argument]
->>>>>
->>>>> Tested with both gcc and clang after this change.
->>>>>
->>>>> Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
->>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>>>
->>>> Thanks for this!
->>>>
->>>> Reviewed-by: Kees Cook <keescook@chromium.org>
->>>>
->>>> --
->>>> Kees Cook
->>>
->>> GCC versions before 8.1 do not support -static-pie,
->>> while https://www.kernel.org/doc/html/next/process/changes.html says
->>> the minimal version is GCC 5.1.
->>> Is this a problem?
->>>
->>> If not, and CFLAGS is guaranteed to include -fpie/-fpic/-fPIE/-fPIC
->>> (PIC), using -static-pie looks good to me.
->>
->> Should we use this alternative, which may be more portable?
->> https://lore.kernel.org/all/20240504022301.35250-1-jhubbard@nvidia.com/
->>
->> -Kees
-> 
-> s/-fPIE -static/-static/ then it looks good to me:)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/syzbot
+head:   6fd891b7248d0b825dbff6454be21f60c7ba1fb0
+commit: 6f8284000d96ea581c00ac352e5f3753c9b3387c [37/42] f2fs: compress: don't allow unaligned truncation on released compress inode
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240507/202405070945.gnJXIxH6-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405070945.gnJXIxH6-lkp@intel.com/reproduce)
 
-hmm, maybe that is better, considering that -static-pie is relatively
-new (as you pointed out in the other thread), and would break the
-minimum kernel gcc version requirements.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405070945.gnJXIxH6-lkp@intel.com/
 
-> 
-> -static creates a position-dependent executable.
-> It doesn't matter whether the compiler uses -fno-pic/-fpie/-fpic
-> codegen, so -fPIE can be removed.
-> 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-This is something I'd have to take your word for. The whole PIE
-story not completely clear to me, but if you're sure it is not
-required here, then of course leaving it out entirely works nicely...
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-audio-manager.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gbphy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-i2c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-pwm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-sdio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-usb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/goldfish/goldfish_pipe.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/chrome/cros_kunit_proto_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mailbox/mtk-cmdq-mailbox.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_powersave.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm-ccn.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/fsl_imx8_ddr_perf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/arm_cspmu_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/nvidia_cspmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/ampere_cspmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem-apple-efuses.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_brcm_nvram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_u-boot-env.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mm-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mq-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mn-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hte/hte-tegra194-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/vdpa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/brcm_u-boot.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/tplink_safeloader.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_pruss.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vhost/vringh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/greybus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/gb-es2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rpmsg/rpmsg_char.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-ast-cf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/counter/ftm-quaddec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/snd-pcm-dmaengine.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/sound_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/drivers/snd-pcmtest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/pci/hda/snd-hda-cirrus-scodec-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/soc-topology-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-ab8500-codec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-sigmadsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/fsl/imx-pcm-dma.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/mxs/snd-soc-mxs-pcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-sdw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/qdsp6/snd-q6dsp-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-atom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-byt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-bdw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8m.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8ulp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/imx-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mtk-adsp-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8195/snd-sof-mt8195.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8186/snd-sof-mt8186.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-utils.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-acpi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-of.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/ac97_bus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy-fb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
+>> ERROR: modpost: "__hexagon_moddi3" [fs/f2fs/f2fs.ko] undefined!
 
-
-thanks,
 -- 
-John Hubbard
-NVIDIA
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
