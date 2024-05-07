@@ -1,63 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA6E7FBCF;
-	Tue,  7 May 2024 23:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEE071738
+	for <llvm@lists.linux.dev>; Tue,  7 May 2024 23:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715123999; cv=none; b=AamDgmrvgXQQbW10ixN+gh+Ftb4hhEnIm9ACBJ55HWGy8To9OtlpM05jerRD0MdfUAmbV5p97fzgpja60BAtQnaAqyldMhA8Px7Cjwdws7h6K5Il6ROvT/+jq5VYJDCHH/AF2A+VxxLocPGaiPdQGfKxqJIDZR+IVbVRQUKotf0=
+	t=1715124472; cv=none; b=L2v0nX9WK9f2adUU6+dlGpEGsGMUD52nUaRAAbcJOo1QaPQ9YVwVokfRGj6rkKW8MaMUXSuX5Rqz2bWIq9GKtuIWuhW2VrVDAeZM01qdYtkFTSN7Yo551VC26YRNUpcG5DyjqvFw5vyarkw7dv+DiuR1GnoUNTIH3WihSOKGYRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715123999; c=relaxed/simple;
-	bh=sEP4iPDmsyjWyHJeI1603Nv4qXSA4IMf9J0xJfpEL7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ib1MTDZF6IrVEewrFPqYjZOWA2t8Akij8LBAcx12f9q2XMFMW5aY5hXutkLq9kQOVJO5wBgKDjbXZiWlwEHM+ydVW7E4rmX6tVFP/nLKbz4WKRr20QwbG8fPp3S/9qTSlcvp1KG98/gQggPwYbl/kFwhKLUZU4SdQwZuKWfEelA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V2FCgb7a; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715124472; c=relaxed/simple;
+	bh=QrC2XTjhaFqvIYFUQMLZeQ+wwdKsLry8CdwZ1QDrvhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=R7PR+cUBNPgbp+w89dnpKx5SWb2M7HMQRfP62BWt9qo7Iq6GWYyFFIesLGYqoCKaGhN9emOweVt7tguyqha9U0/WPiAClA3OlPDDqRz0mDpK67yWjUY6ekAG++dN6JY298uMREgKZDWDJTBm7e7w7BsIDxHOfKICz3T3G76f8Hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iAo2/b+l; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V2FCgb7a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715123998; x=1746659998;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sEP4iPDmsyjWyHJeI1603Nv4qXSA4IMf9J0xJfpEL7k=;
-  b=V2FCgb7afdzL8lX1CIcx+WfsecRePo6gHYmdVqr3YEwe8p8ujSrMlLyq
-   CG9su5K61m5ohzoyhlQkHs8hJ0xZEKpHcUBMDF0Q+OfwemV/VsFZMOp2+
-   ie332dnCN2RTxr1H3FmT0P4MoZp+J9oNrSLViLyH86gGBohYLDHOQZmaK
-   yRAh9nHoTuFx3DAYgMaJoMvVndqRiq6zJSRw4lFf4XcYCLLB9iwtiG95T
-   7unccrIsgK6g0uGUnLBeieAqpJVUlyijHBbPKpWWeMUThCKpLUptqGmEe
-   vhkyr8aHhdS1K0GLRNp3N0lMbTi9Nd+tqpbkd2fDyquKw1rZw5yFVYGX5
-   w==;
-X-CSE-ConnectionGUID: iac0mwV2TSOpyBv5NQ0OrA==
-X-CSE-MsgGUID: zL45Hdc1RuCMktDk0iRAXQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="14744906"
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="14744906"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 16:19:57 -0700
-X-CSE-ConnectionGUID: RWIp3qdYRNKzT7LA61w6Rw==
-X-CSE-MsgGUID: tLv2w/CVRwqH9LW0lz7DaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="51886530"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 07 May 2024 16:19:54 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4U6C-0002jk-1t;
-	Tue, 07 May 2024 23:19:52 +0000
-Date: Wed, 8 May 2024 07:18:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Edward Adam Davis <eadavis@qq.com>,
-	syzbot+c48865e11e7e893ec4ab@syzkaller.appspotmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bfoster@redhat.com,
-	kent.overstreet@linux.dev, linux-bcachefs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] bcachefs: fix oob in bch2_sb_clean_to_text
-Message-ID: <202405080718.ZRZVFchD-lkp@intel.com>
-References: <tencent_816D842DE96C309554E8E2ED9ACC6078120A@qq.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iAo2/b+l"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1ec4dc64c6cso26342375ad.0
+        for <llvm@lists.linux.dev>; Tue, 07 May 2024 16:27:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715124470; x=1715729270; darn=lists.linux.dev;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wLWEXjMZK05OdzWWn6dfRHIshRQNB3cz4ZxogUVoyI0=;
+        b=iAo2/b+lobcFhl+NNL0iiTnY+XbHd21LzAiC0MXTDWWJCNnCnzaCmBv0Wf4KS0bMkk
+         kKB6pXBGtXpDajzI8bSqQXaMWbasKYARCK6VggdSfaCO3XQQBIDRsFIT3Co8ORQRN/SU
+         rESxbBijhtvfgJ//EVXVPVrP/iWZF4w01X1g8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715124470; x=1715729270;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLWEXjMZK05OdzWWn6dfRHIshRQNB3cz4ZxogUVoyI0=;
+        b=EqCYfXpMk+c9B0uUEd9YHGWwwopLA+cMDUpPZipuF42PA59rrY9tL2cwV5591t0EaW
+         Ztp4S7Pj0bJ4pdW7gymCLLietVHRNJOjuRsgjJK6xMuVZrj/goPQxO4N9ihy3HaAYWAz
+         GyGSg6ipk1nESYAm+YB/RclgswHkllIwXKuQLyDYJLnYJK6CFZLuvP8/oRi7I5/EOrq4
+         hZrau8gZ4TFjBKEMmHeJFRBGTRfXSCUygVFE51aM2n7wxVMqZuCbky5C+H+jJnzHi8AK
+         jXkX1DlrtfP61I7UzRfCPzTNC5Lf7DJaD4h2cGIWQg6CC6nH+1+Ava+oqBNt2XIgYkkH
+         UyVg==
+X-Forwarded-Encrypted: i=1; AJvYcCUwy6dN3oCQTzOPS25AwmoT4Ov6EvuPdbKhP0RjsGlTp5Ff3xxJs3dh+gowIYLh9ix9pq5JqK67RsvCf44S19pwVoM5MQ==
+X-Gm-Message-State: AOJu0Yz5jNeIxQACRS4A4KLEpaSop0Lc0TftIjtejqQQptPPucUpF6DK
+	hwQB3cvCAsPhcxZK+6xMyBp+5fMGT1muNSIcquR+jomL5N8Uv5yDQyeb7YbGuQ==
+X-Google-Smtp-Source: AGHT+IHFl7rD94B/E5UxGvSKpBCTcyP5G60ZMyyC7CakBf3DE7hFWqFKhv2WIEHzdRnuTsR5ELP4CQ==
+X-Received: by 2002:a17:903:2303:b0:1ec:b6e2:da89 with SMTP id d9443c01a7336-1eeb0993064mr13723955ad.61.1715124469860;
+        Tue, 07 May 2024 16:27:49 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id l18-20020a170903121200b001eb03a2bb0asm10518113plh.53.2024.05.07.16.27.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 May 2024 16:27:49 -0700 (PDT)
+Date: Tue, 7 May 2024 16:27:48 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <202404291502.612E0A10@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,66 +65,338 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_816D842DE96C309554E8E2ED9ACC6078120A@qq.com>
 
-Hi Edward,
+Hi,
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.9-rc7 next-20240507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/bcachefs-fix-oob-in-bch2_sb_clean_to_text/20240507-172635
-base:   linus/master
-patch link:    https://lore.kernel.org/r/tencent_816D842DE96C309554E8E2ED9ACC6078120A%40qq.com
-patch subject: [PATCH] bcachefs: fix oob in bch2_sb_clean_to_text
-config: i386-buildonly-randconfig-005-20240508 (https://download.01.org/0day-ci/archive/20240508/202405080718.ZRZVFchD-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080718.ZRZVFchD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405080718.ZRZVFchD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/bcachefs/sb-clean.c:296:13: warning: comparison of distinct pointer types ('struct jset_entry *' and 'void *') [-Wcompare-distinct-pointer-types]
-     296 |              entry < vstruct_end(&clean->field);
-         |              ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Over the last decade or so, our work hardening against weaknesses
+in various kernel APIs and eliminating the ambiguities in C language
+semantics have traditionally been somewhat off in one corner or another
+of the Linux codebase. This topic is going to be much different as
+it is ultimately about the C type system, which is rather front and
+center. So, hold on to your hats while I try to explain what's desired
+here. Please try to reserve judgement until the end; as we've explored
+the topic we've found a lot of nuances, which I've tried to touch on
+below. I'm hoping folks can have an open mind about all this and not
+jump to any conclusions without first hearing me out. :)
 
 
-vim +296 fs/bcachefs/sb-clean.c
+Problem to Solve
+================
+The Linux kernel has consistently suffered from unexpected arithmetic
+overflow bugs. These lead to any number of exploitable conditions[0].
+Our continuing efforts to improve things (refcount_t, alloc_size(),
+etc) have helped in some specific areas, but on the whole, we've had a
+relatively unchanged count of serious arithmetic overflow flaws over the
+life of the project[1]. This is not tolerable, and we should, all of us,
+make the effort needed to put an end to it in a systematic way.
 
-   283	
-   284	static void bch2_sb_clean_to_text(struct printbuf *out, struct bch_sb *sb,
-   285					  struct bch_sb_field *f)
-   286	{
-   287		struct bch_sb_field_clean *clean = field_to_type(f, clean);
-   288		struct jset_entry *entry;
-   289	
-   290		prt_printf(out, "flags:          %x",	le32_to_cpu(clean->flags));
-   291		prt_newline(out);
-   292		prt_printf(out, "journal_seq:    %llu",	le64_to_cpu(clean->journal_seq));
-   293		prt_newline(out);
-   294	
-   295		for (entry = clean->start;
- > 296		     entry < vstruct_end(&clean->field);
-   297		     entry = vstruct_next(entry)) {
-   298			if (entry->type == BCH_JSET_ENTRY_btree_keys &&
-   299			    !entry->u64s)
-   300				continue;
-   301	
-   302			bch2_journal_entry_to_text(out, NULL, entry);
-   303			prt_newline(out);
-   304		}
-   305	}
-   306	
+
+Terminology Considerations
+==========================
+When I say "overflow", I mean "overflow and underflow", but more
+specifically I mean "wrap-around". This is not about "undefined
+behavior". We already demand from our compilers that all our arithmetic
+uses a well-defined overflow resolution strategy; overflow results in
+wrap-around (thanks to "-fno-strict-overflow").
+
+
+Root Cause Analysis
+===================
+The condition we need to catch is the case of unexpected wrap-around. We
+have plenty of places in the kernel where we _expect_ wrap-around,
+and many places in the kernel where we attempt to _manually check_
+for wrap-around. What is not covered are the cases where a check is
+missing or poorly implemented. Some of the more insidious bugs come from
+places where assumptions about the possible value ranges of variables are
+wrong, or got changed, or were never considered in the first place. But
+fundamentally the exceptional condition is the wrap-around: most bounds
+checks associated with a given calculation are prepared for a non-wrapping
+value range. Having a calculation wrap-around is what ends up knocking
+the rest of the logic on its head.
+
+This is what is meant through-out by "ambiguous": the _intent of the
+author_ can be ambiguous as it relates to whether a calculation is
+meant to wrap-around. That it wraps around on overflow is not ambiguous:
+it will wrap-around. :) See "Terminology Considerations".
+
+This is the corner stone of the problem: even though the behavior of
+overflow is well-defined, so many authors so often don't correctly handle
+it that the results threaten the integrity of Linux as a whole. C makes
+it too easy to get it wrong, so we are left needing to fix this at a
+fundamental level. This is not a developer education problem; it is a
+problem with C language semantics. "Just do it correctly" has not worked.
+
+
+Mitigation Considerations
+=========================
+When making large scale changes to Linux where we're adding a check
+that didn't exist before, we must not break the old behavior as we're
+migrating to a new behavior/expectation. This has served us well
+across many hardening transitions we've made. Most recently this has
+been exemplified by the array bounds checking, where new checks are
+effectively phased in as a WARN[2], and once they've had sufficient
+bake time (usually measured in years), the check becomes more strongly
+enforced. All the while, there is a steady stream of refactoring going
+on to adopt the new behavior/pattern.
+
+
+Coverage Considerations
+=======================
+Just like any other kind of filtering, coverage for an exceptional
+state is best done with an allowlist, not a blocklist. Using a blocklist
+requires one to know _in advance_ which instances need to be caught. As
+mentioned above, we've spent decades proving we don't adequately know
+where we need to catch overflows. Therefore, we need to take an allowlist
+approach: we must identify the places where wrap-around _is_ expected,
+so that what remains is where it is _not_ expected. That which has not
+yet been identified therefore remains suspect, and we can incrementally
+grow the allowlist, since any not-yet-identified false positives will
+not break any existing behaviors (see "Mitigation Considerations").
+
+All of our hardening efforts have tried to follow this allowlist
+approach. Early on, one of the times we didn't do it was with
+refcount_t. We created a separate type to catch the overflow state and
+used it where we thought things might go wrong. This turned out to be
+a mistake: we've had a long tail of atomic_t overflows that turned into
+real bugs that would have been caught had we detected atomic_t overflows
+by default and instead created a separate type for the atomic_t cases
+that were meant to wrap around.
+
+The integer overflow situation is, as you may observe, very similar to
+the atomic_t situation, and so we must make sure we don't repeat the
+same mistake here. (Though just as an example about different overflow
+resolution strategies, it's worth noting that the major difference with
+atomic_t was that the desired strategy was saturation, not wrap-around.)
+
+
+Language Considerations
+=======================
+C has no formal exception handling system, and standard arithmetic was
+never designed to "fail". This is similar to the many problematic Standard
+C Library routines (e.g. memcpy), which were also never designed to
+have a "failure" case. This puts us in the uncomfortable (but familiar)
+situation where overflow mitigation becomes all-or-nothing, and this
+is what informs the approach detailed in Mitigation Considerations:
+warn but allow wrap-around until we find all false positives.
+
+The lack of unambiguous arithmetic intent in C has been recognized and
+addressed in more modern languages[3], but we're faced with needing to
+solve it in C, for Linux, today. As it happens, this is actually already
+starting to come up in other areas[4] now that we're trying to interface
+Rust with Linux's C internals. Being able to unambiguously describe
+wrapping vs non-wrapping expectations will stop an entire class of flaws,
+but will also help with the continuing Rust integration.
+
+C has no operator overloading, and the only practical way to change types
+is via attributes, which is additive in nature. Whatever the solution,
+we'll need to create new wrapping types that are separate from the
+existing types (as per Coverage Considerations), and the existing types
+will become the non-wrapping types.
+
+C also performs implicit integer promotion and implicit integer
+truncation, so things that look like they would overflow don't overflow
+until they get stored. For example: in "u8 var=255; ...; var++;"
+during what is "var = var + 1", the "var + 1" part doesn't overflow
+because it has been promoted to "int", which happily holds "256" without
+overflow. But the resulting "var = 256" gets truncated to 0 (effectively
+wrapping around). So to properly mitigate integer overflows in C, we
+must deal with both overflowing calculations and truncated assignments.
+
+
+Codebase Considerations
+=======================
+It's become clear from our investigatory efforts with arithmetic overflow
+mitigation that Linux has very few intentional overflows involving
+signed calculations. These overflows tend to either be legitimate bugs
+(many harmless), or are using an signed type when an unsigned type was
+intended (e.g. expecting to operate above INT_MAX, and possibly
+expecting wrap-around).
+
+For unsigned calculations, though, many places are expecting to be
+wrapping (hashes, counters, etc). As a result, there will be much more
+work involved to deal with unsigned calculations, but these are _also_ the
+calculations that have led to most of our wrap-around flaws (e.g. sizes,
+indexes, etc).
+
+
+Practical Considerations
+========================
+While simultaneously taking into account Mitigation, Coverage, Language,
+and Codebase Considerations, we must additionally continue to be able
+to build Linux with multiple version of GCC and Clang; we must remain
+"backward compatible" with our existing toolchains. We need to be able
+to make changes incrementally; the proven successful development strategy
+of Linux generally. We cannot have a "flag day".
+
+
+Potential Solution #1: Use sanitizers
+=====================================
+There already exists, for both GCC[5] and Clang, several sanitizers that
+were created specifically for handling integer overflow (and implicit
+truncation, the fun sibling to integer overflow[6]). These, today,
+already handle the unexpected overflow conditions we need to catch.
+
+Needed on compiler side:
+- create attribute that can be applied to typedefs and variable
+  definitions to indicate "expected to wrap" types. (Clang has this
+  at the ready[7].)
+- allow for common idioms to bypass sanitizers:
+  - explicit wrap-around tests: if (var + offset < var)
+  - loop iterator wrap-around during post-decrement: while (var--)
+  - negative unsigned constants: -1UL
+
+Needed on Linux side:
+- create "expected to wrap" typedefs
+- replace all expected-to-wrap variables with their appropriate wrapping
+  type over the next several years (yes, there's a lot)
+
+Changes to binary when mitigation is enabled:
+- All cases where non-wrapping types may overflow gain instrumentation
+  that checks for wrap-around and when found call (via cold branch) to
+  the sanitizer handler, and then continue on (if so configured).
+
+Example:
+
+    #define __wraps __attribute__((__wraps__))
+    typedef unsigned int __wraps u32_wrap;
+    ...
+    u16 area;
+    u32_wrap crc;
+    ...
+    area = x * y;	/* Sanitizer will check for overflow. */
+    ...
+    crc += word;	/* Wrap-around ignored by sanitizer */
+    ...
+
+Pros:
+- Much of the compiler work is done
+- Sanitizer semantics are well defined
+- Binary changes are well understood (other sanitizers have been in
+  production use for several years now)
+- Bootable proof of concept already exists[8]
+
+
+Potential Solution #2: Operator overloading
+===========================================
+Among some recent[9] C standards proposals was "Operator Overloading
+Without Name Mangling"[10]. This could allow for the redefinition of
+the basic arithmetic operators, overloaded via small static inline
+helpers. This could allow for arbitrary handling of overflows within
+those helpers, using typedefs to distinguish the wrapping types.
+
+Needed on compiler side:
+- Actually implement it
+- Handle all the idioms from solution #1 somehow, but without a clear
+  way to approach it
+
+Needed on Linux side:
+- create "expected to wrap" typedefs
+- create operator overflow functions
+- implement exception handling
+- replace all expected-to-wrap variables over the next several years
+
+Changes to binary when mitigation is enabled:
+- Unknown, but in theory similar to solution #1, though impact of redefining
+  all arithmetic in terms of static inlines is unclear.
+
+Example (in theory -- semantics aren't fully defined yet):
+
+	int int_mul_int(int a, int b)
+	{
+		int result;
+		if (__builtin_mul_overflow(a, b, &result))
+			__builtin_trap();
+		return result;
+	}
+	_Operator * int_mul_int;
+
+	typedef int int_wrap;
+	int int_mul_int_wrap(int_wrap a, int b)
+	{
+		return a * b;
+	}
+	_Operator * int_wrap_eq_int_mul_int;
+
+	int area = x * y;	  /* Traps on overflow */
+	...
+	int_wrap counter = x;
+	counter = counter * y;	  /* Wraps around */
+
+Pros:
+- Flexibility of overflow resolution strategy (though this is currently
+  a non-goal)
+
+Cons:
+- Semantics not fully defined
+- Amount of compiler work needed is unknown
+- More work on the Linux side than solution #1
+- May not handle implicit integer truncation
+- Unknown impact on binary output (e.g. does the compiler handle composing
+  the overloaded operators sanely? Is optimization trashed due to using
+  inlines for everything? etc)
+
+
+Conclusion
+==========
+I'm seeking some general consensus on taking approach #1 above. Any
+solution that actually gains us meaningful coverage is going to require
+pretty extensive changes to Linux's types so that's a universal pain
+point. But I've been beating the "make Linux safer" drum for a long time
+now, and I hope I can convince folks that we need to actually make a
+change here. The status quo isn't good enough, and we can do better. I
+just need to find a common solution we can agree on and realistically
+apply over the coming years.
+
+I'll go get my asbestos suit now... What are your thoughts, suggestions,
+alternatives?
+
+Thanks,
+
+-Kees
+
+[0] I may be a broken record on this topic, but we have to do better.
+These attacks range from script kiddies sneaking bitcoin miners onto
+systems, to ransomware criminals locking healthcare providers out of all
+of their patient records, to fascist regimes tracking and disappearing
+dissidents and their families. We can't pretend Linux's flaws are just
+some academic consideration; there are real-world consequences to our
+use of C.
+
+[1] Looking through the last 10 years of medium and high CVEs (not a
+terrific metric, but it's been a relatively stable one over the same
+time period), we've averaged about 6 major integer overflow flaws a
+year. https://outflux.net/slides/2024/lss-na/#/2
+
+[2] This also lets early adopters of hardening mitigations use things
+like the "warn_limit" sysctl to get enforcement immediately once they've
+validated their workloads.
+
+[3] e.g. Rust has explicitly wrapping and non-wrapping types, C++ has
+operator overloading, etc.
+
+[4] https://lore.kernel.org/lkml/20240411230801.1504496-3-boqun.feng@gmail.com/
+
+[5] Things are more fully developed on the Clang side, so more work
+would be needed on GCC to reach parity, but the bulk of the
+infrastructure exists there. Compared to Clang, GCC needs:
+ - unsigned integer overflow sanitizer
+ - implicit truncation sanitizer
+ - decouple "undefined" from "overflow" (i.e. allow sanitizers to work with
+   -fno-strict-overflow)
+
+[6] https://outflux.net/slides/2024/lss-na/#/30 and the next few slides
+
+[7] https://github.com/llvm/llvm-project/pull/86618
+
+[8] It's not pretty and totally not upstreamable as-is, but it does
+basically work. Many coverage areas are excluded, but the scope of what's
+needed is observable. Notably, this has not been updated to use the
+"wraps" attribute, which should make refactoring much less ugly:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=wip/v6.9-rc2/unsigned-overflow-sanitizer
+
+[9] https://lore.kernel.org/all/9162660e-2d6b-47a3-bfa2-77bfc55c817b@paulmck-laptop/
+
+[10] https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3201.pdf
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
