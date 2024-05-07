@@ -1,129 +1,133 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857216EB49
-	for <llvm@lists.linux.dev>; Tue,  7 May 2024 05:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCFA6D1B0
+	for <llvm@lists.linux.dev>; Tue,  7 May 2024 06:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715061286; cv=none; b=JoPDJuTQ6FMKioDmQhq5dPfnI800F1qCZcJyu16xfPuhM6ZbqCZpEBwzPmKit2xeL3ySZ7QyaQFYhxlPJxrByW7t4YdL2ka8hJAcgd1WPDqxtNEWmWRo22Eqb6y5xHk1wsij1G4Ae0bsAo7hsr9m7AdqoXVlXRlF7IRIl/3GK9g=
+	t=1715061752; cv=none; b=lFKLGXrrnN3HWcW20XhDpXI8UdkMI/82r1cYsP+FW+SqOGrDCVhvNLuf4ImwKiJm46T1+O/HZb2b6/yOnbg4knxjxce14nbu9zSqRIxV3IWCSTvbcrODOAGprb0ny6e+S8p0gu4Xgm2nB/jRD9BH1DSRVuTHhACNp+2raf1WEWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715061286; c=relaxed/simple;
-	bh=zycI60GD/v+qvEnAFNouzBUTO1V9JiQnJpX3TM+77ZE=;
+	s=arc-20240116; t=1715061752; c=relaxed/simple;
+	bh=6eEciy/4SiqwVexa3/ji17TY6bxHxOC7vE5JCvobeHc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oHMqD+jAHN5gHqjM6me2+vS+WXdbfrdlwA+HHmK9McN4XBSjmtlTWa2uhy1e62loKSTm5hWODGkyFdsrxukf5femO22kaNqaloi0PMY0OLQiKt1ugEfSGkXILzivtsr2Z6LOTjCVVCmRe5usb+/b+8YPt2XqG3QEM75EhGpmySE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kj5WNWXp; arc=none smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=VLP8E/p/Sulo5ZOdUiLRT/acPEcGPbtT/v5k1HsYlW06eR9zv/ovfgzyqTDn4Gt6buURMkeODRqJN2lN08qvu/iRp73E7ZDeq0oHKWeDj+V9WPTBlOdG/OLMZqFWobHHkoY5FdPlFJL0G/QL9BAf8Tiv67Neq8zs0jITE6WX5ZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aMqe2CU9; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kj5WNWXp"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-41b48daaaf4so30445e9.0
-        for <llvm@lists.linux.dev>; Mon, 06 May 2024 22:54:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aMqe2CU9"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-418820e6effso31115e9.0
+        for <llvm@lists.linux.dev>; Mon, 06 May 2024 23:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715061283; x=1715666083; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1715061749; x=1715666549; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k2+XprmFK+IYeTTDNzHuz3jEWMm6Vi+YQ+2eFOmblGY=;
-        b=kj5WNWXp9Bdsu6v3iWebAihJFCWo6MMdV6rnmEbxMvazop/2mvH9hAeYmkM+Is6Y+t
-         C/bZFzPU4rwl4OKC6zM9r3+M0tfvpiuC6sCwjMq5BUXO97Qb7LjaVZ5WUcwcjQsodsU9
-         CYgpXVv3Tad9eIbYvnkuivM5TsBQJnW7w5UOP9YHgSXuuu3/sDhKg3aTNJsln0L68Aqs
-         yob3RUoILDbCrttBZ3awTYLknuRMVsF+EHZFEIZk24bzTRuib7SeOwEaePYnH17L5G1x
-         wsCTgJDax3I12pMQRpBK0NS/53BCgc0iGuN0zY3+EkZ/lKPujQ+Fw/KjhG/Z5/9j10ft
-         mlsg==
+        bh=r27a+5j0jPbKzuSHQx0I4ZiLeBi7lavOITwf6ioG1UA=;
+        b=aMqe2CU9gJVt5hGjN1bZSm8ZAXNDBPrsNQIhmXvgY/OQsb6pKq4WrcqZRDcT10TN3h
+         JTXYQ4vcAwNN89y0d+AbS0wap79x2LW7yhSAAk/JUgkUGIyIZhE7a7vi0jZRi652zD7Z
+         VRWmzFZsM84ziwtRKktS+vWtpUtfgJC+0IVi4J35qHNJDwEOhn0W8/AS1wZ/tMSpv4t9
+         9IdB8EPFRzDrKe3r/f+GUqJuwCcu8F2hCIFDKKuaD9jMNZjmRfMMUFOy7Ayn2Clbh9EI
+         WjufcCCR8yedzoJ5H5ibBSmOClB5t0T2aiNXbViZ2A4f8rouU5QsleOvA0LLndMNnXKv
+         3h/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715061283; x=1715666083;
+        d=1e100.net; s=20230601; t=1715061749; x=1715666549;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k2+XprmFK+IYeTTDNzHuz3jEWMm6Vi+YQ+2eFOmblGY=;
-        b=mfvW8al/Ye7Wth1Q4u2OTrlRJYM5QLklIB8OTuy5amBcRLRF4ZR44uuEwxoq8u4kq4
-         sz/xq4he5sBpbw8RYYGIb4qdMsUWPEyjAergl2PaelSYBmEjmPiITQROXFG5eyRvPyfc
-         Bl+N3AUF5FfxqbLxdpexnw4YUN2cvnARjnfs7uoL1/uprThVPBN3k69XSc0PIy5gXPfn
-         jNFisd3VmRxKnNqVMuY5VsEOusH4yFxJEJ5xrKfT2S2mQpZ3G7OncY37Aw10IJPl8pvC
-         pENOcPh4dvRV5+VYi8A/Hj8mPhufW72kuYCuJJxWcWabNtipNmrcYBw2xsuIFeYsM2u0
-         0GJw==
-X-Forwarded-Encrypted: i=1; AJvYcCWDU6AVM2nDjQrG3759IJ51VVdIutATjjiWxToNUfQ9IdsHcnbIJxAihMpYngBWz6FjzcvZYRI6AOsbooGxNhEgv/sU7Q==
-X-Gm-Message-State: AOJu0YzBYT5vb545Wu/Hfo5Ah3TdFKQ7qG0/eGyTMkjm+1ZLap9Sf9h1
-	47lrGIsf/j2PlnHbWkdN6HM0vLewTUMVB9ah5LWLlOyk8SKRJUteO5dZHpwqtodBsO+k0yZyD8W
-	OOA+wCi3I4KYHoQJUO9rfWNbDo8XyhH5KRuE=
-X-Google-Smtp-Source: AGHT+IH9BUY3Ybiuaq2U0mzo8WOYrWHauZfCI6q8FsareAMFaYi33OS8f5Moj2dq6e2fcauU1f/k5k92JiyJ5b89cS8=
-X-Received: by 2002:a05:600c:3ba8:b0:418:5aaa:7db1 with SMTP id
- 5b1f17b1804b1-41f3b8affaemr886575e9.1.1715061282789; Mon, 06 May 2024
- 22:54:42 -0700 (PDT)
+        bh=r27a+5j0jPbKzuSHQx0I4ZiLeBi7lavOITwf6ioG1UA=;
+        b=aY48q61MD4dlLZd/LMSNlFk3YU1/kbMsxTShK3AbzSwb0IxGL18bAneglTKYzSBuFg
+         zNZJ5qU6VFdXNtJIin345sLjtxL21DUK0tWJOlS7bOvlAFZvso+fgZoa9ESOMVHNEtIw
+         V2mV3+Eva6soE9CS133DdNU/9vMWgEBJKMDNAI0+n58fEHAJZL1UPWki0j4tXyNrQTt1
+         85HmHCVPSNpV70rrh2xZ3rxh2zp9i3fH3CT95XPjHQaqILtCnat45cBJj+WiF+t5JP8R
+         PJbXzjscJYQUpUBWOQ2hsTmARkL398wBwwcN4wSe7TStVEIlMVNmZj9BxvFsF2vQXWdz
+         bWtw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3D4w7cSwaR4o4Z+ewDCMAdUC9pa6D1YL/tQx/b8t3XwSWXL1D4OV5TYeUI8Ur9Te0AqR4/zMw/nasvFn1JCOp2kC8wg==
+X-Gm-Message-State: AOJu0YyDMM6P4Zhuj3G3UO/9TI51WvfdxWwApRFIMci0acfiblucPJfG
+	sDtatuun76MtDu7lR0qf1opv/V8PkdSzuWBSi6LV5E/L95453cBMxLjZlq4JbR/6OslIaWITjqd
+	PNBEJPLc35wX2NQwcoWMcSlMXFUGLvNigMlo=
+X-Google-Smtp-Source: AGHT+IEFTsooy9lTXdBUnPXWeLAjuOxu0cUYFTFhxumq/HmIbzVGnFqUYBuaCwPPtc5cLMJXcfjrnfkuzEiIB2JL7cs=
+X-Received: by 2002:a05:600c:511f:b0:41b:4c6a:de6d with SMTP id
+ 5b1f17b1804b1-41f3bed8783mr780285e9.5.1715061748872; Mon, 06 May 2024
+ 23:02:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240507-b4-sio-ntp-usec-v1-1-15003fc9c2b4@google.com>
-In-Reply-To: <20240507-b4-sio-ntp-usec-v1-1-15003fc9c2b4@google.com>
+References: <20240506-b4-sio-ntp-c-v1-1-a01281aa01ba@google.com>
+In-Reply-To: <20240506-b4-sio-ntp-c-v1-1-a01281aa01ba@google.com>
 From: John Stultz <jstultz@google.com>
-Date: Mon, 6 May 2024 22:54:30 -0700
-Message-ID: <CANDhNCqQPGjhSDnCOvHFqQx6vaPb1U-nyaacJSNMxcoKWwRi-g@mail.gmail.com>
-Subject: Re: [PATCH] ntp: remove accidental integer wrap-around
+Date: Mon, 6 May 2024 23:02:17 -0700
+Message-ID: <CANDhNCps8qE1a+Vp2HNgU=-vA5RwhrLd2_D0EMZiNv1j_OOYWA@mail.gmail.com>
+Subject: Re: [PATCH] ntp: safeguard against time_constant overflow case
 To: Justin Stitt <justinstitt@google.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
 	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 6, 2024 at 9:34=E2=80=AFPM Justin Stitt <justinstitt@google.com=
+On Mon, May 6, 2024 at 3:01=E2=80=AFPM Justin Stitt <justinstitt@google.com=
 > wrote:
-> Let's introduce a new macro and use that against NTP_PHASE_LIMIT to
-> properly limit the max size of time_maxerror without overflowing during
-> the check itself.
 >
-> Link: https://github.com/llvm/llvm-project/pull/82432 [1]
-> Closes: https://github.com/KSPP/linux/issues/354
-> Cc: linux-hardening@vger.kernel.org
+> Nonetheless, let's slightly rework the logic surrounding time_constant
+> and how it is incremented such that we avoid unintentional wrap-around
+> (even though it is extremely unlikely to be hit in non-fuzzing scenarios)=
+.
+>
+> [1]: https://github.com/llvm/llvm-project/pull/82432
+>
 > Signed-off-by: Justin Stitt <justinstitt@google.com>
 > ---
->  include/linux/timex.h | 1 +
->  kernel/time/ntp.c     | 8 ++++----
->  2 files changed, 5 insertions(+), 4 deletions(-)
+>  kernel/time/ntp.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 >
-> diff --git a/include/linux/timex.h b/include/linux/timex.h
-> index 3871b06bd302..976490a06915 100644
-> --- a/include/linux/timex.h
-> +++ b/include/linux/timex.h
-> @@ -138,6 +138,7 @@ unsigned long random_get_entropy_fallback(void);
->  #define MINSEC 256             /* min interval between updates (s) */
->  #define MAXSEC 2048            /* max interval between updates (s) */
->  #define NTP_PHASE_LIMIT ((MAXPHASE / NSEC_PER_USEC) << 5) /* beyond max.=
- dispersion */
-> +#define NTP_MAXFREQ_USEC (MAXFREQ / NSEC_PER_USEC) /* scaled to microsec=
-onds */
->
->  /*
->   * kernel variables
 > diff --git a/kernel/time/ntp.c b/kernel/time/ntp.c
-> index 406dccb79c2b..19027b6d0827 100644
+> index 406dccb79c2b..a9f039601968 100644
 > --- a/kernel/time/ntp.c
 > +++ b/kernel/time/ntp.c
-> @@ -454,12 +454,12 @@ int second_overflow(time64_t secs)
->         }
+> @@ -65,6 +65,9 @@ static s64                    time_offset;
+>  /* pll time constant:                                                  *=
+/
+>  static long                    time_constant =3D 2;
 >
->
-> -       /* Bump the maxerror field */
-> -       time_maxerror +=3D MAXFREQ / NSEC_PER_USEC;
-> -       if (time_maxerror > NTP_PHASE_LIMIT) {
-> +       /* Bump the maxerror field, making sure not to exceed NTP_PHASE_L=
-IMIT */
-> +       if (NTP_PHASE_LIMIT - NTP_MAXFREQ_USEC < time_maxerror) {
->                 time_maxerror =3D NTP_PHASE_LIMIT;
->                 time_status |=3D STA_UNSYNC;
-> -       }
-> +       } else
-> +               time_maxerror +=3D NTP_MAXFREQ_USEC;
->
->         /* Compute the phase adjustment for the next second */
->         tick_length      =3D tick_length_base;
->
+> +/* pll time constant increment:                                         =
+       */
+> +static long                    time_constant_inc =3D 4;
+> +
 
-Looks reasonable to me.
-Acked-by: John Stultz <jstultz@google.com>
+I'd probably use a `#define TIME_CONSTANT_INC 4` for this.
+
+>  /* maximum error (usecs):                                              *=
+/
+>  static long                    time_maxerror =3D NTP_PHASE_LIMIT;
+>
+> @@ -734,10 +737,10 @@ static inline void process_adjtimex_modes(const str=
+uct __kernel_timex *txc,
+>
+>         if (txc->modes & ADJ_TIMECONST) {
+>                 time_constant =3D txc->constant;
+> -               if (!(time_status & STA_NANO))
+> -                       time_constant +=3D 4;
+> -               time_constant =3D min(time_constant, (long)MAXTC);
+> -               time_constant =3D max(time_constant, 0l);
+> +               if (!(time_status & STA_NANO) &&
+> +                   unlikely(LONG_MAX - time_constant_inc >=3D time_const=
+ant))
+> +                       time_constant +=3D time_constant_inc;
+> +               time_constant =3D clamp_t(long, time_constant, 0, MAXTC);
+>         }
+
+Overall, this looks fine. Though the time_status conditional is now a
+little unwieldy.
+
+I wonder if some sort of a helper like:
+      time_constant =3D safe_add(time_constant, TIME_CONSTANT_INC, LONG_MAX=
+);
+
+Might make this a little easier to read?
 
 thanks
 -john
