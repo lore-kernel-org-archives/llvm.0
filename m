@@ -1,203 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E6C54BE9
-	for <llvm@lists.linux.dev>; Tue,  7 May 2024 17:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715101704; cv=fail; b=ckC5cZrycRfNs4eMjw4nCn/gCOblElQb2I2Zw7PLJAlB8oACs0vw6X9ploINhQZAhxcIYpVE1akrhKAjYQTJT7oWUnyygmupgEAWlYNCIAxG6/uP+PM09ZApuLs4szizsvEDn27Udap5cMVJG1fzdx29P0o90bRaLsS6+uJPv3U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715101704; c=relaxed/simple;
-	bh=pif7IB1RyDjQADtuWU/f3pH17jWYI85A+czP09gB/7I=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ADuPK6a4+wmytMnyjFsrAJ8GEZIFmoOo8hUzjWXRRVJhM8GSkgVX+g426ehGX1GcGxRwkmCEj5F1lOOKlDiGamuvcgRqaImQWINBKt/FFeZSElNolbPzzfAI5uWgHlDQMIcSGks+czMW4BiZDofjN/L+TzaL0HiBaR36AQM0E5I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zv3oMlo7; arc=fail smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB07116C870;
+	Tue,  7 May 2024 18:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715105752; cv=none; b=oHKOKUrA4ku71eWkOoKeIkzChJcn68p9J4jvLwc24HnX+qglS+uEl9x3/yZYnQ+OtjY1bFcpBNWQLCyYsydyM5uxKJvVL8tOsUw8i4TRijx7BG97ayo3ubVr7vESEXYx1FQsGSxg6jCi0G/7gNwtalwHVRQYaPujfZf7sOi1s8o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715105752; c=relaxed/simple;
+	bh=mf5UmPMNWI6z/l0QJkKwSomwSt9p6Keyb3TpKEP4LUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L6FRf3qAQfRTKos1s4MDIXyJ9jEDikQx+iAJDSfyeckWnPS1qT6amxdgb/TQCvnpvtadumn2rYkxU9llb1fg70wOoFt2q5ma1/f6y35Ekjf6dQlWnbbp++jvePpA/y3QkP/KzXI5WBmjr6mIPELus70nPQ8ZJ7wno5AzQZD2Jr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZDEZVI/b; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zv3oMlo7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZDEZVI/b"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715101703; x=1746637703;
+  t=1715105749; x=1746641749;
   h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=pif7IB1RyDjQADtuWU/f3pH17jWYI85A+czP09gB/7I=;
-  b=Zv3oMlo7xCE2D0TMzEA/2RM88oACanqnOxoDzSmrj3g5LS+FEm2vXGWN
-   iPbCIZcM83+F4Ig/4nS469GSKSf6WQixB282BTZNBeBIL02g2vdhcNVPy
-   vZ//8+bNQ02/CiD3AD4BAQ3YfMcYwnVH9hn+US+g2jyqL4jGc8Lo1Hr2t
-   Wyy6XnZ5WqS0Hz2nSxEpvC2M9Dl5OJykeyn7opMPHJxxUT8gSMtaKIGek
-   SB7bIh1Hy6458DMDsd0KOySCCggGUSWF678VatvjsuxywANyBCb2j0Fmr
-   g2NSfAPHo5W000wHotgYi0Kcgf8kC9+HJCRLwvq5X2spLCMB0+BxzyC77
-   w==;
-X-CSE-ConnectionGUID: 3ux4L72RQZ+6RhCbMH39XQ==
-X-CSE-MsgGUID: 2S3U4FENRySuGM6Whm5vvg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="33425209"
-X-IronPort-AV: E=Sophos;i="6.08,142,1712646000"; 
-   d="scan'208";a="33425209"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 10:08:18 -0700
-X-CSE-ConnectionGUID: gYXUEwEKRvi2LJLCQK42qQ==
-X-CSE-MsgGUID: Dxjn447bTFW9sXMPU6m+kQ==
+   mime-version:in-reply-to;
+  bh=mf5UmPMNWI6z/l0QJkKwSomwSt9p6Keyb3TpKEP4LUc=;
+  b=ZDEZVI/bYlZKvYfZ6BSa4qEN5jbxbuvrVD3wWE0LC+b+2UjKgxy6ms5M
+   N8e2eCcsC6AgX8dYZdArZe1EdbdFIdyjA58g57eTZIxCIXLXXrmfpwG66
+   +BdbNXlCYAdPd7IwMtJiUzpPCk8iKWwOeDXEiLNmubG50heeUf9sC3LGZ
+   RUR8ApAUEKwsZTtuHiwEGqOhLNI7ni0akqcEeZR1Bl5Vu5RO1xXZO3UJw
+   OSFTYkmYkHLUwlb12dbLvRcPWb67+Oiu0hotARELV1YYjvCuggEU0NHjj
+   SeXUGmuQlW1m7NtfXqJ1kln6UkPQGmFoKHHAYpy8wPLf/knI0ddN4mOBD
+   Q==;
+X-CSE-ConnectionGUID: sg1AuN+mRtSdEgvvaefxiQ==
+X-CSE-MsgGUID: asH10tCST+SlwCizAHLLow==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11049799"
+X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
+   d="scan'208";a="11049799"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 11:15:48 -0700
+X-CSE-ConnectionGUID: zfCVuL4KQOuW0pBFkG9aDw==
+X-CSE-MsgGUID: NBKi7VABT0ewefpDuLOBiQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,142,1712646000"; 
-   d="scan'208";a="59758384"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 May 2024 10:08:14 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 7 May 2024 10:08:13 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Tue, 7 May 2024 10:08:13 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 7 May 2024 10:08:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jeNV2RvNiRgqrhCZDNJgrX2BcVo7mB/UyDvbhXZjNWcdHRvjXaGunU3v6HKEB7Z+804esS/qQxwdG1kdMuUYY2osgbiwOnjl+6cqcIFHKG3/FZ4ZHLVZ4/0+2/zl146rtNZOEOklmX+THqFDxkaQT7+kyWdpX6u2HBImfiRLFC5vY1ijKaFnUULAve5Sv8YFwlhyMO67mageVKApKhBmBvb65gNmvUi0iI1/EZNnQ1aTz94hJ2/4gwUZCbv0otwmCbNj3NkjLNO0XIZhnf5/2EsdN4wm1A7nUJfzDeFMbZPAE5RkNfdfe2x55V3AhMaJRLJK4Bu8FYthJNHeTOhvIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vv5cHFLpWaDDLWsFCGe3MccOzAckEGjprEI3MdfTwrQ=;
- b=dYrKHdUieMweZPl57bgSfEgr3h+ZkgeCiPjXQFM+LHJUlg25FeAy7FhEF8EeXWCAxQkV8r01Phh/NZpW4oC8z524J1BqIf+9zEWcEDOtxdeu3WNAkshayXoAPHjk0jf+rZcgH9py8OtNfoH5L0QAvGc8ooLrOtQQgKCe0E9aJy5OOVxArR3bZvUM7IhkPFZbFwPmkRaCm+LcOBhQMF0KVbxgg2zcDaw4ByW+iLQ5hB9EzW6eTPKRsbbmXX3Ch8OtOufFmI6AtLDj2M8wWW1OOrOlNqMiKun0305CVbL2igQItcMjPwTp/PTa1uILgPsOw2OtVM1SDmzUR85FWBoRvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
- by DM4PR11MB8092.namprd11.prod.outlook.com (2603:10b6:8:184::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43; Tue, 7 May
- 2024 17:08:09 +0000
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::faf8:463a:6c86:5996]) by SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::faf8:463a:6c86:5996%6]) with mapi id 15.20.7544.041; Tue, 7 May 2024
- 17:08:09 +0000
-Date: Tue, 7 May 2024 19:08:01 +0200
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: Simon Horman <horms@kernel.org>
-CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Jeroen de Borst <jeroendb@google.com>, "Praveen
- Kaligineedi" <pkaligineedi@google.com>, Shailend Chand <shailend@google.com>,
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
-	<justinstitt@google.com>, Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook
-	<keescook@chromium.org>, <netdev@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH net-next 0/2] gve: Minor cleanups
-Message-ID: <Zjpf8TqVqt8aCsOp@lzaremba-mobl.ger.corp.intel.com>
-References: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
-X-ClientProxiedBy: WA2P291CA0027.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:1f::18) To SN7PR11MB7540.namprd11.prod.outlook.com
- (2603:10b6:806:340::7)
+X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
+   d="scan'208";a="33167004"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 07 May 2024 11:15:45 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s4PLq-0002Xs-1r;
+	Tue, 07 May 2024 18:15:42 +0000
+Date: Wed, 8 May 2024 02:14:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+	Mario.Limonciello@amd.com, viresh.kumar@linaro.org,
+	Ray.Huang@amd.com, gautham.shenoy@amd.com, Borislav.Petkov@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
+	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/11] cpufreq: amd-pstate: implement heterogeneous core
+ topology for highest performance initialization
+Message-ID: <202405080122.4pEEcR2C-lkp@intel.com>
+References: <731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|DM4PR11MB8092:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e2a1e5d-c957-41ee-2c46-08dc6eb844e0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|376005|7416005|1800799015;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?jVcZEfTlwpaw83rpa2kraYfJ/xaSVppvMF4u8+Z70Pfj8HXfq1PV350+DEYF?=
- =?us-ascii?Q?CHQ/ZbSu2mab/5CQ9QzbvAf6KB+xurPnDqUx0amMt+ukOgBCyjsy7m2znfmY?=
- =?us-ascii?Q?VXa60z0bxXZjAljZQR4wiXTGCL1UrBq/U/CHh8FK/4FY8S3R5N1SEClYFKaK?=
- =?us-ascii?Q?ItwXNpXGM0fdx2n7uRxJCgk4dfhl93z4R6I6Brd12oaxY3HJ6RucTP/tSSnn?=
- =?us-ascii?Q?U3iqqmbstLqWO+BCDX6Ir9OrYDBWEjmJ6kYzT5Wc4KEuSL+prBoU7cZVAF9e?=
- =?us-ascii?Q?+grollApRZvVfZE4rLoVQVQW7UMeU5mtK4hhnbxb5iy42v/f6r1tb0QQ5Kbz?=
- =?us-ascii?Q?7dmCb+CxH8wp9NdWHLUoTCyPd9X7Xj3ySjNm0NzQF42vo3s6doijt6wgprPe?=
- =?us-ascii?Q?lJuFWic4b1FGFhfO1sOp5VYyZvH1ku2tzCeW00P6QKTiDNoxCnmVdhhVHTeW?=
- =?us-ascii?Q?KI+eYPoBaTrbnmojT3b4QY0gyfJ9w6TAb5Fpmq502Ne+msYme/OY7DFwTiBU?=
- =?us-ascii?Q?Hudn8adfHogzU9a/A1XEbDQY4DEHWUsk1AarJi1Ncleg9u1QtuKvOmWDJb4V?=
- =?us-ascii?Q?n4i9jk8VakdhbkoIb/wSFdF4jyPPJLNAl1eThgPTKyVr4qyNDFvCC2dNDP4/?=
- =?us-ascii?Q?VbVe5MikBtHbDmIRPdpH+i3MZmD4frIGXBdMjggUboSyxD8OVTSq+9hmL9My?=
- =?us-ascii?Q?5r/VMtovfi8ByNgoiXG7UeMi47TWKXoo2T6GtiAT9ySWrACrycj4feLiAtkO?=
- =?us-ascii?Q?N2p7pEfgJHIz44WV7cfIKlpISx8da4YPPDv7EGhihY2RvZZas1cysn4u0dV+?=
- =?us-ascii?Q?/4IpC7a/cLYW4Ryd5jdmPh38oyDNKaHe8KK/IFhbvl8kuRDDTpqq96r1fET4?=
- =?us-ascii?Q?nX6GMI9crkiuRKbr/Jl6xrwbAkp0Y4J6sJNRrvbFXxmdf0kbW2WK+WW+BCjq?=
- =?us-ascii?Q?NPqquO2fCTq2msgEYI8BUSdP2p2x7EQ9NhLmDdVvCT+0Z0xqyaWHl91ls6kk?=
- =?us-ascii?Q?Acz2SLsiNMeerXJkLD4IJi9e/12vWrDuG+bx/1cmwd7oUnLfxP0k0G6QEidO?=
- =?us-ascii?Q?lkR9mWcA8BrhlsBqAPw7qWWeKTSGrB6zu1XCyfYJsPjBPKNW9v8Nq/RcXsGL?=
- =?us-ascii?Q?UqXPtAP6wwFtyZ2dDGXhJyNUs3zgYq0Ax2qoL0oOVjskVuZTXN8LXV+mUcbU?=
- =?us-ascii?Q?N8xOAi9JzcJjtGWjDm00C8yeb5DhUhRQMc4X4DaHL9QHj67xZ0eQHhrHdJt2?=
- =?us-ascii?Q?KyB0x/Yfd2DNSDDCqexiRoA99Yq4Q4ZBxWFYlFjkLw=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(7416005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JV3ZfM+t/Voe6ufaa7aPgdtXXhmH5SnyuULqgMzT37sTur1gFWB6NlyjMb8h?=
- =?us-ascii?Q?U7/4Q1RbVwSIriFQvEt6SSZddoAy13SbePKzPP1xHVlH9+Df8pd7Evw3XuA5?=
- =?us-ascii?Q?d0oYBJoBC+7ZABPGokBH5bF7e1w0PvfQf/G7/YdZHXkWMSYXtWrFl64GajRd?=
- =?us-ascii?Q?/RQd6PA91T3n2tUWDOs15qQBOEk30JQADj1gLYTJ11ilCd8w72TCgt8hYG4l?=
- =?us-ascii?Q?HIeF2jmcBQRnSgd8OJFsJupFURF3n2mHSDL6cvTayFAdLTlpmQ/XUZ5VfwUq?=
- =?us-ascii?Q?qFfbFXitNJRjHDB4ystrPXAIl3XaOzurJ+rXnllreF3EG5tQwwJsRDlQqPGZ?=
- =?us-ascii?Q?5joR9hfr6JsguRQ3sSOCmHAPYa0jiV41OY5HhKSfRx8IvKbQNxCxOSeyIiau?=
- =?us-ascii?Q?izsGkcdLs9qBmOVwUtYeK1S4wqxY1KlQA9rQF3dIgboDpVuAw7ZwrjTLBsFo?=
- =?us-ascii?Q?UWiRtJjVdAzSpj30nuBRX05m5REEIU67vjfx+wS/88oF+/kSV914P4ahovwN?=
- =?us-ascii?Q?h6vv0U5HrEedfgaGAq7RxJO2LFLTMuCp4u/qu9FrQUWCGoMbh9WzEGtNgsdP?=
- =?us-ascii?Q?M4g46WDtxkhmKCivFHXlCLPUtvahbB3G8SiHZrnCWEgFvNFt4YchDwQtk/bh?=
- =?us-ascii?Q?x4t2SPjQ+SJmAy0i5wb95+2bFR/Xmhxq4JY98WwXi1Ixbv984FP9xXbgkgne?=
- =?us-ascii?Q?KaztzMKw+5jo3ixgDBdihXBhZqMNLX3e+gbm4PbzlaRY5YJhph+vrkAWfePz?=
- =?us-ascii?Q?X1d83tArH7ZsSPj8f8YL6yUEp+mS+gSUlSxWkhHR8WmxcKMsMUDmO30JHwj8?=
- =?us-ascii?Q?lSZU5/qoUZhuQdi8nrtcKWEnIY/5rYrDJ9Rw0CPRFs0WP+XjQoIqcM+PRHrm?=
- =?us-ascii?Q?7MotYwb2XK3ZWbfc5z62skVRV5D3TidSJJscVaOJSfjbEiuvzwX+FrWM7zsD?=
- =?us-ascii?Q?mWlesh99ldBjIFRwm8dJ0viubYuhg0lpltUFrwl5DtB7NsIAPZMvks/v/ekR?=
- =?us-ascii?Q?rJUhrvUJAlTUTYk4D1Q/XG/JDmE6E4Bbrysdrf52kPf3El4nR4AtZemmWa8w?=
- =?us-ascii?Q?/gP2YAl0D0uqtFZjQeV1DwFnL4BATYhTMehY1LjXnf5eCBf7xHWuJQ51ddCm?=
- =?us-ascii?Q?XlBrOr5iOwEBZP6J3P8pB63FGtMHw4uitBwA3RPTOYAwd8ALXBBzG8in3mOp?=
- =?us-ascii?Q?dBoD97HL0dDwM44uK7OknguU5YCLQO5+58X2ZPZZkWtBGPEXf+xiBOJDrlcf?=
- =?us-ascii?Q?K3sGcQ898yQGlA9OEvFKEtx15WnXg+0MtSYULFJjRxafDYbAmgaXiB+pSjUq?=
- =?us-ascii?Q?UgF6Ybe2b2/CzP8z2KJZJDQxQx3aH1hhTaxNqz2aNFYURAxc7jBBbH+0wIPa?=
- =?us-ascii?Q?uNXlijDmQJsTz9OlMIIG/hL4mblqi2LenGEwq8B1fRJloU0lwcJAD1g3959s?=
- =?us-ascii?Q?/iSV2Fe/dt6XyeMHKsQpGa0eGATB9O5Hog7G7xjc7RupPx3tp+44JBmU8dBe?=
- =?us-ascii?Q?myVX5qQqHLhgbqepgARy3SpNGD9L7+xHcCxjam1gBKwKfTkeJYkx2MjceY69?=
- =?us-ascii?Q?sQcFWUJfD8bd/FQT8R7RLQvcQuD05TRotbmrg9v/MKLR0TLL0XRwQ41wsfGT?=
- =?us-ascii?Q?5A=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e2a1e5d-c957-41ee-2c46-08dc6eb844e0
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2024 17:08:09.0146
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WTN05QlCiG80pLtTYjXpMqR/pCV9nMrXtwc36qg14uSSeZlWDlLimf+8Iwmoy4zF6yJ0//H4zzKkT+YWQvs525l+2kIQFqY0mbyIiAt02Vc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB8092
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan@amd.com>
 
-On Fri, May 03, 2024 at 09:31:25PM +0100, Simon Horman wrote:
-> Hi,
-> 
-> This short patchset provides two minor cleanups for the gve driver.
-> 
-> These were found by tooling as mentioned in each patch,
-> and otherwise by inspection.
-> 
-> No change in run time behaviour is intended.
-> Each patch is compile tested only.
->
+Hi Perry,
 
-Both patches look fine to me.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
- 
-> ---
-> Simon Horman (2):
->       gve: Avoid unnecessary use of comma operator
->       gve: Use ethtool_sprintf/puts() to fill stats strings
-> 
->  drivers/net/ethernet/google/gve/gve_adminq.c  |  4 +--
->  drivers/net/ethernet/google/gve/gve_ethtool.c | 42 +++++++++++----------------
->  2 files changed, 19 insertions(+), 27 deletions(-)
-> 
-> base-commit: 5829614a7b3b2cc9820efb2d29a205c00d748fcf
-> 
-> 
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge next-20240507]
+[cannot apply to tip/x86/core linus/master v6.9-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/cpufreq-amd-pstate-optimiza-the-initial-frequency-values-verification/20240507-151930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan%40amd.com
+patch subject: [PATCH 09/11] cpufreq: amd-pstate: implement heterogeneous core topology for highest performance initialization
+config: x86_64-buildonly-randconfig-001-20240507 (https://download.01.org/0day-ci/archive/20240508/202405080122.4pEEcR2C-lkp@intel.com/config)
+compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080122.4pEEcR2C-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405080122.4pEEcR2C-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:15:
+   In file included from include/linux/completion.h:12:
+   In file included from include/linux/swait.h:7:
+   In file included from include/linux/spinlock.h:60:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+>> arch/x86/include/asm/processor.h:690:51: warning: non-void function does not return a value [-Wreturn-type]
+     690 | static inline int amd_get_this_core_type(void)          { }
+         |                                                           ^
+   1 warning generated.
+--
+   In file included from drivers/usb/dwc2/hcd_ddma.c:12:
+   In file included from include/linux/module.h:13:
+   In file included from include/linux/stat.h:19:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+>> arch/x86/include/asm/processor.h:690:51: warning: non-void function does not return a value [-Wreturn-type]
+     690 | static inline int amd_get_this_core_type(void)          { }
+         |                                                           ^
+   drivers/usb/dwc2/hcd_ddma.c:555:16: warning: variable 'n_desc' set but not used [-Wunused-but-set-variable]
+     555 |         u16 idx, inc, n_desc = 0, ntd_max = 0;
+         |                       ^
+   2 warnings generated.
+--
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:15:
+   In file included from include/linux/completion.h:12:
+   In file included from include/linux/swait.h:7:
+   In file included from include/linux/spinlock.h:60:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+>> arch/x86/include/asm/processor.h:690:51: warning: non-void function does not return a value [-Wreturn-type]
+     690 | static inline int amd_get_this_core_type(void)          { }
+         |                                                           ^
+   1 warning generated.
+
+
+vim +690 arch/x86/include/asm/processor.h
+
+   680	
+   681	#ifdef CONFIG_CPU_SUP_AMD
+   682	extern u32 amd_get_highest_perf(void);
+   683	extern void amd_clear_divider(void);
+   684	extern void amd_check_microcode(void);
+   685	extern int amd_get_this_core_type(void);
+   686	#else
+   687	static inline u32 amd_get_highest_perf(void)		{ return 0; }
+   688	static inline void amd_clear_divider(void)		{ }
+   689	static inline void amd_check_microcode(void)		{ }
+ > 690	static inline int amd_get_this_core_type(void)		{ }
+   691	#endif
+   692	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
