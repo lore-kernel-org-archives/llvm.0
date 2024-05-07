@@ -1,150 +1,171 @@
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9AF14B948
-	for <llvm@lists.linux.dev>; Tue,  7 May 2024 22:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5920F71B3B;
+	Tue,  7 May 2024 22:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715119407; cv=none; b=t4cINxRPdMex0Bsoc5SEt/fbymMP+Ccn0sN66o/h+TGBPLFj6ABhDr3BQG7eo9PkzkJOGsMcIKGOx8PuqH1aC2C+wo/vs1mj2uKh1+FAxuI0GKYg5zXAPe+85RaQm4guAFpAvsVMnnsP2pxrIQBE1ox6ahwvnM1AfKj5H047Iz8=
+	t=1715120820; cv=none; b=gEw4mmexNlp1DFeaXSWqvLj6MLwaxZZ84xFBwMabuQvD4n3aRBrZDILqlRV6SZ1JkkjNuJuejlVNu7GZLSZs3ynf354EP4ehEvebl6s+YXFb1HE3yLmz+R7gG0mjCk5uq2Q1rM5E3PNsXwfnzdC2B125Bs4N0KmbkvBn+SShlrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715119407; c=relaxed/simple;
-	bh=MX6SyBQV2e/UPmX5oD7lh1S0/KXjiG5UdXrd7/ZQWrY=;
+	s=arc-20240116; t=1715120820; c=relaxed/simple;
+	bh=rHJWnvxcz9h2764Kfjdo8geuMpSH6DUv0xmpaeUY2eA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RCPXMK73p9m0LIs0woXS47hwRwbILXwdld7qn3y+yLBpOweQdkriLA4cfWesEnxdxppP0HZ+XU9BkM5IJvKXMqEBt6iehOqyOKv4CeQQ6R+u1R+P6yiu91RDluDP0YYeJYu6Pw5Vt7yj/jaKEmFDNaiYe/D9ueG2RGYneLHS/N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GAH0jYUG; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BiGElZttTghP+Cl8HePzZhLSUquxnlNO9HfhiA06Q3wb7i7Sb/l0nBMWnw8enpp6NSLvh7hPtIn07GTZqUSMd9PaqbO6AMUFZf+KowsjSiIkpnZbVsSXHIrUhgm1Ml0JvAhGTTBE8UpG6n0/6X7FqydK7ZN9PAWkPXXtkz3al/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eL4//OBd; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GAH0jYUG"
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-36c6e69180fso14674635ab.3
-        for <llvm@lists.linux.dev>; Tue, 07 May 2024 15:03:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715119405; x=1715724205; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7XYu6qO5CHO9l0ai1bRXa+x+4h/eEC8RbEzVjbVWXls=;
-        b=GAH0jYUGIQXvAz/lVhu6a/yxDA4JxqhDhFvNDrTeLeDicP83alPosLL8FlxlPM9jFO
-         wXEtvlbhRhQdOu/rdcpvD//KmPSNE1yQT/t8KRrWXyo4sjc/czkMhPKKYSpYZ1vz/Djd
-         Sy8KRSIzPcP5MYt6MA3GJrkyBaufbVWAQkbBk2qhToKmYafeZGS3B/LKpChHbZMcOrjs
-         Zkj/oVDZYK7TDDO0+1r3l2ghz/xJRfSv8mwYxmRJh/YpX2bcJOUE+4y1Gio28X2dY/Tk
-         xiyZzBHuMEReGHjdA0mLOld3bBcGt8U7vLJrsThY5w75+w5izeWCUJxSoSjEcmnNS7GZ
-         LzCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715119405; x=1715724205;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7XYu6qO5CHO9l0ai1bRXa+x+4h/eEC8RbEzVjbVWXls=;
-        b=BaOKg060S//KNY1jiT4KHanm4TfWJldqtudFkaGScecXT1+pLwoUEVOmePtsgLaRAG
-         O5uM+U8LqykOIxCt7NJhuwtxd0Q/JUStUJPl5ABOsnMc3l0MC9cqHWWyH4TNaDHaEU0s
-         QLmRQZO2vYlUvUnz9FuD/sPjLAdxAiKDeWye/58Vf5B+gH/ktAD+Pk5sDXHr9hNnl8ip
-         yKHTt7xY7ti2fxHHPS90A2bgbCRPHubTco5v+c9kqZBBpZVhnvnuD2tteTItest7NQMY
-         097NLpb46aZeReklCmtyTVtoZQdWG2uWhmBGJLuY/CBn269CwISm5bNV0LhEPM2jUA7Z
-         bZuA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2zcYUUpOQwZN9vyJYAn71klkpNfRA2aJXmNVE5/UvmPmNE0VW2QpKDQKuXGsZepGs5mGLq3QWhsIuyg65mIHcVPuxmg==
-X-Gm-Message-State: AOJu0YweDpFII7IAuDl4K1HSm6DU3/xdD0pz/N/NRbcGMHHuMgK872++
-	zfL3PB5JHd9jSD5v5dkvtdGaQoOASUl+PcEZySNAPwkr7kKDoyu3vXGbyjDCJA==
-X-Google-Smtp-Source: AGHT+IHeILznDlUOIRj7JtU8GNORObVZbAVb33+P8RJAsCLODYRINZy2EqtCLx4tLeU7nkbNdj4PfQ==
-X-Received: by 2002:a6b:5b16:0:b0:7de:a980:f210 with SMTP id ca18e2360f4ac-7e18fd3402bmr96660439f.3.1715119404651;
-        Tue, 07 May 2024 15:03:24 -0700 (PDT)
-Received: from google.com (195.121.66.34.bc.googleusercontent.com. [34.66.121.195])
-        by smtp.gmail.com with ESMTPSA id v12-20020a056638358c00b0048788df1013sm1625504jal.15.2024.05.07.15.03.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 May 2024 15:03:24 -0700 (PDT)
-Date: Tue, 7 May 2024 22:03:18 +0000
-From: Justin Stitt <justinstitt@google.com>
-To: John Stultz <jstultz@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] ntp: safeguard against time_constant overflow case
-Message-ID: <zhb5dy6ysbdghj3vhnj2s3gd7fhqg3v7xmhonkgfxp33qtc6bw@pqyhntprkwjr>
-References: <20240506-b4-sio-ntp-c-v1-1-a01281aa01ba@google.com>
- <CANDhNCps8qE1a+Vp2HNgU=-vA5RwhrLd2_D0EMZiNv1j_OOYWA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eL4//OBd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715120815; x=1746656815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rHJWnvxcz9h2764Kfjdo8geuMpSH6DUv0xmpaeUY2eA=;
+  b=eL4//OBd2RUS8whVFMJywm4k9ExEFYfNl7yy8xhOs1ZwR0FWgqNIxa27
+   LK+bimcXQhrLkQkQ9nOS9qJKB3E2RV8B8U/QScF0y0EU4S4S332Sc1mbv
+   PhKtXffaN2TUOXggeeB2pvBINNt7AsK3xYAgS9WJwDRAiaX0s/S5ekVXx
+   c5iEwKKx+ebtKU7RjBd64N3vvysrbfik1s4K7ZgI9GR/lL/Gyw1sNFGr5
+   +69Va+TBHF7ao/bG3rn6JXmLZ36MyD1bqwgUxSy9d3pqNs4brfZZHvA44
+   MrL6btJqSBoNRTIVVdLcOk6qwS/dHPkM48yeXvwITvVFOrICYQIjz+ci0
+   Q==;
+X-CSE-ConnectionGUID: f45+DDOfRvGC090UWRfveA==
+X-CSE-MsgGUID: NdMI89hnSBm2iIDrbDEzjw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11416582"
+X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
+   d="scan'208";a="11416582"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 15:26:54 -0700
+X-CSE-ConnectionGUID: eoqHZktBQi6/5AkSanzDaQ==
+X-CSE-MsgGUID: NGK6E8QcQnGZ2wLnon+aVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
+   d="scan'208";a="59834223"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 07 May 2024 15:26:53 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s4TGs-0002hQ-38;
+	Tue, 07 May 2024 22:26:50 +0000
+Date: Wed, 8 May 2024 06:25:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kiran K <kiran.k@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] Bluetooth: btintel_pcie: Add support for PCIe
+ transport
+Message-ID: <202405080647.VRBej6fA-lkp@intel.com>
+References: <20240507155658.294676-2-kiran.k@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANDhNCps8qE1a+Vp2HNgU=-vA5RwhrLd2_D0EMZiNv1j_OOYWA@mail.gmail.com>
+In-Reply-To: <20240507155658.294676-2-kiran.k@intel.com>
 
-Hi,
+Hi Kiran,
 
-On Mon, May 06, 2024 at 11:02:17PM -0700, John Stultz wrote:
-> On Mon, May 6, 2024 at 3:01 PM Justin Stitt <justinstitt@google.com> wrote:
-> >
-> > Nonetheless, let's slightly rework the logic surrounding time_constant
-> > and how it is incremented such that we avoid unintentional wrap-around
-> > (even though it is extremely unlikely to be hit in non-fuzzing scenarios).
-> >
-> > [1]: https://github.com/llvm/llvm-project/pull/82432
-> >
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > ---
-> >  kernel/time/ntp.c | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/kernel/time/ntp.c b/kernel/time/ntp.c
-> > index 406dccb79c2b..a9f039601968 100644
-> > --- a/kernel/time/ntp.c
-> > +++ b/kernel/time/ntp.c
-> > @@ -65,6 +65,9 @@ static s64                    time_offset;
-> >  /* pll time constant:                                                  */
-> >  static long                    time_constant = 2;
-> >
-> > +/* pll time constant increment:                                                */
-> > +static long                    time_constant_inc = 4;
-> > +
-> 
-> I'd probably use a `#define TIME_CONSTANT_INC 4` for this.
-> 
-> >  /* maximum error (usecs):                                              */
-> >  static long                    time_maxerror = NTP_PHASE_LIMIT;
-> >
-> > @@ -734,10 +737,10 @@ static inline void process_adjtimex_modes(const struct __kernel_timex *txc,
-> >
-> >         if (txc->modes & ADJ_TIMECONST) {
-> >                 time_constant = txc->constant;
-> > -               if (!(time_status & STA_NANO))
-> > -                       time_constant += 4;
-> > -               time_constant = min(time_constant, (long)MAXTC);
-> > -               time_constant = max(time_constant, 0l);
-> > +               if (!(time_status & STA_NANO) &&
-> > +                   unlikely(LONG_MAX - time_constant_inc >= time_constant))
-> > +                       time_constant += time_constant_inc;
-> > +               time_constant = clamp_t(long, time_constant, 0, MAXTC);
-> >         }
-> 
-> Overall, this looks fine. Though the time_status conditional is now a
-> little unwieldy.
-> 
-> I wonder if some sort of a helper like:
->       time_constant = safe_add(time_constant, TIME_CONSTANT_INC, LONG_MAX);
-> 
-> Might make this a little easier to read?
+kernel test robot noticed the following build warnings:
 
-How about something like this:
+[auto build test WARNING on bluetooth-next/master]
+[also build test WARNING on bluetooth/master linus/master v6.9-rc7 next-20240507]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	if (txc->modes & ADJ_TIMECONST) {
-		if (!(time_status & STA_NANO))
-			time_constant = clamp_t(long, txc->constant,
-						-TIME_CONSTANT_INC,
-						MAXTC - TIME_CONSTANT_INC) +
-						TIME_CONSTANT_INC;
-		else
-			time_constant = clamp_t(long, txc->constant, 0, MAXTC);
-	}
+url:    https://github.com/intel-lab-lkp/linux/commits/Kiran-K/Bluetooth-btintel_pcie-Add-support-for-PCIe-transport/20240507-234447
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20240507155658.294676-2-kiran.k%40intel.com
+patch subject: [PATCH v2 2/3] Bluetooth: btintel_pcie: Add support for PCIe transport
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240508/202405080647.VRBej6fA-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080647.VRBej6fA-lkp@intel.com/reproduce)
 
-We can remove the initial assignment and use some fancy clamps.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405080647.VRBej6fA-lkp@intel.com/
 
-> 
-> thanks
-> -john
+All warnings (new ones prefixed by >>):
 
-Thanks
-Justin
+>> drivers/bluetooth/btintel_pcie.c:184:6: warning: variable 'reg' set but not used [-Wunused-but-set-variable]
+           u32 reg;
+               ^
+>> drivers/bluetooth/btintel_pcie.c:192:26: warning: shift count >= width of type [-Wshift-count-overflow]
+                                 data->ci_p_addr >> 32);
+                                                 ^  ~~
+>> drivers/bluetooth/btintel_pcie.c:458:15: warning: variable 'frbd' set but not used [-Wunused-but-set-variable]
+           struct frbd *frbd;
+                        ^
+   3 warnings generated.
+
+
+vim +/reg +184 drivers/bluetooth/btintel_pcie.c
+
+   174	
+   175	/* This function enables BT function by setting BTINTEL_PCIE_CSR_FUNC_CTRL_MAC_INIT bit in
+   176	 * BTINTEL_PCIE_CSR_FUNC_CTRL_REG register and wait for MSI-X with
+   177	 * BTINTEL_PCIE_MSIX_HW_INT_CAUSES_GP0.
+   178	 * Then the host reads firmware version from BTINTEL_CSR_F2D_MBX and the boot stage
+   179	 * from BTINTEL_PCIE_CSR_BOOT_STAGE_REG.
+   180	 */
+   181	static int btintel_pcie_enable_bt(struct btintel_pcie_data *data)
+   182	{
+   183		int err;
+ > 184		u32 reg;
+   185	
+   186		data->gp0_received = false;
+   187	
+   188		/* Update the DMA address of CI struct to CSR */
+   189		btintel_pcie_wr_reg32(data, BTINTEL_PCIE_CSR_CI_ADDR_LSB_REG,
+   190				      data->ci_p_addr & 0xffffffff);
+   191		btintel_pcie_wr_reg32(data, BTINTEL_PCIE_CSR_CI_ADDR_MSB_REG,
+ > 192				      data->ci_p_addr >> 32);
+   193	
+   194		/* Reset the cached value of boot stage. it is updated by the MSI-X
+   195		 * gp0 interrupt handler.
+   196		 */
+   197		data->boot_stage_cache = 0x0;
+   198	
+   199		/* Set MAC_INIT bit to start primary bootloader */
+   200		reg = btintel_pcie_rd_reg32(data, BTINTEL_PCIE_CSR_FUNC_CTRL_REG);
+   201	
+   202		btintel_pcie_set_reg_bits(data, BTINTEL_PCIE_CSR_FUNC_CTRL_REG,
+   203					  BTINTEL_PCIE_CSR_FUNC_CTRL_MAC_INIT);
+   204	
+   205		/* Wait until MAC_ACCESS is granted */
+   206		err = btintel_pcie_poll_bit(data, BTINTEL_PCIE_CSR_FUNC_CTRL_REG,
+   207					    BTINTEL_PCIE_CSR_FUNC_CTRL_MAC_ACCESS_STS,
+   208					    BTINTEL_PCIE_CSR_FUNC_CTRL_MAC_ACCESS_STS,
+   209					    BTINTEL_DEFAULT_MAC_ACCESS_TIMEOUT_US);
+   210		if (err < 0)
+   211			return -ENODEV;
+   212	
+   213		/* MAC is ready. Enable BT FUNC */
+   214		btintel_pcie_set_reg_bits(data, BTINTEL_PCIE_CSR_FUNC_CTRL_REG,
+   215					  BTINTEL_PCIE_CSR_FUNC_CTRL_FUNC_ENA |
+   216					  BTINTEL_PCIE_CSR_FUNC_CTRL_FUNC_INIT);
+   217	
+   218		reg = btintel_pcie_rd_reg32(data, BTINTEL_PCIE_CSR_FUNC_CTRL_REG);
+   219	
+   220		/* wait for interrupt from the device after booting up to primary
+   221		 * bootloader.
+   222		 */
+   223		err = wait_event_timeout(data->gp0_wait_q, data->gp0_received,
+   224					 msecs_to_jiffies(BTINTEL_DEFAULT_INTR_TIMEOUT));
+   225		if (!err)
+   226			return -ETIME;
+   227	
+   228		/* Check cached boot stage is BTINTEL_PCIE_CSR_BOOT_STAGE_ROM(BIT(0)) */
+   229		if (~data->boot_stage_cache & BTINTEL_PCIE_CSR_BOOT_STAGE_ROM)
+   230			return -ENODEV;
+   231	
+   232		return 0;
+   233	}
+   234	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
