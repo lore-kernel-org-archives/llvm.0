@@ -1,155 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430464A0C;
-	Tue,  7 May 2024 02:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC5A1D524
+	for <llvm@lists.linux.dev>; Tue,  7 May 2024 03:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715047669; cv=none; b=QdfFWNJGT4zzw7OeV0w1jeLWXPF7y4G0kwy6j8Jpz+sdMRwx88/EsHMYlWPB7gX8ljQprBsU5gaoQMR+dC/Nx5VYqxlXAslZlf3xq/n6JoGXW8qbUiPywFGQ4QanNiRyLqUDJCQwEFYMnCudSifG/1vJon5js7TrGDgsswsU2/A=
+	t=1715053706; cv=none; b=ErIPKuFPBE4bLt78P2dlBtjBhpmxboiKLPSGmEWJqBNjw+QULkwAebPn1lHX7yk5PzGVU2EigobApEdy6velWLjv5o1bVmfr/SCKQwj80tkKl+QBlhgVXpFehmCMzb+TPdiHAqi8R7B0OmJh67p3dWAXN4yZdw7xGnnDgp0ur8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715047669; c=relaxed/simple;
-	bh=SdL+ZHJrA51V6KwSDn2n9sqWbviofW8UtyIV7vTj9/g=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dpKFdylwaLJIHf9w4zz3sunRGYRUelb0Ej+K4zVgGetMWAvl3xy2psHDA7UV41zZWEiW3PDNw2KEXgnFL/ce3pw5i3Gonw/278ObCLb8wPbekcpH5mFcrHNKBsgveoDzyZLaUa3RbVk3BRx+b8tg/RVtCEn5CZ79wju2My5JNQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OnIFx3Op; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715053706; c=relaxed/simple;
+	bh=m/879LQuL8JXETpqluE9o4A4OYLRvuKZ6yO7+lbGxZ8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DfLs9M4bFZ2/sLncH1xD4ad3IfdSw0q/96+Sqi2zOhOLtKxzCkHEOYxvw4i8jM92r5G0xQe0EZ3c3ZmOYRAh6qwUwe41aE7T+wjs77cHbHln/FEU4F6buO1r6W/oIP7lLMj6CGWiYYeirZrhhP1WlDlC+oZAvr6O8S0+GAqBOeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yFwdswr7; arc=none smtp.client-ip=209.85.166.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OnIFx3Op"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715047668; x=1746583668;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=SdL+ZHJrA51V6KwSDn2n9sqWbviofW8UtyIV7vTj9/g=;
-  b=OnIFx3Op0wc8RWSuynCa8yaH6ER3JYTJjNA1I2qwiyioYxc+omk//Gcm
-   noQxagpM4NYMnQ3UDMzaTZks2VVKL6pWpns93h9keNBl/vKN5kBD3H9iv
-   DE7DcSeVV8cheA9rbSyztcKsQs6eTVaR5VEFLeQMuEaC5Ofmz9przQ/5s
-   qEms7af/EBptvJ6NkIxjEjl0jRuoweWVkEL3YvDAtIe93WzUDZeeFHb0m
-   b+mJjftjEthK5uUVwSHG7jMx8e2v2ygqLN+FzPH8hJ14OVtUjcPfKsn/4
-   HcS9InO5l5u3lIfKUssAQgyWXw5SmqldPv9fjknnv6xzoJw3zObiSyPug
-   w==;
-X-CSE-ConnectionGUID: kldy8IKEQ7i8THyXjBbKmw==
-X-CSE-MsgGUID: AIqLai0qSOirw0oYMeoWZw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="11359564"
-X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
-   d="scan'208";a="11359564"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 19:07:16 -0700
-X-CSE-ConnectionGUID: Hyv64H8GSUqYPXZ9jwjk5g==
-X-CSE-MsgGUID: 5dxVQNwEQoayK1dVLJiuRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
-   d="scan'208";a="28751311"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 06 May 2024 19:07:13 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4AEZ-0001Dz-0A;
-	Tue, 07 May 2024 02:07:11 +0000
-Date: Tue, 7 May 2024 10:07:02 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [rgushchin:memcontrol_v1.1 5/5] mm/memcontrol-v1.c:1875:48: warning:
- arithmetic between different enumeration types ('enum node_stat_item' and
- 'enum lru_list')
-Message-ID: <202405071035.tUhz0N6s-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yFwdswr7"
+Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-7da41da873bso408842639f.3
+        for <llvm@lists.linux.dev>; Mon, 06 May 2024 20:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715053703; x=1715658503; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Rj2jBFPI6Z7ZTex3xlLubFd8OE8ofA5lm6spLyhQDT8=;
+        b=yFwdswr79kW1qnLXKbONVXqoU0DgtUPK/pxdVX6/a3CmTVbZHW9ZxL7nRS8XRe1Gfz
+         MwHeQEEiGEr0vsUJFi3IK1a75Y4wc1tTenh0tOeUNXR/HrFn4mCgkwzr4Lm+zTQ23qPm
+         8PAPLLYiyI3LmKgy7DNe48p2dYAmO8DifcePEIVfKbt447EVGzQT+WGHJ3W/afD4qkxE
+         OiO+0HzS31tI+0ESz/DDoVhGRqQERxIch3HA7WBOwiDuRO+e/tBVpYLDYQ25WMWZdp3o
+         JDolsNpTq3ZVo0CRvyqxMqOnXS+39pj1MIXvxKw6YqiG/sZg+IBsYrH0oS46QdBKO5X+
+         nDyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715053703; x=1715658503;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rj2jBFPI6Z7ZTex3xlLubFd8OE8ofA5lm6spLyhQDT8=;
+        b=rIZQpr3Xc53FCCmc90L0tqUYlyuMQsM2nUfbMpUEWvD1aDeY0ykrakc3fXg9jWgszA
+         KGNxdrCjX8vGBtl6PcVxOF2T1KAgbGfepgcWSNiwJ3c9mrjKbjVs/70IHIBE55ov4no1
+         4ACAwzaLUwONnc/Ok6Abzj1IwvRT2Ylm01nhGWNzm7jBZrvQzKxh7f7nzU5wsuycODrC
+         eRjQ+smyOJC1hOjuSMbXkzoeAEAJCfdk13Q4Hzpl/tKm/xb9JY8S6e+6OX6DD7KijcW6
+         kuDYttKIZGIw0tpAw6By1ZKunw9p1mUOfZ5S32+UrUUcCQOdXXVOBf7LjAgfk5+6AYpV
+         yc4g==
+X-Forwarded-Encrypted: i=1; AJvYcCWf0FiV/zOA/A01aanveqJGqRlepD8T7SpHu+dRoqrgVzXSGQ0FpisGXFb1NFrqMaY0UhmPpGZ/dxkS34jwKKoXAqA9LQ==
+X-Gm-Message-State: AOJu0YzGJaMtUmGerWQhZ+XICvhKE6e0rU9sa3ckV5hmr/LYwZ1V+sf/
+	gHnlgQKOv04QLY8YWqUkeDLI5AhO+QQgzYo18vR18xJVEBxkZRauMyGTddtRDyEgtsyNqr493vU
+	NpRfQmCECuD8vBlcVs+sEjg==
+X-Google-Smtp-Source: AGHT+IF9pz2j6uD0BOLZD3RuF1fODTXrHqY0ZFsVdk4z478cCgDWlZtMQ9jc/1kwXxkxEg9w0eiXgsxELlaELuV1Eg==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6602:6c19:b0:7de:de58:3b1f with
+ SMTP id ik25-20020a0566026c1900b007dede583b1fmr446358iob.4.1715053702950;
+ Mon, 06 May 2024 20:48:22 -0700 (PDT)
+Date: Tue, 07 May 2024 03:48:21 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAISkOWYC/32NQQ6CMBBFr0Jm7ZhSixhX3sOwgOkUJiJjWkI0h
+ LtbOYDL9/P/+yskjsIJrsUKkRdJolMGeyiAhnbqGcVnBmusM5U5Y+cwd7AblR4oSvOI9YWDr50
+ NITjIw1fkIO9dem8yD5JmjZ/9Yyl/6V/dUmKJvq1OFZGxxtOtV+1HPpI+odm27QuXpL1dtQAAA A==
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1715053701; l=4122;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=m/879LQuL8JXETpqluE9o4A4OYLRvuKZ6yO7+lbGxZ8=; b=WlDNs6XesT9Dq9XcqMxvRoN4jY5WbclObVpngRPBmNc3EItY3fQdpDx6cG5UAUPiIKoksAwrO
+ 8xLeNDKGNkgBXSrd6KG2KSVE7A647d8GfbwEWE1svFm6xamRks5l0/a
+X-Mailer: b4 0.12.3
+Message-ID: <20240507-b4-sio-block-ioctl-v2-1-e11113aeb10f@google.com>
+Subject: [PATCH v2] block/ioctl: prefer different overflow check Running
+ syzkaller with the newly reintroduced signed integer overflow sanitizer shows
+ this report:
+From: Justin Stitt <justinstitt@google.com>
+To: Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-TO: Roman Gushchin <roman.gushchin@linux.dev>
+[   62.982337] ------------[ cut here ]------------
+[   62.985692] cgroup: Invalid name
+[   62.986211] UBSAN: signed-integer-overflow in ../block/ioctl.c:36:46
+[   62.989370] 9pnet_fd: p9_fd_create_tcp (7343): problem connecting socket to 127.0.0.1
+[   62.992992] 9223372036854775807 + 4095 cannot be represented in type 'long long'
+[   62.997827] 9pnet_fd: p9_fd_create_tcp (7345): problem connecting socket to 127.0.0.1
+[   62.999369] random: crng reseeded on system resumption
+[   63.000634] GUP no longer grows the stack in syz-executor.2 (7353): 20002000-20003000 (20001000)
+[   63.000668] CPU: 0 PID: 7353 Comm: syz-executor.2 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+[   63.000677] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[   63.000682] Call Trace:
+[   63.000686]  <TASK>
+[   63.000731]  dump_stack_lvl+0x93/0xd0
+[   63.000919]  __get_user_pages+0x903/0xd30
+[   63.001030]  __gup_longterm_locked+0x153e/0x1ba0
+[   63.001041]  ? _raw_read_unlock_irqrestore+0x17/0x50
+[   63.001072]  ? try_get_folio+0x29c/0x2d0
+[   63.001083]  internal_get_user_pages_fast+0x1119/0x1530
+[   63.001109]  iov_iter_extract_pages+0x23b/0x580
+[   63.001206]  bio_iov_iter_get_pages+0x4de/0x1220
+[   63.001235]  iomap_dio_bio_iter+0x9b6/0x1410
+[   63.001297]  __iomap_dio_rw+0xab4/0x1810
+[   63.001316]  iomap_dio_rw+0x45/0xa0
+[   63.001328]  ext4_file_write_iter+0xdde/0x1390
+[   63.001372]  vfs_write+0x599/0xbd0
+[   63.001394]  ksys_write+0xc8/0x190
+[   63.001403]  do_syscall_64+0xd4/0x1b0
+[   63.001421]  ? arch_exit_to_user_mode_prepare+0x3a/0x60
+[   63.001479]  entry_SYSCALL_64_after_hwframe+0x6f/0x77
+[   63.001535] RIP: 0033:0x7f7fd3ebf539
+[   63.001551] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+[   63.001562] RSP: 002b:00007f7fd32570c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[   63.001584] RAX: ffffffffffffffda RBX: 00007f7fd3ff3f80 RCX: 00007f7fd3ebf539
+[   63.001590] RDX: 4db6d1e4f7e43360 RSI: 0000000020000000 RDI: 0000000000000004
+[   63.001595] RBP: 00007f7fd3f1e496 R08: 0000000000000000 R09: 0000000000000000
+[   63.001599] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[   63.001604] R13: 0000000000000006 R14: 00007f7fd3ff3f80 R15: 00007ffd415ad2b8
+...
+[   63.018142] ---[ end trace ]---
 
-tree:   https://github.com/rgushchin/linux.git memcontrol_v1.1
-head:   9b269ef160d984dc9ed844151a21384b4ad60fdc
-commit: 9b269ef160d984dc9ed844151a21384b4ad60fdc [5/5] mm: memcg: move cgroup v1 interface files to memcontrol-v1.c
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240507/202405071035.tUhz0N6s-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 37ae4ad0eef338776c7e2cffb3896153d43dcd90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405071035.tUhz0N6s-lkp@intel.com/reproduce)
+Historically, the signed integer overflow sanitizer did not work in the
+kernel due to its interaction with `-fwrapv` but this has since been
+changed [1] in the newest version of Clang; It being re-enabled in the
+kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+sanitizer").
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405071035.tUhz0N6s-lkp@intel.com/
+Let's rework this overflow checking logic to not actually perform an
+overflow during the check itself, thus avoiding the UBSAN splat.
 
-All warnings (new ones prefixed by >>):
+[1]: https://github.com/llvm/llvm-project/pull/82432
 
-   In file included from mm/memcontrol-v1.c:3:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/memcontrol-v1.c:10:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/memcontrol-v1.c:1875:48: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-    1875 |                         nr += lruvec_page_state(lruvec, NR_LRU_BASE + lru);
-         |                                                         ~~~~~~~~~~~ ^ ~~~
-   mm/memcontrol-v1.c:1877:54: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-    1877 |                         nr += lruvec_page_state_local(lruvec, NR_LRU_BASE + lru);
-         |                                                               ~~~~~~~~~~~ ^ ~~~
-   mm/memcontrol-v1.c:1893:46: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-    1893 |                         nr += memcg_page_state(memcg, NR_LRU_BASE + lru);
-         |                                                       ~~~~~~~~~~~ ^ ~~~
-   mm/memcontrol-v1.c:1895:52: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-    1895 |                         nr += memcg_page_state_local(memcg, NR_LRU_BASE + lru);
-         |                                                             ~~~~~~~~~~~ ^ ~~~
-   11 warnings generated.
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Changes in v2:
+- don't use check_add_overflow as I accidentally was writing to p.start
+  and the alternative of using a dummy (unused) variable does not seem great.
+- Link to v1: https://lore.kernel.org/r/20240506-b4-sio-block-ioctl-v1-1-da535cc020dc@google.com
+---
+ block/ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/block/ioctl.c b/block/ioctl.c
+index f505f9c341eb..2639ce9df385 100644
+--- a/block/ioctl.c
++++ b/block/ioctl.c
+@@ -33,7 +33,7 @@ static int blkpg_do_ioctl(struct block_device *bdev,
+ 	if (op == BLKPG_DEL_PARTITION)
+ 		return bdev_del_partition(disk, p.pno);
+ 
+-	if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
++	if (p.start < 0 || p.length <= 0 || LLONG_MAX - p.length < p.start)
+ 		return -EINVAL;
+ 	/* Check that the partition is aligned to the block size */
+ 	if (!IS_ALIGNED(p.start | p.length, bdev_logical_block_size(bdev)))
 
-vim +1875 mm/memcontrol-v1.c
+---
+base-commit: 0106679839f7c69632b3b9833c3268c316c0a9fc
+change-id: 20240506-b4-sio-block-ioctl-78efd742fff4
 
-  1861	
-  1862	static unsigned long mem_cgroup_node_nr_lru_pages(struct mem_cgroup *memcg,
-  1863					int nid, unsigned int lru_mask, bool tree)
-  1864	{
-  1865		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, NODE_DATA(nid));
-  1866		unsigned long nr = 0;
-  1867		enum lru_list lru;
-  1868	
-  1869		VM_BUG_ON((unsigned)nid >= nr_node_ids);
-  1870	
-  1871		for_each_lru(lru) {
-  1872			if (!(BIT(lru) & lru_mask))
-  1873				continue;
-  1874			if (tree)
-> 1875				nr += lruvec_page_state(lruvec, NR_LRU_BASE + lru);
-  1876			else
-  1877				nr += lruvec_page_state_local(lruvec, NR_LRU_BASE + lru);
-  1878		}
-  1879		return nr;
-  1880	}
-  1881	
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
