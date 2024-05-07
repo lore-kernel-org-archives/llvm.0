@@ -1,176 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0191C32
-	for <llvm@lists.linux.dev>; Tue,  7 May 2024 01:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBE84A0C;
+	Tue,  7 May 2024 01:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715045505; cv=none; b=SsgbKyEn2UqQQNPZatQpmWXQ2G3yj48tOzPBYDUfztabuOB3PBc0ho10/VnZjqV19S4xgVLPxlxvyvWqOD8Z/hG7082cy3qI1JU4ZLojliM3cQDQyfl3MfsTt2kp1ciR55l4Ih8lauGqFfd50P6l96P/HjfhWUApjiASzx7rBJ4=
+	t=1715046320; cv=none; b=hjjYZ/56oUmTUduMEA72cL3PeFuZ5R5CwwZRjZ/HAkBl/902Hxv9DcArwMkxjAijYF4E5JH/7ySUf92Lvam8QltUwhE/Dfa8E94pxSzD97hthDhR5XnILK48K5oGXWjzRRBQU5/QRnmImIhe30FK4/YGPjwHQkKznYGgkfzDVog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715045505; c=relaxed/simple;
-	bh=bWg1RTIYoHNS4YDBT17RlCbppwCf/wLuYWu8S8pMCIA=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=A+pJEGTjk9gg77INKA9e30/s1NE3TJOdCgWKxh8MSU0zTyntYMCsEDnk9DsMvM4gYaoy/ZWOzD1GRLOu2+Npa3emAorAZN+zEUC02z/JmJ+dTge88XZiAAjnptwmrpgLR8gpKXLmOq0aqGJBxPtTSkqTy0mnG2Sjpu03LpvToUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QnETyjGG; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1715046320; c=relaxed/simple;
+	bh=Pv1AQtJOYkxC1yQA8no3goFIzvaWgQo7xKQd+D4EqU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l9tMaJq2kV4ZIxI8meAi8mgZb+OB2D8adQyDlAtfuw0e8O+VEEUUiuxAUtSAW6kEEiK570gwLAtYf/Op0bAP1VqjEeXnd0xG7kJq7Kyi8uAz62FBwuNE8p6rMH8pqwyTuaaTiEcSEj71KG5dxMxcJvmeA4gLBULZlgqIdkXY8xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C8M4qr6e; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QnETyjGG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715045502;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5dB1Gt5SfESvhopO3n8bkAfPZmpo/IlvPXUQ/6847Xs=;
-	b=QnETyjGGoTF86/LbBKp5mMh4CdVpQvfwvkHn+3Yw4fdaHZDC/GShiDWqD5B+4Em507dZQk
-	l3HeMFNsIoYJvRfg7ZKpEfzEc+SB+kMDXk/wXZQ2o/PSV/cUyWMupGxX9ZF3q7adbRKz1H
-	RV0oKVhX3hwFsyvvyOwl+uBIGBQlsoo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-539-GIKXBQRyPXO6yXc77ySAoA-1; Mon, 06 May 2024 21:31:40 -0400
-X-MC-Unique: GIKXBQRyPXO6yXc77ySAoA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A12C38001B2
-	for <llvm@lists.linux.dev>; Tue,  7 May 2024 01:31:40 +0000 (UTC)
-Received: from [172.64.4.17] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 42995400EB1;
-	Tue,  7 May 2024 01:31:40 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
- (6.9.0-rc7, mainline.kernel.org-clang, ee5b455b)
-Date: Tue, 07 May 2024 01:31:40 -0000
-To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev,
- yiyan@redhat.com, xiawu@redhat.com, bhe@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C8M4qr6e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715046319; x=1746582319;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pv1AQtJOYkxC1yQA8no3goFIzvaWgQo7xKQd+D4EqU8=;
+  b=C8M4qr6e1Tf23FQn42BId0c1F2lNFbp+++6+HKxTs8B4Nz00Cl/I36hE
+   btpm/AcUDed2fTTZN9GSf4FfyuDOmFLAGNGdalenkITR1jkzSwZ9tZ7iD
+   eBY5ML6h1RcJKQm2TGeIWnodPJP5qCiYJ9vMxFQGpSz4uA8AXkFEf25Lv
+   pjPJndkMGBb77wmKy+AvirJnLwLophHR0IcRXfuCT32x0jE80hKv4occT
+   ADwC1RP2vvpjNo1Vi7AnSLJgDOqbGEsgwskyKMdPf9VL1ap1gRbjM6O1z
+   g3h62wrzXLTbGwtnBTSO0ldZ9gkTZNmnKz5RcVXHExvSuquNU/NnZdR/Y
+   A==;
+X-CSE-ConnectionGUID: lxKuPs4QTGiTPLbUiEnf9Q==
+X-CSE-MsgGUID: +pW7QMRUSkCQ+6Yobw2/pA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="10692311"
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="10692311"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 18:45:15 -0700
+X-CSE-ConnectionGUID: mT/Q3UGcSUejYskr7pmnHg==
+X-CSE-MsgGUID: X5fdfTvqSXaULbUPjlhPUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="59207567"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 06 May 2024 18:45:13 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s49tG-0001D9-1e;
+	Tue, 07 May 2024 01:45:10 +0000
+Date: Tue, 7 May 2024 09:44:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	linux-bluetooth@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v1] Bluetooth: HCI: Remove HCI_AMP support
+Message-ID: <202405070914.iRNrUUQb-lkp@intel.com>
+References: <20240506223758.460710-1-luiz.dentz@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
-Message-Id: <91201.124050621314000985@us-mta-539.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240506223758.460710-1-luiz.dentz@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Luiz,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on next-20240506]
+[cannot apply to v6.9-rc7 v6.9-rc6 v6.9-rc5 linus/master v6.9-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'slab-for-6.9-rc7-fixes' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/vbabka/slab
+url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-HCI-Remove-HCI_AMP-support/20240507-063936
+base:   next-20240506
+patch link:    https://lore.kernel.org/r/20240506223758.460710-1-luiz.dentz%40gmail.com
+patch subject: [PATCH v1] Bluetooth: HCI: Remove HCI_AMP support
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240507/202405070914.iRNrUUQb-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405070914.iRNrUUQb-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1280547151
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405070914.iRNrUUQb-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        kdump - kexec-file-load
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1280547151-x86_64-kernel_upt_26
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /kdump/kexec-file-load
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1280547151-x86_64-kernel_upt_37
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1280547151-x86_64-kernel-debug_upt_32
-        xfstests - nfsv4.2
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1280547151-x86_64-kernel-debug_upt_31
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/340
-                       =E2=9D=8C FAIL generic/346
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: [rhel-10] workqueue: WQ_MEM_RECLAIM ttm:ttm_bo_delayed_delet=
-e [ttm] is flushing !WQ_MEM_RECLAIM events:qxl_gc_work [qxl]
-            URL: https://issues.redhat.com/browse/RHEL-35239
-            Affected tests:
-                Boot test [x86_64, x86_64 (debug)]
-                Reboot test [x86_64 (debug)]
-                xfstests - ext4 [x86_64 (debug)]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
+>> drivers/bluetooth/btmrvl_main.c:682:8: error: no member named 'dev_type' in 'struct hci_dev'
+           hdev->dev_type = priv->btmrvl_dev.dev_type;
+           ~~~~  ^
+   1 error generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
+vim +682 drivers/bluetooth/btmrvl_main.c
 
+132ff4e5fa8dfb Bing Zhao              2009-06-02  656  
+64061607eab7cb Bing Zhao              2010-03-03  657  int btmrvl_register_hdev(struct btmrvl_private *priv)
+132ff4e5fa8dfb Bing Zhao              2009-06-02  658  {
+132ff4e5fa8dfb Bing Zhao              2009-06-02  659  	struct hci_dev *hdev = NULL;
+70a7808b50b119 Abhishek Pandit-Subedi 2020-06-10  660  	struct btmrvl_sdio_card *card = priv->btmrvl_dev.card;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  661  	int ret;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  662  
+132ff4e5fa8dfb Bing Zhao              2009-06-02  663  	hdev = hci_alloc_dev();
+132ff4e5fa8dfb Bing Zhao              2009-06-02  664  	if (!hdev) {
+132ff4e5fa8dfb Bing Zhao              2009-06-02  665  		BT_ERR("Can not allocate HCI device");
+132ff4e5fa8dfb Bing Zhao              2009-06-02  666  		goto err_hdev;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  667  	}
+132ff4e5fa8dfb Bing Zhao              2009-06-02  668  
+132ff4e5fa8dfb Bing Zhao              2009-06-02  669  	priv->btmrvl_dev.hcidev = hdev;
+155961e8001719 David Rheinsberg       2012-02-09  670  	hci_set_drvdata(hdev, priv);
+132ff4e5fa8dfb Bing Zhao              2009-06-02  671  
+c13854cef47510 Marcel Holtmann        2010-02-08  672  	hdev->bus   = HCI_SDIO;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  673  	hdev->open  = btmrvl_open;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  674  	hdev->close = btmrvl_close;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  675  	hdev->flush = btmrvl_flush;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  676  	hdev->send  = btmrvl_send_frame;
+4b245722cabc6e Amitkumar Karwar       2013-10-01  677  	hdev->setup = btmrvl_setup;
+27b869f59d5d98 Amitkumar Karwar       2014-07-18  678  	hdev->set_bdaddr = btmrvl_set_bdaddr;
+4539ca67fe8ede Luiz Augusto von Dentz 2021-10-01  679  	hdev->wakeup = btmrvl_wakeup;
+70a7808b50b119 Abhishek Pandit-Subedi 2020-06-10  680  	SET_HCIDEV_DEV(hdev, &card->func->dev);
+64061607eab7cb Bing Zhao              2010-03-03  681  
+f120c6b635a62d Bing Zhao              2010-03-03 @682  	hdev->dev_type = priv->btmrvl_dev.dev_type;
+f120c6b635a62d Bing Zhao              2010-03-03  683  
+132ff4e5fa8dfb Bing Zhao              2009-06-02  684  	ret = hci_register_dev(hdev);
+132ff4e5fa8dfb Bing Zhao              2009-06-02  685  	if (ret < 0) {
+132ff4e5fa8dfb Bing Zhao              2009-06-02  686  		BT_ERR("Can not register HCI device");
+132ff4e5fa8dfb Bing Zhao              2009-06-02  687  		goto err_hci_register_dev;
+132ff4e5fa8dfb Bing Zhao              2009-06-02  688  	}
+132ff4e5fa8dfb Bing Zhao              2009-06-02  689  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
