@@ -1,108 +1,120 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9288815CD79
-	for <llvm@lists.linux.dev>; Mon,  6 May 2024 23:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B22637
+	for <llvm@lists.linux.dev>; Tue,  7 May 2024 00:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715038244; cv=none; b=BKaSgGERk9GGbK9Ge2hNWx7rDIY5s39S8WuX5KvPLdyW572HFxznRNvadxIUD+ACELKskOdjwC/lbhF8YfiWFVHHl7rgsfeQ2hXt+WBooxTkrtsQ8IYKwEilx4zAMh7e4lGFKm20Hk3Z5zmdSGDWRmnXdXXA/ak55KB8DECzezc=
+	t=1715040322; cv=none; b=ZKQeiqfHkPZfruG5o9QtWjEffBwVBZ+JmSeHaqAMrbWIirUSjWmwEZmxrETDrI+DmYnGTBl+cbQpWzIWtiwpn6Gn2Gw6yOVzPRxcHa7rbO8iNVeb6p9+er8HTKdOQtU1DeyoV6WAYA7gysvWPhAEf6DvOtlqw0WE/6LfZEu0Bs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715038244; c=relaxed/simple;
-	bh=dC5gmNPxNSH+aIEWUfqlcoUV3/RSi8n3oR46/xve6dA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qi62R9jNJERojl/JXLKWCJ1li7mqltu1r98mQ3W8vRKp2NUGaeH4HpjSsmbvNRTdKlN8ggtsPYGB4elE8jNfnhoUMUT9gGYdCvdjbG4eFG3qeQgGBsl8czlqIyzFc34sh0fdXJQ5Q5yWOWrUZ8lkSXo2LGUz3NPxQoJHKGD/m7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=evG4G0FP; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1715040322; c=relaxed/simple;
+	bh=HPz//ch8ZRi2x8WCzJmSVsNjI/8HfUnEKKxsvoVrGaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FH/smcJ6CfBWkcWMfYF3oKO8/Q0+MWTop/rzQoQxd2FA+h7eJMjj/zB6yVoo8dkuQG13If6Oa/lbl7eofjpqPhdSfvBM2tAy85aW2Ep0ejeBtdn/KHiSS5z7J8KYSI6sGqTiEs+Y20kLmEMm2S7YS0ZvKnzER3616kkJS6Hb2d0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fD+Z/VHZ; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="evG4G0FP"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso8480a12.0
-        for <llvm@lists.linux.dev>; Mon, 06 May 2024 16:30:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fD+Z/VHZ"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1eb24e3a2d9so24387975ad.1
+        for <llvm@lists.linux.dev>; Mon, 06 May 2024 17:05:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715038241; x=1715643041; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rday+enGpH1mUN4w1iIrCf7IG9Q6aF8QR6lBBrCyZ7g=;
-        b=evG4G0FPVzsxb5p4tvOZawbyuhtZW2nPxgRsDfMhdzPix8NG/M/cjgOlRFe5l5MydI
-         mLOrCmedIhQ500qnCheDmN1IUws2OzpETdtJnloYZQjEe6r50wlJHu5+wTlTw/Pd/aRy
-         I/W0soSgPNdPpMiCiLCsLnD0GudLD7rmHvGUSsTai4PyRGyHV7VOIahdiG0JYx5ROYJg
-         jMwbjbeBvxAFwtPA6rye5dV37Yn5nlTnchLYTS93InJXrI/5+XykYGd3GZkg+h8s1LIB
-         Nh3EKA1OWAi51epegzBHtBwLxxt2IlIp5RQjA3ld8iU8j8bR8VYUxotSl6c3FgVuHmyR
-         tsKw==
+        d=chromium.org; s=google; t=1715040319; x=1715645119; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KlvDANCVrZHWMQYFIBtkDUG6BaCteNwh6wwcOjijmC0=;
+        b=fD+Z/VHZ8tzekMepD11zAlQH3HlUa+ot/KmKFc+XmIpXuOJVsztU52Va1u+Of97ciJ
+         jW6MWVDlbjaBqa+thR7qtKToomjYEa2HI3SsVIZOWz1pIy++8OIut8laOyi2+bSbv9Qf
+         M+WdnbazYdaEdwCsjMiOYMikjwEkeIifLEbIw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715038241; x=1715643041;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rday+enGpH1mUN4w1iIrCf7IG9Q6aF8QR6lBBrCyZ7g=;
-        b=OQ9PW3w2S7G8hvDJOxmD2CCSeQMIDfQX3lZrv/IKp9r90xEWM0u+9Zb140Ohp+b7nc
-         xb9r4XTsAYfnu/qhV1Oeh/ahlw4TCcfGbJRR7Bb5B2jB/bOnveouqKViOEFz/jKaBvXw
-         7Xht1kkZd18FAEFuSfc4UM3DXkmqmjJTKEVTkg70W0Gkh3ns0MkW8EZ50Wi1bA3sSF5R
-         b3xlAjaowiHt03Rq5LI+C/HAYCpwgV2UIdIecyWQxLRRwJx6CC0bGENYiEWOb2pIgfjW
-         wqWJSOvEzhmKWUpsSPlSm6ocB346RYwwOO60vAlQBsLqMgdkf01crs3D0xQdOBHR2WQo
-         bfJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUl4RDSa6YdCrmR5AE86AleCL1WZZWyhR8DAJvsM2s0tVwUp4Hl0gehVmKWv9mj9JauHSupVvYXvjCZFgxX21CpWrYqSA==
-X-Gm-Message-State: AOJu0YxN+94ATlb2MaZcUm0H7TQ20X2A1DB/MwSw3w9S+o2bHLC9CS9E
-	RMYKadONk1lbg3sN/ju7+rcgemMcsOhGW1YctKGYzEh9rLv2fJNV/PySMb5Br7WSFoiqMARIb3J
-	7VofiZJMjVPT5sgdGuwHYiLBAN0qxSWmnsQn6
-X-Google-Smtp-Source: AGHT+IFPtbSaAcsaOKbHp6npYdFSTUzqld8pO8i1uwvZe0pXCtMxJsE/ukQM7Zz7NLIcHgg7/XYVun1u85SF7+71r+g=
-X-Received: by 2002:aa7:d389:0:b0:572:554b:ec4f with SMTP id
- 4fb4d7f45d1cf-5731316c507mr37653a12.3.1715038240800; Mon, 06 May 2024
- 16:30:40 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715040319; x=1715645119;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KlvDANCVrZHWMQYFIBtkDUG6BaCteNwh6wwcOjijmC0=;
+        b=L9cMGAS8YzMdVXFJEVeGg3yu2uWRqRrcumyjyOGsJ8vOArX0SX99qQytBA9m3PTHpl
+         1Zz+jOm+KymBhLSNCCwvk0Rf8hFodcdbP5TivkrXfqXF8qL2mxINGCGen5hDgPeO96JF
+         2u+mxdO6C692EiWDWBypldC1pa8Be7DdrD+TxJeft+fccj4dp0OkBcBSLYYmrqe3/1kq
+         JpegPT7G4pnTeBSX5u7AmmZyKLZnjspDg1bIZ10xZmHhiKmEQ4rJQhN5ej9OnYFKjE2M
+         8cXLVooyfIs93AcXvjKZH8cPhAhoomWsaCed2gEHUD4VAeu7uyjp00jPfdwxSEk+iPIi
+         cHmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUkMyr/EA5idshhhQJhGMkGU/fZJiB9qYgip+p7cs6+JhtV19GIBHFRSdh6UGFVkXkt3k+zY/xop2c//923iEsThcWJxQ==
+X-Gm-Message-State: AOJu0YwcYjnzcIuU28c+o7/rYuWoklscyoDCL/aINC/Od9yO3gxULysu
+	1/Wph/1aZdU75GA9VM0KEm0RIqyYeJ4ToQMioZ0pQODGehgy/qUKxjo/cKQb0Q==
+X-Google-Smtp-Source: AGHT+IFhCMIL115zdj8pY5gtzUEO5BqoE/SHP70FTQHqPl7M/NDkraWKJXcYOem7iaZCavnsw+unMA==
+X-Received: by 2002:a17:902:eb86:b0:1e4:a667:5528 with SMTP id q6-20020a170902eb8600b001e4a6675528mr16349817plg.3.1715040319219;
+        Mon, 06 May 2024 17:05:19 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id jz7-20020a170903430700b001eb17af8493sm8832219plb.184.2024.05.06.17.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 May 2024 17:05:18 -0700 (PDT)
+Date: Mon, 6 May 2024 17:05:18 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Fangrui Song <maskray@google.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Yang Yingliang <yangyingliang@huawei.com>, kernel@collabora.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] selftests: exec: make binaries position independent
+Message-ID: <202405061704.DD3AF674@keescook>
+References: <20240416152831.3199999-1-usama.anjum@collabora.com>
+ <202404161027.63F4D4FDEB@keescook>
+ <CAFP8O3Jjkh0U94CbS=epXELMtCBpYt4fGejX3spH4=GdF7zVSw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240416152831.3199999-1-usama.anjum@collabora.com> <202404161027.63F4D4FDEB@keescook>
-In-Reply-To: <202404161027.63F4D4FDEB@keescook>
-From: Fangrui Song <maskray@google.com>
-Date: Mon, 6 May 2024 16:30:27 -0700
-Message-ID: <CAFP8O3Jjkh0U94CbS=epXELMtCBpYt4fGejX3spH4=GdF7zVSw@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: exec: make binaries position independent
-To: Kees Cook <keescook@chromium.org>, Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Yang Yingliang <yangyingliang@huawei.com>, 
-	kernel@collabora.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFP8O3Jjkh0U94CbS=epXELMtCBpYt4fGejX3spH4=GdF7zVSw@mail.gmail.com>
 
-On Tue, Apr 16, 2024 at 10:28=E2=80=AFAM Kees Cook <keescook@chromium.org> =
-wrote:
->
-> On Tue, Apr 16, 2024 at 08:28:29PM +0500, Muhammad Usama Anjum wrote:
-> > The -static overrides the -pie and binaries aren't position independent
-> > anymore. Use -static-pie instead which would produce a static and
-> > position independent binary. This has been caught by clang's warnings:
+On Mon, May 06, 2024 at 04:30:27PM -0700, Fangrui Song wrote:
+> On Tue, Apr 16, 2024 at 10:28 AM Kees Cook <keescook@chromium.org> wrote:
 > >
-> >   clang: warning: argument unused during compilation: '-pie'
-> >   [-Wunused-command-line-argument]
+> > On Tue, Apr 16, 2024 at 08:28:29PM +0500, Muhammad Usama Anjum wrote:
+> > > The -static overrides the -pie and binaries aren't position independent
+> > > anymore. Use -static-pie instead which would produce a static and
+> > > position independent binary. This has been caught by clang's warnings:
+> > >
+> > >   clang: warning: argument unused during compilation: '-pie'
+> > >   [-Wunused-command-line-argument]
+> > >
+> > > Tested with both gcc and clang after this change.
+> > >
+> > > Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
+> > > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > >
-> > Tested with both gcc and clang after this change.
+> > Thanks for this!
 > >
-> > Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
-> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->
-> Thanks for this!
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> --
-> Kees Cook
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> >
+> > --
+> > Kees Cook
+> 
+> GCC versions before 8.1 do not support -static-pie,
+> while https://www.kernel.org/doc/html/next/process/changes.html says
+> the minimal version is GCC 5.1.
+> Is this a problem?
+> 
+> If not, and CFLAGS is guaranteed to include -fpie/-fpic/-fPIE/-fPIC
+> (PIC), using -static-pie looks good to me.
 
-GCC versions before 8.1 do not support -static-pie,
-while https://www.kernel.org/doc/html/next/process/changes.html says
-the minimal version is GCC 5.1.
-Is this a problem?
+Should we use this alternative, which may be more portable?
+https://lore.kernel.org/all/20240504022301.35250-1-jhubbard@nvidia.com/
 
-If not, and CFLAGS is guaranteed to include -fpie/-fpic/-fPIE/-fPIC
-(PIC), using -static-pie looks good to me.
+-Kees
 
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+-- 
+Kees Cook
