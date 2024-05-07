@@ -1,64 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F241509A5;
-	Tue,  7 May 2024 11:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316AD8F6B;
+	Tue,  7 May 2024 12:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715080172; cv=none; b=NYewd53dJaPEKNV4KlldBppbxlfdpL5mEAc8EzW3F9/lRno0mOPsDBQmrW2r9IwjHeWsjxlMVZ8cWyf88dbGndPtrjkISP2PDRRCmQnzZt1pjltRtySE19l/PA59lMM40m3grbXl2x1r51Z2F6FCQA+6tjEF5sDOEDFOvHw+XN4=
+	t=1715085164; cv=none; b=WUj7rAXFR252tnOhimY+xfVIca/xj17uWwcyrYy+fzgBJFUalwzvO5v40H3ioiCt2tdv4YOqE1pf/enbNqYTZU6BvsKnlTqE58NZd/9WMeF2vyULXPCNhafCGLAkpwPbEfG0G3l1mq44NqcVGlrM7CFM+6KDB86Xu+OLF/Ynn5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715080172; c=relaxed/simple;
-	bh=ZDHAJEmGPC34idg5wIvN/SlxRNOVp/+v3SFR/mFtXG4=;
+	s=arc-20240116; t=1715085164; c=relaxed/simple;
+	bh=/gUkLjOR4jSCzfgQ8uwQGC9Tyk0qbgfnT/0lr9ZVJOQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r3mDj46Nz3Sb67jDz/L//9XeiAmmm6twSC//KtqrtQZAyVyWxLK4/xOfyLIHKcZ3GxPWTxu3KtT+PXvdEnXk4FMkoVbXaYeZ6qGgaqI+00T21qs73PxA7tWYen+AcvmVKdNZYwkKUbFlyjP2bH8+GOe9H9+bsnDU7E4J3u2EhjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gbt4wUu9; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=bpWRtjVwtFfBFXCf/LNIqv+1q3ZsbgZaZiY6M7YSNTAEHjdUttXXSRlM5fg5X1XA4RUBfcqHDm5G6eYVcRHodiDqHGNISeXEqEuKEU0965joJjJ5IissKiHTcuT2OiD+Op6pYroLBnXowmOS3SfgvQfiknlxe/ag8LxSwJr144I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VdkNTI4T; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gbt4wUu9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715080171; x=1746616171;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZDHAJEmGPC34idg5wIvN/SlxRNOVp/+v3SFR/mFtXG4=;
-  b=gbt4wUu9LzLAIIEOtmSd0OewPeAARlHeqy1dc6K1QdU9rt8zushDLUXU
-   Yz2CPCN9xkP8POk9J46cKcM6p/hKew5f3j+fP7IQ0slYx1aSIHyG9fEqL
-   +hqeQlgPc2rIzYzzUl0iPkwzylItQ1uSvsT2AuGlqphUWp5SGwRtO0jmd
-   q+vo11ut7RiUBU1AXG2ew94Pr5dcd9mycWnXS39M3qiz4R+CQM+A+430l
-   heMmKd+gyHjRhcAV3owV6Vbd84BustJSEuul6++DXWBlzXbfQ+dkIxAuy
-   MxWqoeB69SbVHS629dgFUq1xbys7UlglBRFE1OApDzu7sLGsrLgjY+nw0
-   w==;
-X-CSE-ConnectionGUID: nhSqrS7pR6Sx6lOwpSRROg==
-X-CSE-MsgGUID: zsVL/55ITgqFQKQIUMpIIw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="10720746"
-X-IronPort-AV: E=Sophos;i="6.07,261,1708416000"; 
-   d="scan'208";a="10720746"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 04:09:31 -0700
-X-CSE-ConnectionGUID: ZrOBaoG9Sdiqh7Rw7qH+sw==
-X-CSE-MsgGUID: 36gEx8TfSX+QnqxwlLRF2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,261,1708416000"; 
-   d="scan'208";a="51682325"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 07 May 2024 04:09:28 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4IhJ-0001qH-35;
-	Tue, 07 May 2024 11:09:25 +0000
-Date: Tue, 7 May 2024 19:08:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	michael.riesch@wolfvision.net, kernel@pengutronix.de,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>
-Subject: Re: [PATCH] usb: dwc3: gadget: create per ep interrupts
-Message-ID: <202405071800.omy5Ou1D-lkp@intel.com>
-References: <20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f@pengutronix.de>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VdkNTI4T"
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 447C1UU9015313;
+	Tue, 7 May 2024 12:32:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=VsUJTSdpnWOM0cDbhrM/hZOQ5xrPm9c9WsS553P/z/w=;
+ b=VdkNTI4TvNiS/ClQQJlFKwqrM0Cser+ehQ5uLfyBzhB2/c0vQHwJtacd2vLRCKnav+bH
+ nnLTsgNt06ySpcwn0AmlqHpm4iWV87OM3NovoDZphhFbIUT6fAGUzS30FemEVKYE8GaJ
+ bRGdIqu19dHaH31diGU5+1rK4FYRMh5XA+F2lELm+V0sZcWPWG0mY4p+OgfKIlQNPFaQ
+ wZAqxpkb2FTUsvGSlnRpGbYJ7aAVXFnSRcLEtm5x2kL00qkigYQKQnx6cVt1YU/dXZYD
+ TchUzAOW2JemvxtVrzH09/loP9a+eD8hMNTFhERWros9j8dBEkKo67fZTrGrC1Csk0Xu Ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xyknd03f6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 May 2024 12:32:30 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 447CWTEw004456;
+	Tue, 7 May 2024 12:32:29 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xyknd03f3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 May 2024 12:32:29 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 447ANOgQ022508;
+	Tue, 7 May 2024 12:32:28 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xx1jkwre3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 May 2024 12:32:28 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 447CWNTs54985020
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 7 May 2024 12:32:25 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 410352004B;
+	Tue,  7 May 2024 12:32:23 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 502632004D;
+	Tue,  7 May 2024 12:32:22 +0000 (GMT)
+Received: from osiris (unknown [9.171.44.40])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue,  7 May 2024 12:32:22 +0000 (GMT)
+Date: Tue, 7 May 2024 14:32:20 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Huth <thuth@redhat.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Thorsten Winkler <twinkler@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>, netdev@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH 0/6] s390: Unify IUCV device allocation
+Message-ID: <20240507123220.7301-A-hca@linux.ibm.com>
+References: <20240506194454.1160315-1-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,91 +85,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f@pengutronix.de>
+In-Reply-To: <20240506194454.1160315-1-hca@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WKUqx34HX5S2SSp48t5luArWznjCnPse
+X-Proofpoint-GUID: 31WKNj7By9EH0_0BmBk-Q_I_6TUFYrCo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-07_06,2024-05-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=459 mlxscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ spamscore=0 impostorscore=0 clxscore=1015 bulkscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2405070086
 
-Hi Michael,
+On Mon, May 06, 2024 at 09:44:48PM +0200, Heiko Carstens wrote:
+> Unify IUCV device allocation as suggested by Arnd Bergmann in order
+> to get rid of code duplication in various device drivers.
+> 
+> This also removes various warnings caused by
+> -Wcast-function-type-strict as reported by Nathan Lynch.
+                                             ^^^^^^^^^^^^
 
-kernel test robot noticed the following build warnings:
+Ahem :)
 
-[auto build test WARNING on dd5a440a31fae6e459c0d6271dddd62825505361]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Grzeschik/usb-dwc3-gadget-create-per-ep-interrupts/20240507-070804
-base:   dd5a440a31fae6e459c0d6271dddd62825505361
-patch link:    https://lore.kernel.org/r/20240507-dwc3_per_ep_irqthread-v1-1-f14dec6de19f%40pengutronix.de
-patch subject: [PATCH] usb: dwc3: gadget: create per ep interrupts
-config: x86_64-buildonly-randconfig-001-20240507 (https://download.01.org/0day-ci/archive/20240507/202405071800.omy5Ou1D-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240507/202405071800.omy5Ou1D-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405071800.omy5Ou1D-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/dwc3/gadget.c:1068:6: warning: variable 'count_processed' set but not used [-Wunused-but-set-variable]
-    1068 |         int count_processed = 0;
-         |             ^
-   1 warning generated.
-
-
-vim +/count_processed +1068 drivers/usb/dwc3/gadget.c
-
-  1059	
-  1060	static void dwc3_process_event_entry(struct dwc3 *dwc,
-  1061					     const union dwc3_event *event);
-  1062	
-  1063	static irqreturn_t dwc3_endpoint_thread_irq(int irq, void *_dep)
-  1064	{
-  1065		struct dwc3_ep *dep = _dep;
-  1066		struct dwc3 *dwc = dep->dwc;
-  1067		const union dwc3_event *event;
-> 1068		int count_processed = 0;
-  1069		u32 event_raw;
-  1070		unsigned long flags;
-  1071	
-  1072		dep->givebacks_current_turn = 0;
-  1073	
-  1074		spin_lock_irqsave(&dep->event_lock, flags);
-  1075	
-  1076		if (dep->ep_event_flags & DWC3_EP_EVENT_OVERFLOW) {
-  1077			dev_err(dwc->dev, "ep%d: event buffer overflow\n", dep->number);
-  1078			dep->ep_event_flags &= ~DWC3_EP_EVENT_OVERFLOW;
-  1079		}
-  1080	
-  1081		while (dep->ep_event_r_index != dep->ep_event_w_index) {
-  1082	
-  1083			event_raw = dep->ep_event_buffer[dep->ep_event_r_index];
-  1084	
-  1085			/*
-  1086			 * we have a copy of the event, so we can release the lock
-  1087			 */
-  1088			spin_unlock_irqrestore(&dep->event_lock, flags);
-  1089	
-  1090			event = (const union dwc3_event *) &event_raw;
-  1091	
-  1092			spin_lock(&dwc->lock);
-  1093			dwc3_process_event_entry(dwc, event);
-  1094			spin_unlock(&dwc->lock);
-  1095	
-  1096			/*
-  1097			 * we need to re-acquire the lock to update the read index
-  1098			 */
-  1099			spin_lock_irqsave(&dep->event_lock, flags);
-  1100	
-  1101			dep->ep_event_r_index = (dep->ep_event_r_index + 1) %
-  1102						 ARRAY_SIZE(dep->ep_event_buffer);
-  1103	
-  1104			count_processed += 1;
-  1105		}
-  1106	
-  1107		spin_unlock_irqrestore(&dep->event_lock, flags);
-  1108	
-  1109		return IRQ_HANDLED;
-  1110	}
-  1111	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This should have been Nathan Chancellor, of course. Sorry for this!
