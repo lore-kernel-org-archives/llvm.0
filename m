@@ -1,95 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D9A1877;
-	Tue,  7 May 2024 01:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0191C32
+	for <llvm@lists.linux.dev>; Tue,  7 May 2024 01:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715045229; cv=none; b=QegrAwzP03WbEUQzZ7g+MgYI865RNl/i9+dzEX90PhgBhmjdFhkpaojK2tqF/9/sO2g5J0fuwi5o6qirw5RhudJOFYMzRNYo3nh0IqtjOl0WXtJSQ3S2kcbvJYrjtnTWpRii0cz7VdvbOYFWMTK0LeRWaJx9WNieByFw16DfEO4=
+	t=1715045505; cv=none; b=SsgbKyEn2UqQQNPZatQpmWXQ2G3yj48tOzPBYDUfztabuOB3PBc0ho10/VnZjqV19S4xgVLPxlxvyvWqOD8Z/hG7082cy3qI1JU4ZLojliM3cQDQyfl3MfsTt2kp1ciR55l4Ih8lauGqFfd50P6l96P/HjfhWUApjiASzx7rBJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715045229; c=relaxed/simple;
-	bh=+wuctz0AiwVRvA/EpqH1dAUfEc9dgfyNT226PxPonE0=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=iQilpMCv50KNIaxh2ldBzTnn4NRCPLk2E9gftv+dOXHDG5KDPQB1HQC8JOG/ExNxzM7kq+hL2709O4qjiTxHl6aAs3X0uCaHo5JIvMkgh59CCq+BmX31P6NpupP/OKeoqnJxRjYg3kUJBDRVt6XzH042n0VWJCVMuq3cSGQOsaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=erF2OyYo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715045505; c=relaxed/simple;
+	bh=bWg1RTIYoHNS4YDBT17RlCbppwCf/wLuYWu8S8pMCIA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=A+pJEGTjk9gg77INKA9e30/s1NE3TJOdCgWKxh8MSU0zTyntYMCsEDnk9DsMvM4gYaoy/ZWOzD1GRLOu2+Npa3emAorAZN+zEUC02z/JmJ+dTge88XZiAAjnptwmrpgLR8gpKXLmOq0aqGJBxPtTSkqTy0mnG2Sjpu03LpvToUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QnETyjGG; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="erF2OyYo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582A3C116B1;
-	Tue,  7 May 2024 01:27:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715045228;
-	bh=+wuctz0AiwVRvA/EpqH1dAUfEc9dgfyNT226PxPonE0=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=erF2OyYo4g4QHD5j+j/3El51K5HlY9YjpCRnz5+/o1sT/zNOJPJwzyi6m6MZDvSys
-	 5sAwwmFyjwIsLj0TcrgdOKkFnsVqRy57dxu+rlRnVFdvJfZhMr6M9JpIxiPBCfganM
-	 Gqan89L+VItIyncqv/8uLollGFRnVZusKMFrg3hgWyRxxtSIDYmpjmYhKIKjFcQzel
-	 Z4bNtAcx+8yiiBOkgD5JHG1Mhdt7NdAz3qnDeNJ+Cu6VeWQaIA6sfJRFS24fSeTDex
-	 IIkLisFrox1YdCcoA/+mw1ftDA47lfMNklduD9b2h6jA4UmOeCkAHQlyPLXaGOVa2R
-	 1xE25HTw3e+KQ==
-Date: Mon, 6 May 2024 18:27:07 -0700 (PDT)
-From: Mat Martineau <martineau@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-cc: Shuah Khan <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-    Paolo Abeni <pabeni@redhat.com>, 
-    Steffen Klassert <steffen.klassert@secunet.com>, 
-    Herbert Xu <herbert@gondor.apana.org.au>, 
-    =?ISO-8859-15?Q?Andreas_F=E4rber?= <afaerber@suse.de>, 
-    Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-    Matthieu Baerts <matttbe@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-    Pravin B Shelar <pshelar@ovn.org>, 
-    Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-    Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
-    zhujun2 <zhujun2@cmss.chinamobile.com>, Petr Machata <petrm@nvidia.com>, 
-    Ido Schimmel <idosch@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>, 
-    Nikolay Aleksandrov <razor@blackwall.org>, 
-    Benjamin Poirier <bpoirier@nvidia.com>, 
-    Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-    Dmitry Safonov <0x7f454c46@gmail.com>, netdev@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-actions@lists.infradead.org, 
-    mptcp@lists.linux.dev, dev@openvswitch.org, 
-    Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/net: fix uninitialized variables
-In-Reply-To: <20240506190204.28497-1-jhubbard@nvidia.com>
-Message-ID: <610f9818-b899-1f70-8110-f88db47595ff@kernel.org>
-References: <20240506190204.28497-1-jhubbard@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QnETyjGG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715045502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5dB1Gt5SfESvhopO3n8bkAfPZmpo/IlvPXUQ/6847Xs=;
+	b=QnETyjGGoTF86/LbBKp5mMh4CdVpQvfwvkHn+3Yw4fdaHZDC/GShiDWqD5B+4Em507dZQk
+	l3HeMFNsIoYJvRfg7ZKpEfzEc+SB+kMDXk/wXZQ2o/PSV/cUyWMupGxX9ZF3q7adbRKz1H
+	RV0oKVhX3hwFsyvvyOwl+uBIGBQlsoo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-539-GIKXBQRyPXO6yXc77ySAoA-1; Mon, 06 May 2024 21:31:40 -0400
+X-MC-Unique: GIKXBQRyPXO6yXc77ySAoA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A12C38001B2
+	for <llvm@lists.linux.dev>; Tue,  7 May 2024 01:31:40 +0000 (UTC)
+Received: from [172.64.4.17] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 42995400EB1;
+	Tue,  7 May 2024 01:31:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
+ (6.9.0-rc7, mainline.kernel.org-clang, ee5b455b)
+Date: Tue, 07 May 2024 01:31:40 -0000
+To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev,
+ yiyan@redhat.com, xiawu@redhat.com, bhe@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Message-Id: <91201.124050621314000985@us-mta-539.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 6 May 2024, John Hubbard wrote:
+Hi, we tested your kernel and here are the results:
 
-> When building with clang, via:
->
->    make LLVM=1 -C tools/testing/selftest
->
-> ...clang warns about three variables that are not initialized in all
-> cases:
->
-> 1) The opt_ipproto_off variable is used uninitialized if "testname" is
-> not "ip". Willem de Bruijn pointed out that this is an actual bug, and
-> suggested the fix that I'm using here (thanks!).
->
-> 2) The addr_len is used uninitialized, but only in the assert case,
->   which bails out, so this is harmless.
->
-> 3) The family variable in add_listener() is only used uninitialized in
->   the error case (neither IPv4 nor IPv6 is specified), so it's also
->   harmless.
->
-> Fix by initializing each variable.
->
-> Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Hi John -
 
-MPTCP change looks good to me:
+Kernel information:
+    Commit message: Merge tag 'slab-for-6.9-rc7-fixes' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/vbabka/slab
 
-Acked-by: Mat Martineau <martineau@kernel.org>
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1280547151
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        kdump - kexec-file-load
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1280547151-x86_64-kernel_upt_26
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kexec-file-load
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1280547151-x86_64-kernel_upt_37
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1280547151-x86_64-kernel-debug_upt_32
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1280547151-x86_64-kernel-debug_upt_31
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/340
+                       =E2=9D=8C FAIL generic/346
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: [rhel-10] workqueue: WQ_MEM_RECLAIM ttm:ttm_bo_delayed_delet=
+e [ttm] is flushing !WQ_MEM_RECLAIM events:qxl_gc_work [qxl]
+            URL: https://issues.redhat.com/browse/RHEL-35239
+            Affected tests:
+                Boot test [x86_64, x86_64 (debug)]
+                Reboot test [x86_64 (debug)]
+                xfstests - ext4 [x86_64 (debug)]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
+
+
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
