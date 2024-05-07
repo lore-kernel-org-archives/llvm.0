@@ -1,159 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB07116C870;
-	Tue,  7 May 2024 18:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9A916D9C9
+	for <llvm@lists.linux.dev>; Tue,  7 May 2024 19:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715105752; cv=none; b=oHKOKUrA4ku71eWkOoKeIkzChJcn68p9J4jvLwc24HnX+qglS+uEl9x3/yZYnQ+OtjY1bFcpBNWQLCyYsydyM5uxKJvVL8tOsUw8i4TRijx7BG97ayo3ubVr7vESEXYx1FQsGSxg6jCi0G/7gNwtalwHVRQYaPujfZf7sOi1s8o=
+	t=1715108439; cv=none; b=lWwkO8GQVJ1WRI8TV53ZOtRWCqxuhdw1L7Zrx6ufdlcGjism9JFlcxo6mprdKIFI+9YvpSiy9RtNUPbYkqLSx3KM04lU8udRhbvh1XId5u6hLWdRlTcI4eYmJB4EMST8XHNmMQbyLGGT83ge6qyAI97CJmtG4hMoAfHjXp2nHz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715105752; c=relaxed/simple;
-	bh=mf5UmPMNWI6z/l0QJkKwSomwSt9p6Keyb3TpKEP4LUc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L6FRf3qAQfRTKos1s4MDIXyJ9jEDikQx+iAJDSfyeckWnPS1qT6amxdgb/TQCvnpvtadumn2rYkxU9llb1fg70wOoFt2q5ma1/f6y35Ekjf6dQlWnbbp++jvePpA/y3QkP/KzXI5WBmjr6mIPELus70nPQ8ZJ7wno5AzQZD2Jr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZDEZVI/b; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715108439; c=relaxed/simple;
+	bh=7s3oPGkGLzvOuGWVPAZcFf2NPdjW/ND+O4YOkgFBmXE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JKoHz4ir537Io9h5a4pPIG5N5vIbeqe9vO2rsoAJEnaTQ51Occ82lo8IDwdbi5H2G8X4bR9GeksS9sNdqBb7HEgKANYl+1kHFkwsj7TjHGiJiuik0P0GSF8GGs6Drp9oiqYYewqQLKGmwzUuaTsV2yV16bt9L3KIIBoRJ8KDJE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0V2nDdrx; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZDEZVI/b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715105749; x=1746641749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mf5UmPMNWI6z/l0QJkKwSomwSt9p6Keyb3TpKEP4LUc=;
-  b=ZDEZVI/bYlZKvYfZ6BSa4qEN5jbxbuvrVD3wWE0LC+b+2UjKgxy6ms5M
-   N8e2eCcsC6AgX8dYZdArZe1EdbdFIdyjA58g57eTZIxCIXLXXrmfpwG66
-   +BdbNXlCYAdPd7IwMtJiUzpPCk8iKWwOeDXEiLNmubG50heeUf9sC3LGZ
-   RUR8ApAUEKwsZTtuHiwEGqOhLNI7ni0akqcEeZR1Bl5Vu5RO1xXZO3UJw
-   OSFTYkmYkHLUwlb12dbLvRcPWb67+Oiu0hotARELV1YYjvCuggEU0NHjj
-   SeXUGmuQlW1m7NtfXqJ1kln6UkPQGmFoKHHAYpy8wPLf/knI0ddN4mOBD
-   Q==;
-X-CSE-ConnectionGUID: sg1AuN+mRtSdEgvvaefxiQ==
-X-CSE-MsgGUID: asH10tCST+SlwCizAHLLow==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11049799"
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="11049799"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 11:15:48 -0700
-X-CSE-ConnectionGUID: zfCVuL4KQOuW0pBFkG9aDw==
-X-CSE-MsgGUID: NBKi7VABT0ewefpDuLOBiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="33167004"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 May 2024 11:15:45 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4PLq-0002Xs-1r;
-	Tue, 07 May 2024 18:15:42 +0000
-Date: Wed, 8 May 2024 02:14:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-	Mario.Limonciello@amd.com, viresh.kumar@linaro.org,
-	Ray.Huang@amd.com, gautham.shenoy@amd.com, Borislav.Petkov@amd.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
-	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/11] cpufreq: amd-pstate: implement heterogeneous core
- topology for highest performance initialization
-Message-ID: <202405080122.4pEEcR2C-lkp@intel.com>
-References: <731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan@amd.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0V2nDdrx"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-6001399f22bso2604147a12.0
+        for <llvm@lists.linux.dev>; Tue, 07 May 2024 12:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715108431; x=1715713231; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=52/TiGb0pRp1cCi0WAvKTSl0Kx/3b9XgA1N/tzA4luI=;
+        b=0V2nDdrxVpWj/XiJYofPfntzTv03lOdSpaXeOUR3c/CsL1ZDApc0iZvIGCL9Cam8TT
+         TQc1T0coufjdBFZUXV88wPPcKm88T6jimUEOTD3nbG+Nt1VBCaA7Dqc+nZz8srjwoQ4a
+         V7TYFCSVxl3hRKuwQNms07/DIiWA8s0igAjfNvpOmxtGGyGdy7kcrhwTVvPRwlYhGJHp
+         7ZbZrLfR7Gw0pDOQkHjIQ+P7GIBBnGmzHFWaHgrK5jG7GkrWTEfMKl+tQIePlHF9cTZc
+         l1wF/sjz/+bLL6Kjf8UJ9bIdY7g/XF0AgfqbK5Ch9oOpRInJUPGxCLM3gwv0grMiHOTh
+         fglA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715108431; x=1715713231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=52/TiGb0pRp1cCi0WAvKTSl0Kx/3b9XgA1N/tzA4luI=;
+        b=okM5rYzVfHzF69OB1VIC06v1KBLUqXwSGQb/JwH83HDi5M3Um9GZTQK9QdyMmOdeWK
+         bDfXgbJv0dRtu/6IrGraWWHvLSGWhJ4jPzZp0CS2bmimqjZrhfEDBY8bG/3WoS25O4oN
+         izfEJoo0VPAGh7tLyS5MxNQ76YqCS3fB6X8nTbg2ZutlWeWyIvSECjeUxiW8Ijb9iPMk
+         a4L+kPBw1sa+TMIpEtkGybhLoTATJ3dz4d/tTjtKHg7AGSvlYZuqtfIfqrlbAJV5AvLo
+         ChlIMllsYpcW+lZRZNp7cE6XHNimMqFNbmDwQ+U5I7lQKMxSO6WrDJYhKzj7m+bwaj0P
+         PRWw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBmvpRdwJ5TBd9KJaTzAiPqM0HaQo+GXBM+iszkKhzaAQ3XiB1ht20p42ZDsc3TOoBsqcPubR6AiJbHimN51Bc4uF7/Q==
+X-Gm-Message-State: AOJu0Yz1MqGD6GD6a7CV0eMxPk8Yi4RMJ+Jfbkn0HkUbVY2sJp9T9T8a
+	cpDZ8x4gFE0LW8Ar21GqFJbiT0060TV8ihbw4U1XACmQfUpkHZxcFC+zKEvMGYIYq0XzJnrOc0k
+	HAdxa0F/pXlT4/QfkQYsm1l06dkLv0CCyWRDy
+X-Google-Smtp-Source: AGHT+IFdufqWMf0KRyS6ONQjfkqedO80otF+5gAkHmdq5Jd6uIJPgZyn9Nvw+Eax/axJml6eRyADco7/lvarEj7yCXU=
+X-Received: by 2002:a17:90b:4f46:b0:2a2:70f6:8f67 with SMTP id
+ 98e67ed59e1d1-2b6169e318cmr418365a91.30.1715108430851; Tue, 07 May 2024
+ 12:00:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan@amd.com>
+References: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
+In-Reply-To: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
+From: Shailend Chand <shailend@google.com>
+Date: Tue, 7 May 2024 12:00:19 -0700
+Message-ID: <CANLc=ata9H4ZTN92MhQ+P5bTBo9grE7sP1_JDk5MdzaCOhXOGQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 0/2] gve: Minor cleanups
+To: Simon Horman <horms@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Perry,
+On Fri, May 3, 2024 at 1:31=E2=80=AFPM Simon Horman <horms@kernel.org> wrot=
+e:
+>
+> Hi,
+>
+> This short patchset provides two minor cleanups for the gve driver.
+>
+> These were found by tooling as mentioned in each patch,
+> and otherwise by inspection.
+>
+> No change in run time behaviour is intended.
+> Each patch is compile tested only.
+>
+> ---
+> Simon Horman (2):
+>       gve: Avoid unnecessary use of comma operator
+>       gve: Use ethtool_sprintf/puts() to fill stats strings
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Shailend Chand <shailend@google.com>
+Thanks!
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge next-20240507]
-[cannot apply to tip/x86/core linus/master v6.9-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/cpufreq-amd-pstate-optimiza-the-initial-frequency-values-verification/20240507-151930
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan%40amd.com
-patch subject: [PATCH 09/11] cpufreq: amd-pstate: implement heterogeneous core topology for highest performance initialization
-config: x86_64-buildonly-randconfig-001-20240507 (https://download.01.org/0day-ci/archive/20240508/202405080122.4pEEcR2C-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080122.4pEEcR2C-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405080122.4pEEcR2C-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/x86/include/asm/thread_info.h:59:
-   In file included from arch/x86/include/asm/cpufeature.h:5:
->> arch/x86/include/asm/processor.h:690:51: warning: non-void function does not return a value [-Wreturn-type]
-     690 | static inline int amd_get_this_core_type(void)          { }
-         |                                                           ^
-   1 warning generated.
---
-   In file included from drivers/usb/dwc2/hcd_ddma.c:12:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
-   In file included from arch/x86/include/asm/timex.h:5:
->> arch/x86/include/asm/processor.h:690:51: warning: non-void function does not return a value [-Wreturn-type]
-     690 | static inline int amd_get_this_core_type(void)          { }
-         |                                                           ^
-   drivers/usb/dwc2/hcd_ddma.c:555:16: warning: variable 'n_desc' set but not used [-Wunused-but-set-variable]
-     555 |         u16 idx, inc, n_desc = 0, ntd_max = 0;
-         |                       ^
-   2 warnings generated.
---
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/x86/include/asm/thread_info.h:59:
-   In file included from arch/x86/include/asm/cpufeature.h:5:
->> arch/x86/include/asm/processor.h:690:51: warning: non-void function does not return a value [-Wreturn-type]
-     690 | static inline int amd_get_this_core_type(void)          { }
-         |                                                           ^
-   1 warning generated.
-
-
-vim +690 arch/x86/include/asm/processor.h
-
-   680	
-   681	#ifdef CONFIG_CPU_SUP_AMD
-   682	extern u32 amd_get_highest_perf(void);
-   683	extern void amd_clear_divider(void);
-   684	extern void amd_check_microcode(void);
-   685	extern int amd_get_this_core_type(void);
-   686	#else
-   687	static inline u32 amd_get_highest_perf(void)		{ return 0; }
-   688	static inline void amd_clear_divider(void)		{ }
-   689	static inline void amd_check_microcode(void)		{ }
- > 690	static inline int amd_get_this_core_type(void)		{ }
-   691	#endif
-   692	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>  drivers/net/ethernet/google/gve/gve_adminq.c  |  4 +--
+>  drivers/net/ethernet/google/gve/gve_ethtool.c | 42 +++++++++++----------=
+------
+>  2 files changed, 19 insertions(+), 27 deletions(-)
+>
+> base-commit: 5829614a7b3b2cc9820efb2d29a205c00d748fcf
+>
