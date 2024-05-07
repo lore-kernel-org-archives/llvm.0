@@ -1,88 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6F715CD57;
-	Tue,  7 May 2024 14:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA5E15F335;
+	Tue,  7 May 2024 14:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715091592; cv=none; b=XPF6DdYkzIKV2ZMyzDapY82F+aBjeHeBYP06MgoMmvnu8ShfF8XejPrxS3aDb22QyIkMwyCyMi8FMTzs8+wyjpCfFmr3uCY1JVNyYLgubNEg8myi1jk+JpSHo0HIydXedV+RtZfwoMpJ5as/d/Xi+CECWmEjWjZrw4Vf+uhJ8lY=
+	t=1715092401; cv=none; b=iciMn6HyLAe9jfgwGk/HvfO6bkTgjLi4fCUfgKagyyfZlxZkO+p4Kw3AVK8Fs+WenineNuD+qci0qOWErjqEcSk4WOzCP7nGNCrXVw3kTQdzS2VHkJmTqZeVquecNIaXj3cYclK5dD8xxx+2ENXXwsW357Di/elKHbFLdkVRHU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715091592; c=relaxed/simple;
-	bh=I6GSM79zSh0XAY+vKPdvnFPU4/CJ/hs9rhFrjdIAG0Q=;
+	s=arc-20240116; t=1715092401; c=relaxed/simple;
+	bh=EBmRdpXpY3jTuvjE4yr75q9neMahEjgCbpk68GxzIw8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=srExu3TSVPMJqIHVWNCWe5TkIRF0oGS3O8OP+oSEsD4pHBqKC/46muwMjwmaO6Y5ik+FRCucmvh3iYYGsutPKSWK/u0KlL8X55jxydz9l3KlxbsN/iGs3kBVm8SJAvHwmztVr8SBLDy7LMkxXPaBXTY7985QUPTAnAKyD2X8dsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bLDRQR48; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=W/JxSj1O0kORijlMFErl0if3tywaUS824RWypzcKERh7Fk+xBKBX5IeRzW6LvnUFrcCrxX1BqwlQbUQKA33skabZKEU62g7dfq5bC37Kpo3sEDrONQgHb9oHCAwtq6tfgr9skyzAGAftmhL5DY/XvcTQQsiveNfXPVKpPJoS/pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bmQBMUrP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bLDRQR48"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E361C2BBFC;
-	Tue,  7 May 2024 14:19:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bmQBMUrP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3302C2BBFC;
+	Tue,  7 May 2024 14:33:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715091591;
-	bh=I6GSM79zSh0XAY+vKPdvnFPU4/CJ/hs9rhFrjdIAG0Q=;
+	s=k20201202; t=1715092401;
+	bh=EBmRdpXpY3jTuvjE4yr75q9neMahEjgCbpk68GxzIw8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bLDRQR48XooapH0ZewKit48IGIh2VTlTDQaF0bDxl9bUUpbf86uaszRua07O8jHL0
-	 aTaFFW24AqmPc1zr7XgXgqnx9ixM+wXZgsTcQ5BanYgjYlFVcWTEDdChdiC94sYHQR
-	 OfbSRmz8THMZvCtu5VKSggxfFxFI+z27g8ehJ7lwCZ4Gnr8Aagfv1mhO2Tq5ZHkj7D
-	 5xs7Vmd72SMSD7HNQLYdP1W06TUIBgP4x7SOnbEFwQ8j0yKm8CUzyNDjPnQBK48GTb
-	 89XDz4a3lsDixkI4866sO3x09XpCmVzjtpBjmJhXpAjOHclqx24aCg/V7x/eBHbv0W
-	 D59QZxReVJpJA==
-Date: Tue, 7 May 2024 07:19:49 -0700
+	b=bmQBMUrPQBcSMpETW16eR5aaMhhaSBxw394wOLqCfmVBeDzMrHvubtRvko4pnrvzy
+	 l2H1avHk9dzyyW9H8mdYNYogNbfzASksMdijFC/n089+Ewcd5Mp2ahuT89sqtytxPD
+	 /t6EIayh1+EnLfcmVBen0du/go+XD9RzlR+y6LdxxKGX8SL2uABaYqsuaXfhlHjYeP
+	 J46wTWlorZUUctaDLxN2SLFjI65eIId4xShLp97lDE2QaY7kVgt6rnfbazkVH5+F3F
+	 8e4SD2ouNP63z6zgQHxFeFsvcq1+cLobjWeOoZiZl8im/XeIHlu8IEnU2j4fGrMGhl
+	 WJLefNTNqLPsA==
+Date: Tue, 7 May 2024 07:33:18 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] lib/test_bitops: Add benchmark test for fns()
-Message-ID: <20240507141949.GA2746430@thelio-3990X>
-References: <20240503041701.GA3660305@thelio-3990X>
- <ZjSSylciH+qJeEEG@visitorckw-System-Product-Name>
- <ZjSUk4vgsQ63wfcn@visitorckw-System-Product-Name>
- <20240503155401.GA3960118@thelio-3990X>
- <ZjVdbavKgDo8a0CZ@yury-ThinkPad>
- <20240503222338.GA1908482@thelio-3990X>
- <CANiq72mJPPp=H6qb7sG1K1hxR3uiHA9+WEVAZkvymSt_dW3CbA@mail.gmail.com>
- <20240506175209.GA1425562@thelio-3990X>
- <CANiq72=mSafSJH1hab57LxYfyj_BD7UOtyAerOT8S41MD-MnAw@mail.gmail.com>
- <Zjld/ImGmyBHTLO4@yury-ThinkPad>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Huth <thuth@redhat.com>,
+	Alexandra Winter <wintera@linux.ibm.com>,
+	Thorsten Winkler <twinkler@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH 0/6] s390: Unify IUCV device allocation
+Message-ID: <20240507143318.GC2746430@thelio-3990X>
+References: <20240506194454.1160315-1-hca@linux.ibm.com>
+ <20240507123220.7301-A-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Zjld/ImGmyBHTLO4@yury-ThinkPad>
+In-Reply-To: <20240507123220.7301-A-hca@linux.ibm.com>
 
-On Mon, May 06, 2024 at 03:47:24PM -0700, Yury Norov wrote:
-> On Mon, May 06, 2024 at 08:08:41PM +0200, Miguel Ojeda wrote:
-> > On Mon, May 6, 2024 at 7:52 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > No, unused can be used with local variables, used cannot.
+On Tue, May 07, 2024 at 02:32:20PM +0200, Heiko Carstens wrote:
+> On Mon, May 06, 2024 at 09:44:48PM +0200, Heiko Carstens wrote:
+> > Unify IUCV device allocation as suggested by Arnd Bergmann in order
+> > to get rid of code duplication in various device drivers.
 > > 
-> > Yeah, sorry, I meant `used`, i.e. it is that one the one that
-> > constraints the combination rather than `unused`.
-> > 
-> > >From a quick look at the links in `compiler_attributes.h`, `unused`
-> > can also be applied to types, while `used` cannot -- it is another
-> > difference, but your sentence above already implies it anyway. :)
-> > 
-> > Thanks for the correction!
+> > This also removes various warnings caused by
+> > -Wcast-function-type-strict as reported by Nathan Lynch.
+>                                              ^^^^^^^^^^^^
 > 
-> I have applied the patch in bitmap-for-next this weekend.
+> Ahem :)
 > 
-> https://github.com/norov/linux/commit/eb21fc0c96b48d1e779a0ab16f9165a3e0cd76ad
-> 
-> Can you guys please take a look at it wrt the last comments? I think
-> it's OK. But if not, I will resend it.
+> This should have been Nathan Chancellor, of course. Sorry for this!
 
-Yeah, I think it looks reasonable.
+Heh, at least you got it right on the patches :)
 
 Cheers,
 Nathan
