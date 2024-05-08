@@ -1,151 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511C95338F;
-	Wed,  8 May 2024 08:32:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4809476;
+	Wed,  8 May 2024 08:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715157152; cv=none; b=eX98XKmSJoLGEvXvpAFDh1yVIvPcCYYmGobqc05ag7T+9L+0Oe8nHuQVBssf5MvPoF5n9UY3DiucJReZ7MkB2Q7yz+Hz8ZMP7pNUnm00eC9aAapHyqt2UodpNPCZjVF24GwCfoLsL9Bja0jQWPcfp5ZDWxLk4riBvmNtIgeCBEc=
+	t=1715158699; cv=none; b=oO/4/1XuRz068Oj7fxScb9K+V1p3AtIYn2XANbkOi4HLKI0zsDDu6y50n89Fzg0bfjNEDe+M/27HOV/YzOGTRsgF5lG8fKRmoLhA/mPybZN3okUxN51qfYERES7Xvjt7ZHqe9ddT9D55YVimRYR/nJVhyQpsWULg5XbxamuqMR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715157152; c=relaxed/simple;
-	bh=DqcOk4T4gJZ0/xWAo81NsY8g+OvkcV1E42NwKE8Z8Bc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=a2nA7ENuM3aWkl3EWXMFVaj2UIDGVNaVR2HnUpi1VbG9ymasDLkMGQYpaOADqPk8kO3N3wvh+fDUkRAuxZSauBcLlrEIdcDfpnBG4HoB/RF4Rzh411f1nToh6UD57x9pg1pT2CwHTREpObwfIAxOch/Nvhwj45hTX+HmhVlMuZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/PLj6bV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715158699; c=relaxed/simple;
+	bh=FAL6TpmLghsL+pNKj3y6Xs67lv3hH64ffYCsHRGBkng=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=p2Ey/adgjbI1ESm/j20oq8g3E3qpCro/Mz8F65qx10T45665OgERLRUBLcY1CjlV35Q3zNgxzysuk+x94Vd7VZ0ODOkXdidG1ZSsm7CABgNsutocWovVgr3z8O0IP2OCZXqDKpU+f1BisMpC3eAExGjio1ErN0XG5EkgXL536cU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nubkWa0C; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/PLj6bV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC2B4C4AF66;
-	Wed,  8 May 2024 08:32:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715157151;
-	bh=DqcOk4T4gJZ0/xWAo81NsY8g+OvkcV1E42NwKE8Z8Bc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=J/PLj6bVUDhWgnFyIlijornibU5SPrNBSyCHikPctQQEY1lEgAgMxBsERxkgtQAGl
-	 DOwGX4K7PPc9afntxd4CJdsWCbOVINHxKVgX0pEoZM2FSIWLK6kz/TzPlZ+xRnGOo9
-	 jVCBD8jJsDmxKQQNxKaiOzkBZ/f3y2CRttxJ4cXzYCn6lHd0+ual6ENy2iMGcG8Ogx
-	 ig2xICE2m9PJJmCm77wmCsvZpWO1Q7jecpLY6enzzOqofyVdQGRgj59ZEI07CqIJ47
-	 m8e8JwVdDxp5NHdNoRqxUyzq5zkHUoekMyzaJgszhcwe7zIpYb6omADJbZxlultLuB
-	 2umwEYOlh+2Kg==
-From: Simon Horman <horms@kernel.org>
-Date: Wed, 08 May 2024 09:32:20 +0100
-Subject: [PATCH net-next v2 2/2] gve: Use ethtool_sprintf/puts() to fill
- stats strings
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nubkWa0C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715158697; x=1746694697;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FAL6TpmLghsL+pNKj3y6Xs67lv3hH64ffYCsHRGBkng=;
+  b=nubkWa0CJrF+xNVWbazdFRqN0Ceiw2BzcyhFulq3FkiRrIptwUBjTZC9
+   3Tot4fDil4Lxr1l2/CQgjQ/qIsfxQ9mx7+mlceQ9cRuJafb7WCxBJmD+4
+   jd/OQpontBzFfL9zRW6LgvSgLzL1eM5kHECVpzQrsmkdsQiXqA69/Ozlo
+   dQ57rgZqNllEIuiqmEmIRvu6UdwUSdPQSgTdjqO+PTjYVQGVfEcscOS82
+   FdAm3/7WBeopxcgXGnx2JBtaPbZ4kcA+wXmNhqMKQ8iMMzuZD4++PTK6W
+   hnlgL353HkJkG7ws8vtoCYxZmm01quo3nH9P1mGeUfZ0qXMOuMXZINdIp
+   Q==;
+X-CSE-ConnectionGUID: +V8Wlab7SECu3Q7ELS29aA==
+X-CSE-MsgGUID: HLXbLZamS4iuLfjWUQUf0Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10857264"
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="10857264"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:58:17 -0700
+X-CSE-ConnectionGUID: SVxy8aSAQcK3d+rNinB6bQ==
+X-CSE-MsgGUID: Bzj0hahpROiR3fht4XIhyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="29347238"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 08 May 2024 01:58:16 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s4d7s-0003BE-32;
+	Wed, 08 May 2024 08:58:12 +0000
+Date: Wed, 8 May 2024 16:57:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 167/167] fs/bcachefs/bkey_sort.c:170:28:
+ warning: unused variable 'f'
+Message-ID: <202405081651.dAvosJcU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240508-gve-comma-v2-2-1ac919225f13@kernel.org>
-References: <20240508-gve-comma-v2-0-1ac919225f13@kernel.org>
-In-Reply-To: <20240508-gve-comma-v2-0-1ac919225f13@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>
-Cc: Jeroen de Borst <jeroendb@google.com>, 
- Praveen Kaligineedi <pkaligineedi@google.com>, 
- Shailend Chand <shailend@google.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Larysa Zaremba <larysa.zaremba@intel.com>, 
- Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>, 
- netdev@vger.kernel.org, llvm@lists.linux.dev, 
- linux-hardening@vger.kernel.org
-X-Mailer: b4 0.12.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Make use of standard helpers to simplify filling in stats strings.
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   820055ea04424d9c5d0d58322888ee46fefb55bc
+commit: 820055ea04424d9c5d0d58322888ee46fefb55bc [167/167] bcachefs: whiteout fix
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240508/202405081651.dAvosJcU-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 0ab4458df0688955620b72cc2c72a32dffad3615)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405081651.dAvosJcU-lkp@intel.com/reproduce)
 
-The first two ethtool_puts() changes address the following fortification
-warnings flagged by W=1 builds with clang-18. (The last ethtool_puts
-change does not because the warning relates to writing beyond the first
-element of an array, and gve_gstrings_priv_flags only has one element.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405081651.dAvosJcU-lkp@intel.com/
 
-.../fortify-string.h:562:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-  562 |                         __read_overflow2_field(q_size_field, size);
-      |                         ^
-.../fortify-string.h:562:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+All warnings (new ones prefixed by >>):
 
-Likewise, the same changes resolve the same problems flagged by Smatch.
+   In file included from fs/bcachefs/bkey_sort.c:2:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/bcachefs/bkey_sort.c:170:28: warning: unused variable 'f' [-Wunused-variable]
+     170 |         const struct bkey_format *f = &iter->b->format;
+         |                                   ^
+   6 warnings generated.
 
-.../gve_ethtool.c:100 gve_get_strings() error: __builtin_memcpy() '*gve_gstrings_main_stats' too small (32 vs 576)
-.../gve_ethtool.c:120 gve_get_strings() error: __builtin_memcpy() '*gve_gstrings_adminq_stats' too small (32 vs 512)
 
-Compile tested only.
+vim +/f +170 fs/bcachefs/bkey_sort.c
 
-Reviewed-by: Shailend Chand <shailend@google.com>
-Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- drivers/net/ethernet/google/gve/gve_ethtool.c | 42 +++++++++++----------------
- 1 file changed, 17 insertions(+), 25 deletions(-)
+820055ea04424d Kent Overstreet 2024-05-08  167  
+820055ea04424d Kent Overstreet 2024-05-08  168  unsigned bch2_sort_keys_keep_unwritten_whiteouts(struct bkey_packed *dst, struct sort_iter *iter)
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  169  {
+5b8a9227f8a4ac Kent Overstreet 2018-11-27 @170  	const struct bkey_format *f = &iter->b->format;
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  171  	struct bkey_packed *in, *next, *out = dst;
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  172  
+820055ea04424d Kent Overstreet 2024-05-08  173  	sort_iter_sort(iter, keep_unwritten_whiteouts_cmp);
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  174  
+820055ea04424d Kent Overstreet 2024-05-08  175  	while ((in = sort_iter_next(iter, keep_unwritten_whiteouts_cmp))) {
+820055ea04424d Kent Overstreet 2024-05-08  176  		if (bkey_deleted(in) && in < unwritten_whiteouts_start(iter->b))
+820055ea04424d Kent Overstreet 2024-05-08  177  			continue;
+a965ef4986243b Kent Overstreet 2020-01-15  178  
+820055ea04424d Kent Overstreet 2024-05-08  179  		if ((next = sort_iter_peek(iter)) &&
+820055ea04424d Kent Overstreet 2024-05-08  180  		    !bch2_bkey_cmp_packed_inlined(iter->b, in, next))
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  181  			continue;
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  182  
+820055ea04424d Kent Overstreet 2024-05-08  183  		bkey_p_copy(out, in);
+820055ea04424d Kent Overstreet 2024-05-08  184  		out = bkey_p_next(out);
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  185  	}
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  186  
+820055ea04424d Kent Overstreet 2024-05-08  187  	return (u64 *) out - (u64 *) dst;
+5b8a9227f8a4ac Kent Overstreet 2018-11-27  188  }
+820055ea04424d Kent Overstreet 2024-05-08  189  
 
-diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/ethernet/google/gve/gve_ethtool.c
-index 156b7e128b53..fe1741d482b4 100644
---- a/drivers/net/ethernet/google/gve/gve_ethtool.c
-+++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
-@@ -90,42 +90,34 @@ static const char gve_gstrings_priv_flags[][ETH_GSTRING_LEN] = {
- static void gve_get_strings(struct net_device *netdev, u32 stringset, u8 *data)
- {
- 	struct gve_priv *priv = netdev_priv(netdev);
--	char *s = (char *)data;
-+	u8 *s = (char *)data;
- 	int num_tx_queues;
- 	int i, j;
- 
- 	num_tx_queues = gve_num_tx_queues(priv);
- 	switch (stringset) {
- 	case ETH_SS_STATS:
--		memcpy(s, *gve_gstrings_main_stats,
--		       sizeof(gve_gstrings_main_stats));
--		s += sizeof(gve_gstrings_main_stats);
--
--		for (i = 0; i < priv->rx_cfg.num_queues; i++) {
--			for (j = 0; j < NUM_GVE_RX_CNTS; j++) {
--				snprintf(s, ETH_GSTRING_LEN,
--					 gve_gstrings_rx_stats[j], i);
--				s += ETH_GSTRING_LEN;
--			}
--		}
-+		for (i = 0; i < ARRAY_SIZE(gve_gstrings_main_stats); i++)
-+			ethtool_puts(&s, gve_gstrings_main_stats[i]);
- 
--		for (i = 0; i < num_tx_queues; i++) {
--			for (j = 0; j < NUM_GVE_TX_CNTS; j++) {
--				snprintf(s, ETH_GSTRING_LEN,
--					 gve_gstrings_tx_stats[j], i);
--				s += ETH_GSTRING_LEN;
--			}
--		}
-+		for (i = 0; i < priv->rx_cfg.num_queues; i++)
-+			for (j = 0; j < NUM_GVE_RX_CNTS; j++)
-+				ethtool_sprintf(&s, gve_gstrings_rx_stats[j],
-+						i);
-+
-+		for (i = 0; i < num_tx_queues; i++)
-+			for (j = 0; j < NUM_GVE_TX_CNTS; j++)
-+				ethtool_sprintf(&s, gve_gstrings_tx_stats[j],
-+						i);
-+
-+		for (i = 0; i < ARRAY_SIZE(gve_gstrings_adminq_stats); i++)
-+			ethtool_puts(&s, gve_gstrings_adminq_stats[i]);
- 
--		memcpy(s, *gve_gstrings_adminq_stats,
--		       sizeof(gve_gstrings_adminq_stats));
--		s += sizeof(gve_gstrings_adminq_stats);
- 		break;
- 
- 	case ETH_SS_PRIV_FLAGS:
--		memcpy(s, *gve_gstrings_priv_flags,
--		       sizeof(gve_gstrings_priv_flags));
--		s += sizeof(gve_gstrings_priv_flags);
-+		for (i = 0; i < ARRAY_SIZE(gve_gstrings_priv_flags); i++)
-+			ethtool_puts(&s, gve_gstrings_priv_flags[i]);
- 		break;
- 
- 	default:
+:::::: The code at line 170 was first introduced by commit
+:::::: 5b8a9227f8a4acd9652d6d89a608fbf4c39c6f44 bcachefs: Split out bkey_sort.c
+
+:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
