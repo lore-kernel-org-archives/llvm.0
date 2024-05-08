@@ -1,72 +1,65 @@
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E8410A28
-	for <llvm@lists.linux.dev>; Wed,  8 May 2024 17:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBAC127B5D
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 17:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715189444; cv=none; b=ODYeOmjYGMdIykQT/YLqEB4C5F3N6G2sEZjKgrjCBDfSN32cPqgI63HYN+Vr+jaFjN78DWjFjz9ElTWZUWPfWcJOHCcXIv+mAwfJwayYvQMI+QvX52WTzVxSMZtVjS0GSTRw/4gX1tfRTZO+TRZKfTcdOmAziCODiU+521j3zjw=
+	t=1715189685; cv=none; b=X1SdRSv5JLSLJ+6O2QAPB4XRMAfBfNhQKNIwGHXLq/FORLkdxIUh/SA3cXuJ+B9bvvw+kRaKJw6o30Gg3CiMOWTD5Em7Gqec0SygZbi5NuhevJNXpsrLfXyxPrZpU8S0o0yGzuuSH3k0b1JN/v7WxgomQ0sYozjGPq3hAsBV7D8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715189444; c=relaxed/simple;
-	bh=Pz2VI/tUnCe2PTX/epLY/zIwUao0PXF5XSpGrBWENXA=;
+	s=arc-20240116; t=1715189685; c=relaxed/simple;
+	bh=HKvr42kCJ5T2vBl47UrgH9gPQIDs/Cx4DaxhFirh7Lo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iq+D7mNjmYkkBg6MfjsPwKs13rf2UZ/C+7/XVbier1BAxJOF+FeOWEDFLf1A1BUgWcQMEYwoSA5Ydx5iTd4EFZlDpQHkZ/Z6HLxBcvWUjKj1jM5cKyvfghqqrZETd6DIUdXVb2egccCTztsgaBzWSt24bHrim9YOlQES+WGHniE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bfcNkJzI; arc=none smtp.client-ip=209.85.166.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=J6c81iKgYXfLxVTnv8QqiHzOiYujLeA8cxVBpGorwh8CkN8sxoFbrc3sqZ4Wmeojqw37jNUQYn+23yHFzsciQkkxFKsqnuyd8VDNCPI4nn5qAQdpLBiR4YxIRYMxLy05+RjtXibZYBVPEr0hHgIQAYw7rv5f3igmrovBFGcGXIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eTeCkcqf; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bfcNkJzI"
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-36c5fa79a6eso19337875ab.1
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 10:30:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eTeCkcqf"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6f4178aec15so61203b3a.0
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 10:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715189441; x=1715794241; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1715189682; x=1715794482; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mgm/AtxEukOMRpXROxzGV8zR2nPhcjaYsjDxy8RLMoE=;
-        b=bfcNkJzIkh1t/1FnzhBhN5jsULKHOBM0VoHSqZ4mTqQxixAwwQ1AX3n0GMsGY4nfZV
-         9LJW9b/asueZPq2B0EuvVrlx7nukWJdZKdDJojUlAiC4Zl1Za+vXDEk/UjwhkjtLYXEd
-         sYiUyA1T9fjvXCHDurwvbju6LC5PlT1p2bmccCOLO4XuoucqAGKcr2HRvXAgStX47KdP
-         G0bdiZIlQrL+Y+/2jdyRzpEgScKp90JDEaCoL7VaEeK2+gxytGO5rJhDi4D4T3JmkEdW
-         YcK2PvWAZHJnLckix9T4tx06kH8QguUXNFxgma68C8J+1/srqpsmjg+vF7+8tncG7FXP
-         kepg==
+        bh=0ZlSdIb10yMdduLYmXyW631A2JIaNaeSFkZVL/IzXzM=;
+        b=eTeCkcqf8TB6J+70uym1SpRde2d8ETttNty5qaqGOTNZr3Hqza+/ffodlWkD1M1VtR
+         hr4IelMAHp4NfKhuBQ7BOFyDgt1QvTdjFiQq8ezl+cRqBbTH8JlIo1NBsnsVlTSoBdT+
+         bxwPOZXfDZWZAkKhP6wST9XuNWJ3WIDyN+3CE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715189441; x=1715794241;
+        d=1e100.net; s=20230601; t=1715189682; x=1715794482;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mgm/AtxEukOMRpXROxzGV8zR2nPhcjaYsjDxy8RLMoE=;
-        b=kV9HfzlTcASfEd3QEyXeYOltlCN6GvIHrTgHkZFI485dcq8+/R29TYzuINNOH8GYle
-         NYlKdAdSsVeNBNGHk2lOJ6La92VXjTajADbMNuTPKkG09KlztYo8ETxJoE2ky+b7N0T0
-         FCe8qVt0M5DDiDpgkArV/p2QxCZG5XR3Emv+0QmGT0hNmlYzk/Lgr0kbVRXF9gGbU45h
-         Q0uWexSPnzOdPzpDo1Hvt0sXj+s+SCRYZZx8bqBjyzAq6sVZ+w1tA9u+5lpxsYnZuG7h
-         9WuvwA9Ofaeab2f7WUUuG/cZ+zp5qZDDpCDdGl3X+Uf6iVXSla9agbZVB+g6C34jlhs3
-         mLZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdF8r6M6MvcYAYSzZVbUuZb8MWJ+x3XMtd1GMBTJ/kVBF72CwXi98b0kHWcpPakmb6zyV0jMB2wwen1OO2cuyTdTTqXA==
-X-Gm-Message-State: AOJu0YxMjWTCLefgHtBKl2C5LowEsqFNU9ScEolckGEaRVqZ+uGgqBUG
-	qkvJb1OPgkcbzWT357Yy3wKB23/zjkeg6lPuevDPZByZlMzdVwKcA4iej17SEQ==
-X-Google-Smtp-Source: AGHT+IG4qUlJD1aPV5UJ4KvhFf5gOtyA8cYn/UXu+JKeaXX6SvVh6CB/+n/AvLPMv49pJsB3HndHlA==
-X-Received: by 2002:a05:6e02:b23:b0:36c:4348:35d7 with SMTP id e9e14a558f8ab-36caece1c45mr33919075ab.9.1715189440618;
-        Wed, 08 May 2024 10:30:40 -0700 (PDT)
-Received: from google.com (195.121.66.34.bc.googleusercontent.com. [34.66.121.195])
-        by smtp.gmail.com with ESMTPSA id p6-20020a056e02144600b0036c4d8185b6sm3300996ilo.69.2024.05.08.10.30.39
+        bh=0ZlSdIb10yMdduLYmXyW631A2JIaNaeSFkZVL/IzXzM=;
+        b=O9MYBkfJUMHrzB9xCReNnuWNUGpLxqb2pshBbKqk5wbN8bLDqaRmIRGyb6ipyNY/rl
+         HRm+KjM3uUa5SosKt1pqI/ZWXWS6Q5gzWIJhuFCamSmPkSPrQJVKIzPBCHRZr/QbCoFU
+         vBjjMn91G2GPrzUXSbFj4Y6Dy8vdcBGFwyHIXiM/ufgNDNs/eFgdSvLU+5GVDR7fiF6x
+         dMK4R/yB8znRb17Nkz0uMw5b5IWNVfVv75+5Ni04UJ5weVIGHMy1c3s7fTzjKri7/8hs
+         d0qo/ni51y117GJyysPFySk61UJm9Fqzta1Pdx8F5Ss8v3E2llcfjsxRMuJno/pcw3EB
+         +5vQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9Js6nKAlsBZTDZEmJlgbztRQKIF796TrbSwgaLNrt2ozWMownfFcs2uNhQaxKNGbXq416WRKSBzYShlHiEaKTYJJ8vQ==
+X-Gm-Message-State: AOJu0YzLD0afX+iQoAfRyYllGD2Lgirdyc+q0SkZSjwC0rkd0YTUj7zw
+	Mzn633CYW4Xuuneo1bECYHNV/qVKDxRPB8B4TmZuEWA1xgpR4ztBU9HQ9jolCw==
+X-Google-Smtp-Source: AGHT+IGsPbeewYhYfLGgBNn4yC+he+DDIfnSNSANWyR5bFJKhyZXsgwA47/XfqmZijCPC22jnu5JHQ==
+X-Received: by 2002:a05:6a00:610e:b0:6f3:ef3d:60f4 with SMTP id d2e1a72fcca58-6f49c2b10fdmr3369180b3a.33.1715189682342;
+        Wed, 08 May 2024 10:34:42 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id n5-20020a056a000d4500b006f448d3c700sm10388005pfv.142.2024.05.08.10.34.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 10:30:40 -0700 (PDT)
-Date: Wed, 8 May 2024 17:30:35 +0000
-From: Justin Stitt <justinstitt@google.com>
-To: Simon Horman <horms@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Shailend Chand <shailend@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Larysa Zaremba <larysa.zaremba@intel.com>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] gve: Use ethtool_sprintf/puts() to fill
- stats strings
-Message-ID: <c4feqxslfjh6arvmwww3vylrfue3xl7ywj3eeg3wcujmjyteai@i7ymdkg2ihd6>
-References: <20240508-gve-comma-v2-0-1ac919225f13@kernel.org>
- <20240508-gve-comma-v2-2-1ac919225f13@kernel.org>
+        Wed, 08 May 2024 10:34:41 -0700 (PDT)
+Date: Wed, 8 May 2024 10:34:41 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: sr: fix unintentional arithmetic wraparound
+Message-ID: <202405081034.2BC4BCA4A8@keescook>
+References: <20240508-b4-b4-sio-sr_select_speed-v2-1-00b68f724290@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,48 +68,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240508-gve-comma-v2-2-1ac919225f13@kernel.org>
+In-Reply-To: <20240508-b4-b4-sio-sr_select_speed-v2-1-00b68f724290@google.com>
 
-Hi, 
+On Wed, May 08, 2024 at 05:22:51PM +0000, Justin Stitt wrote:
+> Running syzkaller with the newly reintroduced signed integer overflow
+> sanitizer produces this report:
+> 
+> [   65.194362] ------------[ cut here ]------------
+> [   65.197752] UBSAN: signed-integer-overflow in ../drivers/scsi/sr_ioctl.c:436:9
+> [   65.203607] -2147483648 * 177 cannot be represented in type 'int'
+> [   65.207911] CPU: 2 PID: 10416 Comm: syz-executor.1 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+> [   65.213585] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [   65.219923] Call Trace:
+> [   65.221556]  <TASK>
+> [   65.223029]  dump_stack_lvl+0x93/0xd0
+> [   65.225573]  handle_overflow+0x171/0x1b0
+> [   65.228219]  sr_select_speed+0xeb/0xf0
+> [   65.230786]  ? __pm_runtime_resume+0xe6/0x130
+> [   65.233606]  sr_block_ioctl+0x15d/0x1d0
+> ...
+> 
+> Historically, the signed integer overflow sanitizer did not work in the
+> kernel due to its interaction with `-fwrapv` but this has since been
+> changed [1] in the newest version of Clang. It was re-enabled in the
+> kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+> sanitizer").
+> 
+> Firstly, let's change the type of "speed" to unsigned long as
+> sr_select_speed()'s only caller passes in an unsigned long anyways.
+> 
+> $ git grep '\.select_speed'
+> |	drivers/scsi/sr.c:      .select_speed           = sr_select_speed,
+> ...
+> |	static int cdrom_ioctl_select_speed(struct cdrom_device_info *cdi,
+> |	                unsigned long arg)
+> |	{
+> |	        ...
+> |	        return cdi->ops->select_speed(cdi, arg);
+> |	}
+> 
+> Next, let's add an extra check to make sure we don't exceed 0xffff/177
+> (350) since 0xffff is the max speed. This has two benefits: 1) we deal
+> with integer overflow before it happens and 2) we properly respect the
+> max speed of 0xffff. There are some "magic" numbers here but I did not
+> want to change more than what was necessary.
+> 
+> Link: https://github.com/llvm/llvm-project/pull/82432 [1]
+> Closes: https://github.com/KSPP/linux/issues/357
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-On Wed, May 08, 2024 at 09:32:20AM +0100, Simon Horman wrote:
-> Make use of standard helpers to simplify filling in stats strings.
-> 
-> The first two ethtool_puts() changes address the following fortification
-> warnings flagged by W=1 builds with clang-18. (The last ethtool_puts
-> change does not because the warning relates to writing beyond the first
-> element of an array, and gve_gstrings_priv_flags only has one element.)
-> 
-> .../fortify-string.h:562:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
->   562 |                         __read_overflow2_field(q_size_field, size);
->       |                         ^
-> .../fortify-string.h:562:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-> 
-> Likewise, the same changes resolve the same problems flagged by Smatch.
-> 
-> .../gve_ethtool.c:100 gve_get_strings() error: __builtin_memcpy() '*gve_gstrings_main_stats' too small (32 vs 576)
-> .../gve_ethtool.c:120 gve_get_strings() error: __builtin_memcpy() '*gve_gstrings_adminq_stats' too small (32 vs 512)
-> 
-> Compile tested only.
-> 
-> Reviewed-by: Shailend Chand <shailend@google.com>
-> Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> Signed-off-by: Simon Horman <horms@kernel.org>
+Yeah, this looks good. Thanks!
 
-This patch looks good and follows similar replacements [1] I've made in
-the past.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Acked-by: Justin Stitt <justinstitt@google.com>
-
-> ---
->  drivers/net/ethernet/google/gve/gve_ethtool.c | 42 +++++++++++----------------
->  1 file changed, 17 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/ethernet/google/gve/gve_ethtool.c
-> index 156b7e128b53..fe1741d482b4 100644
->
-
-[1]: https://lore.kernel.org/all/?q=f%3A%22Justin+stitt%22+AND+dfb%3A%22ethtool_puts%22
-
-Thanks
-Justin
+-- 
+Kees Cook
