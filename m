@@ -1,68 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57809EC4;
-	Wed,  8 May 2024 00:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BED379E1
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 00:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715127242; cv=none; b=uKLS0vpqobxX/AzPylSNGbd0OIS6Yw5/+RcvClBplVeLjCvhPqV2YA9FXaQ2LzywVQOwbHarCCoFv2OhR6yexOorb9vR3rpBaS//c+8GGoTAqMOAv6aL9A7aNrX/l7Nac+ihAsFiM9nG2v0JWavZrSvV35YNkf+kSl0hA2ErrfA=
+	t=1715127831; cv=none; b=HKIFe9sssBmYYfkAzOxfeZuE5ACgiCk9C8N+oiRVmdxx3Gtm+VWyyrczOR6gwJ25YYxKl/Cs+XKBHMXCo+5MSwm6QjXgQfoVzk7npldvy3931N1DAYC9Um2NJzs5veZeuZnUgcovSuTtES7FIgQODQsr+ohUe7/BFvRnRT5lJM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715127242; c=relaxed/simple;
-	bh=KlZGcKHOCwyvQnVPkYIgOSg/daK0tJkCNOhIwL1thy8=;
+	s=arc-20240116; t=1715127831; c=relaxed/simple;
+	bh=1da0pLj5XHUXhL0lSN1ETeHymYQMRKeJgc8KotxtGlM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pYNy7s2GiVfllC5vmx2uonFq7iKHqU4irIADovneo6xOrG5tFMbvJpVuhGUNzWmQ+ECPnPhku5JvRnRolMJBE6YPt9M2yHSrVDqbe0zjYM4b/ygsxy/3LdASZ+KHRptZglo6nAZNY1e78ITiggj4KpnvcOWh6HO7UTe6BIXB9u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h05LgAfM; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=MkEcjs2jh+90l6sRUv8h+NU3DBW6/b2QAJuNqvgIIOtEtLadZr0FZ9d7nH8rbY2Lx1AlJUJNVTVQY7viFOk9mqgE5Kl759L21oYdWy/dkmu8S1MNjyQeqco4vLNVXkM25fnMmLWrI8102fjY4ZsygI0simca6jwxZ1mgLo55bck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=T8YbnFuW; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h05LgAfM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715127241; x=1746663241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KlZGcKHOCwyvQnVPkYIgOSg/daK0tJkCNOhIwL1thy8=;
-  b=h05LgAfMSw7zodFXkD2Tf7DhiUfwg/MoXYTgVu3VBG1PSYszAnoPHVaE
-   X2IOZ54X/g2gJp//Va1fed+HjqqPPcV+ydooUxJjgwDO1r4v3i1EWY9R2
-   R4AIkqWeAAZ9psSTEehUFSZRd4PTpxP4/dHuCM+41DwmNwwNcqGadG8/n
-   Cb5Fu65Jk5OcQPM7N7Rd1u7DJAdRy6aFiz3oK3gsyNBP69SdR48u1o+od
-   WzyXUyHSvICWuEswjKCNijjID7RCCQQYZWtMk8tKwRCRJDzmE3xC7MIX8
-   U7ZPLnrGqntz3E4GAtUl6fpKhbuvR5kJ40exaPBjD+l8PABv2np0O2LCK
-   A==;
-X-CSE-ConnectionGUID: 3EC5+S2MRGOXxYmNQAJGCQ==
-X-CSE-MsgGUID: KU37ge7zTZODIGkOxsJEwg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10899163"
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="10899163"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 17:14:01 -0700
-X-CSE-ConnectionGUID: ozBPJ5lsRMK0owkEt7/w6Q==
-X-CSE-MsgGUID: LSXQiHGFTA6Byr7pN/S39w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="33392994"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 07 May 2024 17:13:57 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4UwT-0002lw-30;
-	Wed, 08 May 2024 00:13:53 +0000
-Date: Wed, 8 May 2024 08:13:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vignesh Balasubramanian <vigbalas@amd.com>,
-	linux-kernel@vger.kernel.org, linux-toolchains@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mpe@ellerman.id.au,
-	npiggin@gmail.com, christophe.leroy@csgroup.eu,
-	aneesh.kumar@kernel.org, naveen.n.rao@linux.ibm.com,
-	ebiederm@xmission.com, keescook@chromium.org, x86@kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, bpetkov@amd.com,
-	jinisusan.george@amd.com, matz@suse.de, binutils@sourceware.org,
-	jhb@freebsd.org, felix.willgerodt@intel.com,
-	Vignesh Balasubramanian <vigbalas@amd.com>
-Subject: Re: [PATCH v2 1/1] x86/elf: Add a new .note section containing
- Xfeatures information to x86 core files
-Message-ID: <202405080809.LGYhRYu3-lkp@intel.com>
-References: <20240507095330.2674-2-vigbalas@amd.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T8YbnFuW"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1ed835f3c3cso34922305ad.3
+        for <llvm@lists.linux.dev>; Tue, 07 May 2024 17:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715127829; x=1715732629; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=09NWd9Q6j/agwIZs1K4w41dSpMpn7Xn/XB8A6O9Z+yU=;
+        b=T8YbnFuW96mzHBAg8LX/Z9DFBZEpiCWHOn0v+BLFQzkKhvYNa2zeKQi0z30zUkGF7o
+         qmwnTbWQTLw3r1Nb3yKCJzj28GYzidyt0M3aiDXrPyQ/2BVF8+SKqPu/jT6XujLeSleP
+         TALBM3fLjceFhvKGc4bDkSlLLoxUUjP3dlsFc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715127829; x=1715732629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=09NWd9Q6j/agwIZs1K4w41dSpMpn7Xn/XB8A6O9Z+yU=;
+        b=GbLUdAu3dFUSCqxqszEBFcx9jrovipOSJKsrg6099Cg3QbI0KJ15KpyKGypAhS98Q9
+         LLJqQPZuR28ngnsmUfqfsxNLuAdTzzHlanhyBRy9xQsbb+ysMCT2MY7qly2RKYcgbgSx
+         NRlLF5kJxyI/h0ghNMMi/ddJmOSepsoB81qcnplarR2VAurfRPf2IfGgaLKsqnVhlmoR
+         BYNSBFYDjI/jRDPs7IQnoF/PzVxzBvb97QBPhlDPIqYZW9ctQhWQaOXmAfpmkADN1VnC
+         tyvyuZk5GGuz8UDbcBrCGkV9keAAynVOrrjftUupRu8iqUiQP+ObAj5PkzE9V2BuP6tq
+         Xk/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWp5t9qG6qETO9hC3RW/5lhue70+OHBADhsl1qN7+imG0gZpN3hPok+yRgb5EdBM3ZXWTAbvEN6K+nfvfYSe3I4eAVejA==
+X-Gm-Message-State: AOJu0Yzztt4MLBW9G0SWssTKFj8RGXhHKoiZCZEDoqb0GQA+IvEAOYgM
+	9gu+CstPSmsY/h2dUwi7bAsthdVgqHpdIPa+i77ODA4V0jNsybA+UZpBNBTEWg==
+X-Google-Smtp-Source: AGHT+IHuemiCrxMSHKVE5rfjo+Q/DiytZ800PCNfDHJmUYfSE9kSJVG4tzAseUtRbGaNhTJISUEAdw==
+X-Received: by 2002:a17:903:4286:b0:1e4:6232:367a with SMTP id d9443c01a7336-1eeb01993b8mr12268225ad.22.1715127829507;
+        Tue, 07 May 2024 17:23:49 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id lg6-20020a170902fb8600b001eb7823164esm10550918plb.279.2024.05.07.17.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 May 2024 17:23:49 -0700 (PDT)
+Date: Tue, 7 May 2024 17:23:48 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: sr: fix unintentional arithmetic wraparound
+Message-ID: <202405071715.BD7AA91C2@keescook>
+References: <20240508-b4-b4-sio-sr_select_speed-v1-1-968906b908b7@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,51 +68,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240507095330.2674-2-vigbalas@amd.com>
+In-Reply-To: <20240508-b4-b4-sio-sr_select_speed-v1-1-968906b908b7@google.com>
 
-Hi Vignesh,
+On Wed, May 08, 2024 at 12:02:27AM +0000, Justin Stitt wrote:
+> Running syzkaller with the newly reintroduced signed integer overflow
+> sanitizer produces this report:
+> 
+> [   65.194362] ------------[ cut here ]------------
+> [   65.197752] UBSAN: signed-integer-overflow in ../drivers/scsi/sr_ioctl.c:436:9
+> [   65.203607] -2147483648 * 177 cannot be represented in type 'int'
+> [   65.207911] CPU: 2 PID: 10416 Comm: syz-executor.1 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+> [   65.213585] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [   65.219923] Call Trace:
+> [   65.221556]  <TASK>
+> [   65.223029]  dump_stack_lvl+0x93/0xd0
+> [   65.225573]  handle_overflow+0x171/0x1b0
+> [   65.228219]  sr_select_speed+0xeb/0xf0
+> [   65.230786]  ? __pm_runtime_resume+0xe6/0x130
+> [   65.233606]  sr_block_ioctl+0x15d/0x1d0
+> ...
+> 
+> Historically, the signed integer overflow sanitizer did not work in the
+> kernel due to its interaction with `-fwrapv` but this has since been
+> changed [1] in the newest version of Clang. It was re-enabled in the
+> kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+> sanitizer").
+> 
+> Let's add an extra check to make sure we don't exceed 0xffff/177 (350)
+> since 0xffff is the max speed. This has two benefits: 1) we deal with
+> integer overflow before it happens and 2) we properly respect the max
+> speed of 0xffff. There are some "magic" numbers here but I did not want
+> to change more than what was necessary.
+> 
+> Link: https://github.com/llvm/llvm-project/pull/82432 [1]
+> Closes: https://github.com/KSPP/linux/issues/357
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Here's the syzkaller reproducer:
+> r0 = openat$cdrom(0xffffffffffffff9c, &(0x7f0000000140), 0x800, 0x0)
+> ioctl$CDROM_SELECT_SPEED(r0, 0x5322, 0x7ee9f7c1)
+> 
+> ... which was used against Kees' tree here (v6.8rc2):
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=wip/v6.9-rc2/unsigned-overflow-sanitizer
+> 
+> ... with this config:
+> https://gist.github.com/JustinStitt/824976568b0f228ccbcbe49f3dee9bf4
+> ---
+>  drivers/scsi/sr_ioctl.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
+> index 5b0b35e60e61..2d78bcf68eb3 100644
+> --- a/drivers/scsi/sr_ioctl.c
+> +++ b/drivers/scsi/sr_ioctl.c
+> @@ -430,7 +430,8 @@ int sr_select_speed(struct cdrom_device_info *cdi, int speed)
+>  	Scsi_CD *cd = cdi->handle;
+>  	struct packet_command cgc;
+>  
+> -	if (speed == 0)
+> +	/* avoid exceeding the max speed or overflowing integer bounds */
+> +	if (speed == 0 || speed > 0xffff / 177)
+>  		speed = 0xffff;	/* set to max */
+>  	else
+>  		speed *= 177;	/* Nx to kbyte/s */
 
-kernel test robot noticed the following build warnings:
+I didn't see a "speed < 0" check, so I went to check the type on "speed"
+and found it to be "int". So I'd expect such a check, but then I looked at
+the interface: I think it's wrong that "speed" is an int at all. There's
+only 1 caller, and 1 implementation of "select_speed":
 
-[auto build test WARNING on kees/for-next/execve]
-[also build test WARNING on tip/x86/core kees/for-next/pstore kees/for-next/kspp linus/master v6.9-rc7 next-20240507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+$ git grep '\.select_speed'
+drivers/scsi/sr.c:      .select_speed           = sr_select_speed,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vignesh-Balasubramanian/x86-elf-Add-a-new-note-section-containing-Xfeatures-information-to-x86-core-files/20240507-175615
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/execve
-patch link:    https://lore.kernel.org/r/20240507095330.2674-2-vigbalas%40amd.com
-patch subject: [PATCH v2 1/1] x86/elf: Add a new .note section containing Xfeatures information to x86 core files
-config: i386-randconfig-013-20240508 (https://download.01.org/0day-ci/archive/20240508/202405080809.LGYhRYu3-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080809.LGYhRYu3-lkp@intel.com/reproduce)
+static int cdrom_ioctl_select_speed(struct cdrom_device_info *cdi,
+                unsigned long arg)
+{
+	...
+        return cdi->ops->select_speed(cdi, arg);
+}
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405080809.LGYhRYu3-lkp@intel.com/
+And the arg there is unsigned long (?!).
 
-All warnings (new ones prefixed by >>):
+So I think probably the prototype should be changed to unsigned long,
+and then it can clamp the "speed" argument:
 
->> arch/x86/kernel/fpu/xstate.c:91:19: warning: unused variable 'owner_name' [-Wunused-const-variable]
-      91 | static const char owner_name[] = "LINUX";
-         |                   ^~~~~~~~~~
-   1 warning generated.
++	/* avoid exceeding the max speed or overflowing integer bounds */
++	speed = clamp(0, speed, 0xffff / 177);
+ 	if (speed == 0)
+  		speed = 0xffff;	/* set to max */
+  	else
+  		speed *= 177;	/* Nx to kbyte/s */
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
-   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && DRM_I915_WERROR [=n]
-   Selected by [m]:
-   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && !COMPILE_TEST [=n]
+Then the "negative" values go away are then correctly treated as
+"too big" in the clamping.
 
-
-vim +/owner_name +91 arch/x86/kernel/fpu/xstate.c
-
-    90	
-  > 91	static const char owner_name[] = "LINUX";
-    92	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
