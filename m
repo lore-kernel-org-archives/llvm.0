@@ -1,206 +1,168 @@
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2085.outbound.protection.outlook.com [40.107.96.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B63130E26
-	for <llvm@lists.linux.dev>; Wed,  8 May 2024 21:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715202345; cv=fail; b=SF4XBUHonT4mrSiLCQ1uG7fxtTuA45vPc3RD+HBcz+krURUuHG5JXiNQv9rvVSFcGA+NdAzA7o702hdUSnoqhb+NfgGIcsczjkC2T7h7XB6wk16nhEcvw52LN1x+FS2ql9QlDgaUKfZoxqTs78wRtMA2F0sdqpeujNpyVAx1QQQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715202345; c=relaxed/simple;
-	bh=NaRNLSQWKFEIV7U3nHCj4C5MGh35tpfhKN5A6gOpCBE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ndbtFddC8pAUUoFQsSZb7Yq7FikiryXFUw7ST/NGMrpUZ72esqipM36y0xXIGJdRgPvR0ba6W4nGUmgUl5IV3ZUM2VbDs7kK8kRK1VwmRCgMfm/AwMlZwgb1py6BNp+SHty4vc19X9e0NOqXM4Xy2SAsg86OYgiFuotzSqw534M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=g023Vkdp; arc=fail smtp.client-ip=40.107.96.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E3D393
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 22:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715208879; cv=none; b=a3aMJc0BgVze25mZaWdT64gsfTLBwFXII2bT2uBm5gaDRmj8ICDukTirdOjQg5HEQ/nHMcI5BYjot7qtP2E8j747W4/vdrWhew8OgbXvn14S3JdhCwsqD5l2CoAPeOWRqj2KLmmsFW5EqnpIcXRJYayVnPfbPAH1d+iAZIkDORw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715208879; c=relaxed/simple;
+	bh=gyQ55hQgJIIwlukOBDSk95pxDialupoX6yg1FkBruGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NVbjQTOUchu7aU3UahkkGAs0d4FODQaZQUyckf1i/zFFaSw5eg85whUCw+ZeGqx/PTHfVQ9fxAIEWufA70eZNQK7tjTt80VBJ9bDAeDaf8F+BuFj4wVOIeORaFi70zrE5JPqcXOpZaEnfPA4Uj/55i3vSFTVHSUByAZgWgfJ/bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TzaDaclW; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="g023Vkdp"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L9RItxznLl/BaSRMYH+/dF/qDwWgh/cyryXXlkwuM8m9tEvXfJCFrRXzfbXtySxYYM6G2qH1xrJUPjQio0DPAI5KBtqYZbk3knHgDiGBYad5BgCS0uoowOGCkxieBOogM9ObkNX3JWSmMJzHlJ4UuxjEljuaGhZdJg51rtvnECM8ZkXDRIZrZWCMi5OjSKxnFbgX6pIF7PbfreqooGIgBxUDEJdsgv+NniybDtQY/05KVOSIbU9Hsy8tUJZNsDp9AUNd72fnJxw9QeKNb07E1hJjJbsG4yqz1SdTRROT6SmsPU7ykvnBVx2E42BG6f2ZoRjC96LAXrhHwRirHYR3Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aUFA+EX3e76PP8hx+tvmNnrFTe7ecx4YWUmMgLgl61k=;
- b=k4/qbgnwTBt+8uHJ6fQOY8jG+lGPRJdGtrxnzes3LljXI6f+8jBMPw+ysv6uhej9iDbyJynGGW0wCTwhV+rpoTa3ZSy7x/EFYrWwJubTQyftHLIN8CrhI5Ayp/CO2kHywODtpF2UyS5OJfzFdepyrGUPWgFXNmbLXK8Vq/gWS/o+v96+1M3RR4skHd5NFzni6jezD0iDv1msIfYxlfbVTEPlyvr8ngNgJWiIhQ7+5JiMy9nVJj7pojM1A970RuMWj9Y4N/XsvMAsE6jPObLcKc1FPKBik166Ru/MMlozPO4MB/3GG8xDBZkTDGxa0YkAm7CQ2UVDSUeCTc8ywZ7WCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aUFA+EX3e76PP8hx+tvmNnrFTe7ecx4YWUmMgLgl61k=;
- b=g023VkdpzANRS5VWiifXpswA/goUFYlGBmZjQhB8sq5k3T4E6F+ZnbAiKt7n0QrJRclSfsAJ6OLcuozRwH74i8qLFFevPGcpxvWaVcKfQQb4GpN8aUSIsY+pQ+wBRNCqz2/8ywkbLxh8+1i8zfTlt1ZcfQ2cuwQmJbu4IIyrLNFeqAQ4qA0B1/f5a2GhvaKGQMTWva98W0quEzPnpWbi43lfbGd9YIYBM6S/nIxIUmBtVejVQweM5xPDl6d7LZthwvfI1dI9Ll4gby4EcQ+J0GROIWNcnZn5Joh5AiZVhw9atJDXBwLPecsPqX3Pzr4lTs3tAdpB41N49wDYvlbsxA==
-Received: from BL0PR02CA0042.namprd02.prod.outlook.com (2603:10b6:207:3d::19)
- by SN7PR12MB6813.namprd12.prod.outlook.com (2603:10b6:806:267::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Wed, 8 May
- 2024 21:05:41 +0000
-Received: from BL6PEPF0001AB59.namprd02.prod.outlook.com
- (2603:10b6:207:3d:cafe::68) by BL0PR02CA0042.outlook.office365.com
- (2603:10b6:207:3d::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.46 via Frontend
- Transport; Wed, 8 May 2024 21:05:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL6PEPF0001AB59.mail.protection.outlook.com (10.167.241.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7544.18 via Frontend Transport; Wed, 8 May 2024 21:05:40 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 8 May 2024
- 14:05:24 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 8 May 2024
- 14:05:23 -0700
-Message-ID: <dbca543e-224b-4fa5-ba23-37f4957ff79d@nvidia.com>
-Date: Wed, 8 May 2024 14:05:22 -0700
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TzaDaclW"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1ec41d82b8bso1808835ad.2
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 15:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715208877; x=1715813677; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3u1Pl3pGa/v+VPDPwQjOTFukEhJKGI8Aryv6GP6qkbs=;
+        b=TzaDaclWs0Cf2wA5+KxDIt6caIrVVX0ws8NYDxqUuD0J9It8IxgQI6+ybvrc6psmoX
+         1A2vODWKbqNOo6pT/UzCy16Yu2xO71EwTOwwDx8M42f0p7UNQQs71uvmqA+VypKKVUs7
+         5bHGLlGtp1aHZ02yOC4TLcXn7Czh35M4s65A0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715208877; x=1715813677;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3u1Pl3pGa/v+VPDPwQjOTFukEhJKGI8Aryv6GP6qkbs=;
+        b=UX9B3WmQAHyl9ZlOTHCpTHa+yH4IxP3qIW63PtIWZCklE/WSkR9o8+ZmluMc0Yj2C5
+         kLawfMNGsV9lkFDZez4TayXTZu13BmX9UoTofuUm160UPDVSdb/RVkDRN6KOPXwdp1u5
+         i8u4o249tzr0RpoHk1WjBxUgcp8nJ6eyvPYk6+66O4T/ZGVw7zc2KnmpGk4Zk7PvkxbB
+         bWBty++PqAEkFOCfwidN1o8CefW5vOEhpsVXUUBIWUWK7pC1EjLfEmz3DrO9Evn0wX8D
+         evviNrDS1PtxSC3OP0kfaRgDI5kuLp6UQ/ZJ56cruz0N5k1iPDQehohkzi2OF+ZOnUvK
+         n/aA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/JvxjjapBEE/Y+RkW83de0nNVYoX+xnBT2GhrfD51FJDI5kJRC3/6Fa9Kgq6YsUMmY6xEUA/tIiSMZFvznl9T7nCoQg==
+X-Gm-Message-State: AOJu0YzbxG64AK+YaDSAJTQTECLAZ3JnT90wx5uCYv6ywkQTjeBPEol4
+	bC6v6FP+4kpOePy9TpeTe/Y3ASaZQKq3k6TmgcXaEe2YPWHDiAr2AQDVMmnbX8a/K2buzfP4hbY
+	=
+X-Google-Smtp-Source: AGHT+IF5qLS8MIZu8bkrdkM2TSnYV54A1dmV9tmHQoSYXNzqgbagdmzZsQoufeCX4B3wWJs7UZAp1w==
+X-Received: by 2002:a17:902:c947:b0:1e8:4ad9:cbdf with SMTP id d9443c01a7336-1eeb0187168mr50075185ad.13.1715208877180;
+        Wed, 08 May 2024 15:54:37 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d1899sm714405ad.21.2024.05.08.15.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 15:54:36 -0700 (PDT)
+Date: Wed, 8 May 2024 15:54:36 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <202405081354.B0A8194B3C@keescook>
+References: <202404291502.612E0A10@keescook>
+ <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
+ <202405081144.D5FCC44A@keescook>
+ <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] selftests/futex: pass _GNU_SOURCE without a value to
- the compiler
-To: Shuah Khan <shuah@kernel.org>
-CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?=
-	<andrealmeid@igalia.com>, "Nysal Jan K . A" <nysal@linux.ibm.com>, Mark Brown
-	<broonie@kernel.org>, Valentin Obst <kernel@valentinobst.de>,
-	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Edward Liaw <edliaw@google.com>
-References: <20240503041843.99136-1-jhubbard@nvidia.com>
- <20240503041843.99136-4-jhubbard@nvidia.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20240503041843.99136-4-jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB59:EE_|SN7PR12MB6813:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ba0131a-4623-468a-1cae-08dc6fa29e28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|36860700004|376005|1800799015|7416005|82310400017;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aGVNTnA2emg4NXI5QmhNZnhaaWdHeGJHTGlub2lDQ3QzbVRSVVYyeDNibnNr?=
- =?utf-8?B?RWlkYWJYN3VOQVRLbGZUdUFDUmdQNk1GdVRRNmN6Nis1ZUlsVXBQNTBMcXVZ?=
- =?utf-8?B?UW9wUjdVNzBMZEp5cEExRVhaRk5aaW1PcE5FTkJjUFBqZmRESjBwT2puMVl2?=
- =?utf-8?B?UGhhUlVRSXNrNGxxMHRERWRDeUFYQ0EvbUFqbDJwWjFHUWh2ZUhOWDdYSWdF?=
- =?utf-8?B?aWZiYjEzTWVCTitnVHVmY0dQWnA2VmQ4YmVib2FPTmxIQmRxSGxrRlQrYUV1?=
- =?utf-8?B?L3BJVnVrcUFzZmRUeHVPR05LMVRPUVJWSVNhRURGWGZ4bU1QcWY0R25aa2RD?=
- =?utf-8?B?bWxDZno3WkVROWF0NUNqWkhDeTNKdFNJYUNHL2pDNDE4blFMMVZ4S0pUNGox?=
- =?utf-8?B?TjlzekFwK2FJelh2aGxwYktnM1p5K1hXK2JyTzZJT3BLWlRtMDd3TTdTNXBo?=
- =?utf-8?B?dzlUc0E3M2ZobmZwL2dqU2lJelkvS3BvUm55Ty9CelpVOVJsdC9LcG4zR3dN?=
- =?utf-8?B?NGR1N09uMlBvcUg1bVFFNHYxS2tKVkp4cG5xQktMNmJFb0FIWmV5NCtSOHBF?=
- =?utf-8?B?dHlzSXg4dk81cWEyUWlLYlZ5ZU9hWUVQZkNDQ0FuQ1ExT00zT2pqMDY2Y1JY?=
- =?utf-8?B?clByV1p5Z1IyUXUrWlVic25uaWU2MjVsRWVLR2VjRFlRMWpVZ05SWitBR3BE?=
- =?utf-8?B?eGlzYWxiV0NRSFJRdGFTeW05cDJySVFRMnBEaExpTXlLaDZacXYzUUN3cFRt?=
- =?utf-8?B?R1p2SWFTTWRwaGNnSVBlODR1aE9mVis2VnA0UVVTNnY2ckNKTC9WbDJNUFQ5?=
- =?utf-8?B?V3VBYkxkL0xlMkN2Um5IT0hVcXZaMnI2azY2dnozVzcxUDJ1U2NkcEdlY0JV?=
- =?utf-8?B?aEswdjIzY2V3ZEtUWTlHT2pFakVvY3FIU1Z0UVlBNUlCWjZqem5SZ0g1N0No?=
- =?utf-8?B?Q051YlFPcGNydi96ZTRidUxveGFQMUpKaGRGaURMcE82WHZ1Sk5leEE1SUlQ?=
- =?utf-8?B?cW1KMXlNUGJwVjRaalJJbjRXYmNyajZkVGhudXlJdk45b0V6T3gwbGRVcks4?=
- =?utf-8?B?eEYvdE82bWtwN2RpWUE4Vm5QOVlvMTBJeHE2bHRWK1Q1VjJtUXZ5Z01YRHhX?=
- =?utf-8?B?NDc5Wml0bmMxbkJzUlllSzIvaUF5RC81N0ZwUnZUdXNZY3pJN21IWTY5dmxO?=
- =?utf-8?B?blZ4MlNqZVBWZEFCY2owTVl6ODQ0cGJ1bVdaVHU3MG16SHNBV1pYOGp5ZDZq?=
- =?utf-8?B?SGxiNHFNMFRYdExQL01od0VIZEppRVFDS2s4N2FUUkdjczFSWlcwU0RPb3Ew?=
- =?utf-8?B?RlpsbjVOU3hLK1hIUEN0VnUxcWpYQy9IQWJpVDZDVTFkcGp6OFJBMlJpYVRL?=
- =?utf-8?B?RUIrMHhqTWpzQWJ0QXJkUlF4dyt3cVhINS9HaDN5Mmw3VlMzaVVKUEpXNU9s?=
- =?utf-8?B?djdKMjRwaXlFdHBVVXI2RGV5blFZZVBoUEQvaGxUS2VqV1JEUmM5b0NMVlR3?=
- =?utf-8?B?K01ZbkN6ay9GQkZlYzloRFFENnU3SVEvOVNpNGJUNW9RMHRUVGwweUxxKzVz?=
- =?utf-8?B?elUxRE05cXJPVkgwcFN1VFBtcWFCSkN0UVZsTWJrRGdhd0VoU0xJVE84bkNs?=
- =?utf-8?B?OEFUNDhDdElYT0RxZkRZbHlHbkNJeExxcEZSRnBGUVIyM1ExWmc4VDFXSjlU?=
- =?utf-8?B?elZwOEpkb0hIR1VGdURON1phUXQrUVZQeFVkWnFKNkM4ZTFjQUdQVEJXdU8v?=
- =?utf-8?B?WkxRd2JZVTdGdklObUdaeU1mVTRYeVBtclhjcTJMR0ZEMDVvaG1XV1dyT29j?=
- =?utf-8?B?WndHb3hxeG1qSVp4VVdEb1p0OGhMZG9TSWxiS3FGcFBQdUNQZEZ5RFlJQkhZ?=
- =?utf-8?Q?XqpetpzN1xZst?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(376005)(1800799015)(7416005)(82310400017);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 21:05:40.6550
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ba0131a-4623-468a-1cae-08dc6fa29e28
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB59.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6813
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
 
-On 5/2/24 9:18 PM, John Hubbard wrote:
-> It's slightly better to set _GNU_SOURCE in the source code, but if one
-> must do it via the compiler invocation, then the best way to do so is
-> this:
+On Wed, May 08, 2024 at 01:07:38PM -0700, Linus Torvalds wrote:
+> On Wed, 8 May 2024 at 12:45, Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Wed, May 08, 2024 at 10:52:44AM -0700, Linus Torvalds wrote:
+> > > Example:
+> > >
+> > >    static inline u32 __hash_32_generic(u32 val)
+> > >    {
+> > >         return val * GOLDEN_RATIO_32;
+> > >    }
+> >
+> > But what about:
+> >
+> > static inline u32 __item_offset(u32 val)
+> > {
+> >         return val * ITEM_SIZE_PER_UNIT;
+> > }
+> 
+> What about it? I'm saying that your tool NEEDS TO BE SMART ENOUGH to
+> see the "what about".
 
-Hi Shuah, Edward and all,
+This is verging on omniscience, though. Yes, some amount of additional
+reasoning can be applied under certain conditions (though even that would
+still require some kind of annotation), but GCC can't even reliably figure
+out if a variable is unused in a single function. We're not going to be
+able to track overflow tainting throughout the code base in a useful
+fashion.
 
-This patch now seems to be obsolete, due to Edward Liaw's comprehensive
-fix, "[PATCH v2 0/5] Define _GNU_SOURCE for sources using" [1].
+> IOW, exactly the same as "a+b < a". Yes, "a+b" might wrap around, but
+> if the use is to then compare it with one of the addends, then clearly
+> such a wrap-around is fine.
 
-[1] https://lore.kernel.org/20240507214254.2787305-1-edliaw@google.com
+Yes, but it is an absolutely trivial example: it's a single expression
+with only 2 variables. Proving that the value coming in from some
+protocol that is passed through and manipulated by countless layers of the
+kernel before it gets used inappropriately is not a reasonably solvable
+problem. But we can get at the root cause: the language (and our use of
+it) needs to change to avoid the confused calculation in the first place.
 
-A process question for Shuah: shall I gather up the selftest patches
-that have reviews and acks, and post them with the versions incremented?
+> A tool that doesn't look at how the result is used, and just blindly
+> says "wrap-around error" is a tool that I think is actively
+> detrimental.
 
-I'm new to this list, and I'm not sure of your exact workflow. And there
-are admittedly a flurry of patches involved.
+I do hear what you're saying here. I think you're over-estimating the
+compiler's abilities. And as I mentioned in the RFC, finding known bad
+cases to protect is the reverse of what we want for coverage: we want
+to _not_ cover the things we know to be _safe_. So we want to find
+(via compiler or annotation) the cases where overflow is _expected_.
 
-[1] https://lore.kernel.org/20240507214254.2787305-1-edliaw@google.com
+> We already expect a lot of kernel developers. We should not add on to
+> that burden because of your pet project.
 
-thanks,
+I think it's a misunderstanding to consider this a pet project. C's lack
+of overflow intent has spawned entire language ecosystems in reaction.
+There are entire classes of flaws that exist specifically because of this
+kind of confusion in C. It is the topic of countless PhD research efforts.
+
+People who care about catching overflows can slowly add the type
+annotations over the next many years, and we'll reach reasonable coverage
+soon enough. It doesn't seem onerous: I'm not asking that people even
+do it themselves (though I'd love the help), I'm just trying to find
+acceptance for annotations about where the sanitizer can ignore overflow.
+
+> Put another way: I'm putting the onus on YOU to make sure your pet
+> project is the "Yogi Bear" of pet projects - smarter than the average
+> bear.
+
+Sure, but if the bar is omniscience, that's not a path forward.
+
+I haven't really heard a viable counterproposal here. Let me try something
+more concrete: how would you propose we systemically solve flaws like
+the one fixed below? And note that the first fix was incomplete and it
+took 8 years before it got fully fixed:
+
+	a723968c0ed3 ("perf: Fix u16 overflows")               (v4.3)
+	382c27f4ed28 ("perf: Fix perf_event_validate_size()")  (v6.7)
+
+Because the kernel didn't catch when the u16 overflowed, it allowed for
+kernel memory content exposure to userspace. And that's just the place
+that it got noticed. With the struct holding the u16 is referenced in
+360 different source files, it's not always a trivial analysis. But,
+for example, the sanitizer not finding a "wraps" annotation on the
+perf_event::read_size variable would have caught it immediately on
+overflow.
+
+And I mean this _kind_ of bug; not this bug in particular. I'm just
+using it as a hopefully reasonable example of the complexity level we
+need to solve under.
+
+-Kees
+
 -- 
-John Hubbard
-NVIDIA
-
-> 
->      $(CC) -D_GNU_SOURCE=
-> 
-> ...because otherwise, if this form is used:
-> 
->      $(CC) -D_GNU_SOURCE
-> 
-> ...then that leads the compiler to set a value, as if you had passed in:
-> 
->      $(CC) -D_GNU_SOURCE=1
-> 
-> That, in turn, leads to warnings under both gcc and clang, like this:
-> 
->      futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
-> 
-> Fix this by using the "-D_GNU_SOURCE=" form.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   tools/testing/selftests/futex/functional/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-> index a392d0917b4e..994fa3468f17 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -1,6 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
-> -CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-> +CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
->   LDLIBS := -lpthread -lrt
->   
->   LOCAL_HDRS := \
-
-
+Kees Cook
