@@ -1,101 +1,222 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81CD38F9A
-	for <llvm@lists.linux.dev>; Wed,  8 May 2024 16:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A343B53387
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 17:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715187217; cv=none; b=MXATSudouqBrzMgSvR1yZiXxTMZ+/V684cl+KSyoUP+vBQJa9H77URTOBUyqvZHXHQVa8x2f0AjKMlX23VOOegsRpNoKbtkWBy8pRUglQoyqWcQT/TC0gQgEgxgBFm7j04sNuv34xxLq5/8IKzR7/M96CA/3YyKAIlJJ2D7emIo=
+	t=1715188974; cv=none; b=Ks2JQwUyof/i9m7YnL4chu8BOQbmJSq3/k9NFIxJyRHf4GrdN2DPS1td7vr23dJk3FAdeavmnnm1ZnPr3mlN/PSOtHrZebi7KETcy3eOJWDsLZaMB/VMf3MhqTMcIcjw0JdHPvckeajx7mfnaMV40Dx+gxXyCYzE+k0+OkJIrt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715187217; c=relaxed/simple;
-	bh=ZRyAR2mBMNqdi9nPsWt11Yl2kx65ROj3Il3Aorbo+gE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZNZpb0rQ7jtJjac1JHc0oqnv/JG30w9/3218wpHJLUCjgST5vig7S5rVFsxWQBdmRetKtGqjjlJcKHh56SPK8qranZQQBGTZF/VFyryqzp/EeDAp9mJI63IT3wA/FljiZ82JkTimdfe9faU9vs8UYDuq+Hejymz7Kq4RN7/TtI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YGgTNpVG; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1715188974; c=relaxed/simple;
+	bh=u4IncrtpCxubuwQgD8YUieXvfjotsSuja6N1Oi10lPE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=BWp1qvenTW3adjP/OvtT6JVEwg0i0Tt5o0XHj3p/2BA0sc8QhPZ66Q8k5UkT5IZmCamhvXaGwmlHHaE5FKFxc+Iw5gndSGVw04z8sxFQXDCE0HfeDj8/xf6DOL0vXEr12z7KG/xikSbXVx0k6WRiz2DXnQuB8myPFjt0/9tLP5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bSYjBIED; arc=none smtp.client-ip=209.85.166.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YGgTNpVG"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e3ca546d40so36632575ad.3
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 09:53:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bSYjBIED"
+Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-7e1849aee8cso225574839f.1
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 10:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715187215; x=1715792015; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7pkrtW/maB8r6WHs69e6l7rrcyayXYpss1wCPpNutgY=;
-        b=YGgTNpVGwj+OJxqy+ZBjRrdvhDdvBGA93WOVgvUnaCO/rokJtEAwgDoxAKco78HXtZ
-         75ootcNG57scno2oaviKlrR3+cg5eATuf77jthze39YZAFjnr/cvO9c3ZZWdwffVn5le
-         rrZjBF2eZeNRPL4wj9njg+OU+tmcu4pypMqME=
+        d=google.com; s=20230601; t=1715188972; x=1715793772; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XE1QNsIrpSdoBDzkTgvC4e4sDaJEW78xu5f3eAO+u4k=;
+        b=bSYjBIEDPB0tEODpuh5ul2qi05ZwkVpKKISfwPZYiy7kBVxyuRVwr78Ck6nT+BmPVA
+         Cj/XT5NPYFFYXvU0lTghTH0lexHFARM6zUMXCRot0te5EdW9AmmS8NYsPFHxvn+RtDWa
+         TTqhIDyKtLlVVETwap7tc+xM8SnxQTMHfFE4ox7beuKTV+GKdlWpH3vi9kpBhK4mlK9A
+         JGkwUmC6KxzqiJDJEXpDYkLoyKJXRQv4Ch60DI59tFfruPfnK3Q8IyevX7Gh+KLrfUph
+         KzWI8X3vG/XfZBPuPb9wkY6iPntVEO8JVKpUERWiJnIezNlWxZK0nsK6iI7P2pAOqawo
+         b89g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715187215; x=1715792015;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7pkrtW/maB8r6WHs69e6l7rrcyayXYpss1wCPpNutgY=;
-        b=Z774lZbR/pbzsr22coCWbdcRSxWc/YeymAoDiYe/K/2WKy6NZHl/J984ESorZKlZ+G
-         0iJGcjFDV6NcrEQt89g1ktweCqrmcfE7lDJxHNi86UhPYaClw9JNXHj4YzoX0/aRg4Gb
-         VyxCEVmobySOqA5vDSctG8B7bJ9roAnQHvH6qtWTyw6AAW1WQDFk0BjXSSB+RSQxivSv
-         s/YFyFIMJSQC+sazoHiQv4mwlPtpXBxLhqrlmWXcXrdUImiA0CtsYZvzXkq5kd0W8wJN
-         YKHsYe1LNKveDolLvyvldwTSRxDaB+h5DYmF5LS2CDonCCmpqa7oydcW5na8z84fdZnW
-         379w==
-X-Forwarded-Encrypted: i=1; AJvYcCXL3l3zX9UH8bzw5DuNvF1x6QcNb0fmIhwBeOtp+UiTxtoo14QA/AHEE4cTsowNJkPWB6WyGgzhGX7b20FVoAa7Zt8xMw==
-X-Gm-Message-State: AOJu0YyTqikP6I2H7UWaFtU+XHXdNDxl0rEI28IAPPHIXDwyWfA9mU5Z
-	yKVhVNf/1/fASv7vekxLWj+Vt5Rk6ZubjpJQfcz4kW55M/xo41kxl4lxJcKAsTuecU4sTKp97uA
-	=
-X-Google-Smtp-Source: AGHT+IHvGJnFyMfNwSbDGLiCuhHhmZ9YT2/hUUVyZWRhVPeHnis9Jk0r16sKMqRVQN2ZqvFdS2lcBQ==
-X-Received: by 2002:a17:902:f712:b0:1eb:51a4:3685 with SMTP id d9443c01a7336-1eeb05a1792mr41909655ad.52.1715187215161;
-        Wed, 08 May 2024 09:53:35 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id n8-20020a170903110800b001e22860c32asm12065479plh.143.2024.05.08.09.53.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 09:53:34 -0700 (PDT)
-Date: Wed, 8 May 2024 09:53:34 -0700
-From: Kees Cook <keescook@chromium.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Allen Pais <apais@linux.microsoft.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Vijay Nag <nagvijay@microsoft.com>
-Subject: Re: [linux-next:master 11772/12060] fs/coredump.c:67:27: warning:
- unused variable 'core_file_note_size_min'
-Message-ID: <202405080953.5E9B78A9CA@keescook>
-References: <202405081838.tuETPvPf-lkp@intel.com>
+        d=1e100.net; s=20230601; t=1715188972; x=1715793772;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XE1QNsIrpSdoBDzkTgvC4e4sDaJEW78xu5f3eAO+u4k=;
+        b=fnMM1+6w4vPcD55umDCuCjKnUc3KtFjD19ilNA2Z9zAUFgy/+XF9OaVyGg6dJzR3oh
+         5VaagpI/US0Ta/9yspMRXwZxpn0ZQBNJs/0vsY4/pGm5ZRoDrKu6Ap4t0p/+199BAXlF
+         hJu+AKZbwyjtmUcj5u/MdR/4avET2XCfDCFg2NtsHrN5L96/SeCMeeGBLL46aP9pBoiC
+         bf/pXPWg4GRhJsRN4vE5olCYbE1jGmOtDkNqckUnf82Xilla9GDmqzBhFwT/wm+BmWxy
+         wARn13TPQWDm2DMPe26kfHoKYk+sNuFt4IlbTMfS2ovw928Jh/OoxI8j9EWV6VhpcFrp
+         2FNg==
+X-Forwarded-Encrypted: i=1; AJvYcCVqcV+7S4fUp6nSTVhVee0G+j0/+6dYNGmDe85jDEBjk/TK0oYr1devi3QJSxgOcRV11RkOF21Z7exFacg30c+uiGe4QA==
+X-Gm-Message-State: AOJu0YxYBmiQILELtU7wGLFaHIzD9fgPZXSqWiHmTN0VjJabq5BElEtK
+	bYXA2YHhUr5IuhpeH5i/tEEz1TiAoRk28CPaCm9odOZmBbQnPY50/FeU6UgW2y4x0ZBuAX5dFd/
+	B2gh+0wmvsEUKagEmL5xAFg==
+X-Google-Smtp-Source: AGHT+IEuBGqzlpwNaU7svDGL3Zek3/TGDsOW4gHZZ+YDM2nc1D8NlRTOXdtcbQb/W0hoJF3F1F9uhAcjjx+hP4x81Q==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6602:3f86:b0:7da:b30e:df80 with
+ SMTP id ca18e2360f4ac-7e18fbcc8c5mr3658939f.0.1715188971917; Wed, 08 May 2024
+ 10:22:51 -0700 (PDT)
+Date: Wed, 08 May 2024 17:22:51 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202405081838.tuETPvPf-lkp@intel.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAOq0O2YC/32NQQqDMBBFryKzbkoSrCZd9R5FpMZpHLBGMhJax
+ Ls3Ct0WZvM+/79ZgTESMlyLFSImYgpTBn0qwA2PyaOgPjNoqUt5kbXoyv1yTXBsGUd0S8szYi+
+ wMk72pa6MVZD3c8QnvQ/3vck8EC8hfo5XSe3pz2r+WJMSStjslFVnpenqmw/Bj3h24QXNtm1fG XNPXsMAAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1715188971; l=6182;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=u4IncrtpCxubuwQgD8YUieXvfjotsSuja6N1Oi10lPE=; b=fv+LN7qHNuPE4tQk73JaJ9gUQL3bUZ0BBo3Bg7pp+tVHXb8anS5WSRRQsIjQ1UUCkLRHE0c9o
+ EFv6FCWnOtVCnmHgUVoGP14S9u5iIiOodjb2VK+zubr0V2ELop9Khn1
+X-Mailer: b4 0.12.3
+Message-ID: <20240508-b4-b4-sio-sr_select_speed-v2-1-00b68f724290@google.com>
+Subject: [PATCH v2] scsi: sr: fix unintentional arithmetic wraparound
+From: Justin Stitt <justinstitt@google.com>
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Bill Wendling <morbo@google.com>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, May 08, 2024 at 06:30:25PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   e7b4ef8fffaca247809337bb78daceb406659f2d
-> commit: 13513eafc3ea08cdb70aebe56a7e43083302a809 [11772/12060] fs/coredump: Enable dynamic configuration of max file note size
-> config: i386-buildonly-randconfig-005-20240508 (https://download.01.org/0day-ci/archive/20240508/202405081838.tuETPvPf-lkp@intel.com/config)
-> compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405081838.tuETPvPf-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202405081838.tuETPvPf-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> fs/coredump.c:67:27: warning: unused variable 'core_file_note_size_min' [-Wunused-const-variable]
->       67 | static const unsigned int core_file_note_size_min = CORE_FILE_NOTE_SIZE_DEFAULT;
->          |                           ^~~~~~~~~~~~~~~~~~~~~~~
->    fs/coredump.c:68:27: warning: unused variable 'core_file_note_size_max' [-Wunused-const-variable]
->       68 | static const unsigned int core_file_note_size_max = CORE_FILE_NOTE_SIZE_MAX;
->          |                           ^~~~~~~~~~~~~~~~~~~~~~~
->    2 warnings generated.
+Running syzkaller with the newly reintroduced signed integer overflow
+sanitizer produces this report:
 
-Thanks. I folded in a fix to move these under CONFIG_SYSCTL.
+[   65.194362] ------------[ cut here ]------------
+[   65.197752] UBSAN: signed-integer-overflow in ../drivers/scsi/sr_ioctl.c:436:9
+[   65.203607] -2147483648 * 177 cannot be represented in type 'int'
+[   65.207911] CPU: 2 PID: 10416 Comm: syz-executor.1 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+[   65.213585] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[   65.219923] Call Trace:
+[   65.221556]  <TASK>
+[   65.223029]  dump_stack_lvl+0x93/0xd0
+[   65.225573]  handle_overflow+0x171/0x1b0
+[   65.228219]  sr_select_speed+0xeb/0xf0
+[   65.230786]  ? __pm_runtime_resume+0xe6/0x130
+[   65.233606]  sr_block_ioctl+0x15d/0x1d0
+...
 
--Kees
+Historically, the signed integer overflow sanitizer did not work in the
+kernel due to its interaction with `-fwrapv` but this has since been
+changed [1] in the newest version of Clang. It was re-enabled in the
+kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+sanitizer").
 
--- 
-Kees Cook
+Firstly, let's change the type of "speed" to unsigned long as
+sr_select_speed()'s only caller passes in an unsigned long anyways.
+
+$ git grep '\.select_speed'
+|	drivers/scsi/sr.c:      .select_speed           = sr_select_speed,
+...
+|	static int cdrom_ioctl_select_speed(struct cdrom_device_info *cdi,
+|	                unsigned long arg)
+|	{
+|	        ...
+|	        return cdi->ops->select_speed(cdi, arg);
+|	}
+
+Next, let's add an extra check to make sure we don't exceed 0xffff/177
+(350) since 0xffff is the max speed. This has two benefits: 1) we deal
+with integer overflow before it happens and 2) we properly respect the
+max speed of 0xffff. There are some "magic" numbers here but I did not
+want to change more than what was necessary.
+
+Link: https://github.com/llvm/llvm-project/pull/82432 [1]
+Closes: https://github.com/KSPP/linux/issues/357
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Changes in v2:
+- change @speed type from int to unsigned long and use a clamp (thanks Kees)
+- also update documentation to avoid confusion
+- Link to v1: https://lore.kernel.org/r/20240508-b4-b4-sio-sr_select_speed-v1-1-968906b908b7@google.com
+---
+Here's the syzkaller reproducer:
+r0 = openat$cdrom(0xffffffffffffff9c, &(0x7f0000000140), 0x800, 0x0)
+ioctl$CDROM_SELECT_SPEED(r0, 0x5322, 0x7ee9f7c1)
+
+... which was used against Kees' tree here (v6.8rc2):
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=wip/v6.9-rc2/unsigned-overflow-sanitizer
+
+... with this config:
+https://gist.github.com/JustinStitt/824976568b0f228ccbcbe49f3dee9bf4
+---
+ Documentation/cdrom/cdrom-standard.rst | 4 ++--
+ drivers/scsi/sr.h                      | 2 +-
+ drivers/scsi/sr_ioctl.c                | 5 ++++-
+ include/linux/cdrom.h                  | 2 +-
+ 4 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/cdrom/cdrom-standard.rst b/Documentation/cdrom/cdrom-standard.rst
+index 7964fe134277..6c1303cff159 100644
+--- a/Documentation/cdrom/cdrom-standard.rst
++++ b/Documentation/cdrom/cdrom-standard.rst
+@@ -217,7 +217,7 @@ current *struct* is::
+ 		int (*media_changed)(struct cdrom_device_info *, int);
+ 		int (*tray_move)(struct cdrom_device_info *, int);
+ 		int (*lock_door)(struct cdrom_device_info *, int);
+-		int (*select_speed)(struct cdrom_device_info *, int);
++		int (*select_speed)(struct cdrom_device_info *, unsigned long);
+ 		int (*get_last_session) (struct cdrom_device_info *,
+ 					 struct cdrom_multisession *);
+ 		int (*get_mcn)(struct cdrom_device_info *, struct cdrom_mcn *);
+@@ -396,7 +396,7 @@ action need be taken, and the return value should be 0.
+ 
+ ::
+ 
+-	int select_speed(struct cdrom_device_info *cdi, int speed)
++	int select_speed(struct cdrom_device_info *cdi, unsigned long speed)
+ 
+ Some CD-ROM drives are capable of changing their head-speed. There
+ are several reasons for changing the speed of a CD-ROM drive. Badly
+diff --git a/drivers/scsi/sr.h b/drivers/scsi/sr.h
+index 1175f2e213b5..dc899277b3a4 100644
+--- a/drivers/scsi/sr.h
++++ b/drivers/scsi/sr.h
+@@ -65,7 +65,7 @@ int sr_disk_status(struct cdrom_device_info *);
+ int sr_get_last_session(struct cdrom_device_info *, struct cdrom_multisession *);
+ int sr_get_mcn(struct cdrom_device_info *, struct cdrom_mcn *);
+ int sr_reset(struct cdrom_device_info *);
+-int sr_select_speed(struct cdrom_device_info *cdi, int speed);
++int sr_select_speed(struct cdrom_device_info *cdi, unsigned long speed);
+ int sr_audio_ioctl(struct cdrom_device_info *, unsigned int, void *);
+ 
+ int sr_is_xa(Scsi_CD *);
+diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
+index 5b0b35e60e61..a0d2556a27bb 100644
+--- a/drivers/scsi/sr_ioctl.c
++++ b/drivers/scsi/sr_ioctl.c
+@@ -425,11 +425,14 @@ int sr_reset(struct cdrom_device_info *cdi)
+ 	return 0;
+ }
+ 
+-int sr_select_speed(struct cdrom_device_info *cdi, int speed)
++int sr_select_speed(struct cdrom_device_info *cdi, unsigned long speed)
+ {
+ 	Scsi_CD *cd = cdi->handle;
+ 	struct packet_command cgc;
+ 
++	/* avoid exceeding the max speed or overflowing integer bounds */
++	speed = clamp(0, speed, 0xffff / 177);
++
+ 	if (speed == 0)
+ 		speed = 0xffff;	/* set to max */
+ 	else
+diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
+index 98c6fd0b39b6..fdfb61ccf55a 100644
+--- a/include/linux/cdrom.h
++++ b/include/linux/cdrom.h
+@@ -77,7 +77,7 @@ struct cdrom_device_ops {
+ 				      unsigned int clearing, int slot);
+ 	int (*tray_move) (struct cdrom_device_info *, int);
+ 	int (*lock_door) (struct cdrom_device_info *, int);
+-	int (*select_speed) (struct cdrom_device_info *, int);
++	int (*select_speed) (struct cdrom_device_info *, unsigned long);
+ 	int (*get_last_session) (struct cdrom_device_info *,
+ 				 struct cdrom_multisession *);
+ 	int (*get_mcn) (struct cdrom_device_info *,
+
+---
+base-commit: 0106679839f7c69632b3b9833c3268c316c0a9fc
+change-id: 20240507-b4-b4-sio-sr_select_speed-e68c0d426891
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
