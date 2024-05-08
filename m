@@ -1,226 +1,137 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A2B130A64
-	for <llvm@lists.linux.dev>; Wed,  8 May 2024 20:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715198437; cv=fail; b=G3+GdUlfv8FFpFr6ci5FmmA6nWD/WrMtVlSHovdVPtOiCutc0qZNfeFAYHoa4ayk/o4oFTJ/qsHoLtTCuzv32vt7eV4FZ3IFGt1ZFCJEMNEvDq7CyHCcLym8tMC77OSKC9BnT0kawQqhs7pY/D/7iH4izbZKpu8KmJtLSgbEspM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715198437; c=relaxed/simple;
-	bh=mPSc5/BtlZufZA/nj9kWrOnuX/d7CLNxJdb5ldZntD8=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=tDFwdvf9qr9kv68vrTUEncrreHIditgw9vz7qZF+TGgb13wb518hzidCo87KSOqEC1NdhY4rQOPskAjUYxEmPJRmuL1sFm2KscmXJOFchTYBGCHMgvstBWW3n0iCs/oysEcbcFhd8X/aB5xBJlKbohHmzJ3rxCO+Itfz6M703AE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DJX5+xeu; arc=fail smtp.client-ip=40.107.94.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A64412F383
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 20:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715198880; cv=none; b=etd5PbmolS5ev043+rHlsg1XYYPAk7cP62gBIYw1AxC8zQJcud9AhLCfDVkSaz2bqCO7uZL9B0qo6Pqmq85E1WK6+8UpJgUFFwauoGURWvQ7mHavnzQ2Jz3u8h9s4VoDPVb6x9vvw1r1D6TLxPm8j8PZnrYzzXp6rzbcZ5SjeFY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715198880; c=relaxed/simple;
+	bh=cUhMA3hEDpUsxR6hzz85ZAu88LnRo8wpM9SADaguZmM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=soI23/AvyxqfU0EGA9ZSO1vJWkTXYESL7WnIOosPsUJO0Oxz/gLxtO/koPs+5URxRuQAgFBVJfFR8TL1U0dQEXxQTZapMTpJGcJ3qETQgVO0bfrIi804mmSWowEtYXuf9DiAgRKT51dXWqjdD6R98IoH178LNT9CKbsnrtwGZ7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=L1cHa+hS; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DJX5+xeu"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jZZmtv6W/JDot46jzukQc+uEWFxpIVqsVpzOYebEbJSpiQAQ6ma6YLolwba00xBuj1o/i/PBDFBNHd6WhJBFdaU+JlBAPWTesawfchzvfdrkG6RGa22tD5nIboiSSV28YjDXcGvrY/7QlQ8gn/qKghjN1MaiD7gYq1eTf56wnc/WndC8qzVA9Rw8dyOm+EcxNv9eF3nelUFho3R9WRHJNIY7kHMb/mTkcJoA3whtyIWhZpQDlPdmiFE2N7wE47EnyeMdiewzyVb3cx/OMKZ7rwQP3YqDgbYIi3mZfVq/W4MnAMxzIEqjCZMTeClI9DDI8PAhOITF7G+/BNdveAnqkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8qY9Ge3IWdyGCxk1DS0mIbIieNKg3bCNs9UQ7IpR7AA=;
- b=foXtC3dJ6f35KvnixNa3KUqxUZDcB7wizqze8urfeCnHldEXfneQ8UTp8DfF+5bmQ5Hl55rlciFPOzWawrKWY+InmrZ0y5rBgoB/jw4xKkBpb3uozMlPiZ56vCx12hU/vtNw4a2zmsoAXm6i0r5cyxRYzJK2uVDlEIG0ti/U5plEDsa16C0OVCg4tBRTkcYSrOz4aW9QJ3xrtTHSHTNKH8qFrWjUoZRB55wObx34RJNqo3dSYOxSgssQzU/QqKtX+DfpK611IXnz9LXdcd/Hbs9Ot2MYVcRcFWqzFF35JmelUjyTyQlfCErdEC7qoTZF8Y7ToR/CObbfwnRxyw7/Fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8qY9Ge3IWdyGCxk1DS0mIbIieNKg3bCNs9UQ7IpR7AA=;
- b=DJX5+xeuYNW7c+6iF58YdxxSxvM58k3FU7Xk27GasgknGZ9tEnvTLgLsabxviAWI6qr9oegahQNc+xyeHIDTbpj1BWG4hpJGae7GtxUlXTtEMlMdRS9JKgDodEwO0OBDA3CT64l5rtSxc+BUG8ndE8nKqkiq04KBdwHSbSQ5LS/A4jM9lrK95bYaPfYZUV2QQwXtgo/A3BbqRumIGfhrdFghfuErq9vd1zGY19eYskeQucQP4d6CGWneRD/O8MQeRLkE75cxJZfWsPnaqs21ui8jcvzppoaZmCWs2dxdnjnUPJPeNP9LDN8lkHrIDaoPv1tB/hWA4fdsEH0ap4uHVw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by DS0PR12MB7873.namprd12.prod.outlook.com (2603:10b6:8:142::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.45; Wed, 8 May
- 2024 20:00:30 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Wed, 8 May 2024
- 20:00:30 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	SeongJae Park <sj@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2] selftests/mqueue: fix 5 warnings about signed/unsigned mismatches
-Date: Wed,  8 May 2024 13:00:28 -0700
-Message-ID: <20240508200028.272513-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR02CA0061.namprd02.prod.outlook.com
- (2603:10b6:a03:54::38) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="L1cHa+hS"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a59b49162aeso28148166b.3
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 13:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1715198877; x=1715803677; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KNS3uukLqvQS7T/1QMyWRNid+5RlhH+5kk2j7s9gPHA=;
+        b=L1cHa+hS0VtYil2AxnsbOoCs0bcA+0qSWkCXeEC2BetkFULSut4vQF09FVA+kXwmhe
+         sXyIZVsJ95H3vbipPVhdWgi+p3Nb+ADPwMSQz+c0E8mM/7Q+Fzlfh6U3Ha605xYd0YvK
+         DQgpmzfANMSnkk7UzsyDuh4wU+mcBxbj5pR6c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715198877; x=1715803677;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KNS3uukLqvQS7T/1QMyWRNid+5RlhH+5kk2j7s9gPHA=;
+        b=MCZjdssYZaJuuXh6vrpbUpLsAF+zDU8h8OAutT552ta+mQUh+xMFGDGnRSMAi2rS8s
+         mI+js62Ayl5NJfOSnHW/pN2IL5Su/RPDZijO96wBuwHH0jW0WazCDFnw4rjr2ykvUjo/
+         vRJ0ia0PAEqBqGElfGjXzVgMOnOaLq6XsGJ6+VCL6CksdkawoC9UgBDPaw8IB6boI9MW
+         +nNsFHGi0U0eh7VhA5EP/Jkv9JeUIPYqxleHdgalDO59m8sGB7pg+/b6lQSvXECRyElx
+         iOgVbG7yn4DtxCZokuotIROM/vzEGIr2wjxZuYg1FBhE+HccJ7O+uG4cH0095v/i8wHI
+         Yt2g==
+X-Forwarded-Encrypted: i=1; AJvYcCUvm8PjuJySv+kbH9lhfohVAv5iAY0Y9ZhCEp3DlRqwfjVtQullijVotp5yx8HvHfmT4vmTGgOLrJlOkJNl8Vdy1NpgEw==
+X-Gm-Message-State: AOJu0Yzx0Rr7cjY0vj2Hen2Ijt4Qp5kjzKanPBxPH651ofEg6uO9HfVm
+	Hf9ysauHgPUq1KvBQY18M4LnClWfRw+sLfrnxRHybNgazQZYibJz6Jsgi9zuzK3NN4KK2dm+pNl
+	vxPazRg==
+X-Google-Smtp-Source: AGHT+IFkyIA7U6xr9xgP6KpxaVJIBzCGpg/A51gbtfSyXzejKsB/kTT/mSLgME0dbBy/8XEY5hCQ+w==
+X-Received: by 2002:a17:907:11c2:b0:a59:cf38:5338 with SMTP id a640c23a62f3a-a59fb94b5famr230914066b.19.1715198876802;
+        Wed, 08 May 2024 13:07:56 -0700 (PDT)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
+        by smtp.gmail.com with ESMTPSA id me16-20020a170906aed000b00a59cb16818csm4318624ejb.100.2024.05.08.13.07.56
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 May 2024 13:07:56 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a59b49162aeso28144166b.3
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 13:07:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWqSWyus014VWWiL6HLJEn04vjeIdmZh2GK408oSomMZ4j4R2Qj/PQbhDvoHsqmJx1+h1HOuuxViKbb5Pf5JzelNFw91A==
+X-Received: by 2002:a17:906:74d:b0:a59:bb20:9964 with SMTP id
+ a640c23a62f3a-a59fb94b8f0mr259835466b.23.1715198875937; Wed, 08 May 2024
+ 13:07:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|DS0PR12MB7873:EE_
-X-MS-Office365-Filtering-Correlation-Id: c82f0666-3190-4859-e3b3-08dc6f998381
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|1800799015|376005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YVlIZSkAWp3QhO+ehLCAiEG6E4dfktv0cs6Gg1/mjsT5wTb5ooHcypCKLh7Y?=
- =?us-ascii?Q?KwTb7+Pn7ICqM3O0PTWwHw7OGnZO9ky59ivrHwdmTlH+EM1EbLqZZsextDl9?=
- =?us-ascii?Q?b7FLOjkhGvG1/EiRMseGCR0H9vme1KkLTX477u7GAyhYzHizy6CZ94H8Aust?=
- =?us-ascii?Q?spPrrdr2yFoQBP5zXuX1jGksx3rLNGfiL+kvDsVoLcCRfeZeMZvjUT19bqGm?=
- =?us-ascii?Q?mD2miIzZRtz8PdLXg9Pc3K/F5YlSqtkiAgkrR05uWam8u4/K/n0I6vm5IlcF?=
- =?us-ascii?Q?ibDa86hl8aA+pPy4qN7tRX3JWiZceB8rVKm28+dul+6Wo+fkU1CUHCltvgwv?=
- =?us-ascii?Q?6fXEv8Mvz4y6FF45nvpmVw3Yg2qwa1F9TASahcgjXYhQAiAunE6WDsIMkiwh?=
- =?us-ascii?Q?kzdLrsHLQ6OIU9z5i64LV3VrhFjql0JsoCYAzYTXXlO6Ip6fExlU9JQgoMt+?=
- =?us-ascii?Q?XNhRsz9NtxslnU4vkj2v654FTER6N/JCJXFBCSg0uQoL22vDH2qa9uaHN3V4?=
- =?us-ascii?Q?XNU3wgM99s2exRXvLQ+aHCRuIM6ix0LGW7nwKGNAN0/vgc6NE+ksLeFd2Fs4?=
- =?us-ascii?Q?TqejD5kJR9gFX/msOQRtWsq2aj76ZNYwwASZKz6wyK0VXcWl9CrfVMRk5Jd5?=
- =?us-ascii?Q?2CnM8BW+WGw/MskC+yFK8sV7Kxts0ygs9MKz7qNJPfx6g4HayRCa8GuMPcQF?=
- =?us-ascii?Q?v4LDvfoshIEKZHfnKClqjjX+YgLl9UCL3pXCVFXK6gvubNoj7nrXjkbc1S6L?=
- =?us-ascii?Q?ynR7toUAu7Th1Lauu2eXmUgfYkHtO+I/4vaeqDq7fgkGvE4XITAc2I/7M1wB?=
- =?us-ascii?Q?4/xuDzdGSJd2kEvJMW1qr9yOUQ2tqYjbvbK68TgIGrIwTBmehptssfr6kDFa?=
- =?us-ascii?Q?iNAKjdr8hEX1UAaOVJQLr6hu0zMayOi/iArMhRY8RlC2xYbtfbs8aiRD0OkJ?=
- =?us-ascii?Q?FY6nngVJk11OpfbCg0ydSxMn1Rk/t1MOaCxQI7sZrlJsU6IVyqUHvnsM2WQ6?=
- =?us-ascii?Q?MF7kblilClBOEov8YAefNxfih5Yhzj68L0lJ1YkGjOR8EUhmLgl5FCNH29Ow?=
- =?us-ascii?Q?x0G7sSjTtdXOLSKhXsmQaKHkvEBdP641fR4Q2RhmZj8BxYqeSOAIuyI+vNoo?=
- =?us-ascii?Q?e44B8gdL3iTPfdHDcSpnoQli6oXeaC/+wSmKEAxCHYvTKsjaYVCrh2hgvTJT?=
- =?us-ascii?Q?R+CYJcJiv+w+IyKCUv3zIIELKg/q9HsjDcLR9rMw24+2AUW26JyTEYWtfP43?=
- =?us-ascii?Q?TMpjczc+5HoZ2t9FzOKN7nYH+28kFRwCasF9wFQ1Sw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7mKm1tkX77Fv3B4yt/rg66qFg2uRUvYI/7Opf965IqCACVzyE8UwFSqXqjkj?=
- =?us-ascii?Q?pq+j3lNnijj+nvH7V7WHFO3DysfPxj3H/ie8eED3lGF4tOUA1vFHAEQikxaX?=
- =?us-ascii?Q?Xb5SZHFAznmWUPQN4hAggNBcuaqZebCxWC7oO6OioL6Fi59hmsu4ZaJff8FG?=
- =?us-ascii?Q?t2mjKsCN4y4tkfyR5Ui/yyC+05jo1xvYK0QPLYE9D82HRAOj9fTM/Edpbdbj?=
- =?us-ascii?Q?t0mMOWbps7AWsvfsL6r/Koj51yKRIfvGyQsXtGa7OrGbLImOEzBTj8eITna/?=
- =?us-ascii?Q?1YoTYidSyNT2EyLid5V/MSw43/3ew+xGb7BjYzSwkkhm9ktQHW5aycVfk0xX?=
- =?us-ascii?Q?Ifjy2eXG+JEpbY5YW/RxlHJUfnj7Pm1xMz/pXcq3gkx1Y1K8uzf9ofkXhTvG?=
- =?us-ascii?Q?sz377EID8RztIQ19BU9YAH6VyHMTiF623sgCiCyLnuxilFTa/DibHT+5vIWb?=
- =?us-ascii?Q?zPPPqzAXFdhuKJfnGtP49iYjoaHciJreMy0FlDQfIOAvTNoeCZZCUcZJDLCg?=
- =?us-ascii?Q?A31qZJOOujZ/2qV4j1u1y3IKz0isr9RYW/F5PuleJyT+ecqm6a7AZlTNPwEi?=
- =?us-ascii?Q?Ki7ARYi5rTuZwTmLAlLf5hUSV31nByg8SDdEw7r16xZyqGL9DyeIV8l610EO?=
- =?us-ascii?Q?h/P55U9ntKRlBiI9xIzRpEyycND38bxbAOWBPgrGfJoWqhiQluUO/SWMAfkX?=
- =?us-ascii?Q?V6vt309cTgL6GaIAkujumhwpceqTAh3J7Vh9GSTQEwrJhJMuJJAgpi9etN/+?=
- =?us-ascii?Q?9x9FcSNriOUNFApJrPlNM03WltHc/IA3DUAPw1SgJFsxcelDNwSjFuORzzry?=
- =?us-ascii?Q?8Wf3Gg0Qy9ZECN4vWgsP5oJHIwANlMCw7kx8UFz/P2LMSm3ApPPMR/KhI+8y?=
- =?us-ascii?Q?K8xvkieetAfs0it4aE45g6choNSmw3aabcM4cXaWbFm8kcfRsWJXnvB/4mbM?=
- =?us-ascii?Q?wLEwCF9lZ1iBE34TxjzXPCQvhfr88s23wMHk6YE/0wRpPjtCbrIBvHTMvYuH?=
- =?us-ascii?Q?mtLN+vWcI+6jFR74h/Z3G+SW9E7tf/nRlcGqsVuX/arho5pyxKzmP79zwlJn?=
- =?us-ascii?Q?j0aeKE3T+NDZuN8TcDrAiRvntLBuTYNOD5N/IfI3ADn+zt8SnGYT6ahDcEnM?=
- =?us-ascii?Q?HgS8CYolGo4YpXua1dXv3BdkveY0N1orL+kM3HoG+FaJ78EQSzJnBrQCM5Rf?=
- =?us-ascii?Q?aGCUlm7xcwd8hTrtaSeGrAyfPbXOQylBDZULjn+/n/pIobI/qRDzC+QLb80S?=
- =?us-ascii?Q?IVKsrE+5+VsXOvdL3vsOZO7Q9r9wgNcAIs1qxFVUMUiIbUQb6BHKIGzoetFv?=
- =?us-ascii?Q?x1MYknIFBn8eeThR7tKcQ93ZOqL/ixbT4ZwceLZ/akjkm/+6VDjKEuG54ckU?=
- =?us-ascii?Q?/NkebqUSqD2xrazgrIVy5s4Gzsfi5JocvfbLGqwZ9fR/wBLjA2IdukKkh0hg?=
- =?us-ascii?Q?mjSFCXLHFT+p2SrPv4mJN8xMM5IOTJiTBS8mkz47Q2lTxsznXzarGkeVkcDF?=
- =?us-ascii?Q?c3NLHuSZd/Y6U3k1dgOsTSSZMAktge6iJFsvRGJ15b+hceKb83mTQA/5PPtH?=
- =?us-ascii?Q?i9hY9KqQ2a3v0jIH7xoliHNzWlfnYrZ76+NTmkWG?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c82f0666-3190-4859-e3b3-08dc6f998381
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 20:00:30.7798
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NV5TWWhf/+x1nI81Pc55WgGzylG7rkzBqAbKp1ytYx2jtTU68ugU1sUxWAA5UGzlE9f+JmclsIIYyvgbziphCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7873
+References: <202404291502.612E0A10@keescook> <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
+ <202405081144.D5FCC44A@keescook>
+In-Reply-To: <202405081144.D5FCC44A@keescook>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 8 May 2024 13:07:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
+Message-ID: <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+To: Kees Cook <keescook@chromium.org>
+Cc: Justin Stitt <justinstitt@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-When building with clang, via:
+On Wed, 8 May 2024 at 12:45, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, May 08, 2024 at 10:52:44AM -0700, Linus Torvalds wrote:
+> > Example:
+> >
+> >    static inline u32 __hash_32_generic(u32 val)
+> >    {
+> >         return val * GOLDEN_RATIO_32;
+> >    }
+>
+> But what about:
+>
+> static inline u32 __item_offset(u32 val)
+> {
+>         return val * ITEM_SIZE_PER_UNIT;
+> }
 
-    make LLVM=1 -C tools/testing/selftest
+What about it? I'm saying that your tool NEEDS TO BE SMART ENOUGH to
+see the "what about".
 
-...clang warns about several cases of using a signed integer for the
-priority argument to mq_receive(3), which expects an unsigned int.
+> All I did was change the names of things and now we have to wonder if
+> the result is going to be used for indexing or sizing
 
-Fix this by declaring the type as unsigned int in all cases.
+Exactly. Your tool needs to take that into account.
 
-Also, both input and output priority are unsigned, per the man pages, so
-let's change the type of both priorities throughout, even though clang
-did not warn about the prio_out variable.
+Any kind of mindless "this can wrap around" is inexcusable.
 
-Also, add an argument name to test->func(), in order to address another
-warning from clang.
+It needs to be smarter than that. And yes, that means exactly taking
+into account how the result of the possible wrap-around is actually
+used.
 
-Cc: Ryan Roberts <ryan.roberts@arm.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/mqueue/mq_perf_tests.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+If it's used as a size or as an array index, it might be a problem.
+But if it's used for masking and then a *masked* version is used for
+an index, it clearly is NOT a problem.
 
-diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-index 5c16159d0bcd..9380c656581f 100644
---- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-+++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-@@ -323,7 +323,8 @@ void *fake_cont_thread(void *arg)
- void *cont_thread(void *arg)
- {
- 	char buff[MSG_SIZE];
--	int i, priority;
-+	int i;
-+	unsigned int priority;
- 
- 	for (i = 0; i < num_cpus_to_pin; i++)
- 		if (cpu_threads[i] == pthread_self())
-@@ -373,27 +374,27 @@ void *cont_thread(void *arg)
- 
- struct test {
- 	char *desc;
--	void (*func)(int *);
-+	void (*func)(unsigned int *prio);
- };
- 
--void const_prio(int *prio)
-+void const_prio(unsigned int *prio)
- {
- 	return;
- }
- 
--void inc_prio(int *prio)
-+void inc_prio(unsigned int *prio)
- {
- 	if (++*prio == mq_prio_max)
- 		*prio = 0;
- }
- 
--void dec_prio(int *prio)
-+void dec_prio(unsigned int *prio)
- {
- 	if (--*prio < 0)
- 		*prio = mq_prio_max - 1;
- }
- 
--void random_prio(int *prio)
-+void random_prio(unsigned int *prio)
- {
- 	*prio = random() % mq_prio_max;
- }
-@@ -425,7 +426,7 @@ struct test test2[] = {
- void *perf_test_thread(void *arg)
- {
- 	char buff[MSG_SIZE];
--	int prio_out, prio_in;
-+	unsigned int prio_out, prio_in;
- 	int i;
- 	clockid_t clock;
- 	pthread_t *t;
+IOW, exactly the same as "a+b < a". Yes, "a+b" might wrap around, but
+if the use is to then compare it with one of the addends, then clearly
+such a wrap-around is fine.
 
-base-commit: 45db3ab70092637967967bfd8e6144017638563c
-prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
--- 
-2.45.0
+A tool that doesn't look at how the result is used, and just blindly
+says "wrap-around error" is a tool that I think is actively
+detrimental.
 
+And no, the answer is ABSOLUTELY NOT to add cognitive load on kernel
+developers by adding yet more random helper types and/or functions.
+
+We already expect a lot of kernel developers. We should not add on to
+that burden because of your pet project.
+
+Put another way: I'm putting the onus on YOU to make sure your pet
+project is the "Yogi Bear" of pet projects - smarter than the average
+bear.
+
+As long as you are approaching this from a "this puts the onus on
+others", *YOU* are the problem.
+
+Be the solution, not the problem.
+
+              Linus
