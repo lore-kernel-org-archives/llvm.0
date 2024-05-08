@@ -1,150 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4809476;
-	Wed,  8 May 2024 08:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E304757F2
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 09:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715158699; cv=none; b=oO/4/1XuRz068Oj7fxScb9K+V1p3AtIYn2XANbkOi4HLKI0zsDDu6y50n89Fzg0bfjNEDe+M/27HOV/YzOGTRsgF5lG8fKRmoLhA/mPybZN3okUxN51qfYERES7Xvjt7ZHqe9ddT9D55YVimRYR/nJVhyQpsWULg5XbxamuqMR4=
+	t=1715159649; cv=none; b=JBnBs5Kcbf2MKm3jwGjVS+8S8722kcjowHlZyXPrTvfQkvRyktN9dCqx8tNFHcTmtdnOnXZwo8Ip7IuTG9WMZHhg0q6R5FYb9pVjEJUN+JkwCvRVyG95qmmTbqfx1N4Iwt48fmzACEp7MJefAieI6nm4a1Zn/ao/Uti/b2e13CI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715158699; c=relaxed/simple;
-	bh=FAL6TpmLghsL+pNKj3y6Xs67lv3hH64ffYCsHRGBkng=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p2Ey/adgjbI1ESm/j20oq8g3E3qpCro/Mz8F65qx10T45665OgERLRUBLcY1CjlV35Q3zNgxzysuk+x94Vd7VZ0ODOkXdidG1ZSsm7CABgNsutocWovVgr3z8O0IP2OCZXqDKpU+f1BisMpC3eAExGjio1ErN0XG5EkgXL536cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nubkWa0C; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nubkWa0C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715158697; x=1746694697;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FAL6TpmLghsL+pNKj3y6Xs67lv3hH64ffYCsHRGBkng=;
-  b=nubkWa0CJrF+xNVWbazdFRqN0Ceiw2BzcyhFulq3FkiRrIptwUBjTZC9
-   3Tot4fDil4Lxr1l2/CQgjQ/qIsfxQ9mx7+mlceQ9cRuJafb7WCxBJmD+4
-   jd/OQpontBzFfL9zRW6LgvSgLzL1eM5kHECVpzQrsmkdsQiXqA69/Ozlo
-   dQ57rgZqNllEIuiqmEmIRvu6UdwUSdPQSgTdjqO+PTjYVQGVfEcscOS82
-   FdAm3/7WBeopxcgXGnx2JBtaPbZ4kcA+wXmNhqMKQ8iMMzuZD4++PTK6W
-   hnlgL353HkJkG7ws8vtoCYxZmm01quo3nH9P1mGeUfZ0qXMOuMXZINdIp
-   Q==;
-X-CSE-ConnectionGUID: +V8Wlab7SECu3Q7ELS29aA==
-X-CSE-MsgGUID: HLXbLZamS4iuLfjWUQUf0Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10857264"
-X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="10857264"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:58:17 -0700
-X-CSE-ConnectionGUID: SVxy8aSAQcK3d+rNinB6bQ==
-X-CSE-MsgGUID: Bzj0hahpROiR3fht4XIhyQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="29347238"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 08 May 2024 01:58:16 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4d7s-0003BE-32;
-	Wed, 08 May 2024 08:58:12 +0000
-Date: Wed, 8 May 2024 16:57:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 167/167] fs/bcachefs/bkey_sort.c:170:28:
- warning: unused variable 'f'
-Message-ID: <202405081651.dAvosJcU-lkp@intel.com>
+	s=arc-20240116; t=1715159649; c=relaxed/simple;
+	bh=tF4iPughT/n6gbDG+mQ6IlbX52BIyWj5CwATxGx4kxM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MsNddl1dIpC0kb/pj/GaJvFhnoHxwbPCk+ov2uL+3tVSwZWzDn/j32yDpd2PDtTgWJeyBy2g+bP3ME3Mn/4TQaBTsUYGX5Nsqd1K4joCVel8bNOi78cNvFGk6cX1AtjZUvHu97L37Z+IOg+sBIpd+QaoZ1+Uwpr59FAc6AUiiCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 606F81063;
+	Wed,  8 May 2024 02:14:33 -0700 (PDT)
+Received: from [10.57.67.194] (unknown [10.57.67.194])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A8C83F6A8;
+	Wed,  8 May 2024 02:14:06 -0700 (PDT)
+Message-ID: <c7a1fa3a-3e0a-4da4-8bdc-8d5b98d662c0@arm.com>
+Date: Wed, 8 May 2024 10:14:05 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mqueue: fix 5 warnings about signed/unsigned
+ mismatches
+Content-Language: en-GB
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@redhat.com>, SeongJae Park <sj@kernel.org>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20240505221359.65258-1-jhubbard@nvidia.com>
+ <a340524c-15c1-4b8e-b7a9-1fad52e97f69@arm.com>
+ <c8dd4b34-f49a-4929-9b14-d2cc17e0edd8@nvidia.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <c8dd4b34-f49a-4929-9b14-d2cc17e0edd8@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   820055ea04424d9c5d0d58322888ee46fefb55bc
-commit: 820055ea04424d9c5d0d58322888ee46fefb55bc [167/167] bcachefs: whiteout fix
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240508/202405081651.dAvosJcU-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 0ab4458df0688955620b72cc2c72a32dffad3615)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405081651.dAvosJcU-lkp@intel.com/reproduce)
+On 07/05/2024 18:04, John Hubbard wrote:
+> On 5/7/24 12:54 AM, Ryan Roberts wrote:
+>> On 05/05/2024 23:13, John Hubbard wrote:
+> ...
+>>> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c
+>>> b/tools/testing/selftests/mqueue/mq_perf_tests.c
+>>> index 5c16159d0bcd..fb898850867c 100644
+>>> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
+>>> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
+>>> @@ -323,7 +323,8 @@ void *fake_cont_thread(void *arg)
+>>>   void *cont_thread(void *arg)
+>>>   {
+>>>       char buff[MSG_SIZE];
+>>> -    int i, priority;
+>>> +    int i;
+>>> +    unsigned int priority;
+>>>         for (i = 0; i < num_cpus_to_pin; i++)
+>>>           if (cpu_threads[i] == pthread_self())
+>>> @@ -425,7 +426,8 @@ struct test test2[] = {
+>>>   void *perf_test_thread(void *arg)
+>>>   {
+>>>       char buff[MSG_SIZE];
+>>> -    int prio_out, prio_in;
+>>> +    int prio_out;
+>>
+>> It feels a bit odd for prio_out and prio_in to have different types. I don't
+>> have any prior familiararity with these tests but looks like they are ultimately
+>> the parameters of mq_send() and mq_receive() which both define them as unsigned
+>> ints. Perhaps both should be converted?
+> 
+> 
+> This makes sense, and I recall wondering about it. Looking at it again,
+> I see why didn't go that far: there is a mini-unit test manager inside,
+> passing around priorities that are signed, throughout:
+> 
+>         struct test {
+>             char *desc; void (*func)(int *);
+>         };
+> 
+>         ...
+> 
+>         void inc_prio(int *prio) {
+>             if (++*prio == mq_prio_max)
+>                 *prio = 0;
+>         }
+> 
+> However, I can probably fix up everything to match up. Given that you've
+> called it out, I'll go ahead with that approach. Iit will be quite a few
+> changes but they will all be trivial too.     
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405081651.dAvosJcU-lkp@intel.com/
+Ahh I see. It would certainly be an improvement, but if you don't think it's
+worth the effort, then don't feel you need to do it on my account.
 
-All warnings (new ones prefixed by >>):
+  
+> 
+> 
+> thanks,
 
-   In file included from fs/bcachefs/bkey_sort.c:2:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/bkey_sort.c:170:28: warning: unused variable 'f' [-Wunused-variable]
-     170 |         const struct bkey_format *f = &iter->b->format;
-         |                                   ^
-   6 warnings generated.
-
-
-vim +/f +170 fs/bcachefs/bkey_sort.c
-
-820055ea04424d Kent Overstreet 2024-05-08  167  
-820055ea04424d Kent Overstreet 2024-05-08  168  unsigned bch2_sort_keys_keep_unwritten_whiteouts(struct bkey_packed *dst, struct sort_iter *iter)
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  169  {
-5b8a9227f8a4ac Kent Overstreet 2018-11-27 @170  	const struct bkey_format *f = &iter->b->format;
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  171  	struct bkey_packed *in, *next, *out = dst;
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  172  
-820055ea04424d Kent Overstreet 2024-05-08  173  	sort_iter_sort(iter, keep_unwritten_whiteouts_cmp);
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  174  
-820055ea04424d Kent Overstreet 2024-05-08  175  	while ((in = sort_iter_next(iter, keep_unwritten_whiteouts_cmp))) {
-820055ea04424d Kent Overstreet 2024-05-08  176  		if (bkey_deleted(in) && in < unwritten_whiteouts_start(iter->b))
-820055ea04424d Kent Overstreet 2024-05-08  177  			continue;
-a965ef4986243b Kent Overstreet 2020-01-15  178  
-820055ea04424d Kent Overstreet 2024-05-08  179  		if ((next = sort_iter_peek(iter)) &&
-820055ea04424d Kent Overstreet 2024-05-08  180  		    !bch2_bkey_cmp_packed_inlined(iter->b, in, next))
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  181  			continue;
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  182  
-820055ea04424d Kent Overstreet 2024-05-08  183  		bkey_p_copy(out, in);
-820055ea04424d Kent Overstreet 2024-05-08  184  		out = bkey_p_next(out);
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  185  	}
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  186  
-820055ea04424d Kent Overstreet 2024-05-08  187  	return (u64 *) out - (u64 *) dst;
-5b8a9227f8a4ac Kent Overstreet 2018-11-27  188  }
-820055ea04424d Kent Overstreet 2024-05-08  189  
-
-:::::: The code at line 170 was first introduced by commit
-:::::: 5b8a9227f8a4acd9652d6d89a608fbf4c39c6f44 bcachefs: Split out bkey_sort.c
-
-:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
