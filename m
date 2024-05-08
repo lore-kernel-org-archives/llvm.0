@@ -1,85 +1,134 @@
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37067179A8;
-	Wed,  8 May 2024 06:03:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF043AC10
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 08:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715148225; cv=none; b=LjrREwGk/PwETkNxtNk9UTxb8bErLNw2BejhY/oDs+jK9xUWJ6y8TRsP6m1ckNvgY0BIJS6ykG1JAtk+PE+4q5/fEmrTVcKOb+VqzfXielsIKUM2oNkjukYd0DmixGkNMnaQGlc/9nRnkErZ4rVmzDmA1XBIwROw++37vF47a4o=
+	t=1715155226; cv=none; b=LQIaNCrPGMzHCaex9DpPLqGUC/prSTi+658yC87EYPc8ahm9Z92xP20bp1PDws/OKljRExoLd1zRDWjd84lfg4WW5IFlBZ5NZbx1n3MAYT8yIlOoNr6qXTZ0MC3S4jYBQhXnaQBUjISqdGpt6dVofkmQqnlmKSuL89k52kvHIic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715148225; c=relaxed/simple;
-	bh=vR8MQjZ4OZFhEHYcpFtvdK1XRggMdo6jqFWufXUb6lw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FOiUOGwFPq4DtwC3CHjk5uv8+XBbpPDZzoR1IR5F5PlLlpBrxuB4XsW4hBoUvnBFUtYKfZ7nFc+U/pt2LikuxrNlpap6jqofdbLr0cqGrwqjr6VG6tzbgoZxgCoX7QE3doNcEESFXdZnONWbGJvotPR4wJtiFMGlrNgTV7aWq6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=M0dC76PS; arc=none smtp.client-ip=115.124.30.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1715155226; c=relaxed/simple;
+	bh=A/AkggmDRJWYn/SaPI9yF1hBn4xncSCYULCuBbRnXZY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Ck4OdavoS8nc7mldAwIK03nbGHq9RwY3vczelBo6sb+8eNC15phzkGu+XN9vjtNOG/jn28M1RT2gfFwC01ii8YrQE+xnfdFlwbZk1jVxCoDEqoKUVAi9a4BH7Ri6b8D7SYxpDWdz0YSVY9h61vtMTON0TUtW99Tel8Ay1KpY6k0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hiVhMn8+; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="M0dC76PS"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1715148217; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=quezWr5QuXsegJOKyc01UZwoa4UGQB+lMfqaDG5ySt4=;
-	b=M0dC76PSi5EJU+kfyDhPKEE/dF4SPcbeDfaMMu/z14myLJy/Ks0SylhLhtbTlegEv5b1bXKWS+17yLrU1NZrRbKFMfwIFTHIRLyeBeK/eBAXnqSfc9Rnfums6yk6Y+tTuYHR/4ZToXElUsDFleu8vtcysg+p4ubFUfS55orR1cg=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032014031;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W62W8yi_1715148214;
-Received: from 30.97.56.69(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0W62W8yi_1715148214)
-          by smtp.aliyun-inc.com;
-          Wed, 08 May 2024 14:03:35 +0800
-Message-ID: <4a6c6c90-04bd-4a02-9080-0f98e8cf5ebe@linux.alibaba.com>
-Date: Wed, 8 May 2024 14:03:34 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hiVhMn8+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715155225; x=1746691225;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=A/AkggmDRJWYn/SaPI9yF1hBn4xncSCYULCuBbRnXZY=;
+  b=hiVhMn8+9b9G9wGAwoIcaGEaTnSCe5R0LFiDAqNvwHViEW5UGP5GFW3+
+   Mqz+vdgDPeI9RkJ7IOKyKKT45DRtKkGR1o+rIWByKBvbbHr629b/H/TV0
+   iuJlUpRSTqn0Zua3HGxSGlv5mfUnoBBOTqDAVSCQidEckGLr+v/YYtpDo
+   mMFf1jTgE1sDV2jSwWvqUYk62lKTt4jKbY7NCZebW1+avz/Yc5vs13lq0
+   d1Hw4zM5nZKw1w8pIloRIBXuzpLRLnaPkuzLcDLd74xIbJU+ZP2/Kju78
+   4g3v5j3s4h8LbHdesQjvC7KuutOEJB+WVOzuVhHP6gA1hxkt6HzzXkIsS
+   g==;
+X-CSE-ConnectionGUID: JYcyv2IQThmprWk/dZSRdg==
+X-CSE-MsgGUID: RzRiOY07QZODzF9MqsyA9Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11157645"
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="11157645"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:00:25 -0700
+X-CSE-ConnectionGUID: nJHE1sCIRDu17P/5vHb2Bg==
+X-CSE-MsgGUID: tDH/Dr3jRKOveu8r6SwhHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="33362348"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.80])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:00:20 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 8 May 2024 11:00:15 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>, 
+    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    llvm@lists.linux.dev
+Subject: Re: [PATCH v2] selftests/resctrl: fix clang build warnings related
+ to abs(), labs() calls
+In-Reply-To: <076d9990-6253-438d-bc92-70eba6dfbca9@intel.com>
+Message-ID: <7d4d8a31-00db-c7ba-aa8f-0483c8d93700@linux.intel.com>
+References: <20240503234051.21217-1-jhubbard@nvidia.com> <9ae11dcb-62e8-4361-9f78-971d4c6e6054@intel.com> <997d7fe0-46c8-4b38-824d-083ab29f54ce@nvidia.com> <d67f4f57-4e9a-4715-b6dd-7b83a240b7dd@intel.com> <7dd4b09e-b9ba-459d-bfa4-150e712f54bc@nvidia.com>
+ <076d9990-6253-438d-bc92-70eba6dfbca9@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] mm: shmem: add mTHP support for anonymous shmem
-To: kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
- hughd@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, willy@infradead.org,
- david@redhat.com, ioworker0@gmail.com, wangkefeng.wang@huawei.com,
- ying.huang@intel.com, 21cnbao@gmail.com, ryan.roberts@arm.com,
- shy828301@gmail.com, ziy@nvidia.com, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org
-References: <adc64bf0f150bdc614c6c06fc313adeef7dbbbff.1714978902.git.baolin.wang@linux.alibaba.com>
- <202405071820.2KY0UnDu-lkp@intel.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <202405071820.2KY0UnDu-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="8323328-1785506523-1715155215=:3164"
 
-Hi,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 2024/5/7 18:46, kernel test robot wrote:
->>> mm/shmem.c:1780:10: warning: variable 'folio' is used uninitialized whenever 'while' loop exits because its condition is false [-Wsometimes-uninitialized]
->      1780 |                 while (suitable_orders) {
->           |                        ^~~~~~~~~~~~~~~
->     mm/shmem.c:1795:7: note: uninitialized use occurs here
->      1795 |         if (!folio)
->           |              ^~~~~
->     mm/shmem.c:1780:10: note: remove the condition if it is always true
->      1780 |                 while (suitable_orders) {
->           |                        ^~~~~~~~~~~~~~~
->           |                        1
->     mm/shmem.c:1750:21: note: initialize the variable 'folio' to silence this warning
->      1750 |         struct folio *folio;
->           |                            ^
->           |                             = NULL
->     mm/shmem.c:1564:20: warning: unused function 'shmem_show_mpol' [-Wunused-function]
->      1564 | static inline void shmem_show_mpol(struct seq_file *seq, struct mempolicy *mpol)
+--8323328-1785506523-1715155215=:3164
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Thanks for reporting. Will add below change to avoid the warning:
-diff --git a/mm/shmem.c b/mm/shmem.c
-index d603e36e0f4f..fd2cb2e73a21 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1747,7 +1747,7 @@ static struct folio 
-*shmem_alloc_and_add_folio(struct vm_fault *vmf,
-         struct shmem_inode_info *info = SHMEM_I(inode);
-         struct vm_area_struct *vma = vmf ? vmf->vma : NULL;
-         unsigned long suitable_orders;
--       struct folio *folio;
-+       struct folio *folio = NULL;
-         long pages;
-         int error, order;
+On Tue, 7 May 2024, Reinette Chatre wrote:
+
+> Hi John,
+>=20
+> On 5/7/2024 6:25 PM, John Hubbard wrote:
+> > On 5/7/24 6:21 PM, Reinette Chatre wrote:
+> >> Hi John,
+> > ...
+> >>
+> >> The following (what was in v1) looks good to me. What am I missing?
+> >>
+> >> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testin=
+g/selftests/resctrl/cmt_test.c
+> >> index a81f91222a89..05a241519ae8 100644
+> >> --- a/tools/testing/selftests/resctrl/cmt_test.c
+> >> +++ b/tools/testing/selftests/resctrl/cmt_test.c
+> >> @@ -40,11 +40,11 @@ static int show_results_info(unsigned long sum_llc=
+_val, int no_of_bits,
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> >> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 avg_llc_val =3D sum_llc_val / nu=
+m_of_runs;
+> >> -=C2=A0=C2=A0=C2=A0 avg_diff =3D (long)abs(cache_span - avg_llc_val);
+> >> +=C2=A0=C2=A0=C2=A0 avg_diff =3D (long)(cache_span - avg_llc_val);
+> >=20
+> > This deletes the abs() call, because I incorrectly let clang's warning
+> > lead me to believe that the abs() call was a no-op. But both you and Il=
+po
+> > pointed out that the math breaks if you do that.
+>=20
+> To me the extra abs() was unnecessary anyway ...
+>=20
+> >=20
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 diff_percent =3D ((float)cache_span - a=
+vg_llc_val) / cache_span * 100;
+> >> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D platform && abs((int)dif=
+f_percent) > max_diff_percent &&
+> >> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 abs(avg_diff) =
+> max_diff;
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 labs(avg_diff)=
+ > max_diff;
+> >=20
+>=20
+> .. because it is repeated here.
+
+Yes, there are two *abs() calls in this function.
+
+In this case is okay to remove the first one since it didn't remove=20
+absolute value completely, whereas in the MBA/MBM cases v1 removed *abs()=
+=20
+call entirely which was wrong thing to do.
+
+I explicitly noted in my v1 comment that this CMT change is okay but the=20
+other two were not.
+
+--=20
+ i.
+
+--8323328-1785506523-1715155215=:3164--
