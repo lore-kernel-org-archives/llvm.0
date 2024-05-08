@@ -1,241 +1,201 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4459812CDA8
-	for <llvm@lists.linux.dev>; Wed,  8 May 2024 19:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715197300; cv=fail; b=BnCgYppc+fTICwqwwqBsXTFauQTsXhccoKRVVqQzMwYaPGGP/vIh7mVF9R28Pws+wHc1eTYdj+xAsmRBmX4RjImGNiY7YsVuTOB33/FND9z7V+KEZbSZc9/CEsKzTu5xE5+c7tDzscGp6/IrdhhcM87hsgq99c1BaUe1cAFJs6M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715197300; c=relaxed/simple;
-	bh=FTXmFLZuRpW2kSUZU/nlf2JxITqnjJ//Dme2+ZuIMJc=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=RcMQS3545/v05Oh4CUe57T+E6GE95J8xVvL0SXNCet0tGl0HP165WvhpjN44igT9uXPEHepwKLCJifFnJlyIL9RT/NPYtvOuI7t5Sn+rWnAWmU6ZVn0tmQH6N/kEZ49HloJH62SZbzw2cxMBRcLtLfX6LNKx+875ziZR0+3NzwI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IPN7OJOj; arc=fail smtp.client-ip=40.107.220.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED6A12CDA8
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 19:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715197500; cv=none; b=KV7KE01d/brCFyKed+579w62VGsx3+PCJ2zJHA0AmbIcxraPnSzhTbfqRuOZQzsZmujHE1rQKuw27yVUKJZe89KApjBpJFBvKlqX3AEw/jCHlex5tUdknlu1j0kU8SbCLXtSSNrRvSNxHLNrP3Uzgx7qetPsEsgGjnibzyIoHWQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715197500; c=relaxed/simple;
+	bh=IlFN+qjVbyWxbajojL+B3XzFHidR01L29y4ThUK6x84=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sz/J1OvIVCPjUGXMAKcajsLi3sfqNhDupYU+Uo53GoO6kDoSq7MIwt5BIOKV3j+M/tmUlfJMnViDliqNHfLM1BMDWHD9hy8DW/LuPOmUwQuBpIlLmDkgl7wqH+c+w7cYjP0/ya8QwR/R+2RhQ4Qo12z/NogM9iAKlt7B4nsKl9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=H2dqXr3s; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IPN7OJOj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DYLv0HEowLO9nuLI6zuJu6MK0i3aB0u0lfUrsWlNxkDs2qyCDf/oo3FqaCnYKk9xw1CpNEI5iTqrG2nH7I2ZwG7Mmbph7KPomr+hjOX8hE/MrD24RSslKT1SWwUe1p0gqngdNW37EMmvXwsukS11hgBzTdLhtwRrPC/z4kudA75g+X7PJRrFP6Jc0nf6uMgls2sD9HQNzOYn1Gx/TC4rU7G+Mn75IQGbHfEIfDJOZr5GYX9IqdQlDALCR3SvcbdNSAy07elbQqN6uH/AXaqYDZkmur0vQ4mNTRenZHdYbEehiOpYLnIJ2iGJveWxcEugE7zjp4QxBakq5tlWWZxOLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tzp/iQV9ZtI/J88NVRv5RhlsjifciYnhXGVg1rkITus=;
- b=WtOu05V5++Yt6rv+qTVfGfyevXgbKAVsju3Jgo/PJWOxw519ZUmxdTXXeNDmAuA9bVubLza/QgDKyloj4gdg46X37q896YV0aghlrQqRfeEHXCsVuQmQVIEJw0g9U1wtlPtEqlzhfHja9QNU4nsjzA7LdsCBev3N3sr6qD8Y51wzv+ZA9DTX6EVMUOUsOWWtR0VuIL/9cDWGLmUTmesAELZl7NXQ/ktrD4jvbLhqUTsos8e0rDf4IBTcczhXeUHS3OsfiLUV4UO8JJjbKwk6V4pR1ecUFBGNsdS18InjOyKcSCrY6Gh3wo8sVBH//N7rYzV+StzKdLYxlSVu6xvOYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tzp/iQV9ZtI/J88NVRv5RhlsjifciYnhXGVg1rkITus=;
- b=IPN7OJOjZjgkjQabtKJ9GM292lTTLo+zQEGzJRUYU7/odFuxZpvQ1jOK0SphGHeXzICSFx/W/4ZopSmNZbka0YNPaxWZG0RJihNvlk7K49BZ7+wKgbj8FPzXDQbRAP8MueHX/k0FujUAurMkls1mk0PXtOuvH07y2GkkRjJo2ko9aQtcw0lfdv1JrQvdG9eEUKUP7Lx3meuLVTbERMgrdLfRbcReC2194/MgB6qUGBascUVWAQu3CARaySWoHLtX56iVhO99b+A4A+DBpxTc+d9u2dsgl1S/Qr+pegDf2HWBKlELiz1EHBCzeljXehE7QRavBtPmzWWKEGuo26aI0Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by SN7PR12MB6840.namprd12.prod.outlook.com (2603:10b6:806:264::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.46; Wed, 8 May
- 2024 19:41:35 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Wed, 8 May 2024
- 19:41:35 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3] selftests/resctrl: fix clang build warnings related to abs(), labs() calls
-Date: Wed,  8 May 2024 12:41:32 -0700
-Message-ID: <20240508194132.269168-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.0
-Content-Type: text/plain; charset=UTF-8
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0150.namprd03.prod.outlook.com
- (2603:10b6:a03:33c::35) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="H2dqXr3s"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2a2da57ab3aso130325a91.3
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 12:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715197498; x=1715802298; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bSkp1IjyO8SPzHju8VI5tBOliintVpxYB8En8fnp8Mk=;
+        b=H2dqXr3s4R3t0QhJeNvVD5Mi8J/OFo4ufTfVoDHy5DBQ1xY2N2cFYWXfpj6CIOWNiH
+         Y1d4DBIUUwP0jMafGYWF0NEM8RxYApPxVL+9S9Btl6UDeCx3v2MPT5KjbuNfEzIZqZGy
+         MGwIS0aPZBgkuEjMLx8z8lNBG2DLS400kG2MM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715197498; x=1715802298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bSkp1IjyO8SPzHju8VI5tBOliintVpxYB8En8fnp8Mk=;
+        b=ZNC1UGCjrrcUaE+GcVXL5cNxN7XMJoMnKFAQ8uRBNAMCst/YtMKPgPfFBGd3FqwbmX
+         CmKbBx08s8mG+5amFHKuZyepACWkCJCrRwOUCli88Nn3c0dsrqIr0PvrS8sE0K9bKGtC
+         yxx0OZTUYqqzzekHJsvxUcsjxpAx955VWyMlmqXq0sov2IxbgLHG5leR8xRkMBc0G14q
+         VN+01TWwo8D7q2KKqi2F4ve8TzhAN/LTxK1fWXC/W24ot41p44nXsUZBX09pqyxz0iWl
+         jb+jrsFKSWpVI4vmNt9m9PeDf0cYVLUKDMlKFEZQ6tiGZSxSG12doSa1ozOFniVw4jBh
+         X6EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVd7a8QJfyNfVfRAcMGauGkyayHhv//KJcvV3+5M6/BcDd4ptMsAPZXiJZHcwXsJ+ePFAy2C+15Tqu1aI6zKTR6yurrog==
+X-Gm-Message-State: AOJu0YyNuGlJP9SUIRlwN7KP3oM3PHVozOUlD1TIrJuoUWOuMaeRphyI
+	CjavALkbddXzVXi1U9UYK0ypCsDgaStqr5kGkrO3jkSjKJ8nGKS0xpVA/PIDFQ==
+X-Google-Smtp-Source: AGHT+IEQJv5MoWCuSsH7z9sDM3firMHKZ9a0PaOa+JkXwojX56OtQaqrhExQGOf6H5m7P+TAapuX/w==
+X-Received: by 2002:a17:90a:1305:b0:2ab:9819:64bc with SMTP id 98e67ed59e1d1-2b6169e25cfmr3250633a91.32.1715197497713;
+        Wed, 08 May 2024 12:44:57 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f23-20020a17090ac29700b002acf260e82bsm1827034pjt.57.2024.05.08.12.44.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 12:44:57 -0700 (PDT)
+Date: Wed, 8 May 2024 12:44:56 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <202405081144.D5FCC44A@keescook>
+References: <202404291502.612E0A10@keescook>
+ <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|SN7PR12MB6840:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c4d88fc-499a-4773-26d0-08dc6f96dee3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015|7416005;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VlM3a1pvS2M4Zkl3VnBXM3dRZS9XcWlMM0FmKzN4ZUtHZzJzTnJ6R3kvOUdR?=
- =?utf-8?B?QnhoYjlmaWNweE5FWFNKVCs0VXJJZkFFTldFdG5xOGZBQTBPak5PTU1QWlRZ?=
- =?utf-8?B?RUgrUUtld21aQndhMzFYM1gwdEV1UEwvdTNqQ0h2YkJHNTZ1OHJOcHlCTk5z?=
- =?utf-8?B?eHBaM3hHcEM0L3h5K0hVZXFSaGNRTTZRTE1ndTNOTTZRU3lkWnpyZ2FxYVps?=
- =?utf-8?B?R1A2UDFaNEttZ1RqaWJTdHVSODNvQ2tDNnh4YzdtcnE3WVhWTGIyMWc3bjFC?=
- =?utf-8?B?ZjlVcms2cncrWXloRUpObFVhWWEwczl2U2ZGZzg3SzlnZWdIZFk5ZDRPM3Fp?=
- =?utf-8?B?M1VKZmRsV3QyNkxHWFJwMjFJVHNkbk40WDgwSVFLZWNTa1k4VXVXNXhqdTJo?=
- =?utf-8?B?Y2t5d0xhdUw5R2QzTmFTVi8wUjBSdW5reTVmR0FhWnN5ZDFUd3ZmRkNFMFJn?=
- =?utf-8?B?WE5lTXM1VHY5N21ML0N6UzA5aEpIQ1ZPQmtZamRTWDcyUXN5T0pVcVZtSDdL?=
- =?utf-8?B?b3AxNG8wb21Lbm11SnJrbVAzRzVsSEFJWFhDZDNNbnJmREowVkNqVGJVU1FU?=
- =?utf-8?B?UXFUR0R4RzJmQWNROUx5dVIrNHZlYkJnc24rN0JOTVIzbjF3WGxSTW9yUTF3?=
- =?utf-8?B?VjFzRjJEZG5VTkZwQ1NxNU1EOElEbVRzSElML2NWS3IybkNEeVBYZkxjam9T?=
- =?utf-8?B?OXB6RWg2K1pMQnd3dVU4MmlzdS9iaWJvWWlwZGNudVZkRkN3cWJEVk5xTVFy?=
- =?utf-8?B?Rm1KSm5VVmFNc2xNTlAvTWJIcW5udndoMEpaaS9DRHRhRjBkd2VtaWJWZnZh?=
- =?utf-8?B?VUt0V2xDVmp5SDVwMlEyK3hBT3p2VnM1cWdrTEYrTzNGdEZvMlFFNWJLMUxX?=
- =?utf-8?B?NHJGQ2FpTUF6c0tQcDRNUDE4dTc5ZFBwelB0dC9WSE8xa1MrVnVySGswM01M?=
- =?utf-8?B?T1pYYXdOQ3ZEbE9BVHU1eU5XUTJoTlZ3a01ScU1aRDhGekdLbTJZY0tyQXZC?=
- =?utf-8?B?RjFxc3Nwc2dpZktMOTVBekZLamcxQ2k0ZGNCOTNNRTJYcHltZUZLVGoweGUv?=
- =?utf-8?B?VDV6WmtFSyt5a2lMN0x4czN3d0dlYjFxZmVaZWZiTkZGZldaN3AxMk02WnZW?=
- =?utf-8?B?bXZQYWFoTjc5QXFTZE9lRDJmMHVrcndHc3FWOFRpZEZvV0NlSEt4Q00ySWs0?=
- =?utf-8?B?T3BKYUk4UUp2bU1YNE1HRVZWVThHVlZFcGRCTjhvUnI2Qy9ERFI5bmU3Umxp?=
- =?utf-8?B?N0NtazE2TmQ2SlphMXZQR29FNXBCa3EzM2piRklqVi9EZkZHLzBzVzVRMUZy?=
- =?utf-8?B?d1dvNElBc25lZitmU09obEZZV1A2cWdRK0pVQXdqUnpSaHRSS0doYzlPVlhY?=
- =?utf-8?B?OXAwVjZiQ1BRbjFTMDViQVRSSFFIakZ0eE5Ncy9lblhkZ1RocWY0WTk5bnV3?=
- =?utf-8?B?UHRTUlhDMm1RVUdtdXY2cGN6bEpBNWVCeHJUZ0R0N2MzUm80K2k2em5UZGs2?=
- =?utf-8?B?NXNwbm8wVGhnR2hUMDlEUFZCQUVZL21VQXlxODJHYllXK3F5Tklpck5LMzB6?=
- =?utf-8?B?ekhwa3p1TlQxUEt4OGpqeU1ERlhHalB0Z0tMbzF5OGRMN0dlOS8wRHBWTXI0?=
- =?utf-8?B?dkJtTXpGYjNTYnRSL0ZtSlFuTXRZZmdIU29BbzBlY2Z0QzJoRTdNNFNhUmR1?=
- =?utf-8?B?UzczNEtNWm93VVdKR243WEs5ZHhnZmN5amM3K3J4MzJyditoUHZhblp3PT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eHVjOGYrNFo1UjZGMzI1U3lJOU4yYllPeVZzRnRWcGJKb2QyOWdCUFZOMWti?=
- =?utf-8?B?bGd4ZGYxVlhJUXg3TW9vRzdvajl4NElhNXlSZGpGWk03Z29iWndxa0x4V1lw?=
- =?utf-8?B?eFA5Nno3RzRrWml3L1A1TGRjTzY5RjM0WCsxK3NTU1BPVjJkUDU4UFJPRE51?=
- =?utf-8?B?dzRUWGF5ZzY3VG05LzJZYXJZWnpmRGdrMFJyWHlENEViL1V0ZTZ5YzlBYUV4?=
- =?utf-8?B?a0J1UkRUTlBRQXNIRmNPaHlmR3EzVDlDYlBCRmFoZlcxM3dkbXhTdW81SXEz?=
- =?utf-8?B?cU1iWHZTZGkwMC9RL2VKWEZwNW1zZFZmWnJNSjdHT3FjSXRwb3J4NHZZV0gz?=
- =?utf-8?B?UWpGL2pzaXJ2cGxOWTQrdXgvbWd1YndpY1d5SGdsZS9qRUVOdyt3SjRzdnFY?=
- =?utf-8?B?RVlLTG1IYUhNdENxNmxDK1dIa2J3cnVsbTBOUzZ1blg5WHNwZzg2OXNMZlJn?=
- =?utf-8?B?eXQzVldnODVUbEdvZ1o5eFBBTXBsZjdXUHlLcFRWSWEvUnRrZS84VWlRTTJE?=
- =?utf-8?B?SHZsM3NBdXBqSFp1Qkhwa0FVSnlQN2llUS9TT3gwVHI4bW14Q0FuSG5BOUhU?=
- =?utf-8?B?RE1VVHJFcTFoR0lJT2xzaFRVdmlKNk9xLzMzS2E1U2JoQks5Qzl5TXIvODBB?=
- =?utf-8?B?ZWpxLzA0d1NBR1lPc0RZRlF2QjlzVWN6ZFlqWjBrUGhZRTZ4akxhSTN3emdC?=
- =?utf-8?B?SnQ4OVBLQ0lPMnZTWGs3YzRzNVNZY2VOTVdHNUJpRy8vRlExWEZhRjJUVC96?=
- =?utf-8?B?UXhDeWp3bmN3VjBtNytXWUFUdkgzV0xDZy95bUFQdkVNOHZjWmFEWnJmRzht?=
- =?utf-8?B?NVVEbHR1bUdPOHczZlVCYy9VUUVPazNwVzYvUTR3WEVoT0ZEVUdrQk8yblAw?=
- =?utf-8?B?Rk5tMEtlMVJaOC9scEVyNkkvQkVFTjdaOG5iNUl3RzJ5MTR1QUZCSjI5eTVz?=
- =?utf-8?B?b1M1RTJQanBLTzlVTE82MjkrWWlwVHBYMFZBcG5VTE5CLzdoOVpiWkVVTUdz?=
- =?utf-8?B?ZHZXQ0NlYWY3K1dxNFNEL2xVankrQkJLU1FzT1BSR3RCay8vZFVvS2N3Q3p5?=
- =?utf-8?B?Vkc5VG1kRXA2bEpISm5pWDUvZW1kbTZ3MFJhcFpNemlWWVRWcWZUV0F5dGF4?=
- =?utf-8?B?Y2xDVkFDNk1rOWo5RUZ3NkZSdjIya09DQ3U2dkZGa1lXNnY0VUhkVUI0akUr?=
- =?utf-8?B?VHRZVUQrclRVM0R6V2JOSUJ0TENEdUFpWU9YbTNGL253am5mQzRQblU2dFlX?=
- =?utf-8?B?SVBZUUlJWnd3UUswYXdEV2NlZGdmUHdoN295MkpZd0E1R0dTS1JOYm85RVVC?=
- =?utf-8?B?b2ZyOHlIS0wrWDFGdFREMmtJNjkxQ0syRmZmWHZBTlUyRkYrazBQaXovUEVk?=
- =?utf-8?B?VEZZWHA0ZmtRU0l4TWc2V3JidndRbVh4TVVZakFtVFlRV1JtbG1PZ25LK005?=
- =?utf-8?B?aVlRdm5kK29WdGxEMHN6ajN5Vlk2UlloRjRFcFZTMWsrYTFVYzhFV1lZK3FP?=
- =?utf-8?B?SXBHeDNrMEQ5cVAzeXlDeVpscEU3NW1oakhkSzdDYVlpaTQ0L250WnpWeGNN?=
- =?utf-8?B?L3pTVnV2QnJxQ0w5aGdGWDkyaWsvTUZEbWVqTmsrOXRGRUJKMENFZFYzb0tq?=
- =?utf-8?B?TDRaSWQ0R05xSGRSUC9DQWpkdEt5UzhTZm1HZWZIVWxyWWs2RW5FVFU4ZENU?=
- =?utf-8?B?d2FRQUp2SzRxMkZicHROSnpmN295S2ZUVVB6V0lpSzBsWFVHdmpIQ05ISWEy?=
- =?utf-8?B?UmQ0bUtBdm1yMlc0TlJvVWxxTUVJdDczNnVRSFM0Q0lwQWRqamR1a2xmOERo?=
- =?utf-8?B?ZXZIL1BUdTlGcnJCVGpWOVRHQURsS1VCVEhpVTJUbktBZEFMUXREV01RWFFJ?=
- =?utf-8?B?ZjloODJ0c2tXT082VjJ2SmMzc1VlNnVQdDR1bHk5L2JueVdVQ2FuY3ZlcUs2?=
- =?utf-8?B?ZDJlbGhtUkhOUWVWUUhvczhWekp0T1EyZDh5V1VVaWg5bjFQeVRXUk04d3Vv?=
- =?utf-8?B?dFZDbUhDblJLVXNvZ1U2MjBUbVdDVjFXWWdvS3lQTldkYXVGR2dGU2FnT0Jq?=
- =?utf-8?B?UEJLY3BnNDBWdVdxeEprcXVhSHZadXpVelhjc2V3QWFyejh4cHl6a3JMdGVN?=
- =?utf-8?Q?efad7aP0aPA+ohD4NvYhWxLxi?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c4d88fc-499a-4773-26d0-08dc6f96dee3
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 19:41:35.5950
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hCVgj3IpM/FT2ua64Oo7IpAK11j5KWfr/kxbaW+wXe1LQ8nPw2kGbnXJwU0cyn+7g7IJJA9Qt8L8Tc88sNLj7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6840
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
 
-When building with clang, via:
+On Wed, May 08, 2024 at 10:52:44AM -0700, Linus Torvalds wrote:
+> On Tue, 7 May 2024 at 16:27, Kees Cook <keescook@chromium.org> wrote:
+> [...]
+> Put another way the absolute first and fundamental thing you should
+> look at is to make sure tools don't complain about sane behavior.
 
-    make LLVM=1 -C tools/testing/selftests
+Agreed, and I explicitly called this out in the proposals, including
+adding several idioms that have been found besides the case you mention:
 
-...two types of warnings occur:
+> > - allow for common idioms to bypass sanitizers:
+> >   - explicit wrap-around tests: if (var + offset < var)
+> >   - loop iterator wrap-around during post-decrement: while (var--)
+> >   - negative unsigned constants: -1UL
 
-    warning: absolute value function 'abs' given an argument of type
-    'long' but has parameter of type 'int' which may cause truncation of
-    value
+What I need, though, is for _intent_ to be captured at the source level.
+Unfortunately neither compilers nor humans are omniscient. Wrapping vs
+non-wrapping intent can only rarely be unambiguously determined. I tried
+to explain that here:
 
-    warning: taking the absolute value of unsigned type 'unsigned long'
-    has no effect
+> > This is what is meant through-out by "ambiguous": the _intent of the
+> > author_ can be ambiguous as it relates to whether a calculation is
+> > meant to wrap-around. That it wraps around on overflow is not ambiguous:
+> > it will wrap-around. :) See "Terminology Considerations".
+> >
+> > This is the corner stone of the problem: even though the behavior of
+> > overflow is well-defined, so many authors so often don't correctly handle
+> > it that the results threaten the integrity of Linux as a whole. C makes
+> > it too easy to get it wrong, so we are left needing to fix this at a
+> > fundamental level. This is not a developer education problem; it is a
+> > problem with C language semantics. "Just do it correctly" has not
+> > worked.
 
-Fix these by:
 
-a) using labs() in place of abs(), when long integers are involved, and
+> The thing is, wrap-around is not only well-defined, it's *common*, and
+> *EXPECTED*.
 
-b) Change to use signed integer data types, in places where subtraction
-   is used (and could end up with negative values).
+Yes, common, but that still means "sometimes unexpected". The fact that
+when wrap-around is wanted, an author does nothing different from when
+it is unwanted is the core of the problem: C doesn't provide a way for
+us to see intent. We need to fix this.
 
-c) Remove a duplicate abs() call in cmt_test.c.
+> Example:
+> 
+>    static inline u32 __hash_32_generic(u32 val)
+>    {
+>         return val * GOLDEN_RATIO_32;
+>    }
 
-Cc: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/resctrl/cmt_test.c | 4 ++--
- tools/testing/selftests/resctrl/mba_test.c | 2 +-
- tools/testing/selftests/resctrl/mbm_test.c | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+But what about:
 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index a81f91222a89..05a241519ae8 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -40,11 +40,11 @@ static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
- 	int ret;
- 
- 	avg_llc_val = sum_llc_val / num_of_runs;
--	avg_diff = (long)abs(cache_span - avg_llc_val);
-+	avg_diff = (long)(cache_span - avg_llc_val);
- 	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
- 
- 	ret = platform && abs((int)diff_percent) > max_diff_percent &&
--	      abs(avg_diff) > max_diff;
-+	      labs(avg_diff) > max_diff;
- 
- 	ksft_print_msg("%s Check cache miss rate within %lu%%\n",
- 		       ret ? "Fail:" : "Pass:", max_diff_percent);
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 7946e32e85c8..5fffbc9ff6a4 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -60,7 +60,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 	/* Memory bandwidth from 100% down to 10% */
- 	for (allocation = 0; allocation < ALLOCATION_MAX / ALLOCATION_STEP;
- 	     allocation++) {
--		unsigned long avg_bw_imc, avg_bw_resc;
-+		long avg_bw_imc, avg_bw_resc;
- 		unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
- 		int avg_diff_per;
- 		float avg_diff;
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index d67ffa3ec63a..a4c3ea49b0e8 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -17,7 +17,7 @@
- static int
- show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
- {
--	unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
-+	long avg_bw_imc = 0, avg_bw_resc = 0;
- 	unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
- 	int runs, ret, avg_diff_per;
- 	float avg_diff = 0;
+static inline u32 __item_offset(u32 val)
+{
+	return val * ITEM_SIZE_PER_UNIT;
+}
 
-base-commit: 45db3ab70092637967967bfd8e6144017638563c
+All I did was change the names of things and now we have to wonder if
+the result is going to be used for indexing or sizing, and maybe it
+never considered that there might be a way for val to be greater than
+UINT_MAX / ITEM_SIZE_PER_UNIT.
+
+So instead, how about:
+
+static inline u32_wrap __hash_32_generic(u32_wrap val)
+{
+         return val * GOLDEN_RATIO_32;
+}
+
+Now intent is clear.
+
+> and dammit, I absolutely DO NOT THINK we should annotate this as some
+> kind of "special multiply".
+
+Yes, I agree, annotating the calculations individually seems like it would
+make things much less readable. And this matches the nearly universal
+feedback from developers. The solution used in other languages, with
+much success, is to tie wrapping intent to types. We can do the same.
+
+> I have no idea how many of these exist. But I am 100% convinced that
+> making humans annotate this and making the source code worse is
+> absolutely the wrong approach.
+
+I'd like to make the source better, not worse. :) But if we're going
+to solve this, and do it incrementally, I think progressively updating
+types is the way to go. We have used types in plenty of places where we
+want the compiler to help with checking (gfp_t, pid_t, etc), or with
+specific behaviors (atomic_t, refcount_t, etc). This would be more of
+that, though, yes, to a greater degree.
+
+> So I think you need to limit your wrap-around complaints, and really
+> think about how to limit them. If you go "wrap-around is wrong" as
+> some kind of general; rule, I'm going to ignore you, and I'm going to
+> tell people to ignore you, and refuse any idiotic patches that are the
+> result of such idiotic rules.
+
+This doesn't take into account the reality of deployments worldwide that
+are getting exploited by unexpected wrap-around. There's no problem with
+wrap-around per se, it's that we have no source-level way to indicate
+when it is _intended_. I would phrase the rule as "ambiguous intent of
+wrap-around is wrong".
+
+> Put another way the absolute first and fundamental thing you should
+> look at is to make sure tools don't complain about sane behavior.
+
+What do you see as the solution for the ambiguous intent problem?
+
+> Until you have done that, and taken this seriously, this discussion is
+> not going to ever result in anything productive.
+
+I think I've shown pretty clearly that I take this seriously. We have
+been working out feasibility and potential directions for some time now,
+engaging with compiler communities, building the tooling needed to do
+this with as minimal impact as possible, etc. I didn't send this RFC
+for fun. :)
+
+But let me make sure we're on the same page: do you agree that we need
+to protect Linux from classes of bugs? That there is value in protecting
+our billions of users from avoidable and exploitable flaws that have
+literally life-threatening consequences? If we don't agree that there
+is a problem here worth solving, then yes, it will be hard to have a
+productive discussion.
+
+And please remember that I'm not saying "let's fix it overnight", I'm
+looking to coordinate a best way forward. I want to make a plan. Neither
+human nor compiler omniscience has manifested, so what's the next step?
+
+-Kees
+
 -- 
-2.45.0
-
+Kees Cook
