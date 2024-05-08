@@ -1,134 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF043AC10
-	for <llvm@lists.linux.dev>; Wed,  8 May 2024 08:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D148B50A6D;
+	Wed,  8 May 2024 08:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715155226; cv=none; b=LQIaNCrPGMzHCaex9DpPLqGUC/prSTi+658yC87EYPc8ahm9Z92xP20bp1PDws/OKljRExoLd1zRDWjd84lfg4WW5IFlBZ5NZbx1n3MAYT8yIlOoNr6qXTZ0MC3S4jYBQhXnaQBUjISqdGpt6dVofkmQqnlmKSuL89k52kvHIic=
+	t=1715156655; cv=none; b=ZQN7NpC4EUAZeNHHOD8hHj+DfqT1sfHbXAUJznB+ha+raMFDr2qDcMJBwBOclUShIyFy8Boxy9C70tJG1IELlGXrNhWGRsBITonYrZv9iTkWAj9GINU0MYifrQpBn+qevGtT3p+HWYmU50PdZ6cfem4zzZTdnK678Gqf7dBAtA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715155226; c=relaxed/simple;
-	bh=A/AkggmDRJWYn/SaPI9yF1hBn4xncSCYULCuBbRnXZY=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Ck4OdavoS8nc7mldAwIK03nbGHq9RwY3vczelBo6sb+8eNC15phzkGu+XN9vjtNOG/jn28M1RT2gfFwC01ii8YrQE+xnfdFlwbZk1jVxCoDEqoKUVAi9a4BH7Ri6b8D7SYxpDWdz0YSVY9h61vtMTON0TUtW99Tel8Ay1KpY6k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hiVhMn8+; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1715156655; c=relaxed/simple;
+	bh=XieW1XB6DoWhduZUawaNxBdmIMPqyXa8hYzv98yKvG4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YI0OVdy/fr0eHS8QUSmD/JGgZiFz1B8TNbPbF/VWdq4YNCLllyrSUb0l+RpFiGpMyN/tDIbdKdSNAVd6ktNGllSbeG/oKbGQIX3yt5GrmD5s55/YomzIPx5/szDrOnkxUx8dl+EV4Q8GynI8l1Vio3uAoA8RCZLGLTXViGWBi4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+B222Nh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hiVhMn8+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715155225; x=1746691225;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=A/AkggmDRJWYn/SaPI9yF1hBn4xncSCYULCuBbRnXZY=;
-  b=hiVhMn8+9b9G9wGAwoIcaGEaTnSCe5R0LFiDAqNvwHViEW5UGP5GFW3+
-   Mqz+vdgDPeI9RkJ7IOKyKKT45DRtKkGR1o+rIWByKBvbbHr629b/H/TV0
-   iuJlUpRSTqn0Zua3HGxSGlv5mfUnoBBOTqDAVSCQidEckGLr+v/YYtpDo
-   mMFf1jTgE1sDV2jSwWvqUYk62lKTt4jKbY7NCZebW1+avz/Yc5vs13lq0
-   d1Hw4zM5nZKw1w8pIloRIBXuzpLRLnaPkuzLcDLd74xIbJU+ZP2/Kju78
-   4g3v5j3s4h8LbHdesQjvC7KuutOEJB+WVOzuVhHP6gA1hxkt6HzzXkIsS
-   g==;
-X-CSE-ConnectionGUID: JYcyv2IQThmprWk/dZSRdg==
-X-CSE-MsgGUID: RzRiOY07QZODzF9MqsyA9Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11157645"
-X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="11157645"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:00:25 -0700
-X-CSE-ConnectionGUID: nJHE1sCIRDu17P/5vHb2Bg==
-X-CSE-MsgGUID: tDH/Dr3jRKOveu8r6SwhHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="33362348"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.80])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:00:20 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 8 May 2024 11:00:15 +0300 (EEST)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>, 
-    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/resctrl: fix clang build warnings related
- to abs(), labs() calls
-In-Reply-To: <076d9990-6253-438d-bc92-70eba6dfbca9@intel.com>
-Message-ID: <7d4d8a31-00db-c7ba-aa8f-0483c8d93700@linux.intel.com>
-References: <20240503234051.21217-1-jhubbard@nvidia.com> <9ae11dcb-62e8-4361-9f78-971d4c6e6054@intel.com> <997d7fe0-46c8-4b38-824d-083ab29f54ce@nvidia.com> <d67f4f57-4e9a-4715-b6dd-7b83a240b7dd@intel.com> <7dd4b09e-b9ba-459d-bfa4-150e712f54bc@nvidia.com>
- <076d9990-6253-438d-bc92-70eba6dfbca9@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+B222Nh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3BAC113CC;
+	Wed,  8 May 2024 08:24:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715156655;
+	bh=XieW1XB6DoWhduZUawaNxBdmIMPqyXa8hYzv98yKvG4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R+B222NhYfhflsQf65Hng9jjvTDhRZn0KuYNhgBISCrwcn8B7NGosFC9dd+pgClSX
+	 mBAQZ2Jv95Lm/EzIAdGI1ai5Glx7i0DrR4nQxYsnvO8FnoetwyM9g/udRdT3SZ5vYR
+	 6Jw59/Hnd0w/BZbAxjGW/uq735txFN2+4rMGnAeskGFYxu9mCLZ+g0PfhMHE1xCfmI
+	 y6HnSoRuZKy6+ZjsZnvs3ORrjLaF0k1tLp31FTE+gTEY/iqMwKCmkd2FWaEtP7uzxB
+	 USd4p8pHfQLkvKuac9AchR0j8LzI9jSKg1DcVRHAdLrOoYkdxMvXVp2AzDLdZjEfu1
+	 1ggb96UzeI6mQ==
+Date: Wed, 8 May 2024 09:22:40 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Shailend Chand <shailend@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2] gve: Minor cleanups
+Message-ID: <20240508082240.GM15955@kernel.org>
+References: <20240503-gve-comma-v1-0-b50f965694ef@kernel.org>
+ <20240507152846.30d7c11b@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1785506523-1715155215=:3164"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240507152846.30d7c11b@kernel.org>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Tue, May 07, 2024 at 03:28:46PM -0700, Jakub Kicinski wrote:
+> On Fri, 03 May 2024 21:31:25 +0100 Simon Horman wrote:
+> > This short patchset provides two minor cleanups for the gve driver.
+> > 
+> > These were found by tooling as mentioned in each patch,
+> > and otherwise by inspection.
+> > 
+> > No change in run time behaviour is intended.
+> > Each patch is compile tested only.
+> 
+> Looks like it conflicts now, please rebase
 
---8323328-1785506523-1715155215=:3164
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Tue, 7 May 2024, Reinette Chatre wrote:
-
-> Hi John,
->=20
-> On 5/7/2024 6:25 PM, John Hubbard wrote:
-> > On 5/7/24 6:21 PM, Reinette Chatre wrote:
-> >> Hi John,
-> > ...
-> >>
-> >> The following (what was in v1) looks good to me. What am I missing?
-> >>
-> >> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testin=
-g/selftests/resctrl/cmt_test.c
-> >> index a81f91222a89..05a241519ae8 100644
-> >> --- a/tools/testing/selftests/resctrl/cmt_test.c
-> >> +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> >> @@ -40,11 +40,11 @@ static int show_results_info(unsigned long sum_llc=
-_val, int no_of_bits,
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
-> >> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 avg_llc_val =3D sum_llc_val / nu=
-m_of_runs;
-> >> -=C2=A0=C2=A0=C2=A0 avg_diff =3D (long)abs(cache_span - avg_llc_val);
-> >> +=C2=A0=C2=A0=C2=A0 avg_diff =3D (long)(cache_span - avg_llc_val);
-> >=20
-> > This deletes the abs() call, because I incorrectly let clang's warning
-> > lead me to believe that the abs() call was a no-op. But both you and Il=
-po
-> > pointed out that the math breaks if you do that.
->=20
-> To me the extra abs() was unnecessary anyway ...
->=20
-> >=20
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 diff_percent =3D ((float)cache_span - a=
-vg_llc_val) / cache_span * 100;
-> >> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D platform && abs((int)dif=
-f_percent) > max_diff_percent &&
-> >> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 abs(avg_diff) =
-> max_diff;
-> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 labs(avg_diff)=
- > max_diff;
-> >=20
->=20
-> .. because it is repeated here.
-
-Yes, there are two *abs() calls in this function.
-
-In this case is okay to remove the first one since it didn't remove=20
-absolute value completely, whereas in the MBA/MBM cases v1 removed *abs()=
-=20
-call entirely which was wrong thing to do.
-
-I explicitly noted in my v1 comment that this CMT change is okay but the=20
-other two were not.
-
---=20
- i.
-
---8323328-1785506523-1715155215=:3164--
+Thanks, I'll rebase and send a v2.
