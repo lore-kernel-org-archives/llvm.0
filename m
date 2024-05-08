@@ -1,175 +1,234 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2062.outbound.protection.outlook.com [40.107.236.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35C912FF99;
-	Wed,  8 May 2024 19:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715195571; cv=none; b=uCv3SNaamsyQVxbTRNAI0OHzRrDFl356zFnHqBLQsU94nUV3gtlWcRov8cd76jBarb8ODmqGmtgKIatdBCX6thuXlq1I5j+n6G4N1YhTjc2sAQbu/it+F7hwqq/nQhld9iWXVfuzWNNqackfTptcWlYSAE07lDhBpZrsHDzg2dc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715195571; c=relaxed/simple;
-	bh=UDZ+y5C+6hi5R+nL3waykWlk6BdAqhdWysBV2RefEBo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dATK+qAQxlUjb0gJe8fXeIv3QxzXz+s61j47T/Htd4L7KJMYkPNBfbnqigmcchIYStbxRQEsn1xzCnEvLq/lv9UHEJ57ltbVuCcq96ERvqTSNy3Gtgx9r+jqlgUeqaiLs4PA3hJjCOQbFJlTvxkht0bpYOiVi1QLrSmqdaNbklQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mQKodHYQ; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C415939AD6
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 19:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715197224; cv=fail; b=ezNv+TTQR2DhNAjp3Qq6LcUYFwS7wBSfgLTXkkr934IeN00AlNAtJiPNe5J9Vq6cOPJzmLGAsnA4NG7EfmkXJZPL7SfoCWleg3vIbMFEV+CU/2r5F12RU9o2T0JhoES/qNLx44aRASPNMYI3Ks287FPo6Km0AeoE8g8XyU1FRWk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715197224; c=relaxed/simple;
+	bh=rXjLOSNdwYOP7vvzh0bAf/djJKNTLavDGnepGRABpKw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ShJw78gqmDRV3bLwcdpS5J7Gj05pLdlTPxQKQZrW9UXWFefL4wxRmB/yrX/kikQaLL6tgshThfemDo2RhERHQ0PNSRZSfhuRX0Y1/6Osgr9xmd0hQGDeniKYQ7s8ZOZPkPd2IpJF4y1jp0jjphr7t40XGXL5qHADe/SptyYTK08=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JvEG0syg; arc=fail smtp.client-ip=40.107.236.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mQKodHYQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715195570; x=1746731570;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UDZ+y5C+6hi5R+nL3waykWlk6BdAqhdWysBV2RefEBo=;
-  b=mQKodHYQ7iLPOykywkrG0PKlTPG1wm0ivef1ar4gxj1nkAOKgopOX1QQ
-   k5ojcblv8ymQL9scLAxL23hXlb3miRDV8UGJAhAkriCtem8JYMvPU9Yw2
-   /z2MR+NojFnN2rJMaebpJbrK8+zREcHS2pXdgPy4KwISI0Nb8mIvBD2D7
-   QXaok5dFndZnZb4pfMcpJ5EDdPi3AnXDsMlyVxXg32A7KXRV5SBZt6FXX
-   qS2SDGm8T7aNp4LAZwtN7VrCGvxyw130sKiscYWR6Hq3ImAc5MGYveof1
-   L/OhhKkQwK/J7gLpn4INyjn7YjqWq8eihF7oRgX2bRtq8ILZikOYi8/FQ
-   Q==;
-X-CSE-ConnectionGUID: I/Zzv9RVQaK9c59KSGGTIQ==
-X-CSE-MsgGUID: z8eESwNvQeGnxTmO6wlrHA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="22472883"
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="22472883"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 12:12:49 -0700
-X-CSE-ConnectionGUID: Y9xI5MwgSyyR4UMngLRhrw==
-X-CSE-MsgGUID: 9tj+b7tkSDeV37hXSQ8cfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="33502300"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 08 May 2024 12:12:48 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4mib-00042A-24;
-	Wed, 08 May 2024 19:12:45 +0000
-Date: Thu, 9 May 2024 03:12:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] erofs: Zstandard compression support
-Message-ID: <202405090343.ZIq0cRfw-lkp@intel.com>
-References: <20240508090346.2992116-1-hsiangkao@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JvEG0syg"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sz6D0moPIPnVEcIDfsmWsMcZ3cug06xllqpOij/Uh1KWlMTaA6lZzAg5xVRKObhHbycEtzIkURjDfjCqzyiG4kfkWBjN5RU7bqKpFaCIixLttz5jUX868P9Ukm2a87zLxsyA/ruEFpOk1tufH4pdmyO7GgSSZxh2VAFVsz73GCdk/jKgF4rEMGkjGvJBqcjyMwsO2QSY5rdOxdasjR8TZt/Gt309V5thus1tTeCabAlXFw9Ds/0HmlmMAO/MCuVjfuneIMtdTIGs7P0SHceh4KEGGml1czoYDEn2Qmb93eA5LWDLTbLlzHac6xi/zqZ+cEyryStpytug3qtGUe2nCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ImkIz9nL9Hw9LhEygGDEVuNJXasdsN1pVRzc067uTck=;
+ b=kmmSoz3XGqZDI2ExAx9GWU01U914ZBt/rKbRGfUaACfjn6oss9rcV7q7NeHqv4yBtHu5SUirC3cU7XbXZGkBZWjnnwsaq/7JCKqZ8xdPYDrRDy2CVntzRBS8UQqD/gtk6lw3JSdLSzINhBI9YT9spZJfvjCB/McZwHjk64YSHT9y4g8MpPP17HlnG/pERm7BNRTFMejK37Lwedvncwg9ko4zQi/SFi4ldTtEechrbORR6dJUXYTnXnRkCewgBCOu7WYWRCQUgaegatuAlCOiN5wMl/rpn9YBsWMoGsI2mIY7Tz89e/WMi3EZK9jH1+nrgpolab6zYyN+/sRrnC2xog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ImkIz9nL9Hw9LhEygGDEVuNJXasdsN1pVRzc067uTck=;
+ b=JvEG0sygfzRuZuOH3MPi5nZCPV2/g25rCJALejj4o/3gnu0nQTRJH8cj3LAF/TCktPKW46z8Pddikj4BI5e/qPMIm4vXAL7jnkjYy3narfQ0jPYReQtLKWA51KBzW/HUCYrYadjI3Zks4XjCD4hiELT/O6VYy6RVZWK5eZZ6/icYKxYr1sYTgR3hODqR6uCA1B2MjyvIJ4DUYeAdeAek7vNaac14GtOBYh3U6n3H9q/s2247pSw3cbEqYZNm0Nu11skaEv+FrSxJYmfX1KzsQZ/uOKvn7yfF9q7Q1XqbZrN/PW1kv1MryW10LwtPKxLvYSIiTRcKrAyObuJNcixcCA==
+Received: from BN0PR08CA0005.namprd08.prod.outlook.com (2603:10b6:408:142::20)
+ by CY8PR12MB9036.namprd12.prod.outlook.com (2603:10b6:930:78::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.45; Wed, 8 May
+ 2024 19:40:16 +0000
+Received: from BN1PEPF00004681.namprd03.prod.outlook.com
+ (2603:10b6:408:142:cafe::f) by BN0PR08CA0005.outlook.office365.com
+ (2603:10b6:408:142::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43 via Frontend
+ Transport; Wed, 8 May 2024 19:40:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN1PEPF00004681.mail.protection.outlook.com (10.167.243.87) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7544.18 via Frontend Transport; Wed, 8 May 2024 19:40:15 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 8 May 2024
+ 12:39:54 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 8 May 2024
+ 12:39:53 -0700
+Message-ID: <8ee4ae34-dd65-4d23-a7fb-883603780f06@nvidia.com>
+Date: Wed, 8 May 2024 12:39:53 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240508090346.2992116-1-hsiangkao@linux.alibaba.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+To: Shuah Khan <shuah@kernel.org>
+CC: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+	<justinstitt@google.com>, Fenghua Yu <fenghua.yu@intel.com>, Reinette Chatre
+	<reinette.chatre@intel.com>, Valentin Obst <kernel@valentinobst.de>,
+	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+	<ilpo.jarvinen@linux.intel.com>
+References: <20240508190254.266892-1-jhubbard@nvidia.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20240508190254.266892-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004681:EE_|CY8PR12MB9036:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e6ccf3a-21bc-443d-4d38-08dc6f96af1d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|82310400017|1800799015|36860700004|7416005|376005;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?V0ZoVkZrU3BRakhrUUpyYlJSNlpaMzJUbTZDd3hBMGVGWUtWU3lONXZtT3FU?=
+ =?utf-8?B?emdCdzVQTjFOb0NEUFJ5QUt4UW5DeXNNczBFOGZHS2hzWHN3bHR0dm93UHlT?=
+ =?utf-8?B?NWFic21vNG1NanlLN2FPWkhNZkdNZnFNV1pqYlU4NDdtRzdjTlpRYkRDekYr?=
+ =?utf-8?B?VG03cDNpekp2RWhyMC9ZTkorZ1VIazh3MkNDM0dsbmZja3NFcTBFb3pUTGht?=
+ =?utf-8?B?Yk5KUFlNYUJ3MWNGcVNtczBkdmF3SmNZZWp0ZWw2bUw0U2ZZZDYxRUJXSWs2?=
+ =?utf-8?B?S1grTFlESzBvMVFZWkdyQ2JmSExUZFJuVXlPUWVhWjNZUmNwVWo1bEJNMDB5?=
+ =?utf-8?B?THZqY3YxMit6bHdDS3dwZEpmUTJOak9VNjRMbk9jNE42bjdhYUNkM0ltSGZu?=
+ =?utf-8?B?eGF6WGpHdllRcGFKcUs5QkVDN09BcElsbzBhQ0hzeW5zbUptb3lFRmVKMWc4?=
+ =?utf-8?B?Y2RiV2hJaCtWV3Y5RzJ5WGtxZFF5Y2liSnI0eVhxRHYrb2hnOHNTTVp6WGVS?=
+ =?utf-8?B?bDFranF3UXdCMlhIZTQ4QlJrbGd1bzY0UHdUNTl4dlRDNXVCempiR3QvWGFm?=
+ =?utf-8?B?THk2dEZmNE5kM25CYlNGbE9MRk93NDRKUUpONzdyWW1SSEduak10SnVIVXU4?=
+ =?utf-8?B?dUM2d0kxL3BrNG5GcXJVY0JuQkRvTFRQOHh0NWhYOXd5dzRpTGlBckZyZ25Y?=
+ =?utf-8?B?RFBMcWk1MkxiNzlQcGlUVmhrMGFJYTM1WXNVbWFaSE5RcloxOWJxM3J0elVy?=
+ =?utf-8?B?cjF4L1diNTVpWmdMQjFlL2wrTG5zeDd0TFM4em5vQU1CNGh3cEpKK1ZqVkln?=
+ =?utf-8?B?dmR1VHhjOFZmVlU3U3R3TStoOWFmSTY5bW0wOHhSdTB1ekVJcnZGVzU4elg2?=
+ =?utf-8?B?ZlF3M3MxT0ExNEpVdkJOQk1Ocm5leE1lYmo3UlYvWGEvUXNrNmptY2ZQdEJy?=
+ =?utf-8?B?SmRQd25uMTJQMWZ3Yk9na241a3hqNjB6eEVnaFdMdXJyUERQakh6SDBJaG42?=
+ =?utf-8?B?WTNxMTAyRnNPOHZWdkRGQlF4MFMzNWc5VUpDbW5FMHVPdENlS3h5TGlrVzA1?=
+ =?utf-8?B?OXBTc3F2V3FQc2dsdkI3Y3YyeXVrVGhwS2NHdTBKK0RrckJ1MnVpM3lNY1VU?=
+ =?utf-8?B?bXZvdVRKR04zZzZHR2hUYlpPamU1UDkxQ0FmVnhIVDVCczJqQ1hONnhWQWRK?=
+ =?utf-8?B?QlhpbTZwR1FJWXlUcVlBVVE5czdxZGplU2FLT3F0RWdsQ2RMeWtseWJyeVRi?=
+ =?utf-8?B?Q3cyYlpMeWt2YmZGZWhoVVY3Y1VkTWpxejlXVzJKOEgwNWRFaVNhUGJxU0RC?=
+ =?utf-8?B?VGszQnZEOWVSTkIvMG5rVFl5c2ZTNFA5dk5EYUF3TmNialZnVkhoaU1GaXI4?=
+ =?utf-8?B?RjhiOXN1dE5BcUJkYUR4UEp5SzVvTVRqdVo4eElnM0dJWkthdVQ2YkIxMDRi?=
+ =?utf-8?B?Z2hRYStTWFRnVDJ5UW9YRVhKa2JrSFBpb3ZxeXlRY1BGdytXNWhCN3g5dVpn?=
+ =?utf-8?B?TTErWllyWEZrdjhVVlp6Tlh1YS9FU3lJbHFtaFhlWHhCcjdSK24xdFc2SDV6?=
+ =?utf-8?B?L3JLSjEzSkhPbkkyVXFGNzdLbXlCRnVxR0xSbWhnSHk5ek1xOFRmWnJQQ2Jk?=
+ =?utf-8?B?OVJzRlhCbGRiQU9CUHd3NnFxZnRoajZuWEdwQzBWaktURmRxN2ZuaFdiZ0Jk?=
+ =?utf-8?B?L1FCVkFkU2dnRmVPWVducjhnVlRPQVdGVzJLUVNhd2x4aEE3YjB1WEMwV2Fl?=
+ =?utf-8?B?MnVUZjE2UERPTTlhN3JPVy9WWXVyQ0xQMlRKU0twSHA2RnNTNm5nNDJ6RHd3?=
+ =?utf-8?B?RUVBd2IvdUJTWFJrczYrZTE2bkVvcnBneloyNm1hR1IzdWtNZ0tCTkFwTkg1?=
+ =?utf-8?Q?sYAscVDp0EeE9?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(82310400017)(1800799015)(36860700004)(7416005)(376005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 19:40:15.1447
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e6ccf3a-21bc-443d-4d38-08dc6f96af1d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004681.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB9036
 
-Hi Gao,
+This was supposed to be a v3 patch. I'll resend as v3, sorry
+about creating a confusing email here.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on xiang-erofs/dev]
-[also build test WARNING on next-20240508]
-[cannot apply to xiang-erofs/dev-test xiang-erofs/fixes linus/master v6.9-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gao-Xiang/erofs-Zstandard-compression-support/20240508-170754
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev
-patch link:    https://lore.kernel.org/r/20240508090346.2992116-1-hsiangkao%40linux.alibaba.com
-patch subject: [PATCH] erofs: Zstandard compression support
-config: arm64-randconfig-002-20240509 (https://download.01.org/0day-ci/archive/20240509/202405090343.ZIq0cRfw-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240509/202405090343.ZIq0cRfw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405090343.ZIq0cRfw-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/erofs/decompressor_zstd.c:90:56: warning: variable 'dict_size' is uninitialized when used here [-Wuninitialized]
-                   erofs_err(sb, "unsupported zstd dictionary size %u", dict_size);
-                                                                        ^~~~~~~~~
-   fs/erofs/internal.h:30:39: note: expanded from macro 'erofs_err'
-           _erofs_err(sb, __func__, fmt "\n", ##__VA_ARGS__)
-                                                ^~~~~~~~~~~
-   fs/erofs/decompressor_zstd.c:80:24: note: initialize the variable 'dict_size' to silence this warning
-           unsigned int dict_size, wkspsz;
-                                 ^
-                                  = 0
-   1 warning generated.
-
-
-vim +/dict_size +90 fs/erofs/decompressor_zstd.c
-
-    74	
-    75	int z_erofs_load_zstd_config(struct super_block *sb,
-    76				struct erofs_super_block *dsb, void *data, int size)
-    77	{
-    78		static DEFINE_MUTEX(zstd_resize_mutex);
-    79		struct z_erofs_zstd_cfgs *zstd = data;
-    80		unsigned int dict_size, wkspsz;
-    81		struct z_erofs_zstd *strm, *head = NULL;
-    82		void *wksp;
-    83	
-    84		if (!zstd || size < sizeof(struct z_erofs_zstd_cfgs) || zstd->format) {
-    85			erofs_err(sb, "unsupported zstd format, size=%u", size);
-    86			return -EINVAL;
-    87		}
-    88	
-    89		if (zstd->windowlog > ilog2(Z_EROFS_ZSTD_MAX_DICT_SIZE) - 10) {
-  > 90			erofs_err(sb, "unsupported zstd dictionary size %u", dict_size);
-    91			return -EINVAL;
-    92		}
-    93		dict_size = 1U << (zstd->windowlog + 10);
-    94	
-    95		/* in case 2 z_erofs_load_zstd_config() race to avoid deadlock */
-    96		mutex_lock(&zstd_resize_mutex);
-    97		if (z_erofs_zstd_max_dictsize >= dict_size) {
-    98			mutex_unlock(&zstd_resize_mutex);
-    99			return 0;
-   100		}
-   101	
-   102		/* 1. collect/isolate all streams for the following check */
-   103		while (z_erofs_zstd_avail_strms) {
-   104			struct z_erofs_zstd *n;
-   105	
-   106			for (strm = z_erofs_isolate_strms(true); strm; strm = n) {
-   107				n = strm->next;
-   108				strm->next = head;
-   109				head = strm;
-   110				--z_erofs_zstd_avail_strms;
-   111			}
-   112		}
-   113	
-   114		/* 2. walk each isolated stream and grow max dict_size if needed */
-   115		wkspsz = zstd_dstream_workspace_bound(dict_size);
-   116		for (strm = head; strm; strm = strm->next) {
-   117			wksp = kvmalloc(wkspsz, GFP_KERNEL);
-   118			if (!wksp)
-   119				break;
-   120			kvfree(strm->wksp);
-   121			strm->wksp = wksp;
-   122			strm->wkspsz = wkspsz;
-   123		}
-   124	
-   125		/* 3. push back all to the global list and update max dict_size */
-   126		spin_lock(&z_erofs_zstd_lock);
-   127		DBG_BUGON(z_erofs_zstd_head);
-   128		z_erofs_zstd_head = head;
-   129		spin_unlock(&z_erofs_zstd_lock);
-   130		z_erofs_zstd_avail_strms = z_erofs_zstd_nstrms;
-   131		wake_up_all(&z_erofs_zstd_wq);
-   132		if (!strm)
-   133			z_erofs_zstd_max_dictsize = dict_size;
-   134		mutex_unlock(&zstd_resize_mutex);
-   135		return strm ? -ENOMEM : 0;
-   136	}
-   137	
-
+thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+John Hubbard
+NVIDIA
+
+On 5/8/24 12:02 PM, John Hubbard wrote:
+> When building with clang, via:
+> 
+>      make LLVM=1 -C tools/testing/selftests
+> 
+> ...two types of warnings occur:
+> 
+>      warning: absolute value function 'abs' given an argument of type
+>      'long' but has parameter of type 'int' which may cause truncation of
+>      value
+> 
+>      warning: taking the absolute value of unsigned type 'unsigned long'
+>      has no effect
+> 
+> Fix these by:
+> 
+> a) using labs() in place of abs(), when long integers are involved, and
+> 
+> b) Change to use signed integer data types, in places where subtraction
+>     is used (and could end up with negative values).
+> 
+> c) Remove a duplicate abs() call in cmt_test.c.
+> 
+> Cc: Reinette Chatre <reinette.chatre@intel.com>
+> Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/resctrl/cmt_test.c | 4 ++--
+>   tools/testing/selftests/resctrl/mba_test.c | 2 +-
+>   tools/testing/selftests/resctrl/mbm_test.c | 2 +-
+>   3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+> index a81f91222a89..05a241519ae8 100644
+> --- a/tools/testing/selftests/resctrl/cmt_test.c
+> +++ b/tools/testing/selftests/resctrl/cmt_test.c
+> @@ -40,11 +40,11 @@ static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
+>   	int ret;
+>   
+>   	avg_llc_val = sum_llc_val / num_of_runs;
+> -	avg_diff = (long)abs(cache_span - avg_llc_val);
+> +	avg_diff = (long)(cache_span - avg_llc_val);
+>   	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
+>   
+>   	ret = platform && abs((int)diff_percent) > max_diff_percent &&
+> -	      abs(avg_diff) > max_diff;
+> +	      labs(avg_diff) > max_diff;
+>   
+>   	ksft_print_msg("%s Check cache miss rate within %lu%%\n",
+>   		       ret ? "Fail:" : "Pass:", max_diff_percent);
+> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+> index 7946e32e85c8..5fffbc9ff6a4 100644
+> --- a/tools/testing/selftests/resctrl/mba_test.c
+> +++ b/tools/testing/selftests/resctrl/mba_test.c
+> @@ -60,7 +60,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+>   	/* Memory bandwidth from 100% down to 10% */
+>   	for (allocation = 0; allocation < ALLOCATION_MAX / ALLOCATION_STEP;
+>   	     allocation++) {
+> -		unsigned long avg_bw_imc, avg_bw_resc;
+> +		long avg_bw_imc, avg_bw_resc;
+>   		unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
+>   		int avg_diff_per;
+>   		float avg_diff;
+> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+> index d67ffa3ec63a..a4c3ea49b0e8 100644
+> --- a/tools/testing/selftests/resctrl/mbm_test.c
+> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+> @@ -17,7 +17,7 @@
+>   static int
+>   show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
+>   {
+> -	unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
+> +	long avg_bw_imc = 0, avg_bw_resc = 0;
+>   	unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
+>   	int runs, ret, avg_diff_per;
+>   	float avg_diff = 0;
+> 
+> base-commit: 45db3ab70092637967967bfd8e6144017638563c
+> prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
+> prerequisite-patch-id: 8d96c4b8c3ed6d9ea2588ef7f594ae0f9f83c279
+
+
