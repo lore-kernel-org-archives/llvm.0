@@ -1,222 +1,194 @@
-Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2044.outbound.protection.outlook.com [40.107.93.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A343B53387
-	for <llvm@lists.linux.dev>; Wed,  8 May 2024 17:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715188974; cv=none; b=Ks2JQwUyof/i9m7YnL4chu8BOQbmJSq3/k9NFIxJyRHf4GrdN2DPS1td7vr23dJk3FAdeavmnnm1ZnPr3mlN/PSOtHrZebi7KETcy3eOJWDsLZaMB/VMf3MhqTMcIcjw0JdHPvckeajx7mfnaMV40Dx+gxXyCYzE+k0+OkJIrt4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715188974; c=relaxed/simple;
-	bh=u4IncrtpCxubuwQgD8YUieXvfjotsSuja6N1Oi10lPE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=BWp1qvenTW3adjP/OvtT6JVEwg0i0Tt5o0XHj3p/2BA0sc8QhPZ66Q8k5UkT5IZmCamhvXaGwmlHHaE5FKFxc+Iw5gndSGVw04z8sxFQXDCE0HfeDj8/xf6DOL0vXEr12z7KG/xikSbXVx0k6WRiz2DXnQuB8myPFjt0/9tLP5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bSYjBIED; arc=none smtp.client-ip=209.85.166.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9035382
+	for <llvm@lists.linux.dev>; Wed,  8 May 2024 17:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715189421; cv=fail; b=QK85mZnE+l2rL6tJLEDJ1Pf3BgBM4E9IFYOrcW5Uw3kST8uDrVgC/rQ5BT8BL92MZQh0TLiqxdM7LZukMS7Iv4JGb/KV8opAp9AVqOlwsUA7uimMxZZWU3CeajY3qNaHGx/14wwYx6FgmQQA9ZnXwBmEsLr+VWWm4f/w1iP3OM4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715189421; c=relaxed/simple;
+	bh=E4SAh5rPUVIM608r/V1EyQOAGQwBbZGDrDL8Xq5S90A=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=AmfNRxyH/aH9VaiIqUZIqgNpcnbS8FJti3vp+v7m1QomPx9L/KhIc9i3k5uDTgsvAHNvzC4s9jsdOMjmpWo6vYf3yAN1hWshzwybjCCQ4w13E1O543bR+SBDHLUSCfadPzhopv+updAd+qHZzs5EFdvHijhkkqttsZaXN2yDsIc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bdrA3YL9; arc=fail smtp.client-ip=40.107.93.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bSYjBIED"
-Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-7e1849aee8cso225574839f.1
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 10:22:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715188972; x=1715793772; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XE1QNsIrpSdoBDzkTgvC4e4sDaJEW78xu5f3eAO+u4k=;
-        b=bSYjBIEDPB0tEODpuh5ul2qi05ZwkVpKKISfwPZYiy7kBVxyuRVwr78Ck6nT+BmPVA
-         Cj/XT5NPYFFYXvU0lTghTH0lexHFARM6zUMXCRot0te5EdW9AmmS8NYsPFHxvn+RtDWa
-         TTqhIDyKtLlVVETwap7tc+xM8SnxQTMHfFE4ox7beuKTV+GKdlWpH3vi9kpBhK4mlK9A
-         JGkwUmC6KxzqiJDJEXpDYkLoyKJXRQv4Ch60DI59tFfruPfnK3Q8IyevX7Gh+KLrfUph
-         KzWI8X3vG/XfZBPuPb9wkY6iPntVEO8JVKpUERWiJnIezNlWxZK0nsK6iI7P2pAOqawo
-         b89g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715188972; x=1715793772;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XE1QNsIrpSdoBDzkTgvC4e4sDaJEW78xu5f3eAO+u4k=;
-        b=fnMM1+6w4vPcD55umDCuCjKnUc3KtFjD19ilNA2Z9zAUFgy/+XF9OaVyGg6dJzR3oh
-         5VaagpI/US0Ta/9yspMRXwZxpn0ZQBNJs/0vsY4/pGm5ZRoDrKu6Ap4t0p/+199BAXlF
-         hJu+AKZbwyjtmUcj5u/MdR/4avET2XCfDCFg2NtsHrN5L96/SeCMeeGBLL46aP9pBoiC
-         bf/pXPWg4GRhJsRN4vE5olCYbE1jGmOtDkNqckUnf82Xilla9GDmqzBhFwT/wm+BmWxy
-         wARn13TPQWDm2DMPe26kfHoKYk+sNuFt4IlbTMfS2ovw928Jh/OoxI8j9EWV6VhpcFrp
-         2FNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVqcV+7S4fUp6nSTVhVee0G+j0/+6dYNGmDe85jDEBjk/TK0oYr1devi3QJSxgOcRV11RkOF21Z7exFacg30c+uiGe4QA==
-X-Gm-Message-State: AOJu0YxYBmiQILELtU7wGLFaHIzD9fgPZXSqWiHmTN0VjJabq5BElEtK
-	bYXA2YHhUr5IuhpeH5i/tEEz1TiAoRk28CPaCm9odOZmBbQnPY50/FeU6UgW2y4x0ZBuAX5dFd/
-	B2gh+0wmvsEUKagEmL5xAFg==
-X-Google-Smtp-Source: AGHT+IEuBGqzlpwNaU7svDGL3Zek3/TGDsOW4gHZZ+YDM2nc1D8NlRTOXdtcbQb/W0hoJF3F1F9uhAcjjx+hP4x81Q==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:6602:3f86:b0:7da:b30e:df80 with
- SMTP id ca18e2360f4ac-7e18fbcc8c5mr3658939f.0.1715188971917; Wed, 08 May 2024
- 10:22:51 -0700 (PDT)
-Date: Wed, 08 May 2024 17:22:51 +0000
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bdrA3YL9"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NPiCW2z5AgyAtpqhbgRvIvXF5l6dJM0axKuMe8975fOhA+Q6TF3tumI6JxMdWvkGV5uCzztWAOkS8/kRSlbsoteX5tSQ/NW6XehfHWmhvj3JXr8ZyYV0+yjawDxF7rIwJV3EYbhi0lYhj0Hsm/upcBuXZAKxOyiuvLgHYigrWUSFx1T83Ry7SXi1M7G3/lf2uSpXV7hAVT1bibrsD6EQbuEBaFBf4Pfsa8TIuWsVOpD3QYlYtkPERWbrRlxge0Dg2eXmEycYcZtH3pJF02t3hcFHNoSFMNqqW3n+8ogRpmcUi0/2qxTC+m1J5k4gbMxtcf+fkKBOj5oNYrEcMAFKvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9PgeNSzM6jOyLbybH1I5XpbPmWefl4AH7Gw0S7IZcuY=;
+ b=jvPCtxNtRlmW3UP2QBs1LqiMOcUbJNgh34l5xxkUpcyi/qjPCM0HGHmhOl2DW6yHNG5lU82gZ89OKD+NaK3zraMCDNLGbdHjs40jvIEVGdkAuj8eoET41/KADzYw8SP1bnOvt4SZHUDhjdNjzJuQYapa4kRVKnwu7/QdV15fCEx517SEUIrNQYTQJGkoEosaniHX6GbURsuQ/25RuJQHvgjHW5E0Vdn9jKnQV/WI968aPExIz0C9YUcYzUdBp6VgkLDKh7jdhufZRwxTvIc+vZbpXaxkilLNaBnZR1r1NmZfSbGvrdMYrefxfVROZins/81NDPKP4mkq2zL/aCdQzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9PgeNSzM6jOyLbybH1I5XpbPmWefl4AH7Gw0S7IZcuY=;
+ b=bdrA3YL9pk1yY1bX81mUxBd+6dRjXAvJlKERgBwKclGbYTOOflgpuxHTPuIwjBhzqdACFBCzhVyiT3T4N9eejpZv7chSFIVyrJLmYHzeexBE9EuNFEEzUUC3pidDP3SJoR73R8Ee+TMeaZ00uIYCk5tfXIykMPeiGnmMcPDropXfqr9/t7LZmZMJR5dLX6hP+QFAwodTpwha/n1SlsTFiBlUFisqNdc4k2x9nd1Ni0dH/fYm567dYYC311WmUDZdDwhDnFXS/MFTmBXs+OCGQNnxf8qrMTsW4MTvbU7TugoUPd0ujWmUgLPfj5rrZEu5IC1c6Gb3R3/JM6HwRc3kTw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by DS0PR12MB8413.namprd12.prod.outlook.com (2603:10b6:8:f9::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7544.39; Wed, 8 May 2024 17:30:07 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Wed, 8 May 2024
+ 17:30:04 +0000
+Message-ID: <f4d66d0b-ac3a-416b-ad47-3869e84a03fd@nvidia.com>
+Date: Wed, 8 May 2024 10:29:53 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Reinette Chatre <reinette.chatre@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev
+References: <20240503234051.21217-1-jhubbard@nvidia.com>
+ <9ae11dcb-62e8-4361-9f78-971d4c6e6054@intel.com>
+ <997d7fe0-46c8-4b38-824d-083ab29f54ce@nvidia.com>
+ <d67f4f57-4e9a-4715-b6dd-7b83a240b7dd@intel.com>
+ <7dd4b09e-b9ba-459d-bfa4-150e712f54bc@nvidia.com>
+ <076d9990-6253-438d-bc92-70eba6dfbca9@intel.com>
+ <7d4d8a31-00db-c7ba-aa8f-0483c8d93700@linux.intel.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <7d4d8a31-00db-c7ba-aa8f-0483c8d93700@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR21CA0020.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::30) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAOq0O2YC/32NQQqDMBBFryKzbkoSrCZd9R5FpMZpHLBGMhJax
- Ls3Ct0WZvM+/79ZgTESMlyLFSImYgpTBn0qwA2PyaOgPjNoqUt5kbXoyv1yTXBsGUd0S8szYi+
- wMk72pa6MVZD3c8QnvQ/3vck8EC8hfo5XSe3pz2r+WJMSStjslFVnpenqmw/Bj3h24QXNtm1fG XNPXsMAAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1715188971; l=6182;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=u4IncrtpCxubuwQgD8YUieXvfjotsSuja6N1Oi10lPE=; b=fv+LN7qHNuPE4tQk73JaJ9gUQL3bUZ0BBo3Bg7pp+tVHXb8anS5WSRRQsIjQ1UUCkLRHE0c9o
- EFv6FCWnOtVCnmHgUVoGP14S9u5iIiOodjb2VK+zubr0V2ELop9Khn1
-X-Mailer: b4 0.12.3
-Message-ID: <20240508-b4-b4-sio-sr_select_speed-v2-1-00b68f724290@google.com>
-Subject: [PATCH v2] scsi: sr: fix unintentional arithmetic wraparound
-From: Justin Stitt <justinstitt@google.com>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|DS0PR12MB8413:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0b6bb58f-a72f-4965-39bb-08dc6f847f7a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|7416005|1800799015|366007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?REtLMktjRmpadUFoc3RrbmRBWkRST3BjQ3FweW5NT0wzNHcrL0xtYzI0NG56?=
+ =?utf-8?B?SmJpRTh3NlhHTUdEVkFGcWE2R2oxVE9rc0FBQUlIQlBIRkVoLzQweGFyQlJN?=
+ =?utf-8?B?Y0dHSktZTDcxUEl2SEcrRkJZTnd4bXpTTnQ1YnZSNnZGYldTYzk2NzYxRUNx?=
+ =?utf-8?B?WlNSZW0yV3F3MVFQN2JQVXBuRlcrL3FPcWRLQUhaa3ZqUnZJS1hUWkJRdGpD?=
+ =?utf-8?B?MXhTUVJmR0h3RVFOVzE4aGxOQktiVUdza21wd0dDMEg4dHUvWmxPcWY2aGp4?=
+ =?utf-8?B?RE1rTEJtZGxlS3JDTi9qQXRSY09zSDVSUG5rRDRjaUVvK052enFyNndjMEV0?=
+ =?utf-8?B?anRoTzNpR3NXRlN3clRLUXFVU1E4RUhsMDNDdkh1RVVtZ2xmMFBJZUQveXh0?=
+ =?utf-8?B?MHMyNzdPbEhWdDhqYUtsUUF2NmVqdkljMkhlMXFGVEZGL0E1UG9GMnZQclZ6?=
+ =?utf-8?B?TzFGendLUkloUGdnMG5CV0N1eEpEVStjQWJvR2l6YU01NUtVVzVWbjhPd2Ix?=
+ =?utf-8?B?MFpvTXphVkhyOWxXaU1MMUo1NFhNT2JnOExJZm1KcGJHNS9HNzBMRVczc04z?=
+ =?utf-8?B?THZaZmorMUF0dFVYOWJRYmFuWWkrall1Z1EzdWt2YWhCNVZjbUlXRmkrWGF4?=
+ =?utf-8?B?VDFKU2J5dXgwVkswTFpiZGVBY3NHWTNvbXVNandWckNCRWxmdUdLbUdFRVhK?=
+ =?utf-8?B?NzZNcis2TEVTeENaYmVZYVN4dDVMRlhQM3BPQTFZYWlrZWJOMXU5clloWVVU?=
+ =?utf-8?B?MEF4S2lVa3YwUFBQeDdta3dra016d0J6cWRpZlRYSVEvVDRab3NsV0VqZU8x?=
+ =?utf-8?B?YVFBR2RGN1dTaGJRdXdDcndsamhIdndrbU9yQ3YrekNQTFcxRy9IY28vclNP?=
+ =?utf-8?B?UWdDK1ByTWN6eURhRDNsUFg2TC9tUW1TcjM4QUFWSlB3TGFwMFdqbVhJcHdt?=
+ =?utf-8?B?YTNaRlBiZGt2T3daQy9vUmRCU0dIamQ0WWtMSWlyNU52TE5jRlpIU2Z0YXZh?=
+ =?utf-8?B?Q0ZFVHFOQUMxR2JsSzVmL3I2VHkyK3N5NWxkTUVQeXZLVXNXRk5MdWQ1VDNR?=
+ =?utf-8?B?K2NZcEpTRlpNbDZoaDN1Z2kydjdDdVZqNVJUakYra1ovZTVkZzhYSjMxN0VK?=
+ =?utf-8?B?V1RDYTBacDF0ZTZMd3ZLRk5Rc005SXVrZWhvbkYvSU5vSCsvcnk0NVUvdmpO?=
+ =?utf-8?B?b1NaSHBXaDRyWXM2NFVGajVvNDNMMjYzR0t5TjVUekVyamNDeER0NGU0eld4?=
+ =?utf-8?B?dllKUzVpdXFnSXI5bjdMNDJVM21sdFJXbXhNZzE3aTdtZ1hnMHlFZVp0UDlz?=
+ =?utf-8?B?bGYveDBJaEliQUpvKzVud3YrYldtZGZqRmRPUHdQYkJaOXZOallXZzVvRnU0?=
+ =?utf-8?B?YWx0OStrZ3hQWlp2NEVtT0s5WUl2NXhid3hIbG5YSmkrK0gxM3dwOTFBKzNl?=
+ =?utf-8?B?bjFuKzNGbVhhUHJhVS9IZWJjQVpsVW1ISENFYnV1UUVRNXZSS1NCdEFaN3Zj?=
+ =?utf-8?B?eDBLcVRRSlRpRVZ2MlQyaGw3RUE1aTFJa25HbWlhN2Z4OTlyWFlPVTFOOUpC?=
+ =?utf-8?B?OUNqcUxqR1hjSk9ZU3d5K2ppejZNSnVtKzEzVGluVXBLbFF0K1dLL0xFbEFR?=
+ =?utf-8?B?dnJGNGJpTXFmVUp4QzBDNEFSSFFuclgyN0R3K3dqelJ6NkZiaHpSajFNZjRa?=
+ =?utf-8?B?d1pBR0Z5eHZuZi9ESHVXaTc3b0NnRmdtYmg2VGFPVHZ6a0JKL0p3U0ZBPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cHYzVUhvZTV2dVhqQXRTbStwYWdNTkVHbGFFYVdxMzJwMGF0Wllva3Y2VHVD?=
+ =?utf-8?B?QVdGSnlPdXFJMVJob1BCS1h3N1NiVVlVUVNYU3E4MWRYN3NIR0dudUZMWjVY?=
+ =?utf-8?B?M1RicHFkVklTVmdrbVluS1hUT1NUWjBkNWlnenUwZVFHWTZDZkJPQmlvVUZR?=
+ =?utf-8?B?MUZtUTJqRlJ4ZUZDUm1GT3Jra0xVSFViRDhhN0JjNHNMSk53cy8xSFVXMGVP?=
+ =?utf-8?B?OVFrVk5vYlBJR1U0dTNSQlEwb3B5ZjRKNUtvaHQ0dXpjS1EwdXZjZHIxVmxP?=
+ =?utf-8?B?WnpNZFoxa3UvUDJwMFFrMkNlekVQYTBtR3Nsa1pLM3BBRmg1NW1TeUxIN05h?=
+ =?utf-8?B?WDdCcFpZdEJsQWRSWXB2T0tQLys4dC9mVFpZQnNyMFFTWHN2UHIyZGFDWVhn?=
+ =?utf-8?B?djUvSTYyd1JvNHVGS0x0eFhjOHorWXZIQnh2aXNucjlLWllicVJiVnp1Rmdt?=
+ =?utf-8?B?Rk5kSFQ0U09NNFRZRXh6UUFVc2tPdEtpc3U1eXZzNWsxZWF1Tk0rN0hkcnl3?=
+ =?utf-8?B?blQ1eDNiQVowR045NmNIeUFuZzJZT2hXMDdZOWRLMGVWT2pZNi9IQ3oveVlQ?=
+ =?utf-8?B?YUVRc3lVUlkyZzdOVXp1eDFpQnpKMGgzdjBQM01JaWNucTUwN1VhQld0clUv?=
+ =?utf-8?B?ZnNOazlkK2M4L1RJR3ZZUmplWWFwMUkwR05FaVhYSnFuaHpseERIcTFrS0ht?=
+ =?utf-8?B?MDV5dGptdFkwS3g5YXlpSFF2cEYvR3BwbkJOV3FTTDdkZjErZUNJY0FrSXhj?=
+ =?utf-8?B?TFpnaFRjNjhhOEpDWEY2VEplWFNBcjJCZjQ0VEQ2NmhzNW53a085S1NtMldG?=
+ =?utf-8?B?TFFuT25NVk5WMFcxL0puT1pOejE2ZWNlZ29vYU5XanZBTFpSQ0tkQmt2YkM1?=
+ =?utf-8?B?cUdHSjJBUlU1ZDlLVkhzdjB6S1NoS25wWUtKYXR1aWY4TG0wWFpVeVJJVC9j?=
+ =?utf-8?B?N0pNZEg3VVZJSkJHeWRwc3FOUy9TSWREZFloRkNIcU5HbU9XNWZYVjNGanli?=
+ =?utf-8?B?N25kUWFDSUVVSytrSTJ3QjZXSGl4MlFDMGVodkF4SXBGbE1QbDNBWjVZc3BB?=
+ =?utf-8?B?UkNMUWRZTlVTVXBZUktGN2RJWElFQ0thK2VpbUlmbGFlMEZpaVhoemFuYit5?=
+ =?utf-8?B?NzAxSWdXLzJ5VGlnTE9paDE5WGtBY29XVzhHaEo3d1JaZmcrSWYxY3RTVklO?=
+ =?utf-8?B?dTZkb293WGs5L244TW1QeGV5Z0V2VWJnRGJOUTJxQWdSUFJnYWFtL1hZQnpZ?=
+ =?utf-8?B?UDJpa0taSkdQdjNBcHhpRUtrcmpSeWplTGpSRWtVNnVDY2R1ejZodlpNclg1?=
+ =?utf-8?B?bU9STnZyMDJHNzlVV3BEUm9QYmFnaFgzTTZ3SFNKUGZZc2JwdXJuWFEzRG1D?=
+ =?utf-8?B?aCs0ZVBTS0RyQmxGN3ZOU015UHplQ0g2TVpNY2lvRG5TVTRKa01ZbjRzSWNu?=
+ =?utf-8?B?M09jSTB3K3I5ZktPOVlsdytnSmRVVzdTS2tsNXJLTlZLVzhIc2p1NmNlbWZP?=
+ =?utf-8?B?aXdsK2VVQ09JRmdXd0MzZXF4cjk1QVFEdWlDRlJCVCs4L2pLVloyVWs3UEds?=
+ =?utf-8?B?d2orNzU1UnV5MnFsL1BabXJwT0Y3RFJ2dDhlSjh2aEY5cHRLUnJ1eGRrNmRB?=
+ =?utf-8?B?YTdJODA3d3FqNEtSMDkrTm5LOThreEZPNCtDc05QdFB4QTJadFJENFhFZHFT?=
+ =?utf-8?B?LzNJVEp2YUt1SDRMMzhrTXhFOTBDWUVZVTBkYTFLRE5sbG94cHQrRFR6RVk4?=
+ =?utf-8?B?KzNmUnBxeU00VEtxUjRoTXBvRXlYT1FMVnNzVFRkWjZHbVZ5V00zUklvd1Jo?=
+ =?utf-8?B?OVZIVjNDZ0FHQi9Ba3pEV1dEV3dVdDBHblpYSm5kUUVCTDBRZ3FuMC83Yjdk?=
+ =?utf-8?B?MXlBeHVXSHI0K0NSdG9aWEJrU2d3SGp5ekxSOEgvODZ3blExdHIvaFBTbHZP?=
+ =?utf-8?B?aDkrSEZXK2lNMFR4MWFwakFGdkdoYzNwUkJSWUtYamx1MG9TVjRzYnBzQkt0?=
+ =?utf-8?B?ZmRxRDVZR1VSNUN2aGM5TXZCTjZFOUd4QUNQUWFkOWVHWHozd0pqNTNqZWJW?=
+ =?utf-8?B?OHdqdGVsQ0tKa2FCSklseHlLV3ZIVVNrcDV0d0J0RGFYbTYrK3Vnb3NEd2xR?=
+ =?utf-8?B?dEZDQkVxbGkvUENyR0VPVmFWdzJSbnlYSDNEZkp2aGZkRWFyUEhTYSt5Z3lo?=
+ =?utf-8?B?NGc9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b6bb58f-a72f-4965-39bb-08dc6f847f7a
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 17:30:04.5917
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zi11+TrFHOCyNvkVLkApjAmTM3/DYHKg+FVrR2dELcZpM3zvNd4WhzmQGBb8ClJNH35U6zjOZbkaP4JvvMqcdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8413
 
-Running syzkaller with the newly reintroduced signed integer overflow
-sanitizer produces this report:
+On 5/8/24 1:00 AM, Ilpo Järvinen wrote:
+> On Tue, 7 May 2024, Reinette Chatre wrote:
+> 
+>> Hi John,
+>>
+>> On 5/7/2024 6:25 PM, John Hubbard wrote:
+>>> On 5/7/24 6:21 PM, Reinette Chatre wrote:
+>>>> Hi John,
+>>> ...
+> Yes, there are two *abs() calls in this function.
+> 
+> In this case is okay to remove the first one since it didn't remove
+> absolute value completely, whereas in the MBA/MBM cases v1 removed *abs()
+> call entirely which was wrong thing to do.
+> 
+> I explicitly noted in my v1 comment that this CMT change is okay but the
+> other two were not.
+> 
 
-[   65.194362] ------------[ cut here ]------------
-[   65.197752] UBSAN: signed-integer-overflow in ../drivers/scsi/sr_ioctl.c:436:9
-[   65.203607] -2147483648 * 177 cannot be represented in type 'int'
-[   65.207911] CPU: 2 PID: 10416 Comm: syz-executor.1 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
-[   65.213585] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[   65.219923] Call Trace:
-[   65.221556]  <TASK>
-[   65.223029]  dump_stack_lvl+0x93/0xd0
-[   65.225573]  handle_overflow+0x171/0x1b0
-[   65.228219]  sr_select_speed+0xeb/0xf0
-[   65.230786]  ? __pm_runtime_resume+0xe6/0x130
-[   65.233606]  sr_block_ioctl+0x15d/0x1d0
-...
+Got it, thanks Ilpo (and Reinette), I'll send a v3 with it fixed up
+accordingly, appreciate your patience here. :)
 
-Historically, the signed integer overflow sanitizer did not work in the
-kernel due to its interaction with `-fwrapv` but this has since been
-changed [1] in the newest version of Clang. It was re-enabled in the
-kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
-sanitizer").
 
-Firstly, let's change the type of "speed" to unsigned long as
-sr_select_speed()'s only caller passes in an unsigned long anyways.
-
-$ git grep '\.select_speed'
-|	drivers/scsi/sr.c:      .select_speed           = sr_select_speed,
-...
-|	static int cdrom_ioctl_select_speed(struct cdrom_device_info *cdi,
-|	                unsigned long arg)
-|	{
-|	        ...
-|	        return cdi->ops->select_speed(cdi, arg);
-|	}
-
-Next, let's add an extra check to make sure we don't exceed 0xffff/177
-(350) since 0xffff is the max speed. This has two benefits: 1) we deal
-with integer overflow before it happens and 2) we properly respect the
-max speed of 0xffff. There are some "magic" numbers here but I did not
-want to change more than what was necessary.
-
-Link: https://github.com/llvm/llvm-project/pull/82432 [1]
-Closes: https://github.com/KSPP/linux/issues/357
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Changes in v2:
-- change @speed type from int to unsigned long and use a clamp (thanks Kees)
-- also update documentation to avoid confusion
-- Link to v1: https://lore.kernel.org/r/20240508-b4-b4-sio-sr_select_speed-v1-1-968906b908b7@google.com
----
-Here's the syzkaller reproducer:
-r0 = openat$cdrom(0xffffffffffffff9c, &(0x7f0000000140), 0x800, 0x0)
-ioctl$CDROM_SELECT_SPEED(r0, 0x5322, 0x7ee9f7c1)
-
-... which was used against Kees' tree here (v6.8rc2):
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=wip/v6.9-rc2/unsigned-overflow-sanitizer
-
-... with this config:
-https://gist.github.com/JustinStitt/824976568b0f228ccbcbe49f3dee9bf4
----
- Documentation/cdrom/cdrom-standard.rst | 4 ++--
- drivers/scsi/sr.h                      | 2 +-
- drivers/scsi/sr_ioctl.c                | 5 ++++-
- include/linux/cdrom.h                  | 2 +-
- 4 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/cdrom/cdrom-standard.rst b/Documentation/cdrom/cdrom-standard.rst
-index 7964fe134277..6c1303cff159 100644
---- a/Documentation/cdrom/cdrom-standard.rst
-+++ b/Documentation/cdrom/cdrom-standard.rst
-@@ -217,7 +217,7 @@ current *struct* is::
- 		int (*media_changed)(struct cdrom_device_info *, int);
- 		int (*tray_move)(struct cdrom_device_info *, int);
- 		int (*lock_door)(struct cdrom_device_info *, int);
--		int (*select_speed)(struct cdrom_device_info *, int);
-+		int (*select_speed)(struct cdrom_device_info *, unsigned long);
- 		int (*get_last_session) (struct cdrom_device_info *,
- 					 struct cdrom_multisession *);
- 		int (*get_mcn)(struct cdrom_device_info *, struct cdrom_mcn *);
-@@ -396,7 +396,7 @@ action need be taken, and the return value should be 0.
- 
- ::
- 
--	int select_speed(struct cdrom_device_info *cdi, int speed)
-+	int select_speed(struct cdrom_device_info *cdi, unsigned long speed)
- 
- Some CD-ROM drives are capable of changing their head-speed. There
- are several reasons for changing the speed of a CD-ROM drive. Badly
-diff --git a/drivers/scsi/sr.h b/drivers/scsi/sr.h
-index 1175f2e213b5..dc899277b3a4 100644
---- a/drivers/scsi/sr.h
-+++ b/drivers/scsi/sr.h
-@@ -65,7 +65,7 @@ int sr_disk_status(struct cdrom_device_info *);
- int sr_get_last_session(struct cdrom_device_info *, struct cdrom_multisession *);
- int sr_get_mcn(struct cdrom_device_info *, struct cdrom_mcn *);
- int sr_reset(struct cdrom_device_info *);
--int sr_select_speed(struct cdrom_device_info *cdi, int speed);
-+int sr_select_speed(struct cdrom_device_info *cdi, unsigned long speed);
- int sr_audio_ioctl(struct cdrom_device_info *, unsigned int, void *);
- 
- int sr_is_xa(Scsi_CD *);
-diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
-index 5b0b35e60e61..a0d2556a27bb 100644
---- a/drivers/scsi/sr_ioctl.c
-+++ b/drivers/scsi/sr_ioctl.c
-@@ -425,11 +425,14 @@ int sr_reset(struct cdrom_device_info *cdi)
- 	return 0;
- }
- 
--int sr_select_speed(struct cdrom_device_info *cdi, int speed)
-+int sr_select_speed(struct cdrom_device_info *cdi, unsigned long speed)
- {
- 	Scsi_CD *cd = cdi->handle;
- 	struct packet_command cgc;
- 
-+	/* avoid exceeding the max speed or overflowing integer bounds */
-+	speed = clamp(0, speed, 0xffff / 177);
-+
- 	if (speed == 0)
- 		speed = 0xffff;	/* set to max */
- 	else
-diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
-index 98c6fd0b39b6..fdfb61ccf55a 100644
---- a/include/linux/cdrom.h
-+++ b/include/linux/cdrom.h
-@@ -77,7 +77,7 @@ struct cdrom_device_ops {
- 				      unsigned int clearing, int slot);
- 	int (*tray_move) (struct cdrom_device_info *, int);
- 	int (*lock_door) (struct cdrom_device_info *, int);
--	int (*select_speed) (struct cdrom_device_info *, int);
-+	int (*select_speed) (struct cdrom_device_info *, unsigned long);
- 	int (*get_last_session) (struct cdrom_device_info *,
- 				 struct cdrom_multisession *);
- 	int (*get_mcn) (struct cdrom_device_info *,
-
----
-base-commit: 0106679839f7c69632b3b9833c3268c316c0a9fc
-change-id: 20240507-b4-b4-sio-sr_select_speed-e68c0d426891
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
