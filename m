@@ -1,99 +1,103 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBEB1292CF
-	for <llvm@lists.linux.dev>; Thu,  9 May 2024 22:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30236129A72
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 22:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715292262; cv=none; b=kRet5uFJSqHsYroin8zmUJJyZrJZwJEZs7Pavvo86XVwGT08DkVNc7NaVnnl8zjrn6mK99jpr4dtNHxpJ2yffIH1XJ7iBDuxuq65DXOomrx5G1o4H7j9+FgUOiuIEcfq9e7VBwcnL6aoWXLVKJGfb924UQ86LOYvDZOtorkHJZo=
+	t=1715292622; cv=none; b=jKxPPcJTl/eHBFkiIU6LKDxnWwDpYhuDOLxRSM4VtY48OSYR+lBepz7mbmN6sg1HIq72RAql2qz6m+GNCbDWPPggeefb++v5owkS/LkEhET8TDxkxeOdLqJEbHsUETJ3UVPNTxC0c5DjEAMMTqL/wT+3FIZz1Iqr0MjW1e3SXlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715292262; c=relaxed/simple;
-	bh=OgJHhmIVrHJ1rqU9C9cLleVIC11QJQgCtRwBNIfc5aY=;
+	s=arc-20240116; t=1715292622; c=relaxed/simple;
+	bh=59mEgVC4lkz46VEjh2qNmxWDlTxiAqyCrQSnZR5NBDU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FYmeWL8kK9WVOR2ottUthdyjnIFjLT3ZXEc4hF7Amm6KZtdjmxyxckevPGqF0aDvI4OzlH0jlmlPf4Ko/C2qn+w8E3viMBCg/7uOqfOWyhchDwzQR3xltV4MN+kKwWPEc7pw4US3Yl7WaFcJ7hq7AxmIxMcDo/awBDzprpWnX24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RhYAoyZ8; arc=none smtp.client-ip=209.85.167.175
+	 To:Cc:Content-Type; b=QAILzXc/8e7858zV9SZ+jvrh/MwBxnyHVVE60HpLdfrAiIR/UuXI0gPB5rb0ae3zzYLcLvd7qs/IJNZRNBVPPKy2l9+oLpA+U7JalNUW7hhNfCDnNye5z3lRZoY2PDZNXuwtHj3fjHM6EWNLftBzz3O3yftCZnPVJaPYfacgPso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cgRKYoNt; arc=none smtp.client-ip=209.85.217.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RhYAoyZ8"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3c96c16bb19so835991b6e.1
-        for <llvm@lists.linux.dev>; Thu, 09 May 2024 15:04:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cgRKYoNt"
+Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-47efc7f2625so441867137.3
+        for <llvm@lists.linux.dev>; Thu, 09 May 2024 15:10:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715292260; x=1715897060; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1715292620; x=1715897420; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eaMGWwE54MRwQe9MKn89HK8vqNbPvDPLq1+qzXPGB6k=;
-        b=RhYAoyZ8HPCrJGY6WQShHavzVP0rRWVfDZmeJ8S5u86yw34ep2pWsckzYL1UxUHuYR
-         vOo82DcwPgjL/2YCnQwYPrpWLKePtRwmUCAbEsgxSPYOSkh7ELEzeQ1nXsFdysZlFQ7g
-         KzaGg1AhVWnkPA7IPpDp0mOpazrk+Scc4iEDjBxX3t99QdYzoXsYPje9ZZW2OyD1SNJc
-         nlvEPpdG0GwJXptJKgUv2l93ErxtJYctvxpJ+QOOYu+16gqTaf4gmjNvs22EXHLXBbms
-         1hKaNsyZqtB+ecid9r06W8MtLbOapmWAXBbJqZ3t3AK0lEvqWBVcyuOrkkD1J7H0tg6v
-         5i2A==
+        bh=MKdICX+lX8CE08nIGqEYXYRJN4FhWDTtg4wUvpl3cAY=;
+        b=cgRKYoNtOzlTH0ytx1Izb/zIaqNTamGnKEMAdKJbrE3m7tiQswOc2Ax4K5OiF0jRBY
+         DH17S4SyV4ohU7EKYiNIcFGy2ghNvMGcGPUk2fUqS/1URVErdHs1U0e+ZkquXLxxAYDe
+         5XGzIK+Yt6ETa4giSxefUW3A621qv4OLjc2a2XdrxPN6jXxw9IyFXzvJfcXrCPHrJyg5
+         2pjgfBbjpSQZjJ/WXko1/KJJBkizTAmhszrkNlFNQrDzZX76GFPNGShoe0bj4UuSbZxc
+         h9jM+kngEd7/qJm9g1oeVge6+QKqKGQuGBxlW+PFet5X+YbkCPWwkNSRa2qQSNUufKSD
+         X0dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715292260; x=1715897060;
+        d=1e100.net; s=20230601; t=1715292620; x=1715897420;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eaMGWwE54MRwQe9MKn89HK8vqNbPvDPLq1+qzXPGB6k=;
-        b=UIMmRMibR6oSlV2jzINquAlqrqiRQTN106UOtjwDelF5c6IH2638elLzASbHx4iisa
-         LZOoDFNyyQ3Vr4Ix7H2OWDFzQg+SnWRCK2MEpW+iJ/LIKdkpWyF5HUf71UcZX7M6pVHy
-         c7ooaneOwEgkf/hNenFRf5frnod69u5mobD3Rtzj3eDs866Ly98Qkist3AEjwEuqMLWz
-         BQ0RKkiz7lRdT233pnolgpkheUAKH+u+lYC8qHcXCXC+/6qQgw2Yi6WiWRRANqn2hpme
-         k3qsEJuf5aiXFlO4lulkXZ1C/iW+QL4mQ/TndkHyPtSokad/kLf0Cm+sMG/EJDtEJmN6
-         bcLw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDoWCCZKyNgBEAgSIIqX5d4p4RPn2ZkcM3EUcvYyiBbNoMEaGuRxYIRNpJkhGatBEj2NMT4BLEAaZP6H68RB2k8+dnBg==
-X-Gm-Message-State: AOJu0Yzt/Bpq5rk2Q1UDHqKLzUXuV6SqZir/n8Vagrx0zgElpSMe9ilg
-	lDwn3U5l0IVnrTocjzbrGnk8vw0UucjLpSl7JontNeD4AEjwQRdg8iAekw1DBIHTJvNl6NvgPC6
-	57h7rItKExKOL4EoFGCLso7DxPSM7Ao5hXxpf
-X-Google-Smtp-Source: AGHT+IGOrX7CymOEEesjDKbsfowT/rCu7eZVPPyV31UhJCy/YotrYfiCNXVJAu6ojtjG96eAKvVU1kdO7vspfPuqgL4=
-X-Received: by 2002:a05:6808:1688:b0:3c7:41ba:102f with SMTP id
- 5614622812f47-3c997074664mr1087661b6e.34.1715292259867; Thu, 09 May 2024
- 15:04:19 -0700 (PDT)
+        bh=MKdICX+lX8CE08nIGqEYXYRJN4FhWDTtg4wUvpl3cAY=;
+        b=mfRhmxIFncqQ/iIsfvQlN9S9SLxuwS++pIkCqbry0N8UFktpJqmJfTnUEXMUuiIeRW
+         e4tHMN4wAIgO+tccaGKm+1lKVRgVoX9qptf8G8HRcGKmJcL08yM15StJZmEQdq26bdho
+         DuaFfnJG2jGi3I2uolFVSuSJUV7gS+6d9ore/yqfZYCz0C7SG0op/jI40SUQY97eOy/I
+         ni+tpH2EyG+LfFcBOT8JAZD4dtsGxfoOW+O52ckbZzl0GivE0lB+gcK2UWD0Ri7DEVdw
+         EnfTfE0goLduI6DQMDJBu+WSR6w4rODkJjqbaTVjU4XUqQB3JNz74TbWhyKbdmN7yv8H
+         fchA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5JyfOLrSM4wmFzufi3N0cBU6XCBJBnnLCyGwRY+S1tp/A6+pzwKmSY5qTRsLRp2bL9d7FvlEu3e7WdY7iYepFvt6VhA==
+X-Gm-Message-State: AOJu0Yy4RgAFFC2Q3auGbbQKcAHBAhrWlL8lfW0bln5a2nNfp/uUHWaN
+	Eyd9B2ueb+EvlxVCMnPKokNv5EN5uHx+g9pb25cpvJVE7wPTZxC/AHtc2/M3RLsFZ2+KkMKVAQw
+	16y+sD1w7AGh8LQmlehKf5H3CEc3g7MLPRvMS
+X-Google-Smtp-Source: AGHT+IG9UCFfCI7smAQh5zYoU5+Q/8AopDE+XLvDQt4XHypQBrcuB26D5dwcSEX6FTb7qgBIbqU5zgrv8BJ4OSYe5Bc=
+X-Received: by 2002:a05:6102:3053:b0:47a:22cd:9716 with SMTP id
+ ada2fe7eead31-48077e07a05mr1112057137.17.1715292619999; Thu, 09 May 2024
+ 15:10:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com>
- <f7775510-09d8-41ef-97b2-0457e721a9ec@kernel.org> <CAFhGd8qkYYQZi37Tsj-V5pN5S4xhcyUeAZj1of2kTXG+EtVMgg@mail.gmail.com>
-In-Reply-To: <CAFhGd8qkYYQZi37Tsj-V5pN5S4xhcyUeAZj1of2kTXG+EtVMgg@mail.gmail.com>
+References: <20240507-b4-sio-vfs_fallocate-v1-1-322f84b97ad5@google.com> <20240509155356.w274h4blmcykxej6@quack3>
+In-Reply-To: <20240509155356.w274h4blmcykxej6@quack3>
 From: Justin Stitt <justinstitt@google.com>
-Date: Thu, 9 May 2024 15:04:07 -0700
-Message-ID: <CAFhGd8oZy5aKjp-mVhh2d3U3tzTMzVRAfE039gvBACC0AdDNQw@mail.gmail.com>
-Subject: Re: [PATCH] tty: vt: saturate scrollback_delta to avoid overflow
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, llvm@lists.linux.dev
+Date: Thu, 9 May 2024 15:10:07 -0700
+Message-ID: <CAFhGd8opxHhTdZhDg_hq7XWQFxJ34nLDxTd-nBBgye9BLohnqw@mail.gmail.com>
+Subject: Re: [PATCH] fs: remove accidental overflow during wraparound check
+To: Jan Kara <jack@suse.cz>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 9, 2024 at 3:01=E2=80=AFPM Justin Stitt <justinstitt@google.com=
-> wrote:
+On Thu, May 9, 2024 at 8:53=E2=80=AFAM Jan Kara <jack@suse.cz> wrote:
+> > @@ -319,8 +320,12 @@ int vfs_fallocate(struct file *file, int mode, lof=
+f_t offset, loff_t len)
+> >       if (!S_ISREG(inode->i_mode) && !S_ISBLK(inode->i_mode))
+> >               return -ENODEV;
+> >
+> > -     /* Check for wrap through zero too */
+> > -     if (((offset + len) > inode->i_sb->s_maxbytes) || ((offset + len)=
+ < 0))
+> > +     /* Check for wraparound */
+> > +     if (check_add_overflow(offset, len, &sum))
+> > +             return -EFBIG;
+> > +
+> > +     /* Now, check bounds */
+> > +     if (sum > inode->i_sb->s_maxbytes || sum < 0)
+> >               return -EFBIG;
 >
->
-> Agreed.
->
-> Does an implementation like this look any better?
->
-> static inline void scrolldelta(int lines)
-> {
->         ...
->         /* saturate scrollback_delta so that it never wraps around */
->         if (lines > 0)
->                 scrollback_delta =3D min(scrollback_delta, INT_MAX -
-> lines) + lines;
->         else
->                 scrollback_delta =3D max(scrollback_delta, INT_MIN -
-> lines) + lines;
->         schedule_console_callback();
-> }
+> But why do you check for sum < 0? We know from previous checks offset >=
+=3D 0
+> && len > 0 so unless we overflow, sum is guaranteed to be > 0.
 
-I apologize for this formatting, gmail ate my tabs.
+Fair enough. I suppose with the overflow check in place we can no
+longer have a sum less than zero there. If nothing else, it tells
+readers of this code what the domain of (offset+len) is. I don't mind
+sending a new version, though.
 
-Note to self, do NOT copy/paste from vim to gmail's web client.
-
-> Thanks
-> Justin
+>
+>                                                                 Honza
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
