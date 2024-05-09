@@ -1,88 +1,62 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527EF383BD
-	for <llvm@lists.linux.dev>; Thu,  9 May 2024 15:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414201A2C0C;
+	Thu,  9 May 2024 16:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715270041; cv=none; b=VCVhfX3RuQDhFOYCSUjsKAy4k3/5RYsQ9mwt/yZfE53d/hCcp3pdQaCl4HQDxkWVLfmY1eyNcA0oqu3GzNug07+VPMv2xOI6XRGbQHJy69BwqEGCi3kjd05GhvMSaSPUr/jH3blXt9RsY3Avagj3zBvcjjhaLCPeS8bOYz2YzL8=
+	t=1715272939; cv=none; b=WAc5DvTLlHg9cFPe1tZL+/q63Tvmec6pSBcR/nelp+5ti/Zi53Ipy1fHtnKyJKRP/LkXxOvmTIaINrNJoNaWWFlZ9r/gcxOnJ/PRXF1XZ9x0Uva8rtOLCPbSg/0ISYcHQB8mA/LYbhxgFhPro4u4LSHUK6R1WpoQMxbEEpYPH7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715270041; c=relaxed/simple;
-	bh=kgl7POulRwkv6guf3DOlw60s3g+R1sh3voqGVyv5uHA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C8L+oW57gbxAyr00oibiNtFfZCczYHSgaPui1lwGbnbdfQoW+pdwU0lAF2I6KF5qp+AIyhCwIDML+ItCyz8vLVCuvDntveU2ZUtwc+fqNA+M0Mq3o3UUx9g2Q16mhKhzXbquHZgCaqKiPwtXDyX4DWbAzxm53WipOi0spAcBQAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mLK2/COY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=es8J8FjG; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mLK2/COY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=es8J8FjG; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1715272939; c=relaxed/simple;
+	bh=FhGC7HWHT7I9NIEDYXYnCZ3XIu+nNEtZYCggc1rGG+s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=c8uR0JeSCP9c94jQPKMOGpRsR42abPwWZzoy2/k0N9CQpNdYV5i/DKsi6VwBO9PMY+9SffOxz0qrCWkh0kIOR3sDY6nEAbtULqncdv0mCie+bpsRM7G4l5zBVM8mc9X/oa4Wz9T9pvtpLVPMwOUB0eodVC2McSHon7nZHy9IHwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DBRGk+fO; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mLK2/COY";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="es8J8FjG";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mLK2/COY";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="es8J8FjG"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 76F14388B9;
-	Thu,  9 May 2024 15:53:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1715270036; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1ENRXJy8TOwBwRPUrho6blMoXPCSHd5Sswn+nQd1Hoc=;
-	b=mLK2/COYDcvh0WfuZFsir5Gt2C9Fpi/+cSUp9GmF6mCcYSzybDkVE4iMEjMsjkmdwTItZD
-	bP1XaXyqJEgIkPI9s20bE+lG/5eNSNn6N3K9jcGjC2qwXmpaemgQW58Z2d1fpsG8pA/kcE
-	3BCKuHVGeumNL7EahtNjU2Mfc+gBPTg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1715270036;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1ENRXJy8TOwBwRPUrho6blMoXPCSHd5Sswn+nQd1Hoc=;
-	b=es8J8FjGXagPQbHbDg8VyS2kstKbPNTdaOSvVVxZW1e6aM3bWRE/tQeZA+bH84h973v5Hr
-	PeKt7dh36+wFUJCQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1715270036; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1ENRXJy8TOwBwRPUrho6blMoXPCSHd5Sswn+nQd1Hoc=;
-	b=mLK2/COYDcvh0WfuZFsir5Gt2C9Fpi/+cSUp9GmF6mCcYSzybDkVE4iMEjMsjkmdwTItZD
-	bP1XaXyqJEgIkPI9s20bE+lG/5eNSNn6N3K9jcGjC2qwXmpaemgQW58Z2d1fpsG8pA/kcE
-	3BCKuHVGeumNL7EahtNjU2Mfc+gBPTg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1715270036;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1ENRXJy8TOwBwRPUrho6blMoXPCSHd5Sswn+nQd1Hoc=;
-	b=es8J8FjGXagPQbHbDg8VyS2kstKbPNTdaOSvVVxZW1e6aM3bWRE/tQeZA+bH84h973v5Hr
-	PeKt7dh36+wFUJCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 696D913941;
-	Thu,  9 May 2024 15:53:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0iG3GZTxPGZ9GwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 09 May 2024 15:53:56 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 0ECB2A0861; Thu,  9 May 2024 17:53:56 +0200 (CEST)
-Date: Thu, 9 May 2024 17:53:56 +0200
-From: Jan Kara <jack@suse.cz>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] fs: remove accidental overflow during wraparound check
-Message-ID: <20240509155356.w274h4blmcykxej6@quack3>
-References: <20240507-b4-sio-vfs_fallocate-v1-1-322f84b97ad5@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DBRGk+fO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715272937; x=1746808937;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FhGC7HWHT7I9NIEDYXYnCZ3XIu+nNEtZYCggc1rGG+s=;
+  b=DBRGk+fO5rmJlb8o7tH/4svUxJHBR4aR+GAHjRJjS9iEPRJamIlHGl7R
+   DUIFEy6KTE1TKMVGnKfEwOb0D5ceKi8uhPqwT8y2pt3bswWXl3hd7mt1u
+   3wDmfUer5HdS0M1rPa3XS+DlFr3sC+PtONxUfI3oGtNtR8/q+GmfGEhmW
+   o+TMx+IKZver50rewl0ZJz/mklwioP6FET6RMA8stpGARwCj7nYvCRD8q
+   Oc75XkzxTFKCBqf+emrFr/fnziRt9FL8wXpm4DfdFnkVIEHS+VFd4vCuZ
+   ru+xxJuRVkrw8yN2ptQSkj+Dvy7tlWpfpqOoGXOPq/LLE+8k2/ZaFs2Bl
+   w==;
+X-CSE-ConnectionGUID: R0U9R5Q9TVCt0jCSfdNWAA==
+X-CSE-MsgGUID: rFl1ahu7TsmXXM4R/7VbEQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="11083076"
+X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
+   d="scan'208";a="11083076"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 09:42:15 -0700
+X-CSE-ConnectionGUID: kTSyd02rRp+A7E3dqDYpNw==
+X-CSE-MsgGUID: ISDiJcjjRKCTuApRqTZJQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
+   d="scan'208";a="29402097"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 09 May 2024 09:42:13 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s56qR-00058u-0E;
+	Thu, 09 May 2024 16:42:11 +0000
+Date: Fri, 10 May 2024 00:41:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [arm:zii 40/102] drivers/net/dsa/b53/b53_common.c:1484:23: error:
+ incompatible pointer types initializing 'struct ethtool_keee *' with an
+ expression of type 'struct ethtool_eee *'
+Message-ID: <202405100019.okFNkK95-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -91,68 +65,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240507-b4-sio-vfs_fallocate-v1-1-322f84b97ad5@google.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_COUNT_THREE(0.00)[3];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Spam-Score: -3.80
-X-Spam-Flag: NO
 
-On Tue 07-05-24 23:17:57, Justin Stitt wrote:
-> Running syzkaller with the newly enabled signed integer overflow
-> sanitizer produces this report:
-> 
-> [  195.401651] ------------[ cut here ]------------
-> [  195.404808] UBSAN: signed-integer-overflow in ../fs/open.c:321:15
-> [  195.408739] 9223372036854775807 + 562984447377399 cannot be represented in type 'loff_t' (aka 'long long')
-> [  195.414683] CPU: 1 PID: 703 Comm: syz-executor.0 Not tainted 6.8.0-rc2-00039-g14de58dbe653-dirty #11
-> [  195.420138] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [  195.425804] Call Trace:
-> [  195.427360]  <TASK>
-> [  195.428791]  dump_stack_lvl+0x93/0xd0
-> [  195.431150]  handle_overflow+0x171/0x1b0
-> [  195.433640]  vfs_fallocate+0x459/0x4f0
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git zii
+head:   e9436a5c3f1e8dc9d425f51b98e96e185a20704d
+commit: 7e189be0111c723d361907eecee7f5f96000b518 [40/102] net: dsa: b53: Call b53_eee_init() from b53_mac_link_up()
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240510/202405100019.okFNkK95-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240510/202405100019.okFNkK95-lkp@intel.com/reproduce)
 
-Well, we compile the kernel with -fno-strict-overflow for a reason so I
-wouldn't consider this a bug. But check_add_overflow() is easier to digest
-since we don't have to worry about type details so I'm for this change.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405100019.okFNkK95-lkp@intel.com/
 
-> @@ -319,8 +320,12 @@ int vfs_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
->  	if (!S_ISREG(inode->i_mode) && !S_ISBLK(inode->i_mode))
->  		return -ENODEV;
->  
-> -	/* Check for wrap through zero too */
-> -	if (((offset + len) > inode->i_sb->s_maxbytes) || ((offset + len) < 0))
-> +	/* Check for wraparound */
-> +	if (check_add_overflow(offset, len, &sum))
-> +		return -EFBIG;
-> +
-> +	/* Now, check bounds */
-> +	if (sum > inode->i_sb->s_maxbytes || sum < 0)
->  		return -EFBIG;
+All errors (new ones prefixed by >>):
 
-But why do you check for sum < 0? We know from previous checks offset >= 0
-&& len > 0 so unless we overflow, sum is guaranteed to be > 0.
+>> drivers/net/dsa/b53/b53_common.c:1484:23: error: incompatible pointer types initializing 'struct ethtool_keee *' with an expression of type 'struct ethtool_eee *' [-Werror,-Wincompatible-pointer-types]
+           struct ethtool_keee *p = &dev->ports[port].eee;
+                                ^   ~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/dsa/b53/b53_common.c:1488:4: error: incomplete definition of type 'struct ethtool_keee'
+                   p->eee_enabled = b53_eee_init(ds, port, phydev);
+                   ~^
+   drivers/net/dsa/b53/b53_common.c:1484:9: note: forward declaration of 'struct ethtool_keee'
+           struct ethtool_keee *p = &dev->ports[port].eee;
+                  ^
+   2 errors generated.
 
-								Honza
+
+vim +1484 drivers/net/dsa/b53/b53_common.c
+
+  1475	
+  1476	static void b53_phylink_mac_link_up(struct dsa_switch *ds, int port,
+  1477					    unsigned int mode,
+  1478					    phy_interface_t interface,
+  1479					    struct phy_device *phydev,
+  1480					    int speed, int duplex,
+  1481					    bool tx_pause, bool rx_pause)
+  1482	{
+  1483		struct b53_device *dev = ds->priv;
+> 1484		struct ethtool_keee *p = &dev->ports[port].eee;
+  1485	
+  1486		if (mode == MLO_AN_PHY) {
+  1487			/* Re-negotiate EEE if it was enabled already */
+> 1488			p->eee_enabled = b53_eee_init(ds, port, phydev);
+  1489			return;
+  1490		}
+  1491	
+  1492		if (mode == MLO_AN_FIXED) {
+  1493			/* Force flow control on BCM5301x's CPU port */
+  1494			if (is5301x(dev) && dsa_is_cpu_port(ds, port))
+  1495				tx_pause = rx_pause = true;
+  1496	
+  1497			b53_force_port_config(dev, port, speed, duplex,
+  1498					      tx_pause, rx_pause);
+  1499			b53_force_link(dev, port, true);
+  1500			return;
+  1501		}
+  1502	
+  1503		if (phy_interface_mode_is_8023z(interface) &&
+  1504		    dev->ops->serdes_link_set)
+  1505			dev->ops->serdes_link_set(dev, port, mode, interface, true);
+  1506	}
+  1507	
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
