@@ -1,61 +1,61 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DCD63D
-	for <llvm@lists.linux.dev>; Thu,  9 May 2024 00:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B7F29A2
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 00:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715213188; cv=none; b=tra6pU/f39ica3tErQI3u5QmyqrVhV2L2yMyc1QY9i2K3QpvaDg5tSnnD6eoJn1QuiikAeD07EdlymOuJLV8/q1rgqQB7/4qEr9xAO/Lfom0DhSxGqdHH8kLToj5DijtZM6l6X7diLHFdDwV8gnBUZkcNKSw/J+R6gQJvNrY5j0=
+	t=1715214209; cv=none; b=U4aRfJc80RLTFpOCoynYKGAUWp4KSuY968xOqu4Khx6AyPcAcZ0C+aycPjuH7WFC3hwpNwzm8EHGBON/2H0sdP3nN2cryScfx64aGWhcY2o5p/0jNGekg1qbQ1KJDEdZOXufbZu8tvsV1EWwZ9HiEJwDW7eU3Bk3juOEzSxuMsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715213188; c=relaxed/simple;
-	bh=IDtem1V12nNx0FHh41q9CjFqh2Oa/zkNU2jMr995274=;
+	s=arc-20240116; t=1715214209; c=relaxed/simple;
+	bh=DODW/4URxRbA9DuTjYXWV8p06cnOAPHfE8OhcWBuxFQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LIH/2XHPiuzlXXGe4YxevQ9tTj7mU5M28ykYx3Vwjg/ITyfaLfpnm2u8o/opwXAH8Kmi9YelRS6SKR8oL6nI/Pud4JGl6s4VodrSwLC1uLjYe+N5IIE2CdbtPhtQdPPFzJhIQzaNqkM7Qw2H1VaRPf4s1q91Vy8Xtdi2jDp6nrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Uhcvp7mq; arc=none smtp.client-ip=209.85.167.51
+	 To:Cc:Content-Type; b=fah6J19zJlKA5R/Y8qKBTFpiKrQ0o8jM3IlkOgf0w54YTncuYnLgave5GI380fgilHx++a+u9RSl9D07piAL/SWlTBt6J83C0u6jzEfMCEPMmElQBqxQ18S95mk1GanTzLoWeCZWr2oV5TcvpduSmDMl4J8V8DRr7/c/YIe9hE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cJc6Kkyu; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Uhcvp7mq"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-51f0b6b682fso292833e87.1
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 17:06:26 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cJc6Kkyu"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51f17ac14daso336064e87.1
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 17:23:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1715213185; x=1715817985; darn=lists.linux.dev;
+        d=linux-foundation.org; s=google; t=1715214206; x=1715819006; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EqMDZ7IrqUxdNK1BGX9Bv8+FLqyvy2F/S5DRaEwsjkM=;
-        b=Uhcvp7mqrYTGnNCnzSjIY3DLyTytaAlTXnRqsYSFtT0UMDxAwOrZFNX7rF2sgd3xVx
-         GooNir/uAHUsmwuEayGLyAF3YjWm1M1DC4TAvPnJMKfgGJ6kp7otFQ8dT5G8NcMDJVWp
-         1L4bedcqIn+pggzkRAhO2J6o24ykqKxk36tdo=
+        bh=tUREf8Y8+BNsNPUONsk6UGY92nmezphsmslNvqS96no=;
+        b=cJc6KkyuYw/7/jxbpbTI+6OL1Yy7ue6ZN/+DJ07iSKi83DxYtJGArKhek8hR2KcT+p
+         Ke7NSs/dIIEAuDehprBbMNPKtSqqPZdihgJc1yYhsSX4qwHu3FAOk0AblP0gukm4E26Q
+         TAJztjZqqCp83LZ9J6d+4JSB9tpuCc8bz9+OI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715213185; x=1715817985;
+        d=1e100.net; s=20230601; t=1715214206; x=1715819006;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EqMDZ7IrqUxdNK1BGX9Bv8+FLqyvy2F/S5DRaEwsjkM=;
-        b=jqTN9oTu6nzSxm70C0zfiNJVp1UZrm+A8o2A0CePMnX4UEIrCc3VvQd64kduRBHiGR
-         DtFQfBfmpF4i9tphBzdvi5FCphSz//JWwGq8rggDEM8zUorAcCnsUqy+aBHe2XgTkTgV
-         y/BdY7OCX30iTX5sMJ38QyATjnhUqO+Juxaumjko95/sYNZeNfRQ+ShZg/nxKd2/p1dz
-         u2/H9k/a5IariDknv9FopbkW2NptIVHBCQxw3lute3LQoztBX6w8VOeCYgjhAtT8Tg6S
-         J9M6tI7hgOr9WiQaUu82IDI09VivDR9clbpetwtUryKNK0I8JeFNqg/12pYQjeHPoK82
-         fxTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFPjOFqP2b8zgdC0bfHVXAMYW+yt3O43Q+UyU/yTOCxBeNgSFXhuxwAa+M7iDkbqKp5CruiNMA82U4ERcMRVzWWUkDQA==
-X-Gm-Message-State: AOJu0YzjffkzG8w7vNi7QyEgG3NPd52bYX5xcLnhSjlu1lKXoB1XioCb
-	iWdKAnmKdVZQbLYTvZwOoLHQmRR0A7Omidlq/dBeimFcHcH75UWkWjTLKuC6wUrkFEckcxXtgNY
-	h4i0+BA==
-X-Google-Smtp-Source: AGHT+IHrZU9tqgGVQlI6itVwrWhu8rfq9jOYw8uTaD8PUkibxm9gojKdsFAJe2DPP3aP4EWOxUHhBQ==
-X-Received: by 2002:a19:551a:0:b0:51c:dc6:a1ce with SMTP id 2adb3069b0e04-5217c372c30mr3098988e87.7.1715213185001;
-        Wed, 08 May 2024 17:06:25 -0700 (PDT)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5733c2c7dbasm106443a12.70.2024.05.08.17.06.24
+        bh=tUREf8Y8+BNsNPUONsk6UGY92nmezphsmslNvqS96no=;
+        b=RWbMLDF6lWghP0emP7ydDgIDCEOotaL9pb0NAu0R7WWyATH/j2zYs5WXzE3qX4EHTZ
+         w2QVlJjHANaWHlSEuIRWJlPaFEsYQD2/iMhQVulUyOESdqmacqfeHcqL51i0QAfDrOXs
+         z+Y0CnI7xrEP/h959fuqcQEyt6oLxbW8nGGyPyiqIkc621cOlJ429CTrbXjE7jc0aePx
+         8oSLni3nZhyk/PPVE35+iVKtOu8D7TDfGvJN5jbRGkRyeE5SunjtanPUABOXBuSDcx4N
+         +C+VB5Sl6cWZ1U7RF+sODFwXHfc2YN0lliLuTbBiydUMq1odKGDLs0/etl/xbynncv9G
+         02Yg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ66x+W2n8nLQchfeH8d2DHKdJJ8h4OR/MaHFq6YJzZbmE8kQmsastWK88duUiUPR8oDXhWQiMl8rK1TWa0N8wAOE35w==
+X-Gm-Message-State: AOJu0Yxa+IWUIm5xSMKWR+wkLH/Ud/POwiaGKPK7jYvvG6GHVhx1ctm1
+	E0SG74mKUlY+sN8S9ccUAOyj81jdinGkJh+pu0dTUCx49XLlzS63yZy2ikH7VTZtOw4riBdwYbf
+	NzyUHoA==
+X-Google-Smtp-Source: AGHT+IGVYAX1zeLHKvHNJhXsuxSnlVwUB0WBZGeSnz8uajiRZqy2ZufWDzRz+B96sFuO9YAnJbvHqQ==
+X-Received: by 2002:a05:6512:10cc:b0:521:9315:670 with SMTP id 2adb3069b0e04-521931506a7mr2752737e87.9.1715214206096;
+        Wed, 08 May 2024 17:23:26 -0700 (PDT)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781c269sm15262366b.38.2024.05.08.17.23.24
         for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 May 2024 17:06:24 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a5a1054cf61so66844566b.1
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 17:06:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXuobzX3Xj/7jCSUUy1ccraTTaJ11OUYMhb59KOQxdajooey7L13Z/r3ilTD4e6Jutldnu/oQ06H1tZZtwUrKqnpJvxLQ==
-X-Received: by 2002:a17:906:57c1:b0:a59:ea34:fe0d with SMTP id
- a640c23a62f3a-a59fb9c675emr342484566b.47.1715213183807; Wed, 08 May 2024
- 17:06:23 -0700 (PDT)
+        Wed, 08 May 2024 17:23:24 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a59ad344f7dso57367566b.0
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 17:23:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW6BbIloYV7gb7RNzS1nT/r1o8tCsSYNZAC3Sg8mS8c4bHpS6Nh8NjodUlxh3mxcpx5Q5KZMwpgY2PQ71agqaxjCelEkA==
+X-Received: by 2002:a17:906:f6cd:b0:a59:a7b7:2b8f with SMTP id
+ a640c23a62f3a-a59fb923241mr262394466b.9.1715214204485; Wed, 08 May 2024
+ 17:23:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,9 +67,9 @@ References: <202404291502.612E0A10@keescook> <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6
  <202405081354.B0A8194B3C@keescook> <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
 In-Reply-To: <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 8 May 2024 17:06:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgLaDBSP9MXCHc8heA7-rVNGh9yZDG_y4=87KOx_N0cRg@mail.gmail.com>
-Message-ID: <CAHk-=wgLaDBSP9MXCHc8heA7-rVNGh9yZDG_y4=87KOx_N0cRg@mail.gmail.com>
+Date: Wed, 8 May 2024 17:23:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgf5mpRT_Aiw9aebX_z0i49aUbUBEPr6jk_dUaCTuR6cw@mail.gmail.com>
+Message-ID: <CAHk-=wgf5mpRT_Aiw9aebX_z0i49aUbUBEPr6jk_dUaCTuR6cw@mail.gmail.com>
 Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
 To: Kees Cook <keescook@chromium.org>
 Cc: Justin Stitt <justinstitt@google.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -80,31 +80,45 @@ Content-Type: text/plain; charset="UTF-8"
 On Wed, 8 May 2024 at 16:47, Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
 >
-> But again, maybe it would be worth looking into, at least for some
-> limited cases. To go back to your particular example, it might be
-> worth trying to limit it for unusual type sizes like implicit casts to
-> 'u16' or bitfields: not because those type sizes are magical, but
-> because it might be a way to limit the pain.
+> So *that* I feel could be something where you can warn without a ton
+> of compiler smarts at all. If you see an *implicit* cast to unsigned
+> and then the subsequent operations wraps around, it's probably worth
+> being a lot more worried about.
 
-I think it would be interesting in general to have some kind of
-warning for "implicit cast drops bits".
+Side note on this part: quite often, because of C promotion rules, you
+have "int" as an "intermediate" type.
 
-I fear that we'd have an enormous about of them, and maybe they'd be
-unsolvable without making the code *much* uglier (and sometimes the
-fix might be to add an explicit cast to document intentionally dropped
-bits, but explicit casts have their own issues).
+IOW, while I had that example of
 
-So that's why I feel like it might be interesting to see if limiting
-such checks to only "unusual" types might give us a manageable list of
-worrisome places.
+        int a;
+        ...
+        a * sizeof(xyz);
 
-I think it *would* have flagged the perf u16 overflow case. Again: I
-don't think that was actually ever overflow or wrap-around in the
-arithmetic sense, and it was purely a "assignment to smaller field
-truncated bits" issue.
+being questionably not-UB (because "int a" gets promoted to unsigned
+as part of C integer promotion, and thus you really had a signed value
+that was involved in unsigned wrap-around), if you have
 
-Which again is most definitely not undefined behavior, but I would not
-be at all surprised if it was a much more common issue than actual
-arithmetic overflow is.
+        unsigned short a;
+        ...
+        a * sizeof(xyz);
 
-               Linus
+then technically that 'a' is first promoted to 'int' (because all
+arithmetic on types smaller than int get promoted to int), and then it
+gets promoted to size_t because the multiply gets done in the bigger
+type.
+
+So in one sense that unsigned multiply may actually have involved a
+cast from a signed type, but at the same time it's not at all in that
+kind of "accidentally not UB" class.
+
+I suspect most compilers would have combined the two levels of
+implicit casts into just one, so at no point outside of perhaps some
+very intermediate stage will it show as a signed int cast to unsigned,
+but I thought I'd mention it anyway. Implicit casts get nasty not just
+in assignments, but also in these kinds of situations.
+
+I still suspect the "implicit truncating cast at assignment" is likely
+a much more common case of loss of information than actual arithmetic
+wrap-around, but clearly the two have commonalities.
+
+              Linus
