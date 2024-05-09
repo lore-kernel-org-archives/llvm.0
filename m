@@ -1,202 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C3214883E;
-	Thu,  9 May 2024 06:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40797C2C6
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 06:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715235728; cv=none; b=q3f4opoBUh67gRrABsof+SetrQnu2XGcZCh44nCP3Rv+f/QPqzpwyteCl3+5id97i545z5IwDKB+dVDz7/iKHvy3M3ujwKcCVEkLWPelSsDSsAX9KNOtA0q+ALO3fyMCS7jkXfT/lcSJWRCLjzrO3WD9s60ADDkH2NT0+Wblgcc=
+	t=1715236267; cv=none; b=YPiMf0sQ4xJUfa7McXYnY+OyDUllU9rikINwUi6h8+hzc2JQanV+AH6xmKp1GVO57hGA7duPHqCNWbEUQ/B6Q8QCspXjsYbjpqPDa8HpzH9FycIb4B3uUeCOa9EY8I7Gshp7+bliJ6rMtinK3Fs0GHx0zVVLXt5oSsPbFlVkQ1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715235728; c=relaxed/simple;
-	bh=4LEpg2aLYZbkyrBlhUKVghcrYMIWfuegtRvU8MjZZvo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lvXpFJ1FXuXsiP0mFD9IAMecarQfh0Fnp8G5Np9nWThR9UJyffHUAjdB0DBeG51wJf6tGANNdZ7ch9oqqhIeEbbOFRRXDAdC/jx3O+t2GK9Rs8SkqS28L/x21dKYlHEroQnnhAT6NHds66wEpBSyTsSKpbrYTifHVDVK0a5tFmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QDe3NW6R; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QDe3NW6R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715235726; x=1746771726;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4LEpg2aLYZbkyrBlhUKVghcrYMIWfuegtRvU8MjZZvo=;
-  b=QDe3NW6REVQghBAxI1XJRqEPxCvCf/T/hXO+LflPyVYchzJEXG2BGQHg
-   dNcBfAelrrsyRO9MNFLW/SNYnxD6T6UgqwITQBZ9frG3ZE0WQnzZ/F3Q4
-   WzhJ4Dp0tk0wutbNP+iiqpiik+ablndetKSf6YXm+4EdzLTTsTzillCVk
-   JTJAKbdmCF6WvIByVKXhBpxIavgFdzle3yBPkY8gFwuuBYuQuzSBoVZKW
-   OZAGOVbKE77bl2SZMihBiE+OtrdYJAN9RXLq5Z/FZXkOuuij6RZ8TSypX
-   Up/imyCxT+IgTn5VWV1a32UM3kBwSja93oJMon6uPv+L5O2Fz4DbsJs3q
-   A==;
-X-CSE-ConnectionGUID: NbtCZSUMQECSwSc0N0+QqA==
-X-CSE-MsgGUID: m0MYS0YEQvecosgLyUL6Mg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="10971184"
-X-IronPort-AV: E=Sophos;i="6.08,147,1712646000"; 
-   d="scan'208";a="10971184"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 23:22:05 -0700
-X-CSE-ConnectionGUID: ZLzPmVd/SQiebxda7XX5vQ==
-X-CSE-MsgGUID: +sParpQ5SkWY3pNRgbLl/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,147,1712646000"; 
-   d="scan'208";a="33941674"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 May 2024 23:22:03 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4xAG-0004W8-2Q;
-	Thu, 09 May 2024 06:22:00 +0000
-Date: Thu, 9 May 2024 14:21:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ivan Orlov <ivan.orlov0322@gmail.com>, brendan.higgins@linux.dev,
-	davidgow@google.com, rmoar@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH v2] kunit: Cover 'assert.c' with tests
-Message-ID: <202405091439.Ed9d3azG-lkp@intel.com>
-References: <20240508132557.599213-1-ivan.orlov0322@gmail.com>
+	s=arc-20240116; t=1715236267; c=relaxed/simple;
+	bh=sR91nbWIRwOyq6K9ElyuyadwZV3hd1M+0aO46y81gUw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sk5Di5Ptmw/qOZ2BbnIjVt6JXZxohPdFknftw6xN8Ynn0nlvkObLDsYAEeJAcusfw602Tifqo6nOLChP6ACzI4dOp/V7Pw6OM+gJBv9gRmC+usBT8TE2OFNt3Jy5oJKKbtNuaW/nFk7XnVHjhrFed8vpKaUnzXAkOKEAQe2sCNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-34f7d8bfaa0so389538f8f.0
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 23:31:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715236263; x=1715841063;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iwtvTU9dGUsxu7W/GoS4WNvaRYIcCkqPS/0Zbq6tVQ8=;
+        b=ioY7/5CKWa9/DnDdq3nrYqxnsvH3MNxFHHai//VY847ESOqg4xzoKXCBMGB13put93
+         yDQ0iSYL7Asxel6MBYlKPG2ZSG+WR81hrcU/DlJ/Oku88P2abQ/l3xMsOhaWMrpag4G9
+         +bYdlD1sdkSKwAKsFuCpCxpkq7EiLVp1d94n7ul+9lzUHe1p0X+nrA+L4Io9xMZX4dIh
+         2dXF5E6fYwbNyDYSR2JzdeA9nsAOphIIXDMi71IM5gOzDh4Arm5xGr6k4It4+6TGpH/q
+         9lYyAztVMyXnQ1hEU/dulfu9CXs2mMq0DTRVBCAhD0HlThWjts3TVoSzjJkFsDb/biWU
+         J87A==
+X-Forwarded-Encrypted: i=1; AJvYcCVdq985g8S6LnML4cIeBlxcHe1CI43b4S2ePij8bemEghklI0CylxK0l/k7jU7Khu8xP8EO/qg4zf3yv7WBL9LABlCfWA==
+X-Gm-Message-State: AOJu0YyzDPRAR2Nz91/Gy6mnvqyi5jQd1UbfeUqm8kUd6BYnZJHzMXPf
+	zQM4Ia52IpNTVvTN3x+IHFgMZdtDDycOImIMn4bQH48RRpKZjIbAxIz9LQ==
+X-Google-Smtp-Source: AGHT+IGBHtp5fkttoPxbAN5MSJVlWFzCxprEicfYj7+RDXM7lxtsi5BISTb6L83Noc0GVY5FtQ86ag==
+X-Received: by 2002:a5d:4571:0:b0:34a:cc2:1a34 with SMTP id ffacd0b85a97d-34fca2448b7mr3367482f8f.42.1715236263404;
+        Wed, 08 May 2024 23:31:03 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:69? ([2a0b:e7c0:0:107::aaaa:69])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b79bc83sm794033f8f.16.2024.05.08.23.31.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 May 2024 23:31:02 -0700 (PDT)
+Message-ID: <f7775510-09d8-41ef-97b2-0457e721a9ec@kernel.org>
+Date: Thu, 9 May 2024 08:31:02 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240508132557.599213-1-ivan.orlov0322@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tty: vt: saturate scrollback_delta to avoid overflow
+To: Justin Stitt <justinstitt@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Ivan,
+On 06. 05. 24, 20:55, Justin Stitt wrote:
+> Using the signed overflow sanitizer with syzkaller produces this UBSAN
+> report:
+> 
+> [   31.304043] ------------[ cut here ]------------
+> [   31.304048] UBSAN: signed-integer-overflow in ../drivers/tty/vt/vt.c:309:19
+> [   31.304055] -2147483648 + -1073741824 cannot be represented in type 'int'
+> [   31.304066] CPU: 1 PID: 3894 Comm: syz-executor Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+> [   31.304073] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [   31.304077] Call Trace:
+> [   31.304080]  <TASK>
+> [   31.304083]  dump_stack_lvl+0x93/0xd0
+> [   31.304177]  handle_overflow+0x171/0x1b0
+> [   31.304186]  scrollfront+0xcb/0xd0
+> [   31.304196]  tioclinux+0x3cc/0x450
+> [   31.304205]  tty_ioctl+0x7fc/0xc00
 
-kernel test robot noticed the following build errors:
+The rest of the stack trace can be trimmed:
 
-[auto build test ERROR on shuah-kselftest/kunit]
-[also build test ERROR on shuah-kselftest/kunit-fixes linus/master v6.9-rc7 next-20240508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> [   31.304212]  ? __pfx_tty_ioctl+0x10/0x10
+> [   31.304219]  __se_sys_ioctl+0xe0/0x140
+> [   31.304228]  do_syscall_64+0xd7/0x1b0
+> [   31.304236]  ? arch_exit_to_user_mode_prepare+0x11/0x60
+> [   31.304244]  entry_SYSCALL_64_after_hwframe+0x6f/0x77
+> [   31.304254] RIP: 0033:0x7fc3902ae539
+> [   31.304263] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 8
+> [   31.304282] RSP: 002b:00007ffc8a457998 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> [   31.304289] RAX: ffffffffffffffda RBX: 00007fc3903e2f80 RCX: 00007fc3902ae539
+> [   31.304293] RDX: 0000000020000040 RSI: 000000000000541c RDI: 0000000000000003
+> [   31.304297] RBP: 00007fc39030d496 R08: 0000000000000000 R09: 0000000000000000
+> [   31.304300] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> [   31.304304] R13: 0000000000000800 R14: 00007fc3903e2f80 R15: 00007fc3903e2f80
+> [   31.304310]  </TASK>
+> [   31.304371] ---[ end trace ]---
+> 
+> This is caused by the scrollback_delta overflowing. Historically, the
+> signed integer overflow sanitizer did not work in the kernel due to its
+> interaction with `-fwrapv` but this has since been changed [1] in the
+> newest version of Clang; It being re-enabled in the kernel with Commit
+> 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow sanitizer").
+> 
+> Note that it would be difficult to reproduce this bug in a non-fuzzing
+> scenario as it requires inputting tons of scroll inputs via keyboard
+> before the scheduled console callback has had a chance to update.
+> Nonetheless, let's saturate scrollback_delta so it stays clamped to
+> integer bounds without wrapping around.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Orlov/kunit-Cover-assert-c-with-tests/20240508-212654
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20240508132557.599213-1-ivan.orlov0322%40gmail.com
-patch subject: [PATCH v2] kunit: Cover 'assert.c' with tests
-config: i386-buildonly-randconfig-003-20240509 (https://download.01.org/0day-ci/archive/20240509/202405091439.Ed9d3azG-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240509/202405091439.Ed9d3azG-lkp@intel.com/reproduce)
+And what is actually broken, given signed overflow is well defined under 
+the -fwrapv wings?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405091439.Ed9d3azG-lkp@intel.com/
+> [1]: https://github.com/llvm/llvm-project/pull/82432
+> 
+> Closes: https://github.com/KSPP/linux/issues/351
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+> Note: I am using Kees' SIO tree as a base:
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=dev/v6.8-rc2/signed-overflow-sanitizer
+> ---
+>   drivers/tty/vt/vt.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index 9b5b98dfc8b4..b4768336868e 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -308,7 +308,14 @@ static inline void scrolldelta(int lines)
+>   	/* FIXME */
+>   	/* scrolldelta needs some kind of consistency lock, but the BKL was
+>   	   and still is not protecting versus the scheduled back end */
+> -	scrollback_delta += lines;
+> +
+> +	/* saturate scrollback_delta so that it never wraps around */
+> +	if (lines > 0 && unlikely(INT_MAX - lines < scrollback_delta))
+> +		scrollback_delta = INT_MAX;
+> +	else if (lines < 0 && unlikely(INT_MIN - lines > scrollback_delta))
+> +		scrollback_delta = INT_MIN;
+> +	else
+> +		scrollback_delta += lines;
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+NACK, this is horrid.
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8-selftest.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/isofs/isofs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/hfs/hfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/sysv/sysv.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/hpfs/hpfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/efs/efs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/qnx6/qnx6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/adfs/adfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/bcachefs/mean_and_variance_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/xor.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
-ERROR: modpost: missing MODULE_LICENSE() in lib/kunit/assert_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/assert_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/zlib_deflate/zlib_deflate.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-gw-pld.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-pcf857x.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/console/mdacon.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk-fractional-divider_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/da9121-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/tps6286x-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/8250/serial_cs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/goldfish.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/dtlk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/tlclk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/floppy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/misc/open-dice.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/qcom-pm8008.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/aha1542.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/g_NCR5380.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/i82365.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/ezusb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/isight_firmware.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/mon/usbmon.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/ch341.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb_debug.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/navman.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb-serial-simple.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/matrix-keymap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/vivaldi-fmap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/cbmem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-bigbenff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cherry.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-chicony.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ezkey.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-vivaldi-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-google-hammer.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lg-g15.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-dj.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-hidpp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-maltron.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-mf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ntrig.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-retrode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-samsung.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sjoy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-topseed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-xinmo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/gb-es2.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-bootrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-log.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-loopback.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-power-supply.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-sdio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-uart.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/chrome/cros_kunit_proto_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_u-boot-env.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
->> ERROR: modpost: "kunit_alloc_string_stream" [lib/kunit/assert_test.ko] undefined!
->> ERROR: modpost: "string_stream_get_string" [lib/kunit/assert_test.ko] undefined!
->> ERROR: modpost: "string_stream_clear" [lib/kunit/assert_test.ko] undefined!
+Introduce a helper for this in overflow.h if we have none yet.
 
+thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+js
+suse labs
+
