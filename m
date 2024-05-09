@@ -1,193 +1,177 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40797C2C6
-	for <llvm@lists.linux.dev>; Thu,  9 May 2024 06:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31DF1A2C37;
+	Thu,  9 May 2024 07:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715236267; cv=none; b=YPiMf0sQ4xJUfa7McXYnY+OyDUllU9rikINwUi6h8+hzc2JQanV+AH6xmKp1GVO57hGA7duPHqCNWbEUQ/B6Q8QCspXjsYbjpqPDa8HpzH9FycIb4B3uUeCOa9EY8I7Gshp7+bliJ6rMtinK3Fs0GHx0zVVLXt5oSsPbFlVkQ1c=
+	t=1715238852; cv=none; b=OQ0RzNABJUSiDewT6eVN2OUo5Io0/nHj7H2tHHjZO9gFWrLZCWoY/HQaBgvW9YzUBwbWXB47JSlxi0Y9HILPTbJbm20TuDwa2h61ZHun95PgxsMVIXmITEBqIsbVLqjBFP153Q8xe5EJaKs9/a+DjdXEkKZ5TLOKm12fLNO2kNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715236267; c=relaxed/simple;
-	bh=sR91nbWIRwOyq6K9ElyuyadwZV3hd1M+0aO46y81gUw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sk5Di5Ptmw/qOZ2BbnIjVt6JXZxohPdFknftw6xN8Ynn0nlvkObLDsYAEeJAcusfw602Tifqo6nOLChP6ACzI4dOp/V7Pw6OM+gJBv9gRmC+usBT8TE2OFNt3Jy5oJKKbtNuaW/nFk7XnVHjhrFed8vpKaUnzXAkOKEAQe2sCNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-34f7d8bfaa0so389538f8f.0
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 23:31:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715236263; x=1715841063;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iwtvTU9dGUsxu7W/GoS4WNvaRYIcCkqPS/0Zbq6tVQ8=;
-        b=ioY7/5CKWa9/DnDdq3nrYqxnsvH3MNxFHHai//VY847ESOqg4xzoKXCBMGB13put93
-         yDQ0iSYL7Asxel6MBYlKPG2ZSG+WR81hrcU/DlJ/Oku88P2abQ/l3xMsOhaWMrpag4G9
-         +bYdlD1sdkSKwAKsFuCpCxpkq7EiLVp1d94n7ul+9lzUHe1p0X+nrA+L4Io9xMZX4dIh
-         2dXF5E6fYwbNyDYSR2JzdeA9nsAOphIIXDMi71IM5gOzDh4Arm5xGr6k4It4+6TGpH/q
-         9lYyAztVMyXnQ1hEU/dulfu9CXs2mMq0DTRVBCAhD0HlThWjts3TVoSzjJkFsDb/biWU
-         J87A==
-X-Forwarded-Encrypted: i=1; AJvYcCVdq985g8S6LnML4cIeBlxcHe1CI43b4S2ePij8bemEghklI0CylxK0l/k7jU7Khu8xP8EO/qg4zf3yv7WBL9LABlCfWA==
-X-Gm-Message-State: AOJu0YyzDPRAR2Nz91/Gy6mnvqyi5jQd1UbfeUqm8kUd6BYnZJHzMXPf
-	zQM4Ia52IpNTVvTN3x+IHFgMZdtDDycOImIMn4bQH48RRpKZjIbAxIz9LQ==
-X-Google-Smtp-Source: AGHT+IGBHtp5fkttoPxbAN5MSJVlWFzCxprEicfYj7+RDXM7lxtsi5BISTb6L83Noc0GVY5FtQ86ag==
-X-Received: by 2002:a5d:4571:0:b0:34a:cc2:1a34 with SMTP id ffacd0b85a97d-34fca2448b7mr3367482f8f.42.1715236263404;
-        Wed, 08 May 2024 23:31:03 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:69? ([2a0b:e7c0:0:107::aaaa:69])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b79bc83sm794033f8f.16.2024.05.08.23.31.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 May 2024 23:31:02 -0700 (PDT)
-Message-ID: <f7775510-09d8-41ef-97b2-0457e721a9ec@kernel.org>
-Date: Thu, 9 May 2024 08:31:02 +0200
+	s=arc-20240116; t=1715238852; c=relaxed/simple;
+	bh=fIDvl+sN2aD/k5lPlxU58CPXl0CE8yLdhypmWSqkLQI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jvT+lLqJh+xzQ/SPhPaW3Ai1oZfrn9Sz4ezd+8F4/iKSzaWOC+SXTXzQamWYMemEbAxs0XjC4SJ97/8+H4egLFukmRnlMO0JnOTU5rmYg7Pn9PFA6CTA8IkMV6rWvdwxNH3/7zeOP2XcEg0XLnrkWWQWnfq/qw/7rP4I8e7Hf5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TyMT/gGj; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TyMT/gGj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715238850; x=1746774850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fIDvl+sN2aD/k5lPlxU58CPXl0CE8yLdhypmWSqkLQI=;
+  b=TyMT/gGjL/habDuZIZibcx++qw9R+uSpa6YkVHMe471wmVosdBwWuh2a
+   zcL0kOxxc46I6s+o0mBdPe5rGCmsVQ1q5DJfSPhJa3xU4lJbpcs5qFfnn
+   MBXx2VhWBrGZP3VEls9rzBH4ZVjugZNgocMzBDw6ChwU5YFG7LQjUSCKm
+   EFjE3pGqmLX+HufArdo00EcDAMBEvAnxgFX+RX2S8h02w6N6+f4ymbl/2
+   l0TSrmBmfWLssDV6xFDsM7rOkWi+XCNiQZiKQrWO7Nacm1J6oHVvQLLC2
+   a/Azs1d7XoHUf4FLZcHHCs4LKunapfujma081xphOI4R3/UXzTht5J+kc
+   g==;
+X-CSE-ConnectionGUID: 5MCV1A9eRZKgRgb2mY6quw==
+X-CSE-MsgGUID: mPPsaQZGQACX3mN0M/lqfQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="11265841"
+X-IronPort-AV: E=Sophos;i="6.08,147,1712646000"; 
+   d="scan'208";a="11265841"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 00:14:07 -0700
+X-CSE-ConnectionGUID: /L6/aDr2SAKXZ0DLufGoCA==
+X-CSE-MsgGUID: ex4eExK+TGmS5tVM/uDMQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,147,1712646000"; 
+   d="scan'208";a="33712600"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 09 May 2024 00:14:04 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s4xyc-0004Y4-06;
+	Thu, 09 May 2024 07:14:02 +0000
+Date: Thu, 9 May 2024 15:13:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sourabh Jain <sourabhjain@linux.ibm.com>, linuxppc-dev@ozlabs.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mahesh Salgaonkar <mahesh@linux.ibm.com>,
+	Sourabh Jain <sourabhjain@linux.ibm.com>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Hari Bathini <hbathini@linux.ibm.com>
+Subject: Re: [PATCH 1/2] powerpc/kexec_file: fix extra size calculation for
+ kexec FDT
+Message-ID: <202405091511.8Sd2zYrn-lkp@intel.com>
+References: <20240508130558.1939304-2-sourabhjain@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tty: vt: saturate scrollback_delta to avoid overflow
-To: Justin Stitt <justinstitt@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240508130558.1939304-2-sourabhjain@linux.ibm.com>
 
-On 06. 05. 24, 20:55, Justin Stitt wrote:
-> Using the signed overflow sanitizer with syzkaller produces this UBSAN
-> report:
-> 
-> [   31.304043] ------------[ cut here ]------------
-> [   31.304048] UBSAN: signed-integer-overflow in ../drivers/tty/vt/vt.c:309:19
-> [   31.304055] -2147483648 + -1073741824 cannot be represented in type 'int'
-> [   31.304066] CPU: 1 PID: 3894 Comm: syz-executor Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
-> [   31.304073] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [   31.304077] Call Trace:
-> [   31.304080]  <TASK>
-> [   31.304083]  dump_stack_lvl+0x93/0xd0
-> [   31.304177]  handle_overflow+0x171/0x1b0
-> [   31.304186]  scrollfront+0xcb/0xd0
-> [   31.304196]  tioclinux+0x3cc/0x450
-> [   31.304205]  tty_ioctl+0x7fc/0xc00
+Hi Sourabh,
 
-The rest of the stack trace can be trimmed:
+kernel test robot noticed the following build warnings:
 
-> [   31.304212]  ? __pfx_tty_ioctl+0x10/0x10
-> [   31.304219]  __se_sys_ioctl+0xe0/0x140
-> [   31.304228]  do_syscall_64+0xd7/0x1b0
-> [   31.304236]  ? arch_exit_to_user_mode_prepare+0x11/0x60
-> [   31.304244]  entry_SYSCALL_64_after_hwframe+0x6f/0x77
-> [   31.304254] RIP: 0033:0x7fc3902ae539
-> [   31.304263] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 8
-> [   31.304282] RSP: 002b:00007ffc8a457998 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> [   31.304289] RAX: ffffffffffffffda RBX: 00007fc3903e2f80 RCX: 00007fc3902ae539
-> [   31.304293] RDX: 0000000020000040 RSI: 000000000000541c RDI: 0000000000000003
-> [   31.304297] RBP: 00007fc39030d496 R08: 0000000000000000 R09: 0000000000000000
-> [   31.304300] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> [   31.304304] R13: 0000000000000800 R14: 00007fc3903e2f80 R15: 00007fc3903e2f80
-> [   31.304310]  </TASK>
-> [   31.304371] ---[ end trace ]---
-> 
-> This is caused by the scrollback_delta overflowing. Historically, the
-> signed integer overflow sanitizer did not work in the kernel due to its
-> interaction with `-fwrapv` but this has since been changed [1] in the
-> newest version of Clang; It being re-enabled in the kernel with Commit
-> 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow sanitizer").
-> 
-> Note that it would be difficult to reproduce this bug in a non-fuzzing
-> scenario as it requires inputting tons of scroll inputs via keyboard
-> before the scheduled console callback has had a chance to update.
-> Nonetheless, let's saturate scrollback_delta so it stays clamped to
-> integer bounds without wrapping around.
+[auto build test WARNING on next-20240508]
+[cannot apply to powerpc/next powerpc/fixes linus/master v6.9-rc7 v6.9-rc6 v6.9-rc5 v6.9-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-And what is actually broken, given signed overflow is well defined under 
-the -fwrapv wings?
+url:    https://github.com/intel-lab-lkp/linux/commits/Sourabh-Jain/powerpc-kexec_file-fix-extra-size-calculation-for-kexec-FDT/20240508-211003
+base:   next-20240508
+patch link:    https://lore.kernel.org/r/20240508130558.1939304-2-sourabhjain%40linux.ibm.com
+patch subject: [PATCH 1/2] powerpc/kexec_file: fix extra size calculation for kexec FDT
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240509/202405091511.8Sd2zYrn-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 0ab4458df0688955620b72cc2c72a32dffad3615)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240509/202405091511.8Sd2zYrn-lkp@intel.com/reproduce)
 
-> [1]: https://github.com/llvm/llvm-project/pull/82432
-> 
-> Closes: https://github.com/KSPP/linux/issues/351
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Note: I am using Kees' SIO tree as a base:
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=dev/v6.8-rc2/signed-overflow-sanitizer
-> ---
->   drivers/tty/vt/vt.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index 9b5b98dfc8b4..b4768336868e 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -308,7 +308,14 @@ static inline void scrolldelta(int lines)
->   	/* FIXME */
->   	/* scrolldelta needs some kind of consistency lock, but the BKL was
->   	   and still is not protecting versus the scheduled back end */
-> -	scrollback_delta += lines;
-> +
-> +	/* saturate scrollback_delta so that it never wraps around */
-> +	if (lines > 0 && unlikely(INT_MAX - lines < scrollback_delta))
-> +		scrollback_delta = INT_MAX;
-> +	else if (lines < 0 && unlikely(INT_MIN - lines > scrollback_delta))
-> +		scrollback_delta = INT_MIN;
-> +	else
-> +		scrollback_delta += lines;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405091511.8Sd2zYrn-lkp@intel.com/
 
-NACK, this is horrid.
+All warnings (new ones prefixed by >>):
 
-Introduce a helper for this in overflow.h if we have none yet.
+   In file included from arch/powerpc/kexec/file_load_64.c:17:
+   In file included from include/linux/kexec.h:18:
+   In file included from include/linux/vmcore_info.h:6:
+   In file included from include/linux/elfcore.h:11:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kexec/file_load_64.c:863:3: warning: variable 'cpu_nodes' is uninitialized when used here [-Wuninitialized]
+     863 |                 cpu_nodes++;
+         |                 ^~~~~~~~~
+   arch/powerpc/kexec/file_load_64.c:854:24: note: initialize the variable 'cpu_nodes' to silence this warning
+     854 |         unsigned int cpu_nodes, extra_size = 0;
+         |                               ^
+         |                                = 0
+   6 warnings generated.
 
-thanks,
+
+vim +/cpu_nodes +863 arch/powerpc/kexec/file_load_64.c
+
+   843	
+   844	/**
+   845	 * kexec_extra_fdt_size_ppc64 - Return the estimated additional size needed to
+   846	 *                              setup FDT for kexec/kdump kernel.
+   847	 * @image:                      kexec image being loaded.
+   848	 *
+   849	 * Returns the estimated extra size needed for kexec/kdump kernel FDT.
+   850	 */
+   851	unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image, struct crash_mem *rmem)
+   852	{
+   853		struct device_node *dn;
+   854		unsigned int cpu_nodes, extra_size = 0;
+   855	
+   856		// Budget some space for the password blob. There's already extra space
+   857		// for the key name
+   858		if (plpks_is_available())
+   859			extra_size += (unsigned int)plpks_get_passwordlen();
+   860	
+   861		/* Get the number of CPU nodes in the current device tree */
+   862		for_each_node_by_type(dn, "cpu") {
+ > 863			cpu_nodes++;
+   864		}
+   865	
+   866		/* Consider extra space for CPU nodes added since the boot time */
+   867		if (cpu_nodes > boot_cpu_node_count)
+   868			extra_size += (cpu_nodes - boot_cpu_node_count) * cpu_node_size();
+   869	
+   870		/* Consider extra space for reserved memory ranges if any */
+   871		if (rmem->nr_ranges > 0)
+   872			extra_size += sizeof(struct fdt_reserve_entry) * rmem->nr_ranges;
+   873	
+   874		return extra_size + kdump_extra_fdt_size_ppc64(image, cpu_nodes);
+   875	}
+   876	
+
 -- 
-js
-suse labs
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
