@@ -1,99 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3448029415;
-	Thu,  9 May 2024 18:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AAC75811
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 18:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715278581; cv=none; b=lClR9h/B5d6oq+QpnQu+5hCaeDGizWIG1fkxEqNgL+XBUb71CAUi1CaWnIOPawUvW5Cl8cm0++oDF8Few3xhnPOuvwS8lrwfnqWt/P9fxM1A4S//MNXCmh9S/RmNbw5YHP+WgOCsemmF/TTuBgF7W2TaEDoKcNrAie4wfDw9Lv4=
+	t=1715279965; cv=none; b=M7wSQfKq+9xGbeLwHMW67y1Fbm/xZwOTodMtY/LoimMTigUHH1TS3PJmBAbfqF6sd4zMMQKYns5nQgMEXvUkPDu8FaXzEqCuyzR0MT+P+p2CkvUGlD6y+/RlBZgVjsvGxGTFRZX7EKhs/vuLKf7eTF6kl59dofpwC3Ho0ayegA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715278581; c=relaxed/simple;
-	bh=L4gQYCBzpEUWB7FcwPzOUwmcJBWB3+fhGJNbP5Z/V/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LqU26O2Zq5OMxcTDuwYUIE4dYHc7lmjNOp3kOGwfYkFeOJDCIvmDdmtA/2Z0m82pd8Xet85fAiH8DLrG/EWDLfx2fUy6fNC3Y1Sn7VqZTU4FIo1LHOvXhRyMNIpXTPxOMcEvlEw4YWygTvTbvo8kSdn/iOIIqUpS/7X9UTOdkI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j+iC3yhS; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715279965; c=relaxed/simple;
+	bh=eJ9IVERHhky971S0DcjHHKpGh5uHfCRuKvsYihoB6wA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N0WrVE3g4DDyD/zsuea3b0RgxjePDLwQVrfV5Eo8TK+QizVivxuBBA3SkHMe31L0D1WIckeul8zdvWnSsJyygLzsPGmRb4O66Vmxw5KJYLXEiiQPmXyQpvf4Ugn6vFliNW7cLkBkTr86ywXwHPmWR980N5LAO0Jou6m8WeClE8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=UrpxyLea; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j+iC3yhS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715278580; x=1746814580;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L4gQYCBzpEUWB7FcwPzOUwmcJBWB3+fhGJNbP5Z/V/c=;
-  b=j+iC3yhS042ltkj0L0vCBYkmIVwLEyVxksVy8MdoGNo1O3aAshzVx1Gw
-   qwAugpd9QtRBl7nShl4sd1X6nkQm/IHpTJuSpSMbdoKBDkVVWG2X35+/h
-   G87ZhH9dDXv27VCNZg9L7eWt29Mor2FABTdla2oKJf527lgeQnsedvD4Z
-   KfaeWTw9RKEw4NgfgNiXxSZLbtsH2TXISK5lNbQTLjh7qu1ZiA3eoprW8
-   stJXpSeqbCi8oxDHW7j5TMSzm7B5I3QWDTKJ/uU/ntaZrma+2BhGR9tlf
-   yHX5AqUDTbmtgxzIdbC7glbMNCp51UZZNYiCyPKpxTBDT3QOeFRO9Z08h
-   w==;
-X-CSE-ConnectionGUID: //BwoXqVRMOeIjFfrs3h3Q==
-X-CSE-MsgGUID: 9hBkPPG9QOCjUSG2DBr3Pw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="22618578"
-X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
-   d="scan'208";a="22618578"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 11:16:19 -0700
-X-CSE-ConnectionGUID: h84P3MQ6SseUrDHM1dVPnQ==
-X-CSE-MsgGUID: 2RgPIptIRHSric0f1QFJtw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
-   d="scan'208";a="60186190"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 09 May 2024 11:16:18 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s58JT-0005DF-1d;
-	Thu, 09 May 2024 18:16:15 +0000
-Date: Fri, 10 May 2024 02:15:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/3] ACPI: extlog: Trace PCI Express Error Section
-Message-ID: <202405100132.aORjn9Dh-lkp@intel.com>
-References: <20240507190724.323269-3-fabio.m.de.francesco@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="UrpxyLea"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a59cdd185b9so414825066b.1
+        for <llvm@lists.linux.dev>; Thu, 09 May 2024 11:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1715279962; x=1715884762; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fqOAT+gv91pKFh1YCYnEhtgE7NzT8BCjrBwFy+U+dzg=;
+        b=UrpxyLea7OnTn36+KCZjccDsJjHubeft6lnv1FUwwL6nURl+AEJAIxRLwkrL/Rmvj0
+         2x6FE584NvoGK4acEOUz7rYDQ48sxEnqc6EAR1NX1JO+Cx3J3qV9JwPr6CPwbaDhUHtF
+         fA8cJwDGKRMXM5KMBbz/PCyDpTb9LHQ/WLpXA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715279962; x=1715884762;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fqOAT+gv91pKFh1YCYnEhtgE7NzT8BCjrBwFy+U+dzg=;
+        b=lKK3OJKYq6YkFmFozyMWGsCd/BGHwz4AlymAzcvKUlqovgwKzyX8xHUR7FPTjEt7Bl
+         GYv9/dJUZDzagdqHPTE1ZZ9mSvXSgsLz/x/wj/mtABk0ytffJhkqtfNjiGvnYNHsDp1M
+         1ndlwV/qCl2R7TZqqIQPaSzbx38X76icNcBtswu5L1WaKx2lGyexebqdFkj68qcw/7Rg
+         U9K1FNOBgmQVB18dHpDjJ+7p7F5a+dcojHIA6/le1+I6Po6eXokncfbI4D1L0NR1oN7F
+         XG+Bp6xRHNbY8/CkRtMAaerMYR3/r2EaCPiV29Xf+tztlKlx9RsjoEoepICKOBkPj71Y
+         smvg==
+X-Forwarded-Encrypted: i=1; AJvYcCXWYSmIykMDaQ8ifa6mSAg/BGuv/hy7YUr/6qOqrMmuC2a8GeW0q6hjNZX/8UYMkTxEUwYjaucxyjSuvEdp10byQQAYvQ==
+X-Gm-Message-State: AOJu0YzfcEvYqciNCnntyt/eqTIlT3Qyz2SlIMzE1K1/WyzWUE0D8cY4
+	Cr/cqFtl3eV0pFk217u5DdL285gO9yyEC5wGel+Iph/OS854Tx0nHfwQtvUksANW2W/XfYOrwg8
+	+Ka7l4w==
+X-Google-Smtp-Source: AGHT+IF35PQrhFo7rrp12/z7h+XP0YP6LejzSrNPN1Zgvp+jKRwRyhYFGYXxe6g3wvEgYc/thZ/MDw==
+X-Received: by 2002:a17:906:aec9:b0:a59:b17c:c9d2 with SMTP id a640c23a62f3a-a5a115f2dbemr263510866b.12.1715279962047;
+        Thu, 09 May 2024 11:39:22 -0700 (PDT)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17b01724sm99716166b.162.2024.05.09.11.39.21
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 May 2024 11:39:21 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a59ce1e8609so403011766b.0
+        for <llvm@lists.linux.dev>; Thu, 09 May 2024 11:39:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUF0IVVihBcvYuf04HJdh+TK+sji6EA9Kygv+SldDZt7DccoN4oIzNI1GiUaxgNoWSZwRjLex4o5OlVbUatAnJtYJOETg==
+X-Received: by 2002:a17:906:410b:b0:a59:ad76:b371 with SMTP id
+ a640c23a62f3a-a5a2d292a8amr45358966b.26.1715279960933; Thu, 09 May 2024
+ 11:39:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240507190724.323269-3-fabio.m.de.francesco@linux.intel.com>
+References: <202404291502.612E0A10@keescook> <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
+ <202405081144.D5FCC44A@keescook> <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
+ <202405081354.B0A8194B3C@keescook> <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
+ <202405081949.0565810E46@keescook> <20240509140854.GF3620298@mit.edu>
+ <CAHk-=wgKyP2ffZPa6aKYtytzzFibiNVN5MS=D2cn7_UGCECKdw@mail.gmail.com>
+ <20240509175417.GR2118490@ZenIV> <CAHk-=wgXm15gZHvt8waSFhXS9yZTfvMV95xyvNtPc6FSEA_rvA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgXm15gZHvt8waSFhXS9yZTfvMV95xyvNtPc6FSEA_rvA@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 9 May 2024 11:39:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgBprh=8Us-MtwH9sVNELZK2hdOkFn3EoauwecYgtXOCQ@mail.gmail.com>
+Message-ID: <CAHk-=wgBprh=8Us-MtwH9sVNELZK2hdOkFn3EoauwecYgtXOCQ@mail.gmail.com>
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: "Theodore Ts'o" <tytso@mit.edu>, Kees Cook <keescook@chromium.org>, 
+	Justin Stitt <justinstitt@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Fabio,
+On Thu, 9 May 2024 at 11:08, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+>  Any half-way decent compiler will end up optimizing away the shifts
+> and adds for the high bits because they see the assignment to
+> 'all_bits'. There's no point in generating high bits that just get
+> thrown away.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+.. it might also actually be a good idea *IF* we were to have some
+kind of "implicit cast drops bits" warning, in that the compiler for
+that case wouldn't remove the upper bits calculation, but would
+trigger a warning if they are non-zero.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.9-rc7 next-20240508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So there are actually potential advantages to just always apparently
+doing the full 64-bit arithmetic.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/ACPI-extlog-Trace-CPER-Non-standard-Section-Body/20240508-031035
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20240507190724.323269-3-fabio.m.de.francesco%40linux.intel.com
-patch subject: [RFC PATCH 2/3] ACPI: extlog: Trace PCI Express Error Section
-config: x86_64-randconfig-015-20240508 (https://download.01.org/0day-ci/archive/20240510/202405100132.aORjn9Dh-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240510/202405100132.aORjn9Dh-lkp@intel.com/reproduce)
+Without debug warnings, it's a no-op that the compiler will just skip.
+And with some hypothetical debug flag, it would be a "you are now
+losing the high bits of the time value when assigning the result to a
+limited 32-bit time_t" warning.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405100132.aORjn9Dh-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: cper_severity_to_aer
-   >>> referenced by acpi_extlog.c:213 (drivers/acpi/acpi_extlog.c:213)
-   >>>               vmlinux.o:(extlog_print)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+             Linus
