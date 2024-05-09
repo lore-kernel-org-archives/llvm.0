@@ -1,124 +1,174 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B7F29A2
-	for <llvm@lists.linux.dev>; Thu,  9 May 2024 00:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32DB2A1A6
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 01:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715214209; cv=none; b=U4aRfJc80RLTFpOCoynYKGAUWp4KSuY968xOqu4Khx6AyPcAcZ0C+aycPjuH7WFC3hwpNwzm8EHGBON/2H0sdP3nN2cryScfx64aGWhcY2o5p/0jNGekg1qbQ1KJDEdZOXufbZu8tvsV1EWwZ9HiEJwDW7eU3Bk3juOEzSxuMsA=
+	t=1715217687; cv=none; b=is/mVMFqk0E1KhOgUgxp+MV1T3y9B9mv01HYnvkGyZ+gUkTO2UBZgnz1ihdOqR5UF6JtjaK6QSs6XB3TmHtBIjaHfF9EacmQkKvYI9AWIgUHCzQoyy3X+eoOX6N81dCh+Tu+rpkkNwzA6zfLKnVGJrAS2tHUCBOHl1y91uzbBOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715214209; c=relaxed/simple;
-	bh=DODW/4URxRbA9DuTjYXWV8p06cnOAPHfE8OhcWBuxFQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fah6J19zJlKA5R/Y8qKBTFpiKrQ0o8jM3IlkOgf0w54YTncuYnLgave5GI380fgilHx++a+u9RSl9D07piAL/SWlTBt6J83C0u6jzEfMCEPMmElQBqxQ18S95mk1GanTzLoWeCZWr2oV5TcvpduSmDMl4J8V8DRr7/c/YIe9hE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cJc6Kkyu; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1715217687; c=relaxed/simple;
+	bh=Ta/5FbB28ko7kqkWHY8OI95XOmRdLFY/ptIvut+HPd0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=p+GVxVxbfrZBMWpXDRorItkE/Wyi2F0oFJI5X4ykM8On/FR+2Spg4qszng6zP7Vg5SWhuCkAPg3kcJ2lqg5cWhs09ydr3VWewbNHhb6NzUVSFC5CA1LLq7Fqam3AhtX8q3pxneOM8TC8o5dV5ifo26OMu7tCN88j5fGmSJQnLS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NMmljTx+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cJc6Kkyu"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51f17ac14daso336064e87.1
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 17:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1715214206; x=1715819006; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tUREf8Y8+BNsNPUONsk6UGY92nmezphsmslNvqS96no=;
-        b=cJc6KkyuYw/7/jxbpbTI+6OL1Yy7ue6ZN/+DJ07iSKi83DxYtJGArKhek8hR2KcT+p
-         Ke7NSs/dIIEAuDehprBbMNPKtSqqPZdihgJc1yYhsSX4qwHu3FAOk0AblP0gukm4E26Q
-         TAJztjZqqCp83LZ9J6d+4JSB9tpuCc8bz9+OI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715214206; x=1715819006;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tUREf8Y8+BNsNPUONsk6UGY92nmezphsmslNvqS96no=;
-        b=RWbMLDF6lWghP0emP7ydDgIDCEOotaL9pb0NAu0R7WWyATH/j2zYs5WXzE3qX4EHTZ
-         w2QVlJjHANaWHlSEuIRWJlPaFEsYQD2/iMhQVulUyOESdqmacqfeHcqL51i0QAfDrOXs
-         z+Y0CnI7xrEP/h959fuqcQEyt6oLxbW8nGGyPyiqIkc621cOlJ429CTrbXjE7jc0aePx
-         8oSLni3nZhyk/PPVE35+iVKtOu8D7TDfGvJN5jbRGkRyeE5SunjtanPUABOXBuSDcx4N
-         +C+VB5Sl6cWZ1U7RF+sODFwXHfc2YN0lliLuTbBiydUMq1odKGDLs0/etl/xbynncv9G
-         02Yg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ66x+W2n8nLQchfeH8d2DHKdJJ8h4OR/MaHFq6YJzZbmE8kQmsastWK88duUiUPR8oDXhWQiMl8rK1TWa0N8wAOE35w==
-X-Gm-Message-State: AOJu0Yxa+IWUIm5xSMKWR+wkLH/Ud/POwiaGKPK7jYvvG6GHVhx1ctm1
-	E0SG74mKUlY+sN8S9ccUAOyj81jdinGkJh+pu0dTUCx49XLlzS63yZy2ikH7VTZtOw4riBdwYbf
-	NzyUHoA==
-X-Google-Smtp-Source: AGHT+IGVYAX1zeLHKvHNJhXsuxSnlVwUB0WBZGeSnz8uajiRZqy2ZufWDzRz+B96sFuO9YAnJbvHqQ==
-X-Received: by 2002:a05:6512:10cc:b0:521:9315:670 with SMTP id 2adb3069b0e04-521931506a7mr2752737e87.9.1715214206096;
-        Wed, 08 May 2024 17:23:26 -0700 (PDT)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781c269sm15262366b.38.2024.05.08.17.23.24
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 May 2024 17:23:24 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a59ad344f7dso57367566b.0
-        for <llvm@lists.linux.dev>; Wed, 08 May 2024 17:23:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW6BbIloYV7gb7RNzS1nT/r1o8tCsSYNZAC3Sg8mS8c4bHpS6Nh8NjodUlxh3mxcpx5Q5KZMwpgY2PQ71agqaxjCelEkA==
-X-Received: by 2002:a17:906:f6cd:b0:a59:a7b7:2b8f with SMTP id
- a640c23a62f3a-a59fb923241mr262394466b.9.1715214204485; Wed, 08 May 2024
- 17:23:24 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NMmljTx+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715217684;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lroksOvsXD1v0uaiSescnyUVpvyJiEPBqe56mMH+xd0=;
+	b=NMmljTx+97Y9u37jF443PmjSkmOPX1dpR1F60TR3WPq5gS8MIwsoMXukrYhWxthUAcguLz
+	ysyZFG9YA6Rxjq30Gl2e02RajXT4RxAXgvCMF/JMBAEb/bqQ4XHXueLm6Ual1Y/OAAd7c7
+	MKfOUXmTvNu2IZFYajx9uTyWYwbIPtU=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-655-4LCnGBAUO3qgHodlssqscw-1; Wed,
+ 08 May 2024 21:21:22 -0400
+X-MC-Unique: 4LCnGBAUO3qgHodlssqscw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CEF81C4C399
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 01:21:22 +0000 (UTC)
+Received: from [172.64.13.41] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3CEA8200AD74;
+	Thu,  9 May 2024 01:21:22 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
+ (6.9.0-rc7, mainline.kernel.org-clang, 45db3ab7)
+Date: Thu, 09 May 2024 01:21:22 -0000
+To: bhe@redhat.com, bgoncalv@redhat.com, yiyan@redhat.com,
+ llvm@lists.linux.dev, xiawu@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202404291502.612E0A10@keescook> <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
- <202405081144.D5FCC44A@keescook> <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
- <202405081354.B0A8194B3C@keescook> <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 8 May 2024 17:23:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgf5mpRT_Aiw9aebX_z0i49aUbUBEPr6jk_dUaCTuR6cw@mail.gmail.com>
-Message-ID: <CAHk-=wgf5mpRT_Aiw9aebX_z0i49aUbUBEPr6jk_dUaCTuR6cw@mail.gmail.com>
-Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
-To: Kees Cook <keescook@chromium.org>
-Cc: Justin Stitt <justinstitt@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <56889.124050821212200715@us-mta-655.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 8 May 2024 at 16:47, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So *that* I feel could be something where you can warn without a ton
-> of compiler smarts at all. If you see an *implicit* cast to unsigned
-> and then the subsequent operations wraps around, it's probably worth
-> being a lot more worried about.
+Hi, we tested your kernel and here are the results:
 
-Side note on this part: quite often, because of C promotion rules, you
-have "int" as an "intermediate" type.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-IOW, while I had that example of
 
-        int a;
-        ...
-        a * sizeof(xyz);
+Kernel information:
+    Commit message: Merge tag '6.9-rc7-ksmbd-fixes' of git://git.samba.org/=
+ksmbd
 
-being questionably not-UB (because "int a" gets promoted to unsigned
-as part of C integer promotion, and thus you really had a signed value
-that was involved in unsigned wrap-around), if you have
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1283625471
 
-        unsigned short a;
-        ...
-        a * sizeof(xyz);
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        kdump - kexec-file-load
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1283625471-x86_64-kernel_upt_26
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kexec-file-load
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1283625471-x86_64-kernel_upt_37
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1283625471-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/428
+                       =E2=9D=8C FAIL generic/590
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1283625471-x86_64-kernel-debug_upt_31
 
-then technically that 'a' is first promoted to 'int' (because all
-arithmetic on types smaller than int get promoted to int), and then it
-gets promoted to size_t because the multiply gets done in the bigger
-type.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1749
+            Affected tests:
+                kselftests upstream - bpf [x86_64 (debug)]
 
-So in one sense that unsigned multiply may actually have involved a
-cast from a signed type, but at the same time it's not at all in that
-kind of "accidentally not UB" class.
 
-I suspect most compilers would have combined the two levels of
-implicit casts into just one, so at no point outside of perhaps some
-very intermediate stage will it show as a signed int cast to unsigned,
-but I thought I'd mention it anyway. Implicit casts get nasty not just
-in assignments, but also in these kinds of situations.
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
 
-I still suspect the "implicit truncating cast at assignment" is likely
-a much more common case of loss of information than actual arithmetic
-wrap-around, but clearly the two have commonalities.
 
-              Linus
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
