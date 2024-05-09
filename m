@@ -1,129 +1,110 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84BB713B7BD
-	for <llvm@lists.linux.dev>; Thu,  9 May 2024 12:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CF315CD7D
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 14:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715258585; cv=none; b=DYhRDjljLJWRJTU79QbXxLnFUMJogW6cOco+OEFMxhagH9oeijqc/YXoau27MFvD5lUWaU5mDVWyTbrWLU6u7K+zPRo3vVffqo2v5oDwwP8iAFv72LePn/llxbKTTZ8gZL/kZKqspbwPfAxTeOYuPGDV9SM8hr13JIk50TLxK7w=
+	t=1715263757; cv=none; b=mgPBd3K5XHCW3pTJ2O+OiXAleJskVNNjR+a8JTL8PMYGREACvE92e1GUYnIXOMxTtVpM/F6Lwm7+bwUNssgrMM9Sz2FOKJUeqWW4EhtlV+4EybO3r4wPbZ2lVKf3E+s6jEBSqY1ZQ9iHrJUwuGOvD1zmc90fcpA1aOjf/ZhOGgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715258585; c=relaxed/simple;
-	bh=8BmZZE6TqpdGCbZ9A4QnBHieZRxO5UaDwlFmlYZ9Nos=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F6nVsZYtW4C5N3sWxiI2OaKDqirR/GyMUCPPtWUC5rOE+knYteuNlOXew3r590Q9tor/u0BzekS4VENT7Q/EXfH14+TOyxNpBgK96pjUavDQqRDlit3CpUv1O5N2QIEM/Pwh4NZdwooDdD+xg44czPUIRC887CMhit5akWhrSPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F6D1339;
-	Thu,  9 May 2024 05:43:28 -0700 (PDT)
-Received: from [10.1.38.172] (XHFQ2J9959.cambridge.arm.com [10.1.38.172])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59D6E3F6A8;
-	Thu,  9 May 2024 05:43:01 -0700 (PDT)
-Message-ID: <444612f4-8f3c-445f-bbdb-9b391dd5d5db@arm.com>
-Date: Thu, 9 May 2024 13:42:59 +0100
+	s=arc-20240116; t=1715263757; c=relaxed/simple;
+	bh=bDtjaP+V9cNNcRR6gQ6xBNCDLfECgvJQYpI7pGbQcNs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TZq6ImZa//p8TmmEqPStqJqflU5Szga+nmLSGr0mdXWhrJDaGz6MuPktfx/sKKTVCxmx1gxGflJbSvVuX+y60CdCC+4s1fZ89qxVbKrIzguV8g0ibLS9TmiYwE9OVTkwhp2K20LxJ2+kSNZtGPzhKxfWSEBz1541MXX87ZQfkH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=SV/L7qne; arc=none smtp.client-ip=18.9.28.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="SV/L7qne"
+Received: from cwcc.thunk.org (pool-173-48-113-2.bstnma.fios.verizon.net [173.48.113.2])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 449E8s2L030572
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 9 May 2024 10:08:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1715263737; bh=XxIwd5YKnaE8tpaDDWso8SeLqi8X1R5IdpdBS5HW8MA=;
+	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
+	b=SV/L7qneh5rtjlelL+8GnEOpp4vpOJv/fLJ2OiI0gTeX2do9nvZktzGfc8e8jXGJb
+	 ctB78KcRwIkz5IlkYvd6UF/ftvNdA6c3LFVbQvMM81he9Cei67CAh/x1mTYU2XxhXk
+	 +gLCHwot5DFmHjNE76S3B+BYx1k3Kh21Ji3sHCowoyVH7y+oTrzflqqPedQtbnxiDw
+	 nPhAE82WnR9b3MNtIsf6EIDAGm1Hc19aWWQKGAPwtySmKyUw2rR0nQM8chDs2iIswe
+	 4C/8ivf9Fb5MgxtWddSgTtwpk9B47xCCtm/Md7m1tzz9+BFcHz2MYvNOuwPAcJjelm
+	 QQKlRE0ZoJbfg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 69CF715C026D; Thu, 09 May 2024 10:08:54 -0400 (EDT)
+Date: Thu, 9 May 2024 10:08:54 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+        Justin Stitt <justinstitt@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <20240509140854.GF3620298@mit.edu>
+References: <202404291502.612E0A10@keescook>
+ <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
+ <202405081144.D5FCC44A@keescook>
+ <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
+ <202405081354.B0A8194B3C@keescook>
+ <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
+ <202405081949.0565810E46@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/mqueue: fix 5 warnings about signed/unsigned
- mismatches
-Content-Language: en-GB
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@redhat.com>, SeongJae Park <sj@kernel.org>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20240508200028.272513-1-jhubbard@nvidia.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20240508200028.272513-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202405081949.0565810E46@keescook>
 
-On 08/05/2024 21:00, John Hubbard wrote:
-> When building with clang, via:
-> 
->     make LLVM=1 -C tools/testing/selftest
-> 
-> ...clang warns about several cases of using a signed integer for the
-> priority argument to mq_receive(3), which expects an unsigned int.
-> 
-> Fix this by declaring the type as unsigned int in all cases.
-> 
-> Also, both input and output priority are unsigned, per the man pages, so
-> let's change the type of both priorities throughout, even though clang
-> did not warn about the prio_out variable.
-> 
-> Also, add an argument name to test->func(), in order to address another
-> warning from clang.
-> 
-> Cc: Ryan Roberts <ryan.roberts@arm.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On Wed, May 08, 2024 at 11:11:35PM -0700, Kees Cook wrote:
+> > I think it would be interesting in general to have some kind of
+> > warning for "implicit cast drops bits".
+> > 
+> > I fear that we'd have an enormous about of them, and maybe they'd be
+> > unsolvable without making the code *much* uglier (and sometimes the
+> > fix might be to add an explicit cast to document intentionally dropped
+> > bits, but explicit casts have their own issues).
 
-Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
+Seapking of which, I recently had to work around an overactive
+compiler UBSAN which complained about this:
 
-> ---
->  tools/testing/selftests/mqueue/mq_perf_tests.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-> index 5c16159d0bcd..9380c656581f 100644
-> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-> @@ -323,7 +323,8 @@ void *fake_cont_thread(void *arg)
->  void *cont_thread(void *arg)
->  {
->  	char buff[MSG_SIZE];
-> -	int i, priority;
-> +	int i;
-> +	unsigned int priority;
->  
->  	for (i = 0; i < num_cpus_to_pin; i++)
->  		if (cpu_threads[i] == pthread_self())
-> @@ -373,27 +374,27 @@ void *cont_thread(void *arg)
->  
->  struct test {
->  	char *desc;
-> -	void (*func)(int *);
-> +	void (*func)(unsigned int *prio);
->  };
->  
-> -void const_prio(int *prio)
-> +void const_prio(unsigned int *prio)
->  {
->  	return;
->  }
->  
-> -void inc_prio(int *prio)
-> +void inc_prio(unsigned int *prio)
->  {
->  	if (++*prio == mq_prio_max)
->  		*prio = 0;
->  }
->  
-> -void dec_prio(int *prio)
-> +void dec_prio(unsigned int *prio)
->  {
->  	if (--*prio < 0)
->  		*prio = mq_prio_max - 1;
->  }
->  
-> -void random_prio(int *prio)
-> +void random_prio(unsigned int *prio)
->  {
->  	*prio = random() % mq_prio_max;
->  }
-> @@ -425,7 +426,7 @@ struct test test2[] = {
->  void *perf_test_thread(void *arg)
->  {
->  	char buff[MSG_SIZE];
-> -	int prio_out, prio_in;
-> +	unsigned int prio_out, prio_in;
->  	int i;
->  	clockid_t clock;
->  	pthread_t *t;
-> 
-> base-commit: 45db3ab70092637967967bfd8e6144017638563c
-> prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
+struct ext2_super {
+       ...
+       __u32	time_lo;
+       __u32	time_high;
+       ...
+}
+
+	time_t	now;
+	
+	sb->time_low = now;
+	sb->time_high = now >> 32;
+
+This is obviously (to a human) correct, but because of stupid compiler
+tricks, in order to silence compiler-level and ubsan complaints, this
+got turned into:
+
+
+	sb->time_low = now & 0xffffffff;
+#if (SIZEOF_TIME_T > 4)
+	sb->time_high = (now >> 32) & EXT4_EPOCH_MASK;
+#else
+	sb->time_high = 0;
+#endif
+
+and in the opposite case, I was forced to write:
+
+#if (SIZEOF_TIME_T == 4)
+	return *lo;
+#else
+	return ((time_t)(*hi) << 32) | *lo;
+#endif
+
+... and this made me very sad.  Grumble....
+
+				- Ted
 
