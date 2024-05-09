@@ -1,63 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3381494C9;
-	Thu,  9 May 2024 04:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0345B1494BB
+	for <llvm@lists.linux.dev>; Thu,  9 May 2024 06:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715230086; cv=none; b=ihsHOhlMmQGXGgM4VZet2F4U3PD+LCFm+dNUO0jsfaV4zZahGsJUNPW+pyGHivb8XpogaXPODI2ten/rTqQyp8xM5h/n8jJNINUY5Jn0cPVOKeAbNWkmquJjPiqd8bdgdxWm05a+3MRxfmIQC0C3sn/4g4Ai1KO+gKU+7ChMTks=
+	t=1715235100; cv=none; b=g6HtGOV+CLzGsMhdNJp2QsJ9LpqW09lcwpdOf24JhLKm7ZPvmn2bCU6xuaZPKuQ21wBZA9afXFkG8dic//gW+a24a9TOGSq9rTat+1u8up7qk3MP5HKbLGpzBAHRBrfbZmLnoA3YUhnu6uhFXkR6ASr/T4yxPeK7ZSZX/c6Prds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715230086; c=relaxed/simple;
-	bh=E6GLGUNu5XEPafk+JfG6+bGh7d1mOOqhkHHoKLbrq8I=;
+	s=arc-20240116; t=1715235100; c=relaxed/simple;
+	bh=VSaW/apPlrArKcvmW8VTwX9WHVoo/UgeeO0M3uw7v94=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nkqVTxSYz/dmwTl2vyidLlyZr+84Gar3syu9emnDAmFqy9JPXuA6XCtoWQkZ09lFXas7cwjNtO2Glkw5lFgqvyU886KrnBM1SO6/xAecbBr4jgx5HldpPK2S7z87Yn/dPzuRCAzbP03/dQjWknLsvnLn2GkIUc0bmCF6C4TzhVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+WGMD3f; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=m5YcBjQPSHfkSeSkA49nA8qjITtfCoTqNy+lQXBRQIHfpUguEl1eJJEGOxquIBrQw5fCaeUQYjpFwbwKmh+k9GatWmnw0CN5mwJ00usnpq76n0K4GCrRxXUYu5FVaeUnVynTaDerM35EH5rC4RXZgEDZJ7B4Wpwe5h64P4juBRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=n/tE9bTI; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+WGMD3f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715230084; x=1746766084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E6GLGUNu5XEPafk+JfG6+bGh7d1mOOqhkHHoKLbrq8I=;
-  b=L+WGMD3f3Lh+sdM5CaKDDaHxGiEgIYtFBmmu3FfaScFD+TzIpSOGPWNy
-   LYOx9AJnl1Bab7I6DF1l4OwwUd1DyLONUVtJTHlvLzusZdO8XWQ1eAgF4
-   TOYuFdXz4HaI9LsVaAeWvpimCUP0FdGMoiDvOpn2nE9n3wLOOARHIIvob
-   pg/mTSn+ySiwfW2n1DJxPSTQryeTPvf3Ly4wzHGrIffyHO/RwHbhV7TS8
-   OHQDpEwSp9uBEkZrhQAWET4OT8JbCrRYLylH6l2Ty4QBrMpSATtnB4ROj
-   MbaeB6uQcAPstO6tjBg0Rm2aaOAj1WAUpqxeIr97z6oudt+DmY5REPVcR
-   Q==;
-X-CSE-ConnectionGUID: HkkV4zsHSYGgzy1hIc0biQ==
-X-CSE-MsgGUID: JTvQTbSwREamsKd5n+vfow==
-X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="36508420"
-X-IronPort-AV: E=Sophos;i="6.08,146,1712646000"; 
-   d="scan'208";a="36508420"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 21:48:03 -0700
-X-CSE-ConnectionGUID: DP2pll5XTlWBTP78z2kmVw==
-X-CSE-MsgGUID: MoqN1fHWQmerOeJEMA4WDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,146,1712646000"; 
-   d="scan'208";a="29051161"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 08 May 2024 21:48:00 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4vhG-0004Sq-09;
-	Thu, 09 May 2024 04:47:58 +0000
-Date: Thu, 9 May 2024 12:46:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ivan Orlov <ivan.orlov0322@gmail.com>, brendan.higgins@linux.dev,
-	davidgow@google.com, rmoar@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH v2] kunit: Cover 'assert.c' with tests
-Message-ID: <202405091253.FrHa2zBi-lkp@intel.com>
-References: <20240508132557.599213-1-ivan.orlov0322@gmail.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="n/tE9bTI"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-61bbb208ea5so447029a12.0
+        for <llvm@lists.linux.dev>; Wed, 08 May 2024 23:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715235097; x=1715839897; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T0K8G3AglPkL2fIAqhVyBG1qXwEcXVUsVnaW1DyqOlQ=;
+        b=n/tE9bTIgiQCzCD9S7WeMZdmpiYOb6X8CxYlhciIxf4h14KIw9kVkSPW9EkuZuA9T5
+         hwZJUvZnSXIy1ljs5/5jmQ91mo+eVCmmgM4f4I1dgSrWk0JBFqn1mo8yx0MdA5k8TscQ
+         nPuWCoge9SC+mHtF1OAeC4JkkZLefyGvxdu60=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715235097; x=1715839897;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T0K8G3AglPkL2fIAqhVyBG1qXwEcXVUsVnaW1DyqOlQ=;
+        b=ZGDdnRd/ackBJUW2e0H0qW1atoe7cbaLammuep7QFLK1h/yAk4NLENcX5aVkdfasrJ
+         NPy1XJyKhSZq80+TPk4e5UwiP0ZMNTpvX9lDZir/rw06XhxvMJ8JGwUDByg2O6oJj0FR
+         H6wPhR7nEEULUnMEuTS/uFEcYV6a2ngOrs2Yguf2+s8LefaYx3U5RRZlX+/kCjZmaANg
+         fjbABfBxe+NC8Y9MP1bAYjV9zRwIdR4Zmdi16vUVW4M+Tj4845F3QEmDY8nn+NZDPjnO
+         jOVVhX1GZVr8bO4MP1USRl/MeAtj9TR+oBeQ+XKMgEiqB5Zxf3rQ3hCqjWG/w6SOG4pM
+         yRwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXl82ZmZDxCrvlgfbO/3xf/d2uiRjzYuw0wx8VjqkIQhGUvT4v9Vl+QUakR8ho9IaV1oN4XlvrFDnw1e2Do4ocqEwJrNA==
+X-Gm-Message-State: AOJu0YzgO5O7YpaWO8Bf1WWh3c+NrQDUXJHHi0nu1m6q+35ApcxrifjB
+	vu8m55vXLerUIKRhO65LpPWRLejuZ7agoGNjrO/wPt7TS8FhmOKAjFMxzSQ3eg==
+X-Google-Smtp-Source: AGHT+IHWnG8slcBCx8M7TXvghTiOSC/MA43D+v+CR+3pMR/oyw+4KROq/kc704i6kih9FsKtpDdP7g==
+X-Received: by 2002:a05:6a21:4981:b0:1aa:6a28:cf6e with SMTP id adf61e73a8af0-1afc8dc6e23mr4710728637.48.1715235097166;
+        Wed, 08 May 2024 23:11:37 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a66c54sm594794b3a.40.2024.05.08.23.11.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 23:11:36 -0700 (PDT)
+Date: Wed, 8 May 2024 23:11:35 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <202405081949.0565810E46@keescook>
+References: <202404291502.612E0A10@keescook>
+ <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
+ <202405081144.D5FCC44A@keescook>
+ <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
+ <202405081354.B0A8194B3C@keescook>
+ <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,274 +72,240 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240508132557.599213-1-ivan.orlov0322@gmail.com>
+In-Reply-To: <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
 
-Hi Ivan,
+On Wed, May 08, 2024 at 04:47:25PM -0700, Linus Torvalds wrote:
+> For example, the most common case of overflow we've ever had has very
+> much been array indexing. Now, sometimes that has actually been actual
+> undefined behavior, because it's been overflow in signed variables,
+> and those are "easy" to find in the sense that you just say "no, can't
+> do that". UBSAN finds them, and that's good.
 
-kernel test robot noticed the following build warnings:
+Yes, the array bounds checking work has been going well. It's been
+about 5 years now, plucking out all the weird compiler behaviors,
+refactoring code to get rid of ambiguous patterns, etc. It's turtles
+and compiler extensions all the way down. It's been a real education on
+"this will be easy: the compiler already has all the information". Only
+to find, no, it's not, because no one has tried to make any of it work
+together sanely in 50 years. But we're finally at the tail end of it,
+with clear and unambiguous semantics and mitigations now.
 
-[auto build test WARNING on shuah-kselftest/kunit]
-[also build test WARNING on shuah-kselftest/kunit-fixes linus/master v6.9-rc7 next-20240508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> So I'd suggest seeing if we can catch the cases that *technically*
+> aren't UB, but match dangerous overflow situations. IOW, start with
+> very limited and very targeted things to look out for.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Orlov/kunit-Cover-assert-c-with-tests/20240508-212654
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20240508132557.599213-1-ivan.orlov0322%40gmail.com
-patch subject: [PATCH v2] kunit: Cover 'assert.c' with tests
-config: i386-randconfig-001-20240509 (https://download.01.org/0day-ci/archive/20240509/202405091253.FrHa2zBi-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240509/202405091253.FrHa2zBi-lkp@intel.com/reproduce)
+Yes, exactly. What I'd said in the RFC was that from a terminology
+perspective I don't want to focus on "undefined behavior", this means
+a very specific thing to the compiler folks. I'm focused on what
+_unexpected_ things actually happens in the real world that lead to
+exploitable flaws.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405091253.FrHa2zBi-lkp@intel.com/
+> So *that* I feel could be something where you can warn without a ton
+> of compiler smarts at all. If you see an *implicit* cast to unsigned
+> and then the subsequent operations wraps around, it's probably worth
+> being a lot more worried about.
 
-All warnings (new ones prefixed by >>):
+I agree, implicit casts are worth exploring. It's a more limited set of
+behaviors, but I remain skeptical about the utility of catching them since
+the visibility of those kinds of promotions can quickly go out of scope.
 
->> lib/kunit/assert.c:35:6: warning: no previous prototype for function 'kunit_assert_print_msg' [-Wmissing-prototypes]
-      35 | void kunit_assert_print_msg(const struct va_format *message,
-         |      ^
-   lib/kunit/assert.c:35:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      35 | void kunit_assert_print_msg(const struct va_format *message,
-         | ^
-         | static 
->> lib/kunit/assert.c:95:23: warning: no previous prototype for function 'is_literal' [-Wmissing-prototypes]
-      95 | VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
-         |                       ^
-   lib/kunit/assert.c:95:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      95 | VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
-         |                  ^
-         |                  static 
->> lib/kunit/assert.c:173:23: warning: no previous prototype for function 'is_str_literal' [-Wmissing-prototypes]
-     173 | VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
-         |                       ^
-   lib/kunit/assert.c:173:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     173 | VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
-         |                  ^
-         |                  static 
->> lib/kunit/assert.c:217:6: warning: no previous prototype for function 'kunit_assert_hexdump' [-Wmissing-prototypes]
-     217 | void kunit_assert_hexdump(struct string_stream *stream,
-         |      ^
-   lib/kunit/assert.c:217:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     217 | void kunit_assert_hexdump(struct string_stream *stream,
-         | ^
-         | static 
-   4 warnings generated.
+> And basically try to catch cases where arithmetic is explicitly used
+> for a size calculation: things like 'kmalloc()' etc are the obvious
+> things. And yes, the result will then have an (implicit) cast to
+> 'size_t' as part of the calling convention.
+
+We've been doing this kind of static analysis of allocation size
+mistakes for a while, but it remains not very well introspected by the
+compiler, making it a long game of whack-a-mole. And generally speaking
+all the wrapping around has already happened way before it hits the
+allocator. We've mostly dealt with all the low hanging code pattern fruit
+in this area, but it could be a place to add type-based compiler smarts.
+
+> And, finally, simply pointer arithmetic. Again, this is *not* some
+> "omniscience required". This is something very obvious where the
+> compiler is *very* aware of it being pointer arithmetic, because
+> pointer arithmetic has that implicit (and important) "take size of
+> object into account".
+
+Yes, that is already in progress too. Now that we've got __counted_by for
+flex arrays, the next addition is __counted_by for pointers. Coverage
+there will continue to grow. There is, unfortunately, a rather lot of
+alloc-and-forget going on in the kernel where object sizes are just
+thrown away. We've done some refactoring in places to add it, but I
+suspect the need for that will become more common once we gain coverage
+for pointer offsets.
+
+> So again, if you see an integer expression that leads to pointer
+> arithmetic, at that point the overflow very much is relevant.
+
+Right, and we've already been doing all of these things. They do all share
+the common root cause, though: unexpected wrap-around. But I hear you:
+don't go after the root cause, find high-signal things that are close to
+it.
+
+> So what I object to - loudly - is some completely bogus argument of
+> "integer wraparound is always wrong".
+
+Just so it's not mistaken, I didn't say "always": I said "can be". This
+was never a proposal to outlaw all wrap-around. :P
+
+> But catching wrap-around in *specific* cases, if you can argue for why
+> it's wrong in *those* cases: that sounds fine.
+
+Right. I mean, that is basically what I proposed. It was just over a
+much larger class than it seems you'll tolerate. :P You're asking to keep
+the scope smaller, and aimed at places where we know it can go wrong. I
+still think this is backwards from what would be best coverage. For the
+highest level of flaw mitigation, we want to exclude that which is proven
+safe, not try to catch things that might be unsafe. But I do try to be
+pragmatic, and it doesn't sound like that approach will be accepted here.
+
+> So in *that* case, you actually have a much more interesting
+> situation. Not wrap-around, not overflow, but "implicit cast drops
+> significant bits".
+
+Yup! This is what I was talking about in the RFC: implicit integer
+truncation. It *is* very nasty, I agree. We can get started on this next
+then. I poked around at it earlier this year[1]. My plan was to tackle
+it after finishing signed integer overflows (which is well underway).
+
+> And yes, I do think implicit integer casts are dangerous. Often *more*
+> dangerous than arithmetic overflow and wrapping. We've had absolutely
+> tons of them. Some of our most traditional bugs have very much been
+> about implicit casting losing bits and causing problems as a result.
+
+I really started screaming when I saw this one:
+
+https://git.kernel.org/linus/6311071a056272e1e761de8d0305e87cc566f734
+
+	u8 num_elems = 0;
+	...
+	nla_for_each_nested(nl_elems, attrs, rem_elems)
+		num_elems++; /* Whoops */
+
+	elems = kzalloc(struct_size(elems, elem, num_elems), GFP_KERNEL);
+	...
+	nla_for_each_nested(nl_elems, attrs, rem_elems) {
+		elems->elem[i].data = nla_data(nl_elems);
+	        ...
+
+(The good news for this particular case is that the fix for this bug
+almost literally crossed paths with the wave of __counted_by annotations
+we landed[2], after which overflows of the elems->elem[] array would
+have been noticed by CONFIG_UBSAN_BOUNDS.)
+
+> I think that would be a completely different area that might be worth
+> looking at: instrumenting implicit casts for "drops bits". I'm afraid
+> that it's just *so* common than we might not be able to do that
+> sanely.
+
+During the initial investigation, I tripped over several idioms we'll
+need to deal with (possibly in the compiler). (2 are basically variations
+of ones from the overflow calculation cases.)
+
+- truncation of constant expressions:
+	u8 var = ~(1 << 3);
+  This becomes int, and then all the high bits are thrown away. But
+  intention is nearly universally that the expression should be
+  applied only to the variable width. i.e. what is meant is:
+	u8 var = (u8)~(1 << 3);
+  Allowing this from the compiler side makes sense since it's a constant
+  expression. There may be cases where it is NOT intended, though, if
+  there is some mismatch of type widths hiding in macros that resolve
+  to a constant expression. But refactoring all these instances to
+  include an explicit cast seems prone to inducing maintainer rage.
+
+- basically all cases where the assigned variable is smaller than u32:
+	...checksum(const u8 *buf, u8 len)
+		...
+		u8 sum;
+ 		int a;
+
+		for (a = 0; a < len; a++)
+			sum += buf[a];
+
+	buf[a] goes from u8 to int, then added to a u8 value (no
+	overflow), but then written back and truncated.
+
+	This gets immediately to the ambiguity case, though. This is
+	nearly indistinguishable from the "num_elems++" example above.
+
+	So what do we do? We can add the "wraps" attribute to "sum"?
+	We can use a helper for the "+="?
+
+	Or even just simple math between u8s:
+
+	while (xas->xa_offset == 255) {
+		xas->xa_offset = xas->xa_node->offset - 1;
+
+	Is it expecting to wrap (truncate)? How is it distinguished from
+	the "num_elems++" case?
+
+- "while (var--)" when var is a smaller type than u32: the final
+  post-decrement gets truncated from the promoted "0 - 1" int expression.
+	Ignore post decrements only when the variable is not read again?
+	Ignore it only in "while" cases?
+
+- ERR_PTR() returns long. But all cases of its assignment are into int
+  variables. I need to spend more time looking at this. There
+  shouldn't be any loss of information here, since it's all low negative
+  values. The sanitizer may be upset that 0xffffffffffffffff being
+  converted to 0xffffffff is "losing bits" but they're both just -1.
+  We might also just be able to change ERR_PTR() to return int, and add
+  the cast directly:
+	-	return (long) ptr;
+	+	return (int)(long) ptr;
 
 
-vim +/kunit_assert_print_msg +35 lib/kunit/assert.c
+>[...thread merge...]
+> I think it would be interesting in general to have some kind of
+> warning for "implicit cast drops bits".
+> 
+> I fear that we'd have an enormous about of them, and maybe they'd be
+> unsolvable without making the code *much* uglier (and sometimes the
+> fix might be to add an explicit cast to document intentionally dropped
+> bits, but explicit casts have their own issues).
 
-    33	
-    34	VISIBLE_IF_KUNIT
-  > 35	void kunit_assert_print_msg(const struct va_format *message,
-    36				    struct string_stream *stream)
-    37	{
-    38		if (message->fmt)
-    39			string_stream_add(stream, "\n%pV", message);
-    40	}
-    41	EXPORT_SYMBOL_IF_KUNIT(kunit_assert_print_msg);
-    42	
-    43	void kunit_fail_assert_format(const struct kunit_assert *assert,
-    44				      const struct va_format *message,
-    45				      struct string_stream *stream)
-    46	{
-    47		string_stream_add(stream, "%pV", message);
-    48	}
-    49	EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
-    50	
-    51	void kunit_unary_assert_format(const struct kunit_assert *assert,
-    52				       const struct va_format *message,
-    53				       struct string_stream *stream)
-    54	{
-    55		struct kunit_unary_assert *unary_assert;
-    56	
-    57		unary_assert = container_of(assert, struct kunit_unary_assert, assert);
-    58	
-    59		if (unary_assert->expected_true)
-    60			string_stream_add(stream,
-    61					  KUNIT_SUBTEST_INDENT "Expected %s to be true, but is false\n",
-    62					  unary_assert->condition);
-    63		else
-    64			string_stream_add(stream,
-    65					  KUNIT_SUBTEST_INDENT "Expected %s to be false, but is true\n",
-    66					  unary_assert->condition);
-    67		kunit_assert_print_msg(message, stream);
-    68	}
-    69	EXPORT_SYMBOL_GPL(kunit_unary_assert_format);
-    70	
-    71	void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-    72					     const struct va_format *message,
-    73					     struct string_stream *stream)
-    74	{
-    75		struct kunit_ptr_not_err_assert *ptr_assert;
-    76	
-    77		ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
-    78					  assert);
-    79	
-    80		if (!ptr_assert->value) {
-    81			string_stream_add(stream,
-    82					  KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
-    83					  ptr_assert->text);
-    84		} else if (IS_ERR(ptr_assert->value)) {
-    85			string_stream_add(stream,
-    86					  KUNIT_SUBTEST_INDENT "Expected %s is not error, but is: %ld\n",
-    87					  ptr_assert->text,
-    88					  PTR_ERR(ptr_assert->value));
-    89		}
-    90		kunit_assert_print_msg(message, stream);
-    91	}
-    92	EXPORT_SYMBOL_GPL(kunit_ptr_not_err_assert_format);
-    93	
-    94	/* Checks if `text` is a literal representing `value`, e.g. "5" and 5 */
-  > 95	VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
-    96	{
-    97		char *buffer;
-    98		int len;
-    99		bool ret;
-   100	
-   101		len = snprintf(NULL, 0, "%lld", value);
-   102		if (strlen(text) != len)
-   103			return false;
-   104	
-   105		buffer = kmalloc(len+1, GFP_KERNEL);
-   106		if (!buffer)
-   107			return false;
-   108	
-   109		snprintf(buffer, len+1, "%lld", value);
-   110		ret = strncmp(buffer, text, len) == 0;
-   111	
-   112		kfree(buffer);
-   113	
-   114		return ret;
-   115	}
-   116	EXPORT_SYMBOL_IF_KUNIT(is_literal);
-   117	
-   118	void kunit_binary_assert_format(const struct kunit_assert *assert,
-   119					const struct va_format *message,
-   120					struct string_stream *stream)
-   121	{
-   122		struct kunit_binary_assert *binary_assert;
-   123	
-   124		binary_assert = container_of(assert, struct kunit_binary_assert,
-   125					     assert);
-   126	
-   127		string_stream_add(stream,
-   128				  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-   129				  binary_assert->text->left_text,
-   130				  binary_assert->text->operation,
-   131				  binary_assert->text->right_text);
-   132		if (!is_literal(binary_assert->text->left_text, binary_assert->left_value))
-   133			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
-   134					  binary_assert->text->left_text,
-   135					  binary_assert->left_value,
-   136					  binary_assert->left_value);
-   137		if (!is_literal(binary_assert->text->right_text, binary_assert->right_value))
-   138			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
-   139					  binary_assert->text->right_text,
-   140					  binary_assert->right_value,
-   141					  binary_assert->right_value);
-   142		kunit_assert_print_msg(message, stream);
-   143	}
-   144	EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
-   145	
-   146	void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-   147					    const struct va_format *message,
-   148					    struct string_stream *stream)
-   149	{
-   150		struct kunit_binary_ptr_assert *binary_assert;
-   151	
-   152		binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
-   153					     assert);
-   154	
-   155		string_stream_add(stream,
-   156				  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-   157				  binary_assert->text->left_text,
-   158				  binary_assert->text->operation,
-   159				  binary_assert->text->right_text);
-   160		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-   161				  binary_assert->text->left_text,
-   162				  binary_assert->left_value);
-   163		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px",
-   164				  binary_assert->text->right_text,
-   165				  binary_assert->right_value);
-   166		kunit_assert_print_msg(message, stream);
-   167	}
-   168	EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
-   169	
-   170	/* Checks if KUNIT_EXPECT_STREQ() args were string literals.
-   171	 * Note: `text` will have ""s where as `value` will not.
-   172	 */
- > 173	VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
-   174	{
-   175		int len;
-   176	
-   177		len = strlen(text);
-   178		if (len < 2)
-   179			return false;
-   180		if (text[0] != '\"' || text[len - 1] != '\"')
-   181			return false;
-   182	
-   183		return strncmp(text + 1, value, len - 2) == 0;
-   184	}
-   185	EXPORT_SYMBOL_IF_KUNIT(is_str_literal);
-   186	
-   187	void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-   188					    const struct va_format *message,
-   189					    struct string_stream *stream)
-   190	{
-   191		struct kunit_binary_str_assert *binary_assert;
-   192	
-   193		binary_assert = container_of(assert, struct kunit_binary_str_assert,
-   194					     assert);
-   195	
-   196		string_stream_add(stream,
-   197				  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-   198				  binary_assert->text->left_text,
-   199				  binary_assert->text->operation,
-   200				  binary_assert->text->right_text);
-   201		if (!is_str_literal(binary_assert->text->left_text, binary_assert->left_value))
-   202			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"\n",
-   203					  binary_assert->text->left_text,
-   204					  binary_assert->left_value);
-   205		if (!is_str_literal(binary_assert->text->right_text, binary_assert->right_value))
-   206			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"",
-   207					  binary_assert->text->right_text,
-   208					  binary_assert->right_value);
-   209		kunit_assert_print_msg(message, stream);
-   210	}
-   211	EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
-   212	
-   213	/* Adds a hexdump of a buffer to a string_stream comparing it with
-   214	 * a second buffer. The different bytes are marked with <>.
-   215	 */
-   216	VISIBLE_IF_KUNIT
- > 217	void kunit_assert_hexdump(struct string_stream *stream,
-   218				  const void *buf,
-   219				  const void *compared_buf,
-   220				  const size_t len)
-   221	{
-   222		size_t i;
-   223		const u8 *buf1 = buf;
-   224		const u8 *buf2 = compared_buf;
-   225	
-   226		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT);
-   227	
-   228		for (i = 0; i < len; ++i) {
-   229			if (!(i % 16) && i)
-   230				string_stream_add(stream, "\n" KUNIT_SUBSUBTEST_INDENT);
-   231	
-   232			if (buf1[i] != buf2[i])
-   233				string_stream_add(stream, "<%02x>", buf1[i]);
-   234			else
-   235				string_stream_add(stream, " %02x ", buf1[i]);
-   236		}
-   237	}
-   238	EXPORT_SYMBOL_IF_KUNIT(kunit_assert_hexdump);
-   239	
+This is immediately the place we find ourselves. :)
+
+> So that's why I feel like it might be interesting to see if limiting
+> such checks to only "unusual" types might give us a manageable list of
+> worrisome places.
+
+Well, we'd want to catch the "num_elems++" case, and that's not
+involving any unusual types. How do you propose we distinguish that from
+the u8 checksum case, etc? I had been planning to use the "wraps"
+attribute on the variable. I.e. mark all the places where we expect
+truncation.
+
+>[...thread merge...]
+> I still suspect the "implicit truncating cast at assignment" is likely
+> a much more common case of loss of information than actual arithmetic
+> wrap-around, but clearly the two have commonalities.
+
+Both of the "real world" examples we had in this thread were due
+to implicit truncation. I do think it's less noisy than the unsigned
+arithmetic cases, but it does have significant commonalities. So much so
+that it still looks to me like using the "wraps" attribute makes sense
+for this.
+
+> Summary: targeted baby steps, not some draconian "wrap-around is wrong".
+
+I still think we should bite the bullet, but let's finish up signed
+overflow (this just keeps finding accidental but mostly harmless
+overflows), and then dig into implicit integer truncation next.
+
+Thank you for spending the time to look at all of this. It's a big topic
+that many people feel very strongly about, so it's good to get some
+"approved" direction on it. :)
+
+-Kees
+
+[1] These are NOT meant to be upstreamed as-is. We have idiom exclusions
+    to deal with, etc, but here's the tree I haven't refreshed yet:
+    https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=dev/v6.8-rc2/signed-trunc-sanitizer
+
+[2] c14679d7005a ("wifi: cfg80211: Annotate struct cfg80211_mbssid_elems with __counted_by")
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
