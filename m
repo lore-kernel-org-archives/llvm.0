@@ -1,46 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27375168AF4;
-	Fri, 10 May 2024 10:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539A916FF36;
+	Fri, 10 May 2024 11:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715338539; cv=none; b=IPduIAFRpJLngrPDfbbclm2WgmXD0oLrsLrUbO5VL1MaqbPbbav+xy+XVQ1DiXInVvK18qSGY1L+K7X9sw4jYXrQ1s6lR1U52hoJwgtriLygoHz2L0GWU1+p9NH4FXEdu6UOoYPKD7y0EcrqUfpddhrYs+tanK6hyg4szp+DhNc=
+	t=1715340369; cv=none; b=aaGMhuRPBYLvDbkHMfjOfEbUOdueUwoOpL6ZVeo6htEdisT/vSgQoCrtJQUyRPm9iVtaeGcFZKCOGeqVXIZ4ZXRwzFqQ7cg2ZwzgbLWTW9NbmEj8VPdpGRMyqYqvjtnFi4xgaXB807J1hi43DcRywLpeKK7k8xflJ7bwpfaBOtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715338539; c=relaxed/simple;
-	bh=3RLAuGF0/SkubgGqr81HXENZp8CeEDdU7Is1crZ3K9E=;
+	s=arc-20240116; t=1715340369; c=relaxed/simple;
+	bh=EhJhwV28/b5xd5+o1fMev9i9Pt9MkgYR3jtd/6Qa15k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HEYURWeGJ/q41JwWF69GncWy9YqroUh2C5JX7n6LXCMhFNtVnuy3lRlGf6Er30AJrEaAGXeydd34z+NvG4MkoujJjqIJCz02WQS9kcz4gPsed6x0Y3fdM7ti2qyZ7km2sAqUTYgLKblZN1R7es0eeHOFmyyA46IvYjmcpJLuzuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iAhuMrqN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=FqGaG8C8PiXPnPsDkhQteVefyaJegpDiR7830w83JuZ8SSMLpMtBuZJJlrNREc5u4iRwXH55QMVW+ZoZe4GK9bh8DJzI5ljs5TsjzfSCWVgWSpeomQPoy8U7jKV3IQsFLKpZokJCOvazIoJmpwYSXhEmrSsjSYbFRMBRo1FU2PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iSzFTf9y; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iAhuMrqN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F142DC2BD11;
-	Fri, 10 May 2024 10:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715338538;
-	bh=3RLAuGF0/SkubgGqr81HXENZp8CeEDdU7Is1crZ3K9E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iAhuMrqNrc8yn5jVWXFn7GPRrBN8y7V/vwv8h2mY/wXj3euox2C4isv05myPDDV5q
-	 og6nQb+CIEuHNLZLFoOgncqL6lIaUSLtTevSdZ7+KO8wvZ2wdD7IN8NUOA7KtaBwLS
-	 8+DDn5ftDCGo4fdlbW6fUVVzV52a7V9c5MUrFX7I=
-Date: Fri, 10 May 2024 11:55:30 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Thomas Huth <thuth@redhat.com>,
-	Alexandra Winter <wintera@linux.ibm.com>,
-	Thorsten Winkler <twinkler@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>, netdev@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH 5/6] tty: hvc-iucv: Make use of iucv_alloc_device()
-Message-ID: <2024051023-tapeless-hardener-593d@gregkh>
-References: <20240506194454.1160315-1-hca@linux.ibm.com>
- <20240506194454.1160315-6-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iSzFTf9y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715340369; x=1746876369;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EhJhwV28/b5xd5+o1fMev9i9Pt9MkgYR3jtd/6Qa15k=;
+  b=iSzFTf9yMVlVYSX65SiRqJO6sh95qN2VvTGFtSxazckvwxpBwi+cXaYg
+   lq0Xq1a34Yu4nZuVEnWtWjQ79M/H/1NQUnKSxgbCWdFR4vyeYshP0Pjcu
+   W8XfsMAhCCvF5nTjSzed5a9vTQ0/Cd3gEpCopBEDLFJQQVuoEScIGYG+R
+   Df/70ZLxyEO3Jqhu2Vl6lZ1mQ3ThkZ0Gw8o4Q+bHMwWOzw8O4D673KJJv
+   KZZeLtr/e2hZGnqXQYZFot/B4ZIOkBX9CP+zVsJVB27+TjMjHG17gKNkA
+   9nUpVlwUx6yanzEGsvNvDNQKrJ0WK3uU3fa0HvcAxE9rYVn4UuFxLpsjE
+   A==;
+X-CSE-ConnectionGUID: LrXbQyj1TGeQFuO5Bz51Lg==
+X-CSE-MsgGUID: OWs7F38+QYeZ2JqrrSRKkg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="28826552"
+X-IronPort-AV: E=Sophos;i="6.08,150,1712646000"; 
+   d="scan'208";a="28826552"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 04:26:08 -0700
+X-CSE-ConnectionGUID: ZqJ0JxwATVyiMsF7O+WVDg==
+X-CSE-MsgGUID: UAabKaOsT2qfIBFrFbCyNQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,150,1712646000"; 
+   d="scan'208";a="29445375"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 10 May 2024 04:26:03 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s5OO1-00063T-0p;
+	Fri, 10 May 2024 11:26:01 +0000
+Date: Fri, 10 May 2024 19:25:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tomer Maimon <tmaimon77@gmail.com>, mturquette@baylibre.com,
+	sboyd@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, tali.perry1@gmail.com,
+	joel@jms.id.au, venture@google.com, yuenn@google.com,
+	benjaminfair@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+	Tomer Maimon <tmaimon77@gmail.com>, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v24 2/4] reset: npcm: register npcm8xx clock auxiliary
+ bus device
+Message-ID: <202405101939.Espij82X-lkp@intel.com>
+References: <20240509192411.2432066-3-tmaimon77@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,14 +70,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240506194454.1160315-6-hca@linux.ibm.com>
+In-Reply-To: <20240509192411.2432066-3-tmaimon77@gmail.com>
 
-On Mon, May 06, 2024 at 09:44:53PM +0200, Heiko Carstens wrote:
-> Make use of iucv_alloc_device() to get rid of quite some code.
-> 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  drivers/tty/hvc/hvc_iucv.c | 15 ++-------------
->  1 file changed, 2 insertions(+), 13 deletions(-)
+Hi Tomer,
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on pza/reset/next linus/master v6.9-rc7 next-20240510]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tomer-Maimon/dt-bindings-reset-npcm-add-clock-properties/20240510-072622
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20240509192411.2432066-3-tmaimon77%40gmail.com
+patch subject: [PATCH v24 2/4] reset: npcm: register npcm8xx clock auxiliary bus device
+config: i386-buildonly-randconfig-004-20240510 (https://download.01.org/0day-ci/archive/20240510/202405101939.Espij82X-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240510/202405101939.Espij82X-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405101939.Espij82X-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/reset/reset-npcm.c:391:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     391 |         kfree(rdev);
+         |         ^
+   drivers/reset/reset-npcm.c:391:2: note: did you mean 'vfree'?
+   include/linux/vmalloc.h:162:13: note: 'vfree' declared here
+     162 | extern void vfree(const void *addr);
+         |             ^
+>> drivers/reset/reset-npcm.c:400:9: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     400 |         rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
+         |                ^
+   drivers/reset/reset-npcm.c:400:9: note: did you mean 'vzalloc'?
+   include/linux/vmalloc.h:142:14: note: 'vzalloc' declared here
+     142 | extern void *vzalloc(unsigned long size) __alloc_size(1);
+         |              ^
+>> drivers/reset/reset-npcm.c:400:7: error: incompatible integer to pointer conversion assigning to 'struct npcm_clock_adev *' from 'int' [-Wint-conversion]
+     400 |         rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/reset/reset-npcm.c:414:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     414 |                 kfree(adev);
+         |                 ^
+   4 errors generated.
+
+
+vim +/kfree +391 drivers/reset/reset-npcm.c
+
+   385	
+   386	static void npcm_clock_adev_release(struct device *dev)
+   387	{
+   388		struct auxiliary_device *adev = to_auxiliary_dev(dev);
+   389		struct npcm_clock_adev *rdev = to_npcm_clock_adev(adev);
+   390	
+ > 391		kfree(rdev);
+   392	}
+   393	
+   394	static struct auxiliary_device *npcm_clock_adev_alloc(struct npcm_rc_data *rst_data, char *clk_name)
+   395	{
+   396		struct npcm_clock_adev *rdev;
+   397		struct auxiliary_device *adev;
+   398		int ret;
+   399	
+ > 400		rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
+   401		if (!rdev)
+   402			return ERR_PTR(-ENOMEM);
+   403	
+   404		rdev->base = rst_data->base;
+   405	
+   406		adev = &rdev->adev;
+   407		adev->name = clk_name;
+   408		adev->dev.parent = rst_data->dev;
+   409		adev->dev.release = npcm_clock_adev_release;
+   410		adev->id = 555u;
+   411	
+   412		ret = auxiliary_device_init(adev);
+   413		if (ret) {
+   414			kfree(adev);
+   415			return ERR_PTR(ret);
+   416		}
+   417	
+   418		return adev;
+   419	}
+   420	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
