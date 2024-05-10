@@ -1,209 +1,98 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4E1171093
-	for <llvm@lists.linux.dev>; Fri, 10 May 2024 15:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1681B171E4F
+	for <llvm@lists.linux.dev>; Fri, 10 May 2024 16:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715354113; cv=none; b=VtlvoSH2KoNTKo66JEXozkcodCvMO9PBTc0zJkYCeK/SR6kTaNQQuUZxTThYg7hWeO/SPZsOkPy71CtoJ2gFmxi60S/X58S7B/n1fo0+4a7t5CRzAyxwQedJQ4seL8SStyfXYa6MYcKPBkRXuOav3rFVYE/wWB4W5XtYUOVHZVQ=
+	t=1715357630; cv=none; b=l13r9JzzdttuyaQEyKeNb+U77EMkZHdRslfWMN7/rCwVOx2RyIhsLEtwvcVE4/LPxyW1G2JLonHQU3YIP28JUHpyQlx/9/7nhtqUbzWVHwDQ63/xMqkvVkfVEIZNsgweNep75aODQW8V12v556u5Xm5yvunhYCboaW0o8c2G+B4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715354113; c=relaxed/simple;
-	bh=+l80251r0ZhwdypAfFr7iG7PA4iPz9YsZVkf3xTYNbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DBcqco3+X4HY7hBnlvnmICkFlwv6/jqLUo10LDECP5C57rIKQlxbzXEP1nTf71pFmvioRbHpnyoXKWfK92cCjEKRfP937thgMjDOuHDc9xIYpbgMkbN6iuWTYuxxI/dgaID9NFmIzc6wlRppEkNt4miycKnxVxINWYTSlSJI/v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=SYWaCTf/; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ssG029tG; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=SYWaCTf/; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ssG029tG; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1715357630; c=relaxed/simple;
+	bh=b2Vtp/c0wZElNrbeWZjvkBtkRs6Hnk/JEEfb33UNJTE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mZahnmpGpaUAec17bLmyY9SjuNN+G4oRhomlQyA70uMtS+JrteqeUn3gpsDOchvPAYC4/9yZycA0hVjXMGI5s457aL+ZtZDYw0qay/qfoEk/07MaVc0UBvG2ZnpRIjKDlc5CcFb0JlKNV9sz0bbVZMdNqD5hwlms+OM4qRURatY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rQK1RAEf; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="SYWaCTf/";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ssG029tG";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="SYWaCTf/";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ssG029tG"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1664567398;
-	Fri, 10 May 2024 15:15:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1715354109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gkfYfa2bSqpqubQurBedtYk/7Fl2S8Y+GKROzrM51Ig=;
-	b=SYWaCTf/d50jctkmp4j8AYu1ygzCnz99vfAWh+792nzYE8+Y26mKg31h2M8xAb0K8Lu63C
-	cSbNKxgJq3BPMZWSnKRmO/ScTnAouMc8FDXwl39KsoYQQWLCXt9dGmUPOF+2O4lBVDDodS
-	yrXkDXTlOIxvtEiAlDD4s5d4b5OgSxo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1715354109;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gkfYfa2bSqpqubQurBedtYk/7Fl2S8Y+GKROzrM51Ig=;
-	b=ssG029tGeFnfLQzjax5mMmKqSG6X1vCpV9q/jWyoYoCnZ5e0obffkT29/ZI/pazxqECgm4
-	Xu9WiQurQwCiqGDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="SYWaCTf/";
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=ssG029tG
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1715354109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gkfYfa2bSqpqubQurBedtYk/7Fl2S8Y+GKROzrM51Ig=;
-	b=SYWaCTf/d50jctkmp4j8AYu1ygzCnz99vfAWh+792nzYE8+Y26mKg31h2M8xAb0K8Lu63C
-	cSbNKxgJq3BPMZWSnKRmO/ScTnAouMc8FDXwl39KsoYQQWLCXt9dGmUPOF+2O4lBVDDodS
-	yrXkDXTlOIxvtEiAlDD4s5d4b5OgSxo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1715354109;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gkfYfa2bSqpqubQurBedtYk/7Fl2S8Y+GKROzrM51Ig=;
-	b=ssG029tGeFnfLQzjax5mMmKqSG6X1vCpV9q/jWyoYoCnZ5e0obffkT29/ZI/pazxqECgm4
-	Xu9WiQurQwCiqGDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 09A90139AA;
-	Fri, 10 May 2024 15:15:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id zAxUAv05PmYqKAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Fri, 10 May 2024 15:15:09 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id A59B8A0983; Fri, 10 May 2024 17:15:08 +0200 (CEST)
-Date: Fri, 10 May 2024 17:15:08 +0200
-From: Jan Kara <jack@suse.cz>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] fs: fix unintentional arithmetic wraparound in offset
- calculation
-Message-ID: <20240510151508.hajqjxsn7rghk3dj@quack3>
-References: <20240509-b4-sio-read_write-v1-1-06bec2022697@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rQK1RAEf"
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-47ef107b07fso1097728137.0
+        for <llvm@lists.linux.dev>; Fri, 10 May 2024 09:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715357628; x=1715962428; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b2Vtp/c0wZElNrbeWZjvkBtkRs6Hnk/JEEfb33UNJTE=;
+        b=rQK1RAEfyrHKFBKqOBhOz7iI7zd6uGmAsT33tLcyXM96j1pxoOjl2/NB8WUkPuvBvz
+         cX/rtONCscBVNiF0xLg4lqAmqbSl9pOMY9rmUFOM5dHKQiCCxt4kdvN7QQAsdymaP+b0
+         KVORg1BmX2GwT1HHQm7sfzsreeS2mT+WVayFgUq/Dusb1oDkfJgLHpxN6vfZRp63aA4j
+         fMNResfUYvc5nFZSLFa+EQb7oUjj6V+yyRhopu+8sDRQWeeezO+/Adb78i6a2aZr3UJu
+         W7NvFgwe9NLMn1eXcnrfkV4Z7i30XQ2xQ4u4EkPQNisDK3nQaIgYVFtEgGAp3451ptFc
+         f6Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715357628; x=1715962428;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b2Vtp/c0wZElNrbeWZjvkBtkRs6Hnk/JEEfb33UNJTE=;
+        b=Sy+mN+QxMST+vn++VfhpInF2CgjZ2Jdx8vAV3CxlPGYuwBwvb5VyhbtBlCNZXONWZc
+         iutw2yH8GoA4jZy4WJj9pWU3kSPUcfgqiwUT/BywZeEr2x1LLLYxPd7EgxPjb6lu4I4Q
+         cXVLqqIKa0426SYjCHQp0RSpCYjAjRduVNJqhxcNd7GpfnA2PbyaDT9/+D7VFfx87nFD
+         ktGN5dP1VvZ7fSTW5/+H8Yct/P2CH9+l3MNVvaRqPQgnGQWnoz7Cz58o17b/0P3Uw1hA
+         k2ki1bgNdPNbD22OeiiXgIa2Jt4u616g8zTyuHWh3Ac/ZKitBX06XzpdITzgM6o3RE7x
+         YU2A==
+X-Forwarded-Encrypted: i=1; AJvYcCUnX4DMVFV9SX1QeAvYWEoUcQ01OkfoN2FbD3mq7vfT6rpyIf1GJUmHTzhNWyTBMIJBSvxCdVGpIS0DpSjfO38eaM9Pog==
+X-Gm-Message-State: AOJu0YxDkjRJ0rogV+FIDLvZwl+Glsa8UGaPrerX2j1P5ge/0bpMzdlF
+	CmdjYTgeKU0DAypslTM0u/lzru3m+WojRQ3oRXezFNGA2KOwXlJokOIVKFQT6sP3syccbm5wucU
+	VDPy3z3xr3PSXt/43KeI/u2BGKruGJMOKiQVT
+X-Google-Smtp-Source: AGHT+IG41/Va6A/PicQEwVzYdPo29oFPCeD2uQQ0q6aGV6VfwkSy/QFh16mwRnTYc1WroFao7pdgMaWgVuqXaACix2Q=
+X-Received: by 2002:a67:ec0a:0:b0:47b:ab0d:b3f2 with SMTP id
+ ada2fe7eead31-47fabb4fafcmr5674759137.9.1715357626878; Fri, 10 May 2024
+ 09:13:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240509-b4-sio-read_write-v1-1-06bec2022697@google.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DWL_DNSWL_BLOCKED(0.00)[suse.cz:dkim];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:dkim]
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 1664567398
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Score: -4.01
+References: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com> <2024051039-bankable-liking-e836@gregkh>
+In-Reply-To: <2024051039-bankable-liking-e836@gregkh>
+From: Justin Stitt <justinstitt@google.com>
+Date: Fri, 10 May 2024 09:13:34 -0700
+Message-ID: <CAFhGd8oo-th9bw-VQQAPva6_zNBHQjmOp+oEcaZOM4uk+xi-oQ@mail.gmail.com>
+Subject: Re: [PATCH] tty: vt: saturate scrollback_delta to avoid overflow
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org, 
+	linux-serial@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu 09-05-24 21:34:58, Justin Stitt wrote:
-> When running syzkaller with the newly reintroduced signed integer
-> overflow sanitizer we encounter this report:
-> 
-> [   67.991989] ------------[ cut here ]------------
-> [   67.995501] UBSAN: signed-integer-overflow in ../fs/read_write.c:91:10
-> [   68.000067] 9223372036854775807 + 4096 cannot be represented in type 'loff_t' (aka 'long long')
-> [   68.006266] CPU: 4 PID: 10851 Comm: syz-executor.5 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
-> [   68.012353] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [   68.018983] Call Trace:
-> [   68.020803]  <TASK>
-> [   68.022540]  dump_stack_lvl+0x93/0xd0
-> [   68.025222]  handle_overflow+0x171/0x1b0
-> [   68.028053]  generic_file_llseek_size+0x35b/0x380
-> ...
-> 
-> Historically, the signed integer overflow sanitizer did not work in the
-> kernel due to its interaction with `-fwrapv` but this has since been
-> changed [1] in the newest version of Clang. It was re-enabled in the
-> kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
-> sanitizer").
-> 
-> Since @offset is later limited by @maxsize, we can proactively safeguard
-> against exceeding that value and also dodge some accidental overflow
-> (which may cause bad file access):
-> 
-> 	loff_t vfs_setpos(struct file *file, loff_t offset, loff_t maxsize)
-> 	{
-> 		if (offset < 0 && !unsigned_offsets(file))
-> 			return -EINVAL;
-> 		if (offset > maxsize)
-> 			return -EINVAL;
-> 		...
-> 
-> Link: https://github.com/llvm/llvm-project/pull/82432 [1]
-> Closes: https://github.com/KSPP/linux/issues/358
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-> Here's the syzkaller reproducer:
-> | # {Threaded:false Repeat:false RepeatTimes:0 Procs:1 Slowdown:1 Sandbox:
-> | # SandboxArg:0 Leak:false NetInjection:false NetDevices:false
-> | # NetReset:false Cgroups:false BinfmtMisc:false CloseFDs:false KCSAN:false
-> | # DevlinkPCI:false NicVF:false USB:false VhciInjection:false Wifi:false
-> | # IEEE802154:false Sysctl:false Swap:false UseTmpDir:false
-> | # HandleSegv:false Repro:false Trace:false LegacyOptions:{Collide:false
-> | # Fault:false FaultCall:0 FaultNth:0}}
-> | r0 = openat$sysfs(0xffffffffffffff9c, &(0x7f0000000000)='/sys/kernel/address_bits', 0x0, 0x98)
-> | lseek(r0, 0x7fffffffffffffff, 0x2)
-> 
-> ... which was used against Kees' tree here (v6.8rc2):
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=wip/v6.9-rc2/unsigned-overflow-sanitizer
-> 
-> ... with this config:
-> https://gist.github.com/JustinStitt/824976568b0f228ccbcbe49f3dee9bf4
-> ---
->  fs/read_write.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/read_write.c b/fs/read_write.c
-> index d4c036e82b6c..10c3eaa5ef55 100644
-> --- a/fs/read_write.c
-> +++ b/fs/read_write.c
-> @@ -88,7 +88,7 @@ generic_file_llseek_size(struct file *file, loff_t offset, int whence,
->  {
->  	switch (whence) {
->  	case SEEK_END:
-> -		offset += eof;
-> +		offset = min_t(loff_t, offset, maxsize - eof) + eof;
+On Fri, May 10, 2024 at 3:40=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, May 06, 2024 at 06:55:19PM +0000, Justin Stitt wrote:
+> > Using the signed overflow sanitizer with syzkaller produces this UBSAN
+> > report:
+>
+> <snip>
+>
+> I think you might want to hold off on these until the discussion on the
+> hardening list about overflows all settles down to a solid resolution.
+> Right now these all seem to be a mess and perhaps you will have a better
+> set of primitives to work with once that thread is finished.
 
-Well, but by this you change the behavior of seek(2) for huge offsets.
-Previously we'd return -EINVAL (from following vfs_setpos()), now we set
-position to maxsize. I don't think that is desirable?
+Agreed.
 
-Also the addition in SEEK_CUR could overflow in the same way AFAICT so we
-could treat that in one patch so that the whole function is fixed at once?
+I came to the same conclusion once I reached fs/*.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Let's see how folks want to go forward with handling wraparound :thumbs_up:
+
+>
+> thanks,
+>
+> greg k-h
+
+Thanks
+Justin
