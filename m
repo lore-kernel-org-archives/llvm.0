@@ -1,103 +1,177 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC47E5490E;
-	Fri, 10 May 2024 07:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46F115FA87
+	for <llvm@lists.linux.dev>; Fri, 10 May 2024 09:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715324560; cv=none; b=FI4d7B6LsUbX85hMYghkOE8up3NJXszulboSltQ12gfKqerWWLVkEGSmgmLDyvvnwndnNqnovHs12omh+Xj03Vmgh3lnJ8Q+9dwg9Y1zyaJoSWb4rfZi7GCl4LM4q+G2+KSpkfWrmefQpBCVK9bhPjt65j65ENJ7kCDyUXvHFFo=
+	t=1715331974; cv=none; b=cmD5CqotFE3je+P9eceVE5+3n045AWQVbkI87ly41wmmqWYlkGEBFrHOV/OuR/S200+NZKBKVjM2LJ7plt8u8M6NbmhvPLe32QBZUGttjir/pYNy4SXQCHhAK40zPoUAFAbDCAR9tHIIFQ8lqUn+1OWglpSNwRNCSsG59BMkMb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715324560; c=relaxed/simple;
-	bh=I9q2/LE7OixOeEBOotIdBWSBIomAbjME2L8JXihXNWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ucLKuSkAzrLZrLzHj8eEFumCWzAC9ja3exzK0Wl0Eg3ZOPgg8cQ+TYOOo4sO78PezrKaNVFK7DxEK9d6IysNIQyniApQgcWzY22l5YqlFxElZu+hrnGrlNromT15mb5Fpd8njWbfuddC93zC3Gvq//OAJpBH3Fa6uq8JbDbOqzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=pOYYVDPa; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1715331974; c=relaxed/simple;
+	bh=tyOpBmlZ85nCkdfKTZECuSTS0sZ3YHanLOh3xffjebU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=b6wpykm4ff1pkzIHj3PeFx8ttsqS5wFSHmopmGsbZL1grNS1inJtXUPCkF1Wu7r3pOsfwDEiXGBbwIfH3fmKqxCs4CLBV9Py0l1f11C6Gm4QocOiYqemzscnGnJ8HPP1OUTmgs7sooX2K4c91BjcCk6KsowWSjJJJlYUfvSvQBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G80e5Oqq; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="pOYYVDPa"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9BEIrQ+9MvvMRnuPmQrJgc1/AxggZCBl/hYSbaTzqVY=; b=pOYYVDPa7cVJDbdcvYoD4wfRNM
-	xwNDLjiie4qeT3z15wFQqeGABjlPtifo1iQjjPye49GUPseiI6nXut1fWigs5y4sT044H9jFKJ75k
-	QCcTDjW7uASr80yCwVSwB1qOsZZgEJuIJhj479327r5LuU9RM8MTDYYSshbyMcn1D7M04+Wo88WQq
-	jiBgRAvAT9kaJ6lJdXRT3jQ3azXQ0aA6VCYuKZigc0ohSdSFDIlgfHC29mEfdgHOEsKwoCDyC5qcp
-	KS8dQJdHFljNZtVfyKUiEefcvnfx5Lr6jEo4Z5r2zviNJ5csO4xAhSr3NDZsDRMYWI4ue1rjjfaNk
-	/+H/Eybg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1s5KGy-002BnN-1U;
-	Fri, 10 May 2024 07:02:28 +0000
-Date: Fri, 10 May 2024 08:02:28 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] libfs: fix accidental overflow in offset calculation
-Message-ID: <20240510070228.GY2118490@ZenIV>
-References: <20240510-b4-sio-libfs-v1-1-e747affb1da7@google.com>
- <20240510004906.GU2118490@ZenIV>
- <20240510010451.GV2118490@ZenIV>
- <6oq7du4gkj3mvgzgnmqn7x44ccd3go2d22agay36chzvuv3zyt@4fktkazj4cvw>
- <20240510044805.GW2118490@ZenIV>
- <20240510063312.GX2118490@ZenIV>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G80e5Oqq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715331972; x=1746867972;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=tyOpBmlZ85nCkdfKTZECuSTS0sZ3YHanLOh3xffjebU=;
+  b=G80e5OqquGOiabDwQcV1Ko1KWdZDbJukPzwUffB0Nvuw4d6WuokNgMxc
+   B4HL9XPGFs03o5Ex11SZ8dRaPdSp9gw8ksHx3GriAMYpv13CpGnusgnfE
+   kiS2zJlLsVWXy8Lu6DYeu7K+9Xlvw7oULrjGGp0SDaVOpiAFa7dBRyePc
+   6NhkTd0eKlPIqxO3Bh5qoE0IzPn1LRHJV0HYa0HJBZwS76rBEU64hmw6A
+   gWMjIDov164jlfvSLO7IvMYJDVbhKcDwu+i6iqQM8kA1OGtevTT1h7GNr
+   n4aS9OTg4jua6ZKpL39SArTvCyIrOATlbW4cEtuUpg65QVWDBz1e3kOfi
+   g==;
+X-CSE-ConnectionGUID: qAc/UQ/sSzO0MD8qugoCtQ==
+X-CSE-MsgGUID: 4LPiEWZGTMO5gE7N9TalOg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="28787500"
+X-IronPort-AV: E=Sophos;i="6.08,150,1712646000"; 
+   d="scan'208";a="28787500"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 02:06:11 -0700
+X-CSE-ConnectionGUID: 8dhvWpM1RzesBRtyYX+qZw==
+X-CSE-MsgGUID: zCuMT0YoSkORMG+6wyH4og==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,150,1712646000"; 
+   d="scan'208";a="34067748"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.85])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 02:06:07 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 10 May 2024 12:06:02 +0300 (EEST)
+To: John Hubbard <jhubbard@nvidia.com>
+cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    Fenghua Yu <fenghua.yu@intel.com>, 
+    Reinette Chatre <reinette.chatre@intel.com>, 
+    Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+In-Reply-To: <20240508190254.266892-1-jhubbard@nvidia.com>
+Message-ID: <c1e834d6-266d-d8bb-4e85-cdc440ddcb31@linux.intel.com>
+References: <20240508190254.266892-1-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240510063312.GX2118490@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: multipart/mixed; boundary="8323328-1600665862-1715331962=:1562"
 
-On Fri, May 10, 2024 at 07:33:12AM +0100, Al Viro wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> As the matter of fact, it would be interesting to find out
-> which instances, if any, do *not* have that relationship
-> between SEEK_CUR and SEEK_SET.  If such are rare, it might
-> make sense to mark them as such in file_operations and
-> have vfs_llseek() check that - it would've killed a whole
-> lot of boilerplate.  And there it a careful handling of
-> overflow checks (or a clear comment explaining what's
-> going on) would make a lot more sense.
-> 
-> IF we know that an instance deals with SEEK_CUR as SEEK_SET to
-> offset + ->f_pos, we can translate SEEK_CUR into SEEK_SET
-> in the caller.
+--8323328-1600665862-1715331962=:1562
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-FWIW, weird instances do exist.
+On Wed, 8 May 2024, John Hubbard wrote:
 
-kernel/printk/printk.c:devkmsg_llseek(), for example.  Or this
-gem in drivers/fsi/i2cr-scom.c:
-static loff_t i2cr_scom_llseek(struct file *file, loff_t offset, int whence)
-{
-        switch (whence) {
-        case SEEK_CUR:
-                break;
-        case SEEK_SET:
-                file->f_pos = offset;
-                break;
-        default:
-                return -EINVAL;
-        }
+> When building with clang, via:
+>=20
+>     make LLVM=3D1 -C tools/testing/selftests
+>=20
+> ...two types of warnings occur:
+>=20
+>     warning: absolute value function 'abs' given an argument of type
+>     'long' but has parameter of type 'int' which may cause truncation of
+>     value
+>=20
+>     warning: taking the absolute value of unsigned type 'unsigned long'
+>     has no effect
+>=20
+> Fix these by:
+>=20
+> a) using labs() in place of abs(), when long integers are involved, and
+>=20
+> b) Change to use signed integer data types, in places where subtraction
+>    is used (and could end up with negative values).
+>=20
+> c) Remove a duplicate abs() call in cmt_test.c.
 
-        return offset;
-}
-SEEK_CUR handling in particular is just plain bogus: lseek(fd, -9, SEEK_CUR)
-doing nothing to current position and returning EBADF.  Even if you've done
-lseek(fd, 9, SEEK_SET) just before that...
+In general, instead of filename, it's better to refer to the actual=20
+function in this kind of description. And in this particular case,=20
+cmt_test.c could be replaced with "the CMT selftest" which is more=20
+descriptive and still unambiguous.
 
-I suspect that some of those might be outright bugs; /dev/kmsg one probably
-isn't, but by the look of it those should be rare.
+> Cc: Reinette Chatre <reinette.chatre@intel.com>
+> Cc: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-Then there's orangefs_dir_llseek(), with strange handling of SEEK_SET
-(but not SEEK_CUR); might or might not be a bug...
+Thank you.
 
-From the quick look it does appear that it might be a project worth
-attempting - exceptions are very rare.
+Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+
+--=20
+ i.
+
+> ---
+>  tools/testing/selftests/resctrl/cmt_test.c | 4 ++--
+>  tools/testing/selftests/resctrl/mba_test.c | 2 +-
+>  tools/testing/selftests/resctrl/mbm_test.c | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/s=
+elftests/resctrl/cmt_test.c
+> index a81f91222a89..05a241519ae8 100644
+> --- a/tools/testing/selftests/resctrl/cmt_test.c
+> +++ b/tools/testing/selftests/resctrl/cmt_test.c
+> @@ -40,11 +40,11 @@ static int show_results_info(unsigned long sum_llc_va=
+l, int no_of_bits,
+>  =09int ret;
+> =20
+>  =09avg_llc_val =3D sum_llc_val / num_of_runs;
+> -=09avg_diff =3D (long)abs(cache_span - avg_llc_val);
+> +=09avg_diff =3D (long)(cache_span - avg_llc_val);
+>  =09diff_percent =3D ((float)cache_span - avg_llc_val) / cache_span * 100=
+;
+> =20
+>  =09ret =3D platform && abs((int)diff_percent) > max_diff_percent &&
+> -=09      abs(avg_diff) > max_diff;
+> +=09      labs(avg_diff) > max_diff;
+> =20
+>  =09ksft_print_msg("%s Check cache miss rate within %lu%%\n",
+>  =09=09       ret ? "Fail:" : "Pass:", max_diff_percent);
+> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/s=
+elftests/resctrl/mba_test.c
+> index 7946e32e85c8..5fffbc9ff6a4 100644
+> --- a/tools/testing/selftests/resctrl/mba_test.c
+> +++ b/tools/testing/selftests/resctrl/mba_test.c
+> @@ -60,7 +60,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsign=
+ed long *bw_resc)
+>  =09/* Memory bandwidth from 100% down to 10% */
+>  =09for (allocation =3D 0; allocation < ALLOCATION_MAX / ALLOCATION_STEP;
+>  =09     allocation++) {
+> -=09=09unsigned long avg_bw_imc, avg_bw_resc;
+> +=09=09long avg_bw_imc, avg_bw_resc;
+>  =09=09unsigned long sum_bw_imc =3D 0, sum_bw_resc =3D 0;
+>  =09=09int avg_diff_per;
+>  =09=09float avg_diff;
+> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/s=
+elftests/resctrl/mbm_test.c
+> index d67ffa3ec63a..a4c3ea49b0e8 100644
+> --- a/tools/testing/selftests/resctrl/mbm_test.c
+> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+> @@ -17,7 +17,7 @@
+>  static int
+>  show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
+>  {
+> -=09unsigned long avg_bw_imc =3D 0, avg_bw_resc =3D 0;
+> +=09long avg_bw_imc =3D 0, avg_bw_resc =3D 0;
+>  =09unsigned long sum_bw_imc =3D 0, sum_bw_resc =3D 0;
+>  =09int runs, ret, avg_diff_per;
+>  =09float avg_diff =3D 0;
+>=20
+> base-commit: 45db3ab70092637967967bfd8e6144017638563c
+> prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
+> prerequisite-patch-id: 8d96c4b8c3ed6d9ea2588ef7f594ae0f9f83c279
+>=20
+--8323328-1600665862-1715331962=:1562--
