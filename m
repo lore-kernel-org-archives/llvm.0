@@ -1,98 +1,120 @@
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1681B171E4F
-	for <llvm@lists.linux.dev>; Fri, 10 May 2024 16:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D30417279F
+	for <llvm@lists.linux.dev>; Fri, 10 May 2024 16:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715357630; cv=none; b=l13r9JzzdttuyaQEyKeNb+U77EMkZHdRslfWMN7/rCwVOx2RyIhsLEtwvcVE4/LPxyW1G2JLonHQU3YIP28JUHpyQlx/9/7nhtqUbzWVHwDQ63/xMqkvVkfVEIZNsgweNep75aODQW8V12v556u5Xm5yvunhYCboaW0o8c2G+B4=
+	t=1715358081; cv=none; b=GTpghOIdhu6PfKG/B2Pyr8HBMtueeURnozcn+reymbpsh3i1TLVDRKmjEjlNcApIeGXSASQLQNWrM5jTRnEYxp6Ppip/sk3vHQ8U3lwAmTLaUoQQ3XtFs2/V9CMkYHz9VSD6/OKpT5tHPcn6GXIOjr0Cg7R9QCLByUpDeeW+lNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715357630; c=relaxed/simple;
-	bh=b2Vtp/c0wZElNrbeWZjvkBtkRs6Hnk/JEEfb33UNJTE=;
+	s=arc-20240116; t=1715358081; c=relaxed/simple;
+	bh=8aU0aZOb2y9DUg+lZw8BCNxpFVehcs41OsBX/b+s5tA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mZahnmpGpaUAec17bLmyY9SjuNN+G4oRhomlQyA70uMtS+JrteqeUn3gpsDOchvPAYC4/9yZycA0hVjXMGI5s457aL+ZtZDYw0qay/qfoEk/07MaVc0UBvG2ZnpRIjKDlc5CcFb0JlKNV9sz0bbVZMdNqD5hwlms+OM4qRURatY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rQK1RAEf; arc=none smtp.client-ip=209.85.217.53
+	 To:Cc:Content-Type; b=gdvpAe8HKxr2P3Z1llVj6RwAkIejPItWiE2ExsYZhOxyEldV0407XJ42AvjiNa7ThptmkG0cZs1r8doYzZhnb34knOSHvdBR3wghYJvsvl/aBYMhB38di4Mx7+M0AYDgWyiVav9uDcog7o8ma8irtLDZUlngjRYFEFoazlDWMQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pWNH25nG; arc=none smtp.client-ip=209.85.219.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rQK1RAEf"
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-47ef107b07fso1097728137.0
-        for <llvm@lists.linux.dev>; Fri, 10 May 2024 09:13:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pWNH25nG"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-de46b113a5dso2086058276.3
+        for <llvm@lists.linux.dev>; Fri, 10 May 2024 09:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715357628; x=1715962428; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1715358078; x=1715962878; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b2Vtp/c0wZElNrbeWZjvkBtkRs6Hnk/JEEfb33UNJTE=;
-        b=rQK1RAEfyrHKFBKqOBhOz7iI7zd6uGmAsT33tLcyXM96j1pxoOjl2/NB8WUkPuvBvz
-         cX/rtONCscBVNiF0xLg4lqAmqbSl9pOMY9rmUFOM5dHKQiCCxt4kdvN7QQAsdymaP+b0
-         KVORg1BmX2GwT1HHQm7sfzsreeS2mT+WVayFgUq/Dusb1oDkfJgLHpxN6vfZRp63aA4j
-         fMNResfUYvc5nFZSLFa+EQb7oUjj6V+yyRhopu+8sDRQWeeezO+/Adb78i6a2aZr3UJu
-         W7NvFgwe9NLMn1eXcnrfkV4Z7i30XQ2xQ4u4EkPQNisDK3nQaIgYVFtEgGAp3451ptFc
-         f6Kg==
+        bh=eFE3n+MZyxeo0bNjBIjsCbl4GDn+4HbpNAkc84Q2m38=;
+        b=pWNH25nGVFTNGWYAmDo3sJMn7FYOh5dzShWyNGJK40kuXwQC5qKT3zD9szk7PsuQww
+         feJQSM/X2xkICsN/KJjUkNoY8H4KYLIwaTCEjNOaEZliKYA/+wvUR+A7kORYd04q6pYx
+         V8Y1cwTpvJj20CuzfsD5nQlFIPXzBxWOi91VOV3OUZDoHQ9/dED/fNwC+JlclBMFSMwU
+         AMvjj/5749LGb8qKogWmU04kH0c7ycaUU1pmvtf/gFxwJzYQ+mrrhUrOOpOxjsyXABNR
+         10gvMOGVIKsx1TY/DVQv0VI0tbv4nNdY6aebVFzfImEb+3AUtsysowv+9xnrBoNyIA4w
+         HuZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715357628; x=1715962428;
+        d=1e100.net; s=20230601; t=1715358078; x=1715962878;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b2Vtp/c0wZElNrbeWZjvkBtkRs6Hnk/JEEfb33UNJTE=;
-        b=Sy+mN+QxMST+vn++VfhpInF2CgjZ2Jdx8vAV3CxlPGYuwBwvb5VyhbtBlCNZXONWZc
-         iutw2yH8GoA4jZy4WJj9pWU3kSPUcfgqiwUT/BywZeEr2x1LLLYxPd7EgxPjb6lu4I4Q
-         cXVLqqIKa0426SYjCHQp0RSpCYjAjRduVNJqhxcNd7GpfnA2PbyaDT9/+D7VFfx87nFD
-         ktGN5dP1VvZ7fSTW5/+H8Yct/P2CH9+l3MNVvaRqPQgnGQWnoz7Cz58o17b/0P3Uw1hA
-         k2ki1bgNdPNbD22OeiiXgIa2Jt4u616g8zTyuHWh3Ac/ZKitBX06XzpdITzgM6o3RE7x
-         YU2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUnX4DMVFV9SX1QeAvYWEoUcQ01OkfoN2FbD3mq7vfT6rpyIf1GJUmHTzhNWyTBMIJBSvxCdVGpIS0DpSjfO38eaM9Pog==
-X-Gm-Message-State: AOJu0YxDkjRJ0rogV+FIDLvZwl+Glsa8UGaPrerX2j1P5ge/0bpMzdlF
-	CmdjYTgeKU0DAypslTM0u/lzru3m+WojRQ3oRXezFNGA2KOwXlJokOIVKFQT6sP3syccbm5wucU
-	VDPy3z3xr3PSXt/43KeI/u2BGKruGJMOKiQVT
-X-Google-Smtp-Source: AGHT+IG41/Va6A/PicQEwVzYdPo29oFPCeD2uQQ0q6aGV6VfwkSy/QFh16mwRnTYc1WroFao7pdgMaWgVuqXaACix2Q=
-X-Received: by 2002:a67:ec0a:0:b0:47b:ab0d:b3f2 with SMTP id
- ada2fe7eead31-47fabb4fafcmr5674759137.9.1715357626878; Fri, 10 May 2024
- 09:13:46 -0700 (PDT)
+        bh=eFE3n+MZyxeo0bNjBIjsCbl4GDn+4HbpNAkc84Q2m38=;
+        b=Hx8OXRPQOB6HquRqULQLqawC7uQLUzh0nKYoAviofh8tOqCxsylNcOPcMB53tmtARA
+         Lacdp7rTetjsq/H2YT6Cw/WzVwSNQncfCh3q5U77mVDuFKW//iFwpdXIq1ly099T8yLg
+         mFe74o1pVhMhQst25olRr5nwNHOsc5V4yog6FKNAmHt1BdxpFwP/+ttpHop/Yk5gVcQw
+         J2b8bmobhfHIm/ErBh2Grz32k6D89Ofbm0e0ZFv0wiwdWA5NEFvf7s+vJ2YNlyOyUGbV
+         WkpsRCS1CGkpy3brPQBz2g/1KSbNm+yDs0pBx30NUiOb13UsOO/0j+kJfWOGyh4ekc3N
+         BPIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXC1HwmZoXAygUie8RdKVJ+yDwLf5XvwHUwTldwntxY1ZepggL/b8/ZEpFoVHFzPPysxm/BfXrY1fNHXVNMazB/oprumg==
+X-Gm-Message-State: AOJu0YwCUccw1JgHmYwzAzizPMsjoApJ0IWwRDaR5kf3lhGWXzV8Zq7P
+	56ylfrfqWQ8rhetvsRLTGt9FL/vJjZtGRRWBZbctuhwSMKviHL5QEsOiM7OGk2w4ALO5wTGixV2
+	w6b0bQ07YOVWAUjPr8aDwT/ZRwMMQTt0W7Mkd
+X-Google-Smtp-Source: AGHT+IG1DyUD3fKZKxA634315t5oE5P95Q7TTzvjl87/l/KT7ajBuikVKoMlofkpK08Ducvn1mCsxmnORAB/OPa4VDU=
+X-Received: by 2002:a25:bc8f:0:b0:dee:6346:b856 with SMTP id
+ 3f1490d57ef6-dee6346bbaemr42235276.34.1715358077724; Fri, 10 May 2024
+ 09:21:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240506-b4-sio-scrollback-delta-v1-1-4164d162a2b8@google.com> <2024051039-bankable-liking-e836@gregkh>
-In-Reply-To: <2024051039-bankable-liking-e836@gregkh>
+References: <20240509-b4-sio-read_write-v1-1-06bec2022697@google.com> <20240510151508.hajqjxsn7rghk3dj@quack3>
+In-Reply-To: <20240510151508.hajqjxsn7rghk3dj@quack3>
 From: Justin Stitt <justinstitt@google.com>
-Date: Fri, 10 May 2024 09:13:34 -0700
-Message-ID: <CAFhGd8oo-th9bw-VQQAPva6_zNBHQjmOp+oEcaZOM4uk+xi-oQ@mail.gmail.com>
-Subject: Re: [PATCH] tty: vt: saturate scrollback_delta to avoid overflow
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, llvm@lists.linux.dev
+Date: Fri, 10 May 2024 09:21:06 -0700
+Message-ID: <CAFhGd8qbUYXmgiFuLGQ7dWXFUtZacvT82wD4jSS-xNTvtzXKGQ@mail.gmail.com>
+Subject: Re: [PATCH] fs: fix unintentional arithmetic wraparound in offset calculation
+To: Jan Kara <jack@suse.cz>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 10, 2024 at 3:40=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Fri, May 10, 2024 at 8:15=E2=80=AFAM Jan Kara <jack@suse.cz> wrote:
 >
-> On Mon, May 06, 2024 at 06:55:19PM +0000, Justin Stitt wrote:
-> > Using the signed overflow sanitizer with syzkaller produces this UBSAN
-> > report:
+> On Thu 09-05-24 21:34:58, Justin Stitt wrote:
+> > ---
+> >  fs/read_write.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/read_write.c b/fs/read_write.c
+> > index d4c036e82b6c..10c3eaa5ef55 100644
+> > --- a/fs/read_write.c
+> > +++ b/fs/read_write.c
+> > @@ -88,7 +88,7 @@ generic_file_llseek_size(struct file *file, loff_t of=
+fset, int whence,
+> >  {
+> >       switch (whence) {
+> >       case SEEK_END:
+> > -             offset +=3D eof;
+> > +             offset =3D min_t(loff_t, offset, maxsize - eof) + eof;
 >
-> <snip>
->
-> I think you might want to hold off on these until the discussion on the
-> hardening list about overflows all settles down to a solid resolution.
-> Right now these all seem to be a mess and perhaps you will have a better
-> set of primitives to work with once that thread is finished.
+> Well, but by this you change the behavior of seek(2) for huge offsets.
+> Previously we'd return -EINVAL (from following vfs_setpos()), now we set
+> position to maxsize. I don't think that is desirable?
 
-Agreed.
-
-I came to the same conclusion once I reached fs/*.
-
-Let's see how folks want to go forward with handling wraparound :thumbs_up:
+RIght, we shouldn't change the current behavior. This patch needs rethinkin=
+g.
 
 >
-> thanks,
+> Also the addition in SEEK_CUR could overflow in the same way AFAICT so we
+> could treat that in one patch so that the whole function is fixed at once=
+?
+
+Yep let's include that one as well. However, I'm going to hold off on
+sending a new version until the discussion about how to handle
+overflow comes to a conclusion; as suggested by Greg [1]. I made too
+many assumptions about how folks want overflow to be handled. In the
+case of this patch, a simple check_add_overflow() should be okay and
+match the behavior, but let's wait and see.
+
 >
-> greg k-h
+>                                                                 Honza
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
+
+[1]: https://lore.kernel.org/all/2024051039-bankable-liking-e836@gregkh/
 
 Thanks
 Justin
