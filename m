@@ -1,165 +1,80 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BFF13B5A1
-	for <llvm@lists.linux.dev>; Fri, 10 May 2024 04:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43ABD20309;
+	Fri, 10 May 2024 04:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715314230; cv=none; b=ZJ1xA3/3NItAeuN/fHn74nlNLFLHlTpcLtK4qlwJtlpoGH+0taxjKTayo8tLfgcc0IarZ1E+0ln714LJHAzHFOEwSqHXFpccwCxDdCzGF0cAvkhGTXOLnMzs8oiPkoBsnxsxXk57mhjM+/OjY3EEeq+zlqLLRadaDcynpDfsuu4=
+	t=1715316496; cv=none; b=ZFJ8BLnPtNxVwqEY9N6QTz76M+D+Nn495q1MMZZul7dTFSbB19fHbzQF3OTbsAI85tf30wAVBF51KbryaRPgijp9xgXSCpGHejlwNGPo4bZvsSuHtIYqYfi9EhkWMEU+PC3tlBNzv9AT7mykPVbz2LI5iNfdEx2Kxmt25grRj2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715314230; c=relaxed/simple;
-	bh=d2zxT7UFllFe6ZfFqF5AXdMRHdFiZGapgke1ZaxIYYU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Xg1jcl6sG8+pxPyvojDaZqVubHobyruNDrEwRZyO/ORofgprRGmLa3H5U98OEcDFZ8d6frqXQ8S/+N8KkbS48Aa1RaTEcXO9osfFfOyV8UBuGbjT6sAGae9Ut/dhcHukjjk83rB3BUtvhKofpouQIvCQcIFhyL+3DAj1XXOxBZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yibgk5+C; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1715316496; c=relaxed/simple;
+	bh=OixUejj2noa/W3WcINTvjh/Srj4k4t4XGVgiozW4yig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YqiMWExIYIRclv9zhwU0OOeBYvrqwq/0Db8Puw6rHIKep5HzkseYncYP5p66CkVbskOHU1uoQ/CZFhz5izvMNs+e+3Uhgebod1SWifB7XjlQNtiEpHFVcq3ysRP68a7Zm6bhwnS/s+d1ZG1UpKPm4NRcDLP9gQC+vqz7V5QP/Co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Wws8dFc5; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yibgk5+C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715314227;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=UKYEZ1xiNM5Yl9G/pb14GR53wx1K71smSBsj7/hu72k=;
-	b=Yibgk5+ClqEdg0c8Iqi7AmRbdR1waGj9mE8G2F21+MJlDIsDJUdzVqCIZGaby4LB0FJZsG
-	i6JAKpJC3I6Iv2H/DZVssdsDb7RV5+bFvTEH6ve4Vaqguo2NS07dVNFaryTZp0I2WXb/B4
-	45qAXUPYCPAkUPML3j9sbpoJndTX+s8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-342-7jhEDhhQMfaV0GYr3GhZIQ-1; Fri, 10 May 2024 00:10:24 -0400
-X-MC-Unique: 7jhEDhhQMfaV0GYr3GhZIQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD88485A58C
-	for <llvm@lists.linux.dev>; Fri, 10 May 2024 04:10:23 +0000 (UTC)
-Received: from [172.64.13.41] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6B8662087D73;
-	Fri, 10 May 2024 04:10:23 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
- (6.9.0-rc7, mainline.kernel.org-clang, 448b3fe5)
-Date: Fri, 10 May 2024 04:10:23 -0000
-To: bhe@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com,
- yiyan@redhat.com, xiawu@redhat.com
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Wws8dFc5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=dhiDhhEwm20W3AdRoKjizM2sEfdCHCLz0s2eBCvTzLU=; b=Wws8dFc5amGeAFtmtxE8TNKNRL
+	g8RnK6XUw51MXBROvF6diEzl9Wp7yRkTMc/K9z36VoPWnq8Rs2HpxmGyqWjG5nN/Z2aUTnQkJn3BG
+	9UpnfF0v5uEAUEPgjcEdgnHM1K2zgPEuKx7M8dF4V1li6hIIgeBOgMiMlaILkaWcMWA3esLrgpdPA
+	LKsrQ7ZBoK4V826Ga1jMd0UUJsidR9bpWdjjbvRNYFi6vooDdOrEJ04stmSDCZYL6YONC78hidUI8
+	ukgFqJFixMMh+CqUW+L8QjzGqvaG7yFhycMUdZu5jOixB2B+A9Kh3BV27Y1yHj+kN82R1SkkvITV5
+	qc2u7cGA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1s5IAv-0024NI-2W;
+	Fri, 10 May 2024 04:48:06 +0000
+Date: Fri, 10 May 2024 05:48:05 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] libfs: fix accidental overflow in offset calculation
+Message-ID: <20240510044805.GW2118490@ZenIV>
+References: <20240510-b4-sio-libfs-v1-1-e747affb1da7@google.com>
+ <20240510004906.GU2118490@ZenIV>
+ <20240510010451.GV2118490@ZenIV>
+ <6oq7du4gkj3mvgzgnmqn7x44ccd3go2d22agay36chzvuv3zyt@4fktkazj4cvw>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
-Message-Id: <11011.124051000102400149@us-mta-342.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6oq7du4gkj3mvgzgnmqn7x44ccd3go2d22agay36chzvuv3zyt@4fktkazj4cvw>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi, we tested your kernel and here are the results:
+On Fri, May 10, 2024 at 03:26:08AM +0000, Justin Stitt wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> This feels like a case of accidental correctness. You demonstrated that
+> even with overflow we end up going down a control path that returns an
+> error code so all is good.
 
+No.  It's about a very simple arithmetical fact: the smallest number that
+wraps to 0 is 2^N, which is more than twice the maximal signed N-bit
+value.  So wraparound on adding a signed N-bit to non-negative signed N-bit
+will always end up with negative result.  That's *NOT* a hard math.  Really.
 
-Kernel information:
-    Commit message: Merge tag 'hwmon-for-v6.9-rc8' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/groeck/linux-staging
+As for the rest... SEEK_CUR semantics is "seek to current position + offset";
+just about any ->llseek() instance will have that shape - calculate the
+position we want to get to, then forget about the difference between
+SEEK_SET and SEEK_CUR.  So noticing that wraparound ends with negative
+is enough - we reject straight SEEK_SET to negatives anyway, so no
+extra logics is needed.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1285024137
+> However, I think finding the solution
+> shouldn't require as much mental gymnastics. We clearly don't want our
+> file offsets to wraparound and a plain-and-simple check for that lets
+> readers of the code understand this.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        kdump - kexec-file-load
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1285024137-x86_64-kernel_upt_26
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /kdump/kexec-file-load
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1285024137-x86_64-kernel_upt_37
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: kselftests: bpf:test_tunnel.sh [FAIL]
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1749
-            Affected tests:
-                kselftests upstream - bpf [x86_64 (debug)]
-
-
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+No comments that would be suitable for any kind of polite company.
