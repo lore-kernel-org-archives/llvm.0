@@ -1,242 +1,264 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04olkn2097.outbound.protection.outlook.com [40.92.75.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32D72F26;
-	Sat, 11 May 2024 11:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715426826; cv=none; b=AvxE9PidvsEr3TbnlQQcOsBdPVX6bXeVn3XifBrykbzfBhTLeLtTcKV38TuqSZYHy7wMncns0zz4XAmo6cFRAlKytUxJxyKWqgCrJryPkSAaBFutHnjRvyKQSdGwz5TuEnbpmrcWgm1qWEr5aBAIjEZ6LunCMbh26eRyMuikxAY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715426826; c=relaxed/simple;
-	bh=H2OaQTPAsRZkWaPkzN8SlKZEtKvekM0EraPhEUlNOrs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SI7ZWNRzNP+dMqMVQ01duICfLGfqHSuaM0ivD9pR7NRzxxbCTlUil8DJujSG71XipNL7+oy1BWnUefEvzbtD4gl03hm1ms9176Cmz12cWGha3lT4ya2lURFoILtV8CVHcImQnnbkifWspMXjiR6MWE6XmxnJv4+X51IDi0Jj/sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gfjhIwod; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B8C51C46
+	for <llvm@lists.linux.dev>; Sat, 11 May 2024 13:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.75.97
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715433931; cv=fail; b=j76RmSsrTdOSZsUC7O22rSEMDJtD3E7AJ4rVcliLZJSljbdOKiWQnrtwlm7e0gRb0ftkfeCuNpAIS5bCjOnuwHLF7VE5R/5SIVvfw4HnH89OBiF8NjENuV8X6Ug8nLyeSecOIUYlK9z/nLe6SfVClwNuunk29JFGuxf8GhWeyOo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715433931; c=relaxed/simple;
+	bh=4Rd7+VPUPRwSW59CQpS5OPxA5kQNQwIL7F0lI2iMF8k=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=iJwPzI58fxauhhNxm9AVblIJjWJ8sk1hhOvDDm28TcyR8/flKbFmft88qk3mPt0HEnlE/98070JXGJCwPqmncM7GmRGBaYehsASML64GlsqlwP925SQZZDJat+MRObHxfeKUS52p1E9qvvw31GsdAzJ2h/oC4fC2ctS4BTHFY2o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=sZLq5Qum; arc=fail smtp.client-ip=40.92.75.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gfjhIwod"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715426825; x=1746962825;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=H2OaQTPAsRZkWaPkzN8SlKZEtKvekM0EraPhEUlNOrs=;
-  b=gfjhIwod10EOhbVb0ssjRBWwBpxHLPGW2JRIoyXD/Rmws7RziIkFavwg
-   5QGMDSADLvrjfvwCUTpkN2WszyLDX8dVBg0M4wvmUPYxcdVUbPMqV2zZT
-   7g/z6c5sOwMteMGySV5n7RVS5hHfmpYE5y1qD8K/kMx70kKyulV0N6ZAp
-   XndB8T8Jqxi1TGvzSF7kkDEhUXR9riev3rIydyLxQg3BnCqulO6iFNjXB
-   hH/fHsa0trkuBGmX/eIsicBlqxUIMcElx963tzToyzJ/bzWkL55lBSbca
-   C8a+lVBmAtUZJ7cXnciGhaWIHy6msYpqGjqInO0wa/NGWANP7ik5wc+Jm
-   Q==;
-X-CSE-ConnectionGUID: 0CQO8tAaTIS10xxf5CQp7Q==
-X-CSE-MsgGUID: eeYKxjbZTAGUkBgfU0W4aA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11069"; a="11637470"
-X-IronPort-AV: E=Sophos;i="6.08,153,1712646000"; 
-   d="scan'208";a="11637470"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2024 04:27:04 -0700
-X-CSE-ConnectionGUID: Yf3obMfxQiqcqDEfToEKEw==
-X-CSE-MsgGUID: g0vg9dvpQhCianGhlWDPaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,153,1712646000"; 
-   d="scan'208";a="29996088"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 11 May 2024 04:27:03 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s5ksV-0007JX-2i;
-	Sat, 11 May 2024 11:26:59 +0000
-Date: Sat, 11 May 2024 19:26:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Simon Horman <horms@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Subject: [morimoto:renesas-bsp/v6.1-dev 13/18]
- drivers/net/ethernet/renesas/rswitch.c:1807:10: error: call to undeclared
- function 'clk_get_rate'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202405111942.d7Fbf8aC-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="sZLq5Qum"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SvZFAVviFeuuE6vc/amYPPQkhM2cxUJPK6teoeQFm1YhS1WpLh27u4VEB5+nW3WyrG2Bi8T1Ks1L9y2sdHMMyvhIL8F2pTEFJRJtugIAEcHWtcADllyB4+Terqdrir8GaYNEqU0NO0RxFttS0TUkw4xRFTw9Upt4LwW0/cMBoyuFv2bgua8BJA+6faigVJPzrspcxdYgC+J3FpLtuztefHtS3hkFQ11iwEgi76EuondOlGQqfdlyrHaUlwluMI/6H6hMfS45hRcBS9NNX+Qvp8ZSmYJ1e32/LODoLWoyqXu3XOqlHGJOIP4JaF7s+luEJ92dulN7K4uqSXFVA4d37w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KTa6mF391ZVj1i3KJsZ6f78nRNAtEuPsXZ9F1PE8cZM=;
+ b=ZsjcEyUE+C/t9ybTkRVRoXKEXO/S4aEItix2YYrJS63F3NMQ3IBGw7gosapNyYTNrlAcrClAF3GFOLfs9ioYeVvbZR2M80QBEpLc8kOB9THqTq6icN9Ym1rdoQNqZ50Scxw7ig70L0vfOqt4VWHnleFV2/dBl9o/6B0+mwNVRZJGo0hZy4R+mJi2Hp3Rjo14YjEoTHBov6w5epQFB5/8uxFD1o4s/x0l2Hj4vdLuz4/15JKluyzPFafGxS+IjhAD52YCS1sa+qnRxWIr6IYwzMCQGOXZsQKxg/Zu3cJ55jgrJ6JP2ylWJ36md6mvjBhDZUusld1m4Vyxxs3tfhkcWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KTa6mF391ZVj1i3KJsZ6f78nRNAtEuPsXZ9F1PE8cZM=;
+ b=sZLq5QumB9vXurVuZsJ3Q74xVgCnO3Uri8njFJdydh6SMHtTADe1Uc9/TSAyT/kTw0hC0cm0QcHdu9oQTCzqYR3tKH6rAtonHfPvJrxFUDJJECRcMg7TxjhtwroYZsOJdsI+vZ8IdHdMaTwHKv8XhOgLW78KXi2BnpKRfiF4U85V65g2m8qgqARH3Rh025iWwmto35Y7DBu9S3u8faCSB1QRda7nOSe0sTOi7LPOcBzR0bLR8UfBKCODisqpmkWCe6pyZVRy6eSXR3Ah0j6rEuAuwZfAJ/2CZ24tmeyVEjqsuCzdCYGdf/B2DCwFigiDhYnd1zt50yci1OqvToJXwA==
+Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
+ by DB9PR02MB9993.eurprd02.prod.outlook.com (2603:10a6:10:45c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.54; Sat, 11 May
+ 2024 13:25:25 +0000
+Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
+ ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
+ ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7544.052; Sat, 11 May 2024
+ 13:25:25 +0000
+From: Erick Archer <erick.archer@outlook.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Erick Archer <erick.archer@outlook.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v3] perf/ring_buffer: Prefer struct_size over open coded arithmetic
+Date: Sat, 11 May 2024 15:24:37 +0200
+Message-ID:
+ <AS8PR02MB72379B4807F3951A1B926BA58BE02@AS8PR02MB7237.eurprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN: [Zf4iJn2WoEzAGBfmCkfXO3/Orl8pYWdS]
+X-ClientProxiedBy: MA2P292CA0011.ESPP292.PROD.OUTLOOK.COM
+ (2603:10a6:250:1::15) To AS8PR02MB7237.eurprd02.prod.outlook.com
+ (2603:10a6:20b:3f1::10)
+X-Microsoft-Original-Message-ID:
+ <20240511132437.14587-1-erick.archer@outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|DB9PR02MB9993:EE_
+X-MS-Office365-Filtering-Correlation-Id: ebdc26e9-f838-48e0-552d-08dc71bdd11d
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|461199019|440099019|3412199016|1602099003|1710799017;
+X-Microsoft-Antispam-Message-Info:
+	1KbvCqvxrRGSaGucqwbM1nNudVLBjCB3/rKFg9KcroWr1nQ0axUJ8TLnPKa6fEwNZygaBaiO/NQRRxZZzjH0etfBi8l2pnFjDcd3f/6QBvTd4yGRoIDl43gG6CBmWIc62q4yHCN0owxF3e/QYf0iE5rJplxS3jxNtHpFIfB53fN/w5Ey6cJq93pTXvR1Bsbe/qFse/inTQrVFmGdTMj4LtT/pt2dexRPL1d5eHdLhye3Bj6RYzZ0VrOX6CXqH5OfiFd708Y49WR8aKXIyVoqqPCfTD1Wm3HuHCjfeOpIZniW0vDtPiU8UNwUlR8IBGu+BJalbUnsKWzRCdqiaO+yHVYfzFhV0zOLPGqyl2eQWlU5uEhZiOdfZ04+Z/GwyqExGOOWay7cc+V6l3fOGFp+jiyj0CUwoZhAob3VccGUCyDb5LWDW4HigB7ge3G+OeJO7+y8vszY5NO12OEohu9PlyJEkXe/GOOGISgwiPm8f8Btlgl5SmkrxNfx/m/8+5krzVzqEdFj9PMVap+v+Y7vx/my+etCX5vLUZESZ6SqwP7T55tjIuKSGEI9wiPVQ87wzOB9tjuuOVWCE+8XUNEggL9ZNPe7ZGK/7MlRyrDrNH0lTILCOq/Ax51OmNZybjGb1HwqhWlmMCcyY7GA7JWRgdyaAnhnn6qBTNl5RMqzYl3f15P8uxz3OBYtPBfvt+uckneWfEyEDM/SUMQKSgWPlQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?W9qOaJMFQ0xlfhfHy3g+w80gcpzKgqtTV8Fr/uJzKzt7JV/LP4xpIByiknST?=
+ =?us-ascii?Q?XIo7xk/WJ5o5ug0zKMN32X8BAjZc9KcrvNRa8YRLyZZKKr+9atslZcTRhY6u?=
+ =?us-ascii?Q?5iLw6/33UbGEirHIQZ0ZXb+RNFcJq+QxAYfHve4dDlftAetDUOg7Is7Y4l+y?=
+ =?us-ascii?Q?fssib4G9+8/xHkt9A1PeBOTV7P856iUFH8fyVT0E6mwbdWKTtaW3LfhDyuwQ?=
+ =?us-ascii?Q?g45Ds84VOvavRXRMWx857GVbCbCVRGUVl2HR1y/pDg+m2aGDcaKTUsdKN6S+?=
+ =?us-ascii?Q?9cHyjNf6furdiZeoy2N5ippbFUIpJDgaZy0cCMYFbEkEYB7NAxf99/1kMluB?=
+ =?us-ascii?Q?PFRXKQEvkYU5STXB9IANF1Ml4iIOqIdluAlGNJQpHr1eRoZaKqza1yhKeXIX?=
+ =?us-ascii?Q?N+7yt4ha56+2E3bHVO3X6tAJJ7oeYayChUH16PCDYKiusFJsXwFyOECKUoyq?=
+ =?us-ascii?Q?Cstl/2uy70DfyU6dMei7lKKRfL3P+Tkb3pAzD4ZHcYGymSfGgvIVXzmWbTNm?=
+ =?us-ascii?Q?rBhB4AStFNbt8AiOmhOncgnu1FKyAqdimH1RELRtlFccKZ3nQbBspEMMdQFT?=
+ =?us-ascii?Q?ute+NRWWCSX2sboZY2KQqJj2KnImMi1YZg7dNIoRhx8j9iN2Zv/CLDUpLKg+?=
+ =?us-ascii?Q?DBqUP07g4+P14KRilnnsBakYO+al4CzicKHWEwbBnx1fuxXcTfewX37mtaja?=
+ =?us-ascii?Q?BOEEJStVtovChjgXmruW1njujg85x23WW1veDI4x+CBJRwms44n7jjUNrCPy?=
+ =?us-ascii?Q?MUClUratFzaW7fR+124eNnJkQGuvH54x1stEeQ4BViYaF1OoQlRY/YsMNfRg?=
+ =?us-ascii?Q?mvZ+2AgAimEHQX2oJh01HQCP0gANPxYfTepzhRcOm7nXwmSnYhGsRGK5yeaX?=
+ =?us-ascii?Q?pX6T6cgTAKQCdJUoNU27ZMYfIEXS0yCOPI+fwaU0lFfeaU6XSx/wiwJzP0OQ?=
+ =?us-ascii?Q?RFyWTW8XR24gNratfF9y4TBZRyM9fVN3QNE/h+AUNr++KMuOaU/1L/Fjj7qm?=
+ =?us-ascii?Q?O2/m5CYautf/meF8nfkEFHdJv1G7zrg7Wzr7g3ZjLAn5rNPa6/peE1ct5ufT?=
+ =?us-ascii?Q?CWC2NgUsDyP50mx2rY4N9xjJuG3VJOmC4W48Z0X2KyMiWVxKrP8jq2rJOXPp?=
+ =?us-ascii?Q?YVtOe8c6W8yPtejlnQVY5Cxm9Ab9EHclaSN9SASbOPOWeq3fG6I+clAW7f3o?=
+ =?us-ascii?Q?GOQuB2DPSiOPYNR9fhXyxI4r18Xid/g5gDfQUjd6uEVibAHMQB3V9kzqeq6C?=
+ =?us-ascii?Q?YmOEDSnoKoDa/g5s2SF6?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebdc26e9-f838-48e0-552d-08dc71bdd11d
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2024 13:25:25.2777
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB9993
 
-tree:   https://github.com/morimoto/linux renesas-bsp/v6.1-dev
-head:   77aa8a782c7cfec5abdd25e5426bd90f67497848
-commit: fa24f11486bc1e6885936fd713c7e5da9323b16c [13/18] net: ethernet: renesas: rcar_gen4_ptp: Get clock increment from clock rate
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240511/202405111942.d7Fbf8aC-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240511/202405111942.d7Fbf8aC-lkp@intel.com/reproduce)
+This is an effort to get rid of all multiplications from allocation
+functions in order to prevent integer overflows [1][2].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405111942.d7Fbf8aC-lkp@intel.com/
+As the "rb" variable is a pointer to "struct perf_buffer" and this
+structure ends in a flexible array:
 
-All errors (new ones prefixed by >>):
+struct perf_buffer {
+	[...]
+	void	*data_pages[];
+};
 
-   In file included from drivers/net/ethernet/renesas/rswitch.c:7:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:1775:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/net/ethernet/renesas/rswitch.c:7:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/ethernet/renesas/rswitch.c:7:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/ethernet/renesas/rswitch.c:7:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/net/ethernet/renesas/rswitch.c:1807:10: error: call to undeclared function 'clk_get_rate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1807 |                                      clk_get_rate(priv->clk));
-         |                                      ^
->> drivers/net/ethernet/renesas/rswitch.c:1807:29: error: no member named 'clk' in 'struct rswitch_private'
-    1807 |                                      clk_get_rate(priv->clk));
-         |                                                   ~~~~  ^
-   7 warnings and 2 errors generated.
+the preferred way in the kernel is to use the struct_size() helper to
+do the arithmetic instead of the calculation "size + count * size" in
+the kzalloc_node() functions.
 
+In the "rb_alloc" function defined in the else branch of the macro
 
-vim +/clk_get_rate +1807 drivers/net/ethernet/renesas/rswitch.c
+ #ifndef CONFIG_PERF_USE_VMALLOC
 
-  1764	
-  1765	static int rswitch_init(struct rswitch_private *priv)
-  1766	{
-  1767		int i, err;
-  1768	
-  1769		for (i = 0; i < RSWITCH_NUM_PORTS; i++)
-  1770			rswitch_etha_init(priv, i);
-  1771	
-  1772		rswitch_clock_enable(priv);
-  1773		for (i = 0; i < RSWITCH_NUM_PORTS; i++)
-  1774			rswitch_etha_read_mac_address(&priv->etha[i]);
-  1775	
-  1776		rswitch_reset(priv);
-  1777	
-  1778		rswitch_clock_enable(priv);
-  1779		rswitch_top_init(priv);
-  1780		err = rswitch_bpool_config(priv);
-  1781		if (err < 0)
-  1782			return err;
-  1783	
-  1784		err = rswitch_gwca_linkfix_alloc(priv);
-  1785		if (err < 0)
-  1786			return -ENOMEM;
-  1787	
-  1788		err = rswitch_gwca_ts_queue_alloc(priv);
-  1789		if (err < 0)
-  1790			goto err_ts_queue_alloc;
-  1791	
-  1792		rswitch_gwca_ts_queue_fill(priv, 0, TS_RING_SIZE);
-  1793		INIT_LIST_HEAD(&priv->gwca.ts_info_list);
-  1794	
-  1795		for (i = 0; i < RSWITCH_NUM_PORTS; i++) {
-  1796			err = rswitch_device_alloc(priv, i);
-  1797			if (err < 0) {
-  1798				for (i--; i >= 0; i--)
-  1799					rswitch_device_free(priv, i);
-  1800				goto err_device_alloc;
-  1801			}
-  1802		}
-  1803	
-  1804		rswitch_fwd_init(priv);
-  1805	
-  1806		err = rcar_gen4_ptp_register(priv->ptp_priv, RCAR_GEN4_PTP_REG_LAYOUT,
-> 1807					     clk_get_rate(priv->clk));
-  1808		if (err < 0)
-  1809			goto err_ptp_register;
-  1810	
-  1811		err = rswitch_gwca_request_irqs(priv);
-  1812		if (err < 0)
-  1813			goto err_gwca_request_irq;
-  1814	
-  1815		err = rswitch_gwca_ts_request_irqs(priv);
-  1816		if (err < 0)
-  1817			goto err_gwca_ts_request_irq;
-  1818	
-  1819		err = rswitch_gwca_hw_init(priv);
-  1820		if (err < 0)
-  1821			goto err_gwca_hw_init;
-  1822	
-  1823		err = rswitch_ether_port_init_all(priv);
-  1824		if (err)
-  1825			goto err_ether_port_init_all;
-  1826	
-  1827		rswitch_for_each_enabled_port(priv, i) {
-  1828			err = register_netdev(priv->rdev[i]->ndev);
-  1829			if (err) {
-  1830				rswitch_for_each_enabled_port_continue_reverse(priv, i)
-  1831					unregister_netdev(priv->rdev[i]->ndev);
-  1832				goto err_register_netdev;
-  1833			}
-  1834		}
-  1835	
-  1836		rswitch_for_each_enabled_port(priv, i)
-  1837			netdev_info(priv->rdev[i]->ndev, "MAC address %pM\n",
-  1838				    priv->rdev[i]->ndev->dev_addr);
-  1839	
-  1840		return 0;
-  1841	
-  1842	err_register_netdev:
-  1843		rswitch_ether_port_deinit_all(priv);
-  1844	
-  1845	err_ether_port_init_all:
-  1846		rswitch_gwca_hw_deinit(priv);
-  1847	
-  1848	err_gwca_hw_init:
-  1849	err_gwca_ts_request_irq:
-  1850	err_gwca_request_irq:
-  1851		rcar_gen4_ptp_unregister(priv->ptp_priv);
-  1852	
-  1853	err_ptp_register:
-  1854		for (i = 0; i < RSWITCH_NUM_PORTS; i++)
-  1855			rswitch_device_free(priv, i);
-  1856	
-  1857	err_device_alloc:
-  1858		rswitch_gwca_ts_queue_free(priv);
-  1859	
-  1860	err_ts_queue_alloc:
-  1861		rswitch_gwca_linkfix_free(priv);
-  1862	
-  1863		return err;
-  1864	}
-  1865	
+the count in the struct_size helper is the literal "1" since only one
+pointer to void is allocated. Also, remove the "size" variable as it
+is no longer needed.
 
+At the same time, prepare for the coming implementation by GCC and Clang
+of the __counted_by attribute. Flexible array members annotated with
+__counted_by can have their accesses bounds-checked at run-time via
+CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
+strcpy/memcpy-family functions). In this case, it is important to note
+that the logic needs a little refactoring to ensure that the "nr_pages"
+member is initialized before the first access to the flex array.
+
+In one case, it is only necessary to move the "nr_pages" assignment
+before the array-writing loop while in the other case the access to the
+flex array needs to be moved inside the if branch and after the
+"nr_pages" assignment.
+
+This way, the code is more safer.
+
+This code was detected with the help of Coccinelle, and audited and
+modified manually.
+
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
+Link: https://github.com/KSPP/linux/issues/160 [2]
+Signed-off-by: Erick Archer <erick.archer@outlook.com>
+---
+Changes in v3:
+- Refactor the logic, compared to the previous version, of the second
+  rb_alloc() function to gain __counted_by() coverage (Kees Cook and
+  Christophe JAILLET).
+
+Changes in v2:
+- Annotate "struct perf_buffer" with __counted_by() attribute (Kees Cook).
+- Refactor the logic to gain __counted_by() coverage (Kees Cook).
+
+Previous versions:
+v2 -> https://lore.kernel.org/linux-hardening/AS8PR02MB7237569E4FBE0B26F62FDFDB8B1D2@AS8PR02MB7237.eurprd02.prod.outlook.com/
+v1 -> https://lore.kernel.org/linux-hardening/AS8PR02MB72372AB065EA8340D960CCC48B1B2@AS8PR02MB7237.eurprd02.prod.outlook.com/
+---
+ kernel/events/internal.h    |  2 +-
+ kernel/events/ring_buffer.c | 15 ++++-----------
+ 2 files changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+index 5150d5f84c03..dc8d39b01adb 100644
+--- a/kernel/events/internal.h
++++ b/kernel/events/internal.h
+@@ -55,7 +55,7 @@ struct perf_buffer {
+ 	void				*aux_priv;
+ 
+ 	struct perf_event_mmap_page	*user_page;
+-	void				*data_pages[];
++	void				*data_pages[] __counted_by(nr_pages);
+ };
+ 
+ extern void rb_free(struct perf_buffer *rb);
+diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+index 4013408ce012..d123fa2096cf 100644
+--- a/kernel/events/ring_buffer.c
++++ b/kernel/events/ring_buffer.c
+@@ -822,9 +822,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+ 	unsigned long size;
+ 	int i, node;
+ 
+-	size = sizeof(struct perf_buffer);
+-	size += nr_pages * sizeof(void *);
+-
++	size = struct_size(rb, data_pages, nr_pages);
+ 	if (order_base_2(size) > PAGE_SHIFT+MAX_PAGE_ORDER)
+ 		goto fail;
+ 
+@@ -833,6 +831,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+ 	if (!rb)
+ 		goto fail;
+ 
++	rb->nr_pages = nr_pages;
+ 	rb->user_page = perf_mmap_alloc_page(cpu);
+ 	if (!rb->user_page)
+ 		goto fail_user_page;
+@@ -843,8 +842,6 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+ 			goto fail_data_pages;
+ 	}
+ 
+-	rb->nr_pages = nr_pages;
+-
+ 	ring_buffer_init(rb, watermark, flags);
+ 
+ 	return rb;
+@@ -916,15 +913,11 @@ void rb_free(struct perf_buffer *rb)
+ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+ {
+ 	struct perf_buffer *rb;
+-	unsigned long size;
+ 	void *all_buf;
+ 	int node;
+ 
+-	size = sizeof(struct perf_buffer);
+-	size += sizeof(void *);
+-
+ 	node = (cpu == -1) ? cpu : cpu_to_node(cpu);
+-	rb = kzalloc_node(size, GFP_KERNEL, node);
++	rb = kzalloc_node(struct_size(rb, data_pages, 1), GFP_KERNEL, node);
+ 	if (!rb)
+ 		goto fail;
+ 
+@@ -935,9 +928,9 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
+ 		goto fail_all_buf;
+ 
+ 	rb->user_page = all_buf;
+-	rb->data_pages[0] = all_buf + PAGE_SIZE;
+ 	if (nr_pages) {
+ 		rb->nr_pages = 1;
++		rb->data_pages[0] = all_buf + PAGE_SIZE;
+ 		rb->page_order = ilog2(nr_pages);
+ 	}
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
