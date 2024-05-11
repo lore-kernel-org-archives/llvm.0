@@ -1,64 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC15F1CFBD;
-	Sat, 11 May 2024 19:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25EF219ED;
+	Sat, 11 May 2024 20:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715455168; cv=none; b=PnNHQWwfVgbOLt003UJMlZZtZwmE33e/82eMGTTIop4Sgm7jHgc9aJk87ksIheuYEH92Haa6kAONXjeRWGVqyPBLRmOrOHFWeDl5EysDtsliqbQ2KulkqfTCYglwgK8y17RB1f5E2Oa/c6Wy+S3jlYvh5TBaehjLQh1tu1vkYNk=
+	t=1715457625; cv=none; b=OOWL1ETjUs73J6qX87L/FVSvANNQui5eQqzsGTGk2GsSJl8myjSZwuOl/vnTW6ngwKcbzWusmtDe8ScwUapRjA130SVQNapaTKF/9m6DQrit0d1U7i/IMu9x3U9/KapzRk68EXYFahmr0IrsdC1M82VskKpn5Zsg+bQAm8uTm2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715455168; c=relaxed/simple;
-	bh=ug8kG7vm46i4uryUsM1PUPUN/0WR3V4JrvDQBeosXkw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PJ1Q0vj+vk51XbiL68WDewkm3JW7QYZuyNrOJUqAZI246XXgWhrwY9bSFa5f/f0KGnxx2UjzAaynxTGg/GEZ5a6oFY5R3weuTvDwGLsGgl1d20tQ4A0gMksuzRzBjkLQQdejRbRVW2XdnZ58sr/lEpRoRbZ+DNldVnO1707ATRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RYRzmvOh; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1715457625; c=relaxed/simple;
+	bh=3jvkGdtrJXoy4Y8yeBy6oXcB3RSZl9DwVg11LvbE9EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=m4YKiGF5+z5oBha0wI/3/kNDpuVOCBAF9scruW3KTaCXyUaAfPVVkYeJ0pzTNWqA1EBPFMXtcqIWPk4Uxr9QHTtDSDrrSff/J3jt5uxIGQtuBrWOa0dRx8OG+umTvHPRhufyVCQ5sGpgx7s4WtWFRU9d+pd+9uixndRmy4VeflI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BTu64PNt; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RYRzmvOh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BTu64PNt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715455167; x=1746991167;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ug8kG7vm46i4uryUsM1PUPUN/0WR3V4JrvDQBeosXkw=;
-  b=RYRzmvOhqnbidp/lhUrY2bdwnH7UMuUylON/BJPatSVa1PP4L1X8iA87
-   +jAN+i5Nl3oU0RraSSSs3Q+NoPo1X/a/vp7TsLHz+MJ5rvBP3FIrjVhdA
-   hZLTIYzfcLwZa1mdCFVNM6x/L0558CuAhSdsUd5rs8wV7+KXMw0E23aaK
-   T/ojnApYAictns+C1u3MHhWudsfsQ1G8u/g8d72jkTHjBIjJyLE7/6V+o
-   eVcPJyAPVc1jggjyz4T4ppkxRMizn7mlTfnYHO8s660C3F+mwK0K1RI6H
-   90wcIz/8W4HRN6359i5gkgKDyJyEM9f1eC+95EYozl5vJ7hkYWW55xAL4
-   g==;
-X-CSE-ConnectionGUID: VQp1RFG/T/6BD9DbNocRtg==
-X-CSE-MsgGUID: MUp2EBmHT3aJKGERHzm9Mg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11070"; a="11285592"
+  t=1715457624; x=1746993624;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3jvkGdtrJXoy4Y8yeBy6oXcB3RSZl9DwVg11LvbE9EQ=;
+  b=BTu64PNtw0e+YD3tpwp+lLQPcPFr9onQJY+rKbLDeD/OOGmaOh2yvLDj
+   Po+Yzb8bgjduujrIBHxkWjj7CetNDvK1zcaaaj69+AKMHjNHNSd4DmYLz
+   eLzYXJLD1NSXanP26jINUmFeiWZtbvAIUp1fAbWpK7xi4xDEhharf5p5a
+   exWR5RQ5nK7ODJwI/TgI5PPwAtRjDOidrHFaz++10xXsXdnXno7qYAtPu
+   tpQ9pU/ncd9YT1PqWulTY1ApsagRLEoI45wslJA7ykbD5ZVIu95gThoHk
+   n7PaVBXMlZ7Zfg3PxDuXOCaQJ8DF28QHAn4dRuD0uhYih2bvUf+a4d6Rf
+   Q==;
+X-CSE-ConnectionGUID: qUrbu5wLQyue0iqrO+DzCA==
+X-CSE-MsgGUID: ZhJTnawVTuKQ/jY0crE/Tw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11070"; a="22037206"
 X-IronPort-AV: E=Sophos;i="6.08,154,1712646000"; 
-   d="scan'208";a="11285592"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2024 12:19:25 -0700
-X-CSE-ConnectionGUID: iCiQMfLtR+S1n6XUo40/3Q==
-X-CSE-MsgGUID: Jj/IhAh9TFehPQYEUZXzGA==
+   d="scan'208";a="22037206"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2024 13:00:23 -0700
+X-CSE-ConnectionGUID: 4Jg6KmMLTo+XAh+6FpKTaw==
+X-CSE-MsgGUID: 1pEnVGpFSzqYEy3U/Pln9A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,154,1712646000"; 
-   d="scan'208";a="30342418"
+   d="scan'208";a="30020185"
 Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 11 May 2024 12:19:22 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 11 May 2024 13:00:22 -0700
 Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s5sFa-0007l1-1I;
-	Sat, 11 May 2024 19:19:18 +0000
-Date: Sun, 12 May 2024 03:18:39 +0800
+	id 1s5stH-0007n9-2z;
+	Sat, 11 May 2024 20:00:19 +0000
+Date: Sun, 12 May 2024 03:59:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yasin Lee <yasin.lee.x@outlook.com>, jic23@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
-	swboyd@chromium.org, nuno.a@analog.com, andy.shevchenko@gmail.com,
-	u.kleine-koenig@pengutronix.de, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, yasin.lee.x@gmail.com,
-	yasin.lee.x@outlook.com
-Subject: Re: [PATCH] iio:proximity:hx9031as: Add TYHX HX9031AS/HX9023S sensor
- driver
-Message-ID: <202405120331.GAhwezaB-lkp@intel.com>
-References: <SN7PR12MB8101EDFA7F91A59761095A28A4E72@SN7PR12MB8101.namprd12.prod.outlook.com>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [qais-yousef:improve-sched-cpufreq-interaction 1/1]
+ kernel/sched/core.c:5169:17: error: incompatible pointer to integer
+ conversion passing 'struct task_struct *' to parameter of type 'int'
+Message-ID: <202405120337.tA7GEqCH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,142 +62,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SN7PR12MB8101EDFA7F91A59761095A28A4E72@SN7PR12MB8101.namprd12.prod.outlook.com>
 
-Hi Yasin,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v6.9-rc7 next-20240510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yasin-Lee/iio-proximity-hx9031as-Add-TYHX-HX9031AS-HX9023S-sensor-driver/20240510-173839
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/SN7PR12MB8101EDFA7F91A59761095A28A4E72%40SN7PR12MB8101.namprd12.prod.outlook.com
-patch subject: [PATCH] iio:proximity:hx9031as: Add TYHX HX9031AS/HX9023S sensor driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240512/202405120331.GAhwezaB-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240512/202405120331.GAhwezaB-lkp@intel.com/reproduce)
+tree:   https://github.com/qais-yousef/linux improve-sched-cpufreq-interaction
+head:   7cf8a5268d5386ece305e160647503114338282b
+commit: 7cf8a5268d5386ece305e160647503114338282b [1/1] sched: Consolidate cpufreq updates
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240512/202405120337.tA7GEqCH-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240512/202405120337.tA7GEqCH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405120331.GAhwezaB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405120337.tA7GEqCH-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/iio/proximity/hx9031as.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/iio/proximity/hx9031as.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/iio/proximity/hx9031as.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/iio/proximity/hx9031as.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/iio/proximity/hx9031as.c:1478:16: warning: stack frame size (1072) exceeds limit (1024) in 'hx9031as_dump_show' [-Wframe-larger-than]
-    1478 | static ssize_t hx9031as_dump_show(struct file *file, char __user *user_buf, size_t count, loff_t *ppos)
-         |                ^
-   8 warnings generated.
+>> kernel/sched/core.c:5169:17: error: incompatible pointer to integer conversion passing 'struct task_struct *' to parameter of type 'int' [-Wint-conversion]
+    5169 |                 if (rt_policy(prev)) {
+         |                               ^~~~
+   kernel/sched/sched.h:193:33: note: passing argument to parameter 'policy' here
+     193 | static inline int rt_policy(int policy)
+         |                                 ^
+   1 error generated.
 
 
-vim +/hx9031as_dump_show +1478 drivers/iio/proximity/hx9031as.c
+vim +5169 kernel/sched/core.c
 
-  1477	
-> 1478	static ssize_t hx9031as_dump_show(struct file *file, char __user *user_buf, size_t count, loff_t *ppos)
-  1479	{
-  1480		int ret = -1;
-  1481		uint8_t rx_buf[1] = {0};
-  1482		char buf[BUF_SIZE * 2] = {0};
-  1483		char *p = buf;
-  1484		int ii = 0;
-  1485	
-  1486		for (ii = 0; ii < ARRAY_SIZE(hx9031as_reg_init_list); ii++) {
-  1487			ret = hx9031as_read(hx9031as_reg_init_list[ii].addr, rx_buf, 1);
-  1488			if (ret != 0)
-  1489				PRINT_ERR("hx9031as_read failed\n");
-  1490			PRINT_INF("0x%02X=0x%02X\n", hx9031as_reg_init_list[ii].addr, rx_buf[0]);
-  1491			p += snprintf(p, PAGE_SIZE, "0x%02X=0x%02X\n", hx9031as_reg_init_list[ii].addr, rx_buf[0]);
-  1492		}
-  1493	
-  1494		p += snprintf(p, PAGE_SIZE, "driver version:%s\n", HX9031AS_DRIVER_VER);
-  1495	
-  1496		return simple_read_from_buffer(user_buf, count, ppos, buf, strlen(buf));
-  1497	}
-  1498	
+  5136	
+  5137	static inline void update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
+  5138	{
+  5139	#ifdef CONFIG_CPU_FREQ
+  5140		/*
+  5141		 * RT and DL should always send a freq update. But we can do some
+  5142		 * simple checks to avoid it when we know it's not necessary.
+  5143		 *
+  5144		 * iowait_boost will always trigger a freq update too.
+  5145		 *
+  5146		 * Fair tasks will only trigger an update if the root cfs_rq has
+  5147		 * decayed.
+  5148		 *
+  5149		 * Everything else should do nothing.
+  5150		 */
+  5151		switch (current->policy) {
+  5152		case SCHED_NORMAL:
+  5153		case SCHED_BATCH:
+  5154			if (unlikely(current->in_iowait)) {
+  5155				cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE);
+  5156				return;
+  5157			}
+  5158	
+  5159	#ifdef CONFIG_SMP
+  5160			if (unlikely(rq->cfs.decayed)) {
+  5161				rq->cfs.decayed = false;
+  5162				cpufreq_update_util(rq, 0);
+  5163				return;
+  5164			}
+  5165	#endif
+  5166			return;
+  5167		case SCHED_FIFO:
+  5168		case SCHED_RR:
+> 5169			if (rt_policy(prev)) {
+  5170	#ifdef CONFIG_UCLAMP_TASK
+  5171				unsigned long curr_uclamp_min = uclamp_eff_value(current, UCLAMP_MIN);
+  5172				unsigned long prev_uclamp_min = uclamp_eff_value(prev, UCLAMP_MIN);
+  5173	
+  5174				if (curr_uclamp_min == prev_uclamp_min)
+  5175	#endif
+  5176					return;
+  5177			}
+  5178	#ifdef CONFIG_SMP
+  5179			/* Stopper task masquerades as RT */
+  5180			if (unlikely(current->sched_class == &stop_sched_class))
+  5181				return;
+  5182	#endif
+  5183			cpufreq_update_util(rq, SCHED_CPUFREQ_FORCE_UPDATE);
+  5184			return;
+  5185		case SCHED_DEADLINE:
+  5186			if (current->dl.flags & SCHED_FLAG_SUGOV) {
+  5187				/* Ignore sugov kthreads, they're responding to our requests */
+  5188				return;
+  5189			}
+  5190			cpufreq_update_util(rq, SCHED_CPUFREQ_FORCE_UPDATE);
+  5191			return;
+  5192		default:
+  5193			return;
+  5194		}
+  5195	#endif
+  5196	}
+  5197	
 
 -- 
 0-DAY CI Kernel Test Service
