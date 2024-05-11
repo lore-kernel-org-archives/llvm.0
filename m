@@ -1,84 +1,209 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991971C6A0
-	for <llvm@lists.linux.dev>; Sat, 11 May 2024 17:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC15F1CFBD;
+	Sat, 11 May 2024 19:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715447966; cv=none; b=C6SaR2QHt7lxJfuuacLs/d767FbR5DyFIJQfOO5/U9c9pEOcpR4RU1Dl23GW8iJWTaCCZLgkrHNj/N16SaQWdxhtx+7FAzBZtQ7h/jKfgxLTEeTyLDi636/n0KZJyv0dX+50SvzUMVOSTG+8o+pHfTc9NWfeH3mDYGmvRPGEoVQ=
+	t=1715455168; cv=none; b=PnNHQWwfVgbOLt003UJMlZZtZwmE33e/82eMGTTIop4Sgm7jHgc9aJk87ksIheuYEH92Haa6kAONXjeRWGVqyPBLRmOrOHFWeDl5EysDtsliqbQ2KulkqfTCYglwgK8y17RB1f5E2Oa/c6Wy+S3jlYvh5TBaehjLQh1tu1vkYNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715447966; c=relaxed/simple;
-	bh=pgsGnygtsFDYBZVmkmNEae+IbcuJAAlPGbGMWWujjy8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BwPXAsS2gC3hYu4tvCXJFTVG5uh5EJlWSwqpUsq9SBMMMTElZjNkh5Dj1vhDTDVEtVADoAH6JDaXBnY7S4epLxNzjAREmySxPW3ku+CT4kHGoBgk0CaleQRz08j/YamLZkuhi5pYssuqxr07Gz2rLLj90eydAB3PF6HhQt1tbSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A84D113E;
-	Sat, 11 May 2024 10:19:44 -0700 (PDT)
-Received: from [10.57.65.1] (unknown [10.57.65.1])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D0C53F641;
-	Sat, 11 May 2024 10:19:16 -0700 (PDT)
-Message-ID: <3022c21b-a34d-4592-a0da-79e047372eef@arm.com>
-Date: Sat, 11 May 2024 18:19:14 +0100
+	s=arc-20240116; t=1715455168; c=relaxed/simple;
+	bh=ug8kG7vm46i4uryUsM1PUPUN/0WR3V4JrvDQBeosXkw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PJ1Q0vj+vk51XbiL68WDewkm3JW7QYZuyNrOJUqAZI246XXgWhrwY9bSFa5f/f0KGnxx2UjzAaynxTGg/GEZ5a6oFY5R3weuTvDwGLsGgl1d20tQ4A0gMksuzRzBjkLQQdejRbRVW2XdnZ58sr/lEpRoRbZ+DNldVnO1707ATRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RYRzmvOh; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RYRzmvOh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715455167; x=1746991167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ug8kG7vm46i4uryUsM1PUPUN/0WR3V4JrvDQBeosXkw=;
+  b=RYRzmvOhqnbidp/lhUrY2bdwnH7UMuUylON/BJPatSVa1PP4L1X8iA87
+   +jAN+i5Nl3oU0RraSSSs3Q+NoPo1X/a/vp7TsLHz+MJ5rvBP3FIrjVhdA
+   hZLTIYzfcLwZa1mdCFVNM6x/L0558CuAhSdsUd5rs8wV7+KXMw0E23aaK
+   T/ojnApYAictns+C1u3MHhWudsfsQ1G8u/g8d72jkTHjBIjJyLE7/6V+o
+   eVcPJyAPVc1jggjyz4T4ppkxRMizn7mlTfnYHO8s660C3F+mwK0K1RI6H
+   90wcIz/8W4HRN6359i5gkgKDyJyEM9f1eC+95EYozl5vJ7hkYWW55xAL4
+   g==;
+X-CSE-ConnectionGUID: VQp1RFG/T/6BD9DbNocRtg==
+X-CSE-MsgGUID: MUp2EBmHT3aJKGERHzm9Mg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11070"; a="11285592"
+X-IronPort-AV: E=Sophos;i="6.08,154,1712646000"; 
+   d="scan'208";a="11285592"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2024 12:19:25 -0700
+X-CSE-ConnectionGUID: iCiQMfLtR+S1n6XUo40/3Q==
+X-CSE-MsgGUID: Jj/IhAh9TFehPQYEUZXzGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,154,1712646000"; 
+   d="scan'208";a="30342418"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 11 May 2024 12:19:22 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s5sFa-0007l1-1I;
+	Sat, 11 May 2024 19:19:18 +0000
+Date: Sun, 12 May 2024 03:18:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yasin Lee <yasin.lee.x@outlook.com>, jic23@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
+	swboyd@chromium.org, nuno.a@analog.com, andy.shevchenko@gmail.com,
+	u.kleine-koenig@pengutronix.de, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, yasin.lee.x@gmail.com,
+	yasin.lee.x@outlook.com
+Subject: Re: [PATCH] iio:proximity:hx9031as: Add TYHX HX9031AS/HX9023S sensor
+ driver
+Message-ID: <202405120331.GAhwezaB-lkp@intel.com>
+References: <SN7PR12MB8101EDFA7F91A59761095A28A4E72@SN7PR12MB8101.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftests/openat2: fix clang build failures:
- -static-libasan, LOCAL_HDRS
-Content-Language: en-GB
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- Christian Brauner <brauner@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Alexey Gladkov <legion@kernel.org>, Valentin Obst <kernel@valentinobst.de>,
- linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev
-References: <20240504044336.14411-1-jhubbard@nvidia.com>
- <c406383d-e08a-4a12-9e25-1c987b0d678f@arm.com>
- <f715719a-c835-496c-9e99-d249e5607a0b@nvidia.com>
- <b28e6bcb-dde2-4ac0-ac0d-dfddb42c4426@nvidia.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <b28e6bcb-dde2-4ac0-ac0d-dfddb42c4426@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SN7PR12MB8101EDFA7F91A59761095A28A4E72@SN7PR12MB8101.namprd12.prod.outlook.com>
 
-On 10/05/2024 19:22, John Hubbard wrote:
-> On 5/10/24 10:56 AM, John Hubbard wrote:
->> On 5/10/24 4:52 AM, Ryan Roberts wrote:
->>> On 04/05/2024 05:43, John Hubbard wrote:
->> ...
->>> It just occured to me that the bug report I was fixing with my attempt was
->>> invoking make like this (see [1]):
->>>
->>> # tools/testing/selftests/fchmodat2$ make CC=clang
->>> # tools/testing/selftests/openat2$ make CC=clang
->>>
->>> So LLVM is not set in this case. Perhaps my approach [2] (suggested by Arnd) of
->>> using cc-option is more robust? (cc-option is alredy used by other selftests).
->>>
->>
->> Yes, I think that would better handle the two cases: setting LLVM,
->> and/or setting CC (!).
->>
->> For that, some nits, but only worth fussing over if the patch hasn't
->> gone in yet, or if you're changing it for some other reason:
->>
-> 
-> I just remembered it needs the LOCAL_HDRS approach as well. Did your
-> patch already go in? Should I fix up this one here to use cc-option,
-> or go with yours? Either way is fine with me.
+Hi Yasin,
 
-I don't think my patch has been taken into any branch - I didn't see a
-notification anyway. So it would be great if you are happy to take ownership of
-it? - I'm on Paternity leave for the next 3 weeks so wouldn't get it done until
-I get back.
+kernel test robot noticed the following build warnings:
 
-> 
-> thanks,
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v6.9-rc7 next-20240510]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Yasin-Lee/iio-proximity-hx9031as-Add-TYHX-HX9031AS-HX9023S-sensor-driver/20240510-173839
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/SN7PR12MB8101EDFA7F91A59761095A28A4E72%40SN7PR12MB8101.namprd12.prod.outlook.com
+patch subject: [PATCH] iio:proximity:hx9031as: Add TYHX HX9031AS/HX9023S sensor driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240512/202405120331.GAhwezaB-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240512/202405120331.GAhwezaB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405120331.GAhwezaB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/iio/proximity/hx9031as.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/iio/proximity/hx9031as.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/iio/proximity/hx9031as.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/iio/proximity/hx9031as.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/iio/proximity/hx9031as.c:1478:16: warning: stack frame size (1072) exceeds limit (1024) in 'hx9031as_dump_show' [-Wframe-larger-than]
+    1478 | static ssize_t hx9031as_dump_show(struct file *file, char __user *user_buf, size_t count, loff_t *ppos)
+         |                ^
+   8 warnings generated.
+
+
+vim +/hx9031as_dump_show +1478 drivers/iio/proximity/hx9031as.c
+
+  1477	
+> 1478	static ssize_t hx9031as_dump_show(struct file *file, char __user *user_buf, size_t count, loff_t *ppos)
+  1479	{
+  1480		int ret = -1;
+  1481		uint8_t rx_buf[1] = {0};
+  1482		char buf[BUF_SIZE * 2] = {0};
+  1483		char *p = buf;
+  1484		int ii = 0;
+  1485	
+  1486		for (ii = 0; ii < ARRAY_SIZE(hx9031as_reg_init_list); ii++) {
+  1487			ret = hx9031as_read(hx9031as_reg_init_list[ii].addr, rx_buf, 1);
+  1488			if (ret != 0)
+  1489				PRINT_ERR("hx9031as_read failed\n");
+  1490			PRINT_INF("0x%02X=0x%02X\n", hx9031as_reg_init_list[ii].addr, rx_buf[0]);
+  1491			p += snprintf(p, PAGE_SIZE, "0x%02X=0x%02X\n", hx9031as_reg_init_list[ii].addr, rx_buf[0]);
+  1492		}
+  1493	
+  1494		p += snprintf(p, PAGE_SIZE, "driver version:%s\n", HX9031AS_DRIVER_VER);
+  1495	
+  1496		return simple_read_from_buffer(user_buf, count, ppos, buf, strlen(buf));
+  1497	}
+  1498	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
