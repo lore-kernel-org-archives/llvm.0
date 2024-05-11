@@ -1,169 +1,300 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB0C7F6
-	for <llvm@lists.linux.dev>; Sat, 11 May 2024 14:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D3C56766
+	for <llvm@lists.linux.dev>; Sat, 11 May 2024 16:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715436084; cv=none; b=ao72cbr2uwXnaPqt8NHFewqyWlJ35VzYHtVC4w1XhiG4CRTU13y4hWLicnKTsYIX/Bwd0AZ4s8HyufpUelpvs8sznT5YimiVoEe1z3nc5ayKCuxC7ZI5UNIpUAaKg0HC7EzLmhvWffgIiSLx9V3CvEQLuupWDWUnYzwGuVnsFpg=
+	t=1715444398; cv=none; b=UNZvF2YLf4mYhrkDDOuf5yVkTx296g5BTyHTZ6k5fhOY9KJSg79evj/ZA+iUxd62JF0eEPdSg+Tc4Kee9ZVcUaPO/rhAuYtYFb5PCIIGXojuV9Zy9i8wPncf0a60QHrsNG8ssOffAqA/oPJEsYuo9D0tKg+ElF0sG2F93wki3g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715436084; c=relaxed/simple;
-	bh=p8vyxbN9lvvWlhtNkTSTfbi8xuT1wfgmE6kt573q/PE=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=JCGs5VOQkldywhBRCeqaPIyIVgRHed4e5BMOFdeRpvfKQxtpycyPOBwv0M9o1dYibHAMB02Aa1LgOc2cpxGcecOn6ThjCwgzWwnaVIo/YOFd9PYBj6tkV9u2yL1Cuys23jzI2J4ETCa1PwbTK1Cnql89cDEH2zGSoAhcZ7H/U2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z6/k53Kj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1715444398; c=relaxed/simple;
+	bh=RuuS8zpxoRmHVqAdrZe0CD6SBD46zm4h+foC06fQHu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S1akH+h0yR8wKYle95VDqio4qmm22xEpo45J7EcNi3U2BwqLqxgQDTRaB2IbrJCqO8BOrzgRY48LvX82ZYmeEViVYOQU9psbnO+5XDEShOIPdnc9jZZ9UwhZV6uAozMZU2dwfgXIEC/DT6CtBGxbv/6pWchuMj6r+HVIAdNH9fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rZe1qymd; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z6/k53Kj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715436081;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SuCEhS+5buljvBQOL5jXhzl7GAG+u+cdGdUExeKn3pc=;
-	b=Z6/k53Kj+xyAimJSqUmp3947QDFbacOsYIt1FObNtKM3LQjIdKZuAaogkeAflBsKuK/T++
-	sDlD+bxnMNaTqiBh6ealnSvyH26SjuZGxcMM1VG1DbyW3SQp1Zbf33zc3GqjQ6s3aL/CR7
-	XdnJTXm+FJoRLX9Expvk7v/uPhLPK0s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-446-sxkRFsdLN0mRotgTo5waqg-1; Sat, 11 May 2024 10:01:19 -0400
-X-MC-Unique: sxkRFsdLN0mRotgTo5waqg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82038101A553
-	for <llvm@lists.linux.dev>; Sat, 11 May 2024 14:01:19 +0000 (UTC)
-Received: from [172.64.13.41] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 39C2040004D;
-	Sat, 11 May 2024 14:01:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 204): Test report for master
- (6.9.0-rc7, mainline.kernel.org-clang, f4345f05)
-Date: Sat, 11 May 2024 14:01:19 -0000
-To: bhe@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com,
- yiyan@redhat.com, xiawu@redhat.com
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rZe1qymd"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a59a0e4b773so739230366b.2
+        for <llvm@lists.linux.dev>; Sat, 11 May 2024 09:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715444395; x=1716049195; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vbUMTEX6m3rt+3OY+OFWA/VbtbWKAOJ+KgCixGrtPtw=;
+        b=rZe1qymdjKVEzDHB3ujxFeYuPMB4lTp5NhXkXddSfK1RKIcI4JO5FPezr0sXexj0Iw
+         lGHOXaaLyxqZ3B4ox2T29HiTOJ+grFxjUuorNDp0KO1CcDhVaetJ6lzUdGosc5FaNMxx
+         SDW5MgwlXN3N+VuRvnqen6EKqu6hpk8eDBTz/xz2HuG0y6gRalN1P0+UVYBhwYyqG8Dh
+         GyJyBnUD4gnLgbt295POUkULmEv7H/4au0uaawuERWBFvHib6UWs9RsX3cy9HlhhDhp/
+         NIVCQczAhP8UItKa2rQG77cvr4fJFjU/pVnUqh59MhBjJoLwCwyvDRMDoKyofUglJ+xY
+         hznQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715444395; x=1716049195;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vbUMTEX6m3rt+3OY+OFWA/VbtbWKAOJ+KgCixGrtPtw=;
+        b=oBuseBmbCsji1m4ZXru1JHqEZyeRWojUhsq5vYFYYaiVhpNgImFnFsfnPPZCDD6sGC
+         zDeqsGzQTVp2LZ/5c7GEuU/F8YULOTQsNBxR8HSfXwUu2ocWWkTvvPDeYNL11+eNrL1I
+         Peqe4AoqHZNteKPHHwBDDdKtcGusPn8G3V8ACmmD76fy1YkYrqnzf20x92gqfcrkbfQY
+         p/t4IIa0SXWyxx/+1IEHQiNhzqLb2Qj93xUVlhOHhFm8iigcf4VqKLPXyAJikfUmr4qE
+         uJvLprWUqai0PSfP38cAU+MNJlb82g5fIJodgkF+VDhYxfm8KpmvhAM3TxMI+eRduRh/
+         pokw==
+X-Forwarded-Encrypted: i=1; AJvYcCUaYPoRpkBGlgGtE32ZAdfXtanw47Fm70+EzB6quWpFUty0AYTNXhuXumm/q8AH9mKVczXYyUoGsaNeWHyMjYr9APdPTg==
+X-Gm-Message-State: AOJu0Yx6mXtS7os4T8n7UMingyI+Q0zLY0sLSU+4TsiF2dFPQuK2bCct
+	uDg0+9t6yPhQkwtDEMMXRafaOT6WjYJ/QL0+H6PA933EWL1FqIRibYAsNSnmtqw=
+X-Google-Smtp-Source: AGHT+IGxMl5HSfr0i2j6HMDDHTyIAdFvrzQjk8AYeajhDnujdnlmNHPXsgc2fOM/6TTiXKM9gq/v/w==
+X-Received: by 2002:a17:906:3542:b0:a58:5ee1:db43 with SMTP id a640c23a62f3a-a5a2d57a3b1mr348282766b.23.1715444395024;
+        Sat, 11 May 2024 09:19:55 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17b17844sm344129566b.190.2024.05.11.09.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 May 2024 09:19:54 -0700 (PDT)
+Date: Sat, 11 May 2024 19:19:49 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <039d54d6-8aa2-4e5b-829b-69002cff35d3@moroto.mountain>
+References: <202404291502.612E0A10@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <99890.124051110011901655@us-mta-446.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202404291502.612E0A10@keescook>
 
-Hi, we tested your kernel and here are the results:
+I'm pretty sure we've tried using a sanitizer before and it had too many
+false positives.  So your solution is to annotate all the false
+positives?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+There are two main issue which make integer overflows complicated from
+a static analysis perspective.  1)  Places where it's intentional or
+we don't care.  2)  Places where the integer overflow is harmless for
+one reason or another.  Btw, integer overflows are a lot more common on
+32 bit CPUs because obviously it's easier to overflow 4 billion than
+whatever number U64_MAX is.
 
+Here are is a sample of ten integer overflows that the user can trigger.
+Maybe pick a couple and walk us through how they would be annotated?
 
-Kernel information:
-    Commit message: Merge tag 'block-6.9-20240510' of git://git.kernel.dk/l=
-inux
+drivers/usb/dwc3/gadget.c:3064 dwc3_gadget_vbus_draw() warn: potential integer overflow from user '1000 * mA'
+  3052  static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+  3053  {
+  3054          struct dwc3             *dwc = gadget_to_dwc(g);
+  3055          union power_supply_propval      val = {0};
+  3056          int                             ret;
+  3057  
+  3058          if (dwc->usb2_phy)
+  3059                  return usb_phy_set_power(dwc->usb2_phy, mA);
+  3060  
+  3061          if (!dwc->usb_psy)
+  3062                  return -EOPNOTSUPP;
+  3063  
+  3064          val.intval = 1000 * mA;
+                             ^^^^^^^^^^
+mA comes from the user and we only know that it's a multiple of 2.
+So here we would annotate that val.intval can store integer overflows?
+Or we'd annotate mA?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1286299672
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1286299672-x86_64-kernel_upt_34
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        kdump - kexec-file-load
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1286299672-x86_64-kernel_upt_26
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /kdump/kexec-file-load
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1286299672-x86_64-kernel_upt_37
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                Boot test [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: blktests block/024 failed
-            URL: https://issues.redhat.com/browse/RHEL-8130
-            Affected tests:
-                Storage - blktests - blk - upstream [s390x]
+  3065          ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
+  3066  
+  3067          return ret;
+  3068  }
 
 
-Tests that were not ran because of internal issues:=20
-    Boot test [ppc64le]
-    CKI/restraint [ppc64le]
-    machineinfo [ppc64le]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [ppc64le]
-    SELinux Custom Module Setup [ppc64le]
-    selinux-policy: serge-testsuite [ppc64le]
+drivers/usb/class/usbtmc.c:852 usbtmc_generic_read() warn: potential integer overflow from user 'max_transfer_size + 1'
+   842                   * wMaxPacketSize – 1) to avoid sending a zero-length
+   843                   * packet
+   844                   */
+   845                  remaining = transfer_size;
+   846                  if ((max_transfer_size % data->wMaxPacketSize) == 0)
+   847                          max_transfer_size += (data->wMaxPacketSize - 1);
+   848          } else {
+   849                  /* round down to bufsize to avoid truncated data left */
+   850                  if (max_transfer_size > bufsize) {
+   851                          max_transfer_size =
+   852                                  roundup(max_transfer_size + 1 - bufsize,
+                                                ^^^^^^^^^^^^^^^^^^^^^
+This can overflow.  We should make it a rule that all size variables
+have to be unsigned long.  That would have made this safe on 64 bit
+systems.
+
+   853                                          bufsize);
+   854                  }
+   855                  remaining = max_transfer_size;
+
+drivers/usb/misc/usbtest.c:1994 iso_alloc_urb() warn: potential integer overflow from user 'bytes + maxp'
+  1974  static struct urb *iso_alloc_urb(
+  1975          struct usb_device       *udev,
+  1976          int                     pipe,
+  1977          struct usb_endpoint_descriptor  *desc,
+  1978          long                    bytes,
+  1979          unsigned offset
+  1980  )
+  1981  {
+  1982          struct urb              *urb;
+  1983          unsigned                i, maxp, packets;
+  1984  
+  1985          if (bytes < 0 || !desc)
+  1986                  return NULL;
+  1987  
+  1988          maxp = usb_endpoint_maxp(desc);
+  1989          if (udev->speed >= USB_SPEED_SUPER)
+  1990                  maxp *= ss_isoc_get_packet_num(udev, pipe);
+  1991          else
+  1992                  maxp *= usb_endpoint_maxp_mult(desc);
+  1993  
+  1994          packets = DIV_ROUND_UP(bytes, maxp);
+                                       ^^^^^
+The issue here is on a 32 bit system when bytes is INT_MAX.
+
+  1995  
+  1996          urb = usb_alloc_urb(packets, GFP_KERNEL);
+  1997          if (!urb)
+  1998                  return urb;
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+drivers/usb/storage/uas.c:324 uas_stat_cmplt() warn: potential integer overflow from user 'idx + 1'
+   322          idx = be16_to_cpup(&iu->tag) - 1;
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+The "- 1" makes this UINT_MAX
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+   323          if (idx >= MAX_CMNDS || !devinfo->cmnd[idx]) {
+   324                  dev_err(&urb->dev->dev,
+   325                          "stat urb: no pending cmd for uas-tag %d\n", idx + 1);
+                                                                             ^^^^^^^
+Harmless integer overflow in printk.
 
+   326                  goto out;
+   327          }
+
+
+drivers/mtd/parsers/tplink_safeloader.c:101 mtd_parser_tplink_safeloader_parse() warn: potential integer overflow from user 'bytes + 1'
+    97          for (idx = 0, offset = TPLINK_SAFELOADER_DATA_OFFSET;
+    98               idx < TPLINK_SAFELOADER_MAX_PARTS &&
+    99               sscanf(buf + offset, "partition %64s base 0x%llx size 0x%llx%zn\n",
+   100                      name, &parts[idx].offset, &parts[idx].size, &bytes) == 3;
+
+I think this buffer comes from the partition table?
+
+   101               idx++, offset += bytes + 1) {
+                                      ^^^^^^^^^
+
+   102                  parts[idx].name = kstrdup(name, GFP_KERNEL);
+   103                  if (!parts[idx].name) {
+   104                          err = -ENOMEM;
+
+
+drivers/char/ppdev.c:344 pp_set_timeout() warn: potential integer overflow from user 'tv_sec * 100'
+   343  static int pp_set_timeout(struct pardevice *pdev, long tv_sec, int tv_usec)
+   344  {
+   345          long to_jiffies;
+   346  
+   347          if ((tv_sec < 0) || (tv_usec < 0))
+   348                  return -EINVAL;
+   349  
+   350          to_jiffies = usecs_to_jiffies(tv_usec);
+                                              ^^^^^^^
+
+   351          to_jiffies += tv_sec * HZ;
+                              ^^^^^^^^^^^
+Both of these can overflow
+
+   352          if (to_jiffies <= 0)
+                    ^^^^^^^^^^^^^^^
+But they're checked here.
+
+   353                  return -EINVAL;
+   354  
+   355          pdev->timeout = to_jiffies;
+   356          return 0;
+   357  }
+
+drivers/char/ipmi/ipmi_plat_data.c:70 ipmi_platform_add() warn: potential integer overflow from user 'r[0]->start + p->regsize'
+    69          r[0].start = p->addr;
+    70          r[0].end = r[0].start + p->regsize - 1;
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+I think this is root only so it's safe?  Or it could be a false
+positive.
+
+    71          r[0].name = "IPMI Address 1";
+    72          r[0].flags = flags;
+
+
+drivers/i2c/i2c-dev.c:485 i2cdev_ioctl() warn: potential integer overflow from user (local copy) 'arg * 10'
+   478          case I2C_TIMEOUT:
+   479                  if (arg > INT_MAX)
+   480                          return -EINVAL;
+   481  
+   482                  /* For historical reasons, user-space sets the timeout
+   483                   * value in units of 10 ms.
+   484                   */
+   485                  client->adapter->timeout = msecs_to_jiffies(arg * 10);
+                                                                    ^^^^^^^^^
+This can overflow and then the msecs_to_jiffies() conversion also has
+an integer overflow in it.
+
+   486                  break;
+
+
+drivers/i2c/busses/i2c-bcm2835.c:93 clk_bcm2835_i2c_calc_divider() warn: potential integer overflow from user 'parent_rate + rate'
+    90  static int clk_bcm2835_i2c_calc_divider(unsigned long rate,
+    91                                  unsigned long parent_rate)
+    92  {
+    93          u32 divider = DIV_ROUND_UP(parent_rate, rate);
+    94  
+    95          /*
+    96           * Per the datasheet, the register is always interpreted as an even
+    97           * number, by rounding down. In other words, the LSB is ignored. So,
+    98           * if the LSB is set, increment the divider to avoid any issue.
+    99           */
+   100          if (divider & 1)
+   101                  divider++;
+   102          if ((divider < BCM2835_I2C_CDIV_MIN) ||
+   103              (divider > BCM2835_I2C_CDIV_MAX))
+   104                  return -EINVAL;
+
+Again, math first then check the result later.  Integer overflow is
+basically harmless.
+
+   105  
+   106          return divider;
+   107  }
+
+
+drivers/hwmon/nct6775-core.c:2265 store_temp_offset() warn: potential integer overflow from user '__x + (__d / 2)'
+  2251  static ssize_t
+  2252  store_temp_offset(struct device *dev, struct device_attribute *attr,
+  2253                    const char *buf, size_t count)
+  2254  {
+  2255          struct nct6775_data *data = dev_get_drvdata(dev);
+  2256          struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+  2257          int nr = sattr->index;
+  2258          long val;
+  2259          int err;
+  2260  
+  2261          err = kstrtol(buf, 10, &val);
+  2262          if (err < 0)
+  2263                  return err;
+  2264  
+  2265          val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
+                                                  ^^^^^^^^^^
+Overflow and then clamp.
+
+  2266  
+  2267          mutex_lock(&data->update_lock);
+
+regards,
+dan carpenter
