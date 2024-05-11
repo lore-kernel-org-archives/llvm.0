@@ -1,66 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5244A33;
-	Sat, 11 May 2024 07:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B981610B;
+	Sat, 11 May 2024 07:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715411096; cv=none; b=jFxYF04nu1NYg4N8qW3YuB7oVirsl4BhdPGLhTMZveqLEROvDgqxxlKSS9pCQqVfkBTJOQAiMoMst23ud1+T1/3HA0BF6TjPkIgrJnzKsCg7jTw64xDOAgh/9zqPEZXfjI4mdeMRMG8sn5pLOZb6MNZWSZ+bYU/BCCLZtU4AfGs=
+	t=1715411758; cv=none; b=oqHhwf+5dtO8qu2pazve/WcARZ4WoMhdfEdu34eiGqepd+ViKqu8CoksOudfuI4m21IPHBMjCgnDM5pOwJdTzYgSXg9goZ9II9dg2lKsAfoknd/sunnroluXF0nCDQZgc3TT7x8OixedxMFlBM2DeKGLgT12RZAzcu7t1UZpKB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715411096; c=relaxed/simple;
-	bh=Yiz0h+TJ4V6Llm1CfE0BJLB5v4VhySio+M1awKypBAA=;
+	s=arc-20240116; t=1715411758; c=relaxed/simple;
+	bh=TjIX/flL554zvS60Pv08V4xwbSviSX/085JsCFPdfW0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E1t6KTjgDmYEoCSBOrzgdi09qfkCeXlWOIBGuRXQ1LSvVYXVQiiEGpVHLA5J92+qoB0JehIMbkIWsF5A4bXGjWoXMqtnwOjeBUE2apmAO444uDkxBdrdT9MSzndaVY94VrkjLo2p/sFLO+fwCn7OgnL/Qnuxw6ftVJaiyxFWh44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VlfG+pyz; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=k7MT2ks46WEgP4GX+kU8QR/MAb/KdSik8rTUl8Oknc1mqxoi0jjG1D9QrT3elFxCAJgY8C6E5E8lpDEV54HmNJ61L9m1tAKiwfVISFtsb6qkqLMEs7AbTra57Oaez+95wLndIw9wvKIZu2cD/MdvY451NnETsv3o+ScWpvhu5l0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O0KD0eCw; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VlfG+pyz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O0KD0eCw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715411095; x=1746947095;
+  t=1715411757; x=1746947757;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Yiz0h+TJ4V6Llm1CfE0BJLB5v4VhySio+M1awKypBAA=;
-  b=VlfG+pyzz7JJXNCKbTUS3Ef7Q+/tZbfKWflY0xeh+WN7eS0SwcM/7Kv7
-   YYoAsutENN4GeOaad4EQQxEJoN6XA5rdeXu7fchxz5R9nCC2ImiG3PMi7
-   XEZ2vTrfNIw5EzigiVW8E/2whMl2dC+7hK/8IEtAdrU0iUxvkK0KJgfFf
-   0PAJKC475fuoH4DKx0NO3EOu8I8UZatTEH5stywK5/rtM5I7GdhhbHoKD
-   Pr2CKu/F/6QJNVIqazfIb4cbYc9D6WrVuiQzUtBu2o2vWuWBZthkFzTCr
-   a5Cilet8vZvUDfxFuvph1plerStwSUp7p+J0beYa/03/0NjIztyvmQMJf
+  bh=TjIX/flL554zvS60Pv08V4xwbSviSX/085JsCFPdfW0=;
+  b=O0KD0eCwO9R6GuqK5XlnlBlz7inxXag+onaC1SBQqx1Q4nBOG37CzdMX
+   rWHGKqNhh9bdw/mVT8Dr1gwLQcQgvlr6movjuJNoFriUnIJ6iCB4gMrX9
+   e6RlAZSKhXHie/VuLhUXGs+ssHVNCSvzg2ku3V5ORT35nFHqA4c/IfNpO
+   HNpPSwI+IIxrFAVrdeNj0IsGKlUrW1g5FAk6Qy5l3EhshCCN3R11EglvT
+   0NoQztO9f78Lh8DRmgzZiY6vFmyNf0JGK44rtciEcfyDXRi8sMRhUXFJC
+   PxrCjZj6UPd+pHhx5QhC+sjz63W8HDiJfuWrNvcayc7ikbJjsRarcpunj
    Q==;
-X-CSE-ConnectionGUID: OE+YVV8kR/295m9iNgBn6g==
-X-CSE-MsgGUID: aDuaN/m0SCW9ZuZYWXOasg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11069"; a="28925808"
+X-CSE-ConnectionGUID: HcNRiZ6qQjyAM5UiVQla1w==
+X-CSE-MsgGUID: MiNOVFicRACKRTEIk5ftkQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11069"; a="15223395"
 X-IronPort-AV: E=Sophos;i="6.08,153,1712646000"; 
-   d="scan'208";a="28925808"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2024 00:04:54 -0700
-X-CSE-ConnectionGUID: yOylc/n3QNSnm1GO/I4eZg==
-X-CSE-MsgGUID: pnGRZh0IQk6cjN4ddyq4KQ==
+   d="scan'208";a="15223395"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2024 00:15:56 -0700
+X-CSE-ConnectionGUID: MWwOHqH+RbO9RIk3HpsY+A==
+X-CSE-MsgGUID: gzKGgGHUTNGlt5D+4HZqmA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,153,1712646000"; 
-   d="scan'208";a="29958479"
+   d="scan'208";a="34391821"
 Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 11 May 2024 00:04:52 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 11 May 2024 00:15:52 -0700
 Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s5gmn-00073X-0n;
-	Sat, 11 May 2024 07:04:49 +0000
-Date: Sat, 11 May 2024 15:04:38 +0800
+	id 1s5gxS-00074n-0B;
+	Sat, 11 May 2024 07:15:50 +0000
+Date: Sat, 11 May 2024 15:14:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: hare@kernel.org, Andrew Morton <akpm@linux-foundation.org>
+To: Pankaj Gupta <pankaj.gupta@nxp.com>, Jonathan Corbet <corbet@lwn.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Pankaj Raghav <kernel@pankajraghav.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-	Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH 4/5] block/bdev: enable large folio support for large
- logical block sizes
-Message-ID: <202405111438.WaVytRae-lkp@intel.com>
-References: <20240510102906.51844-5-hare@kernel.org>
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Pankaj Gupta <pankaj.gupta@nxp.com>
+Subject: Re: [PATCH 4/4] firmware: imx: add driver for NXP EdgeLock Enclave
+Message-ID: <202405111457.slkK7qEv-lkp@intel.com>
+References: <20240510-imx-se-if-v1-4-27c5a674916d@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,61 +72,143 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240510102906.51844-5-hare@kernel.org>
+In-Reply-To: <20240510-imx-se-if-v1-4-27c5a674916d@nxp.com>
 
-Hi,
+Hi Pankaj,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on akpm-mm/mm-everything linus/master v6.9-rc7]
-[cannot apply to next-20240510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on e8f897f4afef0031fe618a8e94127a0934896aba]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hare-kernel-org/fs-mpage-use-blocks_per_folio-instead-of-blocks_per_page/20240510-183146
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20240510102906.51844-5-hare%40kernel.org
-patch subject: [PATCH 4/5] block/bdev: enable large folio support for large logical block sizes
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240511/202405111438.WaVytRae-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240511/202405111438.WaVytRae-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Gupta/Documentation-firmware-add-imx-se-to-other_interfaces/20240510-213210
+base:   e8f897f4afef0031fe618a8e94127a0934896aba
+patch link:    https://lore.kernel.org/r/20240510-imx-se-if-v1-4-27c5a674916d%40nxp.com
+patch subject: [PATCH 4/4] firmware: imx: add driver for NXP EdgeLock Enclave
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240511/202405111457.slkK7qEv-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240511/202405111457.slkK7qEv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405111438.WaVytRae-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405111457.slkK7qEv-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> block/bdev.c:145:2: error: call to undeclared function 'mapping_set_folio_min_order'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     145 |         mapping_set_folio_min_order(bdev->bd_inode->i_mapping,
-         |         ^
-   block/bdev.c:163:3: error: call to undeclared function 'mapping_set_folio_min_order'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     163 |                 mapping_set_folio_min_order(bdev->bd_inode->i_mapping,
-         |                 ^
-   2 errors generated.
+>> drivers/firmware/imx/ele_common.c:27:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+      27 |         if (!wait_for_completion_timeout(&priv->done, wait)) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/firmware/imx/ele_common.c:36:9: note: uninitialized use occurs here
+      36 |         return err;
+         |                ^~~
+   drivers/firmware/imx/ele_common.c:27:2: note: remove the 'if' if its condition is always true
+      27 |         if (!wait_for_completion_timeout(&priv->done, wait)) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/firmware/imx/ele_common.c:24:9: note: initialize the variable 'err' to silence this warning
+      24 |         int err;
+         |                ^
+         |                 = 0
+   1 warning generated.
+--
+   In file included from drivers/firmware/imx/ele_base_msg.c:8:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2188:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/firmware/imx/ele_base_msg.c:23:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+      23 |         if (!priv || !s_info)
+         |             ^~~~~~~~~~~~~~~~
+   drivers/firmware/imx/ele_base_msg.c:114:9: note: uninitialized use occurs here
+     114 |         return ret;
+         |                ^~~
+   drivers/firmware/imx/ele_base_msg.c:23:2: note: remove the 'if' if its condition is always false
+      23 |         if (!priv || !s_info)
+         |         ^~~~~~~~~~~~~~~~~~~~~
+      24 |                 goto exit;
+         |                 ~~~~~~~~~
+>> drivers/firmware/imx/ele_base_msg.c:23:6: warning: variable 'ret' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+      23 |         if (!priv || !s_info)
+         |             ^~~~~
+   drivers/firmware/imx/ele_base_msg.c:114:9: note: uninitialized use occurs here
+     114 |         return ret;
+         |                ^~~
+   drivers/firmware/imx/ele_base_msg.c:23:6: note: remove the '||' if its condition is always false
+      23 |         if (!priv || !s_info)
+         |             ^~~~~~~~
+   drivers/firmware/imx/ele_base_msg.c:21:9: note: initialize the variable 'ret' to silence this warning
+      21 |         int ret;
+         |                ^
+         |                 = 0
+>> drivers/firmware/imx/ele_base_msg.c:23:6: warning: variable 'get_info_addr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+      23 |         if (!priv || !s_info)
+         |             ^~~~~~~~~~~~~~~~
+   drivers/firmware/imx/ele_base_msg.c:103:6: note: uninitialized use occurs here
+     103 |         if (get_info_addr) {
+         |             ^~~~~~~~~~~~~
+   drivers/firmware/imx/ele_base_msg.c:23:2: note: remove the 'if' if its condition is always false
+      23 |         if (!priv || !s_info)
+         |         ^~~~~~~~~~~~~~~~~~~~~
+      24 |                 goto exit;
+         |                 ~~~~~~~~~
+>> drivers/firmware/imx/ele_base_msg.c:23:6: warning: variable 'get_info_addr' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+      23 |         if (!priv || !s_info)
+         |             ^~~~~
+   drivers/firmware/imx/ele_base_msg.c:103:6: note: uninitialized use occurs here
+     103 |         if (get_info_addr) {
+         |             ^~~~~~~~~~~~~
+   drivers/firmware/imx/ele_base_msg.c:23:6: note: remove the '||' if its condition is always false
+      23 |         if (!priv || !s_info)
+         |             ^~~~~~~~
+   drivers/firmware/imx/ele_base_msg.c:18:27: note: initialize the variable 'get_info_addr' to silence this warning
+      18 |         phys_addr_t get_info_addr;
+         |                                  ^
+         |                                   = 0
+   9 warnings generated.
 
 
-vim +/mapping_set_folio_min_order +145 block/bdev.c
+vim +27 drivers/firmware/imx/ele_common.c
 
-   133	
-   134	static void set_init_blocksize(struct block_device *bdev)
-   135	{
-   136		unsigned int bsize = bdev_logical_block_size(bdev);
-   137		loff_t size = i_size_read(bdev->bd_inode);
-   138	
-   139		while (bsize < PAGE_SIZE) {
-   140			if (size & bsize)
-   141				break;
-   142			bsize <<= 1;
-   143		}
-   144		bdev->bd_inode->i_blkbits = blksize_bits(bsize);
- > 145		mapping_set_folio_min_order(bdev->bd_inode->i_mapping,
-   146					    get_order(bsize));
-   147	}
-   148	
+    20	
+    21	int imx_ele_msg_rcv(struct se_if_priv *priv)
+    22	{
+    23		u32 wait;
+    24		int err;
+    25	
+    26		wait = msecs_to_jiffies(1000);
+  > 27		if (!wait_for_completion_timeout(&priv->done, wait)) {
+    28			dev_err(priv->dev,
+    29					"Error: wait_for_completion timed out.\n");
+    30			err = -ETIMEDOUT;
+    31		}
+    32	
+    33		mutex_unlock(&priv->se_if_cmd_lock);
+    34		priv->no_dev_ctx_used = false;
+    35	
+    36		return err;
+    37	}
+    38	
 
 -- 
 0-DAY CI Kernel Test Service
