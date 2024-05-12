@@ -1,273 +1,168 @@
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056A520DC3
-	for <llvm@lists.linux.dev>; Sun, 12 May 2024 20:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C3A54F8C;
+	Sun, 12 May 2024 22:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715544833; cv=none; b=UotYqmnO63szndAaVhbh5uEaBQQyQnoGKKF7fm4+puSxULFQmWM40b2R/1WZTrQmnEi7farKPxhkuNbaRG6VMgOyvMt7EAABYblE3glUtgsyYq3KcofTjNKAc0CSi7eLDZLi46m3i5VyhFaDBaRqtzboxzjh+0qB7kHc/n6AYFs=
+	t=1715552693; cv=none; b=bOG3heLdOKDPRkiUuZevZDF0Nvh68DTcpi/nA4nxwXM7Cjjpd2OpoQJBsAAu/OldaH1ucwDB2SPOwb2c9WnxMPR4oukgrbiUwN0NC6D2oYSxSWX42qbYQ812KlhvLlkJ2J6i7uflkL1wpv0LetisBtEg+vj1d38CMhorhm2mxvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715544833; c=relaxed/simple;
-	bh=n8oA1xkjArMGOnYfZNb5Ry0+r1BBNJPH94yslSEDpB8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mIzUZIGUwfkWL7AEOYJRYuAya6ltOgFL2DLxUmzmEghW33nGa30vqDc/XigUBOCM24e9+m+bysA7GhAZ3kDwZST84HgEaiBuCUNORLw5VoqUTkNr58Lx0ndRY8W3QpNl4cZ469mTwFcl8RQUAvx9oQh1V0N130Ae2cJPod/U+1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 05C981BF203;
-	Sun, 12 May 2024 20:12:42 +0000 (UTC)
-Message-ID: <e46b2d43-fe4d-4e9b-95ad-1900779b8bed@ghiti.fr>
-Date: Sun, 12 May 2024 22:12:33 +0200
+	s=arc-20240116; t=1715552693; c=relaxed/simple;
+	bh=3C4Tsvi8zQ8/WgqGGbU/HP9bh5KBCx36pvVCbqCn/0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rcTYm2ALRNwKV5k/+B/xiKoyS5sHbPSwr8KmH4KCGq/CJS592sUG7A5wkF95FZgR8p2Y3O1OeTLcC3gwexwMVNI/AC2k4uKkUC5r+fhCDqck+lJLFIHFF1SArjHMPJ4VKRtFdupz2SpxZAfjNUNa+xytEX2O3e8vX3kKY//Is2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iXNYfd9s; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iXNYfd9s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715552690; x=1747088690;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3C4Tsvi8zQ8/WgqGGbU/HP9bh5KBCx36pvVCbqCn/0w=;
+  b=iXNYfd9szR6wC9iYsMiXt9fJjmM0e6OJ83iQ3+wF+UayFCuYxFqfLOoJ
+   iY0BEPC1rqcru37GJWeKahbd9NqFNoydvhFcylCZWbr/Ru+NKCTxl6BoW
+   d6vz7s4AXSRciHY/8VLxzyihM+ZKOKk9ITF2w7hEt2Bj6a6TFtLeVmhoe
+   j0r6slEZXe1v5W6G7rrQzLJKqVqqev6mrt6NqmcfblfEttFvfNcDMFne6
+   FGnXWg/UxdA8q4XUZVs1wJ/Lwhom9ehqSQFqhTOgC+mMlMPZ4B1tHiVrp
+   NoDUjGOI/wMSYg6svVXCQSiDDAKFEFmJH7kA5OumxxaqNFZTTm5qwARwf
+   Q==;
+X-CSE-ConnectionGUID: FBfRaJq5RrSNXXAYThx1ug==
+X-CSE-MsgGUID: hlcj+dJLT1KA3JBVQdxGoA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11071"; a="11328007"
+X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
+   d="scan'208";a="11328007"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2024 15:24:49 -0700
+X-CSE-ConnectionGUID: IKZ0fXjETquK9VRyvxP70g==
+X-CSE-MsgGUID: v+CBfvrHRqO8IEHv9CUAeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
+   d="scan'208";a="30717284"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 12 May 2024 15:24:46 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s6HcZ-0009Fn-29;
+	Sun, 12 May 2024 22:24:43 +0000
+Date: Mon, 13 May 2024 06:24:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kiarash Hajian <kiarash8112hajian@gmail.com>,
+	Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Kiarash Hajian <kiarash8112hajian@gmail.com>
+Subject: Re: [PATCH v3 2/2] drm/msm/a6xx: request memory region
+Message-ID: <202405130618.N7QKeg94-lkp@intel.com>
+References: <20240512-msm-adreno-memory-region-v3-2-0a728ad45010@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 07/12] riscv/mm: prepare shadow stack for init task
- for kernel cfi
-Content-Language: en-US
-To: Deepak Gupta <debug@rivosinc.com>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, andy.chiu@sifive.com, hankuan.chen@sifive.com,
- guoren@kernel.org, greentime.hu@sifive.com, samitolvanen@google.com,
- cleger@rivosinc.com, apatel@ventanamicro.com, ajones@ventanamicro.com,
- conor.dooley@microchip.com, mchitale@ventanamicro.com,
- dbarboza@ventanamicro.com, waylingii@gmail.com, sameo@rivosinc.com,
- alexghiti@rivosinc.com, akpm@linux-foundation.org,
- shikemeng@huaweicloud.com, rppt@kernel.org, charlie@rivosinc.com,
- xiao.w.wang@intel.com, willy@infradead.org, jszhang@kernel.org,
- leobras@redhat.com, songshuaishuai@tinylab.org, haxel@fzi.de,
- samuel.holland@sifive.com, namcaov@gmail.com, bjorn@rivosinc.com,
- cuiyunhui@bytedance.com, wangkefeng.wang@huawei.com, falcon@tinylab.org,
- viro@zeniv.linux.org.uk, bhe@redhat.com, chenjiahao16@huawei.com,
- hca@linux.ibm.com, arnd@arndb.de, kent.overstreet@linux.dev,
- boqun.feng@gmail.com, oleg@redhat.com, paulmck@kernel.org,
- broonie@kernel.org, rick.p.edgecombe@intel.com
-References: <20240409061043.3269676-1-debug@rivosinc.com>
- <20240409061043.3269676-8-debug@rivosinc.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20240409061043.3269676-8-debug@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240512-msm-adreno-memory-region-v3-2-0a728ad45010@gmail.com>
+
+Hi Kiarash,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on cf87f46fd34d6c19283d9625a7822f20d90b64a4]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kiarash-Hajian/drm-msm-a6xx-request-memory-region/20240512-135215
+base:   cf87f46fd34d6c19283d9625a7822f20d90b64a4
+patch link:    https://lore.kernel.org/r/20240512-msm-adreno-memory-region-v3-2-0a728ad45010%40gmail.com
+patch subject: [PATCH v3 2/2] drm/msm/a6xx: request memory region
+config: i386-buildonly-randconfig-001-20240513 (https://download.01.org/0day-ci/archive/20240513/202405130618.N7QKeg94-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405130618.N7QKeg94-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405130618.N7QKeg94-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1605:8: error: use of undeclared label 'err_mmio'
+    1605 |                 goto err_mmio;
+         |                      ^
+   1 error generated.
 
 
-On 09/04/2024 08:10, Deepak Gupta wrote:
-> Under CONFIG_SHADOW_CALL_STACK, shadow call stack goes into data section.
-> Although with CONFIG_DYNAMIC_SCS on riscv, hardware assisted shadow stack
-> are used. Hardware assisted shadow stack on riscv uses PTE.R=0, PTE.W=1 &
-> PTE.X=0 encodings. Without CONFIG_DYNAMIC_SCS, shadow stack for init is
-> placed in data section and thus regular read/write encodings are applied
-> to it. Although with with CONFIG_DYNAMIC_SCS, they need to go into
-> different section. This change places it into `.shadowstack` section.
-> As part of this change early boot code (`setup_vm`), applies appropriate
-> PTE encodings to shadow call stack for init placed in `.shadowstack`
-> section.
->
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->   arch/riscv/include/asm/pgtable.h     |  4 ++++
->   arch/riscv/include/asm/sections.h    | 22 +++++++++++++++++++++
->   arch/riscv/include/asm/thread_info.h | 10 ++++++++--
->   arch/riscv/kernel/vmlinux.lds.S      | 12 ++++++++++++
->   arch/riscv/mm/init.c                 | 29 +++++++++++++++++++++-------
->   5 files changed, 68 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 9f8ea0e33eb1..3409b250390d 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -197,6 +197,10 @@ extern struct pt_alloc_ops pt_ops __initdata;
->   #define PAGE_KERNEL_READ_EXEC	__pgprot((_PAGE_KERNEL & ~_PAGE_WRITE) \
->   					 | _PAGE_EXEC)
->   
-> +#ifdef CONFIG_DYNAMIC_SCS
-> +#define PAGE_KERNEL_SHADOWSTACK __pgprot(_PAGE_KERNEL & ~(_PAGE_READ | _PAGE_EXEC))
-> +#endif
-> +
+vim +/err_mmio +1605 drivers/gpu/drm/msm/adreno/a6xx_gmu.c
 
+c11fa1204fe940 Akhil P Oommen 2023-01-02  1582  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1583  int a6xx_gmu_wrapper_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+5a903a44a98471 Konrad Dybcio  2023-06-16  1584  {
+5a903a44a98471 Konrad Dybcio  2023-06-16  1585  	struct platform_device *pdev = of_find_device_by_node(node);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1586  	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1587  	int ret;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1588  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1589  	if (!pdev)
+5a903a44a98471 Konrad Dybcio  2023-06-16  1590  		return -ENODEV;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1591  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1592  	gmu->dev = &pdev->dev;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1593  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1594  	of_dma_configure(gmu->dev, node, true);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1595  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1596  	pm_runtime_enable(gmu->dev);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1597  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1598  	/* Mark legacy for manual SPTPRAC control */
+5a903a44a98471 Konrad Dybcio  2023-06-16  1599  	gmu->legacy = true;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1600  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1601  	/* Map the GMU registers */
+5a903a44a98471 Konrad Dybcio  2023-06-16  1602  	gmu->mmio = a6xx_gmu_get_mmio(pdev, "gmu");
+5a903a44a98471 Konrad Dybcio  2023-06-16  1603  	if (IS_ERR(gmu->mmio)) {
+5a903a44a98471 Konrad Dybcio  2023-06-16  1604  		ret = PTR_ERR(gmu->mmio);
+5a903a44a98471 Konrad Dybcio  2023-06-16 @1605  		goto err_mmio;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1606  	}
+5a903a44a98471 Konrad Dybcio  2023-06-16  1607  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1608  	gmu->cxpd = dev_pm_domain_attach_by_name(gmu->dev, "cx");
+5a903a44a98471 Konrad Dybcio  2023-06-16  1609  	if (IS_ERR(gmu->cxpd)) {
+5a903a44a98471 Konrad Dybcio  2023-06-16  1610  		ret = PTR_ERR(gmu->cxpd);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1611  		goto err_mmio;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1612  	}
+5a903a44a98471 Konrad Dybcio  2023-06-16  1613  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1614  	if (!device_link_add(gmu->dev, gmu->cxpd, DL_FLAG_PM_RUNTIME)) {
+5a903a44a98471 Konrad Dybcio  2023-06-16  1615  		ret = -ENODEV;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1616  		goto detach_cxpd;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1617  	}
+5a903a44a98471 Konrad Dybcio  2023-06-16  1618  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1619  	init_completion(&gmu->pd_gate);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1620  	complete_all(&gmu->pd_gate);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1621  	gmu->pd_nb.notifier_call = cxpd_notifier_cb;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1622  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1623  	/* Get a link to the GX power domain to reset the GPU */
+5a903a44a98471 Konrad Dybcio  2023-06-16  1624  	gmu->gxpd = dev_pm_domain_attach_by_name(gmu->dev, "gx");
+5a903a44a98471 Konrad Dybcio  2023-06-16  1625  	if (IS_ERR(gmu->gxpd)) {
+5a903a44a98471 Konrad Dybcio  2023-06-16  1626  		ret = PTR_ERR(gmu->gxpd);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1627  	}
+5a903a44a98471 Konrad Dybcio  2023-06-16  1628  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1629  	gmu->initialized = true;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1630  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1631  	return 0;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1632  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1633  detach_cxpd:
+5a903a44a98471 Konrad Dybcio  2023-06-16  1634  	dev_pm_domain_detach(gmu->cxpd, false);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1635  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1636  	/* Drop reference taken in of_find_device_by_node */
+5a903a44a98471 Konrad Dybcio  2023-06-16  1637  	put_device(gmu->dev);
+5a903a44a98471 Konrad Dybcio  2023-06-16  1638  
+5a903a44a98471 Konrad Dybcio  2023-06-16  1639  	return ret;
+5a903a44a98471 Konrad Dybcio  2023-06-16  1640  }
+5a903a44a98471 Konrad Dybcio  2023-06-16  1641  
 
-Not sure the ifdefs are necessary here, but I'll let others jump in. We 
-have a lot of them, so we should try not to add.
-
-
->   #define PAGE_TABLE		__pgprot(_PAGE_TABLE)
->   
->   #define _PAGE_IOREMAP	((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-> diff --git a/arch/riscv/include/asm/sections.h b/arch/riscv/include/asm/sections.h
-> index a393d5035c54..4c4154d0021e 100644
-> --- a/arch/riscv/include/asm/sections.h
-> +++ b/arch/riscv/include/asm/sections.h
-> @@ -14,6 +14,10 @@ extern char __init_data_begin[], __init_data_end[];
->   extern char __init_text_begin[], __init_text_end[];
->   extern char __alt_start[], __alt_end[];
->   extern char __exittext_begin[], __exittext_end[];
-> +#ifdef CONFIG_DYNAMIC_SCS
-> +extern char __init_shstk_start[], __init_shstk_end[];
-> +#endif
-> +extern char __end_srodata[];
->   
->   static inline bool is_va_kernel_text(uintptr_t va)
->   {
-> @@ -31,4 +35,22 @@ static inline bool is_va_kernel_lm_alias_text(uintptr_t va)
->   	return va >= start && va < end;
->   }
->   
-> +#ifdef CONFIG_DYNAMIC_SCS
-> +static inline bool is_va_init_shadow_stack_early(uintptr_t va)
-> +{
-> +	uintptr_t start = (uintptr_t)(kernel_mapping_pa_to_va(__init_shstk_start));
-> +	uintptr_t end = (uintptr_t)(kernel_mapping_pa_to_va(__init_shstk_end));
-> +
-> +	return va >= start && va < end;
-> +}
-> +
-> +static inline bool is_va_init_shadow_stack(uintptr_t va)
-> +{
-> +	uintptr_t start = (uintptr_t)(__init_shstk_start);
-> +	uintptr_t end = (uintptr_t)(__init_shstk_end);
-> +
-> +	return va >= start && va < end;
-> +}
-> +#endif
-
-
-You could have used an early flag and have only one function but that's 
-up to you.
-
-
-> +
->   #endif /* __ASM_SECTIONS_H */
-> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-> index 5d473343634b..7ae28d627f84 100644
-> --- a/arch/riscv/include/asm/thread_info.h
-> +++ b/arch/riscv/include/asm/thread_info.h
-> @@ -63,12 +63,18 @@ struct thread_info {
->   };
->   
->   #ifdef CONFIG_SHADOW_CALL_STACK
-> +#ifdef CONFIG_DYNAMIC_SCS
->   #define INIT_SCS							\
-> -	.scs_base	= init_shadow_call_stack,			\
-> +	.scs_base	= init_shadow_call_stack,	\
-> +	.scs_sp		= &init_shadow_call_stack[SCS_SIZE / sizeof(long)],
-> +#else
-> +#define INIT_SCS							\
-> +	.scs_base	= init_shadow_call_stack,	\
->   	.scs_sp		= init_shadow_call_stack,
-> +#endif /* CONFIG_DYNAMIC_SCS */
->   #else
->   #define INIT_SCS
-> -#endif
-> +#endif /* CONFIG_SHADOW_CALL_STACK */
->   
->   /*
->    * macros/functions for gaining access to the thread information structure
-> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-> index 002ca58dd998..cccc51f845ab 100644
-> --- a/arch/riscv/kernel/vmlinux.lds.S
-> +++ b/arch/riscv/kernel/vmlinux.lds.S
-> @@ -126,6 +126,18 @@ SECTIONS
->   		*(.srodata*)
->   	}
->   
-> +	. = ALIGN(SECTION_ALIGN);
-> +	__end_srodata = .;
-> +
-> +#ifdef CONFIG_DYNAMIC_SCS
-> +	.shadowstack : AT(ADDR(.shadowstack) - LOAD_OFFSET){
-> +		__init_shstk_start = .;
-> +		KEEP(*(.shadowstack..init))
-> +		. = __init_shstk_start + PAGE_SIZE;
-> +		__init_shstk_end = .;
-> +	}
-> +#endif
-> +
->   	. = ALIGN(SECTION_ALIGN);
->   	_data = .;
->   
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index fe8e159394d8..5b6f0cfa5719 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -713,14 +713,22 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
->   	if (IS_ENABLED(CONFIG_64BIT) && is_va_kernel_lm_alias_text(va))
->   		return PAGE_KERNEL_READ;
->   
-> +#ifdef CONFIG_DYNAMIC_SCS
-> +	/* If init task's shadow stack va, return write only page protections */
-> +	if (IS_ENABLED(CONFIG_64BIT) && is_va_init_shadow_stack(va)) {
-> +		pr_info("Shadow stack protections are being applied to for init\n");
-> +		return PAGE_KERNEL_SHADOWSTACK;
-> +	}
-> +#endif
-
-
-To avoid the ifdef here, I would hide it inis_va_init_shadow_stack().
-
-
-> +
->   	return PAGE_KERNEL;
->   }
->   
->   void mark_rodata_ro(void)
->   {
-> -	set_kernel_memory(__start_rodata, _data, set_memory_ro);
-> +	set_kernel_memory(__start_rodata, __end_srodata, set_memory_ro);
->   	if (IS_ENABLED(CONFIG_64BIT))
-> -		set_kernel_memory(lm_alias(__start_rodata), lm_alias(_data),
-> +		set_kernel_memory(lm_alias(__start_rodata), lm_alias(__end_srodata),
->   				  set_memory_ro);
->   }
->   #else
-> @@ -913,14 +921,21 @@ static void __init create_kernel_page_table(pgd_t *pgdir,
->   static void __init create_kernel_page_table(pgd_t *pgdir, bool early)
->   {
->   	uintptr_t va, end_va;
-> +	pgprot_t prot;
->   
->   	end_va = kernel_map.virt_addr + kernel_map.size;
-> -	for (va = kernel_map.virt_addr; va < end_va; va += PMD_SIZE)
-> +	for (va = kernel_map.virt_addr; va < end_va; va += PMD_SIZE) {
-> +		prot = PAGE_KERNEL_EXEC;
-> +#ifdef CONFIG_DYNAMIC_SCS
-> +		if (early && is_va_init_shadow_stack_early(va))
-> +			prot = PAGE_KERNEL_SHADOWSTACK;
-> +#endif
-
-
-Ditto here to avoid the ifdef, hide it intois_va_init_shadow_stack_early().
-
-
->   		create_pgd_mapping(pgdir, va,
-> -				   kernel_map.phys_addr + (va - kernel_map.virt_addr),
-> -				   PMD_SIZE,
-> -				   early ?
-> -					PAGE_KERNEL_EXEC : pgprot_from_va(va));
-> +					kernel_map.phys_addr + (va - kernel_map.virt_addr),
-> +					PMD_SIZE,
-> +					early ?
-
-
-The 3 lines above are not modified, so no need to indent them.
-
-
-> +					prot : pgprot_from_va(va));
-> +	}
->   }
->   #endif
->   
-
-
-Apart from the nits above, you can add:
-
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-Thanks,
-
-Alex
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
