@@ -1,75 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A08C1CAAF;
-	Mon, 13 May 2024 18:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861893F9D9
+	for <llvm@lists.linux.dev>; Mon, 13 May 2024 18:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715625755; cv=none; b=cVY7VcUO0Hmd/etgeKcE2xEyrQ32GUjMWNF4K2w/GuAfcnqsMcz1DhnRoSPFf6treB2dsNBeMENUAO7KxPA5aAJP9YZoLPhcSulO1UdwpnZeUj0CDfq5R2a1GX0Ha5zj1lWfazedmZFDsA5Yi4mX+ou0oDLV2+JNcGr8GOJz33g=
+	t=1715626301; cv=none; b=bG7jRP7PyW857tGHRPy2aHCU2Wg2GDjAZO4fy6Ys8msUM26o0asZ7D4WxOMV8UouUlPFVVJ3ttRUOyoZo5V+/KIBd4Gt43aqjtvfx5sioz1eW3pQ2cpIEC9DiX1D3bxrrwUByk/I87rxzzGClY9i4OAC9MBVigpaw2cpHFjiYNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715625755; c=relaxed/simple;
-	bh=vflVzp1A0GkWtNm4fegjMCm97wJdDl9jRPwd9eWvaOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZUyHTXRoKAPloovZFoJ4qGZM2ttJjVFh+Nj1GxujWvVvc5G53uNybQqfi1H6YbWV1J9W5nTe6SOr1jlORMlOgnKv+p9IP6DXiE+VJnA+eJwgeg21xk9pfuVGuojrWjc2K+azS0fsysHUuU7I72VKthlYWGu2Z34AEn6ITHidfcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0fLk6CX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715626301; c=relaxed/simple;
+	bh=bvx6mCnzX8C2T7z/ykshZS5xSeo3dI7Pp2H7YdnXt/4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d5tYrMtLbAld3MLNpHfZMKbZ7u0D+RQiYYfAThTyyFV3MVopXbhz2myrkbuwZofUaCWrXYFSE4hTiH9dR/JGZwm8sdwAAmbcEqL7Vh6XkoMtMeW/LYj+iSsqChR5AT6mBLRa97DBuzfRqjj9D5poZ2omuw2oUv2wVCK1armRFgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=oels9BeF; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0fLk6CX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB838C113CC;
-	Mon, 13 May 2024 18:42:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715625754;
-	bh=vflVzp1A0GkWtNm4fegjMCm97wJdDl9jRPwd9eWvaOM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=E0fLk6CX6RRojI58r5e26p+XLRtH96irn9lbWm+4TKsr0x7WmUO2TgZhnjf6RbVBl
-	 nefqqJR9+RQUKtbLyi6ORIFmQXdjzHhuUMDlQ0j8O05dHrp0dvIGRqTKa+RFRGRXwk
-	 r5OULfz1e5BY7LXfn6AAvh8zKfj6rMNSTdxb9xvwS3fJ0XJTUyWSxbnCH3DWxijVAo
-	 dkIqcft4g3eXAbl5OEFpBSotYUTjt5n8J+ZKgtxERxwxgtOMbjk9PKD+xRF3E4F1CM
-	 gU0o8kfdQ7YyzGGsSFrhOgzyMxNlrIXwYVJz7EwG/zulansonU+Qczo30CUwfUZHE3
-	 x4ZUKj+QU3r6g==
-Date: Mon, 13 May 2024 11:42:33 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Heng Qi <hengqi@linux.alibaba.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, "David S . Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>, Jason
-   Wang <jasowang@redhat.com>, "Michael S . Tsirkin" <mst@redhat.com>, Brett
-   Creeley <bcreeley@amd.com>, Ratheesh Kannoth <rkannoth@marvell.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Tal Gilboa <talgi@nvidia.com>, Jonathan  
- Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, Maxime Chevallier
- <maxime.chevallier@bootlin.com>, Jiri Pirko <jiri@resnulli.us>, Paul  
- Greenwalt <paul.greenwalt@intel.com>, Ahmed Zaki <ahmed.zaki@intel.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>, Kory Maincent
- <kory.maincent@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
- justinstitt@google.com, donald.hunter@gmail.com, netdev@vger.kernel.org,
- virtualization@lists.linux.dev
-Subject: Re: [PATCH net-next v13 2/4] ethtool: provide customized dim
- profile management
-Message-ID: <20240513114233.6eb8799e@kernel.org>
-In-Reply-To: <1715614744.0497134-3-hengqi@linux.alibaba.com>
-References: <20240509044747.101237-1-hengqi@linux.alibaba.com>
-	<20240509044747.101237-3-hengqi@linux.alibaba.com>
-	<202405100654.5PbLQXnL-lkp@intel.com>
-	<1715531818.6973832-3-hengqi@linux.alibaba.com>
-	<20240513072249.7b0513b0@kernel.org>
-	<1715611933.2264705-1-hengqi@linux.alibaba.com>
-	<20240513082412.2a27f965@kernel.org>
-	<1715614744.0497134-3-hengqi@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oels9BeF"
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5b279e04391so2639760eaf.3
+        for <llvm@lists.linux.dev>; Mon, 13 May 2024 11:51:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715626298; x=1716231098; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uyix+o2/yzI/teQyeT3mBLMMtNsSET+xVm+DqXsTGyI=;
+        b=oels9BeFv9rQvsgWv8rG0UTSFLlENk8sMVUY4nWTPascFssStJ/yacIvHmoYmhooxS
+         nrnG3T6RpvCOIMWSo+l2wVKIZsOnOqTzSzmK+0OpD4Ymmobg/aX2TCGcZ1ynWQs6x8k+
+         WqWiQGy1HzJ67KQq6zR+fYVcMwnQHX5v7S3OA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715626298; x=1716231098;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uyix+o2/yzI/teQyeT3mBLMMtNsSET+xVm+DqXsTGyI=;
+        b=G7HHkXOto60urP3gp78zqsKOYno1oKD7Mk/d1kdxz44/Vu6Wz5bzC2AdBtaw2+pn58
+         mm7v5jTS/lE5kjgy9R+DGMmorkANyJdOOE5IlKOFmANnpKKeMhYMo/guBF54cNoheJ8n
+         8iyBhKudr9PkD0E1uaZDs7XQEmSyzma2JBYhIDNya1er8B1EDGJJyvfLKsQyyHuGvfT/
+         SL1TZ8ipUsRq/8bjn/461I9cMhoqZxJpkk7p8VqTrKyNkZ8aCBJApc/cLY9ThVar0lAS
+         RZs0s7xxx9AyKWaZgBW0Id096T73t30PgCbZtfvOwkWmuklK2HtYRZWIn3slIDHN0e3x
+         mwRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUdD0fOAW371INNs4d0gYngnZmVpnupk9fFIkp0AvfzxZ6OT/0LSN9NV3MFIEj+HyoeOskoPFAsgHtJ2MbM1jBF986qhg==
+X-Gm-Message-State: AOJu0YwogJjQVc+w9Zo6sO0Q19sKO4e267fJiXXO+SQvCxg+4szsBjo/
+	6Joq/0r5vCB4LvLayJIQC8RxyMi5TwRHMT0tzQdiVt5sRP6w22mQjIU+SuhukQ==
+X-Google-Smtp-Source: AGHT+IGv1B1Gx2wKtJWfijbWmucGg9LEe4iuF9AOrXx3x9zQT6qPe6BMe/LLFnyboO/EG8WWyTenMw==
+X-Received: by 2002:a05:6358:6505:b0:192:5b28:1ace with SMTP id e5c5f4694b2df-193bd007a1cmr1186924055d.29.1715626298112;
+        Mon, 13 May 2024 11:51:38 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-634103f6982sm6959074a12.60.2024.05.13.11.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 May 2024 11:51:37 -0700 (PDT)
+Date: Mon, 13 May 2024 11:51:37 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Erick Archer <erick.archer@outlook.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	"David S.  Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] tty: rfcomm: prefer struct_size over open coded
+ arithmetic
+Message-ID: <202405131150.31B872F41A@keescook>
+References: <AS8PR02MB7237262C62B054FABD7229168BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <d11dacfa-5925-4040-b60b-02ab731d5f1a@kernel.org>
+ <CABBYNZ+4CcoBvkj8ze7mZ4vVfWfm_tyBxdFspvreVASi0VR=6A@mail.gmail.com>
+ <AS8PR02MB72379B760CF7B6A26A69C5558BE22@AS8PR02MB7237.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR02MB72379B760CF7B6A26A69C5558BE22@AS8PR02MB7237.eurprd02.prod.outlook.com>
 
-On Mon, 13 May 2024 23:39:04 +0800 Heng Qi wrote:
->  config PROVE_LOCKING
->         bool "Lock debugging: prove locking correctness"
-> -       depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
-> +       depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && NET
+On Mon, May 13, 2024 at 07:12:57PM +0200, Erick Archer wrote:
+> Hi Kees, Jiri and Luiz,
+> First of all, thanks for the reviews.
+> 
+> On Mon, May 13, 2024 at 12:29:04PM -0400, Luiz Augusto von Dentz wrote:
+> > Hi Jiri, Eric,
+> > 
+> > On Mon, May 13, 2024 at 1:07 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+> > >
+> > > On 12. 05. 24, 13:17, Erick Archer wrote:
+> > > > This is an effort to get rid of all multiplications from allocation
+> > > > functions in order to prevent integer overflows [1][2].
+> > > >
+> > > > As the "dl" variable is a pointer to "struct rfcomm_dev_list_req" and
+> > > > this structure ends in a flexible array:
+> > > ...
+> > > > --- a/include/net/bluetooth/rfcomm.h
+> > > > +++ b/include/net/bluetooth/rfcomm.h
+> > > ...
+> > > > @@ -528,12 +527,12 @@ static int rfcomm_get_dev_list(void __user *arg)
+> > > >       list_for_each_entry(dev, &rfcomm_dev_list, list) {
+> > > >               if (!tty_port_get(&dev->port))
+> > > >                       continue;
+> > > > -             (di + n)->id      = dev->id;
+> > > > -             (di + n)->flags   = dev->flags;
+> > > > -             (di + n)->state   = dev->dlc->state;
+> > > > -             (di + n)->channel = dev->channel;
+> > > > -             bacpy(&(di + n)->src, &dev->src);
+> > > > -             bacpy(&(di + n)->dst, &dev->dst);
+> > > > +             di[n].id      = dev->id;
+> > > > +             di[n].flags   = dev->flags;
+> > > > +             di[n].state   = dev->dlc->state;
+> > > > +             di[n].channel = dev->channel;
+> > > > +             bacpy(&di[n].src, &dev->src);
+> > > > +             bacpy(&di[n].dst, &dev->dst);
+> > >
+> > > This does not relate much to "prefer struct_size over open coded
+> > > arithmetic". It should have been in a separate patch.
+> > 
+> > +1, please split these changes into its own patch so we can apply it separately.
+> 
+> Ok, no problem. Also, I will simplify the "bacpy" lines with direct
+> assignments as Kees suggested:
+> 
+>    di[n].src = dev->src;
+>    di[n].dst = dev->dst;
+> 
+> instead of:
+> 
+>    bacpy(&di[n].src, &dev->src);
+>    bacpy(&di[n].dst, &dev->dst);
 
-We can't make lockdep dependent on NET.
-People working on other subsystems should be able to use LOCKDEP 
-with minimal builds.
+I think that's a separate thing and you can leave bacpy() as-is for now.
+
+-- 
+Kees Cook
