@@ -1,61 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860966AC0;
-	Mon, 13 May 2024 15:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF76539C;
+	Mon, 13 May 2024 15:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715613537; cv=none; b=iBbd1cK2fAiEauOJs4W6XIh/5G9oCDkMYFBTEDjyV4oEtg5QY2b8/YdCQAi7+A7jQAR8HQ1gklEKSZGkO8Y1PTiOUSil3mPCxQH6n8bvjfRjYR/Ike0hZsuMFOT/2+WNZmJb3amB5rjCRBpGyl//uvqCr5Fx86+11CaOU4Us2qs=
+	t=1715613563; cv=none; b=b0+48fHx4yuKKl580lU7Mn599b4BF0ySg+axJ8ewhDpXmJo/X4B1OpZ8Jo3GZP7/lvmgvCgtAf4hlGSfp4EZEMloE5575ww9scnEi2fXBhh5RP8FMDSKvPxvnv92jZaFKZ07fuSyO3ckN6Jn6tCR+635F7UrYTqhwJX0VnA4vIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715613537; c=relaxed/simple;
-	bh=56FIH33ASa4B4yIKs3CG1FH5+Gkw0BL/r+GY/ouYjDk=;
+	s=arc-20240116; t=1715613563; c=relaxed/simple;
+	bh=wHj1VNy0vMRh33TWNtQHJRbW6jcVnhuKzLbGW57DgDU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ojxj6VeITkFM/3RORqacAxy1gWlXKYsRqJA/9lhr7m/KEe84xdYGZ03JBOzsytiloC9T7zpsZl46vHAlhcMRZxMa1ozrUHvJsiOaGNWdlnRCymj0skddhDeaiuPoU9PIPmOq5IhRdKxcAe0DsOZEzQCgTUgez6p8ZusakSjUdbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IVnUG81K; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=S0jzPJ3BgWrhj1ae43ifHXXVX63O4SJoTODb7c0GmamchGSo4O2DCelkdxsjP+rkBXkv5iWru2eD0XxN0lmvEEy4Ch9W8lX6rFAd34iO9WaPrBrl2E4j1wbQQ7FBqi5jzZ0/MEwzRs85p90mjerJhf6R61g+Aj7wWORLc8SNGZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CWKuGcoI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IVnUG81K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715613535; x=1747149535;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=56FIH33ASa4B4yIKs3CG1FH5+Gkw0BL/r+GY/ouYjDk=;
-  b=IVnUG81KLUC7DtWpCpOotjznVso+wTkTZnW0ezFeqazB8GASzKZp20Ng
-   mg+z78AbgkrlnRRb3cbHZEpIVQnF8znIQ5msbXWPzxJ+lmMFs3nAcXaz2
-   QFXZf0uieEsjSt9zAPPNkg1aiPzgT7CbJXzCeKrVEPqv9mQucOYrGvgWr
-   G5z2LlttYB12OqgqL/8RBdydJHAT57fX1ZzHEHbQSWiExJeVAP8BBnN11
-   55nSCFpxcpy2WQSA8WJq+n0+r6U8XRUsOHU/OQa8yWywIZNLorxsNN67B
-   xOSgQIUbZ4e1/KHr0Ut8VBX46VhTX1C+S2B5txc3bvyPl6B9wDXUA47ME
-   Q==;
-X-CSE-ConnectionGUID: uxUAtbjmSReYH/gqNHOK+Q==
-X-CSE-MsgGUID: MPGAxjijQjOI7oK5QA+Twg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="15373290"
-X-IronPort-AV: E=Sophos;i="6.08,158,1712646000"; 
-   d="scan'208";a="15373290"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2024 08:17:43 -0700
-X-CSE-ConnectionGUID: ogWHM4urS4awQp3N7pB5BQ==
-X-CSE-MsgGUID: 7+g/1Bs0SwKy35Wa2zFAWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,158,1712646000"; 
-   d="scan'208";a="35240082"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 13 May 2024 08:17:41 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s6XQn-000APT-36;
-	Mon, 13 May 2024 15:17:37 +0000
-Date: Mon, 13 May 2024 23:16:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	nouveau@lists.freedesktop.org, dakr@redhat.com
-Subject: Re: [PATCH] nouveau/firmware: using dma non-coherent interfaces for
- fw loading.
-Message-ID: <202405132205.FVKltMCq-lkp@intel.com>
-References: <20240513064350.1050994-1-airlied@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CWKuGcoI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 869AAC113CC;
+	Mon, 13 May 2024 15:19:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715613562;
+	bh=wHj1VNy0vMRh33TWNtQHJRbW6jcVnhuKzLbGW57DgDU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CWKuGcoI+uzQLcGuTk4s9n/ib+KqkgH4AmATgPGB9VqtVKSUGaPwHGNAerJhgqu8V
+	 IqFSYYQNRyMi6FRj02UBx/xXPqUe2WUiCWefGBK0Ohn1jg+FEPM/+0UXWaf2kPnpWW
+	 aPwZUZsWEGWbMu5CWSOG8Q0GJuLDUhYnWXGWz06GI+fkYLezXNstuSmdLRNFwWZI7f
+	 ekJl4JI5JrsbUXVwxEOhky9Hb4G/08XMYtzr/lQ9eJCfy91aC4gKQG/JSIpI2liY3g
+	 XzC97YYKQneJOoZcRk/jdKmD4ExONKysrIX93rQH1pT1pQHGorsiwp0kG8udoMD2/+
+	 6WzefNR6Acfgw==
+Date: Mon, 13 May 2024 08:19:20 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Roth <michael.roth@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>, llvm@lists.linux.dev
+Subject: Re: [PULL 18/19] KVM: SEV: Provide support for
+ SNP_EXTENDED_GUEST_REQUEST NAE event
+Message-ID: <20240513151920.GA3061950@thelio-3990X>
+References: <20240510211024.556136-1-michael.roth@amd.com>
+ <20240510211024.556136-19-michael.roth@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,64 +45,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240513064350.1050994-1-airlied@gmail.com>
+In-Reply-To: <20240510211024.556136-19-michael.roth@amd.com>
 
-Hi Dave,
+Hi Michael,
 
-kernel test robot noticed the following build errors:
+On Fri, May 10, 2024 at 04:10:23PM -0500, Michael Roth wrote:
+> Version 2 of GHCB specification added support for the SNP Extended Guest
+> Request Message NAE event. This event serves a nearly identical purpose
+> to the previously-added SNP_GUEST_REQUEST event, but allows for
+> additional certificate data to be supplied via an additional
+> guest-supplied buffer to be used mainly for verifying the signature of
+> an attestation report as returned by firmware.
+> 
+> This certificate data is supplied by userspace, so unlike with
+> SNP_GUEST_REQUEST events, SNP_EXTENDED_GUEST_REQUEST events are first
+> forwarded to userspace via a KVM_EXIT_VMGEXIT exit structure, and then
+> the firmware request is made after the certificate data has been fetched
+> from userspace.
+> 
+> Since there is a potential for race conditions where the
+> userspace-supplied certificate data may be out-of-sync relative to the
+> reported TCB or VLEK that firmware will use when signing attestation
+> reports, a hook is also provided so that userspace can be informed once
+> the attestation request is actually completed. See the updates to
+> Documentation/ for more details on these aspects.
+> 
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Message-ID: <20240501085210.2213060-20-michael.roth@amd.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+...
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 00d29d278f6e..398266bef2ca 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+...
+> +static int snp_begin_ext_guest_req(struct kvm_vcpu *vcpu)
+> +{
+> +	int vmm_ret = SNP_GUEST_VMM_ERR_GENERIC;
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +	unsigned long data_npages;
+> +	sev_ret_code fw_err;
+> +	gpa_t data_gpa;
+> +
+> +	if (!sev_snp_guest(vcpu->kvm))
+> +		goto abort_request;
+> +
+> +	data_gpa = vcpu->arch.regs[VCPU_REGS_RAX];
+> +	data_npages = vcpu->arch.regs[VCPU_REGS_RBX];
+> +
+> +	if (!IS_ALIGNED(data_gpa, PAGE_SIZE))
+> +		goto abort_request;
+> +
+> +	/*
+> +	 * Grab the certificates from userspace so that can be bundled with
+> +	 * attestation/guest requests.
+> +	 */
+> +	vcpu->run->exit_reason = KVM_EXIT_VMGEXIT;
+> +	vcpu->run->vmgexit.type = KVM_USER_VMGEXIT_REQ_CERTS;
+> +	vcpu->run->vmgexit.req_certs.data_gpa = data_gpa;
+> +	vcpu->run->vmgexit.req_certs.data_npages = data_npages;
+> +	vcpu->run->vmgexit.req_certs.flags = 0;
+> +	vcpu->run->vmgexit.req_certs.status = KVM_USER_VMGEXIT_REQ_CERTS_STATUS_PENDING;
+> +	vcpu->arch.complete_userspace_io = snp_complete_ext_guest_req;
+> +
+> +	return 0; /* forward request to userspace */
+> +
+> +abort_request:
+> +	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, SNP_GUEST_ERR(vmm_ret, fw_err));
+> +	return 1; /* resume guest */
+> +}
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip linus/master v6.9 next-20240513]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This patch is now in -next as commit 32fde9e18b3f ("KVM: SEV: Provide
+support for SNP_EXTENDED_GUEST_REQUEST NAE event"), where it causes a
+clang warning (or hard error when CONFIG_WERROR is enabled):
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Airlie/nouveau-firmware-using-dma-non-coherent-interfaces-for-fw-loading/20240513-144435
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240513064350.1050994-1-airlied%40gmail.com
-patch subject: [PATCH] nouveau/firmware: using dma non-coherent interfaces for fw loading.
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240513/202405132205.FVKltMCq-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405132205.FVKltMCq-lkp@intel.com/reproduce)
+  arch/x86/kvm/svm/sev.c:4078:67: error: variable 'fw_err' is uninitialized when used here [-Werror,-Wuninitialized]
+   4078 |         ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, SNP_GUEST_ERR(vmm_ret, fw_err));
+        |                                                                          ^~~~~~
+  include/uapi/linux/sev-guest.h:94:24: note: expanded from macro 'SNP_GUEST_ERR'
+     94 |                                          SNP_GUEST_FW_ERR(fw_err))
+        |                                                           ^~~~~~
+  include/uapi/linux/sev-guest.h:92:32: note: expanded from macro 'SNP_GUEST_FW_ERR'
+     92 | #define SNP_GUEST_FW_ERR(x)             ((x) & SNP_GUEST_FW_ERR_MASK)
+        |                                           ^
+  arch/x86/kvm/svm/sev.c:4051:2: note: variable 'fw_err' is declared here
+   4051 |         sev_ret_code fw_err;
+        |         ^
+  1 error generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405132205.FVKltMCq-lkp@intel.com/
+Seems legitimate to me. What was the intention here?
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/nouveau/nvkm/core/firmware.c:242:12: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'dma_addr_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-                                                   len, &fw->phys,
-                                                        ^~~~~~~~~
-   include/linux/dma-mapping.h:321:15: note: passing argument to parameter 'dma_handle' here
-                   dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp)
-                               ^
-   1 error generated.
-
-
-vim +242 drivers/gpu/drm/nouveau/nvkm/core/firmware.c
-
-   224	
-   225	int
-   226	nvkm_firmware_ctor(const struct nvkm_firmware_func *func, const char *name,
-   227			   struct nvkm_device *device, const void *src, int len, struct nvkm_firmware *fw)
-   228	{
-   229		fw->func = func;
-   230		fw->name = name;
-   231		fw->device = device;
-   232		fw->len = len;
-   233	
-   234		switch (fw->func->type) {
-   235		case NVKM_FIRMWARE_IMG_RAM:
-   236			fw->img = kmemdup(src, fw->len, GFP_KERNEL);
-   237			break;
-   238		case NVKM_FIRMWARE_IMG_DMA: {
-   239			len = ALIGN(fw->len, PAGE_SIZE);
-   240	
-   241			fw->img = dma_alloc_noncoherent(fw->device->dev,
- > 242							len, &fw->phys,
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
