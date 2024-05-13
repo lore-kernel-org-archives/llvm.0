@@ -1,383 +1,135 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FD37CF3A
-	for <llvm@lists.linux.dev>; Mon, 13 May 2024 19:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092C177107
+	for <llvm@lists.linux.dev>; Mon, 13 May 2024 19:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715629420; cv=none; b=Gqvpo2DWFS9ScRKC8GZmi2eicfSpAM331AY6dyJPRTqcL5oMx3zr5ZITiWT4yHCiUZQ8Tal+L84v1F1m6FqoYibOlm6WVjCZQ/Qyp7qNgXIHpj7DRhTrNUpcOtrlCNVX4+yYubKoxMwZ0G8MnpyYPO8AtquWklcT/0o0u5N+IGA=
+	t=1715629508; cv=none; b=qRokhKWf3pZqpWbX1IIIQyhCGAumNaR1/hsIHfvY6nUxQN+NkZoZ1pxS9/fbULu2dZTmO+7W5ioyZWhH3Umt4YZJiqGEQn0/7D+Na/Az8pNX+1q5ghAdrZ7Pu4KQTVX6b0b3awX5bJ/+DcinkNzbTLehtZIuFP5WedsoJ+Tje7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715629420; c=relaxed/simple;
-	bh=K61Eeb63d0yaw8+TKUN2pTbZRolvq3Pgv6Gq358MquE=;
+	s=arc-20240116; t=1715629508; c=relaxed/simple;
+	bh=lkX/M/OVTWkcdWK8AyuLdiu5b3a3EKqBIzeiduQZzZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHKV+I6vtSMZ7ofc0XM0xqC7VU+7hm3SZ9hsfLkYd27M54vyyplBKm/gP6lE6lLbqXFOgrnsBExaes+g1V5kdaP2bC7pJWo5p4THxPj8qmA/cf1putsQQeH1jYqoxL+I9R1K2PZTJ25tun1I2yABtAniV+3EPgJ3kFS8VHeBVvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ndG58KI5; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=j9Idko0ztY0ce/9mazYNK7T58jTs51FAjdXtBQKjAyNFoxrl0oX+Y08lCcJVl6viw3jOmy+J0gTreyL0fpghiDO5FpYLm2zzO4BMCow5U2GbkuadxYXVSiU8jEZLFrC9UEODue4q4w6w7yjYKjpKhgUIb9kR5b45t5gWKTLf0S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mDWEF3xV; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ndG58KI5"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f0537e39b3so22236555ad.3
-        for <llvm@lists.linux.dev>; Mon, 13 May 2024 12:43:39 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mDWEF3xV"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5d8b519e438so3927466a12.1
+        for <llvm@lists.linux.dev>; Mon, 13 May 2024 12:45:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715629418; x=1716234218; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3Yo50qdnkANEGN5IkXj0mAYeaPHuiq9Yw00mAPWh7RA=;
-        b=ndG58KI58ICJ96TU4ArVvZ77zUKfTTbCThqv0rZ67FYhINAhqSb4Wkkq6kE39aubfl
-         lQ2Zk4HEyjdDWWVafbyNF3S5TsR6w7cVot095bx63p2yVL/hHl0WRj1FOx0Sp82V9uoY
-         /ikHR/2rre8yDQDQyGvVc8wcy00mSOIzjN+1A=
+        d=chromium.org; s=google; t=1715629505; x=1716234305; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9chi3Xc1nvI/gVi21b7gtgutjXhJ9XfFazGItJ10RrM=;
+        b=mDWEF3xVRBF4AO/LOsgqqhq3y+YnS1MIwC87rlD5rGFwpjojZbKXeSDMFeiqiSV8ru
+         8nYNVhNqEDrzLJqYA0RUA1Apd1LKwC9oy2jZTxLssnpaQqB5FqgUIXyKfnyGKeICxMme
+         AiU+7EHqGyMSLdfTPc6NI9CTgU8HH3rZvI9WY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715629418; x=1716234218;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Yo50qdnkANEGN5IkXj0mAYeaPHuiq9Yw00mAPWh7RA=;
-        b=laVFIT0Uev2cxNZj0EqCCrvyhteNDgX8UciwlTOW99V/VBnGlJZHOI6MhgPBx38wKH
-         oxxeAnmoDh+h/VBeUi2yegKO1A+yQjHhvC3e2agEiy0cArvWrrzQ/DogKVxdPEVIybhT
-         kCv63frFLRVXY6PibmIICOm93KtcRBZ8ukTGnO1Y2P3jIo9vVCUzUxcAXNDBPFp5ayJr
-         2Tm3DbFdkJbe9/PWKDNS9cMGxsN9+JyoTFMTF5gbPzQt9guKmxO+Cb1bPIWW7G1+2YFL
-         rHdNzGYOp2RWCxSvFzpYVR/Lrlo5RoCH/5OMOxyAiE3I9ZjL/va1bw6g1xswWMOhD8xo
-         ih3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVGOTJqpUbo/JGlSGvc2jxG5X+FWcngu3APVZZMKYBZZWQDYBpqVsJT1X7b0lQuMGe7hbiRo7Pk3IyLCUAM9vezhqoTAA==
-X-Gm-Message-State: AOJu0YzAUc8CyR1hDwU2wa3dP6l9zqYS29nfeDFnLaUHndvSn+hyLY6l
-	HslSAq5qUh2kOr6QF2um3R78lr0EACluPDMi2YUZf3BwFerweJFFqeetx7ajkg==
-X-Google-Smtp-Source: AGHT+IHXRBXfaq+moLO5icTiqOzUIngitS3nNlXAT5sPau7Atj50bQ8EqwnilNsJWDU0XbUScvM9xQ==
-X-Received: by 2002:a17:902:ec89:b0:1eb:58d2:8739 with SMTP id d9443c01a7336-1ef43d0a009mr131792085ad.3.1715629418503;
-        Mon, 13 May 2024 12:43:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715629505; x=1716234305;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9chi3Xc1nvI/gVi21b7gtgutjXhJ9XfFazGItJ10RrM=;
+        b=nKyvJqguUYM+3jDe6pB9so408OzqKPe9sfgjFxd1pRRGT6DuUXh8TY0ELIir9VEc9T
+         10Nj1EjlwqRai4db2SrN9h+dhs7dPcNEe9rTrzMIDA1CRv3jO21+KOyXIVdR/2XFoPkw
+         Hi0ir0zmLzIoH0rPs3Ag67bhykyTqD8GWZar79jIHM3/7mCMniaKQcs6Bgp+uU/qOQzG
+         /q04nzJFN7OTbNxcyDCOYCQsFrmLmWgcuKxMu3ioVFsMcllDB/7zD+7GM1TW1fSEb2F1
+         BUYmHAsRW6P2McjgHNCfWH1gATm3ZL1bjBt4+GOs+3NLvbFvUunDhfIr+fFnbGAOi42C
+         QUHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtMfKUbDOa/vKH6KpPyxXyj4MyX+dDIOhP3OVL5KMb9V4T3JK20n5gsoAxmZbauRh6T+lWd0wGEzPwZDr63AYkKdIC/w==
+X-Gm-Message-State: AOJu0YwMZzFSIB0jRDbPdcy5QbPJzCjl6eLNqQFOpNIrOH+PaV8eCk58
+	9XkGjC03ExPlL8djJ1v903h6EXgLXvxiw1/h4OzyOcU9hOTPIVvgGgsrE22Dlw==
+X-Google-Smtp-Source: AGHT+IFiB350HJmAM9p6dy50xn1DH9UD4cBCncM11fBjTw9zQRi5Yi8p+prPZer6lZhPmiwwzOChIA==
+X-Received: by 2002:a05:6a20:c909:b0:1ad:999b:de47 with SMTP id adf61e73a8af0-1afde1d7b38mr11221877637.51.1715629505306;
+        Mon, 13 May 2024 12:45:05 -0700 (PDT)
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d177asm82902335ad.23.2024.05.13.12.43.38
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b628ea6ab8sm10150799a91.55.2024.05.13.12.45.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 12:43:38 -0700 (PDT)
-Date: Mon, 13 May 2024 12:43:37 -0700
+        Mon, 13 May 2024 12:45:04 -0700 (PDT)
+Date: Mon, 13 May 2024 12:45:04 -0700
 From: Kees Cook <keescook@chromium.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
+To: Erick Archer <erick.archer@outlook.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
-Message-ID: <202405131203.F7B97F5E38@keescook>
-References: <202404291502.612E0A10@keescook>
- <039d54d6-8aa2-4e5b-829b-69002cff35d3@moroto.mountain>
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3] perf/ring_buffer: Prefer struct_size over open coded
+ arithmetic
+Message-ID: <202405131245.E572E4C6@keescook>
+References: <AS8PR02MB72379B4807F3951A1B926BA58BE02@AS8PR02MB7237.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <039d54d6-8aa2-4e5b-829b-69002cff35d3@moroto.mountain>
+In-Reply-To: <AS8PR02MB72379B4807F3951A1B926BA58BE02@AS8PR02MB7237.eurprd02.prod.outlook.com>
 
-On Sat, May 11, 2024 at 07:19:49PM +0300, Dan Carpenter wrote:
-> I'm pretty sure we've tried using a sanitizer before and it had too many
-> false positives.  So your solution is to annotate all the false
-> positives?
-
-That was the plan, yes. Based on current feedback, we'll be taking an
-even more incremental approach, though.
-
-> There are two main issue which make integer overflows complicated from
-> a static analysis perspective.  1)  Places where it's intentional or
-> we don't care.  2)  Places where the integer overflow is harmless for
-> one reason or another.  Btw, integer overflows are a lot more common on
-> 32 bit CPUs because obviously it's easier to overflow 4 billion than
-> whatever number U64_MAX is.
-
-Agreed on all counts. :)
-
-> Here are is a sample of ten integer overflows that the user can trigger.
-> Maybe pick a couple and walk us through how they would be annotated?
-
-Sure, I will answer this from the perspective of the original proposal
-(enabling signed-integer-overflow, unsigned-integer-overflow,
-signed-integer-implicit-truncation, and
-unsigned-integer-implicit-truncation).
-
+On Sat, May 11, 2024 at 03:24:37PM +0200, Erick Archer wrote:
+> This is an effort to get rid of all multiplications from allocation
+> functions in order to prevent integer overflows [1][2].
 > 
-> drivers/usb/dwc3/gadget.c:3064 dwc3_gadget_vbus_draw() warn: potential integer overflow from user '1000 * mA'
->   3052  static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
->   3053  {
->   3054          struct dwc3             *dwc = gadget_to_dwc(g);
->   3055          union power_supply_propval      val = {0};
->   3056          int                             ret;
->   3057  
->   3058          if (dwc->usb2_phy)
->   3059                  return usb_phy_set_power(dwc->usb2_phy, mA);
->   3060  
->   3061          if (!dwc->usb_psy)
->   3062                  return -EOPNOTSUPP;
->   3063  
->   3064          val.intval = 1000 * mA;
->                              ^^^^^^^^^^
-> mA comes from the user and we only know that it's a multiple of 2.
-> So here we would annotate that val.intval can store integer overflows?
-> Or we'd annotate mA?
-
-Do we _want_ it to overflow? This seems like a case where we don't? I
-would expect this to need:
-
-		int intval;
-
-		if (check_mul_overflow(1000, mA, &intval))
-			return -EINVAL;
-
-		val.intval = intval;
-
+> As the "rb" variable is a pointer to "struct perf_buffer" and this
+> structure ends in a flexible array:
 > 
->   3065          ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
->   3066  
->   3067          return ret;
->   3068  }
+> struct perf_buffer {
+> 	[...]
+> 	void	*data_pages[];
+> };
 > 
+> the preferred way in the kernel is to use the struct_size() helper to
+> do the arithmetic instead of the calculation "size + count * size" in
+> the kzalloc_node() functions.
 > 
-> drivers/usb/class/usbtmc.c:852 usbtmc_generic_read() warn: potential integer overflow from user 'max_transfer_size + 1'
->    842                   * wMaxPacketSize – 1) to avoid sending a zero-length
->    843                   * packet
->    844                   */
->    845                  remaining = transfer_size;
->    846                  if ((max_transfer_size % data->wMaxPacketSize) == 0)
->    847                          max_transfer_size += (data->wMaxPacketSize - 1);
->    848          } else {
->    849                  /* round down to bufsize to avoid truncated data left */
->    850                  if (max_transfer_size > bufsize) {
->    851                          max_transfer_size =
->    852                                  roundup(max_transfer_size + 1 - bufsize,
->                                                 ^^^^^^^^^^^^^^^^^^^^^
-> This can overflow.  We should make it a rule that all size variables
-> have to be unsigned long.  That would have made this safe on 64 bit
-> systems.
+> In the "rb_alloc" function defined in the else branch of the macro
 > 
->    853                                          bufsize);
->    854                  }
->    855                  remaining = max_transfer_size;
-
-Again, do we _want_ this to overflow? It looks like not. I'm not sure
-what this code is trying to do, though. The comment doesn't seem to
-match the code. Why isn't this just roundup(max_transfer_size, bufsize) ?
-
-> drivers/usb/misc/usbtest.c:1994 iso_alloc_urb() warn: potential integer overflow from user 'bytes + maxp'
->   1974  static struct urb *iso_alloc_urb(
->   1975          struct usb_device       *udev,
->   1976          int                     pipe,
->   1977          struct usb_endpoint_descriptor  *desc,
->   1978          long                    bytes,
->   1979          unsigned offset
->   1980  )
->   1981  {
->   1982          struct urb              *urb;
->   1983          unsigned                i, maxp, packets;
->   1984  
->   1985          if (bytes < 0 || !desc)
->   1986                  return NULL;
->   1987  
->   1988          maxp = usb_endpoint_maxp(desc);
->   1989          if (udev->speed >= USB_SPEED_SUPER)
->   1990                  maxp *= ss_isoc_get_packet_num(udev, pipe);
->   1991          else
->   1992                  maxp *= usb_endpoint_maxp_mult(desc);
->   1993  
->   1994          packets = DIV_ROUND_UP(bytes, maxp);
->                                        ^^^^^
-> The issue here is on a 32 bit system when bytes is INT_MAX.
-
-All of these examples seem to be cases that should be mitigated. The
-earlier check should be expanded:
-
-		if (bytes < 0 || bytes >= INT_MAX || !desc)
-
+>  #ifndef CONFIG_PERF_USE_VMALLOC
 > 
->   1995  
->   1996          urb = usb_alloc_urb(packets, GFP_KERNEL);
->   1997          if (!urb)
->   1998                  return urb;
+> the count in the struct_size helper is the literal "1" since only one
+> pointer to void is allocated. Also, remove the "size" variable as it
+> is no longer needed.
 > 
+> At the same time, prepare for the coming implementation by GCC and Clang
+> of the __counted_by attribute. Flexible array members annotated with
+> __counted_by can have their accesses bounds-checked at run-time via
+> CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
+> strcpy/memcpy-family functions). In this case, it is important to note
+> that the logic needs a little refactoring to ensure that the "nr_pages"
+> member is initialized before the first access to the flex array.
 > 
-> drivers/usb/storage/uas.c:324 uas_stat_cmplt() warn: potential integer overflow from user 'idx + 1'
->    322          idx = be16_to_cpup(&iu->tag) - 1;
+> In one case, it is only necessary to move the "nr_pages" assignment
+> before the array-writing loop while in the other case the access to the
+> flex array needs to be moved inside the if branch and after the
+> "nr_pages" assignment.
 > 
-> The "- 1" makes this UINT_MAX
+> This way, the code is more safer.
 > 
->    323          if (idx >= MAX_CMNDS || !devinfo->cmnd[idx]) {
->    324                  dev_err(&urb->dev->dev,
->    325                          "stat urb: no pending cmd for uas-tag %d\n", idx + 1);
->                                                                              ^^^^^^^
-> Harmless integer overflow in printk.
+> This code was detected with the help of Coccinelle, and audited and
+> modified manually.
 > 
->    326                  goto out;
->    327          }
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
+> Link: https://github.com/KSPP/linux/issues/160 [2]
+> Signed-off-by: Erick Archer <erick.archer@outlook.com>
 
-Again, this doesn't look like we want it overflowing. "idx" isn't
-reported correctly. It can just use "idx": that's what's being examined
-in the "if" statement.
+Thanks!
 
-> drivers/mtd/parsers/tplink_safeloader.c:101 mtd_parser_tplink_safeloader_parse() warn: potential integer overflow from user 'bytes + 1'
->     97          for (idx = 0, offset = TPLINK_SAFELOADER_DATA_OFFSET;
->     98               idx < TPLINK_SAFELOADER_MAX_PARTS &&
->     99               sscanf(buf + offset, "partition %64s base 0x%llx size 0x%llx%zn\n",
->    100                      name, &parts[idx].offset, &parts[idx].size, &bytes) == 3;
-> 
-> I think this buffer comes from the partition table?
-> 
->    101               idx++, offset += bytes + 1) {
->                                       ^^^^^^^^^
-> 
->    102                  parts[idx].name = kstrdup(name, GFP_KERNEL);
->    103                  if (!parts[idx].name) {
->    104                          err = -ENOMEM;
-
-Again, we don't want it wrapping. The whole loop needs to be expanded to
-be readable, and bounds checking needs to be performed.
-
-> 
-> 
-> drivers/char/ppdev.c:344 pp_set_timeout() warn: potential integer overflow from user 'tv_sec * 100'
->    343  static int pp_set_timeout(struct pardevice *pdev, long tv_sec, int tv_usec)
->    344  {
->    345          long to_jiffies;
->    346  
->    347          if ((tv_sec < 0) || (tv_usec < 0))
->    348                  return -EINVAL;
->    349  
->    350          to_jiffies = usecs_to_jiffies(tv_usec);
->                                               ^^^^^^^
-> 
->    351          to_jiffies += tv_sec * HZ;
->                               ^^^^^^^^^^^
-> Both of these can overflow
-> 
->    352          if (to_jiffies <= 0)
->                     ^^^^^^^^^^^^^^^
-> But they're checked here.
-> 
->    353                  return -EINVAL;
->    354  
->    355          pdev->timeout = to_jiffies;
->    356          return 0;
->    357  }
-
-This doesn't look like a wrapping-desired case either, but just for fun,
-let's assume we want it. (And why are any of these signed?) Annotation
-is added to the variables:
-
-static int pp_set_timeout(struct pardevice *pdev, long __wraps tv_sec, int __wraps tv_usec)
-{
-	long __wraps to_jiffies;
-
-
-
-> 
-> drivers/char/ipmi/ipmi_plat_data.c:70 ipmi_platform_add() warn: potential integer overflow from user 'r[0]->start + p->regsize'
->     69          r[0].start = p->addr;
->     70          r[0].end = r[0].start + p->regsize - 1;
->                            ^^^^^^^^^^^^^^^^^^^^^^^
-> I think this is root only so it's safe?  Or it could be a false
-> positive.
-> 
->     71          r[0].name = "IPMI Address 1";
->     72          r[0].flags = flags;
-
-We don't want this to wrap, yes? I don't know what is expected when regsize == 0,
-but ignoring that, I'd expect:
-
-	if (check_add_overflow(r[0].start, p->regsize - 1, &r[0].end))
-		error...
-
-
-> 
-> 
-> drivers/i2c/i2c-dev.c:485 i2cdev_ioctl() warn: potential integer overflow from user (local copy) 'arg * 10'
->    478          case I2C_TIMEOUT:
->    479                  if (arg > INT_MAX)
->    480                          return -EINVAL;
->    481  
->    482                  /* For historical reasons, user-space sets the timeout
->    483                   * value in units of 10 ms.
->    484                   */
->    485                  client->adapter->timeout = msecs_to_jiffies(arg * 10);
->                                                                     ^^^^^^^^^
-> This can overflow and then the msecs_to_jiffies() conversion also has
-> an integer overflow in it.
-
-If we want these wrapping:
-
-		unsigned long __wraps timeout = arg * 10;
-		client->adapter->timeout = msecs_to_jiffies(timeout);
-
-and:
-
-static inline unsigned long _msecs_to_jiffies(const unsigned int __wraps m)
-
-
-> 
->    486                  break;
-> 
-> 
-> drivers/i2c/busses/i2c-bcm2835.c:93 clk_bcm2835_i2c_calc_divider() warn: potential integer overflow from user 'parent_rate + rate'
->     90  static int clk_bcm2835_i2c_calc_divider(unsigned long rate,
->     91                                  unsigned long parent_rate)
->     92  {
->     93          u32 divider = DIV_ROUND_UP(parent_rate, rate);
->     94  
->     95          /*
->     96           * Per the datasheet, the register is always interpreted as an even
->     97           * number, by rounding down. In other words, the LSB is ignored. So,
->     98           * if the LSB is set, increment the divider to avoid any issue.
->     99           */
->    100          if (divider & 1)
->    101                  divider++;
->    102          if ((divider < BCM2835_I2C_CDIV_MIN) ||
->    103              (divider > BCM2835_I2C_CDIV_MAX))
->    104                  return -EINVAL;
-> 
-> Again, math first then check the result later.  Integer overflow is
-> basically harmless.
-
-Either fix the check or:
-
-	u32 __wraps divider = ...
-
-> 
->    105  
->    106          return divider;
->    107  }
-> 
-> 
-> drivers/hwmon/nct6775-core.c:2265 store_temp_offset() warn: potential integer overflow from user '__x + (__d / 2)'
->   2251  static ssize_t
->   2252  store_temp_offset(struct device *dev, struct device_attribute *attr,
->   2253                    const char *buf, size_t count)
->   2254  {
->   2255          struct nct6775_data *data = dev_get_drvdata(dev);
->   2256          struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
->   2257          int nr = sattr->index;
->   2258          long val;
->   2259          int err;
->   2260  
->   2261          err = kstrtol(buf, 10, &val);
->   2262          if (err < 0)
->   2263                  return err;
->   2264  
->   2265          val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
->                                                   ^^^^^^^^^^
-> Overflow and then clamp.
-
-Looks like DIV_ROUND_CLOSEST() needs to be made sane and use more modern
-helpers (it appears to be doing open-coded is_signed(), wants
-check_*_overflow(), etc).
-
-> 
->   2266  
->   2267          mutex_lock(&data->update_lock);
-> 
-> regards,
-> dan carpenter
-
--Kees
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
