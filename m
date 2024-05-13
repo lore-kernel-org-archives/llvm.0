@@ -1,152 +1,149 @@
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03olkn2106.outbound.protection.outlook.com [40.92.59.106])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490DC20332
-	for <llvm@lists.linux.dev>; Mon, 13 May 2024 17:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.59.106
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715620791; cv=fail; b=Hko7PtDTfa/FeOusUchXH5MZ8GiItB3TyGb8y1NwAnhf+e4p0OQCuZ89X5afmh1u2jY6nOgt4GvP/QXAfLvjE6a8I2zhT8nCr/UgtZkGMWEXEQqIoCMipXtEM38g3ejVTTUtAZYVCKYMjejA4BYW3rzzK7vfzidX/XpLD8TwDW0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715620791; c=relaxed/simple;
-	bh=ZgbVEL+vsrij1DSMczoVQ4FTy6aeHqktaS/azvnWwH4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=KRv72Dc+sb11dXAeExhmxfOUy2H4esl45ho3kW4LesMhP8pUfRNTHlPopCzXQkWyfmJt8t7z/wd1UfJrtA5V4gfbn/ysIIzWNHF0z4UHOXsVHwfx5U+PomDwxtm4gM3YgsVpfky8w6FjewXHPBtZQdPSep9W+3D3K0lq/U+boB8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=riSzfD9p; arc=fail smtp.client-ip=40.92.59.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3398E208CE;
+	Mon, 13 May 2024 17:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715620971; cv=none; b=E+o67WF8ZBXB6iUzIYoO3bk2vg/UpU1NM7pssmzzeMPUjAwujFTZQjNPCw2mhk5ao2jv1IXyjLSobsPQ+rzHEKs8wsTukMPvpfkbFQa+lcWTWp17cfkZivC3EEonbYHdMLqAwd5uggdTlbOzn/5ox8Npd08c88RlFfJrUh6R6kQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715620971; c=relaxed/simple;
+	bh=tyn7cuWnJ6Md4cnRgbwQWBGpdzeCwPyjaPP8SzCMlOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vGUdWGPJd68lXaIITkdxx1MpJ1T1jneJNwVrNwsUyyYwp9lTy+cHpRxX4J4gIQGMXX44P0cMlWjA+ADof31SP/qWuYh3BSZV4ydwUjFzx2xxtRDIETq4t5YQT5swxRb2FWT0blcttCd9PycP5j/pUxQferrxIAMTSnzQYh9mcTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lxxhERDL; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="riSzfD9p"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gFt+1Lat4suMMssH1VqYXBWs1LnsafpBCdJh+lGtt/nLsAS51aLzRi9EXR3rNNq9lyLS4NvdAqjtvsEf3D8V3r0nprwuqMhLUF1Ty2Y75TnIcLsH5mUY7M64Q8APzxI958nJwCw4UwEmtZIXXIewR9fRbqxwJswmg7YeuLomjuoHDzzmDUXD3W8ENATs5TH97jfm/85srDbqAp70Hkqani4NG+EEhFAXXYb4yFz5vbXftcgbBOCSgxGtF8YvS5roLQRCC2sM1Dw14ie578NZRhWtFBauuUFH6JOC27A37KEdgMUOpRAv1e+ZU2nfK737zH+WPOuVMI29vX4XXLAwGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hBSFxt6DKoMUnf98J40iCQppC4H0Qk+LIoOpb0XIiz0=;
- b=F54SvvN8rWTzX53tMD99ZDK7IiHgr1KrMuYHoyH0/k+oKHPjDSmG0Ija30i/VVl9BJQIcPEyCXArqijRWlkhNyFY+Viyq9nlFg7s0DPUkNw6sqeOkLzET0v+oVQ1KsayvL2g1XE7aovzaLEUHrQaeaFafV+XfVZNKzT+8PnIlIEjcQ9WjgNXDquRhUIJi3ry9VhC18gpwUa1E59ELgaPHcBwT1uAeTF8GRgckUtPObco2hDN+4Hc4XSZRILVUEAGbZ0Q/HZA/8DtnS9rpkXtUDhA73mJfJqZipHTuAr8+CNx4Ra5h6u63Re6yVmDKUaKtbJRM0ADgFT4lpV+2iIIXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hBSFxt6DKoMUnf98J40iCQppC4H0Qk+LIoOpb0XIiz0=;
- b=riSzfD9pVKCDZZjIHm53Ob/zplpuhSpLep1HXRpZmTUdkqMRJAINwv/mkqNh7DVCt61VxZJj80kqUF4Rs4NjaHHCNhnU+WlRjWKn1WhlUF9pfzJUkLbc/IqnoOz5iGGKBGj3tNvUfWXtS16aInuFnwzsZWNUbQBuFQ+LF7cKA8G5S6UZgMmClHmrHFmuRA9Jl26VgKCDTA57iPov1eXCAukEVKWKbBNInZv+tbW5XMKd2Sik+pD9arg8ERUoNFKdGBB6wN1Jr/L5uVWZEQbMilNy4LZJWSFWI5bzScHWMLPKJooIHlgcn37opiky9FZbQQi9SPc6sn+P0sQwPaVm4Q==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by DB9PR02MB9780.eurprd02.prod.outlook.com (2603:10a6:10:451::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.55; Mon, 13 May
- 2024 17:19:46 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7544.052; Mon, 13 May 2024
- 17:19:45 +0000
-Date: Mon, 13 May 2024 19:19:43 +0200
-From: Erick Archer <erick.archer@outlook.com>
-To: Kees Cook <keescook@chromium.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: Erick Archer <erick.archer@outlook.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	"David S.  Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] Bluetooth: hci_core: Prefer struct_size over open coded
- arithmetic
-Message-ID:
- <AS8PR02MB7237C71997007C058A51233E8BE22@AS8PR02MB7237.eurprd02.prod.outlook.com>
-References: <AS8PR02MB7237ECD397BDB7F529ADC7468BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <202405122008.8A333C2@keescook>
- <CABBYNZJcg5SpO_pew6ZwN98n1sR7kNZs6VtkFToyOs9NM1bO8Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABBYNZJcg5SpO_pew6ZwN98n1sR7kNZs6VtkFToyOs9NM1bO8Q@mail.gmail.com>
-X-TMN: [zlDpCEdadwWhEMJF58mS9nRALgBSH1at]
-X-ClientProxiedBy: MA4P292CA0011.ESPP292.PROD.OUTLOOK.COM
- (2603:10a6:250:2d::17) To AS8PR02MB7237.eurprd02.prod.outlook.com
- (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID: <20240513171943.GB7952@titan>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lxxhERDL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715620970; x=1747156970;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tyn7cuWnJ6Md4cnRgbwQWBGpdzeCwPyjaPP8SzCMlOI=;
+  b=lxxhERDLnkJBgD5mGWDKJ9k2raOmnxPsWrHTt+IVNZQcnkI0YCWVKzom
+   PL8GBIh2ebDHeepe+fSP0g9qkQx2dizw3XE0LHCxP7Dxl4bqCpWkN35hD
+   BUmUffUBFdoW4m5JStGVVeKR3BM3c8jyOGdtd+eH/A/2m6AKlvCQKY2Mf
+   M/z6biV23lcS+3w1LDTIayzuLyxx7G9R8ljtcQ1oon3TffHcCqxI0J8rC
+   l+8klW75Li9WYiOJ/jC324Ym5i+umcfVdMc4+h4iuENT5Uk/P/lrBwNh6
+   V6e9kfrypnGF3ipF9rKiYhUDV+AFGT7d2OGZFZPYmOkcdMk+imwQJrjbr
+   w==;
+X-CSE-ConnectionGUID: yh6uf9/4S8qgNmVG9VFnTA==
+X-CSE-MsgGUID: HmypHjlrQQqMbn/mGkyb5w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="11515363"
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="11515363"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2024 10:22:48 -0700
+X-CSE-ConnectionGUID: svXuqNxNRXyAQU2rJ9v06Q==
+X-CSE-MsgGUID: 5OviWa7LTgyubePSx02tYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="35156592"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 13 May 2024 10:22:45 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s6ZNq-000AUP-1M;
+	Mon, 13 May 2024 17:22:42 +0000
+Date: Tue, 14 May 2024 01:21:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Perry Yuan <perry.yuan@amd.com>, Mario.Limonciello@amd.com,
+	gautham.shenoy@amd.com, Ray.Huang@amd.com, Borislav.Petkov@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rafael.j.wysocki@intel.com, Alexander.Deucher@amd.com,
+	Xinmei.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 04/10] cpufreq: amd-pstate: add debug message while
+ CPPC is supported and disabled by SBIOS
+Message-ID: <202405140103.onvXHkqE-lkp@intel.com>
+References: <94ad4bca2d8e44a5e53082959220a184c0222e1e.1715356532.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|DB9PR02MB9780:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4f48050f-e8e3-472c-9d0b-08dc7370e2b5
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|440099019|3412199016|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	SBurZOrSjFH12RoEYCRK9S411xTtk5NwudYUPHN8oFKYCfZO8w2fUypa2DRI2bWLo2CJlF/Q4BUbXUR9q2C719O9JS9KPMIwwS6c8sErg//4zaULw+2MYVNA8GE2SWDPqO3FUURKgstqLEOBSsYm1Toyc0IBBAWwKlnKLIyUWAs/GSVtkeJ+pXYkQQkNm0sn4nxgCk1nbT/c/O71qLhx4UJGqCNYZo6Hyo7VSf+eI/sO5+ALF/aCGBXL1WkFavyyFVqlT6BQ9BWtSkxMCQCMqRngC9d3Qvw6xXAa3jeqvcXc39v88/6xsLo8AnfkLIMdZgmvqRj/yJaOMTIOfqTQu8b4JrDh3lmdkUUCq7k4DQGEKONOnggx2+iLAvW0dBe0/VDG3zx7zBwEJ36RRCTdXeDddf6tbaY4DYWqwT/Ro9PV1/nqr8iugGi7Pp5vnHrfQC8JcqOMPvjk/tpdZhEf9y0BjYYaKt3U+hUCoojeb8bbzHQovcXQPwQDrV7KdBmUQeATLoWwn3Yizcx8+z3mddV6DIhDdr2nLpQKDA5CGXY6Tm7fJtcB1OWaraU/iupqPGHUg4d1bK2HxFiXaKiFsx9269NY6lVUW/SrK+fS0qAbZRIiUHOqjyx6bMMQUmgF
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V1ExcWNqUG1DUkthLzZPRiszeVlCVHBYajArL09ZUk5xeVNyTDFmdmJCdUtp?=
- =?utf-8?B?U3Q3WTNyVHlIaVdyeFhCcElLdkRDUGRPb04xOTRwQ2dNVWlOQ3N4am5jYjI2?=
- =?utf-8?B?WXh0L3kza0FjQVo0TlRmY2xpU1YweGNvdU9hM2pQTlBVZHZTaTNMUWZCRHdq?=
- =?utf-8?B?Wjg4MTBPblVZbFp6THdmOWxiVWF2dTEyUmsvcnZMdmlyaS9OOXF4bkNuUEsw?=
- =?utf-8?B?VlZUYkYwY1orWTRFRUJqRlpROHp2M3d6dkNRSzhvTjFKWVF2dkFFTjliZ3JC?=
- =?utf-8?B?RnNZMnErdVVCaGt5b2hvazdZd08yd1IvdUFNZjJSMnVjUElBSU5hcGo2dnVW?=
- =?utf-8?B?Q3lxSDlBSXpBRVJDNjFzTkFvQVVnMHFzSFVhZ0hxQW9NNlVxMmFSWi84Zm9I?=
- =?utf-8?B?dnJ2cStNN2Y3R2FReUxzWjZSOUhZR0NGTXJReDF3NlhBZ3lXbFpGQnVuQ0ZC?=
- =?utf-8?B?ZnY1L3JmWHZjOFgvN3o2RVZLQjg1QTFrT2pMMHZCcXJmc1hqNXdDelFDVmlk?=
- =?utf-8?B?RlcyUnR4VjYyMGpOOEVXcEVjZ3RQK2dtamZWVzUwNUptVk1XdURVLzRPUENL?=
- =?utf-8?B?UEExMEk4V1g2NWdjVkdRUXdtYThlN0NIcUhaQldBQXg3TFptbGEwZ1lIVGt4?=
- =?utf-8?B?dzdaSjBseFUxOE1HcXBqQitUdUExZlhuZzA3aUc4elBDZFY1dWZmbzhwWlZL?=
- =?utf-8?B?eUZwWERrQ0c5ekdWQ1FZYm00aTNUZndSM0hGVkxVQlVQMFA1RE5jZWRUSWww?=
- =?utf-8?B?Q2xCRHBPZ0NJdGF0MXRDTnZWRCtKVDg3cmpwSUxyaE8xbkJSNjY4OW1jVzE0?=
- =?utf-8?B?ZjFRamc1WkxJWTJhMUFpQXZQdGJTbmhiN2RjS2xjVVFYTE52SjEzZzBwbEZE?=
- =?utf-8?B?Zlo1K0RkaDFXT0djVjFTVHJBbDd1ZjUzam1odkJBdWxhaGE2VFNmbmtuQlE2?=
- =?utf-8?B?d0d5alVaeGxUVFVvWExyVm9KUEZWYVRtWHZ4Mk53QzQ3alVCbXJDNVJ3TUxw?=
- =?utf-8?B?aW0wOERrclhEZmZnZy9FeGNvUUNObWZYQlhKUHpCbkxQSDFCYThIeU9Wd0Rv?=
- =?utf-8?B?bW4yWGtpZ2pnL2FZeXNhekw5Wi9HdHhIMWNFRThOMWxaOWZ6VVFWVlBobXN3?=
- =?utf-8?B?RVVhTGtueDVkMDZFNUF3b3NBM2ZWTEU2ZzdsWW5Ub1lZYU1YTmd3dDNtVWlB?=
- =?utf-8?B?SEovWGVpK0cwWTBzeHRpdkNpMFIyRy9KM0xnVXBpaWNpOTZrVTB4dTVXL094?=
- =?utf-8?B?WS9YMHFJU0VpYld0YldHUjJyL1c2MXNwRFl3UzdISjdQRGZoaG5XZm9HK0VG?=
- =?utf-8?B?VFZheCs5Ums2UzMzRXZKS1JMVkhVeXRJaU8vUzcrdHRIQUk3T29DSFRRTnph?=
- =?utf-8?B?YUx0a0RUMUwxOUtocU9maElxeURnNVloVThZOERJVUlhT3ZWRmt2QktyQ0pH?=
- =?utf-8?B?V3dVVzdZZEx1WU9oZk91WFpSeGdvTldZa0VVYTBpRHZoQVlGeEdZZTJDb1pq?=
- =?utf-8?B?eWZlYU9pdlgwdE5jK0Nsd3BGbU5qaXRmNFF2M0NaRFpEWjM4ZG5qUUFETk5h?=
- =?utf-8?B?OE1yMXZFbFd3RjRrVFU5TGFjb0NPK0RFNGVVNkFJUW5rVTRkV2VOYVhwSkFC?=
- =?utf-8?B?NVlYQkF4dU5qSTdld2V5b3lqMXVzUVJFbHE1UXc1ZzYvUE9EdlF5cUdZaFlh?=
- =?utf-8?Q?ZNuEid4kfyTmHiV9xheF?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f48050f-e8e3-472c-9d0b-08dc7370e2b5
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2024 17:19:45.8113
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB9780
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94ad4bca2d8e44a5e53082959220a184c0222e1e.1715356532.git.perry.yuan@amd.com>
 
-Hi Kees and Luiz,
-First of all, thanks for the reviews.
+Hi Perry,
 
-On Mon, May 13, 2024 at 12:31:29PM -0400, Luiz Augusto von Dentz wrote:
-> Hi Eric,
-> 
-> On Sun, May 12, 2024 at 11:08 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Sun, May 12, 2024 at 04:17:06PM +0200, Erick Archer wrote:
-> > > [...]
-> > > Also remove the "size" variable as it is no longer needed and refactor
-> > > the list_for_each_entry() loop to use dr[n] instead of (dr + n).
-> 
-> Have the change above split on its own patch.
+kernel test robot noticed the following build warnings:
 
-Ok, no problem. I will send a new version.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge next-20240513]
+[cannot apply to tip/x86/core linus/master v6.9]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Regards,
-Erick
+url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/cpufreq-amd-pstate-optimize-the-initial-frequency-values-verification/20240513-101217
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/94ad4bca2d8e44a5e53082959220a184c0222e1e.1715356532.git.perry.yuan%40amd.com
+patch subject: [PATCH v2 04/10] cpufreq: amd-pstate: add debug message while CPPC is supported and disabled by SBIOS
+config: i386-randconfig-013-20240513 (https://download.01.org/0day-ci/archive/20240514/202405140103.onvXHkqE-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240514/202405140103.onvXHkqE-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405140103.onvXHkqE-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/cpufreq/amd-pstate.c:1727:26: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+    1727 |                                 (c->x86_model > 0x1f && c->x86_model < 0x1f)) {
+         |                                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +1727 drivers/cpufreq/amd-pstate.c
+
+  1703	
+  1704	/**
+  1705	 * CPPC function is not supported for family ID 17H with model_ID ranging from 0x10 to 0x2F.
+  1706	 * show the debug message that helps to check if the CPU has CPPC support for loading issue.
+  1707	 */
+  1708	static bool amd_cppc_supported(void)
+  1709	{
+  1710		struct cpuinfo_x86 *c = &cpu_data(0);
+  1711	
+  1712		if ((boot_cpu_data.x86 == 0x17) && (boot_cpu_data.x86_model < 0x30)) {
+  1713			pr_debug_once("CPPC feature is not supported by the processor\n");
+  1714			return false;
+  1715		}
+  1716	
+  1717		/*
+  1718		 * If the CPPC flag is disabled in the BIOS for processors that support MSR-based CPPC
+  1719		 * the AMD Pstate driver may not function correctly.
+  1720		 */
+  1721		if (!cpu_feature_enabled(X86_FEATURE_CPPC)) {
+  1722			if (cpu_feature_enabled(X86_FEATURE_ZEN1) || cpu_feature_enabled(X86_FEATURE_ZEN2)) {
+  1723				if (c->x86_model > 0x60 && c->x86_model < 0xaf)
+  1724					goto warn;
+  1725			} else if (cpu_feature_enabled(X86_FEATURE_ZEN3) || cpu_feature_enabled(X86_FEATURE_ZEN4)) {
+  1726				if ((c->x86_model > 0x00 && c->x86_model < 0x0F) || (c->x86_model > 0x2f && c->x86_model < 0xaf) ||
+> 1727					(c->x86_model > 0x1f && c->x86_model < 0x1f)) {
+  1728					goto warn;
+  1729				}
+  1730			} else {
+  1731				goto warn;
+  1732			}
+  1733		}
+  1734	
+  1735		return true;
+  1736	
+  1737	warn:
+  1738		pr_debug_once("The CPPC feature is supported but currently disabled by the BIOS.\n"
+  1739						"Please enable it if your BIOS supports the CPPC option.\n");
+  1740		return false;
+  1741	}
+  1742	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
