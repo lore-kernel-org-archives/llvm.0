@@ -1,139 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF76539C;
-	Mon, 13 May 2024 15:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45B6539C;
+	Mon, 13 May 2024 15:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715613563; cv=none; b=b0+48fHx4yuKKl580lU7Mn599b4BF0ySg+axJ8ewhDpXmJo/X4B1OpZ8Jo3GZP7/lvmgvCgtAf4hlGSfp4EZEMloE5575ww9scnEi2fXBhh5RP8FMDSKvPxvnv92jZaFKZ07fuSyO3ckN6Jn6tCR+635F7UrYTqhwJX0VnA4vIY=
+	t=1715613854; cv=none; b=QIX/XiB+tFzJ6o7I9dD5GRw0K0bnOSmF9p7SmSp8Uw01fLW5f5RHAu6kwIgRMty9qW+PaPFnuju//yDmaRZbVg6kyaLJWporyV38+Hy6dnKRrbPeU4fRoDPparRJo3YR9VzO6qX+OTFQJZJdBwGy6zWzu7Ym5oKgHD/fwnfoQRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715613563; c=relaxed/simple;
-	bh=wHj1VNy0vMRh33TWNtQHJRbW6jcVnhuKzLbGW57DgDU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S0jzPJ3BgWrhj1ae43ifHXXVX63O4SJoTODb7c0GmamchGSo4O2DCelkdxsjP+rkBXkv5iWru2eD0XxN0lmvEEy4Ch9W8lX6rFAd34iO9WaPrBrl2E4j1wbQQ7FBqi5jzZ0/MEwzRs85p90mjerJhf6R61g+Aj7wWORLc8SNGZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CWKuGcoI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715613854; c=relaxed/simple;
+	bh=BcO42AIw8mo5P5+wktc4jRATWiDSkrrN2JRiiYqFvsY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Sz8u4Kph+eBiPB5edoA2Y04Es+HsNo4VOl8V7Cq9l5t1+Lmi1HNiWhy3hoDd5UBVg2YYw3vFRd8iwiryQoA+2MHGe/y9GtH77WGRHNnGhyJuIdByuwSWruw8okz3jwjue+w8dXaMTAzdx8TbIB4N7NljCRXeAnHXrk1pm4JFK24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhLdQ2Ug; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CWKuGcoI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 869AAC113CC;
-	Mon, 13 May 2024 15:19:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhLdQ2Ug"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CE8EC113CC;
+	Mon, 13 May 2024 15:24:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715613562;
-	bh=wHj1VNy0vMRh33TWNtQHJRbW6jcVnhuKzLbGW57DgDU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CWKuGcoI+uzQLcGuTk4s9n/ib+KqkgH4AmATgPGB9VqtVKSUGaPwHGNAerJhgqu8V
-	 IqFSYYQNRyMi6FRj02UBx/xXPqUe2WUiCWefGBK0Ohn1jg+FEPM/+0UXWaf2kPnpWW
-	 aPwZUZsWEGWbMu5CWSOG8Q0GJuLDUhYnWXGWz06GI+fkYLezXNstuSmdLRNFwWZI7f
-	 ekJl4JI5JrsbUXVwxEOhky9Hb4G/08XMYtzr/lQ9eJCfy91aC4gKQG/JSIpI2liY3g
-	 XzC97YYKQneJOoZcRk/jdKmD4ExONKysrIX93rQH1pT1pQHGorsiwp0kG8udoMD2/+
-	 6WzefNR6Acfgw==
-Date: Mon, 13 May 2024 08:19:20 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Roth <michael.roth@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>, llvm@lists.linux.dev
-Subject: Re: [PULL 18/19] KVM: SEV: Provide support for
- SNP_EXTENDED_GUEST_REQUEST NAE event
-Message-ID: <20240513151920.GA3061950@thelio-3990X>
-References: <20240510211024.556136-1-michael.roth@amd.com>
- <20240510211024.556136-19-michael.roth@amd.com>
+	s=k20201202; t=1715613854;
+	bh=BcO42AIw8mo5P5+wktc4jRATWiDSkrrN2JRiiYqFvsY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=GhLdQ2UgHNg7HTNWnyl+NvUzvPP6xLJjBMtuUDcho6j8QcOEoF6R8Fbpn8vATJ5Iz
+	 Efe+ErQ4NNcOW9rWGw//opXPmcxvxsk3d8QiTMo4cDuxbPZ6D67YCKBbWlOI/a8OsT
+	 CjzotsSbWCL2Zp0E8Jdb7rh48vhD/XSvn6IBIZUCJNXZlbHWS14JkakvQqwq0n2pgt
+	 bSJWIhPceV2HtyWfWd1tLHJwsaWcXNJB4BNClG872N1wtmPxQ0DJsfHgTnLKGZgoGX
+	 ZvX5S52kZdHaJliMixWlJ3G8zBq3M3ZHNiEdbCDEcwfCpAUoQSqUh3qXau+aBeHktt
+	 B2IVquzfMxEmA==
+Date: Mon, 13 May 2024 08:24:12 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Heng Qi <hengqi@linux.alibaba.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, "David S . Miller" <davem@davemloft.net>,
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>, Jason
+  Wang <jasowang@redhat.com>, "Michael S . Tsirkin" <mst@redhat.com>, Brett
+  Creeley <bcreeley@amd.com>, Ratheesh Kannoth <rkannoth@marvell.com>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Tal Gilboa <talgi@nvidia.com>, Jonathan 
+ Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Jiri Pirko <jiri@resnulli.us>, Paul 
+ Greenwalt <paul.greenwalt@intel.com>, Ahmed Zaki <ahmed.zaki@intel.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>, Kory Maincent
+ <kory.maincent@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+ justinstitt@google.com, donald.hunter@gmail.com, netdev@vger.kernel.org,
+ virtualization@lists.linux.dev
+Subject: Re: [PATCH net-next v13 2/4] ethtool: provide customized dim
+ profile management
+Message-ID: <20240513082412.2a27f965@kernel.org>
+In-Reply-To: <1715611933.2264705-1-hengqi@linux.alibaba.com>
+References: <20240509044747.101237-1-hengqi@linux.alibaba.com>
+	<20240509044747.101237-3-hengqi@linux.alibaba.com>
+	<202405100654.5PbLQXnL-lkp@intel.com>
+	<1715531818.6973832-3-hengqi@linux.alibaba.com>
+	<20240513072249.7b0513b0@kernel.org>
+	<1715611933.2264705-1-hengqi@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240510211024.556136-19-michael.roth@amd.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Michael,
-
-On Fri, May 10, 2024 at 04:10:23PM -0500, Michael Roth wrote:
-> Version 2 of GHCB specification added support for the SNP Extended Guest
-> Request Message NAE event. This event serves a nearly identical purpose
-> to the previously-added SNP_GUEST_REQUEST event, but allows for
-> additional certificate data to be supplied via an additional
-> guest-supplied buffer to be used mainly for verifying the signature of
-> an attestation report as returned by firmware.
+On Mon, 13 May 2024 22:52:13 +0800 Heng Qi wrote:
+> > > So I think we should declare "CONFIG_PROVE_LOCKING depends on CONFIG_NET".
+> > > How do you think?  
+> > 
+> > Doesn't sound right, `can we instead make building lib/dim/net_dim.c  
 > 
-> This certificate data is supplied by userspace, so unlike with
-> SNP_GUEST_REQUEST events, SNP_EXTENDED_GUEST_REQUEST events are first
-> forwarded to userspace via a KVM_EXIT_VMGEXIT exit structure, and then
-> the firmware request is made after the certificate data has been fetched
-> from userspace.
+> Why? IIUC, the reason is that if CONFIG_NET is not set to Y, the net/core
+> directory will not be compiled, so the lockdep_rtnl_is_held symbol is not
+> present.
+
+Maybe I don't understand what you;re proposing. 
+Show an actual diff please.
+
+> > dependent on CONFIG_NET? Untested but I'm thinking something like:
+> > 
+> > diff --git a/lib/dim/Makefile b/lib/dim/Makefile
+> > index c4cc4026c451..c02c306e2975 100644
+> > --- a/lib/dim/Makefile
+> > +++ b/lib/dim/Makefile
+> > @@ -4,4 +4,8 @@
+> >  
+> >  obj-$(CONFIG_DIMLIB) += dimlib.o
+> >  
+> > -dimlib-objs := dim.o net_dim.o rdma_dim.o
+> > +dimlib-objs := dim.o rdma_dim.o
+> > +
+> > +ifeq ($(CONFIG_NET),y)
+> > +dimlib-objs += net_dim.o
+> > +endif  
 > 
-> Since there is a potential for race conditions where the
-> userspace-supplied certificate data may be out-of-sync relative to the
-> reported TCB or VLEK that firmware will use when signing attestation
-> reports, a hook is also provided so that userspace can be informed once
-> the attestation request is actually completed. See the updates to
-> Documentation/ for more details on these aspects.
+> 1. This is unlikely to work if the kernel is configured as[1]:
 > 
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> Message-ID: <20240501085210.2213060-20-michael.roth@amd.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-...
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 00d29d278f6e..398266bef2ca 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-...
-> +static int snp_begin_ext_guest_req(struct kvm_vcpu *vcpu)
-> +{
-> +	int vmm_ret = SNP_GUEST_VMM_ERR_GENERIC;
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +	unsigned long data_npages;
-> +	sev_ret_code fw_err;
-> +	gpa_t data_gpa;
-> +
-> +	if (!sev_snp_guest(vcpu->kvm))
-> +		goto abort_request;
-> +
-> +	data_gpa = vcpu->arch.regs[VCPU_REGS_RAX];
-> +	data_npages = vcpu->arch.regs[VCPU_REGS_RBX];
-> +
-> +	if (!IS_ALIGNED(data_gpa, PAGE_SIZE))
-> +		goto abort_request;
-> +
-> +	/*
-> +	 * Grab the certificates from userspace so that can be bundled with
-> +	 * attestation/guest requests.
-> +	 */
-> +	vcpu->run->exit_reason = KVM_EXIT_VMGEXIT;
-> +	vcpu->run->vmgexit.type = KVM_USER_VMGEXIT_REQ_CERTS;
-> +	vcpu->run->vmgexit.req_certs.data_gpa = data_gpa;
-> +	vcpu->run->vmgexit.req_certs.data_npages = data_npages;
-> +	vcpu->run->vmgexit.req_certs.flags = 0;
-> +	vcpu->run->vmgexit.req_certs.status = KVM_USER_VMGEXIT_REQ_CERTS_STATUS_PENDING;
-> +	vcpu->arch.complete_userspace_io = snp_complete_ext_guest_req;
-> +
-> +	return 0; /* forward request to userspace */
-> +
-> +abort_request:
-> +	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, SNP_GUEST_ERR(vmm_ret, fw_err));
-> +	return 1; /* resume guest */
-> +}
+> [1] kernel configuration
+> CONFIG_NET=n, CONFIG_ETHTOOL_NETLINK=n, CONFIG_PROVE_LOCKING=y,
+> (CONFIG_FSL_MC_DPIO=y && CONFIG_FSL_MC_BUS=y) select CONFIG_DIMLIB=y.
+> 
+> 
+> Then, because CONFIG_NET is not enabled, so there is no net_dim.o,
+> the following warning appears:
+> 
+> ld.lld: error: undefined symbol: net_dim_get_rx_moderation
+> referenced by dpio-service.c
+> drivers/soc/fsl/dpio/dpio-service.o:(dpaa2_io_dim_work) in archive vmlinux.a
+> 
+> ld.lld: error: undefined symbol: net_dim
+> referenced by dpio-service.c
+> drivers/soc/fsl/dpio/dpio-service.o:(dpaa2_io_update_net_dim) in archive vmlinux.a
 
-This patch is now in -next as commit 32fde9e18b3f ("KVM: SEV: Provide
-support for SNP_EXTENDED_GUEST_REQUEST NAE event"), where it causes a
-clang warning (or hard error when CONFIG_WERROR is enabled):
-
-  arch/x86/kvm/svm/sev.c:4078:67: error: variable 'fw_err' is uninitialized when used here [-Werror,-Wuninitialized]
-   4078 |         ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, SNP_GUEST_ERR(vmm_ret, fw_err));
-        |                                                                          ^~~~~~
-  include/uapi/linux/sev-guest.h:94:24: note: expanded from macro 'SNP_GUEST_ERR'
-     94 |                                          SNP_GUEST_FW_ERR(fw_err))
-        |                                                           ^~~~~~
-  include/uapi/linux/sev-guest.h:92:32: note: expanded from macro 'SNP_GUEST_FW_ERR'
-     92 | #define SNP_GUEST_FW_ERR(x)             ((x) & SNP_GUEST_FW_ERR_MASK)
-        |                                           ^
-  arch/x86/kvm/svm/sev.c:4051:2: note: variable 'fw_err' is declared here
-   4051 |         sev_ret_code fw_err;
-        |         ^
-  1 error generated.
-
-Seems legitimate to me. What was the intention here?
-
-Cheers,
-Nathan
+Simple, dpio-service should depend on NET if it wants NET_DIM
