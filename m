@@ -1,212 +1,190 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6194824BC
-	for <llvm@lists.linux.dev>; Mon, 13 May 2024 21:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715635128; cv=fail; b=Mc4ENZ733JCibn9Xw/WzqtduGjmFrUTgzdsTMlGYhF3fPzdouq0u4wlYCo4juBZcFddQ8F5BcMZQITnVIIlwZ/ClzLDeITXCwh00jzzDNbbs75EJxA+sk44wITuVcS0u4+0SHvZEniCbhotAmTtjDMjd0OG8DP4n4PgulggpuOU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715635128; c=relaxed/simple;
-	bh=5oUD2nPoyGUCx5TGQuQtjxRyRApUCGP3mMnNFdt9mAQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lh//GY61P6K8kYUi1hLCVs2+BanhbANcNzPNnFKlRn9boUmJVIt2o1azgfOQVkCKnnC1YnRrmIgExZoc7bbqzaQ0shdCm4Wi9ShbaWhXrGGvTTYv0Tt6Lzjmyn3Xl6bbeRfjbia0hW7WTd6f38CTuhg1cBkK+JbePPtzODThD5w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ECv/sK9Z; arc=fail smtp.client-ip=40.107.237.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934E380BE3
+	for <llvm@lists.linux.dev>; Mon, 13 May 2024 22:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715638027; cv=none; b=WOM7U4sUpDZYXJU9tLkq5fAFljEFaBbNmxONcV3LJO8QcgBzomSlL5S+pyicfVHDU+9uqBU526ewzko1UV7I8KP/FjbkiOU6ggIbRaJ7Oeje64Vh7vnR3H7p3MKiY4zOzKvT+ULHiJeg/ptBnQFf85N1ORM6wRQB7fLauKexYmc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715638027; c=relaxed/simple;
+	bh=mZ4ms+V1KUqN4p5PXHq31cW+YVpnyNJ3X7Vbpk7ag2U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bZ8eCjjAqltatUygF7FuaEFksBxWN3BFiLpWzpAIuw8uURPMlhiy1/4r72ivEzk1yJAVRHApMpv/M7V5hynM6PnDlGs/5y2jT0PrafYQNSUYJ5eXa5e7I0FUWS41rj8Ia1cCCG3NqRjawbRCgH5ME3ohFZceHci0dqTVerloSJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4Yuza5UI; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ECv/sK9Z"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lXX27+MYX0BgM9/g1WhC1ssgcYZ3JYzCSJH14XJjYGNcIN9sBBbS9+bCi0cOyRljp11w3BlTbpKdF4RCGJrQ7cHko7argJ/9EFW4UsrGBvPidb/f4k0Yw8k7GmBsohQQkHb9wrolLSal+BYChZW2dvX02wV6c114P+xLi/E4OwmDRBDD0o6pXsYP+eFRItA3MJtog8v8vzHejmbpIaoUPq19VrnLGk9AR4r9zOzhIuH5TCBDYMWlYAgfNKpXl+n9+hNYfIyMm92rHl/c2Xjn3l2KQY9GvGRb3F7p+OAbSSWwsFXcVoNoADgeBPeJ71+u8LqxI3XEeHaOu+JkaqWmvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2JwlqFjexOxmYJkPHvWfL5YnAjxWZsyeZM1VRbh7/sE=;
- b=Apzi9pRNpvjlGts9WhTchSX8RCOKsNp4xyGrLepeB2bPQaPflfl1C0TvDWCOEs+MQviZxg8y+gQbRGxNvRxu6Bjxm0ccKJU1+uJKHBi9Wxa+FkAghHXLYf8A4a8anhR3wKjovxE/trDRmib9Jh7VgwIHrvfnnbGg04NMMxHvOAZA81qprkdn+DpYuqlzc1JbSPUoIi3RIRzCLTpha/a1rvRfGSJYo55CmM3jlpf58xWC3EHOOW0rhVR/wWV8aQej+mo+kzF6MUF73qUnNVNrf4mJggYvuiwh2PVmKnR2mfncOSt+kkvI67U5oxvTbVAinV+pU2YXu96wieNSMEeOaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2JwlqFjexOxmYJkPHvWfL5YnAjxWZsyeZM1VRbh7/sE=;
- b=ECv/sK9ZqJ0si+JwhN8mib6mDUy+lj25eTEw+I4yj4IVR7oo9dQ9HIWbsak9fSO0Y/lhTG4iHi0KNJK1OTAWNSSdVn/+nNs/aj0wiYt26THyB0Q4ekYM9Fvk20G+opPNMQvZi1kWG1iaFuFjxo+5/jrN+UYMUmQwT5/0a7zIL00=
-Received: from CH2PR05CA0023.namprd05.prod.outlook.com (2603:10b6:610::36) by
- DS0PR12MB7534.namprd12.prod.outlook.com (2603:10b6:8:139::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7544.49; Mon, 13 May 2024 21:18:40 +0000
-Received: from CH2PEPF00000148.namprd02.prod.outlook.com
- (2603:10b6:610:0:cafe::9a) by CH2PR05CA0023.outlook.office365.com
- (2603:10b6:610::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.22 via Frontend
- Transport; Mon, 13 May 2024 21:18:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH2PEPF00000148.mail.protection.outlook.com (10.167.244.105) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7587.21 via Frontend Transport; Mon, 13 May 2024 21:18:40 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 13 May
- 2024 16:18:40 -0500
-Date: Mon, 13 May 2024 16:18:21 -0500
-From: Michael Roth <michael.roth@amd.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-CC: Nathan Chancellor <nathan@kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Sean Christopherson <seanjc@google.com>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PULL 18/19] KVM: SEV: Provide support for
- SNP_EXTENDED_GUEST_REQUEST NAE event
-Message-ID: <20240513211821.rgg6mz4dgj5w3b4h@amd.com>
-References: <20240510211024.556136-1-michael.roth@amd.com>
- <20240510211024.556136-19-michael.roth@amd.com>
- <20240513151920.GA3061950@thelio-3990X>
- <0ceafce9-0e08-4d47-813d-6b3f52ac5fd6@redhat.com>
- <20240513170535.je74yhujxpogijga@amd.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4Yuza5UI"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-36c85170db2so22790755ab.0
+        for <llvm@lists.linux.dev>; Mon, 13 May 2024 15:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715638025; x=1716242825; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AUn2AW1w0vgCf/iafqE2auFhm5LkVxS+wThISH2ynMA=;
+        b=4Yuza5UIwxlNQv8BTfUE52w1EQK3+0qWX3WHxjbOOh5iHfIr2dDsOzVTCQNlQMfocB
+         oXOS3tFl5P4Q/HuipfXlfzd8zT02+yE6AWDDe/Q2hWD7U0jmyGuMHmDjUBmCDEB4j4qj
+         8mH11Kc/gKJSFW8SsIQXWHQCbHHKcNQb3jxTAJZLvMJ+mk33j/CATpv7j2VsV6jN4Pot
+         dBP7U9D6X/Y4YQc59L3SRZroFg8m0N/7/VJDeZ5gO/k1Ndb//kUybF2vKD6LeJ+KA4Jm
+         NNjP42rHnBckIWsleNKD6cR3qZ37p/aL1t0xTen66sYoNbfuI3ayXhzd/0YwnFNzECVm
+         WsAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715638025; x=1716242825;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AUn2AW1w0vgCf/iafqE2auFhm5LkVxS+wThISH2ynMA=;
+        b=iBnKXD/hgKfziMe3+ZZOyp7YcZzH8NZNgtzQVe1Y6jZDUhdH9cxl7S/w3XSngVYxMe
+         P+PekQ6hFDFP7QRFdj+geML5JHbmP1h88uXHdd9yepL3bWt5Wo5pwVHiSANfZJKuVjP7
+         Zo12KkXEiMnKC8M3AJldhcKoL2AsZzy5ATDivBkZdFF9BEhboSzsw5+DE0PYZ7LUhycc
+         o/KuRBUbRRYbgljYNuxQ01Mg3vw8zutGd3HBd4R5Bcq8Clrac+2MeWqA8CyG/1AGXd1E
+         31TsgXzYnH0IytU7Xr+ebEgNZqHzO4G9bAG/Cej8NuUDKPxRKn6ruX18SB61DkWoYyMc
+         HScw==
+X-Forwarded-Encrypted: i=1; AJvYcCWqpKJh1QwspfwSBVQLEtXnUroot6+K7nsCgwva88t8lh3PJ052uW/mpytPIf0BTgzaiigL3pvCO+Mi5NpJevWTNkiGRQ==
+X-Gm-Message-State: AOJu0YwWWra9GIPuiURVU+ZMdd2pGUdddzcZ2QD2kSoY0GjgwVKRoX1L
+	AvJj0zMSOM7mgCavsX4C0GUoxMiE2a2VPWyoS+SV7pEM5PlsZO9Qu3xgQvs1jQ==
+X-Google-Smtp-Source: AGHT+IFjekC3/wk3ILbUqc0s7IPtYONycCw5QWMFVQVvxrFuhoysFXKfr+BdK3bb3fwrb0JJhvIKEg==
+X-Received: by 2002:a92:cda1:0:b0:36c:546c:ccf6 with SMTP id e9e14a558f8ab-36cc148e3cfmr143375475ab.16.1715638024588;
+        Mon, 13 May 2024 15:07:04 -0700 (PDT)
+Received: from google.com (195.121.66.34.bc.googleusercontent.com. [34.66.121.195])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-36cb9d3f5f6sm24446685ab.4.2024.05.13.15.07.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 May 2024 15:07:03 -0700 (PDT)
+Date: Mon, 13 May 2024 22:06:59 +0000
+From: Justin Stitt <justinstitt@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Nathan Chancellor <nathan@kernel.org>, 
+	Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] fs: fix unintentional arithmetic wraparound in offset
+ calculation
+Message-ID: <q2qn5kgnfvfcnyfm7slx7tkmib5qftcgj2uufqd4o5vyctj6br@coauvkdhpjii>
+References: <20240509-b4-sio-read_write-v2-1-018fc1e63392@google.com>
+ <202405131251.6FD48B6A8@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240513170535.je74yhujxpogijga@amd.com>
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000148:EE_|DS0PR12MB7534:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6f9db7b-1a52-49a8-c6d4-08dc73924316
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|36860700004|82310400017|376005|1800799015;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?z4Jb8G/hXkRc6ODxswmySX4zZsJKYq2s3duZgNg8YRVbEVK9+br6TGbF8YxJ?=
- =?us-ascii?Q?NnZ1lgZm8RuZnoTnkAGLwy0QKlU9Ab1w9ODkx16tmQ9Ot7P91p+ykAXqr87Y?=
- =?us-ascii?Q?tXoPmuD5DNBqARVdTF2cBYLaCBX1sRUqMpol80/BZVLMIAgD4gHATUSwYPP1?=
- =?us-ascii?Q?yvDecyoLJ0ZWbeXava16A2IAb9LeX8gGgRsy9dcKEwgIe2+NF1j/BeyTIxCF?=
- =?us-ascii?Q?4ZehqRrmjBKP/9+1VLnvLRxLEQ/nJH+VoETF9UbEH1XKA3klmSHVxkrOySP/?=
- =?us-ascii?Q?2kvQF/O5586RFyoPTy+TyoLNxdj52ijwwXWYAFISkMyCes/4jDre/7MwEUMi?=
- =?us-ascii?Q?iAR3cNRiepitkVrNfGs4cmeF/4H24qyiERCoHwyfdb9o/SmontvLgkDLKTHy?=
- =?us-ascii?Q?qOpgwyQRSYnxTmet+4JkjRegimquLKaaOgjlNdGRrjfmghtgDGojVCZQjA/H?=
- =?us-ascii?Q?f7EahBawerJOB67mb0WnAcdxXg23h6ryFbytp1oMfzghI96aMw1DNoYyhZpT?=
- =?us-ascii?Q?Ahb0v/vd2AV0k3XbxlwG3c2trijH2i932dVlF1skB6OYvG490bGzvYLU9tD/?=
- =?us-ascii?Q?AchrhZYl+iYBF3Xfq++4vZ5Ay+NqZqcR4FuyEeN9nSOn8yxepO2iheTm43Wd?=
- =?us-ascii?Q?95cXBQY64hdfYJEze2kl7ycPG/s33nc/3sNXeRTazaCXoF+fWQI65Gkb59ql?=
- =?us-ascii?Q?vp360pYDJ699FMVUARn8XEa+6MLWR/ubBVJfs0mv1rsadnsXCXnA3bq5DuzG?=
- =?us-ascii?Q?Si9pxnRs9lo/z3nZ78rk7tNuNjALb396JVIpoO1oKUFv5f/4DtKgNOLIsE9p?=
- =?us-ascii?Q?yymTcYaskXe2BPhks16lXK70oEV/rtE0/RBjt4gC1QXOMJB+Y3lX3dLFld15?=
- =?us-ascii?Q?8oX2MhF25W8TZ/O65iXDr22gn8XH05MxTA7BPJgA7ixHsmz2CIY5SHoG87P/?=
- =?us-ascii?Q?oUWLdV9VNOPNGh4dF3ZYXgZvMTjkjjnlfHa3tXRqwk50teIjwMYAUXSFvqVR?=
- =?us-ascii?Q?012COh3INLU7QV0KPNcZ5ejCQAcZrpDnKBR/Q6b0IcN+RJO4e/a2Dc/iPAZY?=
- =?us-ascii?Q?975kndCkx6ffQAesAOy+lQWLDdYJScZ+iHUCPrvffghVpc6XQu6i/+E2vNdE?=
- =?us-ascii?Q?tYstH/yNolE1LV6kCdqRJsszwE1EFX2d1NJfekUX8lGXfktAu8Q9SbKYvg7d?=
- =?us-ascii?Q?fDuSxicNkvDwomaEygteAU34PQWMbK4CC3cczCiABxblM+FWrtcFS3IrDse4?=
- =?us-ascii?Q?re/zsg9xVS3YsolARHI3XkRRJ9wMpZm3PKzU6dG10mzdOropNbYZIllZhK9u?=
- =?us-ascii?Q?qvzjoUghUO/HRidPnMnoL/h0PWyXRdoz0tWRyzZiO1mVVA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(82310400017)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2024 21:18:40.6659
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6f9db7b-1a52-49a8-c6d4-08dc73924316
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000148.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7534
+In-Reply-To: <202405131251.6FD48B6A8@keescook>
 
-On Mon, May 13, 2024 at 12:05:35PM -0500, Michael Roth wrote:
-> On Mon, May 13, 2024 at 06:53:24PM +0200, Paolo Bonzini wrote:
-> > On 5/13/24 17:19, Nathan Chancellor wrote:
-> > > > +static int snp_begin_ext_guest_req(struct kvm_vcpu *vcpu)
-> > > > +{
-> > > > +	int vmm_ret = SNP_GUEST_VMM_ERR_GENERIC;
-> > > > +	struct vcpu_svm *svm = to_svm(vcpu);
-> > > > +	unsigned long data_npages;
-> > > > +	sev_ret_code fw_err;
-> > > > +	gpa_t data_gpa;
-> > > > +
-> > > > +	if (!sev_snp_guest(vcpu->kvm))
-> > > > +		goto abort_request;
-> > > > +
-> > > > +	data_gpa = vcpu->arch.regs[VCPU_REGS_RAX];
-> > > > +	data_npages = vcpu->arch.regs[VCPU_REGS_RBX];
-> > > > +
-> > > > +	if (!IS_ALIGNED(data_gpa, PAGE_SIZE))
-> > > > +		goto abort_request;
-> > > 
-> > > [...]
-> > > 
-> > > > +abort_request:
-> > > > +	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, SNP_GUEST_ERR(vmm_ret, fw_err));
-> > > > +	return 1; /* resume guest */
-> > > > +}
-> > > 
-> > > This patch is now in -next as commit 32fde9e18b3f ("KVM: SEV: Provide
-> > > support for SNP_EXTENDED_GUEST_REQUEST NAE event"), where it causes a
-> > > clang warning (or hard error when CONFIG_WERROR is enabled) [...]
-> > > Seems legitimate to me. What was the intention here?
+On Mon, May 13, 2024 at 01:01:57PM -0700, Kees Cook wrote:
+> On Thu, May 09, 2024 at 11:42:07PM +0000, Justin Stitt wrote:
+> >  fs/read_write.c  | 18 +++++++++++-------
+> >  fs/remap_range.c | 12 ++++++------
+> >  2 files changed, 17 insertions(+), 13 deletions(-)
 > > 
-> > Mike, I think this should just be 0?
+> > diff --git a/fs/read_write.c b/fs/read_write.c
+> > index d4c036e82b6c..d116e6e3eb3d 100644
+> > --- a/fs/read_write.c
+> > +++ b/fs/read_write.c
+> > @@ -88,7 +88,7 @@ generic_file_llseek_size(struct file *file, loff_t offset, int whence,
+> >  {
+> >  	switch (whence) {
+> >  	case SEEK_END:
+> > -		offset += eof;
+> > +		offset = min(offset, maxsize - eof) + eof;
 > 
-> Hi Paolo,
+> This seems effectively unchanged compared to v1?
 > 
-> Yes, I was just about to submit a patch that does just that:
+> https://lore.kernel.org/all/CAFhGd8qbUYXmgiFuLGQ7dWXFUtZacvT82wD4jSS-xNTvtzXKGQ@mail.gmail.com/
 > 
->   https://github.com/mdroth/linux/commit/df55e9c5b97542fe037f5b5293c11a49f7c658ef
 
-Submitted a proper patch here:
+Right, please note the timestamps of Jan's review of v1 and when I sent
+v2. Essentially, I sent v2 before Jan's review of v1 and as such v2 does
+not fix the problem pointed out by Jan (the behavior of seek is
+technically different for VERY LARGE offsets).
 
-  https://lore.kernel.org/kvm/20240513172704.718533-1-michael.roth@amd.com/
-
-and also one for a separate warning:
-
-  https://lore.kernel.org/kvm/20240513181928.720979-1-michael.roth@amd.com/
-
-I saw my build environment had WARN=0 for the last round of changes, so I
-re-tested various kernel configs with/without clang and haven't seen any
-other issues. So I think that should be the last of it. I'll be sure to be
-a lot more careful about this in the future.
-
-Thanks,
-
-Mike
-
+> >  		break;
+> >  	case SEEK_CUR:
+> >  		/*
+> > @@ -105,7 +105,8 @@ generic_file_llseek_size(struct file *file, loff_t offset, int whence,
+> >  		 * like SEEK_SET.
+> >  		 */
+> >  		spin_lock(&file->f_lock);
+> > -		offset = vfs_setpos(file, file->f_pos + offset, maxsize);
+> > +		offset = vfs_setpos(file, min(file->f_pos, maxsize - offset) +
+> > +					      offset, maxsize);
+> >  		spin_unlock(&file->f_lock);
+> >  		return offset;
+> >  	case SEEK_DATA:
+> > @@ -1416,7 +1417,7 @@ static int generic_copy_file_checks(struct file *file_in, loff_t pos_in,
+> >  	struct inode *inode_in = file_inode(file_in);
+> >  	struct inode *inode_out = file_inode(file_out);
+> >  	uint64_t count = *req_count;
+> > -	loff_t size_in;
+> > +	loff_t size_in, in_sum, out_sum;
+> >  	int ret;
+> >  
+> >  	ret = generic_file_rw_checks(file_in, file_out);
+> > @@ -1450,8 +1451,8 @@ static int generic_copy_file_checks(struct file *file_in, loff_t pos_in,
+> >  	if (IS_SWAPFILE(inode_in) || IS_SWAPFILE(inode_out))
+> >  		return -ETXTBSY;
+> >  
+> > -	/* Ensure offsets don't wrap. */
+> > -	if (pos_in + count < pos_in || pos_out + count < pos_out)
+> > +	if (check_add_overflow(pos_in, count, &in_sum) ||
+> > +	    check_add_overflow(pos_out, count, &out_sum))
+> >  		return -EOVERFLOW;
 > 
-> Sorry for the breakage,
+> I like these changes -- they make this much more readable.
 > 
-> Mike
+> >  
+> >  	/* Shorten the copy to EOF */
+> > @@ -1467,8 +1468,8 @@ static int generic_copy_file_checks(struct file *file_in, loff_t pos_in,
+> >  
+> >  	/* Don't allow overlapped copying within the same file. */
+> >  	if (inode_in == inode_out &&
+> > -	    pos_out + count > pos_in &&
+> > -	    pos_out < pos_in + count)
+> > +	    out_sum > pos_in &&
+> > +	    pos_out < in_sum)
+> >  		return -EINVAL;
+> >  
+> >  	*req_count = count;
+> > @@ -1649,6 +1650,9 @@ int generic_write_check_limits(struct file *file, loff_t pos, loff_t *count)
+> >  	loff_t max_size = inode->i_sb->s_maxbytes;
+> >  	loff_t limit = rlimit(RLIMIT_FSIZE);
+> >  
+> > +	if (pos < 0)
+> > +		return -EINVAL;
+> > +
+> >  	if (limit != RLIM_INFINITY) {
+> >  		if (pos >= limit) {
+> >  			send_sig(SIGXFSZ, current, 0);
+> > diff --git a/fs/remap_range.c b/fs/remap_range.c
+> > index de07f978ce3e..4570be4ef463 100644
+> > --- a/fs/remap_range.c
+> > +++ b/fs/remap_range.c
+> > @@ -36,7 +36,7 @@ static int generic_remap_checks(struct file *file_in, loff_t pos_in,
+> >  	struct inode *inode_out = file_out->f_mapping->host;
+> >  	uint64_t count = *req_count;
+> >  	uint64_t bcount;
+> > -	loff_t size_in, size_out;
+> > +	loff_t size_in, size_out, in_sum, out_sum;
+> >  	loff_t bs = inode_out->i_sb->s_blocksize;
+> >  	int ret;
+> >  
+> > @@ -44,17 +44,17 @@ static int generic_remap_checks(struct file *file_in, loff_t pos_in,
+> >  	if (!IS_ALIGNED(pos_in, bs) || !IS_ALIGNED(pos_out, bs))
+> >  		return -EINVAL;
+> >  
+> > -	/* Ensure offsets don't wrap. */
+> > -	if (pos_in + count < pos_in || pos_out + count < pos_out)
+> > -		return -EINVAL;
+> > +	if (check_add_overflow(pos_in, count, &in_sum) ||
+> > +	    check_add_overflow(pos_out, count, &out_sum))
+> > +		return -EOVERFLOW;
 > 
-> > 
-> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> > index c7a0971149f2..affb4fb47f91 100644
-> > --- a/arch/x86/kvm/svm/sev.c
-> > +++ b/arch/x86/kvm/svm/sev.c
-> > @@ -3911,7 +3911,6 @@ static int snp_begin_ext_guest_req(struct kvm_vcpu *vcpu)
-> >  	int vmm_ret = SNP_GUEST_VMM_ERR_GENERIC;
-> >  	struct vcpu_svm *svm = to_svm(vcpu);
-> >  	unsigned long data_npages;
-> > -	sev_ret_code fw_err;
-> >  	gpa_t data_gpa;
-> >  	if (!sev_snp_guest(vcpu->kvm))
-> > @@ -3938,7 +3937,7 @@ static int snp_begin_ext_guest_req(struct kvm_vcpu *vcpu)
-> >  	return 0; /* forward request to userspace */
-> >  abort_request:
-> > -	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, SNP_GUEST_ERR(vmm_ret, fw_err));
-> > +	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, SNP_GUEST_ERR(vmm_ret, 0));
-> >  	return 1; /* resume guest */
-> >  }
-> > Paolo
-> > 
-> > 
+> Yeah, this is a good error code change. This is ultimately exposed via
+> copy_file_range, where this error is documented as possible.
 > 
+> -Kees
+> 
+> -- 
+> Kees Cook
