@@ -1,60 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606C52D05E;
-	Mon, 13 May 2024 05:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B54B50291;
+	Mon, 13 May 2024 06:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715577362; cv=none; b=b8t3BVXYdSFzkDAmymCC2b6Fzo3TBZ7Stiz5B9Fvh051ZstGOsPwGnjD0MzPmmPeNZtfwKf4IXH1deANDUhgJM3K4wyfGofU6OnGRBb0VPg/gD12qC7HxRXoCXr5BMXQNFDsBTlXJrF/oUAj21wMlGjQfYr1zczGbwV94LwYD2A=
+	t=1715582694; cv=none; b=t+Yr4MF6r8VOn8qp3MR9FFbbSXV3HipyShdsLvY7AlmsA+IqMpndQRLWrU0jhT3od1/auqkCW5/hyci96BJlQm52ZAOYHHtj6wTxdXxaLUTjzNtMnEN2jX4f3goeAGQYzoqaX2kwpfAFJodq/hd+1euS6ScBbADf9LtakpQMlZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715577362; c=relaxed/simple;
-	bh=/TKp7mIly9nvaDtT0R+Tuh0OoJbNpdPfw2AGy7X781o=;
+	s=arc-20240116; t=1715582694; c=relaxed/simple;
+	bh=nXq7taxxO3JmxhnRidgrhbb405e2XuxFNsxB6fFsriY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uz8mie0qHRYFk0Yf6SIHgfhCM5rfrrZJJW0RawKLVPrvnx4fl2g9xf1uNvJ309EoNTFe1o6J3JjXPLaiuLZKGCXfwLWAVAnjAZBxotr9eGHFZGj5v5Qjz0W9VsFcaFWwY9jbW9rWKOg/UC1KyinqBWWCbcdeKUDv5sGAa1jyZDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HLwJnZKT; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rqsZ9qFhRwXT+WNoe9Z41ELgCI16E9B7f2vXVv0q1w8qd6NoUXTycZAe0Rpv1EO8F8URaiQwz/pDb+eImUlAKoi4JhM/b0F7fmODTr66/JzV4+bJruj6+WcI1ruJzwc/GA0rNDzLguTURJb+at61kPEFbEDemoReR0gS2wawkYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JKCbKcYr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLwJnZKT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715577360; x=1747113360;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/TKp7mIly9nvaDtT0R+Tuh0OoJbNpdPfw2AGy7X781o=;
-  b=HLwJnZKToUZbK2P9txgRfrmCeiIBMZlb/ZAa0RZCoai7pyEndTRhOWmW
-   A4X0iR4ZgExbUjMP1kMJQXN/H4cs56uDAug59T7gLKAIoGepXt24FEBAa
-   USkv3b82BI3EdlTgb2FZBqpfXtDjZv/lWSy70CKTcsupYZdMh5Ja8iMtx
-   Ne5vhSoDHSOnrzPGAYs0+SasmLReHJk3CIc5GHz2aVFpJOn1MDfCemdV1
-   ptb7LHmpW5BRIM8ZSD4yJHUhi64xTJ+D4zQQF3enmIpEuymRj3jrdELyG
-   ch2t7L3axXFnJJ70ZzVLPvv6k/Cbt1sJUhcqEWXV5oz0SMDExj7KPyuSM
-   g==;
-X-CSE-ConnectionGUID: zaO6SRf1QSKBYC1iKT1eJw==
-X-CSE-MsgGUID: REQWidoQSXSU2CZjgBlcuQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11071"; a="36871359"
-X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
-   d="scan'208";a="36871359"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2024 22:16:00 -0700
-X-CSE-ConnectionGUID: 4moxybXbQX2QBT2L56+O/g==
-X-CSE-MsgGUID: 3YPGGmpIQlqwfw5ji33JsQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
-   d="scan'208";a="53444420"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 12 May 2024 22:15:58 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s6O2W-0009ZN-0y;
-	Mon, 13 May 2024 05:15:56 +0000
-Date: Mon, 13 May 2024 13:15:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC net-next 2/6] net: stmmac: remove pcs_ctrl_ane()
- method and associated code
-Message-ID: <202405131223.7F8xA20v-lkp@intel.com>
-References: <E1s6C4O-00Ck6O-9D@rmk-PC.armlinux.org.uk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JKCbKcYr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF37CC113CC;
+	Mon, 13 May 2024 06:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715582693;
+	bh=nXq7taxxO3JmxhnRidgrhbb405e2XuxFNsxB6fFsriY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JKCbKcYrka4uQS8xXY9NIsNwsvYa6QRq1rM0f9hGVe+APSUp4f8uRHNeqSb06WyI2
+	 kdC2JK1B43GqJ5HiTc/p0gErpql+V4iVLNeuOY20M7VFzBY1HdT/kBWjZnxcQG1KSx
+	 +OVF6ntJZSwM5OHCSBeIYW/FHIhvEt7aKHfTgaieYM+tHTbCL+eJlM6LLA30phoum8
+	 AHBHyZXWt2zrEVaPBpbCjTWptGANEUvN/6gGdzIYRCxbH1FkqQZHWp8zoy+d+2fL2n
+	 WmTjI062s62za9GlXtAQLYAb7DxyS2QrEHQp9d3H3bHvXxm3nA99EjwzAuaYD+ERBu
+	 TvmGonECdSI3w==
+Date: Sun, 12 May 2024 23:44:51 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kousik Sanagavarapu <five231003@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, Nishanth Menon <nm@ti.com>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Julia Lawall <julia.lawall@inria.fr>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/3] soc: ti: knav_qmss_queue: do device_node auto cleanup
+Message-ID: <20240513064451.GB652533@thelio-3990X>
+References: <20240510071432.62913-3-five231003@gmail.com>
+ <202405111846.3m9z398l-lkp@intel.com>
+ <ZkCZTv0Gci3xxKtw@five231003>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,98 +49,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <E1s6C4O-00Ck6O-9D@rmk-PC.armlinux.org.uk>
+In-Reply-To: <ZkCZTv0Gci3xxKtw@five231003>
 
-Hi Russell,
+On Sun, May 12, 2024 at 03:56:22PM +0530, Kousik Sanagavarapu wrote:
+> On Sat, May 11, 2024 at 06:12:39PM +0800, kernel test robot wrote:
+> > Hi Kousik,
+> > 
+> > kernel test robot noticed the following build errors:
+> > 
+> 
+> [...]
+> 
+> > All errors (new ones prefixed by >>):
+> > 
+> > >> drivers/soc/ti/knav_qmss_queue.c:1853:3: error: cannot jump from this goto statement to its label
+> >                    goto err;
+> >                    ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1840:3: error: cannot jump from this goto statement to its label
+> >                    goto err;
+> >                    ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1835:3: error: cannot jump from this goto statement to its label
+> >                    goto err;
+> >                    ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1831:3: error: cannot jump from this goto statement to its label
+> >                    goto err;
+> >                    ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1822:4: error: cannot jump from this goto statement to its label
+> >                            goto err;
+> >                            ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1826:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *queue_pools __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1818:4: error: cannot jump from this goto statement to its label
+> >                            goto err;
+> >                            ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1826:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *queue_pools __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1810:3: error: cannot jump from this goto statement to its label
+> >                    goto err;
+> >                    ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1826:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *queue_pools __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1813:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *pdsps __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1806:3: error: cannot jump from this goto statement to its label
+> >                    goto err;
+> >                    ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1826:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *queue_pools __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1813:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *pdsps __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1795:3: error: cannot jump from this goto statement to its label
+> >                    goto err;
+> >                    ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *regions __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1826:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *queue_pools __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1813:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *pdsps __free(device_node) =
+> >                                ^
+> >    drivers/soc/ti/knav_qmss_queue.c:1801:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
+> >            struct device_node *qmgrs __free(device_node) =
+> >                                ^
+> >    9 errors generated.
+> 
+> Seems like gcc didn't catch this when I compiled locally.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+FWIW, you may notice this as you do more conversions. The fact that GCC
+does not warn at all is a GCC bug as far as I am aware (i.e., clang's
+error is correct):
 
-[auto build test ERROR on net-next/main]
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-remove-pcs_ctrl_ane-method-and-associated-code/20240513-003120
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/E1s6C4O-00Ck6O-9D%40rmk-PC.armlinux.org.uk
-patch subject: [PATCH RFC net-next 2/6] net: stmmac: remove pcs_ctrl_ane() method and associated code
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240513/202405131223.7F8xA20v-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405131223.7F8xA20v-lkp@intel.com/reproduce)
+which has come up in other places:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405131223.7F8xA20v-lkp@intel.com/
+https://lore.kernel.org/20240425174732.GA270911@dev-arch.thelio-3990X/
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c:628:3: error: implicit declaration of function 'stmmac_pcs_ctrl_ane' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 0, 0, 0);
-                   ^
-   1 error generated.
-
-
-vim +/stmmac_pcs_ctrl_ane +628 drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-
-a7c30e62d4b895 Vinod Koul          2019-01-21  607  
-981d947bcd382c Sneh Shah           2023-12-12  608  /* On interface toggle MAC registers gets reset.
-981d947bcd382c Sneh Shah           2023-12-12  609   * Configure MAC block for SGMII on ethernet phy link up
-981d947bcd382c Sneh Shah           2023-12-12  610   */
-463120c31c58bb Bartosz Golaszewski 2023-06-19  611  static int ethqos_configure_sgmii(struct qcom_ethqos *ethqos)
-463120c31c58bb Bartosz Golaszewski 2023-06-19  612  {
-a818bd12538c14 Sneh Shah           2024-02-20  613  	struct net_device *dev = platform_get_drvdata(ethqos->pdev);
-a818bd12538c14 Sneh Shah           2024-02-20  614  	struct stmmac_priv *priv = netdev_priv(dev);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  615  	int val;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  616  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  617  	val = readl(ethqos->mac_base + MAC_CTRL_REG);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  618  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  619  	switch (ethqos->speed) {
-a818bd12538c14 Sneh Shah           2024-02-20  620  	case SPEED_2500:
-a818bd12538c14 Sneh Shah           2024-02-20  621  		val &= ~ETHQOS_MAC_CTRL_PORT_SEL;
-a818bd12538c14 Sneh Shah           2024-02-20  622  		rgmii_updatel(ethqos, RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-a818bd12538c14 Sneh Shah           2024-02-20  623  			      RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-a818bd12538c14 Sneh Shah           2024-02-20  624  			      RGMII_IO_MACRO_CONFIG2);
-a818bd12538c14 Sneh Shah           2024-02-20  625  		if (ethqos->serdes_speed != SPEED_2500)
-a818bd12538c14 Sneh Shah           2024-02-20  626  			phy_set_speed(ethqos->serdes_phy, SPEED_2500);
-a818bd12538c14 Sneh Shah           2024-02-20  627  		ethqos->serdes_speed = SPEED_2500;
-a818bd12538c14 Sneh Shah           2024-02-20 @628  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 0, 0, 0);
-a818bd12538c14 Sneh Shah           2024-02-20  629  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  630  	case SPEED_1000:
-463120c31c58bb Bartosz Golaszewski 2023-06-19  631  		val &= ~ETHQOS_MAC_CTRL_PORT_SEL;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  632  		rgmii_updatel(ethqos, RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-463120c31c58bb Bartosz Golaszewski 2023-06-19  633  			      RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-463120c31c58bb Bartosz Golaszewski 2023-06-19  634  			      RGMII_IO_MACRO_CONFIG2);
-a818bd12538c14 Sneh Shah           2024-02-20  635  		if (ethqos->serdes_speed != SPEED_1000)
-a818bd12538c14 Sneh Shah           2024-02-20  636  			phy_set_speed(ethqos->serdes_phy, SPEED_1000);
-a818bd12538c14 Sneh Shah           2024-02-20  637  		ethqos->serdes_speed = SPEED_1000;
-a818bd12538c14 Sneh Shah           2024-02-20  638  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  639  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  640  	case SPEED_100:
-463120c31c58bb Bartosz Golaszewski 2023-06-19  641  		val |= ETHQOS_MAC_CTRL_PORT_SEL | ETHQOS_MAC_CTRL_SPEED_MODE;
-a818bd12538c14 Sneh Shah           2024-02-20  642  		if (ethqos->serdes_speed != SPEED_1000)
-a818bd12538c14 Sneh Shah           2024-02-20  643  			phy_set_speed(ethqos->serdes_phy, SPEED_1000);
-a818bd12538c14 Sneh Shah           2024-02-20  644  		ethqos->serdes_speed = SPEED_1000;
-a818bd12538c14 Sneh Shah           2024-02-20  645  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  646  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  647  	case SPEED_10:
-463120c31c58bb Bartosz Golaszewski 2023-06-19  648  		val |= ETHQOS_MAC_CTRL_PORT_SEL;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  649  		val &= ~ETHQOS_MAC_CTRL_SPEED_MODE;
-981d947bcd382c Sneh Shah           2023-12-12  650  		rgmii_updatel(ethqos, RGMII_CONFIG_SGMII_CLK_DVDR,
-981d947bcd382c Sneh Shah           2023-12-12  651  			      FIELD_PREP(RGMII_CONFIG_SGMII_CLK_DVDR,
-981d947bcd382c Sneh Shah           2023-12-12  652  					 SGMII_10M_RX_CLK_DVDR),
-981d947bcd382c Sneh Shah           2023-12-12  653  			      RGMII_IO_MACRO_CONFIG);
-a818bd12538c14 Sneh Shah           2024-02-20  654  		if (ethqos->serdes_speed != SPEED_1000)
-a818bd12538c14 Sneh Shah           2024-02-20  655  			phy_set_speed(ethqos->serdes_phy, ethqos->speed);
-a818bd12538c14 Sneh Shah           2024-02-20  656  		ethqos->serdes_speed = SPEED_1000;
-a818bd12538c14 Sneh Shah           2024-02-20  657  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  658  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  659  	}
-463120c31c58bb Bartosz Golaszewski 2023-06-19  660  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  661  	writel(val, ethqos->mac_base + MAC_CTRL_REG);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  662  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  663  	return val;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  664  }
-463120c31c58bb Bartosz Golaszewski 2023-06-19  665  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
