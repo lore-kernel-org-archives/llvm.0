@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922C312AAEA;
-	Mon, 13 May 2024 02:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDB4139CF7;
+	Mon, 13 May 2024 02:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715567989; cv=none; b=jns8p9HnRjbGC7N4e3ltMW0MPhMMPBtTjfLH/8TWYChOZyS58wcZBg+c4H3L5XWvWdN9m6ttQYTTRWNUpaFVqrsl7mq1zO245RXCVRLWbf7lk5uAQcerhiZVOK9RffdnnhHI6h2rDQzix3HizncGHEbCF3CZoGqBIUHNL08GQuI=
+	t=1715568668; cv=none; b=b3iqRVnif+57nLiKG6mB627CqhcohmvUacYpjEqiDH0RzpYTcGmkeIYmy8kbqVF3DZJGNedK+y4y+8neXKFjWUfR7MOQpeygwsaRWbaefHb4VnM1ORRJtECd6iRcpyLl7weoC1fYbiaZaSSCYAUwaVd7vMjeyHCLzzg74J7Jd9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715567989; c=relaxed/simple;
-	bh=BJ3INmcyzip7tYZxKbEJ8QG+/zUWvN17KRx6bPdQxB4=;
+	s=arc-20240116; t=1715568668; c=relaxed/simple;
+	bh=UjuC+cUD87z+htKM8aE8qC2gJ6ow9sHMwN6FUXAtm60=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XECXvRTeAnYYzKyy+PlKOBzHNMx8a9tU8HhZDOV0MhBuayoLBSQEyo63Zh2efpZEPPAivLjy2SDE9yQb9G+hnhia+hI6fq3a3rOBGJo55zeLHh29a37giZV4OFMZJILcXiY+bujlAwOBNYmlviZpWyjqYC0Pv8rnEnM03ERMlSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fVJ9kjYn; arc=none smtp.client-ip=192.198.163.8
+	 Content-Disposition; b=r8EAVOotINRIbeQzXicR+an/eIjMEtwBBf4qiFDdAUu8UaPHe0gxTU4OngPpJAMYVoZBYQzporrYIEyOnE62l6K68+urTuxRwE3XFwpyFeASCvt5EEoljIYuzmt/WxWPCGlMkhC0K/koxEdxDXynmOPgTpuUR3QgoSW6YgpvOSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mb8LXO2b; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fVJ9kjYn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mb8LXO2b"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715567986; x=1747103986;
+  t=1715568667; x=1747104667;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BJ3INmcyzip7tYZxKbEJ8QG+/zUWvN17KRx6bPdQxB4=;
-  b=fVJ9kjYn4FL5yLk88uUfUanpxb11EgmFl/E5RBaBcLzfwMq64h4/mZHU
-   BA1qnUpkg91+S16RMEdzH+tefg/OW/II+uuDDUvtCJ7xikq3glsxtlmUc
-   ZXq2Icx3AgLC2LFuyzFQIxSJK5dr7i42HqgdkkUC31ZOpZT0ojo2+SUg3
-   MVNffnmjYf8wZpJTES9/roQ1Id1mRnnLExCRu6yDuRpk3tw9boxBsmX3B
-   Us5igWZT1Ra/uit6NF8/xYIy3A16Ji8c4RYrGFRBFkovE3ScDjIebCoVa
-   2VBVwso6wQw+QkowlIZ6LdLzJHc+N46edjxO/JdZdWt5ylICO4JVi/rVz
-   g==;
-X-CSE-ConnectionGUID: n4Pxa/tkQIiHusMTk96Rfg==
-X-CSE-MsgGUID: KrNKwS1vSQyNyQHceCyFTA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11071"; a="29000094"
+  bh=UjuC+cUD87z+htKM8aE8qC2gJ6ow9sHMwN6FUXAtm60=;
+  b=mb8LXO2bOzf66CH7+ZoTYxoa4QEAJxw6GMCwGe/0xHZHQM4SrtaEACmt
+   QvQ9Hft9vDfNYYamQInE5jJ6BsK8IihFQOBvqr2dzIOQBmDb4+NCnWxXQ
+   BA8dz5lR70q3wQjOEg1LRdKaO2X4qwtyZRvcZXvcQUdol3mZYhso0ev1k
+   CwB/669Bk8xEIXumswY8MlD3WKy5zNpu/nYkNSTh5D/kWA8J+u3G3xhJV
+   Udp7AzEsr6vJLCWvM9hceK2L/cg4Fy0/Qr+pe3DnAWdyka/Aun/gP7H3I
+   a7Eg39RIi7P/R2y09cCpwEqWAjHFOmweQNo2Y/IcVG+kVM4jYO7jMFQfu
+   A==;
+X-CSE-ConnectionGUID: DrRAd8vnQZCBbfosBV9sMg==
+X-CSE-MsgGUID: TbuDlfmaRlCW/ShgoujlkQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11071"; a="11704590"
 X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
-   d="scan'208";a="29000094"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2024 19:39:46 -0700
-X-CSE-ConnectionGUID: SJKkwN3ySdqn5tPCg9UVPw==
-X-CSE-MsgGUID: wYd+QCARTzOFezoVsGoSfQ==
+   d="scan'208";a="11704590"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2024 19:49:51 -0700
+X-CSE-ConnectionGUID: iWrst+VjRH6eq2TAT8FPuA==
+X-CSE-MsgGUID: 0hSvXpixSTW5Z0a7GMbCwA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
-   d="scan'208";a="30758962"
+   d="scan'208";a="34615029"
 Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 May 2024 19:39:45 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 12 May 2024 19:49:49 -0700
 Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s6LbK-0009SP-19;
-	Mon, 13 May 2024 02:39:42 +0000
-Date: Mon, 13 May 2024 10:38:47 +0800
+	id 1s6Ll5-0009Sl-0V;
+	Mon, 13 May 2024 02:49:47 +0000
+Date: Mon, 13 May 2024 10:49:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:syscall-tbl-6.9 34/46] make[3]: *** No rule to
- make target 'arch/um/include/generated/asm/bpf_perf_event.h', needed by
- 'all'.
-Message-ID: <202405131015.R5eW2BHz-lkp@intel.com>
+	linux-pci@vger.kernel.org,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>
+Subject: [pci:controller/dwc 24/28] ld.lld: error: undefined symbol:
+ pci_epc_deinit_notify
+Message-ID: <202405131026.c0eAXgnt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,28 +65,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.9
-head:   e0d7a2fe9b74052a280531e773ebaba59e2d523f
-commit: a07293862960e1329b45044916498891ed8161a1 [34/46] kbuild: verify asm-generic header list
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240513/202405131015.R5eW2BHz-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405131015.R5eW2BHz-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git controller/dwc
+head:   8edb2b8795b3c0496b7f2c42dc2ca7dd1ac4a76d
+commit: e9f0f3b8a2e42884ca065829efe6ca93c292de22 [24/28] PCI: endpoint: Introduce 'epc_deinit' event and notify the EPF drivers
+config: arm64-randconfig-003-20240513 (https://download.01.org/0day-ci/archive/20240513/202405131026.c0eAXgnt-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405131026.c0eAXgnt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405131015.R5eW2BHz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405131026.c0eAXgnt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> make[3]: *** No rule to make target 'arch/um/include/generated/asm/bpf_perf_event.h', needed by 'all'.
-   make[3]: Target 'all' not remade because of errors.
-   make[2]: *** [Makefile:1215: asm-generic] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:240: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> ld.lld: error: undefined symbol: pci_epc_deinit_notify
+   >>> referenced by pcie-tegra194.c
+   >>>               drivers/pci/controller/dwc/pcie-tegra194.o:(pex_ep_event_pex_rst_assert) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
