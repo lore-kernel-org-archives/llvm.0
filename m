@@ -1,165 +1,128 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEA3153BE6;
-	Mon, 13 May 2024 15:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A534723CB
+	for <llvm@lists.linux.dev>; Mon, 13 May 2024 16:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715615319; cv=none; b=HT10eRY2tivg6KuRoDAxAimp9NgkvW/Xd6wfcosqb/ZULm++cq81j/ZbufiJExu4gxQ2JBAjd+CgDtqc7Bs9VptnffT1h9nFcj9Sm7j0rwpOdqz9v6yPg5G8yiOAc2KYNRPAOSoCcLWXX6nRl/BzBn6wMamQx1pGz05q+jPxqNg=
+	t=1715617760; cv=none; b=mIxbng4xzhzgMk2e5JP6Hq4iUoJ/bFz+e+A1VWnaC6qjbfDqL9RRQu4zZZ2IZoluSJmtJR+6sDlZUCy9bs9P3ajPSmF8d4rwSbnGODSA67IqoKrJT+9aoBKpKaV/uBm9hlLOkHxheB5TmdTLi4g5fuHqBK3agztsyNLcnD/rPKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715615319; c=relaxed/simple;
-	bh=gh8KA2KzWI8NxNVRWgimB6DI6N3c8EurLnFVYb7mDwk=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=QhU/ITH7LyuZhb6KS3dUdwvcNsCKegHr11s/3MjVCoSHXe/EfTBa1pPoCn+C88DFB/ayqi0Ewk1GY0X/QzVc+iDeqqMAKP+lJzz3GWZ2f3V2YsKlPH+j/zRykMrOhVVIwnIyieQhOqj2NPBC4kQwtlwUo+Yw2FN6GLsWmngx0Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=gCt9F7Ok; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1715617760; c=relaxed/simple;
+	bh=9oirvRjInAAK2WGeTpkg13GutqE/g028MxGLEUfVJ4U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tGiBihIVDYI56sdTPygqmM6bdFVMUrUCDBNU8zwrKmcSnRf60Jdk5E83j9JeFO7BBR9dqhDMZCewloJ5k/yE4ZDneIN+E6P9Yfu4JEkCrL+678t7ECctJklBdf/wKdhJYQ12xGlf9RP0MNQMt8k7QqddcBogRZhHAXU0S+eH97E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tg1Cvtdi; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="gCt9F7Ok"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1715615312; h=Message-ID:Subject:Date:From:To;
-	bh=7TO5SBq3O+tJBEl71UG4O3nzKZttyUTlMkzqET0RB8M=;
-	b=gCt9F7Okihn7mr3hNI9cELz8Tayk7s684tp/KiBEPP2bpI+LGX2Fi16GZEI45IR37fiOxOoKTBHVHo0EYDi7KB6Hu+PLhgku3SAKVnUqEazJIVpWBPiTeTXXFgqJh32S3nZ5RWY3xBSZrDRhdpeOiT1er/ErJsUFJgqyjOY0YyE=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067110;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0W6SNQzg_1715615309;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0W6SNQzg_1715615309)
-          by smtp.aliyun-inc.com;
-          Mon, 13 May 2024 23:48:31 +0800
-Message-ID: <1715614744.0497134-3-hengqi@linux.alibaba.com>
-Subject: Re: [PATCH net-next v13 2/4] ethtool: provide customized dim profile management
-Date: Mon, 13 May 2024 23:39:04 +0800
-From: Heng Qi <hengqi@linux.alibaba.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
- llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- "David S . Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>,
- Eric Dumazet <edumazet@google.com>,
- Jason   Wang <jasowang@redhat.com>,
- "Michael S . Tsirkin" <mst@redhat.com>,
- Brett   Creeley <bcreeley@amd.com>,
- Ratheesh Kannoth <rkannoth@marvell.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Tal Gilboa <talgi@nvidia.com>,
- Jonathan   Corbet <corbet@lwn.net>,
- linux-doc@vger.kernel.org,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Jiri Pirko <jiri@resnulli.us>,
- Paul   Greenwalt <paul.greenwalt@intel.com>,
- Ahmed Zaki <ahmed.zaki@intel.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>,
- Kory Maincent <kory.maincent@bootlin.com>,
- Andrew Lunn <andrew@lunn.ch>,
- justinstitt@google.com,
- donald.hunter@gmail.com,
- netdev@vger.kernel.org,
- virtualization@lists.linux.dev
-References: <20240509044747.101237-1-hengqi@linux.alibaba.com>
- <20240509044747.101237-3-hengqi@linux.alibaba.com>
- <202405100654.5PbLQXnL-lkp@intel.com>
- <1715531818.6973832-3-hengqi@linux.alibaba.com>
- <20240513072249.7b0513b0@kernel.org>
- <1715611933.2264705-1-hengqi@linux.alibaba.com>
- <20240513082412.2a27f965@kernel.org>
-In-Reply-To: <20240513082412.2a27f965@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tg1Cvtdi"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2df848f9325so58200141fa.1
+        for <llvm@lists.linux.dev>; Mon, 13 May 2024 09:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715617757; x=1716222557; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sABAyDDibQeTUxaqpap0tAGtEYkahruaupGbesZnVxw=;
+        b=Tg1CvtdiXPWpP99q04GiKDdb2J5iJi+tVA2JBlziuK1wSG0d9mVRRRv1aOztzyM1hj
+         l4AEx1exuPRwwA3oJ1nchmG/3HJXq0UxrI+lgqFa/4H98VaH+R64Xc/ydEFzPHitjRze
+         lAdiMHzqbXbtIPGq2KIi+N9cfQ62KKcMiWG00bALZtUTS64rHHdbQX+eC/eR9QmUDj6m
+         ZdKuBOTlU7b2yfJ1rSwZTTNX+GwWA9sJ4gaz7fTqyhLzPzcJT3PakgEurLn2u0vN4zKa
+         3cRhqNwG7/FztPJZRWe63IBMrsW5t7euPFbLVa30FhvaF6eEMmpz/z9ihRkimuIDKk+N
+         q7ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715617757; x=1716222557;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sABAyDDibQeTUxaqpap0tAGtEYkahruaupGbesZnVxw=;
+        b=uwybKjj5H4kfJkhLmn1Y9XR2QYjuNOmD00srZhf5kPZgH47P+Btfek4RsoIiFlzF7l
+         LwngjmnHU9Ltxg4Pj+j5PyJZBXCs+IAccF+ZVBkw6kDSOh5COyYavdzp/+lmRO7GgFf7
+         L8EVyraZ5V4Y5N2h81Yzt5ENOm7cYDuDSV1y+Gw+X6fzWheL635hmSONJPIecOZ2026f
+         gwb1mc22VWIKnBHKkSpTyg1oQLXxB4794Fti0LAGCrNo8gC93CjQN7k9yGVE1+slpPWj
+         RoYAMTAIaClbrT490Fh3B21uJUA7bMe6MIJQF2P683QqfpT1zJ4odvAQ9O8wfJhMXTtU
+         Z8yQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRKfv1TpNN26osN9gDSnEBeG/nI7Yuc2zGTi42sUoePWXRg6cFypgeCdRqKAZtbSe9qhEuuyuNWkhBbCTAE99Yvwom1Q==
+X-Gm-Message-State: AOJu0YyiBEy7JRHcJBuRM9HD+0fuvMLJQZU8Mp8wC9eodNS/6ZwjcS18
+	56vrslTeeFRBuxNRh+bMOxaGp7Wuk9VGGQLNaai92dey8W3SfBcfwWQ1zH25EOtyhxnfW5rSghb
+	WpxPra+PJbXMhkNIBOUMrp05YLrs=
+X-Google-Smtp-Source: AGHT+IEzW3swQESCG1PQZCau4vY6voiOCRmeopxeRXdBZmXXzeygMwKz9BndpIVFZiSJ3rYSQcVeLpqTsjWpyxNmprY=
+X-Received: by 2002:a2e:91ce:0:b0:2df:1e3e:327f with SMTP id
+ 38308e7fff4ca-2e52039bcb3mr71238121fa.38.1715617756547; Mon, 13 May 2024
+ 09:29:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <AS8PR02MB7237262C62B054FABD7229168BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <d11dacfa-5925-4040-b60b-02ab731d5f1a@kernel.org>
+In-Reply-To: <d11dacfa-5925-4040-b60b-02ab731d5f1a@kernel.org>
+From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date: Mon, 13 May 2024 12:29:04 -0400
+Message-ID: <CABBYNZ+4CcoBvkj8ze7mZ4vVfWfm_tyBxdFspvreVASi0VR=6A@mail.gmail.com>
+Subject: Re: [PATCH v2] tty: rfcomm: prefer struct_size over open coded arithmetic
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Erick Archer <erick.archer@outlook.com>, Marcel Holtmann <marcel@holtmann.org>, 
+	Johan Hedberg <johan.hedberg@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Kees Cook <keescook@chromium.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 13 May 2024 08:24:12 -0700, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Mon, 13 May 2024 22:52:13 +0800 Heng Qi wrote:
-> > > > So I think we should declare "CONFIG_PROVE_LOCKING depends on CONFIG_NET".
-> > > > How do you think?  
-> > > 
-> > > Doesn't sound right, `can we instead make building lib/dim/net_dim.c  
-> > 
-> > Why? IIUC, the reason is that if CONFIG_NET is not set to Y, the net/core
-> > directory will not be compiled, so the lockdep_rtnl_is_held symbol is not
-> > present.
-> 
-> Maybe I don't understand what you;re proposing. 
-> Show an actual diff please.
+Hi Jiri, Eric,
 
-Like this:
+On Mon, May 13, 2024 at 1:07=E2=80=AFAM Jiri Slaby <jirislaby@kernel.org> w=
+rote:
+>
+> On 12. 05. 24, 13:17, Erick Archer wrote:
+> > This is an effort to get rid of all multiplications from allocation
+> > functions in order to prevent integer overflows [1][2].
+> >
+> > As the "dl" variable is a pointer to "struct rfcomm_dev_list_req" and
+> > this structure ends in a flexible array:
+> ...
+> > --- a/include/net/bluetooth/rfcomm.h
+> > +++ b/include/net/bluetooth/rfcomm.h
+> ...
+> > @@ -528,12 +527,12 @@ static int rfcomm_get_dev_list(void __user *arg)
+> >       list_for_each_entry(dev, &rfcomm_dev_list, list) {
+> >               if (!tty_port_get(&dev->port))
+> >                       continue;
+> > -             (di + n)->id      =3D dev->id;
+> > -             (di + n)->flags   =3D dev->flags;
+> > -             (di + n)->state   =3D dev->dlc->state;
+> > -             (di + n)->channel =3D dev->channel;
+> > -             bacpy(&(di + n)->src, &dev->src);
+> > -             bacpy(&(di + n)->dst, &dev->dst);
+> > +             di[n].id      =3D dev->id;
+> > +             di[n].flags   =3D dev->flags;
+> > +             di[n].state   =3D dev->dlc->state;
+> > +             di[n].channel =3D dev->channel;
+> > +             bacpy(&di[n].src, &dev->src);
+> > +             bacpy(&di[n].dst, &dev->dst);
+>
+> This does not relate much to "prefer struct_size over open coded
+> arithmetic". It should have been in a separate patch.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 291185f54ee4..fbb20d0d08c1 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1299,7 +1299,7 @@ config LOCK_DEBUGGING_SUPPORT
++1, please split these changes into its own patch so we can apply it separa=
+tely.
 
- config PROVE_LOCKING
-        bool "Lock debugging: prove locking correctness"
--       depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
-+       depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && NET
-        select LOCKDEP
-        select DEBUG_SPINLOCK
-        select DEBUG_MUTEXES if !PREEMPT_RT
+> Other than that, LGTM.
+>
+> thanks,
+> --
+> js
+> suse labs
+>
 
 
-And there is:
-
-In include/linux/rtnetlink.h:
-
-#ifdef CONFIG_PROVE_LOCKING
-extern bool lockdep_rtnl_is_held(void);
-#else
-static inline bool lockdep_rtnl_is_held(void)
-{
-        return true;
-}
-#endif /* #ifdef CONFIG_PROVE_LOCKING */
-
-
-In net/core/rtnetlink.c:
-
-#ifdef CONFIG_PROVE_LOCKING
-bool lockdep_rtnl_is_held(void)
-{
-        return lockdep_is_held(&rtnl_mutex);
-}
-EXPORT_SYMBOL(lockdep_rtnl_is_held);
-#endif /* #ifdef CONFIG_PROVE_LOCKING */
-
-Thanks.
-
-> 
-> > > dependent on CONFIG_NET? Untested but I'm thinking something like:
-> > > 
-> > > diff --git a/lib/dim/Makefile b/lib/dim/Makefile
-> > > index c4cc4026c451..c02c306e2975 100644
-> > > --- a/lib/dim/Makefile
-> > > +++ b/lib/dim/Makefile
-> > > @@ -4,4 +4,8 @@
-> > >  
-> > >  obj-$(CONFIG_DIMLIB) += dimlib.o
-> > >  
-> > > -dimlib-objs := dim.o net_dim.o rdma_dim.o
-> > > +dimlib-objs := dim.o rdma_dim.o
-> > > +
-> > > +ifeq ($(CONFIG_NET),y)
-> > > +dimlib-objs += net_dim.o
-> > > +endif  
-> > 
-> > 1. This is unlikely to work if the kernel is configured as[1]:
-> > 
-> > [1] kernel configuration
-> > CONFIG_NET=n, CONFIG_ETHTOOL_NETLINK=n, CONFIG_PROVE_LOCKING=y,
-> > (CONFIG_FSL_MC_DPIO=y && CONFIG_FSL_MC_BUS=y) select CONFIG_DIMLIB=y.
-> > 
-> > 
-> > Then, because CONFIG_NET is not enabled, so there is no net_dim.o,
-> > the following warning appears:
-> > 
-> > ld.lld: error: undefined symbol: net_dim_get_rx_moderation
-> > referenced by dpio-service.c
-> > drivers/soc/fsl/dpio/dpio-service.o:(dpaa2_io_dim_work) in archive vmlinux.a
-> > 
-> > ld.lld: error: undefined symbol: net_dim
-> > referenced by dpio-service.c
-> > drivers/soc/fsl/dpio/dpio-service.o:(dpaa2_io_update_net_dim) in archive vmlinux.a
-> 
-> Simple, dpio-service should depend on NET if it wants NET_DIM
+--=20
+Luiz Augusto von Dentz
