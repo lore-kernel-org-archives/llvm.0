@@ -1,167 +1,92 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CA6153BEA
-	for <llvm@lists.linux.dev>; Mon, 13 May 2024 13:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3837153BC0;
+	Mon, 13 May 2024 14:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715607701; cv=none; b=Zoca9JhV8Zp/sAl1PD+I3yjFx5vnWKnLd45CjTO7c3vmTxwoV8D3zpxdqNPhbrRuGwPMwckzOCZSacdTrChbzbAfxiQG/qaJ2QojChKHsKdb7GBhIVD9IJh+1E5U6GoDkOhv90SQ7P9j5ShpsD/feh23K36prwzgBFXc4JsQq/Q=
+	t=1715610172; cv=none; b=tcO0eNFsUinYc/lzWail3KRMttre6haCGe1GYLBeuFYvl2Y05oam0AIzU8gJckg64wExLiMpH5nVvI7IVIq5CXzbAgBtZW/4kBTxu5/eEgp8j6Kbm/GQ0OqlT2N/TfkxGqNLuyz0viMCQ9AF6Af+bmkzFU7KSU1Ha1B4wD3M7XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715607701; c=relaxed/simple;
-	bh=1vwhNLWQzWOw14LAEZi7EsnlB5e8SqSlplib0RuK460=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aTzYvKtbDitg79oEKxgTPT+uoWZRmw3oWhwZZUnL95gj3fl12u+u7/oJzduCRcBR14RAtXi9oBXwx5ccSaeTE6ulOMQ1JVEKEHpZG5RUa0aeAQ+AJB4Dnj/wP5E0uL3QnB9bnH+rYe/KRdWUsnBC18m/F7BflByjuyN2tovrVbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=gCM+EfKK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mdyZ2uNi; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=gCM+EfKK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mdyZ2uNi; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1715610172; c=relaxed/simple;
+	bh=tI/WvQv46AJugXtuNIipq8toujNOpRvVaAr7krEGAnI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ELjeg1ptSJYglhTrLYBbbNUDGxDtYrlfph+QgCig6O54Yf8P18oDDVo3W77lcwR7FKSDtBZP8g3wQBa9TsOrkvMzGt7frw/LjauWOmbcEJ9bH6PKo/EoQL7J5rdJSK6LLKbZpt376SkKR4sEp9Ajs4JXO2K1MoBAbB9iKW230SQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpFbeQBA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="gCM+EfKK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mdyZ2uNi";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="gCM+EfKK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mdyZ2uNi"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 740D55C0E0;
-	Mon, 13 May 2024 13:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1715607697; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tsajR3jWLhoXAo1Db8WJHsrCg5uk4EqrkI1RB3AkQjQ=;
-	b=gCM+EfKK1yd1U9Cibs0FoEYv8srOq28jiH6hSJ+QuuxUWBv9xgN13a6UByPu8WW8TLQjwU
-	sxhU7iki+aUAOqbjOomb+RMN2+gqNPdy6pzSGaboLushNkZXD9IPjVCVaC1IhIpd3KuAA4
-	Jxn73PG5O5eXCf3O6mwDQGtRCMQN+mg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1715607697;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tsajR3jWLhoXAo1Db8WJHsrCg5uk4EqrkI1RB3AkQjQ=;
-	b=mdyZ2uNizmupVu8YQ6oQcqJdPVFtl1TN7WgfM4J7HlLXOvR47fENoOylA20z6vyY6hmNmQ
-	82XyVNcmcopduFCw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=gCM+EfKK;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=mdyZ2uNi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1715607697; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tsajR3jWLhoXAo1Db8WJHsrCg5uk4EqrkI1RB3AkQjQ=;
-	b=gCM+EfKK1yd1U9Cibs0FoEYv8srOq28jiH6hSJ+QuuxUWBv9xgN13a6UByPu8WW8TLQjwU
-	sxhU7iki+aUAOqbjOomb+RMN2+gqNPdy6pzSGaboLushNkZXD9IPjVCVaC1IhIpd3KuAA4
-	Jxn73PG5O5eXCf3O6mwDQGtRCMQN+mg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1715607697;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tsajR3jWLhoXAo1Db8WJHsrCg5uk4EqrkI1RB3AkQjQ=;
-	b=mdyZ2uNizmupVu8YQ6oQcqJdPVFtl1TN7WgfM4J7HlLXOvR47fENoOylA20z6vyY6hmNmQ
-	82XyVNcmcopduFCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 44F0E13A69;
-	Mon, 13 May 2024 13:41:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id iJXPEJEYQmabDwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 13 May 2024 13:41:37 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 2ACB1A089F; Sun, 12 May 2024 10:05:11 +0200 (CEST)
-Date: Sun, 12 May 2024 10:05:11 +0200
-From: Jan Kara <jack@suse.cz>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] fs: remove accidental overflow during wraparound check
-Message-ID: <20240512080511.yotlypw35qowwjoh@quack3>
-References: <20240507-b4-sio-vfs_fallocate-v1-1-322f84b97ad5@google.com>
- <20240509155356.w274h4blmcykxej6@quack3>
- <CAFhGd8opxHhTdZhDg_hq7XWQFxJ34nLDxTd-nBBgye9BLohnqw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpFbeQBA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 498C4C4AF16;
+	Mon, 13 May 2024 14:22:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715610171;
+	bh=tI/WvQv46AJugXtuNIipq8toujNOpRvVaAr7krEGAnI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=MpFbeQBA5dmJRcc8KkY9woVXu4e6RFP1wuGqPDI/UFeb8VGMy9Rhm2gxGSxP47VrW
+	 LK2BGQqqY3MhZLT1P3WXQISPRCqQaGHem2z3aCDhZKf5JMWGdNrg943mosK7hXDhCP
+	 /jraukPs7LRGbQwH/iWA8I9GM+TOtkP7ylmDUSdy5KUnQZWs+BdcTYKvkljpiUeKwp
+	 P5IzxWZEsW05YsWlfVKXqOAUD2YM7iCQ+T0z8kbbRjHHY4AyIq4fSq5VweynkrTPY9
+	 np161T+Nin8f5+nAgd5+oKunYx/YqDeWPi/+cHcqaWOYduFlKd1OOBbaoz0TYYzTbQ
+	 U/odJW3UbdhQg==
+Date: Mon, 13 May 2024 07:22:49 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Heng Qi <hengqi@linux.alibaba.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, "David S . Miller" <davem@davemloft.net>,
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>, Jason
+ Wang <jasowang@redhat.com>, "Michael S . Tsirkin" <mst@redhat.com>, Brett
+ Creeley <bcreeley@amd.com>, Ratheesh Kannoth <rkannoth@marvell.com>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Tal Gilboa <talgi@nvidia.com>, Jonathan
+ Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Jiri Pirko <jiri@resnulli.us>, Paul
+ Greenwalt <paul.greenwalt@intel.com>, Ahmed Zaki <ahmed.zaki@intel.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>, Kory Maincent
+ <kory.maincent@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+ justinstitt@google.com, donald.hunter@gmail.com, netdev@vger.kernel.org,
+ virtualization@lists.linux.dev
+Subject: Re: [PATCH net-next v13 2/4] ethtool: provide customized dim
+ profile management
+Message-ID: <20240513072249.7b0513b0@kernel.org>
+In-Reply-To: <1715531818.6973832-3-hengqi@linux.alibaba.com>
+References: <20240509044747.101237-1-hengqi@linux.alibaba.com>
+	<20240509044747.101237-3-hengqi@linux.alibaba.com>
+	<202405100654.5PbLQXnL-lkp@intel.com>
+	<1715531818.6973832-3-hengqi@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFhGd8opxHhTdZhDg_hq7XWQFxJ34nLDxTd-nBBgye9BLohnqw@mail.gmail.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	DATE_IN_PAST(1.00)[29];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_COUNT_THREE(0.00)[3];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email,suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 740D55C0E0
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu 09-05-24 15:10:07, Justin Stitt wrote:
-> On Thu, May 9, 2024 at 8:53 AM Jan Kara <jack@suse.cz> wrote:
-> > > @@ -319,8 +320,12 @@ int vfs_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
-> > >       if (!S_ISREG(inode->i_mode) && !S_ISBLK(inode->i_mode))
-> > >               return -ENODEV;
-> > >
-> > > -     /* Check for wrap through zero too */
-> > > -     if (((offset + len) > inode->i_sb->s_maxbytes) || ((offset + len) < 0))
-> > > +     /* Check for wraparound */
-> > > +     if (check_add_overflow(offset, len, &sum))
-> > > +             return -EFBIG;
-> > > +
-> > > +     /* Now, check bounds */
-> > > +     if (sum > inode->i_sb->s_maxbytes || sum < 0)
-> > >               return -EFBIG;
-> >
-> > But why do you check for sum < 0? We know from previous checks offset >= 0
-> > && len > 0 so unless we overflow, sum is guaranteed to be > 0.
+On Mon, 13 May 2024 00:36:58 +0800 Heng Qi wrote:
+> This failed use case seems to come from this series triggering a problem that
+> has not been triggered historically, namely lockdep_rtnl_is_held() is not called
+> in an environment where CONFIG_NET is not configured and CONFIG_PROVE_LOCKING is
+> configured:
+>   If CONFIG_PROVE_LOCKING is configured as Y and CONFIG_NET is n, then
+>   lockdep_rtnl_is_held is in an undefined state at this time.
 > 
-> Fair enough. I suppose with the overflow check in place we can no
-> longer have a sum less than zero there. If nothing else, it tells
-> readers of this code what the domain of (offset+len) is. I don't mind
-> sending a new version, though.
+> So I think we should declare "CONFIG_PROVE_LOCKING depends on CONFIG_NET".
+> How do you think?
 
-Well, for normal readers offset+len is always a positive number. That's
-what you expect. If you see a check for offset+len < 0, you start wondering
-what are you missing... only to find you miss nothing and the check is
-pointless. So yes, please send a version without the pointless check.
+Doesn't sound right, can we instead make building lib/dim/net_dim.c
+dependent on CONFIG_NET? Untested but I'm thinking something like:
 
-								Honza
+diff --git a/lib/dim/Makefile b/lib/dim/Makefile
+index c4cc4026c451..c02c306e2975 100644
+--- a/lib/dim/Makefile
++++ b/lib/dim/Makefile
+@@ -4,4 +4,8 @@
+ 
+ obj-$(CONFIG_DIMLIB) += dimlib.o
+ 
+-dimlib-objs := dim.o net_dim.o rdma_dim.o
++dimlib-objs := dim.o rdma_dim.o
++
++ifeq ($(CONFIG_NET),y)
++dimlib-objs += net_dim.o
++endif
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
