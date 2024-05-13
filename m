@@ -1,162 +1,154 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A07145FE7
-	for <llvm@lists.linux.dev>; Mon, 13 May 2024 03:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587BD146001
+	for <llvm@lists.linux.dev>; Mon, 13 May 2024 05:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715572226; cv=none; b=AYxwJQ9zAxlf1PX8+GLfrEfNS/AgNsQS4pYT2Bpp28Q6bC+CQSIxZ+z/Tfd7Mx7jmDCK+s1ATEuWM3gDJ686qpWUrfyRzhj7VWppiMD1GXVVuEkV6Lx1qsVFs2+HyzgiQ54Zikpf04df2situXtOsTLMB0nleDC1R4kiCKCFXjU=
+	t=1715576856; cv=none; b=TJCmVw7y0B+sEDmFXMyCLzOM7jCjTzOiIouivBx6Pq+PFyJ29tr7rip33onWCz2DQkDEUIS2HXwb2T9xFFFIzMc5cDX1Cb1l0xe6OYpFGTVjgrl52swro5K8KBRY0t60siZhoJsu21utJrw1gXjPo9q8tujnCu9aoPshxvmkops=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715572226; c=relaxed/simple;
-	bh=xdrFYFPTiMmVrYRC/INRLixr9F7jA1nSe/yXxbJ21Ig=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MTMCotTNihwuSpKCL4w/C7yummnr/MeE/dY54nVKB7zd/O5eRbxBW6Mi5+02biflKhRsBeFTjqPgmE8DmYfWaBnbjbpi9A8FpqaftuA8mzZVCaXst+5ggwBncdY8vhDQ7gE1liGdQGvPe+gKRY3XavfVQVKns3xah8deklTXVlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VRB5GQPn; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VRB5GQPn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715572223;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+a6Kx1JkVVSW05bM4mB//ZlKmP6MWx9zyiuZqywMM/U=;
-	b=VRB5GQPnvrMm6tpP4Pc4b44HHYt4YC2tjtWPEwKnc8i+0Uo44HK9azKNR59Y41pKiEl8CF
-	z9/MVbk3zcqvbwE+14gSWywLCNbZszO0j6bYJlJprWHOxVvbQiOLNA8Cubl55hqUNripxv
-	YqvKIHWx5YqVfvsWByFd/tlYmnbeq7o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-118-zZc40dykOli9a9IPN9ynGw-1; Sun, 12 May 2024 23:50:21 -0400
-X-MC-Unique: zZc40dykOli9a9IPN9ynGw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D2FA101A52C
-	for <llvm@lists.linux.dev>; Mon, 13 May 2024 03:50:21 +0000 (UTC)
-Received: from [172.64.13.41] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3BB34C15BB1;
-	Mon, 13 May 2024 03:50:21 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 8 of 204): Test report for master
- (6.9.0, mainline.kernel.org-clang, a38297e3)
-Date: Mon, 13 May 2024 03:50:21 -0000
-To: bhe@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com,
- yiyan@redhat.com, xiawu@redhat.com
+	s=arc-20240116; t=1715576856; c=relaxed/simple;
+	bh=6r5mD4vVz5Goxgvkp3evVY3tElzQ0VE3+3nkBb71T3A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bRIene/zcLfK3DQJdw5e1RKumAPhjcOEGtFvSqVYYTqNbSwrUFSuOU0L5ZPi+RFHKFNtobFnAAMUuyr9bkbYLfsfGoFo1S6kv+YcgwgVi4tc2k+FDoKxCA576WPRu62PkLf3AYjOPpT0IcRKlzTHcW4i1+ikLZhtH2/XEr2p2WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a59cf8140d0so891024366b.3
+        for <llvm@lists.linux.dev>; Sun, 12 May 2024 22:07:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715576854; x=1716181654;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uw/16UOIp0Zk76kJXiDb5d3RcEbZkRCtaVDI7Jh3cdw=;
+        b=KlxcnIgP47lV6qRBd1Zz4ZFxqcxcztCeR0V4IWdNDf51sxapd9zyL5nTkd04CHlB2u
+         CSiuc1cQk8UgDVVC+Pv2qImFiafO5us3RGod/Bf7FCD/FJ5/xNdU3YYOHOSCXy5gRDPO
+         UHJhIZncKPRGb3YdfiwmdVCB3i0It8wzea8yMmxfUknBCUL4CBumEcsBx5Au2hQGWDdy
+         HBEwB4DSxpXjoKfykgstD61uixja8iyCcR02+HgLPXidC4cCvY4073gTlw0wcYRieZXY
+         FYcU04PNfsUZpqdHlrXC26olxNpsn6f4qncVS15XnUY/ozDB/QDUyHtF9VE/oKN0dhl3
+         PAfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWcvtk+e3GJm/7Vc1V/5icbQWKvVm0XzLSvlpOGiUvbNjz8JYWFv1H/1FkR9HOD5T5ZU86TpBYpS/HSZ9a8ao+pGFoYIQ==
+X-Gm-Message-State: AOJu0YywlvGmKd6sKv4/I9Nf2QK/dZ7Ny/rt6+Azcv69bP6o6d8vELvF
+	wLPsoSZsOup41hq+GLz6YNzF5OVQFHh+P8uhHtn0vlTV5FpYljUx
+X-Google-Smtp-Source: AGHT+IENHCS3Ft5fcZCQxxgOpml3eK+icbv1b8X/ToR/ICZr4BzISIeY6NFHrchbbAbO4jEb/FJYcw==
+X-Received: by 2002:a17:906:7f8a:b0:a59:b6a8:4d7a with SMTP id a640c23a62f3a-a5a2d5d3d22mr566370166b.43.1715576853469;
+        Sun, 12 May 2024 22:07:33 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:69? ([2a0b:e7c0:0:107::aaaa:69])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781d787sm550149966b.11.2024.05.12.22.07.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 May 2024 22:07:32 -0700 (PDT)
+Message-ID: <d11dacfa-5925-4040-b60b-02ab731d5f1a@kernel.org>
+Date: Mon, 13 May 2024 07:07:31 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <85138.124051223502101589@us-mta-118.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] tty: rfcomm: prefer struct_size over open coded
+ arithmetic
+To: Erick Archer <erick.archer@outlook.com>,
+ Marcel Holtmann <marcel@holtmann.org>,
+ Johan Hedberg <johan.hedberg@gmail.com>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Kees Cook <keescook@chromium.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <AS8PR02MB7237262C62B054FABD7229168BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <AS8PR02MB7237262C62B054FABD7229168BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 12. 05. 24, 13:17, Erick Archer wrote:
+> This is an effort to get rid of all multiplications from allocation
+> functions in order to prevent integer overflows [1][2].
+> 
+> As the "dl" variable is a pointer to "struct rfcomm_dev_list_req" and
+> this structure ends in a flexible array:
+...
+> --- a/include/net/bluetooth/rfcomm.h
+> +++ b/include/net/bluetooth/rfcomm.h
+...
+> @@ -528,12 +527,12 @@ static int rfcomm_get_dev_list(void __user *arg)
+>   	list_for_each_entry(dev, &rfcomm_dev_list, list) {
+>   		if (!tty_port_get(&dev->port))
+>   			continue;
+> -		(di + n)->id      = dev->id;
+> -		(di + n)->flags   = dev->flags;
+> -		(di + n)->state   = dev->dlc->state;
+> -		(di + n)->channel = dev->channel;
+> -		bacpy(&(di + n)->src, &dev->src);
+> -		bacpy(&(di + n)->dst, &dev->dst);
+> +		di[n].id      = dev->id;
+> +		di[n].flags   = dev->flags;
+> +		di[n].state   = dev->dlc->state;
+> +		di[n].channel = dev->channel;
+> +		bacpy(&di[n].src, &dev->src);
+> +		bacpy(&di[n].dst, &dev->dst);
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+This does not relate much to "prefer struct_size over open coded 
+arithmetic". It should have been in a separate patch.
 
+Other than that, LGTM.
 
-Kernel information:
-    Commit message: Linux 6.9
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1287566399
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        kdump - kexec-file-load
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1287566399-x86_64-kernel_upt_26
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /kdump/kexec-file-load
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1287566399-x86_64-kernel_upt_37
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-Tests that were not ran because of internal issues:=20
-    kselftests upstream - bpf_test_progs [x86_64 (debug)]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64 (debug)]
-    SELinux Custom Module Setup [ppc64le]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+thanks,
+-- 
+js
+suse labs
 
