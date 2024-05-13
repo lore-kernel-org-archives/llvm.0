@@ -1,154 +1,160 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587BD146001
-	for <llvm@lists.linux.dev>; Mon, 13 May 2024 05:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606C52D05E;
+	Mon, 13 May 2024 05:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715576856; cv=none; b=TJCmVw7y0B+sEDmFXMyCLzOM7jCjTzOiIouivBx6Pq+PFyJ29tr7rip33onWCz2DQkDEUIS2HXwb2T9xFFFIzMc5cDX1Cb1l0xe6OYpFGTVjgrl52swro5K8KBRY0t60siZhoJsu21utJrw1gXjPo9q8tujnCu9aoPshxvmkops=
+	t=1715577362; cv=none; b=b8t3BVXYdSFzkDAmymCC2b6Fzo3TBZ7Stiz5B9Fvh051ZstGOsPwGnjD0MzPmmPeNZtfwKf4IXH1deANDUhgJM3K4wyfGofU6OnGRBb0VPg/gD12qC7HxRXoCXr5BMXQNFDsBTlXJrF/oUAj21wMlGjQfYr1zczGbwV94LwYD2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715576856; c=relaxed/simple;
-	bh=6r5mD4vVz5Goxgvkp3evVY3tElzQ0VE3+3nkBb71T3A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bRIene/zcLfK3DQJdw5e1RKumAPhjcOEGtFvSqVYYTqNbSwrUFSuOU0L5ZPi+RFHKFNtobFnAAMUuyr9bkbYLfsfGoFo1S6kv+YcgwgVi4tc2k+FDoKxCA576WPRu62PkLf3AYjOPpT0IcRKlzTHcW4i1+ikLZhtH2/XEr2p2WM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a59cf8140d0so891024366b.3
-        for <llvm@lists.linux.dev>; Sun, 12 May 2024 22:07:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715576854; x=1716181654;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uw/16UOIp0Zk76kJXiDb5d3RcEbZkRCtaVDI7Jh3cdw=;
-        b=KlxcnIgP47lV6qRBd1Zz4ZFxqcxcztCeR0V4IWdNDf51sxapd9zyL5nTkd04CHlB2u
-         CSiuc1cQk8UgDVVC+Pv2qImFiafO5us3RGod/Bf7FCD/FJ5/xNdU3YYOHOSCXy5gRDPO
-         UHJhIZncKPRGb3YdfiwmdVCB3i0It8wzea8yMmxfUknBCUL4CBumEcsBx5Au2hQGWDdy
-         HBEwB4DSxpXjoKfykgstD61uixja8iyCcR02+HgLPXidC4cCvY4073gTlw0wcYRieZXY
-         FYcU04PNfsUZpqdHlrXC26olxNpsn6f4qncVS15XnUY/ozDB/QDUyHtF9VE/oKN0dhl3
-         PAfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcvtk+e3GJm/7Vc1V/5icbQWKvVm0XzLSvlpOGiUvbNjz8JYWFv1H/1FkR9HOD5T5ZU86TpBYpS/HSZ9a8ao+pGFoYIQ==
-X-Gm-Message-State: AOJu0YywlvGmKd6sKv4/I9Nf2QK/dZ7Ny/rt6+Azcv69bP6o6d8vELvF
-	wLPsoSZsOup41hq+GLz6YNzF5OVQFHh+P8uhHtn0vlTV5FpYljUx
-X-Google-Smtp-Source: AGHT+IENHCS3Ft5fcZCQxxgOpml3eK+icbv1b8X/ToR/ICZr4BzISIeY6NFHrchbbAbO4jEb/FJYcw==
-X-Received: by 2002:a17:906:7f8a:b0:a59:b6a8:4d7a with SMTP id a640c23a62f3a-a5a2d5d3d22mr566370166b.43.1715576853469;
-        Sun, 12 May 2024 22:07:33 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:69? ([2a0b:e7c0:0:107::aaaa:69])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781d787sm550149966b.11.2024.05.12.22.07.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 May 2024 22:07:32 -0700 (PDT)
-Message-ID: <d11dacfa-5925-4040-b60b-02ab731d5f1a@kernel.org>
-Date: Mon, 13 May 2024 07:07:31 +0200
+	s=arc-20240116; t=1715577362; c=relaxed/simple;
+	bh=/TKp7mIly9nvaDtT0R+Tuh0OoJbNpdPfw2AGy7X781o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uz8mie0qHRYFk0Yf6SIHgfhCM5rfrrZJJW0RawKLVPrvnx4fl2g9xf1uNvJ309EoNTFe1o6J3JjXPLaiuLZKGCXfwLWAVAnjAZBxotr9eGHFZGj5v5Qjz0W9VsFcaFWwY9jbW9rWKOg/UC1KyinqBWWCbcdeKUDv5sGAa1jyZDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HLwJnZKT; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLwJnZKT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715577360; x=1747113360;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/TKp7mIly9nvaDtT0R+Tuh0OoJbNpdPfw2AGy7X781o=;
+  b=HLwJnZKToUZbK2P9txgRfrmCeiIBMZlb/ZAa0RZCoai7pyEndTRhOWmW
+   A4X0iR4ZgExbUjMP1kMJQXN/H4cs56uDAug59T7gLKAIoGepXt24FEBAa
+   USkv3b82BI3EdlTgb2FZBqpfXtDjZv/lWSy70CKTcsupYZdMh5Ja8iMtx
+   Ne5vhSoDHSOnrzPGAYs0+SasmLReHJk3CIc5GHz2aVFpJOn1MDfCemdV1
+   ptb7LHmpW5BRIM8ZSD4yJHUhi64xTJ+D4zQQF3enmIpEuymRj3jrdELyG
+   ch2t7L3axXFnJJ70ZzVLPvv6k/Cbt1sJUhcqEWXV5oz0SMDExj7KPyuSM
+   g==;
+X-CSE-ConnectionGUID: zaO6SRf1QSKBYC1iKT1eJw==
+X-CSE-MsgGUID: REQWidoQSXSU2CZjgBlcuQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11071"; a="36871359"
+X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
+   d="scan'208";a="36871359"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2024 22:16:00 -0700
+X-CSE-ConnectionGUID: 4moxybXbQX2QBT2L56+O/g==
+X-CSE-MsgGUID: 3YPGGmpIQlqwfw5ji33JsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,157,1712646000"; 
+   d="scan'208";a="53444420"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 12 May 2024 22:15:58 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s6O2W-0009ZN-0y;
+	Mon, 13 May 2024 05:15:56 +0000
+Date: Mon, 13 May 2024 13:15:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC net-next 2/6] net: stmmac: remove pcs_ctrl_ane()
+ method and associated code
+Message-ID: <202405131223.7F8xA20v-lkp@intel.com>
+References: <E1s6C4O-00Ck6O-9D@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] tty: rfcomm: prefer struct_size over open coded
- arithmetic
-To: Erick Archer <erick.archer@outlook.com>,
- Marcel Holtmann <marcel@holtmann.org>,
- Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
-References: <AS8PR02MB7237262C62B054FABD7229168BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <AS8PR02MB7237262C62B054FABD7229168BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1s6C4O-00Ck6O-9D@rmk-PC.armlinux.org.uk>
 
-On 12. 05. 24, 13:17, Erick Archer wrote:
-> This is an effort to get rid of all multiplications from allocation
-> functions in order to prevent integer overflows [1][2].
-> 
-> As the "dl" variable is a pointer to "struct rfcomm_dev_list_req" and
-> this structure ends in a flexible array:
-...
-> --- a/include/net/bluetooth/rfcomm.h
-> +++ b/include/net/bluetooth/rfcomm.h
-...
-> @@ -528,12 +527,12 @@ static int rfcomm_get_dev_list(void __user *arg)
->   	list_for_each_entry(dev, &rfcomm_dev_list, list) {
->   		if (!tty_port_get(&dev->port))
->   			continue;
-> -		(di + n)->id      = dev->id;
-> -		(di + n)->flags   = dev->flags;
-> -		(di + n)->state   = dev->dlc->state;
-> -		(di + n)->channel = dev->channel;
-> -		bacpy(&(di + n)->src, &dev->src);
-> -		bacpy(&(di + n)->dst, &dev->dst);
-> +		di[n].id      = dev->id;
-> +		di[n].flags   = dev->flags;
-> +		di[n].state   = dev->dlc->state;
-> +		di[n].channel = dev->channel;
-> +		bacpy(&di[n].src, &dev->src);
-> +		bacpy(&di[n].dst, &dev->dst);
+Hi Russell,
 
-This does not relate much to "prefer struct_size over open coded 
-arithmetic". It should have been in a separate patch.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Other than that, LGTM.
+[auto build test ERROR on net-next/main]
 
-thanks,
+url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-remove-pcs_ctrl_ane-method-and-associated-code/20240513-003120
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/E1s6C4O-00Ck6O-9D%40rmk-PC.armlinux.org.uk
+patch subject: [PATCH RFC net-next 2/6] net: stmmac: remove pcs_ctrl_ane() method and associated code
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240513/202405131223.7F8xA20v-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405131223.7F8xA20v-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405131223.7F8xA20v-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c:628:3: error: implicit declaration of function 'stmmac_pcs_ctrl_ane' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 0, 0, 0);
+                   ^
+   1 error generated.
+
+
+vim +/stmmac_pcs_ctrl_ane +628 drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+
+a7c30e62d4b895 Vinod Koul          2019-01-21  607  
+981d947bcd382c Sneh Shah           2023-12-12  608  /* On interface toggle MAC registers gets reset.
+981d947bcd382c Sneh Shah           2023-12-12  609   * Configure MAC block for SGMII on ethernet phy link up
+981d947bcd382c Sneh Shah           2023-12-12  610   */
+463120c31c58bb Bartosz Golaszewski 2023-06-19  611  static int ethqos_configure_sgmii(struct qcom_ethqos *ethqos)
+463120c31c58bb Bartosz Golaszewski 2023-06-19  612  {
+a818bd12538c14 Sneh Shah           2024-02-20  613  	struct net_device *dev = platform_get_drvdata(ethqos->pdev);
+a818bd12538c14 Sneh Shah           2024-02-20  614  	struct stmmac_priv *priv = netdev_priv(dev);
+463120c31c58bb Bartosz Golaszewski 2023-06-19  615  	int val;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  616  
+463120c31c58bb Bartosz Golaszewski 2023-06-19  617  	val = readl(ethqos->mac_base + MAC_CTRL_REG);
+463120c31c58bb Bartosz Golaszewski 2023-06-19  618  
+463120c31c58bb Bartosz Golaszewski 2023-06-19  619  	switch (ethqos->speed) {
+a818bd12538c14 Sneh Shah           2024-02-20  620  	case SPEED_2500:
+a818bd12538c14 Sneh Shah           2024-02-20  621  		val &= ~ETHQOS_MAC_CTRL_PORT_SEL;
+a818bd12538c14 Sneh Shah           2024-02-20  622  		rgmii_updatel(ethqos, RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
+a818bd12538c14 Sneh Shah           2024-02-20  623  			      RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
+a818bd12538c14 Sneh Shah           2024-02-20  624  			      RGMII_IO_MACRO_CONFIG2);
+a818bd12538c14 Sneh Shah           2024-02-20  625  		if (ethqos->serdes_speed != SPEED_2500)
+a818bd12538c14 Sneh Shah           2024-02-20  626  			phy_set_speed(ethqos->serdes_phy, SPEED_2500);
+a818bd12538c14 Sneh Shah           2024-02-20  627  		ethqos->serdes_speed = SPEED_2500;
+a818bd12538c14 Sneh Shah           2024-02-20 @628  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 0, 0, 0);
+a818bd12538c14 Sneh Shah           2024-02-20  629  		break;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  630  	case SPEED_1000:
+463120c31c58bb Bartosz Golaszewski 2023-06-19  631  		val &= ~ETHQOS_MAC_CTRL_PORT_SEL;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  632  		rgmii_updatel(ethqos, RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
+463120c31c58bb Bartosz Golaszewski 2023-06-19  633  			      RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
+463120c31c58bb Bartosz Golaszewski 2023-06-19  634  			      RGMII_IO_MACRO_CONFIG2);
+a818bd12538c14 Sneh Shah           2024-02-20  635  		if (ethqos->serdes_speed != SPEED_1000)
+a818bd12538c14 Sneh Shah           2024-02-20  636  			phy_set_speed(ethqos->serdes_phy, SPEED_1000);
+a818bd12538c14 Sneh Shah           2024-02-20  637  		ethqos->serdes_speed = SPEED_1000;
+a818bd12538c14 Sneh Shah           2024-02-20  638  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
+463120c31c58bb Bartosz Golaszewski 2023-06-19  639  		break;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  640  	case SPEED_100:
+463120c31c58bb Bartosz Golaszewski 2023-06-19  641  		val |= ETHQOS_MAC_CTRL_PORT_SEL | ETHQOS_MAC_CTRL_SPEED_MODE;
+a818bd12538c14 Sneh Shah           2024-02-20  642  		if (ethqos->serdes_speed != SPEED_1000)
+a818bd12538c14 Sneh Shah           2024-02-20  643  			phy_set_speed(ethqos->serdes_phy, SPEED_1000);
+a818bd12538c14 Sneh Shah           2024-02-20  644  		ethqos->serdes_speed = SPEED_1000;
+a818bd12538c14 Sneh Shah           2024-02-20  645  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
+463120c31c58bb Bartosz Golaszewski 2023-06-19  646  		break;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  647  	case SPEED_10:
+463120c31c58bb Bartosz Golaszewski 2023-06-19  648  		val |= ETHQOS_MAC_CTRL_PORT_SEL;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  649  		val &= ~ETHQOS_MAC_CTRL_SPEED_MODE;
+981d947bcd382c Sneh Shah           2023-12-12  650  		rgmii_updatel(ethqos, RGMII_CONFIG_SGMII_CLK_DVDR,
+981d947bcd382c Sneh Shah           2023-12-12  651  			      FIELD_PREP(RGMII_CONFIG_SGMII_CLK_DVDR,
+981d947bcd382c Sneh Shah           2023-12-12  652  					 SGMII_10M_RX_CLK_DVDR),
+981d947bcd382c Sneh Shah           2023-12-12  653  			      RGMII_IO_MACRO_CONFIG);
+a818bd12538c14 Sneh Shah           2024-02-20  654  		if (ethqos->serdes_speed != SPEED_1000)
+a818bd12538c14 Sneh Shah           2024-02-20  655  			phy_set_speed(ethqos->serdes_phy, ethqos->speed);
+a818bd12538c14 Sneh Shah           2024-02-20  656  		ethqos->serdes_speed = SPEED_1000;
+a818bd12538c14 Sneh Shah           2024-02-20  657  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
+463120c31c58bb Bartosz Golaszewski 2023-06-19  658  		break;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  659  	}
+463120c31c58bb Bartosz Golaszewski 2023-06-19  660  
+463120c31c58bb Bartosz Golaszewski 2023-06-19  661  	writel(val, ethqos->mac_base + MAC_CTRL_REG);
+463120c31c58bb Bartosz Golaszewski 2023-06-19  662  
+463120c31c58bb Bartosz Golaszewski 2023-06-19  663  	return val;
+463120c31c58bb Bartosz Golaszewski 2023-06-19  664  }
+463120c31c58bb Bartosz Golaszewski 2023-06-19  665  
+
 -- 
-js
-suse labs
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
