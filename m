@@ -1,64 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9353290F;
-	Mon, 13 May 2024 15:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D5F6AC0;
+	Mon, 13 May 2024 15:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715613466; cv=none; b=ZGiyXCbRrsIQapJ/6jKaTeAJxYGou9OodpcQ7DWvTtO/SISXteRu0FaIPM+ll0QyK+V5I0KLf57x6FsiBnNCTlWggFstnGmDZBQ2oOnV8C9fzUhMY/OXy87LhvD69QiI1A0bbAdfxtJyNzfA3iYHl5RW263PyxWQC2w5GyWk+PE=
+	t=1715613535; cv=none; b=VsH0DUjXk+wqrE06Haz7SM9xEjmJ5eUEUii7WnR+zzFsxds5AYQ0g3/9Vv9xAo1D33ohmzB3X8Ae9+zFw3Y04hFRU2bJH7hoUDboqdHiPB+NnUCaWbX0d16qgzxiFhL/pCSGcnidNgBsjqT6Mhw1exnWtN/Z8/BZd80gZltyj80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715613466; c=relaxed/simple;
-	bh=RzGGkG00ZVn/+P8tUKwMnBvs/ytlMn9kwHiGsnUs1Mo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hikNus/FKlIV6kIEgTK89tIaIxD7XPgGihjA4GICKDaAXmXXG4fSEfwgV+6Jdr7pYLmWSkp/NPVTicx1MH0xxQyNDONlBMSw+qUT+5MVTMwTMnkjM8cVoTSNpvQYW1yQZcraWfldFc6NIIXIT46NQbglox1+rgEN34iQ+LO08PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K/cLTsvd; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1715613535; c=relaxed/simple;
+	bh=lik5r2c+wqkSKBDC45HAKwNAuBOJg6Gkv8/sSAPw+2U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dX/dvpku4G/DaV1g6VWNbkHbdkZX3nc//Xcb15+tJTukso4+aaMxJZ/kw7lSqro73v/XkspYH9CA1bZidKzREKeuiasqDdIc/bvqb/7N6TG+1P7Bu+72LqB4+bxVjVLH2Gg3hOGQlQ8nxNJ+kivzCHbWFUV9RmdakVomi2HoDzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PSz/rpLJ; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K/cLTsvd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PSz/rpLJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715613464; x=1747149464;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RzGGkG00ZVn/+P8tUKwMnBvs/ytlMn9kwHiGsnUs1Mo=;
-  b=K/cLTsvd+XEJuN+sA3VHdJZPMC5IEtpXMaev37RKm9OYnN+3ejd8Qjcs
-   BPv+cc7t/XP0+mDJUIpbvzYOuwbXCdLedyOn3r5rN//knON19DChCrjhp
-   bmT//4RPJK02tHavPs48x2uRkdu3CdFR/quUgd4/RqpxVGLFuIBqwwxip
-   WMd3bELz90RLA1pq+7UjB7ctRYCjQfVY+jnFGqpZkq4BvFBn5lfe0wWIg
-   buGPqc5Cg7Wt87ysYxKkfHuw/i4bEV2hTqpw6jXcEyAmBRTxYLHAU4gIW
-   dwHF3mcntHIpLfiUL9vndxaK/cHNtjpiWezrAcoCfYrbW1ccqSo5afz8j
-   w==;
-X-CSE-ConnectionGUID: 1JF7vafyQDOUoc0eJCVFiQ==
-X-CSE-MsgGUID: uPey1lEcTei6/KjghHG8sw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="11499953"
+  t=1715613534; x=1747149534;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lik5r2c+wqkSKBDC45HAKwNAuBOJg6Gkv8/sSAPw+2U=;
+  b=PSz/rpLJ2sX0qzdOjHDdeAyrP0yfQ29IOAGLnTCWjY401Wv0uNyNJ6Fh
+   78sPe1bsthAs9bQeh6SytJ1yEwuyGwnQ0xqI+SlPkjBmqmvBNu11TBeQS
+   JaE8Ad6K038pwQ33cANSljyxA3g7keAN6HlT8xLCtX6mMGjRmBJExRb8/
+   lGLPLFIsAxN7+sXGrwEzfOgnA09HbmVh30wqo2sJqfjPyj/SBLfxk5WPe
+   QToUi+eQB0Z/5gudso5S4TlK72GIuTaVEJvROxz3uW/ljJwuPZ8Ml+mtS
+   9tc9Z/RTT2T1JiHF7Qof9vqKGOAVcaAcWvl4gh0Bl7WmAIoA/ikgmXOpX
+   Q==;
+X-CSE-ConnectionGUID: qBHESlZbTXSQTf4cJA7EfQ==
+X-CSE-MsgGUID: k/y7v7NxS3equ73vqQvoQw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="15373286"
 X-IronPort-AV: E=Sophos;i="6.08,158,1712646000"; 
-   d="scan'208";a="11499953"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2024 08:17:43 -0700
-X-CSE-ConnectionGUID: 2fSb6UYER8KiQbhUtFCG8Q==
-X-CSE-MsgGUID: IeQwQqq3S+KEIOkkju+Emg==
+   d="scan'208";a="15373286"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2024 08:17:43 -0700
+X-CSE-ConnectionGUID: atJ33oOBRY2JHY8/OHAPHw==
+X-CSE-MsgGUID: p5QPv+oVTbaTRlPYYZtGlA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,158,1712646000"; 
-   d="scan'208";a="30404049"
+   d="scan'208";a="35240081"
 Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 13 May 2024 08:17:40 -0700
+  by orviesa004.jf.intel.com with ESMTP; 13 May 2024 08:17:41 -0700
 Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s6XQn-000APV-3A;
-	Mon, 13 May 2024 15:17:37 +0000
-Date: Mon, 13 May 2024 23:16:46 +0800
+	id 1s6XQo-000APX-01;
+	Mon, 13 May 2024 15:17:38 +0000
+Date: Mon, 13 May 2024 23:16:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neilb@suse.de>, Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>, Dai Ngo <Dai.Ngo@oracle.com>,
-	Olga Kornievskaia <kolga@netapp.com>, Tom Talpey <tom@talpey.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	linux-nfs@vger.kernel.org
-Subject: Re: [PATCH] nfsd: change nfsd_create_setattr() to call
- nfsd_setattr() unconditionally
-Message-ID: <202405132241.FduJDwA8-lkp@intel.com>
-References: <171557896893.4857.2572536847924540881@noble.neil.brown.name>
+To: SeongJae Park <sj@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sj:damon/next 29/33] mm/damon/acma.c:154:22: error: too few
+ arguments to function call, expected 6, have 5
+Message-ID: <202405132331.x5eUBFEP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,106 +61,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <171557896893.4857.2572536847924540881@noble.neil.brown.name>
 
-Hi NeilBrown,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on next-20240510]
-[cannot apply to linus/master v6.9 v6.9-rc7 v6.9-rc6 v6.9]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/nfsd-change-nfsd_create_setattr-to-call-nfsd_setattr-unconditionally/20240513-134428
-base:   next-20240510
-patch link:    https://lore.kernel.org/r/171557896893.4857.2572536847924540881%40noble.neil.brown.name
-patch subject: [PATCH] nfsd: change nfsd_create_setattr() to call nfsd_setattr() unconditionally
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240513/202405132241.FduJDwA8-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+head:   8babfaa14bfc8f45e2c3d093952ab737fd0db1d5
+commit: 1465b25a340a8aa09800ddcf3d4aef185ea6c84c [29/33] mm/damon: add the initial part of access/contiguity-aware memory auto-scaling module
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240513/202405132331.x5eUBFEP-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405132241.FduJDwA8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405132331.x5eUBFEP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405132241.FduJDwA8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405132331.x5eUBFEP-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/nfsd/vfs.c:35:
-   In file included from fs/nfsd/xdr3.h:11:
-   In file included from fs/nfsd/xdr.h:8:
-   In file included from fs/nfsd/nfsd.h:15:
-   In file included from include/linux/nfs.h:11:
-   In file included from include/linux/sunrpc/msg_prot.h:205:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
+   In file included from mm/damon/acma.c:19:
+   In file included from include/linux/damon.h:11:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      548 |         val = __raw_readb(PCI_IOBASE + addr);
          |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from fs/nfsd/vfs.c:35:
-   In file included from fs/nfsd/xdr3.h:11:
-   In file included from fs/nfsd/xdr.h:8:
-   In file included from fs/nfsd/nfsd.h:15:
-   In file included from include/linux/nfs.h:11:
-   In file included from include/linux/sunrpc/msg_prot.h:205:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/damon/acma.c:19:
+   In file included from include/linux/damon.h:11:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from fs/nfsd/vfs.c:35:
-   In file included from fs/nfsd/xdr3.h:11:
-   In file included from fs/nfsd/xdr.h:8:
-   In file included from fs/nfsd/nfsd.h:15:
-   In file included from include/linux/nfs.h:11:
-   In file included from include/linux/sunrpc/msg_prot.h:205:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/damon/acma.c:19:
+   In file included from include/linux/damon.h:11:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      585 |         __raw_writeb(value, PCI_IOBASE + addr);
          |                             ~~~~~~~~~~ ^
@@ -176,219 +136,121 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> fs/nfsd/vfs.c:502:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     502 |         if (!(iap->ia_valid ||
-         |             ^~~~~~~~~~~~~~~~~~
-     503 |               (attr->na_seclabel && attr->na_seclabel->len) ||
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     504 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl) ||
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     505 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     506 |                !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfsd/vfs.c:616:9: note: uninitialized use occurs here
-     616 |         return err != 0 ? err : nfserrno(host_err);
-         |                ^~~
-   fs/nfsd/vfs.c:502:2: note: remove the 'if' if its condition is always false
-     502 |         if (!(iap->ia_valid ||
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-     503 |               (attr->na_seclabel && attr->na_seclabel->len) ||
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     504 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl) ||
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     505 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     506 |                !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     507 |                 /* Don't bother with inode_lock() */
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     508 |                 goto out;
-         |                 ~~~~~~~~
-   fs/nfsd/vfs.c:496:13: note: initialize the variable 'err' to silence this warning
-     496 |         __be32          err;
-         |                            ^
-         |                             = 0
->> fs/nfsd/vfs.c:506:55: warning: variable 'inode' is uninitialized when used here [-Wuninitialized]
-     506 |                !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
-         |                                                              ^~~~~
-   include/uapi/linux/stat.h:23:23: note: expanded from macro 'S_ISDIR'
-      23 | #define S_ISDIR(m)      (((m) & S_IFMT) == S_IFDIR)
-         |                            ^
-   fs/nfsd/vfs.c:492:21: note: initialize the variable 'inode' to silence this warning
-     492 |         struct inode    *inode;
-         |                               ^
-         |                                = NULL
-   19 warnings generated.
+   In file included from mm/damon/acma.c:19:
+   In file included from include/linux/damon.h:11:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> mm/damon/acma.c:154:22: error: too few arguments to function call, expected 6, have 5
+     146 |         return damon_new_scheme(
+         |                ~~~~~~~~~~~~~~~~
+     147 |                         pattern,
+     148 |                         action,
+     149 |                         /* work for every second */
+     150 |                         1000000,
+     151 |                         /* under the quota. */
+     152 |                         &quota,
+     153 |                         /* (De)activate this according to the watermarks. */
+     154 |                         &damon_acma_wmarks);
+         |                                           ^
+   include/linux/damon.h:770:15: note: 'damon_new_scheme' declared here
+     770 | struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
+         |               ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     771 |                         enum damos_action action,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+     772 |                         unsigned long apply_interval_us,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     773 |                         struct damos_quota *quota,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     774 |                         struct damos_watermarks *wmarks,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     775 |                         int target_nid);
+         |                         ~~~~~~~~~~~~~~
+>> mm/damon/acma.c:169:3: error: must use 'enum' tag to refer to type 'damos_quota_goal_metric'
+     169 |                 damos_quota_goal_metric goal_metric)
+         |                 ^
+         |                 enum 
+>> mm/damon/acma.c:173:2: error: use of undeclared identifier 'goal'
+     173 |         goal = damos_new_quota_goal(goal_metric, quota_mem_pressure_us);
+         |         ^
+   mm/damon/acma.c:174:7: error: use of undeclared identifier 'goal'
+     174 |         if (!goal)
+         |              ^
+   mm/damon/acma.c:176:39: error: use of undeclared identifier 'goal'
+     176 |         damos_add_quota_goal(&scheme->quota, goal);
+         |                                              ^
+   mm/damon/acma.c:206:27: warning: unused variable 'goal' [-Wunused-variable]
+     206 |         struct damos_quota_goal *goal;
+         |                                  ^~~~
+   mm/damon/acma.c:303:8: error: use of undeclared identifier 'DAMOS_LRU_RECLAIM'; did you mean 'DAMOS_LRU_DEPRIO'?
+     303 |                 case DAMOS_LRU_RECLAIM:
+         |                      ^~~~~~~~~~~~~~~~~
+         |                      DAMOS_LRU_DEPRIO
+   include/linux/damon.h:131:2: note: 'DAMOS_LRU_DEPRIO' declared here
+     131 |         DAMOS_LRU_DEPRIO,
+         |         ^
+   mm/damon/acma.c:314:1: error: function definition is not allowed here
+     314 | {
+         | ^
+   mm/damon/acma.c:319:1: error: function definition is not allowed here
+     319 | {
+         | ^
+   mm/damon/acma.c:335:13: error: use of undeclared identifier 'damon_acma_init'
+     335 | module_init(damon_acma_init);
+         |             ^
+   mm/damon/acma.c:335:30: error: expected '}'
+     335 | module_init(damon_acma_init);
+         |                              ^
+   mm/damon/acma.c:297:1: note: to match this '{'
+     297 | {
+         | ^
+   8 warnings and 10 errors generated.
 
 
-vim +502 fs/nfsd/vfs.c
+vim +154 mm/damon/acma.c
 
-   472	
-   473	/**
-   474	 * nfsd_setattr - Set various file attributes.
-   475	 * @rqstp: controlling RPC transaction
-   476	 * @fhp: filehandle of target
-   477	 * @attr: attributes to set
-   478	 * @guardtime: do not act if ctime.tv_sec does not match this timestamp
-   479	 *
-   480	 * This call may adjust the contents of @attr (in particular, this
-   481	 * call may change the bits in the na_iattr.ia_valid field).
-   482	 *
-   483	 * Returns nfs_ok on success, otherwise an NFS status code is
-   484	 * returned. Caller must release @fhp by calling fh_put in either
-   485	 * case.
-   486	 */
-   487	__be32
-   488	nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *fhp,
-   489		     struct nfsd_attrs *attr, const struct timespec64 *guardtime)
-   490	{
-   491		struct dentry	*dentry;
-   492		struct inode	*inode;
-   493		struct iattr	*iap = attr->na_iattr;
-   494		int		accmode = NFSD_MAY_SATTR;
-   495		umode_t		ftype = 0;
-   496		__be32		err;
-   497		int		host_err = 0;
-   498		bool		get_write_count;
-   499		bool		size_change = (iap->ia_valid & ATTR_SIZE);
-   500		int		retries;
-   501	
- > 502		if (!(iap->ia_valid ||
-   503		      (attr->na_seclabel && attr->na_seclabel->len) ||
-   504		      (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl) ||
-   505		      (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
- > 506		       !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
-   507			/* Don't bother with inode_lock() */
-   508			goto out;
-   509	
-   510		if (iap->ia_valid & ATTR_SIZE) {
-   511			accmode |= NFSD_MAY_WRITE|NFSD_MAY_OWNER_OVERRIDE;
-   512			ftype = S_IFREG;
-   513		}
-   514	
-   515		/*
-   516		 * If utimes(2) and friends are called with times not NULL, we should
-   517		 * not set NFSD_MAY_WRITE bit. Otherwise fh_verify->nfsd_permission
-   518		 * will return EACCES, when the caller's effective UID does not match
-   519		 * the owner of the file, and the caller is not privileged. In this
-   520		 * situation, we should return EPERM(notify_change will return this).
-   521		 */
-   522		if (iap->ia_valid & (ATTR_ATIME | ATTR_MTIME)) {
-   523			accmode |= NFSD_MAY_OWNER_OVERRIDE;
-   524			if (!(iap->ia_valid & (ATTR_ATIME_SET | ATTR_MTIME_SET)))
-   525				accmode |= NFSD_MAY_WRITE;
-   526		}
-   527	
-   528		/* Callers that do fh_verify should do the fh_want_write: */
-   529		get_write_count = !fhp->fh_dentry;
-   530	
-   531		/* Get inode */
-   532		err = fh_verify(rqstp, fhp, ftype, accmode);
-   533		if (err)
-   534			return err;
-   535		if (get_write_count) {
-   536			host_err = fh_want_write(fhp);
-   537			if (host_err)
-   538				goto out;
-   539		}
-   540	
-   541		dentry = fhp->fh_dentry;
-   542		inode = d_inode(dentry);
-   543	
-   544		nfsd_sanitize_attrs(inode, iap);
-   545	
-   546		/*
-   547		 * The size case is special, it changes the file in addition to the
-   548		 * attributes, and file systems don't expect it to be mixed with
-   549		 * "random" attribute changes.  We thus split out the size change
-   550		 * into a separate call to ->setattr, and do the rest as a separate
-   551		 * setattr call.
-   552		 */
-   553		if (size_change) {
-   554			err = nfsd_get_write_access(rqstp, fhp, iap);
-   555			if (err)
-   556				return err;
-   557		}
-   558	
-   559		inode_lock(inode);
-   560		err = fh_fill_pre_attrs(fhp);
-   561		if (err)
-   562			goto out_unlock;
-   563	
-   564		if (guardtime) {
-   565			struct timespec64 ctime = inode_get_ctime(inode);
-   566			if ((u32)guardtime->tv_sec != (u32)ctime.tv_sec ||
-   567			    guardtime->tv_nsec != ctime.tv_nsec) {
-   568				err = nfserr_notsync;
-   569				goto out_fill_attrs;
-   570			}
-   571		}
-   572	
-   573		for (retries = 1;;) {
-   574			struct iattr attrs;
-   575	
-   576			/*
-   577			 * notify_change() can alter its iattr argument, making
-   578			 * @iap unsuitable for submission multiple times. Make a
-   579			 * copy for every loop iteration.
-   580			 */
-   581			attrs = *iap;
-   582			host_err = __nfsd_setattr(dentry, &attrs);
-   583			if (host_err != -EAGAIN || !retries--)
-   584				break;
-   585			if (!nfsd_wait_for_delegreturn(rqstp, inode))
-   586				break;
-   587		}
-   588		if (attr->na_seclabel && attr->na_seclabel->len)
-   589			attr->na_labelerr = security_inode_setsecctx(dentry,
-   590				attr->na_seclabel->data, attr->na_seclabel->len);
-   591		if (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl)
-   592			attr->na_aclerr = set_posix_acl(&nop_mnt_idmap,
-   593							dentry, ACL_TYPE_ACCESS,
-   594							attr->na_pacl);
-   595		if (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
-   596		    !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))
-   597			attr->na_aclerr = set_posix_acl(&nop_mnt_idmap,
-   598							dentry, ACL_TYPE_DEFAULT,
-   599							attr->na_dpacl);
-   600	out_fill_attrs:
-   601		/*
-   602		 * RFC 1813 Section 3.3.2 does not mandate that an NFS server
-   603		 * returns wcc_data for SETATTR. Some client implementations
-   604		 * depend on receiving wcc_data, however, to sort out partial
-   605		 * updates (eg., the client requested that size and mode be
-   606		 * modified, but the server changed only the file mode).
-   607		 */
-   608		fh_fill_post_attrs(fhp);
-   609	out_unlock:
-   610		inode_unlock(inode);
-   611		if (size_change)
-   612			put_write_access(inode);
-   613	out:
-   614		if (!host_err)
-   615			host_err = commit_metadata(fhp);
-   616		return err != 0 ? err : nfserrno(host_err);
-   617	}
-   618	
+   140	
+   141	static struct damos *damon_acma_new_scheme(
+   142			struct damos_access_pattern *pattern, enum damos_action action)
+   143	{
+   144		struct damos_quota quota = damon_acma_quota;
+   145	
+   146		return damon_new_scheme(
+   147				pattern,
+   148				action,
+   149				/* work for every second */
+   150				1000000,
+   151				/* under the quota. */
+   152				&quota,
+   153				/* (De)activate this according to the watermarks. */
+ > 154				&damon_acma_wmarks);
+   155	}
+   156	
+   157	static void damon_acma_copy_quota_status(struct damos_quota *dst,
+   158			struct damos_quota *src)
+   159	{
+   160		dst->total_charged_sz = src->total_charged_sz;
+   161		dst->total_charged_ns = src->total_charged_ns;
+   162		dst->charged_sz = src->charged_sz;
+   163		dst->charged_from = src->charged_from;
+   164		dst->charge_target_from = src->charge_target_from;
+   165		dst->charge_addr_from = src->charge_addr_from;
+   166	}
+   167	
+   168	static int damon_acma_set_scheme_quota(struct damos *scheme, struct damos *old,
+ > 169			damos_quota_goal_metric goal_metric)
+   170	{
+   171		if (old)
+   172			damon_acma_copy_quota_status(&scheme->quota, &old->quota);
+ > 173		goal = damos_new_quota_goal(goal_metric, quota_mem_pressure_us);
+   174		if (!goal)
+   175			return -ENOMEM;
+   176		damos_add_quota_goal(&scheme->quota, goal);
+   177		return 0;
+   178	}
+   179	
 
 -- 
 0-DAY CI Kernel Test Service
