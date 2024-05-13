@@ -1,138 +1,395 @@
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988BB4C74;
-	Mon, 13 May 2024 15:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9353290F;
+	Mon, 13 May 2024 15:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715612814; cv=none; b=C1/CT1NSJKoEzoWpxQPbT2bQJRQ11wTwwoKBw1adBdm/BW1VxSM4sBUCtxjFNQXCU7tdzKv89Tp3x8tVuuMLfF+OkWIAjGyRag/hhKFgVxHevicVMCnSNJee+WqRQs5i/6AgfrbdARrJe4DXfIit/Ywy/1UB3VnQ/XT8Ao6/I5A=
+	t=1715613466; cv=none; b=ZGiyXCbRrsIQapJ/6jKaTeAJxYGou9OodpcQ7DWvTtO/SISXteRu0FaIPM+ll0QyK+V5I0KLf57x6FsiBnNCTlWggFstnGmDZBQ2oOnV8C9fzUhMY/OXy87LhvD69QiI1A0bbAdfxtJyNzfA3iYHl5RW263PyxWQC2w5GyWk+PE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715612814; c=relaxed/simple;
-	bh=y609Cc4cYkc6pEsR0kIAiOhx1xZxh+tw/aoYwkH85eA=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=TBmkZoOwUokLn2YSkQ+PKijPcNraWvECi/IjFZbjyXoU+4nygj+nwTgmgtBzEGMXENMGwNpBWt5Ths58iax2ca6m5YfzXec5LcakVXMiaVFiww/rnt9a1TahW0e+c3ftgfI5F+NKfz4xroFfmmyPq8HAW8BO28asSTeQ7OdZ82I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ygnxlBGL; arc=none smtp.client-ip=115.124.30.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1715613466; c=relaxed/simple;
+	bh=RzGGkG00ZVn/+P8tUKwMnBvs/ytlMn9kwHiGsnUs1Mo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hikNus/FKlIV6kIEgTK89tIaIxD7XPgGihjA4GICKDaAXmXXG4fSEfwgV+6Jdr7pYLmWSkp/NPVTicx1MH0xxQyNDONlBMSw+qUT+5MVTMwTMnkjM8cVoTSNpvQYW1yQZcraWfldFc6NIIXIT46NQbglox1+rgEN34iQ+LO08PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K/cLTsvd; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ygnxlBGL"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1715612806; h=Message-ID:Subject:Date:From:To;
-	bh=7MLM12E9blsRkdX77DqwhU+UpqcO9mhaNTsXw3y52Tg=;
-	b=ygnxlBGLKmyp8lSYi8NVkk1vufURUaezThVgzi4y6boS8HScpKqgZN0CYgMjk3Qrv4JN2TG0KfqEzFVRSzWf07qYrV2ER77XPLMyoG1G6iOou2we3xlFepCw1g6V/K/9LfG8YuueBJqdXlVge1jZLN3huv2ASwk2D6ftwoyA/1Q=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033022160150;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0W6SIWe7_1715612804;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0W6SIWe7_1715612804)
-          by smtp.aliyun-inc.com;
-          Mon, 13 May 2024 23:06:45 +0800
-Message-ID: <1715611933.2264705-1-hengqi@linux.alibaba.com>
-Subject: Re: [PATCH net-next v13 2/4] ethtool: provide customized dim profile management
-Date: Mon, 13 May 2024 22:52:13 +0800
-From: Heng Qi <hengqi@linux.alibaba.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
- llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- "David S . Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>,
- Eric Dumazet <edumazet@google.com>,
- Jason  Wang <jasowang@redhat.com>,
- "Michael S . Tsirkin" <mst@redhat.com>,
- Brett  Creeley <bcreeley@amd.com>,
- Ratheesh Kannoth <rkannoth@marvell.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Tal Gilboa <talgi@nvidia.com>,
- Jonathan  Corbet <corbet@lwn.net>,
- linux-doc@vger.kernel.org,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Jiri Pirko <jiri@resnulli.us>,
- Paul  Greenwalt <paul.greenwalt@intel.com>,
- Ahmed Zaki <ahmed.zaki@intel.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>,
- Kory Maincent <kory.maincent@bootlin.com>,
- Andrew Lunn <andrew@lunn.ch>,
- justinstitt@google.com,
- donald.hunter@gmail.com,
- netdev@vger.kernel.org,
- virtualization@lists.linux.dev
-References: <20240509044747.101237-1-hengqi@linux.alibaba.com>
- <20240509044747.101237-3-hengqi@linux.alibaba.com>
- <202405100654.5PbLQXnL-lkp@intel.com>
- <1715531818.6973832-3-hengqi@linux.alibaba.com>
- <20240513072249.7b0513b0@kernel.org>
-In-Reply-To: <20240513072249.7b0513b0@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K/cLTsvd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715613464; x=1747149464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RzGGkG00ZVn/+P8tUKwMnBvs/ytlMn9kwHiGsnUs1Mo=;
+  b=K/cLTsvd+XEJuN+sA3VHdJZPMC5IEtpXMaev37RKm9OYnN+3ejd8Qjcs
+   BPv+cc7t/XP0+mDJUIpbvzYOuwbXCdLedyOn3r5rN//knON19DChCrjhp
+   bmT//4RPJK02tHavPs48x2uRkdu3CdFR/quUgd4/RqpxVGLFuIBqwwxip
+   WMd3bELz90RLA1pq+7UjB7ctRYCjQfVY+jnFGqpZkq4BvFBn5lfe0wWIg
+   buGPqc5Cg7Wt87ysYxKkfHuw/i4bEV2hTqpw6jXcEyAmBRTxYLHAU4gIW
+   dwHF3mcntHIpLfiUL9vndxaK/cHNtjpiWezrAcoCfYrbW1ccqSo5afz8j
+   w==;
+X-CSE-ConnectionGUID: 1JF7vafyQDOUoc0eJCVFiQ==
+X-CSE-MsgGUID: uPey1lEcTei6/KjghHG8sw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="11499953"
+X-IronPort-AV: E=Sophos;i="6.08,158,1712646000"; 
+   d="scan'208";a="11499953"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2024 08:17:43 -0700
+X-CSE-ConnectionGUID: 2fSb6UYER8KiQbhUtFCG8Q==
+X-CSE-MsgGUID: IeQwQqq3S+KEIOkkju+Emg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,158,1712646000"; 
+   d="scan'208";a="30404049"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 13 May 2024 08:17:40 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s6XQn-000APV-3A;
+	Mon, 13 May 2024 15:17:37 +0000
+Date: Mon, 13 May 2024 23:16:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: NeilBrown <neilb@suse.de>, Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, Dai Ngo <Dai.Ngo@oracle.com>,
+	Olga Kornievskaia <kolga@netapp.com>, Tom Talpey <tom@talpey.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	linux-nfs@vger.kernel.org
+Subject: Re: [PATCH] nfsd: change nfsd_create_setattr() to call
+ nfsd_setattr() unconditionally
+Message-ID: <202405132241.FduJDwA8-lkp@intel.com>
+References: <171557896893.4857.2572536847924540881@noble.neil.brown.name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <171557896893.4857.2572536847924540881@noble.neil.brown.name>
 
-On Mon, 13 May 2024 07:22:49 -0700, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Mon, 13 May 2024 00:36:58 +0800 Heng Qi wrote:
-> > This failed use case seems to come from this series triggering a problem that
-> > has not been triggered historically, namely lockdep_rtnl_is_held() is not called
-> > in an environment where CONFIG_NET is not configured and CONFIG_PROVE_LOCKING is
-> > configured:
-> >   If CONFIG_PROVE_LOCKING is configured as Y and CONFIG_NET is n, then
-> >   lockdep_rtnl_is_held is in an undefined state at this time.
-> > 
-> > So I think we should declare "CONFIG_PROVE_LOCKING depends on CONFIG_NET".
-> > How do you think?
-> 
-> Doesn't sound right, `can we instead make building lib/dim/net_dim.c
+Hi NeilBrown,
 
-Why? IIUC, the reason is that if CONFIG_NET is not set to Y, the net/core
-directory will not be compiled, so the lockdep_rtnl_is_held symbol is not
-present.
+kernel test robot noticed the following build warnings:
 
-> dependent on CONFIG_NET? Untested but I'm thinking something like:
-> 
-> diff --git a/lib/dim/Makefile b/lib/dim/Makefile
-> index c4cc4026c451..c02c306e2975 100644
-> --- a/lib/dim/Makefile
-> +++ b/lib/dim/Makefile
-> @@ -4,4 +4,8 @@
->  
->  obj-$(CONFIG_DIMLIB) += dimlib.o
->  
-> -dimlib-objs := dim.o net_dim.o rdma_dim.o
-> +dimlib-objs := dim.o rdma_dim.o
-> +
-> +ifeq ($(CONFIG_NET),y)
-> +dimlib-objs += net_dim.o
-> +endif
+[auto build test WARNING on next-20240510]
+[cannot apply to linus/master v6.9 v6.9-rc7 v6.9-rc6 v6.9]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-1. This is unlikely to work if the kernel is configured as[1]:
+url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/nfsd-change-nfsd_create_setattr-to-call-nfsd_setattr-unconditionally/20240513-134428
+base:   next-20240510
+patch link:    https://lore.kernel.org/r/171557896893.4857.2572536847924540881%40noble.neil.brown.name
+patch subject: [PATCH] nfsd: change nfsd_create_setattr() to call nfsd_setattr() unconditionally
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240513/202405132241.FduJDwA8-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240513/202405132241.FduJDwA8-lkp@intel.com/reproduce)
 
-[1] kernel configuration
-CONFIG_NET=n, CONFIG_ETHTOOL_NETLINK=n, CONFIG_PROVE_LOCKING=y,
-(CONFIG_FSL_MC_DPIO=y && CONFIG_FSL_MC_BUS=y) select CONFIG_DIMLIB=y.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405132241.FduJDwA8-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/nfsd/vfs.c:35:
+   In file included from fs/nfsd/xdr3.h:11:
+   In file included from fs/nfsd/xdr.h:8:
+   In file included from fs/nfsd/nfsd.h:15:
+   In file included from include/linux/nfs.h:11:
+   In file included from include/linux/sunrpc/msg_prot.h:205:
+   In file included from include/linux/inet.h:42:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from fs/nfsd/vfs.c:35:
+   In file included from fs/nfsd/xdr3.h:11:
+   In file included from fs/nfsd/xdr.h:8:
+   In file included from fs/nfsd/nfsd.h:15:
+   In file included from include/linux/nfs.h:11:
+   In file included from include/linux/sunrpc/msg_prot.h:205:
+   In file included from include/linux/inet.h:42:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from fs/nfsd/vfs.c:35:
+   In file included from fs/nfsd/xdr3.h:11:
+   In file included from fs/nfsd/xdr.h:8:
+   In file included from fs/nfsd/nfsd.h:15:
+   In file included from include/linux/nfs.h:11:
+   In file included from include/linux/sunrpc/msg_prot.h:205:
+   In file included from include/linux/inet.h:42:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> fs/nfsd/vfs.c:502:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     502 |         if (!(iap->ia_valid ||
+         |             ^~~~~~~~~~~~~~~~~~
+     503 |               (attr->na_seclabel && attr->na_seclabel->len) ||
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     504 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl) ||
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     505 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     506 |                !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/nfsd/vfs.c:616:9: note: uninitialized use occurs here
+     616 |         return err != 0 ? err : nfserrno(host_err);
+         |                ^~~
+   fs/nfsd/vfs.c:502:2: note: remove the 'if' if its condition is always false
+     502 |         if (!(iap->ia_valid ||
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+     503 |               (attr->na_seclabel && attr->na_seclabel->len) ||
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     504 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl) ||
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     505 |               (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     506 |                !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     507 |                 /* Don't bother with inode_lock() */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     508 |                 goto out;
+         |                 ~~~~~~~~
+   fs/nfsd/vfs.c:496:13: note: initialize the variable 'err' to silence this warning
+     496 |         __be32          err;
+         |                            ^
+         |                             = 0
+>> fs/nfsd/vfs.c:506:55: warning: variable 'inode' is uninitialized when used here [-Wuninitialized]
+     506 |                !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
+         |                                                              ^~~~~
+   include/uapi/linux/stat.h:23:23: note: expanded from macro 'S_ISDIR'
+      23 | #define S_ISDIR(m)      (((m) & S_IFMT) == S_IFDIR)
+         |                            ^
+   fs/nfsd/vfs.c:492:21: note: initialize the variable 'inode' to silence this warning
+     492 |         struct inode    *inode;
+         |                               ^
+         |                                = NULL
+   19 warnings generated.
 
 
-Then, because CONFIG_NET is not enabled, so there is no net_dim.o,
-the following warning appears:
+vim +502 fs/nfsd/vfs.c
 
-ld.lld: error: undefined symbol: net_dim_get_rx_moderation
-referenced by dpio-service.c
-drivers/soc/fsl/dpio/dpio-service.o:(dpaa2_io_dim_work) in archive vmlinux.a
+   472	
+   473	/**
+   474	 * nfsd_setattr - Set various file attributes.
+   475	 * @rqstp: controlling RPC transaction
+   476	 * @fhp: filehandle of target
+   477	 * @attr: attributes to set
+   478	 * @guardtime: do not act if ctime.tv_sec does not match this timestamp
+   479	 *
+   480	 * This call may adjust the contents of @attr (in particular, this
+   481	 * call may change the bits in the na_iattr.ia_valid field).
+   482	 *
+   483	 * Returns nfs_ok on success, otherwise an NFS status code is
+   484	 * returned. Caller must release @fhp by calling fh_put in either
+   485	 * case.
+   486	 */
+   487	__be32
+   488	nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *fhp,
+   489		     struct nfsd_attrs *attr, const struct timespec64 *guardtime)
+   490	{
+   491		struct dentry	*dentry;
+   492		struct inode	*inode;
+   493		struct iattr	*iap = attr->na_iattr;
+   494		int		accmode = NFSD_MAY_SATTR;
+   495		umode_t		ftype = 0;
+   496		__be32		err;
+   497		int		host_err = 0;
+   498		bool		get_write_count;
+   499		bool		size_change = (iap->ia_valid & ATTR_SIZE);
+   500		int		retries;
+   501	
+ > 502		if (!(iap->ia_valid ||
+   503		      (attr->na_seclabel && attr->na_seclabel->len) ||
+   504		      (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl) ||
+   505		      (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
+ > 506		       !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))))
+   507			/* Don't bother with inode_lock() */
+   508			goto out;
+   509	
+   510		if (iap->ia_valid & ATTR_SIZE) {
+   511			accmode |= NFSD_MAY_WRITE|NFSD_MAY_OWNER_OVERRIDE;
+   512			ftype = S_IFREG;
+   513		}
+   514	
+   515		/*
+   516		 * If utimes(2) and friends are called with times not NULL, we should
+   517		 * not set NFSD_MAY_WRITE bit. Otherwise fh_verify->nfsd_permission
+   518		 * will return EACCES, when the caller's effective UID does not match
+   519		 * the owner of the file, and the caller is not privileged. In this
+   520		 * situation, we should return EPERM(notify_change will return this).
+   521		 */
+   522		if (iap->ia_valid & (ATTR_ATIME | ATTR_MTIME)) {
+   523			accmode |= NFSD_MAY_OWNER_OVERRIDE;
+   524			if (!(iap->ia_valid & (ATTR_ATIME_SET | ATTR_MTIME_SET)))
+   525				accmode |= NFSD_MAY_WRITE;
+   526		}
+   527	
+   528		/* Callers that do fh_verify should do the fh_want_write: */
+   529		get_write_count = !fhp->fh_dentry;
+   530	
+   531		/* Get inode */
+   532		err = fh_verify(rqstp, fhp, ftype, accmode);
+   533		if (err)
+   534			return err;
+   535		if (get_write_count) {
+   536			host_err = fh_want_write(fhp);
+   537			if (host_err)
+   538				goto out;
+   539		}
+   540	
+   541		dentry = fhp->fh_dentry;
+   542		inode = d_inode(dentry);
+   543	
+   544		nfsd_sanitize_attrs(inode, iap);
+   545	
+   546		/*
+   547		 * The size case is special, it changes the file in addition to the
+   548		 * attributes, and file systems don't expect it to be mixed with
+   549		 * "random" attribute changes.  We thus split out the size change
+   550		 * into a separate call to ->setattr, and do the rest as a separate
+   551		 * setattr call.
+   552		 */
+   553		if (size_change) {
+   554			err = nfsd_get_write_access(rqstp, fhp, iap);
+   555			if (err)
+   556				return err;
+   557		}
+   558	
+   559		inode_lock(inode);
+   560		err = fh_fill_pre_attrs(fhp);
+   561		if (err)
+   562			goto out_unlock;
+   563	
+   564		if (guardtime) {
+   565			struct timespec64 ctime = inode_get_ctime(inode);
+   566			if ((u32)guardtime->tv_sec != (u32)ctime.tv_sec ||
+   567			    guardtime->tv_nsec != ctime.tv_nsec) {
+   568				err = nfserr_notsync;
+   569				goto out_fill_attrs;
+   570			}
+   571		}
+   572	
+   573		for (retries = 1;;) {
+   574			struct iattr attrs;
+   575	
+   576			/*
+   577			 * notify_change() can alter its iattr argument, making
+   578			 * @iap unsuitable for submission multiple times. Make a
+   579			 * copy for every loop iteration.
+   580			 */
+   581			attrs = *iap;
+   582			host_err = __nfsd_setattr(dentry, &attrs);
+   583			if (host_err != -EAGAIN || !retries--)
+   584				break;
+   585			if (!nfsd_wait_for_delegreturn(rqstp, inode))
+   586				break;
+   587		}
+   588		if (attr->na_seclabel && attr->na_seclabel->len)
+   589			attr->na_labelerr = security_inode_setsecctx(dentry,
+   590				attr->na_seclabel->data, attr->na_seclabel->len);
+   591		if (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl)
+   592			attr->na_aclerr = set_posix_acl(&nop_mnt_idmap,
+   593							dentry, ACL_TYPE_ACCESS,
+   594							attr->na_pacl);
+   595		if (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
+   596		    !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))
+   597			attr->na_aclerr = set_posix_acl(&nop_mnt_idmap,
+   598							dentry, ACL_TYPE_DEFAULT,
+   599							attr->na_dpacl);
+   600	out_fill_attrs:
+   601		/*
+   602		 * RFC 1813 Section 3.3.2 does not mandate that an NFS server
+   603		 * returns wcc_data for SETATTR. Some client implementations
+   604		 * depend on receiving wcc_data, however, to sort out partial
+   605		 * updates (eg., the client requested that size and mode be
+   606		 * modified, but the server changed only the file mode).
+   607		 */
+   608		fh_fill_post_attrs(fhp);
+   609	out_unlock:
+   610		inode_unlock(inode);
+   611		if (size_change)
+   612			put_write_access(inode);
+   613	out:
+   614		if (!host_err)
+   615			host_err = commit_metadata(fhp);
+   616		return err != 0 ? err : nfserrno(host_err);
+   617	}
+   618	
 
-ld.lld: error: undefined symbol: net_dim
-referenced by dpio-service.c
-drivers/soc/fsl/dpio/dpio-service.o:(dpaa2_io_update_net_dim) in archive vmlinux.a
-
-2. If we declare "CONFIG_DIMLIB depends on CONFIG_NET",
-if the configuration is still [1]:
-Then the result is:
-CONFIG_DIMLIB=Y (selected by CONFIG_FSL_MC_DPIO=y && CONFIG_FSL_MC_BUS=y),
-CONFIG_NET=n, but we declared "CONFIG_DIMLIB depends on CONFIG_NET",
-there is still a compilation error because the lockdep_rtnl_is_held symbol
-cannot be found.
-
-3. If we declare "CONFIG_DIMLIB select CONFIG_NET" and kernel configuration is [1],
-then a circular dependency warning will appear:
-
-CONFIG_DIMLIB select CONFIG_NET, ETHTOOL_NETLINK=Y(depends on CONFIG_NET)
-selects CONFIG_DIMLIB. CONFIG_DIMLIB will select CONFIG_NET...
-
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
