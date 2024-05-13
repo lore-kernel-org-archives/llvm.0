@@ -1,264 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0554381BD;
-	Mon, 13 May 2024 18:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4042E631
+	for <llvm@lists.linux.dev>; Mon, 13 May 2024 18:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715623494; cv=none; b=VVVR5IHomKeT4SZOd9PBH2HCqElhxyUHzRblN7JtrlC8/IBAYT/Ly4VVQp2b3llP4hgUyPCBDTi/3FmrIv/hzQM705uI+7vvYk6CQcK1g/jML3sBj5YFfxtGojICb4006vvBBs8z1gzviCHAr/Kc42tmiPOSh7Qv+UvdA1T9ilw=
+	t=1715625263; cv=none; b=GfWxQZU4UMto4RJUN1lO+FRUlUvN2aQ30buAUqp48pIzJ3nOSY0TbvMBAmqpez/DSV3o4Pi3xmqY7K8+HiVPVA51mO+JqV5/Dn+8qDBGsDbk+FS0Kvkqh7xJPprdm26kJA711TRC0uhWVVWdy9ZtC6corYT/5sVeec1KOT2IiEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715623494; c=relaxed/simple;
-	bh=UNnjVc+pJh5y1zaNd677ePOr+EfWhLiINtWrDbZ6JiI=;
+	s=arc-20240116; t=1715625263; c=relaxed/simple;
+	bh=LMpgS9YUb5fP274F97/qNj06fpYzBLVeI1R6c6nW9QM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u/3dM4tPZOrVPCOwolSloc/7neLARTvUxOpuuxa8btvWkeUhcxv0KiPo++myY5E48e9hHOOHDlLBHVchcMbw7NIyzpuE0EnXEwBfy/Jw5WEjns3j6Zk7qL2vBDGRSCuDc03VzOmG2RpGDJxJMqu9K4WOUFYNsEqvirjA+UKKKCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ALq3nshk; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GvGD9wkjUKcgHnP/vcftfw236pskHaUeGZBAHWHlLuPad4mo2rYYugHEKZYjegASQukGKj0wd3euNRJqVaeLKWOcuIU/RUF6M784N2PtNIyL5Bk/6NYJRj3mDFYcqrNmHyvtmXJGakRxbGCYhqWThRpQW8QH0RaPIAO2nouSLuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kOW1WTVO; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ALq3nshk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715623492; x=1747159492;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UNnjVc+pJh5y1zaNd677ePOr+EfWhLiINtWrDbZ6JiI=;
-  b=ALq3nshkfJNACZs2bGRBOibPHb1J24MjACY4s8o5fwfWEkLXMRJrHPAQ
-   SPW7qeEFCn3JfLOk+7eCAcAYPnSGqbLTsxXguiN5VsWrHsPqkxdiN1LMe
-   K0wpDYbM6xdh8WbDtWXjPGydOoE3Qr/weq0KcK51qiYnKCZOE/EoEEOVv
-   CBiS6T6rFEHvct5VvpgAeuglkS1KtsIJbOsO0AOQ8RAo5GOnLma0YmDEG
-   ynJ1BWGeI6GmmbY5g8OjfBMf4GVVgj8Ve6tvbJPqxgkiZNHQeB/d8l0rA
-   YhtAtW+kc2UBbm/kcAzOKHoEun4VkCjT0nEHXMH+qAQIMl3/VlVDWQ56Y
-   A==;
-X-CSE-ConnectionGUID: 0EpL1efJQMOt7R7XuNmIUA==
-X-CSE-MsgGUID: 52fe8QyPSm65E73VmNiFMg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="11707194"
-X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
-   d="scan'208";a="11707194"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2024 11:04:51 -0700
-X-CSE-ConnectionGUID: nd+xT5/HRpWebuVOWnS8bQ==
-X-CSE-MsgGUID: SDUo857CR4WS3qN7ZUTp3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
-   d="scan'208";a="30360987"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 13 May 2024 11:04:45 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s6a2V-000AVf-1L;
-	Mon, 13 May 2024 18:04:43 +0000
-Date: Tue, 14 May 2024 02:04:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?H=E5kon?= Bugge <haakon.bugge@oracle.com>,
-	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, rds-devel@oss.oracle.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-	Allison Henderson <allison.henderson@oracle.com>,
-	Manjunath Patil <manjunath.b.patil@oracle.com>,
-	Mark Zhang <markzhang@nvidia.com>,
-	=?iso-8859-1?Q?H=E5kon?= Bugge <haakon.bugge@oracle.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Shiraz Saleem <shiraz.saleem@intel.com>,
-	Yang Li <yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH 2/6] rds: Brute force GFP_NOIO
-Message-ID: <202405140136.LE0Nk9by-lkp@intel.com>
-References: <20240513125346.764076-3-haakon.bugge@oracle.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kOW1WTVO"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1eeabda8590so33560795ad.0
+        for <llvm@lists.linux.dev>; Mon, 13 May 2024 11:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715625261; x=1716230061; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h++n7Qlyg3sgT4EiaSRCnOzzYyK0B8BDWAHRP3/F3N0=;
+        b=kOW1WTVOkENTxojP9xiZGmh6frcpxbaCVrU1i75tOGylMmTcMuaxYhQZA2HhlMDSXt
+         xV6rUgTPt2+J8Us7yL/uRVAaAeNaCiYuHk/BtJvAhS922U+ewafSTHRAAmZtBimMRjQ1
+         i1CGSZMxe3NBsGZSMk8N9v6oaD9Wi2D7YeWgc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715625261; x=1716230061;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h++n7Qlyg3sgT4EiaSRCnOzzYyK0B8BDWAHRP3/F3N0=;
+        b=ICDHUe2VKxYNTF0CVYJpnBBp0eEmpUgucyo6R10vAGyxZl0ZLXnZHmjIsi27c2WUkf
+         qTsVlRA46AQg56+WtFeVe6KLNMoZSCRT42ZK9zjb3sEO5jYVcqfE39fDbERjWmCAPoP6
+         yDhE0+bGQxSCCbb4egcaaDYTvb/CUp8RX0C1P14ZQObKGw8ubf4ZkkYbtLqRon5/Q/8r
+         p6MyZDVZvbB6l830osF3G7oILFXUjXxpg0JEVCze6lHiUa8ahPlTeW9hUGGxpEF/RopL
+         rsvti1SDgBeQoQn3jDWx74ohKHlDv7mhlkbFUaXSkO7Sua733/9AD0J1wfPeTNBWIm7f
+         Pv3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWAOJgGPMdSZV/qbwoF9YT9qNDEUMcFn0l4MvHO4MuM8gaFq0DztS/l9TLOoaVjwq9k7Zc6Xl+GTv+RO0CpYfJactJaEw==
+X-Gm-Message-State: AOJu0Yy+YT4HG74eLuZsUCAGN0RYIc3pkBtNwc2v2clo6iPG7SmQp1k3
+	DN/DEHUmy6YjUutWNPwj0yCy4MCI2tZZH0tNU7ZVjdqw0UimBRKipEwAbE1yVA==
+X-Google-Smtp-Source: AGHT+IHCc1iDoDY8y7cN3McKpzD8GoP+zaGEka3xojOMmbdy8UwKg3X31LKvQDdXyzyN7fH2gRjLEA==
+X-Received: by 2002:a17:902:dac6:b0:1e0:b62a:c0a2 with SMTP id d9443c01a7336-1ef441613edmr122093915ad.51.1715625261157;
+        Mon, 13 May 2024 11:34:21 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c13908bsm82642315ad.265.2024.05.13.11.34.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 May 2024 11:34:20 -0700 (PDT)
+Date: Mon, 13 May 2024 11:34:20 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Martin Uecker <uecker@tugraz.at>, Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <202405131047.A3861EC13@keescook>
+References: <202404291502.612E0A10@keescook>
+ <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
+ <202405081144.D5FCC44A@keescook>
+ <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
+ <202405081354.B0A8194B3C@keescook>
+ <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
+ <59f731ab619673afec4956fce6832a1cd5324fb8.camel@tugraz.at>
+ <CAHk-=wjERv03yFU7-RUuqX1y89DYHcpdsuu++ako2nR41-EjYg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240513125346.764076-3-haakon.bugge@oracle.com>
+In-Reply-To: <CAHk-=wjERv03yFU7-RUuqX1y89DYHcpdsuu++ako2nR41-EjYg@mail.gmail.com>
 
-Hi Håkon,
+On Sun, May 12, 2024 at 09:09:08AM -0700, Linus Torvalds wrote:
+>         unsigned char *p;
+>         u32 val;
+> 
+>         p[0] = val;
+>         p[1] = val >> 8;
+>         p[2] = val >> 16;
+>         p[3] = val >> 24;
+> 
+> kind of code is both traditional and correct, but obviously drops bits
+> very much intentionally on each of those assignments.
 
-kernel test robot noticed the following build warnings:
+The good news here is that the integer implicit truncation sanitizers
+are already split between "signed" and "unsigned". So the 2 cases of
+exploitable flaws mentioned earlier:
 
-[auto build test WARNING on tj-wq/for-next]
-[also build test WARNING on rdma/for-next net/main net-next/main linus/master v6.9 next-20240513]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	u8 num_elems;
+	...
+	num_elems++;		/* int promotion stored back to u8 */
 
-url:    https://github.com/intel-lab-lkp/linux/commits/H-kon-Bugge/workqueue-Inherit-NOIO-and-NOFS-alloc-flags/20240513-205927
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-next
-patch link:    https://lore.kernel.org/r/20240513125346.764076-3-haakon.bugge%40oracle.com
-patch subject: [PATCH 2/6] rds: Brute force GFP_NOIO
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240514/202405140136.LE0Nk9by-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240514/202405140136.LE0Nk9by-lkp@intel.com/reproduce)
+and
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405140136.LE0Nk9by-lkp@intel.com/
+	int size;
+	u16 read_size;
+	...
+	read_size = size;	/* large int stored to u16 */
 
-All warnings (new ones prefixed by >>):
+are both confusions across signed/unsigned types, which the signed
+sanitizer would catch. The signed sanitizer would entirely ignore
+the quoted example at the top: everything is unsigned and no int
+promotion is happening.
 
-   In file included from net/rds/af_rds.c:33:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/rds/af_rds.c:38:
-   In file included from include/linux/ipv6.h:101:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from net/rds/af_rds.c:38:
-   In file included from include/linux/ipv6.h:101:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from net/rds/af_rds.c:38:
-   In file included from include/linux/ipv6.h:101:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> net/rds/af_rds.c:315:15: warning: variable 'noio_flags' set but not used [-Wunused-but-set-variable]
-     315 |         unsigned int noio_flags;
-         |                      ^
-   18 warnings generated.
+So, I think we can start with just the "signed integer implicit
+truncation" sanitizer. The compiler will still need to deal with the
+issues I outlined in [1], where I think we need some consideration
+specifically on how to handle things like this (that have a
+smaller-than-int size and trip the sanitizer due to int promotion):
 
+u8 checksum(const u8 *buf)
+{
+	u8 sum = 0;
 
-vim +/noio_flags +315 net/rds/af_rds.c
+	for (int i = 0; i < 4; i++)
+		sum += buf[i];		/* int promotion */
+	return sum;
+}
 
-   310	
-   311	static int rds_cancel_sent_to(struct rds_sock *rs, sockptr_t optval, int len)
-   312	{
-   313		struct sockaddr_in6 sin6;
-   314		struct sockaddr_in sin;
- > 315		unsigned int noio_flags;
-   316		int ret = 0;
-   317	
-   318		if (rds_force_noio)
-   319			noio_flags = memalloc_noio_save();
-   320	
-   321		/* racing with another thread binding seems ok here */
-   322		if (ipv6_addr_any(&rs->rs_bound_addr)) {
-   323			ret = -ENOTCONN; /* XXX not a great errno */
-   324			goto out;
-   325		}
-   326	
-   327		if (len < sizeof(struct sockaddr_in)) {
-   328			ret = -EINVAL;
-   329			goto out;
-   330		} else if (len < sizeof(struct sockaddr_in6)) {
-   331			/* Assume IPv4 */
-   332			if (copy_from_sockptr(&sin, optval,
-   333					sizeof(struct sockaddr_in))) {
-   334				ret = -EFAULT;
-   335				goto out;
-   336			}
-   337			ipv6_addr_set_v4mapped(sin.sin_addr.s_addr, &sin6.sin6_addr);
-   338			sin6.sin6_port = sin.sin_port;
-   339		} else {
-   340			if (copy_from_sockptr(&sin6, optval,
-   341					   sizeof(struct sockaddr_in6))) {
-   342				ret = -EFAULT;
-   343				goto out;
-   344			}
-   345		}
-   346	
-   347		rds_send_drop_to(rs, &sin6);
-   348	out:
-   349		if (rds_force_noio)
-   350			noio_flags = memalloc_noio_save();
-   351		return ret;
-   352	}
-   353	
+We want "sum" to wrap. We could avoid the "implicit" truncation by
+explicitly truncating with something eye-bleedingly horrible like:
+
+		sum = (u8)(sum + buf[i]);
+
+Adding a wrapper for the calculation could work but repeats "sum", and
+needs to be explicitly typed, making it just as unfriendly:
+
+		sum = truncate(u8, sum + buf[i]);
+
+Part of the work I'd done in preparation for all this was making the
+verbosely named wrapping_assign_add() helper which handles all the
+types by examining the arguments and avoids repeating the destination
+argument. So this would become:
+
+		wrapping_assign_add(sum, buf[i]);
+
+Still not as clean as "+=", but at least more readable than the
+alternatives and leaves no question about wrapping intent.
+
+-Kees
+
+[1] https://lore.kernel.org/lkml/202405081949.0565810E46@keescook/
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
