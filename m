@@ -1,282 +1,246 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EE817C77;
-	Tue, 14 May 2024 08:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A251F956
+	for <llvm@lists.linux.dev>; Tue, 14 May 2024 08:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715674562; cv=none; b=AW9XCVDIw3TEjWUSr9y+Zr4PzywcjAoeHfQUGQrzxQmP4NKuxomp8+k3g14pOPAB5rtQcqgbJGF28Qbi+EocS1R6P6UykzujLa8FCRWUgO6ctssZLVm++rkcvgKzCDOAH+Ywmmxl6pBp9nvrle+BH7EtxVackGWJ0AbAOlg4d6Q=
+	t=1715676325; cv=none; b=eR51VnEFZQ6xxL98KUyRTxH3EdwUMCq71cKfjYL/3zsqSMJKRRyxRjoegCUWIGGGr/6bn9Vn1h/TdGCWX2jDEj98nxnE8yI7gTJ5sy5HiP/TPBDse+MKm1YUDBIK7qZvVufS5XYjf/tO9PzkzcBp8VkIL6slhcYyh1kdfgPvHLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715674562; c=relaxed/simple;
-	bh=FElbwnqrhVDqn0d12ciRbpWVx1AzDYDzRuqgRJ1e7eQ=;
+	s=arc-20240116; t=1715676325; c=relaxed/simple;
+	bh=rJIazF0uPRtHdaouZBgz7iYU/9TUHu8dIhCf/WYXSRA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hZYtT5VhbMHhO1y8zYhicTUneMvDp2DHw0lqTyEh3aoxAutSKZAoUZYkhrlLeBXwDHlr5o4jjqOj0Lo0SDuUeZ5CCT5fWuXSJpKcqwz1j2BQrHQyCztWTQ8uomoqUOCeVeC0QqxkMKQILVUWECcwBtfAqmulZogs6e/kKap3s+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VnbzO7I/; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=OGcu5EQpIPtl70N1ofx1Z4L0KS4xp6vRWRomUaXMSsy11JcHAXnmj9HfZOMHA5f+oxOdpgZEUKirpqKpnwu11ypP+yrCXbMTesuFbL8lqVqZZgIJ2wQd0Ct0DEakDzDRuXoH3CQwhKfdZJdr9QUGWvSgJxbSa5Kls/XIanfom1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IQvaMMPD; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VnbzO7I/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715674559; x=1747210559;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FElbwnqrhVDqn0d12ciRbpWVx1AzDYDzRuqgRJ1e7eQ=;
-  b=VnbzO7I/odbrZlRqm9VdTe7DNthXfAG3Bc4feNZY4NScMpTjGsV0gy5e
-   pOkANWJPbzm+lbyMmZ23gkZKFCNdbuxeCkVAPz6WiDCMri/w3oXCO0KWN
-   v7URVaeeSjTsJ9jEZjjlTJY5jEXbbGRpCRGmluQ0j3TmLgoTL576TjwG0
-   1uGWKiA8XBfzoTyxmKF5M59m0ooEPWrQeFt6sIY1k5Im1QssXn0sgB/UP
-   VTY/y5c8I9VqBW13m3TFPBhoX+/0gir8tfUyFRgYnKYgEOskaXnDmsd3n
-   Lg8ck4MWfw65RJkhiAwvAV3x9BKIrMpiRaQgddhtlMUVDpzRbp+Q7saJE
-   A==;
-X-CSE-ConnectionGUID: 90jOMQ+LTTKNpZJ+cHyyXQ==
-X-CSE-MsgGUID: FPjG4H+dS7KEmJqdu2C5wQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="23046571"
-X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
-   d="scan'208";a="23046571"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2024 01:15:59 -0700
-X-CSE-ConnectionGUID: O0B2e/EYTK2naHqRzX/zPA==
-X-CSE-MsgGUID: BdrTSX4DQtCsowv/qhiA5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
-   d="scan'208";a="31155133"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 14 May 2024 01:15:53 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s6nKA-000BHD-2u;
-	Tue, 14 May 2024 08:15:50 +0000
-Date: Tue, 14 May 2024 16:15:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bharat Bhushan <bbhushan2@marvell.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, sgoutham@marvell.com,
-	gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, jerinj@marvell.com, lcherian@marvell.com,
-	richardcochran@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bharat Bhushan <bbhushan2@marvell.com>
-Subject: Re: [net-next,v2 5/8] cn10k-ipsec: Add SA add/delete support for
- outb inline ipsec
-Message-ID: <202405141559.4cP9LvuS-lkp@intel.com>
-References: <20240513105446.297451-6-bbhushan2@marvell.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IQvaMMPD"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a5a2d0d8644so1125197566b.1
+        for <llvm@lists.linux.dev>; Tue, 14 May 2024 01:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715676322; x=1716281122; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=S5pgGNiE0yFh18inZjwCGMxdi3PkHuc9sldyTkkwOOw=;
+        b=IQvaMMPDH7CXScGNa6PNIqMCrkSmIR3PItopEHmojX3yIT4UNGrh1GsOzvceuWvE1E
+         MJJzuaRlnKHBEo/eucT+/wbo/IOvTOXAAEn5yceCa45/uUUH2Gyl/mFgoyBoEmonr7YA
+         Y2y55PP3sV5uFskd/Pi2w56IYSXFjj6/jGOw0RIZpRAT12cUvcXFepztO86U8MtKiwlM
+         8x0h91qeK9rC6QjvJ3akM6Xt2hCR+hSWV1HN7cRnF5gtlCpP4oSQk03WkdF6RumFB82T
+         wInGLpxrm0di7tSIQZCjKbTvxmWnI16e2fU0CjqszkP65Y69yiRD7R/Ehh79J2XdMc9W
+         Dp9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715676322; x=1716281122;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S5pgGNiE0yFh18inZjwCGMxdi3PkHuc9sldyTkkwOOw=;
+        b=hrI3opz+kcwM0Qxwqtl91g6P2S3fkgvT3uExlJOEp8sa1Q9wLV1cB+gnfXZqgdCaK7
+         XvopwLepKNptCk2qk14g93+Ht1CgyqVEZhR/+Z9tfFjUzULhubDeW8CMZamjmnySFC46
+         hD5Po+B2PPA5DyAR6bz4oIFYhUyswvwJwCPC99GbSxYddJ/sytgdTYTm9yjhitlcyYvG
+         oSGId1vNb98BbjuyyWSWG8TnKvD5fW5+NIbSW5MPuK4/0m4DSlkCGKBqg+d8piFT+XW6
+         0T5CvaHW2c7QUvbIa94cV64nMcVvxToW9OKCyBQBKS/fT/5DsLMPLeiCK1lXYgRn+apK
+         oBRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV12C0WxBNZdFZERNt7z9eG0e+n833Se0Gj3iCut7YELBg40k++MSA0WJh68iZ4t8xgz6XjM4A5mpIvNWun8HoDMSlIqA==
+X-Gm-Message-State: AOJu0Yz4TWapqrLqjXIGnd6Z5qAJk2PznAaWrRihdwfCqZ7YPRl2J0lg
+	lu7HyKtFW5+FU6ja+7jrHdKDgK7y4iEVHWt1jhk6Qjfe7bM6w90Fg3cMSH1CZpw=
+X-Google-Smtp-Source: AGHT+IG/veYk/QiA4TlT19kc88WgCw8A4K1JllN2RbIelSwgiXW/5LElmvH1TSH3Org6cXh64TlRvQ==
+X-Received: by 2002:a17:906:2b0d:b0:a59:be21:3575 with SMTP id a640c23a62f3a-a5a2d672ee4mr894591566b.51.1715676321589;
+        Tue, 14 May 2024 01:45:21 -0700 (PDT)
+Received: from localhost ([149.14.240.163])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17892450sm700476866b.63.2024.05.14.01.45.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 May 2024 01:45:20 -0700 (PDT)
+Date: Tue, 14 May 2024 10:45:19 +0200
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
+Message-ID: <0480d602-3ad7-4f8e-a480-9860d56eab30@suswa.mountain>
+References: <202404291502.612E0A10@keescook>
+ <039d54d6-8aa2-4e5b-829b-69002cff35d3@moroto.mountain>
+ <202405131203.F7B97F5E38@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240513105446.297451-6-bbhushan2@marvell.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202405131203.F7B97F5E38@keescook>
 
-Hi Bharat,
+Snipped all the bits where you are clearly correct.
 
-kernel test robot noticed the following build warnings:
+On Mon, May 13, 2024 at 12:43:37PM -0700, Kees Cook wrote:
+> > drivers/usb/class/usbtmc.c:852 usbtmc_generic_read() warn: potential integer overflow from user 'max_transfer_size + 1'
+> >    842                   * wMaxPacketSize – 1) to avoid sending a zero-length
+> >    843                   * packet
+> >    844                   */
+> >    845                  remaining = transfer_size;
+> >    846                  if ((max_transfer_size % data->wMaxPacketSize) == 0)
+> >    847                          max_transfer_size += (data->wMaxPacketSize - 1);
+> >    848          } else {
+> >    849                  /* round down to bufsize to avoid truncated data left */
+> >    850                  if (max_transfer_size > bufsize) {
+> >    851                          max_transfer_size =
+> >    852                                  roundup(max_transfer_size + 1 - bufsize,
+> >                                                 ^^^^^^^^^^^^^^^^^^^^^
+> > This can overflow.  We should make it a rule that all size variables
+> > have to be unsigned long.  That would have made this safe on 64 bit
+> > systems.
+> > 
+> >    853                                          bufsize);
+> >    854                  }
+> >    855                  remaining = max_transfer_size;
+> 
+> Again, do we _want_ this to overflow? It looks like not. I'm not sure
+> what this code is trying to do, though. The comment doesn't seem to
+> match the code. Why isn't this just roundup(max_transfer_size, bufsize) ?
+> 
 
-[auto build test WARNING on next-20240513]
-[cannot apply to linus/master horms-ipvs/master v6.9 v6.9-rc7 v6.9-rc6 v6.9]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/octeontx2-pf-map-skb-data-as-device-writeable/20240513-185803
-base:   next-20240513
-patch link:    https://lore.kernel.org/r/20240513105446.297451-6-bbhushan2%40marvell.com
-patch subject: [net-next,v2 5/8] cn10k-ipsec: Add SA add/delete support for outb inline ipsec
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240514/202405141559.4cP9LvuS-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240514/202405141559.4cP9LvuS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405141559.4cP9LvuS-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:7:
-   In file included from include/net/xfrm.h:9:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:7:
-   In file included from include/net/xfrm.h:9:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:7:
-   In file included from include/net/xfrm.h:9:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:7:
-   In file included from include/net/xfrm.h:9:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:681:6: warning: variable 'pf' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     681 |         if (x->xso.dir == XFRM_DEV_OFFLOAD_IN) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:721:16: note: uninitialized use occurs here
-     721 |         mutex_unlock(&pf->ipsec.lock);
-         |                       ^~
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:681:2: note: remove the 'if' if its condition is always false
-     681 |         if (x->xso.dir == XFRM_DEV_OFFLOAD_IN) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     682 |                 netdev_err(netdev, "xfrm inbound offload not supported\n");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     683 |                 err = -ENODEV;
-         |                 ~~~~~~~~~~~~~~
-     684 |         } else {
-         |         ~~~~~~
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:674:21: note: initialize the variable 'pf' to silence this warning
-     674 |         struct otx2_nic *pf;
-         |                            ^
-         |                             = NULL
-   drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c:768:33: warning: unused variable 'cn10k_ipsec_xfrmdev_ops' [-Wunused-const-variable]
-     768 | static const struct xfrmdev_ops cn10k_ipsec_xfrmdev_ops = {
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
-   19 warnings generated.
+roundup() has an integer overflow in it.
 
 
-vim +681 drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c
+> > drivers/usb/misc/usbtest.c:1994 iso_alloc_urb() warn: potential integer overflow from user 'bytes + maxp'
+> >   1974  static struct urb *iso_alloc_urb(
+> >   1975          struct usb_device       *udev,
+> >   1976          int                     pipe,
+> >   1977          struct usb_endpoint_descriptor  *desc,
+> >   1978          long                    bytes,
+> >   1979          unsigned offset
+> >   1980  )
+> >   1981  {
+> >   1982          struct urb              *urb;
+> >   1983          unsigned                i, maxp, packets;
+> >   1984  
+> >   1985          if (bytes < 0 || !desc)
+> >   1986                  return NULL;
+> >   1987  
+> >   1988          maxp = usb_endpoint_maxp(desc);
+> >   1989          if (udev->speed >= USB_SPEED_SUPER)
+> >   1990                  maxp *= ss_isoc_get_packet_num(udev, pipe);
+> >   1991          else
+> >   1992                  maxp *= usb_endpoint_maxp_mult(desc);
+> >   1993  
+> >   1994          packets = DIV_ROUND_UP(bytes, maxp);
+> >                                        ^^^^^
+> > The issue here is on a 32 bit system when bytes is INT_MAX.
+> 
+> All of these examples seem to be cases that should be mitigated. The
+> earlier check should be expanded:
+> 
+> 		if (bytes < 0 || bytes >= INT_MAX || !desc)
 
-   667	
-   668	static int cn10k_ipsec_add_state(struct xfrm_state *x,
-   669					 struct netlink_ext_ack *extack)
-   670	{
-   671		struct net_device *netdev = x->xso.dev;
-   672		struct cn10k_tx_sa_s *sa_entry;
-   673		struct cpt_ctx_info_s *sa_info;
-   674		struct otx2_nic *pf;
-   675		int err;
-   676	
-   677		err = cn10k_ipsec_validate_state(x);
-   678		if (err)
-   679			return err;
-   680	
- > 681		if (x->xso.dir == XFRM_DEV_OFFLOAD_IN) {
-   682			netdev_err(netdev, "xfrm inbound offload not supported\n");
-   683			err = -ENODEV;
-   684		} else {
-   685			pf = netdev_priv(netdev);
-   686			if (!mutex_trylock(&pf->ipsec.lock)) {
-   687				netdev_err(netdev, "IPSEC device is busy\n");
-   688				return -EBUSY;
-   689			}
-   690	
-   691			if (!(pf->flags & OTX2_FLAG_INLINE_IPSEC_ENABLED)) {
-   692				netdev_err(netdev, "IPSEC not enabled/supported on device\n");
-   693				err = -ENODEV;
-   694				goto unlock;
-   695			}
-   696	
-   697			sa_entry = cn10k_outb_alloc_sa(pf);
-   698			if (!sa_entry) {
-   699				netdev_err(netdev, "SA maximum limit %x reached\n",
-   700					   CN10K_IPSEC_OUTB_MAX_SA);
-   701				err = -EBUSY;
-   702				goto unlock;
-   703			}
-   704	
-   705			cn10k_outb_prepare_sa(x, sa_entry);
-   706	
-   707			err = cn10k_outb_write_sa(pf, sa_entry);
-   708			if (err) {
-   709				netdev_err(netdev, "Error writing outbound SA\n");
-   710				cn10k_outb_free_sa(pf, sa_entry);
-   711				goto unlock;
-   712			}
-   713	
-   714			sa_info = kmalloc(sizeof(*sa_info), GFP_KERNEL);
-   715			sa_info->sa_entry = sa_entry;
-   716			sa_info->sa_iova = cn10k_outb_get_sa_iova(pf, sa_entry);
-   717			x->xso.offload_handle = (unsigned long)sa_info;
-   718		}
-   719	
-   720	unlock:
-   721		mutex_unlock(&pf->ipsec.lock);
-   722		return err;
-   723	}
-   724	
+This doesn't work on 32bit systems.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> > 
+> >   1995  
+> >   1996          urb = usb_alloc_urb(packets, GFP_KERNEL);
+> >   1997          if (!urb)
+> >   1998                  return urb;
+> > 
+> > 
+> > drivers/char/ppdev.c:344 pp_set_timeout() warn: potential integer overflow from user 'tv_sec * 100'
+> >    343  static int pp_set_timeout(struct pardevice *pdev, long tv_sec, int tv_usec)
+> >    344  {
+> >    345          long to_jiffies;
+> >    346  
+> >    347          if ((tv_sec < 0) || (tv_usec < 0))
+> >    348                  return -EINVAL;
+> >    349  
+> >    350          to_jiffies = usecs_to_jiffies(tv_usec);
+> >                                               ^^^^^^^
+> > 
+> >    351          to_jiffies += tv_sec * HZ;
+> >                               ^^^^^^^^^^^
+> > Both of these can overflow
+> > 
+> >    352          if (to_jiffies <= 0)
+> >                     ^^^^^^^^^^^^^^^
+> > But they're checked here.
+> > 
+> >    353                  return -EINVAL;
+> >    354  
+> >    355          pdev->timeout = to_jiffies;
+> >    356          return 0;
+> >    357  }
+> 
+> This doesn't look like a wrapping-desired case either, but just for fun,
+> let's assume we want it.
+
+The original programmer assumed it would wrap so it was intentional/desired.
+
+> (And why are any of these signed?) Annotation
+> is added to the variables:
+> 
+> static int pp_set_timeout(struct pardevice *pdev, long __wraps tv_sec, int __wraps tv_usec)
+> {
+> 	long __wraps to_jiffies;
+
+Sure.
+
+> > drivers/i2c/i2c-dev.c:485 i2cdev_ioctl() warn: potential integer overflow from user (local copy) 'arg * 10'
+> >    478          case I2C_TIMEOUT:
+> >    479                  if (arg > INT_MAX)
+> >    480                          return -EINVAL;
+> >    481  
+> >    482                  /* For historical reasons, user-space sets the timeout
+> >    483                   * value in units of 10 ms.
+> >    484                   */
+> >    485                  client->adapter->timeout = msecs_to_jiffies(arg * 10);
+> >                                                                     ^^^^^^^^^
+> > This can overflow and then the msecs_to_jiffies() conversion also has
+> > an integer overflow in it.
+> 
+> If we want these wrapping:
+> 
+> 		unsigned long __wraps timeout = arg * 10;
+> 		client->adapter->timeout = msecs_to_jiffies(timeout);
+> 
+> and:
+> 
+> static inline unsigned long _msecs_to_jiffies(const unsigned int __wraps m)
+> 
+> 
+
+Here we don't care about wrapping, but I wouldn't go so far as to say it
+was intentional...  I guess this silences the warning.
+
+
+> > drivers/hwmon/nct6775-core.c:2265 store_temp_offset() warn: potential integer overflow from user '__x + (__d / 2)'
+> >   2251  static ssize_t
+> >   2252  store_temp_offset(struct device *dev, struct device_attribute *attr,
+> >   2253                    const char *buf, size_t count)
+> >   2254  {
+> >   2255          struct nct6775_data *data = dev_get_drvdata(dev);
+> >   2256          struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+> >   2257          int nr = sattr->index;
+> >   2258          long val;
+> >   2259          int err;
+> >   2260  
+> >   2261          err = kstrtol(buf, 10, &val);
+> >   2262          if (err < 0)
+> >   2263                  return err;
+> >   2264  
+> >   2265          val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
+> >                                                   ^^^^^^^^^^
+> > Overflow and then clamp.
+> 
+> Looks like DIV_ROUND_CLOSEST() needs to be made sane and use more modern
+> helpers (it appears to be doing open-coded is_signed(), wants
+> check_*_overflow(), etc).
+> 
+
+Sounds good.
+
+regards,
+dan carpenter
