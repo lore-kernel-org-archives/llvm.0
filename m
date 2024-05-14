@@ -1,80 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1474115CE;
-	Tue, 14 May 2024 01:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B558717F6
+	for <llvm@lists.linux.dev>; Tue, 14 May 2024 01:29:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715648430; cv=none; b=h71Js85x0JvIjhKhcJbNazCmmRn+vULpJNbccICXBLLAgiZOnrExZivHsgvkxTwxbuU0cG63jnnxus/Vo86MAPs9jztDnqwvBS7rnYtOwqDdNVL35ehxFmyplBxKJvf8lOrtPzpcfZsq5T3rzbNhnuqeGtkzmc/65iiCJLTMiM4=
+	t=1715650179; cv=none; b=iz9mKwp5hZaaavld8t7Lk1qP9+Dg0MjxGT/P3nVlfJkuCtfsDlzHzQTCwvZZMImE34vTEnEHyzyJAUchWwG0HRKZETAfNrfzSinF6i1V04j3NpV1Pf004qtsUpkiA9MM24xzn6809zxJtZCCdruSqPqmKvc68eBF0HTkpAJbzrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715648430; c=relaxed/simple;
-	bh=tex67ROWkh4NHwRY33hOc+4fTpPBuNxAxyVsPksJt+8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XKjn1RS9oulKJa5eUdkhIZakDOnt2Db3Kr9dMO1SlYBabkz8PBd4kco2w2n/fKWPSpeqWHXnIRT9QpJV3ndQRIb0wByu/uthF1QA1tSgmZD2k1InlZZVv8C4ipbKcpRthDTa0Bxt5wHGS4N6R1ec1TgTPhx5qxXjG1iE5x6EsII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tGE1wHwa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715650179; c=relaxed/simple;
+	bh=ydzzvUXzzyHYXDB3rdnfrOfaFvankCzu/PpfufEIZ8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OXYLnfR8BETidnJUbGiRRh9QN1urDuApC23SDyaBYLJRIk6+FylPuRlLzIrJjv9UVBboKrbIf5VbeNlBLbuTRFzmo8WaNMitpXUb91umV//A3Kt43CWyxq7kyXSu27Vs9F+3uaEN/cARU7yGT8HqjJwvM+9OzRQAg6tjJ5sgGbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bPIgiAps; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tGE1wHwa"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4B56C4AF0A;
-	Tue, 14 May 2024 01:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715648429;
-	bh=tex67ROWkh4NHwRY33hOc+4fTpPBuNxAxyVsPksJt+8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=tGE1wHwavggZavCmGTnx5msI7xOUslc0bp0dW48tmm6zZo0xgP+lE//lcsOscCdlz
-	 f83uKG0CxpPDFhM2UL6GMEbIhychYBELNM0J9K+VO63JkXayas5dA6UyAZ0IC2Bv9o
-	 m1ota997x9ZwsFbAWesfloUcc23tGhiz8FL/zNxwka8i5JYQmqUy/VY5vcbTwpql1e
-	 Tf0ZZQegypp5g4LWxWYYf2PkFvvoryPjD+UpmzM5rctMDbPgLFXMqAEPP4XEv3ti6m
-	 4eKnimz9XNUAVhxivW5xsyRQSNboNCidFYwZLUk6smEZqtL5IlpBoxz55edkO008t0
-	 6fwMRl9iMahLw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9A4F5C43443;
-	Tue, 14 May 2024 01:00:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bPIgiAps"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2a2da57ab3aso3910000a91.3
+        for <llvm@lists.linux.dev>; Mon, 13 May 2024 18:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715650177; x=1716254977; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=G12oTJkF8iLsh/4R29i5V3FaUw9E3HvRiqsr9Lc4hks=;
+        b=bPIgiApswqMwWvJWMcfiDqkk+XJuT6kTgN6M5BZw/k10P1nwsXVcChmXKSO9dB6H+q
+         eK2Ox0Gqg7+k8ZGD60Mq5F+GpFg7ZWlhRM2+2K7UBt0OQKPuhBXd9lTQhhB0xl4hSFv/
+         mX5fBifuvp9oLDn3CyOy9q4VFqWvtsfmhYfew=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715650177; x=1716254977;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G12oTJkF8iLsh/4R29i5V3FaUw9E3HvRiqsr9Lc4hks=;
+        b=wekW1ZjyOfA+KNAy/gCP5tKqMA39PxityvpZDa5t6HDfil76dqVH2X6Xr24ihFDUxO
+         E6x5FxGiF4eti/mGFKnPRP79ey3qkfLWw9MbT3e54f2R4Uvo7IBWDm/mdBiYrDT7gtFV
+         qPDSmVP7wZDg1Ro1I8NGepZUGgOW+2c0dFd6QAp7tMeQ9XsUpnDUBX8JZUVpWesH0WmI
+         b/rX1LTTivdvbow6eSspJE7drcszZhQ2nXg/cpMgk5jlSMgbJeRnlDFA1iViHvbyf19F
+         Yf+cPHf8+2J+iOvAF/RnFDVhWGZoYHusISPlrhn8n+/xsk96JOi1n5jX4JuyI0hi5vPe
+         fJ6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXSkPS5YXmVPgaxk8s45p9thidrMHesWtSflb6hffIjIegRMWrrOvBV3ZmasBdxRbq+cgR/jvSvyMYl7t5bgt4SrCo/uw==
+X-Gm-Message-State: AOJu0YyKxbauwY54C7btjN+YhI6JMb6TA74q2qtGEA1eZaeN97sY6lZe
+	YRsG5r5pSbt9kAHGePyrcG6AzcIPMYKEzXgdRKMrVpa8BlBZ9PKpH5360F7hGw==
+X-Google-Smtp-Source: AGHT+IFEJye/Z8WAoZs9+YbGZcRqMhUSZmFn6dkSlu0jABBG8huBwOzQtMUM1ErHVjwk6NyoQ170SA==
+X-Received: by 2002:a17:90b:3a85:b0:2b2:c85f:aa0b with SMTP id 98e67ed59e1d1-2b6ccfed296mr9212935a91.42.1715650176932;
+        Mon, 13 May 2024 18:29:36 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b628ca53b8sm10361200a91.45.2024.05.13.18.29.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 May 2024 18:29:36 -0700 (PDT)
+Date: Mon, 13 May 2024 18:29:35 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-hardening@vger.kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] hpfs: Annotate struct hpfs_dirent with __counted_by
+Message-ID: <202405131828.9CD8E5A@keescook>
+References: <CAGG=3QW4b9mqh9oGQ16NmMGbo4HVHmdM00Be1Qk97StCpW4xTA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: prestera: Add flex arrays to some structs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171564842962.4255.15459497362848751312.git-patchwork-notify@kernel.org>
-Date: Tue, 14 May 2024 01:00:29 +0000
-References: <AS8PR02MB7237E8469568A59795F1F0408BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
-In-Reply-To: <AS8PR02MB7237E8469568A59795F1F0408BE12@AS8PR02MB7237.eurprd02.prod.outlook.com>
-To: Erick Archer <erick.archer@outlook.com>
-Cc: taras.chornyi@plvision.eu, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, keescook@chromium.org,
- gustavoars@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGG=3QW4b9mqh9oGQ16NmMGbo4HVHmdM00Be1Qk97StCpW4xTA@mail.gmail.com>
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun, 12 May 2024 18:10:27 +0200 you wrote:
-> The "struct prestera_msg_vtcam_rule_add_req" uses a dynamically sized
-> set of trailing elements. Specifically, it uses an array of structures
-> of type "prestera_msg_acl_action actions_msg".
+On Mon, May 13, 2024 at 04:45:54PM -0700, Bill Wendling wrote:
+> Prepare for the coming implementation by GCC and Clang of the
+> __counted_by attribute. Flexible array members annotated with
+> __counted_by can have their accesses bounds-checked at run-time checking
+> via CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE
+> (for strcpy/memcpy-family functions).
 > 
-> The "struct prestera_msg_flood_domain_ports_set_req" also uses a
-> dynamically sized set of trailing elements. Specifically, it uses an
-> array of structures of type "prestera_msg_acl_action actions_msg".
+> Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+>  fs/hpfs/hpfs.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/fs/hpfs/hpfs.h b/fs/hpfs/hpfs.h
+> index 281dec8f636b..ac137787f1f9 100644
+> --- a/fs/hpfs/hpfs.h
+> +++ b/fs/hpfs/hpfs.h
+> @@ -357,7 +357,7 @@ struct hpfs_dirent {
+>    u8 ix; /* code page index (of filename), see
+>      struct code_page_data */
+>    u8 namelen; /* file name length */
+> -  u8 name[]; /* file name */
+> +  u8 name[] __counted_by(namelen); /* file name */
+>    /* dnode_secno down;   btree down pointer, if present,
+>         follows name on next word boundary, or maybe it
+>     precedes next dirent, which is on a word boundary. */
 
-Here is the summary with links:
-  - net: prestera: Add flex arrays to some structs
-    https://git.kernel.org/netdev/net-next/c/86348d217661
+Looking through struct hpfs_dirent::name uses, I think everything checks
+out. I do see some confusing manipulations in hpfs_add_de(), though. I
+*think* it'll be okay, though.
 
-You are awesome, thank you!
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Kees Cook
