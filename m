@@ -1,92 +1,158 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220E14C8D;
-	Tue, 14 May 2024 02:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B213EAD32
+	for <llvm@lists.linux.dev>; Tue, 14 May 2024 02:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715652926; cv=none; b=KCmFlKJl6vSTmmDnTFxgpBd4+u/Z5u2FAAVscRs/6r394u3Jb+GPnC0ckVWmTcm6mrUWzhbPQkeKQhtkhS18m0pFzRZgB/yqCOpQYPqB3YKi7uD4xrk+rAEsch5TYbhmHpQP1pTsd+yVf1OVoFYSAdItjcLSAehZC1f+PwRRqfA=
+	t=1715655040; cv=none; b=e6e5yjVvkjXDyEwQjohbfVYvfYHH/YEs17R4typl0uvh5FKRxFSqJtvGi4T+pItZrPasPjh3A59/T4XiehuOOgUsrSljpgE8Fr88W1gfWiiIsGz42ZLMAROSSGhlSz7dHSQ4m1BxHnCCSLG3UNBI3mxRZISNfTNrwHQ4ToPG3P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715652926; c=relaxed/simple;
-	bh=z6Lm5ompKBHeHZuRba98YUM44pCmPMVjPqmvhRHI+r8=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=Q/7ZehtqlHuAkmfzkseqCNQUsTKuxDgfQ1h3hFzmooyTcxG3NG+iWErr1RbxAzFlDm3sVjSiIsOTF60FtEqnzUtfYf/r5Q+hYWrlb1i18cfxT9EEeWLzPFjj3DbX7jHKDrKBP3oLS++01aOhnoViyv1tVC7AfRYw4k6Yc6zHw7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HX6C6XO3; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1715655040; c=relaxed/simple;
+	bh=tljlP12sTyYuUvTD3YElCJchNDXJhtrkQ+IxniFQfm4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KEKAO91LBN8CHrgz6Ll36d6nivrj/m0a/xkCtBVNC9XNarZARKbaMC7O4e7G4yFCKnTeBP48XDXOT020lNuv3/HdsVQ/6tIwh9FvrxADI81QtOeRsf0A4Mt8s6pvJEFpLQiiEr2T/zsTfMVHksJ4Pftjm3s1FrB2H2CXUG1uE14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eiRCU/AX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HX6C6XO3"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1715652920; h=Message-ID:Subject:Date:From:To;
-	bh=iPnEEWKQuTa1Y1rNnIiTQTNWYIOeu95k7A0SXh7Y2lk=;
-	b=HX6C6XO34O2I/hfWlUuchuDpRLl9ZvjejNuALQipzee6s4t7+Q70GtCnW9I73jbzqGjWZVNr59x6it/RFvhQ7Hb/fqgCoGOInqHhD6t4zm7CFp8Ri1fp0t53PgUpqalhFzy6YjXS7i5vg3YRNxBFq9IZXcBcgieIRNz2kJmqV+Q=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045046011;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0W6TQv3T_1715652917;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0W6TQv3T_1715652917)
-          by smtp.aliyun-inc.com;
-          Tue, 14 May 2024 10:15:18 +0800
-Message-ID: <1715652495.6335685-4-hengqi@linux.alibaba.com>
-Subject: Re: [PATCH net-next v13 2/4] ethtool: provide customized dim profile management
-Date: Tue, 14 May 2024 10:08:15 +0800
-From: Heng Qi <hengqi@linux.alibaba.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
- llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- "David S . Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>,
- Eric Dumazet <edumazet@google.com>,
- Jason    Wang <jasowang@redhat.com>,
- "Michael S . Tsirkin" <mst@redhat.com>,
- Brett    Creeley <bcreeley@amd.com>,
- Ratheesh Kannoth <rkannoth@marvell.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Tal Gilboa <talgi@nvidia.com>,
- Jonathan    Corbet <corbet@lwn.net>,
- linux-doc@vger.kernel.org,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Jiri Pirko <jiri@resnulli.us>,
- Paul    Greenwalt <paul.greenwalt@intel.com>,
- Ahmed Zaki <ahmed.zaki@intel.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>,
- Kory Maincent <kory.maincent@bootlin.com>,
- Andrew Lunn <andrew@lunn.ch>,
- justinstitt@google.com,
- donald.hunter@gmail.com,
- netdev@vger.kernel.org,
- virtualization@lists.linux.dev
-References: <20240509044747.101237-1-hengqi@linux.alibaba.com>
- <20240509044747.101237-3-hengqi@linux.alibaba.com>
- <202405100654.5PbLQXnL-lkp@intel.com>
- <1715531818.6973832-3-hengqi@linux.alibaba.com>
- <20240513072249.7b0513b0@kernel.org>
- <1715611933.2264705-1-hengqi@linux.alibaba.com>
- <20240513082412.2a27f965@kernel.org>
- <1715614744.0497134-3-hengqi@linux.alibaba.com>
- <20240513114233.6eb8799e@kernel.org>
-In-Reply-To: <20240513114233.6eb8799e@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eiRCU/AX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715655037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3E0BfKNs3dkGBxjM/goMRJSbJK/LNofw5/aP4kQ8Ywc=;
+	b=eiRCU/AXIlNQw1DWWWk63RiEmPphxvnZq+aBuXSx3MkKUnXhjf3I9PQIaO1op9ZP/u/wsm
+	2sxfYm6gJ6UuMgZFa2Q4l8ia/vXof3Hw/HbLsGlJlONUtQ5dTK+MBql/CfuqbZrSNdDCf7
+	/6wc0e8uVyg4xU4vLHuYqbc/gK9B4Zw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-635-Wi-_BJ2xOSWv7DCDdVJ-UQ-1; Mon,
+ 13 May 2024 22:50:35 -0400
+X-MC-Unique: Wi-_BJ2xOSWv7DCDdVJ-UQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61F913C025BC
+	for <llvm@lists.linux.dev>; Tue, 14 May 2024 02:50:35 +0000 (UTC)
+Received: from [172.64.11.15] (unknown [10.30.34.149])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 15C881054820;
+	Tue, 14 May 2024 02:50:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 9 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 6d1346f1)
+Date: Tue, 14 May 2024 02:50:35 -0000
+To: yiyan@redhat.com, bhe@redhat.com, llvm@lists.linux.dev,
+ bgoncalv@redhat.com, xiawu@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <76728.124051322503501004@us-mta-635.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 13 May 2024 11:42:33 -0700, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Mon, 13 May 2024 23:39:04 +0800 Heng Qi wrote:
-> >  config PROVE_LOCKING
-> >         bool "Lock debugging: prove locking correctness"
-> > -       depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
-> > +       depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && NET
-> 
-> We can't make lockdep dependent on NET.
-> People working on other subsystems should be able to use LOCKDEP 
-> with minimal builds.
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Got it. Then I declare "DIMLIB depends on NET" and clean up other places.
+Kernel information:
+    Commit message: Merge tag 'soc-defconfig-6.10' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/soc/soc
 
-One more friendly request, I see net-next is closed today, but our downstream
-kernel release deadline is 5.20, so I want to test and release the new v14 today,
-is it ok?
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1288869602
 
-Thanks!
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        kdump - kexec-file-load
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1288869602-x86_64-kernel_upt_26
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kexec-file-load
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1288869602-x86_64-kernel_upt_37
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+
+
+Tests that were not ran because of internal issues:=20
+    kdump - file-load [ppc64le]
+    kdump - sysrq-c [ppc64le]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [ppc64le]
+    SELinux Custom Module Setup [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
