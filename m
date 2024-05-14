@@ -1,260 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FFD139D10;
-	Tue, 14 May 2024 09:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E07113A279
+	for <llvm@lists.linux.dev>; Tue, 14 May 2024 10:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715680271; cv=none; b=kXF2Ekf5DrPms6DeVOIgjud3X4nxkOYQ1O5KutttFnuPfWSC2yikH83iEuh77wo8iBzgtEUr4vHjXKeQ6agd04laIQRYV0Ou1YTfw7j3dOk6fvGBP1gxRGpwCDxPI4BR2Hk+dfR0GwK4/BFNhwD+2jQins2CqRTv2EIKyUaqPtg=
+	t=1715683087; cv=none; b=B5Ek35Zrb4O2rRqT+oU14eqR02aS4KeZ95IsVAamvlDLhx1ERtXstZvY7S4De0k3/ierHvnXw4kEBpCwpGL8i1h0oNpbe/L9gE3e0Aj0Fwt5hS2vg0rFLjRq4EF958XjcdNM1b434PviUkr4E5O0Td0hYC3PD9pKIWn7FDO6xIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715680271; c=relaxed/simple;
-	bh=e/7QB0ztLm37S9xPnzwJmq7yHefNqMLEqkgHjv25Txk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fDjO/AfGIs7J8ckoekObvh+QTQHVdrYQg+jsQZyDCuKEm5+OQXs/23dL3JymdBoJM2Ttnr3guoS37tb8LoBJngkmFR4loRjplTFsXKSrvxPmexw4mWb1PqGwnWXSaoTMLxzDqkvExyK8TeBJtQWyC84VULWimIyCFgUuzejk50k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NyPg14Mw; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715683087; c=relaxed/simple;
+	bh=gXV/oqhmaQ1tdC9JRFSJVqEuie1cUMVVNhKnd6xNMRQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=msJ7F9kPHzw5CKtk6+B/kE+obfnciNQ7uplxvyBry7S/P7pLCwfzSTD+rsbp7Sck1eWngvkBi28YHplXgOiIIrxVHbpj7oDPzJ5RytYKFVxGlgCvwCJhpFc6+WWi8jU6ordbT/Y+8KcfoAPuRqusO/8tsErkg3rddyu2kK6W7kY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TM1nUYLK; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=byghsQKk; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NyPg14Mw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715680270; x=1747216270;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e/7QB0ztLm37S9xPnzwJmq7yHefNqMLEqkgHjv25Txk=;
-  b=NyPg14MwjuQVMfERntWIV4uEU1DKVA1KEClxbtlnnvZepNfDTfZBPQ1F
-   dSntBSphNB141eTjwHgN5c/pu0Sm0/vxK/EjhnROV02ADZLtqV8GAs3D2
-   6Pr6dJsvXxdeveKG0G11ga791JyIKFgl1vr7vjAckxDdupqbzjkPHD3oQ
-   dTzILUcsVMHLbVZzdAMI1shBC8fJzZjBxs9P1hk67GtHvqWR9SZcqjfIZ
-   P/xZY3RXP2eOi7OwIYTsAzrWD5amr9xSjchqkUQ6IalVm2Qcb3+X5Y93m
-   cWYhycq1IFQQ5VfbdB8aIHVANR+u8OIEJV0Yy+A6mixOsWV6BAXAfa2JD
-   w==;
-X-CSE-ConnectionGUID: JOHdsuPGSY6TxC0r0iJj5A==
-X-CSE-MsgGUID: vGa7GotjTXOVRQhE+SEb0A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="15487045"
-X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
-   d="scan'208";a="15487045"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2024 02:51:09 -0700
-X-CSE-ConnectionGUID: f65id6e2QqyTh9LqZCIFTA==
-X-CSE-MsgGUID: OZNKEXkXTH+WPsWTdYZigA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
-   d="scan'208";a="30700220"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 14 May 2024 02:51:07 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s6ooK-000BLv-2p;
-	Tue, 14 May 2024 09:51:04 +0000
-Date: Tue, 14 May 2024 17:50:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: SeongJae Park <sj@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sj:damon/next 32/33] mm/damon/acma.c:62:14: error: use of
- undeclared identifier 'max_mem'
-Message-ID: <202405141712.IN8VzCy4-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TM1nUYLK";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="byghsQKk"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1715683084;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iDStsWVDKLJBA8425Wty2TlT2DjOQySOPO1UJZBTK/s=;
+	b=TM1nUYLKS/rtDO6b+mZa35J2FOZtfg5jpN5AWCz3I8aEFExTnGThvTdTuGyZlrMPr22FYh
+	Pl8roHl3KzZ0U5Ov5TpnAehWZNnQdC7r9rWBa6pnXmzWmbzcypELEmmgSnP85LxmjJbKGQ
+	DQdOaHtl1hH7kZrQvXOaWBDCgDGiVQ9AHMVbTc7fNkamWhibDWbBBdpaXGikoxO5SD3KOb
+	Ub4QGDncE/fW/5pcT/v6HVFxfaxsdjirOvzmUc6PZ0sdB3yn70FbUo3CL1LWAMehLGcyrk
+	ablNYNXbAXWjRR1oz0muqBn/sQ9SISYJ4AVS4XNHs0yiwd67fLYWa1psHVHZlg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1715683084;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iDStsWVDKLJBA8425Wty2TlT2DjOQySOPO1UJZBTK/s=;
+	b=byghsQKks4BdQGcAkosA2dEhmuZsi2ivt9KDLL4SFctUS/5Linbpj3luNP7BCYw6lOVoh3
+	DGNSvwatQH4TOKCQ==
+To: Justin Stitt <justinstitt@google.com>, John Stultz <jstultz@google.com>,
+ Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Bill Wendling <morbo@google.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH] ntp: remove accidental integer wrap-around
+In-Reply-To: <20240507-b4-sio-ntp-usec-v1-1-15003fc9c2b4@google.com>
+References: <20240507-b4-sio-ntp-usec-v1-1-15003fc9c2b4@google.com>
+Date: Tue, 14 May 2024 12:38:03 +0200
+Message-ID: <87v83gllv8.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-head:   8babfaa14bfc8f45e2c3d093952ab737fd0db1d5
-commit: 9c0c2a5550718fd72b4384589be3b4c470a85502 [32/33] mm/damon/acma: implement scale up feature
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240514/202405141712.IN8VzCy4-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240514/202405141712.IN8VzCy4-lkp@intel.com/reproduce)
+On Tue, May 07 2024 at 04:34, Justin Stitt wrote:
+> Using syzkaller alongside the newly reintroduced signed integer overflow
+> sanitizer spits out this report:
+>
+> [  138.454979] ------------[ cut here ]------------
+> [  138.458089] UBSAN: signed-integer-overflow in ../kernel/time/ntp.c:461:16
+> [  138.462134] 9223372036854775807 + 500 cannot be represented in type 'long'
+> [  138.466234] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.8.0-rc2-00038-gc0a509640e93-dirty #10
+> [  138.471498] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [  138.477110] Call Trace:
+> [  138.478657]  <IRQ>
+> [  138.479964]  dump_stack_lvl+0x93/0xd0
+> [  138.482276]  handle_overflow+0x171/0x1b0
+> [  138.484699]  second_overflow+0x2d6/0x500
+> [  138.487133]  accumulate_nsecs_to_secs+0x60/0x160
+> [  138.489931]  timekeeping_advance+0x1fe/0x890
+> [  138.492535]  update_wall_time+0x10/0x30
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405141712.IN8VzCy4-lkp@intel.com/
+Same comment vs. trimming.
 
-All errors (new ones prefixed by >>):
+> Historically, the signed integer overflow sanitizer did not work in the
+> kernel due to its interaction with `-fwrapv` but this has since been
+> changed [1] in the newest version of Clang. It was re-enabled in the
+> kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+> sanitizer").
 
-   In file included from mm/damon/acma.c:16:
-   In file included from include/linux/damon.h:11:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/damon/acma.c:16:
-   In file included from include/linux/damon.h:11:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/damon/acma.c:16:
-   In file included from include/linux/damon.h:11:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from mm/damon/acma.c:16:
-   In file included from include/linux/damon.h:11:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   mm/damon/acma.c:55:14: error: use of undeclared identifier 'min_mem'
-      55 | module_param(min_mem, ulong, 0600);
-         |              ^
-   mm/damon/acma.c:55:14: error: use of undeclared identifier 'min_mem'
->> mm/damon/acma.c:62:14: error: use of undeclared identifier 'max_mem'
-      62 | module_param(max_mem, ulong, 0600);
-         |              ^
->> mm/damon/acma.c:62:14: error: use of undeclared identifier 'max_mem'
-   mm/damon/acma.c:190:22: error: too few arguments to function call, expected 6, have 5
-     182 |         return damon_new_scheme(
-         |                ~~~~~~~~~~~~~~~~
-     183 |                         pattern,
-     184 |                         action,
-     185 |                         /* work for every second */
-     186 |                         1000000,
-     187 |                         /* under the quota. */
-     188 |                         &quota,
-     189 |                         /* (De)activate this according to the watermarks. */
-     190 |                         &damon_acma_wmarks);
-         |                                           ^
-   include/linux/damon.h:770:15: note: 'damon_new_scheme' declared here
-     770 | struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
-         |               ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     771 |                         enum damos_action action,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-     772 |                         unsigned long apply_interval_us,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     773 |                         struct damos_quota *quota,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     774 |                         struct damos_watermarks *wmarks,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     775 |                         int target_nid);
-         |                         ~~~~~~~~~~~~~~
-   mm/damon/acma.c:205:3: error: must use 'enum' tag to refer to type 'damos_quota_goal_metric'
-     205 |                 damos_quota_goal_metric goal_metric)
-         |                 ^
-         |                 enum 
-   mm/damon/acma.c:209:2: error: use of undeclared identifier 'goal'
-     209 |         goal = damos_new_quota_goal(goal_metric, quota_mem_pressure_us);
-         |         ^
-   mm/damon/acma.c:210:7: error: use of undeclared identifier 'goal'
-     210 |         if (!goal)
-         |              ^
-   mm/damon/acma.c:212:39: error: use of undeclared identifier 'goal'
-     212 |         damos_add_quota_goal(&scheme->quota, goal);
-         |                                              ^
-   mm/damon/acma.c:245:52: error: use of undeclared identifier 'KB'
-     245 |         start_limit = monitor_region_start + min_mem_kb * KB;
-         |                                                           ^
-   mm/damon/acma.c:248:45: error: use of undeclared identifier 'MB'
-     248 |         for (end = end_limit; end >= start_limit + SCALE_WINDOW;
-         |                                                    ^
-   mm/damon/acma.c:220:29: note: expanded from macro 'SCALE_WINDOW'
-     220 | #define SCALE_WINDOW    (128 * MB)
-         |                                ^
-   mm/damon/acma.c:249:11: error: use of undeclared identifier 'MB'
-     249 |                         end -= SCALE_WINDOW) {
-         |                                ^
-   mm/damon/acma.c:220:29: note: expanded from macro 'SCALE_WINDOW'
-     220 | #define SCALE_WINDOW    (128 * MB)
-         |                                ^
-   mm/damon/acma.c:250:7: error: call to undeclared function 'damon_alloced_bytes'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     250 |                 if (damon_alloced_bytes(end, end - SCALE_WINDOW)
-         |                     ^
-   mm/damon/acma.c:250:38: error: use of undeclared identifier 'MB'
-     250 |                 if (damon_alloced_bytes(end, end - SCALE_WINDOW)
-         |                                                    ^
-   mm/damon/acma.c:220:29: note: expanded from macro 'SCALE_WINDOW'
-     220 | #define SCALE_WINDOW    (128 * MB)
-         |                                ^
-   mm/damon/acma.c:251:8: error: use of undeclared identifier 'MB'
-     251 |                                 != SCALE_WINDOW)
-         |                                    ^
-   mm/damon/acma.c:220:29: note: expanded from macro 'SCALE_WINDOW'
-     220 | #define SCALE_WINDOW    (128 * MB)
-         |                                ^
-   mm/damon/acma.c:254:52: error: use of undeclared identifier 'MB'
-     254 |         filter->addr_range.start = max(start_limit, end - SCALE_WINDOW);
-         |                                                           ^
-   mm/damon/acma.c:220:29: note: expanded from macro 'SCALE_WINDOW'
-     220 | #define SCALE_WINDOW    (128 * MB)
-         |                                ^
-   mm/damon/acma.c:276:41: error: use of undeclared identifier 'KB'
-     276 |         end_limit = start_limit + max_mem_kb * KB;
-         |                                                ^
-   mm/damon/acma.c:279:49: error: use of undeclared identifier 'MB'
-     279 |         for (start = start_limit; start <= end_limit - SCALE_WINDOW;
-         |                                                        ^
-   mm/damon/acma.c:220:29: note: expanded from macro 'SCALE_WINDOW'
-     220 | #define SCALE_WINDOW    (128 * MB)
-         |                                ^
-   mm/damon/acma.c:280:13: error: use of undeclared identifier 'MB'
-     280 |                         start += SCALE_WINDOW) {
-         |                                  ^
-   mm/damon/acma.c:220:29: note: expanded from macro 'SCALE_WINDOW'
-     220 | #define SCALE_WINDOW    (128 * MB)
-         |                                ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   7 warnings and 20 errors generated.
+Again. Irrelevant to the problem.
 
+> Let's introduce a new macro and use that against NTP_PHASE_LIMIT to
+> properly limit the max size of time_maxerror without overflowing during
+> the check itself.
 
-vim +/max_mem +62 mm/damon/acma.c
+This fails to tell what is causing the issue and just talks about what
+the patch is doing. The latter can be seen from the patch itself, no?
 
-    56	
-    57	/*
-    58	 * Maximum amount of memory to be guaranteed to the system.  In other words,
-    59	 * the upper limit of the scaling.
-    60	 */
-    61	static unsigned long max_mem_kb __read_mostly;
-  > 62	module_param(max_mem, ulong, 0600);
-    63	
+Something like this:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+   On second overflow time_maxerror is unconditionally incremented and
+   the result is checked against NTP_PHASE_LIMIT, but the increment can
+   overflow into negative space.
+
+   Prevent this by checking the overflow condition before incrementing.
+
+Hmm?
+
+But that obviously begs the question why this can happen at all.
+
+#define MAXPHASE 500000000L       
+#define NTP_PHASE_LIMIT ((MAXPHASE / NSEC_PER_USEC) << 5)
+
+==> NTP_PHASE_LIMIT = 1.6e+07 = 0xf42400
+
+#define MAXFREQ 500000
+
+So how can 0xf42400 + 500000/1000 overflow in the first place?
+
+It can't unless time_maxerror is somehow initialized to a bogus
+value and indeed it is:
+
+process_adjtimex_modes()
+        ....
+	if (txc->modes & ADJ_MAXERROR)
+		time_maxerror = txc->maxerror;
+
+So that wants to be fixed and not the symptom.
+
+Thanks,
+
+        tglx
