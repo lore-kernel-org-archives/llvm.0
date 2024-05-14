@@ -1,85 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF45C135A40;
-	Tue, 14 May 2024 13:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2701448D7;
+	Tue, 14 May 2024 14:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715694389; cv=none; b=kErFygxB9XKPbUC7BLddBRW6EnsgTKfGE0VNYy3bxf9qUrXiYdr79u46ZBo5ScI/lMK076s6262nBXddbfceSd6nkvTkjSCLInXjMWJ8rr2gJqgOCBJS3Lo2sHUF/HtFuQ30C6gENiSUyZUdEOpobCC1OzhVBxNZYsVOwCQ6eQc=
+	t=1715695973; cv=none; b=BGacMrYV4Ol3xhc6fPBTk3k18OO+I/Y0sVnHBeEpLD26rt9nHgqvkk8ZPAXQWV7d9B9u8APd1qYpVJ9QX6i5F9ObedR4D/aHsaue5AU9ovABB2zmEnPsF2xJ5QVW3QA8G2LEj8aIUgkEv4qLLjmy6U+UzOPo6tSXOrTQ9nwi6sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715694389; c=relaxed/simple;
-	bh=zBSGEEVkAYXfxfHKmHO3J9UMnIn9Z43RNoE8U8/JUJs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cXT1sNrOGL/2b7UZwGHW3lbIlnJdMmY4xTjb79DninaNE7IrqD7qZ9mM7MwfT4T7eHo3mOUttWGPK09GJmFfk66Ll8jC9fCWN8f+l0ouB4ExJVN7toodN8CIMh9bhB0EFjFbJ6jo7S7RWdnmg2FtD4B9K1ia8pvXrjBdhaYrKBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+nwBFyI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715695973; c=relaxed/simple;
+	bh=QkLXBf732foY955KPZGH978/SHv7Xxnt7lzvIH9cRLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=E8GvRGrnIzxULPgEUdCUXIWk/08dlQ3XUZgWnTVkmNRlYd6Rv0Uhl+llOKVQK5MIlv5qqzF+Hd3Gei0poLf8+Z4PWjVDGnDGfqYaXW6B97XQH1wTGOV74eNUrrHLAaWMgoiIvHUUa4QbFNexdarEFcRtWEibVI0RdULN3r1uTjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ES57VHlS; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+nwBFyI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49328C2BD10;
-	Tue, 14 May 2024 13:46:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715694388;
-	bh=zBSGEEVkAYXfxfHKmHO3J9UMnIn9Z43RNoE8U8/JUJs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=l+nwBFyIporfF0UR4fTxoN8Lx4/bsH7hRvZEErPJk897JJ3CMiUBYxZKLILVJY5is
-	 pTOtImxqbpf50N34AaIr58fAovsJ3UZeVT6U49wtDBhi7qyd4XSQRyEPKjYMwdt9Uz
-	 g7RQ+0I7lkvQimxMs9+w3cdebdI0Wbv+SrbxI6S1DBEc+V8Kn/m1y7XoLn+dpRwTm+
-	 p/lfrJFNQPkOZm+ZkwmPeYH3kU9o2CzYBj2NLd6XoCY6FRqoera6YlYyvylZN04hiH
-	 wzt/rhaBxz1IZuXW6/NsZ5uzEGPq5MF9oVTKVEEpZx0spfVYDpKLMIfzFObhT6k9Lp
-	 WT2ozW4nGRFYw==
-Date: Tue, 14 May 2024 06:46:26 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Heng Qi <hengqi@linux.alibaba.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, "David S . Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>, Jason
-    Wang <jasowang@redhat.com>, "Michael S . Tsirkin" <mst@redhat.com>,
- Brett    Creeley <bcreeley@amd.com>, Ratheesh Kannoth
- <rkannoth@marvell.com>, Alexander Lobakin <aleksander.lobakin@intel.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Tal Gilboa <talgi@nvidia.com>,
- Jonathan    Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, Maxime
- Chevallier <maxime.chevallier@bootlin.com>, Jiri Pirko <jiri@resnulli.us>,
- Paul    Greenwalt <paul.greenwalt@intel.com>, Ahmed Zaki
- <ahmed.zaki@intel.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, Kory
- Maincent <kory.maincent@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
- justinstitt@google.com, donald.hunter@gmail.com, netdev@vger.kernel.org,
- virtualization@lists.linux.dev
-Subject: Re: [PATCH net-next v13 2/4] ethtool: provide customized dim
- profile management
-Message-ID: <20240514064626.44778d98@kernel.org>
-In-Reply-To: <1715652495.6335685-4-hengqi@linux.alibaba.com>
-References: <20240509044747.101237-1-hengqi@linux.alibaba.com>
-	<20240509044747.101237-3-hengqi@linux.alibaba.com>
-	<202405100654.5PbLQXnL-lkp@intel.com>
-	<1715531818.6973832-3-hengqi@linux.alibaba.com>
-	<20240513072249.7b0513b0@kernel.org>
-	<1715611933.2264705-1-hengqi@linux.alibaba.com>
-	<20240513082412.2a27f965@kernel.org>
-	<1715614744.0497134-3-hengqi@linux.alibaba.com>
-	<20240513114233.6eb8799e@kernel.org>
-	<1715652495.6335685-4-hengqi@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ES57VHlS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715695971; x=1747231971;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QkLXBf732foY955KPZGH978/SHv7Xxnt7lzvIH9cRLg=;
+  b=ES57VHlS5/2SFhLlC6wkUAZ8s1u6v7sE1Ns9bL9eGDOvxupnSuAqxuRC
+   diWEwQCa1GMR/wSdwRwrNzBPzjFlbSJPflWIGDCX+vHOmGJrPrC+ej23L
+   SZyaDaXy1FUnP84FRMIrY6NEvL5aL0BL4zWr4+7QDqkZenMXJdLLhM4YJ
+   b5u/8IKbDK9Cjw9ztGMVXl+2JrxenFSY7E2oHAF1vJirqybcfrYyKk/hc
+   +/RjQHT27HRi9tPY0QEyHBAG7XszhEibFMZb3/ib6qM24rX4IUQbW+rMK
+   OPIfA5ABTkggLu705AyNbVhmDcYn1eBrKKHs2Ip72zL7jhWeRt1L5tski
+   Q==;
+X-CSE-ConnectionGUID: XVUvQAJcSyyCVP0rBcZ8fw==
+X-CSE-MsgGUID: OCXZ93ZVR7umZ5gG8xNhCg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11073"; a="11894617"
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="11894617"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2024 07:12:50 -0700
+X-CSE-ConnectionGUID: pAuqDw/6RxGJMPG6mHV9TA==
+X-CSE-MsgGUID: hSkmzZQZQiaPFWsGMM5zBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="35457004"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 14 May 2024 07:12:49 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s6sta-000BWB-1R;
+	Tue, 14 May 2024 14:12:46 +0000
+Date: Tue, 14 May 2024 22:12:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [goldwynr:iomap.2 32/32] ERROR: modpost: "iomap_read_end_io"
+ [fs/btrfs/btrfs.ko] undefined!
+Message-ID: <202405142224.ykqoRg9h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 14 May 2024 10:08:15 +0800 Heng Qi wrote:
-> > We can't make lockdep dependent on NET.
-> > People working on other subsystems should be able to use LOCKDEP 
-> > with minimal builds.  
-> 
-> Got it. Then I declare "DIMLIB depends on NET" and clean up other places.
+tree:   https://github.com/goldwynr/linux iomap.2
+head:   7defcedce6c031c95fa753060462301bd623163f
+commit: 7defcedce6c031c95fa753060462301bd623163f [32/32] btrfs: switch to iomap for buffered reads for data inodes
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240514/202405142224.ykqoRg9h-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240514/202405142224.ykqoRg9h-lkp@intel.com/reproduce)
 
-I'm not sure if there's any legit DIM (but not net_dim) user, if there
-isn't that SGTM. The RDMA is fine to depend on NET.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405142224.ykqoRg9h-lkp@intel.com/
 
-> One more friendly request, I see net-next is closed today, but our downstream
-> kernel release deadline is 5.20, so I want to test and release the new v14 today,
-> is it ok?
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-You'll need to post as RFC since it can't be applied but you can post
-to continue review. Please wait a day or two tho, I'm currently swamped
-trying to go thru the PR preparations.
+WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/riscv/kvm/kvm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/btrfs/btrfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/xor.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/zlib_deflate/zlib_deflate.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-de2-ccu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio_dma_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-i2c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_acm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/u_serial.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_serial.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_obex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/u_ether.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ncm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ecm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_eem.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ecm_subset.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_rndis.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_mass_storage.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_fs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/libcomposite.o
+>> ERROR: modpost: "iomap_read_end_io" [fs/btrfs/btrfs.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
