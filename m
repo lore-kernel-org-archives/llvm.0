@@ -1,126 +1,177 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E07113A279
-	for <llvm@lists.linux.dev>; Tue, 14 May 2024 10:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4FB54903
+	for <llvm@lists.linux.dev>; Tue, 14 May 2024 11:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715683087; cv=none; b=B5Ek35Zrb4O2rRqT+oU14eqR02aS4KeZ95IsVAamvlDLhx1ERtXstZvY7S4De0k3/ierHvnXw4kEBpCwpGL8i1h0oNpbe/L9gE3e0Aj0Fwt5hS2vg0rFLjRq4EF958XjcdNM1b434PviUkr4E5O0Td0hYC3PD9pKIWn7FDO6xIc=
+	t=1715684621; cv=none; b=NWSBHG6X5v0CAb0soQ+lkRK16fA1XSoSAaSOtj+np2A9nUzzXVidPsjOv4qkEraA/MouSm2giZQvl44a8G6KHTFZelRccMeEDnA6EPrIG7Zakc/axL83TZDD+cyiGP99DxHNN0BIt/HQ0CCuWhDbFLzG+oTgIdEW9dAGoEB86vU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715683087; c=relaxed/simple;
-	bh=gXV/oqhmaQ1tdC9JRFSJVqEuie1cUMVVNhKnd6xNMRQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=msJ7F9kPHzw5CKtk6+B/kE+obfnciNQ7uplxvyBry7S/P7pLCwfzSTD+rsbp7Sck1eWngvkBi28YHplXgOiIIrxVHbpj7oDPzJ5RytYKFVxGlgCvwCJhpFc6+WWi8jU6ordbT/Y+8KcfoAPuRqusO/8tsErkg3rddyu2kK6W7kY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TM1nUYLK; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=byghsQKk; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1715684621; c=relaxed/simple;
+	bh=JtKaw7o7aZ5w3yHW8D21Eg9MtuyCytgo0a+elnxWBhc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ctQ7y6did2atjuMa2xamnofnX6K/54A6rHimE7Bl6waPvz06RXA9CM5SZCGNe1PAyaqoJA8O59aPpDjtfzQ7H8jBjPf5R1q9mEQH1OAdweQK8sWqJIR27S/qD01t9mD33AGXj/LkRbaJ4S2BUbPHluqEFn4U7HoT8OZJ/bg9thI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GX1UdD1U; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TM1nUYLK";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="byghsQKk"
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1715683084;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GX1UdD1U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715684618;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iDStsWVDKLJBA8425Wty2TlT2DjOQySOPO1UJZBTK/s=;
-	b=TM1nUYLKS/rtDO6b+mZa35J2FOZtfg5jpN5AWCz3I8aEFExTnGThvTdTuGyZlrMPr22FYh
-	Pl8roHl3KzZ0U5Ov5TpnAehWZNnQdC7r9rWBa6pnXmzWmbzcypELEmmgSnP85LxmjJbKGQ
-	DQdOaHtl1hH7kZrQvXOaWBDCgDGiVQ9AHMVbTc7fNkamWhibDWbBBdpaXGikoxO5SD3KOb
-	Ub4QGDncE/fW/5pcT/v6HVFxfaxsdjirOvzmUc6PZ0sdB3yn70FbUo3CL1LWAMehLGcyrk
-	ablNYNXbAXWjRR1oz0muqBn/sQ9SISYJ4AVS4XNHs0yiwd67fLYWa1psHVHZlg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1715683084;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iDStsWVDKLJBA8425Wty2TlT2DjOQySOPO1UJZBTK/s=;
-	b=byghsQKks4BdQGcAkosA2dEhmuZsi2ivt9KDLL4SFctUS/5Linbpj3luNP7BCYw6lOVoh3
-	DGNSvwatQH4TOKCQ==
-To: Justin Stitt <justinstitt@google.com>, John Stultz <jstultz@google.com>,
- Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Bill Wendling <morbo@google.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH] ntp: remove accidental integer wrap-around
-In-Reply-To: <20240507-b4-sio-ntp-usec-v1-1-15003fc9c2b4@google.com>
-References: <20240507-b4-sio-ntp-usec-v1-1-15003fc9c2b4@google.com>
-Date: Tue, 14 May 2024 12:38:03 +0200
-Message-ID: <87v83gllv8.ffs@tglx>
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rfuFoDfATjvO9Y3WvAOLBhNTqnO10141o3s7a4wd1kQ=;
+	b=GX1UdD1UtNOSMw6x02hJLngRDfvP9qMKwkWBTOGTilnI0nBW6Lpg4wGHDcTNUrlVsImeo/
+	6v2YHvFZyAvcXlH4/l615E+lZ/GVbG/3+bZutvDev76ruS6G3lm8MQ1LYbzR8g17jzt/Bx
+	5oU7QZge79PMtooJHa5Xa7cYELtBqIQ=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-173-Tp60I8HhODi8_-XrvLM-HA-1; Tue,
+ 14 May 2024 07:03:36 -0400
+X-MC-Unique: Tp60I8HhODi8_-XrvLM-HA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC4E93813BC9
+	for <llvm@lists.linux.dev>; Tue, 14 May 2024 11:03:36 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 51DD0105480A;
+	Tue, 14 May 2024 11:03:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 8f5b5f78)
+Date: Tue, 14 May 2024 11:03:36 -0000
+To: xiawu@redhat.com, bgoncalv@redhat.com, xzhou@redhat.com, yiyan@redhat.com,
+ bhe@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Message-Id: <03211.124051407033600715@us-mta-173.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 07 2024 at 04:34, Justin Stitt wrote:
-> Using syzkaller alongside the newly reintroduced signed integer overflow
-> sanitizer spits out this report:
->
-> [  138.454979] ------------[ cut here ]------------
-> [  138.458089] UBSAN: signed-integer-overflow in ../kernel/time/ntp.c:461:16
-> [  138.462134] 9223372036854775807 + 500 cannot be represented in type 'long'
-> [  138.466234] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.8.0-rc2-00038-gc0a509640e93-dirty #10
-> [  138.471498] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [  138.477110] Call Trace:
-> [  138.478657]  <IRQ>
-> [  138.479964]  dump_stack_lvl+0x93/0xd0
-> [  138.482276]  handle_overflow+0x171/0x1b0
-> [  138.484699]  second_overflow+0x2d6/0x500
-> [  138.487133]  accumulate_nsecs_to_secs+0x60/0x160
-> [  138.489931]  timekeeping_advance+0x1fe/0x890
-> [  138.492535]  update_wall_time+0x10/0x30
+Hi, we tested your kernel and here are the results:
 
-Same comment vs. trimming.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> Historically, the signed integer overflow sanitizer did not work in the
-> kernel due to its interaction with `-fwrapv` but this has since been
-> changed [1] in the newest version of Clang. It was re-enabled in the
-> kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
-> sanitizer").
 
-Again. Irrelevant to the problem.
+Kernel information:
+    Commit message: Merge tag 'rust-6.10' of https://github.com/Rust-for-Li=
+nux/linux
 
-> Let's introduce a new macro and use that against NTP_PHASE_LIMIT to
-> properly limit the max size of time_maxerror without overflowing during
-> the check itself.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1289312284
 
-This fails to tell what is causing the issue and just talks about what
-the patch is doing. The latter can be seen from the patch itself, no?
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        kdump - kexec-file-load
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289312284-x86_64-kernel_upt_26
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kexec-file-load
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289312284-x86_64-kernel_upt_37
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289312284-x86_64-kernel_upt_52
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9A=A1 ERROR /10_localwatchdog
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289312284-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289312284-x86_64-kernel-debug_upt_31
 
-Something like this:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
 
-   On second overflow time_maxerror is unconditionally incremented and
-   the result is checked against NTP_PHASE_LIMIT, but the increment can
-   overflow into negative space.
 
-   Prevent this by checking the overflow condition before incrementing.
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [x86_64 (debug)]
 
-Hmm?
 
-But that obviously begs the question why this can happen at all.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-#define MAXPHASE 500000000L       
-#define NTP_PHASE_LIMIT ((MAXPHASE / NSEC_PER_USEC) << 5)
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-==> NTP_PHASE_LIMIT = 1.6e+07 = 0xf42400
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-#define MAXFREQ 500000
-
-So how can 0xf42400 + 500000/1000 overflow in the first place?
-
-It can't unless time_maxerror is somehow initialized to a bogus
-value and indeed it is:
-
-process_adjtimex_modes()
-        ....
-	if (txc->modes & ADJ_MAXERROR)
-		time_maxerror = txc->maxerror;
-
-So that wants to be fixed and not the symptom.
-
-Thanks,
-
-        tglx
