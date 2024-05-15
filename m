@@ -1,135 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B103413F45C;
-	Wed, 15 May 2024 14:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A79C13AF2;
+	Wed, 15 May 2024 16:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715783392; cv=none; b=cWO2mzMzOFouJLAWphYOUMDr3mo4OYl1aOQiiue9Z3dd+w9R3QULUkzizc8XhqaQ/3xOJSiFzGYsRA+XrZEzwy620OppjfNg2ZlFqTnyE73TBk0Z6Da0rFAq2Wn8Qz0DWNH5sGrjMIz7uHtnKYwJbUxhL2UI5fC0xRL1VLtOvGk=
+	t=1715791539; cv=none; b=u830FdK9f9f56MVXJY6VaXZd1bFGBAxDNltNgS3pIIQQO9r4UhOjSA35H1ZQrD5bMzDP/jo+TBX1ZV8iqQVi4MmUwtlSIUqVYMhLNzId8LA5ytdfi9CVPjNKojYDmkqeEYVdhBIZl3zlCW++OwmLZ2GyGHLFjRGlRBHtFZUB+FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715783392; c=relaxed/simple;
-	bh=4aVkQKr9l0WIt7rdsf2qdZclzWVA8zoqgn9hVx4/pV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tJmjy/lgh1KVLhaixAzWPD6yfVSGbFYlxGB6V+p2ZoXRn9Z8W0SGx06Avs4GWCqIQ1hqFpFXHiQK0dT27DnVSYgyIpmuMwuyyxfMFMgLSy3Qcvd0zaGrPAIIpjpsdRM7jKFCz9bnDYA5DpRtn0XrdS4ywT2qdYhn99mg84wdJD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KODpcmsQ; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715791539; c=relaxed/simple;
+	bh=vK6BDh/ZxI93Wj/Q6jEb75a/+f6y+21Ik+iDUEf/6/4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pbJ87nKNWsm3cdVKSs+T95DmBx6opg05PYVYGsedqigVneig3GdUPnkbr70HGaZM4nfboshKwVHAQi7rBcNE9vdsP8bPswA0gy1lUYeflIpqpWx70zTOp0HXyU/r6hKcIq4y391V9RD055wraWBUyFhB7H2KtfQIovrmQX+dDvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mlTuY0/q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KODpcmsQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715783391; x=1747319391;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4aVkQKr9l0WIt7rdsf2qdZclzWVA8zoqgn9hVx4/pV0=;
-  b=KODpcmsQsvHktPktPnrmh7r6oTvPSvBhOcmFaDtGzYihcU4wv2XfdHdl
-   0pihC0JjZ7ahM2VIN4Ywnyhs2BAoMvBc6BVvAqgfOCvvlYALjZVOPQvxN
-   MF4mJNvotatM8FB3CaONf6vX3sb2gadFdCM13A51vsT9Cq+dkAT82wtrp
-   BG6YISEbve/CzhIFbZWjO7B8uvC4YHK1b8xkbA+brW19AhIOiGj+mxe/0
-   LntR/nRuQ4iGTlctt/y3seNrHlhPrzJhjLyn0zj1nq3uROF+biUgj1SR0
-   1yyNy86D3XltrbFNgEgC5F/dVzdqcrmMsDVh7POHPWw2C0D8tQXzPmig9
-   A==;
-X-CSE-ConnectionGUID: uyLaOEO9Staw7MDvl8O/ag==
-X-CSE-MsgGUID: Z9LFtJMqQESt75ZTB9yT2A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="34347528"
-X-IronPort-AV: E=Sophos;i="6.08,162,1712646000"; 
-   d="scan'208";a="34347528"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 07:29:50 -0700
-X-CSE-ConnectionGUID: 3waoFJomQP+WNSpHq1CJYg==
-X-CSE-MsgGUID: LTQu1JZURyCp1t2zn8mVug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,162,1712646000"; 
-   d="scan'208";a="31665567"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 15 May 2024 07:29:47 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s7FdZ-000CvX-0L;
-	Wed, 15 May 2024 14:29:45 +0000
-Date: Wed, 15 May 2024 22:29:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Palmer Dabbelt <palmer@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 13096/13213]
- drivers/irqchip/irq-riscv-imsic-early.c:52:47: error: too many arguments to
- function call, expected 2, have 3
-Message-ID: <202405152211.4swEsJn5-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mlTuY0/q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7A8C2BD11;
+	Wed, 15 May 2024 16:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715791539;
+	bh=vK6BDh/ZxI93Wj/Q6jEb75a/+f6y+21Ik+iDUEf/6/4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mlTuY0/q8WASE+XyxPmUN1U8+itMh/E5KCOiI+kHt0U0+Qji8wnxTTwd4Dw9fmQMY
+	 5htov0vO/O2pRA7LlF+E+pwHUGJljkDT8GLSJI19Z08V2qzUk8q7YPYVwEDd3TneeY
+	 r3W4t6QHQaCKDDh2NA6Uz+Ca3UNHcejElCNx608hTYxhLK8YjlW8L+wiVWckZVqGR2
+	 +Swe6+LSQrXMi/8iNdXpF1Kr1VF6V4X0dF6Z6YleodC70hNdtuG2m2KZMIkDFF8uGQ
+	 yIbrRnqV5HEX1zS6S53QfkCnMTu/OiE7k374P7201sgwLIPKo/Qeocyj6uH8e1Uz/Q
+	 qbvaUjro9LIqw==
+From: Christian Brauner <brauner@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v2] fs: remove accidental overflow during wraparound check
+Date: Wed, 15 May 2024 18:44:45 +0200
+Message-ID: <20240515-rentier-abwinken-f9c282783235@brauner>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240513-b4-sio-vfs_fallocate-v2-1-db415872fb16@google.com>
+References: <20240513-b4-sio-vfs_fallocate-v2-1-db415872fb16@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2300; i=brauner@kernel.org; h=from:subject:message-id; bh=vK6BDh/ZxI93Wj/Q6jEb75a/+f6y+21Ik+iDUEf/6/4=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaS5PFsX9CS2lNF8bmXCqnky74M2aMk0sLXOTnriefCJ0 ULxgoUXO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACbS8Znhf8CWzw/ut4okRjyS rdKSO5xyRiz74c5DNec6I51YYuv3mzP89/3p+/roimIb2VgpUY3QhAc7C5juvhE45Kahel9+47c 4dgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
+On Mon, 13 May 2024 17:50:30 +0000, Justin Stitt wrote:
+> Running syzkaller with the newly enabled signed integer overflow
+> sanitizer produces this report:
+> 
+> [  195.401651] ------------[ cut here ]------------
+> [  195.404808] UBSAN: signed-integer-overflow in ../fs/open.c:321:15
+> [  195.408739] 9223372036854775807 + 562984447377399 cannot be represented in type 'loff_t' (aka 'long long')
+> [  195.414683] CPU: 1 PID: 703 Comm: syz-executor.0 Not tainted 6.8.0-rc2-00039-g14de58dbe653-dirty #11
+> [  195.420138] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [  195.425804] Call Trace:
+> [  195.427360]  <TASK>
+> [  195.428791]  dump_stack_lvl+0x93/0xd0
+> [  195.431150]  handle_overflow+0x171/0x1b0
+> [  195.433640]  vfs_fallocate+0x459/0x4f0
+> ...
+> [  195.490053] ------------[ cut here ]------------
+> [  195.493146] UBSAN: signed-integer-overflow in ../fs/open.c:321:61
+> [  195.497030] 9223372036854775807 + 562984447377399 cannot be represented in type 'loff_t' (aka 'long long)
+> [  195.502940] CPU: 1 PID: 703 Comm: syz-executor.0 Not tainted 6.8.0-rc2-00039-g14de58dbe653-dirty #11
+> [  195.508395] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [  195.514075] Call Trace:
+> [  195.515636]  <TASK>
+> [  195.517000]  dump_stack_lvl+0x93/0xd0
+> [  195.519255]  handle_overflow+0x171/0x1b0
+> [  195.521677]  vfs_fallocate+0x4cb/0x4f0
+> [  195.524033]  __x64_sys_fallocate+0xb2/0xf0
+> 
+> [...]
 
-First bad commit (maybe != root cause):
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   82d92a9a1b9ea0ea52aff27cddd05009b4edad49
-commit: f725fb3518e03b48a50a22f63c440cd04b41334a [13096/13213] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240515/202405152211.4swEsJn5-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240515/202405152211.4swEsJn5-lkp@intel.com/reproduce)
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405152211.4swEsJn5-lkp@intel.com/
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-All errors (new ones prefixed by >>):
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-   In file included from drivers/irqchip/irq-riscv-imsic-early.c:9:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/irqchip/irq-riscv-imsic-early.c:52:47: error: too many arguments to function call, expected 2, have 3
-      52 |         riscv_ipi_set_virq_range(virq, IMSIC_NR_IPI, true);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~                     ^~~~
-   arch/riscv/include/asm/smp.h:52:6: note: 'riscv_ipi_set_virq_range' declared here
-      52 | void riscv_ipi_set_virq_range(int virq, int nr);
-         |      ^                        ~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
 
-
-vim +52 drivers/irqchip/irq-riscv-imsic-early.c
-
-21a8f8a0eb35ce Anup Patel 2024-03-07  41  
-21a8f8a0eb35ce Anup Patel 2024-03-07  42  static int __init imsic_ipi_domain_init(void)
-21a8f8a0eb35ce Anup Patel 2024-03-07  43  {
-21a8f8a0eb35ce Anup Patel 2024-03-07  44  	int virq;
-21a8f8a0eb35ce Anup Patel 2024-03-07  45  
-21a8f8a0eb35ce Anup Patel 2024-03-07  46  	/* Create IMSIC IPI multiplexing */
-21a8f8a0eb35ce Anup Patel 2024-03-07  47  	virq = ipi_mux_create(IMSIC_NR_IPI, imsic_ipi_send);
-21a8f8a0eb35ce Anup Patel 2024-03-07  48  	if (virq <= 0)
-21a8f8a0eb35ce Anup Patel 2024-03-07  49  		return virq < 0 ? virq : -ENOMEM;
-21a8f8a0eb35ce Anup Patel 2024-03-07  50  
-21a8f8a0eb35ce Anup Patel 2024-03-07  51  	/* Set vIRQ range */
-21a8f8a0eb35ce Anup Patel 2024-03-07 @52  	riscv_ipi_set_virq_range(virq, IMSIC_NR_IPI, true);
-21a8f8a0eb35ce Anup Patel 2024-03-07  53  
-21a8f8a0eb35ce Anup Patel 2024-03-07  54  	/* Announce that IMSIC is providing IPIs */
-21a8f8a0eb35ce Anup Patel 2024-03-07  55  	pr_info("%pfwP: providing IPIs using interrupt %d\n", imsic->fwnode, IMSIC_IPI_ID);
-21a8f8a0eb35ce Anup Patel 2024-03-07  56  
-21a8f8a0eb35ce Anup Patel 2024-03-07  57  	return 0;
-21a8f8a0eb35ce Anup Patel 2024-03-07  58  }
-21a8f8a0eb35ce Anup Patel 2024-03-07  59  #else
-21a8f8a0eb35ce Anup Patel 2024-03-07  60  static void imsic_ipi_starting_cpu(void) { }
-21a8f8a0eb35ce Anup Patel 2024-03-07  61  static void imsic_ipi_dying_cpu(void) { }
-21a8f8a0eb35ce Anup Patel 2024-03-07  62  static int __init imsic_ipi_domain_init(void) { return 0; }
-21a8f8a0eb35ce Anup Patel 2024-03-07  63  #endif
-21a8f8a0eb35ce Anup Patel 2024-03-07  64  
-
-:::::: The code at line 52 was first introduced by commit
-:::::: 21a8f8a0eb35ceb21e2c9ddd87468bc3b5ac87c0 irqchip: Add RISC-V incoming MSI controller early driver
-
-:::::: TO: Anup Patel <apatel@ventanamicro.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1/1] fs: remove accidental overflow during wraparound check
+      https://git.kernel.org/vfs/vfs/c/c01a23b6fbd1
