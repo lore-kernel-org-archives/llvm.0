@@ -1,184 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA4B6E617
-	for <llvm@lists.linux.dev>; Wed, 15 May 2024 11:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7555912C7FB
+	for <llvm@lists.linux.dev>; Wed, 15 May 2024 13:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715772699; cv=none; b=LCYCoLZ1D365Gb8LClxtgRruz0pGsmJhprujswki9AQgedzynyW5/eJOQHV/Tt41TzSWlwlcHIiQhTD4jFp/C4l/zqPn6+ihtHorgkCjNj7uCQqT2H0TahWmh8OKCxfgtC0pmR0Z0QDP2Mh6EN7zK9VJ5x5wA3uElM9ghYCIVcE=
+	t=1715780593; cv=none; b=uEf7oxsCoLY3ljL9md8/Oy8ndvqj+RA59x8pvW7iPukU40NpXKrEA5BHC9hnDXRlLbT8PQ9wt32bK2XhwCyTefy3JoRWysv0Vt/D93wUS9Y0NyLpKIGdl6tJvVMO0pDbxm7LVGPr8Qqw5Y9ZJ7kzlf+w7X0QmKaQ7/fvcXFb3GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715772699; c=relaxed/simple;
-	bh=dzfK662HzMGe69vPyDKYwJ1ve/BrvgYvMZGVpZhrxrU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OwZ39/fZ0VKHT7npcDW9gyBEd8AftuWloNEB3sYGG+Hq6e/cAvTfMWWy603GeVd5FoEiNxAEHxv+WOX956gNs2KMtnra9zEmxtNZFBJqojb9qeh4CqifZKGZczXsC/E8CSRHB+bdzwZGIViC5szMVztCqF1FX08BCyUuCcHPjQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bb0PMlnF; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bb0PMlnF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715772696;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tUNCVVFw5SlPCMfs7QI71h2GDkiDf0ARhTC408zMp1k=;
-	b=bb0PMlnFR92zPzN/Uw8AHgfbmtDiKaLbY2MumxXLILJZ0ele2fK+iJ0sxxSWCrDC9ifGT4
-	BFqg62tOLAvEvSvV21wRvFMzDukLEAL4DxY8SDbzkyB3Hv93xCWbp8oM9oHTYuyURQh3q6
-	P4kWTVUPjB9p5Tg2nBnaSM5XAK8PuWU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-270-svV2961XMgWFcEBn1390Ag-1; Wed, 15 May 2024 07:31:33 -0400
-X-MC-Unique: svV2961XMgWFcEBn1390Ag-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 112C1101A525
-	for <llvm@lists.linux.dev>; Wed, 15 May 2024 11:31:33 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BED9851BF;
-	Wed, 15 May 2024 11:31:32 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 204): Test report for master
- (6.9.0, mainline.kernel.org-clang, 4f8b6f25)
-Date: Wed, 15 May 2024 11:31:32 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com
+	s=arc-20240116; t=1715780593; c=relaxed/simple;
+	bh=qyG8CBA1LFfZoDjh2C5tAoYOWcPwQzqYhJHxMxFAF98=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=eoLB/BYD7eQeaFxgfS8btLhYp55bXhjhtENlTFFbJE8T4oQ4y+tfJ4sXyfNsDg6/Gr8U6nlYXRojImPDtyLoBMzWxd9PFo4RUahn5pAYiZl4LvKK0232MpGPxNXnd6yvzmLM3guHDIMFu9l89taab+Bqf9UR/cUSpwN5J5FZy1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id E81CB92009C; Wed, 15 May 2024 15:43:06 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id E22E792009B;
+	Wed, 15 May 2024 14:43:06 +0100 (BST)
+Date: Wed, 15 May 2024 14:43:06 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+    linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+    Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 6/8] MIPS: Limit MIPS_MT_SMP support by ISA reversion
+In-Reply-To: <7fc82f8b-df9d-45f5-8e82-27eac7b4b0ab@app.fastmail.com>
+Message-ID: <alpine.DEB.2.21.2405150850270.45291@angie.orcam.me.uk>
+References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com> <20240202-llvm-msym32-v1-6-52f0631057d6@flygoat.com> <alpine.DEB.2.21.2405142235100.45291@angie.orcam.me.uk> <7fc82f8b-df9d-45f5-8e82-27eac7b4b0ab@app.fastmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
-Message-Id: <76103.124051507313300187@us-mta-270.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-Hi, we tested your kernel and here are the results:
+On Wed, 15 May 2024, Jiaxun Yang wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> >> MIPS MT ASE is only available on ISA between Release 1 and Release 5.
+> >
+> >  R2+ only actually, as also evident from Kconfig...
+> 
+> Hi Maciej,
+> 
+> Long time no see :-)
 
+ It's not so easy to get rid of me. ;)
 
-Kernel information:
-    Commit message: Merge tag 'for-6.10/dm-changes' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/device-mapper/linux-dm
+> There is nothing stopping us to run R1 kernel on R2 hardware, given that
+> those features are all detected at boot time. I understand MT was introduced
+> at 34K which is R2.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1291126217
+ We can certainly choose to support R2 features at run time with R1 kernel 
+configurations, but it's not what the change description says (left quoted 
+above for reference).  And the MT ASE, indeed first implemented with the 
+34K (for which I was a member of the product development team back at MIPS 
+UK), is not a part of the R1 ISA specification set.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1291126217-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-        xfstests - nfsv4.2
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1291126217-x86_64-kernel-debug_upt_31
+> >> --- a/arch/mips/Kconfig
+> >> +++ b/arch/mips/Kconfig
+> >> @@ -2171,7 +2171,8 @@ config CPU_R4K_CACHE_TLB
+> >>  config MIPS_MT_SMP
+> >>  	bool "MIPS MT SMP support (1 TC on each available VPE)"
+> >>  	default y
+> >> -	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MIPSR6 && !CPU_MICROMIPS
+> >> +	depends on TARGET_ISA_REV > 0 && TARGET_ISA_REV < 6
+> >> +	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MICROMIPS
+> >>  	select CPU_MIPSR2_IRQ_VI
+> >>  	select CPU_MIPSR2_IRQ_EI
+> >                    ^^^^^^
+> >  ... here.  I wish people looked beyond the line they change, sigh...
+> 
+> Both features (VI and VEIC) are probed at boot time. Selecting
+> them doesn't necessarily mean that CPU has those functions.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
- scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
-:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [ppc64le, x86_64]
-                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64 (debug)]
-                Filesystem - Loopdev Sanity [ppc64le]
-                Hardware - Firmware test suite [aarch64]
-                Hardware - pciutils: sanity smoke test [x86_64]
-                kselftests upstream - net [x86_64]
-                Libkcapi AF_ALG test [aarch64, ppc64le, s390x, x86_64]
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Reboot test [aarch64, ppc64le, s390x, x86_64]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x, x86_64]
-                Storage - swraid scsi_raid [s390x, x86_64]
-                stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-                stress: stress-ng - memory [s390x]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - cifsv3.11 [x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - nfsv4.2 [x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+ Both are optional for R2+, so necessarily they need to be probed for, but 
+they are not available in R1.  The reverse dependency set here is another 
+indication that the MT ASE is an R2+ feature.
 
-
-Tests that were not ran because of internal issues:=20
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Reboot test [x86_64 (debug)]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+  Maciej
