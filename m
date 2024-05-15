@@ -1,92 +1,181 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376884CB2E;
-	Wed, 15 May 2024 07:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7CD41A81
+	for <llvm@lists.linux.dev>; Wed, 15 May 2024 08:04:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715759870; cv=none; b=UrIMNWpG16yp+7ceaP9kcHUB7w58vqjX4h7uPCUjtWqSThT5knPO2aBGmscO3CaUVy54KZ0QoqKunYm4yAs2lFjo1tW1pxFaaeV0bXFaHn1VaPRC9L4F7zHxA0ZLzyxXau1lFM3IN0wThtP3vlG+YlsaM3Xf5dHdJpwPwBzT4pg=
+	t=1715760259; cv=none; b=MhWBGHYrO6DNzY7MfUb9rdTRbD5EE2gLgweKS4w5eGNqibmaS3GqcEox5r9J1lKZS+01x40mmRUAnv1dp7OoGqkp4N9D2aAQzidIDwDq5uvS3iF9w9XDzOA2L7HH1+Lq4btolKTbLAjaX9+0ey9HGYqKWC1e7e/Qu0nXMFzzKWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715759870; c=relaxed/simple;
-	bh=Z/lRFMon1x6t5IgwQK1lijm0gQDnovjnOQHfgmMkPMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aWJw/ynJfZQc8anL5+E5T31QXssnUEXd8XfQrOAKcyUGoF2nNbxFQ7LfVqVvXR/HChTaS9hr+QjSqP+WOl32RVi6vA9moM9SqkyyUe5huQmfR2MKAfLblgg5dqMVb5bS7F/G87Vc5dkzZsR6WTIO/Kz1MSuiFdBMHL6bOxg2ADk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MZil/YLZ; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1715760259; c=relaxed/simple;
+	bh=/BVKRSUTEdDKduAELfaDOg0P1jhAzz1HEokuBp8pFCw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lw4+kBGjYfY7Qz9liQZ2mDDQNKUxUIsJ5+ZSoAp79qUfw/4bCXYQCTEnYZImBWA0IPO7ASipsyLbXKZi376ScHnZRjB9uO6ZGcZGh22//hks1Rth+Pu76hld6YAoMXlpOOD/qw/ZjOtmoS+2I0FgNI4RpTTJi1JiYYcjMEl29Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=frQdpFiO; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MZil/YLZ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=EVMjXvYoWu9duYh304Rm/ZLOEAMOJGnAs/As64ANNG8=; b=MZil/YLZtZbxcwu9zxQwWqU/no
-	FsJod91Q2GIeY0p9N68dmcq5o7/HloU8fCADGnfFGR8QT+iJJb5OBTw334/PF1eKpbJJ2Q2a10EZA
-	EZagCuaq/y9hVOs6uWdWEMoUmfnLm0WkpxJdNqmHxUKuWZ3BLjmNV+bOFkYPF8mJ6Vp6uEIdeQRwi
-	MzJaP8h/5ntJd6/mbyYvI5xCt4prSAMqbhPakulwAPJQtA3+aCGPXodVnX0kn/mZsAcWN/0AvBetR
-	9c2+qGOmc9Jz7WPF7zeGbljGp4kS9f8ogDFr5/oix6M3692dOekp4m541m3lXgIGeluXV5te6uxaI
-	T/w0fuLg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s79WD-0000000A4ao-0ebj;
-	Wed, 15 May 2024 07:57:45 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C8FAA30068B; Wed, 15 May 2024 09:57:44 +0200 (CEST)
-Date: Wed, 15 May 2024 09:57:44 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
-Message-ID: <20240515075744.GZ40213@noisy.programming.kicks-ass.net>
-References: <202404291502.612E0A10@keescook>
- <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
- <202405081144.D5FCC44A@keescook>
- <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
- <202405081354.B0A8194B3C@keescook>
- <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="frQdpFiO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715760256;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=j9Gkl7QrMqC8UmPVA/cK9AiZScaFqrf5kGBZPuo4fo0=;
+	b=frQdpFiO069drWlTqj36RICU4Jx0WUBcVEeKAqhlmOFofBoCI11qiHylsjgZC7Uutg8exq
+	0SiqLx8GiG6tm2s/AnrNr38VlghyBvBxRG5tu8rSeWCiwOX6CkfNWbwN88XG+taB307ldg
+	Md8BslghT4iCSCPrAIs6H92ZpANPZfM=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-25-R7wm4Uo3MGWkS9gu-1nZwg-1; Wed,
+ 15 May 2024 04:04:14 -0400
+X-MC-Unique: R7wm4Uo3MGWkS9gu-1nZwg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7310F3C00090
+	for <llvm@lists.linux.dev>; Wed, 15 May 2024 08:04:14 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2A82340C6EB7;
+	Wed, 15 May 2024 08:04:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 6 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 1b10b390)
+Date: Wed, 15 May 2024 08:04:14 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <30821.124051504041401057@us-mta-25.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 08, 2024 at 04:47:25PM -0700, Linus Torvalds wrote:
+Hi, we tested your kernel and here are the results:
 
-> Now, another thing to do might be to treat assignments (and again,
-> implicit casts) to 'size_t' specially. In most compilers (certainly in
-> gcc), "size_t" is a special type.
-> 
-> Now, in the kernel, we don't actually use __builtin_size_t (the kernel
-> started out with a very standalone type system, and I think it
-> actually predated gcc's __builtin_size_t or maybe I just wasn't aware
-> of it). But we certainly _could_ - or we could at least use some
-> special marked type for our own 'size_t'.
-
-So I've been arguing that since unsigned (and signed too when -fwrapv)
-have well defined wrapping semantics and people rely on them, you cannot
-go around and assume that wrapping is bad.
-
-You're arguing much the same.
-
-I've proposed that Kees instead adds a type qualifier to explicitly mark
-no-overflow / no-wrap types. That way __buildin_size_t is no longer
-magical, and it along with all the other __builtin_*_overflow() muck can
-go away. You'd end up with things like:
-
-  typedef nowrap unsigned int __kernel_size_t;
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-or perhaps:
+Kernel information:
+    Commit message: Merge tag 'efi-next-for-v6.10' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/efi/efi
 
-	nowrap int idx = j * sizeof(foo);
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1290957864
 
-etc. To indeed annotate these baby steps, without making code needlessly
-ugly with all these __builtin_*_overflow() wrappers.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1290957864-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [aarch64]
+                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64 (debug)]
+                Hardware - Firmware test suite [aarch64]
+                Hardware - pciutils: sanity smoke test [x86_64]
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - net [x86_64]
+                Libkcapi AF_ALG test [aarch64, ppc64le, s390x, x86_64]
+                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
+_64]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+                stress: stress-ng - memory [s390x]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - cifsv3.11 [x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - nfsv4.2 [x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+
+
+Tests that were not ran because of internal issues:=20
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Reboot test [x86_64 (debug)]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
