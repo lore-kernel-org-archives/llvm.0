@@ -1,124 +1,161 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DACBA34
-	for <llvm@lists.linux.dev>; Wed, 15 May 2024 01:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02612A21;
+	Wed, 15 May 2024 01:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715735309; cv=none; b=a0ttZt2XbtpU4EaYyTczaGNMiUNfFBWTxCGKhVGHHjDKnNfh6XduoJH95bEN5mkmAXIa+LiBFa+1YcnOFwNZ875PuO3QBfGhww7NExCHLsOtPrSgM24mVs2YMac4VknfK3+hp1OzFJ0vS6oNw8X4H5hC3t1Bdh9hrtaMQJWptpo=
+	t=1715736253; cv=none; b=STh0wseKWg5ZkWUTnQmZfovwfW5RbQVjvvv33ZCRMf4urlKj8WjW7eSjEyUuUkpjexriMBI7a8zUpKADuFCOYzgRQGMMq19UkpXsV8fAvOzkh+sCLUGs7RhInVK3jgsRS73oG9/czPn+qvOkcuQV+CkXTVtNSVhbS+4qFT8N5rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715735309; c=relaxed/simple;
-	bh=O4pErUei5BcDdY6rSN5JCE4HW0/7Ee1oOOLQEFOtl8U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=frxoAhL56MFbLmnW1Yciq9cQszAtLCVwFVjzLZFQOrrHRVbuZNt/rw0VGJM0gooV7hOQEEZIEghsOdKdsgtGw2LPzHBZnZXFidEpcR2v4KLq2l5iaF3mG8ho91c9GQVDp8FYsluCE7AtMwuzJO6Y3ThKwjn7Wi7Jqoq38WPah2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X+WGjqme; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715736253; c=relaxed/simple;
+	bh=uwFcfdzx44uwtXhg5LJeZCjDv0LXrlANCCvKcXvL5BM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZPtICqXIFWJ/+R2EBpXUvknwgPhD5xVBtLF12hXbqewJWclwr+vqEo4GbJpuuo+YJ5GVs67hBGViBHkdIESYBl596PdFi/xU6t7KzKJtg7d3GDyhba9cyRCOSDznmFJ2f2Yk2qJVeYkUP8RdEsRO5mGN/jG2aBvvrNCHBwynXTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G3QOzuiY; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X+WGjqme"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6f447260f9dso5004891b3a.0
-        for <llvm@lists.linux.dev>; Tue, 14 May 2024 18:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715735307; x=1716340107; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+ayVbf+QMN56CDy4orfOWD3cBOJ6aQix+a9D8vn66o=;
-        b=X+WGjqmee7ztprpS4KYWH7GLYjClNPT1yX9uh2o58yQQLaiaibgf4naAeNFHl5LZB9
-         EnBaapmYKZItODpH65vCdEF6MOc0N32e+sISXZTZStEZJxYNFwo3etLrmoyGIgrUM7qD
-         adN6hGNVanNkkm+cjbVpr9ujfIt8J/KEfDD26K2I6GshvLjQ/kH4Qye6sP6LzVrM6fJa
-         /5puILAwtEhWtYCModjTK9WiSDG4vSusezvUszfHFlWTvK3PAgonD1MAvo5CCoHojoub
-         Z0fu4VzHJxa4l7+8VqvNOfZ0ZBxYDISGc0KaRFIuKNMzxkT1OvNwgnngIOejCq7ext2x
-         nfJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715735307; x=1716340107;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V+ayVbf+QMN56CDy4orfOWD3cBOJ6aQix+a9D8vn66o=;
-        b=Z9IN4yGhB86h2LKj+pLOKjpEt7adcNY0STMtWwJzZ44MOqEq0i0fIvfVmtORSXU/OT
-         CXTCwM11pqjwqde5j3ZT7homK4zkMupWE348HWn0ueBItzx3sxmqIfNmXXJAO2mR9u1g
-         1FGoiqlS6VWLKrRnUovE7UKozXkqyl25jA6CZPow5O579MeSk4cwJHpArS42Yk2/5kqv
-         sHP62D6eklcJG0XS4PzgFiwsMXbXOK9fbAwRrSywUBBwuCr/mygwmV+ChwLie0R8H96Q
-         YM6Blrmsm43W7XwT8zy2EXUQvhQ+wf0Lt51V3/Q+msW9YCb+cxoPdfK4PXrbDEv82hDe
-         BMWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxvU6/f8dEOMr+7LHfCAwLzl3AEckTCzP6SJUccIFmNNjRF5NhyMiZ5Z9yrh1PxUvSjQaghTBMKEl/pQkhFUGwGwyoVA==
-X-Gm-Message-State: AOJu0YywmRRhbuTh2/Ms72T5pWcOio+47lMocAhmABHuGYCxazIo4TLa
-	NnIgJJvWV52O1Qdix14RHVzmYYJnwaRStbFFLVJ7wUyNl8bGM7BZ
-X-Google-Smtp-Source: AGHT+IH1JPc60P9dzDmwpW3nnKjvovvZmskyzzCFDMuzEZRQdR4tEyhx2/zrtE8LudcXR3vUP4MJGQ==
-X-Received: by 2002:a05:6a20:c909:b0:1ad:999b:de47 with SMTP id adf61e73a8af0-1afde1d7b38mr15188336637.51.1715735307307;
-        Tue, 14 May 2024 18:08:27 -0700 (PDT)
-Received: from server.ucalgary.ca (S0106f85e42401d5e.cg.shawcable.net. [174.0.240.170])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d16cfsm104973325ad.18.2024.05.14.18.08.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 May 2024 18:08:26 -0700 (PDT)
-From: Abhinav Saxena <xandfury@gmail.com>
-To: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Abhinav Saxena <xandfury@gmail.com>
-Subject: [RFC PATCH 4/4] selftests/binderfs: Add missing a blank line after declarations
-Date: Wed, 15 May 2024 01:08:05 +0000
-Message-Id: <20240515010805.605511-5-xandfury@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240515010805.605511-1-xandfury@gmail.com>
-References: <20240515010805.605511-1-xandfury@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G3QOzuiY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715736252; x=1747272252;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uwFcfdzx44uwtXhg5LJeZCjDv0LXrlANCCvKcXvL5BM=;
+  b=G3QOzuiYF0rUntvg0h0Iun3+rwP3iR8XJXtx9leXnJWRmzIXvUS0smcD
+   Ia/5blhAzn8TEJrFW8/2atVHfnVNsYb2gKITr6xUGn0cZjgY7k+PbxGeO
+   ECXURwfxLH0oQmz20A4sD1GISIDVWsRoEOcQpUO9wVshM5gj6K3LsVXXU
+   l9ef6126OcW8zxqjZgBgTfY95TQiPsLcLapWktwNcrhyTfQ1uiJKG3YHr
+   6USM7ujvTQjcUFQwAmzFiqAAgPpym47yV9KIYgU0KV4WTUASZ+dAvNmjY
+   xtnVMy86XjZZDkOvWalehy1AvmrJcf6y2gt0wsPqJzHVmbkz3SihF2Jt2
+   A==;
+X-CSE-ConnectionGUID: u8qsiDSlSwOqqDdrSMQUSQ==
+X-CSE-MsgGUID: 3MsCqsFHSdCqLfraEqdzHg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11073"; a="11976465"
+X-IronPort-AV: E=Sophos;i="6.08,160,1712646000"; 
+   d="scan'208";a="11976465"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2024 18:24:11 -0700
+X-CSE-ConnectionGUID: yKRTRpAFS4C/wGIs7WB6JQ==
+X-CSE-MsgGUID: 45L+dKl5TV28UwgXIjAhmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,160,1712646000"; 
+   d="scan'208";a="62063290"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 14 May 2024 18:24:10 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s73NH-000CCt-1c;
+	Wed, 15 May 2024 01:24:07 +0000
+Date: Wed, 15 May 2024 09:24:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Subject: [viro-vfs:untested.persistency 41/58] arch/s390/hypfs/inode.c:331:3:
+ error: call to undeclared function 'd_mark_discardable'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202405150917.hqI6d508-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Adds a blank line after declarations and fixes some more formatting
-issues.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git untested.persistency
+head:   2860da18a75c4e0e4d477417ac9ae9f1d37c676c
+commit: 2ecf285ca491683e16fc72b963cdbb23dc2b4c7a [41/58] convert hypfs
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240515/202405150917.hqI6d508-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240515/202405150917.hqI6d508-lkp@intel.com/reproduce)
 
-Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
----
- .../testing/selftests/filesystems/binderfs/binderfs_test.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405150917.hqI6d508-lkp@intel.com/
 
-diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-index d5dba6c1e07f..d8a22b62dd89 100644
---- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-+++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-@@ -433,6 +433,7 @@ TEST(binderfs_stress)
- 		int i, j, k, nthreads;
- 		pthread_attr_t attr;
- 		pthread_t threads[DEFAULT_THREADS];
-+
- 		change_userns(_metadata, syncfds);
- 		change_mountns(_metadata);
+All errors (new ones prefixed by >>):
 
-@@ -536,11 +537,11 @@ TEST(binderfs_test_privileged)
- {
- 	if (geteuid() != 0)
- 		SKIP(return,
--			   "Tests are not run as root. Skipping privileged tests");
-+		     "Tests are not run as root. Skipping privileged tests");
+   In file included from arch/s390/hypfs/inode.c:15:
+   In file included from include/linux/fs_context.h:14:
+   In file included from include/linux/security.h:33:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/s390/hypfs/inode.c:331:3: error: call to undeclared function 'd_mark_discardable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     331 |                 d_mark_discardable(dentry);
+         |                 ^
+   arch/s390/hypfs/inode.c:331:3: note: did you mean 'd_make_discardable'?
+   include/linux/dcache.h:617:13: note: 'd_make_discardable' declared here
+     617 | extern void d_make_discardable(struct dentry *dentry);
+         |             ^
+   5 warnings and 1 error generated.
 
- 	if (__do_binderfs_test(_metadata))
- 		SKIP(return,
--			   "The Android binderfs filesystem is not available");
-+		     "The Android binderfs filesystem is not available");
- }
 
- TEST(binderfs_test_unprivileged)
-@@ -576,7 +577,7 @@ TEST(binderfs_test_unprivileged)
- 	if (ret) {
- 		if (ret == 2)
- 			SKIP(return,
--				   "The Android binderfs filesystem is not available");
-+			     "The Android binderfs filesystem is not available");
- 		ASSERT_EQ(ret, 0)
- 		{
- 			TH_LOG("wait_for_pid() failed");
---
-2.34.1
+vim +/d_mark_discardable +331 arch/s390/hypfs/inode.c
 
+   316	
+   317	static struct dentry *hypfs_create_file(struct dentry *parent, const char *name,
+   318						char *data, umode_t mode)
+   319	{
+   320		struct dentry *dentry;
+   321		struct inode *inode;
+   322	
+   323		inode_lock(d_inode(parent));
+   324		dentry = start_creating_persistent(parent, name);
+   325		if (IS_ERR(dentry)) {
+   326			dentry = ERR_PTR(-ENOMEM);
+   327			goto fail;
+   328		}
+   329		inode = hypfs_make_inode(parent->d_sb, mode);
+   330		if (!inode) {
+ > 331			d_mark_discardable(dentry);
+   332			dentry = ERR_PTR(-ENOMEM);
+   333			goto fail;
+   334		}
+   335		if (S_ISREG(mode)) {
+   336			inode->i_fop = &hypfs_file_ops;
+   337			if (data)
+   338				inode->i_size = strlen(data);
+   339			else
+   340				inode->i_size = 0;
+   341		} else if (S_ISDIR(mode)) {
+   342			inode->i_op = &simple_dir_inode_operations;
+   343			inode->i_fop = &simple_dir_operations;
+   344			inc_nlink(d_inode(parent));
+   345		} else
+   346			BUG();
+   347		inode->i_private = data;
+   348		d_instantiate(dentry, inode);
+   349	fail:
+   350		inode_unlock(d_inode(parent));
+   351		return dentry;
+   352	}
+   353	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
