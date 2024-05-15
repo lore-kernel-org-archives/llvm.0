@@ -1,146 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16A93BBEA;
-	Wed, 15 May 2024 19:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD8F1591FD
+	for <llvm@lists.linux.dev>; Wed, 15 May 2024 19:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715802126; cv=none; b=ZFExpZ3heoTojCV21Rp+PIOmlYUibxl2lPRIEJl748+kgllfB0rga6S71i5R248lvsSepjr1tYL+aRCTzbCnn2j8JmqSFnA1j1257B/5tH2pHdEz1XTlOJnC4S8M8CnzJx8/IxeOl+IV2lLliFG8EVZJTZpkO4+zeJcrMe5V1SA=
+	t=1715802640; cv=none; b=d0CXEH0tobVWY24Cn4TACMdkJhBza/TPHe8TK7+0NSwiWBQHMP+v1SW9VurPVJLspVt0Xc9RaRx0rYXo3PWcbB4pFP8E4ao/cJ9AcMBzO+UG/wQSy51GswmoXl9uu5SneowtesZz4zn0l7pY93i3wTdcFIspM8ZZ1xBUUQ/hrR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715802126; c=relaxed/simple;
-	bh=CtwBuYhdtNF/tSedOPtlrGMFthimmguPrRv9lXRZ1j8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XORY1alzJRWeKUW4GNB7FKKmiqaBfl9RInHE2nHebnNrY3nOPwQiR4Y5ZuuZquRxp3QjhO5/UqAkwMNHquVdapgngHepJwqrxC5Cg7BtQyRZb5uXFBpEfYP0EUqbMizZ82MSMCb37YJoAf5uVRlb8jUCtJU+ZCQ+3A9JVKmy3ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xem8QH4e; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715802640; c=relaxed/simple;
+	bh=IjpLLvj/1CgcyzrR5NzOYdD8lokXZ3zl/2YarQJUIj8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Nnqjbe1erzXIUrQeXcWe5h+yjgFwyNyoGakjtiWlJ75xcsGz0W3Qge8p8svl7S596Sa8JN7lLNhUNSsgfRZWkUar8ETTnn8iBGUIyVkDtUQ32WgHohEpuShOCGhvglfUflq9FskxVFhLPK/nZ2kSNv0VwB1An9tfYGQnKvIFyvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CjyWRKOD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xem8QH4e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715802124; x=1747338124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CtwBuYhdtNF/tSedOPtlrGMFthimmguPrRv9lXRZ1j8=;
-  b=Xem8QH4ean5K3mr/3dlmVBvhegt2STRMWGggxe/KsjwMnb8/LVzgPl02
-   M2A8x5lXjzs/zqeBcTuGzbRgPVpkXtxpxPjehavf9Q80GifcbeHuNebcz
-   RmrmcJCjkmjqp4/KT9WSIVmKR84iq2IR97SVZpAzMwm5gl7/eg6wgJ0MM
-   pucvFHuVUUZ8paXO8A12EIrcFgGpiVlsI1xhqv306RyQfBd/soO9OMjp7
-   OfqdW4mJOoucldVWYn7SnejV8tU4t/dZGiLlk3RdZScjlO5jVt8ugfLD7
-   Dz7xFeTEQGUbTDxtFSvYBG/+EL2cIg/aAwCd2gxdvpw0WmAP19VWNkoD7
-   Q==;
-X-CSE-ConnectionGUID: MycJs/4NQkm/OHCsfAQOXQ==
-X-CSE-MsgGUID: Fc4WQ04yQ1OBil9OcSNsCA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="34385761"
-X-IronPort-AV: E=Sophos;i="6.08,162,1712646000"; 
-   d="scan'208";a="34385761"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 12:42:03 -0700
-X-CSE-ConnectionGUID: myTNst6yRDiUUNmPfpPD4g==
-X-CSE-MsgGUID: yEbwpkFNSkuh6hI81iEhVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,162,1712646000"; 
-   d="scan'208";a="35699691"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 15 May 2024 12:42:01 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s7KVj-000DCd-1J;
-	Wed, 15 May 2024 19:41:59 +0000
-Date: Thu, 16 May 2024 03:41:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jic23-cxl-staging:arm-numa-fixes 10/11] arch/arm64/mm/init.c:54:12:
- warning: no previous prototype for function 'numa_fill_memblks'
-Message-ID: <202405160319.ggK7PjJZ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CjyWRKOD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715802637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=z5Um5xHzXtDX9R4hgm6slypHZSsJl+OeCyq/I30gN7c=;
+	b=CjyWRKODZxCxp9YP/jrEK+6K4+FEJzcmzqFuyhJEidVTbxX44SOqnyITsiE436R/eI+Otm
+	dSRogBqGe9tVfgeRx6q7It8wWf71lJIFX0D1XIf4QLPgUdmCn8/QVgiPYRJBzFlt0VM6WI
+	Z8/Syf2sjqLnkDdLlvFpC8fQXHN/NPs=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-584-s0b_NmG6P1WmgDQO8gyeDw-1; Wed,
+ 15 May 2024 15:50:36 -0400
+X-MC-Unique: s0b_NmG6P1WmgDQO8gyeDw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F36911C0513F
+	for <llvm@lists.linux.dev>; Wed, 15 May 2024 19:50:35 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.33.101])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 95D7821EE56B;
+	Wed, 15 May 2024 19:50:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 33 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 87caef42)
+Date: Wed, 15 May 2024 19:50:35 -0000
+To: bhe@redhat.com, xiawu@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com,
+ bgoncalv@redhat.com, yiyan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Message-Id: <18018.124051515503600471@us-mta-584.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/cxl-staging.git arm-numa-fixes
-head:   d077bf9570e8024f6d670d5662b62778715084fc
-commit: f4ce7f00375d478828eebf7618d56dce35607227 [10/11] arm64: mm: numa_fill_memblks() to add a memblock.reserved region if match.
-config: arm64-randconfig-002-20240515 (https://download.01.org/0day-ci/archive/20240516/202405160319.ggK7PjJZ-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240516/202405160319.ggK7PjJZ-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405160319.ggK7PjJZ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/arm64/mm/init.c:12:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> arch/arm64/mm/init.c:54:12: warning: no previous prototype for function 'numa_fill_memblks' [-Wmissing-prototypes]
-      54 | int __init numa_fill_memblks(u64 start, u64 end)
-         |            ^
-   arch/arm64/mm/init.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      54 | int __init numa_fill_memblks(u64 start, u64 end)
-         | ^
-         | static 
-   arch/arm64/mm/init.c:89:5: error: redefinition of 'memory_add_physaddr_to_nid'
-      89 | int memory_add_physaddr_to_nid(u64 start)
-         |     ^
-   arch/arm64/include/asm/sparsemem.h:32:36: note: expanded from macro 'memory_add_physaddr_to_nid'
-      32 | #define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
-         |                                    ^
-   include/linux/numa.h:47:19: note: previous definition is here
-      47 | static inline int memory_add_physaddr_to_nid(u64 start)
-         |                   ^
-   arch/arm64/mm/init.c:101:5: error: redefinition of 'phys_to_target_node'
-     101 | int phys_to_target_node(phys_addr_t start)
-         |     ^
-   arch/arm64/include/asm/sparsemem.h:34:29: note: expanded from macro 'phys_to_target_node'
-      34 | #define phys_to_target_node phys_to_target_node
-         |                             ^
-   include/linux/numa.h:51:19: note: previous definition is here
-      51 | static inline int phys_to_target_node(u64 start)
-         |                   ^
-   2 warnings and 2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/numa_fill_memblks +54 arch/arm64/mm/init.c
+Kernel information:
+    Commit message: Merge tag 'hardening-6.10-rc1' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/kees/linux
 
-    49	
-    50	/*
-    51	 * Scan existing memblocks and if this region overlaps with a region with
-    52	 * a nid set, add a reserved memblock.
-    53	 */
-  > 54	int __init numa_fill_memblks(u64 start, u64 end)
-    55	{
-    56		struct memblock_region *region;
-    57	
-    58		for_each_mem_region(region) {
-    59			int nid = memblock_get_region_node(region);
-    60	
-    61			if (nid == NUMA_NO_NODE)
-    62				continue;
-    63			if (!(end < region->base || start >= region->base + region->size)) {
-    64				memblock_add_reserved_node(start, end - start, nid,
-    65							   MEMBLOCK_RSRV_NOINIT);
-    66				return 0;
-    67			}
-    68		}
-    69	
-    70		memblock_add_reserved_node(start, end - start, NUMA_NO_NODE,
-    71					   MEMBLOCK_RSRV_NOINIT);
-    72	
-    73		return NUMA_NO_MEMBLK;
-    74	}
-    75	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1289261994
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        kdump - kexec-file-load
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289261994-x86_64-kernel_upt_26
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /kdump/kexec-file-load
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289261994-x86_64-kernel_upt_37
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1289261994-x86_64-kernel_upt_52
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9A=A1 ERROR /10_localwatchdog
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9A=A1 ERROR /10_localwatchdog
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9A=A1 ERROR /10_localwatchdog
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9A=A1 ERROR /10_localwatchdog
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9A=A1 ERROR /10_localwatchdog
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                machineinfo [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+
+
+Tests that were not ran because of internal issues:=20
+    AMTU (Abstract Machine Test Utility) [ppc64le, s390x]
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    Filesystem - Loopdev Sanity [ppc64le, s390x]
+    kdump - kexec-file-load [s390x]
+    kdump - kexec_boot [s390x]
+    Libkcapi AF_ALG test [ppc64le, s390x]
+    machineinfo [ppc64le, s390x]
+    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
+(debug)]
+    Networking - Ethernet drivers sanity [ppc64le, s390x]
+    Networking cki netfilter test [ppc64le, s390x]
+    Networking vnic: ipvlan/basic [ppc64le, s390x]
+    POSIX pjd-fstest suites [ppc64le, s390x]
+    Reboot test [ppc64le, s390x, x86_64, x86_64 (debug)]
+    SELinux Custom Module Setup [s390x]
+    Storage - dm/common [ppc64le, s390x]
+    xfstests - cifsv3.11 [x86_64 (debug)]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
