@@ -1,185 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from wfout8-smtp.messagingengine.com (wfout8-smtp.messagingengine.com [64.147.123.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD8F1591FD
-	for <llvm@lists.linux.dev>; Wed, 15 May 2024 19:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B88C15CD6B
+	for <llvm@lists.linux.dev>; Wed, 15 May 2024 21:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715802640; cv=none; b=d0CXEH0tobVWY24Cn4TACMdkJhBza/TPHe8TK7+0NSwiWBQHMP+v1SW9VurPVJLspVt0Xc9RaRx0rYXo3PWcbB4pFP8E4ao/cJ9AcMBzO+UG/wQSy51GswmoXl9uu5SneowtesZz4zn0l7pY93i3wTdcFIspM8ZZ1xBUUQ/hrR8=
+	t=1715808401; cv=none; b=NgN+0koXxFFrpysxaR9CIeIx05f8bfFfL/3mGcgx2uf0M/Di151dGv6F5tv64yRHYTnEgZ+nhqGkUZ+GhQzfTtXh1+kJyST13ZzUmk9k4uP/gZXDCBpxDxrFC/bgtftx1qm+LERWmc5cj/5e+NTEwTKh6lsLXQlathK6Bcd6gko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715802640; c=relaxed/simple;
-	bh=IjpLLvj/1CgcyzrR5NzOYdD8lokXZ3zl/2YarQJUIj8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Nnqjbe1erzXIUrQeXcWe5h+yjgFwyNyoGakjtiWlJ75xcsGz0W3Qge8p8svl7S596Sa8JN7lLNhUNSsgfRZWkUar8ETTnn8iBGUIyVkDtUQ32WgHohEpuShOCGhvglfUflq9FskxVFhLPK/nZ2kSNv0VwB1An9tfYGQnKvIFyvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CjyWRKOD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1715808401; c=relaxed/simple;
+	bh=AVWjrF1aB+rVH8EVf5yWkVZ14chy25cKhlbqbiUx/D0=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=i7PDBxbx9Xz47JZpYLw+5LEtuGx/3sgKDAFve2zXPfztqlnmN4JIeBjx4wjUOvekuqcYT9+9FvCfxQpZLG5TOev+KsGjuc6BubtTI5b9B57qPysmObw6gbm2Ut0CAb8CO85B8b9zPW66yABFtTbQVmOuk91gdPFlmmNXx9tJ1mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=d1arJioY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GfqXR+Uj; arc=none smtp.client-ip=64.147.123.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CjyWRKOD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715802637;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=z5Um5xHzXtDX9R4hgm6slypHZSsJl+OeCyq/I30gN7c=;
-	b=CjyWRKODZxCxp9YP/jrEK+6K4+FEJzcmzqFuyhJEidVTbxX44SOqnyITsiE436R/eI+Otm
-	dSRogBqGe9tVfgeRx6q7It8wWf71lJIFX0D1XIf4QLPgUdmCn8/QVgiPYRJBzFlt0VM6WI
-	Z8/Syf2sjqLnkDdLlvFpC8fQXHN/NPs=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-584-s0b_NmG6P1WmgDQO8gyeDw-1; Wed,
- 15 May 2024 15:50:36 -0400
-X-MC-Unique: s0b_NmG6P1WmgDQO8gyeDw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F36911C0513F
-	for <llvm@lists.linux.dev>; Wed, 15 May 2024 19:50:35 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.33.101])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 95D7821EE56B;
-	Wed, 15 May 2024 19:50:35 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 33 of 204): Test report for master
- (6.9.0, mainline.kernel.org-clang, 87caef42)
-Date: Wed, 15 May 2024 19:50:35 -0000
-To: bhe@redhat.com, xiawu@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com,
- bgoncalv@redhat.com, yiyan@redhat.com
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="d1arJioY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GfqXR+Uj"
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfout.west.internal (Postfix) with ESMTP id D4D671C0009D;
+	Wed, 15 May 2024 17:26:38 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 15 May 2024 17:26:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1715808398;
+	 x=1715894798; bh=iC8etUHEwOXKfGQuCm6oDeCaMzIDQh1lzehF6fQBU10=; b=
+	d1arJioY6yp3XSudVzXwvPyBtaEAVGaxUBjAznlMf3HinFamS8B+jxP5DqH3EaWB
+	A0Uo88m8L9+0TF0HJBKpBJRkUK4Pjqen2JKB4sE+LyVFH1kBxNPrSDNgc/F10QyR
+	P7YKCaHJAkjkSrZ0gdmEjnpl2gjw/efq3agSX2ob4VbRCYVq7BJ9h9teFH9I5xRV
+	cm5A31Nkch2XvFlSm+9d1URR59O8d2TWB5bWXvjVWvEaayf1VoLs+oqFiRMhuayt
+	RWSA9S2WNA2VC89lObugcLXOF1kU5Y9qel7sS0q7rP1/mWBiqBOwrzGSpUq+ArjR
+	YLU4LkzJptLNnTILeF0Mig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715808398; x=
+	1715894798; bh=iC8etUHEwOXKfGQuCm6oDeCaMzIDQh1lzehF6fQBU10=; b=G
+	fqXR+UjDwDk6ohpX17aLJL6ZOuRhfAYbdMGLKxlPy+W7LHxzR8IFqqMny31VL/E2
+	R0TxwbqjZ6QwOSWfs/2x5j+r026CHhy8JZUPGlBvXHQepFzgijThgyZqNwWe5kca
+	VZlWWuh/3GjpVJc1ZD9I2tG/qfCb12smIk7xrB/OfWSBeMs2sVWwL/7YZ327VZbS
+	/NVq0sPSN8+O/iSEBZ2f6nCrB3LeIWQOR19e2f6WU1e2qw+kt2pFEIcSSX4QhUnA
+	3OiVzS+TDjyoBRojeSP2saDt7KTezMbd4GZvimU+S3NG6N7+fZcbZgsGQbyE5GDU
+	fSwfib3knjpm3Wk/CQcYg==
+X-ME-Sender: <xms:jShFZjO_UVID7zSeu5VTzx-I5OC8I8mBjA_ivr4dz-K8-W43tQkNSA>
+    <xme:jShFZt9WkEMjdD_qHVSh57JJbLNZOpmrqUopZBP7Lgnb7ZxxAbvUo4ddt4FfxIUwp
+    j8oL2GVk1NL1W_Ul8k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdegkedgudehhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
+    homheqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefh
+    jeeugeevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:jShFZiSvdeGlNqA4SSqlPzFdbKZ-rHVXbdFNA_rjkqW-4YdZQjpTyw>
+    <xmx:jShFZntWiawwKgu7Bn7QEmrxb99fzSjXmVv6nr0yeRlbHGBr9UiAJA>
+    <xmx:jShFZrcY1Hl6bBuO-UsW7okcJHYQEslcNpR5k_Q18dv816ifdYEKlg>
+    <xmx:jShFZj2MHWkVA-G5_r1Ri7t5N20-Olnj8d-viKdgl4FXeaPhTUJi1A>
+    <xmx:jihFZv4LXU5etinvr_Ltwr-fu1kkCfZf3Yef7AnvbDd_WKe_AEkkusES>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 8E9F836A0074; Wed, 15 May 2024 17:26:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-456-gcd147058c-fm-hotfix-20240509.001-g0aad06e4
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
-Message-Id: <18018.124051515503600471@us-mta-584.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <4b8d0a71-f4b3-4c6b-b1e2-f67bb2908508@app.fastmail.com>
+In-Reply-To: <alpine.DEB.2.21.2405150850270.45291@angie.orcam.me.uk>
+References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
+ <20240202-llvm-msym32-v1-6-52f0631057d6@flygoat.com>
+ <alpine.DEB.2.21.2405142235100.45291@angie.orcam.me.uk>
+ <7fc82f8b-df9d-45f5-8e82-27eac7b4b0ab@app.fastmail.com>
+ <alpine.DEB.2.21.2405150850270.45291@angie.orcam.me.uk>
+Date: Wed, 15 May 2024 22:26:16 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ "Guenter Roeck" <linux@roeck-us.net>
+Subject: Re: [PATCH 6/8] MIPS: Limit MIPS_MT_SMP support by ISA reversion
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
 
 
-Kernel information:
-    Commit message: Merge tag 'hardening-6.10-rc1' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/kees/linux
+=E5=9C=A82024=E5=B9=B45=E6=9C=8815=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
+=8D=882:43=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
+> On Wed, 15 May 2024, Jiaxun Yang wrote:
+>
+>> >> MIPS MT ASE is only available on ISA between Release 1 and Release=
+ 5.
+>> >
+>> >  R2+ only actually, as also evident from Kconfig...
+>>=20
+>> Hi Maciej,
+>>=20
+>> Long time no see :-)
+>
+>  It's not so easy to get rid of me. ;)
+>
+>> There is nothing stopping us to run R1 kernel on R2 hardware, given t=
+hat
+>> those features are all detected at boot time. I understand MT was int=
+roduced
+>> at 34K which is R2.
+>
+>  We can certainly choose to support R2 features at run time with R1 ke=
+rnel=20
+> configurations, but it's not what the change description says (left qu=
+oted=20
+> above for reference).  And the MT ASE, indeed first implemented with t=
+he=20
+> 34K (for which I was a member of the product development team back at =
+MIPS=20
+> UK), is not a part of the R1 ISA specification set.
+>
+Good to know!
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1289261994
+The motivation behind this patch is to workaround some randconfig failur=
+es
+that combines MT with early ISA release.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        kdump - kexec-file-load
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1289261994-x86_64-kernel_upt_26
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /kdump/kexec-file-load
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1289261994-x86_64-kernel_upt_37
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        xfstests - cifsv3.11
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1289261994-x86_64-kernel_upt_52
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9A=A1 ERROR /10_localwatchdog
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9A=A1 ERROR /10_localwatchdog
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9A=A1 ERROR /10_localwatchdog
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9A=A1 ERROR /10_localwatchdog
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9A=A1 ERROR /10_localwatchdog
+They are not trivial to fix, so I just ban them in Kconfig. I was a litt=
+le bit
+reluctant to admit that in commit message.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
-]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                Boot test [s390x]
-                machineinfo [s390x]
-                Reboot test [s390x]
-                Storage - blktests - blk - upstream [s390x]
-                Storage - blktests - nvme-tcp - upstream [s390x]
-                Storage - swraid scsi_raid [s390x]
-                stress: stress-ng - cpu-cache [s390x]
-                stress: stress-ng - memory [s390x]
+Anyway, thanks for bringing that up.
 
-
-Tests that were not ran because of internal issues:=20
-    AMTU (Abstract Machine Test Utility) [ppc64le, s390x]
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    Filesystem - Loopdev Sanity [ppc64le, s390x]
-    kdump - kexec-file-load [s390x]
-    kdump - kexec_boot [s390x]
-    Libkcapi AF_ALG test [ppc64le, s390x]
-    machineinfo [ppc64le, s390x]
-    Memory function: memfd_create [aarch64, ppc64le, s390x, x86_64, x86_64 =
-(debug)]
-    Networking - Ethernet drivers sanity [ppc64le, s390x]
-    Networking cki netfilter test [ppc64le, s390x]
-    Networking vnic: ipvlan/basic [ppc64le, s390x]
-    POSIX pjd-fstest suites [ppc64le, s390x]
-    Reboot test [ppc64le, s390x, x86_64, x86_64 (debug)]
-    SELinux Custom Module Setup [s390x]
-    Storage - dm/common [ppc64le, s390x]
-    xfstests - cifsv3.11 [x86_64 (debug)]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+- Jiaxun
