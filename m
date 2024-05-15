@@ -1,148 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E0428382;
-	Wed, 15 May 2024 18:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DC31A2C25
+	for <llvm@lists.linux.dev>; Wed, 15 May 2024 18:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715797802; cv=none; b=KuzEvixtHOttZp2ooXGVSQoikNJkWCft6B4+gAjitKWTLU7TniRRRaM5lpoWNS2JcV4vSdaqoynMsCfb+A1qZz08h5MTv+0yfSw6Vhr6sGS/zJyIek9vd8rOnbtBjdTdmLxfL9Ubq+ERTbHgjStdzsKlPRX9XZgCnbrrcP9jsjA=
+	t=1715797991; cv=none; b=ejvtWMjKLUIliHUJb8RkPhniJ2PGq+CG8JVqQsMXJDxfFQU9RH8F9cdlpDgWZGGdIwRiDUnCXD+BpFRrenj9nrC3lSkpc2ZJSf1COUX1X4GkYnrSHcUQX1ORXe5JbmxaJJw3xiQ0QsSy+AzFiAjcoDgkEm7VRY9mMXS5o3Vuuso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715797802; c=relaxed/simple;
-	bh=Hznvrbw2gFkVJdhmDSVLI2HstkFtLp0w+kC277fjVvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xsyj00yRM6d7MX+GUu96fid3oqjAotLy2fbPbbzVbhVB3v9Z3ML8uwE4xITHIJENLrsxq0O9DSmQW3vqJOClStFZXyYPag1yn9y4LBXDTPhACCO6Ub2/mQ1d3sIY3AeroGSsdNuSzuhlaHdDO69YanvgTFv6l8XLgcl+vmxMERA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZaxtKBEa; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715797991; c=relaxed/simple;
+	bh=yw+ipdvPqTKvzHRePFMCEGB32d2gTHY4yIizWZv9K1I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CFP377RMy8OR9XQkAFiMI/JLMZKtE8Z/3QY0KlSOCVBveHiidJdyBZgXKt2t+Wms19/EbySHrEvZoSeDT9meHLYYo6/7VPhwydlVkVKb+O2L2o3DSnZs8K5goRBTjKsxA//ZxYDigVZIRUmSjMbvFMjEdtKoQ8sZsGcU9WVuMik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xc92i8I7; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZaxtKBEa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715797801; x=1747333801;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hznvrbw2gFkVJdhmDSVLI2HstkFtLp0w+kC277fjVvc=;
-  b=ZaxtKBEaGGBvs8mAHoxAqRq75s+FDuKfFw4UoVDzGSc+ygD3BW8zYMIr
-   zqOKvkUSF4a82AVLvVhmu1PY7J1fUZv9gNJo87jfCVgQg3rF4cehXtQmM
-   +F89ub5wcgOo1ay38wB/HyWhnLPMcy1mudbIkrXSerDYR5HMnYksjUQbP
-   bdcFXXLiZDg8Gw6Hz+Fcep7kU9U7wJvgR8tGBhwSp90ojv8nEflK/KtMf
-   oS275N0vYx1/OFjdFqAEEdg2HEDwmX940IKiCVi6WX39JXRIH56Y6pG8E
-   jsHL2Yk6S8jj6LjKD4eAZpK8x7Dxz5l3gR52pmNIw6ZU/H7KHl2LIQnVb
-   g==;
-X-CSE-ConnectionGUID: AbehlR8wRcKCUItZ8RQvIw==
-X-CSE-MsgGUID: PXM7IA5KQ3ymr/QES2S7UQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="37251088"
-X-IronPort-AV: E=Sophos;i="6.08,162,1712646000"; 
-   d="scan'208";a="37251088"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 11:30:00 -0700
-X-CSE-ConnectionGUID: Qt/939piTbKst1KwjEhCzw==
-X-CSE-MsgGUID: IlawGVXRSq685ZdH2nzQuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,162,1712646000"; 
-   d="scan'208";a="31572578"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 15 May 2024 11:29:59 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s7JO0-000D9H-0F;
-	Wed, 15 May 2024 18:29:56 +0000
-Date: Thu, 16 May 2024 02:29:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Cameron <jonathan.cameron@huawei.com>
-Subject: [jic23-cxl-staging:arm-numa-fixes 6/11] arch/arm64/mm/init.c:75:5:
- error: redefinition of 'phys_to_target_node'
-Message-ID: <202405160205.q9HRVkxO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xc92i8I7"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-572a1b3d6baso36273a12.1
+        for <llvm@lists.linux.dev>; Wed, 15 May 2024 11:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715797988; x=1716402788; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KKkDnLN7qusp5ZEvAbHRefNjI/EUrE6vZKOBSo4hBmc=;
+        b=xc92i8I7ORdPe7uIedYiiThxFUj7oDghA1/P2KGJWAL/VgGEbU8tcimUgbtl00maBG
+         rty/pbohYzU4LrzgZHP7wwebxWZv46LN8ms49IizrOR3rfOx7hydHN8yv4mO2k1lKhUk
+         wrH/xpjliAakDaVYybpjMrQquUT1mqTh2a0BTtHl+vue2KscCmwEQV04Tq3KyN6BJZxH
+         LIOrpPdVNN/9QTZd3EjkGMF4+xR+gIrH2wut4r78zc4ZmFzfgaUKzMsKsXOYt4n3OS4R
+         xYPAkoqCtypQFo0OQA/pRl4bAHy4BUO53d9rd9EpqYxiLRTmExE9ugwO9qIeYheGwmLi
+         hjpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715797988; x=1716402788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KKkDnLN7qusp5ZEvAbHRefNjI/EUrE6vZKOBSo4hBmc=;
+        b=wN0E7OTSem4isyiXGxuUeU4JM36dlV6ZZmSRv3R0N+DZGUVqhwc53mw3oFRMNFDmBs
+         iLmJ2mW79SzjQ0ysmEKE9LwMJYmcm/BZIApy0TENmjt41J3pWqxRguNnOoyszMkH7fuz
+         pN6CHmqHfwx0yfmklNR+G9egTEHTcw7bZLxrvsSkiKUY0Nhlx953VV6alG12bPDVeVLz
+         jq9eRTQBXQZjDkhLB8QE+aCDf/zBq9YruyVI3Od4F+0RGEj35k5M5RNHmu2ePsnBwvWw
+         LrlmEMnqh+PR7uKN+kBCSdzwUaKUA0QSnzItfQyCoDQHuUGWHPS/YsxejhWBthuzAvdE
+         Vieg==
+X-Forwarded-Encrypted: i=1; AJvYcCXt/8JxerGUgDSq3T1rvuwOTT1NTlg75b98RzprEiAKrFzKjJ8M/lx5w53YD2Cs9/7o3S6a4BGolNIV9aMZojqJAwQiJQ==
+X-Gm-Message-State: AOJu0Yx33kmPPSvtQBKotTAtEZShuTSkrDDGnyrrqX9ZG61OeKik3uvj
+	cVo9pBt9kn7s3vnX0ZXIG4BQ2bcfSPrhM09vsO4cU9diGZG7pY1DgHdJSTqRyCx7dNpl0NCFGKI
+	aB7GIbSgXtsVMg0Pakufb2VkHRzhJ3lXYtlA=
+X-Google-Smtp-Source: AGHT+IF6MleNTArg5bIvPJ3/eiTCxrRw7G9TB8KN62fOFsAAIP5+dlj2ACr18vI1mrmdbbKTxO7t/JgL68s+ize3a8I=
+X-Received: by 2002:a50:85c6:0:b0:573:438c:7789 with SMTP id
+ 4fb4d7f45d1cf-574ae418342mr914673a12.1.1715797987465; Wed, 15 May 2024
+ 11:33:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240515010805.605511-1-xandfury@gmail.com> <20240515010805.605511-4-xandfury@gmail.com>
+In-Reply-To: <20240515010805.605511-4-xandfury@gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Wed, 15 May 2024 11:32:48 -0700
+Message-ID: <CAGG=3QWyeWuLmJg1R7X8T4CsSgM+EiDToxjd_-8MD94D=DCLtw@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] selftests/binderfs: Macro argument 'fd' may be
+ better as '(fd)' to avoid precedence issues
+To: Abhinav Saxena <xandfury@gmail.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/cxl-staging.git arm-numa-fixes
-head:   d077bf9570e8024f6d670d5662b62778715084fc
-commit: 67c8bdd7ebb95e48944e4ebffe0a6ce6b68d1663 [6/11] arm64: memblock: Introduce a generic phys_addr_to_target_node()
-config: arm64-randconfig-002-20240515 (https://download.01.org/0day-ci/archive/20240516/202405160205.q9HRVkxO-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240516/202405160205.q9HRVkxO-lkp@intel.com/reproduce)
+On Tue, May 14, 2024 at 6:08=E2=80=AFPM Abhinav Saxena <xandfury@gmail.com>=
+ wrote:
+>
+> Change the macro argument 'fd' to '(fd)' to avoid potential precedence
+> issues. Without parentheses, the macro expansion could lead to
+> unexpected behavior when used with an expression having different
+> precedence levels.
+>
+> Example Code:
+>
+>     #define CALC_SQR_BAD(x) (x*x)
+>     #define CALC_SQR_GOOD(x) ((x)*(x))
+>
+> CALC_SQR_BAD(2+3) expands to 2+(3*3)+2, giving 11 as the incorrect
+> answer. Enclosing with parathesis CALC_SQR_GOOD(2+3) sets the correct
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405160205.q9HRVkxO-lkp@intel.com/
+s/parathesis/parentheses/
 
-All errors (new ones prefixed by >>):
+> order of precedence and expands to (2+3)*(2+3), giving 25 as the
+> correct answer.
+>
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> ---
+>  .../testing/selftests/filesystems/binderfs/binderfs_test.c  | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c=
+ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+> index 4a149e3d4ba4..d5dba6c1e07f 100644
+> --- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+> +++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+> @@ -30,11 +30,11 @@
+>
+>  #define close_prot_errno_disarm(fd)      \
+>         do {                             \
+> -               if (fd >=3D 0) {           \
+> +               if ((fd) >=3D 0) {         \
+>                         int _e_ =3D errno; \
+> -                       close(fd);       \
+> +                       close((fd));     \
+>                         errno =3D _e_;     \
+> -                       fd =3D -EBADF;     \
+> +                       (fd) =3D -EBADF;   \
 
-   In file included from arch/arm64/mm/init.c:12:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   arch/arm64/mm/init.c:63:5: error: redefinition of 'memory_add_physaddr_to_nid'
-      63 | int memory_add_physaddr_to_nid(u64 start)
-         |     ^
-   arch/arm64/include/asm/sparsemem.h:32:36: note: expanded from macro 'memory_add_physaddr_to_nid'
-      32 | #define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
-         |                                    ^
-   include/linux/numa.h:47:19: note: previous definition is here
-      47 | static inline int memory_add_physaddr_to_nid(u64 start)
-         |                   ^
->> arch/arm64/mm/init.c:75:5: error: redefinition of 'phys_to_target_node'
-      75 | int phys_to_target_node(phys_addr_t start)
-         |     ^
-   arch/arm64/include/asm/sparsemem.h:34:29: note: expanded from macro 'phys_to_target_node'
-      34 | #define phys_to_target_node phys_to_target_node
-         |                             ^
-   include/linux/numa.h:51:19: note: previous definition is here
-      51 | static inline int phys_to_target_node(u64 start)
-         |                   ^
-   1 warning and 2 errors generated.
+While I agree that it's generally good to add parentheses in macros,
+this line ensures that 'fd' must be an lvalue and not an arithmetic
+expression.
 
+-bw
 
-vim +/phys_to_target_node +75 arch/arm64/mm/init.c
-
-    62	
-  > 63	int memory_add_physaddr_to_nid(u64 start)
-    64	{
-    65		int nid = __memory_add_physaddr_to_nid(start);
-    66	
-    67		/* Default to node0 as not all callers are prepared for this to fail */
-    68		if (nid == NUMA_NO_NODE)
-    69			return 0;
-    70	
-    71		return nid;
-    72	}
-    73	EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
-    74	
-  > 75	int phys_to_target_node(phys_addr_t start)
-    76	{
-    77		unsigned long start_pfn, end_pfn, pfn = PHYS_PFN(start);
-    78		int nid = __memory_add_physaddr_to_nid(start);
-    79	
-    80		if (nid != NUMA_NO_NODE)
-    81			return nid;
-    82	
-    83		/*
-    84		 * Search reserved memory ranges since the memory address does
-    85		 * not appear to be online
-    86		 */
-    87		for_each_node_state(nid, N_POSSIBLE) {
-    88			get_reserved_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
-    89			if (pfn >= start_pfn && pfn <= end_pfn)
-    90				return nid;
-    91		}
-    92	
-    93		return NUMA_NO_NODE;
-    94	}
-    95	EXPORT_SYMBOL(phys_to_target_node);
-    96	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>                 }                        \
+>         } while (false)
+>
+> --
+> 2.34.1
+>
