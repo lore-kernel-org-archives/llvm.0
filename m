@@ -1,144 +1,205 @@
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAEAA13D619
-	for <llvm@lists.linux.dev>; Tue, 14 May 2024 23:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACABF9CF;
+	Wed, 15 May 2024 01:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715729990; cv=none; b=XqKBkTvUA2ZfQ0xQe/jKyaC9vhIXG6AH7zeZnnwBSn7AC941PdZDPBXoo0R9S7SkJyvswK9AcYYmg3J8nvdXJLk2HU5YerQFH6Qp2IXl0D31p2ev8Cg/VGe3P47Vx9hm4a8zyeUzS9eiWKLHTqwmVrgKadkY2vDRBNvDCTCJ5UM=
+	t=1715735053; cv=none; b=CStTDwBhB3cfn5A+pU43y06dF2BnDZRgozQUp327YVYEn2OexDN1oPENiqTYY6V0/rAygmJBpcmDVAOiHXBsuauEdO4ZmEIgmvGWQz9MY0Ab9XAfYKa2BKU3L9lnE1SeBvTbIp0+arQFjlg8MykxbbjxGV/s+juHvpJ5h1uptfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715729990; c=relaxed/simple;
-	bh=60Ox0a+JCmbAi56j55Bt0YnLVDI15o/pVVrYJoU0WGU=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=B0Kzo51gE1l2BL76ftRnA3SN3SqdstkTzyjG5KCfP99jD9wJKqN3nUCRsCQNGEr39Mp2VT6nNQaMdw6gL3sIPLod1dxypLFdzryG89dED/9E+aCV5Oi805DDRRlef7VYv7kY2PXUL93pwoYNM1Jqc+twvVdfIN6oZoypVbwq3CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=aNVhnzhr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HIlYpX3L; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+	s=arc-20240116; t=1715735053; c=relaxed/simple;
+	bh=JR0EyROUPsAs/gj4aRFKaKKp/XxKJGSvUQck05tirXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j+UU/QpboI9gAxkgLY3JAWs9TS0qrwukRmRRwHRuaf0Rbg8u62dvkSJkuWJzSj4e7JlTENQocycDJzaNhIdnCCfP8CXVf6vS+9u036gKmb2lBYii/RxkeBDTc0gA7zonYLuBsiEIQzaS0kYzUV5qOvSVxLAmwJd1CS4pwLc6thY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b7M0+NtJ; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="aNVhnzhr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HIlYpX3L"
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 06D991381145;
-	Tue, 14 May 2024 19:39:48 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Tue, 14 May 2024 19:39:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1715729988;
-	 x=1715816388; bh=1obXvCkxuWYmqdH7enpj67eu56K1q3VrLcxWZTYvNIw=; b=
-	aNVhnzhrTLEBK1+8J0vnth3FvXxjrCIuk4kby9nRkw9DRG+7hU2S4AGKh6jWWsCe
-	UQXTkQJ6hK0WpD2zg4XwPC+0JNjQcE/gXCxvy3cwS1L+m9EMs6EkBVknmGgX84wx
-	0OYXJ0wC4/3bENyfbmD+JDFy0+XbeG2r9zR1yV9GodGJSmTV6ZPZz+8TyJ/fc5LO
-	26m9OTcOdBgsBsOpQtWBfcafcW0m4F8dhyGXItXUKlON2N9h5yCaOKtH1XOPTI8m
-	Mpd5wjixuAhwBJMLBd7JSPmNZ/nnmc84uJ8EpNpEY1tTiZT1JfZUoJ9m12LGXwPd
-	8RiOkb3L/UQtV2Iq5NvkOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715729988; x=
-	1715816388; bh=1obXvCkxuWYmqdH7enpj67eu56K1q3VrLcxWZTYvNIw=; b=H
-	IlYpX3LGV3wzZQIW7ZtEAb8RYLjgPML+auk99lQiUhy7QJP94uw+5NUHccqO/Hf1
-	ULUsx16rtB9Okw80vS2BOSQW+AQ9ZoEeaqIDQT7/emdP0uTHugPPIfJJC93kwgLD
-	EMYT3K8GDbxHj4wEj9x/qFW/X8RuSNQGMUSCkOZ01Cc0xMR9sYT51AwCA+DL6jGG
-	i77rIK+Qro7PPuuDu5a+tMe3Bf7fl6RxJOQglks8g9z2JLQkogRXCK3Lw7+na9SU
-	Ym75vLt+6S9XQ2f4Qu8dbv572HakzvMMcoacqpbX7INYT1ssLhPk4tM0AvgsxC4d
-	eUSSq70btxHYcq3JCKqcg==
-X-ME-Sender: <xms:Q_ZDZqm58F7b6YP1Flchbu_Q-MK6XF9mrr1tO0dpLa3bS6DQ7aQBAg>
-    <xme:Q_ZDZh3_DrE8to6UYGBoWbqIK521JNlpVLPacJltpLECG7gsqXu8XvZjc7EQF35eg
-    A1fs2acUSsygdD1P-g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdegjedgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:Q_ZDZooFsygNgsQNRGa6bmOkg6j-rZxLw0QSSYxKSZiZderTTKJ0Nw>
-    <xmx:Q_ZDZunDTjdrJUdabGampDyrbXfh82CYOjv48JgndBocI0WyPFrAdg>
-    <xmx:Q_ZDZo2EnDVJ1QhsJ5ShnNDeLT7MYWNQxGLArV_4FZ5mGwMgOVXirA>
-    <xmx:Q_ZDZlu6nWt1-OIUXA9J_ORFy9dBeujO2W3GOdd94lHr1KY5VtqseQ>
-    <xmx:Q_ZDZuywMOvK23ct40AD0B0usuDmwk7TIGrZ7E5LkHhqHcOIt2uuiUDE>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id EDEEB36A0074; Tue, 14 May 2024 19:39:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-455-g0aad06e44-fm-20240509.001-g0aad06e4
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b7M0+NtJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715735052; x=1747271052;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JR0EyROUPsAs/gj4aRFKaKKp/XxKJGSvUQck05tirXY=;
+  b=b7M0+NtJYn/MnUdPybIfVMUGP4RW7aWrLbTVsmm2PlTj+vClGXlII55d
+   ihAEiXsq8nZXmVC+01weW+k7ZEyN68e92K5y97PaIBVxPsZhtDQ4XePDI
+   82N9/KfPEQIAE2rMHzLrG5XcnZfINGwzhWhcnSHITfvudVBMtQl8xa1I2
+   vI4LSw652kutijqXb8Duq+RRDH26JeOTFfsf9IFdqox4K0Gu3jQp5U0Nc
+   3wWz5zUmZNMfDYdGHBtgpyOFtKodGXAsbwHA4qVVjxOH884mnWxty4Xni
+   bvGi+6iqlvNf05IE7cNrrecplh/1fXnzA+BSbcTLMML/B34DAc+X915KP
+   g==;
+X-CSE-ConnectionGUID: KMDe0LNXSSmzUOVRhqZOvA==
+X-CSE-MsgGUID: +rGsNhqZSbyzWdNOqxvHtg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11073"; a="11614519"
+X-IronPort-AV: E=Sophos;i="6.08,160,1712646000"; 
+   d="scan'208";a="11614519"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2024 18:04:11 -0700
+X-CSE-ConnectionGUID: SdpTbBksTFazk3jzjJepSA==
+X-CSE-MsgGUID: Drlff/oITP2CaBqvcdteBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,160,1712646000"; 
+   d="scan'208";a="30943297"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 14 May 2024 18:04:08 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s733u-000CBL-1S;
+	Wed, 15 May 2024 01:04:06 +0000
+Date: Wed, 15 May 2024 09:03:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Matthew Wilcox <willy@infradead.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Pankaj Raghav <p.raghav@samsung.com>, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org, Hannes Reinecke <hare@kernel.org>
+Subject: Re: [PATCH 5/6] block/bdev: lift restrictions on supported blocksize
+Message-ID: <202405150852.LoiNtqk4-lkp@intel.com>
+References: <20240514173900.62207-6-hare@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <7fc82f8b-df9d-45f5-8e82-27eac7b4b0ab@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2405142235100.45291@angie.orcam.me.uk>
-References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
- <20240202-llvm-msym32-v1-6-52f0631057d6@flygoat.com>
- <alpine.DEB.2.21.2405142235100.45291@angie.orcam.me.uk>
-Date: Wed, 15 May 2024 00:39:21 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- "Guenter Roeck" <linux@roeck-us.net>
-Subject: Re: [PATCH 6/8] MIPS: Limit MIPS_MT_SMP support by ISA reversion
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240514173900.62207-6-hare@kernel.org>
+
+Hi Hannes,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v6.9]
+[cannot apply to next-20240514]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hannes-Reinecke/fs-mpage-avoid-negative-shift-for-large-blocksize/20240515-014146
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20240514173900.62207-6-hare%40kernel.org
+patch subject: [PATCH 5/6] block/bdev: lift restrictions on supported blocksize
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240515/202405150852.LoiNtqk4-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project b910bebc300dafb30569cecc3017b446ea8eafa0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240515/202405150852.LoiNtqk4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405150852.LoiNtqk4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from block/bdev.c:9:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from block/bdev.c:15:
+   In file included from include/linux/blk-integrity.h:5:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from block/bdev.c:15:
+   In file included from include/linux/blk-integrity.h:5:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from block/bdev.c:15:
+   In file included from include/linux/blk-integrity.h:5:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   block/bdev.c:145:2: error: call to undeclared function 'mapping_set_folio_min_order'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     145 |         mapping_set_folio_min_order(bdev->bd_inode->i_mapping,
+         |         ^
+>> block/bdev.c:152:16: error: use of undeclared identifier 'bs'
+     152 |         if (get_order(bs) > MAX_PAGECACHE_ORDER || size < 512 ||
+         |                       ^
+   block/bdev.c:164:3: error: call to undeclared function 'mapping_set_folio_min_order'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     164 |                 mapping_set_folio_min_order(bdev->bd_inode->i_mapping,
+         |                 ^
+   13 warnings and 3 errors generated.
 
 
+vim +/bs +152 block/bdev.c
 
-=E5=9C=A82024=E5=B9=B45=E6=9C=8814=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
-=8D=8810:38=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
-> On Fri, 2 Feb 2024, Jiaxun Yang wrote:
->
->> MIPS MT ASE is only available on ISA between Release 1 and Release 5.
->
->  R2+ only actually, as also evident from Kconfig...
+   148	
+   149	int set_blocksize(struct block_device *bdev, int size)
+   150	{
+   151		/* Size must be a power of two, and between 512 and MAX_PAGECACHE_ORDER*/
+ > 152		if (get_order(bs) > MAX_PAGECACHE_ORDER || size < 512 ||
+   153		    !is_power_of_2(size))
+   154			return -EINVAL;
+   155	
+   156		/* Size cannot be smaller than the size supported by the device */
+   157		if (size < bdev_logical_block_size(bdev))
+   158			return -EINVAL;
+   159	
+   160		/* Don't change the size if it is same as current */
+   161		if (bdev->bd_inode->i_blkbits != blksize_bits(size)) {
+   162			sync_blockdev(bdev);
+   163			bdev->bd_inode->i_blkbits = blksize_bits(size);
+   164			mapping_set_folio_min_order(bdev->bd_inode->i_mapping,
+   165						    get_order(size));
+   166			kill_bdev(bdev);
+   167		}
+   168		return 0;
+   169	}
+   170	
 
-Hi Maciej,
-
-Long time no see :-)
-
-There is nothing stopping us to run R1 kernel on R2 hardware, given that
-those features are all detected at boot time. I understand MT was introd=
-uced
-at 34K which is R2.
-
-I tested booting R1 kernel with MT on 1004Kc.
-
-I believe we should give users flexibility on enjoying optional features
-on kernel targeting lower ISA Rev.
-
->
->> --- a/arch/mips/Kconfig
->> +++ b/arch/mips/Kconfig
->> @@ -2171,7 +2171,8 @@ config CPU_R4K_CACHE_TLB
->>  config MIPS_MT_SMP
->>  	bool "MIPS MT SMP support (1 TC on each available VPE)"
->>  	default y
->> -	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MIPSR6 && !CPU_MICRO=
-MIPS
->> +	depends on TARGET_ISA_REV > 0 && TARGET_ISA_REV < 6
->> +	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MICROMIPS
->>  	select CPU_MIPSR2_IRQ_VI
->>  	select CPU_MIPSR2_IRQ_EI
->                    ^^^^^^
->  ... here.  I wish people looked beyond the line they change, sigh...
-
-Both features (VI and VEIC) are probed at boot time. Selecting
-them doesn't necessarily mean that CPU has those functions.
-
-Thanks
-- Jiaxun
->
->   Maciej
-
---=20
-- Jiaxun
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
