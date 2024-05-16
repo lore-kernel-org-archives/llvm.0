@@ -1,58 +1,61 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670E815CB
-	for <llvm@lists.linux.dev>; Thu, 16 May 2024 20:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF86157E73;
+	Thu, 16 May 2024 20:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715892738; cv=none; b=bCTyZyh44nNWCI+1vLHdhJF5cctUo749INo6/0wyYT0HcEtqdjUrbnbtJhdunQQRIoSkVYUNRSV2J4XsywO9oLDblY7GGeHRoOxRWEPDrdp85IAaTXDVfTHxlprhxSnFQFdcvjzXTYK8l3tdd5tpigTX1yC8pE3PY+aOHHI7IcM=
+	t=1715893093; cv=none; b=TUbRu78y0TCcE2feoi08qQaxMTT4/3FVUMA3VBZTTHct6vr37M4+KYMzf+A0pNd68uNryvNUuC/mP2Tmb/ledRaSehX8Mbxt3zsjcAZdgKxub6GhZcyIdAIirl/nDc7cw/eAa1vy2679I6Sc62FYCorJ12NOcxJfvXZ01JQOPQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715892738; c=relaxed/simple;
-	bh=tVODxaTXe1VJWK72M3wkpqVogEldieF3m7bSsMs8jIM=;
+	s=arc-20240116; t=1715893093; c=relaxed/simple;
+	bh=ctWB/dFDLpYDVoZ2Jy6AFmL4gx6JFcg93o7Aw7dtoqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ezkBfSHxmAv3CJgCj1Uud/Uiur4wHIzg73j50g2LTjvyMnunvyViAYRSnXFup5YJGeM3cbyRS6dOkOch7fe9743OcT/TIOyNz2TkPXGHqQdkhdVPSjlLVoB1rnsX6P2IA1JQTwnwfcwAMGP6Hc241soB1dAJ+zUrAjgY89w+E2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=LAL413as; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uiq/dQWtvpruXJHR6gUwzL5asf2dUOgsSSQ7b2eunflExAe/Ef0fiPJT3C1ZNU3DVpj/QJy7svZiQwfvv9WyMboVFHNRgxU8pzNMHvWnudoX4HbKbiOGPdN9XSOVG38NXWQ3z/IRJ0rYyyfLb7KjItgv6ZI8Jg4Kk8n+0AzEsZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OdRqyIjt; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="LAL413as"
-Received: from macsyma.thunk.org (99-196-128-135.cust.exede.net [99.196.128.135] (may be forged))
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 44GKpaRr012754
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 May 2024 16:51:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1715892707; bh=SOtluD1PaXHX4aLfHVPP7s3eptH002zErJfg39HNDSk=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=LAL413asy4CTYAoR3vtKjzRUe9/Y5ZKBHnX4D7QBrLySjGcmNL/TA6b/3nF4L7OW6
-	 auGZzHOYkeWzK33jCS14SqF32HnyLSwxPfpglAASB8vbXfv7A2zObdTAjV2nzCq0gk
-	 m3CWrF5/sUKerMQeqpL1UlyPsZg2cRQOfjRfMox85NiCHzApmIyP4rbralHvruTPzb
-	 s9EMU8horV31wPgD29MyYcikq36S0G1/t/YZk4eJPIO63PqEU2KOY7H6gWiWbv8Vwt
-	 CspH+ti7/1rz0YO7O8w8MOiyu1S1gXy7FSoB+hB49nwfI7z+rpRsp4dnDz6sPrhubc
-	 eVS++1v7+PG0A==
-Received: by macsyma.thunk.org (Postfix, from userid 15806)
-	id F15DF3403E6; Thu, 16 May 2024 14:51:34 -0600 (MDT)
-Date: Thu, 16 May 2024 14:51:34 -0600
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>, Mark Rutland <mark.rutland@arm.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
-Message-ID: <20240516205134.GC287325@mit.edu>
-References: <202404291502.612E0A10@keescook>
- <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
- <202405081144.D5FCC44A@keescook>
- <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
- <202405081354.B0A8194B3C@keescook>
- <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
- <20240515073636.GY40213@noisy.programming.kicks-ass.net>
- <25882715-FE44-44C0-BB9B-57F2E7D1F0F9@kernel.org>
- <20240516140951.GK22557@noisy.programming.kicks-ass.net>
- <CAFhGd8qCCCrccQ2z5bjBD5YcMWHkym9aVz_qYkyyj662XEeHvA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OdRqyIjt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715893093; x=1747429093;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ctWB/dFDLpYDVoZ2Jy6AFmL4gx6JFcg93o7Aw7dtoqs=;
+  b=OdRqyIjtwm/fXNP7Fd2lUEgxc/NECY9DMb+3+cNO8mz/Qbj0m/l72qm8
+   1A+oUhCGBXLkPttA+N6fLuO+b2b5GpkEFT6EH8rQlLA7kwi5XYrnuPnlf
+   8Ac/1gEs69BWMQYfRA1GTWkcWQNHdl2KSVheULnm0+gtScKJi3GTE0Ft5
+   2dKr7xin0bYfOAhE27IycZPF+2IIHE3FrOK95RoM4lQfPnyMeBNG9pqKL
+   dJbMvibXGr3asLd/gy0QVzEjVEN+wRTcD5C4MVPwzbzmSUadkeYmGvUUy
+   7B0/Qoend/7q6BwzfXK+xbhqvPAGdMBCvnFOTQ6ByncHhyvefymPXkpDr
+   g==;
+X-CSE-ConnectionGUID: LUlpo4gbSzmaMXl92sNKMg==
+X-CSE-MsgGUID: ACTqZQqMRjut1/+BDhVz+A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="11890973"
+X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
+   d="scan'208";a="11890973"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 13:58:11 -0700
+X-CSE-ConnectionGUID: GdxwgKv7RJ2AMMyvEVt5dQ==
+X-CSE-MsgGUID: 6KluEpYARt+n2hgkZHdDqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
+   d="scan'208";a="31687972"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 16 May 2024 13:58:09 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s7iAw-000Emn-26;
+	Thu, 16 May 2024 20:58:06 +0000
+Date: Fri, 17 May 2024 04:57:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nobuaki.Tsunashima@infineon.com, marcel@holtmann.org,
+	luiz.dentz@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-bluetooth@vger.kernel.org
+Subject: Re: [PATCH] Bluetooth: Patch for CYW4373 hci up fail issue
+Message-ID: <202405170433.qYUNBTtS-lkp@intel.com>
+References: <6267800d70ae4344acaba3486b54bc0c@infineon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,42 +64,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFhGd8qCCCrccQ2z5bjBD5YcMWHkym9aVz_qYkyyj662XEeHvA@mail.gmail.com>
+In-Reply-To: <6267800d70ae4344acaba3486b54bc0c@infineon.com>
 
-On Thu, May 16, 2024 at 12:48:47PM -0700, Justin Stitt wrote:
-> 
-> It is incredibly important that the exact opposite approach is taken;
-> we need to be annotating (or adding type qualifiers to) the _expected_
-> overflow cases. The omniscience required to go and properly annotate
-> all the spots that will cause problems would suggest that we should
-> just fix the bug outright. If only it was that easy.
+Hi,
 
-It certainly isn't easy, yes.  But the problem is when you dump a huge
-amount of work and pain onto kernel developers, when they haven't
-signed up for it, when they don't necessarily have the time to do all
-of the work themselves, and when their corporate overlords won't given
-them the headcount to handle unfunded mandates which folks who are
-looking for a bright new wonderful future --- don't be surprised if
-kernel developers push back hard.
+kernel test robot noticed the following build errors:
 
-One of the big problems that we've seen with many of these security
-initiatives is that the teams create these unfunded mandates get their
-performance reviews based on how many "bug reports" that they file,
-regardless of whether they are real problems or not.  This has been a
-problem with syzkaller, and with clusterfuzz.  Let's not make this
-problem worse with new and fancy sanitizers, please.
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.9 next-20240516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Unfortunately, I don't get funding from my employer to clear these
-kinds of reports, so when I do the work, it happens on the weekends or
-late at night, on my own time, which is probably why I am so grumpy
-about this.  Whether you call this "sharpening our focus", or "year of
-efficiency", or pick your corporate buzzwords, it really doesn't
-matter.  The important thing is that the figure of merit must NOT be
-"how many security bugs that are found", but how much bullsh*t noise
-do these security features create, and how do you decrease overhead by
-upstream developers to deal with the fuzzing/ubsan/security tools
-find.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nobuaki-Tsunashima-infineon-com/Bluetooth-Patch-for-CYW4373-hci-up-fail-issue/20240516-131000
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+patch link:    https://lore.kernel.org/r/6267800d70ae4344acaba3486b54bc0c%40infineon.com
+patch subject: [PATCH] Bluetooth: Patch for CYW4373 hci up fail issue
+config: x86_64-buildonly-randconfig-003-20240517 (https://download.01.org/0day-ci/archive/20240517/202405170433.qYUNBTtS-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405170433.qYUNBTtS-lkp@intel.com/reproduce)
 
-Cheers,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405170433.qYUNBTtS-lkp@intel.com/
 
-						- Ted
+All errors (new ones prefixed by >>):
+
+>> drivers/bluetooth/btbcm.c:453:33: error: initializing 'struct bcm_chip_version_table *' with an expression of type 'const struct bcm_chip_version_table *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     453 |         struct bcm_chip_version_table *entry = &disable_broken_read_transmit_power_by_chip_ver[0];
+         |                                        ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +453 drivers/bluetooth/btbcm.c
+
+   440	
+   441	struct bcm_chip_version_table {
+   442		u8	chip_id;
+   443		u16 baseline;
+   444	};
+   445	#define BCM_ROMFW_BASELINE_NUM	0xFFFF
+   446	static const struct bcm_chip_version_table disable_broken_read_transmit_power_by_chip_ver[] = {
+   447		{0x87, BCM_ROMFW_BASELINE_NUM}		/* CYW4373/4373E */
+   448	};
+   449	static bool btbcm_is_disable_broken_read_tx_power_by_chip_ver(u8 chip_id, u16 baseline)
+   450	{
+   451		int i;
+   452		int table_size = sizeof(disable_broken_read_transmit_power_by_chip_ver)/sizeof(disable_broken_read_transmit_power_by_chip_ver[0]);
+ > 453		struct bcm_chip_version_table *entry = &disable_broken_read_transmit_power_by_chip_ver[0];
+   454	
+   455		for( i=0 ; i<table_size ; i++, entry++)
+   456		{
+   457			if( (chip_id == entry->chip_id) && (baseline == entry->baseline) )
+   458				return true;
+   459		}
+   460	
+   461		return false;
+   462	}
+   463	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
