@@ -1,129 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF86157E73;
-	Thu, 16 May 2024 20:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6728B1EB2B
+	for <llvm@lists.linux.dev>; Thu, 16 May 2024 22:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715893093; cv=none; b=TUbRu78y0TCcE2feoi08qQaxMTT4/3FVUMA3VBZTTHct6vr37M4+KYMzf+A0pNd68uNryvNUuC/mP2Tmb/ledRaSehX8Mbxt3zsjcAZdgKxub6GhZcyIdAIirl/nDc7cw/eAa1vy2679I6Sc62FYCorJ12NOcxJfvXZ01JQOPQs=
+	t=1715899505; cv=none; b=bxUBIL7Y653Kss1BCAg827kkrquY6PRiMUfnoefRT/kbRCnKd7kQPsG94C+N1MQG3mMpzXspAVDKUebKrMiD9SHOCU/LdXZeAx5L8/jFIuZZxerD3yZfajXzLXIfTdLQ9JQUO9NYNO2UC7HSkvi0C4VNU+WJxMFK/hS31Vd8VEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715893093; c=relaxed/simple;
-	bh=ctWB/dFDLpYDVoZ2Jy6AFmL4gx6JFcg93o7Aw7dtoqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uiq/dQWtvpruXJHR6gUwzL5asf2dUOgsSSQ7b2eunflExAe/Ef0fiPJT3C1ZNU3DVpj/QJy7svZiQwfvv9WyMboVFHNRgxU8pzNMHvWnudoX4HbKbiOGPdN9XSOVG38NXWQ3z/IRJ0rYyyfLb7KjItgv6ZI8Jg4Kk8n+0AzEsZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OdRqyIjt; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OdRqyIjt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715893093; x=1747429093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ctWB/dFDLpYDVoZ2Jy6AFmL4gx6JFcg93o7Aw7dtoqs=;
-  b=OdRqyIjtwm/fXNP7Fd2lUEgxc/NECY9DMb+3+cNO8mz/Qbj0m/l72qm8
-   1A+oUhCGBXLkPttA+N6fLuO+b2b5GpkEFT6EH8rQlLA7kwi5XYrnuPnlf
-   8Ac/1gEs69BWMQYfRA1GTWkcWQNHdl2KSVheULnm0+gtScKJi3GTE0Ft5
-   2dKr7xin0bYfOAhE27IycZPF+2IIHE3FrOK95RoM4lQfPnyMeBNG9pqKL
-   dJbMvibXGr3asLd/gy0QVzEjVEN+wRTcD5C4MVPwzbzmSUadkeYmGvUUy
-   7B0/Qoend/7q6BwzfXK+xbhqvPAGdMBCvnFOTQ6ByncHhyvefymPXkpDr
-   g==;
-X-CSE-ConnectionGUID: LUlpo4gbSzmaMXl92sNKMg==
-X-CSE-MsgGUID: ACTqZQqMRjut1/+BDhVz+A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="11890973"
-X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
-   d="scan'208";a="11890973"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 13:58:11 -0700
-X-CSE-ConnectionGUID: GdxwgKv7RJ2AMMyvEVt5dQ==
-X-CSE-MsgGUID: 6KluEpYARt+n2hgkZHdDqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
-   d="scan'208";a="31687972"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 16 May 2024 13:58:09 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s7iAw-000Emn-26;
-	Thu, 16 May 2024 20:58:06 +0000
-Date: Fri, 17 May 2024 04:57:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nobuaki.Tsunashima@infineon.com, marcel@holtmann.org,
-	luiz.dentz@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org
-Subject: Re: [PATCH] Bluetooth: Patch for CYW4373 hci up fail issue
-Message-ID: <202405170433.qYUNBTtS-lkp@intel.com>
-References: <6267800d70ae4344acaba3486b54bc0c@infineon.com>
+	s=arc-20240116; t=1715899505; c=relaxed/simple;
+	bh=cKglyS+9H62XEHeJRO+8UM6DLraq8qZuLx6o1DzNa7s=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=lySDRmRADNnSoVePqw9RKT0R/RZOmrSKkJMWFqSXhoPIU3Q0HCE9DXp4gFV0id0uT7irQVlXf+KcOg34ZVG91FKBYsveByCDVHj0tJoe1WKFzff2RMJMfaT/Cc90GZQomGOZ3oRxZVfFC9F0p8bfL4Qx5QowtWBNdw5/8mxz5Dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id D2C0A92009C; Fri, 17 May 2024 00:44:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id C713392009B;
+	Thu, 16 May 2024 23:44:55 +0100 (BST)
+Date: Thu, 16 May 2024 23:44:55 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+    linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+    Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 6/8] MIPS: Limit MIPS_MT_SMP support by ISA reversion
+In-Reply-To: <4b8d0a71-f4b3-4c6b-b1e2-f67bb2908508@app.fastmail.com>
+Message-ID: <alpine.DEB.2.21.2405162315290.32322@angie.orcam.me.uk>
+References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com> <20240202-llvm-msym32-v1-6-52f0631057d6@flygoat.com> <alpine.DEB.2.21.2405142235100.45291@angie.orcam.me.uk> <7fc82f8b-df9d-45f5-8e82-27eac7b4b0ab@app.fastmail.com>
+ <alpine.DEB.2.21.2405150850270.45291@angie.orcam.me.uk> <4b8d0a71-f4b3-4c6b-b1e2-f67bb2908508@app.fastmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6267800d70ae4344acaba3486b54bc0c@infineon.com>
+Content-Type: text/plain; charset=US-ASCII
 
-Hi,
+On Wed, 15 May 2024, Jiaxun Yang wrote:
 
-kernel test robot noticed the following build errors:
+> >> There is nothing stopping us to run R1 kernel on R2 hardware, given that
+> >> those features are all detected at boot time. I understand MT was introduced
+> >> at 34K which is R2.
+> >
+> >  We can certainly choose to support R2 features at run time with R1 kernel 
+> > configurations, but it's not what the change description says (left quoted 
+> > above for reference).  And the MT ASE, indeed first implemented with the 
+> > 34K (for which I was a member of the product development team back at MIPS 
+> > UK), is not a part of the R1 ISA specification set.
+> >
+> Good to know!
+> 
+> The motivation behind this patch is to workaround some randconfig failures
+> that combines MT with early ISA release.
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.9 next-20240516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ I'd say it's an actual fix rather than just a workaround.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nobuaki-Tsunashima-infineon-com/Bluetooth-Patch-for-CYW4373-hci-up-fail-issue/20240516-131000
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/6267800d70ae4344acaba3486b54bc0c%40infineon.com
-patch subject: [PATCH] Bluetooth: Patch for CYW4373 hci up fail issue
-config: x86_64-buildonly-randconfig-003-20240517 (https://download.01.org/0day-ci/archive/20240517/202405170433.qYUNBTtS-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405170433.qYUNBTtS-lkp@intel.com/reproduce)
+ Originally intention was with the MIPS port that eventually we would 
+support a generic kernel configuration, such as original x86 Linux has 
+always had or the Alpha port has at one point gained, where you can have 
+respectively an i486 (or previously even i386) or EV4 CPU kernel binary 
+that runs everywhere, even on the most recent hardware available.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405170433.qYUNBTtS-lkp@intel.com/
+ With the MIPS platform fragmentation it has proved too much of an effort
+for the engineering resources we've had available and consequently never 
+happened.  This is why we have retained numerous abstractions intended to 
+switch between handlers at boot time (and had even more in the past).
 
-All errors (new ones prefixed by >>):
+ From R1 onwards the privileged architecture has become more uniform and
+therefore easier to handle between ISA revisions and/or implementations 
+and the choice of the CPU to build for has become more of a balance 
+between backwards compatibility and optimisation stemming from a richer 
+architecture and FWIW I fully support striving to make an R1 kernel binary 
+run with any R1-R5 hardware.  It can be especially useful with platforms 
+that have swappable CPU modules available at different ISA levels.
 
->> drivers/bluetooth/btbcm.c:453:33: error: initializing 'struct bcm_chip_version_table *' with an expression of type 'const struct bcm_chip_version_table *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     453 |         struct bcm_chip_version_table *entry = &disable_broken_read_transmit_power_by_chip_ver[0];
-         |                                        ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+> They are not trivial to fix, so I just ban them in Kconfig. I was a little bit
+> reluctant to admit that in commit message.
 
+ Please always state your genuine motivation in change descriptions.  It 
+lets reviewers understand what a change is about and if there is any 
+concern about the description itself, then it can always be adjusted in 
+the review if needed.
 
-vim +453 drivers/bluetooth/btbcm.c
-
-   440	
-   441	struct bcm_chip_version_table {
-   442		u8	chip_id;
-   443		u16 baseline;
-   444	};
-   445	#define BCM_ROMFW_BASELINE_NUM	0xFFFF
-   446	static const struct bcm_chip_version_table disable_broken_read_transmit_power_by_chip_ver[] = {
-   447		{0x87, BCM_ROMFW_BASELINE_NUM}		/* CYW4373/4373E */
-   448	};
-   449	static bool btbcm_is_disable_broken_read_tx_power_by_chip_ver(u8 chip_id, u16 baseline)
-   450	{
-   451		int i;
-   452		int table_size = sizeof(disable_broken_read_transmit_power_by_chip_ver)/sizeof(disable_broken_read_transmit_power_by_chip_ver[0]);
- > 453		struct bcm_chip_version_table *entry = &disable_broken_read_transmit_power_by_chip_ver[0];
-   454	
-   455		for( i=0 ; i<table_size ; i++, entry++)
-   456		{
-   457			if( (chip_id == entry->chip_id) && (baseline == entry->baseline) )
-   458				return true;
-   459		}
-   460	
-   461		return false;
-   462	}
-   463	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  Maciej
