@@ -1,119 +1,126 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8DC14B974;
-	Thu, 16 May 2024 14:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7D01459F3;
+	Thu, 16 May 2024 15:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715870909; cv=none; b=IwdHQxEULl4GTatuNl/AWvm5TXWH8/Gm2aVwF4SuEcSZv04Qrzu0FnPQNYiI5mZ6wjsZrn+9bP1IXpChda0cP/geEX5nJVPv+LLxnd9qamsweOuo3Q2kzSh9YzfTj0+pjV4alyxtRnk+kiwaqSbRVY2znAC36hF7gW0+9NxYF0A=
+	t=1715873651; cv=none; b=M7wIFXgbymUjTk99fHuKgBnNlIgAK/vTy+m+ywi24aQADHc1Ps33bMjAqkverwFaQPslfdk2yrU4MrqRruwtlWIyLQpajYzRGZs87L8R0PfeLcW/u6t/S89TIrSy6t7HTXuKxnEazDaOlR+8j8cNwW2tnMuwVR95UeFg5C8adJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715870909; c=relaxed/simple;
-	bh=eGibcuJLfqXum3ESdm+NGKonua1wTXgzFMQgE8FqEsY=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FBy5urwP3wuF+hdmtczdPqO/Gw8tWexolOIRki3yVCHlS1FMIPkK9Gn0pAJrHL5QukQqv5s8fK2Bs7AuUYnkF0iek++ThDVh2Eu6c/q3yXfwbbkjSd3jcz3joSU1H4CtpeLgpYUJzKjQzq0IroMUHcr+bA2ra7542CyWEQuMhZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VgCYK2wGZz6J6mh;
-	Thu, 16 May 2024 22:44:53 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id D29B4140A36;
-	Thu, 16 May 2024 22:48:25 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 16 May
- 2024 15:48:25 +0100
-Date: Thu, 16 May 2024 15:48:23 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Kousik Sanagavarapu <five231003@gmail.com>
-CC: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>,
-	Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>, Julia
- Lawall <julia.lawall@inria.fr>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, Shuah Khan <skhan@linuxfoundation.org>,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/3] soc: ti: knav_qmss_queue: do device_node auto
- cleanup
-Message-ID: <20240516154823.00000974@Huawei.com>
-In-Reply-To: <ZkG_7wJvIjZ4ZlcV@five231003>
-References: <20240510071432.62913-3-five231003@gmail.com>
-	<202405111846.3m9z398l-lkp@intel.com>
-	<ZkCZTv0Gci3xxKtw@five231003>
-	<20240513064451.GB652533@thelio-3990X>
-	<ZkG_7wJvIjZ4ZlcV@five231003>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1715873651; c=relaxed/simple;
+	bh=IuOYls7NNFLlwdTf+lCs65OhhoXPYgnCM73dnbJpNX0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Q7KIdHnzCo961ymnmlZkKTHLvPOC/FtKOaysDFOvAQQM7ekPaDWFkYmmeYvmQ++T2rRqdMVPe7v7dfBHFh9OATpOrAyw0BubS0yv4GFa/m1Z90519JvULdXaiDu8H2ZlFgkLCOEVZE59GR/of/FRAqYcM1NFvkeNJAOz1l8bD6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h0pcnREe; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h0pcnREe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715873649; x=1747409649;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IuOYls7NNFLlwdTf+lCs65OhhoXPYgnCM73dnbJpNX0=;
+  b=h0pcnREeLmKaBmmxzhrumQ5SJjHQ1raIzuYdUAhrvUXXFTL5CIDMuofr
+   pJ4vGm9PlnOef+kubl+bdige/NdQHOVOhQ6iIJVxCjbS8/AU/JLVY/y0p
+   2fsqC5LLik6Km+KH/NPq9UbMo62Xm/5YivY92YyF967YWgwGqR5VpGUNo
+   RluNzYRbKyQ9Rd71Ev0AvaWisz6pphaQZysog3BYJfNgzEyHE8KLW6Z4Z
+   Rqqza9U73HR5LPAYGA7Rd9ehxIUT7vcyyCVQENJ9kL+Yov2vvwYzqNLe/
+   N297XdXfZuY3n33WuePKITb4u0bObFCPZruRCEQczcBH1EYKomSePmUAD
+   A==;
+X-CSE-ConnectionGUID: WEDiAAMXSxWyrVKyTDQuDA==
+X-CSE-MsgGUID: CX8Aa827TyiKk4x96AqdRw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="11840698"
+X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
+   d="scan'208";a="11840698"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 08:34:08 -0700
+X-CSE-ConnectionGUID: OZBcv+1sRSOkz8VYp1K6Gg==
+X-CSE-MsgGUID: 7gjYl/hnQpy3kcHZPIrxAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
+   d="scan'208";a="62678814"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 16 May 2024 08:34:07 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s7d7M-000EOR-12;
+	Thu, 16 May 2024 15:34:04 +0000
+Date: Thu, 16 May 2024 23:33:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [linux-next:master 12978/13339]
+ arch/riscv/errata/andes/errata.c:68:38: error: use of undeclared identifier
+ 'RISCV_VENDOR_EXT_ALTERNATIVES_BASE'
+Message-ID: <202405162349.Zz8MMiJF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 13 May 2024 12:53:27 +0530
-Kousik Sanagavarapu <five231003@gmail.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   dbd9e2e056d8577375ae4b31ada94f8aa3769e8a
+commit: 589e2fc8585098e66cf5dace3806b4737edd0fd1 [12978/13339] riscv: Convert xandespmu to use the vendor extension framework
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240516/202405162349.Zz8MMiJF-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240516/202405162349.Zz8MMiJF-lkp@intel.com/reproduce)
 
-> On Sun, May 12, 2024 at 11:44:51PM -0700, Nathan Chancellor wrote:
-> > On Sun, May 12, 2024 at 03:56:22PM +0530, Kousik Sanagavarapu wrote:  
-> > > On Sat, May 11, 2024 at 06:12:39PM +0800, kernel test robot wrote:  
-> > > > Hi Kousik,
-> > > > 
-> > > > kernel test robot noticed the following build errors:
-> > > >   
-> > > 
-> > > [...]
-> > >   
-> > > > All errors (new ones prefixed by >>):
-> > > >   
-> > > > >> drivers/soc/ti/knav_qmss_queue.c:1853:3: error: cannot jump from this goto statement to its label  
-> > > >                    goto err;
-> > > >                    ^
-> > > >    drivers/soc/ti/knav_qmss_queue.c:1855:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
-> > > >            struct device_node *regions __free(device_node) =
-> > > >                                ^  
-> 
-> [...]
-> 
-> > > Seems like gcc didn't catch this when I compiled locally.  
-> > 
-> > FWIW, you may notice this as you do more conversions. The fact that GCC
-> > does not warn at all is a GCC bug as far as I am aware (i.e., clang's
-> > error is correct):
-> > 
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951
-> > 
-> > which has come up in other places:
-> > 
-> > https://lore.kernel.org/20240425174732.GA270911@dev-arch.thelio-3990X/  
-> 
-> Thank you so much for these links :)
-> 
-> All my internet searches ended up at stackoverflow posts which didn't
-> even describe the problem correctly, which also lead me to write an
-> email explaining a partly erroneous solution, which is sitting in my
-> mailbox ;)
-> 
-> Thanks again, these will help a lot.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405162349.Zz8MMiJF-lkp@intel.com/
 
-Independent of all this, it's not a good idea form a readability point
-of view to mix automated and manual cleanup.  So in cases like this
-where you want to do scope based cleanup, use separate functions
-that have appropriately defined scope (or brackets for the really minor
-cases).
+All errors (new ones prefixed by >>):
 
-Here, you may just be able to push the device_node get into
-knav_queue_setup_regions() for example.
+   In file included from arch/riscv/errata/andes/errata.c:14:
+   In file included from arch/riscv/include/asm/cacheflush.h:9:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/riscv/errata/andes/errata.c:68:38: error: use of undeclared identifier 'RISCV_VENDOR_EXT_ALTERNATIVES_BASE'
+      68 |         BUILD_BUG_ON(ERRATA_ANDES_NUMBER >= RISCV_VENDOR_EXT_ALTERNATIVES_BASE);
+         |                                             ^
+   5 warnings and 1 error generated.
 
-Jonathan
 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+vim +/RISCV_VENDOR_EXT_ALTERNATIVES_BASE +68 arch/riscv/errata/andes/errata.c
 
+    63	
+    64	void __init_or_module andes_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
+    65						      unsigned long archid, unsigned long impid,
+    66						      unsigned int stage)
+    67	{
+  > 68		BUILD_BUG_ON(ERRATA_ANDES_NUMBER >= RISCV_VENDOR_EXT_ALTERNATIVES_BASE);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
