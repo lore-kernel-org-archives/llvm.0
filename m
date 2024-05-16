@@ -1,139 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E54414533D;
-	Thu, 16 May 2024 19:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53948156F3F
+	for <llvm@lists.linux.dev>; Thu, 16 May 2024 19:38:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715887979; cv=none; b=QOW/dVGqt3FmBBZ/FBpmMh5G9ny0haBNdXVkvU/3j7xmFIfHHpauaPLVp/fhOwcB9s+QftO9DVzuyOP2liKLe7obPKecuWVVzhfIl69mUJOTH0dIRkx5TiL8HrDpLPGq8fv3OSdoIQpxQBuIeSL3/sM2d8ONSnn6G8FdUz2Vul4=
+	t=1715888315; cv=none; b=tpgEQj6tIzV0jo0s6vW7Az/ebpsgKESJO1UeZH7JtVVy//DfXfALOL9FoPwMNKMxVjFwQIa/5Py+294oi/f9KdtH0vIj4IJEsiFZRZms7JzVSxf222dBZlpXlbQFQrMmZUOQltHH7w5Rx2A/kNqf+b7TqaF77gGAHHEVIHo75FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715887979; c=relaxed/simple;
-	bh=F+2v2+xUF084Tonn2JxepjXqiHplTniHyiir7MNmqac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cUUyDrral7iw3n2gBesA2BOhZ4Ls3p773qKMYTVxSk3pDdNMn+dQWWNhbHE0IEpIhra0jpjg62Ep6ipQaq55iZFQxT0iVgwpc/jvUBYLCGgsAayJMjcHLvw6ultfVYjT6AEINByzcvYOvX/bACD1R8r/MNBSXaVLMlWdkvu1jNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A9QZRkvs; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715888315; c=relaxed/simple;
+	bh=mlnMYRMZywee+bU7X3E/HTKmms1wgK1WMiDq3bygPLc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=c3lags+GuWULCAWBB39BrI0TKEMOiDYOmkNNC/9t6jQQ/8H3Fb8n73v/qcF3XXFN7wKHQwPv5m/UO/hizHWYSh2kQ+r3CHr0jRRiA0PgECGToexcinxsY5Y4r3y58DQghFGlQM5OddY8CmfFhpOR04WXqCC33g3MELjPUGjk/y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MRezFHiF; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A9QZRkvs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715887977; x=1747423977;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F+2v2+xUF084Tonn2JxepjXqiHplTniHyiir7MNmqac=;
-  b=A9QZRkvsq9b6lOKRWN/OOBkt4k3qE3Ezldx1nnkHfHFTmGOaUVwAG5BM
-   /T1AQZAlBOqZkv0Y5IKw0ZIZwwygnI1z1NclL4UKpm00r0xwiqmghhEaP
-   ANlT03790ODc4uKlAojBaGyi42fDa+jAjbHBo4+HO7FNDIE3yePTV8L6h
-   Kt8WTdzd0x5V8XUC/l7hhJWpaWWq3rl9/VAAojxpDO1SiaFH5SrloSnge
-   9X1dlFlLh4jM9jW7Er6UR+MRKiChZqXbFgA6rf55KDTsUyt6xJNQyGllE
-   HvtNLqhNx8/4OzDOPyKU2+fpedfNAI/J0Xy1w1AA3RlTebeTvGOqyxDmo
-   A==;
-X-CSE-ConnectionGUID: HaXmUcGwQPu09RwAEnrYBA==
-X-CSE-MsgGUID: l/4zCv5DTzK91+EVWRmKoQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="29534711"
-X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
-   d="scan'208";a="29534711"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 12:32:56 -0700
-X-CSE-ConnectionGUID: 4nkztOPnTliFpzBhonI88g==
-X-CSE-MsgGUID: Ep0hYkanRwyYg79M2JjH/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
-   d="scan'208";a="31468887"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 16 May 2024 12:32:52 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s7gqQ-000Ehd-0w;
-	Thu, 16 May 2024 19:32:50 +0000
-Date: Fri, 17 May 2024 03:31:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhang Yi <yi.zhang@huaweicloud.com>, linux-xfs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
-	djwong@kernel.org, hch@infradead.org, brauner@kernel.org,
-	david@fromorbit.com, chandanbabu@kernel.org, jack@suse.cz,
-	yi.zhang@huawei.com, yi.zhang@huaweicloud.com,
-	chengzhihao1@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH v2 1/3] iomap: pass blocksize to iomap_truncate_page()
-Message-ID: <202405170356.gLrF2NDl-lkp@intel.com>
-References: <20240516073001.1066373-2-yi.zhang@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MRezFHiF"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-62035d9ecc4so161353747b3.1
+        for <llvm@lists.linux.dev>; Thu, 16 May 2024 12:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715888313; x=1716493113; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GTNya4KcgcK2eGurHUl9hyGe1sf/dMjmphGQ/IQpeU0=;
+        b=MRezFHiF409gX5WwrULGRb/heHSOvIfL75krw0kHICER31SzToV5LiARyCD77uhuP1
+         BIueEEzsDWQ5c1Zo09DtEDasteAdanF4avj2lW6Qa/qv4z1bc1kuP+L3J1PJSR9D8buk
+         DpB86MvmES7ULeahGaHZeFImgrDdy7ZQnkExqRyMZvpwjPMrzomjefNmNLwvvccrvPZ6
+         EA4tIs3N+TOJjilqKWL/7sxy9pwtxVfFtwcliUz45dNpEoRRLR7M4FHyToCST8xF10ye
+         lt7j93nBbfiU8/sLXmHOnceKWHTQCa7V4IhF2YJVlu7kX6gyc6aG4c5Tl3gAeVahJ3ck
+         cw+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715888313; x=1716493113;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GTNya4KcgcK2eGurHUl9hyGe1sf/dMjmphGQ/IQpeU0=;
+        b=NpD5Q36Nn36gXX8FLjorrOfUnfEu0V2UZYnK+hln6/wvs+F7qQLJ7RD42OSQ2LDFYI
+         gPjPPCXH2/e131Qan1kig7wpBrx/ZJTzIuyZPju5/ZhHJ8J44ot5+f7y9JnfhNl4/yEc
+         ZAb6W4byptmEsn4aFHyYe8ASHQOlwLixpW1kMJm1Zo+UCMPTB6TTDsvkh1bIQQTf/ZhF
+         F15qNCfelM/N8iXwz6Nghwg819NN+4R6pM0DcPhwWzqv376bLsI56OXKmWsOfS8c2dIY
+         EwMBe6jbE45AdPpLoOyC+nn5dE+kAYmtvyVG54veHp4bvbMLLdxeKOybrLbIcfj+gxnI
+         FypA==
+X-Forwarded-Encrypted: i=1; AJvYcCX0O5GOwRrDvi0s+tJrnaMnC/cKkQJ+l2nqWZWDROT4kkrdGNv+8ddY8BwE+a+ZrcORWjzgB+UjSb23cnALsulcMwz/rg==
+X-Gm-Message-State: AOJu0YwCQJSSxHMu1CsQG7oe/AZUAjzynik/JAaJF7knXX4deblZu++y
+	8z8Mnshfzp+w4GsMTDUN1PMTIW1elVOkIs7/r8AvD1cqEwAPf6iOp5Z2HBs6stk8XZ51ICMCggK
+	c1Q5fmZR2KQ==
+X-Google-Smtp-Source: AGHT+IGr/aLkFgMRkSjlxVh1xA+fX/na3/5ELahuHu4kuYZN2vLitNc/Cs2NtJ6FKvCmAN8Sir+chzojBjOS2Q==
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a05:690c:b96:b0:61b:791a:9850 with SMTP
+ id 00721157ae682-622b0168adfmr51024257b3.9.1715888313401; Thu, 16 May 2024
+ 12:38:33 -0700 (PDT)
+Date: Thu, 16 May 2024 19:38:30 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240516073001.1066373-2-yi.zhang@huaweicloud.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIALVgRmYC/x2MQQqAIBAAvxJ7TlCxwr4SHUy3WioLrQiiv2edh
+ jnM3BAxEEaosxsCnhRp9UlEnoEdjR+QkUsOkkvFC1Gy6fC0M7suG834cTHeRea0VrxSvZUdQoq 3gD1d/7hpn+cFped4W2gAAAA=
+X-Mailer: b4 0.14-dev
+Message-ID: <20240516-kunit-compile-commands-v1-1-05fc32b79312@google.com>
+Subject: [PATCH] kunit: tool: Build compile_commands.json
+From: Brendan Jackman <jackmanb@google.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Zhang,
+compile_commands.json is used by clangd[1] to provide code navigation
+and completion functionality to editors. See [2] for an example
+configuration that includes this functionality for VSCode.
 
-kernel test robot noticed the following build warnings:
+It can currently be built manually when using kunit.py, by running:
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on linus/master v6.9 next-20240516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  ./scripts/clang-tools/gen_compile_commands.py -d .kunit
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Yi/iomap-pass-blocksize-to-iomap_truncate_page/20240516-154238
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20240516073001.1066373-2-yi.zhang%40huaweicloud.com
-patch subject: [PATCH v2 1/3] iomap: pass blocksize to iomap_truncate_page()
-config: arm-davinci_all_defconfig (https://download.01.org/0day-ci/archive/20240517/202405170356.gLrF2NDl-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405170356.gLrF2NDl-lkp@intel.com/reproduce)
+With this change however, it's built automatically so you don't need to
+manually keep it up to date.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405170356.gLrF2NDl-lkp@intel.com/
+Unlike the manual approach, having make build the compile_commands.json
+means that it appears in the build output tree instead of at the root of
+the source tree, so you'll need to add --compile-commands-dir= to your
+clangd args for it to be found.
 
-All warnings (new ones prefixed by >>):
+[1] https://clangd.llvm.org/
+[2] https://github.com/FlorentRevest/linux-kernel-vscode
 
-   In file included from fs/iomap/buffered-io.c:9:
-   In file included from include/linux/iomap.h:7:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/iomap/buffered-io.c:1453:7: warning: comparison of distinct pointer types ('typeof ((pos)) *' (aka 'long long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-    1453 |                            do_div(pos, blocksize);
-         |                            ^~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
-   2 warnings generated.
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+ tools/testing/kunit/kunit_kernel.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 7254c110ff23..61931c4926fd 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -72,7 +72,8 @@ class LinuxSourceTreeOperations:
+ 			raise ConfigError(e.output.decode())
+ 
+ 	def make(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> None:
+-		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
++		command = ['make', 'all', 'compile_commands.json', 'ARCH=' + self._linux_arch,
++			   'O=' + build_dir, '--jobs=' + str(jobs)]
+ 		if make_options:
+ 			command.extend(make_options)
+ 		if self._cross_compile:
 
-vim +1453 fs/iomap/buffered-io.c
+---
+base-commit: 3c999d1ae3c75991902a1a7dad0cb62c2a3008b4
+change-id: 20240516-kunit-compile-commands-d994074fc2be
 
-  1446	
-  1447	int
-  1448	iomap_truncate_page(struct inode *inode, loff_t pos, unsigned int blocksize,
-  1449			bool *did_zero, const struct iomap_ops *ops)
-  1450	{
-  1451		loff_t start = pos;
-  1452		unsigned int off = is_power_of_2(blocksize) ? (pos & (blocksize - 1)) :
-> 1453				   do_div(pos, blocksize);
-  1454	
-  1455		/* Block boundary? Nothing to do */
-  1456		if (!off)
-  1457			return 0;
-  1458		return iomap_zero_range(inode, start, blocksize - off, did_zero, ops);
-  1459	}
-  1460	EXPORT_SYMBOL_GPL(iomap_truncate_page);
-  1461	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Brendan Jackman <jackmanb@google.com>
+
