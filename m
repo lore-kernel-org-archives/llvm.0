@@ -1,64 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EA6143898;
-	Thu, 16 May 2024 11:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394FF1465A4;
+	Thu, 16 May 2024 13:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715858159; cv=none; b=pZyhHeNKYFXygVsHAiJz67/AIBFTMd9tHMOn4ba01LJC+JJwMnSPlB/aanV7fQeMthfnNLj1qAbycNcfWdQl0oYXcjtXzTFCYwFNE4U18LlyawukdjUee+F6BveQ3PfwA19fR8FyH16GoPi/DoBVYx6jp4WxxW6t4q3iVBiDApY=
+	t=1715864404; cv=none; b=i1BT27AvebNguiIhmL5oL4ZK0/6Bdg8/Az8bky038HRSghpbfl124O2sTNR8/XvTh/dXVuVEhxWbJJ8Jhqey+tYJgrPJNkr7GoNk6shSUEP07xmd2ScTNJsB4YJDNpES6Flhwi5M6p/nKcuXfsip76EBiSseiE3bQoS4WJQwUpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715858159; c=relaxed/simple;
-	bh=8FiDi3rSh8YbjIJWwXL4knvvjLdCTS7p5CuuEb5Phcs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KDPZUTe4wa3+iZwAnRPP/84EODO31ovM7iyWytQaGJShA8/PmCuK2htxvDZiWD1bnv1ksLrn3eYDZzfdWgwcl/CFe5LBFzGvu53Mqrwsex3pTJipQkbyIQZQscSPYZQW9Y9NwKC4oq9ROJ/YDOM8dUvX5or5Oggal3Naey8BBmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NW36PcXO; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1715864404; c=relaxed/simple;
+	bh=dJ0NAdMJFothU+MVSsRxsK17yyT8UnYRq+CRtxkPs2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LkgTSqgnHwSSjRDSQEUJH+bVntSQ2GOMojrPdTdWFX6OL2ostC6/1cWqMiEeKsW77K4sFX6SK2u+jJEip6Nf5o9Ueh58gU6FSWUMqPDJLnJdHqjdVHJ1xwyq/2APrt9AnNMhRRK4BfqAq8XZ1+6PbaO+RNMLaUC7atlsik1vakM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TvfZD0bY; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NW36PcXO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TvfZD0bY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715858157; x=1747394157;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8FiDi3rSh8YbjIJWwXL4knvvjLdCTS7p5CuuEb5Phcs=;
-  b=NW36PcXOU4JL51tmC3JTqYFVuG6kbzYFCH9FXv+fRe7VbwKaKCs+dq0P
-   np7Jxgw5h2QkeWvGNhLYnkAwQQhDpIdcPBsGoi5+Zg0L7yw98i0gJQIyo
-   K59qhpT6V0gaarV+KvBI/IEWeV591tQ7/PpQY9hferJHWxPHneUItGK/L
-   TTAFW55D4d2EnTX3nB17dTPPzuwj5yNoYvoofT1okp7gfCzgFRb/a4KHV
-   VVnkTYfH14XP8V4NK8MNKv40cQtwWKwvKs5TN1INKr6axetUMgMUg+pzb
-   uSFJ3vle7KLA1own/razxIW0exDOGTeAspHojlG1NSl1ny76dxIk8OjOP
+  t=1715864402; x=1747400402;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dJ0NAdMJFothU+MVSsRxsK17yyT8UnYRq+CRtxkPs2Q=;
+  b=TvfZD0bYi7JbQh1VCPQS9QrlZd8PBkWHxf5WgyKLD8E7pckOGS4ilJcV
+   JymxEE1uCGGb79sSPigpI3ZbQ9yz3twjJ+p8m9xDQ234LxDmMq8q3myzw
+   AVdZQ8P1GaPk1wgPnz2cwhdpAN8vChp3rgmzwTi7UirgnBd7RH8/6ku2d
+   Zj4DqtH1dqtfLMUVJ11MY4HdxoQxwW5YBJ1YjuHKOgsouMImmK5EPHqwq
+   9RDb9pUo14szSxtlrpAaAG8T2hgLbl0rBFoEVncsb5aZlq1KCrVlA0I04
+   01lpO4wAsO2fRvjwvotm/X2ctHbhbsKwqDkx1DK+r6kX6yHl6PdY5jDp5
    A==;
-X-CSE-ConnectionGUID: WuX7o7QrSX2yR1Sz4N/L/g==
-X-CSE-MsgGUID: rvgCYSJ2T6ykt3WyzfH5YA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="22564321"
+X-CSE-ConnectionGUID: Q7KJpHxRT8aMzEEVPEMYag==
+X-CSE-MsgGUID: 1xXy6GvaRCGM/YCVtlKXvQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="23108457"
 X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="22564321"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 04:15:56 -0700
-X-CSE-ConnectionGUID: yHj1g9vhQvy6yBpLhbvw0g==
-X-CSE-MsgGUID: dMU429v1RKqrTvjpZ++YSQ==
+   d="scan'208";a="23108457"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 06:00:01 -0700
+X-CSE-ConnectionGUID: //zX3EGARB6EP7s99DIsfg==
+X-CSE-MsgGUID: jmTz8BM/Q7q82vALcJxXUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="31521944"
+   d="scan'208";a="31971828"
 Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 16 May 2024 04:15:55 -0700
+  by orviesa008.jf.intel.com with ESMTP; 16 May 2024 06:00:00 -0700
 Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s7Z5T-000EBT-2h;
-	Thu, 16 May 2024 11:15:51 +0000
-Date: Thu, 16 May 2024 19:15:10 +0800
+	id 1s7aiC-000EFP-37;
+	Thu, 16 May 2024 12:59:56 +0000
+Date: Thu, 16 May 2024 20:59:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-media@vger.kernel.org
+To: Borislav Petkov <bp@suse.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>, hverkuil@xs4all.nl,
-	laurent.pinchart@ideasonboard.com,
-	Wentong Wu <wentong.wu@intel.com>
-Subject: Re: [PATCH v5 1/4] media: v4l: Support passing media pad argument to
- v4l2_get_link_freq()
-Message-ID: <202405161801.Muqsgsku-lkp@intel.com>
-References: <20240516070507.21735-2-sakari.ailus@linux.intel.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>
+Subject: [tip:x86/urgent 1/1] arch/x86/boot/printf.c:257:3: warning:
+ unannotated fall-through between switch labels
+Message-ID: <202405162054.ryP73vy1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,85 +64,211 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240516070507.21735-2-sakari.ailus@linux.intel.com>
 
-Hi Sakari,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 8771b7f31b7fff91a998e6afdb60650d4bac59a5]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-Support-passing-media-pad-argument-to-v4l2_get_link_freq/20240516-150645
-base:   8771b7f31b7fff91a998e6afdb60650d4bac59a5
-patch link:    https://lore.kernel.org/r/20240516070507.21735-2-sakari.ailus%40linux.intel.com
-patch subject: [PATCH v5 1/4] media: v4l: Support passing media pad argument to v4l2_get_link_freq()
-config: i386-randconfig-006-20240516 (https://download.01.org/0day-ci/archive/20240516/202405161801.Muqsgsku-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+head:   dd0716c2b87792ebea30864e7ad1df461d4c1525
+commit: dd0716c2b87792ebea30864e7ad1df461d4c1525 [1/1] x86/boot: Add a fallthrough annotation
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240516/202405162054.ryP73vy1-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240516/202405161801.Muqsgsku-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240516/202405162054.ryP73vy1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405161801.Muqsgsku-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405162054.ryP73vy1-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/media/v4l2-core/v4l2-common.c:510:7: error: no member named 'entity' in 'struct v4l2_subdev'
-     510 |         sd = media_entity_to_v4l2_subdev(pad->entity);
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/media/v4l2-subdev.h:1110:49: note: expanded from macro 'media_entity_to_v4l2_subdev'
-    1110 |                 container_of(__me_sd_ent, struct v4l2_subdev, entity) : \
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   include/linux/container_of.h:20:49: note: expanded from macro 'container_of'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-      21 |                       __same_type(*(ptr), void),                        \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      22 |                       "pointer type mismatch in container_of()");       \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:390:74: note: expanded from macro '__same_type'
-     390 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                          ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
->> drivers/media/v4l2-core/v4l2-common.c:510:7: error: no member named 'entity' in 'v4l2_subdev'
-     510 |         sd = media_entity_to_v4l2_subdev(pad->entity);
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/media/v4l2-subdev.h:1110:3: note: expanded from macro 'media_entity_to_v4l2_subdev'
-    1110 |                 container_of(__me_sd_ent, struct v4l2_subdev, entity) : \
-         |                 ^                                             ~~~~~~
-   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
-      23 |         ((type *)(__mptr - offsetof(type, member))); })
-         |                            ^              ~~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^                        ~~~~~~
->> drivers/media/v4l2-core/v4l2-common.c:510:5: error: assigning to 'struct v4l2_subdev *' from incompatible type 'void'
-     510 |         sd = media_entity_to_v4l2_subdev(pad->entity);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+>> arch/x86/boot/printf.c:257:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     257 |                 case 'u':
+         |                 ^
+   arch/x86/boot/printf.c:257:3: note: insert 'break;' to avoid fall-through
+     257 |                 case 'u':
+         |                 ^
+         |                 break; 
+   1 warning generated.
 
 
-vim +510 drivers/media/v4l2-core/v4l2-common.c
+vim +257 arch/x86/boot/printf.c
 
-   504	
-   505	s64 __v4l2_get_link_freq_pad(struct media_pad *pad, unsigned int mul,
-   506				     unsigned int div)
-   507	{
-   508		struct v4l2_subdev *sd;
-   509	
- > 510		sd = media_entity_to_v4l2_subdev(pad->entity);
-   511		if (!sd)
-   512			return -ENODEV;
-   513	
-   514		return __v4l2_get_link_freq_ctrl(sd->ctrl_handler, mul, div);
-   515	}
-   516	EXPORT_SYMBOL_GPL(__v4l2_get_link_freq_pad);
-   517	
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  112  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  113  int vsprintf(char *buf, const char *fmt, va_list args)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  114  {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  115  	int len;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  116  	unsigned long num;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  117  	int i, base;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  118  	char *str;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  119  	const char *s;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  120  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  121  	int flags;		/* flags to number() */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  122  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  123  	int field_width;	/* width of output field */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  124  	int precision;		/* min. # of digits for integers; max
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  125  				   number of chars for from string */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  126  	int qualifier;		/* 'h', 'l', or 'L' for integer fields */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  127  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  128  	for (str = buf; *fmt; ++fmt) {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  129  		if (*fmt != '%') {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  130  			*str++ = *fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  131  			continue;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  132  		}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  133  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  134  		/* process flags */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  135  		flags = 0;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  136  	      repeat:
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  137  		++fmt;		/* this also skips first '%' */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  138  		switch (*fmt) {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  139  		case '-':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  140  			flags |= LEFT;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  141  			goto repeat;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  142  		case '+':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  143  			flags |= PLUS;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  144  			goto repeat;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  145  		case ' ':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  146  			flags |= SPACE;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  147  			goto repeat;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  148  		case '#':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  149  			flags |= SPECIAL;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  150  			goto repeat;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  151  		case '0':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  152  			flags |= ZEROPAD;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  153  			goto repeat;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  154  		}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  155  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  156  		/* get field width */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  157  		field_width = -1;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  158  		if (isdigit(*fmt))
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  159  			field_width = skip_atoi(&fmt);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  160  		else if (*fmt == '*') {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  161  			++fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  162  			/* it's the next argument */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  163  			field_width = va_arg(args, int);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  164  			if (field_width < 0) {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  165  				field_width = -field_width;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  166  				flags |= LEFT;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  167  			}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  168  		}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  169  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  170  		/* get the precision */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  171  		precision = -1;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  172  		if (*fmt == '.') {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  173  			++fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  174  			if (isdigit(*fmt))
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  175  				precision = skip_atoi(&fmt);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  176  			else if (*fmt == '*') {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  177  				++fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  178  				/* it's the next argument */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  179  				precision = va_arg(args, int);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  180  			}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  181  			if (precision < 0)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  182  				precision = 0;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  183  		}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  184  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  185  		/* get the conversion qualifier */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  186  		qualifier = -1;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  187  		if (*fmt == 'h' || *fmt == 'l' || *fmt == 'L') {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  188  			qualifier = *fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  189  			++fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  190  		}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  191  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  192  		/* default base */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  193  		base = 10;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  194  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  195  		switch (*fmt) {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  196  		case 'c':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  197  			if (!(flags & LEFT))
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  198  				while (--field_width > 0)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  199  					*str++ = ' ';
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  200  			*str++ = (unsigned char)va_arg(args, int);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  201  			while (--field_width > 0)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  202  				*str++ = ' ';
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  203  			continue;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  204  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  205  		case 's':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  206  			s = va_arg(args, char *);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  207  			len = strnlen(s, precision);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  208  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  209  			if (!(flags & LEFT))
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  210  				while (len < field_width--)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  211  					*str++ = ' ';
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  212  			for (i = 0; i < len; ++i)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  213  				*str++ = *s++;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  214  			while (len < field_width--)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  215  				*str++ = ' ';
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  216  			continue;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  217  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  218  		case 'p':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  219  			if (field_width == -1) {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  220  				field_width = 2 * sizeof(void *);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  221  				flags |= ZEROPAD;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  222  			}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  223  			str = number(str,
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  224  				     (unsigned long)va_arg(args, void *), 16,
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  225  				     field_width, precision, flags);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  226  			continue;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  227  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  228  		case 'n':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  229  			if (qualifier == 'l') {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  230  				long *ip = va_arg(args, long *);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  231  				*ip = (str - buf);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  232  			} else {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  233  				int *ip = va_arg(args, int *);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  234  				*ip = (str - buf);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  235  			}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  236  			continue;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  237  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  238  		case '%':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  239  			*str++ = '%';
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  240  			continue;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  241  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  242  			/* integer number formats - set up the flags and "break" */
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  243  		case 'o':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  244  			base = 8;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  245  			break;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  246  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  247  		case 'x':
+9b706aee7d92d6 arch/x86/boot/printf.c  Denys Vlasenko  2008-02-09  248  			flags |= SMALL;
+dd0716c2b87792 arch/x86/boot/printf.c  Borislav Petkov 2024-05-16  249  			fallthrough;
+9b706aee7d92d6 arch/x86/boot/printf.c  Denys Vlasenko  2008-02-09  250  		case 'X':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  251  			base = 16;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  252  			break;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  253  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  254  		case 'd':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  255  		case 'i':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  256  			flags |= SIGN;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11 @257  		case 'u':
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  258  			break;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  259  
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  260  		default:
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  261  			*str++ = '%';
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  262  			if (*fmt)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  263  				*str++ = *fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  264  			else
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  265  				--fmt;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  266  			continue;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  267  		}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  268  		if (qualifier == 'l')
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  269  			num = va_arg(args, unsigned long);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  270  		else if (qualifier == 'h') {
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  271  			num = (unsigned short)va_arg(args, int);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  272  			if (flags & SIGN)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  273  				num = (short)num;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  274  		} else if (flags & SIGN)
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  275  			num = va_arg(args, int);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  276  		else
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  277  			num = va_arg(args, unsigned int);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  278  		str = number(str, num, base, field_width, precision, flags);
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  279  	}
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  280  	*str = '\0';
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  281  	return str - buf;
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  282  }
+1543610ad79ac4 arch/i386/boot/printf.c H. Peter Anvin  2007-07-11  283  
+
+:::::: The code at line 257 was first introduced by commit
+:::::: 1543610ad79ac4cc61c26f8a29c84e4229faa9a3 Console-writing code for the new x86 setup code
+
+:::::: TO: H. Peter Anvin <hpa@zytor.com>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
