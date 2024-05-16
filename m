@@ -1,75 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8149D14D2B3;
-	Thu, 16 May 2024 13:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63085147C75;
+	Thu, 16 May 2024 14:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715866234; cv=none; b=LEaYEBiLTQDQAnvXm0En2QFJKnLvvTm/zBfN4pT6LtHJ6Y/8wBiZt7UJ/T/id0LwelL5P1Fq7o/jgiqSVNRx7IFxi0Qy5pC9CMAgAB6Drk23ZoA72ACxcuczGHuuDM4JezDWAQWbtAlwR2SiY4qdxUmBj7Uv+zKjju8jxR62PtM=
+	t=1715868227; cv=none; b=KyTz2V+ZvKkVjwT/0N/v90iLw+yXs77HG08R4UvXGTg+o8qtDKHosgmUO5srbm38Ng/T/JVrmWuhyGliegC6oAn07zi7rXA5hB41pOCwvqAG6Nqc4WhpjGPFzXzCIEJFhptzBGXnITU8wK+6g65HczgtKSOc70hYeyU1bV6ZHyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715866234; c=relaxed/simple;
-	bh=z8BnU2Is6DFB6KVcEKYw3pqMsABrzURYamS+ST69Qk0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=ZItztftFVjxn/tMp3b9hZ4xEZnJP6wcl1Ji6HLngBKcVXGIHM2Q+JFNDwqunP44JLWwPd8hKahrUfpNYzSmbPa9ONg1oB6/ASUf2be5kXEIAS6Ennk32nUtD75E99y4jmv+OKysHAdGEyr7pVbyq+FyQxoTHIX+PUMwialGI+eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHwLq/uJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715868227; c=relaxed/simple;
+	bh=btau07SULIoJqAYVzbVYOn4odv7J5jQdnBX5OjVK4G4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=U1GIqgwE4Y02uBfsjeDm0ekVvfUnZtMGzRpJVLNl8By7ASkK96khoOMh3MELsdw2AazFkrVn2NY6Po9OuaqPVksoRQUyAVeu0hE1ck6VpJc3BpSQDkWc9QtRId127WJmX1f0ialfvuqIcSWZe1APaKX+rq1KOPabIA6QZXo2qDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Drw8Zuny; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHwLq/uJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4131C113CC;
-	Thu, 16 May 2024 13:30:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Drw8Zuny"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98387C113CC;
+	Thu, 16 May 2024 14:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715866234;
-	bh=z8BnU2Is6DFB6KVcEKYw3pqMsABrzURYamS+ST69Qk0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=PHwLq/uJvoN0fU1gNykdMOT0phruqPrBSqb5l+yRgMUgegRuGl0R4RVb/VQNKldo1
-	 mkkrYXbLB3d90j6KBRyAiuzhzE+wD7cwQViOMeIvc+RIHQoh4CRKYXTMeLoYtm5TD9
-	 AOsZ4N23KBJIcUFYJtlyZfelrFo5K+/PtJG4THL+kze4j1SPTxfaW0h0xnSKkq198s
-	 JYKbDN/WqRLEdSEmlq8TnWU+BozS/3PKiVf7mdKMicq/hW3emTwXiRawbH4XAQIAjK
-	 Wc+YRgcTtWW2ykVjX2w7Pi/kOPaTnAIK+pItqhkJTz04bWGClvurKfg/r4q6DEohA1
-	 CxGmVALL3FaTg==
-Date: Thu, 16 May 2024 06:30:32 -0700
-From: Kees Cook <kees@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>,
- Linus Torvalds <torvalds@linux-foundation.org>
-CC: Kees Cook <keescook@chromium.org>, Justin Stitt <justinstitt@google.com>,
- Mark Rutland <mark.rutland@arm.com>, linux-hardening@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20240515073636.GY40213@noisy.programming.kicks-ass.net>
-References: <202404291502.612E0A10@keescook> <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com> <202405081144.D5FCC44A@keescook> <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com> <202405081354.B0A8194B3C@keescook> <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com> <20240515073636.GY40213@noisy.programming.kicks-ass.net>
-Message-ID: <25882715-FE44-44C0-BB9B-57F2E7D1F0F9@kernel.org>
+	s=k20201202; t=1715868227;
+	bh=btau07SULIoJqAYVzbVYOn4odv7J5jQdnBX5OjVK4G4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Drw8ZunyLWTr0nM0rJ68C/Qs17bPqqTgPav4i1mGgj2/L27YwXmx4oZjSv7CNjyCi
+	 3ObhB/MpoSlxm0DigGTMGuE+plKFoNl91gH2B+GxdKDTGW8BwepQOCwBioUVFmvR6r
+	 VERV9RbO0dTwfKKr3htsi1Iblz3WALW6tUsRpmnyIjK03hmJbAPqSNYYVuN8RjdR5P
+	 dliR0k/KQ20XL1ccOSlhdwSWyUFhSE4umJB819p4TTpRcn7qavEJz0eCTRIOvREhwc
+	 NjGkrSaGwzOB0c8LknuaND4gAkoNrCqqthBLNN/vIivn3O7ADidW4SzXkDlJZivOm4
+	 7qhhsK0PS/1GA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 16 May 2024 07:03:41 -0700
+Subject: [PATCH] x86/boot: Address clang -Wimplicit-fallthrough in
+ vsprintf()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240516-x86-boot-fix-clang-implicit-fallthrough-v1-1-04dc320ca07c@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADwSRmYC/x2NwQqDMBBEf0X27IKRJmp/RTyY7WoWUiOJLYL47
+ 116fMO8mQsKZ+ECz+qCzF8pkjYFU1dAYd5WRnkpQ9u0j8Yah2fv0Kd04CInUtQKynuPQqLRHOM
+ RcvqsAReyNHhvhs5Z0LU9sxr/p3G67x8/+nHAeQAAAA==
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org
+Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1475; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=btau07SULIoJqAYVzbVYOn4odv7J5jQdnBX5OjVK4G4=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGluQk73OprDal7ErGtaPL/fzVM1ew6D8kGH9DdR834W/
+ HZbf2NqRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiIHBfDP71rcTKm7x0Y2SX0
+ I0s4zSc45au+t1qy/qCzwtG3pQteODIy/NsZvI1Z6vjeiqfiWrXB2x2l+cR1DM7/SDilMyVTit+
+ WBQA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
+After enabling -Wimplicit-fallthrough for the x86 boot code, clang
+warns:
 
+  arch/x86/boot/printf.c:257:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    257 |                 case 'u':
+        |                 ^
 
-On May 15, 2024 12:36:36 AM PDT, Peter Zijlstra <peterz@infradead=2Eorg> w=
-rote:
->On Wed, May 08, 2024 at 04:47:25PM -0700, Linus Torvalds wrote:
->> For example, the most common case of overflow we've ever had has very
->> much been array indexing=2E Now, sometimes that has actually been actua=
-l
->> undefined behavior, because it's been overflow in signed variables,
->> and those are "easy" to find in the sense that you just say "no, can't
->> do that"=2E UBSAN finds them, and that's good=2E
->
->We build with -fno-strict-overflow, which implies -fwrapv, which removes
->the UB from signed overflow by mandating 2s complement=2E
+Clang is a little more pedantic than GCC, which does not warn when
+falling through to a case that is just break or return. Clang's version
+is more in line with the kernel's own stance in deprecated.rst, which
+states that all switch/case blocks must end in either break,
+fallthrough, continue, goto, or return. Add the missing break to silence
+the warning.
 
-I am a broken record=2E :) This is _not_ about undefined behavior=2E
+Fixes: dd0716c2b877 ("x86/boot: Add a fallthrough annotation")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202405162054.ryP73vy1-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/boot/printf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This is about finding a way to make the intent of C authors unambiguous=2E=
- That overflow wraps is well defined=2E It is not always _desired_=2E C has=
- no way to distinguish between the two cases=2E
+diff --git a/arch/x86/boot/printf.c b/arch/x86/boot/printf.c
+index c0ec1dc355ab..51dc14b714f6 100644
+--- a/arch/x86/boot/printf.c
++++ b/arch/x86/boot/printf.c
+@@ -254,6 +254,8 @@ int vsprintf(char *buf, const char *fmt, va_list args)
+ 		case 'd':
+ 		case 'i':
+ 			flags |= SIGN;
++			break;
++
+ 		case 'u':
+ 			break;
+ 
 
--Kees
+---
+base-commit: dd0716c2b87792ebea30864e7ad1df461d4c1525
+change-id: 20240516-x86-boot-fix-clang-implicit-fallthrough-fc5c9bb19765
 
---=20
-Kees Cook
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
