@@ -1,73 +1,60 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FC0156F2D
-	for <llvm@lists.linux.dev>; Thu, 16 May 2024 20:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0416514A612;
+	Thu, 16 May 2024 20:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715890032; cv=none; b=Y9FoWvWLOJQ7F+uxYE1mnww7mu83kz69ay6sGUGnGnuqBLSvuKDETkUCZ3w+JVR7PKiyasRSk++2uxNvlkrXdceVJoQRYpmfP5IOXiLxxST2kxwbgl5Gxk2MWmbgU3R2AZwggvrB+3Zk/oAUQM2L3iCF/znGbY+nM47puFjdW2g=
+	t=1715892433; cv=none; b=npoQgqVOKkErV4diriUUJ7DnMRXiBD2dUHUa6n8ihxsyBpG2If4OfZvMCZoIxenmMNJ5BUIa5P7WTFqG42WQm8G0eY29qTs9Y7LQS+E5YeFy6rjGLdpDLkYDEbpAQlQCKjd2hgFN28s21Yvm7VVm7KenfSQ6Ns//zfNwk0GTMM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715890032; c=relaxed/simple;
-	bh=PHM05l3dg41vpIlXCvO5miEj3ChNSyOJ7ppgPBZeDaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c1+GzClGNtz2bmMcV94vGyi+HnGBe6LDhezOGHWACz/FDgIpSu1aV7trZNHH3rdzTccXGDvfO0gHQUqv0KV3f2cUZvYknUH+vG0aa0pCfElynhorhejZpLqi8ETHaGHUn/Xm6ekRB78gKn5jW/5qnodmE0JP7t/JTerYyhVvVWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=k5WIGzEI; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1715892433; c=relaxed/simple;
+	bh=280i5dWRybdaAkMbFSD7O5UetUHSt+pWDkAiPdCi6JU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dU0+Fop+5nfZ0bBNL//tp3U9euTL8C80mt6rM5tPNjgbfGMaakoYQwQiap/1Hl5DgXYTwb+DiZCNOV8QKQoqBTl6D1XBiyYDm/197w6WWG0+okOA6XqLBtWHLcA6mhkDzgWWwnDpaaI6dFiNne9kbn6XuW2ZI1std/0UPNtEgnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cSJjCIEv; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="k5WIGzEI"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f08442b7bcso30471645ad.1
-        for <llvm@lists.linux.dev>; Thu, 16 May 2024 13:07:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715890030; x=1716494830; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KyG12zQ6p7/BXdJX9MxBxAQEGuyOmeFERaocoWUX2nM=;
-        b=k5WIGzEI7l9ayF3pEcp+jBYqhwLxTGdZIqcPki1iehL9HyxaR2/IZapvnjkCMyUtBT
-         X55x7/8QgmgyXp4r+xxsDKE7rk8s9ekwM2ROlm+89eaR7/q5/z16ij90K1LJStdBwZPr
-         bwXINDmnmE4ZH31maUhI3AgYcLFJI3lpDKvbk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715890030; x=1716494830;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KyG12zQ6p7/BXdJX9MxBxAQEGuyOmeFERaocoWUX2nM=;
-        b=Ovw8hgJ30qeOB5LjE9HQ0GXvwExB8mlBL3RvMy8whHYWEVHRCNB0Pec/Avipigqs23
-         qO5DZJ3F3owVQCyD2vfnWjHjMcMF71aP/83gVtPslQgasOpI/o3AHBBsg+rk48ad9Xf+
-         TJtTWQ5T1ae+ZrbmgR3QvGjH6BJIHeBYoV0ckrVnWNFPUHxyvo0hA7neY6ErQy6PxYFT
-         Ly30rWbkcTsnFVBMgUBRnfc5EGZxKm2fiwR5JTry/3tsMt6/n1lamXNVNklveLJRxdMB
-         jbQJ7TZFKuj6ROF+rWoPb/bbXesVQYEPZJHD4DlLKeJmAsBk5gnwHeFIJIp19SVXsyiJ
-         FISA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdhHc6+Gc479DdZqmn1IsDXAcuSNdyTCoKNaEUnfmjjT0XdJ0INXNZwVxQIBl1MRZtyfNGZN5A+ejiG8wlKeI2dDF3XA==
-X-Gm-Message-State: AOJu0YxXeniHkigm8UsSiWcClGrvUb8EB35zYJBUyBR36Rlx32Qk/dXn
-	MuKf6MBAMSENrU4uFESV0dZW9qb6s5um1/D7MkYYrp0CuBs/4M/N6u3X5PXW1w==
-X-Google-Smtp-Source: AGHT+IGTRclh1CigI5i708kRIjv4JGvkOMw+J0DApcHCOCHAenoDy7R8CP0aQXtDPKQhtOx2gDwoFg==
-X-Received: by 2002:a17:902:8542:b0:1e2:be4b:dd9f with SMTP id d9443c01a7336-1ef43d29670mr181010385ad.15.1715890030540;
-        Thu, 16 May 2024 13:07:10 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f096da40a4sm29452455ad.66.2024.05.16.13.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 May 2024 13:07:09 -0700 (PDT)
-Date: Thu, 16 May 2024 13:07:09 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [RFC] Mitigating unexpected arithmetic overflow
-Message-ID: <202405161254.D4F33F7@keescook>
-References: <202404291502.612E0A10@keescook>
- <CAHk-=wi5YPwWA8f5RAf_Hi8iL0NhGJeL6MN6UFWwRMY8L6UDvQ@mail.gmail.com>
- <202405081144.D5FCC44A@keescook>
- <CAHk-=wjeiGb1UxCy6Q8aif50C=wWDX9Pgp+WbZYrO72+B1f_QA@mail.gmail.com>
- <202405081354.B0A8194B3C@keescook>
- <CAHk-=wgoE5EkH+sQwi4KhRhCZizUxwZAnC=+9RbZcw7g6016LQ@mail.gmail.com>
- <20240515073636.GY40213@noisy.programming.kicks-ass.net>
- <25882715-FE44-44C0-BB9B-57F2E7D1F0F9@kernel.org>
- <20240516140951.GK22557@noisy.programming.kicks-ass.net>
- <CAFhGd8qCCCrccQ2z5bjBD5YcMWHkym9aVz_qYkyyj662XEeHvA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cSJjCIEv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715892431; x=1747428431;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=280i5dWRybdaAkMbFSD7O5UetUHSt+pWDkAiPdCi6JU=;
+  b=cSJjCIEvozDu8cqnlp2BYylbTNReAScc/yur/+1ieD96DD5dH6dUAfaL
+   QvmXPBAF6HxqY0vtlQDDl9H6QDGs81KlZQoHgFqYs9PiEk9cZ2ScIE0cH
+   Y0OboppulMqC+oA02LnRaYVXyUnoiV1TUcG/uqXxsCzi7bhkIBK/Tr+Ne
+   lo5nuhOICwYwfJgPfSd7a4Gr78FRMr+xWnhnM3I561f3e3Dx/poKLqGNt
+   5O9SQNbj5ovuW3fFWwfKLTu429opD+mzl7RQMLYN7t8s9g0KsSj6wA6Xg
+   Dgfw3ANgyFoNXz0eOWJBgBx4s8f+ct8BGh+CRvOJv5khT9jxtIu7taUdq
+   A==;
+X-CSE-ConnectionGUID: vjb7JzxoQzydBoh1qeXbVA==
+X-CSE-MsgGUID: VMDl905mSC6ZYCf0AOdijg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="15868862"
+X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
+   d="scan'208";a="15868862"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 13:47:10 -0700
+X-CSE-ConnectionGUID: 8KfTznPGRqCZo2Ic1t6tlA==
+X-CSE-MsgGUID: scsp8ofuQYGM9PJEIU2Ang==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,165,1712646000"; 
+   d="scan'208";a="32102372"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 16 May 2024 13:47:08 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s7i0H-000Elt-2s;
+	Thu, 16 May 2024 20:47:05 +0000
+Date: Fri, 17 May 2024 04:47:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Subject: [viro-vfs:untested.persistency 57/58]
+ security/integrity/ima/ima_fs.c:430:20: error: use of undeclared identifier
+ 'ima_policy'
+Message-ID: <202405170447.fAkCQdzn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,41 +63,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFhGd8qCCCrccQ2z5bjBD5YcMWHkym9aVz_qYkyyj662XEeHvA@mail.gmail.com>
 
-On Thu, May 16, 2024 at 12:48:47PM -0700, Justin Stitt wrote:
-> I don't think we're capable of identifying every single problematic
-> overflow/wraparound case in the kernel, this is pretty obvious
-> considering we've had decades to do so. Instead, it seems much more
-> feasible that we annotate (very, very minimally so as not to disrupt
-> code readability and style) the spots where we _know_ overflow should
-> happen.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git untested.persistency
+head:   b3c987f7369f15318ee1284d9203737f09294b7e
+commit: c6429afc4eb7e8fd9044f85e21c53285f1b96a8b [57/58] ima_fs: don't bother with removal of files in directory we'll be removing
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240517/202405170447.fAkCQdzn-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405170447.fAkCQdzn-lkp@intel.com/reproduce)
 
-For the baby steps Linus wants, we can walk this path:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405170447.fAkCQdzn-lkp@intel.com/
 
-- Finish the *signed* integer overflow refactoring/annotation.
-  This is nearly done already, and every case we've found is either
-  a legitimate bug (thankfully rare), or happens in code that is
-  either accidentally correct (thanks to no UB), or the correctness is
-  very unclear. Refactoring these cases improves readability for
-  everyone and doesn't change the behavior.
+All errors (new ones prefixed by >>):
 
-- Begin *signed* integer implicit truncation refactoring/annotation.
-  As Linus suggested, dealing with this will catch a bunch of the flaws
-  we've seen recently. Handling the false positives here will need some
-  investigation and some compiler support, and that'll happen in
-  parallel.
+>> security/integrity/ima/ima_fs.c:430:20: error: use of undeclared identifier 'ima_policy'
+     430 |         securityfs_remove(ima_policy);
+         |                           ^
+   security/integrity/ima/ima_fs.c:431:2: error: use of undeclared identifier 'ima_policy'
+     431 |         ima_policy = NULL;
+         |         ^
+   2 errors generated.
 
-- Tackle *unsigned* integer overflow on a per-type basis: we can start
-  with the place Linus called out: size_t. This will let us focus on the
-  first of the unsigned types that is not commonly wrapping, and is a
-  regular place that unexpected overflow gets the kernel into big
-  trouble.
 
-What we learn from these three steps should inform us what further steps
-down this path can look like.
+vim +/ima_policy +430 security/integrity/ima/ima_fs.c
 
--Kees
+f4bd857bc8ed99 Mimi Zohar      2009-02-04  397  
+4af4662fa4a9dc Mimi Zohar      2009-02-04  398  /*
+4af4662fa4a9dc Mimi Zohar      2009-02-04  399   * ima_release_policy - start using the new measure policy rules.
+4af4662fa4a9dc Mimi Zohar      2009-02-04  400   *
+4af4662fa4a9dc Mimi Zohar      2009-02-04  401   * Initially, ima_measure points to the default policy rules, now
+f4bd857bc8ed99 Mimi Zohar      2009-02-04  402   * point to the new policy rules, and remove the securityfs policy file,
+f4bd857bc8ed99 Mimi Zohar      2009-02-04  403   * assuming a valid policy.
+4af4662fa4a9dc Mimi Zohar      2009-02-04  404   */
+4af4662fa4a9dc Mimi Zohar      2009-02-04  405  static int ima_release_policy(struct inode *inode, struct file *file)
+4af4662fa4a9dc Mimi Zohar      2009-02-04  406  {
+0716abbb58e3c4 Dmitry Kasatkin 2014-10-03  407  	const char *cause = valid_policy ? "completed" : "failed";
+0716abbb58e3c4 Dmitry Kasatkin 2014-10-03  408  
+80eae209d63ac6 Petko Manolov   2015-12-02  409  	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
+9a11a18902bc3b Eric Richter    2016-10-13  410  		return seq_release(inode, file);
+80eae209d63ac6 Petko Manolov   2015-12-02  411  
+0112721df4edbd Sasha Levin     2015-12-22  412  	if (valid_policy && ima_check_policy() < 0) {
+0112721df4edbd Sasha Levin     2015-12-22  413  		cause = "failed";
+0112721df4edbd Sasha Levin     2015-12-22  414  		valid_policy = 0;
+0112721df4edbd Sasha Levin     2015-12-22  415  	}
+0112721df4edbd Sasha Levin     2015-12-22  416  
+de636769c8c735 Petr Vorel      2018-04-24  417  	pr_info("policy update %s\n", cause);
+0716abbb58e3c4 Dmitry Kasatkin 2014-10-03  418  	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
+0716abbb58e3c4 Dmitry Kasatkin 2014-10-03  419  			    "policy_update", cause, !valid_policy, 0);
+0716abbb58e3c4 Dmitry Kasatkin 2014-10-03  420  
+4af4662fa4a9dc Mimi Zohar      2009-02-04  421  	if (!valid_policy) {
+4af4662fa4a9dc Mimi Zohar      2009-02-04  422  		ima_delete_rules();
+f4bd857bc8ed99 Mimi Zohar      2009-02-04  423  		valid_policy = 1;
+0716abbb58e3c4 Dmitry Kasatkin 2014-10-03  424  		clear_bit(IMA_FS_BUSY, &ima_fs_flags);
+4af4662fa4a9dc Mimi Zohar      2009-02-04  425  		return 0;
+4af4662fa4a9dc Mimi Zohar      2009-02-04  426  	}
+80eae209d63ac6 Petko Manolov   2015-12-02  427  
+4af4662fa4a9dc Mimi Zohar      2009-02-04  428  	ima_update_policy();
+2068626d1345f2 Mimi Zohar      2017-06-27  429  #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
+4af4662fa4a9dc Mimi Zohar      2009-02-04 @430  	securityfs_remove(ima_policy);
+4af4662fa4a9dc Mimi Zohar      2009-02-04  431  	ima_policy = NULL;
+2068626d1345f2 Mimi Zohar      2017-06-27  432  #elif defined(CONFIG_IMA_WRITE_POLICY)
+38d859f991f3a0 Petko Manolov   2015-12-02  433  	clear_bit(IMA_FS_BUSY, &ima_fs_flags);
+ffb122de9a60bd Petr Vorel      2018-04-20  434  #elif defined(CONFIG_IMA_READ_POLICY)
+ffb122de9a60bd Petr Vorel      2018-04-20  435  	inode->i_mode &= ~S_IWUSR;
+38d859f991f3a0 Petko Manolov   2015-12-02  436  #endif
+4af4662fa4a9dc Mimi Zohar      2009-02-04  437  	return 0;
+4af4662fa4a9dc Mimi Zohar      2009-02-04  438  }
+4af4662fa4a9dc Mimi Zohar      2009-02-04  439  
+
+:::::: The code at line 430 was first introduced by commit
+:::::: 4af4662fa4a9dc62289c580337ae2506339c4729 integrity: IMA policy
+
+:::::: TO: Mimi Zohar <zohar@linux.vnet.ibm.com>
+:::::: CC: James Morris <jmorris@namei.org>
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
