@@ -1,105 +1,131 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16AE200D2
-	for <llvm@lists.linux.dev>; Fri, 17 May 2024 11:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68AC43AA0;
+	Fri, 17 May 2024 12:39:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715943642; cv=none; b=qabTpvzHhwxqyT1ZLR7UiYnx0+2yI+TRtEk7OCw7nnvSaM6WDhhNnpbZHyqBm7VTTc/yhrjZcI9FGigEsT0AdN0RWEwo52JyE22tIZuwwhewU51IWcR6pYuSVucVpfbmsUMsJz+2V5BjC86MiS3lDXSzepOHDJYJZtFSpa2r9Ls=
+	t=1715949550; cv=none; b=JD92eLOCM17pq3LJsh97RW4dieu/XyUAksEpf+TXEGHBgBT57+dswJq65tU+wnX//3qUojP0MHbN6X6clq5rnaumiaA/vgGGNmYrxcZ15lqsGvpW0PluI9LZs1WgQNNEwAvBMEYe8AJmRr4ciH28w4GChn+9su3YE/K7PJLqJ44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715943642; c=relaxed/simple;
-	bh=7EEC64SS9Fi698JqjKcaoeII5qyUxMCkfT/0NkvGVLo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=A96iDgqIVpWXFbuLhRB5YpdADNs2H0q7JQ7kQOm6XxFbwcRwOVyuXyIP6mWZ/QohFTTSOiDS3FbvifAErHW795WJslb6LDOg81A0Zf72c68MT2GSbOk69A85fH5oHTKY4IAYkoeLO6CjW5InWEKs+bkd1YWs/zUAl02Sw0eRHwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KN8tM8r/; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1715949550; c=relaxed/simple;
+	bh=BOMB8wdBtR5zMTKdb1X0/tCLTze4IC2lvXPtLc/qX1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T3yW+ZJ9JO6eJ1BZZkeLCvlsG4XddiG3OR2kdcSbz/Qv82TXkDVjZIC2X9xkUlJ5dw9melRUnJbKmQJBujiu/KY8GJTLEo+3LJrEYPap1K2vtK0aYoMiWzKXnBNLJ+H3MkuFzYw6a8pw31Qih1d4lozP0MWQCtCAoi+wYpDJyos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PP3KSs0H; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KN8tM8r/"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-572baf393ddso6531011a12.1
-        for <llvm@lists.linux.dev>; Fri, 17 May 2024 04:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715943639; x=1716548439; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qNOVue41hqxQ8m+b+AVJiBo42I4XisayKzHkj86Mjb4=;
-        b=KN8tM8r/6YsDz57It69ZQaz7WF17c2PkZyM1KqAuHEiM02HZhZ5/F3RpizUalMADtr
-         PH8XkC7Sp7eBgFO3QtpC8S5F2pp3lvTVtfzC8qXOIqvUXwgMUgvuzfzQr4UkOQwjkS11
-         V2dDELEYX9apqGPhHYpktBGilibQMFFmWbOJZhjWtyNCpqgBu4fvEruaKIhWDW0oE1dG
-         VTUNTuSZhn0XYydoHxmBII6gN0fKHfovGmGWi+b+5NSPm3eYw4kd1KAsHQYEIddfLlVX
-         MikVhY1u7QH+N5LL8e7yNBc84UJ91HbQU1O6pE7h7vKljWELBqTCrItpwIIiWyInU644
-         PAqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715943639; x=1716548439;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qNOVue41hqxQ8m+b+AVJiBo42I4XisayKzHkj86Mjb4=;
-        b=KYYlGit3jBaQFkWk2xduKzC1dpTigxrV1HMvuRA1YQVIEBWkjsyj/cMKD6kc7PiR18
-         Ifh9X1EidFkkxThdwQtOxqiIp0rUXJauyntNRaZA3W8pfAKgX7dug4/PINz+kh3v7yMi
-         EM3AUKborvu3k6Me8DZW4bJN3q1Svnn+3wps9A0D35S4m8cX4FoSUXpJ8TdFGOtxhq4D
-         nggl1WpRfC0LprETH1SI0C+fBvt9UI6Ql5A61O0kkxKT0oEU2jnAFV+ba6fBgUWv/TMi
-         j+hlRjL7EYyAPsqWBRyoLUmSNRpkiSK1UPVQOCSGCuzWcjjGYq+ebJ03B80J8FkuHGzI
-         C2xA==
-X-Forwarded-Encrypted: i=1; AJvYcCVoMLFHKP/Ay7gTVGyiapGUw5LneDgJBPiHi232gyaaUggr/utOwHpfzrlqKrTXpASltdlU+0ybUlXw1y3tYhhAR72Pjg==
-X-Gm-Message-State: AOJu0YwAJh6syaaLznb33sZ/A/v5hAVvMjoOG0vFvH2VZR6tHTHMdy9k
-	lJRxXKhLMBvg1BnezrPFO//b8kdSVvfw9Zc1FVHGyu2RxcVOYvgxSyvD60nQkGbzOFTtYM3Octs
-	VrU16kjIagKVEU3XURQGwHYVFqxGrGudKGa9WhQ==
-X-Google-Smtp-Source: AGHT+IHIImsL921tTTC6eatZ7SLL8Yqy2JoDfWbe97SkkDBCfuoHgNHRicDxspmiNsu4E21WbigzJYVQ83mzmvaMVmg=
-X-Received: by 2002:a50:ab19:0:b0:574:ec3d:262a with SMTP id
- 4fb4d7f45d1cf-574ec3d28d3mr8234840a12.5.1715943639134; Fri, 17 May 2024
- 04:00:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PP3KSs0H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715949549; x=1747485549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BOMB8wdBtR5zMTKdb1X0/tCLTze4IC2lvXPtLc/qX1k=;
+  b=PP3KSs0HU9V2k1IfgarVw/ZVR7CrrhLD7hzYoGQzUxp2BJsBeeu6dz5I
+   RDTkoA16uo7NGFcgUSwrTPfhBcbtubQC76InuUP7pZLvjurlIClNyf57C
+   lebekP5Bt59Sp36isp71rP82dkDMp3/Kgegk+5jrwvPjuBg98Moms8VYH
+   r9VqOVfxkbl+oEU25V0oQyoeDBAmLgDIuFZOZ4NEL4is/gSlf35iJRkt3
+   88I5ryusZAmfgha2XAoRDZCTgh35mJNkFprqM4wrjMn0MHQIDQj1LR+8Y
+   lV9RU4A+d8QzmBPFQ48azzyz/Hds/09WgYkYLa7TfuLMNWccjPik5099e
+   w==;
+X-CSE-ConnectionGUID: bhC7vWNYTci9upyEc5hSpg==
+X-CSE-MsgGUID: mi54i0QKSX+Dc3SD61eT5A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="12311897"
+X-IronPort-AV: E=Sophos;i="6.08,167,1712646000"; 
+   d="scan'208";a="12311897"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 05:39:06 -0700
+X-CSE-ConnectionGUID: xSin/eagRWmk4w/QVnTxgw==
+X-CSE-MsgGUID: hAFhE6QaR0y7LOOfqMlQng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,167,1712646000"; 
+   d="scan'208";a="62603985"
+Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 17 May 2024 05:39:03 -0700
+Received: from kbuild by 108735ec233b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s7wrU-0000go-0k;
+	Fri, 17 May 2024 12:39:00 +0000
+Date: Fri, 17 May 2024 20:38:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, broonie@kernel.org,
+	andi.shyti@kernel.org, joel@jms.id.au, alistair@popple.id.au,
+	jk@ozlabs.org, andrew@codeconstruct.com.au,
+	linux-aspeed@lists.ozlabs.org, eajames@linux.ibm.com
+Subject: Re: [PATCH v3 37/40] fsi: core: Add different types of CFAM
+Message-ID: <202405172019.j3pOURPP-lkp@intel.com>
+References: <20240516181907.3468796-38-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 17 May 2024 13:00:25 +0200
-Message-ID: <CA+G9fYuyPFBVyqqg0RVhaz4c0S+H4TMm1apxgwyTUOkge9NY7A@mail.gmail.com>
-Subject: clang: arch/x86/boot/printf.c:257:3: error: unannotated fall-through
- between switch labels [-Werror,-Wimplicit-fallthrough]
-To: open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	clang-built-linux <llvm@lists.linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Borislav Petkov <bp@suse.de>, Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240516181907.3468796-38-eajames@linux.ibm.com>
 
-The following x86 build failed on Linux next-20240517 tag due to following
-warnings / errors only seen with clang builds.
+Hi Eddie,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+kernel test robot noticed the following build warnings:
 
-Build errors:
-----
-arch/x86/boot/printf.c:257:3: error: unannotated fall-through between
-switch labels [-Werror,-Wimplicit-fallthrough]
-  257 |                 case 'u':
-      |                 ^
-arch/x86/boot/printf.c:257:3: note: insert 'break;' to avoid fall-through
-  257 |                 case 'u':
-      |                 ^
-      |                 break;
-1 error generated.
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on robh/for-next broonie-spi/for-next linus/master v6.9 next-20240517]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The suspected patch,
-x86/boot: Add a fallthrough annotation
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/fsi-hub-Set-master-index-to-link-number-plus-one/20240517-023205
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240516181907.3468796-38-eajames%40linux.ibm.com
+patch subject: [PATCH v3 37/40] fsi: core: Add different types of CFAM
+config: i386-buildonly-randconfig-002-20240517 (https://download.01.org/0day-ci/archive/20240517/202405172019.j3pOURPP-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405172019.j3pOURPP-lkp@intel.com/reproduce)
 
-metadata:
----
-  git_describe: next-20240517
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: c75962170e49f24399141276ae119e6a879f36dc
-  git_short_log: c75962170e49 ("Add linux-next specific files for 20240517")
-  build_name: clang-18-lkftconfig
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405172019.j3pOURPP-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/fsi/fsi-core.c:1113:27: warning: no previous prototype for function 'fsi_get_cfam_type' [-Wmissing-prototypes]
+    1113 | const struct device_type *fsi_get_cfam_type(u32 id)
+         |                           ^
+   drivers/fsi/fsi-core.c:1113:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1113 | const struct device_type *fsi_get_cfam_type(u32 id)
+         |       ^
+         | static 
+   1 warning generated.
 
 
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240517/testrun/23951572/suite/build/test/clang-18-lkftconfig/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240517/testrun/23951572/suite/build/test/clang-18-lkftconfig/details/
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2gZwb1q4GHgVCuOfQIMCJ6tqMFn/
+vim +/fsi_get_cfam_type +1113 drivers/fsi/fsi-core.c
 
+  1112	
+> 1113	const struct device_type *fsi_get_cfam_type(u32 id)
+  1114	{
+  1115		u32 major = (id & 0xf00) >> 8;
+  1116		u32 minor = (id & 0xf0) >> 4;
+  1117	
+  1118		switch (major) {
+  1119		case 0x9:
+  1120			return &cfam_s_type;
+  1121		case 0xc:
+  1122			if (minor == 0)
+  1123				return &cfam_ody_type;
+  1124			fallthrough;
+  1125		case 0xd:
+  1126		default:
+  1127			return &cfam_type;
+  1128		}
+  1129	}
+  1130	
 
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
