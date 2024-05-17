@@ -1,112 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B35A23;
-	Fri, 17 May 2024 18:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D2612FF78
+	for <llvm@lists.linux.dev>; Fri, 17 May 2024 20:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715970730; cv=none; b=un1HzapwBlYuMyNkhkxJH8yWUkoOl+QR9KH58BEpHm1Thy3ad23T58H4LiZaopBUKgbisOT3a2M8xqjwAlteLM3UicsJ5kl5yKO/xf+DCy4AyeHH6MsRt8lGQsoUpk6Cc3Wu3vD5ggU3xAWftyKlsinJqovOtKR+idgHZq30Y/Q=
+	t=1715977368; cv=none; b=VIuV6ygdHgzAb4bURSiWlVo5h96MrwqmObT0VY4K7eB0VqMLrRLB9tbC3hGi6F5X5pH3UGepCCgj6ZgLWdTQt0QQSkUmmnfOVEMAYvSnlKsN24RyuaOsDZHoFJRG+UueKT25K3jUKY6UxBY+pX8UoIDTKhrJ0VoGhzyjZGeart8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715970730; c=relaxed/simple;
-	bh=LPdjY38JS7daA139bDVZZYDgoD5tLx+11TEOosNg/4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPfKSCb1CoK2pTY7c0hY0gvVUa4xbyn/8HB0AP6d4s9KtBufRlG8K2OEF8OH8hhQ3fXjDGiLFVathsuT9U1iHUI9w+JILjuQ9VuVYuMCzLzRRrbxndeHGg5Bf5KY+Gw+80lodEIrvIiEpzlN6L/1w5/U0KVq9TEOx+HR6uQod14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XweNs9D3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715977368; c=relaxed/simple;
+	bh=zCP9p5DazSmD8jpaLDilhAropKLjmvEgx/aHY8ray1k=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=By0gGdgsvB1lotas7dDVUEPUy53a2HkHB1CRbPfVadXtcVhvU2i1eXbIcypVeCV1z93iaBuAv4b52GNa73ojk+FT4z7VH8B7Ji1nFDaQ4K73lorr0MbmYPtRKVduOotsVCoLWqxWgQsRH1EMEAF5ZZWpo06Vpzn1FCaCNRym7Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BkPEoBhY; arc=none smtp.client-ip=209.85.166.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XweNs9D3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB42C2BD10;
-	Fri, 17 May 2024 18:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715970730;
-	bh=LPdjY38JS7daA139bDVZZYDgoD5tLx+11TEOosNg/4U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XweNs9D36pUfQquUW5ankP2N1gE//qJoeFrOwZJEG5N8B7IM5Od7mo74SsqUwLdoZ
-	 3319ybnlwnivN+0jT/XtGBcOPb3CGoXcYc1zpTy32HWXqD6FtUSxFU1CE5jasJvdzW
-	 VXI9xKppZmtv21AvzNct2ONPK99sbmn6hwcUPC4MIu/A2/ee4pd1Hi8PeyBcvrKBy2
-	 11H6hDeCuNYS6XKGZEe98Tx3iRFpfSYVOX/jWVye47Rg2ltoGGaQDyRUIZ+LCRvq9g
-	 LNYwsYCzFR8Z6Icj1T7SyuLzg4pcbhpUOpaLPGl4Uv9RrykA9bype6tteHq1Wv0oJH
-	 XdkBI3ii85C5A==
-Date: Fri, 17 May 2024 11:32:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kunit: tool: Build compile_commands.json
-Message-ID: <20240517183208.GA3699823@thelio-3990X>
-References: <20240516-kunit-compile-commands-v1-1-86e61857c820@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BkPEoBhY"
+Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-7e1d7031f4aso781718339f.1
+        for <llvm@lists.linux.dev>; Fri, 17 May 2024 13:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715977366; x=1716582166; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=D7DM0Nh6MbSVPhbmkBCW9PHR6CHMneFfFGcAG6fF5BM=;
+        b=BkPEoBhYinLlQ+1uK+VfxVa1u/cECYh1n4gz6wDNYXOOpGccVLlLUsjeRGkTsXgHxF
+         YNZq4VnV0YbGDSwIXCY6a1tAy+A5I92jWM2AbntMuJB358Ncht3guh4Ey63IqC8ASm71
+         Z5IXjstEnoBHm7pnmAOuFK9OBD0lWR1nxuj/8czWyT3oQdx6E0OAf2bSPbwKckY9ZxKF
+         b/+nGjA5uS3levTpCTW6oewQOHyYE6PX0wg3BJFMZCY0A18buX5pBpIIIalAJIq5S1r1
+         VLfJm2QPcNIgDJZaUPvlV7vu81JHL9k67Zv1Xr6DPdTmmkAQDHKYHaWh6xW9wLCPYR1I
+         jr2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715977366; x=1716582166;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D7DM0Nh6MbSVPhbmkBCW9PHR6CHMneFfFGcAG6fF5BM=;
+        b=aEOL/I0S7aazEf/yDOe6bByTaJOOP2EWm9QzuRGm3qfbmkHHEg2xivNPZHHiWCXAh+
+         81609yIy+n93yV63CG8Ay2psyBXAxSnKm/SYzOOMrk7HhVQACjsnl3/645hM6s/sm+jQ
+         2HKdeDLMKqFw5Kmw4gznRqRJC0PdI1mr1Jzb6m00j5lXJSdzxI/y3l+ETGzXbSzraFYO
+         GFS4t/z2HsWafvNZGYWyPQwu1cp5y98dHG2zY8gRtsWl0YDmWjjwrIFnal/dSrP9nCkc
+         l9GhrjVXJuJ3rsLLV9Gkzbwg4O2Y6onX7dGbj9Yh+CNgqp0FTMDQBxYgaVYrLSnrgkZI
+         0yYA==
+X-Forwarded-Encrypted: i=1; AJvYcCX+vQHLs80CweAQtHIpiyXBv0Z0xToGOpL0Ti759taQUnUyKyj+74Oc20LQofY/vnYUDb5b6ZtMErolV5rDsac42Azxdg==
+X-Gm-Message-State: AOJu0YyumGevN4LKJCvsf5i7pIB8pgrW49rMb0nX4PsBN0m7sC76SVLy
+	mgOTy6y1h9F6gj4h9BVwCBkzQlYasjr337DaStf+Ndk8mOWhA8GsylNmEYCAvaa+FXYD+tJnIxY
+	AbyiyNa0uQaI7YWJPNm6ebQ==
+X-Google-Smtp-Source: AGHT+IEfzcIHL3aw4YYGj6jIF23GXxwmDFMKDO2f0kNIal/VHLvCveT/oVQ6Bz6/dmvmREEIyJ0p9emzA+0NcVytQg==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:6602:3f85:b0:7da:9d28:6578 with
+ SMTP id ca18e2360f4ac-7e1b521c6famr81756139f.3.1715977365684; Fri, 17 May
+ 2024 13:22:45 -0700 (PDT)
+Date: Fri, 17 May 2024 20:22:44 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240516-kunit-compile-commands-v1-1-86e61857c820@google.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAJO8R2YC/3WNTQ7CIBCFr9LM2jFAqY2ueg/TBdApJVFooBJNw
+ 93F7s1bfS/vZ4dE0VGCW7NDpOySC76CODVgFuUtoZsqg2BCso71qCXWDPptxVcig1y1Sl96PRn iUFtrpNm9j8X7WHlxaQvxcxxk/nP/b2WOVR1j7WyuRmg52BDsg84mPGEspXwBVUmrHa8AAAA=
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1715977364; l=3277;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=zCP9p5DazSmD8jpaLDilhAropKLjmvEgx/aHY8ray1k=; b=8vlKBluIsE/OTHUNTS0iYpLHyH5gn9756JcxqGcKKnz4w4qVnCZ/gwGWo5e0kNu4zgcQAfvTW
+ roM1h0fyCt/A4Rci9/I0rO/OOSMd6u+5uK4XrMe/stqDGC7K4YOi1Z1
+X-Mailer: b4 0.12.3
+Message-ID: <20240517-b4-sio-ntp-usec-v2-1-d539180f2b79@google.com>
+Subject: [PATCH v2] ntp: remove accidental integer wrap-around
+From: Justin Stitt <justinstitt@google.com>
+To: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Brendan,
+Using syzkaller alongside the newly reintroduced signed integer overflow
+sanitizer spits out this report:
 
-On Thu, May 16, 2024 at 07:40:53PM +0000, Brendan Jackman wrote:
-> compile_commands.json is used by clangd[1] to provide code navigation
-> and completion functionality to editors. See [2] for an example
-> configuration that includes this functionality for VSCode.
-> 
-> It can currently be built manually when using kunit.py, by running:
-> 
->   ./scripts/clang-tools/gen_compile_commands.py -d .kunit
-> 
-> With this change however, it's built automatically so you don't need to
-> manually keep it up to date.
-> 
-> Unlike the manual approach, having make build the compile_commands.json
-> means that it appears in the build output tree instead of at the root of
-> the source tree, so you'll need to add --compile-commands-dir=.kunit to
-> your clangd args for it to be found. This might turn out to be pretty
-> annoying, I'm not sure yet. If so maybe we can later add some hackery to
-> kunit.py to work around it.
-> 
-> [1] https://clangd.llvm.org/
-> [2] https://github.com/FlorentRevest/linux-kernel-vscode
-> 
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+UBSAN: signed-integer-overflow in ../kernel/time/ntp.c:461:16
+9223372036854775807 + 500 cannot be represented in type 'long'
+Call Trace:
+ <IRQ>
+ dump_stack_lvl+0x93/0xd0
+ handle_overflow+0x171/0x1b0
+ second_overflow+0x2d6/0x500
+ accumulate_nsecs_to_secs+0x60/0x160
+ timekeeping_advance+0x1fe/0x890
+ update_wall_time+0x10/0x30
+...
 
-This makes sense to do automatically in my opinion, as Python will
-already be available (which is the only dependency of
-gen_compile_commands.py as far as I am aware) and it should not take
-that long to generate.
+time_maxerror is unconditionally incremented and the result is checked
+against NTP_PHASE_LIMIT, but the increment itself can overflow,
+resulting in wrap-around to negative space.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+The user can supply some crazy values which is causing the overflow. Add
+an extra validation step checking that maxerror is reasonable.
 
-> ---
->  tools/testing/kunit/kunit_kernel.py | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 7254c110ff23..61931c4926fd 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -72,7 +72,8 @@ class LinuxSourceTreeOperations:
->  			raise ConfigError(e.output.decode())
->  
->  	def make(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> None:
-> -		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
-> +		command = ['make', 'all', 'compile_commands.json', 'ARCH=' + self._linux_arch,
-> +			   'O=' + build_dir, '--jobs=' + str(jobs)]
->  		if make_options:
->  			command.extend(make_options)
->  		if self._cross_compile:
-> 
-> ---
-> base-commit: 3c999d1ae3c75991902a1a7dad0cb62c2a3008b4
-> change-id: 20240516-kunit-compile-commands-d994074fc2be
-> 
-> Best regards,
-> -- 
-> Brendan Jackman <jackmanb@google.com>
-> 
-> 
+Link: https://github.com/llvm/llvm-project/pull/82432 [1]
+Closes: https://github.com/KSPP/linux/issues/354
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Changes in v2:
+- update commit log (thanks Thomas)
+- check for sane user input during validation (thanks Thomas)
+- Link to v1: https://lore.kernel.org/r/20240507-b4-sio-ntp-usec-v1-1-15003fc9c2b4@google.com
+---
+
+Historically, the signed integer overflow sanitizer did not work in the
+kernel due to its interaction with `-fwrapv` but this has since been
+changed [1] in the newest version of Clang. It was re-enabled in the
+kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+sanitizer").
+
+Here's the syzkaller reproducer:
+| #{Threaded:false Repeat:false RepeatTimes:0 Procs:1 Slowdown:1 Sandbox:
+| #SandboxArg:0 Leak:false NetInjection:false NetDevices:false
+| #NetReset:false Cgroups:false BinfmtMisc:false CloseFDs:false KCSAN:false
+| #DevlinkPCI:false NicVF:false USB:false VhciInjection:false Wifi:false
+| #IEEE802154:false Sysctl:false Swap:false UseTmpDir:false
+| #HandleSegv:false Repro:false Trace:false LegacyOptions:{Collide:false
+| #Fault:false FaultCall:0 FaultNth:0}}
+| clock_adjtime(0x0, &(0x7f0000000000)={0x5, 0x1, 0x40,
+| 0x7fffffffffffffff, 0x8, 0xb2, 0x256, 0x6, 0x5, 0x8001, 0x9, 0x3f, 0x0,
+| 0x8000, 0x800, 0x64d, 0x50000, 0x7ff, 0x8000000000000001, 0x1f, 0x3,
+| 0xfff, 0x7fffffff, 0x5, 0x100, 0x4})
+
+... which was used against Kees' tree here (v6.8rc2):
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=wip/v6.9-rc2/unsigned-overflow-sanitizer
+
+... with this config:
+https://gist.github.com/JustinStitt/824976568b0f228ccbcbe49f3dee9bf4
+---
+ kernel/time/timekeeping.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index b58dffc58a8f..321f251c02aa 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -2388,6 +2388,11 @@ static int timekeeping_validate_timex(const struct __kernel_timex *txc)
+ 		}
+ 	}
+ 
++	if (txc->modes & ADJ_MAXERROR) {
++		if (txc->maxerror < 0 || txc->maxerror > NTP_PHASE_LIMIT)
++			return -EINVAL;
++	}
++
+ 	/*
+ 	 * Check for potential multiplication overflows that can
+ 	 * only happen on 64-bit systems:
+
+---
+base-commit: 0106679839f7c69632b3b9833c3268c316c0a9fc
+change-id: 20240507-b4-sio-ntp-usec-1a3ab67bdce1
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
+
