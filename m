@@ -1,90 +1,105 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE552E65B;
-	Fri, 17 May 2024 09:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16AE200D2
+	for <llvm@lists.linux.dev>; Fri, 17 May 2024 11:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715939502; cv=none; b=blISEIiGXXdOBJlF2avsRoOKcJW4G0oLYMWfHb2k94MDVSj0SLPyVouYbCDoxppbfHv1KScPNdHz+z9ZJgEDiIEAd6mUJcSU1uC/5JgFwCEzDz4n96D60/7i0I677LAX75HyppldrmF/d8svkRUbt4dw/vU853r9w+6ejC9bv14=
+	t=1715943642; cv=none; b=qabTpvzHhwxqyT1ZLR7UiYnx0+2yI+TRtEk7OCw7nnvSaM6WDhhNnpbZHyqBm7VTTc/yhrjZcI9FGigEsT0AdN0RWEwo52JyE22tIZuwwhewU51IWcR6pYuSVucVpfbmsUMsJz+2V5BjC86MiS3lDXSzepOHDJYJZtFSpa2r9Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715939502; c=relaxed/simple;
-	bh=KNh+720Wgwh8m9JIhESist1X1saR8CCo7u3IGLKkC4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AombeS7CZrpQ5eniwtvWtzSSCrN4oupQTzTVT8ZejqMZRnJtJ88NT/eptAX6VXUyccO6XpCk0GH//jWXo19VMvra3kb2hlB4S8TK/d/X8mYM1Ju39Mt1AHCk73LFL1RBkmOi00q6gV+GSLNrr5TFmolR/xaf6RlM/Fjst2DUrv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=VsxPCu82; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1715943642; c=relaxed/simple;
+	bh=7EEC64SS9Fi698JqjKcaoeII5qyUxMCkfT/0NkvGVLo=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=A96iDgqIVpWXFbuLhRB5YpdADNs2H0q7JQ7kQOm6XxFbwcRwOVyuXyIP6mWZ/QohFTTSOiDS3FbvifAErHW795WJslb6LDOg81A0Zf72c68MT2GSbOk69A85fH5oHTKY4IAYkoeLO6CjW5InWEKs+bkd1YWs/zUAl02Sw0eRHwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KN8tM8r/; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="VsxPCu82"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D520640E023A;
-	Fri, 17 May 2024 09:51:31 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id z1P4H5KTAb_M; Fri, 17 May 2024 09:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1715939488; bh=Tn19CGCpCdau3W/VZavQRk1vzNxdqS823UYMPdxtm78=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VsxPCu826x6OJ5zXBP9Y1SK4oeTmhoXkcLWgCKbCAMbYbstfkLuXfIYXFcKumfJPc
-	 LwHb7KT9srjLqiqyF48cefYqs1kxnpJWRlFM6QjAkpT/yg1+L2BRtALQOk/kdORhx5
-	 safrlHubHttQgV6i3FygkKjfsbBqodIdferr8pc4gLJrSaWjjvQO+p+sp7xXN+8Oi9
-	 Admwy2sXu0y/YRQq7DnBYKHpLQJ81hfnoI9YrLN2sov4ndVaVopAwCFavscPXhQrq6
-	 J2nUy4wgANjobnNmN1YJXWz1wmdX9bnEuYTba8qqHWu1Po/RbDs81AmKalz9kNsitt
-	 lqt+P8FF4296Sa54BKHsZatpKFh1i6eUlmbMnOjpNddBddqOnKA/uIvPADyvWCaqp5
-	 A9bbqifeoC8wChN39d+AQ/Df3xdq3vyY4CTS07Az4iQPGI9b+dx5VqOfYg0mog+Sgz
-	 s6BG4VXU4wPxceI7hRsXBH7U9dEHFpyOBBqxQbAPdZmAR/Sg1qN0tAwO+Rt8UpfSp+
-	 s10tvZpAflIdT9gVni5vCB0q0yLJM0t5RZ2vM33VekQo/ypq5NakJiVL6RPwmV+9Gv
-	 IZm+3Rh8pwoaomM10OhmiMwGa+S7P0von8C+B4dic+SoHfYLKeXpxF5y+VM+hQ3foE
-	 9yamcT2+mXy4janDcmN7T+yI=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5094A40E016A;
-	Fri, 17 May 2024 09:51:17 +0000 (UTC)
-Date: Fri, 17 May 2024 11:51:10 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] x86/boot: Address clang -Wimplicit-fallthrough in
- vsprintf()
-Message-ID: <20240517095110.GAZkcojmJQoY_zU-OT@fat_crate.local>
-References: <20240516-x86-boot-fix-clang-implicit-fallthrough-v1-1-04dc320ca07c@kernel.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KN8tM8r/"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-572baf393ddso6531011a12.1
+        for <llvm@lists.linux.dev>; Fri, 17 May 2024 04:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715943639; x=1716548439; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qNOVue41hqxQ8m+b+AVJiBo42I4XisayKzHkj86Mjb4=;
+        b=KN8tM8r/6YsDz57It69ZQaz7WF17c2PkZyM1KqAuHEiM02HZhZ5/F3RpizUalMADtr
+         PH8XkC7Sp7eBgFO3QtpC8S5F2pp3lvTVtfzC8qXOIqvUXwgMUgvuzfzQr4UkOQwjkS11
+         V2dDELEYX9apqGPhHYpktBGilibQMFFmWbOJZhjWtyNCpqgBu4fvEruaKIhWDW0oE1dG
+         VTUNTuSZhn0XYydoHxmBII6gN0fKHfovGmGWi+b+5NSPm3eYw4kd1KAsHQYEIddfLlVX
+         MikVhY1u7QH+N5LL8e7yNBc84UJ91HbQU1O6pE7h7vKljWELBqTCrItpwIIiWyInU644
+         PAqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715943639; x=1716548439;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qNOVue41hqxQ8m+b+AVJiBo42I4XisayKzHkj86Mjb4=;
+        b=KYYlGit3jBaQFkWk2xduKzC1dpTigxrV1HMvuRA1YQVIEBWkjsyj/cMKD6kc7PiR18
+         Ifh9X1EidFkkxThdwQtOxqiIp0rUXJauyntNRaZA3W8pfAKgX7dug4/PINz+kh3v7yMi
+         EM3AUKborvu3k6Me8DZW4bJN3q1Svnn+3wps9A0D35S4m8cX4FoSUXpJ8TdFGOtxhq4D
+         nggl1WpRfC0LprETH1SI0C+fBvt9UI6Ql5A61O0kkxKT0oEU2jnAFV+ba6fBgUWv/TMi
+         j+hlRjL7EYyAPsqWBRyoLUmSNRpkiSK1UPVQOCSGCuzWcjjGYq+ebJ03B80J8FkuHGzI
+         C2xA==
+X-Forwarded-Encrypted: i=1; AJvYcCVoMLFHKP/Ay7gTVGyiapGUw5LneDgJBPiHi232gyaaUggr/utOwHpfzrlqKrTXpASltdlU+0ybUlXw1y3tYhhAR72Pjg==
+X-Gm-Message-State: AOJu0YwAJh6syaaLznb33sZ/A/v5hAVvMjoOG0vFvH2VZR6tHTHMdy9k
+	lJRxXKhLMBvg1BnezrPFO//b8kdSVvfw9Zc1FVHGyu2RxcVOYvgxSyvD60nQkGbzOFTtYM3Octs
+	VrU16kjIagKVEU3XURQGwHYVFqxGrGudKGa9WhQ==
+X-Google-Smtp-Source: AGHT+IHIImsL921tTTC6eatZ7SLL8Yqy2JoDfWbe97SkkDBCfuoHgNHRicDxspmiNsu4E21WbigzJYVQ83mzmvaMVmg=
+X-Received: by 2002:a50:ab19:0:b0:574:ec3d:262a with SMTP id
+ 4fb4d7f45d1cf-574ec3d28d3mr8234840a12.5.1715943639134; Fri, 17 May 2024
+ 04:00:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240516-x86-boot-fix-clang-implicit-fallthrough-v1-1-04dc320ca07c@kernel.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Fri, 17 May 2024 13:00:25 +0200
+Message-ID: <CA+G9fYuyPFBVyqqg0RVhaz4c0S+H4TMm1apxgwyTUOkge9NY7A@mail.gmail.com>
+Subject: clang: arch/x86/boot/printf.c:257:3: error: unannotated fall-through
+ between switch labels [-Werror,-Wimplicit-fallthrough]
+To: open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	clang-built-linux <llvm@lists.linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Borislav Petkov <bp@suse.de>, Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 16, 2024 at 07:03:41AM -0700, Nathan Chancellor wrote:
-> After enabling -Wimplicit-fallthrough for the x86 boot code, clang
-> warns:
-> 
->   arch/x86/boot/printf.c:257:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
->     257 |                 case 'u':
->         |                 ^
-> 
-> Clang is a little more pedantic than GCC, which does not warn when
-> falling through to a case that is just break or return.
+The following x86 build failed on Linux next-20240517 tag due to following
+warnings / errors only seen with clang builds.
 
-Is anyone fixing Clang?
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-:-P
+Build errors:
+----
+arch/x86/boot/printf.c:257:3: error: unannotated fall-through between
+switch labels [-Werror,-Wimplicit-fallthrough]
+  257 |                 case 'u':
+      |                 ^
+arch/x86/boot/printf.c:257:3: note: insert 'break;' to avoid fall-through
+  257 |                 case 'u':
+      |                 ^
+      |                 break;
+1 error generated.
 
--- 
-Regards/Gruss,
-    Boris.
+The suspected patch,
+x86/boot: Add a fallthrough annotation
 
-https://people.kernel.org/tglx/notes-about-netiquette
+metadata:
+---
+  git_describe: next-20240517
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: c75962170e49f24399141276ae119e6a879f36dc
+  git_short_log: c75962170e49 ("Add linux-next specific files for 20240517")
+  build_name: clang-18-lkftconfig
+
+
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240517/testrun/23951572/suite/build/test/clang-18-lkftconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240517/testrun/23951572/suite/build/test/clang-18-lkftconfig/details/
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2gZwb1q4GHgVCuOfQIMCJ6tqMFn/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
