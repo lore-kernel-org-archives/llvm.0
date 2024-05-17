@@ -1,174 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1318140367;
-	Fri, 17 May 2024 21:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDE41DFD2
+	for <llvm@lists.linux.dev>; Fri, 17 May 2024 21:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715981988; cv=none; b=NcUziA+fbPNUwWVrxwWZZgyJRYRAmIAm5uYPiTvYwn+34uKzr3yDEu7Qv94bCWIJGoU3unYQURYavuCr/62x+QSsgPgVYwaVsS2mz3QMyTgcAq/heJk0gLivTdiXh49M00+mMOSxxfJD7kjy0hWeQlTIhUPak+a/xNe4a77LiRY=
+	t=1715982666; cv=none; b=O+THAvJK8L+jKC1ni8cumaEYu65aG/XPTP7CnOgiIRBySBZz9bsGYjXJnl8hQ1hezXUB9CdZdAWRC/OcYNYt08tWe3kwxzefLNQ1KRUu6jWd4Uu/6hGAeltU/HvalCm2HIX9/kDtfkOrmWLnkPTpDT5yFkwOvqxuXaFkZN04fYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715981988; c=relaxed/simple;
-	bh=2SS4RimWdSKvDc8cYyQUQTKo0de1Bc26jlHfZplTVjE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fPMfTui3H4SKDFVfWjeQQjy6GFc5BCNRckx0i2UBZw9UcFZ3GVcSzLMFR5eAY2X7dEPqSn/bXL7wRp+33HeDzThctl2Vl78RIvKwGXolbK4UDNI97bP/FvqXpUlrfXFr/ChrRPZ1Igj6cKZtJ+CdEZlb3EBZZbCXn6RvONzCAsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J5vEFyTp; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715982666; c=relaxed/simple;
+	bh=0E7eaNTn25VPZND5g23qK/Ao2qthaQCAHj3l7eXug3g=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=uZkar9FYSUqzbGKXPUjzYgL6Zg+gkm7MzjAj0W3q6jtveHzdxzv+L3QedhZzSk/rEunGY2mldn7LicFEWJlcIMBEoHr9z7EGWkx9R2X2lDNq/EklbXSDq48ZusMNllGQh9Ksv191d9aOyu00QpyORvIX6JDPnRQdohyXcX0gED0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=I5JM9JpD; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J5vEFyTp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715981987; x=1747517987;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2SS4RimWdSKvDc8cYyQUQTKo0de1Bc26jlHfZplTVjE=;
-  b=J5vEFyTpnVvnOKkJSStUGWO9PBRkSwaPrvmipmVn0vBrOKBGuZV098+k
-   u5ns1CJ+uUeK31K9Wyw+drtCwu+E9aM0xCztDcnllKt820oX2CE+7DnvV
-   5uhD3w7uJ3L4Bfks5xa8TQBI//fbze4E0ZEyxKl8RTg28XhKDaRH5JqKj
-   rklNwTKbNfbnGORcg0DuoB/uOUWWn51m/9qKmq9q2P0ItNQRamigw7x8j
-   Om9T+NkTIRmG1wW/NotRv1YkwX3UhSyoSlEZRatY1DJvOOzFLVwthlVsA
-   yKFlMeQINo/rgX3faEzXEdXPmSe4LdCVYc8ErUYYJSZcxkM7MMf5DctLT
-   g==;
-X-CSE-ConnectionGUID: 8GM9mKUTRVC68fbgr2pWsg==
-X-CSE-MsgGUID: iejt+0GFRK+J/3XkAPDFlw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="12356748"
-X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
-   d="scan'208";a="12356748"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 14:39:46 -0700
-X-CSE-ConnectionGUID: gkIVbgFKR4KZwf7oGFI1XQ==
-X-CSE-MsgGUID: zsKfyn7DTkeY+sy0JqMShA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
-   d="scan'208";a="36827114"
-Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 17 May 2024 14:39:41 -0700
-Received: from kbuild by 108735ec233b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s85Fv-00019g-0g;
-	Fri, 17 May 2024 21:37:44 +0000
-Date: Sat, 18 May 2024 05:34:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: ye.xingchen@zte.com.cn, davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	corbet@lwn.net, dsahern@kernel.org, ncardwell@google.com,
-	soheil@google.com, mfreemon@cloudflare.com, lixiaoyan@google.com,
-	david.laight@aculab.com, haiyangz@microsoft.com,
-	ye.xingchen@zte.com.cn, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	xu.xin16@zte.com.cn, zhang.yunkai@zte.com.cn, fan.yu9@zte.com.cn
-Subject: Re: [PATCH net-next] icmp: Add icmp_timestamp_ignore_all to control
- ICMP_TIMESTAMP
-Message-ID: <202405180545.RQgwvazz-lkp@intel.com>
-References: <20240517172639229ec5bN7VBV7SGEHkSK5K6f@zte.com.cn>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="I5JM9JpD"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-61ae4743d36so7009497b3.2
+        for <llvm@lists.linux.dev>; Fri, 17 May 2024 14:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1715982662; x=1716587462; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JqVu/kA6Go97evFIK242c0lkRDXDcl7LbF0LEfPVfNg=;
+        b=I5JM9JpDLc+kQauVnoGt5fJxQErObZGLKFVhnuXmVdsIU+Zn3zjZ6Vn8OBkCzX8uM8
+         xo6vDqHn1pQFiAWWnlfZwdUkxr01SVDGg1Xh3rK3URGPKcBY0RSzIsdWTjJbS7W4qOwG
+         TMmUS/2W+H6zyiqv8saj1fJ6/SqAlzWCucB4ifwyKe5UjCK9MMKk4Lq1TWQ6xpcbDHwf
+         lEPQ/2EurHJ+RHCsYex9TNuyYCFRYZf/y5C7ypa1lK2phGJkGDQD/TYp7OQE4d/wd5m7
+         MMBNrD4+h5cA6OjxitEatiogaYywK5YOkeHXpvvC6x/+9wN9VQlxg55P85ewKgJ/ZGwL
+         7m/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715982662; x=1716587462;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JqVu/kA6Go97evFIK242c0lkRDXDcl7LbF0LEfPVfNg=;
+        b=vA3FJA7OQIqVc1kRRM64lBpUbT2iVFvx620sExp54uaafHYe4MrFB3Av4Q9ZuIThrW
+         O92WjsYMpNB+fkAyPJvT9geYEOmx/qx5fMGwLwHXRauQ2IilonGFTHPXGhXid6D/2W+j
+         O4ZW1LyLjcUgrZ2SXHsSsKfaV6R+5f9pqEnyf8/NA8FAz1NVD68f1RcvFpzQLwRvQuXP
+         ySsA06E19pWep7kBQX7kTpmsaVhXB4oBZs9FgI90qqAYkjoFDf2DSLaAJuJKHdXLhaV5
+         98C0DPQxYB7dH4r1NxZ+Xq9f/X84rXrmw9yIcbzmkh+L/WJLdMO9Abcc+IWvVHfuudQM
+         Qitw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuvE/rox2hdGwIzujrlTyZK8Ki7S3FOw3GagCJtUEP5ZQT85tmqwS2qjq/gZrpbPQjOKnfgtI/XJK9MAqMYucdoc2IfQ==
+X-Gm-Message-State: AOJu0YwVevL/fb4EJX95dD60lwOboJzYjmzmk/63jAxXFrDcseB7SaxP
+	xvd/TPjTtTPPP+N+nz2Xu5ygNbDpj854riwXbpjQZDK88WMqG0Mg8sFxoi5EA9vTZmFuBj8oH/Z
+	f8eV7BbdvctnU1+80Z3KOHjZ9Ph3rnHE0Q1/iLQ==
+X-Google-Smtp-Source: AGHT+IEe+nZ2KnnP6vARg4nvWdn1LICCt7qYyk2XbAACiY4Suxq8FXGH4FZW8lOfg1gNUOlq+6kGwbcqxVUklqhTOmo=
+X-Received: by 2002:a81:ac23:0:b0:61b:3348:34c0 with SMTP id
+ 00721157ae682-622b016d1a7mr216119787b3.50.1715982662218; Fri, 17 May 2024
+ 14:51:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240517172639229ec5bN7VBV7SGEHkSK5K6f@zte.com.cn>
+From: Ivan Babrou <ivan@cloudflare.com>
+Date: Fri, 17 May 2024 14:50:51 -0700
+Message-ID: <CABWYdi0ymezpYsQsPv7qzpx2fWuTkoD1-wG1eT-9x-TSREFrQg@mail.gmail.com>
+Subject: bpftool does not print full names with LLVM 17 and newer
+To: bpf <bpf@vger.kernel.org>
+Cc: kernel-team <kernel-team@cloudflare.com>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hello,
 
-kernel test robot noticed the following build warnings:
+We recently bumped LLVM used for bpftool compilation from 15 to 18 and
+our alerting system notified us about some unknown bpf programs. It
+turns out, the names were truncated to 15 chars, whereas before they
+were longer.
 
-[auto build test WARNING on net-next/main]
+After some investigation, I was able to see that the following code:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/icmp-Add-icmp_timestamp_ignore_all-to-control-ICMP_TIMESTAMP/20240517-172903
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240517172639229ec5bN7VBV7SGEHkSK5K6f%40zte.com.cn
-patch subject: [PATCH net-next] icmp: Add icmp_timestamp_ignore_all to control ICMP_TIMESTAMP
-config: arm-clps711x_defconfig (https://download.01.org/0day-ci/archive/20240518/202405180545.RQgwvazz-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fa9b1be45088dce1e4b602d451f118128b94237b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240518/202405180545.RQgwvazz-lkp@intel.com/reproduce)
+    diff --git a/src/common.c b/src/common.c
+    index 958e92a..ac38506 100644
+    --- a/src/common.c
+    +++ b/src/common.c
+    @@ -435,7 +435,9 @@ void get_prog_full_name(const struct
+bpf_prog_info *prog_info, int prog_fd,
+        if (!prog_btf)
+            goto copy_name;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405180545.RQgwvazz-lkp@intel.com/
+    +    printf("[0] finfo.type_id = %x\n", finfo.type_id);
+        func_type = btf__type_by_id(prog_btf, finfo.type_id);
+    +    printf("[1] finfo.type_id = %x\n", finfo.type_id);
+        if (!func_type || !btf_is_func(func_type))
+            goto copy_name;
 
-All warnings (new ones prefixed by >>):
+When ran under gdb, shows:
 
-   In file included from net/ipv4/icmp.c:69:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> net/ipv4/icmp.c:1157:16: warning: variable 'net' is uninitialized when used here [-Wuninitialized]
-    1157 |         if (READ_ONCE(net->ipv4.sysctl_icmp_timestamp_ignore_all))
-         |                       ^~~
-   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |                     ^
-   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                         ^
-   net/ipv4/icmp.c:1155:17: note: initialize the variable 'net' to silence this warning
-    1155 |         struct net *net;
-         |                        ^
-         |                         = NULL
-   2 warnings generated.
+    (gdb) b common.c:439
+    Breakpoint 1 at 0x16859: file common.c, line 439.
+
+    (gdb) r
+    3403: tracing  [0] finfo.type_id = 0
+
+    Breakpoint 1, get_prog_full_name (prog_info=0x7fffffffe160,
+prog_fd=3, name_buff=0x7fffffffe030 "", buff_len=128) at common.c:439
+    439        func_type = btf__type_by_id(prog_btf, finfo.type_id);
+    (gdb) print finfo
+    $1 = {insn_off = 0, type_id = 1547}
 
 
-vim +/net +1157 net/ipv4/icmp.c
+Notice that finfo.type_id is printed as zero, but in gdb it is in fact 1547.
 
-  1144	
-  1145	/*
-  1146	 *	Handle ICMP Timestamp requests.
-  1147	 *	RFC 1122: 3.2.2.8 MAY implement ICMP timestamp requests.
-  1148	 *		  SHOULD be in the kernel for minimum random latency.
-  1149	 *		  MUST be accurate to a few minutes.
-  1150	 *		  MUST be updated at least at 15Hz.
-  1151	 */
-  1152	static enum skb_drop_reason icmp_timestamp(struct sk_buff *skb)
-  1153	{
-  1154		struct icmp_bxm icmp_param;
-  1155		struct net *net;
-  1156	
-> 1157		if (READ_ONCE(net->ipv4.sysctl_icmp_timestamp_ignore_all))
-  1158			return SKB_NOT_DROPPED_YET;
-  1159	
-  1160		/*
-  1161		 *	Too short.
-  1162		 */
-  1163		if (skb->len < 4)
-  1164			goto out_err;
-  1165	
-  1166		/*
-  1167		 *	Fill in the current time as ms since midnight UT:
-  1168		 */
-  1169		icmp_param.data.times[1] = inet_current_timestamp();
-  1170		icmp_param.data.times[2] = icmp_param.data.times[1];
-  1171	
-  1172		BUG_ON(skb_copy_bits(skb, 0, &icmp_param.data.times[0], 4));
-  1173	
-  1174		icmp_param.data.icmph	   = *icmp_hdr(skb);
-  1175		icmp_param.data.icmph.type = ICMP_TIMESTAMPREPLY;
-  1176		icmp_param.data.icmph.code = 0;
-  1177		icmp_param.skb		   = skb;
-  1178		icmp_param.offset	   = 0;
-  1179		icmp_param.data_len	   = 0;
-  1180		icmp_param.head_len	   = sizeof(struct icmphdr) + 12;
-  1181		icmp_reply(&icmp_param, skb);
-  1182		return SKB_NOT_DROPPED_YET;
-  1183	
-  1184	out_err:
-  1185		__ICMP_INC_STATS(dev_net(skb_dst(skb)->dev), ICMP_MIB_INERRORS);
-  1186		return SKB_DROP_REASON_PKT_TOO_SMALL;
-  1187	}
-  1188	
+Disassembly difference looks like this:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    -    8b 75 cc                 mov    -0x34(%rbp),%esi
+    -    e8 47 8d 02 00           call   3f5b0 <btf__type_by_id>
+    +    31 f6                    xor    %esi,%esi
+    +    e8 a9 8c 02 00           call   3f510 <btf__type_by_id>
+
+This can be avoided if one removes "const" during finfo initialization:
+
+    const struct bpf_func_info finfo = {};
+
+This seems like a pretty annoying miscompilation, and hopefully
+there's a way to make clang complain about this loudly, but that's
+outside of my expertise. There might be other places like this that we
+just haven't noticed yet.
+
+I can send a patch to fix this particular issue, but I'm hoping for a
+more comprehensive approach from people who know better.
+
+Thanks.
