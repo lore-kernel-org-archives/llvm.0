@@ -1,148 +1,186 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AF1633
-	for <llvm@lists.linux.dev>; Fri, 17 May 2024 00:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6261D38F
+	for <llvm@lists.linux.dev>; Fri, 17 May 2024 00:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715906837; cv=none; b=SgnzNKNkgLScW/EZsTF0SJEkUH5BdCwnHZNk3nybA/N6ys0DYv16yeNA4aFcbQ94Hoz2+CJhrSJQXWtnCE0ySVOnjyeaZ5f5lu9um0KtrIrH421tVAOYKtXsnz8vfGib9TyKd6qEmuhJCSZ3KHn5bLfm/dWD2GHyVT1cspikalA=
+	t=1715907163; cv=none; b=npzgVnRDxrTKcaIhR6SBhHZb3q79KjGjxiP42tQpdu7YqEgr+w3M5FQZ5jL1KLDih5McgX2KYo5fg2kD/nisax3yA8d7fZwV33nusXEwh4gz0jA/f6z6XhtN+6I2ZCguqLbBSxjDLNtQarqv7tMeQoEhL9LIswgnnJrG4fSfbrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715906837; c=relaxed/simple;
-	bh=APN4VP2Crr6QKrWp/Xr/rV+r2whWDGdcimi2/j06TL0=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Ik2Aq9PQEhLehrPshajNcVoIVkhvIdQo6ZSQbwQV3oYU9z5HltHvbRj2Zl/RuqRkb4jF6txRjOLZKrAqxmX+AxlP+MoVxle/4ganyRxR8GROFwpo6JL5qeqOnmxYhv4lOEz2qw8oX/ekZ3ACA5jwBFUmIiy7xT8yjcAF2og2Ev4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y1VBdpy7; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
+	s=arc-20240116; t=1715907163; c=relaxed/simple;
+	bh=gQqe+8T26wZUSFay3/trJGnBTthmxt+iFNmFVZ30Vr8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jkKec6Nd9Cv/Jv8IwJhARI0XLIzqPhB9KSrXKDbeXSfd0JvY8Ic22j0ncwzgR+xARgLjsMsXvtutfGB4ae4xYjLyULDtN5rYlSipQIkaxzaNN7wBbUrO63/S3WIKEjE9oH3m9q+fZ0rRJR1TLcewInPzp3NresIPtIUX68urGZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UIHHFkFo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y1VBdpy7"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61be8f9ca09so147575267b3.2
-        for <llvm@lists.linux.dev>; Thu, 16 May 2024 17:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715906834; x=1716511634; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+sBRFmlKo34YzhiPfM618pBAaUxmxSb2mTc1sHV0NzU=;
-        b=y1VBdpy7065AuluTkGeO0eSP9FRthpqynT2Jc9/aGp6eR2kXGLlUgYAAtjZ9l/lJbo
-         EEiVDBH3vqbQODDYnW3OY6Y3XcJPGat5sZ6TWP0zXKbwv2fzI8lIGkMuEnqQs6AA7Ay9
-         TcIH9F5JlCn6is7PQ0Ionl/9QoIdXivqyBiL0QA6TfAmMe7h/jQF0IUyimBPWc44o1Vu
-         cYohMfdRxI525FBVhcqmvLxp6++A3PVWoUXTEhW0Ad/jPx8wo4CewXrAb9rcxcNXQ070
-         xGWyH6WC8yivr5bs+/YfyfJaCy9kMDF2t6PMuP6YsK4veLn+E5IMnp6yapXBdy0+UyCZ
-         BO6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715906834; x=1716511634;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+sBRFmlKo34YzhiPfM618pBAaUxmxSb2mTc1sHV0NzU=;
-        b=E3EybevXX3UbWoLMcUVuYL+jYADjVndI1s3nqqXyY+3jzKYuK3A27A8SlX2Ylw2oTt
-         pnKM5K8C0Ab61yNgsu6HppjCL2LCXY3HFgEYB3zwdGIbZclC5AqfU/GGgjUOa20ww5VQ
-         GqaxhX2hQZv35kdBY9uzy/LTxzOEN+AIy7qM7L704jp14wUU5weYOaoyExjmB/HU/mfn
-         Y4xKzs1LFR9Wxd2M51uhol2/J6RtevC4GzX/vhZ1BTjQ2SSH0C9GwK86bE+agrtKEagm
-         381+hfz8Ca+hUh+NUIPZ4LjsV78w+etEAgPCudo/Il8kN3Pd3zdoPJd4XPqwPVViPmDt
-         GXCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVW+bMgVf0Na48xZGJTX1D9flO5Umn3IMQisRPn/OtM7z/Dajf7NwrrJELJ5QoSKeMbDnkqrlxmre1QGK1XbL28y1qbkg==
-X-Gm-Message-State: AOJu0YzsbVg5OgDPi8h09MIU/DH/4t9A1M6qTnFXXj+UaaVXLJS3Pv4I
-	5h4/OnosRhuBX3zNIHg673wPEguOTpNYBgAWXOgVf/UuCmYNWp6dItxEoJFRoOiddIRmbjGHnL9
-	hGTGPbz/AHOYS1hUoAbFvfg==
-X-Google-Smtp-Source: AGHT+IETpYv5Kjvsk8OyrTodOgdwpPqjDaOSc1Z+SNVKHGp/NLwKQuB7PDtZOHT9w6zHvkJhoKySJ/78MmzZqKV0rQ==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:690c:4508:b0:61b:e9d5:ac1d with
- SMTP id 00721157ae682-622afd65a8emr54872957b3.0.1715906833765; Thu, 16 May
- 2024 17:47:13 -0700 (PDT)
-Date: Fri, 17 May 2024 00:47:10 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UIHHFkFo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715907160;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FZGd0f0VoDQB1VfYyjxvSEttIiIIdGwSeWGcfXOogaU=;
+	b=UIHHFkFoxBn4EzKKy7BwK6LiXOHrIWuBGSX1NHfBAyXD4tYVHH4a5py1GjN6VH8ey60YwD
+	oAqrnpZoUVgw0Zg5xZ38FI3B0DaswI32uCnMye4bS6RWqmwnpQeEElPxpKXriWW1IaHeRt
+	U9S8M6p2L86RSWPbWB9Fh+T65aFsXOY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-488-DPIJfitVOd2vPTR9FkgsIg-1; Thu,
+ 16 May 2024 20:52:36 -0400
+X-MC-Unique: DPIJfitVOd2vPTR9FkgsIg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C00329AA2D2
+	for <llvm@lists.linux.dev>; Fri, 17 May 2024 00:52:36 +0000 (UTC)
+Received: from [172.64.13.32] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 060322026D68;
+	Fri, 17 May 2024 00:52:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 5 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 6fd600d7)
+Date: Fri, 17 May 2024 00:52:35 -0000
+To: xzhou@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAA2pRmYC/3WMwQrCMBBEf6Xs2ZVkbat46n9ID0lc0wVtSlKCU
- vLvxt49DW+YeRskjsIJrs0GkbMkCXMFOjTgJjN7RrlXBlLUqk71aFusG5zXBR06orNV5PrOnKB elsgPee+621h5krSG+NntWf/aP6KsUaNRmi7a1LBm8CH4Jx9deMFYSvkCn07L/akAAAA=
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1715906832; l=2916;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=APN4VP2Crr6QKrWp/Xr/rV+r2whWDGdcimi2/j06TL0=; b=lVQhJSXTmnBiRmTpSG1PZj6jdwvTeXv2JarvTTQ1WVuAkjVh09o5tkjDw6JS3PNECmkC/jajo
- 5RhTx6x5HKxC1PMpnksmZbLIIwZoUFWoMnm5GuoEn0sHIeScvxHC4Yz
-X-Mailer: b4 0.12.3
-Message-ID: <20240517-b4-sio-ntp-c-v2-1-f3a80096f36f@google.com>
-Subject: [PATCH v2] ntp: safeguard against time_constant overflow case
-From: Justin Stitt <justinstitt@google.com>
-To: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <84603.124051620523600207@us-mta-488.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Using syzkaller with the recently reintroduced signed integer overflow
-sanitizer produces this UBSAN report:
+Hi, we tested your kernel and here are the results:
 
-UBSAN: signed-integer-overflow in ../kernel/time/ntp.c:738:18
-9223372036854775806 + 4 cannot be represented in type 'long'
-Call Trace:
- <TASK>
- dump_stack_lvl+0x93/0xd0
- handle_overflow+0x171/0x1b0
- __do_adjtimex+0x1236/0x1440
- do_adjtimex+0x2be/0x740
- __x64_sys_clock_adjtime+0x154/0x1d0
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Rework the logic surrounding time_constant and how it is incremented so
-that it doesn't wrap-around.
 
-Link: https://github.com/llvm/llvm-project/pull/82432 [1]
-Closes: https://github.com/KSPP/linux/issues/352
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Changes in v2:
-- Adjust commit log (thanks Thomas)
-- massively simplify bounds checking for time_constant
-- Link to v1: https://lore.kernel.org/r/20240506-b4-sio-ntp-c-v1-1-a01281aa01ba@google.com
----
-Historically, the signed integer overflow sanitizer did not work in the
-kernel due to its interaction with `-fwrapv` but this has since been
-changed [1] in the newest version of Clang. It was re-enabled in the
-kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
-sanitizer").
+Kernel information:
+    Commit message: Merge tag 'media/v6.10-1' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/mchehab/linux-media
 
-Here's the syzkaller reproducer:
-| # {Threaded:false Repeat:false RepeatTimes:0 Procs:1 Slowdown:1 Sandbox:
-| # SandboxArg:0 Leak:false NetInjection:false NetDevices:false
-| # NetReset:false Cgroups:false BinfmtMisc:false CloseFDs:false KCSAN:false
-| # DevlinkPCI:false NicVF:false USB:false VhciInjection:false Wifi:false
-| # IEEE802154:false Sysctl:false Swap:false UseTmpDir:false
-| # HandleSegv:false Repro:false Trace:false LegacyOptions:{Collide:false
-| # Fault:false FaultCall:0 FaultNth:0}}
-| clock_adjtime(0x0, &(0x7f0000000280)={0xff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7ffffffffffffffe})
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1293845753
 
-... which was used against Kees' tree here (v6.8rc2):
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=wip/v6.9-rc2/unsigned-overflow-sanitizer
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1293845753-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9D=8C FAIL generic/100
+                       =E2=9D=8C FAIL generic/123
 
-... with this config:
-https://gist.github.com/JustinStitt/824976568b0f228ccbcbe49f3dee9bf4
----
- kernel/time/ntp.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [aarch64, ppc64le, s39=
+0x]
+                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64 (debug)]
+                Hardware - Firmware test suite [aarch64]
+                Hardware - pciutils: sanity smoke test [x86_64]
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - net [x86_64]
+                Libkcapi AF_ALG test [aarch64, ppc64le, s390x, x86_64]
+                Memory function: memfd_create [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
+_64]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - blktests - nvme-tcp - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+                stress: stress-ng - memory [s390x]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - cifsv3.11 [x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - nfsv4.2 [x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+                Storage - blktests - blk - upstream [s390x]
+                Storage - swraid scsi_raid [s390x]
+                stress: stress-ng - cpu-cache [s390x]
+                stress: stress-ng - memory [s390x]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, s390x, x86_64=
+]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, s390x, x86_64]
+        Issue: Storage nvme - rdma: nvme/014 - flush: Interrupted system ca=
+ll
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1980181
+            Affected tests:
+                Storage - blktests - nvme-tcp - upstream [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
-diff --git a/kernel/time/ntp.c b/kernel/time/ntp.c
-index 406dccb79c2b..d64f69e14938 100644
---- a/kernel/time/ntp.c
-+++ b/kernel/time/ntp.c
-@@ -733,8 +733,7 @@ static inline void process_adjtimex_modes(const struct __kernel_timex *txc,
- 		time_esterror = txc->esterror;
- 
- 	if (txc->modes & ADJ_TIMECONST) {
--		time_constant = txc->constant;
--		if (!(time_status & STA_NANO))
-+		if (!(time_status & STA_NANO) && time_constant < MAXTC)
- 			time_constant += 4;
- 		time_constant = min(time_constant, (long)MAXTC);
- 		time_constant = max(time_constant, 0l);
 
----
-base-commit: 0106679839f7c69632b3b9833c3268c316c0a9fc
-change-id: 20240506-b4-sio-ntp-c-c227b02c65a3
+Tests that were not ran because of internal issues:=20
+    machineinfo [ppc64le]
+    Reboot test [ppc64le]
+    SELinux Custom Module Setup [ppc64le, x86_64]
+    selinux-policy: serge-testsuite [ppc64le]
 
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
