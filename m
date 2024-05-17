@@ -1,78 +1,80 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DC712FF6D
-	for <llvm@lists.linux.dev>; Fri, 17 May 2024 16:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E2E12F58F;
+	Fri, 17 May 2024 16:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715963346; cv=none; b=ObpnRwsvFKSjPdJHYTB+erznmlKJjGoW//8G2VdJAWS36gUNuY3T2HM2eAEvrKxema7ZJ4nh5SjZYU86MFbJkrXcs5myQAMMHJZlT3MVZbl8vredGNP6euuBUKCbGFurifhbk3VI5uF9zof9ujmR+WDi4I507nG7kiQ4NAlN+WU=
+	t=1715964031; cv=none; b=HuB9/vjyn+CoT/HkQfP8MuE40jRVBvtmnksqI5uRxMzRNgp/l4L7mTWg8viV6uhPWS4ToZhqQMqqhV8MmG7i8YkYGq8q0e2OH6f6X8DD8chq7yz6WNSgGPrXXfrc3eRJ00pJgbLA9j1u0KQDNPHoL56hXn7UEdxKal4auHV1+No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715963346; c=relaxed/simple;
-	bh=A0l1biPmh781DV/HZQilyuVGfhQUzNsWAV/svLQy1H8=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=eWqxBrtNY1gSA0yCJIQMyQQ2SRBs+F3ogVa9KCcX5WrWGLW+x0tOH+9pLExUSUm1SDsC6iWzKSBggvcrBbqgsq7UlRP8TppGXxcwTrm6rMc9rr1qZRjkCAi9bg1Mew1b1COcbMa58YoMAuXqOxH5o5u+4FKlFo8wIfRr9+5cpbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7e1bcad7693so910069239f.1
-        for <llvm@lists.linux.dev>; Fri, 17 May 2024 09:29:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715963344; x=1716568144;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TsObFqL+Ghmp/IYp9hQ0PuAh2qoGln/YEOD0/ZgXel8=;
-        b=K+JI7f0vndGFrHcBj8hyBCXX277g7LkM2d2yoBRZZhJy5tdW529RuUbqVmdijz1qmG
-         6uVbRS/c0VJQigTu9AqWmbrQDDFjo0Ow8uppx+ZJ3ZQ4X/7FXzReQUMk7GlIl1TscBsh
-         Nikv5EH5kKcHVLmFIWhRbdqgCYR1Rj0WJYIPlBsxpl5Uwz2Y28TZ7qPTijykY6FX/Yby
-         n4n6BKRbXLej9F1Cz85pZfBb8rkkei5acQSCMkkBnnsxS3aibgOEMEZXUcIK5ZZvqPv6
-         HCBeem4ZcDX7zyNejCRqJVBxyZ0jWKWfwUg+DTNwh0RAiyuvPP5h06q/YusBzzUWd9wO
-         Fxhw==
-X-Forwarded-Encrypted: i=1; AJvYcCVLqL9MgkPHQeeNP7ID1zslQeRu82vBhsXUFk91dxhN9MeCxvwVxdrFDsvva/d1yejvzvQajwFMeuFpP//2kcnVyvH2TA==
-X-Gm-Message-State: AOJu0YyWHcAwP3eQILPjkllfBdmOUbxdDJsg1lB6vriJQghw3F1zUO0x
-	wAHr6LDS4dFhtnGyKv3G5X30zCNBRounV09xfaehyGkXQ3KS3QrAKf8FmSY0FHs2MjXF3uSrgXr
-	yvuqBMEbxPcpydD/zg+J71ZyKWvFHwp3F6RkMnMwismypAIZH5S7hhDQ=
-X-Google-Smtp-Source: AGHT+IGJJGcpjdTLU5VW4ShRLcsJbiqzr+V2191f9uvaiH6IuWNuq02taQQQhJXzqWwMfkWPlghi3GdQAbaxORRhDagrnlcmNhQP
+	s=arc-20240116; t=1715964031; c=relaxed/simple;
+	bh=MpnJH7lXvg1Hyp4OFSGIGZ8fFF5JMG16MW9ZXR9kFE8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GrBflE9PBOPVWewcxoTBhPFr0sAtt2yyjskm/X+HB7++CkcorZSTHfbRGQoORd8R7vA1v9l1B2UwpoRGHgASWK12o1p0v7bTyIXQ5TG7BFl+r3MGEmo5S/vHib5IguL8oy2bgXrnALUUOH6bWLFS3cm9Bt+J22KIMbwZSqylh6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGatCEqX; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGatCEqX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A26C2BD10;
+	Fri, 17 May 2024 16:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715964031;
+	bh=MpnJH7lXvg1Hyp4OFSGIGZ8fFF5JMG16MW9ZXR9kFE8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aGatCEqXEuQBzblyhw31ZukKidg34xgZKf6mMPwX3hP1l53RyhWvh+cHtbQekDm32
+	 huZLMtSFC2hJw4VzJClpOwG0mX3oSGi0H5qibHEj7ivHYYFaAjnQBP/ChkDt5fS5mp
+	 eEKq/PTFaWC2XRnKVJ3c8UsuTV+qlvLCa6sJfATDVD1FxNUCMOGVOr1jVlGD5snmni
+	 N5nwckp/s/TmcVOUh8XfUMAd+zKzFg8cORkzRqztcSsY4ZB+BDgBMemJlmTDAKh6rI
+	 dIY9kKwxlGeqnJ6C2WoL7fd8E8obZx9aKKgSV7t2yGu0DEXfJSVlKCVmVDHk37lT6L
+	 OrCyOtBSQX4Rg==
+Date: Fri, 17 May 2024 09:40:28 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: Re: [trace:probes/for-next 17/17] kernel/kprobes.c:1141:24: error: a
+ function declaration without a prototype is deprecated in all versions of C
+Message-ID: <20240517164028.GA3695607@thelio-3990X>
+References: <202405170340.eyEMhYvc-lkp@intel.com>
+ <87eda1pjl4.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:872a:b0:488:7a00:9343 with SMTP id
- 8926c6da1cb9f-489589c27b6mr1543251173.0.1715963344596; Fri, 17 May 2024
- 09:29:04 -0700 (PDT)
-Date: Fri, 17 May 2024 09:29:04 -0700
-In-Reply-To: <0000000000001a94c3061747fabd@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009a41c90618a8d96a@google.com>
-Subject: Re: [syzbot] [ntfs3?] possible deadlock in ntfs_mark_rec_free (2)
-From: syzbot <syzbot+016b09736213e65d106e@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87eda1pjl4.fsf@oracle.com>
 
-syzbot has bisected this issue to:
+Hi Stephen,
 
-commit e0f363a98830e8d7d70fbaf91c07ae0b7c57aafe
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Mon May 8 07:36:28 2023 +0000
+On Thu, May 16, 2024 at 01:50:31PM -0700, Stephen Brennan wrote:
+> kernel test robot <lkp@intel.com> writes:
+> >>> kernel/kprobes.c:1141:24: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+> >     1141 | void kprobe_ftrace_kill()
+> >          |                        ^
+> >          |                         void
+> >    5 warnings and 1 error generated.
+...
+> I'm guessing that what's happening here is that Clang is categorizing
+> the old-style declaration as a different function for which there was no
+> prior declaration. When I add the "void" here, the clang error goes
+> away.
 
-    fs/ntfs3: Mark ntfs dirty when on-disk struct is corrupted
+I believe you are right.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1431b56c980000
-start commit:   ea5f6ad9ad96 Merge tag 'platform-drivers-x86-v6.10-1' of g..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1631b56c980000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1231b56c980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f59c50304274d557
-dashboard link: https://syzkaller.appspot.com/bug?extid=016b09736213e65d106e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16340168980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=107e7f04980000
+> In any case, the warning is right, and I should have used the correct
+> declaration here. The below patch will shut this up. If there's any
+> possibility of improving the error message clang gives us here, it would
+> be appreciated though.
 
-Reported-by: syzbot+016b09736213e65d106e@syzkaller.appspotmail.com
-Fixes: e0f363a98830 ("fs/ntfs3: Mark ntfs dirty when on-disk struct is corrupted")
+I think Aaron Ballman, one of the clang code owners, commented on this
+exact situation recently, in the larger context of addressing some of
+the wording issues with this warning if I am understanding that issue
+correctly:
+https://github.com/llvm/llvm-project/issues/90596#issuecomment-2096081580
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Cheers,
+Nathan
