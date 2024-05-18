@@ -1,153 +1,232 @@
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05olkn2096.outbound.protection.outlook.com [40.92.90.96])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E8F15E88
-	for <llvm@lists.linux.dev>; Sat, 18 May 2024 08:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.90.96
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716021077; cv=fail; b=nSpecbCSog7kubrtwTjMgtoxvh5WEDVYOHxPy3VEjTFmDRKkzT8q5yAsbzo4O6wS7tpV5xc3KB/KXZqZD7EFEwSwOsvzZIYf5ciSUN2BhmLo3iaMICJrwJ/Ld+KaS79PMVzCaNS7jvoqfRy6HRJyCN8jlPqJi2fg6+fnsnM3fSo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716021077; c=relaxed/simple;
-	bh=BfcUnnoGavhSUjWNm6uA9jJ5/41YkMxKsdVPjLPCZUc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jjW60zeAHcBUleqDNyS1Xvy4LkNEi+0MMW4jx2AadfYi+BmKGbaRmqC5KM55dygJQTH77BT1yw9EQrRLl747Nv1z6qeVkYyd5rp1d/wT+A9LYHLQFsDVqbhs/I0e2E66mIHDK9arN7QuxQq2vZhab3S/ORZzqZVCl1naqSJvQek=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=rLZrLKbk; arc=fail smtp.client-ip=40.92.90.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3B5199B8;
+	Sat, 18 May 2024 09:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716025736; cv=none; b=LrQf+JZz4yuRruVx1tPA7OPQXuPpcp/3FfcJoQd+eE+R0oj6Kqt8Raqidd4JfnB0SfoMynBqG8sI4GWNL0VrRJkTTAFAnD1z7BvOe72YuqBLHLTWzsd/AFpqCMn7vtvS6kUYe7eJFq+xAMw29rT8a5CBxGirQqH53AmfOfuTXhQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716025736; c=relaxed/simple;
+	bh=YaTkBMT2YgiEgWhpcFUf/HLJwwZ2wxxLHUpVRDMxy2c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eeWxPKuxB6O4TAnOrLmRhhE3nvXr12TUP8evgmMP6u7Mpbga7Qp+HkkSlSXAjpoAMHLSOQcKbllITIgId/6lIxQIUsaRVWU0hFm/vrEwdV/udZ/IYF3VghRbr/yqP/HlDtTtFXGzu0m59k7PkMXFzdH/87Kfb+7UMT6Bl6RL2N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fF08RZ/m; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="rLZrLKbk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DL8tE5YZ6lmdSwBqIB9IAb97DSoy2DmhZ2+cnNGkGf1zQf1REBd9yXodPAg9/kBXsMkGhp0T1QcuaBTPcbSBnWqNwrc1bZHBzJpJ2MRdaIa3g1VZI1GqaLpkgmQRyFKz0xMA5JiWsQc+nElgnK/WCLOH6c7NoynHdyVA+ZvABKH9ih8+T7wTI0RTuAKAJzkVRadmK+9V81AkiDUbOcQxK/9l9AWW2op8GKYhiPCQTr69OYb4vTgUlFXLo084c39+goQihNB6Ltyw0G9kaWKU81mhoJhDD4ir7WXt62Nr14Dl+y5B/BA3o7OTx+Pw1ClwsqZJt5CPAHa2bSB5rjik/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=daC3THgyOiQzGJtJX2KuIaT/NeDMy0RudLFDY/u4FOQ=;
- b=L4nhkD7MliCGsUQ6xGrkCURpKKONFA0VbSnDkIYzvqPxtZvZWHGjtK6kCq14OzPgaf586x243Otg1XnPNBVp2xKkoTDYumW+7bRLLBv37k/tVRwmkhSI/6ZhBuzJtyn66YfWpTzXCbuIndsc20htuxJZ3sIX+lXHUknr/tcaTgHQSdAfHcVdZe7WTP6YM08TtdyirbZJC/CkeUv17dDbxTdYozHs+YaBV3/GK1l+2Z68blHZooeYrS7cHwZ9djYd68L3Ko23anl7RPr07NO/GdKUehlEmf8/xxRZZpSihXSVDfenH+LObyelsYgksffWd8rN7mO/4gzOC5nQpXh+/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=daC3THgyOiQzGJtJX2KuIaT/NeDMy0RudLFDY/u4FOQ=;
- b=rLZrLKbkgiC7QmEIgpBTpHgrR4+oXF7uMLqQynu9HuK6QvQNvwVhW5j82K1ivgWrqZsqQKsymjFsQhXmavmn7AiuNU939QDMXMdwQropKcbWfBH9IeKIYsRgzkGdd+SH5RjglpbXq58A/hpap6dzhsDg4hl7iXjpyJnleePbbgtj2/hOBKsmxHOrb64kd/tqStu1VxPfIVtkQToH31xscMysNChFpGCmvTWx6f6t2/UKHPzjKIrvKpLj2j3XVTIL/P7F7mKBZk6idmRsPZ2pVdZ6qCDexXtrUesMMx3PXazgSU77WRKsRJJXchZZOjxEkv3BVSf9RMbmDvqPyqLbGA==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by GV2PR02MB8723.eurprd02.prod.outlook.com (2603:10a6:150:7c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.31; Sat, 18 May
- 2024 08:31:09 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7587.028; Sat, 18 May 2024
- 08:31:09 +0000
-From: Erick Archer <erick.archer@outlook.com>
-To: Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Erick Archer <erick.archer@outlook.com>,
-	linux-bluetooth@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 2/2] Bluetooth: hci_core: Prefer array indexing over pointer arithmetic
-Date: Sat, 18 May 2024 10:30:39 +0200
-Message-ID:
- <AS8PR02MB72370994136D06FC99680CC88BEF2@AS8PR02MB7237.eurprd02.prod.outlook.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240518083039.7202-1-erick.archer@outlook.com>
-References: <20240518083039.7202-1-erick.archer@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [K7kVgqjXF+OcZcPiLQyP3yju7H8n/SLb]
-X-ClientProxiedBy: MA2P292CA0026.ESPP292.PROD.OUTLOOK.COM (2603:10a6:250::12)
- To AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID:
- <20240518083039.7202-3-erick.archer@outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fF08RZ/m"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716025735; x=1747561735;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YaTkBMT2YgiEgWhpcFUf/HLJwwZ2wxxLHUpVRDMxy2c=;
+  b=fF08RZ/mpUUoxnesyA31no5nLmf/O8cnwkgqngud1JkhZ1nf9uClJ0BM
+   9hFG44CA1gpanlT63nOTWLxnQOvJHG3s4ZOTZxPiHQYSWcyiKpji9debg
+   ZHiaMYp/n9xwR1Y2t149dpV/SOawF+OFkEAfDXyySQTsg0I1z5Tn3E65N
+   jZZaKcgQG4Jh6vx7SdEH/fM2WQGZrR2fZQpHDI3xqbA23XcNsuEBwdPC/
+   EC3m14dLWaAVAQs0cg3b43UBgMiPhWJP0YXMpRPf6UCYbAcNMa8UT6sM3
+   O6NBAM06W5qiWVwkHrNrjm7KImdzpYPSDiGVBviG/1gtE7pqChXrMvuxV
+   Q==;
+X-CSE-ConnectionGUID: YgX5vO13RZ29vafgV0k12Q==
+X-CSE-MsgGUID: /fZ1Fyr6S4mLUXYREXiomw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="12397471"
+X-IronPort-AV: E=Sophos;i="6.08,170,1712646000"; 
+   d="scan'208";a="12397471"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2024 02:48:54 -0700
+X-CSE-ConnectionGUID: r81JVZ5QQOKLZ9tEEV41WA==
+X-CSE-MsgGUID: CO4B7G+RQluAErgZ9aNm4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,170,1712646000"; 
+   d="scan'208";a="36448065"
+Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 18 May 2024 02:48:52 -0700
+Received: from kbuild by 108735ec233b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s8GgM-0001zl-19;
+	Sat, 18 May 2024 09:48:50 +0000
+Date: Sat, 18 May 2024 17:47:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xuewei Niu <niuxuewei97@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 2/5] vsock/virtio: Add support for multi-devices
+Message-ID: <202405181709.eZtUowMg-lkp@intel.com>
+References: <20240517144607.2595798-3-niuxuewei.nxw@antgroup.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|GV2PR02MB8723:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e869dab-8e2c-4783-1da5-08dc7714de47
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|3412199016|440099019|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	o9/tebtvu7Ue7q3F+507HAQkdZneZz0j5KyvzNedAnAy1dMq8wh+OU2n/x0waeYBm0te5Cy6O64wsXC7fTtk/RSaBLcIzZpicfAIHT+o8hicNrGg1XqnNXQf/jPzI2GKbgX2VKP7rdFZNkw4tFLbx3dQYGofCopdelSA21L5P1QyMRqpjL/x2Yn4KE/hzNq187ggiWv8l0nl/IYF5sXfYmczHNOGnzIptSsRKLOhZzdHRuEeV+Ej2FrYvIizcIYun7Fu9oV7PAcXSSlkzsAMeqnKXzvvywbJrleTwiZ8mvHT0cEkOC0OupT0WsgX4II03D3dvB+5cbYKQ+2qHbGNMVPZye4uQWNfX2iG47ckAOk6sGqljo/fxAXavzLTiL8aQQqsz46OtexoX9lTkQUZPbz+KRsUx5dVZegTI5O7tqEk1jfSLVmPAAc6815/w9VbxZYrzmJ7xHj18tKxo5loqCz028kNYkaFlTJh4ssl0B4/yZ8KKLGU2NsjNasa4FKJBWHp/Fs0w3ciQzHjvghNxbrgghAwAJifkTh9XFsjS4W41H4g/qG7bAoh1rGpvyohjFvOx2zR2QK+cKN4xygRHckrqZPCB1vMj+yRbtWflbXURAyYQzOwTnDPK9dbS/L1
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Mnkoa4uBiNhQfD++9Jmsvh+qf/9XsmZG4Mu5F1fdkj5U2NpmtVlIFUX9tDAX?=
- =?us-ascii?Q?nW8SX5yO4x/uhH1HrxiX1RO97RRg4VJ1NckU8h8kBAXThncbjGHfbmTfJiNP?=
- =?us-ascii?Q?oB86ROgZc+tZ1evxYlTNV0xzrNTXHt9cAlfM5PMoBmnZvBO4KQOLbvd2cWcR?=
- =?us-ascii?Q?zFab9AhKreGYlMKjlWXZHy/ujSluEovft9MelSsmkepxEit9Sk8CWlEVLyWg?=
- =?us-ascii?Q?i8AJaw67L6/GlFVLIJPBSkdNoDgYdjJB7irbptErB6jr6HcQyWth0LOdHGpz?=
- =?us-ascii?Q?/iJ4HU0zvxGmJJ/4K3HjGc/w2LaXsZLGwYGhs+Zg6rTdPXNe8rtM/ChirZVh?=
- =?us-ascii?Q?+79bcW582LQ6NZmhve1EkulqnZO4OvPp5RLZBYXMZl4NU33eBcBkrROjCowN?=
- =?us-ascii?Q?wiUyKPJyThrcJyem97AWsREHknyRTHzYVFvkunhtjNsouS7EfVB2amgmHNbn?=
- =?us-ascii?Q?oXOmFPg+E8ezEsZJDFi8a1gJWyeknf/x5VmCd+bRQZbbAgqglKeQatYLtt8H?=
- =?us-ascii?Q?og4jwQUrGJNIHVkMQgFgX7APw9J1oW5I1gNO9IsY+V1zm4tZ7UoZGmKGtzAu?=
- =?us-ascii?Q?b7JEBNOG0T2osYig8PkphAhDpIbfLHPr11cskNHFTWyFFhi4F8uDYYf99ENz?=
- =?us-ascii?Q?D4b2NtbIBLaHM+ofKxOIWRkO1FvUKaF15hWnkByWOHijScPabnWbgeJ0/aFL?=
- =?us-ascii?Q?XISxhjZJMq/nKQ8unKZch/vWqRXeBBO+dzbvM0dSl2floYfeykU9dPztJw7t?=
- =?us-ascii?Q?ggSocGpV4YbNtVNzla2n9JSASO9p4AgIbPS6aYL8ghvbuRcr4tixe1T0F1Ou?=
- =?us-ascii?Q?+uU9cP43J1f5EboFC6XHDFdaK79PWEuSg3FjKQWP/T83w93hM7QPyq/UFjiQ?=
- =?us-ascii?Q?KbRdRj8W9DWZmbTA0Aw3t1FE0COzYPis5jrikMs9wgkz8UxJhOGXV0iz8AIN?=
- =?us-ascii?Q?KU6CfqizM3BBx3J4dnDVaa7X0E5aMF95T7W9ZoPliVZ9bAWHPHgLrFqTK4Om?=
- =?us-ascii?Q?h05jGW1Oml0kfY2WqjF/GeKFLIDZJNwq8B3D2EegyoVR5uGCgBg1IIdEM7kk?=
- =?us-ascii?Q?9f7D/tI9HKKZFMn7RnRhVdpJgyce4Vg9Z2T5uRWXYkncu8pOl+F1s6eSEB7F?=
- =?us-ascii?Q?d56fZa3voe9wlZjXVHDrR6iBcNUyviJSp+2bpnupPb7XcJH745Z8qIXZuYjd?=
- =?us-ascii?Q?2JQGI6DChRMD+pzhOO02hvkZZVJfKvwieea0OQUQphzsPwhpl6q25sSeoGnc?=
- =?us-ascii?Q?pNuXlPop4Q9GfSnxVuJm?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e869dab-8e2c-4783-1da5-08dc7714de47
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2024 08:31:09.4329
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR02MB8723
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240517144607.2595798-3-niuxuewei.nxw@antgroup.com>
 
-Refactor the list_for_each_entry() loop of hci_get_dev_list()
-function to use array indexing instead of pointer arithmetic.
+Hi Xuewei,
 
-This way, the code is more readable and idiomatic.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Erick Archer <erick.archer@outlook.com>
----
- net/bluetooth/hci_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.9 next-20240517]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 81fe0958056d..b3ee9ff17624 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -864,8 +864,8 @@ int hci_get_dev_list(void __user *arg)
- 		if (hci_dev_test_flag(hdev, HCI_AUTO_OFF))
- 			flags &= ~BIT(HCI_UP);
- 
--		(dr + n)->dev_id  = hdev->id;
--		(dr + n)->dev_opt = flags;
-+		dr[n].dev_id  = hdev->id;
-+		dr[n].dev_opt = flags;
- 
- 		if (++n >= dev_num)
- 			break;
+url:    https://github.com/intel-lab-lkp/linux/commits/Xuewei-Niu/vsock-virtio-Extend-virtio-vsock-spec-with-an-order-field/20240517-225120
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20240517144607.2595798-3-niuxuewei.nxw%40antgroup.com
+patch subject: [RFC PATCH 2/5] vsock/virtio: Add support for multi-devices
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240518/202405181709.eZtUowMg-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fa9b1be45088dce1e4b602d451f118128b94237b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240518/202405181709.eZtUowMg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405181709.eZtUowMg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/vmw_vsock/af_vsock.c:92:
+   In file included from include/linux/errqueue.h:6:
+   In file included from include/net/ip.h:22:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/vmw_vsock/af_vsock.c:92:
+   In file included from include/linux/errqueue.h:6:
+   In file included from include/net/ip.h:22:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/vmw_vsock/af_vsock.c:92:
+   In file included from include/linux/errqueue.h:6:
+   In file included from include/net/ip.h:22:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> net/vmw_vsock/af_vsock.c:549:6: warning: no previous prototype for function 'transport_g2h_verify_cid' [-Wmissing-prototypes]
+     549 | bool transport_g2h_verify_cid(unsigned int cid)
+         |      ^
+   net/vmw_vsock/af_vsock.c:549:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     549 | bool transport_g2h_verify_cid(unsigned int cid)
+         | ^
+         | static 
+>> net/vmw_vsock/af_vsock.c:1235:4: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+    1235 |                         else
+         |                         ^
+   net/vmw_vsock/af_vsock.c:1250:4: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+    1250 |                         else
+         |                         ^
+   20 warnings generated.
+
+
+vim +/transport_g2h_verify_cid +549 net/vmw_vsock/af_vsock.c
+
+   548	
+ > 549	bool transport_g2h_verify_cid(unsigned int cid)
+   550	{
+   551		/* transports that support multi devices */
+   552		rcu_read_lock();
+   553		if (transport_g2h->get_virtio_vsock &&
+   554		    (cid == VMADDR_CID_ANY || transport_g2h->get_virtio_vsock(cid))) {
+   555			rcu_read_unlock();
+   556			return true;
+   557		}
+   558		rcu_read_unlock();
+   559		/* other transports */
+   560		if (cid == transport_g2h->get_local_cid())
+   561			return true;
+   562	
+   563		return false;
+   564	}
+   565	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
