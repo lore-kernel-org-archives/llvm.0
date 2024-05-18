@@ -1,190 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B34715AF1;
-	Sat, 18 May 2024 14:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75BABE49
+	for <llvm@lists.linux.dev>; Sat, 18 May 2024 15:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716043863; cv=none; b=HymTrBNMdSRFyXmNRbZuLWLghuIPXJJno1mz40LYHdrvHqTnCbvlbhAn6GXS/SKtcag4ntaMEwkNzO0zYiiPXK4oeDN/LR5O1JfqH5qXQyNFD2DJvCjXSfzZAaOupDzxAh1JlSY4ZHxRI1NgnKZcVysUZDCXs6iANtKmaaylyGM=
+	t=1716045132; cv=none; b=dk2PT7WriazRbQVgmAOmHz+zdX7uSikk6pcX1lP0fZr6U4rd1ONNCfUt607hUbb+9jAzeCqri7Dhe1MJqAAPj+b2pe+EFHK1ibApOe6DEhCTIETF42ERlePj0hEy8YBM0ZL78fFUB1fejbGSPtmWrsqm1kYllNrmDYpkiz45WSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716043863; c=relaxed/simple;
-	bh=q5tPNws3AwDYs7kJHEm5atSYOH23N45nLi8bdhxydbM=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=rwaRPWlw4YB+2FpTi2D3HPrCXAm1IC/cO1DeoH7coUG5qcuOU7fqwTvL0rlemzAOMwezxxuCbgzq+xzRH86eJK7uWE/3bUAO6zsgm1By9tUdQmOY1pyPJH0vz6ywE0Co7VpmsFl/bqjk51Z/ARPhl7VMkaDLYpr8WNuA5QjbBec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qeoHYAmq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716045132; c=relaxed/simple;
+	bh=h6qMxkjgxNuC3UtDiOpXzCKuAY7nk1RXtkmgs+2/5EM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=qceED70P95Hb1/V70w+XrXniknioTNtCWnLqeoKRthNI9vceEj3k07/7S0WI7/ejFSOIqwIh0uAEtW6zlx+9X+T47g989ia1A0eEZqiRRU7URut1fRMWxUk3hlzqOWmd2sL9Wo2Vcub7bDIBlJfxKx4j/yTJe1QK1VKGfaWc1Bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S5CRwrnj; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qeoHYAmq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 927E9C113CC;
-	Sat, 18 May 2024 14:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716043863;
-	bh=q5tPNws3AwDYs7kJHEm5atSYOH23N45nLi8bdhxydbM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qeoHYAmq2CzcCKxH7WSJm8zlq81y5/+t9u3yI8MAYhBzxajNLCJdk9L74Ru9Y4G/m
-	 yMuMMASgpAOGEwwQwugqLs8EaDpO9iwgu4TQwEveidaxuqRyI7EMfaR3mhWsllUsA5
-	 LIWQRoRs0pdMxUTrGvk77Sqc/aMxPOTr0YMliYzKydJSo5YfNag7XwxdQa0+/fV3Gp
-	 jzBdbs51arVzJlshG6ihh8QPhekPnSfDPPfEmZ07Nv9WjlQQpmHSwXpYNAj9g4ggeI
-	 TGVPVUL763vFwkrtu+kNwlDF52KGx05XkWaAD57GWmDFmflXdGYnR1fuhAA1Iei3co
-	 7RZXR3JkJVn2w==
-Date: Sat, 18 May 2024 23:50:59 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, "Masami Hiramatsu (Google)"
- <mhiramat@kernel.org>, "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: Re: [trace:probes/for-next 17/17] kernel/kprobes.c:1141:24: error:
- a function declaration without a prototype is deprecated in all versions of
- C
-Message-Id: <20240518235059.3c3a0065a9980e8eb09f68b4@kernel.org>
-In-Reply-To: <87eda1pjl4.fsf@oracle.com>
-References: <202405170340.eyEMhYvc-lkp@intel.com>
-	<87eda1pjl4.fsf@oracle.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S5CRwrnj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716045128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FtCDrdPLkssi0eBNqLy8cnF76bomHwI3xmxPflKzX1A=;
+	b=S5CRwrnjtgAox6xAaghoEigsdseCdHBRb2yXU/X6KHppSg8jCsI8Mi5+YaYIH5bWOZLeCi
+	Oe4mx1yGsdmJiGirIaSpVB77IO4L4Uhw2WoLvt/FP5U0BQXjb+rW8w3ZSxFBRa10OO2NJY
+	pbOQrw/haqEwj2VuQDNJ7ch9sj2UMXM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-267-Fo8ZZUQvMwysfstwWvNXyA-1; Sat, 18 May 2024 11:12:07 -0400
+X-MC-Unique: Fo8ZZUQvMwysfstwWvNXyA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5AEF80017F
+	for <llvm@lists.linux.dev>; Sat, 18 May 2024 15:12:06 +0000 (UTC)
+Received: from [172.64.13.32] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AE0CA40105B;
+	Sat, 18 May 2024 15:12:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 12 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 4b377b48)
+Date: Sat, 18 May 2024 15:12:05 -0000
+To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <94415.124051811120700181@us-mta-267.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 16 May 2024 13:50:31 -0700
-Stephen Brennan <stephen.s.brennan@oracle.com> wrote:
+Hi, we tested your kernel and here are the results:
 
-> kernel test robot <lkp@intel.com> writes:
-> > tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace probes/for-next
-> > head:   1a7d0890dd4a502a202aaec792a6c04e6e049547
-> > commit: 1a7d0890dd4a502a202aaec792a6c04e6e049547 [17/17] kprobe/ftrace: bail out if ftrace was killed
-> > config: s390-defconfig (https://download.01.org/0day-ci/archive/20240517/202405170340.eyEMhYvc-lkp@intel.com/config)
-> > compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405170340.eyEMhYvc-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202405170340.eyEMhYvc-lkp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    In file included from kernel/kprobes.c:23:
-> >    In file included from include/linux/kprobes.h:28:
-> >    In file included from include/linux/ftrace.h:13:
-> >    In file included from include/linux/kallsyms.h:13:
-> >    In file included from include/linux/mm.h:2210:
-> >    include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-> >      508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> >          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-> >      509 |                            item];
-> >          |                            ~~~~
-> >    include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-> >      515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> >          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-> >      516 |                            NR_VM_NUMA_EVENT_ITEMS +
-> >          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >    include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-> >      522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> >          |                               ~~~~~~~~~~~ ^ ~~~
-> >    include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-> >      527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> >          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-> >      528 |                            NR_VM_NUMA_EVENT_ITEMS +
-> >          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >    include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-> >      536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> >          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-> >      537 |                            NR_VM_NUMA_EVENT_ITEMS +
-> >          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >>> kernel/kprobes.c:1141:24: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-> >     1141 | void kprobe_ftrace_kill()
-> >          |                        ^
-> >          |                         void
-> >    5 warnings and 1 error generated.
-> 
-> This certainly reads as an error in my patch. I tried to carefully
-> include three declarations:
-> 
-> 1. CONFIG_KPROBES && CONFIG_KPROBES_ON_FTRACE (the extern decl)
-> 2. CONFIG_KPROBES && !CONFIG_KPROBES_ON_FTRACE (a static inline)
-> 3. !CONFIG_KPROBES (a static inline)
-> 
-> To double check, I actually used an ifdef visualizer[1] (written by a
-> coworker) and as far as I can see, I did this correctly...
-> 
-> When I pull probes/for-next and the 0day compiler configuration, I do
-> reproduce the build error.
-> 
-> However, I'm not 100% confident that this is a real error. I ran the
-> build with make V=1, and found the clang build command to build the
-> kernel/kprobes.c command. I replaced the "-c -o kernel/kprobes.o" with
-> "-E", so that I could simply browse the preprocessed source code. I cd
-> into the build directory and do:
-> 
-> $extremely_long_clang_command ... -E $srcdir/kernel/kprobes.o \
->     | grep kprobe_ftrace_kill
-> extern void kprobe_ftrace_kill(void);
-> void kprobe_ftrace_kill()
-> 
-> ---
-> 
-> When I do a GCC cross compile (s390x-linux-gnu-gcc) using the same
-> configuration file, with "W=1 V=1" I do see:
-> 
-> /home/stepbren/repos/linux-upstream/kernel/kprobes.c: In function ‘kprobe_ftrace_kill’:
-> /home/stepbren/repos/linux-upstream/kernel/kprobes.c:1141:6: warning: old-style function definition [-Wold-style-definition]
->  1141 | void kprobe_ftrace_kill()
->       |      ^~~~~~~~~~~~~~~~~~
-> 
-> I'm guessing that what's happening here is that Clang is categorizing
-> the old-style declaration as a different function for which there was no
-> prior declaration. When I add the "void" here, the clang error goes
-> away.
-> 
-> In any case, the warning is right, and I should have used the correct
-> declaration here. The below patch will shut this up. If there's any
-> possibility of improving the error message clang gives us here, it would
-> be appreciated though.
-> 
-> Masami, would you like me to send this to the list, or do you just want
-> to fix up the commit? My apologies for this, I should have run the "make
-> W=1" prior to submission.
-
-Sorry, that is my mistake to missed the issue. Linus alreay fixed the
-error (I confirmed).
-I also forgot to run W=1 build. Let me fix my process.
-
-Thank you,
-
-> 
-> Thanks,
-> Stephen
-> 
-> From 324849fd366b8d2d4367ed2cd6f74621099439e1 Mon Sep 17 00:00:00 2001
-> From: Stephen Brennan <stephen.s.brennan@oracle.com>
-> Date: Thu, 16 May 2024 13:48:32 -0700
-> Subject: [PATCH] kprobes/ftrace: fix old-style function declaration
-> 
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-> ---
->  kernel/kprobes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 166ebf81dc450..4f917bdad1e11 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -1138,7 +1138,7 @@ static int disarm_kprobe_ftrace(struct kprobe *p)
->                 ipmodify ? &kprobe_ipmodify_enabled : &kprobe_ftrace_enabled);
->  }
-> 
-> -void kprobe_ftrace_kill()
-> +void kprobe_ftrace_kill(void)
->  {
->         kprobe_ftrace_disabled = true;
->  }
-> --
-> 2.43.0
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Kernel information:
+    Commit message: kprobe/ftrace: fix build error due to bad function defi=
+nition
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1295796813
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1295796813-x86_64-kernel_upt_37
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1295796813-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9D=8C FAIL generic/100
+                       =E2=9D=8C FAIL generic/123
+                       =E2=9D=8C FAIL generic/590
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [aarch64, ppc64le, s39=
+0x, x86_64]
+                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64 (debug)]
+                Filesystem - Loopdev Sanity [ppc64le]
+                Hardware - Firmware test suite [aarch64]
+                Hardware - pciutils: sanity smoke test [x86_64]
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - net [x86_64]
+                Libkcapi AF_ALG test [aarch64, ppc64le, s390x, x86_64]
+                Memory function: memfd_create [aarch64, s390x, x86_64]
+                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
+_64]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                xfstests - btrfs [x86_64]
+                xfstests - cifsv3.11 [x86_64]
+                xfstests - ext4 [x86_64]
+                xfstests - nfsv4.2 [x86_64]
+                xfstests - xfs [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                Hardware - Firmware test suite [aarch64]
+                Networking cki netfilter test [aarch64, s390x, x86_64]
+                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
+                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                stress: stress-ng - memory [aarch64, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, x86_64]
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [ppc64le, s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
