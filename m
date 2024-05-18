@@ -1,60 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A102E403;
-	Sat, 18 May 2024 12:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2198438FA6;
+	Sat, 18 May 2024 12:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716034576; cv=none; b=NXE3D5PBTdfGcY0bVsULA3aH18wiOkvBYLN5U3/zOWUMkZNWn0GGAukILsS7iVMKIVsN9wpIFvPH9MhbFnkPXC2wZMGZgC736BT2BheOya89tuA4Uzlsl1N5gZMjxLphnyq53Y717i6klwz8yEkyDsOgWoco6U3wnc5FO1cLQak=
+	t=1716036437; cv=none; b=EEKRZIPFx08zwZKaYOetNTDFvTlMw9quso5ATbewfKPCms2uZvp2dSjhTdGgIAOVJKUGcll9aweeP4b4pggkuTyCwz1EFoUdcpVb7Y+YmbSQThTHQnTCX+07bW9f0RHxAH/NSqxE1hwPupEnwOpDWT8+C4ULMCVsyy03XMrNAJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716034576; c=relaxed/simple;
-	bh=ApMVBkDX7lpRgBa4eMTuX771AAamoU3OytuCJ4XWlWc=;
+	s=arc-20240116; t=1716036437; c=relaxed/simple;
+	bh=xuz41WZVIrvTI8jLUziuMNmX+Hum6+huPnqQtG6dkyY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u/ZWECiPRp3+1WVmsZ8HNUqVEGPttqQPPCb/SleT2kfgfUhPoA3Dvvpd45/0F4AR5yekxdK9JD5BThwyzHcYQSIweskFl0piWNSIf91oxt0X71lolPiFfGa2GS1MkaL7bpyHIiGJKApFqgviRaBMBs6DCuWQwi01qC9LWlVUTjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQyVII3S; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTzqeeVIx0Kt8QuzoIN4IfhxjcdWRblb4Pwg6YR3jKpTDFdmpBe/brFYwUkhoCL6de/+9xt8N7B3W/KAk2gdC8+1vwZKRPDvgKOsdNedUIvyWYjZYT6htXd1VZxMG/NdcqC7ZTZTVXOQL+tCUiB7A8Gb1U66YQOiI/GM087XlJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNFswWBp; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQyVII3S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNFswWBp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716034574; x=1747570574;
+  t=1716036435; x=1747572435;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ApMVBkDX7lpRgBa4eMTuX771AAamoU3OytuCJ4XWlWc=;
-  b=LQyVII3S2J7SUd4eJy3+Ll1UBiZ+OPgV4aEy4N2Ptn/ILqrYRs/nuQ3K
-   A+LIGYmR2qfVii9fJ56ZLuNxa0uYZPoYunFXtxONaa9/hktqdFDRSg32L
-   +G13qakMw7yo63xs72GWlez7xdnnii8TqabveP97NxOxQoBy47D9U5UBw
-   zKDfyo+oHHicE+CPPvVpoPRWaenzhG7GbNyIXCHyF57JkMXQtvGhppBFq
-   H9kOLfoBmudAyEomfxd0ODEvRIAGIa8koeSrIVX/B508zrb/uXio1a0DC
-   b3A5X/7YKwXweEQUnB6sIxgDcPHkDAd0F/5th5ugqh4MENwIGxaWFjh/w
-   w==;
-X-CSE-ConnectionGUID: OIQZqmYvQVydMeagLNT02Q==
-X-CSE-MsgGUID: anu0GHtAQJaAjVXjDG/z/g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="12014158"
+  bh=xuz41WZVIrvTI8jLUziuMNmX+Hum6+huPnqQtG6dkyY=;
+  b=mNFswWBp5XEyXEvYe540h80MfMqESEkpZV5RsQId6Icze/krTYQlhtjV
+   mXTint/nUdPiRUxrb9XtDHYQDqK0TQGjSdf/DVja1sp/UZaRtSvMKW53v
+   pDNJjZ2qOlaV5Sl9hGOOoTGL5/2cXJDg1Q0/n14dw0xDJGdqywQtfCheS
+   ope9vOSCTJ9fOeArh7kko3eUnT4qWafR9HpeHMyzsIAUluVjn0VD1q6tH
+   i7WcHfNSSUHSgAYDKxl2y7yZGfIJVMMv5iaLxEGY50HqlYFsWu/lHkupj
+   iRwDjpM0gcng0DR0GANfMWMCsNzTT1j0hbgpZ1aT2EPCzgjNmJjPY2I1n
+   A==;
+X-CSE-ConnectionGUID: O0f/gnFSTRCgzTJxEfD2rA==
+X-CSE-MsgGUID: 40T2vjV8SqeGgT0A0l3OrA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="12327493"
 X-IronPort-AV: E=Sophos;i="6.08,170,1712646000"; 
-   d="scan'208";a="12014158"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2024 05:16:11 -0700
-X-CSE-ConnectionGUID: hjVjS92VS8uiJg4SuSLviw==
-X-CSE-MsgGUID: CxlKV9BQSZikYK7hcXIstQ==
+   d="scan'208";a="12327493"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2024 05:47:14 -0700
+X-CSE-ConnectionGUID: Ve0APK95TRi/NxP2mzGFxg==
+X-CSE-MsgGUID: UcIFWc++TYWmflmWB2VY3A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,170,1712646000"; 
-   d="scan'208";a="31905527"
+   d="scan'208";a="36978443"
 Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 18 May 2024 05:16:09 -0700
+  by orviesa004.jf.intel.com with ESMTP; 18 May 2024 05:47:10 -0700
 Received: from kbuild by 108735ec233b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s8Iyt-0002BS-1s;
-	Sat, 18 May 2024 12:16:07 +0000
-Date: Sat, 18 May 2024 20:15:08 +0800
+	id 1s8JSu-0002CY-0T;
+	Sat, 18 May 2024 12:47:08 +0000
+Date: Sat, 18 May 2024 20:46:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 04/20] mm: Provide mm_struct and address to
- huge_ptep_get()
-Message-ID: <202405181929.XiSN8yVW-lkp@intel.com>
-References: <52ef59b206e8082a173965dee11712c9394f2e83.1715971869.git.christophe.leroy@csgroup.eu>
+To: Christian Marangi <ansuelsmth@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Marangi <ansuelsmth@gmail.com>
+Subject: Re: [PATCH 3/3] leds: leds-lp5569: Add support for Texas Instruments
+ LP5569
+Message-ID: <202405182007.uyC8NXfY-lkp@intel.com>
+References: <20240515143129.31557-3-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,160 +70,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <52ef59b206e8082a173965dee11712c9394f2e83.1715971869.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <20240515143129.31557-3-ansuelsmth@gmail.com>
 
-Hi Christophe,
+Hi Christian,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on powerpc/fixes arm64/for-next/core linus/master v6.9]
-[cannot apply to akpm-mm/mm-everything next-20240517]
+[auto build test ERROR on lee-leds/for-leds-next]
+[also build test ERROR on robh/for-next linus/master v6.9 next-20240517]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/mm-Provide-pagesize-to-pmd_populate/20240518-030701
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/52ef59b206e8082a173965dee11712c9394f2e83.1715971869.git.christophe.leroy%40csgroup.eu
-patch subject: [RFC PATCH v2 04/20] mm: Provide mm_struct and address to huge_ptep_get()
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240518/202405181929.XiSN8yVW-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fa9b1be45088dce1e4b602d451f118128b94237b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240518/202405181929.XiSN8yVW-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/dt-bindings-leds-lp55xx-Add-new-ti-lp5569-compatible/20240515-223434
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+patch link:    https://lore.kernel.org/r/20240515143129.31557-3-ansuelsmth%40gmail.com
+patch subject: [PATCH 3/3] leds: leds-lp5569: Add support for Texas Instruments LP5569
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240518/202405182007.uyC8NXfY-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240518/202405182007.uyC8NXfY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405181929.XiSN8yVW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405182007.uyC8NXfY-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/fs-io.c:4:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/bcachefs/fs-io.c:29:
-   In file included from include/linux/migrate.h:8:
-   In file included from include/linux/hugetlb.h:851:
->> arch/s390/include/asm/hugetlb.h:67:44: error: too few arguments to function call, expected 3, have 1
-      67 |         int changed = !pte_same(huge_ptep_get(ptep), pte);
-         |                                 ~~~~~~~~~~~~~     ^
-   arch/s390/include/asm/hugetlb.h:22:7: note: 'huge_ptep_get' declared here
-      22 | pte_t huge_ptep_get(struct mm_struct *mm, unsigned long addr, pte_t *ptep);
-         |       ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings and 1 error generated.
---
-   In file included from kernel/fork.c:30:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/fork.c:46:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/fork.c:52:
-   In file included from include/linux/hugetlb.h:851:
->> arch/s390/include/asm/hugetlb.h:67:44: error: too few arguments to function call, expected 3, have 1
-      67 |         int changed = !pte_same(huge_ptep_get(ptep), pte);
-         |                                 ~~~~~~~~~~~~~     ^
-   arch/s390/include/asm/hugetlb.h:22:7: note: 'huge_ptep_get' declared here
-      22 | pte_t huge_ptep_get(struct mm_struct *mm, unsigned long addr, pte_t *ptep);
-         |       ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/fork.c:79:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
+   In file included from drivers/leds/leds-lp5569.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      547 |         val = __raw_readb(PCI_IOBASE + addr);
          |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/fork.c:79:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/leds/leds-lp5569.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/fork.c:79:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/leds/leds-lp5569.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      584 |         __raw_writeb(value, PCI_IOBASE + addr);
          |                             ~~~~~~~~~~ ^
@@ -226,250 +166,234 @@ All errors (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   19 warnings and 1 error generated.
---
-   In file included from kernel/sysctl.c:22:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from drivers/leds/leds-lp5569.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
    In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/sysctl.c:35:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>> drivers/leds/leds-lp5569.c:169:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     169 |         val |= FIELD_PREP(LP5569_CP_MODE_MASK, chip->pdata->charge_pump_mode);
+         |                ^
+>> drivers/leds/leds-lp5569.c:195:8: error: call to undeclared function 'FIELD_PREP_CONST'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     195 |         val = LP5569_MODE_LOAD_ENG << LP5569_MODE_ENGn_SHIFT(idx);
+         |               ^
+   drivers/leds/leds-lp5569.c:41:33: note: expanded from macro 'LP5569_MODE_LOAD_ENG'
+      41 | #define   LP5569_MODE_LOAD_ENG          FIELD_PREP_CONST(LP5569_MODE_ENG_MASK, 0x1)
+         |                                         ^
+   drivers/leds/leds-lp5569.c:262:40: error: call to undeclared function 'FIELD_PREP_CONST'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     262 |                 if (LP5569_MODE_ENGn_GET(i, mode) != LP5569_MODE_LOAD_ENG)
          |                                                      ^
-   In file included from kernel/sysctl.c:35:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/sysctl.c:35:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from kernel/sysctl.c:45:
-   In file included from include/linux/hugetlb.h:851:
->> arch/s390/include/asm/hugetlb.h:67:44: error: too few arguments to function call, expected 3, have 1
-      67 |         int changed = !pte_same(huge_ptep_get(ptep), pte);
-         |                                 ~~~~~~~~~~~~~     ^
-   arch/s390/include/asm/hugetlb.h:22:7: note: 'huge_ptep_get' declared here
-      22 | pte_t huge_ptep_get(struct mm_struct *mm, unsigned long addr, pte_t *ptep);
-         |       ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/sysctl.c:53:
-   In file included from include/linux/nfs_fs.h:31:
-   In file included from include/linux/sunrpc/auth.h:13:
-   In file included from include/linux/sunrpc/sched.h:19:
-   include/linux/sunrpc/xdr.h:782:46: warning: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-     782 |         if (U32_MAX >= SIZE_MAX / sizeof(*p) && len > SIZE_MAX / sizeof(*p))
-         |                                                 ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
-   18 warnings and 1 error generated.
---
-   In file included from kernel/kexec_core.c:9:
-   In file included from include/linux/btf.h:8:
-   In file included from include/linux/bpfptr.h:6:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/kexec_core.c:15:
-   In file included from include/linux/kexec.h:20:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/kexec_core.c:15:
-   In file included from include/linux/kexec.h:20:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/kexec_core.c:15:
-   In file included from include/linux/kexec.h:20:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from kernel/kexec_core.c:40:
-   In file included from include/linux/hugetlb.h:851:
->> arch/s390/include/asm/hugetlb.h:67:44: error: too few arguments to function call, expected 3, have 1
-      67 |         int changed = !pte_same(huge_ptep_get(ptep), pte);
-         |                                 ~~~~~~~~~~~~~     ^
-   arch/s390/include/asm/hugetlb.h:22:7: note: 'huge_ptep_get' declared here
-      22 | pte_t huge_ptep_get(struct mm_struct *mm, unsigned long addr, pte_t *ptep);
-         |       ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   17 warnings and 1 error generated.
-..
+   drivers/leds/leds-lp5569.c:41:33: note: expanded from macro 'LP5569_MODE_LOAD_ENG'
+      41 | #define   LP5569_MODE_LOAD_ENG          FIELD_PREP_CONST(LP5569_MODE_ENG_MASK, 0x1)
+         |                                         ^
+>> drivers/leds/leds-lp5569.c:321:11: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     321 |         status = FIELD_GET(LP5569_ENG_STATUS_MASK, status);
+         |                  ^
+   drivers/leds/leds-lp5569.c:601:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     601 |                                  FIELD_PREP(LP5569_CP_MODE_MASK, LP55XX_CP_BOOST),
+         |                                  ^
+   drivers/leds/leds-lp5569.c:696:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     696 |                                  FIELD_PREP(LP5569_CP_MODE_MASK, LP55XX_CP_BYPASS),
+         |                                  ^
+   drivers/leds/leds-lp5569.c:903:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     903 |                 val = FIELD_PREP(LP5569_FADER_MAPPING_MASK, val);
+         |                       ^
+>> drivers/leds/leds-lp5569.c:904:13: error: call to undeclared function 'FIELD_MAX'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     904 |                 if (val > FIELD_MAX(LP5569_FADER_MAPPING_MASK)) {
+         |                           ^
+   drivers/leds/leds-lp5569.c:932:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     932 |                         val = FIELD_PREP(LP5569_FADER_MAPPING_MASK, buf[i] - '0');
+         |                               ^
+   7 warnings and 9 errors generated.
 
 
-vim +67 arch/s390/include/asm/hugetlb.h
+vim +/FIELD_PREP +169 drivers/leds/leds-lp5569.c
 
-53492b1de46a75 include/asm-s390/hugetlb.h      Gerald Schaefer    2008-04-30  62  
-e509861105a3c1 arch/s390/include/asm/hugetlb.h Martin Schwidefsky 2013-07-23  63  static inline int huge_ptep_set_access_flags(struct vm_area_struct *vma,
-e509861105a3c1 arch/s390/include/asm/hugetlb.h Martin Schwidefsky 2013-07-23  64  					     unsigned long addr, pte_t *ptep,
-e509861105a3c1 arch/s390/include/asm/hugetlb.h Martin Schwidefsky 2013-07-23  65  					     pte_t pte, int dirty)
-53492b1de46a75 include/asm-s390/hugetlb.h      Gerald Schaefer    2008-04-30  66  {
-e509861105a3c1 arch/s390/include/asm/hugetlb.h Martin Schwidefsky 2013-07-23 @67  	int changed = !pte_same(huge_ptep_get(ptep), pte);
-e509861105a3c1 arch/s390/include/asm/hugetlb.h Martin Schwidefsky 2013-07-23  68  	if (changed) {
-e509861105a3c1 arch/s390/include/asm/hugetlb.h Martin Schwidefsky 2013-07-23  69  		huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
-935d4f0c6dc8b3 arch/s390/include/asm/hugetlb.h Ryan Roberts       2023-09-22  70  		__set_huge_pte_at(vma->vm_mm, addr, ptep, pte);
-53492b1de46a75 include/asm-s390/hugetlb.h      Gerald Schaefer    2008-04-30  71  	}
-e509861105a3c1 arch/s390/include/asm/hugetlb.h Martin Schwidefsky 2013-07-23  72  	return changed;
-53492b1de46a75 include/asm-s390/hugetlb.h      Gerald Schaefer    2008-04-30  73  }
-53492b1de46a75 include/asm-s390/hugetlb.h      Gerald Schaefer    2008-04-30  74  
+   155	
+   156	static int lp5569_post_init_device(struct lp55xx_chip *chip)
+   157	{
+   158		int ret;
+   159		int val;
+   160	
+   161		ret = lp55xx_write(chip, LP5569_REG_ENABLE, LP5569_ENABLE);
+   162		if (ret)
+   163			return ret;
+   164	
+   165		/* Chip startup time is 500 us, 1 - 2 ms gives some margin */
+   166		usleep_range(1000, 2000);
+   167	
+   168		val = LP5569_DEFAULT_CONFIG;
+ > 169		val |= FIELD_PREP(LP5569_CP_MODE_MASK, chip->pdata->charge_pump_mode);
+   170	
+   171		if (chip->pdata->clock_mode == LP55XX_CLOCK_INT)
+   172			val |= LP5569_INTERNAL_CLK;
+   173	
+   174		ret = lp55xx_write(chip, LP5569_REG_MISC, val);
+   175		if (ret)
+   176			return ret;
+   177	
+   178		if (chip->pdata->clock_mode == LP55XX_CLOCK_INT) {
+   179			ret = lp55xx_update_bits(chip, LP5569_REG_IO_CONTROL,
+   180						 LP5569_CLK_OUTPUT,
+   181						 LP5569_CLK_OUTPUT);
+   182			if (ret)
+   183				return ret;
+   184		}
+   185	
+   186		return lp5569_init_program_engine(chip);
+   187	}
+   188	
+   189	static void lp5569_load_engine(struct lp55xx_chip *chip)
+   190	{
+   191		enum lp55xx_engine_index idx = chip->engine_idx;
+   192		u8 mask, val;
+   193	
+   194		mask = LP5569_MODE_ENGn_MASK(idx);
+ > 195		val = LP5569_MODE_LOAD_ENG << LP5569_MODE_ENGn_SHIFT(idx);
+   196	
+   197		lp55xx_update_bits(chip, LP5569_REG_OP_MODE, mask, val);
+   198	
+   199		lp5569_wait_opmode_done();
+   200	}
+   201	
+   202	static void lp5569_load_engine_and_select_page(struct lp55xx_chip *chip)
+   203	{
+   204		enum lp55xx_engine_index idx = chip->engine_idx;
+   205	
+   206		lp5569_load_engine(chip);
+   207	
+   208		lp55xx_write(chip, LP5569_REG_PROG_PAGE_SEL, LP5569_PAGE_ENG(idx));
+   209	}
+   210	
+   211	static void lp5569_stop_all_engines(struct lp55xx_chip *chip)
+   212	{
+   213		lp55xx_write(chip, LP5569_REG_OP_MODE, 0);
+   214		lp5569_wait_opmode_done();
+   215	}
+   216	
+   217	static void lp5569_stop_engine(struct lp55xx_chip *chip)
+   218	{
+   219		enum lp55xx_engine_index idx = chip->engine_idx;
+   220	
+   221		lp55xx_update_bits(chip, LP5569_REG_OP_MODE, LP5569_MODE_ENGn_MASK(idx), 0);
+   222	
+   223		lp5569_wait_opmode_done();
+   224	}
+   225	
+   226	static void lp5569_turn_off_channels(struct lp55xx_chip *chip)
+   227	{
+   228		int i;
+   229	
+   230		for (i = 0; i < LP5569_MAX_LEDS; i++)
+   231			lp55xx_write(chip, LP5569_REG_LED_PWM_BASE + i, 0);
+   232	}
+   233	
+   234	static void lp5569_run_engine(struct lp55xx_chip *chip, bool start)
+   235	{
+   236		int i, ret;
+   237		u8 mode;
+   238		u8 exec;
+   239	
+   240		/* stop engine */
+   241		if (!start) {
+   242			lp5569_stop_engine(chip);
+   243			lp5569_turn_off_channels(chip);
+   244			return;
+   245		}
+   246	
+   247		/*
+   248		 * To run the engine,
+   249		 * operation mode and enable register should updated at the same time
+   250		 */
+   251	
+   252		ret = lp55xx_read(chip, LP5569_REG_OP_MODE, &mode);
+   253		if (ret)
+   254			return;
+   255	
+   256		ret = lp55xx_read(chip, LP5569_REG_EXEC_CTRL, &exec);
+   257		if (ret)
+   258			return;
+   259	
+   260		/* change operation mode to RUN only when each engine is loading */
+   261		for (i = LP55XX_ENGINE_1; i <= LP55XX_ENGINE_3; i++) {
+   262			if (LP5569_MODE_ENGn_GET(i, mode) != LP5569_MODE_LOAD_ENG)
+   263				continue;
+   264	
+   265			mode &= ~LP5569_MODE_ENGn_MASK(i);
+   266			mode |= LP5569_MODE_RUN_ENG << LP5569_MODE_ENGn_SHIFT(i);
+   267			exec &= ~LP5569_EXEC_ENGn_MASK(i);
+   268			exec |= LP5569_EXEC_RUN_ENG << LP5569_EXEC_ENGn_SHIFT(i);
+   269		}
+   270	
+   271		lp55xx_write(chip, LP5569_REG_OP_MODE, mode);
+   272		lp5569_wait_opmode_done();
+   273	
+   274		lp55xx_write(chip, LP5569_REG_EXEC_CTRL, exec);
+   275	}
+   276	
+   277	static int lp5569_init_program_engine(struct lp55xx_chip *chip)
+   278	{
+   279		int i;
+   280		int j;
+   281		int ret;
+   282		u8 status;
+   283		/* one pattern per engine setting LED MUX start and stop addresses */
+   284		static const u8 pattern[][LP5569_PROGRAM_LENGTH] =  {
+   285			{ 0x9c, LP5569_ENG1_MUX_ADDR, 0x9c, 0xb0, 0x9d, 0x80, 0xd8, 0x00, 0},
+   286			{ 0x9c, LP5569_ENG2_MUX_ADDR, 0x9c, 0xc0, 0x9d, 0x80, 0xd8, 0x00, 0},
+   287			{ 0x9c, LP5569_ENG3_MUX_ADDR, 0x9c, 0xd0, 0x9d, 0x80, 0xd8, 0x00, 0},
+   288		};
+   289	
+   290		/* hardcode 32 bytes of memory for each engine from program memory */
+   291		ret = lp55xx_write(chip, LP5569_REG_CH1_PROG_START, LP5569_ENG1_PROG_ADDR);
+   292		if (ret)
+   293			return ret;
+   294	
+   295		ret = lp55xx_write(chip, LP5569_REG_CH2_PROG_START, LP5569_ENG2_PROG_ADDR);
+   296		if (ret)
+   297			return ret;
+   298	
+   299		ret = lp55xx_write(chip, LP5569_REG_CH3_PROG_START, LP5569_ENG3_PROG_ADDR);
+   300		if (ret)
+   301			return ret;
+   302	
+   303		/* write LED MUX address space for each engine */
+   304		for (i = LP55XX_ENGINE_1; i <= LP55XX_ENGINE_3; i++) {
+   305			chip->engine_idx = i;
+   306			lp5569_load_engine_and_select_page(chip);
+   307	
+   308			for (j = 0; j < LP5569_PROGRAM_LENGTH; j++) {
+   309				ret = lp55xx_write(chip, LP5569_REG_PROG_MEM + j,
+   310						   pattern[i - 1][j]);
+   311				if (ret)
+   312					goto out;
+   313			}
+   314		}
+   315	
+   316		lp5569_run_engine(chip, true);
+   317	
+   318		/* Let the programs run for couple of ms and check the engine status */
+   319		usleep_range(3000, 6000);
+   320		lp55xx_read(chip, LP5569_REG_STATUS, &status);
+ > 321		status = FIELD_GET(LP5569_ENG_STATUS_MASK, status);
+   322	
+   323		if (status != LP5569_ENG_STATUS_MASK) {
+   324			dev_err(&chip->cl->dev,
+   325				"could not configure LED engine, status = 0x%.2x\n",
+   326				status);
+   327			ret = -1;
+   328		}
+   329	
+   330	out:
+   331		lp5569_stop_all_engines(chip);
+   332		return ret;
+   333	}
+   334	
 
 -- 
 0-DAY CI Kernel Test Service
