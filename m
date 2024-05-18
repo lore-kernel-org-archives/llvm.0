@@ -1,245 +1,104 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0421BBE49
-	for <llvm@lists.linux.dev>; Sat, 18 May 2024 15:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463DD1E52A
+	for <llvm@lists.linux.dev>; Sat, 18 May 2024 15:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716045197; cv=none; b=gzcYK7E4rBr+ST8/g7/ogU2SzoEpFQz8Ho9K/PxfATY4Gnr4H+2hrOgWxwjoKWP0Adsn2ey71yS7SKzUWqlCxZgD7Uvlpa0pGPZ+grleGohD+7NTq/SiSfNwqyPDY8g3Qzaxz7Q4a4pyxL4XOm+HthXfS9B0ML5+tHSkYRYaSNM=
+	t=1716046929; cv=none; b=CB1+1KGZkRfFpL14RaoQy9vR3H5CzI3wlJ+BYxoXAa//ixn2S3MsT3dVMuJPtEnxMIOpyuKBKO806lOca3gTiTUczMa1tBAsx+Z65h9rHUQCpGtF+tBjBhVBXM7yA5iln1SPZJJ/4y+vXEckoikXANlpj43jg/C5N4zQpiDwhoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716045197; c=relaxed/simple;
-	bh=WofiJK5CSW6n6gwWwmwbsqBMufrTrY1blOq2uVCWn5I=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=EuXra5ZF/TmxmVpPkog22kffkRxphS0YV76Lzjhne/zd9tgIr20KnpL11zPOaFx0HQ3Fam7v77iN2lHBD0d19aPFab3lNYJ0zMomIyXwXceAMwE9WOAUWMr7Lr9KQ92rWyxqPwFNnbR5CLiQXiTIfqOwd5DFEkPfzWFCw6s0oXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YJLOGV3t; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YJLOGV3t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716045193;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NUp48UdcrYa7IEGcPXnuH+NmsllaxbWnAqDXmfbc0aA=;
-	b=YJLOGV3tFjWBsALyE69VWUG3Ye2x4SrirmaZoVXW8diYNV3JbZZcgi30ZJ+HsIYdzPPKOJ
-	KOMmVaIZvt9do2TXnFmCCthL3WBn6lUON3463910ayuPI2ywZW1fRXAQPRaKC1Q+pC/4Y4
-	Tg0VTUfr+P3OtIAzD+ZWcEZMMnHNHYA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-280-_kYTwMI9MCuyQuE5vTGZAg-1; Sat, 18 May 2024 11:13:10 -0400
-X-MC-Unique: _kYTwMI9MCuyQuE5vTGZAg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7307F800281
-	for <llvm@lists.linux.dev>; Sat, 18 May 2024 15:13:10 +0000 (UTC)
-Received: from [172.64.13.32] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 271F7C15BB9;
-	Sat, 18 May 2024 15:13:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 204): Test report for master
- (6.9.0, mainline.kernel.org-clang, 7ee332c9)
-Date: Sat, 18 May 2024 15:13:10 -0000
-To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
+	s=arc-20240116; t=1716046929; c=relaxed/simple;
+	bh=KEiRFn1zMsvA/RzSGsTpNHMl4lP5BT6qwK22Hk4Utow=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=kjgt/HKO8Ejzr7zzwYvvl8QaExQJ0/WamU7IpBSMVI3hT72Z5qGhFspJ2e73SCOJp4MGL+UZQOAxRvDUl8L+RYPA9n7NXwUp5fF2gPJRr8zQWzdo5ZFArpb+uARKjvdh6HlR76u0R55cVsGxK6XBeqk1ibuGeaB80uLMOZqXO/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-8-4PZfaOVqP-eUYUtpx8xdag-1; Sat, 18 May 2024 16:40:13 +0100
+X-MC-Unique: 4PZfaOVqP-eUYUtpx8xdag-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 18 May
+ 2024 16:39:41 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 18 May 2024 16:39:41 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Dan Carpenter' <dan.carpenter@linaro.org>, Kees Cook
+	<keescook@chromium.org>
+CC: Linus Torvalds <torvalds@linux-foundation.org>, Justin Stitt
+	<justinstitt@google.com>, Peter Zijlstra <peterz@infradead.org>, Mark Rutland
+	<mark.rutland@arm.com>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [RFC] Mitigating unexpected arithmetic overflow
+Thread-Topic: [RFC] Mitigating unexpected arithmetic overflow
+Thread-Index: AQHapdsGNoLb3Ne/oEmjTsfdfTDWz7GdI4ug
+Date: Sat, 18 May 2024 15:39:41 +0000
+Message-ID: <d95664b24ec94436b6cf906fefcc0b4f@AcuMS.aculab.com>
+References: <202404291502.612E0A10@keescook>
+ <039d54d6-8aa2-4e5b-829b-69002cff35d3@moroto.mountain>
+ <202405131203.F7B97F5E38@keescook>
+ <0480d602-3ad7-4f8e-a480-9860d56eab30@suswa.mountain>
+In-Reply-To: <0480d602-3ad7-4f8e-a480-9860d56eab30@suswa.mountain>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
-Message-Id: <09781.124051811131000307@us-mta-280.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'parisc-for-6.10-1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/deller/parisc-linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1295525991
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1295525991-x86_64-kernel_upt_37
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1295525991-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9D=8C FAIL generic/100
-                       =E2=9D=8C FAIL generic/123
-                       =E2=9D=8C FAIL generic/246
-                       =E2=9D=8C FAIL generic/248
-                       =E2=9D=8C FAIL generic/249
-                       =E2=9D=8C FAIL generic/257
-                       =E2=9D=8C FAIL generic/308
-                       =E2=9D=8C FAIL generic/309
-                       =E2=9D=8C FAIL generic/310
-                       =E2=9D=8C FAIL generic/339
-                       =E2=9D=8C FAIL generic/360
-                       =E2=9D=8C FAIL generic/406
-                       =E2=9D=8C FAIL generic/412
-                       =E2=9D=8C FAIL generic/420
-                       =E2=9D=8C FAIL generic/428
-                       =E2=9D=8C FAIL generic/433
-                       =E2=9D=8C FAIL generic/437
-                       =E2=9D=8C FAIL generic/439
-                       =E2=9D=8C FAIL generic/443
-                       =E2=9D=8C FAIL generic/446
-                       =E2=9D=8C FAIL generic/451
-                       =E2=9D=8C FAIL generic/452
-                       =E2=9D=8C FAIL generic/460
-                       =E2=9D=8C FAIL generic/524
-                       =E2=9D=8C FAIL generic/532
-                       =E2=9D=8C FAIL generic/565
-                       =E2=9D=8C FAIL generic/567
-                       =E2=9D=8C FAIL generic/590
-        xfstests - nfsv4.2
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1295525991-x86_64-kernel-debug_upt_31
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
- scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
-:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [aarch64, ppc64le, s39=
-0x, x86_64]
-                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64 (debug)]
-                Hardware - Firmware test suite [aarch64]
-                Hardware - pciutils: sanity smoke test [x86_64]
-                kselftests upstream - bpf [x86_64]
-                kselftests upstream - net [x86_64]
-                Libkcapi AF_ALG test [aarch64, ppc64le, s390x, x86_64]
-                Memory function: memfd_create [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Reboot test [aarch64, ppc64le, s390x, x86_64]
-                stress: stress-ng - cpu-cache [aarch64, x86_64]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - cifsv3.11 [x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - nfsv4.2 [x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, x86_64]
-        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
-d, map_write access on the bpf labeled init_t.
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
-            Affected tests:
-                Hardware - Firmware test suite [aarch64]
-                Networking cki netfilter test [aarch64, s390x, x86_64]
-                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
-                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
-                Storage - blktests - blk - upstream [aarch64, x86_64]
-                stress: stress-ng - cpu-cache [aarch64, x86_64]
-                stress: stress-ng - memory [aarch64, x86_64]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+RnJvbTogRGFuIENhcnBlbnRlcg0KPiBTZW50OiAxNCBNYXkgMjAyNCAwOTo0NQ0KPiANCj4gU25p
+cHBlZCBhbGwgdGhlIGJpdHMgd2hlcmUgeW91IGFyZSBjbGVhcmx5IGNvcnJlY3QuDQo+IA0KPiBP
+biBNb24sIE1heSAxMywgMjAyNCBhdCAxMjo0MzozN1BNIC0wNzAwLCBLZWVzIENvb2sgd3JvdGU6
+DQo+ID4gPiBkcml2ZXJzL3VzYi9jbGFzcy91c2J0bWMuYzo4NTIgdXNidG1jX2dlbmVyaWNfcmVh
+ZCgpIHdhcm46IHBvdGVudGlhbCBpbnRlZ2VyIG92ZXJmbG93IGZyb20gdXNlcg0KPiAnbWF4X3Ry
+YW5zZmVyX3NpemUgKyAxJw0KPiA+ID4gICAgODQyICAgICAgICAgICAgICAgICAgICogd01heFBh
+Y2tldFNpemUg4oCTIDEpIHRvIGF2b2lkIHNlbmRpbmcgYSB6ZXJvLWxlbmd0aA0KPiA+ID4gICAg
+ODQzICAgICAgICAgICAgICAgICAgICogcGFja2V0DQo+ID4gPiAgICA4NDQgICAgICAgICAgICAg
+ICAgICAgKi8NCj4gPiA+ICAgIDg0NSAgICAgICAgICAgICAgICAgIHJlbWFpbmluZyA9IHRyYW5z
+ZmVyX3NpemU7DQo+ID4gPiAgICA4NDYgICAgICAgICAgICAgICAgICBpZiAoKG1heF90cmFuc2Zl
+cl9zaXplICUgZGF0YS0+d01heFBhY2tldFNpemUpID09IDApDQo+ID4gPiAgICA4NDcgICAgICAg
+ICAgICAgICAgICAgICAgICAgIG1heF90cmFuc2Zlcl9zaXplICs9IChkYXRhLT53TWF4UGFja2V0
+U2l6ZSAtIDEpOw0KPiA+ID4gICAgODQ4ICAgICAgICAgIH0gZWxzZSB7DQo+ID4gPiAgICA4NDkg
+ICAgICAgICAgICAgICAgICAvKiByb3VuZCBkb3duIHRvIGJ1ZnNpemUgdG8gYXZvaWQgdHJ1bmNh
+dGVkIGRhdGEgbGVmdCAqLw0KPiA+ID4gICAgODUwICAgICAgICAgICAgICAgICAgaWYgKG1heF90
+cmFuc2Zlcl9zaXplID4gYnVmc2l6ZSkgew0KPiA+ID4gICAgODUxICAgICAgICAgICAgICAgICAg
+ICAgICAgICBtYXhfdHJhbnNmZXJfc2l6ZSA9DQo+ID4gPiAgICA4NTIgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgcm91bmR1cChtYXhfdHJhbnNmZXJfc2l6ZSArIDEgLSBidWZzaXpl
+LA0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+Xl5eXl5eXl5eXl5eXl5eXl5eXl5eDQo+ID4gPiBUaGlzIGNhbiBvdmVyZmxvdy4gIFdlIHNob3Vs
+ZCBtYWtlIGl0IGEgcnVsZSB0aGF0IGFsbCBzaXplIHZhcmlhYmxlcw0KPiA+ID4gaGF2ZSB0byBi
+ZSB1bnNpZ25lZCBsb25nLiAgVGhhdCB3b3VsZCBoYXZlIG1hZGUgdGhpcyBzYWZlIG9uIDY0IGJp
+dA0KPiA+ID4gc3lzdGVtcy4NCj4gPiA+DQo+ID4gPiAgICA4NTMgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBidWZzaXplKTsNCj4gPiA+ICAgIDg1NCAgICAgICAgICAg
+ICAgICAgIH0NCj4gPiA+ICAgIDg1NSAgICAgICAgICAgICAgICAgIHJlbWFpbmluZyA9IG1heF90
+cmFuc2Zlcl9zaXplOw0KPiA+DQo+ID4gQWdhaW4sIGRvIHdlIF93YW50XyB0aGlzIHRvIG92ZXJm
+bG93PyBJdCBsb29rcyBsaWtlIG5vdC4gSSdtIG5vdCBzdXJlDQo+ID4gd2hhdCB0aGlzIGNvZGUg
+aXMgdHJ5aW5nIHRvIGRvLCB0aG91Z2guIFRoZSBjb21tZW50IGRvZXNuJ3Qgc2VlbSB0bw0KPiA+
+IG1hdGNoIHRoZSBjb2RlLiBXaHkgaXNuJ3QgdGhpcyBqdXN0IHJvdW5kdXAobWF4X3RyYW5zZmVy
+X3NpemUsIGJ1ZnNpemUpID8NCj4gPg0KDQpJc24ndCBpdCBqdXN0IG1heF90cmFuc2Zlcl9zaXpl
+IC8gYnVmc2l6ZSAqIGJ1ZnNpemU/DQoNCj4gcm91bmR1cCgpIGhhcyBhbiBpbnRlZ2VyIG92ZXJm
+bG93IGluIGl0Lg0KDQpXaGljaCBpcyBhIGdlbmVyaWMgcHJvYmxlbSB3aXRoIHRoZXNlICdoZWxw
+ZXJzJy4NCklmIHRoZSBmdW5jdGlvbiBpcyBvcGVuIGNvZGVkIGFueSBvdmVyZmxvdyBpcyBvYnZp
+b3VzLg0KQnV0IGhpZGUgaXQgaW4gYSB3cmFwcGVyIGFuZCBpdCBpcyBqdXN0ICdhc3N1bWVkIHRv
+IHdvcmsnLg0KRElWX1JPVU5EVVAoeCwgeSkgY2FuIGJlIGVpdGhlciAoeCArIHkgLSAxKS95IG9y
+ICh4IC0gMSkveSArIDEuDQpUaGUgZmlyc3QgaXMgdmFsaWQgZm9yIDAgYnV0IGNhbiBvdmVyZmxv
+dywgdGhlIHNlY29uZCBpcyB2YWxpZCBmb3IgeCAhPSAwLg0KKFdobyBrbm93cyB3aGF0IGlzIGV4
+cGVjdGVkIGZvciBuZWdhdGl2ZSB2YWx1ZXMhKQ0KSW4gbW9zdCBwbGFjZXMgb25lIG9mIHRoZSBw
+YWlyIHdpbGwgYWx3YXlzIGJlIGNvcnJlY3QuDQoNCk9iZnVzY2F0aW5nIHRoZSBjb2RlIHRlbmQg
+dG8gc3RvcCByZWFkZXJzIChhbmQgdGhlIGtlcm5lbCBjb2RlIGRvZXMgZ2V0IHNvbWUpDQpzcG90
+dGluZyB0aGluZ3MgaW4gcGFzc2luZy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
+cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
+MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
