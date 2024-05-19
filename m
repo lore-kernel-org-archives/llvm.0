@@ -1,67 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBCF6CDCA;
-	Sun, 19 May 2024 18:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE2B4E1CE;
+	Sun, 19 May 2024 20:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716144068; cv=none; b=txym2ZSYUddaZJQvxRFZj74tkxurvcCvALrjnpx2AYYt0NEJYZrIlCf3gt+0BBMHO3z7oUnNfodZrtggYDamIkqWGkaXuNBxPhL5bpCrBPP5Ero5kC1Pr9aVLLSC/IZSoTzWrsPNkLyfrG5t/FZbBEyUaTLwPIW4F+92HDPl3bo=
+	t=1716150971; cv=none; b=Ul0+1rwMKNcYHUq34Vlwz5epzpZBHKBMEyRpWgwXa/125L4Qdd+C0WFXVA6a8pb/H4IfEi0y2UDot5NmgclV56vbWhdEKBaNLXur2clsDGicE1nFYHDjFGEtiihvfWo5mjhEmQ7PkudnUZRNAtL32dvXTfqHpCJ7iox4wBku+rI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716144068; c=relaxed/simple;
-	bh=KhwAmAPou2kkv7BTGP/ipZ+kQymSAtsihPeeYZuhSVs=;
+	s=arc-20240116; t=1716150971; c=relaxed/simple;
+	bh=PvchwwyHop/XcvwdlyaD/GxovOSOTuEM6HwG18aSwr4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DKpDEgXZwTdIj8PioLgcI0ba4jLOQMgxijNlvCdBFEFp951m20ajKmRU4UKZrEozuP/xYZ+fe0vYuNyEMS36P1X/UIeoNl0v6J0tffHB27pg5GokTb93+TE4QPGuBUuZwM3AJXf9gwUIp75cBMEBi9hMwNd2Afy06gDeT32iBzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DYfC+oa1; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=jYuMF2jvV9rQtI/YqPNUpY/88xhQ3GC1Y5WRiNU5ToGdx/HU5zGRBvQDbyzt0y3fNbTUTog/FlBRfMtH2SLzNCXZNysJjxROM2hrwA/5Qzp1zvLUgirjxLXVz2T+Reem2Ti/w2jDt1Vp8CvjAtEkPJUq8Mx/CdmcCe0QkZAvF24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZnLdR+QN; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DYfC+oa1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZnLdR+QN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716144066; x=1747680066;
+  t=1716150969; x=1747686969;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KhwAmAPou2kkv7BTGP/ipZ+kQymSAtsihPeeYZuhSVs=;
-  b=DYfC+oa1/mJ/tohADpzc5rzqC9oZV4zYJr5FT8fEv1Dk+KK0AVy9PKAC
-   b8EN1uac30oZRLYlJriUbn3V6dN17joZ7e8XwWcMmycySm9TIqeaZXprR
-   b4qcDIfcySULGRcsYVcN5HL8MAlke66BqxhSFFog0PAV+y51RcPxZRYHX
-   lBydG7Rdwe/9rKOyT+SzSs9N6BAmi9/z+MpIXpeS0sqrCWf5P29qDXSzA
-   yTXN6bO6VWOxehai/wJS9FcMs2jqNY6JIbyxm6XzgFMU7kakOQsv6/T/M
-   FUDY6fIinNenKeJN8B/muShWeFjs5fP/n2aNXaytUNEmc1aG0HGuEVoE4
+  bh=PvchwwyHop/XcvwdlyaD/GxovOSOTuEM6HwG18aSwr4=;
+  b=ZnLdR+QNpIzU0DSGwznHv8vy7I6bqey3jn3jGQYj/r3FLZgmoA9Bs0s6
+   Y3o+jmEkwN7CkOAgyjfyAD8wv3kGJ4KmMcmgVZXs8weBz+KI908cKMJdA
+   3KgiX864D6xrFYyQci8jSj0HA9yBtOvTATLer5VuYqMYzAIrKSy8yKImH
+   X/QvYt6hQsxzT3Dm6nf62q08NdmwQYfjXTV1S/DV6ApKo7grTtDpLWRu3
+   oHGBC2OWQwU8kDhAWjt2GRcQC4pCqVfFU/DO2sU8qaDn6t1ljJjC7FvA5
+   XNpkpqz/tBQ3bowqI1QmtN+149vMAAdyJE/jkjN228S1pJ/70B2RJXCij
    w==;
-X-CSE-ConnectionGUID: tUZZYGxvRHGlxVZU5dxIFw==
-X-CSE-MsgGUID: UVwl7wBWQBq7g+kRB7x4pA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11077"; a="15210591"
+X-CSE-ConnectionGUID: kakNuPCZSfSeyYIoR/mfPg==
+X-CSE-MsgGUID: 0zYsefHLSRGTcgBQofxdfg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11077"; a="23412067"
 X-IronPort-AV: E=Sophos;i="6.08,173,1712646000"; 
-   d="scan'208";a="15210591"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2024 11:41:05 -0700
-X-CSE-ConnectionGUID: qLgz2vTSTBCLpNIiEA+ppQ==
-X-CSE-MsgGUID: u+JH4vW5TYW7ga04PS5/4A==
+   d="scan'208";a="23412067"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2024 13:36:09 -0700
+X-CSE-ConnectionGUID: hAuS7mItQAGZRzMpvNwHeg==
+X-CSE-MsgGUID: DNMCxiFmSyuh2hG4uII5KA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,173,1712646000"; 
-   d="scan'208";a="37243342"
+   d="scan'208";a="63150766"
 Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 19 May 2024 11:40:59 -0700
+  by orviesa002.jf.intel.com with ESMTP; 19 May 2024 13:36:07 -0700
 Received: from kbuild by 108735ec233b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s8lSq-00045c-2r;
-	Sun, 19 May 2024 18:40:56 +0000
-Date: Mon, 20 May 2024 02:40:28 +0800
+	id 1s8nGG-0004Au-1Q;
+	Sun, 19 May 2024 20:36:04 +0000
+Date: Mon, 20 May 2024 04:35:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Baojun Xu <baojun.xu@ti.com>, tiwai@suse.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
-	andriy.shevchenko@linux.intel.com, lgirdwood@gmail.com,
-	perex@perex.cz, pierre-louis.bossart@linux.intel.com,
-	kevin-lu@ti.com, shenghao-ding@ti.com, navada@ti.com,
-	13916275206@139.com, v-po@ti.com, niranjan.hy@ti.com,
-	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-	liam.r.girdwood@intel.com, yung-chuan.liao@linux.intel.com,
-	baojun.xu@ti.com, broonie@kernel.org, soyer@irl.hu
-Subject: Re: [PATCH v5 1/1] ALSA: hda/tas2781: Add tas2781 hda driver based
- on SPI
-Message-ID: <202405200222.TIIew7S6-lkp@intel.com>
-References: <20240519150433.760-2-baojun.xu@ti.com>
+To: egyszeregy@freemail.hu, broonie@kernel.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Benjamin =?utf-8?B?U3rFkWtl?= <egyszeregy@freemail.hu>
+Subject: Re: [PATCH] spidev: Introduce "linux,spidev-name" property for
+ device tree of spidev.
+Message-ID: <202405200406.PHvbYk5Z-lkp@intel.com>
+References: <20240519181039.23147-1-egyszeregy@freemail.hu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,153 +65,125 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240519150433.760-2-baojun.xu@ti.com>
+In-Reply-To: <20240519181039.23147-1-egyszeregy@freemail.hu>
 
-Hi Baojun,
+Hi,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on tiwai-sound/for-linus rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.9 next-20240517]
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on linus/master v6.9 next-20240517]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baojun-Xu/ALSA-hda-tas2781-Add-tas2781-hda-driver-based-on-SPI/20240519-230843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20240519150433.760-2-baojun.xu%40ti.com
-patch subject: [PATCH v5 1/1] ALSA: hda/tas2781: Add tas2781 hda driver based on SPI
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240520/202405200222.TIIew7S6-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240520/202405200222.TIIew7S6-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/egyszeregy-freemail-hu/spidev-Introduce-linux-spidev-name-property-for-device-tree-of-spidev/20240520-021957
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20240519181039.23147-1-egyszeregy%40freemail.hu
+patch subject: [PATCH] spidev: Introduce "linux,spidev-name" property for device tree of spidev.
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240520/202405200406.PHvbYk5Z-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240520/202405200406.PHvbYk5Z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405200222.TIIew7S6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405200406.PHvbYk5Z-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/pci/hda/tas2781_spi_fwlib.c:1225:11: warning: result of comparison of constant 13656 with expression of type 'unsigned char' is always false [-Wtautological-constant-out-of-range-compare]
-    1225 |             (reg == TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG)) &&
-         |              ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> sound/pci/hda/tas2781_spi_fwlib.c:1281:11: warning: result of comparison of constant 13660 with expression of type 'unsigned char' is always true [-Wtautological-constant-out-of-range-compare]
-    1281 |             (reg <= (TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG) + 4)))
-         |              ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/pci/hda/tas2781_spi_fwlib.c:1280:11: warning: result of comparison of constant 13656 with expression of type 'unsigned char' is always false [-Wtautological-constant-out-of-range-compare]
-    1280 |             (reg >= TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG)) &&
-         |              ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/pci/hda/tas2781_spi_fwlib.c:2112:3: warning: variable 'status' is uninitialized when used here [-Wuninitialized]
-    2112 |                 status++;
-         |                 ^~~~~~
-   sound/pci/hda/tas2781_spi_fwlib.c:2050:12: note: initialize the variable 'status' to silence this warning
-    2050 |         int status;
-         |                   ^
-         |                    = 0
-   4 warnings generated.
+>> drivers/spi/spidev.c:812:24: error: passing 'const struct class' to parameter of incompatible type 'const struct class *'; take the address with &
+                           dev = device_create(spidev_class, &spi->dev, spidev->devt,
+                                               ^~~~~~~~~~~~
+                                               &
+   include/linux/device.h:1175:35: note: passing argument to parameter 'cls' here
+   device_create(const struct class *cls, struct device *parent, dev_t devt,
+                                     ^
+   drivers/spi/spidev.c:816:24: error: passing 'const struct class' to parameter of incompatible type 'const struct class *'; take the address with &
+                           dev = device_create(spidev_class, &spi->dev, spidev->devt,
+                                               ^~~~~~~~~~~~
+                                               &
+   include/linux/device.h:1175:35: note: passing argument to parameter 'cls' here
+   device_create(const struct class *cls, struct device *parent, dev_t devt,
+                                     ^
+   2 errors generated.
 
 
-vim +1225 sound/pci/hda/tas2781_spi_fwlib.c
+vim +812 drivers/spi/spidev.c
 
-  1206	
-  1207	static int tasdev_multibytes_chksum(struct tasdevice_priv *tasdevice,
-  1208		unsigned char book, unsigned char page,
-  1209		unsigned char reg, unsigned int len)
-  1210	{
-  1211		struct tas_crc crc_data;
-  1212		unsigned char crc_chksum = 0;
-  1213		unsigned char nBuf1[128];
-  1214		int ret = 0, i;
-  1215		bool in;
-  1216	
-  1217		if ((reg + len - 1) > 127) {
-  1218			ret = -EINVAL;
-  1219			dev_err(tasdevice->dev, "firmware error\n");
-  1220			goto end;
-  1221		}
-  1222	
-  1223		if ((book == TASDEVICE_BOOK_ID(TAS2781_SA_COEFF_SWAP_REG)) &&
-  1224		    (page == TASDEVICE_PAGE_ID(TAS2781_SA_COEFF_SWAP_REG)) &&
-> 1225		    (reg == TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG)) &&
-  1226		    (len == 4)) {
-  1227			/* DSP swap command, pass */
-  1228			ret = 0;
-  1229			goto end;
-  1230		}
-  1231	
-  1232		in = check_yram(&crc_data, book, page, reg, len);
-  1233		if (!in)
-  1234			goto end;
-  1235	
-  1236		if (len == 1) {
-  1237			dev_err(tasdevice->dev, "firmware error\n");
-  1238			ret = -EINVAL;
-  1239			goto end;
-  1240		}
-  1241	
-  1242		ret = tasdevice_spi_dev_bulk_read(tasdevice,
-  1243			TASDEVICE_REG(book, page, crc_data.offset),
-  1244			nBuf1, crc_data.len);
-  1245		if (ret < 0)
-  1246			goto end;
-  1247	
-  1248		for (i = 0; i < crc_data.len; i++) {
-  1249			if ((book == TASDEVICE_BOOK_ID(TAS2781_SA_COEFF_SWAP_REG)) &&
-  1250			    (page == TASDEVICE_PAGE_ID(TAS2781_SA_COEFF_SWAP_REG)) &&
-  1251			    ((i + crc_data.offset) >=
-  1252				TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG)) &&
-  1253			    ((i + crc_data.offset) <=
-  1254				(TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG) + 4)))
-  1255				/* DSP swap command, bypass */
-  1256				continue;
-  1257			else
-  1258				crc_chksum += crc8(tasdevice->crc8_lkp_tbl, &nBuf1[i],
-  1259					1, 0);
-  1260		}
-  1261	
-  1262		ret = crc_chksum;
-  1263	
-  1264	end:
-  1265		return ret;
-  1266	}
-  1267	
-  1268	static int do_singlereg_checksum(struct tasdevice_priv *tasdevice,
-  1269		unsigned char book, unsigned char page,
-  1270		unsigned char reg, unsigned char val)
-  1271	{
-  1272		struct tas_crc crc_data;
-  1273		unsigned int nData1;
-  1274		int ret = 0;
-  1275		bool in;
-  1276	
-  1277		/* DSP swap command, pass */
-  1278		if ((book == TASDEVICE_BOOK_ID(TAS2781_SA_COEFF_SWAP_REG)) &&
-  1279		    (page == TASDEVICE_PAGE_ID(TAS2781_SA_COEFF_SWAP_REG)) &&
-  1280		    (reg >= TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG)) &&
-> 1281		    (reg <= (TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG) + 4)))
-  1282			return 0;
-  1283	
-  1284		in = check_yram(&crc_data, book, page, reg, 1);
-  1285		if (!in)
-  1286			return 0;
-  1287		ret = tasdevice_spi_dev_read(tasdevice,
-  1288			TASDEVICE_REG(book, page, reg), &nData1);
-  1289		if (ret < 0)
-  1290			return ret;
-  1291	
-  1292		if (nData1 != val) {
-  1293			dev_err(tasdevice->dev,
-  1294				"B[0x%x]P[0x%x]R[0x%x] W[0x%x], R[0x%x]\n",
-  1295				book, page, reg, val, nData1);
-  1296			tasdevice->err_code |= ERROR_YRAM_CRCCHK;
-  1297			return -EAGAIN;
-  1298		}
-  1299	
-  1300		ret = crc8(tasdevice->crc8_lkp_tbl, &val, 1, 0);
-  1301	
-  1302		return ret;
-  1303	}
-  1304	
+   767	
+   768	static int spidev_probe(struct spi_device *spi)
+   769	{
+   770		int ret;
+   771		const char *name;
+   772		int (*match)(struct device *dev);
+   773		struct spidev_data	*spidev;
+   774		int			status;
+   775		unsigned long		minor;
+   776	
+   777		match = device_get_match_data(&spi->dev);
+   778		if (match) {
+   779			status = match(&spi->dev);
+   780			if (status)
+   781				return status;
+   782		}
+   783	
+   784		/* Allocate driver data */
+   785		spidev = kzalloc(sizeof(*spidev), GFP_KERNEL);
+   786		if (!spidev)
+   787			return -ENOMEM;
+   788	
+   789		/* Initialize the driver data */
+   790		spidev->spi = spi;
+   791		mutex_init(&spidev->spi_lock);
+   792		mutex_init(&spidev->buf_lock);
+   793	
+   794		INIT_LIST_HEAD(&spidev->device_entry);
+   795	
+   796		/* If we can allocate a minor number, hook up this device.
+   797		 * Reusing minors is fine so long as udev or mdev is working.
+   798		 */
+   799		mutex_lock(&device_list_lock);
+   800		minor = find_first_zero_bit(minors, N_SPI_MINORS);
+   801		if (minor < N_SPI_MINORS) {
+   802			struct device *dev;
+   803	
+   804			spidev->devt = MKDEV(SPIDEV_MAJOR, minor);
+   805	
+   806			/*
+   807			 * If "linux,spidev-name" is specified in device tree, use /dev/spidev-<name>
+   808			 * in Linux userspace, otherwise use /dev/spidev<bus_num>.<cs_num>.
+   809			 */
+   810			ret = device_property_read_string(&spi->dev, "linux,spidev-name", &name);
+   811			if (ret < 0)
+ > 812				dev = device_create(spidev_class, &spi->dev, spidev->devt,
+   813						    spidev, "spidev%d.%d",
+   814						    spi->controller->bus_num, spi_get_chipselect(spi, 0));
+   815			else
+   816				dev = device_create(spidev_class, &spi->dev, spidev->devt,
+   817						    spidev, "spidev-%s", name);
+   818	
+   819			status = PTR_ERR_OR_ZERO(dev);
+   820		} else {
+   821			dev_dbg(&spi->dev, "no minor number available!\n");
+   822			status = -ENODEV;
+   823		}
+   824		if (status == 0) {
+   825			set_bit(minor, minors);
+   826			list_add(&spidev->device_entry, &device_list);
+   827		}
+   828		mutex_unlock(&device_list_lock);
+   829	
+   830		spidev->speed_hz = spi->max_speed_hz;
+   831	
+   832		if (status == 0)
+   833			spi_set_drvdata(spi, spidev);
+   834		else
+   835			kfree(spidev);
+   836	
+   837		return status;
+   838	}
+   839	
 
 -- 
 0-DAY CI Kernel Test Service
