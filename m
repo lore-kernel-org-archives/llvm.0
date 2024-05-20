@@ -1,101 +1,190 @@
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010F933C7
-	for <llvm@lists.linux.dev>; Mon, 20 May 2024 05:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB7B17C67
+	for <llvm@lists.linux.dev>; Mon, 20 May 2024 05:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716182288; cv=none; b=ormhxUfz4TolFR5JXAo7HMdbMkEmF0IvqwFJ+i4kwbXDNDyI53zpYzdTKAQ4h5LWbAbC1rB4/ZC9CeKAZxSulZhFRPHIYrOUpYZ/eBT9QyR6rvmYluQWCiiCNOXgGEmAFGfKra1omJiac8pqveBpBppX9xmjZI3DRbvkqy3X2Ho=
+	t=1716182534; cv=none; b=dGd9GOKgLsB1Do/Koxl1rRMoA2tdcSqPDuYXPG8UTyUeNw5rhJxoB/MA4prQZMACdwYnjjLupYsYSt8sN0umXbYbimTei2Q5g83GnFws0gorghZ94gZD3+Y9Qa+T8W5YauPUCNPXoVmJD94WHgF3kiaW5gU3x/o5jpPbBXpNxtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716182288; c=relaxed/simple;
-	bh=E9qDEFQY1grBMvG2pLW44IhOXhR0mVV6WnchLTdLq6Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XWUFB+WbGoxhhTJsGPz+jhJn8DS13WGbt7VdY1jT7iB44G+8DQMmrRtjSsuu5vtgj77a00VDDETe4aDhsktrz0ZtqAps+PCSvn3fpqRKq2g2jkwNBTOBXGelT5rnijyIO/FvSJy2+bFECCdIZ0VrSK88o8eHnYenfQpOkwlQvDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.3] (ip5f5af1d0.dynamic.kabel-deutschland.de [95.90.241.208])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	s=arc-20240116; t=1716182534; c=relaxed/simple;
+	bh=XH82C4t8wH1L1Ezt+DFqXC+JRHro3LdnphJDZ6398ek=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=p2GBtz/Iyr4X48fLc3EEAX4cXRkCle4prgOOk0qmTYdod1AQXUSgK5TUp6xYHEPE00cfhsaNR0x/VigL0AuquaeOFCXbJ0mKcY+l1I3S1+JhXszvqCV2BgEXrt37S1xgxBnEo+DJ/IXz8Dk2fss0abM0+XB1j6gxzjsmiwnOp9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XXpe3Y4Z; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XXpe3Y4Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716182531;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xEXmVUvJBDoJlolHf18blWzPBGBij54Nmif9wO4LZLs=;
+	b=XXpe3Y4ZgW+Vb1VV4Fzq2B85/RMNfHB1J/5hLsLtdbR6KkkVdDj8WPtwr5JWPZxxF08WNv
+	kyVpkHdrTlwO/VD30Aw8092nUfbJwaHjvWthRWVfN53VMld0lknbixqdLM6TD+bndm6BLW
+	0Q0+Ft9x/Nz+sO44nZnhiJQRh1gxCo0=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-3-lhGWzknzMImldFRJuyzoRg-1; Mon,
+ 20 May 2024 01:22:09 -0400
+X-MC-Unique: lhGWzknzMImldFRJuyzoRg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id CADD861E5FE06;
-	Mon, 20 May 2024 07:12:09 +0200 (CEST)
-Message-ID: <28196c54-3c65-4646-84f6-76da79368f8e@molgen.mpg.de>
-Date: Mon, 20 May 2024 07:12:09 +0200
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16BF63C000B2
+	for <llvm@lists.linux.dev>; Mon, 20 May 2024 05:22:09 +0000 (UTC)
+Received: from [172.64.13.32] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C41C65618;
+	Mon, 20 May 2024 05:22:08 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 61307b7b)
+Date: Mon, 20 May 2024 05:22:08 -0000
+To: xzhou@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] Bluetooth: btintel: remove useless code in
- btintel_set_dsm_reset_method
-To: Su Hui <suhui@nfschina.com>
-Cc: marcel@holtmann.org, luiz.dentz@gmail.com, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-References: <20240520021625.110430-1-suhui@nfschina.com>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20240520021625.110430-1-suhui@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Message-Id: <07441.124052001220900303@us-mta-3.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dear Su,
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Thank you for your patch. Some minor comments.
+Kernel information:
+    Commit message: Merge tag 'mm-stable-2024-05-17-19-19' of git://git.ker=
+nel.org/pub/scm/linux/kernel/git/akpm/mm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1296680909
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1296680909-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/006
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [s390x]
+                Boot test [s390x]
+                Filesystem - Loopdev Sanity [s390x]
+                Libkcapi AF_ALG test [s390x]
+                machineinfo [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+                Reboot test [s390x]
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                AMTU (Abstract Machine Test Utility) [aarch64, ppc64le, s39=
+0x]
+                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64 (debug)]
+                Filesystem - Loopdev Sanity [ppc64le]
+                Hardware - Firmware test suite [aarch64]
+                Libkcapi AF_ALG test [aarch64, ppc64le, s390x]
+                machineinfo [aarch64]
+                Memory function: memfd_create [aarch64, s390x]
+                Networking cki netfilter test [aarch64, ppc64le, s390x]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                xfstests - btrfs [aarch64]
+                xfstests - ext4 [aarch64]
+                xfstests - xfs [aarch64]
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                Hardware - Firmware test suite [aarch64]
+                Networking cki netfilter test [aarch64, s390x, x86_64]
+                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
+                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                stress: stress-ng - memory [aarch64, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
+ID: 44011 at fs/iomap/iter.c:51)
+            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
+kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
+            Affected tests:
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+        Issue: [upstream] stress-ng: avc denial on secretmemory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1752
+            Affected tests:
+                stress: stress-ng - memory [aarch64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
-Am 20.05.24 um 04:16 schrieb Su Hui:
-> Clang static checker(scan-build) warning:
-
-Please add a space before (. Noting the version of scan build would also 
-be nice.
-
-> drivers/bluetooth/btintel.c:2537:14:
-> Value stored to 'handle' during its initialization is never read.
-> 
-> No need to repeatedly assign values to 'handle'. Remove this useless
-> code to save some space.
-
-The plural “values” is misleading to me. Maybe just remove the sentence, 
-and say:
-
-Remove this unused assignment.
-
-For the summary, “useless code” could also be more specific:
-
-Bluetooth: btintel: Remove unused assignement in 
-btintel_set_dsm_reset_method()
-
-Maybe also add a Fixes: tag.
-
-> Signed-off-by: Su Hui <suhui@nfschina.com>
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
 
 
-Kind regards,
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Paul
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-> ---
->   drivers/bluetooth/btintel.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-> index 0c855c3ee1c1..f1c101dc0c28 100644
-> --- a/drivers/bluetooth/btintel.c
-> +++ b/drivers/bluetooth/btintel.c
-> @@ -2542,8 +2542,6 @@ static void btintel_set_dsm_reset_method(struct hci_dev *hdev,
->   		RESET_TYPE_VSEC
->   	};
->   
-> -	handle = ACPI_HANDLE(GET_HCIDEV_DEV(hdev));
-> -
->   	if (!handle) {
->   		bt_dev_dbg(hdev, "No support for bluetooth device in ACPI firmware");
->   		return;
