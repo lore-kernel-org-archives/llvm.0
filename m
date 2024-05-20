@@ -1,166 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8972718EB1;
-	Mon, 20 May 2024 20:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB85179BF
+	for <llvm@lists.linux.dev>; Mon, 20 May 2024 21:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716235367; cv=none; b=U1Uum4SOE4wo60rVUoWjZLMdirKwGU6smbBEPji1ktxXqywGHg3ts9WscUIqUFTzfIaQN5dgmjVkv8MI3ldv1mfvQ0bYItH4svBSqf/ToCQCVcyH4o7sVsG+TqvW4edEZNPXs2q+iEuLajvQfZABoGdEKpp4kCOfGTbucj++kkk=
+	t=1716240730; cv=none; b=jGoqCg1Sr9cfxR5sRW0lAOO+iVg/Rgb/gencwvRi2pHEkQb6LHUhtZg/WguUR/COSEh58sXvH8ShmW8qck0dFIkLFz7bR+7VZA2+ldahMvq/ZZS6acIXptLBRGZF5wFGQkvhv0Az0S5bjQH2DT24bPlOSL75WwvvwIZFaU4jpLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716235367; c=relaxed/simple;
-	bh=FsAbo9snhN4vFBiYKTcW83J5wmZ+F82i49ZylVTgF8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FzDESDOTLU5DSt6BaP4vvzKM+WXjDc0G5QSFnzJDd8vWy0flltJVQ5P8uq0ETtZCgPXWy5X2vXOj2dWmwQPCAkRX+WojYSjNM5dqubIdZJZiMbFVc1txhY/B5m/Yk/fnKriOy/7rjHCEkQWdOiU8GzWJPo6tG4qlN7AerEXlJ3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WWzWFeFp; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716240730; c=relaxed/simple;
+	bh=+phe3Dn0kAJsEJKCKqC/u42l/w9QPlrwTCBb5jkGSDM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pi4d/W7SscLiGAn5CDwjP+GOnOp83DXL5T42ZtohClygDf7BfBKW/bxtxcL/BNuxoVBAKeg5m6uGETfLGmARMqzca+mpQo+ig/1h6O+KQq2pmRs2jgf3L2n9WfKk1mHcF1TI9oexh4iMuyulJ575K7uZ8tNqNvf0Po6aPRdoc4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wbDcTEx/; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WWzWFeFp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716235365; x=1747771365;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FsAbo9snhN4vFBiYKTcW83J5wmZ+F82i49ZylVTgF8Y=;
-  b=WWzWFeFp13Jah2HCItnlZUf6KlwN5f8+i6EANYLFVGbInrjv0nMFlC5+
-   nXwsabv1ndI/lt2ake9xCluEtdsGGhY4Bfjf7KFRbsyZVLarerJqpccp4
-   0I9w+t29vhsp+x3rOGNBHuzF7QgXAtO4Os1Hdh7MXcC+pc1DIaiNeSqDG
-   J1XrgWwMPC9yYl8mhHmz0QL1WPjiiOq8WnUmBQhLSwd3nRgbMJdB8B77b
-   O3O8UUFWjii0QDXkRs+FKZ2qU6XP1mGKeM3d9oAEk//6Nz8ww/3KHemts
-   lE7SMf/R0UfTrDP6oM5UcJXCG1zt9U/u7qKXPXLpu7K7uu2dZxzG0hec/
-   A==;
-X-CSE-ConnectionGUID: /y4sG4D3Qh240vmKs3mxvw==
-X-CSE-MsgGUID: y8VPS4OqT26l61e1FgWgHw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="15336002"
-X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="15336002"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 13:02:45 -0700
-X-CSE-ConnectionGUID: bNsTCpw8QpuEkz8c0aU4rQ==
-X-CSE-MsgGUID: 3lcWJKh0SE6JCN2M9H+fkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="37489957"
-Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 20 May 2024 13:02:43 -0700
-Received: from kbuild by 108735ec233b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s99Cu-000574-0U;
-	Mon, 20 May 2024 20:02:35 +0000
-Date: Tue, 21 May 2024 04:01:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [miquelraynal:macronix/nand-next/spi-nand-cont-read 13/13]
- drivers/mtd/nand/spi/macronix.c:71:12: error: call to undeclared function
- 'FIELD_GET'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202405210358.Lu8w6dPe-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wbDcTEx/"
+X-Envelope-To: ivan@cloudflare.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716240725;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bcY+s6m5RT0WTmqxlbBbw/jl5u8VPujdIzVjdDRst3A=;
+	b=wbDcTEx/QcBRXvd2RyiZqCIupe22EhKXZiTSwk75VXq4iqcIwm5rr8LFvEQNBn5SyqjLLf
+	iWrQxi/Qe7po8jJKQcMkGy4V/CZS+3VFdXT/AMmk6fA+GzBDbyNZkw+KfPLDpT+ITYpSjy
+	+J4c1f21mdCOWD2ikEhS6PcYOB4dE98=
+X-Envelope-To: alexei.starovoitov@gmail.com
+X-Envelope-To: bpf@vger.kernel.org
+X-Envelope-To: kernel-team@cloudflare.com
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: llvm@lists.linux.dev
+Message-ID: <80b405c5-4bab-4364-ba32-e3f6ab9a5d57@linux.dev>
+Date: Mon, 20 May 2024 14:31:59 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://github.com/miquelraynal/linux-0day.git macronix/nand-next/spi-nand-cont-read
-head:   f60b2d314a9c7534714521dfbeca9cff37134d56
-commit: f60b2d314a9c7534714521dfbeca9cff37134d56 [13/13] mtd: spi-nand: macronix: Continuous read support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240521/202405210358.Lu8w6dPe-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fa9b1be45088dce1e4b602d451f118128b94237b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240521/202405210358.Lu8w6dPe-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405210358.Lu8w6dPe-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/mtd/nand/spi/macronix.c:10:
-   In file included from include/linux/mtd/spinand.h:16:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/mtd/nand/spi/macronix.c:10:
-   In file included from include/linux/mtd/spinand.h:16:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/mtd/nand/spi/macronix.c:10:
-   In file included from include/linux/mtd/spinand.h:16:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/mtd/nand/spi/macronix.c:10:
-   In file included from include/linux/mtd/spinand.h:16:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/mtd/nand/spi/macronix.c:71:12: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      71 |                 *eccsr = MACRONIX_ECCSR_BF_LAST_PAGE(*eccsr);
-         |                          ^
-   drivers/mtd/nand/spi/macronix.c:13:44: note: expanded from macro 'MACRONIX_ECCSR_BF_LAST_PAGE'
-      13 | #define MACRONIX_ECCSR_BF_LAST_PAGE(eccsr) FIELD_GET(GENMASK(3, 0), eccsr)
-         |                                            ^
-   7 warnings and 1 error generated.
+Subject: Re: bpftool does not print full names with LLVM 17 and newer
+Content-Language: en-GB
+To: Ivan Babrou <ivan@cloudflare.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>
+References: <CABWYdi0ymezpYsQsPv7qzpx2fWuTkoD1-wG1eT-9x-TSREFrQg@mail.gmail.com>
+ <CAADnVQ+YXf=1iO3C7pBvV1vhfWDyko2pJzKDXv7i6fkzsBM0ig@mail.gmail.com>
+ <CABWYdi14d61j9=nei6q7YCT8ZLv2DDc1uqmY_f_DimBUAW5MCA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CABWYdi14d61j9=nei6q7YCT8ZLv2DDc1uqmY_f_DimBUAW5MCA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-vim +/FIELD_GET +71 drivers/mtd/nand/spi/macronix.c
+On 5/20/24 12:44 PM, Ivan Babrou wrote:
+> On Fri, May 17, 2024 at 4:33 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>> On Fri, May 17, 2024 at 2:51 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+>>> Hello,
+>>>
+>>> We recently bumped LLVM used for bpftool compilation from 15 to 18 and
+>>> our alerting system notified us about some unknown bpf programs. It
+>>> turns out, the names were truncated to 15 chars, whereas before they
+>>> were longer.
+>>>
+>>> After some investigation, I was able to see that the following code:
+>>>
+>>>      diff --git a/src/common.c b/src/common.c
+>>>      index 958e92a..ac38506 100644
+>>>      --- a/src/common.c
+>>>      +++ b/src/common.c
+>>>      @@ -435,7 +435,9 @@ void get_prog_full_name(const struct
+>>> bpf_prog_info *prog_info, int prog_fd,
+>>>          if (!prog_btf)
+>>>              goto copy_name;
+>>>
+>>>      +    printf("[0] finfo.type_id = %x\n", finfo.type_id);
+>>>          func_type = btf__type_by_id(prog_btf, finfo.type_id);
+>>>      +    printf("[1] finfo.type_id = %x\n", finfo.type_id);
+>>>          if (!func_type || !btf_is_func(func_type))
+>>>              goto copy_name;
+>>>
+>>> When ran under gdb, shows:
+>>>
+>>>      (gdb) b common.c:439
+>>>      Breakpoint 1 at 0x16859: file common.c, line 439.
+>>>
+>>>      (gdb) r
+>>>      3403: tracing  [0] finfo.type_id = 0
+>>>
+>>>      Breakpoint 1, get_prog_full_name (prog_info=0x7fffffffe160,
+>>> prog_fd=3, name_buff=0x7fffffffe030 "", buff_len=128) at common.c:439
+>>>      439        func_type = btf__type_by_id(prog_btf, finfo.type_id);
+>>>      (gdb) print finfo
+>>>      $1 = {insn_off = 0, type_id = 1547}
+>>>
+>>>
+>>> Notice that finfo.type_id is printed as zero, but in gdb it is in fact 1547.
+>>>
+>>> Disassembly difference looks like this:
+>>>
+>>>      -    8b 75 cc                 mov    -0x34(%rbp),%esi
+>>>      -    e8 47 8d 02 00           call   3f5b0 <btf__type_by_id>
+>>>      +    31 f6                    xor    %esi,%esi
+>>>      +    e8 a9 8c 02 00           call   3f510 <btf__type_by_id>
+>>>
+>>> This can be avoided if one removes "const" during finfo initialization:
+>>>
+>>>      const struct bpf_func_info finfo = {};
+>>>
+>>> This seems like a pretty annoying miscompilation, and hopefully
+>>> there's a way to make clang complain about this loudly, but that's
+>>> outside of my expertise. There might be other places like this that we
+>>> just haven't noticed yet.
+>>>
+>>> I can send a patch to fix this particular issue, but I'm hoping for a
+>>> more comprehensive approach from people who know better.
+>> Wow. Great catch. Please send a patch to fix bpftool and,
+>> I agree, llvm should be warning about such footgun,
+>> but the way ptr_to_u64() is written is probably silencing it.
+>> We probably should drop 'const' from it:
+>> static inline __u64 ptr_to_u64(const void *ptr)
+>>
+>> and maybe add a flavor of ptr_to_u64 with extra check
+>> that the arg doesn't have a const modifier.
+>> __builtin_types_compatible_p(typeof(ptr), void *)
+>> should do the trick.
+> In bpftool there's just two call sites that are unhappy if I remove
+> "const" in the arguments:
+>
+> * this problematic one
+> * "GPL" literal passed
+>
+> I'll send the patch to drop "const" from the struct initialization
 
-    53	
-    54	static int macronix_get_eccsr(struct spinand_device *spinand, u8 *eccsr)
-    55	{
-    56		struct spi_mem_op op = SPI_MEM_OP(SPI_MEM_OP_CMD(0x7c, 1),
-    57						  SPI_MEM_OP_NO_ADDR,
-    58						  SPI_MEM_OP_DUMMY(1, 1),
-    59						  SPI_MEM_OP_DATA_IN(1, eccsr, 1));
-    60	
-    61		int ret = spi_mem_exec_op(spinand->spimem, &op);
-    62		if (ret)
-    63			return ret;
-    64	
-    65		/*
-    66		 * ECCSR exposes the number of bitflips for the last read page in bits [3:0].
-    67		 * Continuous read compatible chips also expose maximum number of
-    68		 * bitflips for the whole read operation in bits [7:4].
-    69		 */
-    70		if (!spinand->set_cont_read)
-  > 71			*eccsr = MACRONIX_ECCSR_BF_LAST_PAGE(*eccsr);
-    72		else
-    73			*eccsr = MACRONIX_ECCSR_BF_ACCUMULATED_PAGES(*eccsr);
-    74	
-    75		return 0;
-    76	}
-    77	
+Yes, this should work as we discussed earlier. Thanks!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> today or tomorrow (it works great in our internal build), but I'll
+> leave the bigger change to you. There seem to be many places in libbpf
+> and I'm far from being a C expert to drive this change.
+
+As discussed in below link. It is not easy for compiler to deduce whether
+an undefined behavior is triggered or not. The additional
+const_ptr_to_u64() serves the purpose to force patch author and reviewer
+to double check whether the 'u64' value may eventually invalidate
+'const' property or not.
+
+>
+> I managed to bisect clang to find the commit that introduced the change:
+>
+> * https://github.com/llvm/llvm-project/commit/0b2d5b967d98
+>
+> I also mentioned the commit author and they have some ideas about
+> UBSAN catching this (it doesn't in the current state):
+>
+> * https://mastodon.ivan.computer/@mastodon/112465898861074834
+>
