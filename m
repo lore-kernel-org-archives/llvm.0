@@ -1,163 +1,199 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB85179BF
-	for <llvm@lists.linux.dev>; Mon, 20 May 2024 21:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1365E1CD3B;
+	Mon, 20 May 2024 22:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716240730; cv=none; b=jGoqCg1Sr9cfxR5sRW0lAOO+iVg/Rgb/gencwvRi2pHEkQb6LHUhtZg/WguUR/COSEh58sXvH8ShmW8qck0dFIkLFz7bR+7VZA2+ldahMvq/ZZS6acIXptLBRGZF5wFGQkvhv0Az0S5bjQH2DT24bPlOSL75WwvvwIZFaU4jpLg=
+	t=1716242893; cv=none; b=GjzF5F6MEZXp8gFoSNrfYTEzbpM/mUuSKwKE1JKp1dNKdEpOS4eiZrnsVhFCrVa3DKimbVUqvA7Hn6QosW8eyvVBcdj04gGY/0twTK906Cj0Aq0EYROFgiQS8fHFduVXZiWqMr3dL07kPg+JEPSKOc1MMsKh+8V9t0ve+PckhXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716240730; c=relaxed/simple;
-	bh=+phe3Dn0kAJsEJKCKqC/u42l/w9QPlrwTCBb5jkGSDM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pi4d/W7SscLiGAn5CDwjP+GOnOp83DXL5T42ZtohClygDf7BfBKW/bxtxcL/BNuxoVBAKeg5m6uGETfLGmARMqzca+mpQo+ig/1h6O+KQq2pmRs2jgf3L2n9WfKk1mHcF1TI9oexh4iMuyulJ575K7uZ8tNqNvf0Po6aPRdoc4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wbDcTEx/; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1716242893; c=relaxed/simple;
+	bh=iFGZ6328HqmzBFXk0oIfQN//Y27uuiSgBm3fp6/mYxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JaIHAyzWfh11LnzKa+2VIcr11H5+5g/Z7OkZL4VW1TOxjHlEYgmH0LAdR7xFOSLs6zT/4vHnr74/qZv51bFaA5ZwS4v5kpUMWMWOESRKMFE/jf76VQjYGYwlG4f3iJ/LQNb06a882OHCfJ4KwVKwrxyVMqUGoMPrkdMCvPFekNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lV3g1yGG; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wbDcTEx/"
-X-Envelope-To: ivan@cloudflare.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1716240725;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bcY+s6m5RT0WTmqxlbBbw/jl5u8VPujdIzVjdDRst3A=;
-	b=wbDcTEx/QcBRXvd2RyiZqCIupe22EhKXZiTSwk75VXq4iqcIwm5rr8LFvEQNBn5SyqjLLf
-	iWrQxi/Qe7po8jJKQcMkGy4V/CZS+3VFdXT/AMmk6fA+GzBDbyNZkw+KfPLDpT+ITYpSjy
-	+J4c1f21mdCOWD2ikEhS6PcYOB4dE98=
-X-Envelope-To: alexei.starovoitov@gmail.com
-X-Envelope-To: bpf@vger.kernel.org
-X-Envelope-To: kernel-team@cloudflare.com
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: llvm@lists.linux.dev
-Message-ID: <80b405c5-4bab-4364-ba32-e3f6ab9a5d57@linux.dev>
-Date: Mon, 20 May 2024 14:31:59 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lV3g1yGG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716242892; x=1747778892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iFGZ6328HqmzBFXk0oIfQN//Y27uuiSgBm3fp6/mYxE=;
+  b=lV3g1yGGJtsBcwVsH/Ru/OIg3+kthtUagBh/AWuDTenQ4gP/3fpk+KMC
+   N2wH9rdvdNZjWhl1SnP7h39D4lWxvTS/rntvMjC5vgce9UHzHvtQBM11T
+   +jQxDl87f7Bx7ptSnV9bhbU3LZagy9E5dbfLzOFQG1J1ZH82Gf0wDcV1M
+   CItftXjMjYUFYYWWeseSqHnUWeodWB6eyNy9MD4wg/26BTqRmkLhJlcQJ
+   e5JzHOge8/4vaeO+20WwlfIkgvGVwso/5luGS0e4ZTtEwmMGduUjs7Hpf
+   tfohxBcbwFZvLffsnkqh+m10BqGeL1DS3DS5kiRsvubblAHs6Cxetkt8X
+   A==;
+X-CSE-ConnectionGUID: 8lBm3BesTQ2dk4GLDm1PmA==
+X-CSE-MsgGUID: SbTIgbhCQPiDzOGcpA9OXw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="11614558"
+X-IronPort-AV: E=Sophos;i="6.08,176,1712646000"; 
+   d="scan'208";a="11614558"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 15:08:11 -0700
+X-CSE-ConnectionGUID: UGMkWuMCQZ+C46lypG4FYQ==
+X-CSE-MsgGUID: MtVPhxsKQQmqKBVqXq7XkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,176,1712646000"; 
+   d="scan'208";a="37518611"
+Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 20 May 2024 15:08:09 -0700
+Received: from kbuild by 108735ec233b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s9B95-0005C0-3C;
+	Mon, 20 May 2024 22:06:45 +0000
+Date: Tue, 21 May 2024 06:05:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+	linux-ext4@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tytso@mit.edu,
+	saukad@google.com, harshads@google.com,
+	Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Subject: Re: [PATCH 04/10] ext4: rework fast commit commit path
+Message-ID: <202405210505.cGPCGQFq-lkp@intel.com>
+References: <20240520055153.136091-5-harshadshirwadkar@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: bpftool does not print full names with LLVM 17 and newer
-Content-Language: en-GB
-To: Ivan Babrou <ivan@cloudflare.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>
-References: <CABWYdi0ymezpYsQsPv7qzpx2fWuTkoD1-wG1eT-9x-TSREFrQg@mail.gmail.com>
- <CAADnVQ+YXf=1iO3C7pBvV1vhfWDyko2pJzKDXv7i6fkzsBM0ig@mail.gmail.com>
- <CABWYdi14d61j9=nei6q7YCT8ZLv2DDc1uqmY_f_DimBUAW5MCA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CABWYdi14d61j9=nei6q7YCT8ZLv2DDc1uqmY_f_DimBUAW5MCA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240520055153.136091-5-harshadshirwadkar@gmail.com>
 
+Hi Harshad,
 
-On 5/20/24 12:44 PM, Ivan Babrou wrote:
-> On Fri, May 17, 2024 at 4:33 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->> On Fri, May 17, 2024 at 2:51 PM Ivan Babrou <ivan@cloudflare.com> wrote:
->>> Hello,
->>>
->>> We recently bumped LLVM used for bpftool compilation from 15 to 18 and
->>> our alerting system notified us about some unknown bpf programs. It
->>> turns out, the names were truncated to 15 chars, whereas before they
->>> were longer.
->>>
->>> After some investigation, I was able to see that the following code:
->>>
->>>      diff --git a/src/common.c b/src/common.c
->>>      index 958e92a..ac38506 100644
->>>      --- a/src/common.c
->>>      +++ b/src/common.c
->>>      @@ -435,7 +435,9 @@ void get_prog_full_name(const struct
->>> bpf_prog_info *prog_info, int prog_fd,
->>>          if (!prog_btf)
->>>              goto copy_name;
->>>
->>>      +    printf("[0] finfo.type_id = %x\n", finfo.type_id);
->>>          func_type = btf__type_by_id(prog_btf, finfo.type_id);
->>>      +    printf("[1] finfo.type_id = %x\n", finfo.type_id);
->>>          if (!func_type || !btf_is_func(func_type))
->>>              goto copy_name;
->>>
->>> When ran under gdb, shows:
->>>
->>>      (gdb) b common.c:439
->>>      Breakpoint 1 at 0x16859: file common.c, line 439.
->>>
->>>      (gdb) r
->>>      3403: tracing  [0] finfo.type_id = 0
->>>
->>>      Breakpoint 1, get_prog_full_name (prog_info=0x7fffffffe160,
->>> prog_fd=3, name_buff=0x7fffffffe030 "", buff_len=128) at common.c:439
->>>      439        func_type = btf__type_by_id(prog_btf, finfo.type_id);
->>>      (gdb) print finfo
->>>      $1 = {insn_off = 0, type_id = 1547}
->>>
->>>
->>> Notice that finfo.type_id is printed as zero, but in gdb it is in fact 1547.
->>>
->>> Disassembly difference looks like this:
->>>
->>>      -    8b 75 cc                 mov    -0x34(%rbp),%esi
->>>      -    e8 47 8d 02 00           call   3f5b0 <btf__type_by_id>
->>>      +    31 f6                    xor    %esi,%esi
->>>      +    e8 a9 8c 02 00           call   3f510 <btf__type_by_id>
->>>
->>> This can be avoided if one removes "const" during finfo initialization:
->>>
->>>      const struct bpf_func_info finfo = {};
->>>
->>> This seems like a pretty annoying miscompilation, and hopefully
->>> there's a way to make clang complain about this loudly, but that's
->>> outside of my expertise. There might be other places like this that we
->>> just haven't noticed yet.
->>>
->>> I can send a patch to fix this particular issue, but I'm hoping for a
->>> more comprehensive approach from people who know better.
->> Wow. Great catch. Please send a patch to fix bpftool and,
->> I agree, llvm should be warning about such footgun,
->> but the way ptr_to_u64() is written is probably silencing it.
->> We probably should drop 'const' from it:
->> static inline __u64 ptr_to_u64(const void *ptr)
->>
->> and maybe add a flavor of ptr_to_u64 with extra check
->> that the arg doesn't have a const modifier.
->> __builtin_types_compatible_p(typeof(ptr), void *)
->> should do the trick.
-> In bpftool there's just two call sites that are unhappy if I remove
-> "const" in the arguments:
->
-> * this problematic one
-> * "GPL" literal passed
->
-> I'll send the patch to drop "const" from the struct initialization
+kernel test robot noticed the following build errors:
 
-Yes, this should work as we discussed earlier. Thanks!
+[auto build test ERROR on tytso-ext4/dev]
+[also build test ERROR on linus/master v6.9 next-20240520]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> today or tomorrow (it works great in our internal build), but I'll
-> leave the bigger change to you. There seem to be many places in libbpf
-> and I'm far from being a C expert to drive this change.
+url:    https://github.com/intel-lab-lkp/linux/commits/Harshad-Shirwadkar/ext4-convert-i_fc_lock-to-spinlock/20240520-135501
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20240520055153.136091-5-harshadshirwadkar%40gmail.com
+patch subject: [PATCH 04/10] ext4: rework fast commit commit path
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240521/202405210505.cGPCGQFq-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fa9b1be45088dce1e4b602d451f118128b94237b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240521/202405210505.cGPCGQFq-lkp@intel.com/reproduce)
 
-As discussed in below link. It is not easy for compiler to deduce whether
-an undefined behavior is triggered or not. The additional
-const_ptr_to_u64() serves the purpose to force patch author and reviewer
-to double check whether the 'u64' value may eventually invalidate
-'const' property or not.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405210505.cGPCGQFq-lkp@intel.com/
 
->
-> I managed to bisect clang to find the commit that introduced the change:
->
-> * https://github.com/llvm/llvm-project/commit/0b2d5b967d98
->
-> I also mentioned the commit author and they have some ideas about
-> UBSAN catching this (it doesn't in the current state):
->
-> * https://mastodon.ivan.computer/@mastodon/112465898861074834
->
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-audio-manager.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gbphy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-i2c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-pwm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-sdio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-usb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/goldfish/goldfish_pipe.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/chrome/cros_kunit_proto_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mailbox/mtk-cmdq-mailbox.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_powersave.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm-ccn.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/fsl_imx8_ddr_perf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/arm_cspmu_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/nvidia_cspmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/ampere_cspmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem-apple-efuses.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_brcm_nvram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_u-boot-env.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mm-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mq-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mn-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hte/hte-tegra194-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/vdpa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/brcm_u-boot.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/tplink_safeloader.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_pruss.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vhost/vringh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/greybus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/gb-es2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rpmsg/rpmsg_char.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-ast-cf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/counter/ftm-quaddec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/snd-pcm-dmaengine.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/sound_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/drivers/snd-pcmtest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/pci/hda/snd-hda-cirrus-scodec-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/soc-topology-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-ab8500-codec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-sigmadsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/fsl/imx-pcm-dma.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/mxs/snd-soc-mxs-pcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-sdw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/qdsp6/snd-q6dsp-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-atom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-byt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-bdw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8m.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8ulp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/imx-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mtk-adsp-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8195/snd-sof-mt8195.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8186/snd-sof-mt8186.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-utils.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-acpi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-of.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in sound/ac97_bus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy-fb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
+>> ERROR: modpost: "jbd2_journal_lock_updates_no_rsv" [fs/ext4/ext4.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
