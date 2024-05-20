@@ -1,59 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660B6136E2B;
-	Mon, 20 May 2024 15:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60ACDDDA
+	for <llvm@lists.linux.dev>; Mon, 20 May 2024 17:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716219582; cv=none; b=L4eTDIpKGUzOuQIOohSjO8Mp4rZTn2rqMx0R0gEDDKjxsE0iVEGmp8HFmcNeElL3ZtnhU8vmZvbB06c2dRr9F+nxLiEdtQIjDsn1kFJi5FoSB1aFlg1gAtNaJ/fzFTKqlMeY33NxehiJfT/ON82RgW1bd79e0/dickPy7wakbp8=
+	t=1716224522; cv=none; b=A8PhG9tKOmzbQQ2VtP7peny4qw4n+832vxv5QCUa/DsRnDsJ1Q6WCBgYvLTigi8wxKMlSQdRzGc7PIS7NjG1/GKjqO+tp9hfhV/PVyXTI1vZhLabpRbQyo1x/wJloZFts+wuN31Tm0L/LP8rkrajfpYKKQ9man/Q0wdeidrxMpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716219582; c=relaxed/simple;
-	bh=2FJ07d8DgDe52fowMphmtvHhTWRSPM6nzFVguY1V0j8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Voske4HJKbhaOI3dXHzL6cqCdKY2xt+QDCrUP7FcXdDLorb5uxUNc69IxpA1dU80iGx42h1kXvdEO+dGIqfDqQNFOznINRJSCpfpchnffmQQRMWGwg2wQ45cUad5I8XLwzoC1uw389cezM/qHYcf4K00ifvwkineUMuWxC5DTAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Th8Qs/aE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716224522; c=relaxed/simple;
+	bh=+61SlSFs+bK47d9CKe64gm4Q05wLUYPddacTpbPUX94=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sW9rSihSWgWxZQY7x4VQeL+fCxEJuGcAYB9Ut5qiVBirXyoBi9asL9Z2G84VF6Y3uX25/9/HbVAJm9rGzfm4RW9mizlAdaUXWcM8+Bl1pnJQzBtCF7TEh7vxmtibKwXICAMjXiNAtLiDl9YxZGFCS6g8k0lgi0jwrKjAjC0wHUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m6vHjLOA; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Th8Qs/aE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 847D5C2BD10;
-	Mon, 20 May 2024 15:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716219581;
-	bh=2FJ07d8DgDe52fowMphmtvHhTWRSPM6nzFVguY1V0j8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Th8Qs/aEfWvWQmD9GndbxkfaHQ4YZ/VcnlWDeguQehlJ1sAWn8yYdpqv/+5ct0wIx
-	 v2Qm0Us+sr2x9J10dvBpD4bjf14NQpNjDwb7v+m17zhySOHdyKC/nGbaHRqA8yUaLA
-	 kBdnvM/gHYZ8nGWWy7+TgXCfAF9Sbz+ULvb22tncf67ovPIhXvTx0va+4MhgXxDA+V
-	 reJG3m2jg0gzNTaK+fMJ5PHpdDNzPVNIH8yyN8X6BD/eF/cKmTzVEN81fpjYD3foqH
-	 MNxI5jfUiJX7sjAXoqqo7ew8eMNT6Bp+E4qo/OsiZzrc4GMFhPb4xEIh/bCKNCEFn6
-	 N3RvuOq/cVH7g==
-Date: Mon, 20 May 2024 08:39:39 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: conor@kernel.org, ojeda@kernel.org
-Subject: Prebuilt LLVM 18.1.6 uploaded
-Message-ID: <20240520153939.GA1166124@thelio-3990X>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m6vHjLOA"
+X-Envelope-To: alexei.starovoitov@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716224514;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EAgmPQxenfiA/ZhiTeo4I/5YK5kI+JEH9mMpDcYcRdg=;
+	b=m6vHjLOAF12YD8MlEZSeLfBS0wuKogqiwdOsKP3RkFH7frV7s3Tszz5kY4HxxFD3aQ6rTX
+	Vk/JwnCmzc0JCWOeVV5rTOqfKO+gzf2Srx4MlI3KM8+HeStcHVNjaFjbUJkSkHpmo2xvm7
+	HplM9mUUtzRO/Ou8kJfeehPXeb8dzU4=
+X-Envelope-To: ivan@cloudflare.com
+X-Envelope-To: bpf@vger.kernel.org
+X-Envelope-To: kernel-team@cloudflare.com
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: llvm@lists.linux.dev
+Message-ID: <5cb46d34-f4a3-49c7-8dd6-df6bc87b4f25@linux.dev>
+Date: Mon, 20 May 2024 10:01:47 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: Re: bpftool does not print full names with LLVM 17 and newer
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Ivan Babrou <ivan@cloudflare.com>
+Cc: bpf <bpf@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>
+References: <CABWYdi0ymezpYsQsPv7qzpx2fWuTkoD1-wG1eT-9x-TSREFrQg@mail.gmail.com>
+ <CAADnVQ+YXf=1iO3C7pBvV1vhfWDyko2pJzKDXv7i6fkzsBM0ig@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQ+YXf=1iO3C7pBvV1vhfWDyko2pJzKDXv7i6fkzsBM0ig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi all,
 
-I have built and uploaded LLVM 18.1.6 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+On 5/17/24 5:33 PM, Alexei Starovoitov wrote:
+> On Fri, May 17, 2024 at 2:51 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+>> Hello,
+>>
+>> We recently bumped LLVM used for bpftool compilation from 15 to 18 and
+>> our alerting system notified us about some unknown bpf programs. It
+>> turns out, the names were truncated to 15 chars, whereas before they
+>> were longer.
+>>
+>> After some investigation, I was able to see that the following code:
+>>
+>>      diff --git a/src/common.c b/src/common.c
+>>      index 958e92a..ac38506 100644
+>>      --- a/src/common.c
+>>      +++ b/src/common.c
+>>      @@ -435,7 +435,9 @@ void get_prog_full_name(const struct
+>> bpf_prog_info *prog_info, int prog_fd,
+>>          if (!prog_btf)
+>>              goto copy_name;
+>>
+>>      +    printf("[0] finfo.type_id = %x\n", finfo.type_id);
+>>          func_type = btf__type_by_id(prog_btf, finfo.type_id);
+>>      +    printf("[1] finfo.type_id = %x\n", finfo.type_id);
+>>          if (!func_type || !btf_is_func(func_type))
+>>              goto copy_name;
+>>
+>> When ran under gdb, shows:
+>>
+>>      (gdb) b common.c:439
+>>      Breakpoint 1 at 0x16859: file common.c, line 439.
+>>
+>>      (gdb) r
+>>      3403: tracing  [0] finfo.type_id = 0
+>>
+>>      Breakpoint 1, get_prog_full_name (prog_info=0x7fffffffe160,
+>> prog_fd=3, name_buff=0x7fffffffe030 "", buff_len=128) at common.c:439
+>>      439        func_type = btf__type_by_id(prog_btf, finfo.type_id);
+>>      (gdb) print finfo
+>>      $1 = {insn_off = 0, type_id = 1547}
+>>
+>>
+>> Notice that finfo.type_id is printed as zero, but in gdb it is in fact 1547.
+>>
+>> Disassembly difference looks like this:
+>>
+>>      -    8b 75 cc                 mov    -0x34(%rbp),%esi
+>>      -    e8 47 8d 02 00           call   3f5b0 <btf__type_by_id>
+>>      +    31 f6                    xor    %esi,%esi
+>>      +    e8 a9 8c 02 00           call   3f510 <btf__type_by_id>
+>>
+>> This can be avoided if one removes "const" during finfo initialization:
+>>
+>>      const struct bpf_func_info finfo = {};
+>>
+>> This seems like a pretty annoying miscompilation, and hopefully
+>> there's a way to make clang complain about this loudly, but that's
+>> outside of my expertise. There might be other places like this that we
+>> just haven't noticed yet.
+>>
+>> I can send a patch to fix this particular issue, but I'm hoping for a
+>> more comprehensive approach from people who know better.
+> Wow. Great catch. Please send a patch to fix bpftool and,
 
-This is currently scheduled to be the last 18.x release unless a
-critical issue is found:
+Indeed, removing 'const' modifier should allow correct code
+generation.
 
-https://discourse.llvm.org/t/18-1-6-released/79068
+> I agree, llvm should be warning about such footgun,
+> but the way ptr_to_u64() is written is probably silencing it.
 
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new, so that they can be
-investigated and fixed in main if they are still relevant there.
+Yes, ptr_to_u64() cast a 'ptr to const value' to a __u64
+which later could be used as 'ptr to value' where the 'value'
+could be changed.
 
-Cheers,
-Nathan
+> We probably should drop 'const' from it:
+> static inline __u64 ptr_to_u64(const void *ptr)
+>
+> and maybe add a flavor of ptr_to_u64 with extra check
+> that the arg doesn't have a const modifier.
+> __builtin_types_compatible_p(typeof(ptr), void *)
+> should do the trick.
+
+I guess we could introduce ptr_non_const_to_u64() like
+
+static inline __u64 ptr_non_const_to_u64(void *ptr)
+{
+         static_assert(__builtin_types_compatible_p(typeof(ptr), void *), "expect type void *");
+         return (__u64)(unsigned long)ptr;
+}
+
+and add additional check in ptr_to_u64() like
+
+static inline __u64 ptr_to_u64(const void *ptr)
+{
+        static_assert(__builtin_types_compatible_p(typeof(ptr), const void *), "expect type const void *");
+        return (__u64)(unsigned long)ptr;
+}
+
+But I am not sure how useful they are. If users declare the variable as 'const'
+and use ptr_to_u64(), compilation will succeed but the result could be wrong.
+
+Compiler could do the following analysis:
+   (1) ptr_to_u64() argument is a constant and the result is __u64 (let us say u64_val = ptr_to_u64(...)).
+   (2) u64_val has address taken and its content may be modified in the current function or
+       through the function call. If this is true, compiler might warn. This will require some
+       analysis and the warning may not be always true (esp. it requires inter-procedural analysis and
+       in this case, bpf_prog_get_info_by_fd() eventually goes into the library/kernel so compiler has no
+       way to know whether the value could change).
+So I guess it will be very hard for compiler to warn for this particular case.
+
