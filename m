@@ -1,199 +1,383 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95E550A6C
-	for <llvm@lists.linux.dev>; Tue, 21 May 2024 07:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933EF54662;
+	Tue, 21 May 2024 08:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716276106; cv=none; b=Sj7rf5IvovK4IUrcXTxvz/04EyVTAkN/KOWr2P1Tw9bCp2CM0NOsj6TiYu9DoCXWDNQDP2nsHDqhtAE7GiKhS+yUDGl1nf5PL25eAzgQatYcUkTOOrbgeloXLbgC+m+iBTR82Cg6cAPLZodK+1THO/EExG+Fp3rdAsqZmnciQ4U=
+	t=1716279019; cv=none; b=CUmuBcEEWm57hUASRI/khwZNeT8+d6viNptnWjJQJNY/cvocNzahEgnYJkfwbyqfM/6aroOAKpsHtqEFm/A1pBeCNafFE73k8Uux/mNem+sUqMoYwiZmzGFGkmj77PHtd0cBQ7v41T1Hqyzq2Yqi7jJ/lSFEMm1moDG8CdsyqFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716276106; c=relaxed/simple;
-	bh=EuDXty/yVHREPI0rlPjBnLrsARQMme1yy6TGB58la0Y=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=n8dpy5BE4tpGP3mTyf9+TWMDeiqHcEFvwbUu5V4Gc+sFn1yuMafgke4NmD2aYrdxG/r9UzzYQTBb7g3Ibj9/SVgFFxeaDcjwsmgR7GrnPuA02Jv8we9X5rQuWi+l0dUH7Kofvpcxp2RjW/8NzM3+wAVXp6aFjiMBKSyhH67On6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XWgpW0CC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1716279019; c=relaxed/simple;
+	bh=EIVvD//jBwLUIZqnAqldAaSFJ5k+6u5rzaPCQ/h6cSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MY5IIewO5GMx8vVt/5trVDuoKDvuK+AQKEztkRa0bGOg1N3JF43zqOJNkogfwEJmqoYYz13YeszQ7fWIvwu9F7Ys0AcuU48Sh8Q2vP86y78qZOoiX3MQCKJffqxgP5+J1dy8GW30andew3M4rbdbI93AhXJLLu+vbdDjI9Gl7b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nl66cR8n; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XWgpW0CC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716276103;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=olmHvHNTBWDxJg9fC1lBOL0kWecJ8XAJ/2pN2A7UvGw=;
-	b=XWgpW0CCLFShCD5du2awieUFncT7rFcKgdhfhX1EGaIZic89yZ28pjI9iCYW5Rr7ltvriK
-	S24i9iFRHOT0bnQQxZRae6BXsQtA2DVyBgyp/LY2jEZG74nl4zuBIdLMluzdjqTYeww4BV
-	6NJQiNzdVKN9Qi9Vng+rHKc6B/5IDG4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-653-1pBKmLYpOe-Lp3nvzbBxmg-1; Tue, 21 May 2024 03:21:41 -0400
-X-MC-Unique: 1pBKmLYpOe-Lp3nvzbBxmg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BBE4C800169
-	for <llvm@lists.linux.dev>; Tue, 21 May 2024 07:21:40 +0000 (UTC)
-Received: from [172.64.11.21] (unknown [10.30.34.149])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 751B35618;
-	Tue, 21 May 2024 07:21:40 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 204): Test report for master
- (6.9.0, mainline.kernel.org-clang, daa12112)
-Date: Tue, 21 May 2024 07:21:40 -0000
-To: xzhou@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nl66cR8n"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716279016; x=1747815016;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EIVvD//jBwLUIZqnAqldAaSFJ5k+6u5rzaPCQ/h6cSY=;
+  b=Nl66cR8neH9HqYqmPtrsGlBqN0E0jIiwqvoL0kRSNmYFY0GvKG6drStg
+   FJWLSfZqcqonJ5BDCI9hrzJQHd/pP6m7LGSC44if+hIFkOOpH0rhbSDrO
+   F5+VtEYBF29cjCa1V7q1H1me2mthL1aqz4hB00MtMoT37m8chUbj2gF0Z
+   VbuTFl8v3Xk2sdjbFno3S30diF/Z/f2qSdt62Bvv3l/Ue5h8zZ5MrM7Oq
+   gSn/mR1iD1WvCzZN7jFx/O0Bk1EiL2Vy+/ZdJEzYH1IxmCQwVEWUxtfZM
+   g6SFaHioe324nArcapyyruW8QxY/b2QMnD+pM1Wi76CX3v4kQpVOPktmc
+   A==;
+X-CSE-ConnectionGUID: 1P+QLcYtT3Cw/gPiKsa48Q==
+X-CSE-MsgGUID: oxlB3UviTxiEsg7BPQeeEA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="16242361"
+X-IronPort-AV: E=Sophos;i="6.08,177,1712646000"; 
+   d="scan'208";a="16242361"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 01:10:15 -0700
+X-CSE-ConnectionGUID: o77A5059RHSyk+NUT+Dy5w==
+X-CSE-MsgGUID: KybhfvFxTLiDB1BzcltNtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,177,1712646000"; 
+   d="scan'208";a="32739998"
+Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 21 May 2024 01:10:13 -0700
+Received: from kbuild by 108735ec233b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s9KZX-00064i-2X;
+	Tue, 21 May 2024 08:10:11 +0000
+Date: Tue, 21 May 2024 16:09:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew Brost <matthew.brost@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: include/linux/vmstat.h:522:36: error: arithmetic between different
+ enumeration types ('enum node_stat_item' and 'enum lru_list')
+Message-ID: <202405211551.VnBA7xye-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
-Message-Id: <61188.124052103214100221@us-mta-653.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8f6a15f095a63a83b096d9b29aaff4f0fbe6f6e6
+commit: dd08ebf6c3525a7ea2186e636df064ea47281987 drm/xe: Introduce a new DRM driver for Intel GPUs
+date:   5 months ago
+config: riscv-randconfig-002-20240521 (https://download.01.org/0day-ci/archive/20240521/202405211551.VnBA7xye-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fa9b1be45088dce1e4b602d451f118128b94237b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240521/202405211551.VnBA7xye-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405211551.VnBA7xye-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:4:
+   In file included from drivers/gpu/drm/xe/xe_uc_types.h:9:
+   In file included from drivers/gpu/drm/xe/xe_guc_types.h:13:
+   In file included from drivers/gpu/drm/xe/xe_guc_ct_types.h:10:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   1 error generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_pcode.c:9:
+   In file included from drivers/gpu/drm/xe/xe_gt.h:9:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_pcode.c:74:44: error: variable 'timeout' is uninitialized when used within its own initialization [-Werror,-Wuninitialized]
+      74 |                 _wait_for_atomic(pcode_mailbox_done(gt), timeout * 1000, 1);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_utils.h:299:27: note: expanded from macro '_wait_for_atomic'
+     299 |         int cpu, ret, timeout = (US) * 1000; \
+         |                       ~~~~~~~    ^~
+   2 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_wait_user_fence.c:7:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_wait_user_fence.c:59:5: error: no previous prototype for function 'check_hw_engines' [-Werror,-Wmissing-prototypes]
+      59 | int check_hw_engines(struct xe_device *xe,
+         |     ^
+   drivers/gpu/drm/xe/xe_wait_user_fence.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      59 | int check_hw_engines(struct xe_device *xe,
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_wait_user_fence.c:85:5: error: no previous prototype for function 'xe_wait_user_fence_ioctl' [-Werror,-Wmissing-prototypes]
+      85 | int xe_wait_user_fence_ioctl(struct drm_device *dev, void *data,
+         |     ^
+   drivers/gpu/drm/xe/xe_wait_user_fence.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      85 | int xe_wait_user_fence_ioctl(struct drm_device *dev, void *data,
+         | ^
+         | static 
+   3 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_irq.c:10:
+   In file included from drivers/gpu/drm/xe/xe_device.h:12:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_irq.c:451:6: error: no previous prototype for function 'xe_irq_reset' [-Werror,-Wmissing-prototypes]
+     451 | void xe_irq_reset(struct xe_device *xe)
+         |      ^
+   drivers/gpu/drm/xe/xe_irq.c:451:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     451 | void xe_irq_reset(struct xe_device *xe)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_irq.c:467:6: error: no previous prototype for function 'xe_gt_irq_postinstall' [-Werror,-Wmissing-prototypes]
+     467 | void xe_gt_irq_postinstall(struct xe_gt *gt)
+         |      ^
+   drivers/gpu/drm/xe/xe_irq.c:467:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     467 | void xe_gt_irq_postinstall(struct xe_gt *gt)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_irq.c:515:5: error: no previous prototype for function 'xe_irq_install' [-Werror,-Wmissing-prototypes]
+     515 | int xe_irq_install(struct xe_device *xe)
+         |     ^
+   drivers/gpu/drm/xe/xe_irq.c:515:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     515 | int xe_irq_install(struct xe_device *xe)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_irq.c:545:6: error: no previous prototype for function 'xe_irq_shutdown' [-Werror,-Wmissing-prototypes]
+     545 | void xe_irq_shutdown(struct xe_device *xe)
+         |      ^
+   drivers/gpu/drm/xe/xe_irq.c:545:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     545 | void xe_irq_shutdown(struct xe_device *xe)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_irq.c:550:6: error: no previous prototype for function 'xe_irq_suspend' [-Werror,-Wmissing-prototypes]
+     550 | void xe_irq_suspend(struct xe_device *xe)
+         |      ^
+   drivers/gpu/drm/xe/xe_irq.c:550:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     550 | void xe_irq_suspend(struct xe_device *xe)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_irq.c:558:6: error: no previous prototype for function 'xe_irq_resume' [-Werror,-Wmissing-prototypes]
+     558 | void xe_irq_resume(struct xe_device *xe)
+         |      ^
+   drivers/gpu/drm/xe/xe_irq.c:558:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     558 | void xe_irq_resume(struct xe_device *xe)
+         | ^
+         | static 
+   7 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_gt_topology.c:8:
+   In file included from drivers/gpu/drm/xe/xe_gt.h:9:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_gt_topology.c:98:1: error: no previous prototype for function 'xe_gt_topology_count_dss' [-Werror,-Wmissing-prototypes]
+      98 | xe_gt_topology_count_dss(xe_dss_mask_t mask)
+         | ^
+   drivers/gpu/drm/xe/xe_gt_topology.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      97 | unsigned int
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_gt_topology.c:104:1: error: no previous prototype for function 'xe_gt_topology_dss_group_mask' [-Werror,-Wmissing-prototypes]
+     104 | xe_gt_topology_dss_group_mask(xe_dss_mask_t mask, int grpsize)
+         | ^
+   drivers/gpu/drm/xe/xe_gt_topology.c:103:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     103 | u64
+         | ^
+         | static 
+   3 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_tuning.c:9:
+   In file included from drivers/gpu/drm/xe/xe_gt_types.h:14:
+   In file included from drivers/gpu/drm/xe/xe_uc_types.h:9:
+   In file included from drivers/gpu/drm/xe/xe_guc_types.h:13:
+   In file included from drivers/gpu/drm/xe/xe_guc_ct_types.h:10:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_tuning.c:36:6: error: no previous prototype for function 'xe_tuning_process_gt' [-Werror,-Wmissing-prototypes]
+      36 | void xe_tuning_process_gt(struct xe_gt *gt)
+         |      ^
+   drivers/gpu/drm/xe/xe_tuning.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      36 | void xe_tuning_process_gt(struct xe_gt *gt)
+         | ^
+         | static 
+   2 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_guc_pc.c:7:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:9:
+   In file included from drivers/gpu/drm/xe/xe_bo_types.h:12:
+   In file included from include/drm/ttm/ttm_bo.h:34:
+   In file included from include/drm/drm_gem.h:42:
+   In file included from include/drm/drm_vma_manager.h:27:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_guc_pc.c:721:5: error: no previous prototype for function 'xe_guc_pc_start' [-Werror,-Wmissing-prototypes]
+     721 | int xe_guc_pc_start(struct xe_guc_pc *pc)
+         |     ^
+   drivers/gpu/drm/xe/xe_guc_pc.c:721:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     721 | int xe_guc_pc_start(struct xe_guc_pc *pc)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_guc_pc.c:771:5: error: no previous prototype for function 'xe_guc_pc_stop' [-Werror,-Wmissing-prototypes]
+     771 | int xe_guc_pc_stop(struct xe_guc_pc *pc)
+         |     ^
+   drivers/gpu/drm/xe/xe_guc_pc.c:771:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     771 | int xe_guc_pc_stop(struct xe_guc_pc *pc)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_guc_pc.c:812:5: error: no previous prototype for function 'xe_guc_pc_init' [-Werror,-Wmissing-prototypes]
+     812 | int xe_guc_pc_init(struct xe_guc_pc *pc)
+         |     ^
+   drivers/gpu/drm/xe/xe_guc_pc.c:812:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     812 | int xe_guc_pc_init(struct xe_guc_pc *pc)
+         | ^
+         | static 
+   4 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_gt.c:11:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:9:
+   In file included from drivers/gpu/drm/xe/xe_bo_types.h:12:
+   In file included from include/drm/ttm/ttm_bo.h:34:
+   In file included from include/drm/drm_gem.h:42:
+   In file included from include/drm/drm_vma_manager.h:27:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_gt.c:211:5: error: no previous prototype for function 'emit_nop_job' [-Werror,-Wmissing-prototypes]
+     211 | int emit_nop_job(struct xe_gt *gt, struct xe_engine *e)
+         |     ^
+   drivers/gpu/drm/xe/xe_gt.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     211 | int emit_nop_job(struct xe_gt *gt, struct xe_engine *e)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_gt.c:245:5: error: no previous prototype for function 'emit_wa_job' [-Werror,-Wmissing-prototypes]
+     245 | int emit_wa_job(struct xe_gt *gt, struct xe_engine *e)
+         |     ^
+   drivers/gpu/drm/xe/xe_gt.c:245:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     245 | int emit_wa_job(struct xe_gt *gt, struct xe_engine *e)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_gt.c:596:5: error: no previous prototype for function 'do_gt_reset' [-Werror,-Wmissing-prototypes]
+     596 | int do_gt_reset(struct xe_gt *gt)
+         |     ^
+   drivers/gpu/drm/xe/xe_gt.c:596:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     596 | int do_gt_reset(struct xe_gt *gt)
+         | ^
+         | static 
+   4 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_guc.c:6:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:9:
+   In file included from drivers/gpu/drm/xe/xe_bo_types.h:12:
+   In file included from include/drm/ttm/ttm_bo.h:34:
+   In file included from include/drm/drm_gem.h:42:
+   In file included from include/drm/drm_vma_manager.h:27:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_guc.c:239:6: error: no previous prototype for function 'guc_write_params' [-Werror,-Wmissing-prototypes]
+     239 | void guc_write_params(struct xe_guc *guc)
+         |      ^
+   drivers/gpu/drm/xe/xe_guc.c:239:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     239 | void guc_write_params(struct xe_guc *guc)
+         | ^
+         | static 
+   drivers/gpu/drm/xe/xe_guc.c:574:6: error: no previous prototype for function 'guc_enable_irq' [-Werror,-Wmissing-prototypes]
+     574 | void guc_enable_irq(struct xe_guc *guc)
+         |      ^
+   drivers/gpu/drm/xe/xe_guc.c:574:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     574 | void guc_enable_irq(struct xe_guc *guc)
+         | ^
+         | static 
+   3 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_dma_buf.c:6:
+   In file included from include/linux/dma-buf.h:19:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/gpu/drm/xe/xe_dma_buf.c:306:
+   drivers/gpu/drm/xe/tests/xe_dma_buf.c:255:6: error: no previous prototype for function 'xe_dma_buf_kunit' [-Werror,-Wmissing-prototypes]
+     255 | void xe_dma_buf_kunit(struct kunit *test)
+         |      ^
+   drivers/gpu/drm/xe/tests/xe_dma_buf.c:255:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     255 | void xe_dma_buf_kunit(struct kunit *test)
+         | ^
+         | static 
+   2 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_ring_ops.c:7:
+   In file included from drivers/gpu/drm/xe/xe_gt.h:9:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2177:
+>> include/linux/vmstat.h:522:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/xe/xe_ring_ops.c:288:20: error: array index 0 is past the end of the array (that has type 'u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
+     288 |         i = emit_bb_start(job->batch_addr[0], BIT(8), dw, i);
+         |                           ^               ~
+   drivers/gpu/drm/xe/xe_sched_job_types.h:43:2: note: array 'batch_addr' declared here
+      43 |         u64 batch_addr[0];
+         |         ^
+   drivers/gpu/drm/xe/xe_ring_ops.c:294:20: error: array index 1 is past the end of the array (that has type 'u64[0]' (aka 'unsigned long long[0]')) [-Werror,-Warray-bounds]
+     294 |         i = emit_bb_start(job->batch_addr[1], BIT(8), dw, i);
+         |                           ^               ~
+   drivers/gpu/drm/xe/xe_sched_job_types.h:43:2: note: array 'batch_addr' declared here
+      43 |         u64 batch_addr[0];
+         |         ^
+   3 errors generated.
+..
 
 
-Kernel information:
-    Commit message: Merge tag 'dma-mapping-6.10-2024-05-20' of git://git.in=
-fradead.org/users/hch/dma-mapping
+vim +522 include/linux/vmstat.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1297974188
+9d7ea9a297e644 Konstantin Khlebnikov 2019-12-04  519  
+9d7ea9a297e644 Konstantin Khlebnikov 2019-12-04  520  static inline const char *lru_list_name(enum lru_list lru)
+9d7ea9a297e644 Konstantin Khlebnikov 2019-12-04  521  {
+9d7ea9a297e644 Konstantin Khlebnikov 2019-12-04 @522  	return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+9d7ea9a297e644 Konstantin Khlebnikov 2019-12-04  523  }
+9d7ea9a297e644 Konstantin Khlebnikov 2019-12-04  524  
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1297974188-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/590
+:::::: The code at line 522 was first introduced by commit
+:::::: 9d7ea9a297e6445d567056f15b469dde13ca4134 mm/vmstat: add helpers to get vmstat item names for each enum type
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
- scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
-:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [aarch64, ppc64le, x86=
-_64]
-                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64 (debug)]
-                Filesystem - Loopdev Sanity [ppc64le]
-                Hardware - Firmware test suite [aarch64]
-                Hardware - pciutils: sanity smoke test [x86_64]
-                kselftests upstream - bpf [x86_64]
-                kselftests upstream - net [x86_64]
-                Libkcapi AF_ALG test [aarch64, ppc64le, s390x, x86_64]
-                Memory function: memfd_create [aarch64, s390x, x86_64]
-                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
-_64]
-                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
-_64]
-                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
-                Reboot test [aarch64, ppc64le, s390x, x86_64]
-                stress: stress-ng - cpu-cache [aarch64, x86_64]
-                xfstests - btrfs [aarch64]
-                xfstests - ext4 [aarch64]
-                xfstests - xfs [aarch64]
-        Issue: [upstream] blktests tests/zbd/010 failed (WARNING: CPU: 22 P=
-ID: 44011 at fs/iomap/iter.c:51)
-            URL: https://lore.kernel.org/linux-block/CAHj4cs-kfojYC9i0G73PR=
-kYzcxCTex=3D-vugRFeP40g_URGvnfQ@mail.gmail.com/T/#u
-            Affected tests:
-                Storage - blktests - blk - upstream [aarch64, x86_64]
-        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
-d, map_write access on the bpf labeled init_t.
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
-            Affected tests:
-                Hardware - Firmware test suite [aarch64]
-                Networking cki netfilter test [aarch64, s390x, x86_64]
-                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
-                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
-                Storage - blktests - blk - upstream [aarch64, x86_64]
-                stress: stress-ng - cpu-cache [aarch64, x86_64]
-                stress: stress-ng - memory [aarch64, x86_64]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: [upstream] stress-ng: avc denial on secretmemory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1752
-            Affected tests:
-                stress: stress-ng - memory [aarch64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                AMTU (Abstract Machine Test Utility) [s390x]
-                Boot test [s390x]
-                Filesystem - Loopdev Sanity [s390x]
-                Libkcapi AF_ALG test [s390x]
-                machineinfo [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-                Reboot test [s390x]
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                kdump - kexec-file-load [x86_64]
+:::::: TO: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
