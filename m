@@ -1,62 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC8E1B966;
-	Tue, 21 May 2024 16:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B14149C72;
+	Tue, 21 May 2024 21:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716307660; cv=none; b=bfeU43nbIyPZap0ApQ4CbCjezoBU7M85VRXEsyf6ybL+6dThLiGFyzTo8tySSTdok6git8wO2V2IysbzO/xnn7zzi5PMQb7SmRZbgwpcV1CopFNJbwzRj+bBaETj4H+PGS4fQijPUvtt+CIKmVx7Caa7pFDChcujUeHZFDWCod4=
+	t=1716326010; cv=none; b=Iyhq5lKpRlH7AAdYY2aS1BUtrF3ZHeAqaV4l9aL6VWDq82fmYneuqxzC1ZEUalLy8vd1Uk+k0CsshHCNj03UsC9gy0tIJPZV5LtDwm7tF2aCVA9J+vjQidxpFzKSSnrWXjNLSvTesFJGp31oW8tkbdMmKljakwAAe0dT/EnrQiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716307660; c=relaxed/simple;
-	bh=X6+TQuHQYvENKSfztJ5OftVkQopYjO+iM3X+c63PpAo=;
+	s=arc-20240116; t=1716326010; c=relaxed/simple;
+	bh=jU/KIs1yxidfflnv5CSKB5RJvZIBfuN7UKBuEXcylFc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ArJH5AbL5+iChSW0vxJQCKBGJ3QplpigSjXIM1PXC0rkKwfsNLsEqboeUWSfiz/U7BeMDzQ8pLLHW+fHoWmpnjzC9O9DsCnw43QGXYRybdmmCaELF2TFtBI/zX7oOG6qFRU+EmAw/6Ip20mbPegHIO3T/vvKJj0dVIIAh03hXwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LFWdXCrz; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=eSLWpdgkJ8Cq3SMDJn+Xaz7vVfkRQBy4xgPWjPZxaBXVzO5WoMzYCYZ+Flx/estzVMsaIp7dZtWk1q+1oIoFr91Q3wIJS7CDI1xsja51WH0o6tXPpQOuOx3+IUYpDYDIa3aVLlqg9/V3AYgDSrmm0C0ZTYL0oLvA1PZxnncDUH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S534v9LZ; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LFWdXCrz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S534v9LZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716307659; x=1747843659;
+  t=1716326007; x=1747862007;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=X6+TQuHQYvENKSfztJ5OftVkQopYjO+iM3X+c63PpAo=;
-  b=LFWdXCrzlR+czqZJwkYksW47z2SxXmbRmD0kXji+lk/unb71ZmeTErkK
-   EJVdekFMwkZNsl0sJ1Xsgqdd/RUKZkcZ1Jpc5QdqCrLSYODF3cfH1jYvP
-   79PXuL1wzSkSh6p6TzviXnaQncCgbr5tj2rInAVuZL/d6yS4pLXYicYbU
-   +IPSQ9fl0zYv8NyxixpeLFCYEF4pZv63LNoyRBSAbxGRvmY8coqpqmMz6
-   whldT6qFy1HrKPKhbHM1VKg7u3W8I/ZXisUPvXfPDWUw6pmrR0SYyQgMo
-   HsaYr4SrjW6G9zpAPLG9ydVXZhM/FPaQJe1NoUhK2Lrwq9+ashIg3EEGE
-   w==;
-X-CSE-ConnectionGUID: lLMSv8H6SeGQ3+wzqgyKnA==
-X-CSE-MsgGUID: ZO3pA0MyRIeWI6D4rOk5IQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="23918929"
+  bh=jU/KIs1yxidfflnv5CSKB5RJvZIBfuN7UKBuEXcylFc=;
+  b=S534v9LZzdI19LJcuaOFlOJZbcIp/etuytwRQJuM89JomXgy8tYYPvQU
+   /QphiIAR9ZS2kAOQ/rEquznZqY9a0Euieo/4zWpJZpVHbafwzG+l4KvyZ
+   K6CcND5PIUvgizBNKCcecnGV4Pbise0ce0izAPrWlW7ZW/ekrpftwFT1L
+   4alWQsl5TaZDq5JgtxdBPydC3FwGrsrn2XNTzyk52E1hzRg3LatHpus/+
+   /Hu57oyhIQja7xgFiQ4yrkSqBmLbl46UupNbw5jyZQMjc26wm3Fae4IPL
+   /Qteh9JUXgTyuPz8ipMqFL6UmppiC44ngmCFsKa8Eiagn8Rzz2krrtuYM
+   g==;
+X-CSE-ConnectionGUID: ZbmP1LoiTZS41t8cXGoygw==
+X-CSE-MsgGUID: xR95fIO3SdqW0mnJq9Gaug==
+X-IronPort-AV: E=McAfee;i="6600,9927,11079"; a="12386870"
 X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="23918929"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 09:07:30 -0700
-X-CSE-ConnectionGUID: L8Q/U9mDTeq3jXNUSIKErA==
-X-CSE-MsgGUID: A2di3e/mSd20kHJVKIOzlg==
+   d="scan'208";a="12386870"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 14:13:26 -0700
+X-CSE-ConnectionGUID: T+/OAt9fSpiQPz7u2tDMSA==
+X-CSE-MsgGUID: cFVMG8jZRSib6lotqrC9nQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="33030958"
+   d="scan'208";a="32971104"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 21 May 2024 09:07:26 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 21 May 2024 14:13:22 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s9S1N-0000Vx-00;
-	Tue, 21 May 2024 16:07:25 +0000
-Date: Wed, 22 May 2024 00:07:01 +0800
+	id 1s9Wmo-0000kX-2V;
+	Tue, 21 May 2024 21:13:06 +0000
+Date: Wed, 22 May 2024 05:12:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Hopps <chopps@chopps.org>, devel@linux-ipsec.org
+To: Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org, Christian Hopps <chopps@chopps.org>
-Subject: Re: [PATCH ipsec-next v2 16/17] xfrm: iptfs: handle reordering of
- received packets
-Message-ID: <202405212335.amQLFAic-lkp@intel.com>
-References: <20240520214255.2590923-17-chopps@chopps.org>
+	dmitry.baryshkov@linaro.org, ictor.liu@nxp.com,
+	sui.jingfeng@linux.dev, aford@beaconembedded.com,
+	Adam Ford <aford173@gmail.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/bridge: adv7511:  Fix Intermittent EDID failures
+Message-ID: <202405220445.DW2U7DXR-lkp@intel.com>
+References: <20240521011614.496421-1-aford173@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,271 +76,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240520214255.2590923-17-chopps@chopps.org>
+In-Reply-To: <20240521011614.496421-1-aford173@gmail.com>
 
-Hi Christian,
+Hi Adam,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on klassert-ipsec-next/master]
-[cannot apply to klassert-ipsec/master netfilter-nf/main linus/master nf-next/master v6.9 next-20240521]
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-tip/drm-tip linus/master drm-intel/for-linux-next-fixes v6.9 next-20240521]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Hopps/include-uapi-add-ip_tfs_-_hdr-packet-formats/20240521-064324
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec-next.git master
-patch link:    https://lore.kernel.org/r/20240520214255.2590923-17-chopps%40chopps.org
-patch subject: [PATCH ipsec-next v2 16/17] xfrm: iptfs: handle reordering of received packets
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240521/202405212335.amQLFAic-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project fa9b1be45088dce1e4b602d451f118128b94237b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240521/202405212335.amQLFAic-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Ford/drm-bridge-adv7511-Fix-Intermittent-EDID-failures/20240521-091841
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240521011614.496421-1-aford173%40gmail.com
+patch subject: [PATCH] drm/bridge: adv7511:  Fix Intermittent EDID failures
+config: i386-buildonly-randconfig-002-20240521 (https://download.01.org/0day-ci/archive/20240522/202405220445.DW2U7DXR-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240522/202405220445.DW2U7DXR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405212335.amQLFAic-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405220445.DW2U7DXR-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from net/xfrm/xfrm_iptfs.c:11:
-   In file included from include/linux/icmpv6.h:5:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/xfrm/xfrm_iptfs.c:11:
-   In file included from include/linux/icmpv6.h:5:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/xfrm/xfrm_iptfs.c:11:
-   In file included from include/linux/icmpv6.h:5:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/xfrm/xfrm_iptfs.c:11:
-   In file included from include/linux/icmpv6.h:5:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> net/xfrm/xfrm_iptfs.c:1371:29: warning: variable 's0seq' set but not used [-Wunused-but-set-variable]
-    1371 |         u64 distance, extra_drops, s0seq;
-         |                                    ^
-   net/xfrm/xfrm_iptfs.c:1903:6: warning: variable 'blkoff' set but not used [-Wunused-but-set-variable]
-    1903 |         u32 blkoff = 0;
-         |             ^
-   net/xfrm/xfrm_iptfs.c:2253:11: warning: variable 'settime' set but not used [-Wunused-but-set-variable]
-    2253 |         time64_t settime;
-         |                  ^
-   10 warnings generated.
+>> drivers/gpu/drm/bridge/adv7511/adv7511_drv.c:507:35: warning: variable 'cec_status' is uninitialized when used here [-Wuninitialized]
+     507 |         if (irq_status == IRQ_HANDLED || cec_status == IRQ_HANDLED)
+         |                                          ^~~~~~~~~~
+   drivers/gpu/drm/bridge/adv7511/adv7511_drv.c:472:16: note: initialize the variable 'cec_status' to silence this warning
+     472 |         int cec_status;
+         |                       ^
+         |                        = 0
+   1 warning generated.
 
 
-vim +/s0seq +1371 net/xfrm/xfrm_iptfs.c
+vim +/cec_status +507 drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
 
-  1360	
-  1361	static void __reorder_future_shifts(struct xfrm_iptfs_data *xtfs,
-  1362					    struct sk_buff *inskb,
-  1363					    struct list_head *list,
-  1364					    struct list_head *freelist)
-  1365	{
-  1366		const u32 nslots = xtfs->cfg.reorder_win_size + 1;
-  1367		const u64 inseq = __esp_seq(inskb);
-  1368		u32 savedlen = xtfs->w_savedlen;
-  1369		u64 wantseq = xtfs->w_wantseq;
-  1370		struct sk_buff *slot0 = NULL;
-> 1371		u64 distance, extra_drops, s0seq;
-  1372		struct skb_wseq *wnext;
-  1373		u32 beyond, shifting, slot;
-  1374	
-  1375		BUG_ON(inseq <= wantseq);
-  1376		distance = inseq - wantseq;
-  1377		BUG_ON(distance <= nslots - 1);
-  1378		beyond = distance - (nslots - 1);
-  1379	
-  1380		/* Handle future sequence number received.
-  1381		 *
-  1382		 * IMPORTANT: we are at least advancing w_wantseq (i.e., wantseq) by 1
-  1383		 * b/c we are beyond the window boundary.
-  1384		 *
-  1385		 * We know we don't have the wantseq so that counts as a drop.
-  1386		 */
-  1387	
-  1388		/* ex: slot count is 4, array size is 3 savedlen is 2, slot 0 is the
-  1389		 * missing sequence number.
-  1390		 *
-  1391		 * the final slot at savedlen (index savedlen - 1) is always occupied.
-  1392		 *
-  1393		 * beyond is "beyond array size" not savedlen.
-  1394		 *
-  1395		 *          +--------- array length (savedlen == 2)
-  1396		 *          |   +----- array size (nslots - 1 == 3)
-  1397		 *          |   |   +- window boundary (nslots == 4)
-  1398		 *          V   V | V
-  1399		 *                |
-  1400		 *  0   1   2   3 |   slot number
-  1401		 * ---  0   1   2 |   array index
-  1402		 *     [b] [c] : :|   array
-  1403		 *                |
-  1404		 * "2" "3" "4" "5"|*6*  seq numbers
-  1405		 *
-  1406		 * We receive seq number 6
-  1407		 * distance == 4 [inseq(6) - w_wantseq(2)]
-  1408		 * newslot == distance
-  1409		 * index == 3 [distance(4) - 1]
-  1410		 * beyond == 1 [newslot(4) - lastslot((nslots(4) - 1))]
-  1411		 * shifting == 1 [min(savedlen(2), beyond(1)]
-  1412		 * slot0_skb == [b], and should match w_wantseq
-  1413		 *
-  1414		 *                +--- window boundary (nslots == 4)
-  1415		 *  0   1   2   3 | 4   slot number
-  1416		 * ---  0   1   2 | 3   array index
-  1417		 *     [b] : : : :|     array
-  1418		 * "2" "3" "4" "5" *6*  seq numbers
-  1419		 *
-  1420		 * We receive seq number 6
-  1421		 * distance == 4 [inseq(6) - w_wantseq(2)]
-  1422		 * newslot == distance
-  1423		 * index == 3 [distance(4) - 1]
-  1424		 * beyond == 1 [newslot(4) - lastslot((nslots(4) - 1))]
-  1425		 * shifting == 1 [min(savedlen(1), beyond(1)]
-  1426		 * slot0_skb == [b] and should match w_wantseq
-  1427		 *
-  1428		 *                +-- window boundary (nslots == 4)
-  1429		 *  0   1   2   3 | 4   5   6   slot number
-  1430		 * ---  0   1   2 | 3   4   5   array index
-  1431		 *     [-] [c] : :|             array
-  1432		 * "2" "3" "4" "5" "6" "7" *8*  seq numbers
-  1433		 *
-  1434		 * savedlen = 2, beyond = 3
-  1435		 * iter 1: slot0 == NULL, missed++, lastdrop = 2 (2+1-1), slot0 = [-]
-  1436		 * iter 2: slot0 == NULL, missed++, lastdrop = 3 (2+2-1), slot0 = [c]
-  1437		 * 2 < 3, extra = 1 (3-2), missed += extra, lastdrop = 4 (2+2+1-1)
-  1438		 *
-  1439		 * We receive seq number 8
-  1440		 * distance == 6 [inseq(8) - w_wantseq(2)]
-  1441		 * newslot == distance
-  1442		 * index == 5 [distance(6) - 1]
-  1443		 * beyond == 3 [newslot(6) - lastslot((nslots(4) - 1))]
-  1444		 * shifting == 2 [min(savedlen(2), beyond(3)]
-  1445		 *
-  1446		 * slot0_skb == NULL changed from [b] when "savedlen < beyond" is true.
-  1447		 */
-  1448	
-  1449		/* Now send any packets that are being shifted out of saved, and account
-  1450		 * for missing packets that are exiting the window as we shift it.
-  1451		 */
-  1452	
-  1453		/* If savedlen > beyond we are shifting some, else all. */
-  1454		shifting = min(savedlen, beyond);
-  1455	
-  1456		/* slot0 is the buf that just shifted out and into slot0 */
-  1457		slot0 = NULL;
-  1458		s0seq = wantseq;
-  1459		wnext = xtfs->w_saved;
-  1460		for (slot = 1; slot <= shifting; slot++, wnext++) {
-  1461			/* handle what was in slot0 before we occupy it */
-  1462			if (slot0)
-  1463				list_add_tail(&slot0->list, list);
-  1464			s0seq++;
-  1465			slot0 = wnext->skb;
-  1466			wnext->skb = NULL;
-  1467		}
-  1468	
-  1469		/* slot0 is now either NULL (in which case it's what we now are waiting
-  1470		 * for, or a buf in which case we need to handle it like we received it;
-  1471		 * however, we may be advancing past that buffer as well..
-  1472		 */
-  1473	
-  1474		/* Handle case where we need to shift more than we had saved, slot0 will
-  1475		 * be NULL iff savedlen is 0, otherwise slot0 will always be
-  1476		 * non-NULL b/c we shifted the final element, which is always set if
-  1477		 * there is any saved, into slot0.
-  1478		 */
-  1479		if (savedlen < beyond) {
-  1480			extra_drops = beyond - savedlen;
-  1481			if (savedlen == 0) {
-  1482				BUG_ON(slot0);
-  1483				s0seq += extra_drops;
-  1484			} else {
-  1485				extra_drops--; /* we aren't dropping what's in slot0 */
-  1486				BUG_ON(!slot0);
-  1487				list_add_tail(&slot0->list, list);
-  1488				s0seq += extra_drops + 1;
-  1489			}
-  1490			slot0 = NULL;
-  1491			/* slot0 has had an empty slot pushed into it */
-  1492		}
-  1493	
-  1494		/* Remove the entries */
-  1495		__vec_shift(xtfs, beyond);
-  1496	
-  1497		/* Advance want seq */
-  1498		xtfs->w_wantseq += beyond;
-  1499	
-  1500		/* Process drops here when implementing congestion control */
-  1501	
-  1502		/* We've shifted. plug the packet in at the end. */
-  1503		xtfs->w_savedlen = nslots - 1;
-  1504		xtfs->w_saved[xtfs->w_savedlen - 1].skb = inskb;
-  1505		iptfs_set_window_drop_times(xtfs, xtfs->w_savedlen - 1);
-  1506	
-  1507		/* if we don't have a slot0 then we must wait for it */
-  1508		if (!slot0)
-  1509			return;
-  1510	
-  1511		/* If slot0, seq must match new want seq */
-  1512		BUG_ON(xtfs->w_wantseq != __esp_seq(slot0));
-  1513	
-  1514		/* slot0 is valid, treat like we received expected. */
-  1515		__reorder_this(xtfs, slot0, list);
-  1516	}
-  1517	
+   505	
+   506		/* If there is no IRQ to handle, exit indicating no IRQ data */
+ > 507		if (irq_status == IRQ_HANDLED || cec_status == IRQ_HANDLED)
+   508			return IRQ_HANDLED;
+   509	
+   510		return IRQ_NONE;
+   511	}
+   512	
 
 -- 
 0-DAY CI Kernel Test Service
