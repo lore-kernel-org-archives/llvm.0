@@ -1,95 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3AF8F6D;
-	Wed, 22 May 2024 14:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B715A76048;
+	Wed, 22 May 2024 17:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716388292; cv=none; b=mvbBumpfLbGi5tKSkTHVEkVE+ygpvWbqEZ8ZJh+n3XSQ0vPRJ1m5ZkT4pCGU8dZopHC5SVljDf7VhFZHkxx+x9jp8qIqlfFEYPLChhLpqxJ7N0uXG0wB3w/dNjPuGTUMw5kdtfANK2SKCb7znLtPKcvWmgAEBrc4Lg1EK+bnbVU=
+	t=1716399170; cv=none; b=q7ozyMAJqO5X3IzwcvN3gD4HChQQagR9/FfOzIsGYE9J9aDiu5cHbENwJYPU8tMoSyMMbEBhWEuEL9GdXux1llUWawv8BZfIWYGDkOXHDaZi2Jd+0XuTDz3lxWAlJur3jdSzeBA1HYTTkSkG9351svK+M2Pp01PU+yGCnLk1Kgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716388292; c=relaxed/simple;
-	bh=caxlHLkLA7Kyl2xhI0wkWw8AtvfOM+yyH8wCjBO9scI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C37/EIN0ROr4gD3SqHp3WwD6dk8RNkssNk0b7lyZIJPl9po+xHNrf23SDUXx1i22jeGVmZcVDuEoolB5KYC/7fOxs49HQPeyZFWLkP2HF7+aA5JO/tQmuTB+E+SsJI8DYP+DiIfLCG8sEu8k95GCnOo3mnouOPS6AL29dTOsKPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J9pkbY/o; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716399170; c=relaxed/simple;
+	bh=/PN55//MytV2k126282ue9+p5v4Xkeov6iPQTSuOE0I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DJfhIvb6JcJ59leuTgR6ebcrW0fWdKtNvd5+pixDQkJvsAmfClh0BMftQDsOqj5aNCO+lQkipq5RCDFJVnJZKvMw15JUu1cmmqBKDfAtQWr93GOSChaYXaz3F2nY6W8PPomX0bNE3vjFZcLsbyK6sfYfOkebhmLg+WbsaDxvDBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y47fhWjY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J9pkbY/o"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88564C2BBFC;
-	Wed, 22 May 2024 14:31:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y47fhWjY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7FBC2BBFC;
+	Wed, 22 May 2024 17:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716388290;
-	bh=caxlHLkLA7Kyl2xhI0wkWw8AtvfOM+yyH8wCjBO9scI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J9pkbY/oQCevl7mOH3JJXSgFZZOrwY2EaiGTjT8Qvv42x3YKAakriYSPEhSm7/KqX
-	 05892MJl4SjdKnQ5Z8EygCt+PzSVMSLX1ThcbkbQy2Thj0ibC6PxwSuS4xeDSYHrYQ
-	 2d1HSVKTf4d5DvLDe0hqNcp9+dCb4GCcYr92NOht2cTMFClds7a2SfDhgwPdB9EE7G
-	 Mw49zWiygkpLHxgM2eEXsf797PqZb10QM3kAaW6l7R0S7mBde/SbVRXaBh7V6PKhH5
-	 YPSxlvClXZXKD1wcVZue7IpXSclgliHTDcvRlCrR7vDdXSUYLZ/zK7+P/djy4uGwAd
-	 8gNRRpFg7CiMQ==
-Date: Wed, 22 May 2024 09:31:29 -0500
-From: Rob Herring <robh@kernel.org>
-To: skseofh@gmail.com
-Cc: lkp@intel.com, daero_le.lee@samsung.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, rppt@kernel.org,
-	saravanak@google.com
-Subject: Re: [PATCH v2] of: of_reserved_mem: clean-up reserved memory with
- no-map
-Message-ID: <20240522143129.GA3244910-robh@kernel.org>
-References: <202405011208.qsZQwChO-lkp@intel.com>
- <20240501132359.488616-1-skseofh@gmail.com>
+	s=k20201202; t=1716399170;
+	bh=/PN55//MytV2k126282ue9+p5v4Xkeov6iPQTSuOE0I=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Y47fhWjYcGcX+hOXTvI/thAGXgpXSJkTNj/raoRIYCzHfYHB0cm8nftecIKyahIjl
+	 Q4aZMLVXBy+W/wAXMACXGJcNlJE9tnqGrnX9CEn3+FsT3RfYR7lHA7DeSRc+QCFKY6
+	 qPEeOvszF4EwoIto7zwVqmRwaKRVcIGVW+Bk8BgD36RD892XLlH/uHaSp6g/5GCJUI
+	 2hBukG52w9lh3MSvOIBjqjCBN9KU1qz9i5se9iqFs8SPvPKDxvQlg6675DysWrBDYV
+	 WvBUkze66kt6+i0jHAo78VPkSOyPGn/i7t0TESMlrvksdlaZRAvkefo1+PkBxvFHej
+	 hFvTTnR93Ap3A==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 22 May 2024 10:32:43 -0700
+Subject: [PATCH] efi/libstub: zboot.lds: Discard .discard sections
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240501132359.488616-1-skseofh@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240522-efi-zboot-lds-add-discard-sections-to-discard-v1-1-6b415efa0f85@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADosTmYC/z2NQQqDQAxFryJZN2CDFuxVShfjJFMDxSmToYji3
+ Q0uXL4P7/0NTIqKwbPZoMhfTfPscL81EKcwfwSVnYFa6tqeCCUprmPOFb9sGJiR1WIojCaxum1
+ Y87X1SWgYU0f8CODNX3F/Of9e730/AL0j0wl/AAAA
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ linux-efi@vger.kernel.org, loongarch@lists.linux.dev, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1966; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=/PN55//MytV2k126282ue9+p5v4Xkeov6iPQTSuOE0I=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGl+Oo4Oxd7SElMMTAu1Lm6fLL6M/+cp31+Llh65fP3Gy
+ 4u7j+0W6ShlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATeXKT4Q9H3JdL7xP8nLr+
+ bQ+r07/4Idp7zpSFZ3rXaNZs35OXKnCf4X/2GW+e06zO+rcVgn482DjpxNxVRy0/aKXkvJPQWyq
+ sKMEOAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, May 01, 2024 at 10:23:59PM +0900, skseofh@gmail.com wrote:
-> From: Daero Lee <daero_le.lee@samsung.com>
-> 
-> In early_init_dt_reserve_memory we only add memory w/o no-map flag to
-> memblock.reserved. But we need to add memory w/ no-map flag to
-> memblock.reserved, because NOMAP and memblock.reserved are semantically
-> different.
-> 
-> Signed-off-by: Daero Lee <daero_le.lee@samsung.com>
-> ---
->  drivers/of/of_reserved_mem.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
-> index 8236ecae2953..d00a17a9cebc 100644
-> --- a/drivers/of/of_reserved_mem.c
-> +++ b/drivers/of/of_reserved_mem.c
-> @@ -81,6 +81,7 @@ static void __init fdt_reserved_mem_save_node(unsigned long node, const char *un
->  static int __init early_init_dt_reserve_memory(phys_addr_t base,
->  					       phys_addr_t size, bool nomap)
->  {
-> +	int err = 0;
->  	if (nomap) {
->  		/*
->  		 * If the memory is already reserved (by another region), we
-> @@ -91,7 +92,10 @@ static int __init early_init_dt_reserve_memory(phys_addr_t base,
->  		    memblock_is_region_reserved(base, size))
->  			return -EBUSY;
->  
-> -		return memblock_mark_nomap(base, size);
-> +
-> +		err = memblock_mark_nomap(base, size);
+When building ARCH=loongarch defconfig + CONFIG_UNWINDER_ORC=y using
+LLVM, there is a warning from ld.lld when linking the EFI zboot image
+due to the use of unreachable() in number() in vsprintf.c:
 
-The last time this was touched, it was to make the handling aligned with 
-EFI memory map handling. Is that still going to be the case with this 
-change? Or does EFI memory map handling have the same issue?
+  ld.lld: warning: drivers/firmware/efi/libstub/lib.a(vsprintf.stub.o):(.discard.unreachable+0x0): has non-ABS relocation R_LARCH_32_PCREL against symbol ''
 
-> +		if (err)
-> +			return err;
->  	}
->  	return memblock_reserve(base, size);
->  }
-> -- 
-> 2.25.1
-> 
+If the compiler cannot eliminate the default case for any reason, the
+.discard.unreachable section will remain in the final binary but the
+entire point of any section prefixed with .discard is that it is only
+used at compile time, so it can be discarded via /DISCARD/ in a linker
+script. The asm-generic vmlinux.lds.h includes .discard and .discard.*
+in the COMMON_DISCARDS macro but that is not used for zboot.lds, as it
+is not a kernel image linker script.
+
+Add .discard and .discard.* to /DISCARD/ in zboot.lds, so that any
+sections meant to be discarded at link time are not included in the
+final zboot image. This issue is not specific to LoongArch, it is just
+the first architecture to select CONFIG_OBJTOOL, which defines
+annotate_unreachable() as an asm statement to add the
+.discard.unreachable section, and use the EFI stub.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2023
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/firmware/efi/libstub/zboot.lds | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/firmware/efi/libstub/zboot.lds b/drivers/firmware/efi/libstub/zboot.lds
+index ac8c0ef85158..af2c82f7bd90 100644
+--- a/drivers/firmware/efi/libstub/zboot.lds
++++ b/drivers/firmware/efi/libstub/zboot.lds
+@@ -41,6 +41,7 @@ SECTIONS
+ 	}
+ 
+ 	/DISCARD/ : {
++		*(.discard .discard.*)
+ 		*(.modinfo .init.modinfo)
+ 	}
+ }
+
+---
+base-commit: 15aa8fb852f995dd234a57f12dfb989044968bb6
+change-id: 20240522-efi-zboot-lds-add-discard-sections-to-discard-5fe29bf42d6a
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
