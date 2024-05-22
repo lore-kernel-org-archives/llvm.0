@@ -1,193 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D2AD51E
-	for <llvm@lists.linux.dev>; Wed, 22 May 2024 19:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AAC5C8FC;
+	Wed, 22 May 2024 19:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716405714; cv=none; b=NVulBAMdWTZw5fTONClJpwp5jF6CC0B2mUJ4T9qKCf3eIv2syOyevaq2PXDrF4kycNI+1SwVYvtmloUS4Ru9lcm2tEcEhBU9c8eyfPdG27ue2e3xaR9zsb7kJQlNY5l33qOCUh/nYCkrW5N0MkFPR8gBAnEC2/XFXxVPKhuVqz0=
+	t=1716407148; cv=none; b=mhEJxP3BIy3WkBJAkIjZUz5B89yc8cTPwo6tmuDdPb39r3S2lZGaPvtkWZijrDFes8kC9mXxx+iOEBVW2YLcwGCl8Vqp1gKoxqOdlZlmk9Wnw44lOrDTbejg7qXeyMsnIV4bdAHLJ+lBtb2P6fgMZyIaBuimv3tD+NxczTP96dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716405714; c=relaxed/simple;
-	bh=rNmdcWUKubo+hLpGVEoV1nRa+aed+Gku+dif9NeLGG4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ZhFnLF1hYZLqfd0tdXmq25c4WXicyBGN4aAb5HYLlVwvvfUpq9N7peGwD3NuLW3vY6qGncmBrhp4a1c+VxgAw67SaxHHkvGN1HTIDWMnmaS3MS+zf+ExSO/h/tLhF/hyUPyIBx7wLv52ABTJ24Aur/sM7uohe/hoRBIUfnqpGMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hHLeP8k1; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1716407148; c=relaxed/simple;
+	bh=VNy3X1gCkM1Q2lQt+/I2zG7AyOiV6ah49bD+X8inkw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YE5uGjShWOn9mPS2FNIpX4NvWwInQwzbB86sHTzq+j+6jlPRMt6YAKbcEknjbJTBvY0pbeQAOd5uchq0MHPonuje4zZib6ITxOROo3NlC158mHTMg7ZWwhP9HDZWWH/iH9XsRphJFp7yvIFM+/qbcTMIubBvy0jyJ9jz1dPAAVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gp9t78h5; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hHLeP8k1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716405711;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SdVYWqgOKa8cWFEm2e4ZHiGVjSqdkriUBpu/2ZR2Ufs=;
-	b=hHLeP8k1Fy2vKYBBygzeUGuwY4Nk4PZzzaPbpfvJ/xp6HoOI44v2SAVL3TFK+YtQuUdZgN
-	FYkNktphpN9E8t057kOJWY9pXkEPOHGJDk556vkpZ/QlLhVBQspaHHRUNi80Gonp487lm9
-	o1FTnSRluWwkuA+J6ecWe4vzJFzs2jY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-294-Ht7Ba-rENce3rktn-FxexA-1; Wed, 22 May 2024 15:21:50 -0400
-X-MC-Unique: Ht7Ba-rENce3rktn-FxexA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3D1B101A525
-	for <llvm@lists.linux.dev>; Wed, 22 May 2024 19:21:49 +0000 (UTC)
-Received: from [172.64.0.115] (unknown [10.30.33.131])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C258A105480A;
-	Wed, 22 May 2024 19:21:48 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 26 of 204): Test report for master
- (6.9.0, mainline.kernel.org-clang, 29c73fc7)
-Date: Wed, 22 May 2024 19:21:48 -0000
-To: jishi@redhat.com, haliu@redhat.com, llvm@lists.linux.dev, yiche@redhat.com,
- zlang@redhat.com, jiji@redhat.com, xzhou@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gp9t78h5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716407147; x=1747943147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VNy3X1gCkM1Q2lQt+/I2zG7AyOiV6ah49bD+X8inkw4=;
+  b=Gp9t78h57p+ribgoWSp6DYpU7YLPAd8Bp0T5TxtBNTyTTs6Lz2CgnUJx
+   CSyobItc5FgGJGQPMSIgp91ELpKtkR4j3mnT9cBFKQf87tAeB0/Goeogk
+   lrBZ4i5gl4RQ+C2AHsj2OWD4FOAitmpnWuEQDdu4pY/ywuzbKNo3l37RE
+   NcOk9aKXD900Dt1p7Sm9CFhZT3FpmcJSNn+F8t/8EYTXG9lUik+VAA8Mm
+   xy+yAss4xhWxPK4c+9CSE7FZKe022yWeMwxsNv1y9Q+XPXC++edpK2Th0
+   oV+o28t4Id8pEQNrLp61mlWZRvc9h9u0H/z9ZYYkM9wnmkUm5F/Jg5z+u
+   A==;
+X-CSE-ConnectionGUID: VV+ZYse/QZaK9lp0ntZzog==
+X-CSE-MsgGUID: NtRHcK2xTr6kkIynsymG2w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="23822286"
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="23822286"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 12:45:46 -0700
+X-CSE-ConnectionGUID: rp48xsGlTcSri1Fl61eRFg==
+X-CSE-MsgGUID: jvSo1K/UT1echsxPpGbLqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="37883105"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 22 May 2024 12:45:41 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s9ru7-0001vN-0N;
+	Wed, 22 May 2024 19:45:39 +0000
+Date: Thu, 23 May 2024 03:45:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaojian Du <Xiaojian.Du@amd.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	hpa@zytor.com, daniel.sneddon@linux.intel.com, jpoimboe@kernel.org,
+	pawan.kumar.gupta@linux.intel.com, sandipan.das@amd.com,
+	kai.huang@intel.com, perry.yuan@amd.com, x86@kernel.org,
+	ray.huang@amd.com, rafael@kernel.org,
+	Xiaojian Du <Xiaojian.Du@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: amd-pstate: change cpu freq transition
+ delay for some models
+Message-ID: <202405230325.UPlOikDm-lkp@intel.com>
+References: <b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
-Message-Id: <05383.124052215215000249@us-mta-294.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du@amd.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Xiaojian,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on tip/master]
+[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master next-20240522]
+[cannot apply to tip/x86/core tip/auto-latest v6.9]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'perf-tools-for-v6.10-1-2024-05-21' of git://=
-git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaojian-Du/cpufreq-amd-pstate-change-cpu-freq-transition-delay-for-some-models/20240522-135241
+base:   tip/master
+patch link:    https://lore.kernel.org/r/b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du%40amd.com
+patch subject: [PATCH v2 2/2] cpufreq: amd-pstate: change cpu freq transition delay for some models
+config: x86_64-randconfig-006-20240522 (https://download.01.org/0day-ci/archive/20240523/202405230325.UPlOikDm-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240523/202405230325.UPlOikDm-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1299926531
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405230325.UPlOikDm-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Networking cki netfilter test
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1299926531-ppc64le-kernel_upt_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        Networking vnic: ipvlan/basic
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1299926531-ppc64le-kernel_upt_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        POSIX pjd-fstest suites
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1299926531-ppc64le-kernel_upt_5
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        xfstests - btrfs
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1299926531-x86_64-kernel-debug_upt_30
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
-        xfstests - cifsv3.11
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1299926531-x86_64-kernel_upt_52
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/590
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
-701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
-context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
-r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
-            Affected tests:
-                Boot test [s390x]
-                Networking cki netfilter test [s390x]
-                Networking vnic: ipvlan/basic [s390x]
-                POSIX pjd-fstest suites [s390x]
-        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
- scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
-:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
-            Affected tests:
-                Boot test [aarch64, ppc64le, s390x, x86_64]
-                Reboot test [aarch64, ppc64le, s390x, x86_64]
-        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
-d, map_write access on the bpf labeled init_t.
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
-            Affected tests:
-                Hardware - Firmware test suite [aarch64]
-                Networking cki netfilter test [aarch64, s390x, x86_64]
-                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
-                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
-                Storage - blktests - blk - upstream [x86_64]
-                stress: stress-ng - cpu-cache [x86_64]
-                stress: stress-ng - memory [x86_64]
-                xfstests - btrfs [aarch64, x86_64]
-                xfstests - ext4 [aarch64, x86_64]
-                xfstests - xfs [aarch64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: mkfs.xfs prints warning about invalid stride unit, hardware =
-specific
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1924
-            Affected tests:
-                xfstests - xfs [x86_64 (debug)]
+>> drivers/cpufreq/amd-pstate.c:824:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+     824 |                 else
+         |                 ^
+   1 warning generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Boot test [aarch64, s390x]
-    CKI/restraint [aarch64, s390x]
-    machineinfo [aarch64, ppc64le, s390x]
-    Reboot test [aarch64, s390x, x86_64 (debug)]
-    SELinux Custom Module Setup [aarch64, ppc64le, s390x]
-    Storage - blktests - blk - upstream [aarch64, s390x]
-    Storage - blktests - nvme-tcp - upstream [aarch64, s390x]
-    Storage - swraid scsi_raid [aarch64, s390x]
-    stress: stress-ng - cpu-cache [aarch64, s390x]
-    stress: stress-ng - memory [aarch64, s390x]
-    xfstests - cifsv3.11 [x86_64 (debug)]
-    xfstests - nfsv4.2 [x86_64 (debug)]
+vim +824 drivers/cpufreq/amd-pstate.c
 
+   811	
+   812	/*
+   813	 * Get pstate transition delay time from ACPI tables that firmware set
+   814	 * instead of using hardcode value directly.
+   815	 */
+   816	static u32 amd_pstate_get_transition_delay_us(unsigned int cpu)
+   817	{
+   818		u32 transition_delay_ns;
+   819	
+   820		transition_delay_ns = cppc_get_transition_latency(cpu);
+   821		if (transition_delay_ns == CPUFREQ_ETERNAL)
+   822			if (cpu_feature_enabled(X86_FEATURE_FAST_CPPC))
+   823				return AMD_PSTATE_FAST_CPPC_TRANSITION_DELAY;
+ > 824			else
+   825				return AMD_PSTATE_TRANSITION_DELAY;
+   826	
+   827		return transition_delay_ns / NSEC_PER_USEC;
+   828	}
+   829	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
