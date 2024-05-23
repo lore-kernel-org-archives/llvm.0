@@ -1,148 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1B9146D4D;
-	Wed, 22 May 2024 23:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916962599;
+	Thu, 23 May 2024 02:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716422055; cv=none; b=pMfRKKdp0jw/kaykTw823QI4/BixVhcDS5NoWdooCExPKm6FDPQoBcv516LSOhmcm3R4b6rNB3EEF4wRY4eRR8A1NgJjH9XM8+9SXn/zmFRUtL0HO+GMfrEwwuJtCViiAjNCeer1ovIDheq1TJ1XO4QOrbHhnLPmssrHN8wQvgo=
+	t=1716430810; cv=none; b=arNRC4jGs0repzopMRkeIUfcItFNKQ6HnqOcqf9BlG27K1vokop/bCgz4JZwfTn/2eudwg6eFBF8FVTR9aknO121tpXHgdsU4mBKqGJGBk454g0O/9x+ekeldxvzYhnkDEwi7kBUIyyxbOBWg2jJfpPhFaIAZhVOYxrxqr8Y75k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716422055; c=relaxed/simple;
-	bh=zfFjpPAadQiJDf/TeNREBUHKQa6hrMS2H08VQGFIwwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IFVoBMHHBjg1EPhbYbWcBaeZnmX65VPADVUksscffTitZY3yWFcG/gZ5ZZLqnxdIExXzazPCnvWecvS3Fq5lMkf7OMhJD8jTh0zexbbT4x3W+f0ABWwEWILqx7nidpuQ8mmpTmxxYtJbrZPAVEDFQNdlaRp7P+sAs/wGFj2lArc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZeZ8VhY4; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716430810; c=relaxed/simple;
+	bh=8YLExkAWvQwUkYKlsfDf7mOtmV2KT3rc2IEA2TsqMH4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fRrmwNs68H3/k6REyvZ/LTPhP1P0aj6AC0X+5CSeLU5i5y1fE3mFr9Yjada/pasvZv2bbZ4jIzNNgBallwTnnbqyg3Avrvc0rk8SayTNKyzcGnLvdkUFXuS1MuEDLIqVcOTGG02IVsXQngzg7mk1eOW7tTZtzjxk8TwT1HSdSBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqBFRquf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZeZ8VhY4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716422053; x=1747958053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zfFjpPAadQiJDf/TeNREBUHKQa6hrMS2H08VQGFIwwE=;
-  b=ZeZ8VhY4cZOEEKYvW3z38LB+uz+5pki/rdfF58UqXnB2kDrdp9b6iWuy
-   ONThAHzn25fOfQyz+xvVkeB3OJmvoORixRSu5u/5PyGE/3WQc1Ut7OtpF
-   rT37i03AjzVZR1ISCCmYGmehZbdVUA484IDQna/p4RbYBwoAr0Y/zvd/c
-   difHtPdlnLXr7A97Q/fIfJu45zM1BX2PzRyGrMoEq76yuAzbNfPFslges
-   Bkb2sK5V7zpxxrSiyg2bfNFxjxCMCBYvi8yHmjY0pdlC6tSsdJX8cbBy7
-   09LSvYVLVgBC8G8lThD0mdqk4BVkTQsAn0n8uUNYawtb3coSZbhEdNtQ8
-   g==;
-X-CSE-ConnectionGUID: URlC9FLEQQCC3iveQDhPuA==
-X-CSE-MsgGUID: vrDgjZuxSqKlMgHKllqwEQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="38089925"
-X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="38089925"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 16:54:13 -0700
-X-CSE-ConnectionGUID: CXeuInAmReKhLlFBPgJtsA==
-X-CSE-MsgGUID: 1pDku+9rQMOVuyKBk+irjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="70866539"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 22 May 2024 16:54:12 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s9vmb-0002G5-10;
-	Wed, 22 May 2024 23:54:09 +0000
-Date: Thu, 23 May 2024 07:53:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Harshitha Prem <quic_hprem@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v5 8/8] wifi: ath12k: move ath12k_hw from per soc to group
-Message-ID: <202405230757.dDsk7F8w-lkp@intel.com>
-References: <20240522095439.2596989-9-quic_hprem@quicinc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqBFRquf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA3DC4AF07;
+	Thu, 23 May 2024 02:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716430810;
+	bh=8YLExkAWvQwUkYKlsfDf7mOtmV2KT3rc2IEA2TsqMH4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gqBFRqufnpH8uQ3ANXM7tJnCEYf7MZhnBPqa0I9s+8duks+Pgg8Lq45rpWJvHofqT
+	 6cXwsEu9xcykJq3I/gzNjiy4Q5/x+vCC2CeBzWsx9hJzWXwogmtCRzizI2gkFV7aa5
+	 4PdWYlEz6vllaCO1SuaSZOuU2Oih781BaPZzQCp16dUOO8r+Zk8hH/UnZm6qIuubYG
+	 T7EIyR4CLy72Vk4AU/dOH0tmvsiKE+R+vp/oLfS3cllSIfvUx1Ttndd14G9QJc4Gda
+	 Bzs+FihojeP4LIFB2dEBEWglO0f5RxajQ/+fmTdHSbRtp9De1AC33qIO53Hk3tV0FA
+	 DvNVwhK3UnrIw==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a5a2d0d8644so955863766b.1;
+        Wed, 22 May 2024 19:20:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXRi6Dziicx+vKxaWjXiQR24EmtGoQ9Za+bss3hAQ+TcL6/7IAANawEeFgFhS8nu00vcZPDzToWtrBUbF/bMNLVkcdgH779XCAVeOMYN16HroKrNLOzfasqqTAlkzUQe5PYClkEI1uEkVr2GhCcluguCIFR2rtZjJ0=
+X-Gm-Message-State: AOJu0YwajrH3jkVchLbheWvHZAAFFv+9SQwhYAFFjXhZrquW4azmCmBr
+	6yhWrj31bheMTa108qoQpwJnAJPUV/RWAgB2XS+tnseXsmhwXPJd/rH98+rV3DWD+0I3CEbA12R
+	SWMgZ3tU1nnx1m2ZANJ6ftm4XPnI=
+X-Google-Smtp-Source: AGHT+IHFFAFNdm2thGmpgTjZWOG+fuvJCmT7/ZlPl55Y9DTWh7mQqEWjHeMPJmZvWGHQXLSxyYiaQAE8rvH+ytx+Hb8=
+X-Received: by 2002:a17:906:4152:b0:a59:d44c:9bc with SMTP id
+ a640c23a62f3a-a622814def4mr264319766b.66.1716430808794; Wed, 22 May 2024
+ 19:20:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240522095439.2596989-9-quic_hprem@quicinc.com>
+References: <20240522-efi-zboot-lds-add-discard-sections-to-discard-v1-1-6b415efa0f85@kernel.org>
+ <CAMj1kXG-Ck3y1STD9GeS6gyqUgOL6ch3jjCtdZjN_w+LScOzpw@mail.gmail.com>
+In-Reply-To: <CAMj1kXG-Ck3y1STD9GeS6gyqUgOL6ch3jjCtdZjN_w+LScOzpw@mail.gmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 23 May 2024 10:19:47 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4EOV8cMPpO_=O4rnCNKcMwVa_NeeoA9w8unC5nJU5LzQ@mail.gmail.com>
+Message-ID: <CAAhV-H4EOV8cMPpO_=O4rnCNKcMwVa_NeeoA9w8unC5nJU5LzQ@mail.gmail.com>
+Subject: Re: [PATCH] efi/libstub: zboot.lds: Discard .discard sections
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, WANG Xuerui <kernel@xen0n.name>, linux-efi@vger.kernel.org, 
+	loongarch@lists.linux.dev, llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Harshitha,
+Acked-by: Huacai Chen <chenhuacai@loongson.cn>
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 429eeef2ed089af1b3aa1983ec00a7591166be27]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Harshitha-Prem/wifi-ath12k-Refactor-core-start-api/20240522-175804
-base:   429eeef2ed089af1b3aa1983ec00a7591166be27
-patch link:    https://lore.kernel.org/r/20240522095439.2596989-9-quic_hprem%40quicinc.com
-patch subject: [PATCH v5 8/8] wifi: ath12k: move ath12k_hw from per soc to group
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240523/202405230757.dDsk7F8w-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240523/202405230757.dDsk7F8w-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405230757.dDsk7F8w-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/wireless/ath/ath12k/mac.c:9217:11: warning: variable 'ab' is uninitialized when used here [-Wuninitialized]
-    9217 |         ah->ab = ab;
-         |                  ^~
-   drivers/net/wireless/ath/ath12k/mac.c:9204:24: note: initialize the variable 'ab' to silence this warning
-    9204 |         struct ath12k_base *ab;
-         |                               ^
-         |                                = NULL
-   1 warning generated.
-
-
-vim +/ab +9217 drivers/net/wireless/ath/ath12k/mac.c
-
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9197  
-31c9fd320b69d4 Karthikeyan Periyasamy 2024-05-22  9198  static struct ath12k_hw *ath12k_mac_hw_allocate(struct ath12k_hw_group *ag,
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9199  						struct ath12k_pdev_map *pdev_map,
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9200  						u8 num_pdev_map)
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9201  {
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9202  	struct ieee80211_hw *hw;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9203  	struct ath12k *ar;
-31c9fd320b69d4 Karthikeyan Periyasamy 2024-05-22  9204  	struct ath12k_base *ab;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9205  	struct ath12k_pdev *pdev;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9206  	struct ath12k_hw *ah;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9207  	int i;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9208  	u8 pdev_idx;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9209  
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9210  	hw = ieee80211_alloc_hw(struct_size(ah, radio, num_pdev_map),
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9211  				&ath12k_ops);
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9212  	if (!hw)
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9213  		return NULL;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9214  
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9215  	ah = ath12k_hw_to_ah(hw);
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9216  	ah->hw = hw;
-9b4e5caaf5905e Karthikeyan Periyasamy 2024-05-03 @9217  	ah->ab = ab;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9218  	ah->num_radio = num_pdev_map;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9219  
-acaa84009fade2 Karthikeyan Periyasamy 2024-05-03  9220  	mutex_init(&ah->hw_mutex);
-acaa84009fade2 Karthikeyan Periyasamy 2024-05-03  9221  
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9222  	for (i = 0; i < num_pdev_map; i++) {
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9223  		ab = pdev_map[i].ab;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9224  		pdev_idx = pdev_map[i].pdev_idx;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9225  		pdev = &ab->pdevs[pdev_idx];
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9226  
-ba12f08f316746 Karthikeyan Periyasamy 2024-04-09  9227  		ar = ath12k_ah_to_ar(ah, i);
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9228  		ar->ah = ah;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9229  		ar->ab = ab;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9230  		ar->hw_link_id = i;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9231  		ar->pdev = pdev;
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9232  		ar->pdev_idx = pdev_idx;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9233  		pdev->ar = ar;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9234  
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9235  		ath12k_mac_setup(ar);
-31c9fd320b69d4 Karthikeyan Periyasamy 2024-05-22  9236  		ath12k_dp_pdev_pre_alloc(ar);
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9237  	}
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9238  
-6db6e70a17f6fb Karthikeyan Periyasamy 2024-01-18  9239  	return ah;
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9240  }
-8a742a79f90e3d Karthikeyan Periyasamy 2024-01-14  9241  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Thu, May 23, 2024 at 1:37=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wr=
+ote:
+>
+> On Wed, 22 May 2024 at 19:32, Nathan Chancellor <nathan@kernel.org> wrote=
+:
+> >
+> > When building ARCH=3Dloongarch defconfig + CONFIG_UNWINDER_ORC=3Dy usin=
+g
+> > LLVM, there is a warning from ld.lld when linking the EFI zboot image
+> > due to the use of unreachable() in number() in vsprintf.c:
+> >
+> >   ld.lld: warning: drivers/firmware/efi/libstub/lib.a(vsprintf.stub.o):=
+(.discard.unreachable+0x0): has non-ABS relocation R_LARCH_32_PCREL against=
+ symbol ''
+> >
+> > If the compiler cannot eliminate the default case for any reason, the
+> > .discard.unreachable section will remain in the final binary but the
+> > entire point of any section prefixed with .discard is that it is only
+> > used at compile time, so it can be discarded via /DISCARD/ in a linker
+> > script. The asm-generic vmlinux.lds.h includes .discard and .discard.*
+> > in the COMMON_DISCARDS macro but that is not used for zboot.lds, as it
+> > is not a kernel image linker script.
+> >
+> > Add .discard and .discard.* to /DISCARD/ in zboot.lds, so that any
+> > sections meant to be discarded at link time are not included in the
+> > final zboot image. This issue is not specific to LoongArch, it is just
+> > the first architecture to select CONFIG_OBJTOOL, which defines
+> > annotate_unreachable() as an asm statement to add the
+> > .discard.unreachable section, and use the EFI stub.
+> >
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/2023
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Thanks, I'll take this as a fix.
+>
+>
+> > ---
+> >  drivers/firmware/efi/libstub/zboot.lds | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/firmware/efi/libstub/zboot.lds b/drivers/firmware/=
+efi/libstub/zboot.lds
+> > index ac8c0ef85158..af2c82f7bd90 100644
+> > --- a/drivers/firmware/efi/libstub/zboot.lds
+> > +++ b/drivers/firmware/efi/libstub/zboot.lds
+> > @@ -41,6 +41,7 @@ SECTIONS
+> >         }
+> >
+> >         /DISCARD/ : {
+> > +               *(.discard .discard.*)
+> >                 *(.modinfo .init.modinfo)
+> >         }
+> >  }
+> >
+> > ---
+> > base-commit: 15aa8fb852f995dd234a57f12dfb989044968bb6
+> > change-id: 20240522-efi-zboot-lds-add-discard-sections-to-discard-5fe29=
+bf42d6a
+> >
+> > Best regards,
+> > --
+> > Nathan Chancellor <nathan@kernel.org>
+> >
