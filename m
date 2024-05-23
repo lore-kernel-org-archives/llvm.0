@@ -1,64 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81189175A5;
-	Thu, 23 May 2024 20:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EECC128396
+	for <llvm@lists.linux.dev>; Thu, 23 May 2024 23:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716495948; cv=none; b=Ehi/R6Na2eogxSSKCokY/+TBVLZlHGTczVZuKHKqxAXhfkUZcdXmLTDEA1mfUA0ckKBbWem9w3t0pHLSxdBsvV6YPD30f7cR0BHTlvCvONUqZ7dBYxhsqSSmWYTgN6H4noDGHF7SnXPGiCY93EV8Yor0n2nfo6ZK20iAmp3Ofxo=
+	t=1716505949; cv=none; b=L3wwWTLhQOGflAZjgqxA4/ANZmRQllNhzB7jbbo/Jcp4tyuHeEfsW8d3hIoPvd6HQGVZ+LVwW1Y8hVKzwBScr8/rNQkckBYd+63j6zu2e8UyUyYlKCVGEcOFqqgh0A2lUNvD+gtv9TEbkkDyE4Jt+z7FK/0pjc8n1Fckf1NZqeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716495948; c=relaxed/simple;
-	bh=LKhQHsSrnnAo0BE32SPWbRof1Q809utUpT3FUynBKyM=;
+	s=arc-20240116; t=1716505949; c=relaxed/simple;
+	bh=Pr5fclf/NyQdxEw21anVvy8WtHKkbRAUyx9Gl02m/X8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fu7JdchwNTmrZnjxsH7jkN9B6bkO7TEPKdsBjGC2TfrZiDtko5JVeYo4h82zD6xNREW2kMEbLHrbmE11IzE1GtmGGp6LJjkbN41B4ums7sV5UKJHOf6VeLGpGFgUyoY8xhNsLubyNKct8AI78TS1zFJesAbOlbjkwkerXmgl4XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=crYORmdp; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=X4r1p86bCbbnkxc7V26t5u87l0Pc9S3gsHi1cNgki6NT61kqsuRo510UP3pZG5Vav95Dpl4An3DMm+6s0lYvBWMhbRylMsQs9qytCgKLw0HGpXWoGH5/vYnhKMw3A8b4Qvq68TolZ5QUBlDaAUPqJBM/ZSaQs2KkO1pJW8bcDaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=idxf5R5H; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="crYORmdp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716495946; x=1748031946;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LKhQHsSrnnAo0BE32SPWbRof1Q809utUpT3FUynBKyM=;
-  b=crYORmdptGuspqlUb+ZbsstmtpNlfl6AnXUNOuw/NGk86dWUv0oEoL+7
-   5x1SNwKA32hJRW5HJOqtENIV3rd7U4/KMQjMdaPMqBGk6wrQZBePrE5YD
-   9toAmjAfSXQW5AE1FaVvpgyi5OZdSxbVagr808RPPKB29JTMQLAujfzwd
-   qzTuJIcqr4dDd4cJdggLQh1sUFQb39yoGP/tRkzyqNaKlaU/KjGA8oJ1M
-   6vA1fUpTfLrvwpaUMJjS2oImKJjxB7CfBLuFJ3wV2rpPh+1OjDJIyvC1U
-   pceml3vlTYSQBWAbMRyQ648xb3VIi2Dtw7c6o1p3soI0kkZmatt/P6Ymo
-   w==;
-X-CSE-ConnectionGUID: PBqeYMyzSDeUuuwL1LPWSQ==
-X-CSE-MsgGUID: Oxyi5u3aTkKnBud1fBcMKA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="12694363"
-X-IronPort-AV: E=Sophos;i="6.08,183,1712646000"; 
-   d="scan'208";a="12694363"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 13:25:45 -0700
-X-CSE-ConnectionGUID: JQPjwt5uSHSfoDQrSuGEpg==
-X-CSE-MsgGUID: 6cnjPq47TqOCPn2NpU480Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,183,1712646000"; 
-   d="scan'208";a="38189693"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 23 May 2024 13:25:43 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sAF0P-0003KD-0R;
-	Thu, 23 May 2024 20:25:41 +0000
-Date: Fri, 24 May 2024 04:25:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dominique Martinet <asmadeus@codewreck.org>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	v9fs@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] 9p: v9fs_fid_find: also lookup by inode if not found
- dentry
-Message-ID: <202405240422.ZWrRj5Ck-lkp@intel.com>
-References: <20240523113638.1196299-1-asmadeus@codewreck.org>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="idxf5R5H"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1f44b441b08so1701555ad.0
+        for <llvm@lists.linux.dev>; Thu, 23 May 2024 16:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1716505946; x=1717110746; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mMbC5KBXhHkDvBNusLgJck71yWRaMS5suGXHx+nBss=;
+        b=idxf5R5HoqhoOhYvQmtlQT1c/Y+SW7XRYOowbtHc/ghdxwZaroPj51l1nP6C0YtiH+
+         /Q0UOn2auu/z2y+OvbShDPvCWMczy0YD1zJsmzfRSKTaPlKsvb7xvYrGF9bcOrS5hjTn
+         zB8RK9OS0tpQeeYWWJkNIiEqjxVYJaAPFFA8U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716505946; x=1717110746;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5mMbC5KBXhHkDvBNusLgJck71yWRaMS5suGXHx+nBss=;
+        b=H9D+jOuQ1qmIRKO3sVk0L5o7bgTKPISq5InS6CdQHnJqs8Oa2hbRHBjY1WxAQ13XEl
+         50d+0iP2XA2rvTakIeizzTDx/FLuCdYt2gS4dQkOEX5qJTaxtPQSOzR43AM+P969mTkb
+         gsEhZEvU64xGWDZp+c1MjBST+PdZU4uQ6A3/chJGXyeXJ4CInIUuvXlJVYX6pyxL/D4l
+         VnSSAtnW7Ah4TH86zHMhcAhkm2x9S2WR5nCCDeEqKP8Zy0vTEtIkAknoTaHNy3sf11lh
+         jEnhlBwJxRs+tfJDDOUWv/1DwfIApsnpoGowT/Zn6QiLfJXbwoahFayEnyoUdRBCXWdI
+         5f3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVqBjZD1rc3Lxlg/S46xZWoW3hs/yIis9SWcGazG397mME/xLl7eh5KcJFBHxYeLElKwNvvV68qgQWUJexA2zz176MlGA==
+X-Gm-Message-State: AOJu0Yxs1Xcjq5I4n4gx0TYdy/aKjQrajilLMnDiTuvCO/qHnVmBuSzz
+	v+77YUO3OZY153TUxfe6q9++K3Iz2DTx9zud1yyGnKvHVS1wrhEZRdnCv+stEw==
+X-Google-Smtp-Source: AGHT+IFbXrTeUCq7J46GiJ/p3IWwvb8fOgFDb0trMNcBbD+UJjL4KOevqFmzptXng6JsupSTGMLaXg==
+X-Received: by 2002:a17:903:1d0:b0:1eb:73c2:6b4a with SMTP id d9443c01a7336-1f4486e5e10mr8167325ad.8.1716505946250;
+        Thu, 23 May 2024 16:12:26 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c9b2e88sm1125295ad.253.2024.05.23.16.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 May 2024 16:12:25 -0700 (PDT)
+Date: Thu, 23 May 2024 16:12:25 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] x86/boot: Address clang -Wimplicit-fallthrough in
+ vsprintf()
+Message-ID: <202405231603.2E810E3FC@keescook>
+References: <20240516-x86-boot-fix-clang-implicit-fallthrough-v1-1-04dc320ca07c@kernel.org>
+ <20240517095110.GAZkcojmJQoY_zU-OT@fat_crate.local>
+ <20240517151833.GB3660288@thelio-3990X>
+ <20240523115734.GAZk8vLgzOzD8Tv9pq@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,101 +74,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240523113638.1196299-1-asmadeus@codewreck.org>
+In-Reply-To: <20240523115734.GAZk8vLgzOzD8Tv9pq@fat_crate.local>
 
-Hi Dominique,
+On Thu, May 23, 2024 at 01:57:34PM +0200, Borislav Petkov wrote:
+> On Fri, May 17, 2024 at 08:18:33AM -0700, Nathan Chancellor wrote:
+> > There was a patch to make Clang match GCC's behavior a few years ago but
+> > I think Kees made a good argument that GCC's behavior leaves potential
+> > bugs on the table, so that was not pursued further.
+> > 
+> > https://reviews.llvm.org/D91895#2417170
+> 
+> Really? Maybe I'm being dense but I don't see real bugs there... I see
+> readability issues. :-)
 
-kernel test robot noticed the following build warnings:
+There isn't a bug _here_, but this is about making the code unambiguous
+everywhere in the kernel. We've already done the work to get rid of
+all these warnings; this one is newly introduced, so let's get it fixed.
 
-[auto build test WARNING on v6.9]
-[also build test WARNING on linus/master next-20240523]
-[cannot apply to ericvh-v9fs/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We don't want to have the same flow-control statement reachable from two
+different "case"s where the resulting behaviors are different. Otherwise
+we can't determine if a "fallthrough" is missing or intentional.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dominique-Martinet/9p-v9fs_fid_find-also-lookup-by-inode-if-not-found-dentry/20240523-193912
-base:   v6.9
-patch link:    https://lore.kernel.org/r/20240523113638.1196299-1-asmadeus%40codewreck.org
-patch subject: [PATCH] 9p: v9fs_fid_find: also lookup by inode if not found dentry
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240524/202405240422.ZWrRj5Ck-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240524/202405240422.ZWrRj5Ck-lkp@intel.com/reproduce)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405240422.ZWrRj5Ck-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/9p/fid.c:17:
-   In file included from fs/9p/v9fs.h:11:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/riscv/include/asm/cacheflush.h:9:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/9p/fid.c:137:2: warning: non-void function does not return a value [-Wreturn-type]
-     137 |         }
-         |         ^
-   fs/9p/fid.c:139:2: error: expected identifier or '('
-     139 |         return ret;
-         |         ^
-   fs/9p/fid.c:140:1: error: extraneous closing brace ('}')
-     140 | }
-         | ^
-   2 warnings and 2 errors generated.
-
-
-vim +137 fs/9p/fid.c
-
-987a64850996db Greg Kurz           2020-09-23  103  
-987a64850996db Greg Kurz           2020-09-23  104  
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  105  /**
-ba17674fe02909 Latchesar Ionkov    2007-10-17  106   * v9fs_fid_find - retrieve a fid that belongs to the specified uid
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  107   * @dentry: dentry to look for fid in
-ba17674fe02909 Latchesar Ionkov    2007-10-17  108   * @uid: return fid that belongs to the specified user
-ba17674fe02909 Latchesar Ionkov    2007-10-17  109   * @any: if non-zero, return any fid associated with the dentry
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  110   *
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  111   */
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  112  
-b464255699077c Eric W. Biederman   2013-01-30  113  static struct p9_fid *v9fs_fid_find(struct dentry *dentry, kuid_t uid, int any)
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  114  {
-ba17674fe02909 Latchesar Ionkov    2007-10-17  115  	struct p9_fid *fid, *ret;
-bd238fb431f319 Latchesar Ionkov    2007-07-10  116  
-4b8e992392a246 Al Viro             2014-08-19  117  	p9_debug(P9_DEBUG_VFS, " dentry: %pd (%p) uid %d any %d\n",
-4b8e992392a246 Al Viro             2014-08-19  118  		 dentry, dentry, from_kuid(&init_user_ns, uid),
-b464255699077c Eric W. Biederman   2013-01-30  119  		 any);
-ba17674fe02909 Latchesar Ionkov    2007-10-17  120  	ret = NULL;
-aaeb7ecfb48ad4 Al Viro             2013-02-28  121  	/* we'll recheck under lock if there's anything to look in */
-22e424feb6658c Dominique Martinet  2022-01-29  122  	if (dentry->d_fsdata) {
-aaeb7ecfb48ad4 Al Viro             2013-02-28  123  		struct hlist_head *h = (struct hlist_head *)&dentry->d_fsdata;
-9a268faa5f8627 Sohaib Mohamed      2021-10-01  124  
-634095dab2a200 Al Viro             2013-02-27  125  		spin_lock(&dentry->d_lock);
-56a79b7b021bf1 Linus Torvalds      2013-03-03  126  		hlist_for_each_entry(fid, h, dlist) {
-b464255699077c Eric W. Biederman   2013-01-30  127  			if (any || uid_eq(fid->uid, uid)) {
-ba17674fe02909 Latchesar Ionkov    2007-10-17  128  				ret = fid;
-b48dbb998d70b7 Dominique Martinet  2022-06-12  129  				p9_fid_get(ret);
-ba17674fe02909 Latchesar Ionkov    2007-10-17  130  				break;
-ba17674fe02909 Latchesar Ionkov    2007-10-17  131  			}
-ba17674fe02909 Latchesar Ionkov    2007-10-17  132  		}
-634095dab2a200 Al Viro             2013-02-27  133  		spin_unlock(&dentry->d_lock);
-7894f99a4c6ef6 Dominique Martinet  2024-05-23  134  	}
-7894f99a4c6ef6 Dominique Martinet  2024-05-23  135  	if (!ret && dentry->d_inode)
-1543b4c5071c54 Eric Van Hensbergen 2023-03-27  136  		ret = v9fs_fid_find_inode(dentry->d_inode, false, uid, any);
-ba17674fe02909 Latchesar Ionkov    2007-10-17 @137  	}
-bd238fb431f319 Latchesar Ionkov    2007-07-10  138  
-ba17674fe02909 Latchesar Ionkov    2007-10-17  139  	return ret;
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  140  }
-3ed8491c8a75ce Eric Van Hensbergen 2005-09-09  141  
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
