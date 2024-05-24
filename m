@@ -1,182 +1,97 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0B312DD8E
-	for <llvm@lists.linux.dev>; Fri, 24 May 2024 16:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8402E8626E;
+	Fri, 24 May 2024 16:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716566617; cv=none; b=OoBfrQPl1HPwzpNODdw6y4F9plLRZML5n4mi3+6h9maL3ZMd9DEwxQbUafDIm3iDml6gK36sUKDemWZ9QturopKk0ZWz3OuWzcfuHxfDZ1XvkUXePgGUMianLdwVEeZcio+L4skBP5yM3/D1Mh2DaM9ESGEm19F2RCl4FPVJJoA=
+	t=1716568822; cv=none; b=GDR/BL7QnccGCKy45osk3uJ5DQOU4ZDVDbDzkCiRlb1EO4adSvbvuOzQFwPAt2WjB0zBqtAMSV2ju3rzcKuo6c8WzYCOCcS4V2Cdmmh8a8hwTLsii69rCpY1PBG1l9jPovI+mQa1FD6oUNtmmrdLwx3qTH7UZ3r1ErYDLGLiFi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716566617; c=relaxed/simple;
-	bh=jcYfrQux9RRufLBucVlaKQB/uSKaLAyTFQ1XBs3s/18=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XfdMyN5zPYjg/Ff2gP78JOOSdW1y/lM6jq1dCd2Ptt9lmsG6OHXGSwjSjBYqoFoeoG2noQRYG07udU2ry9DVagiWKAsi2CMz0gdEgLey+mKZw/GTF1p7dlo/y5kD7hvF47bZNVMldl7uJ3udzvblb++LlmsWXyugzcZZePQHG/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=BJ7hrmY5; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1716568822; c=relaxed/simple;
+	bh=9mvpBAnKzNAyjIz4AaURNG6HUDlSprKVfsup9+Rsh3Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WrncZLqQCThTvuQZyxcBVKDTxkQp+l/QVWdHfVtiaBaCRdpX8xtX4Xm+qXc7Gg/GFrCsSDv7IwseALsohXXxFwJdsObo3pLrtbGCW3fyEIZUxDcVbn9jcZtOFuMDg0yhy8yzcuYEFr+UZlhyf3rPtVLiFqZ2z6Lt56N4FC0zXYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=lSjyQV7C; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="BJ7hrmY5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1716566614;
-	bh=jcYfrQux9RRufLBucVlaKQB/uSKaLAyTFQ1XBs3s/18=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=BJ7hrmY59qdh4O56NrMB5x+iWZR9T0WcUGf+f5D2Qo1Qw19wz6478UWqyrAGio8DP
-	 mQEU+sP+FBbdlnJAfRATwFkavyzQCgs35Yp21eb6Jsim6U9ChpnTWW8+GP19t6R6kj
-	 rtFeaNirDP+bY9EklkVzOlx0zHqwzMIJP+oTRLgY/2XuXebBeXM339WxVjmFYrcJ4H
-	 JxaTU7wOyqq5fVqRuCarRi1DRem1L3MIPCVA7dFFyd22m+FHHEx9eyLHNV3SSr5Bi2
-	 L+kBaonsDvKf+zzG2nB/eISphTs8fAQByHO4wCW7LvT7eAB6H12SXlxd3i5ZoWoPgr
-	 1Yl7mbE5VnmFg==
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4Vm8wQ4q9Dz11J8;
-	Fri, 24 May 2024 12:03:34 -0400 (EDT)
-Message-ID: <7236a148-c513-4053-9778-0bce6657e358@efficios.com>
-Date: Fri, 24 May 2024 12:04:11 -0400
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="lSjyQV7C"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 18F2240E02A8;
+	Fri, 24 May 2024 16:40:18 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id tm43LEE-mE5d; Fri, 24 May 2024 16:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1716568813; bh=jiaxkAzz/Wg3+OBprXDh1+W9WaBImj/HoQGusdn/co4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lSjyQV7CoZXTb+RQFBdfy8SZiBa5FhP58xrEVOvOq5su45eeCbtV8uc8W5t0yGCE0
+	 GtcIJtgF3SWdypNdkTxX6o9IqvGoTE6F1eYoOYdiTHSRxBEJlBBWh15Kxzv8wXQPZE
+	 rlBOAEJZke50zWDCQEjDmsBwYm66EQBdooJEqoEnHCfJqmrDHgShcXAFIvcPiJ6Ucm
+	 ZievW5F/CVIfrDmVsWZyT985vBV8KaP01FZ0FEVCoD9Kq96WVm2Ku8ZublztRRToX+
+	 hq2ElrwRehd8uejyTPLYe+LBiW1fiWOcXWEsAbPSbcrCtpYvdjTtmILg+7GyNiA6iZ
+	 85Wy1/sSAUmNdfCiz+swD8hC3btor5aPpF5TlVhLMsqtP4htLUAW2fbDxaZ/zYLQIP
+	 Nxtzf4EZrCrQyE3JnoxHRMC7klma0PVLb27CIQKjJYBHwm0OxdJPiczv7P3bVdmyCV
+	 1NHG8f8h0Vb5T0q/U6irqgQrlQQGMZ6iey9aCIA0Cu4shRWUZPywyiy6jyLuy+g+Qm
+	 Wb5wySme+TjQ6VbR6bGpyYIeE4ZSyWv6IXYPlm+nycKRUnsQJxcsJoA/TrRkBME/5z
+	 CX71Fv5nuHWqxw/zvo0zZBu8hDRrn/0ZWkVIbAK/OL7CL7pePffHTwD46RO5Y+ZjvG
+	 bd0u23XM4fIc5GEqCVXkvcYo=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9C4BD40E016A;
+	Fri, 24 May 2024 16:40:01 +0000 (UTC)
+Date: Fri, 24 May 2024 18:39:56 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Kees Cook <keescook@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] x86/boot: Address clang -Wimplicit-fallthrough in
+ vsprintf()
+Message-ID: <20240524163956.GBZlDC3DH_OqvAjSBC@fat_crate.local>
+References: <20240516-x86-boot-fix-clang-implicit-fallthrough-v1-1-04dc320ca07c@kernel.org>
+ <20240517095110.GAZkcojmJQoY_zU-OT@fat_crate.local>
+ <20240517151833.GB3660288@thelio-3990X>
+ <20240523115734.GAZk8vLgzOzD8Tv9pq@fat_crate.local>
+ <202405231603.2E810E3FC@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Use of zero-length arrays in bcachefs structures inner fields
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Brian Foster <bfoster@redhat.com>, Kees Cook <keescook@chromium.org>,
- linux-kernel <linux-kernel@vger.kernel.org>, linux-bcachefs@vger.kernel.org,
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
- Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- llvm@lists.linux.dev
-References: <986294ee-8bb1-4bf4-9f23-2bc25dbad561@efficios.com>
- <vu7w6if47tv3kwnbbbsdchu3wpsbkqlvlkvewtvjx5hkq57fya@rgl6bp33eizt>
- <944d79b5-177d-43ea-a130-25bd62fc787f@efficios.com>
-Content-Language: en-US
-In-Reply-To: <944d79b5-177d-43ea-a130-25bd62fc787f@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202405231603.2E810E3FC@keescook>
 
-On 2024-05-24 11:35, Mathieu Desnoyers wrote:
-> [ Adding clang/llvm and KMSAN maintainers/reviewers in CC. ]
-> 
-> On 2024-05-24 11:28, Kent Overstreet wrote:
->> On Thu, May 23, 2024 at 01:53:42PM -0400, Mathieu Desnoyers wrote:
->>> Hi Kent,
->>>
->>> Looking around in the bcachefs code for possible causes of this KMSAN
->>> bug report:
->>>
->>> https://lore.kernel.org/lkml/000000000000fd5e7006191f78dc@google.com/
->>>
->>> I notice the following pattern in the bcachefs structures: zero-length
->>> arrays members are inserted in structures (not always at the end),
->>> seemingly to achieve a result similar to what could be done with a
->>> union:
->>>
->>> fs/bcachefs/bcachefs_format.h:
->>>
->>> struct bkey_packed {
->>>          __u64           _data[0];
->>>
->>>          /* Size of combined key and value, in u64s */
->>>          __u8            u64s;
->>> [...]
->>> };
->>>
->>> likewise:
->>>
->>> struct bkey_i {
->>>          __u64                   _data[0];
->>>
->>>          struct bkey     k;
->>>          struct bch_val  v;
->>> };
->>>
->>> (and there are many more examples of this pattern in bcachefs)
->>>
->>> AFAIK, the C11 standard states that array declarator constant expression
->>>
->>> Effectively, we can verify that this code triggers an undefined behavior
->>> with:
->>>
->>> #include <stdio.h>
->>>
->>> struct z {
->>>          int x[0];
->>>          int y;
->>>          int z;
->>> } __attribute__((packed));
->>>
->>> int main(void)
->>> {
->>>          struct z a;
->>>
->>>          a.y = 1;
->>>          printf("%d\n", a.x[0]);
->>> }
->>> delimited by [ ] shall have a value greater than zero.
->>
->> Yet another example of the C people going absolutely nutty with
->> everything being undefined. Look, this isn't ok, we need to get work
->> done, and I've already wasted entirely too much time on ZLA vs. flex
->> array member nonsense.
->>
->> There's a bunch of legit uses for zero length arrays, and your example,
->> where we're not even _assigning_ to x, is just batshit. Someone needs to
->> get his head examined.
+On Thu, May 23, 2024 at 04:12:25PM -0700, Kees Cook wrote:
+> There isn't a bug _here_, but this is about making the code unambiguous
+> everywhere in the kernel. We've already done the work to get rid of
+> all these warnings; this one is newly introduced, so let's get it fixed.
 
-Notice how a.y is first set to 1, then a.x[0] is loaded, expecting to
-alias with a.y.
+Nah, it has been there since forever (forever == 2007 in this case). It
+fires because I enabled the warning in the decompressor.
 
-This is the same aliasing pattern found in bcachefs, for instance here:
+> We don't want to have the same flow-control statement reachable from two
+> different "case"s where the resulting behaviors are different. Otherwise
+> we can't determine if a "fallthrough" is missing or intentional.
 
-bcachefs_format.h:
-
-struct jset {
-[...]
-         __u8                    encrypted_start[0];
-
-         __le16                  _read_clock; /* no longer used */
-         __le16                  _write_clock;
-
-         /* Sequence number of oldest dirty journal entry */
-         __le64                  last_seq;
-
-
-         struct jset_entry       start[0];
-         __u64                   _data[];
-} __packed __aligned(8);
-
-where struct jset last_seq field is set by jset_validate():
-
-		jset->last_seq = jset->seq;
-
-and where journal_read_bucket() uses the encrypted_start member as input:
-
-                 ret = bch2_encrypt(c, JSET_CSUM_TYPE(j), journal_nonce(j),
-                              j->encrypted_start,
-                              vstruct_end(j) - (void *) j->encrypted_start);
-
-Regards,
-
-Mathieu
-
-
->>
->>> So I wonder if the issue reported by KMSAN could be caused by this
->>> pattern ?
->>
->> Possibly; the KMSAN errors I've been looking at do look suspicious. But
->> it sounds like we need a real fix that involves defining proper
->> semantics, not compiler folks giving up and saying 'aiee!'.
->>
->> IOW, clang/KMSAN are broken if they simply choke on a zero length array
->> being present.
-> 
+I'd agree if this warning wasn't enabled by default but were a W=123...
+diagnostic thing which does the additional checks. But right now clang
+is warning for a perfectly valid, albeit a bit confusing C.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
