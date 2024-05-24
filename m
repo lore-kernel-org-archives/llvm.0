@@ -1,308 +1,190 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31E73A268;
-	Fri, 24 May 2024 18:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AD343AA5
+	for <llvm@lists.linux.dev>; Fri, 24 May 2024 18:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716575866; cv=none; b=VP+nwcClm7vd9I6LOk8b/hVxJi83YQlnqCXQbrzQRE/0MjYN5RMDutS8Me1p8Al4/HXhFMH3HBR2djQjn8K0ddrDI4lVICGFg4QWnrqgzld58Vt6mXXAGJj2nqDh7X6X1ET5FASjrSw2JobIWQ6esOj/qYTldRyN511QQk1NLWU=
+	t=1716576117; cv=none; b=hlO4iWMaAR0RYp+5v7CQ7rTNYrgwcFZnvcMcVh7T2LQCgAgdV+joP+KSItA7goAB5lfe9lJNS6MVU5nQzfnOHlM7/vF1Cu4JUKecJd0iVN/Of24LYT9xJ8bIJQhHzH0R+QQaPhTU8Lmj4acJ194uBck7NavLbIaB6oEfnm2c00Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716575866; c=relaxed/simple;
-	bh=WuZsFTk4V1/+re+xCpFbakqU6PKXmJJRF7pBxJTebww=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cdHeNMYTge3sVazY3PeG9S9jYu4rPbC/nhiKGO89MvnTSnSWF/n5eqPlbCda9RQEAv91Ik26l2mdEktrpqtwnQ/wAT5d6Hh70/HGZUzCcwekY10RAImVenoITtcUQO/n4pTC7P8LiLU5k9uynr5ClvcEHJRTe2PMIoMWOVKahbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NuCGJj72; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716576117; c=relaxed/simple;
+	bh=+1Cb2whbEKIxIedchVoPKuSyY93BLxhmUFCDtUxX6eQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=oZD/kI3KjJPe/G8xUQMHynoBGh6vNxJLQbbfR/NPn6sm1dpfvLBJb7uYQxH9+0UcvcI5St0HHXLKdYsFnHq4qseqWFW1TZ41vHrCs05IXqarO6fnEE5ne1GhX1/+/1dIVXy2S+EO8gM5dSxqEKCn2DCOax1FjfA4w+VaJ+iWOQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=azy9mb2l; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NuCGJj72"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716575865; x=1748111865;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WuZsFTk4V1/+re+xCpFbakqU6PKXmJJRF7pBxJTebww=;
-  b=NuCGJj72kh8arUt2mXzZTgAgSSAACy/jnObEIYEGlmFFvVh2D3+ZxtMq
-   xvS77hCknJFmGUDgg4/nsjUG6GQYkJpJwaZud6lpLtqoF6ggczPVGWHPP
-   sEgRvcIlOKYe5MKDJqHXSWn+qqijx9aghRbYEXTF8202dPjr9L4dgRgHY
-   zjRUdtzTu5/bxfpTwWTyHRYkYOJGkeRqSim5zunabac7P+dTUUtA6Bkim
-   Aq+soMGG1f5mCCb1mftDhjJLmVsiG1Wju+kOSbn9ggQ5TqApqhBYK9SXk
-   a3n2ozPfpDQl7WRk6z6UoQcRCLcuqDCdH9WGqqjZh06BNdPeUQZ6uAVNW
-   w==;
-X-CSE-ConnectionGUID: 61tYRHVZRsO9GiiieROSDQ==
-X-CSE-MsgGUID: N1oq23b8TQqmYdROGki8eg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="23631452"
-X-IronPort-AV: E=Sophos;i="6.08,186,1712646000"; 
-   d="scan'208";a="23631452"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 11:37:44 -0700
-X-CSE-ConnectionGUID: lr/L+B/rTQmqSgP3TySIDA==
-X-CSE-MsgGUID: auGwczonThyluRLsnAy3Kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,186,1712646000"; 
-   d="scan'208";a="34022031"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 24 May 2024 11:37:43 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sAZmN-0005nL-0I;
-	Fri, 24 May 2024 18:36:49 +0000
-Date: Sat, 25 May 2024 02:36:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 19/20] fs/bcachefs/btree_io.c:737:22:
- warning: format specifies type 'unsigned int' but the argument has type
- 'size_t' (aka 'unsigned long')
-Message-ID: <202405250253.TtQZAfKA-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="azy9mb2l"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716576114;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WfPZOaJMyGIgF3J9IKOYM+YzRZhSdEVS8mhgvlF+cTw=;
+	b=azy9mb2lbO4mwvkD0fjvVarjSB8vmyHtf53OPJCzFjQc0xm+oOP8JdzKZDxeIZEhM3l3Fl
+	nIvCUgyvbleIuS+Sgw9ztpK7BaFkF85UcTwgWgiP8u3X0nMsGQXqRjUA52hqP6HabiYLQh
+	Pro6+RXQ7vZ49Dj/khbzlBO89BpVlCY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-628-iaJeKttBMFiZXnhBhdqUmA-1; Fri,
+ 24 May 2024 14:41:53 -0400
+X-MC-Unique: iaJeKttBMFiZXnhBhdqUmA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE1923806705
+	for <llvm@lists.linux.dev>; Fri, 24 May 2024 18:41:52 +0000 (UTC)
+Received: from [172.64.0.115] (unknown [10.30.33.131])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5F2071C0654B;
+	Fri, 24 May 2024 18:41:52 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, b4d88a60)
+Date: Fri, 24 May 2024 18:41:52 -0000
+To: jishi@redhat.com, haliu@redhat.com, llvm@lists.linux.dev, yiche@redhat.com,
+ zlang@redhat.com, jiji@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <31901.124052414415300332@us-mta-628.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   66168c7564110bd4d13fdae9ba677fad12d89728
-commit: 4f2b201a5d676c84ca898273516c0cf8aec96ba4 [19/20] bcachefs: Check for bsets past bch_btree_ptr_v2.sectors_written
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240525/202405250253.TtQZAfKA-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240525/202405250253.TtQZAfKA-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405250253.TtQZAfKA-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/btree_io.c:737:22: warning: format specifies type 'unsigned int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-     736 |                          "bset past end of btree node (offset %u len %u but written %u)",
-         |                                                                                     ~~
-         |                                                                                     %zu
-     737 |                          offset, sectors, ptr_written ?: btree_sectors(c))) {
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/btree_io.c:628:53: note: expanded from macro 'btree_err_on'
-     628 | #define btree_err_on(cond, ...) ((cond) ? btree_err(__VA_ARGS__) : false)
-         |                                                     ^~~~~~~~~~~
-   fs/bcachefs/btree_io.c:618:18: note: expanded from macro 'btree_err'
-     618 |                                msg, ##__VA_ARGS__);                     \
-         |                                ~~~    ^~~~~~~~~~~
-   fs/bcachefs/btree_io.c:1890:36: warning: bitwise operation between different enumeration types ('enum bch_watermark' and 'enum bch_trans_commit_flags') [-Wenum-enum-conversion]
-    1890 |                                         BCH_WATERMARK_interior_updates|
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-    1891 |                                         BCH_TRANS_COMMIT_journal_reclaim|
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/btree_update.h:190:71: note: expanded from macro 'bch2_trans_do'
-     190 |         bch2_trans_run(_c, commit_do(trans, _disk_res, _journal_seq, _flags, _do))
-         |                                                                              ^~~
-   fs/bcachefs/btree_update.h:174:25: note: expanded from macro 'commit_do'
-     174 |         lockrestart_do(_trans, _do ?: bch2_trans_commit(_trans, (_disk_res),\
-         |                                ^~~
-   fs/bcachefs/btree_iter.h:670:11: note: expanded from macro 'lockrestart_do'
-     670 |         _ret2 = (_do);                                                  \
-         |                  ^~~
-   fs/bcachefs/btree_update.h:184:14: note: expanded from macro 'bch2_trans_run'
-     184 |         int _ret = (_do);                                               \
-         |                     ^~~
-   7 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +737 fs/bcachefs/btree_io.c
+Kernel information:
+    Commit message: Merge tag 'block-6.10-20240523' of git://git.kernel.dk/=
+linux
 
-   680	
-   681	static int validate_bset(struct bch_fs *c, struct bch_dev *ca,
-   682				 struct btree *b, struct bset *i,
-   683				 unsigned offset, unsigned sectors,
-   684				 int write, bool have_retry, bool *saw_error)
-   685	{
-   686		unsigned version = le16_to_cpu(i->version);
-   687		unsigned ptr_written = btree_ptr_sectors_written(&b->key);
-   688		struct printbuf buf1 = PRINTBUF;
-   689		struct printbuf buf2 = PRINTBUF;
-   690		int ret = 0;
-   691	
-   692		btree_err_on(!bch2_version_compatible(version),
-   693			     -BCH_ERR_btree_node_read_err_incompatible,
-   694			     c, ca, b, i,
-   695			     btree_node_unsupported_version,
-   696			     "unsupported bset version %u.%u",
-   697			     BCH_VERSION_MAJOR(version),
-   698			     BCH_VERSION_MINOR(version));
-   699	
-   700		if (btree_err_on(version < c->sb.version_min,
-   701				 -BCH_ERR_btree_node_read_err_fixable,
-   702				 c, NULL, b, i,
-   703				 btree_node_bset_older_than_sb_min,
-   704				 "bset version %u older than superblock version_min %u",
-   705				 version, c->sb.version_min)) {
-   706			mutex_lock(&c->sb_lock);
-   707			c->disk_sb.sb->version_min = cpu_to_le16(version);
-   708			bch2_write_super(c);
-   709			mutex_unlock(&c->sb_lock);
-   710		}
-   711	
-   712		if (btree_err_on(BCH_VERSION_MAJOR(version) >
-   713				 BCH_VERSION_MAJOR(c->sb.version),
-   714				 -BCH_ERR_btree_node_read_err_fixable,
-   715				 c, NULL, b, i,
-   716				 btree_node_bset_newer_than_sb,
-   717				 "bset version %u newer than superblock version %u",
-   718				 version, c->sb.version)) {
-   719			mutex_lock(&c->sb_lock);
-   720			c->disk_sb.sb->version = cpu_to_le16(version);
-   721			bch2_write_super(c);
-   722			mutex_unlock(&c->sb_lock);
-   723		}
-   724	
-   725		btree_err_on(BSET_SEPARATE_WHITEOUTS(i),
-   726			     -BCH_ERR_btree_node_read_err_incompatible,
-   727			     c, ca, b, i,
-   728			     btree_node_unsupported_version,
-   729			     "BSET_SEPARATE_WHITEOUTS no longer supported");
-   730	
-   731		if (!write &&
-   732		    btree_err_on(offset + sectors > (ptr_written ?: btree_sectors(c)),
-   733				 -BCH_ERR_btree_node_read_err_fixable,
-   734				 c, ca, b, i,
-   735				 bset_past_end_of_btree_node,
-   736				 "bset past end of btree node (offset %u len %u but written %u)",
- > 737				 offset, sectors, ptr_written ?: btree_sectors(c))) {
-   738			i->u64s = 0;
-   739			ret = 0;
-   740			goto out;
-   741		}
-   742	
-   743		btree_err_on(offset && !i->u64s,
-   744			     -BCH_ERR_btree_node_read_err_fixable,
-   745			     c, ca, b, i,
-   746			     bset_empty,
-   747			     "empty bset");
-   748	
-   749		btree_err_on(BSET_OFFSET(i) && BSET_OFFSET(i) != offset,
-   750			     -BCH_ERR_btree_node_read_err_want_retry,
-   751			     c, ca, b, i,
-   752			     bset_wrong_sector_offset,
-   753			     "bset at wrong sector offset");
-   754	
-   755		if (!offset) {
-   756			struct btree_node *bn =
-   757				container_of(i, struct btree_node, keys);
-   758			/* These indicate that we read the wrong btree node: */
-   759	
-   760			if (b->key.k.type == KEY_TYPE_btree_ptr_v2) {
-   761				struct bch_btree_ptr_v2 *bp =
-   762					&bkey_i_to_btree_ptr_v2(&b->key)->v;
-   763	
-   764				/* XXX endianness */
-   765				btree_err_on(bp->seq != bn->keys.seq,
-   766					     -BCH_ERR_btree_node_read_err_must_retry,
-   767					     c, ca, b, NULL,
-   768					     bset_bad_seq,
-   769					     "incorrect sequence number (wrong btree node)");
-   770			}
-   771	
-   772			btree_err_on(BTREE_NODE_ID(bn) != b->c.btree_id,
-   773				     -BCH_ERR_btree_node_read_err_must_retry,
-   774				     c, ca, b, i,
-   775				     btree_node_bad_btree,
-   776				     "incorrect btree id");
-   777	
-   778			btree_err_on(BTREE_NODE_LEVEL(bn) != b->c.level,
-   779				     -BCH_ERR_btree_node_read_err_must_retry,
-   780				     c, ca, b, i,
-   781				     btree_node_bad_level,
-   782				     "incorrect level");
-   783	
-   784			if (!write)
-   785				compat_btree_node(b->c.level, b->c.btree_id, version,
-   786						  BSET_BIG_ENDIAN(i), write, bn);
-   787	
-   788			if (b->key.k.type == KEY_TYPE_btree_ptr_v2) {
-   789				struct bch_btree_ptr_v2 *bp =
-   790					&bkey_i_to_btree_ptr_v2(&b->key)->v;
-   791	
-   792				if (BTREE_PTR_RANGE_UPDATED(bp)) {
-   793					b->data->min_key = bp->min_key;
-   794					b->data->max_key = b->key.k.p;
-   795				}
-   796	
-   797				btree_err_on(!bpos_eq(b->data->min_key, bp->min_key),
-   798					     -BCH_ERR_btree_node_read_err_must_retry,
-   799					     c, ca, b, NULL,
-   800					     btree_node_bad_min_key,
-   801					     "incorrect min_key: got %s should be %s",
-   802					     (printbuf_reset(&buf1),
-   803					      bch2_bpos_to_text(&buf1, bn->min_key), buf1.buf),
-   804					     (printbuf_reset(&buf2),
-   805					      bch2_bpos_to_text(&buf2, bp->min_key), buf2.buf));
-   806			}
-   807	
-   808			btree_err_on(!bpos_eq(bn->max_key, b->key.k.p),
-   809				     -BCH_ERR_btree_node_read_err_must_retry,
-   810				     c, ca, b, i,
-   811				     btree_node_bad_max_key,
-   812				     "incorrect max key %s",
-   813				     (printbuf_reset(&buf1),
-   814				      bch2_bpos_to_text(&buf1, bn->max_key), buf1.buf));
-   815	
-   816			if (write)
-   817				compat_btree_node(b->c.level, b->c.btree_id, version,
-   818						  BSET_BIG_ENDIAN(i), write, bn);
-   819	
-   820			btree_err_on(bch2_bkey_format_invalid(c, &bn->format, write, &buf1),
-   821				     -BCH_ERR_btree_node_read_err_bad_node,
-   822				     c, ca, b, i,
-   823				     btree_node_bad_format,
-   824				     "invalid bkey format: %s\n  %s", buf1.buf,
-   825				     (printbuf_reset(&buf2),
-   826				      bch2_bkey_format_to_text(&buf2, &bn->format), buf2.buf));
-   827			printbuf_reset(&buf1);
-   828	
-   829			compat_bformat(b->c.level, b->c.btree_id, version,
-   830				       BSET_BIG_ENDIAN(i), write,
-   831				       &bn->format);
-   832		}
-   833	out:
-   834	fsck_err:
-   835		printbuf_exit(&buf2);
-   836		printbuf_exit(&buf1);
-   837		return ret;
-   838	}
-   839	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1303029402
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Networking cki netfilter test
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1303029402-ppc64le-kernel_upt_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        Networking vnic: ipvlan/basic
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1303029402-ppc64le-kernel_upt_11
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        POSIX pjd-fstest suites
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1303029402-ppc64le-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1303029402-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/590
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                Hardware - Firmware test suite [aarch64]
+                Networking cki netfilter test [aarch64, s390x, x86_64]
+                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
+                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                stress: stress-ng - memory [aarch64, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                kdump - kexec-file-load [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
