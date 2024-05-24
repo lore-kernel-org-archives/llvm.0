@@ -1,71 +1,72 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EECC128396
-	for <llvm@lists.linux.dev>; Thu, 23 May 2024 23:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196981EF01;
+	Fri, 24 May 2024 03:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716505949; cv=none; b=L3wwWTLhQOGflAZjgqxA4/ANZmRQllNhzB7jbbo/Jcp4tyuHeEfsW8d3hIoPvd6HQGVZ+LVwW1Y8hVKzwBScr8/rNQkckBYd+63j6zu2e8UyUyYlKCVGEcOFqqgh0A2lUNvD+gtv9TEbkkDyE4Jt+z7FK/0pjc8n1Fckf1NZqeo=
+	t=1716521321; cv=none; b=P2af0e7//VtyIigym7WEaZbsRhGX0Krw5pVk9e7FBA9Aikxmnn80eMwodMLf/+s33PwMjSOTTlRHomGVYWSrxbrccIr71ziidvYqyHViuDrtMT6A4f0EebM+y3lSe35n69sMCpQBv6ih3grBI8vWgPySBxjowPOCZHmH+IUhRjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716505949; c=relaxed/simple;
-	bh=Pr5fclf/NyQdxEw21anVvy8WtHKkbRAUyx9Gl02m/X8=;
+	s=arc-20240116; t=1716521321; c=relaxed/simple;
+	bh=BmHxPvxy7A16jb2AYJ8QAISuGgdPP6gUOqwmVG0jhKQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X4r1p86bCbbnkxc7V26t5u87l0Pc9S3gsHi1cNgki6NT61kqsuRo510UP3pZG5Vav95Dpl4An3DMm+6s0lYvBWMhbRylMsQs9qytCgKLw0HGpXWoGH5/vYnhKMw3A8b4Qvq68TolZ5QUBlDaAUPqJBM/ZSaQs2KkO1pJW8bcDaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=idxf5R5H; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=YLvZAx+5ouyMGWLW7xn7qew1ZQ3ze2I4ysyK61Bs9Vh0To5wneVist5kL+37CuzYq6+OMSDOKCrNoiBWhohsZ50k/LQ5l1XZuUSLYYKhuGEmhWWcYAq2bjMyxRt99BIr0mJPyqMmW0nVnC8/v5oxg+AMHd8EapXiNrCNAEKV8l4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IyrW24+b; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="idxf5R5H"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1f44b441b08so1701555ad.0
-        for <llvm@lists.linux.dev>; Thu, 23 May 2024 16:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1716505946; x=1717110746; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5mMbC5KBXhHkDvBNusLgJck71yWRaMS5suGXHx+nBss=;
-        b=idxf5R5HoqhoOhYvQmtlQT1c/Y+SW7XRYOowbtHc/ghdxwZaroPj51l1nP6C0YtiH+
-         /Q0UOn2auu/z2y+OvbShDPvCWMczy0YD1zJsmzfRSKTaPlKsvb7xvYrGF9bcOrS5hjTn
-         zB8RK9OS0tpQeeYWWJkNIiEqjxVYJaAPFFA8U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716505946; x=1717110746;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5mMbC5KBXhHkDvBNusLgJck71yWRaMS5suGXHx+nBss=;
-        b=H9D+jOuQ1qmIRKO3sVk0L5o7bgTKPISq5InS6CdQHnJqs8Oa2hbRHBjY1WxAQ13XEl
-         50d+0iP2XA2rvTakIeizzTDx/FLuCdYt2gS4dQkOEX5qJTaxtPQSOzR43AM+P969mTkb
-         gsEhZEvU64xGWDZp+c1MjBST+PdZU4uQ6A3/chJGXyeXJ4CInIUuvXlJVYX6pyxL/D4l
-         VnSSAtnW7Ah4TH86zHMhcAhkm2x9S2WR5nCCDeEqKP8Zy0vTEtIkAknoTaHNy3sf11lh
-         jEnhlBwJxRs+tfJDDOUWv/1DwfIApsnpoGowT/Zn6QiLfJXbwoahFayEnyoUdRBCXWdI
-         5f3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVqBjZD1rc3Lxlg/S46xZWoW3hs/yIis9SWcGazG397mME/xLl7eh5KcJFBHxYeLElKwNvvV68qgQWUJexA2zz176MlGA==
-X-Gm-Message-State: AOJu0Yxs1Xcjq5I4n4gx0TYdy/aKjQrajilLMnDiTuvCO/qHnVmBuSzz
-	v+77YUO3OZY153TUxfe6q9++K3Iz2DTx9zud1yyGnKvHVS1wrhEZRdnCv+stEw==
-X-Google-Smtp-Source: AGHT+IFbXrTeUCq7J46GiJ/p3IWwvb8fOgFDb0trMNcBbD+UJjL4KOevqFmzptXng6JsupSTGMLaXg==
-X-Received: by 2002:a17:903:1d0:b0:1eb:73c2:6b4a with SMTP id d9443c01a7336-1f4486e5e10mr8167325ad.8.1716505946250;
-        Thu, 23 May 2024 16:12:26 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c9b2e88sm1125295ad.253.2024.05.23.16.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 May 2024 16:12:25 -0700 (PDT)
-Date: Thu, 23 May 2024 16:12:25 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] x86/boot: Address clang -Wimplicit-fallthrough in
- vsprintf()
-Message-ID: <202405231603.2E810E3FC@keescook>
-References: <20240516-x86-boot-fix-clang-implicit-fallthrough-v1-1-04dc320ca07c@kernel.org>
- <20240517095110.GAZkcojmJQoY_zU-OT@fat_crate.local>
- <20240517151833.GB3660288@thelio-3990X>
- <20240523115734.GAZk8vLgzOzD8Tv9pq@fat_crate.local>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IyrW24+b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716521321; x=1748057321;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BmHxPvxy7A16jb2AYJ8QAISuGgdPP6gUOqwmVG0jhKQ=;
+  b=IyrW24+bBOi0DgUQCVPonuGSCA80PxeuT/nJ8IJYgyE1lTKcX/EKQYUA
+   M50IC22lbb1v31wzGg5SPuXfgWux9jqfYqzmAT0buEZXehm+j1HgQxQ98
+   G72yrrYvJw6nGF7cx+GoC46ky7IosLb6w7EwLP3pfphpGSTsHllUtrIvQ
+   RmLh43YKTNHaR+AfzK3CeamDY8M4VRG5iQeCY+0UVbgG9wVemIPR0JHMU
+   4RvZFNHIhimRSwA2wFfwiPn9DqVUb4UrgsIGi8dLe81bd+sMBwEvWyBC2
+   IZhH6HqDdHFMTVpLSuZnD+QqVf9pvWXzB1Kt1mcwmsNonFuvjtELQKPOD
+   A==;
+X-CSE-ConnectionGUID: H8v4OWLMQaGUw0pmupcLkg==
+X-CSE-MsgGUID: XM/Uw4x7RxOIuqJUha7WDA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="35398329"
+X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
+   d="scan'208";a="35398329"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 20:28:40 -0700
+X-CSE-ConnectionGUID: gY/CM6FATPai6/GBbCwYiw==
+X-CSE-MsgGUID: vmi/9T6/RKm+fon72EZqig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
+   d="scan'208";a="65093228"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 23 May 2024 20:28:35 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sALbb-0003n3-2n;
+	Fri, 24 May 2024 03:28:32 +0000
+Date: Fri, 24 May 2024 11:28:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kim Seer Paller <kimseer.paller@analog.com>,
+	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dimitri Fedrau <dima.fedrau@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+Subject: Re: [PATCH v2 5/5] iio: dac: ltc2664: Add driver for LTC2664 and
+ LTC2672
+Message-ID: <202405241141.kYcxrSem-lkp@intel.com>
+References: <20240523031909.19427-6-kimseer.paller@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,30 +75,161 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240523115734.GAZk8vLgzOzD8Tv9pq@fat_crate.local>
+In-Reply-To: <20240523031909.19427-6-kimseer.paller@analog.com>
 
-On Thu, May 23, 2024 at 01:57:34PM +0200, Borislav Petkov wrote:
-> On Fri, May 17, 2024 at 08:18:33AM -0700, Nathan Chancellor wrote:
-> > There was a patch to make Clang match GCC's behavior a few years ago but
-> > I think Kees made a good argument that GCC's behavior leaves potential
-> > bugs on the table, so that was not pursued further.
-> > 
-> > https://reviews.llvm.org/D91895#2417170
-> 
-> Really? Maybe I'm being dense but I don't see real bugs there... I see
-> readability issues. :-)
+Hi Kim,
 
-There isn't a bug _here_, but this is about making the code unambiguous
-everywhere in the kernel. We've already done the work to get rid of
-all these warnings; this one is newly introduced, so let's get it fixed.
+kernel test robot noticed the following build warnings:
 
-We don't want to have the same flow-control statement reachable from two
-different "case"s where the resulting behaviors are different. Otherwise
-we can't determine if a "fallthrough" is missing or intentional.
+[auto build test WARNING on 827dca3129708a8465bde90c86c2e3c38e62dd4f]
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Kim-Seer-Paller/iio-ABI-Generalize-ABI-documentation-for-DAC/20240523-112246
+base:   827dca3129708a8465bde90c86c2e3c38e62dd4f
+patch link:    https://lore.kernel.org/r/20240523031909.19427-6-kimseer.paller%40analog.com
+patch subject: [PATCH v2 5/5] iio: dac: ltc2664: Add driver for LTC2664 and LTC2672
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240524/202405241141.kYcxrSem-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240524/202405241141.kYcxrSem-lkp@intel.com/reproduce)
 
--Kees
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405241141.kYcxrSem-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/iio/dac/ltc2664.c:20:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/iio/dac/ltc2664.c:627:8: warning: variable 'span' is uninitialized when used here [-Wuninitialized]
+     627 |                         if (span < 0)
+         |                             ^~~~
+   drivers/iio/dac/ltc2664.c:563:15: note: initialize the variable 'span' to silence this warning
+     563 |         int ret, span;
+         |                      ^
+         |                       = 0
+   6 warnings generated.
+
+
+vim +/span +627 drivers/iio/dac/ltc2664.c
+
+   557	
+   558	static int ltc2664_channel_config(struct ltc2664_state *st)
+   559	{
+   560		const struct ltc2664_chip_info *chip_info = st->chip_info;
+   561		struct device *dev = &st->spi->dev;
+   562		u32 reg, tmp[2], mspan;
+   563		int ret, span;
+   564	
+   565		mspan = LTC2664_MSPAN_SOFTSPAN;
+   566		ret = device_property_read_u32(dev, "adi,manual-span-operation-config",
+   567					       &mspan);
+   568		if (!ret) {
+   569			if (!chip_info->manual_span_support)
+   570				return dev_err_probe(dev, -EINVAL,
+   571				       "adi,manual-span-operation-config not supported\n");
+   572	
+   573			if (mspan > ARRAY_SIZE(ltc2664_mspan_lut))
+   574				return dev_err_probe(dev, -EINVAL,
+   575				       "adi,manual-span-operation-config not in range\n");
+   576		}
+   577	
+   578		st->rfsadj = 20000;
+   579		ret = device_property_read_u32(dev, "adi,rfsadj-ohms", &st->rfsadj);
+   580		if (!ret) {
+   581			if (!chip_info->rfsadj_support)
+   582				return dev_err_probe(dev, -EINVAL,
+   583						     "adi,rfsadj-ohms not supported\n");
+   584	
+   585			if (st->rfsadj < 19000 || st->rfsadj > 41000)
+   586				return dev_err_probe(dev, -EINVAL,
+   587						     "adi,rfsadj-ohms not in range\n");
+   588		}
+   589	
+   590		device_for_each_child_node_scoped(dev, child) {
+   591			struct ltc2664_chan *chan;
+   592	
+   593			ret = fwnode_property_read_u32(child, "reg", &reg);
+   594			if (ret)
+   595				return dev_err_probe(dev, ret,
+   596						     "Failed to get reg property\n");
+   597	
+   598			if (reg >= chip_info->num_channels)
+   599				return dev_err_probe(dev, -EINVAL,
+   600						     "reg bigger than: %d\n",
+   601						     chip_info->num_channels);
+   602	
+   603			chan = &st->channels[reg];
+   604	
+   605			if (fwnode_property_read_bool(child, "adi,toggle-mode")) {
+   606				chan->toggle_chan = true;
+   607				/* assume sw toggle ABI */
+   608				st->iio_channels[reg].ext_info = ltc2664_toggle_sym_ext_info;
+   609				/*
+   610				 * Clear IIO_CHAN_INFO_RAW bit as toggle channels expose
+   611				 * out_voltage/current_raw{0|1} files.
+   612				 */
+   613				__clear_bit(IIO_CHAN_INFO_RAW,
+   614					    &st->iio_channels[reg].info_mask_separate);
+   615			}
+   616	
+   617			chan->raw[0] = ltc2664_mspan_lut[mspan][1];
+   618			chan->raw[1] = ltc2664_mspan_lut[mspan][1];
+   619	
+   620			chan->span = ltc2664_mspan_lut[mspan][0];
+   621	
+   622			ret = fwnode_property_read_u32_array(child, "adi,output-range-microvolt",
+   623							     tmp, ARRAY_SIZE(tmp));
+   624			if (!ret && mspan == LTC2664_MSPAN_SOFTSPAN) {
+   625				chan->span = ltc2664_set_span(st, tmp[0] / 1000,
+   626							      tmp[1] / 1000, reg);
+ > 627				if (span < 0)
+   628					return dev_err_probe(dev, span,
+   629							     "Failed to set span\n");
+   630	
+   631			}
+   632	
+   633			ret = fwnode_property_read_u32(child,
+   634						       "adi,output-range-microamp",
+   635						       &tmp[0]);
+   636			if (!ret) {
+   637				chan->span = ltc2664_set_span(st, 0, tmp[0] / 1000, reg);
+   638				if (span < 0)
+   639					return dev_err_probe(dev, span,
+   640							     "Failed to set span\n");
+   641			}
+   642		}
+   643	
+   644		return 0;
+   645	}
+   646	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
