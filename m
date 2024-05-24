@@ -1,138 +1,221 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337388526E;
-	Fri, 24 May 2024 09:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2BA85277;
+	Fri, 24 May 2024 09:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716543181; cv=none; b=pq7FVChBDT1RciHkcqdd0DLFKEzVbnESNcu7y+SCSTzet4j34LwjNf2BstGS0mwA0GvEvulzNW5ZUcrfSIZpPTtphDcexKKG/09Ch8GL92F2Z5YGrZmXT4gbQlRScalOaTrAXC1k1dW9lPnO1q0S9cYI5rcQh9zPkdATC+NtIHA=
+	t=1716543771; cv=none; b=QuJDAKfXAQFWqsUVZIKyGHvq2SVWOH5wvNUrmA+IJo9I0FH4We49amCyBXYUkthOdfMnB5QvNjYc/3w72b3uXMbXD6uTi2ze/kUNX9Wrhd0obzZ6+jhN1Fq4wmSFQwYRfklQgEJ9th8qRYker7c41AAL26fkHbC8as6Uop24924=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716543181; c=relaxed/simple;
-	bh=2RrLOS91XoKFHAFTx+37jUWVutB0E1TVUDdeeyeIG+o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E4iS/+QZHofND7L8WbfiEdb3/kyC+5PTr3D2Y00hrUVvdM+X066hkFZZz/g3JQx05tniMqZbEzNj+uia4bewfm1X4JlXT8mx8ne9cpDWOVgZyS6RkzreE2pfkBqLIk/rUEc0C83Y+9xTGJW8iaavi4xHkHQkulgwV6rWM3wjUiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D+5SMxqP; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716543771; c=relaxed/simple;
+	bh=EE0Mfcd6ewSc6+WFz6f+/FGp9UJiVN+BC87M0MwSeQw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uHvrCmQQpe2tgPozGwUiTCqgyxxQUAfqaB7ZNylJtH+VYy/gl+wz83W5fYoMoQdX+LJnegK/WXJ43Ej/31zd9z86cCXXMfAdliUr0PfB9b6Pzal31a9c0g03WzEjSwHaVcims2JTBNvjVqyaP6zk3I99G2RfZmc0xdqX4SBpWPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cig1fQcP; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D+5SMxqP"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4202959b060so62009115e9.2;
-        Fri, 24 May 2024 02:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716543178; x=1717147978; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/N78wdGhHYwk+WAeb4KOPaNgXTFF+oTiWHimI1zWv+w=;
-        b=D+5SMxqPElKFzj9SOri729X3DyEnqni026sPQWgtFTznPHUQWbRoWiW2L7mxpsVHDT
-         WGl+PThkj7jtMt9CJkRDLmz6j+2VWnSzI0p2D/lAkIEsek6j47Nn6LYEy0qEsogJ47NU
-         PVczvsB0iIzN2Y0eF0q5jCeyh6dZiAD837us51FpJnGaSakqNEiNfTAZt7xbJje6lrut
-         DPqud1+FRvXl9C3MrqQVayfQ92iJsVsJ5qQTCdp6W2tQau0GjriAzaqBFec+qmBaq94j
-         u129EINshVci2UuwexK4kEP5Tt1MoDQPwqjFdptvpcd9SGhl9vAPuGFx92fZhD/YZQ21
-         WYVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716543178; x=1717147978;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/N78wdGhHYwk+WAeb4KOPaNgXTFF+oTiWHimI1zWv+w=;
-        b=bz9eca8vH3GwA+PTl+8QBbuN8PHymwJqw6WREnt1b2QF+HFPM4OXzzUUujUgClITDw
-         M4cgNkjI0lYsE2/ojQ7LtcgSCxyhLi+uFeXlmL5aYexuGyo8BY322O4PDhfPtVgljWF2
-         UfsUpFGw3fSKtNwLUHrldEvQ53qmOBqvZiQ2jjrqkpMX2gEUODMpMcMvSpG+dfgt5C65
-         fYTT8aXXTDwTfDt5dctpPlZ6rHxvoA+6pAvhix8ODBQdl+b2cu7xXyoxPsczCBsJ1GQ6
-         3NMtHbzG4PL86J/4A2JzpCXVpLWwYga9lq8KZhZTQ6wvEqdKqUPidAUQQCT11XKDiNiU
-         1Ijw==
-X-Forwarded-Encrypted: i=1; AJvYcCUriweqtrbO4a7VqLl0Lxivb8/lEmxJA0N2G6IxFNGYyY3PSPbnjhn662wNf4BWH9d8Mj03EotDW/DCXW/0Z7tTXpJl8hahhQv198cboBK2IX4aGzJ7EdLGPqGipG+QY+PeIxo=
-X-Gm-Message-State: AOJu0YzZwAhb+5Dkt+EmLPeWyi+GlChVDwDqU73eMR0LwxKXB4Oj/IPE
-	pyqAbS+eSDIkqDFzgLbbzo10ZntxgQgHvYRhzjc7LAH+Xv1SxyCsUk81uT1U3AOEq3b8FhhlyyI
-	qZMdsRrDm47Xkt9mESzKgj8RD2ps=
-X-Google-Smtp-Source: AGHT+IG85r6fzf+Rn3oq43J6zk37pMjCk/MUQ1CH01rTPdQh47I++Z/WHoEVeJOT8Si3w4cgr4HsmuiiPelOESdHSTI=
-X-Received: by 2002:a5d:6983:0:b0:354:fb81:19d7 with SMTP id
- ffacd0b85a97d-3552fdc86e4mr1000287f8f.44.1716543178271; Fri, 24 May 2024
- 02:32:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cig1fQcP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716543770; x=1748079770;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EE0Mfcd6ewSc6+WFz6f+/FGp9UJiVN+BC87M0MwSeQw=;
+  b=cig1fQcPRSNTPHgx9jtyIKj3mjnvxQsOySXAgWtyWqoFLZHK1kLBpeM3
+   +Hoy8J4HcVgzP4zKWkcYDBVOJueFPot9IZwD+E6pJBi2UTBBz331SfuUL
+   AE1rkJKmK7gnMOXopAdtUZGgpUY3S5Mxg0QPT58469IfSoGoHsRBon1Mh
+   HT3jtLOaaLBapWov63G4FmCLdGMdVDeMINUb9Zw4Yrh8f96aISz0ob3rT
+   zNC55qcGvnZsS1jwcc9OefnC6Z58sI5UacYG/F5GGAsHPfNSUXsBemTfx
+   9agf0+xkO3hSrns8IXWt3jM/pbzlNgkp7xJQbK1xrAlFn8oySZq+AzyMy
+   A==;
+X-CSE-ConnectionGUID: Hn5P6LqgQDm1z0+fAgeyUg==
+X-CSE-MsgGUID: 0sfh6jFqRbyzddnhjvL9JA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="12763457"
+X-IronPort-AV: E=Sophos;i="6.08,185,1712646000"; 
+   d="scan'208";a="12763457"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 02:42:49 -0700
+X-CSE-ConnectionGUID: znjdwd8bQf2TBiM/HicIRA==
+X-CSE-MsgGUID: RL2Xng9gQBqLZzgS6kTPcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,185,1712646000"; 
+   d="scan'208";a="33887417"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 24 May 2024 02:42:45 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sARRP-0004SB-12;
+	Fri, 24 May 2024 09:42:30 +0000
+Date: Fri, 24 May 2024 17:38:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hector Martin <marcan@marcan.st>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] xhci: Remove dead code in xhci_move_dequeue_past_td()
+Message-ID: <202405241753.Idenkg7C-lkp@intel.com>
+References: <20240524-xhci-deadcode-v1-1-a4453a756e0f@marcan.st>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202405011208.qsZQwChO-lkp@intel.com> <20240501132359.488616-1-skseofh@gmail.com>
- <20240522143129.GA3244910-robh@kernel.org>
-In-Reply-To: <20240522143129.GA3244910-robh@kernel.org>
-From: DaeRo Lee <skseofh@gmail.com>
-Date: Fri, 24 May 2024 18:32:46 +0900
-Message-ID: <CAATEi5=pe+A8bUp=JqoMUcqQWp9uZ+4b0A92QxVRmsNj0H0ayw@mail.gmail.com>
-Subject: Re: [PATCH v2] of: of_reserved_mem: clean-up reserved memory with no-map
-To: Rob Herring <robh@kernel.org>
-Cc: lkp@intel.com, daero_le.lee@samsung.com, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, rppt@kernel.org, saravanak@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240524-xhci-deadcode-v1-1-a4453a756e0f@marcan.st>
 
-2024=EB=85=84 5=EC=9B=94 22=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 11:31, =
-Rob Herring <robh@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On Wed, May 01, 2024 at 10:23:59PM +0900, skseofh@gmail.com wrote:
-> > From: Daero Lee <daero_le.lee@samsung.com>
-> >
-> > In early_init_dt_reserve_memory we only add memory w/o no-map flag to
-> > memblock.reserved. But we need to add memory w/ no-map flag to
-> > memblock.reserved, because NOMAP and memblock.reserved are semantically
-> > different.
-> >
-> > Signed-off-by: Daero Lee <daero_le.lee@samsung.com>
-> > ---
-> >  drivers/of/of_reserved_mem.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.=
-c
-> > index 8236ecae2953..d00a17a9cebc 100644
-> > --- a/drivers/of/of_reserved_mem.c
-> > +++ b/drivers/of/of_reserved_mem.c
-> > @@ -81,6 +81,7 @@ static void __init fdt_reserved_mem_save_node(unsigne=
-d long node, const char *un
-> >  static int __init early_init_dt_reserve_memory(phys_addr_t base,
-> >                                              phys_addr_t size, bool nom=
-ap)
-> >  {
-> > +     int err =3D 0;
-> >       if (nomap) {
-> >               /*
-> >                * If the memory is already reserved (by another region),=
- we
-> > @@ -91,7 +92,10 @@ static int __init early_init_dt_reserve_memory(phys_=
-addr_t base,
-> >                   memblock_is_region_reserved(base, size))
-> >                       return -EBUSY;
-> >
-> > -             return memblock_mark_nomap(base, size);
-> > +
-> > +             err =3D memblock_mark_nomap(base, size);
->
-> The last time this was touched, it was to make the handling aligned with
-> EFI memory map handling. Is that still going to be the case with this
-> change? Or does EFI memory map handling have the same issue?
-Can I get more information about EFI memory map handling that you're saying=
-?
+Hi Hector,
 
-1) Are you talking about uefi_mem in the reserved-memory node like below?
- ex) arm64/boot/dts/qcom/qcs404.dtsi
-                uefi_mem: memory@9f800000 {
-                        reg =3D <0 0x9f800000 0 0x800000>;
-                        no-map;
-                };
+kernel test robot noticed the following build warnings:
 
-2) Or, about handling EFI memory map function efi_init() -> reserve_regions=
-()?
+[auto build test WARNING on a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6]
 
->
-> > +             if (err)
-> > +                     return err;
-> >       }
-> >       return memblock_reserve(base, size);
-> >  }
-> > --
-> > 2.25.1
-> >
+url:    https://github.com/intel-lab-lkp/linux/commits/Hector-Martin/xhci-Remove-dead-code-in-xhci_move_dequeue_past_td/20240524-151544
+base:   a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6
+patch link:    https://lore.kernel.org/r/20240524-xhci-deadcode-v1-1-a4453a756e0f%40marcan.st
+patch subject: [PATCH] xhci: Remove dead code in xhci_move_dequeue_past_td()
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240524/202405241753.Idenkg7C-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240524/202405241753.Idenkg7C-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405241753.Idenkg7C-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/usb/host/xhci-ring.c:55:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/usb/host/xhci-ring.c:695:1: warning: unused label 'deq_found' [-Wunused-label]
+     695 | deq_found:
+         | ^~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/deq_found +695 drivers/usb/host/xhci-ring.c
+
+e6b20121c6d5d1 Mathias Nyman 2017-06-02  633  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  634  static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+d1dbfb942c33bf Mathias Nyman 2021-01-29  635  				unsigned int slot_id, unsigned int ep_index,
+d1dbfb942c33bf Mathias Nyman 2021-01-29  636  				unsigned int stream_id, struct xhci_td *td)
+d1dbfb942c33bf Mathias Nyman 2021-01-29  637  {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  638  	struct xhci_virt_device *dev = xhci->devs[slot_id];
+d1dbfb942c33bf Mathias Nyman 2021-01-29  639  	struct xhci_virt_ep *ep = &dev->eps[ep_index];
+d1dbfb942c33bf Mathias Nyman 2021-01-29  640  	struct xhci_ring *ep_ring;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  641  	struct xhci_command *cmd;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  642  	struct xhci_segment *new_seg;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  643  	union xhci_trb *new_deq;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  644  	int new_cycle;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  645  	dma_addr_t addr;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  646  	u64 hw_dequeue;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  647  	bool cycle_found = false;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  648  	bool td_last_trb_found = false;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  649  	u32 trb_sct = 0;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  650  	int ret;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  651  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  652  	ep_ring = xhci_triad_to_transfer_ring(xhci, slot_id,
+d1dbfb942c33bf Mathias Nyman 2021-01-29  653  			ep_index, stream_id);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  654  	if (!ep_ring) {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  655  		xhci_warn(xhci, "WARN can't find new dequeue, invalid stream ID %u\n",
+d1dbfb942c33bf Mathias Nyman 2021-01-29  656  			  stream_id);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  657  		return -ENODEV;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  658  	}
+d1dbfb942c33bf Mathias Nyman 2021-01-29  659  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  660  	hw_dequeue = xhci_get_hw_deq(xhci, dev, ep_index, stream_id);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  661  	new_seg = ep_ring->deq_seg;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  662  	new_deq = ep_ring->dequeue;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  663  	new_cycle = hw_dequeue & 0x1;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  664  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  665  	/*
+d1dbfb942c33bf Mathias Nyman 2021-01-29  666  	 * We want to find the pointer, segment and cycle state of the new trb
+d1dbfb942c33bf Mathias Nyman 2021-01-29  667  	 * (the one after current TD's last_trb). We know the cycle state at
+d1dbfb942c33bf Mathias Nyman 2021-01-29  668  	 * hw_dequeue, so walk the ring until both hw_dequeue and last_trb are
+d1dbfb942c33bf Mathias Nyman 2021-01-29  669  	 * found.
+d1dbfb942c33bf Mathias Nyman 2021-01-29  670  	 */
+d1dbfb942c33bf Mathias Nyman 2021-01-29  671  	do {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  672  		if (!cycle_found && xhci_trb_virt_to_dma(new_seg, new_deq)
+d1dbfb942c33bf Mathias Nyman 2021-01-29  673  		    == (dma_addr_t)(hw_dequeue & ~0xf)) {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  674  			cycle_found = true;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  675  			if (td_last_trb_found)
+d1dbfb942c33bf Mathias Nyman 2021-01-29  676  				break;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  677  		}
+d1dbfb942c33bf Mathias Nyman 2021-01-29  678  		if (new_deq == td->last_trb)
+d1dbfb942c33bf Mathias Nyman 2021-01-29  679  			td_last_trb_found = true;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  680  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  681  		if (cycle_found && trb_is_link(new_deq) &&
+d1dbfb942c33bf Mathias Nyman 2021-01-29  682  		    link_trb_toggles_cycle(new_deq))
+d1dbfb942c33bf Mathias Nyman 2021-01-29  683  			new_cycle ^= 0x1;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  684  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  685  		next_trb(xhci, ep_ring, &new_seg, &new_deq);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  686  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  687  		/* Search wrapped around, bail out */
+d1dbfb942c33bf Mathias Nyman 2021-01-29  688  		if (new_deq == ep->ring->dequeue) {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  689  			xhci_err(xhci, "Error: Failed finding new dequeue state\n");
+d1dbfb942c33bf Mathias Nyman 2021-01-29  690  			return -EINVAL;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  691  		}
+d1dbfb942c33bf Mathias Nyman 2021-01-29  692  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  693  	} while (!cycle_found || !td_last_trb_found);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  694  
+d1dbfb942c33bf Mathias Nyman 2021-01-29 @695  deq_found:
+d1dbfb942c33bf Mathias Nyman 2021-01-29  696  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  697  	/* Don't update the ring cycle state for the producer (us). */
+d1dbfb942c33bf Mathias Nyman 2021-01-29  698  	addr = xhci_trb_virt_to_dma(new_seg, new_deq);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  699  	if (addr == 0) {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  700  		xhci_warn(xhci, "Can't find dma of new dequeue ptr\n");
+d1dbfb942c33bf Mathias Nyman 2021-01-29  701  		xhci_warn(xhci, "deq seg = %p, deq ptr = %p\n", new_seg, new_deq);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  702  		return -EINVAL;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  703  	}
+d1dbfb942c33bf Mathias Nyman 2021-01-29  704  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  705  	if ((ep->ep_state & SET_DEQ_PENDING)) {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  706  		xhci_warn(xhci, "Set TR Deq already pending, don't submit for 0x%pad\n",
+d1dbfb942c33bf Mathias Nyman 2021-01-29  707  			  &addr);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  708  		return -EBUSY;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  709  	}
+d1dbfb942c33bf Mathias Nyman 2021-01-29  710  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  711  	/* This function gets called from contexts where it cannot sleep */
+d1dbfb942c33bf Mathias Nyman 2021-01-29  712  	cmd = xhci_alloc_command(xhci, false, GFP_ATOMIC);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  713  	if (!cmd) {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  714  		xhci_warn(xhci, "Can't alloc Set TR Deq cmd 0x%pad\n", &addr);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  715  		return -ENOMEM;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  716  	}
+d1dbfb942c33bf Mathias Nyman 2021-01-29  717  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  718  	if (stream_id)
+d1dbfb942c33bf Mathias Nyman 2021-01-29  719  		trb_sct = SCT_FOR_TRB(SCT_PRI_TR);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  720  	ret = queue_command(xhci, cmd,
+d1dbfb942c33bf Mathias Nyman 2021-01-29  721  		lower_32_bits(addr) | trb_sct | new_cycle,
+d1dbfb942c33bf Mathias Nyman 2021-01-29  722  		upper_32_bits(addr),
+d1dbfb942c33bf Mathias Nyman 2021-01-29  723  		STREAM_ID_FOR_TRB(stream_id), SLOT_ID_FOR_TRB(slot_id) |
+d1dbfb942c33bf Mathias Nyman 2021-01-29  724  		EP_ID_FOR_TRB(ep_index) | TRB_TYPE(TRB_SET_DEQ), false);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  725  	if (ret < 0) {
+d1dbfb942c33bf Mathias Nyman 2021-01-29  726  		xhci_free_command(xhci, cmd);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  727  		return ret;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  728  	}
+d1dbfb942c33bf Mathias Nyman 2021-01-29  729  	ep->queued_deq_seg = new_seg;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  730  	ep->queued_deq_ptr = new_deq;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  731  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  732  	xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
+d1dbfb942c33bf Mathias Nyman 2021-01-29  733  		       "Set TR Deq ptr 0x%llx, cycle %u\n", addr, new_cycle);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  734  
+d1dbfb942c33bf Mathias Nyman 2021-01-29  735  	/* Stop the TD queueing code from ringing the doorbell until
+d1dbfb942c33bf Mathias Nyman 2021-01-29  736  	 * this command completes.  The HC won't set the dequeue pointer
+d1dbfb942c33bf Mathias Nyman 2021-01-29  737  	 * if the ring is running, and ringing the doorbell starts the
+d1dbfb942c33bf Mathias Nyman 2021-01-29  738  	 * ring running.
+d1dbfb942c33bf Mathias Nyman 2021-01-29  739  	 */
+d1dbfb942c33bf Mathias Nyman 2021-01-29  740  	ep->ep_state |= SET_DEQ_PENDING;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  741  	xhci_ring_cmd_db(xhci);
+d1dbfb942c33bf Mathias Nyman 2021-01-29  742  	return 0;
+d1dbfb942c33bf Mathias Nyman 2021-01-29  743  }
+d1dbfb942c33bf Mathias Nyman 2021-01-29  744  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
