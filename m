@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAF5391;
-	Sat, 25 May 2024 01:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3732F1362;
+	Sat, 25 May 2024 01:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716600314; cv=none; b=CF3xm7GnhsgWkl//lxiiqQWpeLokDC50+lkGJbQhQjbho5H4UE7LFaz2IAwb9L4/4X7X1gd41OF4jx9h/Eh1JAteI5YJfmMMkxShl2uNxoJAsjPaVFVBcPKTR31d/7kToj85zrTRz+yLmjrdkDfEcFt9zTIn8JqN8nFbQYLcUvc=
+	t=1716600916; cv=none; b=HbVuZlQ2dudyroqiMxItOT6Za0NxMKErd8n3BTIAIR/Dh7nGidOfnCWrL2yBzeXFEwZGb7MgCVrgqm3bfVkka6OZ/iD2VM8rjfiH67eD4UoBv0RJeTH3jXcBnO7touK5PqormWJlOdbRbJY3O3FZc8uktgqCiLYh36iPStqDilI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716600314; c=relaxed/simple;
-	bh=uprftOU8r+u19t1CX273JBxmldWqGzDeRz55IhNpvKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hc9AS5WZAfaNGvwKfBh9/w4G6Uo+GBiQN+ySeZRqQrzM/JasnnR9BGGvuV8HJUO7as1hu2P4VDJEzC3/0wWaNr492q19Ehe97u24AVPWK4D1m96wznKtiI8fyF/bV3AUd2aM6IyFqymKofgnJcPtnBuYCGB9iZoF/zEPxCbJGHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DKSRN8Qk; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1716600916; c=relaxed/simple;
+	bh=NC6HMat4skw5VIQrflD3p4BkpVKSlEfdqAAuv6T4PjU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Xn0/GP17JafzfmXpFi4egGBnsatgK3qZd4YN5MKOjYUki19gmelvBSsk6aik5KRmfoyVozTYofWyvBozERAfGe9rDXsIf3OwnqH3DQms4AYi7qo4xQsYm3kywRgP5B9Nt+26Cn91OzPFiTB+hfrihi5QX75jH5vkKcKa3MY7bCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lpup6GQG; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DKSRN8Qk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lpup6GQG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716600312; x=1748136312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uprftOU8r+u19t1CX273JBxmldWqGzDeRz55IhNpvKg=;
-  b=DKSRN8QkHb7l+2SgkylpoVQnRANW/r9Tld6w+lSaX1nkTWh8/Antr5u5
-   va7izrxcM+Yjnw43qTtQC12x8w9qo4CGLMCFep8dNi1HI/DbPNO4bKOE6
-   rwiNMYCrn29J+ikMfmWZX+gh0DGfhw5wznpsRHpSYhVDuARMFWasXRU5f
-   XD1exz6KrtZVNVH+zWNWAsoBTQggN8G6drcS9LbnWa1ArI8fd6koLNooP
-   ygExTIe7ygHZWMHgKsGRYu02tKO2w9Uif3/tWhlVs4zUDexb5k9ZcJNA/
-   7ZHd+qJIYe1SKXWOzBoGk1JY4TEE+E9A/Jix5udJwWJVsJSfT7e3cTMFt
-   g==;
-X-CSE-ConnectionGUID: lp66/AKISYWUIoPX1H/iMw==
-X-CSE-MsgGUID: B8Rw1WHGRWGt4WQ0idNr3w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="12775736"
+  t=1716600914; x=1748136914;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NC6HMat4skw5VIQrflD3p4BkpVKSlEfdqAAuv6T4PjU=;
+  b=Lpup6GQGnAnDCBZ+qU84NNrpZ7LsgWMseQDx+v9DzRa5Ro9jL43Fv8pC
+   lEMkymO5/u4GdCmeqYBVpOkhIw2d9qQ+WjQhNqtj50Nd1x6ZcwPsfasli
+   CLsk9chIyStmDPDFm1K4S28QhfpsjaaxEJ7oi0qu7JPSLne5YZUy8fuQ5
+   ynN+9A5RhiL1fkUnOxprQBl/9kjcBdAfKuG7XQ5pRQMyStr34zOuy9UhE
+   0VyJldOWb5dccO6cCgXjNIuEldnWZGIzkauRZ9Ih5pnt0Qg0JFP4urtYz
+   43V7wbq910wyzoBCYRJBG2REZlAkoomycu6IA7ciLDckc0ajh18Wsldm6
+   Q==;
+X-CSE-ConnectionGUID: JpcXP6SrSQOqnh50c6jcQw==
+X-CSE-MsgGUID: U94yuANxSEiGLf5rNQ/RJg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="24120192"
 X-IronPort-AV: E=Sophos;i="6.08,187,1712646000"; 
-   d="scan'208";a="12775736"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 18:25:11 -0700
-X-CSE-ConnectionGUID: XrF+eU27S1++i01NgYWprg==
-X-CSE-MsgGUID: 0uDWnx2aR0WmKo2ccl2H4g==
+   d="scan'208";a="24120192"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 18:35:14 -0700
+X-CSE-ConnectionGUID: KAmSgHchS1SyToSK7kNywQ==
+X-CSE-MsgGUID: jEcR663lTH65RuihFcGFvA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,187,1712646000"; 
-   d="scan'208";a="38612851"
+   d="scan'208";a="71601267"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 24 May 2024 18:25:10 -0700
+  by orviesa001.jf.intel.com with ESMTP; 24 May 2024 18:35:12 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sAg9k-00065r-14;
-	Sat, 25 May 2024 01:25:08 +0000
-Date: Sat, 25 May 2024 09:24:26 +0800
+	id 1sAgJS-00069M-0A;
+	Sat, 25 May 2024 01:35:10 +0000
+Date: Sat, 25 May 2024 09:35:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mitul Golani <mitulkumar.ajitkumar.golani@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v9 3/8] drm/i915: Compute CMRR and calculate vtotal
-Message-ID: <202405250934.b3wpZ9NM-lkp@intel.com>
-References: <20240524102432.2499104-4-mitulkumar.ajitkumar.golani@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 21/23] fs/bcachefs/btree_io.c:542:7:
+ warning: format specifies type 'size_t' (aka 'unsigned int') but the
+ argument has type 'unsigned long'
+Message-ID: <202405250948.JeFBsoxZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,43 +63,152 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240524102432.2499104-4-mitulkumar.ajitkumar.golani@intel.com>
 
-Hi Mitul,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-tip/drm-tip next-20240523]
-[cannot apply to drm-intel/for-linux-next-fixes linus/master v6.9]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mitul-Golani/drm-i915-Define-and-compute-Transcoder-CMRR-registers/20240524-183131
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20240524102432.2499104-4-mitulkumar.ajitkumar.golani%40intel.com
-patch subject: [PATCH v9 3/8] drm/i915: Compute CMRR and calculate vtotal
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20240525/202405250934.b3wpZ9NM-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240525/202405250934.b3wpZ9NM-lkp@intel.com/reproduce)
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   254510a1c2691db5fdaccbafe0e1872fd7a2e4e6
+commit: ab2c3aaf4521ab863cb8efebf4139add2ccf58ae [21/23] bcachefs: Plumb bkey into __btree_err()
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240525/202405250948.JeFBsoxZ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240525/202405250948.JeFBsoxZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405250934.b3wpZ9NM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405250948.JeFBsoxZ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __divdi3
-   >>> referenced by intel_vrr.c
-   >>>               drivers/gpu/drm/i915/display/intel_vrr.o:(cmrr_get_vtotal) in archive vmlinux.a
-   >>> referenced by intel_vrr.c
-   >>>               drivers/gpu/drm/i915/display/intel_vrr.o:(cmrr_get_vtotal) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __udivdi3
-   >>> referenced by intel_vrr.c
-   >>>               drivers/gpu/drm/i915/display/intel_vrr.o:(cmrr_get_vtotal) in archive vmlinux.a
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/bcachefs/btree_io.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> fs/bcachefs/btree_io.c:542:7: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+     541 |                 prt_printf(out, " bset byte offset %zu",
+         |                                                    ~~~
+         |                                                    %lu
+     542 |                            (unsigned long)(void *)k -
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+     543 |                            ((unsigned long)(void *)i & ~511UL));
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
+     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
+         |                                                               ^~~~~~~~~~~
+   fs/bcachefs/btree_io.c:1895:36: warning: bitwise operation between different enumeration types ('enum bch_watermark' and 'enum bch_trans_commit_flags') [-Wenum-enum-conversion]
+    1895 |                                         BCH_WATERMARK_interior_updates|
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    1896 |                                         BCH_TRANS_COMMIT_journal_reclaim|
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/btree_update.h:190:71: note: expanded from macro 'bch2_trans_do'
+     190 |         bch2_trans_run(_c, commit_do(trans, _disk_res, _journal_seq, _flags, _do))
+         |                                                                              ^~~
+   fs/bcachefs/btree_update.h:174:25: note: expanded from macro 'commit_do'
+     174 |         lockrestart_do(_trans, _do ?: bch2_trans_commit(_trans, (_disk_res),\
+         |                                ^~~
+   fs/bcachefs/btree_iter.h:670:11: note: expanded from macro 'lockrestart_do'
+     670 |         _ret2 = (_do);                                                  \
+         |                  ^~~
+   fs/bcachefs/btree_update.h:184:14: note: expanded from macro 'bch2_trans_run'
+     184 |         int _ret = (_do);                                               \
+         |                     ^~~
+   9 warnings generated.
+
+
+vim +542 fs/bcachefs/btree_io.c
+
+   519	
+   520	static void btree_err_msg(struct printbuf *out, struct bch_fs *c,
+   521				  struct bch_dev *ca,
+   522				  struct btree *b, struct bset *i, struct bkey_packed *k,
+   523				  unsigned offset, int write)
+   524	{
+   525		prt_printf(out, bch2_log_msg(c, "%s"),
+   526			   write == READ
+   527			   ? "error validating btree node "
+   528			   : "corrupt btree node before write ");
+   529		if (ca)
+   530			prt_printf(out, "on %s ", ca->name);
+   531		prt_printf(out, "at btree ");
+   532		bch2_btree_pos_to_text(out, c, b);
+   533	
+   534		printbuf_indent_add(out, 2);
+   535	
+   536		prt_printf(out, "\nnode offset %u/%u",
+   537			   b->written, btree_ptr_sectors_written(&b->key));
+   538		if (i)
+   539			prt_printf(out, " bset u64s %u", le16_to_cpu(i->u64s));
+   540		if (k)
+   541			prt_printf(out, " bset byte offset %zu",
+ > 542				   (unsigned long)(void *)k -
+   543				   ((unsigned long)(void *)i & ~511UL));
+   544		prt_str(out, ": ");
+   545	}
+   546	
 
 -- 
 0-DAY CI Kernel Test Service
