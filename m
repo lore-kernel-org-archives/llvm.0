@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3732F1362;
-	Sat, 25 May 2024 01:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627D115C9;
+	Sat, 25 May 2024 02:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716600916; cv=none; b=HbVuZlQ2dudyroqiMxItOT6Za0NxMKErd8n3BTIAIR/Dh7nGidOfnCWrL2yBzeXFEwZGb7MgCVrgqm3bfVkka6OZ/iD2VM8rjfiH67eD4UoBv0RJeTH3jXcBnO7touK5PqormWJlOdbRbJY3O3FZc8uktgqCiLYh36iPStqDilI=
+	t=1716604766; cv=none; b=XVppyj0q3zWl6qjBa3ijGHLS8Y8a0Wec4znzvanduTeCakSTCF7ADOGw/Fzb/YnmkFet3EGKjH3JWRaKskOKo9a1XHHr5D56csDP2LIeHUdDYEtV9y2MMDtgk09H+ZTC2MH7Pumiwq18dYCkSZMCAEVRDSWv/6NVBAtAh9+1ZvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716600916; c=relaxed/simple;
-	bh=NC6HMat4skw5VIQrflD3p4BkpVKSlEfdqAAuv6T4PjU=;
+	s=arc-20240116; t=1716604766; c=relaxed/simple;
+	bh=iuqX6BdRUTDa0FjlTIl7ac0cMbwDA2wZzH+x3PjT4Qs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xn0/GP17JafzfmXpFi4egGBnsatgK3qZd4YN5MKOjYUki19gmelvBSsk6aik5KRmfoyVozTYofWyvBozERAfGe9rDXsIf3OwnqH3DQms4AYi7qo4xQsYm3kywRgP5B9Nt+26Cn91OzPFiTB+hfrihi5QX75jH5vkKcKa3MY7bCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lpup6GQG; arc=none smtp.client-ip=198.175.65.13
+	 Content-Disposition; b=BHQVPcOF8VOjqF9bFsGfWMx5kPUaH3qrg4vWKK7xu2qgA3xM3/rZQXoLI0azuzYRCaU3XsZ/HsJwy0XYLz6B3JGvnGyfYGG1ubOMk5SPIhylScNyUGop1jJ0Z77tOnN++yvXtqC1NNPyYWlcpQn0kjX3d642nNbDYtQSRilZkGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=miwSA8ZP; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lpup6GQG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="miwSA8ZP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716600914; x=1748136914;
+  t=1716604764; x=1748140764;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NC6HMat4skw5VIQrflD3p4BkpVKSlEfdqAAuv6T4PjU=;
-  b=Lpup6GQGnAnDCBZ+qU84NNrpZ7LsgWMseQDx+v9DzRa5Ro9jL43Fv8pC
-   lEMkymO5/u4GdCmeqYBVpOkhIw2d9qQ+WjQhNqtj50Nd1x6ZcwPsfasli
-   CLsk9chIyStmDPDFm1K4S28QhfpsjaaxEJ7oi0qu7JPSLne5YZUy8fuQ5
-   ynN+9A5RhiL1fkUnOxprQBl/9kjcBdAfKuG7XQ5pRQMyStr34zOuy9UhE
-   0VyJldOWb5dccO6cCgXjNIuEldnWZGIzkauRZ9Ih5pnt0Qg0JFP4urtYz
-   43V7wbq910wyzoBCYRJBG2REZlAkoomycu6IA7ciLDckc0ajh18Wsldm6
-   Q==;
-X-CSE-ConnectionGUID: JpcXP6SrSQOqnh50c6jcQw==
-X-CSE-MsgGUID: U94yuANxSEiGLf5rNQ/RJg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="24120192"
+  bh=iuqX6BdRUTDa0FjlTIl7ac0cMbwDA2wZzH+x3PjT4Qs=;
+  b=miwSA8ZPDukxtv2SPrumkJN9qaZCKJM51IGD+6Yakw6awnWUtk1cjnb8
+   rjN6ugs1RFnN4H/12r4v2WeUyRoYvWv/+4zpi1ubaMNPLu0lsjQM2HF7e
+   PC6fv05jEVPpWMLieV3A8Ww9GZAMlW2vXtbQIi9v8JhSFQrskSuAena6d
+   +k+ySuHdxWSO74ahrTl2TrewF0VYV8RrbW45FwSkIq/E0EeC8jGDHFkfB
+   1KPxjEHYd5RgPuCDFaJg8xjpXyu9vfsBL1KByVBUcmH0IzE2GCPLCjAE5
+   RN4eHrHEmfX8fODt0vgZKG1XFwQ8jozsFJhYx0uoWD70tZMkv6l2KwpmT
+   g==;
+X-CSE-ConnectionGUID: iaWm3qDTQwin6P71Vn5+nw==
+X-CSE-MsgGUID: DI9IRxL7QLOoNa3aDCShZA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="23599098"
 X-IronPort-AV: E=Sophos;i="6.08,187,1712646000"; 
-   d="scan'208";a="24120192"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 18:35:14 -0700
-X-CSE-ConnectionGUID: KAmSgHchS1SyToSK7kNywQ==
-X-CSE-MsgGUID: jEcR663lTH65RuihFcGFvA==
+   d="scan'208";a="23599098"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 19:39:21 -0700
+X-CSE-ConnectionGUID: ZaOClT0DQjKoZtE+9QRbBg==
+X-CSE-MsgGUID: cBlV+JG/T/ShkCBbWG/c3Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,187,1712646000"; 
-   d="scan'208";a="71601267"
+   d="scan'208";a="39053539"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 24 May 2024 18:35:12 -0700
+  by orviesa005.jf.intel.com with ESMTP; 24 May 2024 19:39:21 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sAgJS-00069M-0A;
-	Sat, 25 May 2024 01:35:10 +0000
-Date: Sat, 25 May 2024 09:35:08 +0800
+	id 1sAhJV-0006Np-1a;
+	Sat, 25 May 2024 02:39:17 +0000
+Date: Sat, 25 May 2024 10:39:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 21/23] fs/bcachefs/btree_io.c:542:7:
- warning: format specifies type 'size_t' (aka 'unsigned int') but the
- argument has type 'unsigned long'
-Message-ID: <202405250948.JeFBsoxZ-lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:objtool-diff 2/2] kernel/fork.c:2815:9: warning:
+ incompatible integer to pointer conversion assigning to 'int *' from 'int'
+Message-ID: <202405251037.WDBJpiSc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,151 +62,143 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   254510a1c2691db5fdaccbafe0e1872fd7a2e4e6
-commit: ab2c3aaf4521ab863cb8efebf4139add2ccf58ae [21/23] bcachefs: Plumb bkey into __btree_err()
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240525/202405250948.JeFBsoxZ-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240525/202405250948.JeFBsoxZ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-diff
+head:   745009dc796e56fc87e911138d801679ecd3576e
+commit: 745009dc796e56fc87e911138d801679ecd3576e [2/2] test
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240525/202405251037.WDBJpiSc-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240525/202405251037.WDBJpiSc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405250948.JeFBsoxZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405251037.WDBJpiSc-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/bcachefs/btree_io.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> fs/bcachefs/btree_io.c:542:7: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
-     541 |                 prt_printf(out, " bset byte offset %zu",
-         |                                                    ~~~
-         |                                                    %lu
-     542 |                            (unsigned long)(void *)k -
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-     543 |                            ((unsigned long)(void *)i & ~511UL));
-         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
-     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/btree_io.c:1895:36: warning: bitwise operation between different enumeration types ('enum bch_watermark' and 'enum bch_trans_commit_flags') [-Wenum-enum-conversion]
-    1895 |                                         BCH_WATERMARK_interior_updates|
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-    1896 |                                         BCH_TRANS_COMMIT_journal_reclaim|
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/btree_update.h:190:71: note: expanded from macro 'bch2_trans_do'
-     190 |         bch2_trans_run(_c, commit_do(trans, _disk_res, _journal_seq, _flags, _do))
-         |                                                                              ^~~
-   fs/bcachefs/btree_update.h:174:25: note: expanded from macro 'commit_do'
-     174 |         lockrestart_do(_trans, _do ?: bch2_trans_commit(_trans, (_disk_res),\
-         |                                ^~~
-   fs/bcachefs/btree_iter.h:670:11: note: expanded from macro 'lockrestart_do'
-     670 |         _ret2 = (_do);                                                  \
-         |                  ^~~
-   fs/bcachefs/btree_update.h:184:14: note: expanded from macro 'bch2_trans_run'
-     184 |         int _ret = (_do);                                               \
-         |                     ^~~
-   9 warnings generated.
+   kernel/fork.c:2815:11: error: implicit declaration of function 'klp_shadow_get_or_alloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           newpid = klp_shadow_get_or_alloc(p, 0, sizeof(*newpid), GFP_KERNEL,
+                    ^
+>> kernel/fork.c:2815:9: warning: incompatible integer to pointer conversion assigning to 'int *' from 'int' [-Wint-conversion]
+           newpid = klp_shadow_get_or_alloc(p, 0, sizeof(*newpid), GFP_KERNEL,
+                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+   fs/proc/array.c:408:11: error: implicit declaration of function 'klp_shadow_get' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           newpid = klp_shadow_get(p, 0);
+                    ^
+>> fs/proc/array.c:408:9: warning: incompatible integer to pointer conversion assigning to 'int *' from 'int' [-Wint-conversion]
+           newpid = klp_shadow_get(p, 0);
+                  ^ ~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +542 fs/bcachefs/btree_io.c
+vim +2815 kernel/fork.c
 
-   519	
-   520	static void btree_err_msg(struct printbuf *out, struct bch_fs *c,
-   521				  struct bch_dev *ca,
-   522				  struct btree *b, struct bset *i, struct bkey_packed *k,
-   523				  unsigned offset, int write)
-   524	{
-   525		prt_printf(out, bch2_log_msg(c, "%s"),
-   526			   write == READ
-   527			   ? "error validating btree node "
-   528			   : "corrupt btree node before write ");
-   529		if (ca)
-   530			prt_printf(out, "on %s ", ca->name);
-   531		prt_printf(out, "at btree ");
-   532		bch2_btree_pos_to_text(out, c, b);
-   533	
-   534		printbuf_indent_add(out, 2);
-   535	
-   536		prt_printf(out, "\nnode offset %u/%u",
-   537			   b->written, btree_ptr_sectors_written(&b->key));
-   538		if (i)
-   539			prt_printf(out, " bset u64s %u", le16_to_cpu(i->u64s));
-   540		if (k)
-   541			prt_printf(out, " bset byte offset %zu",
- > 542				   (unsigned long)(void *)k -
-   543				   ((unsigned long)(void *)i & ~511UL));
-   544		prt_str(out, ": ");
-   545	}
-   546	
+  2756	
+  2757	/*
+  2758	 *  Ok, this is the main fork-routine.
+  2759	 *
+  2760	 * It copies the process, and if successful kick-starts
+  2761	 * it and waits for it to finish using the VM if required.
+  2762	 *
+  2763	 * args->exit_signal is expected to be checked for sanity by the caller.
+  2764	 */
+  2765	#include <linux/livepatch.h>
+  2766	pid_t kernel_clone(struct kernel_clone_args *args)
+  2767	{
+  2768		u64 clone_flags = args->flags;
+  2769		struct completion vfork;
+  2770		struct pid *pid;
+  2771		struct task_struct *p;
+  2772		int trace = 0;
+  2773		pid_t nr;
+  2774		int *newpid;
+  2775		static int ctr = 0;
+  2776	
+  2777		/*
+  2778		 * For legacy clone() calls, CLONE_PIDFD uses the parent_tid argument
+  2779		 * to return the pidfd. Hence, CLONE_PIDFD and CLONE_PARENT_SETTID are
+  2780		 * mutually exclusive. With clone3() CLONE_PIDFD has grown a separate
+  2781		 * field in struct clone_args and it still doesn't make sense to have
+  2782		 * them both point at the same memory location. Performing this check
+  2783		 * here has the advantage that we don't need to have a separate helper
+  2784		 * to check for legacy clone().
+  2785		 */
+  2786		if ((clone_flags & CLONE_PIDFD) &&
+  2787		    (clone_flags & CLONE_PARENT_SETTID) &&
+  2788		    (args->pidfd == args->parent_tid))
+  2789			return -EINVAL;
+  2790	
+  2791		/*
+  2792		 * Determine whether and which event to report to ptracer.  When
+  2793		 * called from kernel_thread or CLONE_UNTRACED is explicitly
+  2794		 * requested, no event is reported; otherwise, report if the event
+  2795		 * for the type of forking is enabled.
+  2796		 */
+  2797		if (!(clone_flags & CLONE_UNTRACED)) {
+  2798			if (clone_flags & CLONE_VFORK)
+  2799				trace = PTRACE_EVENT_VFORK;
+  2800			else if (args->exit_signal != SIGCHLD)
+  2801				trace = PTRACE_EVENT_CLONE;
+  2802			else
+  2803				trace = PTRACE_EVENT_FORK;
+  2804	
+  2805			if (likely(!ptrace_event_enabled(current, trace)))
+  2806				trace = 0;
+  2807		}
+  2808	
+  2809		p = copy_process(NULL, trace, NUMA_NO_NODE, args);
+  2810		add_latent_entropy();
+  2811	
+  2812		if (IS_ERR(p))
+  2813			return PTR_ERR(p);
+  2814	
+> 2815		newpid = klp_shadow_get_or_alloc(p, 0, sizeof(*newpid), GFP_KERNEL,
+  2816						 NULL, NULL);
+  2817		if (newpid)
+  2818			*newpid = ctr++;
+  2819	
+  2820		/*
+  2821		 * Do this prior waking up the new thread - the thread pointer
+  2822		 * might get invalid after that point, if the thread exits quickly.
+  2823		 */
+  2824		trace_sched_process_fork(current, p);
+  2825	
+  2826		pid = get_task_pid(p, PIDTYPE_PID);
+  2827		nr = pid_vnr(pid);
+  2828	
+  2829		if (clone_flags & CLONE_PARENT_SETTID)
+  2830			put_user(nr, args->parent_tid);
+  2831	
+  2832		if (clone_flags & CLONE_VFORK) {
+  2833			p->vfork_done = &vfork;
+  2834			init_completion(&vfork);
+  2835			get_task_struct(p);
+  2836		}
+  2837	
+  2838		if (IS_ENABLED(CONFIG_LRU_GEN_WALKS_MMU) && !(clone_flags & CLONE_VM)) {
+  2839			/* lock the task to synchronize with memcg migration */
+  2840			task_lock(p);
+  2841			lru_gen_add_mm(p->mm);
+  2842			task_unlock(p);
+  2843		}
+  2844	
+  2845		wake_up_new_task(p);
+  2846	
+  2847		/* forking complete and child started to run, tell ptracer */
+  2848		if (unlikely(trace))
+  2849			ptrace_event_pid(trace, pid);
+  2850	
+  2851		if (clone_flags & CLONE_VFORK) {
+  2852			if (!wait_for_vfork_done(p, &vfork))
+  2853				ptrace_event_pid(PTRACE_EVENT_VFORK_DONE, pid);
+  2854		}
+  2855	
+  2856		put_pid(pid);
+  2857		return nr;
+  2858	}
+  2859	
 
 -- 
 0-DAY CI Kernel Test Service
