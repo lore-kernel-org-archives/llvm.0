@@ -1,164 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872B410F2;
-	Sat, 25 May 2024 04:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4DA8F66
+	for <llvm@lists.linux.dev>; Sat, 25 May 2024 05:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716611111; cv=none; b=eayaGzaQDgf1rVXHdZf1YZELYXG+JZcPakvPVgYvTyYSIHyAzxG1ydSxlwvYoITQRbBJjRpibAm1glQs3YM2IO6wFz7xHrkwHUhD/l8bjZhwSWSgIJ04LzXh6qMT4ny348E3bugWPqhlDh+T/Pm75QyiRrKcU6w5lLzCf6mVj5A=
+	t=1716613852; cv=none; b=ddpmaqo0BnBhoZ+npAlqO4c1hSXl3UyTiVvXm6cyv2ywTHmLbopJ+rqf48VGxPK0XxHyU1MhK8RQCZRdLlputn3mmytn7/jCn5RgAQ6DjpopAWS1NLeTNpHVMqIP3R9uNWskeI/NUXi7spuUWCKUqQlHmJ8m13rN8CTVvqRHRhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716611111; c=relaxed/simple;
-	bh=TPQMrZsBoP7RCgzOMhTGeMoLZbkYV+G5dpFhbVqguzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AU3f9KCYuaOv7iUnCWHmLRWoP2ZgKpyZJTvyghJZXIaAaI/ZPp4h6MS5PoPR457VmOzQj+Kht+pY9uQGkkmE/5yqE2bZjITRH+skPL3zxD5I5X9J8EuNrwIh1vFhw/4BUY7CL0ouYAIk6jTDok0xGYAOTcx4KT0AUsXhaa+wLVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KJ9B26ou; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716613852; c=relaxed/simple;
+	bh=Lj+Uo495KwrPHv5uskf3aJMpslC4Gc97d7KiyThIMj0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=O2KyUC2fzN0QihrKAJF7sHEU6cZyolFPFbpI6E93AkW91FN2tjuRKIHM1Jf3k58DGHyyRfMYSO/mGqzkc6ITRY4G+3RabNCiKYHs2FmvNjN3CFB/ccCTqBa/3OxG6oCEoB9FmhmBax3Fz9rGX0dvZDaRq4Is2mwb6fncPcPlEN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TsnXHsuN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KJ9B26ou"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716611109; x=1748147109;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TPQMrZsBoP7RCgzOMhTGeMoLZbkYV+G5dpFhbVqguzM=;
-  b=KJ9B26ouAyzNnCMKWhcnT5oJHc2fRLpRFQuM2xv+DFC6o/FeR1X8R3GV
-   NuRtdyCc6FJiV72pZARFX4CRKVh1U7NE4mnfxVdcVOOFIbDESixado5gK
-   JB6fSmpw5D07HpczKhs+e6UdsuGwvNdry+PRNqlhpXIvJiquN+md0R2jc
-   W6T879XFH9UHWB0gIY7AQIwqvJLN9wZmka1QHrUvw6BAtB9d5BOKUUROZ
-   fmshz+VxdOD5gTyTmJzQ7xGOUWRk1ARAvZp757+jj2If5J/tYoQ20foF+
-   N7JSEYY3fc1lH/pmyC4W9cGDLVCRlwetA3/FrN5ZRFWlkWesZQTnu7T+Y
-   w==;
-X-CSE-ConnectionGUID: F3/MgqbURC2VyZiPN/6b8Q==
-X-CSE-MsgGUID: dOtei23oRf+TSNZRZeIeEw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="13182376"
-X-IronPort-AV: E=Sophos;i="6.08,187,1712646000"; 
-   d="scan'208";a="13182376"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 21:25:09 -0700
-X-CSE-ConnectionGUID: lJl9FDWcRtK480aJrFsXqw==
-X-CSE-MsgGUID: gxT47ohFT8iYEkbhwBbnIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,187,1712646000"; 
-   d="scan'208";a="34100623"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 24 May 2024 21:25:07 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sAixt-0006VV-1N;
-	Sat, 25 May 2024 04:25:05 +0000
-Date: Sat, 25 May 2024 12:24:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC net-next 2/6] net: stmmac: remove pcs_ctrl_ane()
- method and associated code
-Message-ID: <202405251257.hL6jMiJW-lkp@intel.com>
-References: <E1s6C4O-00Ck6O-9D@rmk-PC.armlinux.org.uk>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TsnXHsuN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716613849;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/FBivmLbdBfJaQS4quN4qShQe00+kxcnBrHKD0WVrz0=;
+	b=TsnXHsuNnVGCzFtY0ytWejcZ8R6T6A49LpwOZKe+ssmVuExpxODDDUdraKXpJXs4p9MoNI
+	SDg5quJ/G89h9uCnIoBIgZyv+IFSfPfwCTSl/PwRH5O+FC1QtYYS6UaIIJY7recSbSUlXv
+	4cQYE+9/17maKLrFty9Izd5YAYrXXEs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-102-qarpc782Pq688ezVSswwvA-1; Sat, 25 May 2024 01:10:48 -0400
+X-MC-Unique: qarpc782Pq688ezVSswwvA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E459185A780
+	for <llvm@lists.linux.dev>; Sat, 25 May 2024 05:10:48 +0000 (UTC)
+Received: from [172.64.0.115] (unknown [10.30.33.131])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 95A4E7412;
+	Sat, 25 May 2024 05:10:47 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 25 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, 02c438bb)
+Date: Sat, 25 May 2024 05:10:47 -0000
+To: jishi@redhat.com, haliu@redhat.com, llvm@lists.linux.dev, yiche@redhat.com,
+ zlang@redhat.com, jiji@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1s6C4O-00Ck6O-9D@rmk-PC.armlinux.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Message-Id: <96299.124052501104800179@us-mta-102.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Russell,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-remove-pcs_ctrl_ane-method-and-associated-code/20240525-090556
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/E1s6C4O-00Ck6O-9D%40rmk-PC.armlinux.org.uk
-patch subject: [PATCH RFC net-next 2/6] net: stmmac: remove pcs_ctrl_ane() method and associated code
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240525/202405251257.hL6jMiJW-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240525/202405251257.hL6jMiJW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405251257.hL6jMiJW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c:628:3: error: implicit declaration of function 'stmmac_pcs_ctrl_ane' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 0, 0, 0);
-                   ^
-   drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c:628:3: note: did you mean 'stmmac_pcs_clean'?
-   drivers/net/ethernet/stmicro/stmmac/stmmac.h:381:6: note: 'stmmac_pcs_clean' declared here
-   void stmmac_pcs_clean(struct net_device *ndev);
-        ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/stmmac_pcs_ctrl_ane +628 drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+Kernel information:
+    Commit message: Merge tag 'for-6.10-tag' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/kdave/linux
 
-a7c30e62d4b895 Vinod Koul          2019-01-21  607  
-981d947bcd382c Sneh Shah           2023-12-12  608  /* On interface toggle MAC registers gets reset.
-981d947bcd382c Sneh Shah           2023-12-12  609   * Configure MAC block for SGMII on ethernet phy link up
-981d947bcd382c Sneh Shah           2023-12-12  610   */
-463120c31c58bb Bartosz Golaszewski 2023-06-19  611  static int ethqos_configure_sgmii(struct qcom_ethqos *ethqos)
-463120c31c58bb Bartosz Golaszewski 2023-06-19  612  {
-a818bd12538c14 Sneh Shah           2024-02-20  613  	struct net_device *dev = platform_get_drvdata(ethqos->pdev);
-a818bd12538c14 Sneh Shah           2024-02-20  614  	struct stmmac_priv *priv = netdev_priv(dev);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  615  	int val;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  616  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  617  	val = readl(ethqos->mac_base + MAC_CTRL_REG);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  618  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  619  	switch (ethqos->speed) {
-a818bd12538c14 Sneh Shah           2024-02-20  620  	case SPEED_2500:
-a818bd12538c14 Sneh Shah           2024-02-20  621  		val &= ~ETHQOS_MAC_CTRL_PORT_SEL;
-a818bd12538c14 Sneh Shah           2024-02-20  622  		rgmii_updatel(ethqos, RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-a818bd12538c14 Sneh Shah           2024-02-20  623  			      RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-a818bd12538c14 Sneh Shah           2024-02-20  624  			      RGMII_IO_MACRO_CONFIG2);
-a818bd12538c14 Sneh Shah           2024-02-20  625  		if (ethqos->serdes_speed != SPEED_2500)
-a818bd12538c14 Sneh Shah           2024-02-20  626  			phy_set_speed(ethqos->serdes_phy, SPEED_2500);
-a818bd12538c14 Sneh Shah           2024-02-20  627  		ethqos->serdes_speed = SPEED_2500;
-a818bd12538c14 Sneh Shah           2024-02-20 @628  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 0, 0, 0);
-a818bd12538c14 Sneh Shah           2024-02-20  629  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  630  	case SPEED_1000:
-463120c31c58bb Bartosz Golaszewski 2023-06-19  631  		val &= ~ETHQOS_MAC_CTRL_PORT_SEL;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  632  		rgmii_updatel(ethqos, RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-463120c31c58bb Bartosz Golaszewski 2023-06-19  633  			      RGMII_CONFIG2_RGMII_CLK_SEL_CFG,
-463120c31c58bb Bartosz Golaszewski 2023-06-19  634  			      RGMII_IO_MACRO_CONFIG2);
-a818bd12538c14 Sneh Shah           2024-02-20  635  		if (ethqos->serdes_speed != SPEED_1000)
-a818bd12538c14 Sneh Shah           2024-02-20  636  			phy_set_speed(ethqos->serdes_phy, SPEED_1000);
-a818bd12538c14 Sneh Shah           2024-02-20  637  		ethqos->serdes_speed = SPEED_1000;
-a818bd12538c14 Sneh Shah           2024-02-20  638  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  639  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  640  	case SPEED_100:
-463120c31c58bb Bartosz Golaszewski 2023-06-19  641  		val |= ETHQOS_MAC_CTRL_PORT_SEL | ETHQOS_MAC_CTRL_SPEED_MODE;
-a818bd12538c14 Sneh Shah           2024-02-20  642  		if (ethqos->serdes_speed != SPEED_1000)
-a818bd12538c14 Sneh Shah           2024-02-20  643  			phy_set_speed(ethqos->serdes_phy, SPEED_1000);
-a818bd12538c14 Sneh Shah           2024-02-20  644  		ethqos->serdes_speed = SPEED_1000;
-a818bd12538c14 Sneh Shah           2024-02-20  645  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  646  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  647  	case SPEED_10:
-463120c31c58bb Bartosz Golaszewski 2023-06-19  648  		val |= ETHQOS_MAC_CTRL_PORT_SEL;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  649  		val &= ~ETHQOS_MAC_CTRL_SPEED_MODE;
-981d947bcd382c Sneh Shah           2023-12-12  650  		rgmii_updatel(ethqos, RGMII_CONFIG_SGMII_CLK_DVDR,
-981d947bcd382c Sneh Shah           2023-12-12  651  			      FIELD_PREP(RGMII_CONFIG_SGMII_CLK_DVDR,
-981d947bcd382c Sneh Shah           2023-12-12  652  					 SGMII_10M_RX_CLK_DVDR),
-981d947bcd382c Sneh Shah           2023-12-12  653  			      RGMII_IO_MACRO_CONFIG);
-a818bd12538c14 Sneh Shah           2024-02-20  654  		if (ethqos->serdes_speed != SPEED_1000)
-a818bd12538c14 Sneh Shah           2024-02-20  655  			phy_set_speed(ethqos->serdes_phy, ethqos->speed);
-a818bd12538c14 Sneh Shah           2024-02-20  656  		ethqos->serdes_speed = SPEED_1000;
-a818bd12538c14 Sneh Shah           2024-02-20  657  		stmmac_pcs_ctrl_ane(priv, priv->ioaddr, 1, 0, 0);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  658  		break;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  659  	}
-463120c31c58bb Bartosz Golaszewski 2023-06-19  660  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  661  	writel(val, ethqos->mac_base + MAC_CTRL_REG);
-463120c31c58bb Bartosz Golaszewski 2023-06-19  662  
-463120c31c58bb Bartosz Golaszewski 2023-06-19  663  	return val;
-463120c31c58bb Bartosz Golaszewski 2023-06-19  664  }
-463120c31c58bb Bartosz Golaszewski 2023-06-19  665  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1304424277
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Networking cki netfilter test
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1304424277-ppc64le-kernel_upt_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        Networking vnic: ipvlan/basic
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1304424277-ppc64le-kernel_upt_11
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        POSIX pjd-fstest suites
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1304424277-ppc64le-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        xfstests - cifsv3.11
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1304424277-x86_64-kernel_upt_52
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/590
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1304424277-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/014
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                Hardware - Firmware test suite [aarch64]
+                Networking cki netfilter test [aarch64, s390x, x86_64]
+                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
+                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
+                Storage - blktests - blk - upstream [x86_64]
+                stress: stress-ng - cpu-cache [x86_64]
+                stress: stress-ng - memory [x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [aarch64, s390x]
+    CKI/restraint [aarch64, s390x]
+    kselftests upstream - bpf [x86_64 (debug)]
+    kselftests upstream - bpf_test_progs [x86_64 (debug)]
+    kselftests upstream - net [x86_64 (debug)]
+    machineinfo [aarch64, s390x]
+    Reboot test [aarch64, s390x, x86_64 (debug)]
+    SELinux Custom Module Setup [aarch64, s390x, x86_64 (debug)]
+    Storage - blktests - blk - upstream [aarch64, s390x]
+    Storage - blktests - nvme-tcp - upstream [aarch64, s390x]
+    Storage - swraid scsi_raid [aarch64, s390x]
+    stress: stress-ng - cpu-cache [aarch64, s390x]
+    stress: stress-ng - memory [aarch64, s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
