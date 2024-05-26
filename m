@@ -1,88 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE7F12AAE6;
-	Sun, 26 May 2024 21:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194AD1C27;
+	Sun, 26 May 2024 23:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716760075; cv=none; b=pNlCLg5LgpzGZHqpDkmAhYyKO+LzBrNswYswnA1EPF/fS8P/atR/Mz67eyzgNTWQ12r7BavH3v9s4xBFGRKtGEmtdifeFyD3JhN2yd8ovsI/mKFGLi8T7L/NjFX8uHZw7ZMOnUHI5qTEKuSKySo4h+Y67dLgWtryEfkyHSK/VGs=
+	t=1716765444; cv=none; b=b4ZSd+MKCIrt8aLK343RjiK3/GM50wgM13hzQWEq1IjbsgL4JaQjjj37w8QMrJKTN2YgbhY2+jiYff8/Hbbsm1Q/o4kcVe/OaRAcw9heVY3JPm+xsB8lAux62qPiLEtziOQu1GLWCha9D9zCHULxZn+GZ5tFP9oW4K1ttk0OFSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716760075; c=relaxed/simple;
-	bh=Wo7KosZhQwFSNB62TPZn511Lp0+CXG/OzbrDd8xxMbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XZQlimgnDwqlGWpvA8S4z/19rk7Rq1wv+gjkO7mGNf15FNmH8C0YjGr9heMya//Vyk+lSM831p7qDVHUkbDmIpr/6HiwQuURwRS4QjreXdINhFGaKuuc6ZrQkgxLRjqS/0r7sV3epVBSKTWP8f2/wGBwtsdPXiGmKp5K1zn0PLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mOmBRc5K; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716765444; c=relaxed/simple;
+	bh=lqV71dyGNzoKcV/Iv3TfEMBsKD/L3s54JM57KtyVYmo=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Nny6eokHVuYQ9c5fLZD9WjXop6+s0byi4h3tCZhEopsbV2w0FOMX3UwVZmoEBZvZYhhNJqR20leDeicz1xoqq7QsopujssYmZ3K6plrct7zx2IQdUx2aEsf4ipr4dK1s08t+/9u9nw1VlKhGQI+RWtu6cTbvTgwk9v9MC1rLaCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dkv3zkx9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mOmBRc5K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716760074; x=1748296074;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Wo7KosZhQwFSNB62TPZn511Lp0+CXG/OzbrDd8xxMbA=;
-  b=mOmBRc5KPPo+LOcCPy9xwgG+vhIgCqhaGzOb9txMhsAGuUflu2olqJ/O
-   DyaBfm+FnPBYPK14CLBNKJ+3JKDRIpHZZ+bad1iKd3idTPgJ++R2FSfmj
-   7wkoT003ioEHtgOKft4O39ollJpf+FBfc6d7O0liKzjS/pBlDyBiWB7SO
-   IiJW18FfLgEG3cY1oqco52VouIA+e+TBsw6JBDKZgT1y/szc/beGhfzob
-   MaNiClJn/ZR0k/TtH/ePpLHSsWBByyIkQ53gZ2h2a9hzKC3JYX7iuUctt
-   ALlzh/1JB5M0gS1G/Pp/FLMk9bpXQMuU//oGdQnFSCmeGov0mikG8eHW5
-   w==;
-X-CSE-ConnectionGUID: HvGoojiPSUOQi9icb+Ry0g==
-X-CSE-MsgGUID: C47oLA8xT5aCUwatBV+WHQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="13251622"
-X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="13251622"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2024 14:47:53 -0700
-X-CSE-ConnectionGUID: Vh5PVpElSo2pXzeXC0jRrw==
-X-CSE-MsgGUID: ufeJsivtR7qpEIp8648Qvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="39408845"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 26 May 2024 14:47:51 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBLiW-0008fr-0z;
-	Sun, 26 May 2024 21:47:48 +0000
-Date: Mon, 27 May 2024 05:46:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>
-Subject: [pci:endpoint 8/12] ld.lld: error: undefined symbol:
- pci_epc_deinit_notify
-Message-ID: <202405270544.yKgcokbA-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dkv3zkx9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E861C2BD10;
+	Sun, 26 May 2024 23:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716765443;
+	bh=lqV71dyGNzoKcV/Iv3TfEMBsKD/L3s54JM57KtyVYmo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dkv3zkx9qPFKNDRFoa351crEdyWzXNNHPoLvdZYvN+w9aarqlWKSPo/pay8YVUgG/
+	 KjRcXMefFa4YFPGgaXXDoDTzKin5YTBi6AeCNAu6ifEyMu86Y18E6bqObOnPvFPj5t
+	 jEK6mSBl1Uja7hd6WHM/pKJ4HDtmCPS5z4ANq0kaESRfFV21H1zixHj0YQAnb9nqej
+	 wJHrQnbS0VASvaem+zQAo77fql3mV31eb8VtvNT5ltEOB+FHkrSm3l1c8dWqCFimrO
+	 TkY9gw/w3wmdKswCRNkDDXSQkomyAbormsKri2kGqHRRspPPtgkz4Ud3fZ5yPNj7ef
+	 CXRiBh/0MMPMA==
+Date: Mon, 27 May 2024 08:17:19 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Tatsuya S <tatsuya.s2862@gmail.com>, rostedt@goodmis.org,
+ mhiramat@kernel.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] ftrace: Fix stack trace entry generated by
+ ftrace_pid_func()
+Message-Id: <20240527081719.a3f5b4c270d54a0453e3464f@kernel.org>
+In-Reply-To: <202405262232.L4XH8q6O-lkp@intel.com>
+References: <20240526112658.46740-1-tatsuya.s2862@gmail.com>
+	<202405262232.L4XH8q6O-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git endpoint
-head:   5c172f7afc887f2cd383a125cc7fd98d921fe10f
-commit: f94f2844f28c968364af8543414fbea9c8b3005d [8/12] PCI: endpoint: Introduce 'epc_deinit' event and notify the EPF drivers
-config: arm64-randconfig-002-20240526 (https://download.01.org/0day-ci/archive/20240527/202405270544.yKgcokbA-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405270544.yKgcokbA-lkp@intel.com/reproduce)
+On Sun, 26 May 2024 22:51:53 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405270544.yKgcokbA-lkp@intel.com/
+> Hi Tatsuya,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on linus/master]
+> [also build test WARNING on rostedt-trace/for-next v6.9 next-20240523]
+> [cannot apply to rostedt-trace/for-next-urgent]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Tatsuya-S/ftrace-Fix-stack-trace-entry-generated-by-ftrace_pid_func/20240526-193149
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20240526112658.46740-1-tatsuya.s2862%40gmail.com
+> patch subject: [PATCH] ftrace: Fix stack trace entry generated by ftrace_pid_func()
+> config: x86_64-buildonly-randconfig-002-20240526 (https://download.01.org/0day-ci/archive/20240526/202405262232.L4XH8q6O-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240526/202405262232.L4XH8q6O-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202405262232.L4XH8q6O-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/trace/ftrace.c:102:6: warning: no previous prototype for function 'ftrace_pids_enabled' [-Wmissing-prototypes]
+>      102 | bool ftrace_pids_enabled(struct ftrace_ops *ops)
+>          |      ^
+>    kernel/trace/ftrace.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>      102 | bool ftrace_pids_enabled(struct ftrace_ops *ops)
+>          | ^
+>          | static 
+>    1 warning generated.
 
-All errors (new ones prefixed by >>):
+This is because the prototype in linux/ftrace.h is placed in the 
+#ifdef CONFIG_DYNAMIC_FTRACE block. The prototype needs to be moved
+outside of the block.
 
->> ld.lld: error: undefined symbol: pci_epc_deinit_notify
-   >>> referenced by pcie-tegra194.c
-   >>>               drivers/pci/controller/dwc/pcie-tegra194.o:(pex_ep_event_pex_rst_assert) in archive vmlinux.a
+Thank you,
+
+> 
+> 
+> vim +/ftrace_pids_enabled +102 kernel/trace/ftrace.c
+> 
+>    101	
+>  > 102	bool ftrace_pids_enabled(struct ftrace_ops *ops)
+>    103	{
+>    104		struct trace_array *tr;
+>    105	
+>    106		if (!(ops->flags & FTRACE_OPS_FL_PID) || !ops->private)
+>    107			return false;
+>    108	
+>    109		tr = ops->private;
+>    110	
+>    111		return tr->function_pids != NULL || tr->function_no_pids != NULL;
+>    112	}
+>    113	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
