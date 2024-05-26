@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D789DC8C7;
-	Sun, 26 May 2024 09:42:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E371E134CC;
+	Sun, 26 May 2024 09:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716716539; cv=none; b=Yqy3yDbdkbChsOmFRl1icA1tU6poqqt4YIs9oOW8vnKeHb93mk+LWh2eEImkcMHIDCqYx3duZZTs9xRgdVYmHo/UNJnS9i6iVmWWG+wa5c5Xak8EI++Pc3OLP+nv9AblF0s/4QOQ1ifq9UY1bgBBJMN1joPw8Xf8lPDqJt/73ZA=
+	t=1716716569; cv=none; b=Tqz/oA2WjLosnnb+6R8lSq7JaxLk/dpC8Nk4wd0fCONAmkN53OusNEC6FhNfhtZaOUtQRKMYGaPIve/OsBivdy2LUIlxNurKdRJyEEd2iHow6Edq62G8dGGyN1NXQFk3AHonTnDaMZe1rm6njEwmUtHwOz3DdOJi7wxEj/J+IRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716716539; c=relaxed/simple;
-	bh=0BHDXa1QqAjapqWR9PcY7BiXXTwanjPMar8YU1/yvYQ=;
+	s=arc-20240116; t=1716716569; c=relaxed/simple;
+	bh=AlYLmkAaDJcvMFp487qB7ZfdbDQ45NX/2X4nnOofN+k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RyzOrBkhyDhwIQzWFKsChpotbwOUDV5Obmm37NOOP7jWWczChV2sttCawhKSDonFqnsppyYrqYwUnawspvu1sdM1dshwifupND1LwWFdaO9IxnprSt66ndzZztJ5MEUUrOH0yX6E+zPoCTakN/RvFaQCUAjbRqqgJClEfQ3gO8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t/GJuXrT; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=iRn6eiiHVFFYY47OxqF49nUbJcwI4uG7upN7r4y067w7ZH8JwG7kfgPWeFB5fx1ZD898YCSTRXI6V9T4SlfL78lxBwbMSA/FJqawt2fEWggXYs6iX6NZG6lzuHamXYBHrvG6rXeXfFu8Uk0E1RZR+xckUrzlVEr+OE9Gwhb8xqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mygaz5U8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t/GJuXrT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCAA8C32781;
-	Sun, 26 May 2024 09:42:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mygaz5U8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7494C32781;
+	Sun, 26 May 2024 09:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716716538;
-	bh=0BHDXa1QqAjapqWR9PcY7BiXXTwanjPMar8YU1/yvYQ=;
+	s=k20201202; t=1716716568;
+	bh=AlYLmkAaDJcvMFp487qB7ZfdbDQ45NX/2X4nnOofN+k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t/GJuXrTDhf6RRrOwVzo9I+nWjlCNIYvJEg1JiXRnh4/VrfadQlhu2KnghzVrBuLu
-	 B8jtTbYy9gq+lozWq8N7Ab2D1WKWBlJuxq4K6O0QEy80E+wyMWtu7VmWWmNS+twtso
-	 x7Smz5oNXq2yFDF4bvpTzfldn41Hv+JWdK8t5rlTXHi77KWDofNT6I9Pnx8DKnRnzj
-	 frRkalJHZ8IZalKyhPA8Vm+FYynCn1MemZuUnukLu0S63WUuKgqogQWcHiowqkF6Do
-	 oOwig9r/2brVGwydumjrp7bMkaaOR+n9FH0oLhXhbhY6w7d6b+WxiGvauIox1CqWoL
-	 MDekDvwP9a6ng==
+	b=mygaz5U80ne055HDtt5udKfqiSCYtS8sx9Ex3bUliSXUdAb4VylBOqF96qqRQPcvt
+	 6FT/A9ZmIT7iN9y4UiZ0NgypVwAFsMHl3AiEh5TzSkuHiVfr8xaU3ysEWL8NBSKa6I
+	 RVsxLGvwDkYq0uwQ5R6eS7f7YpOUmYpPRSvA101phVThXkaa99CCdZaqMdwLgj172A
+	 0b4PSVV7kzgMq2wxw7gaZS/2ubYaoHhNhS6vsmfNliwvJsqrom7IJyoThtgxKtb49a
+	 Alke492dcI4EHQAin3gk2Q8GSgzjlLDZuvx4E4XAOGyZ1LNs9ECwH2vvxiW1W/1vgr
+	 AX5qT0veRzIJw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -36,12 +36,12 @@ Cc: Justin Stitt <justinstitt@google.com>,
 	nathan@kernel.org,
 	linux-block@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.9 15/15] block/ioctl: prefer different overflow check
-Date: Sun, 26 May 2024 05:41:47 -0400
-Message-ID: <20240526094152.3412316-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.8 14/14] block/ioctl: prefer different overflow check
+Date: Sun, 26 May 2024 05:42:19 -0400
+Message-ID: <20240526094224.3412675-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240526094152.3412316-1-sashal@kernel.org>
-References: <20240526094152.3412316-1-sashal@kernel.org>
+In-Reply-To: <20240526094224.3412675-1-sashal@kernel.org>
+References: <20240526094224.3412675-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.9.1
+X-stable-base: Linux 6.8.10
 Content-Transfer-Encoding: 8bit
 
 From: Justin Stitt <justinstitt@google.com>
@@ -121,7 +121,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/block/ioctl.c b/block/ioctl.c
-index f505f9c341eb0..2639ce9df3852 100644
+index 5f8c988239c68..edc09346c92e3 100644
 --- a/block/ioctl.c
 +++ b/block/ioctl.c
 @@ -33,7 +33,7 @@ static int blkpg_do_ioctl(struct block_device *bdev,
