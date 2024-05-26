@@ -1,116 +1,185 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F6D29CF0
-	for <llvm@lists.linux.dev>; Sun, 26 May 2024 17:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E5C374FE
+	for <llvm@lists.linux.dev>; Sun, 26 May 2024 21:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716746227; cv=none; b=KHMxi5Sq02uTOwZAL5v7Frbd/SlCBWkB6/FjpRM/oXGFS+W9uBcUw3CG8h9F7bjp94ElByAlpQbDyVFeCQKTgtXKiw1Extyi4PeQaWDsYyB1I1MDGwS5mZ8tnZaKaPoKzzyjtlNoAV79AIwuycritPSAmQ2VhXr/HOVFDJ1qbAE=
+	t=1716757923; cv=none; b=BgDRoh6e8Um4qo+xa4pjczqLcgKsh8/YIEIKKtGtSplF2iTENRpdvy7SrTWXCAsFYavV5+/707ou8iK1A9cxsnjPpiEwrOJW8+sS1H48EKgqQ1z04J1sZPTmWvccsz8QxBKPVicpFskEAPAyhAQscq6OqGssSLl0FvKKjKAJ7to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716746227; c=relaxed/simple;
-	bh=gwrkl0x0ZYQXDs57tv+T6mmq3c+fVkN3vQ8jk1jAIGw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lmAc2DglCFHdZjnxeUuDak2UQRMNJ5EZXGm/LoeX+tD7oq0v+DJgCZbz6gyJyivnChD5zQKZ8aQWqz7HrO9pp3hH7shS+FSMeD3RT5fNcUPrCkQW3dmR6jdCYZr4Apl2YizRmSZfniQqlxgM0sOTbOUKYbpHdXByrkt75k+VeZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VM3YiVAl; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716757923; c=relaxed/simple;
+	bh=c/rvXiapLlWBNtX5OYVmRIdy+6ldPq9O5vsxKn0ZZq4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=K4EZX+75VpVTN2ZpinqMqv4X6UQCM1MX7+5VW50NUNov2fmZt5JfWQqKrXWxGjvYlLU3KxJ1LuftFm2Bg6vpXiVy4svDzOgZSppFFqMwlhuDyykMK5i71hdU6CPVXc+9626T71kxCaDRPHHxzPW2uWbl6sIHOnU4qlKhk7cP7vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fpkCSEar; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VM3YiVAl"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5785d466c82so2625457a12.3
-        for <llvm@lists.linux.dev>; Sun, 26 May 2024 10:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716746224; x=1717351024; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4wdEt72NXsmqG4ZgtbWkypOIL4UtO8kSPqTnYgEIfbA=;
-        b=VM3YiVAlABthZdKpHfcLTGYussZABBtYU63DkJMaTRoB52r/un/eAmBBhSeY5a+cT2
-         58swkezlSjhX+i56xVAEpWrcIeouzUe5oWjlPV3n7F7CHkx35jz+EPAvMgP8AXPuIHti
-         x2/zDAisqWSvEeHwjitNW2xsTZ3ivyXXGp37nS6t0Ceykhikia1SrF09gfzWNmHhlf7B
-         oJroyfGYKAXYB9jRK50nFdK5gRjKHEbjd/74+4mgaz/mdNpnQ1Xne2IsUsyU9NmYgTnT
-         nVpVRrztUhYGCpcLd4IoS7i9Ux5hteATYlZ/6GK46OlYF0d+XssQxiFLj8+bgeKMRB70
-         lLhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716746224; x=1717351024;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4wdEt72NXsmqG4ZgtbWkypOIL4UtO8kSPqTnYgEIfbA=;
-        b=EplUYyHdZC77tmNPIlZ7/tStVEwFvb0tEvWvY1PZ9ljfR9dTDBAAwBhn1FZrtei2jo
-         zBUuel0etRwSkFlmMekM0Uc7cfIX30shN3vXeLj3NmWcj9c92qRLx02qXH7kJBhm2XT7
-         ztGf1u/R2qtcR/BI0LWF/RBTGc4k37NZiNCTWEFR9FDfsJptBuhyBZv5MPqnlWfeFImG
-         0+Wuwp8sMqVIAgrt5whr3JQcV6NJZDK/zdoZZi2EvgVq24SoBDbXvBwHBqHrDiUd2pzx
-         6MMrUdoHgZGIVxkIovv39EfqAXs/QFVTK14RwxnBfRa4AYS4BgXrcmBo8pZ5qaRwHtHa
-         n4qw==
-X-Forwarded-Encrypted: i=1; AJvYcCUO9RdW7ZQjOguLk9Z9vYg9CIBxnhcwI0kXheZz7VgBHzvFJpOGKXbhorGFMAaKcMwP0NGjXJiM9MG0T9CuZSJ5TMU4Cg==
-X-Gm-Message-State: AOJu0YwBl/TQ7xCzK4VRPPMij+9GkP/1KOG+CMua3iZX6laFmwgRpeKo
-	Jr6JYpjF8W9TP9c0+75hdcownvv0RYBF2QUwa5A3soKRqsaQQiLo
-X-Google-Smtp-Source: AGHT+IFPAMK0nTnoFeh8iBe1mJjQQc3xu6NNyMU2yvsrihWDwbp+bHn8GX1qWvA2iHXNjMEjyNQuDA==
-X-Received: by 2002:a17:906:d18d:b0:a59:ab57:741e with SMTP id a640c23a62f3a-a6265112305mr520494766b.76.1716746224366;
-        Sun, 26 May 2024 10:57:04 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626c817c52sm406424866b.1.2024.05.26.10.57.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 May 2024 10:57:04 -0700 (PDT)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: x86@kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: [PATCH 2/2] x86/percpu: *DO NOT MERGE* Enable named address spaces for clang
-Date: Sun, 26 May 2024 19:55:53 +0200
-Message-ID: <20240526175655.227798-2-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20240526175655.227798-1-ubizjak@gmail.com>
-References: <20240526175655.227798-1-ubizjak@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fpkCSEar"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716757916;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=x7JHrvQQjm+gSW1LSr56cQN2h82gotaEBHeiSshwmOw=;
+	b=fpkCSEarw3tkmkt7xLm+bYRsYKy/czH2Zh2cSmj8HbauV7f1zLNvgjBU+SxiMD89HZJyGT
+	gCULqXmBi6dLXcU0bBAh3CpnkBjZmjdSZU4YmcIOGcnhBW+oSgHL9ys7qiEPvjLtia89qB
+	MelwbyGg/jDH9x5o8q3/gtxv3sF5pj4=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-154-BfTaKK55P16U--FIVr_S3g-1; Sun,
+ 26 May 2024 17:11:53 -0400
+X-MC-Unique: BfTaKK55P16U--FIVr_S3g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 72FB8380670B
+	for <llvm@lists.linux.dev>; Sun, 26 May 2024 21:11:52 +0000 (UTC)
+Received: from [172.64.0.115] (unknown [10.30.33.131])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5F2872026D68;
+	Sun, 26 May 2024 21:11:51 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 12 of 204): Test report for master
+ (6.9.0, mainline.kernel.org-clang, c1332049)
+Date: Sun, 26 May 2024 21:11:51 -0000
+To: jishi@redhat.com, haliu@redhat.com, fsuba@redhat.com, llvm@lists.linux.dev,
+ yiche@redhat.com, zlang@redhat.com, jiji@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Message-Id: <12552.124052617115300195@us-mta-154.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Enable named address spaces feature for clang.
+Hi, we tested your kernel and here are the results:
 
-However, someone from clang side should qualify the compiler
-before this feature is enabled for real.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
----
- arch/x86/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index e8837116704c..08455e62f994 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2433,7 +2433,6 @@ endmenu
- 
- config CC_HAS_NAMED_AS
- 	def_bool $(success,echo 'int __seg_fs fs; int __seg_gs gs;' | $(CC) -x c - -S -o /dev/null)
--	depends on CC_IS_GCC
- 
- config CC_HAS_NAMED_AS_FIXED_SANITIZERS
- 	def_bool CC_IS_GCC && GCC_VERSION >= 130300
--- 
-2.42.0
+Kernel information:
+    Commit message: Merge tag '6.10-rc-smb3-fixes-part2' of git://git.samba=
+.org/sfrench/cifs-2.6
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1305745986
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Networking cki netfilter test
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1305745986-ppc64le-kernel_upt_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        Networking vnic: ipvlan/basic
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1305745986-ppc64le-kernel_upt_11
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        POSIX pjd-fstest suites
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1305745986-ppc64le-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        Storage - dm/common
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1305745986-ppc64le-kernel_upt_13
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL exit_code
+        xfstests - cifsv3.11
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1305745986-x86_64-kernel_upt_52
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/590
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                Hardware - Firmware test suite [aarch64]
+                Networking cki netfilter test [aarch64, s390x, x86_64]
+                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
+                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                stress: stress-ng - memory [aarch64, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [ppc64le, s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
