@@ -1,45 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E642B9C5;
-	Sun, 26 May 2024 09:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D789DC8C7;
+	Sun, 26 May 2024 09:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716716533; cv=none; b=tE/+41o9sTwvbvt6rDNgCqN4xYgxEPBR3ym2tg7i6lMRVNeDIEk7/BhPYbdGNyGtDcxj3NOXEV16u30sKBOm0JoHZ0HvNsP7ptqNjFperpE8AKymVdBRM5Puxf0Z3Uqu8QfGmu9E/xbzxvXj1UsPi0FDgVl2dKQy9ape49Hsbow=
+	t=1716716539; cv=none; b=Yqy3yDbdkbChsOmFRl1icA1tU6poqqt4YIs9oOW8vnKeHb93mk+LWh2eEImkcMHIDCqYx3duZZTs9xRgdVYmHo/UNJnS9i6iVmWWG+wa5c5Xak8EI++Pc3OLP+nv9AblF0s/4QOQ1ifq9UY1bgBBJMN1joPw8Xf8lPDqJt/73ZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716716533; c=relaxed/simple;
-	bh=Pn2wC7Qjgmx1WJ5h/NAhgXkp/LKfK1z1n1o1iNJNFAg=;
+	s=arc-20240116; t=1716716539; c=relaxed/simple;
+	bh=0BHDXa1QqAjapqWR9PcY7BiXXTwanjPMar8YU1/yvYQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MwcSVQeNDOlwj2fmxePBAYVkisVugy8A0urFYqsAHtFEokJOKxbfobNKJRXxC78MGN6enTa2ElLpcISgD1bT0a21yoyqs+CfKqLwrHXHHWMt+f69bUFq7c4ahZnHRWeGYCiu2gm0RkJh0gJWPeq1wHZV8GaRW7Dx0mF3w2SOch0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FMMzgPDG; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=RyzOrBkhyDhwIQzWFKsChpotbwOUDV5Obmm37NOOP7jWWczChV2sttCawhKSDonFqnsppyYrqYwUnawspvu1sdM1dshwifupND1LwWFdaO9IxnprSt66ndzZztJ5MEUUrOH0yX6E+zPoCTakN/RvFaQCUAjbRqqgJClEfQ3gO8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t/GJuXrT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FMMzgPDG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C7CC4AF08;
-	Sun, 26 May 2024 09:42:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t/GJuXrT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCAA8C32781;
+	Sun, 26 May 2024 09:42:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716716533;
-	bh=Pn2wC7Qjgmx1WJ5h/NAhgXkp/LKfK1z1n1o1iNJNFAg=;
+	s=k20201202; t=1716716538;
+	bh=0BHDXa1QqAjapqWR9PcY7BiXXTwanjPMar8YU1/yvYQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FMMzgPDGEnT5yIxmjV4IECZru5Hz3SODKsp8IL6VaAbwV1dc814QtbvZl1O10YZni
-	 vMcrGjWtTOT/QzcYYfmlouMFkYS565dwlx8T8XVPqjRaolZzLQcS9EZBF/75cvlQs/
-	 oWkFGx90X4tMeFRf8WlbZKM2VydCeINDIaPdoEVGaB30oJ9R/SE9+w+h0E1DQnR8Iy
-	 Wf+3mjV7mw9XXvmrTqU1uJre5jvRukSNBF90so6PqDPN2RBxrCMV/eKyTDTbevWHx/
-	 9cHSr39svICBlwP7Tweo1HFeSHad5JErqiLbT30oTC81WLaI0wisCxqHE8zW1S48p8
-	 V2L+aSfTYj78Q==
+	b=t/GJuXrTDhf6RRrOwVzo9I+nWjlCNIYvJEg1JiXRnh4/VrfadQlhu2KnghzVrBuLu
+	 B8jtTbYy9gq+lozWq8N7Ab2D1WKWBlJuxq4K6O0QEy80E+wyMWtu7VmWWmNS+twtso
+	 x7Smz5oNXq2yFDF4bvpTzfldn41Hv+JWdK8t5rlTXHi77KWDofNT6I9Pnx8DKnRnzj
+	 frRkalJHZ8IZalKyhPA8Vm+FYynCn1MemZuUnukLu0S63WUuKgqogQWcHiowqkF6Do
+	 oOwig9r/2brVGwydumjrp7bMkaaOR+n9FH0oLhXhbhY6w7d6b+WxiGvauIox1CqWoL
+	 MDekDvwP9a6ng==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	Erhard Furtner <erhard_f@mailbox.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
+Cc: Justin Stitt <justinstitt@google.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Jens Axboe <axboe@kernel.dk>,
 	Sasha Levin <sashal@kernel.org>,
-	kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org,
+	nathan@kernel.org,
+	linux-block@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.9 13/15] ubsan: Avoid i386 UBSAN handler crashes with Clang
-Date: Sun, 26 May 2024 05:41:45 -0400
-Message-ID: <20240526094152.3412316-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.9 15/15] block/ioctl: prefer different overflow check
+Date: Sun, 26 May 2024 05:41:47 -0400
+Message-ID: <20240526094152.3412316-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240526094152.3412316-1-sashal@kernel.org>
 References: <20240526094152.3412316-1-sashal@kernel.org>
@@ -54,78 +53,86 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.9.1
 Content-Transfer-Encoding: 8bit
 
-From: Kees Cook <keescook@chromium.org>
+From: Justin Stitt <justinstitt@google.com>
 
-[ Upstream commit 2e431b23a13ce4459cf484c8f0b3218c7048b515 ]
+[ Upstream commit ccb326b5f9e623eb7f130fbbf2505ec0e2dcaff9 ]
 
-When generating Runtime Calls, Clang doesn't respect the -mregparm=3
-option used on i386. Hopefully this will be fixed correctly in Clang 19:
-https://github.com/llvm/llvm-project/pull/89707
-but we need to fix this for earlier Clang versions today. Force the
-calling convention to use non-register arguments.
+Running syzkaller with the newly reintroduced signed integer overflow
+sanitizer shows this report:
 
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Closes: https://github.com/KSPP/linux/issues/350
-Link: https://lore.kernel.org/r/20240424224026.it.216-kees@kernel.org
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Justin Stitt <justinstitt@google.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
+[   62.982337] ------------[ cut here ]------------
+[   62.985692] cgroup: Invalid name
+[   62.986211] UBSAN: signed-integer-overflow in ../block/ioctl.c:36:46
+[   62.989370] 9pnet_fd: p9_fd_create_tcp (7343): problem connecting socket to 127.0.0.1
+[   62.992992] 9223372036854775807 + 4095 cannot be represented in type 'long long'
+[   62.997827] 9pnet_fd: p9_fd_create_tcp (7345): problem connecting socket to 127.0.0.1
+[   62.999369] random: crng reseeded on system resumption
+[   63.000634] GUP no longer grows the stack in syz-executor.2 (7353): 20002000-20003000 (20001000)
+[   63.000668] CPU: 0 PID: 7353 Comm: syz-executor.2 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+[   63.000677] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[   63.000682] Call Trace:
+[   63.000686]  <TASK>
+[   63.000731]  dump_stack_lvl+0x93/0xd0
+[   63.000919]  __get_user_pages+0x903/0xd30
+[   63.001030]  __gup_longterm_locked+0x153e/0x1ba0
+[   63.001041]  ? _raw_read_unlock_irqrestore+0x17/0x50
+[   63.001072]  ? try_get_folio+0x29c/0x2d0
+[   63.001083]  internal_get_user_pages_fast+0x1119/0x1530
+[   63.001109]  iov_iter_extract_pages+0x23b/0x580
+[   63.001206]  bio_iov_iter_get_pages+0x4de/0x1220
+[   63.001235]  iomap_dio_bio_iter+0x9b6/0x1410
+[   63.001297]  __iomap_dio_rw+0xab4/0x1810
+[   63.001316]  iomap_dio_rw+0x45/0xa0
+[   63.001328]  ext4_file_write_iter+0xdde/0x1390
+[   63.001372]  vfs_write+0x599/0xbd0
+[   63.001394]  ksys_write+0xc8/0x190
+[   63.001403]  do_syscall_64+0xd4/0x1b0
+[   63.001421]  ? arch_exit_to_user_mode_prepare+0x3a/0x60
+[   63.001479]  entry_SYSCALL_64_after_hwframe+0x6f/0x77
+[   63.001535] RIP: 0033:0x7f7fd3ebf539
+[   63.001551] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+[   63.001562] RSP: 002b:00007f7fd32570c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[   63.001584] RAX: ffffffffffffffda RBX: 00007f7fd3ff3f80 RCX: 00007f7fd3ebf539
+[   63.001590] RDX: 4db6d1e4f7e43360 RSI: 0000000020000000 RDI: 0000000000000004
+[   63.001595] RBP: 00007f7fd3f1e496 R08: 0000000000000000 R09: 0000000000000000
+[   63.001599] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[   63.001604] R13: 0000000000000006 R14: 00007f7fd3ff3f80 R15: 00007ffd415ad2b8
+...
+[   63.018142] ---[ end trace ]---
+
+Historically, the signed integer overflow sanitizer did not work in the
+kernel due to its interaction with `-fwrapv` but this has since been
+changed [1] in the newest version of Clang; It was re-enabled in the
+kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+sanitizer").
+
+Let's rework this overflow checking logic to not actually perform an
+overflow during the check itself, thus avoiding the UBSAN splat.
+
+[1]: https://github.com/llvm/llvm-project/pull/82432
+
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20240507-b4-sio-block-ioctl-v3-1-ba0c2b32275e@google.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/ubsan.h | 41 +++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+ block/ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/ubsan.h b/lib/ubsan.h
-index 0abbbac8700d1..0982578fbd98f 100644
---- a/lib/ubsan.h
-+++ b/lib/ubsan.h
-@@ -124,19 +124,32 @@ typedef s64 s_max;
- typedef u64 u_max;
- #endif
+diff --git a/block/ioctl.c b/block/ioctl.c
+index f505f9c341eb0..2639ce9df3852 100644
+--- a/block/ioctl.c
++++ b/block/ioctl.c
+@@ -33,7 +33,7 @@ static int blkpg_do_ioctl(struct block_device *bdev,
+ 	if (op == BLKPG_DEL_PARTITION)
+ 		return bdev_del_partition(disk, p.pno);
  
--void __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
--void __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
--void __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
--void __ubsan_handle_negate_overflow(void *_data, void *old_val);
--void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
--void __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
--void __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
--void __ubsan_handle_out_of_bounds(void *_data, void *index);
--void __ubsan_handle_shift_out_of_bounds(void *_data, void *lhs, void *rhs);
--void __ubsan_handle_builtin_unreachable(void *_data);
--void __ubsan_handle_load_invalid_value(void *_data, void *val);
--void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
--					 unsigned long align,
--					 unsigned long offset);
-+/*
-+ * When generating Runtime Calls, Clang doesn't respect the -mregparm=3
-+ * option used on i386: https://github.com/llvm/llvm-project/issues/89670
-+ * Fix this for earlier Clang versions by forcing the calling convention
-+ * to use non-register arguments.
-+ */
-+#if defined(CONFIG_X86_32) && \
-+    defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 190000
-+# define ubsan_linkage asmlinkage
-+#else
-+# define ubsan_linkage
-+#endif
-+
-+void ubsan_linkage __ubsan_handle_add_overflow(void *data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_sub_overflow(void *data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_mul_overflow(void *data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_negate_overflow(void *_data, void *old_val);
-+void ubsan_linkage __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
-+void ubsan_linkage __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
-+void ubsan_linkage __ubsan_handle_out_of_bounds(void *_data, void *index);
-+void ubsan_linkage __ubsan_handle_shift_out_of_bounds(void *_data, void *lhs, void *rhs);
-+void ubsan_linkage __ubsan_handle_builtin_unreachable(void *_data);
-+void ubsan_linkage __ubsan_handle_load_invalid_value(void *_data, void *val);
-+void ubsan_linkage __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
-+						       unsigned long align,
-+						       unsigned long offset);
- 
- #endif
+-	if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
++	if (p.start < 0 || p.length <= 0 || LLONG_MAX - p.length < p.start)
+ 		return -EINVAL;
+ 	/* Check that the partition is aligned to the block size */
+ 	if (!IS_ALIGNED(p.start | p.length, bdev_logical_block_size(bdev)))
 -- 
 2.43.0
 
