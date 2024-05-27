@@ -1,184 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFCFDF60;
-	Mon, 27 May 2024 10:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A541249FF
+	for <llvm@lists.linux.dev>; Mon, 27 May 2024 11:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716804685; cv=none; b=TfqrPZHs3iHHPx7NAZrZWp9tsO9EOHdFjpb3pdcjvBITotpcoP/+yrkvkVjKz+qFoNRv8o19wyJHY8OQONGmJxRymfXUEOtyEXotMOGQKCDkCAo29QVzmWCwB8mVsTr59EHPobt4wKycMuhUW+u59L7/OIyLit8XSQAAJ7GFNjU=
+	t=1716808248; cv=none; b=WRPnJPfhECqzhmdtU8asEGYIOyc0FxRnh94P93aQ1ZJ89DwqRRnDj57vRVAXt/VVLn09TeBrkFaE15UUWtakH3SFqkxmKGEBqpIG7Qoz9nxyO+FznLRUgc4DkZxrKODneQM7xM+QUh6UzbGFgNnHNPYyp6iDrXoyw7WraWl7WRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716804685; c=relaxed/simple;
-	bh=iF1e4OR68r7uRH5SuttU2xbWS5C5hLwh9sBP8FO+9lM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PeFP9e+kyDZVyI7bNh2JpL2U7GLweGV5Hiv/0lR1bdrOU9j4BODxecqHhDVkI/T2wZkKu7XMW2YxfScqZJa4JCSbqY1i6/Yqbvthxuxy5h4G9wCjI+ZXbb1gv9y7CDxZglODKlyBXKgmNlv8kvHyMpQN6gRLPGvpD8IK2H/Czyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jz/sxKoe; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716808248; c=relaxed/simple;
+	bh=pTuM0FUrQCTPCkOI80Ez12upzaQlZiXWeoI+NIIbHz0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=n9HVKBYQuDi+y+FOPNs+0cL5oZhx2RxE9f6ZvjD4quP4WdV8aOCBKMI9qE0sSTUfgH2BbfwDjB1Fb2yqTKIOA847Rs+wmZlEiSnAaIkQUoETWXp1z17TLLhweN0VfP1i6APZFH3V6oTU6+avIk+dYVxCusfsXhqO1gOs9SaWi3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QOQHiKml; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jz/sxKoe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716804683; x=1748340683;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iF1e4OR68r7uRH5SuttU2xbWS5C5hLwh9sBP8FO+9lM=;
-  b=Jz/sxKoeH4pXPc4WNyb7psMFXPuyGKxuw+n2vPPS7YjXWJu+IB8EJxE1
-   n03XO+n7ZdPcfg0nVEOp5ths7ELBbEY/9pLa67Mfwc57MKuY21kBu+pGq
-   RwhkMyFQ6gFKOaXkW+X3kJoWic4UI9gzPTOc94COSLRKLhK0WN5REGApb
-   p3obQF8bt3EgJfCB4DPlxoGoE3MZf/umHvRP06GtUmLmtDPmRVma6liCk
-   wzTidEADmpf3WxiDUd4jYQW4Z1m52+g9RtejEhyjpme/g0aD08ku/3Hjx
-   kwV2Px39I+29nIqibrvVNfdaPU588UsSZyhwG6fxsnHMlEl++nU4NHNm9
-   g==;
-X-CSE-ConnectionGUID: EkDDl6BhRjySr1oMv0acUQ==
-X-CSE-MsgGUID: YF/s3uZKTxOW3NjaYAsJYQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="23680783"
-X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
-   d="scan'208";a="23680783"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 03:11:13 -0700
-X-CSE-ConnectionGUID: EX1qWCtdSXG5ocjR6v65wg==
-X-CSE-MsgGUID: OmnGnyXPTiG7dDZNxHRB0A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
-   d="scan'208";a="65939837"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 27 May 2024 03:11:11 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBXJs-0009yf-2Y;
-	Mon, 27 May 2024 10:11:08 +0000
-Date: Mon, 27 May 2024 18:11:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: drivers/tty/mxser.c:291:2: warning: 'counted_by' should not be
- applied to an array with element of unknown size because 'struct mxser_port'
- is a struct type with a flexible array member. This will be an error in a
- future compiler version
-Message-ID: <202405271811.Mp20bWge-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QOQHiKml"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716808246;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pWbV8TAuceVDMc/6i/0qIoNMHDaGTOcj4+e06ot/pXU=;
+	b=QOQHiKmlyKJoz/HP3OfnJ4PnIqE0NyKH0taHISnbIkZrdMonXh4MmlcDR2RL3ggWBhTW7r
+	UXC+ZRum+lbIoXZ6KLdbC7536JmoF+VWjHR/vhoIE8zBSqtDiK57ju+ikuqpg/BhgAU5KK
+	6zzU0Oi3Y4tAA/OYjgp7jSNtu1kysvY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-13-4yOTdEyOOrOHQtu_TRVmsQ-1; Mon,
+ 27 May 2024 07:10:44 -0400
+X-MC-Unique: 4yOTdEyOOrOHQtu_TRVmsQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 852C0380670C
+	for <llvm@lists.linux.dev>; Mon, 27 May 2024 11:10:44 +0000 (UTC)
+Received: from [172.64.4.19] (unknown [10.30.33.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1EE4240C6CB2;
+	Mon, 27 May 2024 11:10:44 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 14 of 204): Test report for master
+ (6.10.0-rc1, mainline.kernel.org-clang, 1613e604)
+Date: Mon, 27 May 2024 11:10:43 -0000
+To: xzhou@redhat.com, bgoncalv@redhat.com, zlang@redhat.com, jishi@redhat.com,
+ llvm@lists.linux.dev, haliu@redhat.com, jiji@redhat.com, yiche@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Message-Id: <53057.124052707104401435@us-mta-13.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-commit: f34907ecca71177a438bc1f1012e945326f707c3 mxser: Annotate struct mxser_board with __counted_by
-date:   8 months ago
-config: s390-randconfig-002-20240527 (https://download.01.org/0day-ci/archive/20240527/202405271811.Mp20bWge-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405271811.Mp20bWge-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405271811.Mp20bWge-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/tty/mxser.c:18:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2168:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/tty/mxser.c:24:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/tty/mxser.c:24:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/tty/mxser.c:24:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/tty/mxser.c:291:2: warning: 'counted_by' should not be applied to an array with element of unknown size because 'struct mxser_port' is a struct type with a flexible array member. This will be an error in a future compiler version [-Wbounds-safety-counted-by-elt-type-unknown-size]
-     291 |         struct mxser_port ports[] __counted_by(nports);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   14 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +291 drivers/tty/mxser.c
+Kernel information:
+    Commit message: Linux 6.10-rc1
 
-   281	
-   282	struct mxser_board {
-   283		unsigned int idx;
-   284		unsigned short nports;
-   285		int irq;
-   286		unsigned long vector;
-   287	
-   288		enum mxser_must_hwid must_hwid;
-   289		speed_t max_baud;
-   290	
- > 291		struct mxser_port ports[] __counted_by(nports);
-   292	};
-   293	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1306163338
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Networking cki netfilter test
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1306163338-ppc64le-kernel_upt_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        Networking vnic: ipvlan/basic
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1306163338-ppc64le-kernel_upt_11
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        POSIX pjd-fstest suites
+             ppc64le
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1306163338-ppc64le-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        Reboot test
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1306163338-x86_64-kernel-debug_upt_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1306163338-x86_64-kernel_upt_37
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1306163338-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/100
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                Boot test [aarch64, ppc64le, x86_64]
+                Reboot test [aarch64, ppc64le, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                Hardware - Firmware test suite [aarch64]
+                Networking cki netfilter test [aarch64, s390x, x86_64]
+                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
+                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                stress: stress-ng - memory [aarch64, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    kselftests upstream - bpf [x86_64 (debug)]
+    kselftests upstream - bpf_test_progs [x86_64 (debug)]
+    kselftests upstream - net [x86_64 (debug)]
+    machineinfo [s390x]
+    Reboot test [s390x, x86_64 (debug)]
+    SELinux Custom Module Setup [s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
