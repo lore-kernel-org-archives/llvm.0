@@ -1,54 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1D07345B;
-	Mon, 27 May 2024 15:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE7116726B;
+	Mon, 27 May 2024 15:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716825406; cv=none; b=FeV3TkLqFdquj1XP7nx9tLKqMW3yVInr8Cvlaq1ABW2hS4rKMceuP7+jRDcffLKby3EpU+mibLBa/R82/jruPUnXhgy7AHG+RdFNw3xJ6w8NOK/aG/wVNxxVhWUWH1uQE81REwdhT8a05w3usR2gkX/HQKxT56NOCQ4kLXdgeaI=
+	t=1716825471; cv=none; b=Cv4jcOXgBeZyKT5D82Nid+cdeDEfwo484kdycKf7VUHzEujfyXKVpEkAJJE63EpbRARXb3BTWUcMqEWf5cUhTth7KZfnpS2/u+brreZrN6myPzf4BjgCLcr4bRIHP2EAzP/0Pxd7GUawWeuCzsuCtCC4BETk3FCJXYqJI9x/VRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716825406; c=relaxed/simple;
-	bh=+AC7xpRWLi6eiPgRbMT4SkLSvtDXs5ycUktdEd2xH2E=;
+	s=arc-20240116; t=1716825471; c=relaxed/simple;
+	bh=jliCrrRlvQBl/x/36ti7pFXBGun1yJO+TJTp8mWdxmw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DSnt96D55aCZoPa9I/2hPNPXxJXDlU5G0403nvuFpXlCzA8Kn2K9SgrzvnL430hX+0aKg1iBMt4gFy1QhRyyE/S5/vnMV+FHN92AM4jy8I/V5UaH1vVS/OzaK4lFB5hHkwHpI/uTAlWG4vAzIGJTyv5LyB19E8NH3wvD/hQSwkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R6XlWeNF; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=cSPe6Fzl/qP3qxrjHiJUUp3jHRfRM5cbqTOKHbz8eq1x7mvtsxSVTi466KMWfxwIBTkuHwF/bpZJ8IaHUUJWMusvBCnwt9Q+K4eht2IIfV/GxguHM4RMon8MM+gIFB5ciB6bDFB56zkTagJ+RKy/XVO1lofySA7ro6mmQ0fY0eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5lNzkyp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R6XlWeNF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC26C32789;
-	Mon, 27 May 2024 15:56:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5lNzkyp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB84C2BBFC;
+	Mon, 27 May 2024 15:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716825406;
-	bh=+AC7xpRWLi6eiPgRbMT4SkLSvtDXs5ycUktdEd2xH2E=;
+	s=k20201202; t=1716825470;
+	bh=jliCrrRlvQBl/x/36ti7pFXBGun1yJO+TJTp8mWdxmw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R6XlWeNF/bGiKpSy3XdvMOWQ5e1C4wn6manIK4xF7XoY5WZpWsau+utLZQ3uTNcIV
-	 KwZMMAefy2hS1GnmgitCP8o9wkzG+PrCE4KYm+SrM3Mi+JbZ9kGkW70WsdYk48LYQJ
-	 NNrC2kN0Inp4e+2TvtNPcbfGxz3/0XBf5oweuHC3BZLya4fGLwPaRxQbWkJQmpvASG
-	 b9oeuiJtCvZ53m8OKoDe+JEzf1YmCgC+ftrlBGVTj6ZrFaF2YXUNLJFIckUcG7oRmM
-	 NO6UOEuhrNyUXoqaikKk+xR2wiTbVrOTk/l0PnH+7J8gKfBC4VSJHYyTG3KdLrPzsr
-	 +Mhse3vAU8vTQ==
+	b=a5lNzkypUQh3XLSgOjFmtL/I54QX9vmBQr1RgDeoi0x5k4JBqbtD+l+ww5zAX6eH0
+	 +bTRt5Z1eBEOC324bTzLAQHa6JYRgL3/fd5yltWnqWObDdkTAfwLTlu+7DFD3VomF4
+	 rTaRGvGWtsi2JAVCWKWX129o5H42caLJfXfKxlbnpPe6uvpgpMj1tU5ncSt/iRkyms
+	 TZ0+uxzop0Ntk0nuem+WQlekep7beD2XDt+EDbQSJwYfFC0NXJ64WaJajL5GA5Q6/g
+	 HHvwt+5doel9BHwQFuoJnlFvsO3RT9WmoIuLdIqOKoEXWaXPz+9kv5ykuIWNZFU+MH
+	 NXuNq2eg8bQvA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
+Cc: Nathan Lynch <nathanl@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
 	Sasha Levin <sashal@kernel.org>,
 	nathan@kernel.org,
-	arnd@arndb.de,
-	bhe@redhat.com,
-	geert@linux-m68k.org,
-	rppt@kernel.org,
-	wangkefeng.wang@huawei.com,
-	stanislav.kinsburskii@gmail.com,
-	bhelgaas@google.com,
-	christophe.leroy@csgroup.eu,
+	vaibhav@linux.ibm.com,
+	gautam@linux.ibm.com,
+	jniethe5@gmail.com,
+	sshegde@linux.ibm.com,
 	linuxppc-dev@lists.ozlabs.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 15/16] powerpc/io: Avoid clang null pointer arithmetic warnings
-Date: Mon, 27 May 2024 11:55:06 -0400
-Message-ID: <20240527155541.3865428-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 09/11] powerpc/pseries: Enforce hcall result buffer validity and size
+Date: Mon, 27 May 2024 11:56:46 -0400
+Message-ID: <20240527155710.3865826-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240527155541.3865428-1-sashal@kernel.org>
-References: <20240527155541.3865428-1-sashal@kernel.org>
+In-Reply-To: <20240527155710.3865826-1-sashal@kernel.org>
+References: <20240527155710.3865826-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,86 +53,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.32
+X-stable-base: Linux 6.1.92
 Content-Transfer-Encoding: 8bit
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Nathan Lynch <nathanl@linux.ibm.com>
 
-[ Upstream commit 03c0f2c2b2220fc9cf8785cd7b61d3e71e24a366 ]
+[ Upstream commit ff2e185cf73df480ec69675936c4ee75a445c3e4 ]
 
-With -Wextra clang warns about pointer arithmetic using a null pointer.
-When building with CONFIG_PCI=n, that triggers a warning in the IO
-accessors, eg:
+plpar_hcall(), plpar_hcall9(), and related functions expect callers to
+provide valid result buffers of certain minimum size. Currently this
+is communicated only through comments in the code and the compiler has
+no idea.
 
-  In file included from linux/arch/powerpc/include/asm/io.h:672:
-  linux/arch/powerpc/include/asm/io-defs.h:23:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     23 | DEF_PCI_AC_RET(inb, u8, (unsigned long port), (port), pio, port)
-        | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ...
-  linux/arch/powerpc/include/asm/io.h:591:53: note: expanded from macro '__do_inb'
-    591 | #define __do_inb(port)          readb((PCI_IO_ADDR)_IO_BASE + port);
-        |                                       ~~~~~~~~~~~~~~~~~~~~~ ^
+For example, if I write a bug like this:
 
-That is because when CONFIG_PCI=n, _IO_BASE is defined as 0.
+  long retbuf[PLPAR_HCALL_BUFSIZE]; // should be PLPAR_HCALL9_BUFSIZE
+  plpar_hcall9(H_ALLOCATE_VAS_WINDOW, retbuf, ...);
 
-Although _IO_BASE is defined as plain 0, the cast (PCI_IO_ADDR) converts
-it to void * before the addition with port happens.
+This compiles with no diagnostics emitted, but likely results in stack
+corruption at runtime when plpar_hcall9() stores results past the end
+of the array. (To be clear this is a contrived example and I have not
+found a real instance yet.)
 
-Instead the addition can be done first, and then the cast. The resulting
-value will be the same, but avoids the warning, and also avoids void
-pointer arithmetic which is apparently non-standard.
+To make this class of error less likely, we can use explicitly-sized
+array parameters instead of pointers in the declarations for the hcall
+APIs. When compiled with -Warray-bounds[1], the code above now
+provokes a diagnostic like this:
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Closes: https://lore.kernel.org/all/CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com
+error: array argument is too small;
+is of size 32, callee requires at least 72 [-Werror,-Warray-bounds]
+   60 |                 plpar_hcall9(H_ALLOCATE_VAS_WINDOW, retbuf,
+      |                 ^                                   ~~~~~~
+
+[1] Enabled for LLVM builds but not GCC for now. See commit
+    0da6e5fd6c37 ("gcc: disable '-Warray-bounds' for gcc-13 too") and
+    related changes.
+
+Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://msgid.link/20240503075619.394467-1-mpe@ellerman.id.au
+Link: https://msgid.link/20240408-pseries-hvcall-retbuf-v1-1-ebc73d7253cf@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/io.h | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ arch/powerpc/include/asm/hvcall.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-index 0732b743e0996..59cc25cb4578e 100644
---- a/arch/powerpc/include/asm/io.h
-+++ b/arch/powerpc/include/asm/io.h
-@@ -585,12 +585,12 @@ __do_out_asm(_rec_outl, "stwbrx")
- #define __do_inw(port)		_rec_inw(port)
- #define __do_inl(port)		_rec_inl(port)
- #else /* CONFIG_PPC32 */
--#define __do_outb(val, port)	writeb(val,(PCI_IO_ADDR)_IO_BASE+port);
--#define __do_outw(val, port)	writew(val,(PCI_IO_ADDR)_IO_BASE+port);
--#define __do_outl(val, port)	writel(val,(PCI_IO_ADDR)_IO_BASE+port);
--#define __do_inb(port)		readb((PCI_IO_ADDR)_IO_BASE + port);
--#define __do_inw(port)		readw((PCI_IO_ADDR)_IO_BASE + port);
--#define __do_inl(port)		readl((PCI_IO_ADDR)_IO_BASE + port);
-+#define __do_outb(val, port)	writeb(val,(PCI_IO_ADDR)(_IO_BASE+port));
-+#define __do_outw(val, port)	writew(val,(PCI_IO_ADDR)(_IO_BASE+port));
-+#define __do_outl(val, port)	writel(val,(PCI_IO_ADDR)(_IO_BASE+port));
-+#define __do_inb(port)		readb((PCI_IO_ADDR)(_IO_BASE + port));
-+#define __do_inw(port)		readw((PCI_IO_ADDR)(_IO_BASE + port));
-+#define __do_inl(port)		readl((PCI_IO_ADDR)(_IO_BASE + port));
- #endif /* !CONFIG_PPC32 */
+diff --git a/arch/powerpc/include/asm/hvcall.h b/arch/powerpc/include/asm/hvcall.h
+index 95fd7f9485d55..a0fef2493c1f1 100644
+--- a/arch/powerpc/include/asm/hvcall.h
++++ b/arch/powerpc/include/asm/hvcall.h
+@@ -493,7 +493,7 @@ long plpar_hcall_norets_notrace(unsigned long opcode, ...);
+  * Used for all but the craziest of phyp interfaces (see plpar_hcall9)
+  */
+ #define PLPAR_HCALL_BUFSIZE 4
+-long plpar_hcall(unsigned long opcode, unsigned long *retbuf, ...);
++long plpar_hcall(unsigned long opcode, unsigned long retbuf[static PLPAR_HCALL_BUFSIZE], ...);
  
- #ifdef CONFIG_EEH
-@@ -606,12 +606,12 @@ __do_out_asm(_rec_outl, "stwbrx")
- #define __do_writesw(a, b, n)	_outsw(PCI_FIX_ADDR(a),(b),(n))
- #define __do_writesl(a, b, n)	_outsl(PCI_FIX_ADDR(a),(b),(n))
+ /**
+  * plpar_hcall_raw: - Make a hypervisor call without calculating hcall stats
+@@ -507,7 +507,7 @@ long plpar_hcall(unsigned long opcode, unsigned long *retbuf, ...);
+  * plpar_hcall, but plpar_hcall_raw works in real mode and does not
+  * calculate hypervisor call statistics.
+  */
+-long plpar_hcall_raw(unsigned long opcode, unsigned long *retbuf, ...);
++long plpar_hcall_raw(unsigned long opcode, unsigned long retbuf[static PLPAR_HCALL_BUFSIZE], ...);
  
--#define __do_insb(p, b, n)	readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
--#define __do_insw(p, b, n)	readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
--#define __do_insl(p, b, n)	readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
--#define __do_outsb(p, b, n)	writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
--#define __do_outsw(p, b, n)	writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
--#define __do_outsl(p, b, n)	writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-+#define __do_insb(p, b, n)	readsb((PCI_IO_ADDR)(_IO_BASE+(p)), (b), (n))
-+#define __do_insw(p, b, n)	readsw((PCI_IO_ADDR)(_IO_BASE+(p)), (b), (n))
-+#define __do_insl(p, b, n)	readsl((PCI_IO_ADDR)(_IO_BASE+(p)), (b), (n))
-+#define __do_outsb(p, b, n)	writesb((PCI_IO_ADDR)(_IO_BASE+(p)),(b),(n))
-+#define __do_outsw(p, b, n)	writesw((PCI_IO_ADDR)(_IO_BASE+(p)),(b),(n))
-+#define __do_outsl(p, b, n)	writesl((PCI_IO_ADDR)(_IO_BASE+(p)),(b),(n))
+ /**
+  * plpar_hcall9: - Make a pseries hypervisor call with up to 9 return arguments
+@@ -518,8 +518,8 @@ long plpar_hcall_raw(unsigned long opcode, unsigned long *retbuf, ...);
+  * PLPAR_HCALL9_BUFSIZE to size the return argument buffer.
+  */
+ #define PLPAR_HCALL9_BUFSIZE 9
+-long plpar_hcall9(unsigned long opcode, unsigned long *retbuf, ...);
+-long plpar_hcall9_raw(unsigned long opcode, unsigned long *retbuf, ...);
++long plpar_hcall9(unsigned long opcode, unsigned long retbuf[static PLPAR_HCALL9_BUFSIZE], ...);
++long plpar_hcall9_raw(unsigned long opcode, unsigned long retbuf[static PLPAR_HCALL9_BUFSIZE], ...);
  
- #define __do_memset_io(addr, c, n)	\
- 				_memset_io(PCI_FIX_ADDR(addr), c, n)
+ /* pseries hcall tracing */
+ extern struct static_key hcall_tracepoint_key;
 -- 
 2.43.0
 
