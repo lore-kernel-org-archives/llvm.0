@@ -1,126 +1,199 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2073.outbound.protection.outlook.com [40.107.95.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3166615E5A8;
-	Mon, 27 May 2024 20:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716840179; cv=none; b=LKz4MkX4ipELWoXdoq+QI9dbZvnI+gh8+bYaYg1u8eztvF4+vGaBxj/+Plm3lYDNwYdX16RqPWlbg7DyY9mc7uCwECsZb1tb+CL92jpBYurIHCRRM2tZBPbZcl6/h0WDsU9KO6QXz1ybRk2urXrpiNyWD1PC+WZQV/KPlsfvgrw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716840179; c=relaxed/simple;
-	bh=cal7mG0qUZDbQaDkg8S5M7WXgm8vuqmTCMSvfQjBd84=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CIbO9v95+qI3xJ0QultGXonORvAYGJcAimgiljm0vZ+w6OfHnbg1kttXlfugS1kaLtL9tWfkPfj9Wb2CGI3j6a4oanGMoCzE02kix99ZOsNGh0xC9rrMnZBH/WfboTTMJp673eJ0X4Vuty6QAJCN0gYEOMMHLHnlYUO1cOA7aIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HttzYzSD; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC83315E5C6
+	for <llvm@lists.linux.dev>; Mon, 27 May 2024 20:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716840544; cv=fail; b=bxCFugeeqYaNNZCxok50OmgOK3z4diLO4juuqOMAGb3BgzZ9+xdCGa0KctiRhKExOEUwIsrnkkJskVv9aZFUs1Shuz0vksTcogPR/WfwLHhzxCukF9JUO+rgyVot51kMyyW8Md77V7tvsjSSGqEUJx+tXfGxcGlOS84AVpvEyaw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716840544; c=relaxed/simple;
+	bh=5zpd20uDMc2h43/F49FuetLy3CX5tTTeIifppWp/0UQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=e6AAeq+5DdsO3b4LzBtp8x6uhiNGk6tNj+4ODkF09y2YaKZWYm0qq0fOvnHbWvwczIhNNFW4T1g5CJEMxtDSn4Hid82cF/1yoLFIJxFMWLFdBov0OOOfP9/Hrv5Ko3mekJrdIXtR/zXeRTLQ6kdxaKqGV7iyz/Wd5WzObcf8wVI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pxmi4uzy; arc=fail smtp.client-ip=40.107.95.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HttzYzSD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716840177; x=1748376177;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cal7mG0qUZDbQaDkg8S5M7WXgm8vuqmTCMSvfQjBd84=;
-  b=HttzYzSD2+JV+JpxljWFkW0rMJySdd0Un7/bY+Uq2JOGK1CE9Ue7nOr4
-   dBK5EDBT85xqsS4HUnfEvZ99ar8WCSom+5OtH5cCv5RBsnQp1com0iY5B
-   7iaMBU0U0pvrmJ5RiiLzWKaHOjv24B4b6D/OoxAX/Juq+Hx1GCrUzXuif
-   NEMykNxnKIy8UzPa2vJJRcVRzI5z2iHOBL6fbT2d8Q+8o6mmD5udeXhMu
-   ErV05LgefSSYymbHVIn9R670BJrqxA5H+udAgDwoasJHFncQF2ENFSxd3
-   S6qCg13PHvh7jl7mFqf307SDnabLmEZcnuRCWlSacOT84S5YYJ+7+yz47
-   g==;
-X-CSE-ConnectionGUID: 9JtH54ufSkW2AgkoEhNyAw==
-X-CSE-MsgGUID: oNGtuRzbSaekIx2fiQBtkQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38551855"
-X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
-   d="scan'208";a="38551855"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 13:02:56 -0700
-X-CSE-ConnectionGUID: OvQQXpLfRQuX6VE8i4kLfQ==
-X-CSE-MsgGUID: 7hyXouXUT0eYX5P46h8/3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
-   d="scan'208";a="34737795"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 27 May 2024 13:02:55 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBgYV-000B2t-36;
-	Mon, 27 May 2024 20:02:52 +0000
-Date: Tue, 28 May 2024 04:02:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Snitzer <snitzer@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Matthew Sakai <msakai@redhat.com>
-Subject: drivers/md/dm-vdo/int-map.c:87: error: Cannot parse struct or union!
-Message-ID: <202405280322.DuFLX7rb-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pxmi4uzy"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=awTpnqX5BqZfAgVxNgMjoMNNCaYWAVjfflRRhp+molzLPz56TOIQ49C1k75EjoH7WCQCcf9E1MmTySqDWqXfLn9iezNak00jyXiLazNADzkRX5D43sm6y0KPTcQHiIBZCnKxtaOcfMazEeDmJeNPowMT4Ns3AF3T7KKPsufEtIEksoM5kYlBIAB2LGjKBpVMb30J3fxX6DffDD39dheGFkCLp+lxnq4hmlt7BfPJTvyWILPZJrEzxJ9xwpT8NAk5ZIZPwu6JZVL5xYPStqzNJBCslo/TezKEwQa25mYxQY6Yucg2OXQt9BuA4oZIJ4BS/GGBlJH8VucivYT21Ty0fA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QAvdZShSnMielUmLt9itatcuY+ZvX7NBcMK5HNnpCVU=;
+ b=O67Pg4AzVegl7mhpvDWLV+K9Pph/u6PFj5s07eCJqaEdWw19lCNReIbKtIoPKFrS3ImwiQZ3v6NH1eb2sRAclk0LBIR3kw6Dzd7gf73dlO4ZZCr4gKw5iWGkyI8MF3uGe5tdFVq5cgtfsVXmgTddyctoz2Y2EorD6GyYm2Upv3zZfkxi1YHSz1N7Uq+FWLnqEtwXSRSjrtBrYMq+8lBojqQm464+URB2HSBvYBIur3ikAI31r2FIUuj9dHaSdL8zVP8icJ/EewChjKK4W4xjXTaSORYx42dwNzThilmslGAvqYVPgvcBVRx/Ma4LBS6lWovUr1OD4ODvRLH+QeuU6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QAvdZShSnMielUmLt9itatcuY+ZvX7NBcMK5HNnpCVU=;
+ b=pxmi4uzyy/cH9nKxo/+8Zxf4F30YEeRRVepkysK3t90MTNH6tvM7BlXDV2nHl/J1WjAoXs3nBYy5gVSS2yMOughZpARTBta8wTMa+bxBy6UDfREg8CqA4PTKubVXBJRhDK4PGaQ4imYZiTMMoxuVD1jV5Y7QS3h+XuZwAujEbd0gfUAH9hFnw8x5albVP7TX55udNIXAvTjW9YNMVgU8HbaQo99OBWgNL5dW1txhBCVREB2rPOvNpdTEBvzpjqUPKgiVhNgmQ8UBMXhTVXnc8RXIoZu9IRZng6qS78rZdZ/aO5IyNiWxok27SjPwvSuHwL5O9ZeeB7R6iTKgGJtD/A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by IA0PR12MB7773.namprd12.prod.outlook.com (2603:10b6:208:431::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.28; Mon, 27 May
+ 2024 20:08:59 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7611.030; Mon, 27 May 2024
+ 20:08:58 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	SeongJae Park <sj@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	John Hubbard <jhubbard@nvidia.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [PATCH v2] selftests/mqueue: fix 5 warnings about signed/unsigned mismatches
+Date: Mon, 27 May 2024 13:08:35 -0700
+Message-ID: <20240527200835.143682-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.1
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0124.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c6::9) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|IA0PR12MB7773:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8dce7979-fb08-440e-5ae0-08dc7e88d834
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|376005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?g3nYJ6/0U6mpAEf7/c0+mA/5ubjtvJXdjSrkNtc43SOE9dLNlsLLGJyZ2ecc?=
+ =?us-ascii?Q?WEUbtdAXtRxGluQqbml+hRiBYT5miokzxIZ7tNYJiE0uDo8zya+f/gcxMJxN?=
+ =?us-ascii?Q?3ESlCF/njXtIMHf8gZq66uqd1YalVs5siHCWsrkupN6Xmu/dUuehilafcHoB?=
+ =?us-ascii?Q?PJxwAdlPJIGh+il5C2l7dko4p8E+g4v/GrQWnoDPe0YZaZxzFtruHGOWH3PO?=
+ =?us-ascii?Q?uyblG6UvTIfKh6jpNXxAUFydKF4bixQ+8vhk0QFVMGnde0N+2bZROk7CgJmw?=
+ =?us-ascii?Q?94RfZai7dYpz8TMr6aUvc1G865hoxdJjcMXNVIEw/HH5GyOl0UpXfFflANnp?=
+ =?us-ascii?Q?c5Bu/xOCMAIpd+lAr037pEfBE0RslcHtUdBi8WS5kf85RA2HunWZfkxRH8dA?=
+ =?us-ascii?Q?U0AoE8W9pevC6cevS/+2TYhx0HS7YGRdzD2TAzzEE/awE8Gcwf9xL+TLfmVB?=
+ =?us-ascii?Q?AfWOq5nmJxD8R7uHqP50VZ9jOwLrIPqbqOrDWgvQoDsvIEcmpgncrhcRIF5s?=
+ =?us-ascii?Q?ikJ098ThiTZNv0I1egXHm/x0ucUjaSJGkmYS9gVh8zvM2xOCQT+YIU75QXS8?=
+ =?us-ascii?Q?dwbqApDEbW4TYITURLJbjghs7Z7UGbmxjzQFNePnnfYMRp6InTuDTJkIm3aT?=
+ =?us-ascii?Q?sa21HWIKpXiW4lLCi4QEUed8Dme9Pma8dVXHKEOetCPZtRmLMwynFRkkF2wO?=
+ =?us-ascii?Q?MNSdR5WoVVkZbCT2CWwyzSE/k+swC7GZno9VwHgZhreZXTawcjFNp1YjWDc7?=
+ =?us-ascii?Q?+ouVMT37qUrdoydlieqZ+yQtUG7HGMOblyN5j5RX5Tedzq6ka3OFMC0HYITs?=
+ =?us-ascii?Q?l44INF5ID+6zpPlminGhM4LubPPynP/Qr5PB4OchjAXqs3FFGzF7jrGaTZ2m?=
+ =?us-ascii?Q?FEuqfxTBx+HTJ4CAGMwIFwcR87f3eoJ+v1sWzDR3L2n0EQEUrmmp6epvFrVx?=
+ =?us-ascii?Q?vNpqF4VH4yDk8yA/bbJiwWhLU+f7HG6IYtanJOsfxaEyETFgme8HBnQOX7de?=
+ =?us-ascii?Q?jfkNwMApbSDjmOZqGqj9z7W/TEDZEj0DtLSAJpM91Et6jflBGi3LdjT1MUnI?=
+ =?us-ascii?Q?Cx2JK6BtQo93tiWDdRJKkZ4OhSVfPk8kNZ2OlBYVKt9UGNvKUk809IfivVgz?=
+ =?us-ascii?Q?I70xVGciW4HcvvQApSR2/j8VJGybCfDCmEGAjhZJpHrh+pglvURrbHhfPAzB?=
+ =?us-ascii?Q?M4hTO5AMLXaHbdHp//cSL6qwZfCM+B7p8iY90LZjC9eA+XFezvQwEQhgnCQO?=
+ =?us-ascii?Q?K7U7C6OD+uPIf1yTVZu0j1pYLubEuTe8n3ejfuW6xQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?6w5dVHKCu7My8FO7NKVC+CZ7XBnIcabi9MMPf2uvaj+vfbnV+oMUgI5AUJJt?=
+ =?us-ascii?Q?MMAOMYUyq2LQKpVPzlIDekWi0PaygqgXaKE6h2I2nHesPCfnE25pTH0w1R8w?=
+ =?us-ascii?Q?oDxUc01tk4aCOGhtNcpQILSvGHZI3HCKOrhtjDcq5VjMBQJGA0dYRgtlAKzv?=
+ =?us-ascii?Q?pju9MBaICYMmsJTn/pP/exl1rWcN9tADbwRCWnDcxMDOUH6N7xObfDUy1IA0?=
+ =?us-ascii?Q?VsgDSlgFFXfYqCh1Y/FDsz5XZWQbofHOG8TcraLTtDO48M+7dyVqB8zAlI9P?=
+ =?us-ascii?Q?6+5sXXBFk6n8TLRysqCwHfoNCeLV0nNVINllD9NKxEd/Wl9hdPXU3JeWKm2u?=
+ =?us-ascii?Q?GUdQvpuutCjhiC9ByJlvIgCi2ueysxKSvn5NltUpyLrDZDk+1ymbvr0JPhDc?=
+ =?us-ascii?Q?2Wr34WUuL4H/KEsl1WIt8e4+2BNetIJxJJrQKqwDBAXlpuzEJWvbKr550Kgr?=
+ =?us-ascii?Q?KFFl+Ql8CfjHtwVTUSaQ54xAtkcB5qPKjYM3IelLqqjkZO2WrCJdvt1w5pOh?=
+ =?us-ascii?Q?tRU006Xmzx0vSTg40lRDfHGJuzXG8vVe0OzpxAl5GSxnJYVb1vCvqK3MmmJP?=
+ =?us-ascii?Q?T8M4quHM+Fhbz/TxVCtDZZtBXyM4zuzUFKFAwBB35JPtl+VQLKxT5icwvfa4?=
+ =?us-ascii?Q?EfojjLuT98PD/WSebPauZktsaIs9idWjcxkupl87jGDr8vvaJ1mr70nyku8j?=
+ =?us-ascii?Q?s5vEvnLHZR6xdd0s6jg/6vGGQVyDgZ9ictWsaiVbLirr8RNp6/GNYDwF5FF8?=
+ =?us-ascii?Q?DeY/GHYfR8T9CIcbIKClLC5bXMSNFF8hjgKdFu6OIZhwg1+9SqrAI/XWd09F?=
+ =?us-ascii?Q?h/VfvSUqpeyFWW54vlOIDzpTWysyOeSh556BPs2Xtzxfs7MyQkxB7DChGQTt?=
+ =?us-ascii?Q?cknl9Vs5+CKRwnrOkckYcBcVsCBZqj/5ITaSkCC4KXfKKPbD3pgntjM3CMwH?=
+ =?us-ascii?Q?BMHK7voXvDsIJ1xIzEIl3vXtzdju6D39mGM7gqpWzpVPruhci69Iiwc9c8uo?=
+ =?us-ascii?Q?TNMg4M1moYrOHHeivnLjD+V9KDabzu07f2Xh3NyWiLkIefOWVtdG4b+XRwGy?=
+ =?us-ascii?Q?7vlqL3pyKVQodm9r8AxUlcdi7JPs69EuYO/a6wffJ+IHu7D1wVpZmTa20ezl?=
+ =?us-ascii?Q?DJmxfZ7rtIFwULdi7DENBC+id7x1q/GuLFZRAkQP2PL9rw+SnCAWlYjn/sEU?=
+ =?us-ascii?Q?s55s5GvCOhBHr6epfMFrKYL28yVJA7pz3QB0IM+/tHs17yMhKRB+Das6h56P?=
+ =?us-ascii?Q?W34QAuFOgm7qQ4gwE6TAKljIxR1EkY/qL02Od1GTn4C9enW3lS1RtU9AWZYk?=
+ =?us-ascii?Q?G7nBD9fFAzJhY7hDfD1jgzr7zi+QCgWE9nqajsbKE4bjZmmCs+f/5iSguswj?=
+ =?us-ascii?Q?+2l3EJxz3+Bw2+Zz3RePDwwK6mFrOD3VRsVIMKpkMIzfvjIj1N2UJgkQGCj/?=
+ =?us-ascii?Q?BSViBhHIZYE6fQfyBYe7KR2JKaGcHj7tP9E2kcBDdlBg7sRcE4Bbjmz+l7sk?=
+ =?us-ascii?Q?joOU9qKzKHNb1bsY/SBG4MiQmAMFKLSBegEpJRSOyECiW1eA1AC4t4Bg9my6?=
+ =?us-ascii?Q?IqDHDmPTEmY+QVk15w9wnleGktr+sMioUbBhQflgG39iNPMuJUZBTHHdO+VN?=
+ =?us-ascii?Q?ow=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dce7979-fb08-440e-5ae0-08dc7e88d834
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2024 20:08:58.8806
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xrlOopL1phKUNsAMbgfGrlZTx8LpcRtGKkpbXht0+jqqlTz+HYjOnp+7OgSMa/Of5cAZ9uaI25U2t6RE0ry5lg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7773
 
-Hi Mike,
+When building with clang, via:
 
-First bad commit (maybe != root cause):
+    make LLVM=1 -C tools/testing/selftest
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2bfcfd584ff5ccc8bb7acde19b42570414bf880b
-commit: f36b1d3ba533d21b5b793623f05761b0297d114e dm vdo: use a proper Makefile for dm-vdo
-date:   3 months ago
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240528/202405280322.DuFLX7rb-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405280322.DuFLX7rb-lkp@intel.com/reproduce)
+...clang warns about several cases of using a signed integer for the
+priority argument to mq_receive(3), which expects an unsigned int.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405280322.DuFLX7rb-lkp@intel.com/
+Fix this by declaring the type as unsigned int in all cases.
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
 
->> drivers/md/dm-vdo/int-map.c:87: error: Cannot parse struct or union!
-   drivers/md/dm-vdo/int-map.c:105: warning: Function parameter or struct member 'bucket_count' not described in 'int_map'
-   drivers/md/dm-vdo/int-map.c:330: warning: Function parameter or struct member '__always_unused' not described in 'search_hop_list'
-   drivers/md/dm-vdo/int-map.c:330: warning: Excess function parameter 'map' description in 'search_hop_list'
-   drivers/md/dm-vdo/int-map.c:461: warning: Function parameter or struct member '__always_unused' not described in 'move_empty_bucket'
-   drivers/md/dm-vdo/int-map.c:461: warning: Excess function parameter 'map' description in 'move_empty_bucket'
+Changes since the first version:
 
+1) Rebased onto Linux 6.10-rc1
 
-vim +87 drivers/md/dm-vdo/int-map.c
+2) Reviewed-by's added.
 
-cc46b9554b3f6d Matthew Sakai 2023-11-16  66  
-cc46b9554b3f6d Matthew Sakai 2023-11-16  67  /**
-cc46b9554b3f6d Matthew Sakai 2023-11-16  68   * struct bucket - hash bucket
-cc46b9554b3f6d Matthew Sakai 2023-11-16  69   *
-cc46b9554b3f6d Matthew Sakai 2023-11-16  70   * Buckets are packed together to reduce memory usage and improve cache efficiency. It would be
-cc46b9554b3f6d Matthew Sakai 2023-11-16  71   * tempting to encode the hop offsets separately and maintain alignment of key/value pairs, but
-cc46b9554b3f6d Matthew Sakai 2023-11-16  72   * it's crucial to keep the hop fields near the buckets that they use them so they'll tend to share
-cc46b9554b3f6d Matthew Sakai 2023-11-16  73   * cache lines.
-cc46b9554b3f6d Matthew Sakai 2023-11-16  74   */
-cc46b9554b3f6d Matthew Sakai 2023-11-16  75  struct __packed bucket {
-cc46b9554b3f6d Matthew Sakai 2023-11-16  76  	/**
-cc46b9554b3f6d Matthew Sakai 2023-11-16  77  	 * @first_hop: The biased offset of the first entry in the hop list of the neighborhood
-cc46b9554b3f6d Matthew Sakai 2023-11-16  78  	 *             that hashes to this bucket.
-cc46b9554b3f6d Matthew Sakai 2023-11-16  79  	 */
-cc46b9554b3f6d Matthew Sakai 2023-11-16  80  	u8 first_hop;
-cc46b9554b3f6d Matthew Sakai 2023-11-16  81  	/** @next_hop: The biased offset of the next bucket in the hop list. */
-cc46b9554b3f6d Matthew Sakai 2023-11-16  82  	u8 next_hop;
-cc46b9554b3f6d Matthew Sakai 2023-11-16  83  	/** @key: The key stored in this bucket. */
-cc46b9554b3f6d Matthew Sakai 2023-11-16  84  	u64 key;
-cc46b9554b3f6d Matthew Sakai 2023-11-16  85  	/** @value: The value stored in this bucket (NULL if empty). */
-cc46b9554b3f6d Matthew Sakai 2023-11-16  86  	void *value;
-cc46b9554b3f6d Matthew Sakai 2023-11-16 @87  };
-cc46b9554b3f6d Matthew Sakai 2023-11-16  88  
+thanks,
+John Hubbard
 
-:::::: The code at line 87 was first introduced by commit
-:::::: cc46b9554b3f6d2f09b1111386b2706e5b4f56c8 dm vdo: add basic hash map data structures
+ tools/testing/selftests/mqueue/mq_perf_tests.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-:::::: TO: Matthew Sakai <msakai@redhat.com>
-:::::: CC: Mike Snitzer <snitzer@kernel.org>
+diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
+index 5c16159d0bcd..fb898850867c 100644
+--- a/tools/testing/selftests/mqueue/mq_perf_tests.c
++++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
+@@ -323,7 +323,8 @@ void *fake_cont_thread(void *arg)
+ void *cont_thread(void *arg)
+ {
+ 	char buff[MSG_SIZE];
+-	int i, priority;
++	int i;
++	unsigned int priority;
+ 
+ 	for (i = 0; i < num_cpus_to_pin; i++)
+ 		if (cpu_threads[i] == pthread_self())
+@@ -425,7 +426,8 @@ struct test test2[] = {
+ void *perf_test_thread(void *arg)
+ {
+ 	char buff[MSG_SIZE];
+-	int prio_out, prio_in;
++	int prio_out;
++	unsigned int prio_in;
+ 	int i;
+ 	clockid_t clock;
+ 	pthread_t *t;
 
+base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.1
+
