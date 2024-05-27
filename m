@@ -1,59 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7755DF78;
-	Mon, 27 May 2024 06:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCD81BDDF;
+	Mon, 27 May 2024 06:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716790152; cv=none; b=inACOFGJ402984AfsgYsZ4AdHUvKy5ysb+2phP4x5tjCR5yUbFZdClaFKS3cCjVjW9/oN/7dbb0f9aU90g6J/n2l34W72dnegkRl4ZoOhp061zNSGS9gqjDS1ISN6rDMfejS/xT9YvwcsJO0Q+ubZvM0Bf0AEEYwRcsAh5ryCH4=
+	t=1716791552; cv=none; b=FFBo7aOh3b2Q6W+8lOXjRYmEzjH3J1wYEKwfJMGK16XPgiGJF5xCpqx3HHCaVcbjUveQbn4CLO6SZZLON5QZEXtexBHgWaqQPSkm0JHIW+Yd809v2ZBudN6VuZDDWN8n08ntRPdU/bI1LMQEypg2iYk0cp7v46CsvgKxaHckqcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716790152; c=relaxed/simple;
-	bh=5juOmIHwN99y4lCK2wMtOeVed5wbxin2pQ46GEfz22g=;
+	s=arc-20240116; t=1716791552; c=relaxed/simple;
+	bh=auVjQlWyoHQdIMybmSN8O+mK3/mRNQukHdMV1W+b0oA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HkppAlApJ/KEUpLGIcHYMBbflC1HmWi/y54UfOhGV2RJn2QcogN1fQIK+Y0niejXYgzkPQrtk2OVvCHcKE93rDAWstecocP65oDGkPbcUNdC5S47yqzgAgwYc3Et99OvKUHspGiUv7MwjS3Ggj78UwzfH0zLY+qZBvpn5nMGOUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c5vl3NL4; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=RMIXP1RU3OyTZBc6MzTFuwSaEw9cCM0k8TEDBbd1OQHqErMjcpiZ7iGdpZSy1HIUrKIb02J2WpIKO1aSbC/G3gD4XSlceKz4y243jYU3Qq349M2UN/zzrLWdv1Po7Kfuvo2/j6FUzTroA7K1mroHwXrCKos7RNpm1uUhy0fcuIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LXpdJ4Qx; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c5vl3NL4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LXpdJ4Qx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716790150; x=1748326150;
+  t=1716791550; x=1748327550;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5juOmIHwN99y4lCK2wMtOeVed5wbxin2pQ46GEfz22g=;
-  b=c5vl3NL4Yk/wvyuSOczDavNn5xLOQcyRs9tRhaxZaveA3PCFsb9wJ4Q4
-   Mvyq2Zd3WlhC8qDR59kbKnAuw+DtJBi69KSZfCbBi53qJpWIeGKveAj0a
-   XWskqBg+UlXphhRW6GyCbZDuGXRwXejbIfjRw2IZ18iO/qh58Yb/ivnol
-   us0EIwYlrMwCZ6uixLynI+TawXcFQ8eut5k7vjsKl4fajREJIKZa6ohZb
-   JQDcHHB/iGGdVehBrBuC91aJnxHjt0i39xn1146Ba1LtiCVIu1AGtZD1r
-   1MTsmBHuAYMemabZg/hLbSMuJKkhhWAK/roPZpBjPVjVAH296eKINJAcO
+  bh=auVjQlWyoHQdIMybmSN8O+mK3/mRNQukHdMV1W+b0oA=;
+  b=LXpdJ4QxT3+LuakAbjZTMQF5eMGjoUDQEbjgaA1+CahEqHbRB4uF0pNI
+   kAsjekAsf/75zKNHGIY2to4YahqTjY8jzGApdlby8xmtG60p86vaRBqSD
+   CKpUx6PQg7M1gj0Lqx1dT6ApqinCuPqGWzSCqgvj9hP/rfYrepdzY3Lv6
+   Ot/fpqilxq/XlMa0aJBgmOB1WSwvlM9rQTGpwO/NB37Taik8v+wR0FAql
+   h1QUhCVEF+y4rGenvnA34ckFgfBPso8muid4UZoKy0V0ayWpf/3LRvAEK
+   ct5sYrE4mb6pVFLvmxamuNuuNQw6UzdBnJqAZmORvB441f6L9L/EZ/uep
    A==;
-X-CSE-ConnectionGUID: SMn8uFnLR+iyBfjeaz2d8w==
-X-CSE-MsgGUID: xfGYA+bKRbWff30lGwN7DQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="16923250"
+X-CSE-ConnectionGUID: z6mmB5PDTAi1/rDAA8jQpQ==
+X-CSE-MsgGUID: JQ8IopFCTCyIMlZFjT1kiw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="13215151"
 X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="16923250"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2024 23:09:08 -0700
-X-CSE-ConnectionGUID: P9jcPFmMQy2HU1YFgz6uAg==
-X-CSE-MsgGUID: 5hfmg+tdQR65UltEUC9TAg==
+   d="scan'208";a="13215151"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2024 23:32:29 -0700
+X-CSE-ConnectionGUID: tVu+4zmCQdaSKioLnOq7Hg==
+X-CSE-MsgGUID: gde25LMFRPGtsewYoyXRiQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="39618406"
+   d="scan'208";a="57847351"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 26 May 2024 23:09:07 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 26 May 2024 23:32:26 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sBTXc-0009Va-1s;
-	Mon, 27 May 2024 06:09:04 +0000
-Date: Mon, 27 May 2024 14:08:39 +0800
+	id 1sBTu9-0009Wj-2r;
+	Mon, 27 May 2024 06:32:22 +0000
+Date: Mon, 27 May 2024 14:31:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Kees Cook <keescook@chromium.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 32/32] fs/bcachefs/fsck.c:466:3: warning:
- label followed by a declaration is a C23 extension
-Message-ID: <202405271406.K0vDqtws-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Chaitanya Kulkarni <kch@nvidia.com>
+Subject: drivers/nvme/target/fc.c:150:2: warning: 'counted_by' should not be
+ applied to an array with element of unknown size because 'struct
+ nvmet_fc_fcp_iod' is a struct type with a flexible array member. This will
+ be an error in a future compiler version
+Message-ID: <202405271448.bD0Hn0p4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,72 +67,130 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   161718dc9ebbd6c0d588becd0409c5efcfa7ff9c
-commit: 161718dc9ebbd6c0d588becd0409c5efcfa7ff9c [32/32] bcachefs: check_key_has_inode()
-config: x86_64-buildonly-randconfig-001-20240527 (https://download.01.org/0day-ci/archive/20240527/202405271406.K0vDqtws-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405271406.K0vDqtws-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+commit: ccd3129aca286c41616afe357e3494c5b43350a0 nvmet-fc: Annotate struct nvmet_fc_tgt_queue with __counted_by
+date:   8 months ago
+config: s390-randconfig-002-20240527 (https://download.01.org/0day-ci/archive/20240527/202405271448.bD0Hn0p4-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405271448.bD0Hn0p4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405271406.K0vDqtws-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405271448.bD0Hn0p4-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/bcachefs/fsck.c:466:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     466 |                 struct btree_iter iter = {};
-         |                 ^
-   1 warning generated.
+   In file included from drivers/nvme/target/fc.c:6:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/nvme/target/fc.c:8:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/nvme/target/fc.c:8:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/nvme/target/fc.c:8:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/nvme/target/fc.c:150:2: warning: 'counted_by' should not be applied to an array with element of unknown size because 'struct nvmet_fc_fcp_iod' is a struct type with a flexible array member. This will be an error in a future compiler version [-Wbounds-safety-counted-by-elt-type-unknown-size]
+     150 |         struct nvmet_fc_fcp_iod         fod[] __counted_by(sqsize);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/nvme/target/fc.c:177:1: warning: unused function 'nvmet_fc_iodnum' [-Wunused-function]
+     177 | nvmet_fc_iodnum(struct nvmet_fc_ls_iod *iodptr)
+         | ^~~~~~~~~~~~~~~
+   drivers/nvme/target/fc.c:183:1: warning: unused function 'nvmet_fc_fodnum' [-Wunused-function]
+     183 | nvmet_fc_fodnum(struct nvmet_fc_fcp_iod *fodptr)
+         | ^~~~~~~~~~~~~~~
+   16 warnings generated.
 
 
-vim +466 fs/bcachefs/fsck.c
+vim +150 drivers/nvme/target/fc.c
 
-cc0532900bcf18 Kent Overstreet 2024-03-31  457  
-161718dc9ebbd6 Kent Overstreet 2024-05-26  458  static int reconstruct_inode(struct btree_trans *trans, enum btree_id btree, u32 snapshot, u64 inum)
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  459  {
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  460  	struct bch_fs *c = trans->c;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  461  	unsigned i_mode = S_IFREG;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  462  	u64 i_size = 0;
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  463  
-161718dc9ebbd6 Kent Overstreet 2024-05-26  464  	switch (btree) {
-161718dc9ebbd6 Kent Overstreet 2024-05-26  465  	case BTREE_ID_extents:
-09d4c2acbf4c86 Kent Overstreet 2024-04-01 @466  		struct btree_iter iter = {};
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  467  
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  468  		bch2_trans_iter_init(trans, &iter, BTREE_ID_extents, SPOS(inum, U64_MAX, snapshot), 0);
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  469  		struct bkey_s_c k = bch2_btree_iter_peek_prev(&iter);
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  470  		bch2_trans_iter_exit(trans, &iter);
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  471  		int ret = bkey_err(k);
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  472  		if (ret)
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  473  			return ret;
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  474  
-161718dc9ebbd6 Kent Overstreet 2024-05-26  475  		i_size = k.k->p.offset << 9;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  476  		break;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  477  	case BTREE_ID_dirents:
-161718dc9ebbd6 Kent Overstreet 2024-05-26  478  		i_mode = S_IFDIR;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  479  		break;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  480  	case BTREE_ID_xattrs:
-161718dc9ebbd6 Kent Overstreet 2024-05-26  481  		break;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  482  	default:
-161718dc9ebbd6 Kent Overstreet 2024-05-26  483  		BUG();
-161718dc9ebbd6 Kent Overstreet 2024-05-26  484  	}
-161718dc9ebbd6 Kent Overstreet 2024-05-26  485  
-161718dc9ebbd6 Kent Overstreet 2024-05-26  486  	struct bch_inode_unpacked new_inode;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  487  	bch2_inode_init_early(c, &new_inode);
-161718dc9ebbd6 Kent Overstreet 2024-05-26  488  	bch2_inode_init_late(&new_inode, bch2_current_time(c), 0, 0, i_mode|0600, 0, NULL);
-161718dc9ebbd6 Kent Overstreet 2024-05-26  489  	new_inode.bi_size = i_size;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  490  	new_inode.bi_inum = inum;
-161718dc9ebbd6 Kent Overstreet 2024-05-26  491  
-161718dc9ebbd6 Kent Overstreet 2024-05-26  492  	return __bch2_fsck_write_inode(trans, &new_inode, snapshot);
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  493  }
-09d4c2acbf4c86 Kent Overstreet 2024-04-01  494  
-
-:::::: The code at line 466 was first introduced by commit
-:::::: 09d4c2acbf4c864fef0f520bbcba256c9a19102e bcachefs: reconstruct_inode()
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+   128	
+   129	struct nvmet_fc_tgt_queue {
+   130		bool				ninetypercent;
+   131		u16				qid;
+   132		u16				sqsize;
+   133		u16				ersp_ratio;
+   134		__le16				sqhd;
+   135		atomic_t			connected;
+   136		atomic_t			sqtail;
+   137		atomic_t			zrspcnt;
+   138		atomic_t			rsn;
+   139		spinlock_t			qlock;
+   140		struct nvmet_cq			nvme_cq;
+   141		struct nvmet_sq			nvme_sq;
+   142		struct nvmet_fc_tgt_assoc	*assoc;
+   143		struct list_head		fod_list;
+   144		struct list_head		pending_cmd_list;
+   145		struct list_head		avail_defer_list;
+   146		struct workqueue_struct		*work_q;
+   147		struct kref			ref;
+   148		struct rcu_head			rcu;
+   149		/* array of fcp_iods */
+ > 150		struct nvmet_fc_fcp_iod		fod[] __counted_by(sqsize);
+   151	} __aligned(sizeof(unsigned long long));
+   152	
 
 -- 
 0-DAY CI Kernel Test Service
