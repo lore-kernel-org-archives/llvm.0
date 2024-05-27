@@ -1,118 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBEF1A2C2C;
-	Sun, 26 May 2024 23:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE12C1A2C06
+	for <llvm@lists.linux.dev>; Mon, 27 May 2024 02:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716766462; cv=none; b=WFGC9jqaKQWqTe6SCKk/mNuXoSEsZvI9m4QLUuk47SxXXm/45mVOED4iIjRx8mo+uQDXQOqcqlulIncXR8Mwmu8DgwOtbdMglMezFuSDPbXnmUWzPtyK7AdrKUtJFaRw5P4Y5KJ9lMNFscq/vggayeLZmK76oDOK5dQlwYsYrYw=
+	t=1716775592; cv=none; b=aLZSsUzHakWB346sbq+xKlv8r3HZ7mA8ShAdiGO5k65Jqs6Yj4Py7YbhLX806XgQCzE3z27WmNd2ouiujlzJPv9lSHUROm3rmjlmCzlr6BZ4wD/pW9zvIPf+7Roxg4L7VxaqavEa+5KclWbW5cfUSnaaV4rfG88hr3Vr7C64DvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716766462; c=relaxed/simple;
-	bh=YQOuh/heB2ECjajHc+hfb5AhWWtp9iWjRbj78w+1CBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BRXmAJh2GS4rb07VST0s0O1nzp/n9HjnOmjNM5TlDqFfeClzFdH+9nBUiBpi7XGWnV77Vm5I8D37A9VX8mfuXj3DUl/pU8t4Ji0E88wEal5we2CAmNJevRWdThO20M1yHXYy8UGBB5gOEO9WkRWyWeGk+9nrH/OvIcb+kdNSdbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R7ihNR/3; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716775592; c=relaxed/simple;
+	bh=0KXo3AVNLqFRMvDu3wkXyLN6vqXMeAZYhcWh5lY34Pg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qgQQtN7O55ztWG6bazlyr4hQ3cdKQSv6QzNhmqycsfNs+3GApCzSKxUdtJmic2Ye0GpCpCXT3kYb3y6q4qm5BeuM0lF/Fh2UDeCBbh99vVvFjykeM+FPbBF+mQScsMmYd2sMhFlK22eqXAz3DgIIl+snrxHlnmpT0UVRbCulFJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R0I4gFhU; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R7ihNR/3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716766461; x=1748302461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YQOuh/heB2ECjajHc+hfb5AhWWtp9iWjRbj78w+1CBs=;
-  b=R7ihNR/3+Zyc3PQsihdWDOxbcFe1fvc5Lo8isbCTnnS/xoImMXHGkCQ5
-   YIh6BfsnhTcoqjvzrkA/W1b+9KmBFRKf3zO4X6Rp2zm94pAN7vQ838Hpw
-   ZoTmPUV9+fdzL+gVN7cHxBGeD6zK9eYr7qtJEbOV2/ax22lDmIPSTb07k
-   ggtaf/TcgKlB3TpoOU80F/m+yoxyQkGSGH5nT5ap9qbZAn/5jb7zgZE2U
-   A1E7m5ADdvvqY3giUirPYayrcfgG4e+GjyCs1rA/vCC5pCJPSLu/GOele
-   l+JU96vO+r3W+iQ0PzbOrDc1ug3QzMrBrByHjOiU+JLHqvQxtUtPenOLk
-   g==;
-X-CSE-ConnectionGUID: 1FqrzDLhSQGX/0f0n+3I4Q==
-X-CSE-MsgGUID: dL/GaRLjRNK5RKX4H9qy/g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="35585948"
-X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="35585948"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2024 16:34:21 -0700
-X-CSE-ConnectionGUID: 8PV7+unKQ12ZKoBXrzU2mg==
-X-CSE-MsgGUID: rKWAxDmSRmiheDPISxCmAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="39547247"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 26 May 2024 16:34:19 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBNNW-0008qr-2t;
-	Sun, 26 May 2024 23:34:15 +0000
-Date: Mon, 27 May 2024 07:33:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sui Jingfeng <sui.jingfeng@linux.dev>, Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Sui Jingfeng <sui.jingfeng@linux.dev>
-Subject: Re: [PATCH v6 02/10] drm/bridge: Set firmware node of drm_bridge
- instances automatically
-Message-ID: <202405270622.VDMbp9FR-lkp@intel.com>
-References: <20240526202115.129049-3-sui.jingfeng@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R0I4gFhU"
+X-Envelope-To: lkp@intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716775587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k7LCmvAxIYOVvpO6R7p76ccCzHXaBGKk9+emyZM3oos=;
+	b=R0I4gFhUK6m7i9mSKwrVEjUcuiQ1P348IpC4440HcrJJg7bv6fYwAUySXV/SGhGgW9zlcs
+	yRo1ZDvzT9KfhmZN1HyrVdbVP8WmWV6zwxd+Lt9BvZv3HUYlCjZQ1yneLKl0pIaQKGp6zs
+	25rFeoQthB26h4E/mFz+m0YD3ZEZe4c=
+X-Envelope-To: rfoss@kernel.org
+X-Envelope-To: laurent.pinchart@ideasonboard.com
+X-Envelope-To: llvm@lists.linux.dev
+X-Envelope-To: oe-kbuild-all@lists.linux.dev
+X-Envelope-To: dri-devel@lists.freedesktop.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+Message-ID: <db39b18b-b941-44b8-abeb-d06c5cc087d7@linux.dev>
+Date: Mon, 27 May 2024 10:06:20 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240526202115.129049-3-sui.jingfeng@linux.dev>
+Subject: Re: [PATCH v6 02/10] drm/bridge: Set firmware node of drm_bridge
+ instances automatically
+To: kernel test robot <lkp@intel.com>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20240526202115.129049-3-sui.jingfeng@linux.dev>
+ <202405270622.VDMbp9FR-lkp@intel.com>
+Content-Language: en-US, en-AU
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sui Jingfeng <sui.jingfeng@linux.dev>
+In-Reply-To: <202405270622.VDMbp9FR-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Sui,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-exynos/exynos-drm-next]
-[also build test ERROR on linus/master v6.10-rc1 next-20240523]
-[cannot apply to shawnguo/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-bridge-Allow-using-fwnode-APIs-to-get-the-next-bridge/20240527-042402
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20240526202115.129049-3-sui.jingfeng%40linux.dev
-patch subject: [PATCH v6 02/10] drm/bridge: Set firmware node of drm_bridge instances automatically
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240527/202405270622.VDMbp9FR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405270622.VDMbp9FR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405270622.VDMbp9FR-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/omapdrm/dss/hdmi5.c:487:49: error: expected identifier
-           drm_bridge_add(&hdmi->bridge, &hdmi->pdev->dev.);
-                                                          ^
-   1 error generated.
+Hi,
 
 
-vim +487 drivers/gpu/drm/omapdrm/dss/hdmi5.c
+On 5/27/24 07:33, kernel test robot wrote:
+> Hi Sui,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on drm-exynos/exynos-drm-next]
+> [also build test ERROR on linus/master v6.10-rc1 next-20240523]
+> [cannot apply to shawnguo/for-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-bridge-Allow-using-fwnode-APIs-to-get-the-next-bridge/20240527-042402
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
+> patch link:    https://lore.kernel.org/r/20240526202115.129049-3-sui.jingfeng%40linux.dev
+> patch subject: [PATCH v6 02/10] drm/bridge: Set firmware node of drm_bridge instances automatically
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20240527/202405270622.VDMbp9FR-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405270622.VDMbp9FR-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202405270622.VDMbp9FR-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> drivers/gpu/drm/omapdrm/dss/hdmi5.c:487:49: error: expected identifier
+>             drm_bridge_add(&hdmi->bridge, &hdmi->pdev->dev.);
+>                                                            ^
+>     1 error generated.
+> 
+> 
+> vim +487 drivers/gpu/drm/omapdrm/dss/hdmi5.c
+> 
+>     480	
+>     481	static void hdmi5_bridge_init(struct omap_hdmi *hdmi)
+>     482	{
+>     483		hdmi->bridge.funcs = &hdmi5_bridge_funcs;
+>     484		hdmi->bridge.ops = DRM_BRIDGE_OP_EDID;
+>     485		hdmi->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
+>     486	
+>   > 487		drm_bridge_add(&hdmi->bridge, &hdmi->pdev->dev.);
+>     488	}
+>     489	
+> 
 
-   480	
-   481	static void hdmi5_bridge_init(struct omap_hdmi *hdmi)
-   482	{
-   483		hdmi->bridge.funcs = &hdmi5_bridge_funcs;
-   484		hdmi->bridge.ops = DRM_BRIDGE_OP_EDID;
-   485		hdmi->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
-   486	
- > 487		drm_bridge_add(&hdmi->bridge, &hdmi->pdev->dev.);
-   488	}
-   489	
+
+Sorry, my bad. I have do compile test on ARM64 before posting.
+checkpatch.pl report a style problem, then I manually modify this
+patch, accidentally add the tail '.' character. Will be fixed
+at the next version.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards
+Sui
