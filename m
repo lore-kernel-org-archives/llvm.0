@@ -1,59 +1,62 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25DA5338D
-	for <llvm@lists.linux.dev>; Mon, 27 May 2024 08:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFCFDF60;
+	Mon, 27 May 2024 10:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716798383; cv=none; b=tZWHvuY8Ani9k3Crv0OmpznsKq9hz6e04iNH/RkyE+3nLOZsxBEVDwU8bMDznBIMVtU6U3DZqoQnazvxvZhLZ4NhSAu3xX0AgY+vuTJqtr8q5sLbnfh8H89IihwUKnZdcz0HS9r7mem0YjnxTRgsmrYFddIHdK+t7jp6M/R6q1w=
+	t=1716804685; cv=none; b=TfqrPZHs3iHHPx7NAZrZWp9tsO9EOHdFjpb3pdcjvBITotpcoP/+yrkvkVjKz+qFoNRv8o19wyJHY8OQONGmJxRymfXUEOtyEXotMOGQKCDkCAo29QVzmWCwB8mVsTr59EHPobt4wKycMuhUW+u59L7/OIyLit8XSQAAJ7GFNjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716798383; c=relaxed/simple;
-	bh=N2rkjmod0V5TSK3iX6HgNEPfqUf5A0L9NW1ww3l73+E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YU98xrfu2h/LR/cSMtOE7Y2uOoOxnQQJ5c4gWxcnek6BnAUu9g0idPV3zq8UGi0U77JzEoR8OThhALumNeO19JPHAwnvQVxOEMWwWlHROkfrZt2Lgk+yqGkrVUBgjr3I71yA95cDB0Q4vxUsm2mPo5PrH4oUIpyzbFEV5CeEZKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e2loFAwk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1716804685; c=relaxed/simple;
+	bh=iF1e4OR68r7uRH5SuttU2xbWS5C5hLwh9sBP8FO+9lM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PeFP9e+kyDZVyI7bNh2JpL2U7GLweGV5Hiv/0lR1bdrOU9j4BODxecqHhDVkI/T2wZkKu7XMW2YxfScqZJa4JCSbqY1i6/Yqbvthxuxy5h4G9wCjI+ZXbb1gv9y7CDxZglODKlyBXKgmNlv8kvHyMpQN6gRLPGvpD8IK2H/Czyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jz/sxKoe; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e2loFAwk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716798380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WBAQ3/gOi1m5yeV6rqPAsHdgTfEnytLD8rdeXruMhpE=;
-	b=e2loFAwkm91ynA7s0x3GlMonsHV0UCGLVCYFRLStcAH0XZ9qf+WT0GO0wwPQP1l/IFT8jm
-	k/rMYbP1lQWL5j2A6VJ4vTgYaE5aHLcHKLjEw0mbJc+tzRg/E9+QLsqyDKHMNlLdwq35mU
-	yZOynuz1IOiTy/33AAEMscAR8KOCW6E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-17-F4qUzjGDP1OyWAPoLHzvfQ-1; Mon, 27 May 2024 04:26:15 -0400
-X-MC-Unique: F4qUzjGDP1OyWAPoLHzvfQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14AE7800CAC;
-	Mon, 27 May 2024 08:26:15 +0000 (UTC)
-Received: from localhost (unknown [10.43.135.229])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id AD88540C6CB2;
-	Mon, 27 May 2024 08:26:13 +0000 (UTC)
-Date: Mon, 27 May 2024 10:26:11 +0200
-From: Miroslav Lichvar <mlichvar@redhat.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Justin Stitt <justinstitt@google.com>, John Stultz <jstultz@google.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] ntp: remove accidental integer wrap-around
-Message-ID: <ZlRDoyJk2Erzje_z@localhost>
-References: <20240517-b4-sio-ntp-usec-v2-1-d539180f2b79@google.com>
- <87ed9re7i4.ffs@tglx>
- <87bk4ve5wc.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jz/sxKoe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716804683; x=1748340683;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iF1e4OR68r7uRH5SuttU2xbWS5C5hLwh9sBP8FO+9lM=;
+  b=Jz/sxKoeH4pXPc4WNyb7psMFXPuyGKxuw+n2vPPS7YjXWJu+IB8EJxE1
+   n03XO+n7ZdPcfg0nVEOp5ths7ELBbEY/9pLa67Mfwc57MKuY21kBu+pGq
+   RwhkMyFQ6gFKOaXkW+X3kJoWic4UI9gzPTOc94COSLRKLhK0WN5REGApb
+   p3obQF8bt3EgJfCB4DPlxoGoE3MZf/umHvRP06GtUmLmtDPmRVma6liCk
+   wzTidEADmpf3WxiDUd4jYQW4Z1m52+g9RtejEhyjpme/g0aD08ku/3Hjx
+   kwV2Px39I+29nIqibrvVNfdaPU588UsSZyhwG6fxsnHMlEl++nU4NHNm9
+   g==;
+X-CSE-ConnectionGUID: EkDDl6BhRjySr1oMv0acUQ==
+X-CSE-MsgGUID: YF/s3uZKTxOW3NjaYAsJYQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="23680783"
+X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
+   d="scan'208";a="23680783"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 03:11:13 -0700
+X-CSE-ConnectionGUID: EX1qWCtdSXG5ocjR6v65wg==
+X-CSE-MsgGUID: OmnGnyXPTiG7dDZNxHRB0A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
+   d="scan'208";a="65939837"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 27 May 2024 03:11:11 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBXJs-0009yf-2Y;
+	Mon, 27 May 2024 10:11:08 +0000
+Date: Mon, 27 May 2024 18:11:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: drivers/tty/mxser.c:291:2: warning: 'counted_by' should not be
+ applied to an array with element of unknown size because 'struct mxser_port'
+ is a struct type with a flexible array member. This will be an error in a
+ future compiler version
+Message-ID: <202405271811.Mp20bWge-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,37 +65,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87bk4ve5wc.ffs@tglx>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
 
-On Fri, May 24, 2024 at 02:44:19PM +0200, Thomas Gleixner wrote:
-> On Fri, May 24 2024 at 14:09, Thomas Gleixner wrote:
-> > So instead of turning the clock back, we might be better off to actually
-> > put the normalization in place at the assignment:
-> >
-> >     time_maxerror = min(max(0, txc->maxerror), NTP_PHASE_LIMIT);
-> >
-> > or something like that.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+commit: f34907ecca71177a438bc1f1012e945326f707c3 mxser: Annotate struct mxser_board with __counted_by
+date:   8 months ago
+config: s390-randconfig-002-20240527 (https://download.01.org/0day-ci/archive/20240527/202405271811.Mp20bWge-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405271811.Mp20bWge-lkp@intel.com/reproduce)
 
-Yes, I think that's a better approach. Failing the system call could
-break existing applications, e.g. ntpd can be configured to accept a
-large root distance and it doesn't clamp the maxerror value, while
-updating the PLL offset in the same adjtimex() call.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405271811.Mp20bWge-lkp@intel.com/
 
-> So that commit also removed the sanity check for time_esterror, but
-> that's not doing anything in the kernel other than being reset in
-> clear_ntp() and being handed back to user space. No idea what this is
-> actually used for.
+All warnings (new ones prefixed by >>):
 
-It's a lower-bound estimate of the clock error, which applications can
-check if it's acceptable for them. I think it should be clamped too.
-It doesn't make much sense for it to be larger than the maximum error.
+   In file included from drivers/tty/mxser.c:18:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/tty/mxser.c:24:
+   In file included from include/linux/tty.h:12:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:42:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/tty/mxser.c:24:
+   In file included from include/linux/tty.h:12:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:42:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/tty/mxser.c:24:
+   In file included from include/linux/tty.h:12:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:42:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/tty/mxser.c:291:2: warning: 'counted_by' should not be applied to an array with element of unknown size because 'struct mxser_port' is a struct type with a flexible array member. This will be an error in a future compiler version [-Wbounds-safety-counted-by-elt-type-unknown-size]
+     291 |         struct mxser_port ports[] __counted_by(nports);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   14 warnings generated.
 
-Another possible improvement of adjtimex() would be to set the UNSYNC
-flag immediately in the call if maxerror >= 16s to avoid the delay of
-up to 1 second for applications which check only that flag instead of
-the maxerror value.
+
+vim +291 drivers/tty/mxser.c
+
+   281	
+   282	struct mxser_board {
+   283		unsigned int idx;
+   284		unsigned short nports;
+   285		int irq;
+   286		unsigned long vector;
+   287	
+   288		enum mxser_must_hwid must_hwid;
+   289		speed_t max_baud;
+   290	
+ > 291		struct mxser_port ports[] __counted_by(nports);
+   292	};
+   293	
 
 -- 
-Miroslav Lichvar
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
