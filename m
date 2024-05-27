@@ -1,142 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2707438FB9;
-	Mon, 27 May 2024 16:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4554817E8FC;
+	Mon, 27 May 2024 19:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716825606; cv=none; b=haiEWPw6wm0Xtgt2LFfCykqTfm1oYvfxd7nADX98O09/GiXHwPbDJqZ7N+dWCpqGhWvXwvx5Mn/3dVXuRhtcCUXP1M9SUiaQTlr7NWMiuwFOsh/EVdp1t1vgp1KodCwF9aOSfw2nezHx73wtVQg49BuADipVnXWMZ2lpGcwyi8E=
+	t=1716838972; cv=none; b=RiyGNxjle+s8qIvyEyUpxBI7FSyYviWmbrEmla2WCQiPTcMtFy3hUTlmhRkieOh0yTjlOI8Jn4i8c4FKz35lVxe6SUDvZKnHa6dsm5t48pTeueRbqAnfbwK36vHsC0yWJsh24imPSKJhoSadSG6EzA3+EdlMwE/yZGCb/R3MgJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716825606; c=relaxed/simple;
-	bh=3j6I4oXfoJyk2FD8DzmE8CORnviTv/b07TPvLGl+Hf0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L1XC4yfvn9/pGhOwdITzIUHq/O6RJWuyNiuBMyf34bveY6vMdm10vGI7nUaHMWe233KjJg1dWTDRMwNBhrQ6B9cR5fj+MwBlYG4j3GtXpMyYH+x7FvetjlTfT8nvYnmeoIfVRpLkfQMgdl1EcKOdm7dTwUxZE394kY/dnJpDA0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/8XJZaE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716838972; c=relaxed/simple;
+	bh=X3GDXPn1m/8V1r4YKNbqtXRVUrJs+Sh/0PSSVCqYAKM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=N8cLGy82KBdqikDsTcOkWUGSJNW/tU8HHBxqI2Oy+nfkHOBbo3o3Nb8DwTkXNZNJfkWHRTl8UK4bEbwqTPHOdGcK+DQj6vjG+nazxFgUaLMnwKEMkn/MihjCS1rSEd/LCYxBMselElhIVTgsAu/Iqyu3ZsGV08ByNBTyJK74zkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+Y7M/ay; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/8XJZaE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F333CC2BBFC;
-	Mon, 27 May 2024 16:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716825605;
-	bh=3j6I4oXfoJyk2FD8DzmE8CORnviTv/b07TPvLGl+Hf0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q/8XJZaEAZmUW1fYgIXjoKQfJaX+mSVsfPHrZwE5fsSqdZiWWXyCBfFDRpjsY0rPB
-	 8lt1N2o5sERqeJn6vLMO2NlT9DXpx3Xx4tM9WezJOyYePmR/TcsAhUNrWYbDT2zVVs
-	 YQoIgFeKv8ONoIKGGuc71Fxinp0BQFCSwoMyXZnBJqAX4odIqW5/FgLATQsaSsvoW1
-	 /0AwB14ClTi2SStkR2WIY2aF2Wcd+6XojEZTJu0T5ZmQ7QdaBdQDOy21RgaTdC8Rti
-	 YhSqynuIShshgB0UidXd/3isVpAS/UpEsTK1YORI2iFRlU6EYsMWabF3aavK/VUbOI
-	 TH7o17n92Q/Cw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	bhe@redhat.com,
-	arnd@arndb.de,
-	geert@linux-m68k.org,
-	rppt@kernel.org,
-	stanislav.kinsburskii@gmail.com,
-	wangkefeng.wang@huawei.com,
-	christophe.leroy@csgroup.eu,
-	bhelgaas@google.com,
-	linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.19 2/2] powerpc/io: Avoid clang null pointer arithmetic warnings
-Date: Mon, 27 May 2024 11:59:45 -0400
-Message-ID: <20240527155949.3866553-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240527155949.3866553-1-sashal@kernel.org>
-References: <20240527155949.3866553-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+Y7M/ay"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716838970; x=1748374970;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=X3GDXPn1m/8V1r4YKNbqtXRVUrJs+Sh/0PSSVCqYAKM=;
+  b=Y+Y7M/ayanhrcFG5USiy7/FuMpungyZMp48IzENwrxIEqBKAzA0XBPb9
+   swHhHKORAnxO7TVqQbSg0sN+hpfJgePmS+A0p8Ik2MDuTHMG4C08KAJln
+   4h+lGmKhSpbXbV5V01CajILwo5uObfT588cBSE1ZgvReIutV5YZiGMSEx
+   FpXpUihghtzgc2JuqsKoPXN+fFNaQpNuucXGwK2g7ZNlP7qpEUUV7b9lv
+   HROB5qAumZ0Fh8BwoucHKGqyVsSMHQ6/yepOthygr/srbE95KwwIwsiGX
+   sFGhoSBhty9Eau6uZsG0kITvPbatrAuD/ZB6G3kwiTaglsFqn5cvistTs
+   w==;
+X-CSE-ConnectionGUID: IEUohWSWSd2sjUbJNa2Vtw==
+X-CSE-MsgGUID: zjQppDYdTiShkNO+2OOiOQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38550843"
+X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
+   d="scan'208";a="38550843"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 12:42:48 -0700
+X-CSE-ConnectionGUID: GOGv4u6ERxSCDI1HBpEXLQ==
+X-CSE-MsgGUID: ue9PvyLCQrS627xIdd6RTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
+   d="scan'208";a="39679291"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 27 May 2024 12:42:47 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBgF1-000B24-2O;
+	Mon, 27 May 2024 19:42:43 +0000
+Date: Tue, 28 May 2024 03:41:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_acpi_b2_v6_610_rc1_full 52/54]
+ drivers/tty/serial/8250/8250_platform.c:202:23: error: call to undeclared
+ function 'devm_ioremap'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202405280316.IjfpQEYc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.315
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+tree:   https://github.com/avpatel/linux.git riscv_acpi_b2_v6_610_rc1_full
+head:   0bdb7caa1b23db090f1bdef3c214c52136374124
+commit: b46a331e996d877983f97d4636e86d9c608bb69b [52/54] serial: 8250_platform: Enable generic 16550A platform devices
+config: i386-buildonly-randconfig-003-20240528 (https://download.01.org/0day-ci/archive/20240528/202405280316.IjfpQEYc-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405280316.IjfpQEYc-lkp@intel.com/reproduce)
 
-[ Upstream commit 03c0f2c2b2220fc9cf8785cd7b61d3e71e24a366 ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405280316.IjfpQEYc-lkp@intel.com/
 
-With -Wextra clang warns about pointer arithmetic using a null pointer.
-When building with CONFIG_PCI=n, that triggers a warning in the IO
-accessors, eg:
+All errors (new ones prefixed by >>):
 
-  In file included from linux/arch/powerpc/include/asm/io.h:672:
-  linux/arch/powerpc/include/asm/io-defs.h:23:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     23 | DEF_PCI_AC_RET(inb, u8, (unsigned long port), (port), pio, port)
-        | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ...
-  linux/arch/powerpc/include/asm/io.h:591:53: note: expanded from macro '__do_inb'
-    591 | #define __do_inb(port)          readb((PCI_IO_ADDR)_IO_BASE + port);
-        |                                       ~~~~~~~~~~~~~~~~~~~~~ ^
+>> drivers/tty/serial/8250/8250_platform.c:202:23: error: call to undeclared function 'devm_ioremap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     202 |                 uart.port.membase = devm_ioremap(dev, uart.port.mapbase, uart.port.mapsize);
+         |                                     ^
+>> drivers/tty/serial/8250/8250_platform.c:202:21: error: incompatible integer to pointer conversion assigning to 'unsigned char *' from 'int' [-Wint-conversion]
+     202 |                 uart.port.membase = devm_ioremap(dev, uart.port.mapbase, uart.port.mapsize);
+         |                                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-That is because when CONFIG_PCI=n, _IO_BASE is defined as 0.
 
-Although _IO_BASE is defined as plain 0, the cast (PCI_IO_ADDR) converts
-it to void * before the addition with port happens.
+vim +/devm_ioremap +202 drivers/tty/serial/8250/8250_platform.c
 
-Instead the addition can be done first, and then the cast. The resulting
-value will be the same, but avoids the warning, and also avoids void
-pointer arithmetic which is apparently non-standard.
+   160	
+   161	/*
+   162	 * Generic 16550A platform devices
+   163	 */
+   164	static int serial8250_platform_probe(struct platform_device *pdev)
+   165	{
+   166		struct device *dev = &pdev->dev;
+   167		struct uart_8250_port uart;
+   168		struct resource *regs;
+   169		unsigned char iotype;
+   170		int ret, line;
+   171	
+   172		memset(&uart, 0, sizeof(uart));
+   173		regs = platform_get_resource(pdev, IORESOURCE_IO, 0);
+   174		if (regs) {
+   175			uart.port.iobase = regs->start;
+   176			iotype = UPIO_PORT;
+   177		} else {
+   178			regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   179			if (!regs) {
+   180				dev_err(dev, "no registers defined\n");
+   181				return -EINVAL;
+   182			}
+   183	
+   184			uart.port.mapbase = regs->start;
+   185			uart.port.mapsize = resource_size(regs);
+   186			uart.port.flags = UPF_IOREMAP;
+   187			iotype = UPIO_MEM;
+   188		}
+   189	
+   190		uart.port.uartclk = 1843200; // default
+   191		uart.port.type = PORT_16550A;
+   192		uart.port.dev = &pdev->dev;
+   193		uart.port.flags |= UPF_SKIP_TEST | UPF_BOOT_AUTOCONF;
+   194		ret = uart_read_and_validate_port_properties(&uart.port);
+   195		/* no interrupt -> fall back to polling */
+   196		if (ret == -ENXIO)
+   197			ret = 0;
+   198		if (ret)
+   199			return ret;
+   200	
+   201		if (uart.port.mapbase) {
+ > 202			uart.port.membase = devm_ioremap(dev, uart.port.mapbase, uart.port.mapsize);
+   203			if (!uart.port.membase)
+   204				return -ENOMEM;
+   205		}
+   206	
+   207		/*
+   208		 * The previous call may not set iotype correctly when reg-io-width
+   209		 * property is absent and it doesn't support IO port resource.
+   210		 */
+   211		uart.port.iotype = iotype;
+   212	
+   213		line = serial8250_register_8250_port(&uart);
+   214		if (line < 0)
+   215			return -ENODEV;
+   216	
+   217		platform_set_drvdata(pdev, (void *)((long)line + 1));
+   218		return 0;
+   219	}
+   220	
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Closes: https://lore.kernel.org/all/CA+G9fYtEh8zmq8k8wE-8RZwW-Qr927RLTn+KqGnq1F=ptaaNsA@mail.gmail.com
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://msgid.link/20240503075619.394467-1-mpe@ellerman.id.au
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/powerpc/include/asm/io.h | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-index 4681d4c50567e..5ff8ab12f56c7 100644
---- a/arch/powerpc/include/asm/io.h
-+++ b/arch/powerpc/include/asm/io.h
-@@ -569,12 +569,12 @@ __do_out_asm(_rec_outl, "stwbrx")
- #define __do_inw(port)		_rec_inw(port)
- #define __do_inl(port)		_rec_inl(port)
- #else /* CONFIG_PPC32 */
--#define __do_outb(val, port)	writeb(val,(PCI_IO_ADDR)_IO_BASE+port);
--#define __do_outw(val, port)	writew(val,(PCI_IO_ADDR)_IO_BASE+port);
--#define __do_outl(val, port)	writel(val,(PCI_IO_ADDR)_IO_BASE+port);
--#define __do_inb(port)		readb((PCI_IO_ADDR)_IO_BASE + port);
--#define __do_inw(port)		readw((PCI_IO_ADDR)_IO_BASE + port);
--#define __do_inl(port)		readl((PCI_IO_ADDR)_IO_BASE + port);
-+#define __do_outb(val, port)	writeb(val,(PCI_IO_ADDR)(_IO_BASE+port));
-+#define __do_outw(val, port)	writew(val,(PCI_IO_ADDR)(_IO_BASE+port));
-+#define __do_outl(val, port)	writel(val,(PCI_IO_ADDR)(_IO_BASE+port));
-+#define __do_inb(port)		readb((PCI_IO_ADDR)(_IO_BASE + port));
-+#define __do_inw(port)		readw((PCI_IO_ADDR)(_IO_BASE + port));
-+#define __do_inl(port)		readl((PCI_IO_ADDR)(_IO_BASE + port));
- #endif /* !CONFIG_PPC32 */
- 
- #ifdef CONFIG_EEH
-@@ -590,12 +590,12 @@ __do_out_asm(_rec_outl, "stwbrx")
- #define __do_writesw(a, b, n)	_outsw(PCI_FIX_ADDR(a),(b),(n))
- #define __do_writesl(a, b, n)	_outsl(PCI_FIX_ADDR(a),(b),(n))
- 
--#define __do_insb(p, b, n)	readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
--#define __do_insw(p, b, n)	readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
--#define __do_insl(p, b, n)	readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
--#define __do_outsb(p, b, n)	writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
--#define __do_outsw(p, b, n)	writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
--#define __do_outsl(p, b, n)	writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-+#define __do_insb(p, b, n)	readsb((PCI_IO_ADDR)(_IO_BASE+(p)), (b), (n))
-+#define __do_insw(p, b, n)	readsw((PCI_IO_ADDR)(_IO_BASE+(p)), (b), (n))
-+#define __do_insl(p, b, n)	readsl((PCI_IO_ADDR)(_IO_BASE+(p)), (b), (n))
-+#define __do_outsb(p, b, n)	writesb((PCI_IO_ADDR)(_IO_BASE+(p)),(b),(n))
-+#define __do_outsw(p, b, n)	writesw((PCI_IO_ADDR)(_IO_BASE+(p)),(b),(n))
-+#define __do_outsl(p, b, n)	writesl((PCI_IO_ADDR)(_IO_BASE+(p)),(b),(n))
- 
- #define __do_memset_io(addr, c, n)	\
- 				_memset_io(PCI_FIX_ADDR(addr), c, n)
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
