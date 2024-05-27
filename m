@@ -1,61 +1,58 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4554817E8FC;
-	Mon, 27 May 2024 19:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3166615E5A8;
+	Mon, 27 May 2024 20:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716838972; cv=none; b=RiyGNxjle+s8qIvyEyUpxBI7FSyYviWmbrEmla2WCQiPTcMtFy3hUTlmhRkieOh0yTjlOI8Jn4i8c4FKz35lVxe6SUDvZKnHa6dsm5t48pTeueRbqAnfbwK36vHsC0yWJsh24imPSKJhoSadSG6EzA3+EdlMwE/yZGCb/R3MgJY=
+	t=1716840179; cv=none; b=LKz4MkX4ipELWoXdoq+QI9dbZvnI+gh8+bYaYg1u8eztvF4+vGaBxj/+Plm3lYDNwYdX16RqPWlbg7DyY9mc7uCwECsZb1tb+CL92jpBYurIHCRRM2tZBPbZcl6/h0WDsU9KO6QXz1ybRk2urXrpiNyWD1PC+WZQV/KPlsfvgrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716838972; c=relaxed/simple;
-	bh=X3GDXPn1m/8V1r4YKNbqtXRVUrJs+Sh/0PSSVCqYAKM=;
+	s=arc-20240116; t=1716840179; c=relaxed/simple;
+	bh=cal7mG0qUZDbQaDkg8S5M7WXgm8vuqmTCMSvfQjBd84=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=N8cLGy82KBdqikDsTcOkWUGSJNW/tU8HHBxqI2Oy+nfkHOBbo3o3Nb8DwTkXNZNJfkWHRTl8UK4bEbwqTPHOdGcK+DQj6vjG+nazxFgUaLMnwKEMkn/MihjCS1rSEd/LCYxBMselElhIVTgsAu/Iqyu3ZsGV08ByNBTyJK74zkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+Y7M/ay; arc=none smtp.client-ip=192.198.163.7
+	 Content-Disposition; b=CIbO9v95+qI3xJ0QultGXonORvAYGJcAimgiljm0vZ+w6OfHnbg1kttXlfugS1kaLtL9tWfkPfj9Wb2CGI3j6a4oanGMoCzE02kix99ZOsNGh0xC9rrMnZBH/WfboTTMJp673eJ0X4Vuty6QAJCN0gYEOMMHLHnlYUO1cOA7aIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HttzYzSD; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+Y7M/ay"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HttzYzSD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716838970; x=1748374970;
+  t=1716840177; x=1748376177;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=X3GDXPn1m/8V1r4YKNbqtXRVUrJs+Sh/0PSSVCqYAKM=;
-  b=Y+Y7M/ayanhrcFG5USiy7/FuMpungyZMp48IzENwrxIEqBKAzA0XBPb9
-   swHhHKORAnxO7TVqQbSg0sN+hpfJgePmS+A0p8Ik2MDuTHMG4C08KAJln
-   4h+lGmKhSpbXbV5V01CajILwo5uObfT588cBSE1ZgvReIutV5YZiGMSEx
-   FpXpUihghtzgc2JuqsKoPXN+fFNaQpNuucXGwK2g7ZNlP7qpEUUV7b9lv
-   HROB5qAumZ0Fh8BwoucHKGqyVsSMHQ6/yepOthygr/srbE95KwwIwsiGX
-   sFGhoSBhty9Eau6uZsG0kITvPbatrAuD/ZB6G3kwiTaglsFqn5cvistTs
-   w==;
-X-CSE-ConnectionGUID: IEUohWSWSd2sjUbJNa2Vtw==
-X-CSE-MsgGUID: zjQppDYdTiShkNO+2OOiOQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38550843"
+  bh=cal7mG0qUZDbQaDkg8S5M7WXgm8vuqmTCMSvfQjBd84=;
+  b=HttzYzSD2+JV+JpxljWFkW0rMJySdd0Un7/bY+Uq2JOGK1CE9Ue7nOr4
+   dBK5EDBT85xqsS4HUnfEvZ99ar8WCSom+5OtH5cCv5RBsnQp1com0iY5B
+   7iaMBU0U0pvrmJ5RiiLzWKaHOjv24B4b6D/OoxAX/Juq+Hx1GCrUzXuif
+   NEMykNxnKIy8UzPa2vJJRcVRzI5z2iHOBL6fbT2d8Q+8o6mmD5udeXhMu
+   ErV05LgefSSYymbHVIn9R670BJrqxA5H+udAgDwoasJHFncQF2ENFSxd3
+   S6qCg13PHvh7jl7mFqf307SDnabLmEZcnuRCWlSacOT84S5YYJ+7+yz47
+   g==;
+X-CSE-ConnectionGUID: 9JtH54ufSkW2AgkoEhNyAw==
+X-CSE-MsgGUID: oNGtuRzbSaekIx2fiQBtkQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38551855"
 X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
-   d="scan'208";a="38550843"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 12:42:48 -0700
-X-CSE-ConnectionGUID: GOGv4u6ERxSCDI1HBpEXLQ==
-X-CSE-MsgGUID: ue9PvyLCQrS627xIdd6RTg==
+   d="scan'208";a="38551855"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 13:02:56 -0700
+X-CSE-ConnectionGUID: OvQQXpLfRQuX6VE8i4kLfQ==
+X-CSE-MsgGUID: 7hyXouXUT0eYX5P46h8/3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
-   d="scan'208";a="39679291"
+   d="scan'208";a="34737795"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 27 May 2024 12:42:47 -0700
+  by orviesa010.jf.intel.com with ESMTP; 27 May 2024 13:02:55 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sBgF1-000B24-2O;
-	Mon, 27 May 2024 19:42:43 +0000
-Date: Tue, 28 May 2024 03:41:37 +0800
+	id 1sBgYV-000B2t-36;
+	Mon, 27 May 2024 20:02:52 +0000
+Date: Tue, 28 May 2024 04:02:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sunil V L <sunilvl@ventanamicro.com>
+To: Mike Snitzer <snitzer@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_acpi_b2_v6_610_rc1_full 52/54]
- drivers/tty/serial/8250/8250_platform.c:202:23: error: call to undeclared
- function 'devm_ioremap'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202405280316.IjfpQEYc-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Matthew Sakai <msakai@redhat.com>
+Subject: drivers/md/dm-vdo/int-map.c:87: error: Cannot parse struct or union!
+Message-ID: <202405280322.DuFLX7rb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,92 +62,64 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/avpatel/linux.git riscv_acpi_b2_v6_610_rc1_full
-head:   0bdb7caa1b23db090f1bdef3c214c52136374124
-commit: b46a331e996d877983f97d4636e86d9c608bb69b [52/54] serial: 8250_platform: Enable generic 16550A platform devices
-config: i386-buildonly-randconfig-003-20240528 (https://download.01.org/0day-ci/archive/20240528/202405280316.IjfpQEYc-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405280316.IjfpQEYc-lkp@intel.com/reproduce)
+Hi Mike,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2bfcfd584ff5ccc8bb7acde19b42570414bf880b
+commit: f36b1d3ba533d21b5b793623f05761b0297d114e dm vdo: use a proper Makefile for dm-vdo
+date:   3 months ago
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240528/202405280322.DuFLX7rb-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405280322.DuFLX7rb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405280316.IjfpQEYc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405280322.DuFLX7rb-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/tty/serial/8250/8250_platform.c:202:23: error: call to undeclared function 'devm_ioremap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     202 |                 uart.port.membase = devm_ioremap(dev, uart.port.mapbase, uart.port.mapsize);
-         |                                     ^
->> drivers/tty/serial/8250/8250_platform.c:202:21: error: incompatible integer to pointer conversion assigning to 'unsigned char *' from 'int' [-Wint-conversion]
-     202 |                 uart.port.membase = devm_ioremap(dev, uart.port.mapbase, uart.port.mapsize);
-         |                                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/md/dm-vdo/int-map.c:87: error: Cannot parse struct or union!
+   drivers/md/dm-vdo/int-map.c:105: warning: Function parameter or struct member 'bucket_count' not described in 'int_map'
+   drivers/md/dm-vdo/int-map.c:330: warning: Function parameter or struct member '__always_unused' not described in 'search_hop_list'
+   drivers/md/dm-vdo/int-map.c:330: warning: Excess function parameter 'map' description in 'search_hop_list'
+   drivers/md/dm-vdo/int-map.c:461: warning: Function parameter or struct member '__always_unused' not described in 'move_empty_bucket'
+   drivers/md/dm-vdo/int-map.c:461: warning: Excess function parameter 'map' description in 'move_empty_bucket'
 
 
-vim +/devm_ioremap +202 drivers/tty/serial/8250/8250_platform.c
+vim +87 drivers/md/dm-vdo/int-map.c
 
-   160	
-   161	/*
-   162	 * Generic 16550A platform devices
-   163	 */
-   164	static int serial8250_platform_probe(struct platform_device *pdev)
-   165	{
-   166		struct device *dev = &pdev->dev;
-   167		struct uart_8250_port uart;
-   168		struct resource *regs;
-   169		unsigned char iotype;
-   170		int ret, line;
-   171	
-   172		memset(&uart, 0, sizeof(uart));
-   173		regs = platform_get_resource(pdev, IORESOURCE_IO, 0);
-   174		if (regs) {
-   175			uart.port.iobase = regs->start;
-   176			iotype = UPIO_PORT;
-   177		} else {
-   178			regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   179			if (!regs) {
-   180				dev_err(dev, "no registers defined\n");
-   181				return -EINVAL;
-   182			}
-   183	
-   184			uart.port.mapbase = regs->start;
-   185			uart.port.mapsize = resource_size(regs);
-   186			uart.port.flags = UPF_IOREMAP;
-   187			iotype = UPIO_MEM;
-   188		}
-   189	
-   190		uart.port.uartclk = 1843200; // default
-   191		uart.port.type = PORT_16550A;
-   192		uart.port.dev = &pdev->dev;
-   193		uart.port.flags |= UPF_SKIP_TEST | UPF_BOOT_AUTOCONF;
-   194		ret = uart_read_and_validate_port_properties(&uart.port);
-   195		/* no interrupt -> fall back to polling */
-   196		if (ret == -ENXIO)
-   197			ret = 0;
-   198		if (ret)
-   199			return ret;
-   200	
-   201		if (uart.port.mapbase) {
- > 202			uart.port.membase = devm_ioremap(dev, uart.port.mapbase, uart.port.mapsize);
-   203			if (!uart.port.membase)
-   204				return -ENOMEM;
-   205		}
-   206	
-   207		/*
-   208		 * The previous call may not set iotype correctly when reg-io-width
-   209		 * property is absent and it doesn't support IO port resource.
-   210		 */
-   211		uart.port.iotype = iotype;
-   212	
-   213		line = serial8250_register_8250_port(&uart);
-   214		if (line < 0)
-   215			return -ENODEV;
-   216	
-   217		platform_set_drvdata(pdev, (void *)((long)line + 1));
-   218		return 0;
-   219	}
-   220	
+cc46b9554b3f6d Matthew Sakai 2023-11-16  66  
+cc46b9554b3f6d Matthew Sakai 2023-11-16  67  /**
+cc46b9554b3f6d Matthew Sakai 2023-11-16  68   * struct bucket - hash bucket
+cc46b9554b3f6d Matthew Sakai 2023-11-16  69   *
+cc46b9554b3f6d Matthew Sakai 2023-11-16  70   * Buckets are packed together to reduce memory usage and improve cache efficiency. It would be
+cc46b9554b3f6d Matthew Sakai 2023-11-16  71   * tempting to encode the hop offsets separately and maintain alignment of key/value pairs, but
+cc46b9554b3f6d Matthew Sakai 2023-11-16  72   * it's crucial to keep the hop fields near the buckets that they use them so they'll tend to share
+cc46b9554b3f6d Matthew Sakai 2023-11-16  73   * cache lines.
+cc46b9554b3f6d Matthew Sakai 2023-11-16  74   */
+cc46b9554b3f6d Matthew Sakai 2023-11-16  75  struct __packed bucket {
+cc46b9554b3f6d Matthew Sakai 2023-11-16  76  	/**
+cc46b9554b3f6d Matthew Sakai 2023-11-16  77  	 * @first_hop: The biased offset of the first entry in the hop list of the neighborhood
+cc46b9554b3f6d Matthew Sakai 2023-11-16  78  	 *             that hashes to this bucket.
+cc46b9554b3f6d Matthew Sakai 2023-11-16  79  	 */
+cc46b9554b3f6d Matthew Sakai 2023-11-16  80  	u8 first_hop;
+cc46b9554b3f6d Matthew Sakai 2023-11-16  81  	/** @next_hop: The biased offset of the next bucket in the hop list. */
+cc46b9554b3f6d Matthew Sakai 2023-11-16  82  	u8 next_hop;
+cc46b9554b3f6d Matthew Sakai 2023-11-16  83  	/** @key: The key stored in this bucket. */
+cc46b9554b3f6d Matthew Sakai 2023-11-16  84  	u64 key;
+cc46b9554b3f6d Matthew Sakai 2023-11-16  85  	/** @value: The value stored in this bucket (NULL if empty). */
+cc46b9554b3f6d Matthew Sakai 2023-11-16  86  	void *value;
+cc46b9554b3f6d Matthew Sakai 2023-11-16 @87  };
+cc46b9554b3f6d Matthew Sakai 2023-11-16  88  
+
+:::::: The code at line 87 was first introduced by commit
+:::::: cc46b9554b3f6d2f09b1111386b2706e5b4f56c8 dm vdo: add basic hash map data structures
+
+:::::: TO: Matthew Sakai <msakai@redhat.com>
+:::::: CC: Mike Snitzer <snitzer@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
