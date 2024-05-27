@@ -1,192 +1,158 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86ADABA33
-	for <llvm@lists.linux.dev>; Mon, 27 May 2024 21:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716846453; cv=fail; b=A9unwAYaP7KLMs0hy8E5m+YxlGfiiJM5pW76QVoeIuyFssk09qo6xWZdeR4zvkEOIqNZi5Fmjj45GVhAnH0EqvqOVWFkBTWSwk2jqqhSkvgh+Rp7WYGm3jgP7D8l8g1H2Sq6xvACWNcUD5F6gRjuyJCx4F3wJobuuGus4V8urak=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716846453; c=relaxed/simple;
-	bh=qBaC1q3YXJUrQKcuFKKRQEwUwWPbYAl2olYHZnHzR+c=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=SrcyzMOyBqdBkdq+c9umhL4awl1h8Jnz2hl27e3L6QkDn6zp3cfpJ4cR35vkioYPwgF28HWB+zBbWT3KhhEIgXqSoebzswqCKs/1dT8Oli/kY6i7RfrRe893V7e+2ygR5B2k7DR1g33bKQHL+0r6bX+YXJskVICSs0YJOHbYU0w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FsO42aFt; arc=fail smtp.client-ip=40.107.94.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E4B179A8;
+	Mon, 27 May 2024 21:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716846589; cv=none; b=OY92G725E2RNvOG189jrinTbiW7YyMuTBmJ+CosLX/RDcjQR8kTa5OArm9FhLdrpXlPSKeJqz5vBVweiJygx0jsaCdEEZBKpwfigfEneW9SzbtW/QX3iRee+zwVUOiC53aVw0inls7QAP34vDTOF4IWUG6nO28E2DU9xqxzW9fU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716846589; c=relaxed/simple;
+	bh=TaxDK200MLX2XHmYu+OzsBM+c3Zws6ucFlzjhvEu2t0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KsCurZVWBj/rI88vBvCJRHO4WYZAbYq6QEZWibnhKk+JQsJwTpcS8L5aRIBH0mxPBmcGpw8WaefgzKjui2t7t9oCTqfocwRCNh/CTf/N4fL3xWr9cl55kgAzBHDjyqCIsCpLYYkTsWSulJFhD3C4hsz6Y20SNdNvYTHIPihlEsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fu4vhUwr; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FsO42aFt"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kf8ddbXFqWB8UKQ0lvcXjib2bwpWGT8qfviWONXSPXV3N8X4Fzc4pMSSDFrLmx3TPvsL7RMQ9f5fMgNAziRV4l5Pj64p/EuHnAIMPw12hDd5QCHNiVClc1WW8yQ6mNzYh/23pcIIeC2Cee3PE24AUrpMc7iGnsk7Jwk7aU3vtUujv6QoBU/3FfkJBSeYLkpNYztln+8De1YWdb2NRXFn7XiuVZtI/hgCNONV7nRNbfbGQ/x7O3ypcIA4R6hoo5k1+wHKu3DkBRVrZHI+hNwtQYhqadG+cZmIdJCcOFx/Va9WryeOfftx2ck0m9x/O1/K8MT0Ls/FcQq10jZiU63o/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d4qVoQr0un2mWR9QkXloxNDP3qrlyqvuGO2Y3z72NmU=;
- b=kWViYjYJzmSbdWBCO1WbWjf88X/afgI2RmnD3ajVXXyi17ucFBrTSn3NcXNNIxcfmch7hM50eL4LnLy5CEoxFrdtkfvqm2uMpK8KVrYOb9DPtJHXyAv+N7JcqxnDTh65FBPEnLymdfV/BRMogwlcpeLcmxHCbEV7oh6oBnwxPPfnT7LkwafkZzTrnBKbfxk+wpFXDmr866iiqt+IFEKKBqoUgGNG2FaxXkou4S3CxWerRJlECRGW0ahaQdqTCzru7OwiN74vB0JkqAllE5bU6LAnq6SD84NdkrxHgTkoZnTQQ08/v6WBNdZ6sNj4A3+TsWSe9/gNRdrUGeX6/3KRgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d4qVoQr0un2mWR9QkXloxNDP3qrlyqvuGO2Y3z72NmU=;
- b=FsO42aFtzotVE73hBPAEk0uiLdwH+n4Wy0poYFoAt9c87rE5VRfhpQR7NMulgnCpzZYddBTbT/pc9M7Y+8RSEoQEzYfgDII1TcZhlSPNptpkLVC8sf4WMa+8rRhcSW2LG8X1fxItkUBtSjXL04JW5m8GITvdwRetV2JaawF6kpM14MSTgqkm/w3s5DJGUQ8NQAkir2A6pe6gUyISVk6aBMrt1XE3Bl3Tn6ruLveO3AgxeXyhhK0XZwv67mCNFhDz/DXWM1s62MnFuHzzd+ED0zx7/YSUfLVU8k/AIfCBhk9CSlhDIICGIYF0min0LgvHhB1FXLU3Scl/Jp1ASbH/FQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by SN7PR12MB7955.namprd12.prod.outlook.com (2603:10b6:806:34d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.29; Mon, 27 May
- 2024 21:47:27 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7611.030; Mon, 27 May 2024
- 21:47:27 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Beau Belgrave <beaub@linux.microsoft.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	sunliming <sunliming@kylinos.cn>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2] selftests/user_events: silence a clang warning: address of packed member
-Date: Mon, 27 May 2024 14:47:04 -0700
-Message-ID: <20240527214704.300444-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.1
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR04CA0002.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::12) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fu4vhUwr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716846587; x=1748382587;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TaxDK200MLX2XHmYu+OzsBM+c3Zws6ucFlzjhvEu2t0=;
+  b=fu4vhUwrCpQmDtMvKlT9cKrSH8NRnhkPIRS+c+izG+WOvWLKnS0FwIVr
+   Fdh+Afv8deWFkynBj12cCtGevVv40jGnRz9nAvCeor9Y+65IjMgcOnEX/
+   bzZ9RhKg/WLq2iL7bxqPWvxz3VGgUp2EXRD9+swAOYuuZTddGn2AbZ2Zr
+   JM8+hFNGDm4zO+AW3j48wjtBgVM8/grAU3dat/GyJqoqPTP2mSFeEWOda
+   3oPyW5EtzQBfZMehwgGdrqD4vq6gN3Toy60OyPwH7n/cHb5/rHlCCe0XI
+   UkgZMVzCoUBhntb/J0gKxbpKwAimdvmyndFwr7072vBOVV/T5Nh5IGQNu
+   A==;
+X-CSE-ConnectionGUID: MF9jS5voQ7qNleh/iBK5xg==
+X-CSE-MsgGUID: fSMPPXRhSAiHZBioslhn/w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38555483"
+X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
+   d="scan'208";a="38555483"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 14:49:46 -0700
+X-CSE-ConnectionGUID: oe1W3xljSB+fH3HMu+bWCQ==
+X-CSE-MsgGUID: Xkj9r93iQWm4+yqb8h8VjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,193,1712646000"; 
+   d="scan'208";a="72271601"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 27 May 2024 14:49:45 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBiDu-000B87-0T;
+	Mon, 27 May 2024 21:49:42 +0000
+Date: Tue, 28 May 2024 05:49:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:execmem/x86-rox/rfc-v2 6/10] mm/execmem.c:244:2: error: call
+ to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202405280506.0poiRvHZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|SN7PR12MB7955:EE_
-X-MS-Office365-Filtering-Correlation-Id: 17694fca-8c59-4582-a179-08dc7e9699d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|7416005|1800799015;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?x+JGId/vBcpAA/ccmffbNzCGTcN50WHT+XmzFWopgnw12JUd/68rKt2iLxUg?=
- =?us-ascii?Q?xIt5g1zj6g9/RjqdILTQKCeprePcDfs6lRWrjG8BoPzYYTP2WACCVagEFUVM?=
- =?us-ascii?Q?UrF+DXQD3cgvJmR1EGIqC36bWjmUVHvUaw/fimU3MmSAQsvMwiRJpnkCV/y0?=
- =?us-ascii?Q?jNLVsLh/v44uOhZFYG4ZEZCTUaZhBzvrQVJvtLb5EksMvV5Fc7C0s25PNFxN?=
- =?us-ascii?Q?xo/B4pz7zxFk4ZuN8WLEVNo04KCB1MfrwiNcScy3EHMqLvP2ainA7UORB66S?=
- =?us-ascii?Q?LxvEiQMc7ql/dPHe9DMdGUEHNfvlRQde+kwKOuA7lLHewoEa/vy8zDq9LRPb?=
- =?us-ascii?Q?4ROli8IQjN1p9otwEHXhz7PEc89GAn5OeJC3qwcuMylILEoyXZXs+EpGMIV4?=
- =?us-ascii?Q?mgfYX8U86HI5Ke1yqjQ247L5i5+NWji+g2XH3SpF6pFXXCqyJJE4UXP5bIUS?=
- =?us-ascii?Q?hv2EwkCr0YtokANJxW2TqO2MuuBn0kaiXvkMRQ+dRn/2PT1chk+lIB9aa/xO?=
- =?us-ascii?Q?J5tLHsPzu/SQA882VB47J8l5lkWBNiZF/ZJZ9vSS94mc9jhhgY+7Bb2NimE2?=
- =?us-ascii?Q?79k3OZJubs/dZkW6c0meN5CC1RFoSxZX0LFWAC2UaW8f4MbHKEXRivF13wvX?=
- =?us-ascii?Q?dijPRuqjhBZs//OOAHSXSkn0eqnUZYv2ut86Ob9DZJkaIXRdbnFGLcB1N3Wj?=
- =?us-ascii?Q?+mobHolhdTjT5QNOCnJKW+pbLizqzi3MTE0rjwFYusmrB7zeLPbPUTbIz9Cs?=
- =?us-ascii?Q?YzG9vDFyJgEXNrGF57szdU687HRYhMAGHplD2fEgReXSMMGPq/hJOYKr6qgO?=
- =?us-ascii?Q?sS9E95yHBCIULuxB3l8GprNL8ziqxNS6zpsN8Xb3SJg1Rs9oHPoVvr/RtwbQ?=
- =?us-ascii?Q?JrWdV8FCtUgVd2I7hpgMKsAU51rYb60AhJj1p/+7CR44ZSOrxhAggKNYumOW?=
- =?us-ascii?Q?ouuQSUG/aE+Ep4VAqLOArPHKWL+PDrmF3RNeSp0n2e2o+tabX7s1VS+bYm+8?=
- =?us-ascii?Q?NWhPBBplLRhA9+ndNuIsi/WYYPHl5NbBPaYrfPskSBCyHdAfINTTn3kwfiel?=
- =?us-ascii?Q?4hdHFBsX/HayuEFNQNTFSYqQPWOVxgB/2iPxmeTZp8WdsDygFXGQs8LEImf1?=
- =?us-ascii?Q?Srq215hIZ3uat4Ow+pTBWHMgzZuhlUZh/q+iu2Hed3l8Ld6IuhtyFilHnsq6?=
- =?us-ascii?Q?uIBVdhrlUelL1khQXOv/InSoY4QGP7o1xu4IHtS4OilEzFbahXnCsHeXDcCr?=
- =?us-ascii?Q?D/ha8R7WL6DGFBZXbU78Di1Ze3Alp7EYUxtFRQDVRA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(7416005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?h9NahQyMyUXePzOavFYj28xz/kpwmV4MQWyJmXiQMC7uN/Llu3dzj5AtihCv?=
- =?us-ascii?Q?LW0THgMvNQEez4P+gAbd2PdLyFzUW/jEgMsyu13xiJwvl0LAcBmMP59S+tVi?=
- =?us-ascii?Q?YOpZGyivZgPHiLvhY/vDsWO6mvnoHFWrPWWvcPa9ros9Tl/yALwRjtUoNHgi?=
- =?us-ascii?Q?z6m/6EStN/JTaxPuZGDtUw1E5SVKpW0LvV4JrrpeB7HHwL9NcX2rljr7tWzW?=
- =?us-ascii?Q?cjAwJZJpk6xRMVfAuWLeCoeUZYKX/hvJLHHN415KEhxYzZg/APY0NQixExWF?=
- =?us-ascii?Q?Mg9OheM9Oi/jjqr1jcDr4v1rtj4qQ9+0A0la1HTh4+NmZ4eMmJPEfWGiSt8z?=
- =?us-ascii?Q?5/Z3p8EZNnamoe9f1G/sk3Kbs5nF6yb7DXxRUTiWQw0JZKTlsxUebiltz6gF?=
- =?us-ascii?Q?XSIKP9AVD4nkBiFY9+krAxAV83f7Ts7fdPnDr7I16RWcHkzx8MUlm7zW/c31?=
- =?us-ascii?Q?XvktXoJJL+OejKm0b0IVFN4dcZntK02tuXrP8PYFA+OBdR3UzsC8RCoYzvZB?=
- =?us-ascii?Q?7b0hx9OVqqLD2rQYcMSVh7nH1S5T2fPwMOOSjX5744fD2Bo+kjf1YrFs0M0k?=
- =?us-ascii?Q?77nJxy0FF7dtiYHgUSZ0gvvENo3fkeq4CUop7DFXA8/K70vsPleCG27xJFzh?=
- =?us-ascii?Q?byklG5fHf64vVLy2qBwy+FvtuBBtDi2OyDLngzQb9WCjsvqQ4JIp1xfIPjhX?=
- =?us-ascii?Q?G1g5tXVX2O+XuAkO2y1V8yImfcbinqtrGMvH+THaH+xDWI+LqXLrAws7ywgh?=
- =?us-ascii?Q?0p6sBX+ZAPPnnu3MmEIkDwTlrFG360ZBn/LBPwFjsSnzccR7vosK60qGRMRM?=
- =?us-ascii?Q?O9kkNNE0y1Zta6MOa1HRfC4cJ+FrBRpiDR0DcKmTZPgSsMk/zVIgmfHEaaFX?=
- =?us-ascii?Q?2inWt1wDzse7xPsfUgQldLB/ABbfPWSusLq9dqo2yqgEjoFCXQdPNryoL+14?=
- =?us-ascii?Q?/JPoNYxI8y1XSzi5+5Ne3fQNQxuHJgKTMrMqPYV2eRAxx51pIc2xgFr+DeDb?=
- =?us-ascii?Q?rV9z0IiTk85WoXuZijFEbaGz/YuALSiAtyiSK/pD+t/DGS5UnkwU85nwIQPW?=
- =?us-ascii?Q?tKMv2aM8mYHVUv0/+uXGJhag7Uv8zVBNp1vjeIcseIX2wRlWwSGQpWHqmTdw?=
- =?us-ascii?Q?6E1kpgkS+0495ZL4+b6x5Xzq1dwR9/bdetkNeR+R4YthRmR/jNYlGIKCc/BP?=
- =?us-ascii?Q?OERLZ4jUiBhHzE9lP72KZD8RPb1mUt2ktaWk8sxlD69AoBQveq5PTs56fINi?=
- =?us-ascii?Q?gfjYtIkkgG7K+75UXxi3IUqavcT48JlaNeUHfy/Th7IIx59uPG0FXmQoc9l1?=
- =?us-ascii?Q?bI2kmKfawhXb+nWdDb1JwVPk1TMBkw/Nl2jpUmDCqaNuuIiUSR+IJs+7jBCC?=
- =?us-ascii?Q?zujUe6lZIW1joq1JRsjFSCplY/7nd1GkjqB3w4lJk7yQCfi99IMOZlLYL6ue?=
- =?us-ascii?Q?bFihOX3F7O2BtRwf2PdAh5BVgwDgfhuiVd7GjQb24eVUF/1ngkCoD5DUXcQj?=
- =?us-ascii?Q?oHf/cWFgrYcBqAwU88dyeObJaom7r+2wdQG/I9wQ58+QfFy8uk5RvIMogU+W?=
- =?us-ascii?Q?1svJnNsKKfVpDOCEezDDdIpx/1jkpCSCNgtRbRWJ+Y9dHJSWn2XSVJk+aZSH?=
- =?us-ascii?Q?CA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17694fca-8c59-4582-a179-08dc7e9699d2
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2024 21:47:27.1323
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dye9BvUTuksbe157hgzLcNX6x4RUZ3POCKv1PdIsAS9WssV/BlCpTNyTwDMtkLoRipKSiBpcs80dmjjtHwximA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7955
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When building with clang, via:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git execmem/x86-rox/rfc-v2
+head:   1ed68c458a903b01b26064ff71cc5ac567515aaa
+commit: 76352f0fdb291c3691fef5f903ec42d5aced661a [6/10] execmem: add support for cache of large ROX pages
+config: arm-randconfig-003-20240528 (https://download.01.org/0day-ci/archive/20240528/202405280506.0poiRvHZ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405280506.0poiRvHZ-lkp@intel.com/reproduce)
 
-    make LLVM=1 -C tools/testing/selftest
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405280506.0poiRvHZ-lkp@intel.com/
 
-...clang warns about "taking address of packed member 'write_index' ".
-This is not particularly helpful, because the test code really wants to
-write to exactly this location, and if it ends up being unaligned, then
-the test won't work (and may segfault, depending on the CPU type).
+All errors (new ones prefixed by >>):
 
-If that ever comes up, it will be obvious and can be fixed. But all it's
-doing now is prevent a clean clang build, so disable the warning.
-
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
-
-Changes since the first version:
-
-1) Rebased onto Linux 6.10-rc1
+   In file included from mm/execmem.c:9:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   mm/execmem.c:54:24: error: use of undeclared identifier 'PMD_SIZE'
+      54 |                 if (IS_ALIGNED(size, PMD_SIZE) && IS_ALIGNED(mas.index, PMD_SIZE)) {
+         |                                      ^
+   mm/execmem.c:54:59: error: use of undeclared identifier 'PMD_SIZE'
+      54 |                 if (IS_ALIGNED(size, PMD_SIZE) && IS_ALIGNED(mas.index, PMD_SIZE)) {
+         |                                                                         ^
+   mm/execmem.c:88:11: error: use of undeclared identifier 'PMD_SIZE'
+      88 |                 align = PMD_SIZE;
+         |                         ^
+   mm/execmem.c:228:30: error: use of undeclared identifier 'PMD_SIZE'
+     228 |         alloc_size = round_up(size, PMD_SIZE);
+         |                                     ^
+>> mm/execmem.c:244:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     244 |         flush_tlb_kernel_range(start, end);
+         |         ^
+   mm/execmem.c:249:12: error: use of undeclared identifier 'PMD_SHIFT'
+     249 |                                        PMD_SHIFT);
+         |                                        ^
+   1 warning and 6 errors generated.
 
 
-thanks,
-John Hubbard
+vim +/flush_tlb_kernel_range +244 mm/execmem.c
 
+   218	
+   219	static int execmem_cache_populate(struct execmem_range *range, size_t size)
+   220	{
+   221		unsigned long vm_flags = VM_FLUSH_RESET_PERMS | VM_ALLOW_HUGE_VMAP;
+   222		unsigned long start, end;
+   223		struct vm_struct *vm;
+   224		size_t alloc_size;
+   225		int err = -ENOMEM;
+   226		void *p;
+   227	
+   228		alloc_size = round_up(size, PMD_SIZE);
+   229		p = execmem_vmalloc(range, alloc_size, PAGE_KERNEL, vm_flags);
+   230		if (!p)
+   231			return err;
+   232	
+   233		vm = find_vm_area(p);
+   234		if (!vm)
+   235			goto err_free_mem;
+   236	
+   237		/* fill memory with instructions that will trap */
+   238		execmem_fill_trapping_insns(p, alloc_size, /* writable = */ true);
+   239	
+   240		start = (unsigned long)p;
+   241		end = start + alloc_size;
+   242	
+   243		vunmap_range_noflush(start, end);
+ > 244		flush_tlb_kernel_range(start, end);
+   245	
+   246		/* FIXME: handle direct map alias */
+   247	
+   248		err = vmap_pages_range_noflush(start, end, range->pgprot, vm->pages,
+   249					       PMD_SHIFT);
+   250		if (err)
+   251			goto err_free_mem;
+   252	
+   253		err = execmem_cache_add(p, alloc_size);
+   254		if (err)
+   255			goto err_free_mem;
+   256	
+   257		return 0;
+   258	
+   259	err_free_mem:
+   260		vfree(p);
+   261		return err;
+   262	}
+   263	
 
- tools/testing/selftests/user_events/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/testing/selftests/user_events/Makefile b/tools/testing/selftests/user_events/Makefile
-index 10fcd0066203..617e94344711 100644
---- a/tools/testing/selftests/user_events/Makefile
-+++ b/tools/testing/selftests/user_events/Makefile
-@@ -1,5 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
-+
-+ifneq ($(LLVM),)
-+    CFLAGS += -Wno-address-of-packed-member
-+endif
-+
- LDLIBS += -lrt -lpthread -lm
- 
- TEST_GEN_PROGS = ftrace_test dyn_test perf_test abi_test
-
-base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
 -- 
-2.45.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
