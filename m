@@ -1,63 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCD81BDDF;
-	Mon, 27 May 2024 06:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25DA5338D
+	for <llvm@lists.linux.dev>; Mon, 27 May 2024 08:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716791552; cv=none; b=FFBo7aOh3b2Q6W+8lOXjRYmEzjH3J1wYEKwfJMGK16XPgiGJF5xCpqx3HHCaVcbjUveQbn4CLO6SZZLON5QZEXtexBHgWaqQPSkm0JHIW+Yd809v2ZBudN6VuZDDWN8n08ntRPdU/bI1LMQEypg2iYk0cp7v46CsvgKxaHckqcw=
+	t=1716798383; cv=none; b=tZWHvuY8Ani9k3Crv0OmpznsKq9hz6e04iNH/RkyE+3nLOZsxBEVDwU8bMDznBIMVtU6U3DZqoQnazvxvZhLZ4NhSAu3xX0AgY+vuTJqtr8q5sLbnfh8H89IihwUKnZdcz0HS9r7mem0YjnxTRgsmrYFddIHdK+t7jp6M/R6q1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716791552; c=relaxed/simple;
-	bh=auVjQlWyoHQdIMybmSN8O+mK3/mRNQukHdMV1W+b0oA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RMIXP1RU3OyTZBc6MzTFuwSaEw9cCM0k8TEDBbd1OQHqErMjcpiZ7iGdpZSy1HIUrKIb02J2WpIKO1aSbC/G3gD4XSlceKz4y243jYU3Qq349M2UN/zzrLWdv1Po7Kfuvo2/j6FUzTroA7K1mroHwXrCKos7RNpm1uUhy0fcuIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LXpdJ4Qx; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716798383; c=relaxed/simple;
+	bh=N2rkjmod0V5TSK3iX6HgNEPfqUf5A0L9NW1ww3l73+E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YU98xrfu2h/LR/cSMtOE7Y2uOoOxnQQJ5c4gWxcnek6BnAUu9g0idPV3zq8UGi0U77JzEoR8OThhALumNeO19JPHAwnvQVxOEMWwWlHROkfrZt2Lgk+yqGkrVUBgjr3I71yA95cDB0Q4vxUsm2mPo5PrH4oUIpyzbFEV5CeEZKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e2loFAwk; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LXpdJ4Qx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716791550; x=1748327550;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=auVjQlWyoHQdIMybmSN8O+mK3/mRNQukHdMV1W+b0oA=;
-  b=LXpdJ4QxT3+LuakAbjZTMQF5eMGjoUDQEbjgaA1+CahEqHbRB4uF0pNI
-   kAsjekAsf/75zKNHGIY2to4YahqTjY8jzGApdlby8xmtG60p86vaRBqSD
-   CKpUx6PQg7M1gj0Lqx1dT6ApqinCuPqGWzSCqgvj9hP/rfYrepdzY3Lv6
-   Ot/fpqilxq/XlMa0aJBgmOB1WSwvlM9rQTGpwO/NB37Taik8v+wR0FAql
-   h1QUhCVEF+y4rGenvnA34ckFgfBPso8muid4UZoKy0V0ayWpf/3LRvAEK
-   ct5sYrE4mb6pVFLvmxamuNuuNQw6UzdBnJqAZmORvB441f6L9L/EZ/uep
-   A==;
-X-CSE-ConnectionGUID: z6mmB5PDTAi1/rDAA8jQpQ==
-X-CSE-MsgGUID: JQ8IopFCTCyIMlZFjT1kiw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="13215151"
-X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="13215151"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2024 23:32:29 -0700
-X-CSE-ConnectionGUID: tVu+4zmCQdaSKioLnOq7Hg==
-X-CSE-MsgGUID: gde25LMFRPGtsewYoyXRiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,191,1712646000"; 
-   d="scan'208";a="57847351"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 26 May 2024 23:32:26 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBTu9-0009Wj-2r;
-	Mon, 27 May 2024 06:32:22 +0000
-Date: Mon, 27 May 2024 14:31:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Chaitanya Kulkarni <kch@nvidia.com>
-Subject: drivers/nvme/target/fc.c:150:2: warning: 'counted_by' should not be
- applied to an array with element of unknown size because 'struct
- nvmet_fc_fcp_iod' is a struct type with a flexible array member. This will
- be an error in a future compiler version
-Message-ID: <202405271448.bD0Hn0p4-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e2loFAwk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716798380;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WBAQ3/gOi1m5yeV6rqPAsHdgTfEnytLD8rdeXruMhpE=;
+	b=e2loFAwkm91ynA7s0x3GlMonsHV0UCGLVCYFRLStcAH0XZ9qf+WT0GO0wwPQP1l/IFT8jm
+	k/rMYbP1lQWL5j2A6VJ4vTgYaE5aHLcHKLjEw0mbJc+tzRg/E9+QLsqyDKHMNlLdwq35mU
+	yZOynuz1IOiTy/33AAEMscAR8KOCW6E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-17-F4qUzjGDP1OyWAPoLHzvfQ-1; Mon, 27 May 2024 04:26:15 -0400
+X-MC-Unique: F4qUzjGDP1OyWAPoLHzvfQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14AE7800CAC;
+	Mon, 27 May 2024 08:26:15 +0000 (UTC)
+Received: from localhost (unknown [10.43.135.229])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id AD88540C6CB2;
+	Mon, 27 May 2024 08:26:13 +0000 (UTC)
+Date: Mon, 27 May 2024 10:26:11 +0200
+From: Miroslav Lichvar <mlichvar@redhat.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Justin Stitt <justinstitt@google.com>, John Stultz <jstultz@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] ntp: remove accidental integer wrap-around
+Message-ID: <ZlRDoyJk2Erzje_z@localhost>
+References: <20240517-b4-sio-ntp-usec-v2-1-d539180f2b79@google.com>
+ <87ed9re7i4.ffs@tglx>
+ <87bk4ve5wc.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,132 +62,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <87bk4ve5wc.ffs@tglx>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-commit: ccd3129aca286c41616afe357e3494c5b43350a0 nvmet-fc: Annotate struct nvmet_fc_tgt_queue with __counted_by
-date:   8 months ago
-config: s390-randconfig-002-20240527 (https://download.01.org/0day-ci/archive/20240527/202405271448.bD0Hn0p4-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7aa382fd7257d9bd4f7fc50bb7078a3c26a1628c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240527/202405271448.bD0Hn0p4-lkp@intel.com/reproduce)
+On Fri, May 24, 2024 at 02:44:19PM +0200, Thomas Gleixner wrote:
+> On Fri, May 24 2024 at 14:09, Thomas Gleixner wrote:
+> > So instead of turning the clock back, we might be better off to actually
+> > put the normalization in place at the assignment:
+> >
+> >     time_maxerror = min(max(0, txc->maxerror), NTP_PHASE_LIMIT);
+> >
+> > or something like that.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405271448.bD0Hn0p4-lkp@intel.com/
+Yes, I think that's a better approach. Failing the system call could
+break existing applications, e.g. ntpd can be configured to accept a
+large root distance and it doesn't clamp the maxerror value, while
+updating the PLL offset in the same adjtimex() call.
 
-All warnings (new ones prefixed by >>):
+> So that commit also removed the sanity check for time_esterror, but
+> that's not doing anything in the kernel other than being reset in
+> clear_ntp() and being handed back to user space. No idea what this is
+> actually used for.
 
-   In file included from drivers/nvme/target/fc.c:6:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2168:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/nvme/target/fc.c:8:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/nvme/target/fc.c:8:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/nvme/target/fc.c:8:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/nvme/target/fc.c:150:2: warning: 'counted_by' should not be applied to an array with element of unknown size because 'struct nvmet_fc_fcp_iod' is a struct type with a flexible array member. This will be an error in a future compiler version [-Wbounds-safety-counted-by-elt-type-unknown-size]
-     150 |         struct nvmet_fc_fcp_iod         fod[] __counted_by(sqsize);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/nvme/target/fc.c:177:1: warning: unused function 'nvmet_fc_iodnum' [-Wunused-function]
-     177 | nvmet_fc_iodnum(struct nvmet_fc_ls_iod *iodptr)
-         | ^~~~~~~~~~~~~~~
-   drivers/nvme/target/fc.c:183:1: warning: unused function 'nvmet_fc_fodnum' [-Wunused-function]
-     183 | nvmet_fc_fodnum(struct nvmet_fc_fcp_iod *fodptr)
-         | ^~~~~~~~~~~~~~~
-   16 warnings generated.
+It's a lower-bound estimate of the clock error, which applications can
+check if it's acceptable for them. I think it should be clamped too.
+It doesn't make much sense for it to be larger than the maximum error.
 
-
-vim +150 drivers/nvme/target/fc.c
-
-   128	
-   129	struct nvmet_fc_tgt_queue {
-   130		bool				ninetypercent;
-   131		u16				qid;
-   132		u16				sqsize;
-   133		u16				ersp_ratio;
-   134		__le16				sqhd;
-   135		atomic_t			connected;
-   136		atomic_t			sqtail;
-   137		atomic_t			zrspcnt;
-   138		atomic_t			rsn;
-   139		spinlock_t			qlock;
-   140		struct nvmet_cq			nvme_cq;
-   141		struct nvmet_sq			nvme_sq;
-   142		struct nvmet_fc_tgt_assoc	*assoc;
-   143		struct list_head		fod_list;
-   144		struct list_head		pending_cmd_list;
-   145		struct list_head		avail_defer_list;
-   146		struct workqueue_struct		*work_q;
-   147		struct kref			ref;
-   148		struct rcu_head			rcu;
-   149		/* array of fcp_iods */
- > 150		struct nvmet_fc_fcp_iod		fod[] __counted_by(sqsize);
-   151	} __aligned(sizeof(unsigned long long));
-   152	
+Another possible improvement of adjtimex() would be to set the UNSYNC
+flag immediately in the call if maxerror >= 16s to avoid the delay of
+up to 1 second for applications which check only that flag instead of
+the maxerror value.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Miroslav Lichvar
+
