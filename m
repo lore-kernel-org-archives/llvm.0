@@ -1,58 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953722940D;
-	Tue, 28 May 2024 23:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC0713F421;
+	Tue, 28 May 2024 23:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716939175; cv=none; b=AkODyWc8J1ghiwTgATKywR+F82trLKB3A5QvxR6okNzvSi43h4yU2jSRQG52HUZZ+3ONjbXQdBJOMt9U0syd1NSh50f50vy6hmceODbbyNb4j+ToP1+ykRjXVd2Dpg4jfBT59WWQtKI7Z6MsrD4bWJ8NW93Lok1PAFvB75Orfp0=
+	t=1716939178; cv=none; b=X2gUzm1UUC3p8L/kpIP0Y3dxcUCvkSpQnRVUo5V4j5RD3q0mhUisyabjHZOyeiXdigW7B2TckZXAlcrBwjmpFzknDgkJAMjuBnxzFOYoD0paK7xGcJui+7+85hN4uaDI6JT1M3YNHk1g+ZlU95YeRG63ifd+3OtaSsGnJma503A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716939175; c=relaxed/simple;
-	bh=ufvN3pUNYe6Q1J3ne+40KdYJEK72jHy1xBPQYxwB9ag=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UrcsFuNSocHVLz1iYeDM80Rf0qFCtjdj8VX/KTYMZwQjvSB1CMosn1lTktdPMSkflSCvmaRYF8JGCPHzhgpDWZIsf8E8iftuqQIrNRzRCXrkNRO0qWZ1e1mojj4Th+N3J6eAzy4qRsNfTTE8kjQUnFggghFD5z5N5NTNH9CWOi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LWkhNHiQ; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1716939178; c=relaxed/simple;
+	bh=h9fhzysPsCiidwmTP22MYeTE5zTE65ef2fk1cKfix7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Iq8hLskci8YbbMeTOavAbPvszZAz7Q8HFudiCh0l2EXpzBYWXsBEU8sdDM0OU861KZ3kiGKNDnHJqHhVNMHvNhhTQQzoVfdHZCNLoGQY5Zj0XwBhcGd7BD2vuQiE9uSub4/8XvMGqBibkx5pbMwoXYFFPeqyrSARiTJQ5FF3UbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QB24/QyW; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LWkhNHiQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QB24/QyW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716939173; x=1748475173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ufvN3pUNYe6Q1J3ne+40KdYJEK72jHy1xBPQYxwB9ag=;
-  b=LWkhNHiQ+1IVee00/xev4SPkUAs/fSfDaUcmT4Nhw0v/0dzP14q9VVM+
-   96sU8TfEiCat6aNR2h8smUbrW+tpGUfkSi38iudzQuYAYTU2M1IF7V15q
-   a1X6RofVYZ6yZ7GHj+u+MEFFMhGlOj3g7TmKbDYh5SFHNYc7sf8XyW8+s
-   Qsr5xVZpAzuJfTBVHNMByQWjKIQ0Q1ScWLEfSA4odI4bZITUQsAdYSE+u
-   By5Yyae4RUJTPYTALiJEvEojR1KbuAFzUtyzNn6X+QGHsl3un8Wg5OyPR
-   C2skvFX1I/eHPbkVNRPe1XqoUmTz1Dy8Dkn87AKIvRCWByjoWpXYJHT0W
+  t=1716939175; x=1748475175;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h9fhzysPsCiidwmTP22MYeTE5zTE65ef2fk1cKfix7s=;
+  b=QB24/QyWk3EzVEc/PpWUIEXl2g7c1GH53EzFHgWeugvEIZp8feeC8Cu3
+   ujIOFswnJPUD5uDs6oQfkRiyxIpYNLqf022Ihb7aElFzLNrjKnzrioBOZ
+   zefv65qVVN7PBHwIPllp9Cqkm/6w7pBFS1/iExNhWjT4WviZDXAfUA3sk
+   b3d2SGPx3egez+Yt42CQGD3TJgyI1DfXa6cgDtI32gMw0+y/vNJDfISP6
+   4kjhyJLhuQKRcbbplIYuMO7JLrVFlfCRSOJsZHzqdBWILbeDnh2P0l/7T
+   EkrJclDQPy9ItWzNBy7oNK9NENGdsY9Oul7mY8V4bG+/OQcPuIRHRxQFS
    A==;
-X-CSE-ConnectionGUID: xZy/WbOVS1+hx/0NEQa8sg==
-X-CSE-MsgGUID: cyD+VYF/Qt+UG25CrcZLeA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="30842627"
+X-CSE-ConnectionGUID: BAiG+HLWS82aJsIiyR/cvQ==
+X-CSE-MsgGUID: Sib68luJQ06seW6IT61W1g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="30842629"
 X-IronPort-AV: E=Sophos;i="6.08,196,1712646000"; 
-   d="scan'208";a="30842627"
+   d="scan'208";a="30842629"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
   by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 16:32:53 -0700
-X-CSE-ConnectionGUID: h4U7aXMRRK+yxMFoN4oBtg==
-X-CSE-MsgGUID: M08j/SeDQhmJ2M/X9iQvoQ==
+X-CSE-ConnectionGUID: 6R/9eJX7Tm2fzbgFoMX6jQ==
+X-CSE-MsgGUID: nbSlpXfsQDiC/MBOkLwibw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,196,1712646000"; 
-   d="scan'208";a="35302320"
+   d="scan'208";a="35302321"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
   by orviesa009.jf.intel.com with ESMTP; 28 May 2024 16:32:51 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sC6JF-000Cs8-0t;
+	id 1sC6JF-000Cs5-0p;
 	Tue, 28 May 2024 23:32:49 +0000
-Date: Wed, 29 May 2024 07:31:56 +0800
+Date: Wed, 29 May 2024 07:31:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mark:arm64/gicv3-nmi-prio 4/4] drivers/irqchip/irq-gic-v3.c:40:43:
- error: use of undeclared identifier 'GICV3_PRIO_IRQ'
-Message-ID: <202405290702.U3dhwDww-lkp@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Christoph Hellwig <hch@lst.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org
+Subject: Re: [PATCH 7/7] iomap: Return the folio from iomap_write_begin()
+Message-ID: <202405290732.YLYLE1Zi-lkp@intel.com>
+References: <20240528164829.2105447-8-willy@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,39 +65,187 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240528164829.2105447-8-willy@infradead.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/gicv3-nmi-prio
-head:   3c0651daca34ea67b809bd2ef412779c94517811
-commit: 3c0651daca34ea67b809bd2ef412779c94517811 [4/4] WIP: irqchip/gic-v3: choose priorities at boot time
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240529/202405290702.U3dhwDww-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240529/202405290702.U3dhwDww-lkp@intel.com/reproduce)
+Hi Matthew,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.10-rc1 next-20240528]
+[cannot apply to tytso-ext4/dev jack-fs/for_next hch-configfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/fs-Introduce-buffered_write_operations/20240529-005213
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240528164829.2105447-8-willy%40infradead.org
+patch subject: [PATCH 7/7] iomap: Return the folio from iomap_write_begin()
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20240529/202405290732.YLYLE1Zi-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240529/202405290732.YLYLE1Zi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405290702.U3dhwDww-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405290732.YLYLE1Zi-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/irqchip/irq-gic-v3.c:40:43: error: use of undeclared identifier 'GICV3_PRIO_IRQ'
-   static u8 dist_prio_irq __ro_after_init = GICV3_PRIO_IRQ;
-                                             ^
->> drivers/irqchip/irq-gic-v3.c:41:43: error: use of undeclared identifier 'GICV3_PRIO_NMI'
-   static u8 dist_prio_nmi __ro_after_init = GICV3_PRIO_NMI;
-                                             ^
-   drivers/irqchip/irq-gic-v3.c:825:36: error: use of undeclared identifier 'GICV3_PRIO_NMI'
-           return unlikely(gic_read_rpr() == GICV3_PRIO_NMI);
-                                             ^
-   3 errors generated.
+   In file included from fs/iomap/buffered-io.c:9:
+   In file included from include/linux/iomap.h:7:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from fs/iomap/buffered-io.c:9:
+   In file included from include/linux/iomap.h:7:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/iomap/buffered-io.c:9:
+   In file included from include/linux/iomap.h:7:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/iomap/buffered-io.c:9:
+   In file included from include/linux/iomap.h:7:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> fs/iomap/buffered-io.c:802:7: warning: variable 'status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     802 |                 if (!iomap_valid) {
+         |                     ^~~~~~~~~~~~
+   fs/iomap/buffered-io.c:826:17: note: uninitialized use occurs here
+     826 |         return ERR_PTR(status);
+         |                        ^~~~~~
+   fs/iomap/buffered-io.c:802:3: note: remove the 'if' if its condition is always false
+     802 |                 if (!iomap_valid) {
+         |                 ^~~~~~~~~~~~~~~~~~~
+     803 |                         iter->iomap.flags |= IOMAP_F_STALE;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     804 |                         goto out_unlock;
+         |                         ~~~~~~~~~~~~~~~~
+     805 |                 }
+         |                 ~
+   fs/iomap/buffered-io.c:773:12: note: initialize the variable 'status' to silence this warning
+     773 |         int status;
+         |                   ^
+         |                    = 0
+   8 warnings generated.
 
 
-vim +/GICV3_PRIO_IRQ +40 drivers/irqchip/irq-gic-v3.c
+vim +802 fs/iomap/buffered-io.c
 
-    39	
-  > 40	static u8 dist_prio_irq __ro_after_init = GICV3_PRIO_IRQ;
-  > 41	static u8 dist_prio_nmi __ro_after_init = GICV3_PRIO_NMI;
-    42	
+69f4a26c1e0c7c Gao Xiang               2021-08-03  766  
+07d07cfe38427e Matthew Wilcox (Oracle  2024-05-28  767) static struct folio *iomap_write_begin(struct iomap_iter *iter, loff_t pos,
+07d07cfe38427e Matthew Wilcox (Oracle  2024-05-28  768) 		size_t len)
+afc51aaa22f26c Darrick J. Wong         2019-07-15  769  {
+471859f57d4253 Andreas Gruenbacher     2023-01-15  770  	const struct iomap_folio_ops *folio_ops = iter->iomap.folio_ops;
+fad0a1ab34f777 Christoph Hellwig       2021-08-10  771  	const struct iomap *srcmap = iomap_iter_srcmap(iter);
+d1bd0b4ebfe052 Matthew Wilcox (Oracle  2021-11-03  772) 	struct folio *folio;
+07d07cfe38427e Matthew Wilcox (Oracle  2024-05-28  773) 	int status;
+afc51aaa22f26c Darrick J. Wong         2019-07-15  774  
+1b5c1e36dc0e0f Christoph Hellwig       2021-08-10  775  	BUG_ON(pos + len > iter->iomap.offset + iter->iomap.length);
+1b5c1e36dc0e0f Christoph Hellwig       2021-08-10  776  	if (srcmap != &iter->iomap)
+c039b997927263 Goldwyn Rodrigues       2019-10-18  777  		BUG_ON(pos + len > srcmap->offset + srcmap->length);
+afc51aaa22f26c Darrick J. Wong         2019-07-15  778  
+afc51aaa22f26c Darrick J. Wong         2019-07-15  779  	if (fatal_signal_pending(current))
+07d07cfe38427e Matthew Wilcox (Oracle  2024-05-28  780) 		return ERR_PTR(-EINTR);
+afc51aaa22f26c Darrick J. Wong         2019-07-15  781  
+d454ab82bc7f4a Matthew Wilcox (Oracle  2021-12-09  782) 	if (!mapping_large_folio_support(iter->inode->i_mapping))
+d454ab82bc7f4a Matthew Wilcox (Oracle  2021-12-09  783) 		len = min_t(size_t, len, PAGE_SIZE - offset_in_page(pos));
+d454ab82bc7f4a Matthew Wilcox (Oracle  2021-12-09  784) 
+07c22b56685dd7 Andreas Gruenbacher     2023-01-15  785  	folio = __iomap_get_folio(iter, pos, len);
+9060bc4d3aca61 Andreas Gruenbacher     2023-01-15  786  	if (IS_ERR(folio))
+07d07cfe38427e Matthew Wilcox (Oracle  2024-05-28  787) 		return folio;
+d7b64041164ca1 Dave Chinner            2022-11-29  788  
+d7b64041164ca1 Dave Chinner            2022-11-29  789  	/*
+d7b64041164ca1 Dave Chinner            2022-11-29  790  	 * Now we have a locked folio, before we do anything with it we need to
+d7b64041164ca1 Dave Chinner            2022-11-29  791  	 * check that the iomap we have cached is not stale. The inode extent
+d7b64041164ca1 Dave Chinner            2022-11-29  792  	 * mapping can change due to concurrent IO in flight (e.g.
+d7b64041164ca1 Dave Chinner            2022-11-29  793  	 * IOMAP_UNWRITTEN state can change and memory reclaim could have
+d7b64041164ca1 Dave Chinner            2022-11-29  794  	 * reclaimed a previously partially written page at this index after IO
+d7b64041164ca1 Dave Chinner            2022-11-29  795  	 * completion before this write reaches this file offset) and hence we
+d7b64041164ca1 Dave Chinner            2022-11-29  796  	 * could do the wrong thing here (zero a page range incorrectly or fail
+d7b64041164ca1 Dave Chinner            2022-11-29  797  	 * to zero) and corrupt data.
+d7b64041164ca1 Dave Chinner            2022-11-29  798  	 */
+471859f57d4253 Andreas Gruenbacher     2023-01-15  799  	if (folio_ops && folio_ops->iomap_valid) {
+471859f57d4253 Andreas Gruenbacher     2023-01-15  800  		bool iomap_valid = folio_ops->iomap_valid(iter->inode,
+d7b64041164ca1 Dave Chinner            2022-11-29  801  							 &iter->iomap);
+d7b64041164ca1 Dave Chinner            2022-11-29 @802  		if (!iomap_valid) {
+d7b64041164ca1 Dave Chinner            2022-11-29  803  			iter->iomap.flags |= IOMAP_F_STALE;
+d7b64041164ca1 Dave Chinner            2022-11-29  804  			goto out_unlock;
+d7b64041164ca1 Dave Chinner            2022-11-29  805  		}
+d7b64041164ca1 Dave Chinner            2022-11-29  806  	}
+d7b64041164ca1 Dave Chinner            2022-11-29  807  
+d454ab82bc7f4a Matthew Wilcox (Oracle  2021-12-09  808) 	if (pos + len > folio_pos(folio) + folio_size(folio))
+d454ab82bc7f4a Matthew Wilcox (Oracle  2021-12-09  809) 		len = folio_pos(folio) + folio_size(folio) - pos;
+afc51aaa22f26c Darrick J. Wong         2019-07-15  810  
+c039b997927263 Goldwyn Rodrigues       2019-10-18  811  	if (srcmap->type == IOMAP_INLINE)
+bc6123a84a71b5 Matthew Wilcox (Oracle  2021-05-02  812) 		status = iomap_write_begin_inline(iter, folio);
+1b5c1e36dc0e0f Christoph Hellwig       2021-08-10  813  	else if (srcmap->flags & IOMAP_F_BUFFER_HEAD)
+d1bd0b4ebfe052 Matthew Wilcox (Oracle  2021-11-03  814) 		status = __block_write_begin_int(folio, pos, len, NULL, srcmap);
+afc51aaa22f26c Darrick J. Wong         2019-07-15  815  	else
+bc6123a84a71b5 Matthew Wilcox (Oracle  2021-05-02  816) 		status = __iomap_write_begin(iter, pos, len, folio);
+afc51aaa22f26c Darrick J. Wong         2019-07-15  817  
+afc51aaa22f26c Darrick J. Wong         2019-07-15  818  	if (unlikely(status))
+afc51aaa22f26c Darrick J. Wong         2019-07-15  819  		goto out_unlock;
+afc51aaa22f26c Darrick J. Wong         2019-07-15  820  
+07d07cfe38427e Matthew Wilcox (Oracle  2024-05-28  821) 	return folio;
+afc51aaa22f26c Darrick J. Wong         2019-07-15  822  
+afc51aaa22f26c Darrick J. Wong         2019-07-15  823  out_unlock:
+7a70a5085ed028 Andreas Gruenbacher     2023-01-15  824  	__iomap_put_folio(iter, pos, 0, folio);
+afc51aaa22f26c Darrick J. Wong         2019-07-15  825  
+07d07cfe38427e Matthew Wilcox (Oracle  2024-05-28  826) 	return ERR_PTR(status);
+afc51aaa22f26c Darrick J. Wong         2019-07-15  827  }
+afc51aaa22f26c Darrick J. Wong         2019-07-15  828  
 
 -- 
 0-DAY CI Kernel Test Service
