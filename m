@@ -1,102 +1,120 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1253B782
-	for <llvm@lists.linux.dev>; Tue, 28 May 2024 05:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06904C622;
+	Tue, 28 May 2024 05:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716872699; cv=none; b=ggXOxiW+JLTUx6haaXJYU7/7JHO9DGfBPokuquitZ5QHVgxdw/HCEhannvxHCyp9Zo/oeimWvbmlXdNCd1/dSbh7sOMw+vQuOGu+sOsoAuaTWAhLDtDSFvD7iz84HOEVOsCC3l7HyrTP+253RI5/JWqIvM0M9pYuI0ALRnHzmVM=
+	t=1716873912; cv=none; b=VJ/MWtwfSM9roliJ8XQD1AA5ad/HnvjgCeWU13nrcoiKUVVejs10WNBxsDHMFiW6MqZvV/QILZo/g+1ygaugQv2NMH3r2yBWbRfPoD/FCV4ksPUk8Sjhh9kcLJtBsCZqS842DZ1uAbkVnernrdrbnMQK0ZCdQzQVZXLrvK1lRSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716872699; c=relaxed/simple;
-	bh=2K/FMnaQ6Mh3oj1FxMCogS4VncgpJIP0YBWCZW7ObRY=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=oXkwlaYryPzgeZ78E62FQFhw5QZFOl7j+mdTcAOUF9bUJiBTwt5xPQth+r4AfTCNFkxQDWRJ9/ffXPgUg8GdwY/oFOgENX5ULh+qNGrABAhHlNuj1FxDHqOIhifa91u/gwL0w0mPiBkY6rJN3vMFjHuwWUyCrm+7GsK1eUCGi5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CylAoe9W; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1716873912; c=relaxed/simple;
+	bh=9ljL2SRej7kfSr3/Z80vnbqUEmaAjmzBnY5RLtqXrnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XbERzza+Xkc1lyA+4IFM8AZjGg3zHF+zT1eDx1gX4g9Db/P6cvmzAXOQ89nEMUMIEQbVP2KYXHIbAZAGQwBZGAa52+7oMaIH4egwuUK6vJcXMADZdXj8eQIlZN/u6z2i5WUG7KgHulewf/xkYl3Zg5603AM/87pLQFN/0QLvo90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Crlv4UUK; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CylAoe9W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716872696;
-	bh=2K/FMnaQ6Mh3oj1FxMCogS4VncgpJIP0YBWCZW7ObRY=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=CylAoe9WpJOPueFDmgS43j8pNeU63iZjtQJFJCexRGdIJ+nURSN2lxgmOpZLeogje
-	 75wIxPwtFA3+RTrva+c6YeGwKW+gXivRcsZPiJpn79axyFhLNe0f6rbKTxD3MQtcNj
-	 b4KpzqYDpOvObfN4R2yxE47gbkZimvb0Ar1b1y+VyQiji072sLQNq1WGqdyyXrQu3e
-	 Gf9bKnEwkvHvLHv1pd9iLD3O0G0IVch/vEzGBLuLwMkUa7QdJA3xlCy0B1XsljQikr
-	 Z14lFvuQJgvdUG4Hmqxk42K1Oop6pqlDVTsM8QMnSKmhY9Z+OSWtF6ITsDzoKNXQC4
-	 xDv4h1SnTnqrw==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BC3063782137;
-	Tue, 28 May 2024 05:04:46 +0000 (UTC)
-Message-ID: <ae9de160-c8dc-4e5e-9ec9-4846a5dc643e@collabora.com>
-Date: Tue, 28 May 2024 10:04:18 +0500
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Crlv4UUK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716873910; x=1748409910;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9ljL2SRej7kfSr3/Z80vnbqUEmaAjmzBnY5RLtqXrnM=;
+  b=Crlv4UUKcjgRtdv2ysfu/WuvtQJLoeWHQbTTFB4duBwP1ejfTjUC7tYt
+   IP8uNNc7lA9qNnkl8Cjg+Uvu//TGiziEyS3FysADvRQSQafZuCXjFfHHh
+   37CG8poVSDqm+h8tzdq+9Zjg54EjE6IojfoFpc4XLp6ydtO2fmQmptyLD
+   WC2g+6e8WpVzmfkwe3MmjVUuA1ui3kziw++U772JE3oY2Y6CIpgqb85gH
+   iS6YXThJTa6trog0BBXcaODehG3EmpsuXxz7A5c+BS+68pLYoHRsFJQfO
+   PEPNdbCwRW9gp9wil5djGJblvB3NBnvHHHq7qUx9CEP53IHmb920Fyk4m
+   Q==;
+X-CSE-ConnectionGUID: 2dMZyZPVSXOXgabUCIRY9A==
+X-CSE-MsgGUID: kUspt9+5QDadIswm6vpWvg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="13038220"
+X-IronPort-AV: E=Sophos;i="6.08,194,1712646000"; 
+   d="scan'208";a="13038220"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 22:25:10 -0700
+X-CSE-ConnectionGUID: iw1DyotnQsOQ2cZ3eVSkpw==
+X-CSE-MsgGUID: fkHDgsOvSi2w7etDCHK2kw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,194,1712646000"; 
+   d="scan'208";a="35019332"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 27 May 2024 22:25:10 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBpKa-000Bil-2S;
+	Tue, 28 May 2024 05:25:05 +0000
+Date: Tue, 28 May 2024 13:22:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:mgtime 4/5] fs/inode.c:73:15: error: '__section__'
+ attribute only applies to functions, global variables, Objective-C methods,
+ and Objective-C properties
+Message-ID: <202405281321.aRVc7usN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com
-Subject: Re: [PATCH 0/8] selftests: x86: build suite with clang
-To: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- "Mike Rapoport (IBM)" <rppt@kernel.org>, Ingo Molnar <mingo@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Alexey Dobriyan <adobriyan@gmail.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, "Chang S. Bae" <chang.seok.bae@intel.com>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240501122918.3831734-1-usama.anjum@collabora.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240501122918.3831734-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Soft reminder
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git mgtime
+head:   05aa6b03b8c3451d4aac5fb47e9e99c6e00ee304
+commit: 05ca0fa7e195e028694f41de279dec33ada93d21 [4/5] fs: add infrastructure for multigrain timestamps
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240528/202405281321.aRVc7usN-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405281321.aRVc7usN-lkp@intel.com/reproduce)
 
-On 5/1/24 5:29 PM, Muhammad Usama Anjum wrote:
-> This series fixes build errors found by clang to allow the x86 suite to
-> get built with the clang.
-> 
-> Unfortunately, there is one bug [1] in the clang becuase of which
-> extended asm isn't handled correctly by it and build fails for
-> sysret_rip.c. Hence even after this series the build of this test would
-> fail with clang. Should we disable this test for now when clang is used
-> until the bug is fixed in clang? Not sure. Any opinions?
-> 
-> [1] https://github.com/llvm/llvm-project/issues/53728
-> 
-> Muhammad Usama Anjum (8):
->   selftests: x86: Remove dependence of headers file
->   selftests: x86: check_initial_reg_state: remove -no-pie while using
->     -static
->   selftests: x86: test_vsyscall: remove unused function
->   selftests: x86: fsgsbase_restore: fix asm directive from =rm to =r
->   selftests: x86: syscall_arg_fault_32: remove unused variable
->   selftests: x86: test_FISTTP: use fisttps instead of ambigous fisttp
->   selftests: x86: fsgsbase: Remove unused function and variable
->   selftests: x86: amx: Remove unused functions
-> 
->  tools/testing/selftests/x86/Makefile            |  9 +++++----
->  tools/testing/selftests/x86/amx.c               | 16 ----------------
->  tools/testing/selftests/x86/fsgsbase.c          |  6 ------
->  tools/testing/selftests/x86/fsgsbase_restore.c  |  2 +-
->  tools/testing/selftests/x86/syscall_arg_fault.c |  1 -
->  tools/testing/selftests/x86/test_FISTTP.c       |  8 ++++----
->  tools/testing/selftests/x86/test_vsyscall.c     |  5 -----
->  7 files changed, 10 insertions(+), 37 deletions(-)
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405281321.aRVc7usN-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/inode.c:73:15: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
+      73 | static struct __cacheline_aligned_in_smp ctime_floor_val ctime_floor;
+         |               ^
+   include/linux/cache.h:60:36: note: expanded from macro '__cacheline_aligned_in_smp'
+      60 | #define __cacheline_aligned_in_smp __cacheline_aligned
+         |                                    ^
+   include/linux/cache.h:55:4: note: expanded from macro '__cacheline_aligned'
+      55 |                  __section__(".data..cacheline_aligned")))
+         |                  ^
+   fs/inode.c:73:15: warning: attribute declaration must precede definition [-Wignored-attributes]
+   include/linux/cache.h:60:36: note: expanded from macro '__cacheline_aligned_in_smp'
+      60 | #define __cacheline_aligned_in_smp __cacheline_aligned
+         |                                    ^
+   include/linux/cache.h:54:18: note: expanded from macro '__cacheline_aligned'
+      54 |   __attribute__((__aligned__(SMP_CACHE_BYTES),                  \
+         |                  ^
+   fs/inode.c:64:8: note: previous definition is here
+      64 | struct ctime_floor_val {
+         |        ^
+   1 warning and 1 error generated.
+
+
+vim +/__section__ +73 fs/inode.c
+
+    62	
+    63	/* Floor value for all ctime stamps */
+    64	struct ctime_floor_val {
+    65		union {
+    66			struct {
+    67				ktime_t	coarse;
+    68				ktime_t	floor;
+    69			};
+    70			u128	full;
+    71		};
+    72	};
+  > 73	static struct __cacheline_aligned_in_smp ctime_floor_val ctime_floor;
+    74	
 
 -- 
-BR,
-Muhammad Usama Anjum
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
