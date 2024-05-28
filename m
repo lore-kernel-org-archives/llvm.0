@@ -1,139 +1,173 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E0017082D
-	for <llvm@lists.linux.dev>; Tue, 28 May 2024 15:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D71171657;
+	Tue, 28 May 2024 16:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716908535; cv=none; b=PF/7cN0H8TmvVGzlPmRaLmqrPMk7/5hO1ZNorts93riOD9fvPbzqPLdEwbbyNkPywIQrVovHPvMXQc/POPAjJJ331afVyp+6zbNa3yegb+xdrS1iREXsruP5fhCghfjAro1fGdaJ6v4JYJzj03hR+BDCpoh6R5MFtByXml6ruFw=
+	t=1716912173; cv=none; b=lNbW+5LXZLXcV82mUkDJgicDFLsKQ/r7xN3GWT6b9GqBl/AFlXUssYySlrOpw4jb9yCkX9OfhMfgDIa5jQOUGkQnT0DMO49E+jhDd22ya6DF5kgLCDits7DxRKOh2heTIaa6tz2TwzbL71R3ZuKi5VaVicAs5Ps5+r87oXB5IXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716908535; c=relaxed/simple;
-	bh=5ZHpZGACX2Frn3dDPf3fXyWybxr2L7JiyfRf2W2/hW0=;
+	s=arc-20240116; t=1716912173; c=relaxed/simple;
+	bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P+YuRlbbbLSot7LhsWAeFBXdRfgiBFg3PEgjoBz7RbE0ulB1yIAzIylQffK4AnFUDi3mn9C5CAYVa4A9JyXzbNdsLFu3Iasg464H5N4cOWrdVLuNz81A/LUUkidsfUglTCuZLrw0p2f3y2GT6WL0Ok+h81xSVrjsCNOiWK+nkNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=opoXfCNq; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qs20/vT9OFW8PsXXROHrjIkOd2oKvqzJgyqjHJgkavnEOFm9mKa6/a/sNFv6jM7CAm2hTghOj2qr4xb/tQRfSKPefUko6EL/CipOXW5cB1jZUQH91ZE2Quj42e8QIEfQrzDj51hgHWZI8CYXkG1qNw7d8gost+131d/bRKT0+hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=abhkWOWA; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="opoXfCNq"
-X-Envelope-To: glider@google.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1716908532;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dKnPZ9OJHpypgolMUhUxX3o8dY3J/6CO95tM7cGqfv8=;
-	b=opoXfCNqL0eaKrPq9sbb09xqDBlnVf51DlM6AdAAiU/XeLeu4KiMfvs8PGhdiophKkgpNx
-	4GMqFrplyQMupkP+yleNmZRmTkTXWHz5B0AWJMb6bufOkv6bZSG3IUOYbdoG9kCJZwp3/z
-	J71p/VMOEAsFEaZQ3BGiLIx0kDif3Xc=
-X-Envelope-To: mathieu.desnoyers@efficios.com
-X-Envelope-To: bfoster@redhat.com
-X-Envelope-To: keescook@chromium.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: linux-bcachefs@vger.kernel.org
-X-Envelope-To: elver@google.com
-X-Envelope-To: dvyukov@google.com
-X-Envelope-To: kasan-dev@googlegroups.com
-X-Envelope-To: nathan@kernel.org
-X-Envelope-To: ndesaulniers@google.com
-X-Envelope-To: morbo@google.com
-X-Envelope-To: justinstitt@google.com
-X-Envelope-To: llvm@lists.linux.dev
-Date: Tue, 28 May 2024 11:02:05 -0400
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Alexander Potapenko <glider@google.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Brian Foster <bfoster@redhat.com>, Kees Cook <keescook@chromium.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux-bcachefs@vger.kernel.org, Marco Elver <elver@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
-Subject: Re: Use of zero-length arrays in bcachefs structures inner fields
-Message-ID: <63zx2cnrf5u2slmabde2wptxvq6a3opvrj2zrkcolw3gdkjdpf@bttdonbctura>
-References: <986294ee-8bb1-4bf4-9f23-2bc25dbad561@efficios.com>
- <vu7w6if47tv3kwnbbbsdchu3wpsbkqlvlkvewtvjx5hkq57fya@rgl6bp33eizt>
- <944d79b5-177d-43ea-a130-25bd62fc787f@efficios.com>
- <7236a148-c513-4053-9778-0bce6657e358@efficios.com>
- <jqj6do7lodrrvpjmk6vlhasdigs23jkyvznniudhebcizstsn7@6cetkluh4ehl>
- <CAG_fn=Vp+WoxWw_aA9vr9yf_4qRvu1zqfLDWafR8J41Zd9tX5g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="abhkWOWA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716912172; x=1748448172;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
+  b=abhkWOWAD1lxiykExf0AanWLAg6TFaYNyCFc9FvvApP3icMM+bOUapEu
+   Rr0FfW4Iemc+tSIGEWjBEb4S3O+2xdAhehDOISt2m81q0gaWL7W2mqeZN
+   aXR7diHg/Y0L96ZTalbtGwA0Kd+KUqqX55H0zmKxxcxr/pt9K2w5/allY
+   fcf58jEE1a7mAdQnBaNTVEzqY71gZumR8lYrjMZ7BB7jWxIxONxhKf5DU
+   pTQGw5fld0uP/ioxYMz/8XzUwvMWtykED5yCh7YgTmNluUsPGBf+pu/5H
+   qxYL07epgZO6NQpnXGd/Vr4Jhyvfi3WooM/taYLYQxFDxiGhDA9jBOMOg
+   A==;
+X-CSE-ConnectionGUID: emLB4ZFjTsKbhTH4KLJxAg==
+X-CSE-MsgGUID: VwS7nFCrTumQx7Y6jAUp4Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="24685043"
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="24685043"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 09:02:51 -0700
+X-CSE-ConnectionGUID: QSrT1CW1R4GH1zOmD3LUKQ==
+X-CSE-MsgGUID: BcsEDqCiSmGGBf/FMWktww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="35208558"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 28 May 2024 09:02:50 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBzHj-000CQD-0P;
+	Tue, 28 May 2024 16:02:47 +0000
+Date: Wed, 29 May 2024 00:02:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Naresh Solanki <naresh.solanki@9elements.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+Message-ID: <202405282323.3IOCxxpg-lkp@intel.com>
+References: <20240528091808.863702-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG_fn=Vp+WoxWw_aA9vr9yf_4qRvu1zqfLDWafR8J41Zd9tX5g@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20240528091808.863702-1-naresh.solanki@9elements.com>
 
-On Tue, May 28, 2024 at 01:36:11PM +0200, Alexander Potapenko wrote:
-> On Fri, May 24, 2024 at 7:30 PM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> >
-> > On Fri, May 24, 2024 at 12:04:11PM -0400, Mathieu Desnoyers wrote:
-> > > On 2024-05-24 11:35, Mathieu Desnoyers wrote:
-> > > > [ Adding clang/llvm and KMSAN maintainers/reviewers in CC. ]
-> > > >
-> > > > On 2024-05-24 11:28, Kent Overstreet wrote:
-> > > > > On Thu, May 23, 2024 at 01:53:42PM -0400, Mathieu Desnoyers wrote:
-> > > > > > Hi Kent,
-> > > > > >
-> > > > > > Looking around in the bcachefs code for possible causes of this KMSAN
-> > > > > > bug report:
-> > > > > >
-> > > > > > https://lore.kernel.org/lkml/000000000000fd5e7006191f78dc@google.com/
-> > > > > >
-> > > > > > I notice the following pattern in the bcachefs structures: zero-length
-> > > > > > arrays members are inserted in structures (not always at the end),
-> > > > > > seemingly to achieve a result similar to what could be done with a
-> > > > > > union:
-> > > > > >
-> > > > > > fs/bcachefs/bcachefs_format.h:
-> > > > > >
-> > > > > > struct bkey_packed {
-> > > > > >          __u64           _data[0];
-> > > > > >
-> > > > > >          /* Size of combined key and value, in u64s */
-> > > > > >          __u8            u64s;
-> > > > > > [...]
-> > > > > > };
-> > > > > >
-> > > > > > likewise:
-> > > > > >
-> > > > > > struct bkey_i {
-> > > > > >          __u64                   _data[0];
-> > > > > >
-> > > > > >          struct bkey     k;
-> > > > > >          struct bch_val  v;
-> > > > > > };
-> 
-> I took a glance at the LLVM IR for fs/bcachefs/bset.c, and it defines
-> struct bkey_packed and bkey_i as:
-> 
->     %struct.bkey_packed = type { [0 x i64], i8, i8, i8, [0 x i8], [37 x i8] }
->     %struct.bkey_i = type { [0 x i64], %struct.bkey, %struct.bch_val }
-> 
-> , which more or less looks as expected, so I don't think it could be
-> causing problems with KMSAN right now.
-> Moreover, there are cases in e.g. include/linux/skbuff.h where
-> zero-length arrays are used for the same purpose, and KMSAN handles
-> them just fine.
-> 
-> Yet I want to point out that even GCC discourages the use of
-> zero-length arrays in the middle of a struct:
-> https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html, so Clang is not
-> unique here.
-> 
-> Regarding the original KMSAN bug, as noted in
-> https://lore.kernel.org/all/0000000000009f9447061833d477@google.com/T/,
-> we might be missing the event of copying data from the disk to
-> bcachefs structs.
-> I'd appreciate help from someone knowledgeable about how disk I/O is
-> implemented in the kernel.
+Hi Naresh,
 
-If that was missing I'd expect everything to be breaking. What's the
-helper that marks memory as initialized?
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 5fbf8734fb36cf67339f599f0e51747a6aff690c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max6639-Update-hwmon-init-using-info/20240528-172245
+base:   5fbf8734fb36cf67339f599f0e51747a6aff690c
+patch link:    https://lore.kernel.org/r/20240528091808.863702-1-naresh.solanki%409elements.com
+patch subject: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+config: arm64-randconfig-002-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405282323.3IOCxxpg-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/max6639.c:291:3: error: expected expression
+                   u8 x;
+                   ^
+>> drivers/hwmon/max6639.c:296:3: error: use of undeclared identifier 'x'
+                   x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
+                   ^
+   drivers/hwmon/max6639.c:303:4: error: use of undeclared identifier 'x'
+                           x |= 0x4;
+                           ^
+   drivers/hwmon/max6639.c:304:3: error: use of undeclared identifier 'x'
+                   x &= 0x7;
+                   ^
+   drivers/hwmon/max6639.c:305:25: error: use of undeclared identifier 'x'
+                   *pwm_val = freq_table[x];
+                                         ^
+   drivers/hwmon/max6639.c:328:3: error: expected expression
+                   u8 x;
+                   ^
+   drivers/hwmon/max6639.c:332:8: error: use of undeclared identifier 'x'
+                   for (x = 0; x < sizeof(freq_table); x++)
+                        ^
+   drivers/hwmon/max6639.c:332:15: error: use of undeclared identifier 'x'
+                   for (x = 0; x < sizeof(freq_table); x++)
+                               ^
+   drivers/hwmon/max6639.c:332:39: error: use of undeclared identifier 'x'
+                   for (x = 0; x < sizeof(freq_table); x++)
+                                                       ^
+   drivers/hwmon/max6639.c:333:26: error: use of undeclared identifier 'x'
+                           if (val <= freq_table[x])
+                                                 ^
+   drivers/hwmon/max6639.c:337:38: error: use of undeclared identifier 'x'
+                                            MAX6639_FAN_CONFIG3_FREQ_MASK, x);
+                                                                           ^
+   drivers/hwmon/max6639.c:341:7: error: use of undeclared identifier 'x'
+                   if (x >> 2)
+                       ^
+   12 errors generated.
+
+
+vim +291 drivers/hwmon/max6639.c
+
+   275	
+   276	static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
+   277				    long *pwm_val)
+   278	{
+   279		struct max6639_data *data = dev_get_drvdata(dev);
+   280		unsigned int val, res;
+   281	
+   282		if (IS_ERR(data))
+   283			return PTR_ERR(data);
+   284	
+   285		switch (attr) {
+   286		case hwmon_pwm_input:
+   287			res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
+   288			*pwm_val = val * 255 / 120;
+   289			return 0;
+   290		case hwmon_pwm_freq:
+ > 291			u8 x;
+   292	
+   293			res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
+   294			if (res < 0)
+   295				return res;
+ > 296			x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
+   297	
+   298			res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
+   299			if (res < 0)
+   300				return res;
+   301	
+   302			if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
+   303				x |= 0x4;
+   304			x &= 0x7;
+   305			*pwm_val = freq_table[x];
+   306			return res;
+   307		default:
+   308			return -EOPNOTSUPP;
+   309		}
+   310	}
+   311	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
