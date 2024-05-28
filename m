@@ -1,63 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D71171657;
-	Tue, 28 May 2024 16:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0875024E;
+	Tue, 28 May 2024 19:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716912173; cv=none; b=lNbW+5LXZLXcV82mUkDJgicDFLsKQ/r7xN3GWT6b9GqBl/AFlXUssYySlrOpw4jb9yCkX9OfhMfgDIa5jQOUGkQnT0DMO49E+jhDd22ya6DF5kgLCDits7DxRKOh2heTIaa6tz2TwzbL71R3ZuKi5VaVicAs5Ps5+r87oXB5IXc=
+	t=1716924673; cv=none; b=t7qFkjh0kGr3YrrPgi0/obv43sA3FRBlKv3O+9g/rQBrCydVY0RJhHmI2pcxu7evrdeZ825hN3q1gDZMDoukfwdIVl0h79jMgyy2gausjz81bPoIe93OZfxvUcDY8TggRcAWzuJZoO8/16ZVbGtV0IUcWDFNz56Z1/tCKxyH6qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716912173; c=relaxed/simple;
-	bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
+	s=arc-20240116; t=1716924673; c=relaxed/simple;
+	bh=ZGRsY2ZQZErkGb3Ve4FDnyIZLkQj3AbizzUfJX7D1JU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qs20/vT9OFW8PsXXROHrjIkOd2oKvqzJgyqjHJgkavnEOFm9mKa6/a/sNFv6jM7CAm2hTghOj2qr4xb/tQRfSKPefUko6EL/CipOXW5cB1jZUQH91ZE2Quj42e8QIEfQrzDj51hgHWZI8CYXkG1qNw7d8gost+131d/bRKT0+hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=abhkWOWA; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gig5GqedvCzONmHV6QqQp/UPHfOGDRgBL/ehq9sTlHCBY1aalVeuLdgC4lQoUcSVnTJCBkAmoDw8ruwwHK2l0evsO24V+Nw6jWX/J88QF+CK7x1lZat38M91mvSlGl3zyjE3j6auQAkhfY4kn37qNd5utdd04Xwd4+cwT6GyjkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZayzUQF/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="abhkWOWA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716912172; x=1748448172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pTd9+3ADyKSsLJxka8UR2Fi7CwtGAZ/fPYypqOBGFKc=;
-  b=abhkWOWAD1lxiykExf0AanWLAg6TFaYNyCFc9FvvApP3icMM+bOUapEu
-   Rr0FfW4Iemc+tSIGEWjBEb4S3O+2xdAhehDOISt2m81q0gaWL7W2mqeZN
-   aXR7diHg/Y0L96ZTalbtGwA0Kd+KUqqX55H0zmKxxcxr/pt9K2w5/allY
-   fcf58jEE1a7mAdQnBaNTVEzqY71gZumR8lYrjMZ7BB7jWxIxONxhKf5DU
-   pTQGw5fld0uP/ioxYMz/8XzUwvMWtykED5yCh7YgTmNluUsPGBf+pu/5H
-   qxYL07epgZO6NQpnXGd/Vr4Jhyvfi3WooM/taYLYQxFDxiGhDA9jBOMOg
-   A==;
-X-CSE-ConnectionGUID: emLB4ZFjTsKbhTH4KLJxAg==
-X-CSE-MsgGUID: VwS7nFCrTumQx7Y6jAUp4Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="24685043"
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="24685043"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 09:02:51 -0700
-X-CSE-ConnectionGUID: QSrT1CW1R4GH1zOmD3LUKQ==
-X-CSE-MsgGUID: BcsEDqCiSmGGBf/FMWktww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="35208558"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 28 May 2024 09:02:50 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBzHj-000CQD-0P;
-	Tue, 28 May 2024 16:02:47 +0000
-Date: Wed, 29 May 2024 00:02:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Naresh Solanki <naresh.solanki@9elements.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
-Message-ID: <202405282323.3IOCxxpg-lkp@intel.com>
-References: <20240528091808.863702-1-naresh.solanki@9elements.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZayzUQF/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057A7C3277B;
+	Tue, 28 May 2024 19:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716924673;
+	bh=ZGRsY2ZQZErkGb3Ve4FDnyIZLkQj3AbizzUfJX7D1JU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZayzUQF/CRwyHEDjHYOegUqd6PFEA3IZd5BZH3OyeQhARI7ku7s8PLJbxIz2x/DFv
+	 lQu9iInAWM7uPnIH+KM5mWrQYL37cocZgHQJ5WZDp9fyjWE6y/ca/t/JYB733zosP8
+	 mT8ILP083xKJBmeQtllIgtwIiFaCHUAc7DvK2uptb0HfYrG7N3SJy+kttBGHYRLfYi
+	 44iNjWoOwcAtxyFKW+iZa3LW8JGIqLxOAFE0p9grtDvqdjj2eIhR1fAvDnwHEepZOy
+	 P057DWgxD0WH4PjcKHTf11k/e2jTSFCO8ZRYFazwFlgBkl3lQw0s51mTYc+DkrRs2t
+	 YxQgeWrlEYBpQ==
+Date: Tue, 28 May 2024 12:31:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
+	Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/7] riscv: Implement cmpxchg8/16() using Zabha
+Message-ID: <20240528193110.GA2196855@thelio-3990X>
+References: <20240528151052.313031-1-alexghiti@rivosinc.com>
+ <20240528151052.313031-3-alexghiti@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,108 +52,226 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240528091808.863702-1-naresh.solanki@9elements.com>
+In-Reply-To: <20240528151052.313031-3-alexghiti@rivosinc.com>
 
-Hi Naresh,
+Hi Alexandre,
 
-kernel test robot noticed the following build errors:
+On Tue, May 28, 2024 at 05:10:47PM +0200, Alexandre Ghiti wrote:
+> This adds runtime support for Zabha in cmpxchg8/16 operations.
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/Kconfig               | 16 ++++++++++++++++
+>  arch/riscv/Makefile              | 10 ++++++++++
+>  arch/riscv/include/asm/cmpxchg.h | 26 ++++++++++++++++++++++++--
+>  3 files changed, 50 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index b443def70139..05597719bb1c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -579,6 +579,22 @@ config RISCV_ISA_V_PREEMPTIVE
+>  	  preemption. Enabling this config will result in higher memory
+>  	  consumption due to the allocation of per-task's kernel Vector context.
+>  
+> +config TOOLCHAIN_HAS_ZABHA
+> +	bool
+> +	default y
+> +	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zabha)
+> +	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zabha)
 
-[auto build test ERROR on 5fbf8734fb36cf67339f599f0e51747a6aff690c]
+This test does not take into account the need for
+'-menable-experimental-extensions' and '1p0' in the '-march=' value with
+clang 19, so it can never be enabled even if it is available.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max6639-Update-hwmon-init-using-info/20240528-172245
-base:   5fbf8734fb36cf67339f599f0e51747a6aff690c
-patch link:    https://lore.kernel.org/r/20240528091808.863702-1-naresh.solanki%409elements.com
-patch subject: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
-config: arm64-randconfig-002-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282323.3IOCxxpg-lkp@intel.com/reproduce)
+I am not really sure how to succinctly account for this though, other
+than duplicating and modifying the cc-option checks with a dependency on
+either CC_IS_GCC or CC_IS_CLANG. Another option is taking the same
+approach as the _SUPPORTS_DYNAMIC_FTRACE symbols and introduce
+CLANG_HAS_ZABHA and GCC_HAS_ZABHA? That might not make it too ugly.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405282323.3IOCxxpg-lkp@intel.com/
+I think the ZACAS patch has a similar issue, it just isn't noticeable
+with clang 19 but it should be with clang 17 and 18.
 
-All errors (new ones prefixed by >>):
+> +	depends on AS_HAS_OPTION_ARCH
+> +
+> +config RISCV_ISA_ZABHA
+> +	bool "Zabha extension support for atomic byte/half-word operations"
+> +	depends on TOOLCHAIN_HAS_ZABHA
+> +	default y
+> +	help
+> +	  Adds support to use atomic byte/half-word operations in the kernel.
+> +
+> +	  If you don't know what to do here, say Y.
+> +
+>  config TOOLCHAIN_HAS_ZACAS
+>  	bool
+>  	default y
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index d5b60b87998c..f58ac921dece 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -89,6 +89,16 @@ else
+>  riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZACAS) := $(riscv-march-y)_zacas
+>  endif
+>  
+> +# Check if the toolchain supports Zabha
+> +ifdef CONFIG_AS_IS_LLVM
+> +# Support for experimental Zabha was merged in LLVM 19.
+> +KBUILD_CFLAGS += -menable-experimental-extensions
+> +KBUILD_AFLAGS += -menable-experimental-extensions
+> +riscv-march-y := $(riscv-march-y)_zabha1p0
 
->> drivers/hwmon/max6639.c:291:3: error: expected expression
-                   u8 x;
-                   ^
->> drivers/hwmon/max6639.c:296:3: error: use of undeclared identifier 'x'
-                   x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
-                   ^
-   drivers/hwmon/max6639.c:303:4: error: use of undeclared identifier 'x'
-                           x |= 0x4;
-                           ^
-   drivers/hwmon/max6639.c:304:3: error: use of undeclared identifier 'x'
-                   x &= 0x7;
-                   ^
-   drivers/hwmon/max6639.c:305:25: error: use of undeclared identifier 'x'
-                   *pwm_val = freq_table[x];
-                                         ^
-   drivers/hwmon/max6639.c:328:3: error: expected expression
-                   u8 x;
-                   ^
-   drivers/hwmon/max6639.c:332:8: error: use of undeclared identifier 'x'
-                   for (x = 0; x < sizeof(freq_table); x++)
-                        ^
-   drivers/hwmon/max6639.c:332:15: error: use of undeclared identifier 'x'
-                   for (x = 0; x < sizeof(freq_table); x++)
-                               ^
-   drivers/hwmon/max6639.c:332:39: error: use of undeclared identifier 'x'
-                   for (x = 0; x < sizeof(freq_table); x++)
-                                                       ^
-   drivers/hwmon/max6639.c:333:26: error: use of undeclared identifier 'x'
-                           if (val <= freq_table[x])
-                                                 ^
-   drivers/hwmon/max6639.c:337:38: error: use of undeclared identifier 'x'
-                                            MAX6639_FAN_CONFIG3_FREQ_MASK, x);
-                                                                           ^
-   drivers/hwmon/max6639.c:341:7: error: use of undeclared identifier 'x'
-                   if (x >> 2)
-                       ^
-   12 errors generated.
+This block should have some dependency on CONFIG_TOOLCHAIN_HAS_ZABHA as
+well right? Otherwise, the build breaks with LLVM toolchains that do not
+support zabha, like LLVM 18.1.x:
 
+  clang: error: invalid arch name 'rv64imac_zihintpause_zacas1p0_zabha1p0', unsupported version number 1.0 for extension 'zabha'
 
-vim +291 drivers/hwmon/max6639.c
+I think the zacas patch has the same bug.
 
-   275	
-   276	static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
-   277				    long *pwm_val)
-   278	{
-   279		struct max6639_data *data = dev_get_drvdata(dev);
-   280		unsigned int val, res;
-   281	
-   282		if (IS_ERR(data))
-   283			return PTR_ERR(data);
-   284	
-   285		switch (attr) {
-   286		case hwmon_pwm_input:
-   287			res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
-   288			*pwm_val = val * 255 / 120;
-   289			return 0;
-   290		case hwmon_pwm_freq:
- > 291			u8 x;
-   292	
-   293			res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
-   294			if (res < 0)
-   295				return res;
- > 296			x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
-   297	
-   298			res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
-   299			if (res < 0)
-   300				return res;
-   301	
-   302			if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
-   303				x |= 0x4;
-   304			x &= 0x7;
-   305			*pwm_val = freq_table[x];
-   306			return res;
-   307		default:
-   308			return -EOPNOTSUPP;
-   309		}
-   310	}
-   311	
+I think that it would be good to consolidate the adding of
+'-menable-experimental-extensions' to the compiler and assembler flags
+to perhaps having a hidden symbol like CONFIG_EXPERIMENTAL_EXTENSIONS
+that is selected by any extension that is experimental for the
+particular toolchain version.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+config EXPERIMENTAL_EXTENSIONS
+    bool
+
+config TOOLCHAIN_HAS_ZABHA
+    def_bool y
+    select EXPERIMENTAL_EXETNSIONS if CC_IS_CLANG
+    ...
+
+config TOOLCHAIN_HAS_ZACAS
+    def_bool_y
+    # ZACAS was experimental until Clang 19: https://github.com/llvm/llvm-project/commit/95aab69c109adf29e183090c25dc95c773215746
+    select EXPERIMENTAL_EXETNSIONS if CC_IS_CLANG && CLANG_VERSION < 190000
+    ...
+
+Then in the Makefile:
+
+ifdef CONFIG_EXPERIMENTAL_EXTENSIONS
+KBUILD_AFLAGS += -menable-experimental-extensions
+KBUILD_CFLAGS += -menable-experimental-extensions
+endif
+
+> +else
+> +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZABHA) := $(riscv-march-y)_zabha
+> +endif
+> +
+>  # Remove F,D,V from isa string for all. Keep extensions between "fd" and "v" by
+>  # matching non-v and non-multi-letter extensions out with the filter ([^v_]*)
+>  KBUILD_CFLAGS += -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64ima)fd([^v_]*)v?/\1\2/')
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index 1c50b4821ac8..65de9771078e 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -103,8 +103,14 @@
+>   * indicated by comparing RETURN with OLD.
+>   */
+>  
+> -#define __arch_cmpxchg_masked(sc_sfx, prepend, append, r, p, o, n)	\
+> +#define __arch_cmpxchg_masked(sc_sfx, cas_sfx, prepend, append, r, p, o, n)	\
+>  ({									\
+> +	__label__ zabha, end;						\
+> +									\
+> +	asm goto(ALTERNATIVE("nop", "j %[zabha]", 0,			\
+> +			     RISCV_ISA_EXT_ZABHA, 1)			\
+> +			: : : : zabha);					\
+> +									\
+>  	u32 *__ptr32b = (u32 *)((ulong)(p) & ~0x3);			\
+>  	ulong __s = ((ulong)(p) & (0x4 - sizeof(*p))) * BITS_PER_BYTE;	\
+>  	ulong __mask = GENMASK(((sizeof(*p)) * BITS_PER_BYTE) - 1, 0)	\
+> @@ -131,6 +137,17 @@
+>  		: "memory");						\
+>  									\
+>  	r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
+> +	goto end;							\
+> +									\
+> +zabha:									\
+> +	__asm__ __volatile__ (						\
+> +		prepend							\
+> +		"	amocas" cas_sfx " %0, %z2, %1\n"		\
+
+This should probably have some dependency on CONFIG_RISCV_ISA_ZABHA? I get the
+following with GCC 13.2.0:
+
+  include/linux/atomic/atomic-arch-fallback.h: Assembler messages:
+  include/linux/atomic/atomic-arch-fallback.h:2108: Error: unrecognized opcode `amocas.w a4,a3,0(s1)'
+
+> +		append							\
+> +		: "+&r" (r), "+A" (*(p))				\
+> +		: "rJ" (n)						\
+> +		: "memory");						\
+> +end:									\
+
+I get a lot of warnings from this statement and the one added by the
+previous patch for zacas, which is a C23 extension:
+
+  include/linux/atomic/atomic-arch-fallback.h:4234:9: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+  include/linux/atomic/atomic-arch-fallback.h:89:29: note: expanded from macro 'raw_cmpxchg_relaxed'
+     89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+        |                             ^
+  arch/riscv/include/asm/cmpxchg.h:219:2: note: expanded from macro 'arch_cmpxchg_relaxed'
+    219 |         _arch_cmpxchg((ptr), (o), (n), "", "", "")
+        |         ^
+  arch/riscv/include/asm/cmpxchg.h:200:3: note: expanded from macro '_arch_cmpxchg'
+    200 |                 __arch_cmpxchg_masked(sc_sfx, ".h" sc_sfx,              \
+        |                 ^
+  arch/riscv/include/asm/cmpxchg.h:150:14: note: expanded from macro '__arch_cmpxchg_masked'
+    150 | end:                                                                    \
+        |                                                                         ^
+
+This resolves it:
+
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index ba3ffc2fcdd0..57aa4a554278 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -147,7 +147,7 @@ zabha:									\
+ 		: "+&r" (r), "+A" (*(p))				\
+ 		: "rJ" (n)						\
+ 		: "memory");						\
+-end:									\
++end:;									\
+ })
+ 
+ #define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
+@@ -180,7 +180,7 @@ zacas:									\
+ 		: "+&r" (r), "+A" (*(p))				\
+ 		: "rJ" (n)						\
+ 		: "memory");						\
+-end:									\
++end:;									\
+ })
+ 
+ #define _arch_cmpxchg(ptr, old, new, sc_sfx, prepend, append)		\
+
+>  })
+>  
+>  #define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
+> @@ -175,8 +192,13 @@ end:									\
+>  									\
+>  	switch (sizeof(*__ptr)) {					\
+>  	case 1:								\
+> +		__arch_cmpxchg_masked(sc_sfx, ".b" sc_sfx,		\
+> +					prepend, append,		\
+> +					__ret, __ptr, __old, __new);    \
+> +		break;							\
+>  	case 2:								\
+> -		__arch_cmpxchg_masked(sc_sfx, prepend, append,		\
+> +		__arch_cmpxchg_masked(sc_sfx, ".h" sc_sfx,		\
+> +					prepend, append,		\
+>  					__ret, __ptr, __old, __new);	\
+>  		break;							\
+>  	case 4:								\
+> -- 
+> 2.39.2
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
