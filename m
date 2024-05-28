@@ -1,110 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A6516F91D;
-	Tue, 28 May 2024 14:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E0017082D
+	for <llvm@lists.linux.dev>; Tue, 28 May 2024 15:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716907140; cv=none; b=t8I3aB48/JOxcDKStPVcYi2nQiRF4XTjtBlfzf/KLc1SfWt4k1RZigM5M2uQ1lHksiBo9s7LaZkXtNBGXeNdVq71/3BLJEgyx6V1ZhmQqzOz30PoUkBDRydhd8joBrz2ERfOB0Ohb5nIZMNYHC2VjW1eVP9+3TEMveYG+4dyQ64=
+	t=1716908535; cv=none; b=PF/7cN0H8TmvVGzlPmRaLmqrPMk7/5hO1ZNorts93riOD9fvPbzqPLdEwbbyNkPywIQrVovHPvMXQc/POPAjJJ331afVyp+6zbNa3yegb+xdrS1iREXsruP5fhCghfjAro1fGdaJ6v4JYJzj03hR+BDCpoh6R5MFtByXml6ruFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716907140; c=relaxed/simple;
-	bh=M6zz23ytNcIYjpmOBVGRwLDdpmrQad24JbGnhp4sZto=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZQ6Qrsorw/NgdPvc5x/MivH2jTwZp7y0SdbEDBwPkkqblv3h2qgtY+cysCGD9LUjwjZyNVrWPK8/E6yOCbFnRsuQks1fUg3J8egHnwnz7L51Thf80/iM+WyDuxaLcoUUQPk0Rg0tGZgnjXSDHCWrpgKWvpNRqZLZHCG63lZDxqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ViWTw5dy; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716908535; c=relaxed/simple;
+	bh=5ZHpZGACX2Frn3dDPf3fXyWybxr2L7JiyfRf2W2/hW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+YuRlbbbLSot7LhsWAeFBXdRfgiBFg3PEgjoBz7RbE0ulB1yIAzIylQffK4AnFUDi3mn9C5CAYVa4A9JyXzbNdsLFu3Iasg464H5N4cOWrdVLuNz81A/LUUkidsfUglTCuZLrw0p2f3y2GT6WL0Ok+h81xSVrjsCNOiWK+nkNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=opoXfCNq; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ViWTw5dy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716907138; x=1748443138;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M6zz23ytNcIYjpmOBVGRwLDdpmrQad24JbGnhp4sZto=;
-  b=ViWTw5dyFrdhzL6dKgVYRnTObQRx0Z7XDaPEULIxiu08Hy3YP/3M+2VQ
-   FHkhUZmPhGID01vGdVJI8NOjgslnIe6RaK2T7VW9+SMecvP0vcIlvxiZI
-   bWbPmK2NmGfmIzklumhYHuTkbvUXj3FAtkvmdmKUFoNkaNOiJ4gCIAYiC
-   0K7hcth7A40+IjqOGMpRYDrlNP82Iz26/22Gv80NJseZW1TO1FJyCNM33
-   iNwZMPWwlFt/hcmxGwGgMrZ7IVIJQ2rjtYzAUeQBTrSHQvqX8GNAkKZph
-   VeIcbLaeIMQTGpU/J/IudFiXKLA2BONW7gzQKfSpRfh9AQTbws+XRBpbz
-   g==;
-X-CSE-ConnectionGUID: g8VGptm7TICrHCqRgNIwpQ==
-X-CSE-MsgGUID: HAhdimppQWicGXamyalBeg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="13097648"
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="13097648"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 07:38:58 -0700
-X-CSE-ConnectionGUID: dA1SJRMtSvSOTk2Fpy2o+Q==
-X-CSE-MsgGUID: 53UMXH7CRJGOnwsVBk8ANA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="40056247"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 28 May 2024 07:38:56 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBxyY-000CL3-0s;
-	Tue, 28 May 2024 14:38:54 +0000
-Date: Tue, 28 May 2024 22:38:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Andy Yan <andyshrk@163.com>
-Subject: [drm-misc:drm-misc-next 29/29]
- drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c:213:3: error: implicit declaration of
- function 'drm_connector_hdmi_compute_mode_clock' is invalid in C99
-Message-ID: <202405282205.EU7NUoeQ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="opoXfCNq"
+X-Envelope-To: glider@google.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716908532;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dKnPZ9OJHpypgolMUhUxX3o8dY3J/6CO95tM7cGqfv8=;
+	b=opoXfCNqL0eaKrPq9sbb09xqDBlnVf51DlM6AdAAiU/XeLeu4KiMfvs8PGhdiophKkgpNx
+	4GMqFrplyQMupkP+yleNmZRmTkTXWHz5B0AWJMb6bufOkv6bZSG3IUOYbdoG9kCJZwp3/z
+	J71p/VMOEAsFEaZQ3BGiLIx0kDif3Xc=
+X-Envelope-To: mathieu.desnoyers@efficios.com
+X-Envelope-To: bfoster@redhat.com
+X-Envelope-To: keescook@chromium.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: linux-bcachefs@vger.kernel.org
+X-Envelope-To: elver@google.com
+X-Envelope-To: dvyukov@google.com
+X-Envelope-To: kasan-dev@googlegroups.com
+X-Envelope-To: nathan@kernel.org
+X-Envelope-To: ndesaulniers@google.com
+X-Envelope-To: morbo@google.com
+X-Envelope-To: justinstitt@google.com
+X-Envelope-To: llvm@lists.linux.dev
+Date: Tue, 28 May 2024 11:02:05 -0400
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Alexander Potapenko <glider@google.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Brian Foster <bfoster@redhat.com>, Kees Cook <keescook@chromium.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, linux-bcachefs@vger.kernel.org, Marco Elver <elver@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
+Subject: Re: Use of zero-length arrays in bcachefs structures inner fields
+Message-ID: <63zx2cnrf5u2slmabde2wptxvq6a3opvrj2zrkcolw3gdkjdpf@bttdonbctura>
+References: <986294ee-8bb1-4bf4-9f23-2bc25dbad561@efficios.com>
+ <vu7w6if47tv3kwnbbbsdchu3wpsbkqlvlkvewtvjx5hkq57fya@rgl6bp33eizt>
+ <944d79b5-177d-43ea-a130-25bd62fc787f@efficios.com>
+ <7236a148-c513-4053-9778-0bce6657e358@efficios.com>
+ <jqj6do7lodrrvpjmk6vlhasdigs23jkyvznniudhebcizstsn7@6cetkluh4ehl>
+ <CAG_fn=Vp+WoxWw_aA9vr9yf_4qRvu1zqfLDWafR8J41Zd9tX5g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG_fn=Vp+WoxWw_aA9vr9yf_4qRvu1zqfLDWafR8J41Zd9tX5g@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   62545c719e26ec9f62efab7e9582deb73265b6d0
-commit: ea64761a54a25fa2c27bae99b3c72dadfaa74d3e [29/29] drm/sun4i: hdmi: Switch to HDMI connector
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240528/202405282205.EU7NUoeQ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282205.EU7NUoeQ-lkp@intel.com/reproduce)
+On Tue, May 28, 2024 at 01:36:11PM +0200, Alexander Potapenko wrote:
+> On Fri, May 24, 2024 at 7:30 PM Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >
+> > On Fri, May 24, 2024 at 12:04:11PM -0400, Mathieu Desnoyers wrote:
+> > > On 2024-05-24 11:35, Mathieu Desnoyers wrote:
+> > > > [ Adding clang/llvm and KMSAN maintainers/reviewers in CC. ]
+> > > >
+> > > > On 2024-05-24 11:28, Kent Overstreet wrote:
+> > > > > On Thu, May 23, 2024 at 01:53:42PM -0400, Mathieu Desnoyers wrote:
+> > > > > > Hi Kent,
+> > > > > >
+> > > > > > Looking around in the bcachefs code for possible causes of this KMSAN
+> > > > > > bug report:
+> > > > > >
+> > > > > > https://lore.kernel.org/lkml/000000000000fd5e7006191f78dc@google.com/
+> > > > > >
+> > > > > > I notice the following pattern in the bcachefs structures: zero-length
+> > > > > > arrays members are inserted in structures (not always at the end),
+> > > > > > seemingly to achieve a result similar to what could be done with a
+> > > > > > union:
+> > > > > >
+> > > > > > fs/bcachefs/bcachefs_format.h:
+> > > > > >
+> > > > > > struct bkey_packed {
+> > > > > >          __u64           _data[0];
+> > > > > >
+> > > > > >          /* Size of combined key and value, in u64s */
+> > > > > >          __u8            u64s;
+> > > > > > [...]
+> > > > > > };
+> > > > > >
+> > > > > > likewise:
+> > > > > >
+> > > > > > struct bkey_i {
+> > > > > >          __u64                   _data[0];
+> > > > > >
+> > > > > >          struct bkey     k;
+> > > > > >          struct bch_val  v;
+> > > > > > };
+> 
+> I took a glance at the LLVM IR for fs/bcachefs/bset.c, and it defines
+> struct bkey_packed and bkey_i as:
+> 
+>     %struct.bkey_packed = type { [0 x i64], i8, i8, i8, [0 x i8], [37 x i8] }
+>     %struct.bkey_i = type { [0 x i64], %struct.bkey, %struct.bch_val }
+> 
+> , which more or less looks as expected, so I don't think it could be
+> causing problems with KMSAN right now.
+> Moreover, there are cases in e.g. include/linux/skbuff.h where
+> zero-length arrays are used for the same purpose, and KMSAN handles
+> them just fine.
+> 
+> Yet I want to point out that even GCC discourages the use of
+> zero-length arrays in the middle of a struct:
+> https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html, so Clang is not
+> unique here.
+> 
+> Regarding the original KMSAN bug, as noted in
+> https://lore.kernel.org/all/0000000000009f9447061833d477@google.com/T/,
+> we might be missing the event of copying data from the disk to
+> bcachefs structs.
+> I'd appreciate help from someone knowledgeable about how disk I/O is
+> implemented in the kernel.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405282205.EU7NUoeQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c:213:3: error: implicit declaration of function 'drm_connector_hdmi_compute_mode_clock' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   drm_connector_hdmi_compute_mode_clock(mode, 8,
-                   ^
-   drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c:213:3: note: did you mean 'drm_hdmi_compute_mode_clock'?
-   include/drm/display/drm_hdmi_helper.h:28:1: note: 'drm_hdmi_compute_mode_clock' declared here
-   drm_hdmi_compute_mode_clock(const struct drm_display_mode *mode,
-   ^
-   1 error generated.
-
-
-vim +/drm_connector_hdmi_compute_mode_clock +213 drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-
-   207	
-   208	static enum drm_mode_status
-   209	sun4i_hdmi_connector_mode_valid(struct drm_connector *connector,
-   210					struct drm_display_mode *mode)
-   211	{
-   212		unsigned long long rate =
- > 213			drm_connector_hdmi_compute_mode_clock(mode, 8,
-   214							      HDMI_COLORSPACE_RGB);
-   215	
-   216		return sun4i_hdmi_connector_clock_valid(connector, mode, rate);
-   217	}
-   218	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If that was missing I'd expect everything to be breaking. What's the
+helper that marks memory as initialized?
