@@ -1,146 +1,143 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DDC16C69D
-	for <llvm@lists.linux.dev>; Tue, 28 May 2024 11:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272036F08A;
+	Tue, 28 May 2024 12:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716896216; cv=none; b=n6Gx0nIjqEvytHVyJsA7y5bMsikUSnMI+j9QLYz0ik6bo/n23OiwGMWMOh1uJMCwO4EpEmTLKPVZCxyFGebGUWMfE+ot93xFSTanom+xGvzSJxRA3V65WVzAPvJbYX/AxFOJhJYGOjofBdJgKQgy6dxDi2AZfFXXQxbg0Cb/qTQ=
+	t=1716900870; cv=none; b=asNBoRVPSYm4OXIRhwLWpsg/aBHzUzXo8ZdVHeR4qTQFzt/0EyVWB3jdJAgdwDSJcDd4k9QFE91g7AjEPmkj4sVMG4LD/EQ14LtQDEeCIaEw7nnYyOshK5v1rR0UsVDxgXOMMjdLho6eD6tkNIfEl2hmp4Dq65L6LpYWutu1yVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716896216; c=relaxed/simple;
-	bh=M0MaGrmyVgPDZ5O+a4ObngblY3U7Ng60oW1EiVKZdNs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q/BasvKL58nGe9nXntA6I3Y3g+A3waQkGyK3zrAmYHlm08goUwRBrmlxPbiTHv9PfFBtqHykPNa8X5HKyAY1fu9TKbsqXdLkQ16REjsj/eoZvymgSjYn+vYUgOpaJqeta0wOrEg3d6cBcWlWZxIALeh3/5kQz1vrWUbyqus1qvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b/MsObQF; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1716900870; c=relaxed/simple;
+	bh=zhjmPwGF/MUJ8NPPpqQPbAB7QBimAAKgje5xk8TXdTc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uDt9OCjOCJSSOMFcrT5ajrPUPLRPQraTv0DEnQOiGTpzhuikMA5o4i9T+Ri1jmtdZpVWEgDgQghLoYkNuRwBuPsY5bOmF7Zn44CCik9sCV4uxvzfD3ZrH/Cwqa7VkDbe4NjKC+sGzYo1Xzd7GqDpOIbLp3QLYCGaCruWuMhBC0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DkmElAN3; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b/MsObQF"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6ab9d01cb11so4202186d6.1
-        for <llvm@lists.linux.dev>; Tue, 28 May 2024 04:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716896213; x=1717501013; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5+fy7bxhmTSYRqmL4m3IRHCvKHkrSDKxVpOHKJ74CWc=;
-        b=b/MsObQFkdrbRx0ZLwlvRjm9fed6r7jLudt9nQMMHLizpoBWXeO4brVYCURUImnUYk
-         CDm00EaKM9kmgZUwkkzx1s3gnfoalQdn6otl2BqCgM6GBgp4Yi8qp0l2VPelIQOKnZlL
-         Ih9S+dmoFOXb0asx+u5kAoD1X+kgZRZAysh8kUWNZoFFokFG2VVnEmCohgfNRgdxnfo4
-         VTln6ZjAdHukbi43C5JBV79Vs03HEB2cBaj47yrNqQSMYTO6Jv3YegT90E5UBbpdW6tU
-         qnDe/szEEfTaUnbsu/szqsuc/JZykF3ZuSWBE1yVyRU3Wc0b/C/LDwxROrqYNbc91t0B
-         x1oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716896213; x=1717501013;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5+fy7bxhmTSYRqmL4m3IRHCvKHkrSDKxVpOHKJ74CWc=;
-        b=Pbm46GSaueNPl+KzSWI0e1sGkuUsspjx9ZAKzm5ZaQXtBNzJgpq6p9b9tYI9zxEl9o
-         HXLD+ZAWGfEbTWpmLRHme7lhEq2FNX+NHce4BVN8rmWJJrFUtiaJeZZWMRe09fxC4onc
-         Gz7Slci37AzhAqV7aSEbhl0v6EdBBPbBtwz/g8F1S8ubnDwnpllHFMkceVI0MtxY7aAy
-         Pp+AFxrk62RpLB6Nj1LVgKZFTCroNLEbB4U01PkOF0yC3D7LRu2hqrlBj/x36GYAPwt8
-         j3E27wzyDPDKlq6m3/x9BEbuOu7xdLuCMaU5dJHcd2wJhz91fRo+h4pEbz5HAvrynuq6
-         osoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqFVYum05N+4s/cMWeLMK5lfX9e9B6rWfJ1ZzkKa1PCZIz7JutFTYbm3Gmapl682b3ILWpWiJ8/2C6CbSy12My1Frw9w==
-X-Gm-Message-State: AOJu0YwNBNawMo+ptejoc89cRG2WA+NI/FzMA5wrTSIPfxGbp7YksQ6g
-	DZ06knCPP4EOx9Zv2wDa1Vkalbo8sX63MHY84G/xu2wxJF/I//WhpI6NYM5y3LJ7s0ykhrD40Wr
-	3FrYabOdRXZLk10sRxNs/vE2D3gMgcE/hqePM
-X-Google-Smtp-Source: AGHT+IEg6PbfYyP0aS02Mv0srCCx6EfAtwyybRhD4r3hX01VAgUGGxblt8OUbvO4llpryD8LyAH3/0ceqAYcq/6J4a4=
-X-Received: by 2002:a05:6214:4602:b0:6ab:92b7:5903 with SMTP id
- 6a1803df08f44-6abbbcb0b35mr137433736d6.21.1716896213239; Tue, 28 May 2024
- 04:36:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DkmElAN3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716900868; x=1748436868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zhjmPwGF/MUJ8NPPpqQPbAB7QBimAAKgje5xk8TXdTc=;
+  b=DkmElAN3Nm1lYTMx9PSrokKnmoIp46AXMDKJDeG19P3cp04zlPJHAfa2
+   ECUOuM7MFpRVePWFYgNV0tXpePSsUKKit7RBao1bZQ26DUZWu+pwymCvD
+   FyO+IZzjSB9YxrNnC0gOtxVMXF4xZVq7C4DxauDFuIL8WFommnVgDOrst
+   +tJXxLuP7Qx0yDmICIs0zAsr3p3BGvROG2HZQvqzrD/BMvi0B1Q85swo3
+   koFRTNpxXLTsR4dcR3oZU84ZrrUgs5PfL83kCHKAD0UKQ1oqpPd+iaX6A
+   GTUNYlZDSRw7Ec9AEG2WoavcK3pUy29gcCbbYtjxD8cOSfFme1gwtA0E1
+   g==;
+X-CSE-ConnectionGUID: /Jz6KzJVRMyYQXmOTSeqLw==
+X-CSE-MsgGUID: cXm96+CETfGpFiEWff6foA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38624678"
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="38624678"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 05:54:23 -0700
+X-CSE-ConnectionGUID: e4TLYlnHQJ+cnQSAui0hEA==
+X-CSE-MsgGUID: vFAolv0hRqCm6fOxmKrqnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
+   d="scan'208";a="35085290"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 28 May 2024 05:54:21 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sBwLL-000CCR-1P;
+	Tue, 28 May 2024 12:54:19 +0000
+Date: Tue, 28 May 2024 20:53:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Naresh Solanki <naresh.solanki@9elements.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+Message-ID: <202405282012.UaQ1329z-lkp@intel.com>
+References: <20240528091808.863702-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <986294ee-8bb1-4bf4-9f23-2bc25dbad561@efficios.com>
- <vu7w6if47tv3kwnbbbsdchu3wpsbkqlvlkvewtvjx5hkq57fya@rgl6bp33eizt>
- <944d79b5-177d-43ea-a130-25bd62fc787f@efficios.com> <7236a148-c513-4053-9778-0bce6657e358@efficios.com>
- <jqj6do7lodrrvpjmk6vlhasdigs23jkyvznniudhebcizstsn7@6cetkluh4ehl>
-In-Reply-To: <jqj6do7lodrrvpjmk6vlhasdigs23jkyvznniudhebcizstsn7@6cetkluh4ehl>
-From: Alexander Potapenko <glider@google.com>
-Date: Tue, 28 May 2024 13:36:11 +0200
-Message-ID: <CAG_fn=Vp+WoxWw_aA9vr9yf_4qRvu1zqfLDWafR8J41Zd9tX5g@mail.gmail.com>
-Subject: Re: Use of zero-length arrays in bcachefs structures inner fields
-To: Kent Overstreet <kent.overstreet@linux.dev>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Brian Foster <bfoster@redhat.com>, Kees Cook <keescook@chromium.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux-bcachefs@vger.kernel.org, 
-	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240528091808.863702-1-naresh.solanki@9elements.com>
 
-On Fri, May 24, 2024 at 7:30=E2=80=AFPM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
-> On Fri, May 24, 2024 at 12:04:11PM -0400, Mathieu Desnoyers wrote:
-> > On 2024-05-24 11:35, Mathieu Desnoyers wrote:
-> > > [ Adding clang/llvm and KMSAN maintainers/reviewers in CC. ]
-> > >
-> > > On 2024-05-24 11:28, Kent Overstreet wrote:
-> > > > On Thu, May 23, 2024 at 01:53:42PM -0400, Mathieu Desnoyers wrote:
-> > > > > Hi Kent,
-> > > > >
-> > > > > Looking around in the bcachefs code for possible causes of this K=
-MSAN
-> > > > > bug report:
-> > > > >
-> > > > > https://lore.kernel.org/lkml/000000000000fd5e7006191f78dc@google.=
-com/
-> > > > >
-> > > > > I notice the following pattern in the bcachefs structures: zero-l=
-ength
-> > > > > arrays members are inserted in structures (not always at the end)=
-,
-> > > > > seemingly to achieve a result similar to what could be done with =
-a
-> > > > > union:
-> > > > >
-> > > > > fs/bcachefs/bcachefs_format.h:
-> > > > >
-> > > > > struct bkey_packed {
-> > > > >          __u64           _data[0];
-> > > > >
-> > > > >          /* Size of combined key and value, in u64s */
-> > > > >          __u8            u64s;
-> > > > > [...]
-> > > > > };
-> > > > >
-> > > > > likewise:
-> > > > >
-> > > > > struct bkey_i {
-> > > > >          __u64                   _data[0];
-> > > > >
-> > > > >          struct bkey     k;
-> > > > >          struct bch_val  v;
-> > > > > };
+Hi Naresh,
 
-I took a glance at the LLVM IR for fs/bcachefs/bset.c, and it defines
-struct bkey_packed and bkey_i as:
+kernel test robot noticed the following build warnings:
 
-    %struct.bkey_packed =3D type { [0 x i64], i8, i8, i8, [0 x i8], [37 x i=
-8] }
-    %struct.bkey_i =3D type { [0 x i64], %struct.bkey, %struct.bch_val }
+[auto build test WARNING on 5fbf8734fb36cf67339f599f0e51747a6aff690c]
 
-, which more or less looks as expected, so I don't think it could be
-causing problems with KMSAN right now.
-Moreover, there are cases in e.g. include/linux/skbuff.h where
-zero-length arrays are used for the same purpose, and KMSAN handles
-them just fine.
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max6639-Update-hwmon-init-using-info/20240528-172245
+base:   5fbf8734fb36cf67339f599f0e51747a6aff690c
+patch link:    https://lore.kernel.org/r/20240528091808.863702-1-naresh.solanki%409elements.com
+patch subject: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
+config: i386-buildonly-randconfig-003-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282012.UaQ1329z-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282012.UaQ1329z-lkp@intel.com/reproduce)
 
-Yet I want to point out that even GCC discourages the use of
-zero-length arrays in the middle of a struct:
-https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html, so Clang is not
-unique here.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405282012.UaQ1329z-lkp@intel.com/
 
-Regarding the original KMSAN bug, as noted in
-https://lore.kernel.org/all/0000000000009f9447061833d477@google.com/T/,
-we might be missing the event of copying data from the disk to
-bcachefs structs.
-I'd appreciate help from someone knowledgeable about how disk I/O is
-implemented in the kernel.
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/max6639.c:291:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     291 |                 u8 x;
+         |                 ^
+   drivers/hwmon/max6639.c:328:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     328 |                 u8 x;
+         |                 ^
+   2 warnings generated.
+
+
+vim +291 drivers/hwmon/max6639.c
+
+   275	
+   276	static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
+   277				    long *pwm_val)
+   278	{
+   279		struct max6639_data *data = dev_get_drvdata(dev);
+   280		unsigned int val, res;
+   281	
+   282		if (IS_ERR(data))
+   283			return PTR_ERR(data);
+   284	
+   285		switch (attr) {
+   286		case hwmon_pwm_input:
+   287			res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
+   288			*pwm_val = val * 255 / 120;
+   289			return 0;
+   290		case hwmon_pwm_freq:
+ > 291			u8 x;
+   292	
+   293			res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
+   294			if (res < 0)
+   295				return res;
+   296			x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
+   297	
+   298			res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
+   299			if (res < 0)
+   300				return res;
+   301	
+   302			if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
+   303				x |= 0x4;
+   304			x &= 0x7;
+   305			*pwm_val = freq_table[x];
+   306			return res;
+   307		default:
+   308			return -EOPNOTSUPP;
+   309		}
+   310	}
+   311	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
