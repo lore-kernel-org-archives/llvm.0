@@ -1,176 +1,100 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2063.outbound.protection.outlook.com [40.107.243.63])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27E913E054
-	for <llvm@lists.linux.dev>; Tue, 28 May 2024 22:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716936237; cv=fail; b=CXK9MjQM5TCYCULhZyzSjK0o+2k4b6vxSXl+xgiUZPRXfPQL4IjFrXvDEi+cwUQ4AEbBy6qJzKgIHz/WjAcEFYjStVibH7zgfXQ2pME9Zq+08Nll6bsuxukbgglFgFlq6X8Qlh9f1MbcF3kbA8CdCKqhwrYqFGepM2HaO+0AVdA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716936237; c=relaxed/simple;
-	bh=0lxCFvvLq9PuQmTqYjpBpDpkrCPs4XvuULU/5f52I4U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=iFO+1It3wWVlXzc1O/bjrR/02do0fmjPCYAVLzebTAoS1Fk0E/r7BjtAxhECd5QHfzCFov5DKRJ+RlxwVxyLrurfu6jLCnBAMo6gigMGwydAnK9qdqmM0nSD3NzfmqXZy8Khuil+NJGb11o6NssaF/7RUDydbO6R0aqNFw6m5Ms=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aNlqCA++; arc=fail smtp.client-ip=40.107.243.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953722940D;
+	Tue, 28 May 2024 23:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716939175; cv=none; b=AkODyWc8J1ghiwTgATKywR+F82trLKB3A5QvxR6okNzvSi43h4yU2jSRQG52HUZZ+3ONjbXQdBJOMt9U0syd1NSh50f50vy6hmceODbbyNb4j+ToP1+ykRjXVd2Dpg4jfBT59WWQtKI7Z6MsrD4bWJ8NW93Lok1PAFvB75Orfp0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716939175; c=relaxed/simple;
+	bh=ufvN3pUNYe6Q1J3ne+40KdYJEK72jHy1xBPQYxwB9ag=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UrcsFuNSocHVLz1iYeDM80Rf0qFCtjdj8VX/KTYMZwQjvSB1CMosn1lTktdPMSkflSCvmaRYF8JGCPHzhgpDWZIsf8E8iftuqQIrNRzRCXrkNRO0qWZ1e1mojj4Th+N3J6eAzy4qRsNfTTE8kjQUnFggghFD5z5N5NTNH9CWOi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LWkhNHiQ; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aNlqCA++"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M5roGZpc7Tf8lTXy72idvJa31gPqBYQAZ9d7PyZC4hE16teWOfwI24B02qqiVw7OnL1L6QPUpcu2zrHQRCT/la/lDwud8bHyC7kwNjxiNCxcBTqnEQ9lE4oWKQlPsh/8PQhKTZ892T5vG8qKvvN9b7v78rPeS/wWWyLQYAprl1jJ3NCtJhAvdEkR8PkETd3lfLxuwGMYgr7MGK0/G8OuysJ3EGiDeCksJJ48qa2mne5OC3uU8n+CrjTT9HZSN+nAUaua21WRT3+yBNQcC/MbOvTugA8LJHXIyV36biIJ79owDh697AdR3+1H0yQu6a6WyBT+wa/GuTfTk3OGgJ24NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GBCVCam2HIgrjwWQzhpfYBIJIZb8RCbCanl6dgERaj0=;
- b=YN2Mxv4ODqraqIYRd7SSbYfLJuqhjwullsMg6S+KvH2w/XdPQqfjhFSYQT1GVxHxfb688Sa3wNivSLqDgVDNcOlzYnhvIRDvc//u99N1UmPkCEche/WV2tS+b/6xAQGLcTl48ySvxKtAhEURwDC4YzTjdqicKegTnfaIC0ikvIj4GJuxYr09uTPECNg0+R/tOIg4o0enHB+9uEdOAm6POhSQYNVdQjFe8FmnhFwCdB5Od7lKC+TekeNn4GcE+d0SBD8g/8LwnPLR3PiXH6OO8Zj4bCcRM/OjWwU/f1lHSEDmyrtitR784uBDgSNnhiPIpOkk+uqCvs5/J9Jss5etJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GBCVCam2HIgrjwWQzhpfYBIJIZb8RCbCanl6dgERaj0=;
- b=aNlqCA++7EU9k9TyBKT+ngUUqIGNCwoxkFQ5qWNH7aPs/kpOlycNLptXvjYqrHEdZvV4g7XHpLOgaT2QvEJxNsQLcMyBFiPuEClpTHDZQGCSoXMXgJWRnoEqBhEgOv2dTAbDEVgTnxlqWIIKg96PRXtJeFTd9kuWe/jUHpIWgSN1nbZ0jlO3S3DmpZPmW055QEP1Igf3qEn/7dkb9siPkUhKVt2BG51XoS3qkO35VE3b0y+I7qXdxIXsb7S4R3+hSeXxH3/zMRP9C1pIRzi264bF2FvgaHtTnlWrCIOt/I2ByiNAwdP0WUVgc0Eo8MIOZVUVi8pScxqdlBBTQhu55Q==
-Received: from DM6PR03CA0078.namprd03.prod.outlook.com (2603:10b6:5:333::11)
- by PH7PR12MB7284.namprd12.prod.outlook.com (2603:10b6:510:20b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.29; Tue, 28 May
- 2024 22:43:52 +0000
-Received: from CH3PEPF0000000C.namprd04.prod.outlook.com
- (2603:10b6:5:333:cafe::23) by DM6PR03CA0078.outlook.office365.com
- (2603:10b6:5:333::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.30 via Frontend
- Transport; Tue, 28 May 2024 22:43:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF0000000C.mail.protection.outlook.com (10.167.244.39) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7633.15 via Frontend Transport; Tue, 28 May 2024 22:43:51 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 28 May
- 2024 15:43:36 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 28 May
- 2024 15:43:35 -0700
-Message-ID: <a666bb5c-ba85-4b57-bfdb-217da150fb36@nvidia.com>
-Date: Tue, 28 May 2024 15:43:35 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LWkhNHiQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716939173; x=1748475173;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ufvN3pUNYe6Q1J3ne+40KdYJEK72jHy1xBPQYxwB9ag=;
+  b=LWkhNHiQ+1IVee00/xev4SPkUAs/fSfDaUcmT4Nhw0v/0dzP14q9VVM+
+   96sU8TfEiCat6aNR2h8smUbrW+tpGUfkSi38iudzQuYAYTU2M1IF7V15q
+   a1X6RofVYZ6yZ7GHj+u+MEFFMhGlOj3g7TmKbDYh5SFHNYc7sf8XyW8+s
+   Qsr5xVZpAzuJfTBVHNMByQWjKIQ0Q1ScWLEfSA4odI4bZITUQsAdYSE+u
+   By5Yyae4RUJTPYTALiJEvEojR1KbuAFzUtyzNn6X+QGHsl3un8Wg5OyPR
+   C2skvFX1I/eHPbkVNRPe1XqoUmTz1Dy8Dkn87AKIvRCWByjoWpXYJHT0W
+   A==;
+X-CSE-ConnectionGUID: xZy/WbOVS1+hx/0NEQa8sg==
+X-CSE-MsgGUID: cyD+VYF/Qt+UG25CrcZLeA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="30842627"
+X-IronPort-AV: E=Sophos;i="6.08,196,1712646000"; 
+   d="scan'208";a="30842627"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 16:32:53 -0700
+X-CSE-ConnectionGUID: h4U7aXMRRK+yxMFoN4oBtg==
+X-CSE-MsgGUID: M08j/SeDQhmJ2M/X9iQvoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,196,1712646000"; 
+   d="scan'208";a="35302320"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 28 May 2024 16:32:51 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sC6JF-000Cs8-0t;
+	Tue, 28 May 2024 23:32:49 +0000
+Date: Wed, 29 May 2024 07:31:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mark:arm64/gicv3-nmi-prio 4/4] drivers/irqchip/irq-gic-v3.c:40:43:
+ error: use of undeclared identifier 'GICV3_PRIO_IRQ'
+Message-ID: <202405290702.U3dhwDww-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] selftests/futex: pass _GNU_SOURCE without a value to
- the compiler
-To: Edward Liaw <edliaw@google.com>
-CC: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, "Ingo
- Molnar" <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Darren
- Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, "Nysal Jan K . A"
-	<nysal@linux.ibm.com>, Mark Brown <broonie@kernel.org>, Valentin Obst
-	<kernel@valentinobst.de>, <linux-kselftest@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20240503041843.99136-1-jhubbard@nvidia.com>
- <20240503041843.99136-4-jhubbard@nvidia.com>
- <dbca543e-224b-4fa5-ba23-37f4957ff79d@nvidia.com>
- <CAG4es9Vi3Kmvb0Nn2FNGmVL2YB_5qcJHunUaTRuSy=mkiLhb0Q@mail.gmail.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAG4es9Vi3Kmvb0Nn2FNGmVL2YB_5qcJHunUaTRuSy=mkiLhb0Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0000000C:EE_|PH7PR12MB7284:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2585acc4-2e76-47fd-5643-08dc7f67a5a6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|1800799015|376005|36860700004|82310400017|7416005;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NXhVU0tsWEdJU2dxd2tNNmtLZG5VYkNCSEtKOUwxTDFsTmFrSWRNcUl4a0R1?=
- =?utf-8?B?VGFxQmVld0RrdVdYcmIrVGNtVzc3RTE3NW9UblQ4elZRWmFWWVpqZTdSeUFr?=
- =?utf-8?B?K0lvODRmY1N3dUJsUml3dGh6bzdhODdod0N3eEpRRW9yb1piVnRZL1ZQaWYz?=
- =?utf-8?B?NGdsbEo2ZGZYeXB6bnRlQm9Cd1JxMG5Dc1o4cGZ0YVV0bW5KdGVyTHQzY1hh?=
- =?utf-8?B?TnViOFdVR0dHQiszQStsekFnK1JMTk5XOGtLeHhnM3ZuNGFsRG1aZlpHY0Y2?=
- =?utf-8?B?RU9YVXV5czZVbXdGYU95VWF3Y0lqTXZ4eURFK1FzY2txOTUycWJSbTNuaTVB?=
- =?utf-8?B?OXRUcE5IQlNydUNYMnNnZmNGaFFaa0RzODVyWTNtVTRnc29wdjA3NE9BRFhy?=
- =?utf-8?B?blI1N0pZSkVaR2NhUDEyZWh5NEJSMEVmSlZpbU94N2lLZW1uN1ZXR3o5QTVK?=
- =?utf-8?B?aXlVRit2SERCT3ZaMFpVVEtlNzk5MHdoT3cwSHRzekpMaS9yL1lXeGRpS3Jj?=
- =?utf-8?B?Q3VtNWl5bmZlaHBOc3VnYVRuZG94T0dqZDFVcjVMbFFoL3VmNkdHbm5VYVcx?=
- =?utf-8?B?ZWNVd1ZzMy9ON0l5Vis5THJMSkJSNjJ2ajkyZEdkWlZ0SHRkRndFVGtPRkZX?=
- =?utf-8?B?b1BwTjNCZGJpSGM1SDBCNmgxK0tLMW5TUU1pUFl4K0hIY24rM2lwMXM3Mzdx?=
- =?utf-8?B?MmhEYnk3cHRHeFFVNURVNHBzaWxIc3RicEdkc2dSdVUrT2dyWlhjbmwzVXl1?=
- =?utf-8?B?UmpNRVNmQlZWVDE2bWlIYUQwcDZTbGJKaHkxa0FPdHdDQ2FpTzMyM29XSlcv?=
- =?utf-8?B?VjloYU5zeEp4dCtLRDNFUllIMEJGTUlwQWtZN3k2UTlUUk1tYjhhRWhoSm5W?=
- =?utf-8?B?bUQzYTlVblpqZ3dTekVqdlRCLzdsLzNZYnlLektQNXl3d0NocGRFN3Y1V2E0?=
- =?utf-8?B?ZTY4a09GcXVkR21iRElZeWlIRi92OFA1V3IvRlRQWkhaZWs3ck8xckd5UFpX?=
- =?utf-8?B?a25kU1p5M0laZHdWbjZUUVI5NlRsSWlFSXBEb2ZyUE10dHBPVUxZTmlyRG5Q?=
- =?utf-8?B?NXZsQXdHZlJPSGZwU2dLbFgrc0J1YUNUNmVhR0RvSFNrc0ZRQnRpVFdzN3Vx?=
- =?utf-8?B?OXZpNkw2RTlRc3dPY3F3L2RoNDkxNGZVMHVtKzhNR3ZISmFxajVVbHA3Si9o?=
- =?utf-8?B?UnErcTRlL0ZqWklUR2RMRjBCYW9GRllPYkVTS2xLb2pnUzgzajg2c3VMZ3lS?=
- =?utf-8?B?TjMwZGw0cXZQeXRVaFdhM0poLzBURFBubU81cjBiTnNDbnBsdDl6T3NvMTk1?=
- =?utf-8?B?Y3F5bXR1K2RTQTdicy8vWHNRZHdxWE9ZQ2UyRkxXb3JuZmRjWVAvOWZKSzdr?=
- =?utf-8?B?WXdKbE41ZjVUZEM1WDFZMUpuM2dKNG45U2o1cVR6VjhrUzJjNmRkZ3lwU0xO?=
- =?utf-8?B?bnhUTW8wZCtJNUI2MFAySDBQTTVDZDE2WGpWckVJNEEzL1poVnNZb29HZjR1?=
- =?utf-8?B?aGl5ekFRUEVsc2c0NERYL2pPdFVrQjEySm5VZ3ZjSWlmSTJHOEVuSjljbmRK?=
- =?utf-8?B?VDMxQ0JvSU9kMjRjQ3N0eGxxdUtydU5ydDlrbGxvYTh6eFBlMHRiS3E1QVUy?=
- =?utf-8?B?VkFyTUZMVHhoQi9JYTRBc1dzK2g3UzdXcDNibXdiMzZoYkpVWkUvYUcycmRM?=
- =?utf-8?B?WGowOE1LRXNWZkR3VlU2S3krV09uZDJ0V09OZzBranQ3dVZ6dUc5c1Urdksy?=
- =?utf-8?B?eFA3ZllsTGREMXJRampOSmhMV3hUaEhSVHQ0QnppOWd3N2k5R1NBeU43bWNm?=
- =?utf-8?B?cHVUZzFwTTZsQnM3QTQyVmJJcUtQemtWb0ZwWG56NDh0YWtnYjhWYS9leWZ5?=
- =?utf-8?Q?bMq+dvrSkuqAl?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(1800799015)(376005)(36860700004)(82310400017)(7416005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2024 22:43:51.5706
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2585acc4-2e76-47fd-5643-08dc7f67a5a6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0000000C.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7284
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/28/24 3:24 PM, Edward Liaw wrote:
-> On Wed, May 8, 2024 at 2:05 PM John Hubbard <jhubbard@nvidia.com> wrote:
->>
->> On 5/2/24 9:18 PM, John Hubbard wrote:
->>> It's slightly better to set _GNU_SOURCE in the source code, but if one
->>> must do it via the compiler invocation, then the best way to do so is
->>> this:
->>
->> Hi Shuah, Edward and all,
->>
->> This patch now seems to be obsolete, due to Edward Liaw's comprehensive
->> fix, "[PATCH v2 0/5] Define _GNU_SOURCE for sources using" [1].
->>
->> [1] https://lore.kernel.org/20240507214254.2787305-1-edliaw@google.com
-> 
-> Since we're dropping that patch, would we be able to merge this one?
-> This should resolve the futex_requeue_pi compiler warnings with Clang.
-> 
-> Reviewed-by: Edward Liaw <edliaw@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/gicv3-nmi-prio
+head:   3c0651daca34ea67b809bd2ef412779c94517811
+commit: 3c0651daca34ea67b809bd2ef412779c94517811 [4/4] WIP: irqchip/gic-v3: choose priorities at boot time
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240529/202405290702.U3dhwDww-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240529/202405290702.U3dhwDww-lkp@intel.com/reproduce)
 
-Thanks for the review! I can post a v2 of this tiny series that has only
-patches 1 and 3, rebased on -rc1, so that it's clear what to merge.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405290702.U3dhwDww-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/irqchip/irq-gic-v3.c:40:43: error: use of undeclared identifier 'GICV3_PRIO_IRQ'
+   static u8 dist_prio_irq __ro_after_init = GICV3_PRIO_IRQ;
+                                             ^
+>> drivers/irqchip/irq-gic-v3.c:41:43: error: use of undeclared identifier 'GICV3_PRIO_NMI'
+   static u8 dist_prio_nmi __ro_after_init = GICV3_PRIO_NMI;
+                                             ^
+   drivers/irqchip/irq-gic-v3.c:825:36: error: use of undeclared identifier 'GICV3_PRIO_NMI'
+           return unlikely(gic_read_rpr() == GICV3_PRIO_NMI);
+                                             ^
+   3 errors generated.
 
 
-thanks,
+vim +/GICV3_PRIO_IRQ +40 drivers/irqchip/irq-gic-v3.c
+
+    39	
+  > 40	static u8 dist_prio_irq __ro_after_init = GICV3_PRIO_IRQ;
+  > 41	static u8 dist_prio_nmi __ro_after_init = GICV3_PRIO_NMI;
+    42	
+
 -- 
-John Hubbard
-NVIDIA
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
