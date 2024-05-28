@@ -1,63 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272036F08A;
-	Tue, 28 May 2024 12:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F79C16F850;
+	Tue, 28 May 2024 13:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716900870; cv=none; b=asNBoRVPSYm4OXIRhwLWpsg/aBHzUzXo8ZdVHeR4qTQFzt/0EyVWB3jdJAgdwDSJcDd4k9QFE91g7AjEPmkj4sVMG4LD/EQ14LtQDEeCIaEw7nnYyOshK5v1rR0UsVDxgXOMMjdLho6eD6tkNIfEl2hmp4Dq65L6LpYWutu1yVs=
+	t=1716902205; cv=none; b=iBcMJJOBABK/dczTNUBR1fX7GvEH6I3Arn8mGuRoBQ7wHC7iU7tAU0D+NK4KmasL1METQZpzDwbtUhzRuwtjCBKhKdnfOWw3jWcQva4ATWxkUFw5pne8K04cOkPVukiu77sRy8pF9HmU0SXeGlLwMiMD1Xcl4EO6agClN3LUszU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716900870; c=relaxed/simple;
-	bh=zhjmPwGF/MUJ8NPPpqQPbAB7QBimAAKgje5xk8TXdTc=;
+	s=arc-20240116; t=1716902205; c=relaxed/simple;
+	bh=tP9LNLHcHcid8pBq2Y+wDHSSdjrKRVd8ZjilPzbswnE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uDt9OCjOCJSSOMFcrT5ajrPUPLRPQraTv0DEnQOiGTpzhuikMA5o4i9T+Ri1jmtdZpVWEgDgQghLoYkNuRwBuPsY5bOmF7Zn44CCik9sCV4uxvzfD3ZrH/Cwqa7VkDbe4NjKC+sGzYo1Xzd7GqDpOIbLp3QLYCGaCruWuMhBC0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DkmElAN3; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=OYJMJ/R7AZeBb1ZfxAcEJwCQcRKg6LbWJQbc6tfHbiHRgDyTeCmmwBTvRYp7+Qxzka+Vr/kZCmjCGMRwvdqm+KXt/xJOKXVKHiIb1vjkw0KK3DarvWZablsF9QmjVk3WdcTzkaznfHjTPli9inMHFcGeYL14gjGzTaIaCj2vAHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cCCp0jSF; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DkmElAN3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cCCp0jSF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716900868; x=1748436868;
+  t=1716902202; x=1748438202;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zhjmPwGF/MUJ8NPPpqQPbAB7QBimAAKgje5xk8TXdTc=;
-  b=DkmElAN3Nm1lYTMx9PSrokKnmoIp46AXMDKJDeG19P3cp04zlPJHAfa2
-   ECUOuM7MFpRVePWFYgNV0tXpePSsUKKit7RBao1bZQ26DUZWu+pwymCvD
-   FyO+IZzjSB9YxrNnC0gOtxVMXF4xZVq7C4DxauDFuIL8WFommnVgDOrst
-   +tJXxLuP7Qx0yDmICIs0zAsr3p3BGvROG2HZQvqzrD/BMvi0B1Q85swo3
-   koFRTNpxXLTsR4dcR3oZU84ZrrUgs5PfL83kCHKAD0UKQ1oqpPd+iaX6A
-   GTUNYlZDSRw7Ec9AEG2WoavcK3pUy29gcCbbYtjxD8cOSfFme1gwtA0E1
-   g==;
-X-CSE-ConnectionGUID: /Jz6KzJVRMyYQXmOTSeqLw==
-X-CSE-MsgGUID: cXm96+CETfGpFiEWff6foA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="38624678"
+  bh=tP9LNLHcHcid8pBq2Y+wDHSSdjrKRVd8ZjilPzbswnE=;
+  b=cCCp0jSFvxZT6u1WvjwYx2FwGvWQWAOjGwFx/+tFdwdoWpQTfKrg1p6m
+   4VUeYEZJl5A20Z1Hbn9YQ1iX3bSBJGykTNju0hgdjYS8wdcP10y/7zvd1
+   Rz8qoEW5XX3jX/EcuP0cCnlkBjGzhIU1/x54ezccj48CQQA6IdFi6yMwz
+   2vTOEElFW/4LXH/7JObW/dAbUkoaSrj+wJnJY8vA1v8KoYMxNoa1o93ke
+   jvxThY57w+vxrXnVzW99ENP3SASDcel6rLFxFOPLTg93UYntkAS0tEUZM
+   fBc20Cr1H+zEm0lzlaSLRgx28whmINs0mZYUspBOKs7EN+hcomWCgwA1N
+   w==;
+X-CSE-ConnectionGUID: 551OQc4rT2mCdh2chQTUyw==
+X-CSE-MsgGUID: uioFgdQ2RPmWr6vUhqsCsA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="13016929"
 X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="38624678"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 05:54:23 -0700
-X-CSE-ConnectionGUID: e4TLYlnHQJ+cnQSAui0hEA==
-X-CSE-MsgGUID: vFAolv0hRqCm6fOxmKrqnw==
+   d="scan'208";a="13016929"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 06:16:40 -0700
+X-CSE-ConnectionGUID: oAOqOddLRqGQgH5dTxqg+w==
+X-CSE-MsgGUID: 5MmUvP+QSB2ns0Y4VCSVvg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="35085290"
+   d="scan'208";a="34983502"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 28 May 2024 05:54:21 -0700
+  by orviesa010.jf.intel.com with ESMTP; 28 May 2024 06:16:35 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sBwLL-000CCR-1P;
-	Tue, 28 May 2024 12:54:19 +0000
-Date: Tue, 28 May 2024 20:53:26 +0800
+	id 1sBwgr-000CDP-1B;
+	Tue, 28 May 2024 13:16:33 +0000
+Date: Tue, 28 May 2024 21:15:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Naresh Solanki <naresh.solanki@9elements.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
+To: Xu Yang <xu.yang_2@nxp.com>, frank.li@nxp.com, will@kernel.org,
+	mark.rutland@arm.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, john.g.garry@oracle.com, jolsa@kernel.org,
+	namhyung@kernel.org, irogers@google.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
-Message-ID: <202405282012.UaQ1329z-lkp@intel.com>
-References: <20240528091808.863702-1-naresh.solanki@9elements.com>
+	mike.leach@linaro.org, peterz@infradead.org, mingo@redhat.com,
+	acme@kernel.org, alexander.shishkin@linux.intel.com,
+	adrian.hunter@intel.com, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, imx@lists.linux.dev
+Subject: Re: [PATCH v11 2/8] perf: imx_perf: add macro definitions for
+ parsing config attr
+Message-ID: <202405282055.sHBcNC4i-lkp@intel.com>
+References: <20240528160523.1695953-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,77 +73,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240528091808.863702-1-naresh.solanki@9elements.com>
+In-Reply-To: <20240528160523.1695953-2-xu.yang_2@nxp.com>
 
-Hi Naresh,
+Hi Xu,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 5fbf8734fb36cf67339f599f0e51747a6aff690c]
+[auto build test WARNING on perf-tools-next/perf-tools-next]
+[also build test WARNING on tip/perf/core perf-tools/perf-tools linus/master v6.10-rc1 next-20240528]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/hwmon-max6639-Update-hwmon-init-using-info/20240528-172245
-base:   5fbf8734fb36cf67339f599f0e51747a6aff690c
-patch link:    https://lore.kernel.org/r/20240528091808.863702-1-naresh.solanki%409elements.com
-patch subject: [PATCH v2] hwmon: (max6639) : Update hwmon init using info
-config: i386-buildonly-randconfig-003-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282012.UaQ1329z-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282012.UaQ1329z-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Yang/perf-imx_perf-add-macro-definitions-for-parsing-config-attr/20240528-160104
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
+patch link:    https://lore.kernel.org/r/20240528160523.1695953-2-xu.yang_2%40nxp.com
+patch subject: [PATCH v11 2/8] perf: imx_perf: add macro definitions for parsing config attr
+config: arm-randconfig-003-20240528 (https://download.01.org/0day-ci/archive/20240528/202405282055.sHBcNC4i-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405282055.sHBcNC4i-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405282012.UaQ1329z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405282055.sHBcNC4i-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hwmon/max6639.c:291:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     291 |                 u8 x;
-         |                 ^
-   drivers/hwmon/max6639.c:328:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     328 |                 u8 x;
-         |                 ^
+   In file included from drivers/perf/fsl_imx9_ddr_perf.c:11:
+   In file included from include/linux/perf_event.h:18:
+   In file included from include/uapi/linux/bpf_perf_event.h:11:
+   In file included from ./arch/arm/include/generated/uapi/asm/bpf_perf_event.h:1:
+   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/perf/fsl_imx9_ddr_perf.c:46:9: warning: 'CONFIG_COUNTER' macro redefined [-Wmacro-redefined]
+      46 | #define CONFIG_COUNTER          GENMASK(15, 8)
+         |         ^
+   ./include/generated/autoconf.h:377:9: note: previous definition is here
+     377 | #define CONFIG_COUNTER 1
+         |         ^
    2 warnings generated.
 
 
-vim +291 drivers/hwmon/max6639.c
+vim +/CONFIG_COUNTER +46 drivers/perf/fsl_imx9_ddr_perf.c
 
-   275	
-   276	static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
-   277				    long *pwm_val)
-   278	{
-   279		struct max6639_data *data = dev_get_drvdata(dev);
-   280		unsigned int val, res;
-   281	
-   282		if (IS_ERR(data))
-   283			return PTR_ERR(data);
-   284	
-   285		switch (attr) {
-   286		case hwmon_pwm_input:
-   287			res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
-   288			*pwm_val = val * 255 / 120;
-   289			return 0;
-   290		case hwmon_pwm_freq:
- > 291			u8 x;
-   292	
-   293			res = regmap_read(data->regmap, MAX6639_REG_FAN_CONFIG3(channel), &val);
-   294			if (res < 0)
-   295				return res;
-   296			x = val & MAX6639_FAN_CONFIG3_FREQ_MASK;
-   297	
-   298			res = regmap_read(data->regmap, MAX6639_REG_GCONFIG, &val);
-   299			if (res < 0)
-   300				return res;
-   301	
-   302			if (val & MAX6639_GCONFIG_PWM_FREQ_HI)
-   303				x |= 0x4;
-   304			x &= 0x7;
-   305			*pwm_val = freq_table[x];
-   306			return res;
-   307		default:
-   308			return -EOPNOTSUPP;
-   309		}
-   310	}
-   311	
+    44	
+    45	#define CONFIG_EVENT		GENMASK(7, 0)
+  > 46	#define CONFIG_COUNTER		GENMASK(15, 8)
+    47	
 
 -- 
 0-DAY CI Kernel Test Service
