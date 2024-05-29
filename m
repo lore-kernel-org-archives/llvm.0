@@ -1,192 +1,306 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2048.outbound.protection.outlook.com [40.107.236.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC36A15B0E4
-	for <llvm@lists.linux.dev>; Wed, 29 May 2024 02:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716948534; cv=fail; b=tdFzp7X0ugPFbUpbdtK4UG3T5eMu+MB2eTIDo+aqn7RiUvW0+DzxfbJ1QdeSWb0cZjK0M5VuOH45cLtHsUoxHJdmwoNP8D8Fpihxa2AhkKosUtR7GblDVIW8ZdYgub2Lt/gAOMB7u0tTEqtrPE3CetTwLB1kd5n9B8v6jqkNnLI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716948534; c=relaxed/simple;
-	bh=m6StqIIvMC1ualYVakFbzI6brq7UYVnA836S6mnhQJ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oxcVhInHrX+J+ku7UVBYVSfZFdpzABbFi9H56SzdWIR/uDaRSYh7on25IVrHuv4tYuDdWuAUPTahrb3jL7u8tPYwp2MnNdodCledMg8LR8svu1LLmlkg5oq3xGd/IgO0PZondGl6eIfb7jXikUsaxpqwohThBPruwFvgVjC9ygo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZN1BOu6P; arc=fail smtp.client-ip=40.107.236.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB89415ADA8
+	for <llvm@lists.linux.dev>; Wed, 29 May 2024 02:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716949248; cv=none; b=IHdCnuW+6ZyecadHIvQ+hmHgGm6u6fjecYY/aEYL5+CDpufpz1u517NhIChSwr3SWW+8It/uDStJo1jTH4SZs/wOYbde1nyNhJHhPLrmC9tDe0bJjJOxak0nzr9j7sx7orZl0RFlE9I76V6e1MpKCXN43zxYMMYP/qwSHPt5gxI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716949248; c=relaxed/simple;
+	bh=U+W//EVdx0UAbUQqkIfAMe/SGhPbRP7U+NdtplK/RrA=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=iE9nRB+0DmHzNZgVFm/SEqyOIhxWnQm9P6fPZY/jko7vknEaEzlgYdJYa7UP5RSHzQaa4MDhXYjndKp7a6rusdcvSnXiymVbz8F5QF4efGO77qE/+pU9bXUkB0DV95DFfYSuq/y35FEjQdQQGnwICUDs9tmu80NIqm7nZGV9kY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W1MUMbbS; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZN1BOu6P"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NfvNgX953zwZ1F5eCN/J9brFXDN/ksAwO6GRGfmGXU2T0fBUYVXeS8lF8sHWm0uZJeYD49GrS1BvssFt4DxVYsW5euewAY5lSWjxTjwF5T4SGNrIxUVpwUg/+TA0GZ/nmSShdBu/QrTkL0Pic/IzeORbc8UEYKjMmn45qUUtx4Q5IzwbgYcDykAU5yXSqMD3GfJrW7hzKDzC99jZdm1BDA/ddYS9GhEb9w/RFa4Nwd6tzcz3nZmH/bShmpckD4JQ209Qdxw+Ewckbbu0m4zEIbjMmMUXdlTekxiIT9CGU9fct2QVUorKTM+U+CdGFYi8XurVe8WR81Kcml39iahKww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wBpC1o3AcVkPrvvVeufrvPsYaK2RDTfkmvEJThKwzSY=;
- b=hjRyE4W5ozKeARdolHNP8DYIEj5m0Tj2Y7Z9ACQm+Ksn36sma6RJyD9rY+SQYtNZ6/pQ9Ia4J0d8+HlIgiSw1rV3wafY0/hyoDnWPrNGC/E7YsKgctYpu6VmrxN0UjO+iMguG41kP6ItuWGaEvqnIh2AANJVPS9ko7j51qRsXAvjGYDJ5l7KG1uXu4t/30WdUUd+ySQPy6eCM7eDdSdDKtwhuMzmaci95vDA83g37HKC4VS3EAeJrzk0xjQ5KDjhnowuuLUMbxU5zfYfNIwi6re5NKLHQgbUSag7zAD6dKnBieQuJ80eBQrmEc22BlHqEoQu/b6HdG5ODDw23WWKKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wBpC1o3AcVkPrvvVeufrvPsYaK2RDTfkmvEJThKwzSY=;
- b=ZN1BOu6PIAE4XlCht/2GeNFvsYd18pXjgKbAR6pZaqdVaDzsNGzQyKkJHynLjVzJUIQgPNs/ytazolFToPX5fkjQZ5TTws5br+GtTI2QOTRRfZAUoPbi8HGPV/O9bELIj2mal3+QOCMbXZTsfGCqimu24Jw4gJ8BnLdD5z1A/Z6NcvsBTkDLc7weVQJp5VUhSAeJ5c7ZjiCqP8tkj6pV6otaWAO7cCfZTY45A+MSFUlDHBPoDfIIIqNAPwQJp4CMjNV1AmC8AqmLz59iq+nfDqpeoX8iUp+kS1nT2mxBNfGu87RiyCVdOIs0zE2HkvoClIr/ZRXvKvaTDNwBov+30w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by MW4PR12MB5642.namprd12.prod.outlook.com (2603:10b6:303:187::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.30; Wed, 29 May
- 2024 02:08:46 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7611.030; Wed, 29 May 2024
- 02:08:46 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Beau Belgrave <beaub@linux.microsoft.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1MUMbbS"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-6818811ef2dso997073a12.0
+        for <llvm@lists.linux.dev>; Tue, 28 May 2024 19:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716949246; x=1717554046; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=347Tv+L36ItrUa9DcwFsT5YsIM2weBtvDOWbMcJm1vI=;
+        b=W1MUMbbS0CsOkv7WPXZ8uZxTjTLCq4iCJnTGrb0M+tUdE9D0/OGtJ+swY0K3N/ieSn
+         bMi1uXlZEbS+p4HxUHx6PFHlgLlg3+3Bh64H0BFu+3YkV+uFfJ6ssMLxO05GHguG7w+U
+         RaVAqZxBEeI9oiAJObHjxk9rLqr83L5REjucFH57nTdMGEZVFqKjV8PhYbvA2XhsuiCe
+         evPmaaVvbM8d58coN4XltTgwGTwkYg/hW1ES2moHRrfvF3ak1sm+onJiV3Hf7wmGJVza
+         XxwcoXBaVsZAWKZQNNe2fJpQiuOR9yu+F3mbchbqtVCXN7D8S6ubPw4u/nMdEQgyeKfZ
+         yBQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716949246; x=1717554046;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=347Tv+L36ItrUa9DcwFsT5YsIM2weBtvDOWbMcJm1vI=;
+        b=SVgR+41E4Ke7dDrjLujxaMNyX3n0RWvNMKdx1/tkJ2FkXxwgYxOFQeiPOwVKHPnDin
+         ocupjdeqzPHxHbtuc9m6KgNFr8szkTvurbwuAIehYoo70GvrFNbTe7Hwz0F3GXKoK9tY
+         9E43W9bO70xDkbOuL15/0Xwqpw27JVLDhhYoC3vr6bMDZpPZEUC6ZNHs7iVqr0M59Fr8
+         O+Hs39v2MU6rGMu7ChXg8DhV/w9eonwdMC/RdJkrYGVETHw/PxLy5Jg5XBbMJ9Vh9gEW
+         b2Rdun9ZN4NZ4ZoEiC0MVyh2P/ZNy7xaTfS2y10MZbM1rB2ppELW6lOC7wG4dguNY1Q3
+         azUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWq/Rw6sRISBhSC4dYuMoeZMGSV7dCMfxinUIu7SuvLoDR7gd6+YXeQcd2nYkHQLrPkoSmrulomG/mz/AkWpQMeLyBhsQ==
+X-Gm-Message-State: AOJu0YyHR53xPgBTGDtYQxYtKruDl/eG83k0IiVhFoUrtK99r0cJB24h
+	78hEmMmeWxwSg4cNPIs8FqAC2k971+EOolZ/CMd/d78AgJknXuwm
+X-Google-Smtp-Source: AGHT+IHoETe02pTx/zsmIpmRrV07oYeWjfDTOvDLsnucWpNSSmY9ikIEOi0eCyGo/VAVReoqmSQpdw==
+X-Received: by 2002:a05:6a20:da8f:b0:1af:aec3:2841 with SMTP id adf61e73a8af0-1b212e5bddbmr15754764637.56.1716949245970;
+        Tue, 28 May 2024 19:20:45 -0700 (PDT)
+Received: from localhost.localdomain ([2604:a880:4:1d0::427:6000])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2bf5f6155b6sm9410812a91.29.2024.05.28.19.20.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 19:20:45 -0700 (PDT)
+From: Gatlin Newhouse <gatlin.newhouse@gmail.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Kees Cook <keescook@chromium.org>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
 	Bill Wendling <morbo@google.com>,
-	sunliming <sunliming@kylinos.cn>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] selftests/lib.mk: silence some clang warnings that gcc already ignores
-Date: Tue, 28 May 2024 19:08:42 -0700
-Message-ID: <20240529020842.127275-3-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240529020842.127275-1-jhubbard@nvidia.com>
-References: <20240529020842.127275-1-jhubbard@nvidia.com>
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR17CA0038.namprd17.prod.outlook.com
- (2603:10b6:a03:167::15) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	Justin Stitt <justinstitt@google.com>,
+	Gatlin Newhouse <gatlin.newhouse@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <bhe@redhat.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	Pengfei Xu <pengfei.xu@intel.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Xin Li <xin3.li@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] x86/traps: Enable UBSAN traps on x86
+Date: Wed, 29 May 2024 02:20:30 +0000
+Message-Id: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|MW4PR12MB5642:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0455712-9a38-49e0-260d-08dc7f844597
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|1800799015|376005|366007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?3xrFqfo+EHqWBE8xBcKYChhEMKyRMbgdQ3o+GRm8AsYTKelHL8/xnfDC6nA0?=
- =?us-ascii?Q?AnetVmPKAy+6I9zPH3sKSjnORaAL0zbqWIDw5ZPKVIlR5SeuNGV2EBa63zV4?=
- =?us-ascii?Q?aOevSNXffOuuvk9oJYXh0JivDz0jhfHJnfh6G4W6RJ731EhYyPoI9kqmEgq3?=
- =?us-ascii?Q?Qh49z2+gKyvTrTJLfYNA4QJ1X/j95ClpNqRQQbpzNXrZWV3vOw2+/+kUpDmi?=
- =?us-ascii?Q?+F01rnU8SmYHkMJSDzWZeQQ1MepGOBISYE2hqjNPxi/waRVlRcLPypZy/9Yz?=
- =?us-ascii?Q?Fweef/Io/EwXUb4AMR99ScAc+Hmbu+/KkNpGnzJ8sQabV42mICyanarqv22n?=
- =?us-ascii?Q?B1POu6DLgXv0N1S1MU838YbOMFTG/765Zj5jTonuxvufgtRXxZEFw/yBzBUI?=
- =?us-ascii?Q?A1jWnUAoY04SooPmwXOFzmqwZWHQq8evjG9UUPuskxsDyD3/93g1gnvbreHD?=
- =?us-ascii?Q?ZNh6l5TYR8y3YXH6EbYjxAb/iwKlAH6thSDatZqlnWXlQ1JafO7L1peywYmp?=
- =?us-ascii?Q?fQQA0FOoF4/oeOItl+7xhtC8MQAQmtrG8+aZp3ckQ5wfugFaYrXZO7OD3cOw?=
- =?us-ascii?Q?xlxgxeKJCR/Ngw90E9EU872w3bBNcVrCOMKVznws+Ci18NztdaDK1r05NUuL?=
- =?us-ascii?Q?hqjm8s0K/2Be6liCjmLWuzSOZnUDRQCOHSNX5UgwednFXbG7rlUqrLO8y8hV?=
- =?us-ascii?Q?wPkQeD5eRW+86jjTPc0QsirhStzRhWwUSvd2sXmfPRF32JMPQY55J0CrMU9d?=
- =?us-ascii?Q?S7k1rLc55ZjiyWVqIXXs1oWVfBuXr85zBaUowv5b81W9Qv8pWjFgg9/vp/kc?=
- =?us-ascii?Q?qIMqlDVvVDk3sJtyEh5sjTTO3WUAnmzGwboV3VcYTsf7+MTjzkC3d6GDgDz2?=
- =?us-ascii?Q?BtPE6Av2FBV/IFgfy2rcUX239TKviW5Nxpp5LY9n5Rbck4EXD3y0vD+BbAKp?=
- =?us-ascii?Q?9KdASVc1xhDSavh6mUXSfJUOCvKptvANPA1N+PzdCLQC4J5JoWQiboq+IYLo?=
- =?us-ascii?Q?k1lEJAMXSpf51L5rzJV433RkVVlUhyWdaXOZgZINYUbqkzIAcq5Z8gysejem?=
- =?us-ascii?Q?l7BpDuTd4NFNzMlgtJhYC7MvXTIZEjTP05aNSJyHwPBCDGoyy86uQqphbWdv?=
- =?us-ascii?Q?cwg+r4nCISlrm9ik9w64ijXcHd+85jIGyapo7lr6lSNKUdGJOvwOxLe8iXz4?=
- =?us-ascii?Q?d+bov4ZPHEAW+TyyNoCKAj/9AVAys7WytwsXJwWdYqa9tNQefK2i6jBK3npG?=
- =?us-ascii?Q?6WUzMc1YUvdI5C6YJemBqqi8VQr5y4cawL/JV+IKPw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?43QCE+8VVdJRiJwZXIF4yCohIpTwpweaO38FkdcJ9r0fgAnZY4tR/G7BkxAx?=
- =?us-ascii?Q?q5RmJz3jChq9+dkwz0to38MqQHEg5BxnvS2HaaDC4mtEovKG5wewYaHoh9R0?=
- =?us-ascii?Q?HEINQqoXBHJ5V8ObD14LzAgxERWGrcJT593wPeGHtE7MQHuvAiuCJA4xXC/t?=
- =?us-ascii?Q?pROMHv8CXcb8HHbPBvBQZ+LsDntDXy1cb518o0xRWkUW2CmXBExAY5Zpae5T?=
- =?us-ascii?Q?JIhektR5lqwxqNBAacORP56bEPCY/rL41wMHe2VZ/yXWb6QJW16CcOpMGJn8?=
- =?us-ascii?Q?gh5gN+gJxFAXSnRt6q75XdTd+J+SYoN6hsXLkoaaY4WfDViaGKKh33nKlThD?=
- =?us-ascii?Q?gzhiKRF8chU9LKWMoQZ0vuKk+1WnLeTZPF6KmNMKhvqdewyhjP5aZ0a5Jktr?=
- =?us-ascii?Q?Ms2iI4ukHnaT7FkUUECWjbpQdD703jxRKNfRctMN4aJfbSSpsPxQIfA3adj6?=
- =?us-ascii?Q?WYgzvL3bd64PkYGoNafs1Pe04ZQtvfvWsm2JZ4QmoVAT1WL5Epigy7jBNkmi?=
- =?us-ascii?Q?sa3pxOZNp6WRBLscXBP5avJx/61ybsFVkMCvGkUxNqPtTEwUrq7nqZHb0Oc5?=
- =?us-ascii?Q?SdiIk5E3m0HVuj5bITfphwigG9YuoYhc6kyclIvyo7n8ILHYO99ubF5n67tB?=
- =?us-ascii?Q?PkegxnfDV9pXZ6FpL8mRvYsZsp7A/vu4WTXsipxHAHE4Ove5vjZVChaZ9jj/?=
- =?us-ascii?Q?G4zCqmblYcWC4Cp2LJNzLlUw0SAypXsY5iAVhC15/ZWc0B1u1sA8304YDevx?=
- =?us-ascii?Q?EW36lxDuHrrNB44DH9Qz3APdO24dd47mFFevFZOQD15NEWhlTRYnS8FsnFqE?=
- =?us-ascii?Q?3SZIKdI7mme14YcnvdueNkgh1sk692VzttlxOhtFxxAVXkw6+TuSo4KuA076?=
- =?us-ascii?Q?gYAijcmd4yLiuH2ShfS3V5B8m5KJfO5RMhNNkQtlQo95uLLcGOEOr3S+t0cz?=
- =?us-ascii?Q?fWBBM0QOUzFdY9BxX8mtBeNIBR7IPLfb/TPCA+q73bb7gGd2U3nOkD6yVFHT?=
- =?us-ascii?Q?/be57LL5YlePqo87WZUxZy5KXpogOrpfT8/asNJfCximurrb4Odw6e6sNmBx?=
- =?us-ascii?Q?XIRCunJU0pgAJHrSML/lVkcTd/hnvoDtgVAWb8x28/pan2ovpjGB+l9VV2Lk?=
- =?us-ascii?Q?NJ6n8V6D53SFjMbE0O0IlVwksDpYIgX0wxtbEPFO0T7hqOU6Y2Up5TrsB8Rq?=
- =?us-ascii?Q?oFz1Q32UNjSowrVp3Szo0Je8fDaIihHvn0Z4UK02XzJMxG/59b8GvMB+Tw92?=
- =?us-ascii?Q?vS0nq0ktJ7WxryIiryEDvsTO/iQMc8QQJdGXxPkgpThDH3XkzacMrnumqANX?=
- =?us-ascii?Q?QMknPpFQCtO0/skyh4ZAmQVXHgcjgmvEEqUSSfXRH8jgRFyrXzyjuiGW2UGF?=
- =?us-ascii?Q?aRqOGBFV7Bwt1xGf6hyvMB8VOeTjNoTAuQmniXrxO8QxaeQKHShlpGoqeFb5?=
- =?us-ascii?Q?VN0GKexIimIrkTw6pmB7cBJ/qeFzTeGdm4Yt7MDMLo7RQA8SLJ5yyNKXmG/c?=
- =?us-ascii?Q?HqJXw4clZyPsLleO3YJFJVbhp6Oue7CZpP7hjzHWs/ONaJUxybAjMgqsnAtA?=
- =?us-ascii?Q?QLw717XYafyRwoHso6NXVx+myg0r7VzZ5XXegI3r?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0455712-9a38-49e0-260d-08dc7f844597
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2024 02:08:46.0252
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Qy7XOTi/1El/f3YjggYpAtygwPLlqa5LVc8rLkmpbtoD5V9Ww61sWjUpXMfxIWtWWhkDMCtRxDIWsYekZfE3TQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5642
+Content-Transfer-Encoding: 7bit
 
-gcc defaults to silence (off) for the following warnings, but clang
-defaults to the opposite. These warnings are not useful for kselftests,
-so silence them for the clang builds as well:
+Bring x86 to parity with arm64, similar to commit 25b84002afb9
+("arm64: Support Clang UBSAN trap codes for better reporting").
+Enable the output of UBSAN type information on x86 architectures
+compiled with clang when CONFIG_UBSAN_TRAP=y. Currently ARM
+architectures output which specific sanitizer caused the trap,
+via the encoded data in the trap instruction. Clang on x86
+currently encodes the same data in ud1 instructions but the x86
+handle_bug() and is_valid_bugaddr() functions currently only look
+at ud2s.
 
-    -Wno-address-of-packed-member
-    -Wno-gnu-variable-sized-type-not-at-end
-
-This eliminates warnings for the net/ and user_events/ kselftest
-subsystems, in these files:
-
-    ./net/af_unix/scm_rights.c
-    ./net/timestamping.c
-    ./net/ipsec.c
-    ./user_events/perf_test.c
-
-Cc: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Signed-off-by: Gatlin Newhouse <gatlin.newhouse@gmail.com>
 ---
- tools/testing/selftests/lib.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ MAINTAINERS                  |  2 ++
+ arch/x86/include/asm/bug.h   |  8 ++++++++
+ arch/x86/include/asm/ubsan.h | 21 +++++++++++++++++++++
+ arch/x86/kernel/Makefile     |  1 +
+ arch/x86/kernel/traps.c      | 34 ++++++++++++++++++++++++++++------
+ arch/x86/kernel/ubsan.c      | 32 ++++++++++++++++++++++++++++++++
+ 6 files changed, 92 insertions(+), 6 deletions(-)
+ create mode 100644 arch/x86/include/asm/ubsan.h
+ create mode 100644 arch/x86/kernel/ubsan.c
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 2902787b89b2..41e879f3f8a2 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -50,6 +50,12 @@ else
- CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
- endif # CROSS_COMPILE
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 28e20975c26f..b8512887ffb1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22635,6 +22635,8 @@ L:	kasan-dev@googlegroups.com
+ L:	linux-hardening@vger.kernel.org
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
++F:	arch/x86/include/asm/ubsan.h
++F:	arch/x86/kernel/ubsan.c
+ F:	Documentation/dev-tools/ubsan.rst
+ F:	include/linux/ubsan.h
+ F:	lib/Kconfig.ubsan
+diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+index a3ec87d198ac..e3fbed9073f8 100644
+--- a/arch/x86/include/asm/bug.h
++++ b/arch/x86/include/asm/bug.h
+@@ -13,6 +13,14 @@
+ #define INSN_UD2	0x0b0f
+ #define LEN_UD2		2
  
-+# gcc defaults to silence (off) for the following warnings, but clang defaults
-+# to the opposite. These warnings are not useful for kselftests, so silence them
-+# for the clang builds as well.
-+CFLAGS += -Wno-address-of-packed-member
-+CFLAGS += -Wno-gnu-variable-sized-type-not-at-end
++/*
++ * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
++ */
++#define INSN_UD1	0xb90f
++#define LEN_UD1		2
++#define INSN_REX	0x67
++#define LEN_REX		1
 +
- CC := $(CLANG) $(CLANG_FLAGS) -fintegrated-as
- else
- CC := $(CROSS_COMPILE)gcc
+ #ifdef CONFIG_GENERIC_BUG
+ 
+ #ifdef CONFIG_X86_32
+diff --git a/arch/x86/include/asm/ubsan.h b/arch/x86/include/asm/ubsan.h
+new file mode 100644
+index 000000000000..5235822eb4ae
+--- /dev/null
++++ b/arch/x86/include/asm/ubsan.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_UBSAN_H
++#define _ASM_X86_UBSAN_H
++
++/*
++ * Clang Undefined Behavior Sanitizer trap mode support.
++ */
++#include <linux/bug.h>
++#include <linux/ubsan.h>
++#include <asm/ptrace.h>
++
++#ifdef CONFIG_UBSAN_TRAP
++enum bug_trap_type handle_ubsan_failure(struct pt_regs *regs, int insn);
++#else
++static inline enum bug_trap_type handle_ubsan_failure(struct pt_regs *regs, int insn)
++{
++	return BUG_TRAP_TYPE_NONE;
++}
++#endif /* CONFIG_UBSAN_TRAP */
++
++#endif /* _ASM_X86_UBSAN_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 74077694da7d..fe1d9db27500 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -145,6 +145,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+ 
+ obj-$(CONFIG_CFI_CLANG)			+= cfi.o
++obj-$(CONFIG_UBSAN_TRAP)		+= ubsan.o
+ 
+ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ 
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 4fa0b17e5043..7876449e97a0 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -67,6 +67,7 @@
+ #include <asm/vdso.h>
+ #include <asm/tdx.h>
+ #include <asm/cfi.h>
++#include <asm/ubsan.h>
+ 
+ #ifdef CONFIG_X86_64
+ #include <asm/x86_init.h>
+@@ -79,6 +80,9 @@
+ 
+ DECLARE_BITMAP(system_vectors, NR_VECTORS);
+ 
++/*
++ * Check for UD1, UD2, with or without REX instructions.
++ */
+ __always_inline int is_valid_bugaddr(unsigned long addr)
+ {
+ 	if (addr < TASK_SIZE_MAX)
+@@ -88,7 +92,13 @@ __always_inline int is_valid_bugaddr(unsigned long addr)
+ 	 * We got #UD, if the text isn't readable we'd have gotten
+ 	 * a different exception.
+ 	 */
+-	return *(unsigned short *)addr == INSN_UD2;
++	if (*(u16 *)addr == INSN_UD2)
++		return INSN_UD2;
++	if (*(u16 *)addr == INSN_UD1)
++		return INSN_UD1;
++	if (*(u8 *)addr == INSN_REX && *(u16 *)(addr + 1) == INSN_UD1)
++		return INSN_REX;
++	return 0;
+ }
+ 
+ static nokprobe_inline int
+@@ -216,6 +226,7 @@ static inline void handle_invalid_op(struct pt_regs *regs)
+ static noinstr bool handle_bug(struct pt_regs *regs)
+ {
+ 	bool handled = false;
++	int insn;
+ 
+ 	/*
+ 	 * Normally @regs are unpoisoned by irqentry_enter(), but handle_bug()
+@@ -223,7 +234,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+ 	 * irqentry_enter().
+ 	 */
+ 	kmsan_unpoison_entry_regs(regs);
+-	if (!is_valid_bugaddr(regs->ip))
++	insn = is_valid_bugaddr(regs->ip);
++	if (insn == 0)
+ 		return handled;
+ 
+ 	/*
+@@ -236,10 +248,20 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+ 	 */
+ 	if (regs->flags & X86_EFLAGS_IF)
+ 		raw_local_irq_enable();
+-	if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+-	    handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
+-		regs->ip += LEN_UD2;
+-		handled = true;
++
++	if (insn == INSN_UD2) {
++		if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
++		handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
++			regs->ip += LEN_UD2;
++			handled = true;
++		}
++	} else {
++		if (handle_ubsan_failure(regs, insn) == BUG_TRAP_TYPE_WARN) {
++			if (insn == INSN_REX)
++				regs->ip += LEN_REX;
++			regs->ip += LEN_UD1;
++			handled = true;
++		}
+ 	}
+ 	if (regs->flags & X86_EFLAGS_IF)
+ 		raw_local_irq_disable();
+diff --git a/arch/x86/kernel/ubsan.c b/arch/x86/kernel/ubsan.c
+new file mode 100644
+index 000000000000..6cae11f4fe23
+--- /dev/null
++++ b/arch/x86/kernel/ubsan.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Clang Undefined Behavior Sanitizer trap mode support.
++ */
++#include <linux/bug.h>
++#include <linux/string.h>
++#include <linux/printk.h>
++#include <linux/ubsan.h>
++#include <asm/ptrace.h>
++#include <asm/ubsan.h>
++
++/*
++ * Checks for the information embedded in the UD1 trap instruction
++ * for the UB Sanitizer in order to pass along debugging output.
++ */
++enum bug_trap_type handle_ubsan_failure(struct pt_regs *regs, int insn)
++{
++	u32 type = 0;
++
++	if (insn == INSN_REX) {
++		type = (*(u16 *)(regs->ip + LEN_REX + LEN_UD1));
++		if ((type & 0xFF) == 0x40)
++			type = (type >> 8) & 0xFF;
++	} else {
++		type = (*(u16 *)(regs->ip + LEN_UD1));
++		if ((type & 0xFF) == 0x40)
++			type = (type >> 8) & 0xFF;
++	}
++	pr_crit("%s at %pS\n", report_ubsan_failure(regs, type), (void *)regs->ip);
++
++	return BUG_TRAP_TYPE_NONE;
++}
 -- 
-2.45.1
+2.25.1
 
