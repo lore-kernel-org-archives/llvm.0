@@ -1,187 +1,98 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03F217B505
-	for <llvm@lists.linux.dev>; Wed, 29 May 2024 08:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E883117BB0E
+	for <llvm@lists.linux.dev>; Wed, 29 May 2024 08:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716970005; cv=none; b=NzHRdXgWQCFg0ecUUc/ecsMLQeyhQmjRVk7RfBe9aVsm5sNMlj2KobISRQLhOTOmoAeqNJ+MU8lUzOnsE6iUSeUN/fBd709BKi0Kw6lA+GoE9GcoyWy7/kAyA/M0o4EY02r/10vhT9wpO7zxXis6nJmel+g+GISwh8OiWtxEth4=
+	t=1716970688; cv=none; b=e8NgN6K1aa4/WnHTNqrpT6CZwfk6+r8gSHKGUTRQx6ajGclqT43gdZ3Nk9AjLNjHIkdtcnJ5bU87kU8RK42OA1rfLNGRAL9rw/umskthof9lFnfzOR5eAF20kvPho0l74sSr89dxgpIYVwCWAHbangNlU4uuNzqZ1Pvo6iwrNkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716970005; c=relaxed/simple;
-	bh=C9NThqdx/W9npFCwEseQgicfZl61EOyPH13LNK3W6HM=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=NCWnPe8xAbfLDyrgFj/40G6R39zD9Lpq7YQLuQqYdFaeT0zM2ZoHRUYny/DSpMLfZm8aMt7J+z6O7ahpfaN7pdr3/02GfCdIEVRCBpZ64a0LNAuYHy2SUXfiOcm+k9yyHTTMol1W4ObERaalYXLiiqEP93UPusOFMh7B91ht4sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0TPyU/Bm; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1716970688; c=relaxed/simple;
+	bh=PH3g73IUBo++D2q6c/meuMRPW8F0op+ZjovpZ13rJYs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=FXWKv4E+BCdU/KoMXimOXIXMxjIbKMdpaTA2fburUQRRMZEAtx7DZXf77RyaVCa4rFt6ZsNf3eoa2A7HibtbLbBMudBPbsyRlmdzuX5TJM46H8s2tqTg+73AnH0vismFh276H5zrBlO9K6Yz7CNXhDug2f4DGvXemEIHeyy/nss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=BoTz8w7t; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LE2Cl4ZK; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0TPyU/Bm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716970002;
-	bh=C9NThqdx/W9npFCwEseQgicfZl61EOyPH13LNK3W6HM=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=0TPyU/Bmm41hIGdVrpdVaPzXI963Y+no4v0A8ghyC3bQvE3pjAxBLp11ReGn+iJGj
-	 kHkobjweMEugNEjPF3NZ9sxAeJaf+HV/ftMvhjdSt4dSK8vN3fgK4BKF3WkP84nv4Q
-	 Uahb+JJ/974RBI0oVHnj1sc0Gnbx4U5nBlVRPmFO1reC/hnSF+ebDirAVVv+V4iZIJ
-	 6TOVPgMZK2NgCJxUzGxnXbSQcCWw6962KX8iQ3WtInBEYIve8tSOGA8wdcXd7zEe/c
-	 3bwjDfVc7MQVEqo/FYZPuUoXJ2f/qc/ilOvZu530ffd2p2iCUIfveKG2Hqb4jwtAhz
-	 1Rmw2FBaZJcGA==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0A9D23782162;
-	Wed, 29 May 2024 08:06:34 +0000 (UTC)
-Message-ID: <0816b38b-41a1-431a-90a4-1ac33401a671@collabora.com>
-Date: Wed, 29 May 2024 13:05:57 +0500
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="BoTz8w7t";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LE2Cl4ZK"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1716970685;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VisuJquPIChpxFSeuXKm3BwthCpocWOziwbjGlkW3mo=;
+	b=BoTz8w7tg+5pAYB3WTkk6jnPjCzUS9z0neRfqMZHzrq9h+LZXnODAKPSUNjExMTjFrP/ce
+	H9jCBY90DjR7iN/BVH4DOQ23kvwi0/pDfliMzNOhHg5+J60YMJvq9GKVSubLijrywm8KjK
+	SfQVRI6Y7uXPnXipACHzqpdfosQejx6RkEpBR7Cw87JqbAaoYfcYvcyA3Sy8icnc43LzC4
+	nmMAGGPgsu+Q7056MyjftnY+X0e7WXcRPs7xiNjr7/nHCwRQCgVSVESc9ey1IgtnnU8nym
+	XYjh9P24bmqXuI5/zp4pyX0XHUtHntvGgzrDdMj2R3DpDgIvoBcdt71ABn6c/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1716970685;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VisuJquPIChpxFSeuXKm3BwthCpocWOziwbjGlkW3mo=;
+	b=LE2Cl4ZKSn5lUeDv71XnuhlGbLGoUjoiAiNlV/X+VkyTc0Dm60QzyXAasSVhUphLhPtuYY
+	NoynSjDEiFaegtDA==
+To: Miroslav Lichvar <mlichvar@redhat.com>
+Cc: Justin Stitt <justinstitt@google.com>, John Stultz <jstultz@google.com>,
+ Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Bill Wendling <morbo@google.com>, Nick Desaulniers
+ <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] ntp: remove accidental integer wrap-around
+In-Reply-To: <ZlRDoyJk2Erzje_z@localhost>
+References: <20240517-b4-sio-ntp-usec-v2-1-d539180f2b79@google.com>
+ <87ed9re7i4.ffs@tglx> <87bk4ve5wc.ffs@tglx> <ZlRDoyJk2Erzje_z@localhost>
+Date: Wed, 29 May 2024 10:18:04 +0200
+Message-ID: <8734q19glf.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/vDSO: fix clang build errors and warnings
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-References: <20240527211622.290635-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240527211622.290635-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 5/28/24 2:16 AM, John Hubbard wrote:
-> When building with clang, via:
-> 
->     make LLVM=1 -C tools/testing/selftests
-> 
-> ...there are several warnings, and an error. This fixes all of those and
-> allows these tests to run and pass.
-> 
-> 1. Fix linker error (undefined reference to memcpy) by providing a local
->    version of memcpy.
-> 
-> 2. clang complains about using this form:
-> 
->     if (g = h & 0xf0000000)
-> 
-> ...so factor out the assignment into a separate step.
-> 
-> 3. The code is passing a signed const char* to elf_hash(), which expects
->    a const unsigned char *. There are several callers, so fix this at
->    the source by allowing the function to accept a signed argument, and
->    then converting to unsigned operations, once inside the function.
-> 
-> 4. clang doesn't have __attribute__((externally_visible)) and generates
->    a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
->    to require that attribute in order to build, run and pass tests here,
->    so remove it.
-Just checked with GCC 5.1, it builds fine without any errors.
+On Mon, May 27 2024 at 10:26, Miroslav Lichvar wrote:
+> On Fri, May 24, 2024 at 02:44:19PM +0200, Thomas Gleixner wrote:
+>> On Fri, May 24 2024 at 14:09, Thomas Gleixner wrote:
+>> > So instead of turning the clock back, we might be better off to actually
+>> > put the normalization in place at the assignment:
+>> >
+>> >     time_maxerror = min(max(0, txc->maxerror), NTP_PHASE_LIMIT);
+>> >
+>> > or something like that.
+>
+> Yes, I think that's a better approach. Failing the system call could
+> break existing applications, e.g. ntpd can be configured to accept a
+> large root distance and it doesn't clamp the maxerror value, while
+> updating the PLL offset in the same adjtimex() call.
 
-> 
-> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-LGTM
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Thanks for confirming. I suspected that, but the original change logs
+are pretty useless in that regard.
 
-> ---
-> 
-> Changes since the first version:
-> 
-> 1) Rebased onto Linux 6.10-rc1
-> 
-> thanks,
-> John Hubbard
-> 
->  tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
->  .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
->  2 files changed, 27 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-> index 413f75620a35..4ae417372e9e 100644
-> --- a/tools/testing/selftests/vDSO/parse_vdso.c
-> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
-> @@ -55,14 +55,20 @@ static struct vdso_info
->  	ELF(Verdef) *verdef;
->  } vdso_info;
->  
-> -/* Straight from the ELF specification. */
-> -static unsigned long elf_hash(const unsigned char *name)
-> +/*
-> + * Straight from the ELF specification...and then tweaked slightly, in order to
-> + * avoid a few clang warnings.
-> + */
-> +static unsigned long elf_hash(const char *name)
->  {
->  	unsigned long h = 0, g;
-> -	while (*name)
-> +	const unsigned char *uch_name = (const unsigned char *)name;
-> +
-> +	while (*uch_name)
->  	{
-> -		h = (h << 4) + *name++;
-> -		if (g = h & 0xf0000000)
-> +		h = (h << 4) + *uch_name++;
-> +		g = h & 0xf0000000;
-> +		if (g)
->  			h ^= g >> 24;
->  		h &= ~g;
->  	}
-> diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> index 8a44ff973ee1..27f6fdf11969 100644
-> --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> @@ -18,7 +18,7 @@
->  
->  #include "parse_vdso.h"
->  
-> -/* We need a libc functions... */
-> +/* We need some libc functions... */
->  int strcmp(const char *a, const char *b)
->  {
->  	/* This implementation is buggy: it never returns -1. */
-> @@ -34,6 +34,20 @@ int strcmp(const char *a, const char *b)
->  	return 0;
->  }
->  
-> +/*
-> + * The clang build needs this, although gcc does not.
-> + * Stolen from lib/string.c.
-> + */
-> +void *memcpy(void *dest, const void *src, size_t count)
-> +{
-> +	char *tmp = dest;
-> +	const char *s = src;
-> +
-> +	while (count--)
-> +		*tmp++ = *s++;
-> +	return dest;
-> +}
-> +
->  /* ...and two syscalls.  This is x86-specific. */
->  static inline long x86_syscall3(long nr, long a0, long a1, long a2)
->  {
-> @@ -70,7 +84,7 @@ void to_base10(char *lastdig, time_t n)
->  	}
->  }
->  
-> -__attribute__((externally_visible)) void c_main(void **stack)
-> +void c_main(void **stack)
->  {
->  	/* Parse the stack */
->  	long argc = (long)*stack;
-> 
-> base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
+>> So that commit also removed the sanity check for time_esterror, but
+>> that's not doing anything in the kernel other than being reset in
+>> clear_ntp() and being handed back to user space. No idea what this is
+>> actually used for.
+>
+> It's a lower-bound estimate of the clock error, which applications can
+> check if it's acceptable for them. I think it should be clamped too.
+> It doesn't make much sense for it to be larger than the maximum error.
 
--- 
-BR,
-Muhammad Usama Anjum
+Ok.
+
+> Another possible improvement of adjtimex() would be to set the UNSYNC
+> flag immediately in the call if maxerror >= 16s to avoid the delay of
+> up to 1 second for applications which check only that flag instead of
+> the maxerror value.
+
+That needs to be a seperate change.
+
+Thanks,
+
+        tglx
