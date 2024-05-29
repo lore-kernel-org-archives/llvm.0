@@ -1,70 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DF617BB17;
-	Wed, 29 May 2024 23:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F25E17B4F2
+	for <llvm@lists.linux.dev>; Wed, 29 May 2024 23:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717024228; cv=none; b=syLEQZv4nhKoOSe1esoRm+dY2fc7os3Zm6veo1jquVXdGCZVj1ZyDovTeSucPxYL9k0kh9Fb64I6jAkH4sd6tyixvExxNAjvQG4jp7+McZAEjekfufrtcuvJRyAPVjklml/71ilxcJGg6OeQIMe3h8zaJpLKtroDbzm9J5a7Pfs=
+	t=1717025560; cv=none; b=G672u/Mkn9ZrbQDG11CPFyqlNy60wfiCgzb+siAhCvZtPNN6+xjJT426bWYPGw/cUtgnGDGuRltSE4ikRHIlfI+jT63Ol2slOp88sai2ZB26KHSRcNzOmrl7J+bwifhJcibo7o1Wj+A5E3B+HmvBxohqmROL+Z0eTdDRMpoc+ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717024228; c=relaxed/simple;
-	bh=vzWcn7Aw091UVdTPFhmX1lM4t/jWNKg7Zc+z6URoDl4=;
+	s=arc-20240116; t=1717025560; c=relaxed/simple;
+	bh=/0SdF5uqE6gzTTXQWDfWuqijnmeHpXTwYnsb4nK5NfI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PU0a/jrCRH2ycqk3qLeLbAPqv7LwLBKWEMgEaj0vUqYemUnwEpmykVsU+K6gkAjLQkvJ2yEQG9C5hcicFn5FC9Fm6AvC7BlcQMyVPwpPerpfRXjphtsffLXqiuj2MDcBLYx7VY87UkzW76y5fDyrkNNbYv4FGrUTF0xBgFJWhlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pi0fHrBX; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=oJJjU+5H3IS3f+JaaCgGmSeOwSHYyArl3AYDVjV2OvgjItVShjvnpHYzoLcLZ/Xmj31BSfB2P+gNKiYNNcv0kbL67xFdki7lOmOdAW+eDnVPuHpBvJ1rsgAEvpDY+ueE3sky8I88aHwiC/LYq+r8fbFbF+a/8FLazqzjkgMz/y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ekcd+b9/; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pi0fHrBX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717024226; x=1748560226;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vzWcn7Aw091UVdTPFhmX1lM4t/jWNKg7Zc+z6URoDl4=;
-  b=Pi0fHrBX7+aPAMNZBWhQNeLSCvW+0PdGI5KNX3zdYBz01Bvey6RCMqnt
-   sHvOTCQBSe3+fM7wu11d/JMGw1CNE/xTS6qCbFz48T0C4h1avEq+wsL+R
-   JWWvb6Sd+CZgbVaMB+qVcT1DR3zCs33JiRdzHPQRNRFMPEeaYMBngC3je
-   DFMLgbS02KudVSi/cITN6bicnvggX9NWSMVZDe8BxNFYALRcnw0T966fF
-   1quIPhRisD7JX0vpj+IxdiZqlciAA2qX7JNi4iktGWYvK4gGg4IPJtTUv
-   +Pj1B1MPObS+2bVdJPXkt53aiEyOsVMdc8g6oWMaNfbH4/AIgGjHB3gXw
-   Q==;
-X-CSE-ConnectionGUID: OlQo8ChiTFS7wbj+gS3q+Q==
-X-CSE-MsgGUID: wkuk6sXJTquA9j83d2EDdA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="11763894"
-X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208";a="11763894"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 16:10:26 -0700
-X-CSE-ConnectionGUID: FT9yY/amRni9wzGldubA2g==
-X-CSE-MsgGUID: dsspOyF2TfK9+7eXjWqogA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208";a="35663200"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 29 May 2024 16:10:21 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sCSR1-000EJ3-0U;
-	Wed, 29 May 2024 23:10:19 +0000
-Date: Thu, 30 May 2024 07:09:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Lu <chris.lu@mediatek.com>, Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Von Dentz <luiz.dentz@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Wang <sean.wang@mediatek.com>,
-	Deren Wu <deren.Wu@mediatek.com>,
-	Aaron Hou <aaron.hou@mediatek.com>,
-	Steve Lee <steve.lee@mediatek.com>,
-	linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-mediatek <linux-mediatek@lists.infradead.org>,
-	Chris Lu <chris.lu@mediatek.com>
-Subject: Re: [PATCH v2 3/3] Bluetooth: btusb: mediatek: add MediaTek ISO data
- transmission function
-Message-ID: <202405300602.AUh9Yu96-lkp@intel.com>
-References: <20240529062946.5655-4-chris.lu@mediatek.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ekcd+b9/"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f4a0050b9aso2699135ad.2
+        for <llvm@lists.linux.dev>; Wed, 29 May 2024 16:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1717025558; x=1717630358; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cucV7qOoOPIUrj3G8eYL6EQD/QmFAva7FNUzBgHa+iQ=;
+        b=Ekcd+b9/Icbzgq2p3BDHPdvCi056BO9p8sKvOCwEMfRZ8iQgCLC8oGIlSkx62ckefx
+         yeDqrbg9nwEgit3kNdkUbY3G5LErGHVOE2iTXjj9OMU8bjORwk4+rGBR+rvvwm1p24Y2
+         cj2KV47hX+UuM6VHEkc50vuWjrle/iZjO+aYk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717025558; x=1717630358;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cucV7qOoOPIUrj3G8eYL6EQD/QmFAva7FNUzBgHa+iQ=;
+        b=Qpf67NLQBin1UKqDpb4APgNbCaycButaSdkzlH8MjW4ueEFPO00h7nmIT2MXtRHld4
+         eeBrTT0qBbEiRyp0zF8+CjQbJCJ8En0xE17O688G93gd1JHUepBtj/NNHg62nBbZf7cA
+         NI4YoVfk/zL4DWZRhRZlrLSjcXQm4VVMYQFhifpi8TjQmwWcAooBM4Rj4456Vjbt6Nc3
+         VLiISF91vTIpdKTPf89uCF1Kp+xGtnsEjsx7WRuhH8AyoglwxV7u8OJlzZoFh1kz6Chl
+         AkqLlJMB2PCckvtNZ31hnvbrMi19AmFYwXgPFB3UhADbX654LxgDJx2+bdJFU4as74o+
+         XDrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVyz2PnT8gREVHX5w+lAJ8wAUZe7V9uckXKJ2vO00uwjaiLLMIRjyN7UjqtDevsHcYG03+6iHfOsCmisqJs4Bxx+6MzIQ==
+X-Gm-Message-State: AOJu0Yz+3B38vTefMQC6r2j9UXSw1OoVY1vnkcWId+vQJbk4ibTBKpP2
+	UvpgZvS3GvS+q6q/3jgaFMgskdD1bbML9zYsRVtQeA6tTw+m1xVONI+Cld+LVQ==
+X-Google-Smtp-Source: AGHT+IGrZufDO7aDrD5XQN2/A2YMhT+Y9cL7VGKbNsy++FzDVwe+PKFjUp+fb94aTS54ZMP8pq2noA==
+X-Received: by 2002:a17:902:d2c1:b0:1f3:903:5c9a with SMTP id d9443c01a7336-1f619936a85mr5241125ad.58.1717025558317;
+        Wed, 29 May 2024 16:32:38 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c99d23asm108088905ad.208.2024.05.29.16.32.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 May 2024 16:32:37 -0700 (PDT)
+Date: Wed, 29 May 2024 16:32:37 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Gatlin Newhouse <gatlin.newhouse@gmail.com>
+Cc: Marco Elver <elver@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <bhe@redhat.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	Pengfei Xu <pengfei.xu@intel.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/traps: Enable UBSAN traps on x86
+Message-ID: <202405291631.79BB8BF@keescook>
+References: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
+ <CANpmjNM2S2whk31nfNGSBO5MFPPUHX7FPuHBJn1nN9zdP63xTw@mail.gmail.com>
+ <2j6nkzn2tfdwdqhoal5o56ds2hqg2sqk5diolv23l5nzteypzh@fi53ovwjjl3w>
+ <CANpmjNM4pFHYRqmBLi0qUm8K2SroYWg7NFjreHffHvk0WW95kA@mail.gmail.com>
+ <57vgoje4bmrckwqtwnletukcnlvjpj2yp3cjlkym4bfw66a57a@w35yjzcurcis>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,38 +86,103 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240529062946.5655-4-chris.lu@mediatek.com>
+In-Reply-To: <57vgoje4bmrckwqtwnletukcnlvjpj2yp3cjlkym4bfw66a57a@w35yjzcurcis>
 
-Hi Chris,
+On Wed, May 29, 2024 at 01:36:39PM -0700, Gatlin Newhouse wrote:
+> On Wed, May 29, 2024 at 08:30:20PM UTC, Marco Elver wrote:
+> > On Wed, 29 May 2024 at 20:17, Gatlin Newhouse <gatlin.newhouse@gmail.com> wrote:
+> > >
+> > > On Wed, May 29, 2024 at 09:25:21AM UTC, Marco Elver wrote:
+> > > > On Wed, 29 May 2024 at 04:20, Gatlin Newhouse <gatlin.newhouse@gmail.com> wrote:
+> > > > [...]
+> > > > >         if (regs->flags & X86_EFLAGS_IF)
+> > > > >                 raw_local_irq_enable();
+> > > > > -       if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+> > > > > -           handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
+> > > > > -               regs->ip += LEN_UD2;
+> > > > > -               handled = true;
+> > > > > +
+> > > > > +       if (insn == INSN_UD2) {
+> > > > > +               if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+> > > > > +               handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
+> > > > > +                       regs->ip += LEN_UD2;
+> > > > > +                       handled = true;
+> > > > > +               }
+> > > > > +       } else {
+> > > > > +               if (handle_ubsan_failure(regs, insn) == BUG_TRAP_TYPE_WARN) {
+> > > >
+> > > > handle_ubsan_failure currently only returns BUG_TRAP_TYPE_NONE?
+> > > >
+> > > > > +                       if (insn == INSN_REX)
+> > > > > +                               regs->ip += LEN_REX;
+> > > > > +                       regs->ip += LEN_UD1;
+> > > > > +                       handled = true;
+> > > > > +               }
+> > > > >         }
+> > > > >         if (regs->flags & X86_EFLAGS_IF)
+> > > > >                 raw_local_irq_disable();
+> > > > > diff --git a/arch/x86/kernel/ubsan.c b/arch/x86/kernel/ubsan.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..6cae11f4fe23
+> > > > > --- /dev/null
+> > > > > +++ b/arch/x86/kernel/ubsan.c
+> > > > > @@ -0,0 +1,32 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > > +/*
+> > > > > + * Clang Undefined Behavior Sanitizer trap mode support.
+> > > > > + */
+> > > > > +#include <linux/bug.h>
+> > > > > +#include <linux/string.h>
+> > > > > +#include <linux/printk.h>
+> > > > > +#include <linux/ubsan.h>
+> > > > > +#include <asm/ptrace.h>
+> > > > > +#include <asm/ubsan.h>
+> > > > > +
+> > > > > +/*
+> > > > > + * Checks for the information embedded in the UD1 trap instruction
+> > > > > + * for the UB Sanitizer in order to pass along debugging output.
+> > > > > + */
+> > > > > +enum bug_trap_type handle_ubsan_failure(struct pt_regs *regs, int insn)
+> > > > > +{
+> > > > > +       u32 type = 0;
+> > > > > +
+> > > > > +       if (insn == INSN_REX) {
+> > > > > +               type = (*(u16 *)(regs->ip + LEN_REX + LEN_UD1));
+> > > > > +               if ((type & 0xFF) == 0x40)
+> > > > > +                       type = (type >> 8) & 0xFF;
+> > > > > +       } else {
+> > > > > +               type = (*(u16 *)(regs->ip + LEN_UD1));
+> > > > > +               if ((type & 0xFF) == 0x40)
+> > > > > +                       type = (type >> 8) & 0xFF;
+> > > > > +       }
+> > > > > +       pr_crit("%s at %pS\n", report_ubsan_failure(regs, type), (void *)regs->ip);
+> > > > > +
+> > > > > +       return BUG_TRAP_TYPE_NONE;
+> > > > > +}
+> > > >
+> > > > Shouldn't this return BUG_TRAP_TYPE_WARN?
+> > >
+> > > So as far as I understand, UBSAN trap mode never warns. Perhaps it does on
+> > > arm64, although it calls die() so I am unsure. Maybe the condition in
+> > > handle_bug() should be rewritten in the case of UBSAN ud1s? Do you have any
+> > > suggestions?
+> > 
+> > AFAIK on arm64 it's basically a kernel OOPS.
+> > 
+> > The main thing I just wanted to point out though is that your newly added branch
+> > 
+> > > if (handle_ubsan_failure(regs, insn) == BUG_TRAP_TYPE_WARN) {
+> > 
+> > will never be taken, because I don't see where handle_ubsan_failure()
+> > returns BUG_TRAP_TYPE_WARN.
+> >
+> 
+> Initially I wrote this with some symmetry to the KCFI checks nearby, but I
+> was unsure if this would be considered handled or not.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on next-20240529]
-[cannot apply to bluetooth/master linus/master v6.10-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Lu/Bluetooth-net-add-hci_iso_hdr-function-for-iso-data/20240529-143216
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20240529062946.5655-4-chris.lu%40mediatek.com
-patch subject: [PATCH v2 3/3] Bluetooth: btusb: mediatek: add MediaTek ISO data transmission function
-config: i386-randconfig-014-20240530 (https://download.01.org/0day-ci/archive/20240530/202405300602.AUh9Yu96-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240530/202405300602.AUh9Yu96-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405300602.AUh9Yu96-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: btmtk_isopkt_pad
-   >>> referenced by btusb.c:2267 (drivers/bluetooth/btusb.c:2267)
-   >>>               drivers/bluetooth/btusb.o:(btusb_send_frame) in archive vmlinux.a
+Yeah, that seemed like the right "style" to me too. Perhaps, since it
+can never warn, we could just rewrite it so it's a void function avoid
+the checking, etc.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
