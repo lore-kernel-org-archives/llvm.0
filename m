@@ -1,77 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB4E2F2A;
-	Wed, 29 May 2024 00:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618495336A;
+	Wed, 29 May 2024 01:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716944269; cv=none; b=m5Ggl67Ap+0ahZw3/xvR9Gb7LKgNDEDQocua1/88jTyTWDvt81YjcmGoOXL3m+DG9WgBTQlkvSkISdihFw9pctnLOp2g1qGOxPQQ5G7aOGgCUgGYy+JITrHWwS1g1iHAbDVS+RwgmRSf2rWFBwoPB7gOn7mwOo7G8Ruv1nBWYfI=
+	t=1716946249; cv=none; b=VvRhY6zstiT2l1xHf8Ojiy+B/+zbNZ5SOrBAMPZtCLsTgborzxUDwN0OUiZj1zGHHR+5SBmWiHg/rk6Z/6nzkGrI+HaEXbkmNwZpqIFsnHFW8X2011qgkX0IRGFaYDE/Zdg9t2HvSswBn0x+6lpRva+aDKqTta39pZ8geA/02vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716944269; c=relaxed/simple;
-	bh=9PMDHi0i2X7JYHYfsjL5TSPtAzVp+Z//KwjHgfx3R6M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eU6M2BNtd6He87w4SVCrZylVIkmM4bkVnwk29SKgRqMAJ4S/3+RcMmR4VLHWEWStzG5z7nxFw5yc8xXF/wtKySFfyEDBeutg1IsTFXem55HtERx6htkNpqYtqUdtcsz1m6H3MyDQVkrrnwZB4GP58HBphEvmLtwtHSJQBM3JU/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g6uXwrdI; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1716946249; c=relaxed/simple;
+	bh=STdZN/5rresr7AFsAXEI4MdbvzYJSgK0Oro4TKJftzI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=G+RY6neDZzOOZdSRY2z6hFSVfyEHON/2+hoVvQEVkozd0Bf1rdJyNaCqrDCEhyYNJdBqBYeQCpZzUJRzUhn2tJ3j+RJn6V1QHU1UZ6Frn6do9P++ywDJAJEMwXG/DgMLG35LJun5mdetUFOkq77Dq/4ujLI61xgTQXSYlp8PkqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RIVAk9VX; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g6uXwrdI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RIVAk9VX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716944267; x=1748480267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9PMDHi0i2X7JYHYfsjL5TSPtAzVp+Z//KwjHgfx3R6M=;
-  b=g6uXwrdIxHqlF7i0gWIPf4/mJ3jZbdecPCBIMGXfI+IMlXdryPg6OkG0
-   EHiBVelux3MyUwllYdc4UKLIWX5Cw+t3XffbTw1pcD11yADxVRB6O/FYq
-   ZhhhkvSfbUGvkH8g8U2aRhInaJuk09EaPKZeNrrkKi2oEotTxXiy+CuUN
-   NV4Bn1z3cDzJQ/qgB3a/Hcn/r85AZIgqnfWWd5aD/8FCah/Hy2rQJvND7
-   eBo+ojZvK98d4lbPgvHo9RCBwLpzsy9I5EkZAPk+prxM6B7QGiVJxMhTH
-   0BgeYWMkubeDmMTseP0Om800PuLKRlwhf2I6+suqhvWVIY8cwQkSEys+M
-   g==;
-X-CSE-ConnectionGUID: uvT3ah70SvqbZXeVrSNb8w==
-X-CSE-MsgGUID: Ear0ys8zQRSUCktCcUEOsA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="24738022"
+  t=1716946247; x=1748482247;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=STdZN/5rresr7AFsAXEI4MdbvzYJSgK0Oro4TKJftzI=;
+  b=RIVAk9VXWz3wBXc1MUObJhkFcw7ZXnNRdY/6Mgs31kxET6q/WcMYfxOy
+   3oITei1am043LKAokf0vNY0Y7L0YHda0PLubnwaXM1T0wsJwRWd7McX93
+   Ib0si+dGI5Io3cNWlduY+e7h0BpMO44fKBt87bAhv1Idde0ePeMy4oiab
+   pJLH/i+y8XTCiMNWRAaYG/G2kLKTGcpGUjUNESgKh9DEcaZtzxcU4Ds0X
+   nB/66lt7seSs2M9et3kg3ZT8ndU5t6Z87El9zbo4MNCmWNb63Zf5bT58C
+   F/WQ6XSadzHFU3h+SSOZThPIDf0A4CHa5Tjy2l/QDUt0BWheRo6a1zMyC
+   w==;
+X-CSE-ConnectionGUID: E+4EwI18QAaU2ehrgKLlFQ==
+X-CSE-MsgGUID: 0XcSgKX+QtmKoUNIuSQ4JQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="13456820"
 X-IronPort-AV: E=Sophos;i="6.08,197,1712646000"; 
-   d="scan'208";a="24738022"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 17:57:46 -0700
-X-CSE-ConnectionGUID: 9XYhmVTTSMK9lfuGzBmNlA==
-X-CSE-MsgGUID: XvW19c5xTcKwgSa5g6SciA==
+   d="scan'208";a="13456820"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 18:30:44 -0700
+X-CSE-ConnectionGUID: Y5naWKSJTm6jwP1GRLMhqw==
+X-CSE-MsgGUID: FBvQwgiARdCUwknrTHKV3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,197,1712646000"; 
-   d="scan'208";a="35317869"
+   d="scan'208";a="39696800"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 28 May 2024 17:57:42 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 28 May 2024 18:30:44 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sC7dL-000Cwn-2I;
-	Wed, 29 May 2024 00:57:39 +0000
-Date: Wed, 29 May 2024 08:57:13 +0800
+	id 1sC89I-000CyB-27;
+	Wed, 29 May 2024 01:30:40 +0000
+Date: Wed, 29 May 2024 09:30:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	Chao Wei <chao.wei@sophgo.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	=?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Subject: Re: [PATCH 5/5] riscv: dts: sophgo: Add LicheeRV Nano board device
- tree
-Message-ID: <202405290822.4dIYJxLq-lkp@intel.com>
-References: <20240527-sg2002-v1-5-1b6cb38ce8f4@bootlin.com>
+	linux-renesas-soc@vger.kernel.org,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [geert-renesas-drivers:master 1238/1305]
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu14/smu_v14_0_2_ppt.c:1565:20:
+ error: use of undeclared identifier 'I2C_CLASS_SPD'
+Message-ID: <202405290948.dvQMPrCs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,31 +64,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240527-sg2002-v1-5-1b6cb38ce8f4@bootlin.com>
 
-Hi Thomas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Bonnefille/dt-bindings-interrupt-controller-Add-SOPHGO-SG2002-plic/20240527-183235
-base:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-patch link:    https://lore.kernel.org/r/20240527-sg2002-v1-5-1b6cb38ce8f4%40bootlin.com
-patch subject: [PATCH 5/5] riscv: dts: sophgo: Add LicheeRV Nano board device tree
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240529/202405290822.4dIYJxLq-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240529/202405290822.4dIYJxLq-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git master
+head:   0b2f40fe4961467879063f9e70c4d1426ff4218d
+commit: e61bcf42d290e73025bab38e0e55a5586c2d8ad5 [1238/1305] i2c: Remove I2C_CLASS_SPD
+config: i386-randconfig-006-20240529 (https://download.01.org/0day-ci/archive/20240529/202405290948.dvQMPrCs-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240529/202405290948.dvQMPrCs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405290822.4dIYJxLq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405290948.dvQMPrCs-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> make[6]: *** No rule to make target 'arch/riscv/boot/dts/sophgo/sg2002-licheerv-nano.dtb', needed by 'arch/riscv/boot/dts/sophgo/'.
-   make[6]: Target 'arch/riscv/boot/dts/sophgo/' not remade because of errors.
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu14/smu_v14_0_2_ppt.c:1565:20: error: use of undeclared identifier 'I2C_CLASS_SPD'
+    1565 |                 control->class = I2C_CLASS_SPD;
+         |                                  ^
+   1 error generated.
+
+
+vim +/I2C_CLASS_SPD +1565 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu14/smu_v14_0_2_ppt.c
+
+3e55845c3983d92 Likun Gao 2023-04-25  1551  
+3e55845c3983d92 Likun Gao 2023-04-25  1552  static int smu_v14_0_2_i2c_control_init(struct smu_context *smu)
+3e55845c3983d92 Likun Gao 2023-04-25  1553  {
+3e55845c3983d92 Likun Gao 2023-04-25  1554  	struct amdgpu_device *adev = smu->adev;
+3e55845c3983d92 Likun Gao 2023-04-25  1555  	int res, i;
+3e55845c3983d92 Likun Gao 2023-04-25  1556  
+3e55845c3983d92 Likun Gao 2023-04-25  1557  	for (i = 0; i < MAX_SMU_I2C_BUSES; i++) {
+3e55845c3983d92 Likun Gao 2023-04-25  1558  		struct amdgpu_smu_i2c_bus *smu_i2c = &adev->pm.smu_i2c[i];
+3e55845c3983d92 Likun Gao 2023-04-25  1559  		struct i2c_adapter *control = &smu_i2c->adapter;
+3e55845c3983d92 Likun Gao 2023-04-25  1560  
+3e55845c3983d92 Likun Gao 2023-04-25  1561  		smu_i2c->adev = adev;
+3e55845c3983d92 Likun Gao 2023-04-25  1562  		smu_i2c->port = i;
+3e55845c3983d92 Likun Gao 2023-04-25  1563  		mutex_init(&smu_i2c->mutex);
+3e55845c3983d92 Likun Gao 2023-04-25  1564  		control->owner = THIS_MODULE;
+3e55845c3983d92 Likun Gao 2023-04-25 @1565  		control->class = I2C_CLASS_SPD;
+3e55845c3983d92 Likun Gao 2023-04-25  1566  		control->dev.parent = &adev->pdev->dev;
+3e55845c3983d92 Likun Gao 2023-04-25  1567  		control->algo = &smu_v14_0_2_i2c_algo;
+3e55845c3983d92 Likun Gao 2023-04-25  1568  		snprintf(control->name, sizeof(control->name), "AMDGPU SMU %d", i);
+3e55845c3983d92 Likun Gao 2023-04-25  1569  		control->quirks = &smu_v14_0_2_i2c_control_quirks;
+3e55845c3983d92 Likun Gao 2023-04-25  1570  		i2c_set_adapdata(control, smu_i2c);
+3e55845c3983d92 Likun Gao 2023-04-25  1571  
+3e55845c3983d92 Likun Gao 2023-04-25  1572  		res = i2c_add_adapter(control);
+3e55845c3983d92 Likun Gao 2023-04-25  1573  		if (res) {
+3e55845c3983d92 Likun Gao 2023-04-25  1574  			DRM_ERROR("Failed to register hw i2c, err: %d\n", res);
+3e55845c3983d92 Likun Gao 2023-04-25  1575  			goto Out_err;
+3e55845c3983d92 Likun Gao 2023-04-25  1576  		}
+3e55845c3983d92 Likun Gao 2023-04-25  1577  	}
+3e55845c3983d92 Likun Gao 2023-04-25  1578  
+3e55845c3983d92 Likun Gao 2023-04-25  1579  	/* assign the buses used for the FRU EEPROM and RAS EEPROM */
+3e55845c3983d92 Likun Gao 2023-04-25  1580  	/* XXX ideally this would be something in a vbios data table */
+3e55845c3983d92 Likun Gao 2023-04-25  1581  	adev->pm.ras_eeprom_i2c_bus = &adev->pm.smu_i2c[1].adapter;
+3e55845c3983d92 Likun Gao 2023-04-25  1582  	adev->pm.fru_eeprom_i2c_bus = &adev->pm.smu_i2c[0].adapter;
+3e55845c3983d92 Likun Gao 2023-04-25  1583  
+3e55845c3983d92 Likun Gao 2023-04-25  1584  	return 0;
+3e55845c3983d92 Likun Gao 2023-04-25  1585  Out_err:
+3e55845c3983d92 Likun Gao 2023-04-25  1586  	for ( ; i >= 0; i--) {
+3e55845c3983d92 Likun Gao 2023-04-25  1587  		struct amdgpu_smu_i2c_bus *smu_i2c = &adev->pm.smu_i2c[i];
+3e55845c3983d92 Likun Gao 2023-04-25  1588  		struct i2c_adapter *control = &smu_i2c->adapter;
+3e55845c3983d92 Likun Gao 2023-04-25  1589  
+3e55845c3983d92 Likun Gao 2023-04-25  1590  		i2c_del_adapter(control);
+3e55845c3983d92 Likun Gao 2023-04-25  1591  	}
+3e55845c3983d92 Likun Gao 2023-04-25  1592  	return res;
+3e55845c3983d92 Likun Gao 2023-04-25  1593  }
+3e55845c3983d92 Likun Gao 2023-04-25  1594  
+
+:::::: The code at line 1565 was first introduced by commit
+:::::: 3e55845c3983d92e28517a545e403b5eb9acf95b drm/amd/swsmu: add smu v14_0_2 support
+
+:::::: TO: Likun Gao <Likun.Gao@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
 -- 
 0-DAY CI Kernel Test Service
