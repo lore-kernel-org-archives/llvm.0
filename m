@@ -1,162 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7F99474;
-	Wed, 29 May 2024 10:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3DA1BDCF
+	for <llvm@lists.linux.dev>; Wed, 29 May 2024 11:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716980238; cv=none; b=lXrPZnN7miBaDjtC5Zhtb11I1HLGR74jAJgqHWU3XFNnYqiJHLrfKXLBvD53i9SOsn1gkpE1ups27ufMbLxcvdHr+Q1uI6U0AMThYdlZ6jncOcRB1Xp+LT+vkviV919Do4A8XxeagF7lGywcesuD0Y+enLXpKvGvXHVAsaG39sk=
+	t=1716982908; cv=none; b=gnMPxBdpowXkb0vAINmQcuA+AXD5TU3bgfHvs95AQ7ktgV0F2AZ4jJptSykrN+L25M0UtBD3IiAyOUhuPlGjboCMrxaE4b/szVoYtb9KeSuctatyojfw/dCrWtozk2GBIyV0oWI7aaplmD7bdSq01xzKqlBPG69i/ih+k8H7J2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716980238; c=relaxed/simple;
-	bh=ctD49qVERR2dHv1J4v4UmR3i9jG/YE+pVf0bMo3bCKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sSRf4Ga7Ytw+R9rjeGoWse40KZXlm04heLn2WpQr4jZ6YZW7KHGSQGP9bvwv104PrMEUeSeHa0IVdp6Lh/UxMAesuNj9H7Mxhz2CMOFX2wUHa9zG4ScpPVILPXDtRLBm77rCe4tfNHcRxiof5FO/rmU7wfN1NTbw2Au16/IgZ5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P1IHeRAz; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716982908; c=relaxed/simple;
+	bh=tzZQo7vUqK6MKuE/RM3RRaXsd98JAe3tB5Nk3IU4Ay4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lsgOFZ0KiTdxX2jnWRSNwSCYqWM952Q/kBYYpC5lKi4Nmk2f7+LaGFW7LukdOHonnwKYIRHGmm72vg9sPOdgaKijmUyyJ7NtPQFLyGHx/D4u+m7mjDzxxTy8cE+cl0K/1GOEmVR+3Yk/4jekfXpxToZOyGgz5l5Ki8GmBZkLeh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HA9qKE9b; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P1IHeRAz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716980236; x=1748516236;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ctD49qVERR2dHv1J4v4UmR3i9jG/YE+pVf0bMo3bCKQ=;
-  b=P1IHeRAzx9MqPMvfggL4mvDfMusGSi0j/594FzhzXqmcMCCTiO6ixpDS
-   6/zh4Xt1U3k/xypDlhK5aVP6bZ7sK34W31twl0fViKf0KQ4P543Gv12xD
-   jO16YZVQvmPrv8TzG0u9ueKReYE+EQFTFAeoEOWWqIX4UIi7zjvQGZy5y
-   5o7fTb2e++gerBZuO5wdDx3GNMMO96PdrgpLXoGVy9FHZGuuuR6MJ+NNf
-   m8sHM2sOkNCOe9XcdyTISckgHtyQbhRuLC/ET74moAhk6hp/hXRJq85fT
-   0/5j3e/98XeBJcYAfW+WWPsTPn00H4U9IkxFSLhWXVLYNMCGb9yaSswI5
-   g==;
-X-CSE-ConnectionGUID: Jd/XJWUSSxaQk27hP5X+DQ==
-X-CSE-MsgGUID: BH0DMw29QsKwOZD/ZQjiyg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="13249912"
-X-IronPort-AV: E=Sophos;i="6.08,198,1712646000"; 
-   d="scan'208";a="13249912"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 03:57:15 -0700
-X-CSE-ConnectionGUID: 3lgZ/CTcRFCU7r6ApjApTQ==
-X-CSE-MsgGUID: HoHlOsDHRDGuIo+007P5cQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,198,1712646000"; 
-   d="scan'208";a="35346963"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 29 May 2024 03:57:14 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sCGzX-000DXf-1k;
-	Wed, 29 May 2024 10:57:11 +0000
-Date: Wed, 29 May 2024 18:57:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Bertschinger <tahbertschinger@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:master 53/77] fs/bcachefs/fs.c:1723:7: warning: variable
- 'ret' is used uninitialized whenever 'if' condition is true
-Message-ID: <202405291826.785pVN5c-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HA9qKE9b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1716982906;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WmgnmfmCwqPLe3kMROpaKmbBjA0HbKWjZUykbdgNF60=;
+	b=HA9qKE9bCf/ED1omwvDSPyXvvnuEzX2oKbaM+0ScWoG1QGpFxMMU+2lo3Lywynaz76gNEL
+	xqR5r0gOIw5WNQ04hIxOxji05gOD4YQBIG3N63afib2NpKVL4zSEYpSlFrjcP5Nhz0j7wx
+	RTde9iYUOhh59WfTOapGdkGzKk9rgZU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-259-YQ_RZDnXOIybS4XPtDaMFg-1; Wed, 29 May 2024 07:41:44 -0400
+X-MC-Unique: YQ_RZDnXOIybS4XPtDaMFg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B7D48058D1
+	for <llvm@lists.linux.dev>; Wed, 29 May 2024 11:41:44 +0000 (UTC)
+Received: from [172.64.13.36] (unknown [10.30.32.93])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0C97040004D;
+	Wed, 29 May 2024 11:41:44 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 12 of 204): Test report for master
+ (6.10.0-rc1, mainline.kernel.org-clang, e0cce98f)
+Date: Wed, 29 May 2024 11:41:43 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Message-Id: <42794.124052907414400633@us-mta-259.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://evilpiepirate.org/git/bcachefs.git master
-head:   f1229fe4c8f0262d814eae41e4c55627818205fe
-commit: 6223304fab6387f4fdefd0681dd88a76b06f960f [53/77] bcachefs: use new mount API
-config: i386-buildonly-randconfig-001-20240529 (https://download.01.org/0day-ci/archive/20240529/202405291826.785pVN5c-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240529/202405291826.785pVN5c-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405291826.785pVN5c-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/bcachefs/fs.c:1723:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1723 |                 if (opts.read_only) {
-         |                     ^~~~~~~~~~~~~~
-   fs/bcachefs/fs.c:1747:24: note: uninitialized use occurs here
-    1747 |         return bch2_err_class(ret);
-         |                               ^~~
-   fs/bcachefs/fs.c:1723:3: note: remove the 'if' if its condition is always false
-    1723 |                 if (opts.read_only) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-    1724 |                         bch2_fs_read_only(c);
-         |                         ~~~~~~~~~~~~~~~~~~~~~
-    1725 | 
-    1726 |                         sb->s_flags |= SB_RDONLY;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-    1727 |                 } else {
-         |                 ~~~~~~
->> fs/bcachefs/fs.c:1720:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1720 |         if (opts.read_only != c->opts.read_only) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/fs.c:1747:24: note: uninitialized use occurs here
-    1747 |         return bch2_err_class(ret);
-         |                               ^~~
-   fs/bcachefs/fs.c:1720:2: note: remove the 'if' if its condition is always true
-    1720 |         if (opts.read_only != c->opts.read_only) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/fs.c:1716:9: note: initialize the variable 'ret' to silence this warning
-    1716 |         int ret;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +1723 fs/bcachefs/fs.c
+Kernel information:
+    Commit message: Merge tag 'tpmdd-next-6.10-rc2' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/jarkko/linux-tpmdd
 
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1711  
-6223304fab6387 Thomas Bertschinger 2024-05-27  1712  static int bch2_remount(struct super_block *sb, int *flags,
-6223304fab6387 Thomas Bertschinger 2024-05-27  1713  			struct bch_opts opts)
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1714  {
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1715  	struct bch_fs *c = sb->s_fs_info;
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1716  	int ret;
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1717  
-62719cf33c3ad6 Kent Overstreet     2023-12-23  1718  	opt_set(opts, read_only, (*flags & SB_RDONLY) != 0);
-62719cf33c3ad6 Kent Overstreet     2023-12-23  1719  
-1c6fdbd8f2465d Kent Overstreet     2017-03-16 @1720  	if (opts.read_only != c->opts.read_only) {
-1ada160618d66b Kent Overstreet     2020-06-15  1721  		down_write(&c->state_lock);
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1722  
-1c6fdbd8f2465d Kent Overstreet     2017-03-16 @1723  		if (opts.read_only) {
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1724  			bch2_fs_read_only(c);
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1725  
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1726  			sb->s_flags |= SB_RDONLY;
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1727  		} else {
-134915f3d38d83 Kent Overstreet     2019-03-21  1728  			ret = bch2_fs_read_write(c);
-134915f3d38d83 Kent Overstreet     2019-03-21  1729  			if (ret) {
-134915f3d38d83 Kent Overstreet     2019-03-21  1730  				bch_err(c, "error going rw: %i", ret);
-1ada160618d66b Kent Overstreet     2020-06-15  1731  				up_write(&c->state_lock);
-5c1ef830f67860 Kent Overstreet     2022-09-18  1732  				ret = -EINVAL;
-5c1ef830f67860 Kent Overstreet     2022-09-18  1733  				goto err;
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1734  			}
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1735  
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1736  			sb->s_flags &= ~SB_RDONLY;
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1737  		}
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1738  
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1739  		c->opts.read_only = opts.read_only;
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1740  
-1ada160618d66b Kent Overstreet     2020-06-15  1741  		up_write(&c->state_lock);
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1742  	}
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1743  
-96dea3d599dbc3 Kent Overstreet     2023-09-12  1744  	if (opt_defined(opts, errors))
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1745  		c->opts.errors = opts.errors;
-5c1ef830f67860 Kent Overstreet     2022-09-18  1746  err:
-5c1ef830f67860 Kent Overstreet     2022-09-18  1747  	return bch2_err_class(ret);
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1748  }
-1c6fdbd8f2465d Kent Overstreet     2017-03-16  1749  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1309145805
 
-:::::: The code at line 1723 was first introduced by commit
-:::::: 1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a bcachefs: Initial commit
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - cifsv3.11
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1309145805-x86_64-kernel_upt_52
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/207
+                       =E2=9D=8C FAIL generic/208
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1309145805-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/207
+                       =E2=9D=8C FAIL generic/208
 
-:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] SELinux is preventing systemd-userdbd from map_rea=
+d, map_write access on the bpf labeled init_t.
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2250930
+            Affected tests:
+                Hardware - Firmware test suite [aarch64]
+                Networking cki netfilter test [aarch64, s390x, x86_64]
+                Networking vnic: ipvlan/basic [aarch64, s390x, x86_64]
+                POSIX pjd-fstest suites [aarch64, s390x, x86_64]
+                Storage - blktests - blk - upstream [aarch64, x86_64]
+                stress: stress-ng - cpu-cache [aarch64, x86_64]
+                stress: stress-ng - memory [aarch64, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
+ scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
+:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Networking cki netfilter test [aarch64, ppc64le, s390x, x86=
+_64]
+                Networking vnic: ipvlan/basic [aarch64, ppc64le, s390x, x86=
+_64]
+                POSIX pjd-fstest suites [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+                xfstests - btrfs [aarch64, x86_64]
+                xfstests - ext4 [aarch64, x86_64]
+                xfstests - xfs [aarch64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] [s390x] avc:  denied  { read write } for  pid=3D12=
+701 comm=3D"systemd-user-ru" name=3D"z90crypt" dev=3D"devtmpfs" ino=3D103 s=
+context=3Dsystem_u:system_r:systemd_logind_t:s0 tcontext=3Dsystem_u:object_=
+r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2263825
+            Affected tests:
+                Boot test [s390x]
+                Networking cki netfilter test [s390x]
+                Networking vnic: ipvlan/basic [s390x]
+                POSIX pjd-fstest suites [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x, x86_64]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
