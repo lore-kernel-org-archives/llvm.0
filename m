@@ -1,193 +1,195 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from GBR01-LO4-obe.outbound.protection.outlook.com (mail-lo4gbr01on2105.outbound.protection.outlook.com [40.107.122.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC26E14534D
-	for <llvm@lists.linux.dev>; Wed, 29 May 2024 20:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717015004; cv=none; b=NjCfgzlYMDPCOQVM8tbZezJwXcyda9nR33H8wetjQxTiOCtBdNmDiCB5x6HWZDjd5nmWIoC/O8d5UzmenbW7z6bqBIL/DMW21uY9xEkBGGDVKsl/p8C2QKQiE1PSIWgh1Mcp+y32xuGwtwyaHovfVBq2kD+QalVobnxE7x3bYQU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717015004; c=relaxed/simple;
-	bh=KAuwmpAQlvgKVAuhQljiF3gBQKzQXSKUp3q7GZNgyAM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qDFrBKynUVmiodS5gS3DcCDqRjo1p5FRj/4n+2TXV6lzgPkKpq4QavYWGXU1znxQRfhCzlSkT+Uki2kDEc57ASZeIV5QWFsx37u3U3+R6g53Zzb+HAt8maEfvs1tKWOEiuQPeD9trFF/zD00xPhPpHMVpuyMSEfNHjCoYwoPIWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AD0Z+Or7; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B2D1B960
+	for <llvm@lists.linux.dev>; Wed, 29 May 2024 20:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.122.105
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717015690; cv=fail; b=nmJjkR1NhI4mRYvdszJd3NaT24PvlfM3Zr2saxk5G0e51M8LRWL89mXYfOsQcOtq1WUY/lgMBsPjBqs1ywAoov5WACLVB+GeMWRDAn+J/GjX/F5hRi+V3LsKySJHM5Jrjij1aJYg0vwBthocfaZI/XrAQLnQJbqTxd2zeD8e/fM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717015690; c=relaxed/simple;
+	bh=RWVZmEUjZiDTJ6EvTziW9BztnehyxPC4NUgSoPOsWa8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EPZtYZrmbJr7PFqKcUY7XeE42JxK8ymQWEZuZ9xnB9YpRCpJVYF+xbIjG7JWDe40RQ/IVeSds94urfil/G0rCfAt1pswL68J5vBm9T0Gg3I+9JBAap0T3IeQdGBjUR/FHzoQClD8URRpyWIqPOi94RlKANZCIXooF6b+PS+bDV4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=cClOVvbK; arc=fail smtp.client-ip=40.107.122.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AD0Z+Or7"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f4a52d2688so1496025ad.3
-        for <llvm@lists.linux.dev>; Wed, 29 May 2024 13:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717015002; x=1717619802; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JsDD1NAPFioHO4gLv1AtQFDU2NR/QOFSQPXZbsUyXIQ=;
-        b=AD0Z+Or7cgCmH764zOUurRX0vnc/Q5dAhOQ7qLj4XPTCIwF4N+3IPtQEc0iDe8feCM
-         CQLFMTv7dbUwYTH0u07sMReryJvTUZCVVGBn7tuaZ0XWz1H1wUTeOGJywxoC91g26kbD
-         DJa13sHyyOtXIpdhMeRpWbgjeShe/3bf7PTYdmMLZwPnnuHlEc9WdaAcCepO6GuJ68MZ
-         N3l8Dg9bYFhyR7a1HCMnGEf/jAPUYqsK9GCaStrNGRkXbG4K2UZ6SEIVVTnziH6zULWJ
-         P49QLzNdd38rrlEo+SAtFYvPHNQFuAR5q0tfnGSEm65TllgJPSSTQhtCT6qLpDV6Mram
-         o2Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717015002; x=1717619802;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JsDD1NAPFioHO4gLv1AtQFDU2NR/QOFSQPXZbsUyXIQ=;
-        b=ew0zjB/vKDBBkkCipnKr7+yuth+hJ7d9r0FKE4SaSc3Iv8JN0Pgs5DD2O8dtlBjLCf
-         +c43Ix/rThANaNEaStmhYFyuOk1wrOd4w51EVFMyOmOCdYX92nmOZKJwDoPcQ/odxMUy
-         IsgnbhlLtElwbHvRL1ldNZqMA4gfKwWnrhYdDblljH1KBIBg4JiCPgWqkHms5pGnVImF
-         rfUSSBWiSaGO+QiFHhtC+dxiiNQZGiPx30OPx8++95AnDCMPadteOPkkx1uxXxkFANjG
-         fZaWElxn0wByGQw6C6ZAm0DTI9OSbGg42q7iRmcF0ajpItlyVSd7/WNiQhw9gIY9fr9c
-         7Ytg==
-X-Forwarded-Encrypted: i=1; AJvYcCUC7Bh027f0cj68c3Y6zUr5QCfTAyGPq84Gjec+NDnXxaXMRagZ6UecZXcoOD5MCWar+zcj8NG7oTPHsnZ3QenaOlxhWg==
-X-Gm-Message-State: AOJu0YxrshfwSxhqz76l8/p0s4ru2C8bb9o13lXgF/4ymnSqxUSeNvs8
-	T9BDEeHac/2rz5daxpo9zBuACsRmoeHH8RODFLTs1QbT2531h/kT
-X-Google-Smtp-Source: AGHT+IFzfRiiqI8oIBnyBDHVNzQy3TKrU+G1kSritJ5B25V5oeLzSgd4JGxkvl7xiz1uHMCm0UlTbw==
-X-Received: by 2002:a17:903:8c3:b0:1f2:f986:595d with SMTP id d9443c01a7336-1f61a4dd759mr1743215ad.66.1717015001980;
-        Wed, 29 May 2024 13:36:41 -0700 (PDT)
-Received: from Gatlins-MacBook-Pro.local ([131.252.143.197])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c75e579sm103603725ad.35.2024.05.29.13.36.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 May 2024 13:36:41 -0700 (PDT)
-Date: Wed, 29 May 2024 13:36:39 -0700
-From: Gatlin Newhouse <gatlin.newhouse@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Changbin Du <changbin.du@huawei.com>, 
-	Pengfei Xu <pengfei.xu@intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/traps: Enable UBSAN traps on x86
-Message-ID: <57vgoje4bmrckwqtwnletukcnlvjpj2yp3cjlkym4bfw66a57a@w35yjzcurcis>
-References: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
- <CANpmjNM2S2whk31nfNGSBO5MFPPUHX7FPuHBJn1nN9zdP63xTw@mail.gmail.com>
- <2j6nkzn2tfdwdqhoal5o56ds2hqg2sqk5diolv23l5nzteypzh@fi53ovwjjl3w>
- <CANpmjNM4pFHYRqmBLi0qUm8K2SroYWg7NFjreHffHvk0WW95kA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="cClOVvbK"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rr7azrQVovkeN1VntBnr7diqy3A+9nnEdm2/kzeCzGIo4YN6XmEu2DNRPwP5VPp1iQ0eYhdusojgpf6g7+7zYf9vxAQMwAWF4UAITk5tJzkQ1XCPO24eDCewiVN0ghxJOlTGkuI9e+Qr/lF6jJ7WV1E2iHDK/KkeEjtwIYdvr1KwCCHKfJMzP3jld93zx6PNpIGtn+qYlqZTGjcGV/v7bpV2FOfJNCiw+vwgjY+s1OMTy4Ab8z7jHnUbKh5P75y7Ik9ZgKY1Y3hIRQ3ABeJOhVqh1Bn3l3xR938GIG9Iz3aOsq2HaZE1zEP2Dt/sgbjJ4P0V6BMfUXRK8NULADkBtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dGpvFoGAeQ/uDBuz4FynmhTkDhc4IgqKmmMyzHbWzlQ=;
+ b=MKJB6ZmzMbOvZx4yTqKSTF8o+vIysSmOWbnT4Huglg3HgF5EtPfgzhIBlYBcnaKnxTiv7ypJKUFKXV/venQX0V8926CYGyOzjVDk4N4aKfmKPPgjFTF1Te54UW5kvPWTSyoiKGUvCfxfAs5qCOExvWoCZD6bcZDe3DSlGuPfvZ4lr+n73dLrz5kq+w1atcwt8z/G8Qu02ymAsBrSEChgTGravTGyJjDKoEbYYRD4z12ErD0ByboJq7t9qepyZLeq+DjJLiXeKV57lHiuVX4oZiELBvrMm4wULVE8kV546RMYyS5OQBvCPUpH4sLJ00TMCb9VlUBnvOALM3AJ5mwP/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dGpvFoGAeQ/uDBuz4FynmhTkDhc4IgqKmmMyzHbWzlQ=;
+ b=cClOVvbKoLx8jK11PrQ9MdlP48uL3ZRrX7CzPcrNn14oEw4QCX7MgYB12HDy71le89thQI3xlhMWZmT3W8vaUh+2oVgx9o9sFH3P56rppg3u9hBctKnvMuLPZQTikE942GvccAsnYrnzVGsEnOCJj6A17hsWrmX17u9K2MiTDco=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO0P265MB5141.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:281::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.33; Wed, 29 May
+ 2024 20:45:38 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7%5]) with mapi id 15.20.7611.016; Wed, 29 May 2024
+ 20:45:38 +0000
+Date: Wed, 29 May 2024 21:45:32 +0100
+From: Gary Guo <gary@garyguo.net>
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Andrew Morton
+ <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
+ <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
+ Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?UTF-8?B?Qmo=?=
+ =?UTF-8?B?w7Zybg==?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
+ <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice
+ Ryhl <aliceryhl@google.com>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 2/2] kbuild: rust: provide an option to inline C
+ helpers into Rust
+Message-ID: <20240529214532.7804a7d2.gary@garyguo.net>
+In-Reply-To: <20240529202817.3641974-3-gary@garyguo.net>
+References: <20240529202817.3641974-1-gary@garyguo.net>
+	<20240529202817.3641974-3-gary@garyguo.net>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0636.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:294::14) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNM4pFHYRqmBLi0qUm8K2SroYWg7NFjreHffHvk0WW95kA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB5141:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68599b3c-c649-4392-f705-08dc80204c18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|366007|376005|1800799015|7416005|921011;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?hIaFve2/qwglkHKD4QhkmY9NhhQCC14VblasrWoSrks/6XScZ5a13CX8nWCC?=
+ =?us-ascii?Q?Q2LAECX3239ZU5rBTU+HgVyoUx68cR68MSs/eXrE9T7Bk9EiPHal5aBDsqbl?=
+ =?us-ascii?Q?/EX2FpMJmwq3Z1K+YO5iWLuryqZqWnkUYrM/hvQ+oqYKF2NkxODjgaiE0sRO?=
+ =?us-ascii?Q?j8O46YKomsFltNnxoGnzFGyizOn9AT6su9hkiYhy+7ohWPlFIntL8ZIgv2XR?=
+ =?us-ascii?Q?BwN0RwLL18RJnZv4maNO9tp3r06y6sRLDI3LfeGjqynGnf2KhrCts5z4er/t?=
+ =?us-ascii?Q?m2dyWfEYELAr7WDPTHjMi0d8x++TToSGbOAVMEo86Z/hdLyxxGOpnXoHSqXy?=
+ =?us-ascii?Q?qclgGT5iuZTpTWDflCpQG+3Uu6xuwpa6eKrHFXc6v56IBXvQQgg5kIEXhRjX?=
+ =?us-ascii?Q?AHtnWMcDdIAgH1IVJbU6BwAiHTr22Ndvj1Taq5wFH2QcpzYG2M6mUD/WEeco?=
+ =?us-ascii?Q?9rwhdw0Yhc8mTYzGqMCzO8OExqeQbK+5ozU9mQ2s9meA/6csYHJYJ6Go0U0Z?=
+ =?us-ascii?Q?GrIxk9Q0ZKueox6GYlwL3sg3UE5KTLL0TQJnBBYNZ5mg/QkY/HXS5EcvIzOs?=
+ =?us-ascii?Q?M0ECObmaLuC/snGQsYomc93U8xfa6wLicHO0c4NwvItQsn5sSb0d1reG0H9Y?=
+ =?us-ascii?Q?ibkZW1ic17APubwHa3z5JNGwNfns1pETWcoR1Sz/Uj3DW9r1j66P8oRcrrzn?=
+ =?us-ascii?Q?b7kYjtLZex8xtMtxdV2OPt0cr1GMsnENTqUvBVNkT3hkqWOWwQQukkmFk0oP?=
+ =?us-ascii?Q?WNOVWWbwkg2CrBai+W+ogopC2EvUEaGVlVw6n0Iy9/Jki4pgShu2Yz9PUFYp?=
+ =?us-ascii?Q?ww7HQ1cMS2n9ajsZOfoVZAGbyN2LtIlUlY+RD52CT1RrJDBup1DqWRNZS2Zy?=
+ =?us-ascii?Q?DdVON7bawBuR9bd6N1TEmdBjr8PQ42Pu3xL/er39F12RcCfrCcj4R49hOKHC?=
+ =?us-ascii?Q?04pOvXF12txi8/7kt5GGmIN6+wl7wmq2GsWx2Ox1tKCK9StANjLcmaZIt/9+?=
+ =?us-ascii?Q?mA0jZ+GYh6Y7W4u9UflrByNZ6eD2lcETuCCpUPxk4gJ7P3E5vWQhBwdzH38s?=
+ =?us-ascii?Q?UEWMZpnHiZkeujtRej1ljEXjaxAPP4ClSyxOSr0h6iGFytCjGBI7qGaOLmi6?=
+ =?us-ascii?Q?bfecPEVKop1tkIBXWVEu39Q/KBPraiytrbU/HMSj/b8nEBsTSMf43Bbff+d0?=
+ =?us-ascii?Q?l+5XnyjOYhTv0PTEHozAx8+PzwaoRq7mN03ViCSEtX/FE3kTdETpXZDK5N4x?=
+ =?us-ascii?Q?WrvfflTbJTZ/Gmq09rojB01z2C+4i3F1j4gUVWPjmaQPI8eDe83roYCTmtAu?=
+ =?us-ascii?Q?ZibwpBOfaAbHAeDklh/ywXky?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(7416005)(921011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?tEHwKGZN6FLshT11w2OKFIG0rLEUvHmDjU+Qjtl6tyhhHnFGKN4ASE2mPJfW?=
+ =?us-ascii?Q?B2vy4GwAnHh8TItEGcdnhk10su9hSyzMWZO9cpyoAhkZzCqJquxs0o2vvqlS?=
+ =?us-ascii?Q?uO/hmCoLoGdIULvXbB2l8d74fnJ8GFI6QKM0GyucQqd7t05xA1z7nr+qVgP3?=
+ =?us-ascii?Q?9Mj68vAQY/gjUjlJkYPLm4d+xUKfKE88fqdbLZUpovs7+e9V/liDoc04vawv?=
+ =?us-ascii?Q?AITwKW3AYS3dGA8IgBh7YjMgAQl0bENqHO0brxRkbC8rIumHwLVUdhZd/lHy?=
+ =?us-ascii?Q?UBOIio1D/BGFUuGpHZWyVC9mrIO9UOzhtEkjn3LyGOUHCFBZNtEPKTbj7Etg?=
+ =?us-ascii?Q?Qp4IFbeQru1wZ0D+QkUMe51vlUKJ1lSpUB6D7mCao5KJxNlF4V1+htdjUfKm?=
+ =?us-ascii?Q?So6Q54dqOApckFcjyCoRmSVkTUcF/iCxcDSblXwLV50QHlZYXq03Bx3mDQY2?=
+ =?us-ascii?Q?kr5fDQZcnW+O5hUxTRpQzMbTZJdfwi29BsMwlg+GPyV6vyqe47xPhFVufqiH?=
+ =?us-ascii?Q?9X7Q6QRx8d641w6wpaxq3z2rFJ1Zi5XtBWg2SufMdpRlzoPfw5Agiv0E6eOl?=
+ =?us-ascii?Q?7FPA+GVpe/sPA8Nc1WGBKxRQAQUre2x9+2RAHBUcFZ72y+7JKPjyrV7J3y6s?=
+ =?us-ascii?Q?KWUWOVo7PqcKiXkJ/8gHodcDr78DQSxmAJUpauigO+NaUz4TMyVFew7ZIa2B?=
+ =?us-ascii?Q?wmYTflBoUPueRTcBIeGsAbARbp7vEyT2P9TIU0sqjXdd4tSb3vSfGcAmYBME?=
+ =?us-ascii?Q?NCTChrDssCt3eljRm/qRiIGYyps9k9SC4zyoeogAVF62njdQsnjnsunJnktA?=
+ =?us-ascii?Q?ruxmUvYKV3aOBPLjwoFsfAPqN7YZsBb2KgFT2IjR4XLsmrzuiUy5g3KCKYoP?=
+ =?us-ascii?Q?SRj37V2lgPSRwYt9IB1BZlddj+f7WzGOYepYZPf0FKPah/+7QCFAYP9roGy/?=
+ =?us-ascii?Q?M3EFb8gxdxaUPsb6CMFiorBSH24wqWK8r/V4FARThmawyZnOakvwcMHuPJpx?=
+ =?us-ascii?Q?UQENpQM1ho5OJQnSx2EWCshp5LbA/7dGLPt9nY6iVbNjXP4iYNi7LEQ+LTQT?=
+ =?us-ascii?Q?LzlbEJ6o/aKWrVProre9JQJaoGv4UmFIv+/ro1hFBKgiPBya6v2+FCOnVGOb?=
+ =?us-ascii?Q?mGTZBtjOiZSwRSMjC7J+7G/KfwYDgKW8FKEGJAeOfQgOPjavd31vbW+1VJsU?=
+ =?us-ascii?Q?sgCa+kZnbiZscGRfjAy21QdqXGTymeb3qBxLIkgH3d8k4eILQbclGXKEupEO?=
+ =?us-ascii?Q?7N5LVD/3YB3ZB9re0P8MVmvp7Yzga/Dq+5mZNnqFYeEAu7X/CtfvaG94XDk9?=
+ =?us-ascii?Q?fHT7mrT3dbNt3ksWDEVyQ9XWu7aD2K/8IXwADuBO+4SKTSOO3vfwbp0LVp92?=
+ =?us-ascii?Q?bOrA76e+5GV5KhjrLE1tlRFqB2+IpWN3h1HH1wRSlvUmT1pEF/JL2NO1KSkp?=
+ =?us-ascii?Q?njhhfqjeS0LOwAJAbWxXqkLoeMl10bw/fxPkHOPWqwoX61H9XVPZsTfKFBiP?=
+ =?us-ascii?Q?7OqgC5VkQON/HSXg41qDKDbtdRc/ywKeR2J8ziQcbiJjmCMqYkug2nCJBI5p?=
+ =?us-ascii?Q?9uGaR013kiNNPvq5Ok69Xaw/HGANLTpbhFmQX/BGegcjuee2Hm7fd1Kxy74j?=
+ =?us-ascii?Q?qS2e0axGBfGfDeJ6W6ix1o0KF9PcaFy4Pnk3q4kVbhhN?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68599b3c-c649-4392-f705-08dc80204c18
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2024 20:45:38.4942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oVnfyqsSWgJrMcCt177ruDh7olROktsOLshTd8+iy+RUz1HsVsLdjZhI8GNCjdxGPH32FKdEG3HSU+k8pNFVcA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB5141
 
-On Wed, May 29, 2024 at 08:30:20PM UTC, Marco Elver wrote:
-> On Wed, 29 May 2024 at 20:17, Gatlin Newhouse <gatlin.newhouse@gmail.com> wrote:
-> >
-> > On Wed, May 29, 2024 at 09:25:21AM UTC, Marco Elver wrote:
-> > > On Wed, 29 May 2024 at 04:20, Gatlin Newhouse <gatlin.newhouse@gmail.com> wrote:
-> > > [...]
-> > > >         if (regs->flags & X86_EFLAGS_IF)
-> > > >                 raw_local_irq_enable();
-> > > > -       if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-> > > > -           handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
-> > > > -               regs->ip += LEN_UD2;
-> > > > -               handled = true;
-> > > > +
-> > > > +       if (insn == INSN_UD2) {
-> > > > +               if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-> > > > +               handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
-> > > > +                       regs->ip += LEN_UD2;
-> > > > +                       handled = true;
-> > > > +               }
-> > > > +       } else {
-> > > > +               if (handle_ubsan_failure(regs, insn) == BUG_TRAP_TYPE_WARN) {
-> > >
-> > > handle_ubsan_failure currently only returns BUG_TRAP_TYPE_NONE?
-> > >
-> > > > +                       if (insn == INSN_REX)
-> > > > +                               regs->ip += LEN_REX;
-> > > > +                       regs->ip += LEN_UD1;
-> > > > +                       handled = true;
-> > > > +               }
-> > > >         }
-> > > >         if (regs->flags & X86_EFLAGS_IF)
-> > > >                 raw_local_irq_disable();
-> > > > diff --git a/arch/x86/kernel/ubsan.c b/arch/x86/kernel/ubsan.c
-> > > > new file mode 100644
-> > > > index 000000000000..6cae11f4fe23
-> > > > --- /dev/null
-> > > > +++ b/arch/x86/kernel/ubsan.c
-> > > > @@ -0,0 +1,32 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +/*
-> > > > + * Clang Undefined Behavior Sanitizer trap mode support.
-> > > > + */
-> > > > +#include <linux/bug.h>
-> > > > +#include <linux/string.h>
-> > > > +#include <linux/printk.h>
-> > > > +#include <linux/ubsan.h>
-> > > > +#include <asm/ptrace.h>
-> > > > +#include <asm/ubsan.h>
-> > > > +
-> > > > +/*
-> > > > + * Checks for the information embedded in the UD1 trap instruction
-> > > > + * for the UB Sanitizer in order to pass along debugging output.
-> > > > + */
-> > > > +enum bug_trap_type handle_ubsan_failure(struct pt_regs *regs, int insn)
-> > > > +{
-> > > > +       u32 type = 0;
-> > > > +
-> > > > +       if (insn == INSN_REX) {
-> > > > +               type = (*(u16 *)(regs->ip + LEN_REX + LEN_UD1));
-> > > > +               if ((type & 0xFF) == 0x40)
-> > > > +                       type = (type >> 8) & 0xFF;
-> > > > +       } else {
-> > > > +               type = (*(u16 *)(regs->ip + LEN_UD1));
-> > > > +               if ((type & 0xFF) == 0x40)
-> > > > +                       type = (type >> 8) & 0xFF;
-> > > > +       }
-> > > > +       pr_crit("%s at %pS\n", report_ubsan_failure(regs, type), (void *)regs->ip);
-> > > > +
-> > > > +       return BUG_TRAP_TYPE_NONE;
-> > > > +}
-> > >
-> > > Shouldn't this return BUG_TRAP_TYPE_WARN?
-> >
-> > So as far as I understand, UBSAN trap mode never warns. Perhaps it does on
-> > arm64, although it calls die() so I am unsure. Maybe the condition in
-> > handle_bug() should be rewritten in the case of UBSAN ud1s? Do you have any
-> > suggestions?
-> 
-> AFAIK on arm64 it's basically a kernel OOPS.
-> 
-> The main thing I just wanted to point out though is that your newly added branch
-> 
-> > if (handle_ubsan_failure(regs, insn) == BUG_TRAP_TYPE_WARN) {
-> 
-> will never be taken, because I don't see where handle_ubsan_failure()
-> returns BUG_TRAP_TYPE_WARN.
+On Wed, 29 May 2024 21:28:15 +0100
+Gary Guo <gary@garyguo.net> wrote:
+
+>  Makefile               |  4 +++-
+>  lib/Kconfig.debug      | 10 ++++++++++
+>  rust/Makefile          | 34 ++++++++++++++++++++++++++++++----
+>  rust/exports.c         |  3 +++
+>  rust/helpers.c         | 41 +++++++++++++++++++++--------------------
+>  scripts/Makefile.build |  5 ++++-
+>  6 files changed, 71 insertions(+), 26 deletions(-)
 >
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index 895f4b696962..3abf96f14148 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -32,18 +32,19 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/wait.h>
+>  #include <linux/workqueue.h>
+> +#include "helpers.h"
 
-Initially I wrote this with some symmetry to the KCFI checks nearby, but I
-was unsure if this would be considered handled or not.
+I made a mistake during rebase and forgot to include rust/helpers.h in
+this patch. The content is
 
-> 
-> That means 'handled' will be false, and the code in exc_invalid_op
-> will proceed to call handle_invalid_op() which is probably not what
-> you intended - i.e. it's definitely not BUG_TRAP_TYPE_NONE, but one of
-> TYPE_WARN of TYPE_BUG.
->
+```
+#ifndef RUST_HELPERS_H
+#define RUST_HELPERS_H
 
-This remains a question to me as to whether it should be considered handled
-or not. Which is why I'm happy to change this branch which is never taken to
-something else that still outputs the UBSAN type information before calling
-handle_invalid_op().
+#include <linux/compiler_types.h>
 
-> 
-> Did you test it and you got the behaviour you expected?
->
+#ifdef __BINDGEN__
+#define __rust_helper
+#else
+#define __rust_helper inline
+#endif
 
-Testing with LKDTM provided the output I expected. The UBSAN type information
-along with file and offsets are output before an illegal op and trace.
+#endif
+```
+
+I'll include this in patch v2 but would like to get a general feedback
+before sending another version.
+
+
+
+
