@@ -1,127 +1,154 @@
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743DE17C207
-	for <llvm@lists.linux.dev>; Thu, 30 May 2024 14:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A8A145A01;
+	Thu, 30 May 2024 14:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717079123; cv=none; b=tk6/ddgcmCSwbQaj6HutOUlKKg6hGCb6GZbMqJT0pD8ekrAT/qO0/UTqhIqv5P1Wqx1ZebFwZrYn/1dVZvbfkgOFlpvncdO/F9PMSrHg9V/Li+ai1gSJ15egC1kUsS74xharGKTg9Q5gIabIhv2cd9TyjcS+U6YnodtqSyQKf7M=
+	t=1717081092; cv=none; b=k5A8KDyQM0sR/831gRtsWNtAgQ4n98GjvWS4o1zHEI1QARMBd5157cOVe70R2Gq7Xh60cE+DfK6pGnbtZV4uDqOjGYab9x/+ZxbDkrcnT6On8LVeuYZyLfwmflCbsAKHRlYaHrDwKkhqMlLEmRY9VhKhu/gFABjyo7FKmC8KQZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717079123; c=relaxed/simple;
-	bh=g/X45uSF6k+HRkBUhwjSpxSxuIqXtM9kMM336BDvTlw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FF1b9xbku0dOJjgMVfC4on/Mz8G6guItvjbUKqg07qDcLPWth6VZL7+TH38uuY59p2xTmvOyfg4vizHxUOdfNrY7Zqn0mIQ3kE7gbezqJxs0n1Fpa+VOcAkMBkfFDQ3B6YZKnRn+7lmF+9nbFKFPhiBCBLD5jdBROGBw44tv+9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dr0ePJPA; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1717081092; c=relaxed/simple;
+	bh=vHl/hFne/dN3VS62u9WcIyO8pcYKfCjKEu2He7GV1JM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qpBZQ6cM1VOdRo5Zu8HRh++qDVyB8Y+MbzomcBoW4Vn0qm4BehFpXZO0vsPU+qSsX4Z+/z/9mY2/P/1nF+YwyBB7npoBEW6S9ZZo/a/hZdt+9oM2R/eDT3sXdoxHB0jDBuNh/KyBWUxku6MqkFVLVqzODef2rks9m1nF/jfacvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrYNBvc3; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dr0ePJPA"
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7e8e2020002so4281939f.0
-        for <llvm@lists.linux.dev>; Thu, 30 May 2024 07:25:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrYNBvc3"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7024003a517so126152b3a.2;
+        Thu, 30 May 2024 07:58:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1717079121; x=1717683921; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nsdkf/hEokdRbVfsff4bOqv3Tbq/llwdsETViLwX3BI=;
-        b=dr0ePJPAhFW0It1dzkZz+mB+tBpWf8GhYzotQK9AMvDptNVg+X70nFxflfz5SHrTLf
-         RCEbr49Gx2Ow4FVby4LRO956Z6emBDrQnsfQCxRvDBt41vsjwAspUjLBCzTMBm1Vxa5l
-         8YKN0b0W9CAknEumJC9Wxx2iTR7P23i5Vg378=
+        d=gmail.com; s=20230601; t=1717081090; x=1717685890; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pcneh6OdbXB2yw8eBub3uBTS5tn1ef9zWgBOmoSp/pE=;
+        b=VrYNBvc3u8PZEs+SGpeDPIs/P0ONtFVgYjl46jzjmZTcTUcWIatXqSC+khdJ40GsD5
+         cC2ZIx/JqOPtIOBcG3inW0gwJWstDN1DaaoKo1NPwrTJnFB1wpCKStqRXxXLmyhJgslR
+         Uo/FDKuo767+6UiUpBYNrGV2R7URi9BBaRaI9FZI/BqYwns3F/GliwriiVZmNK4ar1fb
+         gMo8TwPdND8xkuDFU9eHewqKIXKYbMcoSnErC4T8y2ACo7XYKkbcy/lbzmivfpbsl2lv
+         cc1t8QZ3S7q8uhRHIgBg2FwvLFp9+ePbLd7b0UssGVsVEov5jD5g/sVlHKTZtlsWaJc8
+         UwXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717079121; x=1717683921;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nsdkf/hEokdRbVfsff4bOqv3Tbq/llwdsETViLwX3BI=;
-        b=g2RQKwq5k8uPeaal3BKKmgBpwX+0akOG4CF/TTqaBNGsl2y31mMbEG8DCH7GtEljiH
-         aNy7cP6dB/Qy6mHNCM/iBmlzheBMkQg+0y0nJnsmQQNyk1lAcc0J82u/mIrhKmnjFFqS
-         dCxRhcCm9MoAwqkzqtdv8laoU+usiby4xhqLRFRuXqk7AR5kGPSCkFE/Mvt7tqtXfJ5Z
-         9IXnX+E7ufHutxj73EnS42eiL7B80bAR35baoK1IE6DF1PNU4XwuCXyApDEWdaLlD4zb
-         Y2cDnbSfjFky02KFdCQOZFllfXVAf78hH4FHM2IqV3hCGZV4gPgnr+wMAXjCpMNXfzPf
-         nrqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNhYQWFNBbTqW+FX4+O8Q5eQ+X+3vAtKVpnwRaHG8ulaMPUErAGEdlN/ngupUWQ1kq4vaUPpYfLhGgrQABEmuJFdcldg==
-X-Gm-Message-State: AOJu0YwM2yU2mhIK7JMHJwFnT8i3WFVd0/+Xao4IccvaE9X987IWCINb
-	+Fx4rgDS9JVCaVIlM50/5TiJrDqEKprykcnb065Prq7S4XEDDSgvJKwTbuI4WyE=
-X-Google-Smtp-Source: AGHT+IF8O6GPnyWjF5VaTmv02b4u4/S8Ekhuksh/BQkhTKKplAGUx/4CG+uFBabO2++mbMvPZsfKCg==
-X-Received: by 2002:a05:6602:19c9:b0:7e1:8bc8:8228 with SMTP id ca18e2360f4ac-7eaf5b73813mr241539839f.0.1717079120876;
-        Thu, 30 May 2024 07:25:20 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b10cf31917sm1404185173.45.2024.05.30.07.25.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 07:25:20 -0700 (PDT)
-Message-ID: <88c64f5e-4586-4b38-b3c8-0c3af93a71ae@linuxfoundation.org>
-Date: Thu, 30 May 2024 08:25:18 -0600
+        d=1e100.net; s=20230601; t=1717081090; x=1717685890;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pcneh6OdbXB2yw8eBub3uBTS5tn1ef9zWgBOmoSp/pE=;
+        b=AaveZ9KqokNEiVQrsvKu7XL6NTrWT6FcsJRfDNj5pARqNLZmxt5ijOiYZYqWUONX7D
+         YSfCtmFAGipUSUSmLCQhkpbsgiSq4kfjZjfyZHZ/MyJ+kkvMfo4NTisI63sAkuGubcb/
+         7t29U2EB1CKdWaZynWaLjf7P0h1BfcCp8lUVVEGDUHMz1lEnM79Ecd39aPexYEss/+Lo
+         Ls4XVc1CxcZGXlBu4vPxEJlP/pVzEu6E499mjUZUrItuWi2ndUdeWSX0DZLc2kw2qWk0
+         9hLZMIjJ9GQp2yA173EQuKHt9xcmHVgnUQ5KVJmTqk8og8fvwPnA+oX6QfWcIW2ZHF2K
+         7rdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbfYf7uLQonKNTq/lWREVBMcNrFVpDPfTV+YXcqNRYesSGq7iO3Fq7Rt9jFyT/aavhKmKj4jrI4PtWUEmXuRcesxxGwYvDwGJ0k3mTmGQXV/UMEtE0YWSw7ZDVynA=
+X-Gm-Message-State: AOJu0YzDND6fhc7ME+QSM15+5aPqJ688Cc3+cFWkLWa/TVM0gthME+gT
+	x9Z7ZaAhra3UMNJFUyG4+Dq4ZUyUg6pH2b8d8E1Kz1BhgvvXhOjAvUZZmahARij5m5dXyuLWjKl
+	JhFOhsN/CCnFb0gbZkJd9mHcOl18Dkw==
+X-Google-Smtp-Source: AGHT+IG/K9bjenhk0+Nldu2e8TDBOCESyblInvnkPhmih6+zxEhLkPmDFwz2LvGoFVaBBs/bIA3IpcKiiLGStFQRrDc=
+X-Received: by 2002:a05:6a00:4214:b0:6ed:60a4:6d9c with SMTP id
+ d2e1a72fcca58-702310e53cdmr2970675b3a.4.1717081090330; Thu, 30 May 2024
+ 07:58:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/lib.mk: silence some clang warnings that
- gcc already ignores
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: Beau Belgrave <beaub@linux.microsoft.com>,
- Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
- sunliming <sunliming@kylinos.cn>, Masami Hiramatsu <mhiramat@kernel.org>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240529020842.127275-1-jhubbard@nvidia.com>
- <20240529020842.127275-3-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240529020842.127275-3-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240529-drop-counted-by-radeon-states-state-array-v1-1-5cdc1fb29be7@kernel.org>
+In-Reply-To: <20240529-drop-counted-by-radeon-states-state-array-v1-1-5cdc1fb29be7@kernel.org>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Thu, 30 May 2024 10:57:58 -0400
+Message-ID: <CADnq5_P5Mz=Acm0HURUUHu03eBmemcu7jYe8nYJ5WtBjb93Qgg@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: Remove __counted_by from StateArray.states[]
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Kees Cook <keescook@chromium.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/28/24 20:08, John Hubbard wrote:
-> gcc defaults to silence (off) for the following warnings, but clang
-> defaults to the opposite. These warnings are not useful for kselftests,
-> so silence them for the clang builds as well:
+Applied.  Thanks!
 
-Please you add more information on why they aren't useful
-for kselftests.
-
-> 
->      -Wno-address-of-packed-member
->      -Wno-gnu-variable-sized-type-not-at-end
-> 
-> This eliminates warnings for the net/ and user_events/ kselftest
-> subsystems, in these files:
-> 
->      ./net/af_unix/scm_rights.c
->      ./net/timestamping.c
->      ./net/ipsec.c
->      ./user_events/perf_test.c
-> 
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On Wed, May 29, 2024 at 5:54=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> From: Bill Wendling <morbo@google.com>
+>
+> Work for __counted_by on generic pointers in structures (not just
+> flexible array members) has started landing in Clang 19 (current tip of
+> tree). During the development of this feature, a restriction was added
+> to __counted_by to prevent the flexible array member's element type from
+> including a flexible array member itself such as:
+>
+>   struct foo {
+>     int count;
+>     char buf[];
+>   };
+>
+>   struct bar {
+>     int count;
+>     struct foo data[] __counted_by(count);
+>   };
+>
+> because the size of data cannot be calculated with the standard array
+> size formula:
+>
+>   sizeof(struct foo) * count
+>
+> This restriction was downgraded to a warning but due to CONFIG_WERROR,
+> it can still break the build. The application of __counted_by on the
+> states member of 'struct _StateArray' triggers this restriction,
+> resulting in:
+>
+>   drivers/gpu/drm/radeon/pptable.h:442:5: error: 'counted_by' should not =
+be applied to an array with element of unknown size because 'ATOM_PPLIB_STA=
+TE_V2' (aka 'struct _ATOM_PPLIB_STATE_V2') is a struct type with a flexible=
+ array member. This will be an error in a future compiler version [-Werror,=
+-Wbounds-safety-counted-by-elt-type-unknown-size]
+>     442 |     ATOM_PPLIB_STATE_V2 states[] __counted_by(ucNumEntries);
+>         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   1 error generated.
+>
+> Remove this use of __counted_by to fix the warning/error. However,
+> rather than remove it altogether, leave it commented, as it may be
+> possible to support this in future compiler releases.
+>
+> Cc: stable@vger.kernel.org
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2028
+> Fixes: efade6fe50e7 ("drm/radeon: silence UBSAN warning (v3)")
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> Co-developed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->   tools/testing/selftests/lib.mk | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 2902787b89b2..41e879f3f8a2 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -50,6 +50,12 @@ else
->   CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
->   endif # CROSS_COMPILE
->   
-> +# gcc defaults to silence (off) for the following warnings, but clang defaults
-> +# to the opposite. These warnings are not useful for kselftests, so silence them
-> +# for the clang builds as well.
-> +CFLAGS += -Wno-address-of-packed-member
-> +CFLAGS += -Wno-gnu-variable-sized-type-not-at-end
-> +
->   CC := $(CLANG) $(CLANG_FLAGS) -fintegrated-as
->   else
->   CC := $(CROSS_COMPILE)gcc
-
-thanks,
--- Shuah
-
+>  drivers/gpu/drm/radeon/pptable.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/pptable.h b/drivers/gpu/drm/radeon/pp=
+table.h
+> index b7f22597ee95..969a8fb0ee9e 100644
+> --- a/drivers/gpu/drm/radeon/pptable.h
+> +++ b/drivers/gpu/drm/radeon/pptable.h
+> @@ -439,7 +439,7 @@ typedef struct _StateArray{
+>      //how many states we have
+>      UCHAR ucNumEntries;
+>
+> -    ATOM_PPLIB_STATE_V2 states[] __counted_by(ucNumEntries);
+> +    ATOM_PPLIB_STATE_V2 states[] /* __counted_by(ucNumEntries) */;
+>  }StateArray;
+>
+>
+>
+> ---
+> base-commit: e64e8f7c178e5228e0b2dbb504b9dc75953a319f
+> change-id: 20240529-drop-counted-by-radeon-states-state-array-01936ded4c1=
+8
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
