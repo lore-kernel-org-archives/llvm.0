@@ -1,171 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD5A14BF8D;
-	Thu, 30 May 2024 19:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41661433CA
+	for <llvm@lists.linux.dev>; Thu, 30 May 2024 19:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717097979; cv=none; b=ZdtMbbFSDDBnpwN5kjCUbXnoUM7cGAa49ERr3Q+0YqWGnz4+itueDRxvorim5EwkTgcy9VslfIvjptBdcOdd1jOgtx8T5SGXNYhioY7rAwNf9v6KcbSnx2C7S8qzL32vdqJEEOa2nB3LBNLxli7ynUmts8zir8PCgMr6QuPcO30=
+	t=1717098383; cv=none; b=ZPP3knOGlSTm/PuR4SIvHANGvWKqyVYt/FwjLwQtqoGdNuRckgAf95DsSA4fzWvz3/fXzN57DDKoX8/bDqwiguM7b8ZXc5/IYs+CtSZ0bqVnwb+eg9qi2mdTUUpR1vStOjKyOLaGDoTBAquwxNxvbWkpgiQvHVEVGZM/Czf1/aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717097979; c=relaxed/simple;
-	bh=/lktGtJSvAn4lh7mJGP1VwrQBcfaabMzyjbDYfqQoH4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vtyho7r8a+nUQUl7pwyUSL88PtJ4wEFISFUIdNmQ2rhZP5DtUomj4kOT5Fq9sCET1K8e88VDUxfvPooSagBnPPwZQKm/2VwhaAIIrqDC/uAX2N2Qt/hiDJbNlncaCulZqE77J/NlUFipWOoZA1uIsIFNjdRxOmqxtIVUPgMbz9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lb3aI8TG; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1717098383; c=relaxed/simple;
+	bh=4IDw+U0NYGggxxvx7zM6B2lBbkSgCFEokG3fZQ5dkpU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nyrjklDTKxLUMe7D4w6yRA7UKchLiWbMQkziMJr1oiUfHnJALvVaVJ2wXJrxp+AdgvVlfWdVTHMx6AjjTGqA99wuQj53QgULvXPkdMmKbN4J8KMIETtTjvBP84QgpgE7ozi0JEuH1hMms5qs2JlaNKZddGWibyGfNAdbyVus+yQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wp05puD4; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lb3aI8TG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wp05puD4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717097977; x=1748633977;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/lktGtJSvAn4lh7mJGP1VwrQBcfaabMzyjbDYfqQoH4=;
-  b=Lb3aI8TGHI5w7Lu4up/4Qc3OBh6+Ba5/h8U8s7vZfWz08g5D9K2jpvka
-   cpPJMKvJg3+mx0VhVgRhybWR/2p0LaMiDeTfWEqbA/g54LNb60/buG3pR
-   vb1cLeKHeeOyXU6xMb5OygR5D99mNhVmrWJylSXvj5Lwy5/JBIqo4rAFB
-   CEDKCqyJqESthVsfW+oQPuF4okrVq9oNOBS1hvJb/BQFv1bfmJBzSN9+k
-   0nsbFrAV+UOnFMEi8Jg4vKtuyKXxAKbFstEktz5pymhRML5Gqvui2MDHf
-   1ciHn474yv0o1qxjLohs18lj/u6gkDB5mMANQNjvuFY+t4J6KHyrRIztG
-   g==;
-X-CSE-ConnectionGUID: i5hnyjAASI2ZOx2mzRxz9w==
-X-CSE-MsgGUID: 3GKs+8+PQmGGr/DcS2YhZQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13809275"
+  t=1717098382; x=1748634382;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4IDw+U0NYGggxxvx7zM6B2lBbkSgCFEokG3fZQ5dkpU=;
+  b=Wp05puD4Mp2cnokma8Nn6pMJro9xxXQJvJ4jMet43zYB8xdu2LLnh6RU
+   x4IkQkS4PDIw3ybyu9iCY+uTGCOkPfRWh4Ot4hXBG6D1/ng4p1CqfAb8a
+   0qvaLsaHTbSaNbyYll7UfsPEZB95efU7YStpRQYR6uG2UOfMX34ZlqU9k
+   G0FFz4neY8W1uUoLidsdcgJ428z8NztQVZYTBtmL3I5nd2T8MYt9YgogD
+   aUj+D8ADv3eD4eY9xlW/0hGjS9ovle0QorTHVgNJ2y169n8d1gxovVIV9
+   27FxpA6Nt4mbEdjMhgkR8CIIU17dWZ2usqzhi/P6GeYgRBDEVxnVYy7F0
+   w==;
+X-CSE-ConnectionGUID: JeCxHnvWQfyHdZBlDbiOHg==
+X-CSE-MsgGUID: ZFM5Bys+Sby9c8JOHNe3Tg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="31107111"
 X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
-   d="scan'208";a="13809275"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 12:39:36 -0700
-X-CSE-ConnectionGUID: RR6vibQ8SNWT6LNa4FbOmw==
-X-CSE-MsgGUID: X2unkvyYR22oCdxtNCYCrw==
+   d="scan'208";a="31107111"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 12:46:22 -0700
+X-CSE-ConnectionGUID: cGuxMnMoRXaToZK4VCxdrA==
+X-CSE-MsgGUID: gtHbfsiwTXqwyROoZftCWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
-   d="scan'208";a="40985566"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 30 May 2024 12:39:33 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sClcX-000FuD-1Y;
-	Thu, 30 May 2024 19:39:29 +0000
-Date: Fri, 31 May 2024 03:38:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Witold Sadowski <wsadowski@marvell.com>, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, broonie@kernel.org,
-	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, pthombar@cadence.com,
-	Witold Sadowski <wsadowski@marvell.com>
-Subject: Re: [PATCH v7 2/4] spi: cadence: Add Marvell xSPI IP overlay changes
-Message-ID: <202405310322.RIyE2GGE-lkp@intel.com>
-References: <20240529220026.1644986-3-wsadowski@marvell.com>
+   d="scan'208";a="35849719"
+Received: from kinlongk-desk.amr.corp.intel.com (HELO [10.125.111.178]) ([10.125.111.178])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 12:46:21 -0700
+Message-ID: <4d2c93e8-5ab0-4b28-af24-c00d57f359fe@intel.com>
+Date: Thu, 30 May 2024 12:46:20 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240529220026.1644986-3-wsadowski@marvell.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/6] selftests/x86: fix build errors and warnings found
+ via clang
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: angquan yu <angquan21@gmail.com>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ Ingo Molnar <mingo@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>,
+ Alexey Dobriyan <adobriyan@gmail.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Sohil Mehta <sohil.mehta@intel.com>, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, x86@kernel.org,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>
+References: <20240527210042.220315-1-jhubbard@nvidia.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20240527210042.220315-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Witold,
+On 5/27/24 14:00, John Hubbard wrote:
+> John Hubbard (6):
+>   selftests/x86: build test_FISTTP.c with clang
+>   selftests/x86: build fsgsbase_restore.c with clang
+>   selftests/x86: build sysret_rip.c with clang
+>   selftests/x86: avoid -no-pie warnings from clang during compilation
+>   selftests/x86: remove (or use) unused variables and functions
+>   selftests/x86: fix printk warnings reported by clang
 
-kernel test robot noticed the following build errors:
+John, could you and Muhammad have a chat and perhaps settle on a series
+series that gets acks from both of you?
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on linus/master v6.10-rc1 next-20240529]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> https://lore.kernel.org/all/20240501122918.3831734-1-usama.anjum@collabora.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Witold-Sadowski/spi-dt-bindings-cadence-Add-Marvell-overlay-bindings-documentation-for-Cadence-XSPI/20240530-060250
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20240529220026.1644986-3-wsadowski%40marvell.com
-patch subject: [PATCH v7 2/4] spi: cadence: Add Marvell xSPI IP overlay changes
-config: arm-randconfig-004-20240531 (https://download.01.org/0day-ci/archive/20240531/202405310322.RIyE2GGE-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405310322.RIyE2GGE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405310322.RIyE2GGE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/spi/spi-cadence-xspi.c:496:15: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           *buf64++ = readq(addr);
-                                      ^
-   drivers/spi/spi-cadence-xspi.c:499:10: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           tmp = readq(addr);
-                                 ^
-   drivers/spi/spi-cadence-xspi.c:505:9: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   tmp = readq(addr);
-                         ^
->> drivers/spi/spi-cadence-xspi.c:520:4: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           writeq(*buf64++, addr);
-                           ^
-   drivers/spi/spi-cadence-xspi.c:524:4: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                           writeq(tmp, addr);
-                           ^
-   drivers/spi/spi-cadence-xspi.c:530:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   writeq(tmp, addr);
-                   ^
-   6 errors generated.
-
-
-vim +/readq +496 drivers/spi/spi-cadence-xspi.c
-
-   485	
-   486	static void mrvl_ioreadq(void __iomem  *addr, void *buf, int len)
-   487	{
-   488		int i = 0;
-   489		int rcount = len / 8;
-   490		int rcount_nf = len % 8;
-   491		uint64_t tmp;
-   492		uint64_t *buf64 = (uint64_t *)buf;
-   493	
-   494		if (((uint64_t)buf % 8) == 0) {
-   495			for (i = 0; i < rcount; i++)
- > 496				*buf64++ = readq(addr);
-   497		} else {
-   498			for (i = 0; i < rcount; i++) {
-   499				tmp = readq(addr);
-   500				memcpy(buf+(i*8), &tmp, 8);
-   501			}
-   502		}
-   503	
-   504		if (rcount_nf != 0) {
-   505			tmp = readq(addr);
-   506			memcpy(buf+(i*8), &tmp, rcount_nf);
-   507		}
-   508	}
-   509	
-   510	static void mrvl_iowriteq(void __iomem *addr, const void *buf, int len)
-   511	{
-   512		int i = 0;
-   513		int rcount = len / 8;
-   514		int rcount_nf = len % 8;
-   515		uint64_t tmp;
-   516		uint64_t *buf64 = (uint64_t *)buf;
-   517	
-   518		if (((uint64_t)buf % 8) == 0) {
-   519			for (i = 0; i < rcount; i++)
- > 520				writeq(*buf64++, addr);
-   521		} else {
-   522			for (i = 0; i < rcount; i++) {
-   523				memcpy(&tmp, buf+(i*8), 8);
-   524				writeq(tmp, addr);
-   525			}
-   526		}
-   527	
-   528		if (rcount_nf != 0) {
-   529			memcpy(&tmp, buf+(i*8), rcount_nf);
-   530			writeq(tmp, addr);
-   531		}
-   532	}
-   533	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I had Muhammad's in my queue and didn't realize we had two overlapping
+series' bouncing around until now.
