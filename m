@@ -1,188 +1,154 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F25E17B4F2
-	for <llvm@lists.linux.dev>; Wed, 29 May 2024 23:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE21A8814
+	for <llvm@lists.linux.dev>; Thu, 30 May 2024 00:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717025560; cv=none; b=G672u/Mkn9ZrbQDG11CPFyqlNy60wfiCgzb+siAhCvZtPNN6+xjJT426bWYPGw/cUtgnGDGuRltSE4ikRHIlfI+jT63Ol2slOp88sai2ZB26KHSRcNzOmrl7J+bwifhJcibo7o1Wj+A5E3B+HmvBxohqmROL+Z0eTdDRMpoc+ho=
+	t=1717028701; cv=none; b=SpdTfkcHQZOqd2teml9+l43DNnRyr04KAqCJOf51I21n2lO5kG/z/HaWumyBZnrtnxvJJ/1/C8nItAJxwDZcPODVVnslwxMU9DqDTGQ0aibbeyQ8SNkEvi8Q9eu14mGix5v58XPDhubKeDaCKmeiMBuhd/JW8TgdhnrJGXHGE9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717025560; c=relaxed/simple;
-	bh=/0SdF5uqE6gzTTXQWDfWuqijnmeHpXTwYnsb4nK5NfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oJJjU+5H3IS3f+JaaCgGmSeOwSHYyArl3AYDVjV2OvgjItVShjvnpHYzoLcLZ/Xmj31BSfB2P+gNKiYNNcv0kbL67xFdki7lOmOdAW+eDnVPuHpBvJ1rsgAEvpDY+ueE3sky8I88aHwiC/LYq+r8fbFbF+a/8FLazqzjkgMz/y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ekcd+b9/; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1717028701; c=relaxed/simple;
+	bh=fi6T2j94Ji7pMV4CVbe0HpecLMs+r9lr+Q6XndjoPC8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=BaEz96EqnHTvVXv2/4O0HHYigBacTbPRoGpYJNYCK9hLRDFC8T6yWBams58Tfj4Wbkx8nOEWC6TfdewXJNz1sPCj3WS6WeZiUN/1R+qaPQbjr4pcCGqwKSzNw8jGFE9yelPk4Dp9z8qXhQGklV+NECu0oum6G1hqIcEFHyA5otU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=FN0HCdop; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ekcd+b9/"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f4a0050b9aso2699135ad.2
-        for <llvm@lists.linux.dev>; Wed, 29 May 2024 16:32:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="FN0HCdop"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3588cb76276so272063f8f.0
+        for <llvm@lists.linux.dev>; Wed, 29 May 2024 17:24:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1717025558; x=1717630358; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cucV7qOoOPIUrj3G8eYL6EQD/QmFAva7FNUzBgHa+iQ=;
-        b=Ekcd+b9/Icbzgq2p3BDHPdvCi056BO9p8sKvOCwEMfRZ8iQgCLC8oGIlSkx62ckefx
-         yeDqrbg9nwEgit3kNdkUbY3G5LErGHVOE2iTXjj9OMU8bjORwk4+rGBR+rvvwm1p24Y2
-         cj2KV47hX+UuM6VHEkc50vuWjrle/iZjO+aYk=
+        d=citrix.com; s=google; t=1717028698; x=1717633498; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8WU/Su/TdkCMJqoSn+Qk/ofrN8Qleakj9+qJnBXhLHY=;
+        b=FN0HCdop43MNUXpvPzesnjzwjFsRCoRbo44PCkU9bYm+lRYZ/tykkTSX0Ri7b+tdCJ
+         WtBR3EKBY3umvjD3KEGYRcQy/F/RLfY/dnqHNBy6zuPlbabgTNhlbgyzb9+ntTdZrBFM
+         XN6PfLPNH8s/WzVP5+aJIbrHKVCSUIXJh0YVk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717025558; x=1717630358;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cucV7qOoOPIUrj3G8eYL6EQD/QmFAva7FNUzBgHa+iQ=;
-        b=Qpf67NLQBin1UKqDpb4APgNbCaycButaSdkzlH8MjW4ueEFPO00h7nmIT2MXtRHld4
-         eeBrTT0qBbEiRyp0zF8+CjQbJCJ8En0xE17O688G93gd1JHUepBtj/NNHg62nBbZf7cA
-         NI4YoVfk/zL4DWZRhRZlrLSjcXQm4VVMYQFhifpi8TjQmwWcAooBM4Rj4456Vjbt6Nc3
-         VLiISF91vTIpdKTPf89uCF1Kp+xGtnsEjsx7WRuhH8AyoglwxV7u8OJlzZoFh1kz6Chl
-         AkqLlJMB2PCckvtNZ31hnvbrMi19AmFYwXgPFB3UhADbX654LxgDJx2+bdJFU4as74o+
-         XDrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVyz2PnT8gREVHX5w+lAJ8wAUZe7V9uckXKJ2vO00uwjaiLLMIRjyN7UjqtDevsHcYG03+6iHfOsCmisqJs4Bxx+6MzIQ==
-X-Gm-Message-State: AOJu0Yz+3B38vTefMQC6r2j9UXSw1OoVY1vnkcWId+vQJbk4ibTBKpP2
-	UvpgZvS3GvS+q6q/3jgaFMgskdD1bbML9zYsRVtQeA6tTw+m1xVONI+Cld+LVQ==
-X-Google-Smtp-Source: AGHT+IGrZufDO7aDrD5XQN2/A2YMhT+Y9cL7VGKbNsy++FzDVwe+PKFjUp+fb94aTS54ZMP8pq2noA==
-X-Received: by 2002:a17:902:d2c1:b0:1f3:903:5c9a with SMTP id d9443c01a7336-1f619936a85mr5241125ad.58.1717025558317;
-        Wed, 29 May 2024 16:32:38 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c99d23asm108088905ad.208.2024.05.29.16.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 May 2024 16:32:37 -0700 (PDT)
-Date: Wed, 29 May 2024 16:32:37 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Gatlin Newhouse <gatlin.newhouse@gmail.com>
-Cc: Marco Elver <elver@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Changbin Du <changbin.du@huawei.com>,
-	Pengfei Xu <pengfei.xu@intel.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/traps: Enable UBSAN traps on x86
-Message-ID: <202405291631.79BB8BF@keescook>
-References: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
- <CANpmjNM2S2whk31nfNGSBO5MFPPUHX7FPuHBJn1nN9zdP63xTw@mail.gmail.com>
- <2j6nkzn2tfdwdqhoal5o56ds2hqg2sqk5diolv23l5nzteypzh@fi53ovwjjl3w>
- <CANpmjNM4pFHYRqmBLi0qUm8K2SroYWg7NFjreHffHvk0WW95kA@mail.gmail.com>
- <57vgoje4bmrckwqtwnletukcnlvjpj2yp3cjlkym4bfw66a57a@w35yjzcurcis>
+        d=1e100.net; s=20230601; t=1717028698; x=1717633498;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8WU/Su/TdkCMJqoSn+Qk/ofrN8Qleakj9+qJnBXhLHY=;
+        b=Yxe/1fLD/55VLEWKluojSaqdv5D6M/74GHiGMn71J7Cm3z4eWN67hF5l/15A/YK9Sh
+         vvbq2kGJUPZNJps44i0GMhTxXA+1IEankNQuLQWomGCgRPDsx9qD1VrDPLd/M1FWPRwF
+         TmKbkCEOCtxe3vhUQW5vtBRdxOyaOfvjhGm71IqtWfZm0l7dFV/CGK5T9w9Y2lQ0wyO0
+         jDcjCmPbkkY5AoDnb99H+QMu3SIL1G87cE/C0DcGTQy/mEsH5JBBnByR/Hu938rlJDZE
+         uSxR6RT4uSPBNB/njWJA/Z6gG/TVr4yJ2C9IENJbFzUU9t2BIez9QGFgcHBGSCB7nyKI
+         Y76w==
+X-Forwarded-Encrypted: i=1; AJvYcCURkLf4Fz7cftZmp/dta2JYuXZEt2+CScpYx1LFoG5e45FsHScnAQAo85YqgpbmqenuWXZzQFJYK9pSZ3rpztrC37rZaw==
+X-Gm-Message-State: AOJu0YxejiGBu7P2kCFPyndf9B8Lo7OUxQHZW6LgCRyieXeFC36q6xmu
+	Bwe0v5N6ekCawG7NOv8ebAKhl3uvnM5Y3iGlgmwiuulMNIe0YVYUeRLiFHqTuY0=
+X-Google-Smtp-Source: AGHT+IFZ7lX6qTYkNJQEilvQTt7HXeWa2peIYv2ELm1RXd6YLAydTQY4jMWLgRLWpf79Sr76ZX3JYQ==
+X-Received: by 2002:adf:ea0f:0:b0:354:f729:c3e7 with SMTP id ffacd0b85a97d-35dc7ec9862mr169890f8f.34.1717028698143;
+        Wed, 29 May 2024 17:24:58 -0700 (PDT)
+Received: from [192.168.1.10] (host-92-26-98-202.as13285.net. [92.26.98.202])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4212709d378sm8137365e9.29.2024.05.29.17.24.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 May 2024 17:24:57 -0700 (PDT)
+Message-ID: <c068193b-75fb-49d2-9104-775051ffd941@citrix.com>
+Date: Thu, 30 May 2024 01:24:56 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57vgoje4bmrckwqtwnletukcnlvjpj2yp3cjlkym4bfw66a57a@w35yjzcurcis>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] x86/traps: Enable UBSAN traps on x86
+To: Gatlin Newhouse <gatlin.newhouse@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Kees Cook <keescook@chromium.org>, Marco Elver <elver@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Changbin Du <changbin.du@huawei.com>, Pengfei Xu <pengfei.xu@intel.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+References: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
+Content-Language: en-GB
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
+ 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
+ 6+ahAA==
+In-Reply-To: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 29, 2024 at 01:36:39PM -0700, Gatlin Newhouse wrote:
-> On Wed, May 29, 2024 at 08:30:20PM UTC, Marco Elver wrote:
-> > On Wed, 29 May 2024 at 20:17, Gatlin Newhouse <gatlin.newhouse@gmail.com> wrote:
-> > >
-> > > On Wed, May 29, 2024 at 09:25:21AM UTC, Marco Elver wrote:
-> > > > On Wed, 29 May 2024 at 04:20, Gatlin Newhouse <gatlin.newhouse@gmail.com> wrote:
-> > > > [...]
-> > > > >         if (regs->flags & X86_EFLAGS_IF)
-> > > > >                 raw_local_irq_enable();
-> > > > > -       if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-> > > > > -           handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
-> > > > > -               regs->ip += LEN_UD2;
-> > > > > -               handled = true;
-> > > > > +
-> > > > > +       if (insn == INSN_UD2) {
-> > > > > +               if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-> > > > > +               handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
-> > > > > +                       regs->ip += LEN_UD2;
-> > > > > +                       handled = true;
-> > > > > +               }
-> > > > > +       } else {
-> > > > > +               if (handle_ubsan_failure(regs, insn) == BUG_TRAP_TYPE_WARN) {
-> > > >
-> > > > handle_ubsan_failure currently only returns BUG_TRAP_TYPE_NONE?
-> > > >
-> > > > > +                       if (insn == INSN_REX)
-> > > > > +                               regs->ip += LEN_REX;
-> > > > > +                       regs->ip += LEN_UD1;
-> > > > > +                       handled = true;
-> > > > > +               }
-> > > > >         }
-> > > > >         if (regs->flags & X86_EFLAGS_IF)
-> > > > >                 raw_local_irq_disable();
-> > > > > diff --git a/arch/x86/kernel/ubsan.c b/arch/x86/kernel/ubsan.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..6cae11f4fe23
-> > > > > --- /dev/null
-> > > > > +++ b/arch/x86/kernel/ubsan.c
-> > > > > @@ -0,0 +1,32 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > > +/*
-> > > > > + * Clang Undefined Behavior Sanitizer trap mode support.
-> > > > > + */
-> > > > > +#include <linux/bug.h>
-> > > > > +#include <linux/string.h>
-> > > > > +#include <linux/printk.h>
-> > > > > +#include <linux/ubsan.h>
-> > > > > +#include <asm/ptrace.h>
-> > > > > +#include <asm/ubsan.h>
-> > > > > +
-> > > > > +/*
-> > > > > + * Checks for the information embedded in the UD1 trap instruction
-> > > > > + * for the UB Sanitizer in order to pass along debugging output.
-> > > > > + */
-> > > > > +enum bug_trap_type handle_ubsan_failure(struct pt_regs *regs, int insn)
-> > > > > +{
-> > > > > +       u32 type = 0;
-> > > > > +
-> > > > > +       if (insn == INSN_REX) {
-> > > > > +               type = (*(u16 *)(regs->ip + LEN_REX + LEN_UD1));
-> > > > > +               if ((type & 0xFF) == 0x40)
-> > > > > +                       type = (type >> 8) & 0xFF;
-> > > > > +       } else {
-> > > > > +               type = (*(u16 *)(regs->ip + LEN_UD1));
-> > > > > +               if ((type & 0xFF) == 0x40)
-> > > > > +                       type = (type >> 8) & 0xFF;
-> > > > > +       }
-> > > > > +       pr_crit("%s at %pS\n", report_ubsan_failure(regs, type), (void *)regs->ip);
-> > > > > +
-> > > > > +       return BUG_TRAP_TYPE_NONE;
-> > > > > +}
-> > > >
-> > > > Shouldn't this return BUG_TRAP_TYPE_WARN?
-> > >
-> > > So as far as I understand, UBSAN trap mode never warns. Perhaps it does on
-> > > arm64, although it calls die() so I am unsure. Maybe the condition in
-> > > handle_bug() should be rewritten in the case of UBSAN ud1s? Do you have any
-> > > suggestions?
-> > 
-> > AFAIK on arm64 it's basically a kernel OOPS.
-> > 
-> > The main thing I just wanted to point out though is that your newly added branch
-> > 
-> > > if (handle_ubsan_failure(regs, insn) == BUG_TRAP_TYPE_WARN) {
-> > 
-> > will never be taken, because I don't see where handle_ubsan_failure()
-> > returns BUG_TRAP_TYPE_WARN.
-> >
-> 
-> Initially I wrote this with some symmetry to the KCFI checks nearby, but I
-> was unsure if this would be considered handled or not.
+On 29/05/2024 3:20 am, Gatlin Newhouse wrote:
+> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+> index a3ec87d198ac..e3fbed9073f8 100644
+> --- a/arch/x86/include/asm/bug.h
+> +++ b/arch/x86/include/asm/bug.h
+> @@ -13,6 +13,14 @@
+>  #define INSN_UD2	0x0b0f
+>  #define LEN_UD2		2
+>  
+> +/*
+> + * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
+> + */
+> +#define INSN_UD1	0xb90f
+> +#define LEN_UD1		2
+> +#define INSN_REX	0x67
+> +#define LEN_REX		1
 
-Yeah, that seemed like the right "style" to me too. Perhaps, since it
-can never warn, we could just rewrite it so it's a void function avoid
-the checking, etc.
+That's an address size override prefix, not a REX prefix.
 
--- 
-Kees Cook
+What information is actually encoded in this UD1 instruction?  I can't
+find anything any documentation which actually discusses how the ModRM
+byte is encoded.
+
+~Andrew
