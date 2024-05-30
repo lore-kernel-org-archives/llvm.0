@@ -1,56 +1,56 @@
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF9E6BB30
-	for <llvm@lists.linux.dev>; Thu, 30 May 2024 19:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109824C624
+	for <llvm@lists.linux.dev>; Thu, 30 May 2024 19:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717096054; cv=none; b=btnKvH7RpX2gGmzG/gPWHO0a57HhaVqJmMP21PQP2sF1fqhuG8meGRrM0f4xH6wdCpmhTH0PpTLXKQHXEOgEFD94YwTCL6Lzjh+hcQPBq80sUqpECwpozRZWRDo6+Cq8bd3lyg8c9whN2IufD2hfO8XfMGJpGhupeSxXjpAb+oY=
+	t=1717096200; cv=none; b=alruYuY+SdfHs9OuA0QVCcVM75CIwDlSX3ektXY8h4KgoObOuvYqwSkBlbZua8HwalwjZpnQkBdJ4KtY6pFOjjsMzJUgmVfRf8jqcdje4M8+8BFd49IhIOEXFwgAgWHa27ZRXf8juIY9n9kl8Y42l3d+R0uaWiKizC+/u8cse4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717096054; c=relaxed/simple;
-	bh=imZhQcOLo/A57RIklfhNXDPLYJZwF4mjSMXlBfn4bjA=;
+	s=arc-20240116; t=1717096200; c=relaxed/simple;
+	bh=xDFSARpGqCzo0/7RFIXaYWJVdeCDcGwisUU1BrK4egA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MKpZgfZAsjD/ZWAiajANzKTnykMMrYHepMJKryn9IjRHmFXz2kHQnIhAcLSp2q1FTCy//Vfu8iWNgQWz0XH1arMDNL+ktCbxZ+/bhKvqW/TMkbWnLfElfMtEqwi2nTp76Nx3EyShzMz3b4RNcDW9mnN7jjwAJ3zvHGshXPbuXxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IQIU9PdP; arc=none smtp.client-ip=209.85.166.173
+	 In-Reply-To:Content-Type; b=beiJgYi5b2pVkorqH9f4QfkBXjriQoOuP0wsYrDaCJBAEDU81yysc48jyv5hPGca5XO1J0NlizKIZpzwdsKixCp8TvB+bWIe65SB26s1gx9k6beuWyAvgItbnSURC01ty3oc0cFDerGedyanz6l1W9/HwlRPByS2GgUHJcR28Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MNQWiLX9; arc=none smtp.client-ip=209.85.166.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IQIU9PdP"
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-36dd6cbad62so701965ab.3
-        for <llvm@lists.linux.dev>; Thu, 30 May 2024 12:07:33 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MNQWiLX9"
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7e8e2020002so5906939f.0
+        for <llvm@lists.linux.dev>; Thu, 30 May 2024 12:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1717096052; x=1717700852; darn=lists.linux.dev;
+        d=linuxfoundation.org; s=google; t=1717096198; x=1717700998; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+bUYnIhpz2h+On3VZsj3Zd6/727awMN92YMgceCOy3k=;
-        b=IQIU9PdPhVHBYWmURWocN0uIFIWwpANSEGdfn0qIiguL+/IxMmCq9wkGItVp8MO93c
-         iXi0UUVSkI3UN2g8+hbERKmMv4SmoBpFnlzWwv+PfkHRJ3WF5XmH8a1aA7YTGjnvnfim
-         sPnJ5SaRXTn9NFTcejsjhI3xz3OxL4W8PeAlw=
+        bh=IcKB/OzN80KdCv2vfgGkfs7hKHO3oNyK2DZlDHQX5Es=;
+        b=MNQWiLX9bsg8ymbsR918gvRqwyT4SeFg6PFlX4D1qns4hG+HlN+mTPEEcrGSZfR1bh
+         9RAgXxsXpuFxA+qMgoISnOIz+y0AtbIz2GDfOXgPAoxnJKIrInvOd3zBFBegYBa7rA9K
+         mhMSHIhyUcJXZ/oeis94k64TnS0y3PFXBGPGo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717096052; x=1717700852;
+        d=1e100.net; s=20230601; t=1717096198; x=1717700998;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+bUYnIhpz2h+On3VZsj3Zd6/727awMN92YMgceCOy3k=;
-        b=Mqiaik4mt8vbIEiWSwwJJtEBSiv+x4MoNqamQ/e5ru3TD9rFYWytsI9vLc/gJAt2zq
-         r6gwDQU39Zy0AV4NJEpYhwCraoY4E23569DB2Wa5wR4CfRw89pyfZcmIiNcFf4zVE1nD
-         VKUvXvcVzpOGHCDRxg1Flg+G/Adb0yCHlrUwrTICL/JmJs9kucxENwmv77zzLP8civMU
-         IbQjBZQPRB6WyroYQCmGYA/j109/OeblFryLh+D89QWyB7YE22eGY5BofDZfotrvnT8e
-         Qw3tTHJ1DcD+RdaYeQRMmfSt9c7TZI1+cuOEd4GNKKIBHtx6cGNTCNfLxl+WUZzrESvl
-         jaXw==
-X-Forwarded-Encrypted: i=1; AJvYcCWmCx6Pnaw9WDenoP6ohie5hV+cuBWOFY5sRdVqcL9qoxF6i37zJN8q5HLyBa3OLKsfcqm4EnWbvvqAviuYCJEir2ZwdA==
-X-Gm-Message-State: AOJu0YwLBDOI0al7Ma5TH1N2meYkuqt3MpJfURuhStVwpXnnrtdL3QS1
-	neOkRLeMywMjhwITJpFxmcvR5Qrp5PlQQ/eyA3hpY/Z6zjZ8fD3zKGr9OiUOvgk=
-X-Google-Smtp-Source: AGHT+IF9l7LBfGVRaO1lXseUgLjeTwRtLuQbVpQCUEF4bDP7enC9s+0s5gWCrSJYh2zfm16q0xSmUQ==
-X-Received: by 2002:a5d:8601:0:b0:7d9:eeb8:ddeb with SMTP id ca18e2360f4ac-7eaf5d91d5fmr333582139f.2.1717096052448;
-        Thu, 30 May 2024 12:07:32 -0700 (PDT)
+        bh=IcKB/OzN80KdCv2vfgGkfs7hKHO3oNyK2DZlDHQX5Es=;
+        b=epilfFZGVldHpx9J0rS5e0NwC/aXws9ixGm5rR1V9bKLFEclO2TRipycyKhiGNR5F+
+         WVrb+dofwrnlnzgR2yY9eYBqUBb8tTpvyUtLLEeWOBioW09nqFzULzEjgxHJBLbE0WPq
+         qREdSjJyDEi7ZP1H4Op1Bt2WBYwM8ZsV+PeuD0dHQWtZLwMWDQX/gaZ47CndiHC63SAL
+         v++2AgzmeU8r35nELUd2kahxiBGO9umHszMegMB56Ne5FOQz6YbAQQlG86dsl6UTWhSG
+         IooubXSquziZ/9RlptHHan2GUy9OBRuiaIsS8OVCoWZvgxmbsPAdI5kXinyZxjSHpsfD
+         zinA==
+X-Forwarded-Encrypted: i=1; AJvYcCWPu3jP0jAbZw87dCXdifXv8aYkIENQylTj40mUMA2DJHgmw8fGr1ViTAspNvYtzOpKB95C5DEeREA5Drj2mDhgV62YSw==
+X-Gm-Message-State: AOJu0Yx5Ajd0hqT5DcYviRz27VUSuohUnAx0JEbEhwvmDunHuF5I2ilf
+	fdmKSZxHdC1eJjhuPv2l1V7iymdf6LxT5dfrnmqrJjgTXV55WoS0hrFsbn3qsG0=
+X-Google-Smtp-Source: AGHT+IFkN8Ai4VWwR2PnmlSq/IYFOdiHtE3kJJIeH5v5Cghihl734+b5MpoKYjTzHOlYkXDDq77yvQ==
+X-Received: by 2002:a05:6602:6426:b0:7e1:8829:51f6 with SMTP id ca18e2360f4ac-7eaff5e2ca8mr14707139f.1.1717096198165;
+        Thu, 30 May 2024 12:09:58 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b48764e4b8sm67181173.35.2024.05.30.12.07.31
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b488e4b35asm67021173.79.2024.05.30.12.09.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 12:07:32 -0700 (PDT)
-Message-ID: <dd3f1b86-504e-4b65-b45f-2e36fc55f179@linuxfoundation.org>
-Date: Thu, 30 May 2024 13:07:31 -0600
+        Thu, 30 May 2024 12:09:57 -0700 (PDT)
+Message-ID: <a56e4c6e-fffe-4c88-9bb2-8bcafbd91fa6@linuxfoundation.org>
+Date: Thu, 30 May 2024 13:09:56 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,8 +58,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] selftests/futex: pass _GNU_SOURCE without a value
- to the compiler
+Subject: Re: [PATCH v2 0/3] selftests/futex: clang-inspired fixes
 To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
  Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
@@ -70,55 +69,39 @@ Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
  LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
  Shuah Khan <skhan@linuxfoundation.org>
 References: <20240529022938.129624-1-jhubbard@nvidia.com>
- <20240529022938.129624-4-jhubbard@nvidia.com>
+ <b6641940-f10a-4ed4-a672-69c6d51125a7@linuxfoundation.org>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240529022938.129624-4-jhubbard@nvidia.com>
+In-Reply-To: <b6641940-f10a-4ed4-a672-69c6d51125a7@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/28/24 20:29, John Hubbard wrote:
-> It's slightly better to set _GNU_SOURCE in the source code, but if one
-> must do it via the compiler invocation, then the best way to do so is
-> this:
+On 5/30/24 08:23, Shuah Khan wrote:
+> On 5/28/24 20:29, John Hubbard wrote:
+>> Hi,
+>>
+>> Here's a few fixes that are part of my effort to get all selftests
+>> building cleanly under clang. Plus one that I noticed by inspection.
+>>
+>> Changes since the first version:
+>>
+>> 1) Rebased onto Linux 6.10-rc1
+>> 2) Added Reviewed-by's.
+>>
+>> ...and it turns out that all three patches are still required, on -rc1,
+>> in order to get a clean clang build.
 > 
->      $(CC) -D_GNU_SOURCE=
-> 
-> ...because otherwise, if this form is used:
-> 
->      $(CC) -D_GNU_SOURCE
-> 
-> ...then that leads the compiler to set a value, as if you had passed in:
-> 
->      $(CC) -D_GNU_SOURCE=1
-> 
-> That, in turn, leads to warnings under both gcc and clang, like this:
-> 
->      futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
-> 
-> Fix this by using the "-D_GNU_SOURCE=" form.
-> 
-> Reviewed-by: Edward Liaw <edliaw@google.com>
-> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   tools/testing/selftests/futex/functional/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-> index a392d0917b4e..994fa3468f17 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -1,6 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
-> -CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-> +CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
->   LDLIBS := -lpthread -lrt
->   
->   LOCAL_HDRS := \
+> Thank you. I will apply these for the next rc.
 
-This looks fine. Applied now to linux-kselftest fixes branch
+
+John Hubbard (3):
+   selftests/futex: don't redefine .PHONY targets (all, clean)
+   selftests/futex: don't pass a const char* to asprintf(3)
+
+Patch 1/3 and 2/3 please see changes requested.
+
+Applied to linux-kselftest fixes branch
+   selftests/futex: pass _GNU_SOURCE without a value to the compiler
 
 thanks,
 -- Shuah
