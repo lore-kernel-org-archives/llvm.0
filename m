@@ -1,154 +1,183 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE21A8814
-	for <llvm@lists.linux.dev>; Thu, 30 May 2024 00:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571ABFC0C;
+	Thu, 30 May 2024 01:07:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717028701; cv=none; b=SpdTfkcHQZOqd2teml9+l43DNnRyr04KAqCJOf51I21n2lO5kG/z/HaWumyBZnrtnxvJJ/1/C8nItAJxwDZcPODVVnslwxMU9DqDTGQ0aibbeyQ8SNkEvi8Q9eu14mGix5v58XPDhubKeDaCKmeiMBuhd/JW8TgdhnrJGXHGE9w=
+	t=1717031263; cv=none; b=qBuIz8P60agE02dxKd8Lnjxvo6kECBHbzO3dfpD6GYtKqQfFULjt9oTt/kGMoUItoI024X+U1kMZLFpJabKpaqCboYNogSWuuAV5bAgB0GelLvgmb/hbWU0yVK8ZfR1LWBZRahmybLCftkJOr7TuvmpQ1pYUoy909DAJy7QUfcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717028701; c=relaxed/simple;
-	bh=fi6T2j94Ji7pMV4CVbe0HpecLMs+r9lr+Q6XndjoPC8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BaEz96EqnHTvVXv2/4O0HHYigBacTbPRoGpYJNYCK9hLRDFC8T6yWBams58Tfj4Wbkx8nOEWC6TfdewXJNz1sPCj3WS6WeZiUN/1R+qaPQbjr4pcCGqwKSzNw8jGFE9yelPk4Dp9z8qXhQGklV+NECu0oum6G1hqIcEFHyA5otU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=FN0HCdop; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
+	s=arc-20240116; t=1717031263; c=relaxed/simple;
+	bh=XjvxQ58QFqkAqBkQUJiK8TAuqi7nU98sT/Ve+TJkfko=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q9KJ62TgVIQ1BxZDXLyjK10VphWEYXawXaS138hZK64UbkjiFuVJYQ+CiQD1z5DQnu3dQ6h0icpQvlq9PpgwEcDpGiTN7bL6qoe802/SFsW+e2yGK/if68YezdSOEkQIiEwGHPTb49HK1Yp0yo9JP99KIZ82UpzXFSqHPURtswI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eA8o/RIC; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="FN0HCdop"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3588cb76276so272063f8f.0
-        for <llvm@lists.linux.dev>; Wed, 29 May 2024 17:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citrix.com; s=google; t=1717028698; x=1717633498; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=8WU/Su/TdkCMJqoSn+Qk/ofrN8Qleakj9+qJnBXhLHY=;
-        b=FN0HCdop43MNUXpvPzesnjzwjFsRCoRbo44PCkU9bYm+lRYZ/tykkTSX0Ri7b+tdCJ
-         WtBR3EKBY3umvjD3KEGYRcQy/F/RLfY/dnqHNBy6zuPlbabgTNhlbgyzb9+ntTdZrBFM
-         XN6PfLPNH8s/WzVP5+aJIbrHKVCSUIXJh0YVk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717028698; x=1717633498;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8WU/Su/TdkCMJqoSn+Qk/ofrN8Qleakj9+qJnBXhLHY=;
-        b=Yxe/1fLD/55VLEWKluojSaqdv5D6M/74GHiGMn71J7Cm3z4eWN67hF5l/15A/YK9Sh
-         vvbq2kGJUPZNJps44i0GMhTxXA+1IEankNQuLQWomGCgRPDsx9qD1VrDPLd/M1FWPRwF
-         TmKbkCEOCtxe3vhUQW5vtBRdxOyaOfvjhGm71IqtWfZm0l7dFV/CGK5T9w9Y2lQ0wyO0
-         jDcjCmPbkkY5AoDnb99H+QMu3SIL1G87cE/C0DcGTQy/mEsH5JBBnByR/Hu938rlJDZE
-         uSxR6RT4uSPBNB/njWJA/Z6gG/TVr4yJ2C9IENJbFzUU9t2BIez9QGFgcHBGSCB7nyKI
-         Y76w==
-X-Forwarded-Encrypted: i=1; AJvYcCURkLf4Fz7cftZmp/dta2JYuXZEt2+CScpYx1LFoG5e45FsHScnAQAo85YqgpbmqenuWXZzQFJYK9pSZ3rpztrC37rZaw==
-X-Gm-Message-State: AOJu0YxejiGBu7P2kCFPyndf9B8Lo7OUxQHZW6LgCRyieXeFC36q6xmu
-	Bwe0v5N6ekCawG7NOv8ebAKhl3uvnM5Y3iGlgmwiuulMNIe0YVYUeRLiFHqTuY0=
-X-Google-Smtp-Source: AGHT+IFZ7lX6qTYkNJQEilvQTt7HXeWa2peIYv2ELm1RXd6YLAydTQY4jMWLgRLWpf79Sr76ZX3JYQ==
-X-Received: by 2002:adf:ea0f:0:b0:354:f729:c3e7 with SMTP id ffacd0b85a97d-35dc7ec9862mr169890f8f.34.1717028698143;
-        Wed, 29 May 2024 17:24:58 -0700 (PDT)
-Received: from [192.168.1.10] (host-92-26-98-202.as13285.net. [92.26.98.202])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4212709d378sm8137365e9.29.2024.05.29.17.24.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 17:24:57 -0700 (PDT)
-Message-ID: <c068193b-75fb-49d2-9104-775051ffd941@citrix.com>
-Date: Thu, 30 May 2024 01:24:56 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eA8o/RIC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717031261; x=1748567261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XjvxQ58QFqkAqBkQUJiK8TAuqi7nU98sT/Ve+TJkfko=;
+  b=eA8o/RIC/Wp1mjs0mIXeJ7inAk6dSukPVDdj/HbchcGt7Z9VzTegMFKh
+   PSdMu9DKvfxmRhdrRv8BQTfD61SPkjK4gy3ye3G7bx7SqKDt83mE4Ji02
+   fSCGjNtUM/60qRJgutqBDP144ambmnLqyTOGLI54zmE+OEjhtSFXT0KDX
+   HI/QG+Yf3QFLjfAY2QeIxrY+kcJMnh6cf8+fT3oSbCd0FSQ1UhADn47CK
+   1A6W/LnqdjUqMqCe85wKdLMsrb1yD5xVH58Us6VXxQj6I2S2F86XHkmFN
+   mK6tDvK4lVmX7y86Lihcds1sXrPQXlOzssEUhCh1dYvOUNXoFiN3qNRlL
+   Q==;
+X-CSE-ConnectionGUID: fCiDKXkrT/CuAEhugkNMAg==
+X-CSE-MsgGUID: UA+IJH2gQb+4YxUdgfXTCQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="24894758"
+X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
+   d="scan'208";a="24894758"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 18:07:41 -0700
+X-CSE-ConnectionGUID: tT7J4lPYQyS5VelxkbE4pQ==
+X-CSE-MsgGUID: +7OOO/vLR1aQxcOyIYeVnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
+   d="scan'208";a="73089445"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 29 May 2024 18:07:39 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sCUGV-000EOj-30;
+	Thu, 30 May 2024 01:07:35 +0000
+Date: Thu, 30 May 2024 09:06:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aditya Nagesh <adityanagesh@linux.microsoft.com>,
+	adityanagesh@microsoft.com, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Aditya Nagesh <adityanagesh@linux.microsoft.com>
+Subject: Re: [PATCH v5] Drivers: hv: Cosmetic changes for hv.c and balloon.c
+Message-ID: <202405300835.7RLpoY4A-lkp@intel.com>
+References: <1716998695-32135-1-git-send-email-adityanagesh@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/traps: Enable UBSAN traps on x86
-To: Gatlin Newhouse <gatlin.newhouse@gmail.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Kees Cook <keescook@chromium.org>, Marco Elver <elver@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Changbin Du <changbin.du@huawei.com>, Pengfei Xu <pengfei.xu@intel.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>,
- Jason Gunthorpe <jgg@ziepe.ca>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-References: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
-Content-Language: en-GB
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
- 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
- 6+ahAA==
-In-Reply-To: <20240529022043.3661757-1-gatlin.newhouse@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1716998695-32135-1-git-send-email-adityanagesh@linux.microsoft.com>
 
-On 29/05/2024 3:20 am, Gatlin Newhouse wrote:
-> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-> index a3ec87d198ac..e3fbed9073f8 100644
-> --- a/arch/x86/include/asm/bug.h
-> +++ b/arch/x86/include/asm/bug.h
-> @@ -13,6 +13,14 @@
->  #define INSN_UD2	0x0b0f
->  #define LEN_UD2		2
->  
-> +/*
-> + * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
-> + */
-> +#define INSN_UD1	0xb90f
-> +#define LEN_UD1		2
-> +#define INSN_REX	0x67
-> +#define LEN_REX		1
+Hi Aditya,
 
-That's an address size override prefix, not a REX prefix.
+kernel test robot noticed the following build errors:
 
-What information is actually encoded in this UD1 instruction?  I can't
-find anything any documentation which actually discusses how the ModRM
-byte is encoded.
+[auto build test ERROR on next-20240529]
+[cannot apply to linus/master v6.10-rc1 v6.9 v6.9-rc7 v6.10-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-~Andrew
+url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Nagesh/Drivers-hv-Cosmetic-changes-for-hv-c-and-balloon-c/20240530-000928
+base:   next-20240529
+patch link:    https://lore.kernel.org/r/1716998695-32135-1-git-send-email-adityanagesh%40linux.microsoft.com
+patch subject: [PATCH v5] Drivers: hv: Cosmetic changes for hv.c and balloon.c
+config: i386-buildonly-randconfig-004-20240530 (https://download.01.org/0day-ci/archive/20240530/202405300835.7RLpoY4A-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240530/202405300835.7RLpoY4A-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405300835.7RLpoY4A-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hv/hv_balloon.c:980:2: error: unterminated conditional directive
+     980 | #ifdef CONFIG_MEMORY_HOTPLUG
+         |  ^
+>> drivers/hv/hv_balloon.c:2129:23: error: expected '}'
+    2129 | MODULE_LICENSE("GPL");
+         |                       ^
+   drivers/hv/hv_balloon.c:968:1: note: to match this '{'
+     968 | {
+         | ^
+   2 errors generated.
+
+
+vim +980 drivers/hv/hv_balloon.c
+
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   966  
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   967  static void hot_add_req(struct work_struct *dummy)
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   968  {
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   969  	struct dm_hot_add_response resp;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   970  #ifdef CONFIG_MEMORY_HOTPLUG
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   971  	unsigned long pg_start, pfn_cnt;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   972  	unsigned long rg_start, rg_sz;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   973  #endif
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   974  	struct hv_dynmem_device *dm = &dm_device;
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   975  
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   976  	memset(&resp, 0, sizeof(struct dm_hot_add_response));
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   977  	resp.hdr.type = DM_MEM_HOT_ADD_RESPONSE;
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   978  	resp.hdr.size = sizeof(struct dm_hot_add_response);
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   979  
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  @980  #ifdef CONFIG_MEMORY_HOTPLUG
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   981  	pg_start = dm->ha_wrk.ha_page_range.finfo.start_page;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   982  	pfn_cnt = dm->ha_wrk.ha_page_range.finfo.page_cnt;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   983  
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   984  	rg_start = dm->ha_wrk.ha_region_range.finfo.start_page;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   985  	rg_sz = dm->ha_wrk.ha_region_range.finfo.page_cnt;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   986  
+1aa0ebde593dfb Aditya Nagesh    2024-05-29   987  	if (rg_start == 0 && !dm->host_specified_ha_region) {
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   988  		/*
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   989  		 * Based on the hot-add page range being specified,
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   990  	}
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   991  
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18   992  	if (do_hot_add)
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   993  		resp.page_count = process_hot_add(pg_start, pfn_cnt,
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   994  						  rg_start, rg_sz);
+549fd280b145e2 Vitaly Kuznetsov 2015-02-28   995  
+549fd280b145e2 Vitaly Kuznetsov 2015-02-28   996  	dm->num_pages_added += resp.page_count;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   997  #endif
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18   998  	/*
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18   999  	 * The result field of the response structure has the
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1000  	 * following semantics:
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1001  	 *
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1002  	 * 1. If all or some pages hot-added: Guest should return success.
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1003  	 *
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1004  	 * 2. If no pages could be hot-added:
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1005  	 *
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1006  	 * If the guest returns success, then the host
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1007  	 * will not attempt any further hot-add operations. This
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1008  	 * signifies a permanent failure.
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1009  	 *
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1010  	 * If the guest returns failure, then this failure will be
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1011  	 * treated as a transient failure and the host may retry the
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1012  	 * hot-add operation after some delay.
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1013  	 */
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1014  	if (resp.page_count > 0)
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1015  		resp.result = 1;
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1016  	else if (!do_hot_add)
+7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1017  		resp.result = 1;
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1018  	else
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1019  		resp.result = 0;
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1020  
+25bd2b2f1f0534 Dexuan Cui       2019-11-19  1021  	if (!do_hot_add || resp.page_count == 0) {
+25bd2b2f1f0534 Dexuan Cui       2019-11-19  1022  		if (!allow_hibernation)
+223e1e4d2c16fe Vitaly Kuznetsov 2018-03-04  1023  			pr_err("Memory hot add failed\n");
+25bd2b2f1f0534 Dexuan Cui       2019-11-19  1024  		else
+25bd2b2f1f0534 Dexuan Cui       2019-11-19  1025  			pr_info("Ignore hot-add request!\n");
+25bd2b2f1f0534 Dexuan Cui       2019-11-19  1026  	}
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1027  
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1028  	dm->state = DM_INITIALIZED;
+20138d6cb838aa K. Y. Srinivasan 2013-07-17  1029  	resp.hdr.trans_id = atomic_inc_return(&trans_id);
+1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1030  	vmbus_sendpacket(dm->dev->channel, &resp,
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1031  			sizeof(struct dm_hot_add_response),
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1032  			(unsigned long)NULL,
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1033  			VM_PKT_DATA_INBAND, 0);
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1034  }
+9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1035  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
