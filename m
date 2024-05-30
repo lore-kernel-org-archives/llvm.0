@@ -1,108 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE9347A73;
-	Thu, 30 May 2024 17:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5182540BE3
+	for <llvm@lists.linux.dev>; Thu, 30 May 2024 19:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717091009; cv=none; b=A98EnyAWWBBUP6nELFgF3gRN5PuxOUGMOTO+n8Gd1B3BPeHleE72DL048A/4DWCP+7IRY8cT2sFgIrUdR5bksLx2JbigiNgI7IRTJJSQtzOLuDPO2trmGVOj7w6RQI1mC0fmAxEMYseKi92PgiU75cD3Vw6klduA+WwdrFT2tFo=
+	t=1717095808; cv=none; b=Rhp2vcJiduxaw7K+wyYQviPJJamPGHRafubf/2hcScVzxScFvm4hTFC1jywRfVANTAmzzloVNQWzP+62gYEFPd7sIBRuX8F01NVG7QwtqsaHVURJceH69mIfXjNL9zdRnXN4nlTJA6POlYMKQix9FYrW9CKmricN8VQAO26R/24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717091009; c=relaxed/simple;
-	bh=8fcphnfj+O2CwB7e1G0DKa0lKG2nE+NF5g3drom6Aiw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YwHi14jFGLwho1XJd4wfnvSr3o86xoQC4HksJVX2C+KZccT5mZrL5+PNg/qJbYJGlbajvyDdJRHxd4ca81ehzIEP4AMFDOTYt4jJ6Gzrf2Vj6A0f8rFW1ihA/h5lGKI/uYQ2IdqD2atETdmur04jGDk+2u/65ao1NPiuAM/JTtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aMcGGFQy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717095808; c=relaxed/simple;
+	bh=gVV3+IFYD1OxH/Wqhf1iWQFzYnfj7Ay2H+idOty2pyc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uK2fHIVhp1nOQyZ0ocxYeKSWLxGnlqlpNRHxDEBQ0f7QpIeRCCo140nE5sqdM3jG7eOyIxFlv0lg9hKythjZRznqotH6Rl32oKMuD6MpGBE1EnRlmIjhWszzvQ+Fseev3avH0+CPElWIpdPiVnd5XWc48RblBCkWBsLmlRFnA0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HyU81Sad; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aMcGGFQy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B43C2BBFC;
-	Thu, 30 May 2024 17:43:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717091009;
-	bh=8fcphnfj+O2CwB7e1G0DKa0lKG2nE+NF5g3drom6Aiw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aMcGGFQyFAeT1sScSa+Y1stGV15mVtxb5fUMSCFGMM06VxG5JpaOJjozldpE+AYUP
-	 w0T0zK2gt2Z77DddsikCWJLJmpve4SEv5rcnTg4ProZVOeFR87tJx4ETV84OazMuBm
-	 I50Xu1AffzkmoOeBkB46pqCp1/RJTkEm4Si0k3jFhrpq8O4JYsohzLIjKnM1fLnYCi
-	 h3GbpFPIlhP5D8w9jsOlFv+XqLuefxaiy/vUvbXLGNXfcheYet2zzvwjEn0smU5fsZ
-	 CV+K4AHPNw77aKq0/Y281I27I9+y1LBbeFywbz9kUuvbBUyUmKFTe3JQNmBB20a9Zf
-	 wmihACkzroVqQ==
-Date: Thu, 30 May 2024 10:43:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-serial@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] tty: mxser: Remove __counted_by from mxser_board.ports[]
-Message-ID: <20240530174326.GB3018978@thelio-3990X>
-References: <20240529-drop-counted-by-ports-mxser-board-v1-1-0ab217f4da6d@kernel.org>
- <d7c19866-6883-4f98-b178-a5ccf8726895@kernel.org>
- <2024053008-sadly-skydiver-92be@gregkh>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HyU81Sad"
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7eaf9e5681aso4939639f.2
+        for <llvm@lists.linux.dev>; Thu, 30 May 2024 12:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1717095805; x=1717700605; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0ypmVzNDeZplp2odL/zLGgH80NvTjOKRz+Qmx+RXyRY=;
+        b=HyU81Sad/01ypkt53tS1v+ewuJAwerLZpEZiNEaYceRp4uIuZWEhztggx3DL2K5A7M
+         u9JMZCSjAipR4zVCSEcAh8v6OgRdFGy9A4qO8Y9amLT0Sf7KdUbAcJX5GMdvfHOkcbCA
+         2xaN66M+42+ycPdP2fsxAoIogAbKoSKm3KEY8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717095805; x=1717700605;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ypmVzNDeZplp2odL/zLGgH80NvTjOKRz+Qmx+RXyRY=;
+        b=fyB1SGYadnXK+AXqd/hFW1yYRnyegd7G193KgKhuSijgJfkWzdFVT8zfKLEFOC9i63
+         nv9fa+Kr22/n5mQo6QKeR+euCl9TiDATgM5gGrstJLcfi+jlTzD5lJn49PaZ84+GD656
+         AiFxRbUKGTKmGgMoVcyXYjzJSUK1Us3K2UXmpIvWHd3g2fqzH4P56zZuuiqZZZenb+95
+         NHRtWDfdWuoptNhfioQE03VlD+01o+DUbdj5LQCLQvLZGtaviRvd7q14AnISz3F7Jl0N
+         QSwBwnx91TZk6u6qNMNknevRiY7JfYwiSlk6f1A3Z1GsUHEnDs51jMKlnlBeuigti83L
+         L/LA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXYPxiSaR7CpHAlDjrZbdFaO0t/rZpBfu3/GsMEg3JdFLXGutI/8JKM8VpQygAL+rVpY+u9eCNTVyDrzovxT0NptWdDA==
+X-Gm-Message-State: AOJu0Yz7zDyEqeCyT5NvRitJ4xByLjeZe8Bpb2unrEGaqg6tluAH+WEZ
+	w9LYNewmG/zryg0uPr5MPHMWkzxGbCHWUYeKYXMo2DfMpNtOWaEeXePJzq1Mmsw=
+X-Google-Smtp-Source: AGHT+IHL2RIktWzDYsXqMYxWTYOSCdmd0gSX4cuLtu57cIFNBVH+YBART6vih1ekHP9lPpA0zCGiCg==
+X-Received: by 2002:a05:6602:3344:b0:7de:b279:fb3e with SMTP id ca18e2360f4ac-7eaf5d6865bmr293265239f.1.1717095804736;
+        Thu, 30 May 2024 12:03:24 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b48b8a6db0sm61826173.98.2024.05.30.12.03.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 May 2024 12:03:24 -0700 (PDT)
+Message-ID: <ceb9182e-b6d4-4f6d-bb53-87efe5337230@linuxfoundation.org>
+Date: Thu, 30 May 2024 13:03:23 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024053008-sadly-skydiver-92be@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] selftests/futex: don't redefine .PHONY targets
+ (all, clean)
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, Edward Liaw <edliaw@google.com>,
+ =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+ "Nysal Jan K . A" <nysal@linux.ibm.com>, Mark Brown <broonie@kernel.org>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240529022938.129624-1-jhubbard@nvidia.com>
+ <20240529022938.129624-2-jhubbard@nvidia.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240529022938.129624-2-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 30, 2024 at 09:40:13AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, May 30, 2024 at 08:22:03AM +0200, Jiri Slaby wrote:
-> > >  This will be an error in a future compiler version [-Werror,-Wbounds-safety-counted-by-elt-type-unknown-size]
-> > >      291 |         struct mxser_port ports[] __counted_by(nports);
-> > >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    1 error generated.
-> > > 
-> > > Remove this use of __counted_by to fix the warning/error. However,
-> > > rather than remove it altogether, leave it commented, as it may be
-> > > possible to support this in future compiler releases.
-> > 
-> > This looks like a compiler bug/deficiency.
+On 5/28/24 20:29, John Hubbard wrote:
+> The .PHONY targets "all" and "clean"  are both defined in the file that
+> is included in the very next line: ../lib.mk.
+> 
 
-I apologize. As I commented on the nvmet-fc patch, I should have
-included where the flexible array member was within 'struct mxser_port',
-especially since I already knew it from
-https://github.com/ClangBuiltLinux/linux/issues/2026.
+What problems are you seeing without this patch?
+If I recall correctly, futex needs these defined.
 
-I hope we can all agree now that this is not a compiler bug or issue.
+Please provide information on why this change is
+needed.
 
-> I agree, why not just turn that option off in the compiler so that these
-> "warnings" will not show up?
+> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/futex/Makefile | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
+> index 11e157d7533b..78ab2cd111f6 100644
+> --- a/tools/testing/selftests/futex/Makefile
+> +++ b/tools/testing/selftests/futex/Makefile
+> @@ -3,8 +3,6 @@ SUBDIRS := functional
+>   
+>   TEST_PROGS := run.sh
+>   
+> -.PHONY: all clean
+> -
+>   include ../lib.mk
+>   
+>   all:
 
-I think the only part of the warning text that got quoted above should
-clarify why this is not a real solution.
-
-For the record, if this was a true issue on the compiler side, I would
-have made that very clear in the commit message (or perhaps not even
-sent the patch in the first place and worked to get it fixed on the
-compiler side, as ClangBuiltLinux has always tried to do first since the
-beginning).
-
-> > What does gcc say BTW?
-
-GCC does not have any support for __counted_by merged yet. I suspect
-that its current implementation won't say anything either, otherwise
-Kees should have noticed it in his testing. As you and Gustavo note
-further down thread, sentinel is flagged by
--Wflex-array-member-not-at-end.
-
-  In file included from include/linux/tty_port.h:8,
-                   from include/linux/tty.h:11,
-                   from drivers/tty/mxser.c:24:
-  include/linux/tty_buffer.h:40:27: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-     40 |         struct tty_buffer sentinel;
-        |                           ^~~~~~~~
-
-Gustavo has a suggested diff to resolve the issue at the GitHub issue I
-linked above that seems like a reasonable fix for both issues that is
-small enough to go into stable trees that contain f34907ecca71 like this
-one?
-
-Cheers,
-Nathan
+thanks,
+-- Shuah
