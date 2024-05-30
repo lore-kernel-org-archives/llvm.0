@@ -1,200 +1,181 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2075.outbound.protection.outlook.com [40.107.220.75])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97FF14B97E
-	for <llvm@lists.linux.dev>; Thu, 30 May 2024 21:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717103750; cv=fail; b=YLpXz9RVmQGmWw1ATAX9w0zjhn69nGPa/TpTI1VYqX9D02PcSmOn80xeMdRM1VDdBztYXVqS8e7JsUdLOsT/TUDy4uFDDD1dzpoSK0FetKiXazDkhOfVmsx4wLx3WTUgb3CKswp3FzoyDsfSmpmvmPOv0BUr86vqAuTy4jb0Uv8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717103750; c=relaxed/simple;
-	bh=M7rgBXFMOk9qYEfIxFYreDET75QQR97+ZhlQQ/cn+X4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=uaTS/CNy15Olo+fWbEFTBtmp+SYr6kq4HaXvBUlDo1l36O0U+fsnFEybmBOvLdc7sBjeYC1uT7Us9fnMR6N56CdefLYcN/Jw2K4xiMHiGoyfhW7FNmxO87S+FHDAt0vWV+0N2Vyp1YBKXjQJzmqqFh5405y7RtC4gyJsVdW27Qw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=d/DI52eO; arc=fail smtp.client-ip=40.107.220.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504A36F316;
+	Thu, 30 May 2024 22:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717107293; cv=none; b=poTw5f5suVfdtxYEc3beCHKEHaxCujsB8t/xGC9iW5Ts62S/R8kOIV+WAtByHtXldDBJwXtroHl4TbiLu/0cTRYlDGslHOQzt/pkhChMuDKfsM9LZpUYJX2NJOu2mcggQRNqIZLxER96XUSfFJPStsbj5nKRqiiRKbG3MFQeL7Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717107293; c=relaxed/simple;
+	bh=szn7aSVUM6e8HtoVb4OJrxdGsHt+Bf7QCvWNbJP7jlE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ARpmXZs/CFUOU6tr/msehR4redtdQZpogT9H3gOlmuj1DLFtHA+IpXETNkuyUrFtT+RDHjosAZ9rzmt07yZsicdPa5749ykQURH9HP/JTAuz2xn25mEqHcDj+TgATHsbzdgl+XFK9gEdgcCVIwzbmyqecZsnzDitR74qYuExxXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l4IAigNs; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="d/DI52eO"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=An/FumOW71a9kfCNye3xVcIMWzRUIhvyEATzujaOmp7X1ul641CZLC83RQp530f9R9Wn1QG+Du2785HY2ys4UVc+lOCTNxEv6If2qi83F2YzIW92/1AnzeXiVTiF5gmVquHNgPcf+YFzR1s1Hofq1s8tEgz9WL6W7x/Gd4nyjG4yFPfbjFMNllRx9L/4l93UqHACp624HQ3IMFAHJe+wFo19nLW8wbLPiLT817Y7R9lnEG6gGH6Co3sSYh35T7FD8840HbbKvs73m32HbvggUbStRVDkD5pHgorKgjfau1LqQnYprMHQsBmiXiGymq39jmgMxKYjKgG3gQ3wpVmVgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q+5UvBVB1eD9bhmerAtHJ/+4AtKC462leU9LRas/f4A=;
- b=MstGjyAMH7SIe4B/1fMFTJmAC6QbuOVzV5WV5SokfLZKEwrqrAu+ZMx3qtSYCUexqtZBrA6pmpJyvHSU47oKqOs4FEyDe5XM8bKDWjALPdIN8yBFjM0mCwl86PPH5Qj4YY+zMMDc9uHxWtSGKdJ5StGBVgqsgMZF8LvshoyQuTE2S2Y2z8zkPjvwvKKWM9CfurpCdguWLN0GFuJP/DsjGgIIMu0Wj54h4ac2bhmTmUzM/tmW1QFM62b+fQ6rx0fRe8Gds96wMXmoOSlSw0P9QxDeYs7JiRD/LBgN6GZQz61ItVoewtD/zLOAe0FjzriK9sy4thrI9G0J2AmOSXybDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q+5UvBVB1eD9bhmerAtHJ/+4AtKC462leU9LRas/f4A=;
- b=d/DI52eOUn63v874pcqlhOaA/gQHHbjuL5jaG4QgUoeDmoEfRwbegRMPDaT9qYv6b1mOhOxr3ZJE2389WVUhj+4MD0x0k7Hfx4RxtF0Y6AGSSlyOQhnt3pYcvqGYj9JXhHGdR8/MYof/QPJyuyxtxediL1BSSUCSh+Hv/AxrslpWl5RzSJvztCry/cR+n4MLeR3f90KVvmbAhEVmC0NPmOEpMzSVOaIRKFd6Xdy+sz19si+U5yHGp5m4gnBIn8d42WwnZpqsQPAO45FriIT5uIVZ3elkP9D/UXEpP3z4TfcXIjAVIco0PvjDC8z3R0kKKsnJWSkrsjs5+RGxxR0XgQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by PH0PR12MB7906.namprd12.prod.outlook.com (2603:10b6:510:26c::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.21; Thu, 30 May
- 2024 21:15:45 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7633.018; Thu, 30 May 2024
- 21:15:43 +0000
-Message-ID: <b65059db-a8b8-4801-a4db-6a2edfd18d12@nvidia.com>
-Date: Thu, 30 May 2024 14:15:21 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] selftests/futex: don't pass a const char* to
- asprintf(3)
-To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, Edward Liaw <edliaw@google.com>,
- =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
- "Nysal Jan K . A" <nysal@linux.ibm.com>, Mark Brown <broonie@kernel.org>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20240529022938.129624-1-jhubbard@nvidia.com>
- <20240529022938.129624-3-jhubbard@nvidia.com>
- <94fe2649-8def-4f2a-ba5f-19ae8a4226bf@linuxfoundation.org>
- <f0a1ca78-f94e-4f02-a5e0-ef9d610fac07@nvidia.com>
- <b245cd0a-8a87-4169-b0de-e4f6ce6984c6@linuxfoundation.org>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <b245cd0a-8a87-4169-b0de-e4f6ce6984c6@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0240.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::35) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l4IAigNs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717107291; x=1748643291;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=szn7aSVUM6e8HtoVb4OJrxdGsHt+Bf7QCvWNbJP7jlE=;
+  b=l4IAigNsUEpLq8QAo0WNqbS5mrl7DvJuarkrMILCKKMmSrTegGu7bp35
+   ZjraRiP9M/DR7+OC70zD9vO7VwZ396NsDrmF7YI7PZJEQh+qXvZLPcSZa
+   bM7bULo15/wpRGeqmkm1wjfsVUPzESMtm/E+TGbPnFBAxUWn+hbtAkwEx
+   iAjrDmBwvJ8F+C1oRVCAgSL7Nmsdwpq9WRo1N9ZC5YhnzITYSavl9aDmj
+   snmZurysyK5VVpa+qezj2dhrEnrmkC7eH00ZJx2Zf0XyXPgmwsK2kY2Sc
+   Nq5g+qHXB2HrpqFMQarQaWXSuzt6KiuUY9gp6EGb1LUioIw+5y4gxFic5
+   A==;
+X-CSE-ConnectionGUID: Ea0u3UITTk+aLTyTvAj+hA==
+X-CSE-MsgGUID: oac1ReacQgmTCqnTk1F0bQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="31124755"
+X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
+   d="scan'208";a="31124755"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 15:14:51 -0700
+X-CSE-ConnectionGUID: FQWZ9OKpThmHlFLQrn0org==
+X-CSE-MsgGUID: ZGPmZ1eIRWWY4paNBDOrMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
+   d="scan'208";a="41025991"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 30 May 2024 15:14:50 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sCo2p-000G3T-07;
+	Thu, 30 May 2024 22:14:47 +0000
+Date: Fri, 31 May 2024 06:14:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 90/93]
+ fs/bcachefs/thread_with_file.c:375:2: warning: label followed by a
+ declaration is a C23 extension
+Message-ID: <202405310602.WxfwdaAA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|PH0PR12MB7906:EE_
-X-MS-Office365-Filtering-Correlation-Id: be3959d6-2cf6-430f-1db3-08dc80edaaa1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|1800799015|366007|7416005;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TnhqeGd5YW5SWUlyWmFRUTBocUt4MFFaQWZCTTdKTS9PNlRjNyt6VGo5Mi9R?=
- =?utf-8?B?bXV4N08xaVV1TThWeDZ2TXVXOVFKblhJcmNRSGdZUDVEVFdZL1BweWNzL2xF?=
- =?utf-8?B?NVAzZ3RXU0NtMCtuZ2NmeWJmV1RTV2IydXZ6SmlGOVdrQnFmQzRIQ3kzNFI0?=
- =?utf-8?B?OGoydjVHV2NQWm5ZNFhqYU5FNFI1aVJrd0NtK1VIam9COUUxQjdUREhvNERo?=
- =?utf-8?B?eFY0NTJSd21PUGlyQk9OSnFaRE1kTnNnVld0TW5HWEdPZzRMdXdjdjYvb2lv?=
- =?utf-8?B?alZQS2xMOWw3a0xsUDZsdDVpYktONUNtSzl4VmhCNmR2aXJwaFR4cGh5SVRS?=
- =?utf-8?B?bkJwdG55N1FSZ1JiSVRFN1BWN2ZZWVh4K0pIUXpQRjJRdExCSUsyQ0hKSU0w?=
- =?utf-8?B?N2x2aS9DUDVXVDBYWFhUQ29BN21sQU4wVDdFa1ZzNjRwUDI3TnlOTW5ueW1p?=
- =?utf-8?B?VzJ6ODFBVjRwdlFoanY5MW8xRlpnSEpKQnd6SUpPUGVvVU5XajYzVUxUcDJt?=
- =?utf-8?B?Wm9iVlpkeEs4U0FpR3Q2SFJhMFh4TDBZRlZJQmphV0Q2clhISGdYNW5RZmo5?=
- =?utf-8?B?b3E4YVVITVFjTTlIdW11UW04MmdiTVVEQ0ZoWS9wck1PK21YdHdMWHVZUCs3?=
- =?utf-8?B?NUZqTmVCYnJRS0E0ZVBiSkwreitscGs2WkZoYXBYL2FyVVFsOGpaUmNyalZw?=
- =?utf-8?B?c0JrS2F4VzJJNkZOc2pIVmxNMmluellzUC9ML0JiNWJsVjdLdC9QaFMybTV3?=
- =?utf-8?B?S1NWTXEvU0RvN1dxL3FubWk5YTNqbk1zNG5Fb3F4Q25JR3JTbjlGOWpxd0pk?=
- =?utf-8?B?VnU5Ykt0Z3RyYmNnRHBZb1BEYzJueHdCdCs3Mm83S1djcmJEVm81TzFFcHY4?=
- =?utf-8?B?MThWd3l0YysvcWhzeHByLzY1OWN6aHNzZDVQZXRQeitqY1A0TEdzTUV4aXN4?=
- =?utf-8?B?SE1IUlUzRGMwUGJYdmYrVWM5ZGVzc00vU294MHFPYWFFdG55cnpNUmtnZnY0?=
- =?utf-8?B?TFl2aW40N29zMlV0T0FmNTBHUE5DTC85WHplL3p5VnkxSGVhQnNKQkJINVp3?=
- =?utf-8?B?d1RGSndFRytCbFBqMm9wYkl1TmZSK1UvRUVyRGg0dDRzS1hkZDRNeFVuY2s5?=
- =?utf-8?B?WkVhZnBoLzFpMFB6WFNZZjVVd3JHeVMvN0FYMFltSUtxbFhRVTBtUklTWDB4?=
- =?utf-8?B?dzFhbWVGQXBGb3Y5anNlT25mY3VVaWU4Z1BYMlFBSFVZSXkvY3ZHRGVsMUJP?=
- =?utf-8?B?ZnViejFzeHdCQmpTc0lmSzl6QmlxL0p2MHdjeEFXZHlqVC9xUENJbkJHSzhI?=
- =?utf-8?B?WWd6cUpQM1AreGw2ekxmRm41eGlDdkFGbWhiS1poY0EvT21lS3phL2E2VnUr?=
- =?utf-8?B?SklBYmhrVVBpaisyZmhEU2VYQU9CNS9jOW9Zc1pKLzlSc0NjaHhId2VLOU15?=
- =?utf-8?B?RjRPUjZMdStOWTFodVZKeHVmVHZraEh3aXVlQytvQUJLZ0VBTnovdGVkNjJN?=
- =?utf-8?B?NWM0OXZnNnlvdTNPSXpUV2tGZy9GNGZWb29SR0hZMDVhN2M5bGluUU9BQmpF?=
- =?utf-8?B?NlhyMXFBNGJ6SEJMajNVb0FvMlh4OXc0d3ZuY1hBeEtKS29Qd2xPTzN3WHF1?=
- =?utf-8?B?UlBqWk9YbXVQNmVBMEVOYXlDWGhFR3RvbVlMUUJISEVmdmQ4S3Budy9hMlR1?=
- =?utf-8?B?ODFWbElvNlM0NGJGY0FVdXQ3UERleTk1Um1VTzRST2k1aEJIbGt4OVlRPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007)(7416005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cVhPSFFiVUFsTm9jSHprVDZZd2V2OU5pc2xaNW4ybW1sMVVtR2RhaGVZTVI0?=
- =?utf-8?B?VXZWUWpMbVJxQUtYbkFXRmJsd2hEQUl6cjRvb1lQak05TGcvYW1ad1A4TlVk?=
- =?utf-8?B?QWpGRU5JMS9ScjdSSW40T3RRU3UyenIrTWJGTWNmU0RHQWU5anFwVHQ3RGJx?=
- =?utf-8?B?NFpuNDY5TXNuMXExYU1Bc3NzbkcvMnNLZ3B2eU91VWhJUzMydkJMY0lSdWdB?=
- =?utf-8?B?WkJiVkVwQk8yZEs0eUtrRU5YREp4T3hCRGlJcmtia2p3aktjYXJSVVFNK0lT?=
- =?utf-8?B?KzRGdG16L0oyQTNITDdxUmZTa3BjWU40SjY2bDVtRU5GNUxoS3hiYjZwdjFX?=
- =?utf-8?B?MzRKdXpoVHltTm0rSk5BUDhHRnRpNlk1anFYbVZxWDFoMGxTRmpWMnU5OHNS?=
- =?utf-8?B?REplUWViRm9yNGlYWm1RV2IzOFd2TVRlektWRy9QYmtGMmZDYVVZK3dlS3Y4?=
- =?utf-8?B?aWFHQzN5UzlMWW80dVRkclZLclhCdStUaFZnRTVWL3Q1dDl2cndHQ09pUElx?=
- =?utf-8?B?WmFqeW45TVNaelZ3Z2ZDZmpkYVNvV2paaEZqNnUwYkF6eFAwSHlDUGpwVWV3?=
- =?utf-8?B?dXZhTDRDRWpvL0RYaUZWN1NocTFiYkR5U3k2NUx4aVVaTVU3V2ZRV3Nuekkr?=
- =?utf-8?B?cmc4RUQ0dWEzZ0V6aGt0QkxDa0VRVVpMZjg4WndPQ25ISjlVS0xGVVhyZjhz?=
- =?utf-8?B?N2dqSndFdEpaeGhWbU1rQTlyeS9vZlhnMzJ5T1ZkME96NlRvbG8wOTFJVkZC?=
- =?utf-8?B?Wmo4UjVaMWVrRlQrZkErSGJXd0swYmlUanpCTTJ5bEFXbkRvZlc0VjM3V1hT?=
- =?utf-8?B?WjZUN2ZWR2ZSL09PMU1EemlpcnZSVjhtZ0gwQlVlSEJ6blJ3WWZqbXk1VCtM?=
- =?utf-8?B?RGlyU3BxdlBxbUlvZzZWenNHaS9IZkFEUndwTkxmNSswM2dsSWY0cmdhempy?=
- =?utf-8?B?eVlDblYrNDlnWGdPdUVFeENZczdZU1F5ZmNnbks2eXVaOEU2enhsM2ZpNlA1?=
- =?utf-8?B?d1pUbXNLSWpoeUxYUG5nWE5xQlJtNHhTa0ZIYnVMK090aGlVa0hyQ01jS3N1?=
- =?utf-8?B?c2l0aFovdkJwSE5ZUkRReW44Ynk1Q2Q3ZCs1Q1lTZzZrbHh6ditzNlB0M2ZW?=
- =?utf-8?B?M1Vibmd2dmVadUJUWTlKM3lUTG1xNm9abG9iQXBxcE1kRVBwaUdsZzM4U3Fh?=
- =?utf-8?B?RGRDUVhTN1cvL3N3TkJuRFFoMGYvaTZOemJET080VXA3T0d6eHBtZEpoWkZT?=
- =?utf-8?B?VkpoUXdKeGhJbHJBSFpWTkYrdG5LTGxYbXJZUjdhcXV6TjZ0cCtwa1BvL0dG?=
- =?utf-8?B?dlRZaE1uSmorT0hBQjl6RFZkamxSWXFYVEk3MlFYUHkwMzRNZ3Z5VDg5QXNN?=
- =?utf-8?B?MTgxK1l5U0draEJEbVZwRUdGSERvWGpDR0daT1d3ZmVNL21DT0NjcW1tai9E?=
- =?utf-8?B?Q0JEY0dkMUZLRDVDSE1wVGdtSDhkVDFzbmpBME1DWjI1MGJGbE16WUdmaWU2?=
- =?utf-8?B?UjlQdzNrM0ljN05lRzlxTjdFY1p6WUdTYW1LbXhnZzhjd09GY2I5K3NDNzNv?=
- =?utf-8?B?OThwczdTSXE4MUZYUU5HakNTbmxiNmlGb0dnM1dORzdXZ2o2S3NHTTQrQXB2?=
- =?utf-8?B?TEdjVWw1cEYvVEFsTTVxSllORXVodlJGbEsyU2FpZ3NCRmNtN2s0Y2VhTVQ3?=
- =?utf-8?B?cGN0Sy9HTHF1N2h0UlZVcTZ3YmR6S0l1eWlzemZ5SGorQlVTeitWSmtER282?=
- =?utf-8?B?NVRtM3NRVUlFR0tzOE96RzlWWUcrY0JEN1V4ZUF6TVJiemlzT05lbzJyRmNS?=
- =?utf-8?B?dHVkWVUwUW1LcTNoTHFoVUtodGhwTHo0N0RhVmdVZjA2OTlzWlZqUVhEMjVw?=
- =?utf-8?B?WUlXQkRONkcrMHZ5ZzRlTE93OTZoVFE1MW56OHd3UkUxTGxXVW5yOUJUVXdi?=
- =?utf-8?B?NDFmNy91VUNiLzViOG9FdWQvNWlaYmg1YkszelljYUxNNmpEdVF6NmN4L29I?=
- =?utf-8?B?UnZIcGJ0ZWZUdWFXOXBweDk4SEZsWDB0ZWowcHRoY1BQOVAvZWdzbXc2U1FN?=
- =?utf-8?B?RExiTjR1cDlWeU14b3N2M0FTa0JZNDVESUxXamR1Q3NvbS9IMm5DY0NadXEx?=
- =?utf-8?B?VG5LVC9YWmlvR25mb1diMjdRS05DdGFRV24wOU5ZbG9pL0tDZG01aUxpVWpH?=
- =?utf-8?B?M3c9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be3959d6-2cf6-430f-1db3-08dc80edaaa1
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2024 21:15:43.9221
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NbpIOp9nNakf7MwOx7PMNxfp32yrr4Z2EMEKysPIDXXnw+csishfySY2GlyRnda27lBxjiMoZwwNooRiv6TNmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7906
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/30/24 2:13 PM, Shuah Khan wrote:
-> On 5/30/24 13:16, John Hubbard wrote:
->> On 5/30/24 12:04 PM, Shuah Khan wrote:
->>> On 5/28/24 20:29, John Hubbard wrote:
->>>> When building with clang, via:
->>>>
->>>>      make LLVM=1 -C tools/testing/selftests
->>>>
->>>> ...clang issues a warning, because test_name is passed into 
->>>> asprintf(3),
->>>> which then changes it.
->>>
->>> Please include the warning in the commit log.
->>
->> Ah, OK, the warning is:
->>
->> futex_requeue_pi.c:403:17: warning: passing 'const char **' to parameter
->> of type 'char **' discards qualifiers in nested pointer types
->> [-Wincompatible-pointer-types-discards-qualifiers]
->>
->>
->> Please let me know if you'd prefer a v3, or if you'd rather fix it
->> up, whatever seems easiest for you.
->>
-> 
-> Yes please send me v3.
-> 
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   ce6297d0475422fa2de0db1d4f955633ba70d031
+commit: 21091985987e4fcc4580030d896ac35906041d22 [90/93] bcachefs: bch2_stdio_redirect_readline_timeout()
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240531/202405310602.WxfwdaAA-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405310602.WxfwdaAA-lkp@intel.com/reproduce)
 
-OK, coming soon, hopefully a bit later today, in fact.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405310602.WxfwdaAA-lkp@intel.com/
 
-thanks,
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/bcachefs/thread_with_file.c:4:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/bcachefs/thread_with_file.c:375:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     375 |         unsigned long t = timeout != MAX_SCHEDULE_TIMEOUT
+         |         ^
+   6 warnings generated.
+
+
+vim +375 fs/bcachefs/thread_with_file.c
+
+   366	
+   367	int bch2_stdio_redirect_readline_timeout(struct stdio_redirect *stdio,
+   368						 darray_char *line,
+   369						 unsigned long timeout)
+   370	{
+   371		unsigned long until = jiffies + timeout;
+   372		struct stdio_buf *buf = &stdio->input;
+   373		size_t seen = 0;
+   374	again:
+ > 375		unsigned long t = timeout != MAX_SCHEDULE_TIMEOUT
+   376			? max_t(long, until - jiffies, 0)
+   377			: timeout;
+   378	
+   379		t = min(t, sysctl_hung_task_timeout_secs * HZ / 2);
+   380	
+   381		wait_event_timeout(buf->wait, stdio_redirect_has_more_input(stdio, seen), t);
+   382	
+   383		if (stdio->done)
+   384			return -1;
+   385	
+   386		spin_lock(&buf->lock);
+   387		seen = buf->buf.nr;
+   388		char *n = memchr(buf->buf.data, '\n', seen);
+   389	
+   390		if (!n && timeout != MAX_SCHEDULE_TIMEOUT && jiffies >= until) {
+   391			spin_unlock(&buf->lock);
+   392			return -ETIME;
+   393		}
+   394	
+   395		if (!n) {
+   396			buf->waiting_for_line = true;
+   397			spin_unlock(&buf->lock);
+   398			goto again;
+   399		}
+   400	
+   401		size_t b = n + 1 - buf->buf.data;
+   402		if (b > line->size) {
+   403			spin_unlock(&buf->lock);
+   404			int ret = darray_resize(line, b);
+   405			if (ret)
+   406				return ret;
+   407			seen = 0;
+   408			goto again;
+   409		}
+   410	
+   411		buf->buf.nr -= b;
+   412		memcpy(line->data, buf->buf.data, b);
+   413		memmove(buf->buf.data,
+   414			buf->buf.data + b,
+   415			buf->buf.nr);
+   416		line->nr = b;
+   417	
+   418		buf->waiting_for_line = false;
+   419		spin_unlock(&buf->lock);
+   420	
+   421		wake_up(&buf->wait);
+   422		return 0;
+   423	}
+   424	
+
 -- 
-John Hubbard
-NVIDIA
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
