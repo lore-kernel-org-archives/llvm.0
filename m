@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571ABFC0C;
-	Thu, 30 May 2024 01:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8431C1BF3A;
+	Thu, 30 May 2024 01:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717031263; cv=none; b=qBuIz8P60agE02dxKd8Lnjxvo6kECBHbzO3dfpD6GYtKqQfFULjt9oTt/kGMoUItoI024X+U1kMZLFpJabKpaqCboYNogSWuuAV5bAgB0GelLvgmb/hbWU0yVK8ZfR1LWBZRahmybLCftkJOr7TuvmpQ1pYUoy909DAJy7QUfcM=
+	t=1717033783; cv=none; b=Iw5gecRuvD6mMvlmBBd4dbo/a6BkVjG+hDSsUdA83gohdfmTRX7vRaixp6iqpDW9Kb5pjhHq5haXFJDQn7FUfL1HVcbbOtKHxP5tYJzF4Sax6qS45E9Hb3FjjZ8s0Em+z0KgQwiE0vG4cdBObv5A85lNo2zbeDbn08kvadrMUHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717031263; c=relaxed/simple;
-	bh=XjvxQ58QFqkAqBkQUJiK8TAuqi7nU98sT/Ve+TJkfko=;
+	s=arc-20240116; t=1717033783; c=relaxed/simple;
+	bh=Yg7ADNLFhA8x8n2kljlsNCO28sL98OmzmdIzh3y/eLw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q9KJ62TgVIQ1BxZDXLyjK10VphWEYXawXaS138hZK64UbkjiFuVJYQ+CiQD1z5DQnu3dQ6h0icpQvlq9PpgwEcDpGiTN7bL6qoe802/SFsW+e2yGK/if68YezdSOEkQIiEwGHPTb49HK1Yp0yo9JP99KIZ82UpzXFSqHPURtswI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eA8o/RIC; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=t6fGsHD9MsSUqWMFyU4PJDEoLK3WBMNb2NmlhqWZR480Yd4D6cVUh2SGm6Pr4coz0RsJKaT0JUIeveLSE6Au18CsH++6VxBoXpFcUyyiDJhPGfeuGMhV832nExpJzru9VTMUMGMccF6qX/+IObPciV1J1SM6jIXi6TRL+i7w94U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j46uIzr6; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eA8o/RIC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j46uIzr6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717031261; x=1748567261;
+  t=1717033780; x=1748569780;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XjvxQ58QFqkAqBkQUJiK8TAuqi7nU98sT/Ve+TJkfko=;
-  b=eA8o/RIC/Wp1mjs0mIXeJ7inAk6dSukPVDdj/HbchcGt7Z9VzTegMFKh
-   PSdMu9DKvfxmRhdrRv8BQTfD61SPkjK4gy3ye3G7bx7SqKDt83mE4Ji02
-   fSCGjNtUM/60qRJgutqBDP144ambmnLqyTOGLI54zmE+OEjhtSFXT0KDX
-   HI/QG+Yf3QFLjfAY2QeIxrY+kcJMnh6cf8+fT3oSbCd0FSQ1UhADn47CK
-   1A6W/LnqdjUqMqCe85wKdLMsrb1yD5xVH58Us6VXxQj6I2S2F86XHkmFN
-   mK6tDvK4lVmX7y86Lihcds1sXrPQXlOzssEUhCh1dYvOUNXoFiN3qNRlL
-   Q==;
-X-CSE-ConnectionGUID: fCiDKXkrT/CuAEhugkNMAg==
-X-CSE-MsgGUID: UA+IJH2gQb+4YxUdgfXTCQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="24894758"
+  bh=Yg7ADNLFhA8x8n2kljlsNCO28sL98OmzmdIzh3y/eLw=;
+  b=j46uIzr6XNi4K1xsJpiHugfesybV8Mj8OQfrpqdxUbFLHz6u2f2RR2cM
+   6t+DayTcMt0udGycfLgAyv74pCSTWTQh9tBH3H7D3UJfmlD3J8DCwkvLA
+   KuicR+pydv0V4zwmclSYPxBs0sRs4MA0tNUieuFwfG8hg7j4l2P69Ni9B
+   Q817cCIiWfAifYQWd/HcyRBSHWsba+iUWsYFVH98RTlKs61yXdXI20ewm
+   vthzHoV1PGM/8f+vrB6hxJhwIR398AiFf9mhFKaV8vepNoJnNdznzDeQf
+   M0qS6XarCN4nixLQ9FzVb+O1v9bskVosxQ0PDOqfUWmUoMJlZjiz57NwM
+   w==;
+X-CSE-ConnectionGUID: 14JpBYvSQMq3Skl9hBzqLA==
+X-CSE-MsgGUID: N1h8v6pvSUymGRGjzYnarQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="38871272"
 X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208";a="24894758"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 18:07:41 -0700
-X-CSE-ConnectionGUID: tT7J4lPYQyS5VelxkbE4pQ==
-X-CSE-MsgGUID: +7OOO/vLR1aQxcOyIYeVnQ==
+   d="scan'208";a="38871272"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 18:49:39 -0700
+X-CSE-ConnectionGUID: 9VN7nmezSeecFN5lDFf2ug==
+X-CSE-MsgGUID: sxn7NAeARr20p2UmRvIQoA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208";a="73089445"
+   d="scan'208";a="40546398"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 29 May 2024 18:07:39 -0700
+  by orviesa005.jf.intel.com with ESMTP; 29 May 2024 18:49:39 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sCUGV-000EOj-30;
-	Thu, 30 May 2024 01:07:35 +0000
-Date: Thu, 30 May 2024 09:06:51 +0800
+	id 1sCUvA-000EQA-0L;
+	Thu, 30 May 2024 01:49:36 +0000
+Date: Thu, 30 May 2024 09:48:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aditya Nagesh <adityanagesh@linux.microsoft.com>,
-	adityanagesh@microsoft.com, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Aditya Nagesh <adityanagesh@linux.microsoft.com>
-Subject: Re: [PATCH v5] Drivers: hv: Cosmetic changes for hv.c and balloon.c
-Message-ID: <202405300835.7RLpoY4A-lkp@intel.com>
-References: <1716998695-32135-1-git-send-email-adityanagesh@linux.microsoft.com>
+To: Jiawen Wu <jiawenwu@trustnetic.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC net-next 2/3] net: txgbe: support Flow Director perfect
+ filters
+Message-ID: <202405300942.GkTBvnAh-lkp@intel.com>
+References: <20240529093821.27108-3-jiawenwu@trustnetic.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,117 +63,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1716998695-32135-1-git-send-email-adityanagesh@linux.microsoft.com>
+In-Reply-To: <20240529093821.27108-3-jiawenwu@trustnetic.com>
 
-Hi Aditya,
+Hi Jiawen,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on next-20240529]
-[cannot apply to linus/master v6.10-rc1 v6.9 v6.9-rc7 v6.10-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Nagesh/Drivers-hv-Cosmetic-changes-for-hv-c-and-balloon-c/20240530-000928
-base:   next-20240529
-patch link:    https://lore.kernel.org/r/1716998695-32135-1-git-send-email-adityanagesh%40linux.microsoft.com
-patch subject: [PATCH v5] Drivers: hv: Cosmetic changes for hv.c and balloon.c
-config: i386-buildonly-randconfig-004-20240530 (https://download.01.org/0day-ci/archive/20240530/202405300835.7RLpoY4A-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiawen-Wu/net-txgbe-add-FDIR-ATR-support/20240529-174347
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240529093821.27108-3-jiawenwu%40trustnetic.com
+patch subject: [RFC net-next 2/3] net: txgbe: support Flow Director perfect filters
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240530/202405300942.GkTBvnAh-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240530/202405300835.7RLpoY4A-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240530/202405300942.GkTBvnAh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405300835.7RLpoY4A-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405300942.GkTBvnAh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/hv/hv_balloon.c:980:2: error: unterminated conditional directive
-     980 | #ifdef CONFIG_MEMORY_HOTPLUG
-         |  ^
->> drivers/hv/hv_balloon.c:2129:23: error: expected '}'
-    2129 | MODULE_LICENSE("GPL");
-         |                       ^
-   drivers/hv/hv_balloon.c:968:1: note: to match this '{'
-     968 | {
-         | ^
-   2 errors generated.
+>> drivers/net/ethernet/wangxun/txgbe/txgbe_fdir.c:325:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     325 |         case 0x7F:
+         |         ^
+   drivers/net/ethernet/wangxun/txgbe/txgbe_fdir.c:325:2: note: insert 'break;' to avoid fall-through
+     325 |         case 0x7F:
+         |         ^
+         |         break; 
+   drivers/net/ethernet/wangxun/txgbe/txgbe_fdir.c:340:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     340 |         case TXGBE_ATR_L4TYPE_MASK:
+         |         ^
+   drivers/net/ethernet/wangxun/txgbe/txgbe_fdir.c:340:2: note: insert 'break;' to avoid fall-through
+     340 |         case TXGBE_ATR_L4TYPE_MASK:
+         |         ^
+         |         break; 
+   drivers/net/ethernet/wangxun/txgbe/txgbe_fdir.c:359:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     359 |         case 0xFFFF:
+         |         ^
+   drivers/net/ethernet/wangxun/txgbe/txgbe_fdir.c:359:2: note: insert 'break;' to avoid fall-through
+     359 |         case 0xFFFF:
+         |         ^
+         |         break; 
+   3 warnings generated.
 
 
-vim +980 drivers/hv/hv_balloon.c
+vim +325 drivers/net/ethernet/wangxun/txgbe/txgbe_fdir.c
 
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   966  
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   967  static void hot_add_req(struct work_struct *dummy)
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   968  {
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   969  	struct dm_hot_add_response resp;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   970  #ifdef CONFIG_MEMORY_HOTPLUG
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   971  	unsigned long pg_start, pfn_cnt;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   972  	unsigned long rg_start, rg_sz;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   973  #endif
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   974  	struct hv_dynmem_device *dm = &dm_device;
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   975  
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   976  	memset(&resp, 0, sizeof(struct dm_hot_add_response));
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   977  	resp.hdr.type = DM_MEM_HOT_ADD_RESPONSE;
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   978  	resp.hdr.size = sizeof(struct dm_hot_add_response);
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14   979  
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  @980  #ifdef CONFIG_MEMORY_HOTPLUG
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   981  	pg_start = dm->ha_wrk.ha_page_range.finfo.start_page;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   982  	pfn_cnt = dm->ha_wrk.ha_page_range.finfo.page_cnt;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   983  
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   984  	rg_start = dm->ha_wrk.ha_region_range.finfo.start_page;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   985  	rg_sz = dm->ha_wrk.ha_region_range.finfo.page_cnt;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   986  
-1aa0ebde593dfb Aditya Nagesh    2024-05-29   987  	if (rg_start == 0 && !dm->host_specified_ha_region) {
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   988  		/*
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   989  		 * Based on the hot-add page range being specified,
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   990  	}
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   991  
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18   992  	if (do_hot_add)
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   993  		resp.page_count = process_hot_add(pg_start, pfn_cnt,
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   994  						  rg_start, rg_sz);
-549fd280b145e2 Vitaly Kuznetsov 2015-02-28   995  
-549fd280b145e2 Vitaly Kuznetsov 2015-02-28   996  	dm->num_pages_added += resp.page_count;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15   997  #endif
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18   998  	/*
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18   999  	 * The result field of the response structure has the
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1000  	 * following semantics:
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1001  	 *
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1002  	 * 1. If all or some pages hot-added: Guest should return success.
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1003  	 *
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1004  	 * 2. If no pages could be hot-added:
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1005  	 *
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1006  	 * If the guest returns success, then the host
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1007  	 * will not attempt any further hot-add operations. This
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1008  	 * signifies a permanent failure.
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1009  	 *
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1010  	 * If the guest returns failure, then this failure will be
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1011  	 * treated as a transient failure and the host may retry the
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1012  	 * hot-add operation after some delay.
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1013  	 */
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1014  	if (resp.page_count > 0)
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1015  		resp.result = 1;
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1016  	else if (!do_hot_add)
-7f4f2302a11173 K. Y. Srinivasan 2013-03-18  1017  		resp.result = 1;
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1018  	else
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1019  		resp.result = 0;
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1020  
-25bd2b2f1f0534 Dexuan Cui       2019-11-19  1021  	if (!do_hot_add || resp.page_count == 0) {
-25bd2b2f1f0534 Dexuan Cui       2019-11-19  1022  		if (!allow_hibernation)
-223e1e4d2c16fe Vitaly Kuznetsov 2018-03-04  1023  			pr_err("Memory hot add failed\n");
-25bd2b2f1f0534 Dexuan Cui       2019-11-19  1024  		else
-25bd2b2f1f0534 Dexuan Cui       2019-11-19  1025  			pr_info("Ignore hot-add request!\n");
-25bd2b2f1f0534 Dexuan Cui       2019-11-19  1026  	}
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1027  
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1028  	dm->state = DM_INITIALIZED;
-20138d6cb838aa K. Y. Srinivasan 2013-07-17  1029  	resp.hdr.trans_id = atomic_inc_return(&trans_id);
-1cac8cd4d146b6 K. Y. Srinivasan 2013-03-15  1030  	vmbus_sendpacket(dm->dev->channel, &resp,
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1031  			sizeof(struct dm_hot_add_response),
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1032  			(unsigned long)NULL,
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1033  			VM_PKT_DATA_INBAND, 0);
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1034  }
-9aa8b50b2b3d3a K. Y. Srinivasan 2012-11-14  1035  
+   303	
+   304	int txgbe_fdir_set_input_mask(struct wx *wx, union txgbe_atr_input *input_mask)
+   305	{
+   306		u32 fdirm = 0, fdirtcpm = 0, flex = 0;
+   307	
+   308		/* Program the relevant mask registers.  If src/dst_port or src/dst_addr
+   309		 * are zero, then assume a full mask for that field.  Also assume that
+   310		 * a VLAN of 0 is unspecified, so mask that out as well.  L4type
+   311		 * cannot be masked out in this implementation.
+   312		 *
+   313		 * This also assumes IPv4 only.  IPv6 masking isn't supported at this
+   314		 * point in time.
+   315		 */
+   316	
+   317		/* verify bucket hash is cleared on hash generation */
+   318		if (input_mask->formatted.bkt_hash)
+   319			wx_dbg(wx, "bucket hash should always be 0 in mask\n");
+   320	
+   321		/* Program FDIRM and verify partial masks */
+   322		switch (input_mask->formatted.vm_pool & 0x7F) {
+   323		case 0x0:
+   324			fdirm |= TXGBE_RDB_FDIR_OTHER_MSK_POOL;
+ > 325		case 0x7F:
+   326			break;
+   327		default:
+   328			wx_err(wx, "Error on vm pool mask\n");
+   329			return -EINVAL;
+   330		}
+   331	
+   332		switch (input_mask->formatted.flow_type & TXGBE_ATR_L4TYPE_MASK) {
+   333		case 0x0:
+   334			fdirm |= TXGBE_RDB_FDIR_OTHER_MSK_L4P;
+   335			if (input_mask->formatted.dst_port ||
+   336			    input_mask->formatted.src_port) {
+   337				wx_err(wx, "Error on src/dst port mask\n");
+   338				return -EINVAL;
+   339			}
+   340		case TXGBE_ATR_L4TYPE_MASK:
+   341			break;
+   342		default:
+   343			wx_err(wx, "Error on flow type mask\n");
+   344			return -EINVAL;
+   345		}
+   346	
+   347		/* Now mask VM pool and destination IPv6 - bits 5 and 2 */
+   348		wr32(wx, TXGBE_RDB_FDIR_OTHER_MSK, fdirm);
+   349	
+   350		flex = rd32(wx, TXGBE_RDB_FDIR_FLEX_CFG(0));
+   351		flex &= ~TXGBE_RDB_FDIR_FLEX_CFG_FIELD0;
+   352		flex |= (TXGBE_RDB_FDIR_FLEX_CFG_BASE_MAC |
+   353			 TXGBE_RDB_FDIR_FLEX_CFG_OFST(0x6));
+   354	
+   355		switch ((__force u16)input_mask->formatted.flex_bytes & 0xFFFF) {
+   356		case 0x0000:
+   357			/* Mask Flex Bytes */
+   358			flex |= TXGBE_RDB_FDIR_FLEX_CFG_MSK;
+   359		case 0xFFFF:
+   360			break;
+   361		default:
+   362			wx_err(wx, "Error on flexible byte mask\n");
+   363			return -EINVAL;
+   364		}
+   365		wr32(wx, TXGBE_RDB_FDIR_FLEX_CFG(0), flex);
+   366	
+   367		/* store the TCP/UDP port masks, bit reversed from port layout */
+   368		fdirtcpm = ntohs(input_mask->formatted.dst_port);
+   369		fdirtcpm <<= TXGBE_RDB_FDIR_PORT_DESTINATION_SHIFT;
+   370		fdirtcpm |= ntohs(input_mask->formatted.src_port);
+   371	
+   372		/* write both the same so that UDP and TCP use the same mask */
+   373		wr32(wx, TXGBE_RDB_FDIR_TCP_MSK, ~fdirtcpm);
+   374		wr32(wx, TXGBE_RDB_FDIR_UDP_MSK, ~fdirtcpm);
+   375		wr32(wx, TXGBE_RDB_FDIR_SCTP_MSK, ~fdirtcpm);
+   376	
+   377		/* store source and destination IP masks (little-enian) */
+   378		wr32(wx, TXGBE_RDB_FDIR_SA4_MSK, ntohl(~input_mask->formatted.src_ip[0]));
+   379		wr32(wx, TXGBE_RDB_FDIR_DA4_MSK, ntohl(~input_mask->formatted.dst_ip[0]));
+   380	
+   381		return 0;
+   382	}
+   383	
 
 -- 
 0-DAY CI Kernel Test Service
