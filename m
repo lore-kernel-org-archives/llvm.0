@@ -1,108 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACCB634;
-	Thu, 30 May 2024 05:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219F7143724
+	for <llvm@lists.linux.dev>; Thu, 30 May 2024 05:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717045283; cv=none; b=jJAJj6coHr++nKcJqw3EWBJ+bhCijMFwZD4Qm6Ko2MNSYP7iUNAW7EzUHAJ1NqrJ/zahxTXAhFApSjORbE8InVsNEJd0o4kghnWdQrdRnWb7+r53Qr5sBt2nVPnbko8FaoCKeU0huj3kEaKGsPHADkRPBsZZ1v4PN/ibx/KqvrQ=
+	t=1717045528; cv=none; b=iTJyXMQ79NjBos049I2sI3wDu+fkzatRfv2+B4jqYBvl1hRlNM5ItfXpqq5N0Dfgx1UTYQgUoEGH7r+OK85a3QiUqTBPb4XeZCIJugH/HGghMbIbF1AmUjdrZivb/DTCcJLh5JoW43j/ItVLN086+2GgqxGpIErgLyXwnsTuWgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717045283; c=relaxed/simple;
-	bh=3fKtsVlscKrDCr0/4RtGhFnZ+mu0HqQoRFjQIXlIXx8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sEcMJOCCkjJYp9SAPyIdPQ+BF2V+04rKeV3ipkZMZSHoCBFFlSwBxWVemKY+UIvBPU2XKUIXnvGzy6RfcCvR19lgNXH4vxGb0oedQap2xttbTP97cvepxuHKBfh5IFibgRd56ELoKgoR0YmxuibpWfHSsSIaNS2gB4u9uiGVGwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iUCi+Jph; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717045528; c=relaxed/simple;
+	bh=s9qXRDE3kVrAi41iJlR/Y5hBZergFEJWL5Qw7DmJZ7U=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=kRfpQsRJDDa1/3UROyxL6yRDROuTcjyZMVcO/gsRVyc7Wc6NABX8rPsDSbxJa94n6anKey3mdB/Gg89ZGY7eUH78OQUd9ESXrs6g1ZSyur36eL+zJ60km6SNlaW4ogu5wtUIrwopNAb98wkh2xI1knptE0AdjxT65qZO/Skgs/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=uRn7mB89; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iUCi+Jph"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717045281; x=1748581281;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3fKtsVlscKrDCr0/4RtGhFnZ+mu0HqQoRFjQIXlIXx8=;
-  b=iUCi+JphUsSkEkrkwgNmaGB/FfmUSlFXXEZWFZgC0nrLH7Y1GA30Nl+t
-   X3ZLZ7vkXvMvBfeKdEytJgno7+7os1oCBmfxhTFBA8AVTF9Mm7nfOEaQK
-   CEYAoNjvuRdzZpE2STxFuZxvClKwvaBai0u4LzLctt38rUg/u4sJG0IzQ
-   B8CvOcC8bmTxRaoo+j4OM59ITXBMCeokIdQ5isDdWybNmxLmxjn2YNGV6
-   PFPIc6hD+YR/wzDrseZvrjusZLJNmbbcvHnSDFIfltInAqX0AmWP1aPcP
-   HG7m/ergaGQNJAiEwZ0N3MVa0+o2SL0sAzCn5pkC3V/A/dCwkjVunwQhQ
-   g==;
-X-CSE-ConnectionGUID: /EM8QcizQ1a2d8rzeqg63w==
-X-CSE-MsgGUID: O99Uqe3WTMihIQUgcsfI8w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="13315277"
-X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208";a="13315277"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 22:01:21 -0700
-X-CSE-ConnectionGUID: eauEfww9ReOVi8YZll660g==
-X-CSE-MsgGUID: Mr5Nwnq/TFG14bPuC29wYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208";a="66886450"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 29 May 2024 22:01:19 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sCXuf-000Ep2-1U;
-	Thu, 30 May 2024 05:01:17 +0000
-Date: Thu, 30 May 2024 13:00:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gary Guo <gary@garyguo.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [nbdd0121:thin-lto 3/4] make[3]: *** No rule to make target
- 'rust/helpers/helpers_combined.c', needed by 'rust/helpers.o'.
-Message-ID: <202405301250.AnYihoGn-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="uRn7mB89"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1717045523;
+	bh=s9qXRDE3kVrAi41iJlR/Y5hBZergFEJWL5Qw7DmJZ7U=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=uRn7mB89I2VpD/4rjIY1xGx+r6xJfQejHjCuoOWO4c/11bqz6E8UDyH8oCtRy8De5
+	 +u9cNLQ7jSV+UjaBF5LbzSSx+I2UuXiO45/rk1i4nxYrAs/gqIFg/M4o53AOfwxB2b
+	 yDf/uArjFtwVZu7P+zFsjZAe0EDDiMTgcQkE0iSR5b4ONJLHZtl1zLUgXMw0omEXkM
+	 GR5pSuxMjjNLp8Jv2xSuM1DXliLmW+YMlOiRnzhf8DQakzTI460aVtC5I6fpucz8n5
+	 HD6H8SfxLy/V3nYvyAJrLlvprQyqPpy5l+03hLdEQlY0S6l2R1op6IFB+VCsgUD+C8
+	 EIC1PfLBwUgfg==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CC77A3782173;
+	Thu, 30 May 2024 05:05:13 +0000 (UTC)
+Message-ID: <20323e06-e2f6-4991-8b63-4471b6567932@collabora.com>
+Date: Thu, 30 May 2024 10:04:43 +0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
+ sunliming <sunliming@kylinos.cn>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>
+Subject: Re: [PATCH 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
+ builds
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+References: <20240529020842.127275-1-jhubbard@nvidia.com>
+ <20240529020842.127275-2-jhubbard@nvidia.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240529020842.127275-2-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Gary,
+On 5/29/24 7:08 AM, John Hubbard wrote:
+> The kselftests may be built in a couple different ways:
+>     make LLVM=1
+>     make CC=clang
+> 
+> In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest
+> of lib.mk, and any Makefiles that include lib.mk, can base decisions
+> solely on whether or not LLVM is set.
+> 
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Ryan Roberts <ryan.roberts@arm.com>
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+LGTM
 
-First bad commit (maybe != root cause):
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-tree:   https://github.com/nbdd0121/linux thin-lto
-head:   d8e271683fffd0c16191967cf6539648cce3a48e
-commit: 0fe9d2aea0403e050b76ef4dc17f1a3b70698025 [3/4] kbuild: rust: auto generate rust helper exports
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240530/202405301250.AnYihoGn-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240530/202405301250.AnYihoGn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405301250.AnYihoGn-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   cat: kbuild/src/consumer/rust/helpers/bug.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/build_assert.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/build_bug.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/err.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/kunit.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/mutex.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/refcount.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/signal.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/slab.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/spinlock.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/task.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/wait.c: No such file or directory
-   cat: kbuild/src/consumer/rust/helpers/workqueue.c: No such file or directory
-   make[3]: *** [rust/Makefile:380: rust/helpers/helpers_combined.c] Error 1
-   make[3]: *** Deleting file 'rust/helpers/helpers_combined.c'
->> make[3]: *** No rule to make target 'rust/helpers/helpers_combined.c', needed by 'rust/helpers.o'.
-   make[3]: Target 'rust/' not remade because of errors.
-   make[2]: *** [Makefile:1214: prepare] Error 2
-   make[1]: *** [Makefile:240: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+> ---
+>  tools/testing/selftests/lib.mk | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 429535816dbd..2902787b89b2 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -1,5 +1,17 @@
+>  # This mimics the top-level Makefile. We do it explicitly here so that this
+>  # Makefile can operate with or without the kbuild infrastructure.
+> +
+> +# The kselftests may be built in a couple different ways:
+> +#     make LLVM=1
+> +#     make CC=clang
+> +#
+> +# In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest of
+> +# lib.mk, and any Makefiles that include lib.mk, can base decisions solely on
+> +# whether or not LLVM is set.
+> +ifeq ($(CC),clang)
+> +    LLVM := 1
+> +endif
+> +
+>  ifneq ($(LLVM),)
+>  ifneq ($(filter %/,$(LLVM)),)
+>  LLVM_PREFIX := $(LLVM)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+BR,
+Muhammad Usama Anjum
