@@ -1,127 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF164380;
-	Fri, 31 May 2024 19:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717185560; cv=none; b=uXhrC0Hbfp3HaD6fV/cDv/Wrryq0hwB/mnrVjKnLtFvED6mYRl9E+Trx4fwk+UrdwAiaQcDGqrj9d+gfHhFcZfor143G3c2SeZqjRlqaFtmXbvxj7caD0znbhufsmy7EipLxB9gz3P2XwTAx/DFqm2kAMbMCfJ7908LObWuTLaM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717185560; c=relaxed/simple;
-	bh=jnv5YKLbj+Z2l8vdr8swzLTMD2a39mAbcZlrOzmNvKc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCiAzmc2x0h4vWmQnquRf/7IdyA0FzsUkAR//7liWXKMsuRw+/OtJ1E2wylcx8OKyTqH2EUfRDZ8uGjMBodnmC1PchTAfzyeSLEAw/qykVIuVKY8PtZi9deOIf6rY6fr1YJyEpKmIjllZLFdtiluVMFIS8k5nWW1l14d5UQeIis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X60/4adr; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23E617E456
+	for <llvm@lists.linux.dev>; Fri, 31 May 2024 20:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717186085; cv=fail; b=Q51vSWS+jpaloXu6i8+MZV9+RA5jZqAV2fHLDu3IDtcgWDaDmLBLVSaMLm0O6ogGwPpz07z36JBQeH/gwNOhiMBcIHgvuBdEcUJ1kGhvOdlfbci4/T5krV6nrufB6bS85kgr57zuRwP7lCqeJIwiA+qRAEJhvg7Ea/CYdDixIEI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717186085; c=relaxed/simple;
+	bh=zBhQLTB8WkCdF8qUKVSvXWqLNz9Jx/yhF1CF0QcmCpc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eDv0aU8IKi/DJulYKQAqSKV4I/Sh2nXKnrai4KFcp1FmHcAmrvx5MmyEkbNyWXTzTVcbGRyGm7SAxqoid5Z/MsorK8TmiR1uGJwj34RVufYuroXyXymKRrCgF6b+LbAkgcNtDbPyGJH5CdLmMQ8k16P1VEcv07uUmpWOSgdmuv4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Btkd57T0; arc=fail smtp.client-ip=40.107.223.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X60/4adr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717185558; x=1748721558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jnv5YKLbj+Z2l8vdr8swzLTMD2a39mAbcZlrOzmNvKc=;
-  b=X60/4adrK3io+O5DpCD1DSiCqLzfcVhADlgA42iF+wEnbUTE5mgVy+Ae
-   +YYZ+DDZ5G/HMT6zI3PAy8C3EPaCmjgzJ860KBdJzubGAZ8Fe12fgqoH2
-   w7X+TvArKT0O5m8m4UcODBd02OThp0bya10fa9PBTzP8usEcAuIqObgnU
-   rVvYVairCScE1e+T8AzWw5Js4UuTq3c3fP/ymknzmosx0L7xMFQddJ2LN
-   alSPzI9geIAILrGXyc7knCpsNYqDZql9Sjg4ltBaESpbQ5ZKl/MAGkxEG
-   Pmay6E2RCWHk8doiZQzuxLjOwuGi00YHqMxyVvT8Qrj6AcORLFPzs3aeN
-   g==;
-X-CSE-ConnectionGUID: ynB+aH/oQ4SX9nTaR+7BJg==
-X-CSE-MsgGUID: QCMqiB5QQQ+YNtxegEiwcQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="24321216"
-X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
-   d="scan'208";a="24321216"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 12:59:18 -0700
-X-CSE-ConnectionGUID: koVK9twYRRmYVQ1QSc9Rvw==
-X-CSE-MsgGUID: 56AM9RKLQEWQM53t0AqYIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
-   d="scan'208";a="36202161"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 31 May 2024 12:59:15 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sD8P9-000HlJ-2z;
-	Fri, 31 May 2024 19:59:11 +0000
-Date: Sat, 1 Jun 2024 03:58:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Simon Trimmer <simont@opensource.cirrus.com>, tiwai@suse.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-sound@vger.kernel.org, alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-	soyer@irl.hu, shenghao-ding@ti.com, kevin-lu@ti.com,
-	baojun.xu@ti.com, kailang@realtek.com,
-	Simon Trimmer <simont@opensource.cirrus.com>
-Subject: Re: [PATCH 4/7] ALSA: hda: hda_component: Introduce component parent
- structure
-Message-ID: <202406010354.ludmQT3O-lkp@intel.com>
-References: <20240531151409.80284-5-simont@opensource.cirrus.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Btkd57T0"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NpaEjkigaQyQeqZbGYXihmZpx4HE/RELE+lOpxtpybSMq/G8LdfQEr/dRs729bfmUFY4+3YpAJI9nmyHbwnugME3f58RQOiIiEctNN5nzpB+WaC6mDBsSKda3tYsOZxSkZUgGo4j7DRZsIJYB0aMerV6dV4Bjw4rJFEz6KPl7V70ex6iU4pQv3FquU12vAGE77Muu0XnwT0s/nGRtGaxea/2X25nrVs6LHzoIZXjWGjaH6GhJ47tGUS7rRhEEgQTH1FwqPHSIM2j09HHRaRkjHNpxUzWpVo9IwrONas5qOp5HZ+RWHcWIhr6Vn+pTpjZFDfvlkEylyWWmhV6kgKYFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=01YYcT/4NfWh0YHun2p0ZqrMm4xnTY2SOjGXZCbnC8E=;
+ b=bi+zX8j/+tnyHy0FAyvG3karJFDiyTzKqjXhket/Lc9LAxiDJmQyvBIbm9RLXB2LMy+NLdfxFONZ+g2VXMlsnuzvP/+cLQFLZ8A0VB0pUhK924qqovB/w7dJSdk7cBHqlHjspEDAlSQjlU603zJLoq2spoTtoATWZBl8/pMW5TeeK70ZZWaxWzAV2/xR+iNFski6hZFV4NxY2UUoirx0SrbLk+b3Mxa9RnVRqAEWZNVmGjv58bMJivyv5rhjC85VFkAfbNxil+nLC81HAWZRPQ5tJuvuZWN4X/d3bU6ABBbbTIl8mNmztW2XiVLHk/xemyUp5B1XYSBkc6TqkQZ74g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=01YYcT/4NfWh0YHun2p0ZqrMm4xnTY2SOjGXZCbnC8E=;
+ b=Btkd57T0Nns6md8EEdJ48isu/ZcaRPj6jud9wFw4+t91+snx69gwUSF2vBYlzqbwwyPvFi//T5suJI0QUchnWvYNxd8W/qGZp+aUl0NUt4Bp0nMDf3Neizrj4Z5Eyra4/OLhYjBwmi2rzGO+IfdqE6uWtfQtEMvZ8YTCogtRPrQ/O8a24VPPawXudw90iFmDOIpJ3ATvnD6fggbCdLCqyZahtYqoog/OANb48CbZW8ToQYeiew53JnbEjp2rDJ7HrvvlUUkZ6UhTfpEZZuD4GJyUHD+SDuBK5RZkaDYiDdYfDr0t49JGSqIZz9NZEsI4ZfZzkixPKi7JUca4tonXPQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by CH3PR12MB8880.namprd12.prod.outlook.com (2603:10b6:610:17b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Fri, 31 May
+ 2024 20:08:00 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7633.021; Fri, 31 May 2024
+ 20:08:00 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Edward Liaw <edliaw@google.com>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	"Nysal Jan K . A" <nysal@linux.ibm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v3 1/3] selftests/futex: don't redefine .PHONY targets (all, clean)
+Date: Fri, 31 May 2024 13:07:53 -0700
+Message-ID: <20240531200755.128749-2-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240531200755.128749-1-jhubbard@nvidia.com>
+References: <20240531200755.128749-1-jhubbard@nvidia.com>
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR05CA0029.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::42) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240531151409.80284-5-simont@opensource.cirrus.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|CH3PR12MB8880:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ac63a3e-1f52-4776-3bc3-08dc81ad5ecb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|376005|7416005|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?mlAD0H55Q7UYcXGPBnLpS8WkmMY323aYTrIxUJy3awEeOZ0QLyLkiMd7BT+P?=
+ =?us-ascii?Q?m3CwT7IwsGvl7OHyCM0sKVI+oM7yhpMH5uOEKm+WaQ9zD9YTtOH+CHVHCa0/?=
+ =?us-ascii?Q?pfTHbqKq+/ixFFP6Gc5v//5bqCWMdyBYrRY2WVECUD1/fjjQI8ZgrLcyBRbW?=
+ =?us-ascii?Q?CIoKvby+M6kgQxOrzH5Zqnn6lXNM+WQ1a4eOZS9vvcF+BR9YcRy0ZVUFrLRr?=
+ =?us-ascii?Q?ibU3Y6LzQeYakF8NyQI+P2SzuRrURmcK4fLIe8cPre88BrBNFWtkEB05+w3H?=
+ =?us-ascii?Q?15PkPK4un6mydf+fOvjRlD7vlVwjyPDhlcLjp02dhvCkYeIppdnD+o6GVNmH?=
+ =?us-ascii?Q?M7rR1LM3nmmGJGkprkf4JGCCGoWZP6EkBlwGQZt6pZtnj2C31ZPTqgjmvabV?=
+ =?us-ascii?Q?rcpTuA+yb0B9n7VRVQNL06F1shRewbDWqxxIlZk+gzWTeYkYuh41jrRih+j1?=
+ =?us-ascii?Q?ZixpruuRKL2EyTXXP8LWDeN8C0gKcJrAeJYwRezesi44TgbAX6O76g1MF8vE?=
+ =?us-ascii?Q?qcSIebphZmz5xqtSjiR9+H2AHW7AkLF8NomC7S8L9ElocZoBKeHhIkT6W4Se?=
+ =?us-ascii?Q?iPy7LuUgBOdeK6C0NvRacEp0EoCdihahVUIkcJnzc710vGPoYbf7/c2ljmDm?=
+ =?us-ascii?Q?gEMYgCJtqwi6upVNAA3194Ep00sE3ekMq4Q33QyCO9hfpGJbRQ6Ap5K+HabW?=
+ =?us-ascii?Q?nR8+7HrmI46Q0S8WaAu6DpJSjuTXBK3leZhCeUEPqRhAShd1mU3bwEJ3A8xm?=
+ =?us-ascii?Q?eIDQGlNmSvLOrMC8TRfpAospuZtLgDpl/CMyGjQdHTUxOiMmOGGOoZJD51+s?=
+ =?us-ascii?Q?PnMAALKA5oF5OoT5ur87C955fkMyzXvJ9xki76Q7d1Wll88Rg1TIhuTueWWc?=
+ =?us-ascii?Q?c7f7NAPMT/U+l9/L+BtSVG9fjIdVWl0HljEOMGTIxYcgwYdnHTEkjCaf6WcV?=
+ =?us-ascii?Q?iZVTDF1MS+r8Mem1oaG9GYbDtl0fgkfP4aWD5bsNBTBZnXURu7KqUBF87n3E?=
+ =?us-ascii?Q?ptdsu5pK1yvOp4vM7C+jmSL/SQH3b4CAb+5eHXsgNnoWrbMja74Hh/Cj/Je6?=
+ =?us-ascii?Q?w+Ys9I/pnxAm3z3aAjP1cbABvtB0sjxFD+R7T7oBIzG0eMFpk5mlQDuGOP1t?=
+ =?us-ascii?Q?7aVcY7JjsjBlCk010DoJ7JXFrK4p5n5fsql64lbB9UwJmyseYJfgKmQaZEcC?=
+ =?us-ascii?Q?9R2G1gR+Obzgx9rEH5wVRbErzILtI9OOG5FCl/m7nwA5cMrXVaUMwcLCPBoA?=
+ =?us-ascii?Q?y1kqpzohodjEo1Qv8mraJnZKUOJWvdeTuYhax2uPVA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(7416005)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?cuusBcxMl3AY+61aX+9c95fGqvayq3KDvVPwyqNQJFVvPcC8OZ4m69jIJxE5?=
+ =?us-ascii?Q?c4iOlc3ePLLrmfFaM561y1n7K/y3XWoGPN996/QOgXdW/E8Ax/ebzQ+/ouS+?=
+ =?us-ascii?Q?GEjl9dAvpUuw77E90Ku4qzy0Se8Gqy2KoLDKRlm6uBcoXPw2ZW6KmOdfVRXk?=
+ =?us-ascii?Q?yz15rZXXGQ+VjtZzjOWoHqowrw3Ln3PtZex2nDStiF9v+inHJiWJH5b77Gvg?=
+ =?us-ascii?Q?UpUBrlgiK6tBQ4goy2m9sdPgGRhaAMSio/3FId1pH0bp+SlDhjbiESbcP/0P?=
+ =?us-ascii?Q?Rg3YK1wSEVe8rGlLQsXXQce3wg3RJY98ZdpsipM2T7uKxoTajIR/YNf/t6VQ?=
+ =?us-ascii?Q?LUW2buEqx2fZZc5/XY2qC+7XEW8/H14141K6qrlZye5+JIrDFFRrC6mL7qqY?=
+ =?us-ascii?Q?1yjDTxPs1YCTvUa/hEivuRm3hlND8oCwVcy9BqofAyV+w4E0q+jDj99oEXoh?=
+ =?us-ascii?Q?DxIhP72fmB17gAWmCXGWZJyYcKlMPq/z9VjQECreVpqKEKt0r9jG9zrzxYtG?=
+ =?us-ascii?Q?EJzHBK3N35t0xyDzlxq0IhTR8VawnIsl8U/vv7zVDbCSEg3QIixO0zb/gon9?=
+ =?us-ascii?Q?t3TS3OWQcm4bWpXmhkR9RBvpx6af1WPQiSskgcpImhKnMOjCrbVaKia0QFtp?=
+ =?us-ascii?Q?uF0AjhMRl47BCcjl4I/XVXTvkko/wl2NlvL2pmyB4idk3ka+ceIjpCxi5Ic1?=
+ =?us-ascii?Q?3rty1gR7ruuRmjRL5Z242MTlo2897vdm14va/YQPPqkmC+6MZmPqE+ddG/5c?=
+ =?us-ascii?Q?Rquod/4PLVl17h6KlzzlmCe9PIdvlydVurhgv5jqcFb/fmhM+9EzIFXUy8w8?=
+ =?us-ascii?Q?5D5EF0nGNDb04EBBw1PsfJyd7LaaqcZUygxT6ItGJBFl0ABl1izb+4R2CQPq?=
+ =?us-ascii?Q?9i7H+TEOAi832yFTVC/prpgcEMFJg+4fri15DSjCyDm/kEYph+P6SwT/NrZB?=
+ =?us-ascii?Q?dTIIVhiBI7s3+96PmbFRco+5mVN1ckmwb+xQvBxoawlMEBeAEfFEzUbKPMTc?=
+ =?us-ascii?Q?gjV7M+2ob3kax074ScaDq3ZzeFDaiwwy07im1mCsZJxQaNvUKwpUH11WFdlx?=
+ =?us-ascii?Q?YlXoUJZGMxT5KDwPewZU35dSuj9Th1rAngo0oZqBRzAqPHlNFhUmR/gyz/ir?=
+ =?us-ascii?Q?UxZ+Eupo+UdQUUKYdxjfuHfR2NeFUCs6e+bqldYmhBK6gT7r4TPFGDhV0tWa?=
+ =?us-ascii?Q?hDCtkx/GvGp1RS5LcK6WVE4NwgL5xAaj0ie8ukAPYITooJN1fdM20xY15l2k?=
+ =?us-ascii?Q?gs1NMi4CZ9iLnEHmKIg8c1muXvBMjcbwh2JV/VJl6MkxvvdM/2StDH6ayLaR?=
+ =?us-ascii?Q?/t2l/fZHZGIHYs/if0xHn305HyZPaspLxVf2LtuHzpsErPvRLr4qGziXi+zC?=
+ =?us-ascii?Q?R2RSJCMI3wzgb9ALWM5LdCXjONQeIFUSFsT20Icqi4hGENa252rRbCHhgHhI?=
+ =?us-ascii?Q?b1wEN02+2xPqf3pfF4iXaUyTYspxlyZ5GBNNYDSZw8eGPNsYhlLHIunaOXNj?=
+ =?us-ascii?Q?6Yaiu0HF2/mhimge6m8b3jwTy3T9vcJWcOy2qFezaasWCa0MH8eHmdlV7U5Q?=
+ =?us-ascii?Q?qGCkCYSWbMz6GT7AVklHnSI+NEq8ckDdN/KAeGKh?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ac63a3e-1f52-4776-3bc3-08dc81ad5ecb
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2024 20:08:00.0201
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: g+yZVa+3YVCCDo1hdRtyp882JZJX8EyvZ8mzOCaJ8m9wnw4fXhAunoXhX8qbburY7ukcLnXq4Khvfme8tJPG0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8880
 
-Hi Simon,
+The .PHONY targets "all" and "clean"  are both already defined in the
+file that is included in the very next line:
 
-kernel test robot noticed the following build warnings:
+    ../lib.mk.
 
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on tiwai-sound/for-linus linus/master v6.10-rc1 next-20240531]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Remove this duplicate code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Simon-Trimmer/ALSA-hda-cs35l56-Component-should-be-unbound-before-deconstruction/20240531-231828
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20240531151409.80284-5-simont%40opensource.cirrus.com
-patch subject: [PATCH 4/7] ALSA: hda: hda_component: Introduce component parent structure
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240601/202406010354.ludmQT3O-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406010354.ludmQT3O-lkp@intel.com/reproduce)
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/futex/Makefile | 2 --
+ 1 file changed, 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406010354.ludmQT3O-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> sound/pci/hda/hda_component.c:140:27: warning: 'memset' call operates on objects of type 'struct hda_component_parent' while the size is based on a different type 'struct hda_component_parent *' [-Wsizeof-pointer-memaccess]
-           memset(parent, 0, sizeof(parent));
-                  ~~~~~~            ^~~~~~
-   sound/pci/hda/hda_component.c:140:27: note: did you mean to dereference the argument to 'sizeof' (and multiply it by the number of elements)?
-           memset(parent, 0, sizeof(parent));
-                                    ^~~~~~
-   1 warning generated.
-
-
-vim +140 sound/pci/hda/hda_component.c
-
-   133	
-   134	int hda_component_manager_bind(struct hda_codec *cdc,
-   135				       struct hda_component_parent *parent)
-   136	{
-   137		int i;
-   138	
-   139		/* Init shared and component specific data */
- > 140		memset(parent, 0, sizeof(parent));
-   141		for (i = 0; i < ARRAY_SIZE(parent->comps); i++)
-   142			parent->comps[i].codec = cdc;
-   143	
-   144		return component_bind_all(hda_codec_dev(cdc), &parent->comps);
-   145	}
-   146	EXPORT_SYMBOL_NS_GPL(hda_component_manager_bind, SND_HDA_SCODEC_COMPONENT);
-   147	
-
+diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
+index 11e157d7533b..78ab2cd111f6 100644
+--- a/tools/testing/selftests/futex/Makefile
++++ b/tools/testing/selftests/futex/Makefile
+@@ -3,8 +3,6 @@ SUBDIRS := functional
+ 
+ TEST_PROGS := run.sh
+ 
+-.PHONY: all clean
+-
+ include ../lib.mk
+ 
+ all:
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.1
+
