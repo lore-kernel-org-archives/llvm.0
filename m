@@ -1,82 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761A72E64B;
-	Fri, 31 May 2024 14:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3F75381A;
+	Fri, 31 May 2024 15:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717165867; cv=none; b=LvJ6S8BF0dyLovSpcRnW6FUV78et7DOsAD19fDr/Pe3xb+QvDeEyK9/2H0RegNK7SXNRQCREONl7c77PW2Lfbh2kAwg1lkTNwH7O4Yw0aoGS4yZNAKldIwc8lnTvYF08DzyfOzY1RQllu4AiHDvbjCM5xoqQal4y8PcH1oFd7oI=
+	t=1717170587; cv=none; b=jp8O8JRbo6UiCxrwIq/ReE3hzN2JBF5OnR4PGy3aXvg8ZrzKZc8qCnukRVva3QioqkBpZsKMc1b0EcrRo9AHJlu8EnAE/hCeHGZ6VXOSDDamJ/bU2lBVfJn3xJw/nS28MyM35ipaAJ5IQtnUzkSB91oMhwmSzGur+KohgHokGx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717165867; c=relaxed/simple;
-	bh=JvE95VldL4Wm6uxSEGwGimYI1FBYwpi2JYmljsv3ZAA=;
+	s=arc-20240116; t=1717170587; c=relaxed/simple;
+	bh=i/GODoG/qqUw/5FjxkcYBVk33tge+/kdSkNcUIAovik=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZxT5ztcQuU1pSz7t7L3Nn927KNp+67NCezMgJWDJl5ELBwfcz8duXuBK3DXAh99kOTNC+RtFBs3I1+7X3oX9+q94PJm4E9HA3Aa+7XSz7g5hKvNgrMAiWCYSKEYw7z0GKbpvmvq1WgwGCjN5AadulsNaox3NCBCsX6NW87p2u+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b4q0BVzH; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=goiA7lNO0XueAg+hHz7r9v6y+PKQrRat2uI8KsQeld2tZQSNA1s2pcfUQMzROm4IPiBIVJOvICYjlpCl3ZXBG3ikXSgFPr/r7wuxfeeebeB4gXAcKzEa9I+ORMhr+eUV/Z9CICPdrA6FUa/oj/3YqdLAXx4bDaXlLc5mOAYazO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A3sZgzET; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b4q0BVzH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A3sZgzET"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717165867; x=1748701867;
+  t=1717170585; x=1748706585;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JvE95VldL4Wm6uxSEGwGimYI1FBYwpi2JYmljsv3ZAA=;
-  b=b4q0BVzHOW2xK2I1bjLX/1wu+QOVP2TRIG8vbl8JX6y1hLm1PGE9mcdm
-   y1lNZ7o5w3FQQEPc9iU5DnHp7J12uMFwbuOpQ8PcQOEAnn/6h+r6bOngG
-   pLzvIaYblMt8enQG+BHJr341Ev+gayBX0yQxnxWUGKxKLGPdRnxiJhMDu
-   i9dIKt6kx09tIwLxnJ55DoZi+KmvL+tIFIpDUNfFygejyp1vz8WCRzHTH
-   MaCVDxP9CkTd6ea3gPyB1FVwoLA5h3l9ql5zTBDJyyEBqpROPZUej0eGO
-   Im2hFFJezB9r8pmA3RIEy9xEjeuXJlm3AiK8dmQ6TTJArjswSXxB+3kcC
-   A==;
-X-CSE-ConnectionGUID: 4BuH6xjRSkS/txJ2qDeCxw==
-X-CSE-MsgGUID: q6cJ6b5LTnGNT3/1jmE79g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="36242688"
+  bh=i/GODoG/qqUw/5FjxkcYBVk33tge+/kdSkNcUIAovik=;
+  b=A3sZgzETaDykzgiP/ucrtM9DZFjw0sINmTucIlfh1ELa3lxFYlnJ3r0o
+   hhJzMfOiojonfGYDFMYj3T98qU4RWgKY8U26k7EM8RCEjVwir143sGoAl
+   HG+hlWL6E8q18dQN+q0UZQ1KJX11Ef0CNKi0Ga+ENvm3pMJsMGdWHt+vI
+   ZlWzd6aYQ3DcBrDQJIg7F+yP31uzld1I5BCdSoPcNUzsFoPi4+jdVuab9
+   jCm/nxGi/PVdRtoBol4MJUm8IPPWZ7a4azw4cRJENn+V5rstQumQ4zMF3
+   ZDv0p0C/82xY9J2XUOivJ5rGKDcBhhKZldhEdapy0dDFqSpuM6kSnC7yH
+   g==;
+X-CSE-ConnectionGUID: C3jGGsaVSEWEgZjL1IAaiA==
+X-CSE-MsgGUID: lsK5EzBOTjmEtS5x44vLyg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="17565740"
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="36242688"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 07:31:06 -0700
-X-CSE-ConnectionGUID: 0FTBQ/SASnC/QvwnryK7fA==
-X-CSE-MsgGUID: KgUFmX8zTD2bMRaXcoAYwA==
+   d="scan'208";a="17565740"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 08:49:45 -0700
+X-CSE-ConnectionGUID: 5YnRgS3ZT+OJq9zwDlLUuQ==
+X-CSE-MsgGUID: As6LDmtJT9WXHsTGK61d1w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="73666970"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 07:30:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sD3HS-0000000CUNA-19F6;
-	Fri, 31 May 2024 17:30:54 +0300
-Date: Fri, 31 May 2024 17:30:53 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Rob Herring <robh@kernel.org>, Weidong Wang <wangweidong.a@awinic.com>,
-	Mark Brown <broonie@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Shenghao Ding <shenghao-ding@ti.com>,
-	Marco Felsch <m.felsch@pengutronix.de>,
-	Alper Nebi Yasak <alpernebiyasak@gmail.com>,
-	Chancel Liu <chancel.liu@nxp.com>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
-	alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-	linuxppc-dev@lists.ozlabs.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	James Schulman <james.schulman@cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Kevin Lu <kevin-lu@ti.com>, Baojun Xu <baojun.xu@ti.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Banajit Goswami <bgoswami@quicinc.com>,
-	Shengjiu Wang <shengjiu.wang@gmail.com>,
-	Xiubo Li <Xiubo.Lee@gmail.com>
-Subject: Re: [PATCH v1 1/6] ASoC: codecs: Remove unused of_gpio.h
-Message-ID: <ZlnfHWx3uPzCoJwX@smile.fi.intel.com>
-References: <20240530230037.1156253-2-andriy.shevchenko@linux.intel.com>
- <202405311428.tzsBMIPs-lkp@intel.com>
+   d="scan'208";a="36143171"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 31 May 2024 08:49:41 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sD4Vb-000HIV-34;
+	Fri, 31 May 2024 15:49:36 +0000
+Date: Fri, 31 May 2024 23:49:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>,
+	Bernd Schubert <bernd.schubert@fastmail.fm>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Amir Goldstein <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrei Vagin <avagin@google.com>, io-uring@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Josef Bacik <josef@toxicpanda.com>
+Subject: Re: [PATCH] fs: sys_ringbuffer() (WIP)
+Message-ID: <202405312226.yKqHcQE4-lkp@intel.com>
+References: <ytprj7mx37dna3n3kbiskgvris4nfvv63u3v7wogdrlzbikkmt@chgq5hw3ny3r>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,38 +73,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202405311428.tzsBMIPs-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <ytprj7mx37dna3n3kbiskgvris4nfvv63u3v7wogdrlzbikkmt@chgq5hw3ny3r>
 
-On Fri, May 31, 2024 at 02:42:33PM +0800, kernel test robot wrote:
-> Hi Andy,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on broonie-sound/for-next]
-> [also build test ERROR on shawnguo/for-next rockchip/for-next linus/master v6.10-rc1 next-20240529]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ASoC-codecs-Remove-unused-of_gpio-h/20240531-070350
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-> patch link:    https://lore.kernel.org/r/20240530230037.1156253-2-andriy.shevchenko%40linux.intel.com
-> patch subject: [PATCH v1 1/6] ASoC: codecs: Remove unused of_gpio.h
-> config: i386-buildonly-randconfig-006-20240531 (https://download.01.org/0day-ci/archive/20240531/202405311428.tzsBMIPs-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405311428.tzsBMIPs-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202405311428.tzsBMIPs-lkp@intel.com/
+Hi Kent,
 
-My gosh, the whoever wrote the GPIO code in that driver has no clue what they
-are doing. It's a pure mess.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.10-rc1]
+[cannot apply to tip/x86/asm next-20240531]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kent-Overstreet/fs-sys_ringbuffer-WIP/20240531-115626
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/ytprj7mx37dna3n3kbiskgvris4nfvv63u3v7wogdrlzbikkmt%40chgq5hw3ny3r
+patch subject: [PATCH] fs: sys_ringbuffer() (WIP)
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240531/202405312226.yKqHcQE4-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405312226.yKqHcQE4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405312226.yKqHcQE4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:5:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+>> include/linux/mm_types.h:8:10: fatal error: 'linux/darray_types.h' file not found
+       8 | #include <linux/darray_types.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:117: arch/um/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1208: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +8 include/linux/mm_types.h
+
+     6	
+     7	#include <linux/auxvec.h>
+   > 8	#include <linux/darray_types.h>
+     9	#include <linux/kref.h>
+    10	#include <linux/list.h>
+    11	#include <linux/spinlock.h>
+    12	#include <linux/rbtree.h>
+    13	#include <linux/maple_tree.h>
+    14	#include <linux/rwsem.h>
+    15	#include <linux/completion.h>
+    16	#include <linux/cpumask.h>
+    17	#include <linux/uprobes.h>
+    18	#include <linux/rcupdate.h>
+    19	#include <linux/page-flags-layout.h>
+    20	#include <linux/workqueue.h>
+    21	#include <linux/seqlock.h>
+    22	#include <linux/percpu_counter.h>
+    23	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
