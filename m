@@ -1,456 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49797158A02;
-	Fri, 31 May 2024 13:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D286E39AEC
+	for <llvm@lists.linux.dev>; Fri, 31 May 2024 14:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717161143; cv=none; b=YS4KWGmU07HUXNBeVieUo8qQhe4g1fjlX/GqyhnoHCvxK503bN5F7IFnmtb3oMTENWwP4JBBPEQ72J9YOMQQNPxm5b051rPjoKetviOrd85fhL25VBmMCoPDTUvyQMdiVhe3rYxqWJIF30HwlTTZw6pkB8BKgS9GlQbuXrhODHU=
+	t=1717165831; cv=none; b=YVda3jC5R6YWx1ljblphIlrhmgCj4zQKBN1xWnjMqUXVNB8uTdURme0+8NoQyaoav0ScJtnzIJHWEqrratxyIOxpCx97wWw9N4oGc1cVIc6AT2k81dalAV7wICxMnQsKdCaN4euYkjYD4AeZCcFgq6e5dm0YnpaNk0kkCwhxvXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717161143; c=relaxed/simple;
-	bh=D+jYgRW12mm1CrCJHdPwjI8xYOlI4+FrV4ANjLifTCw=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QpbHUDgoi4n2mnTpZ9viEPGO1mRmodniKnYrFGC558ueZkTGnInyyyRKif6WBtcF8puC503TitPyXk6tS3dtdJ4GX+ENzkbdJy/Geokq2ocli3jV5Ef9gvO1bQS9I43whyq+WjbC0+to+VAdjtXGV4JtR2rrukWOTWKiGf58zj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ddVirbTT; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717165831; c=relaxed/simple;
+	bh=Mstlf+YHhXo7luLr0yWqsRsb7jFizjn94L8piso2cDc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KZAuysYWBJTqAv7lvbqjsLNrIpQOnq2GW2MmxQAq1fSLBUVtqq9iaVqJFWi1mU74TyCypVDaXfmRPoHjHJC/TTDE1vnjZoigw8veWj+6nIvghIICn5VEoDduy+8VRDPdNwEV87s0ukTni0vhbTfnJcIaDDMqNBMFXi3vfJWzKRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eYhQ7+y+; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ddVirbTT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717161142; x=1748697142;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=D+jYgRW12mm1CrCJHdPwjI8xYOlI4+FrV4ANjLifTCw=;
-  b=ddVirbTTPTOux4HLk4YedGltIVsApvcnk8W3EksMPkzJZ2dxGUZTFuiC
-   iyZeB22I7JBGRfK6h66RhpB8g8lK1QGtJNDkeBHjMbB6KwZi4PoeyCw2n
-   dDq+wCbcEkbjLf4CP3SA+2nk0+7WqkT3SIRWpdAYhRG3x7kHceTIym3xU
-   0/6yWlYGuxtaN/AM7VkAajst4KYCXqqWqRbhmnvC0WoSdx3p55zf7K7io
-   xyRSui8gOyLk5oNgO9sRRRn73oI1wHfRAG6UKRk2D+8b+YahbT7i2SwXF
-   81oH5T4kiIfadgWXGorUsM6TT1Dai/1kYXDSU7jKzlu8vfmijuDYMI3dR
-   Q==;
-X-CSE-ConnectionGUID: RsnGDNOrSUyvpkAXgh9K0Q==
-X-CSE-MsgGUID: dQ6aIbSfRzOVj341+QqdwQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13824255"
-X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="13824255"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:12:20 -0700
-X-CSE-ConnectionGUID: aQ7npH7lQ3S4qvQb7U93NA==
-X-CSE-MsgGUID: je8XOlXlQ6W2ydUCwKQaUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="40714900"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 31 May 2024 06:12:18 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sD23F-000H7o-1T;
-	Fri, 31 May 2024 13:12:10 +0000
-Date: Fri, 31 May 2024 21:11:24 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [jmondi:imx8mp/iob-gitlab/v6.9/extensible-format 1/7]
- include/uapi/linux/rkisp1-config.h:1033:57: warning: bitwise operation
- between different enumeration types ('enum rkisp1_ext_params_block_id' and
- 'enum rkisp1_ext_params_block_group')
-Message-ID: <202405312102.wicgBDe2-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eYhQ7+y+"
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7e24aa659abso10435739f.3
+        for <llvm@lists.linux.dev>; Fri, 31 May 2024 07:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1717165829; x=1717770629; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3MGoSLns1wisPZvs6NHvJiVrP0w2UVFcddDT3uXZgnQ=;
+        b=eYhQ7+y+b+SuBHzhMkYmQVUara/gOaPXW5S3V2JenUhPQTJWPP9A4LnJa253gpGFbZ
+         vAi6NJ1yr1MSm60myFy9itJ0YpK30kxvnAOBUt0yYUQTqkacvZjOv2PZ26C3O7nEIxDy
+         JXFKaIbGWldiGe2/ZFXXoJxMfWc8q0RtOa0b0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717165829; x=1717770629;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3MGoSLns1wisPZvs6NHvJiVrP0w2UVFcddDT3uXZgnQ=;
+        b=d3H01Pk9Oye3kDRAvS+JO1OquF42gFX8zjHNTlNa20CljzWRQ9kEX5/Od46J/8srhx
+         GtSCPlu6RRTLvFlIFUcOS1sanJaw6+GJp3htWWgJeqjkt2fMgjnyfH4MkVhjAsLsC3eL
+         5Askzw/CiUyzaYhyTSeXhlfIOciC68QznxWpK2oULiosMJrmSCkuQW2E+iM8WcDIgs7Z
+         +ZyPeHcl8JDCbZbZR85xX1UmQziRHej+73ySvniJ6cfiW7le+2NnPBhccMhbOtEeL03s
+         NtwBamOtD5oaA861cemUgyKCCBGM2Xprge7W6CIBn2qcGcbkVsjm98ZmkIBPY3sKF3Uy
+         V7/g==
+X-Forwarded-Encrypted: i=1; AJvYcCWu7dGoEvyOcG3/8aE8S/IRndiW9nO5KVzc+od23PC0fAHXwwArc4a0JJtfOJCfCoAW3qpKjyJheXgmQPaB1hfxYtGTPw==
+X-Gm-Message-State: AOJu0YwxL1ZDblw9USvJOYtl1O/sE73cuIL2WpYHjrv73VToddK5mKLz
+	32jbmxs+tuxU1uMwMstkHt9HHGbTTxrZvfO3WBWnSWWQKBdUCRe2ALmSFHT1Jjs=
+X-Google-Smtp-Source: AGHT+IHczcdb2EbS2U/zWmYn9oiBLgIRgPJ888h24oBdfKt520toNKLvs1PL7yQp/2Ht6WoSuPpkMg==
+X-Received: by 2002:a05:6602:e59:b0:7de:b279:fb3e with SMTP id ca18e2360f4ac-7eafff09f0emr251963439f.1.1717165828911;
+        Fri, 31 May 2024 07:30:28 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b5568ed9aasm246775173.45.2024.05.31.07.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 May 2024 07:30:28 -0700 (PDT)
+Message-ID: <e9597e75-948b-4ddc-8ca3-e9b188099f8f@linuxfoundation.org>
+Date: Fri, 31 May 2024 08:30:27 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftests/lib.mk: silence some clang warnings that
+ gcc already ignores
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Beau Belgrave <beaub@linux.microsoft.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
+ sunliming <sunliming@kylinos.cn>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240529020842.127275-1-jhubbard@nvidia.com>
+ <20240529020842.127275-3-jhubbard@nvidia.com>
+ <88c64f5e-4586-4b38-b3c8-0c3af93a71ae@linuxfoundation.org>
+ <e0f3563b-5cd7-4f3c-ae7c-4478c25d527c@nvidia.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <e0f3563b-5cd7-4f3c-ae7c-4478c25d527c@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-TO: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+On 5/30/24 13:28, John Hubbard wrote:
+> On 5/30/24 7:25 AM, Shuah Khan wrote:
+>> On 5/28/24 20:08, John Hubbard wrote:
+>>> gcc defaults to silence (off) for the following warnings, but clang
+>>> defaults to the opposite. These warnings are not useful for kselftests,
+>>> so silence them for the clang builds as well:
+>>
+>> Please you add more information on why they aren't useful
+>> for kselftests.
+> 
+> Ah OK. My wording is a little misleading. The warnings are not useful
+> for the *kernel*, as previous decided by the gcc settings when building
+> the kernel. And it is only only due to including kernel data structures
+> in the selftests, that we get the warnings on clang.
+> 
+> So it is not something unique to the selftests. There is nothing that
+> the selftests' code does that triggers these warnings, other than the
+> act of including the kernel's data structures.
+> 
+> I can post a v2 to update both the comment and the commit description.
+> 
+  
+Yes please.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jmondi/linux.git imx8mp/iob-gitlab/v6.9/extensible-format
-head:   179f4f4afe27e4c851a5e7d3f24961a895d7aa60
-commit: 58734661b41fc775ca877b2364ecaa09542bea30 [1/7] uapi: rkisp1-config: Add extensible parameters format
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240531/202405312102.wicgBDe2-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405312102.wicgBDe2-lkp@intel.com/reproduce)
+thanks,
+-- Shuah
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405312102.wicgBDe2-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c:13:
-   In file included from include/media/v4l2-common.h:105:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c:13:
-   In file included from include/media/v4l2-common.h:105:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c:13:
-   In file included from include/media/v4l2-common.h:105:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c:13:
-   In file included from include/media/v4l2-common.h:105:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c:21:
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.h:17:
->> include/uapi/linux/rkisp1-config.h:1033:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1033 |         RKISP1_EXT_PARAMS_BLS = RKISP1_EXT_PARAMS_BLOCK_ID_BLS |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1034 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1035:59: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1035 |         RKISP1_EXT_PARAMS_DPCC = RKISP1_EXT_PARAMS_BLOCK_ID_DPCC |
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1036 |                                  RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1037:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1037 |         RKISP1_EXT_PARAMS_SDG = RKISP1_EXT_PARAMS_BLOCK_ID_SDG |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1038 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1039:69: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1039 |         RKISP1_EXT_PARAMS_AWB_GAINS = RKISP1_EXT_PARAMS_BLOCK_ID_AWB_GAINS |
-         |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1040 |                                       RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1041:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1041 |         RKISP1_EXT_PARAMS_FLT = RKISP1_EXT_PARAMS_BLOCK_ID_FLT |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1042 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1043:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1043 |         RKISP1_EXT_PARAMS_BDM = RKISP1_EXT_PARAMS_BLOCK_ID_BDM |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1044 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1045:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1045 |         RKISP1_EXT_PARAMS_CTK = RKISP1_EXT_PARAMS_BLOCK_ID_CTK |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1046 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1047:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1047 |         RKISP1_EXT_PARAMS_GOC = RKISP1_EXT_PARAMS_BLOCK_ID_GOC |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1048 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1049:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1049 |         RKISP1_EXT_PARAMS_DPF = RKISP1_EXT_PARAMS_BLOCK_ID_DPF |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1050 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1051:75: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1051 |         RKISP1_EXT_PARAMS_DPF_STRENGHT = RKISP1_EXT_PARAMS_BLOCK_ID_DPF_STRENGHT |
-         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1052 |                                          RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1053:61: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1053 |         RKISP1_EXT_PARAMS_CPROC = RKISP1_EXT_PARAMS_BLOCK_ID_CPROC |
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1054 |                                   RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1055:55: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1055 |         RKISP1_EXT_PARAMS_IE = RKISP1_EXT_PARAMS_BLOCK_ID_IE |
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1056 |                                RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1059:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1059 |         RKISP1_EXT_PARAMS_LSC = RKISP1_EXT_PARAMS_BLOCK_ID_LSC |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1060 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_LSC,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1063:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1063 |         RKISP1_EXT_PARAMS_AWB_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AWB_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1064 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1065:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1065 |         RKISP1_EXT_PARAMS_HST_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_HST_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1066 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1067:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1067 |         RKISP1_EXT_PARAMS_AEC_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AEC_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1068 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1069:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1069 |         RKISP1_EXT_PARAMS_AFC_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AFC_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1070 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   24 warnings generated.
---
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.c:11:
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.h:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.c:11:
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.h:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.c:11:
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.h:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.c:11:
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.h:17:
->> include/uapi/linux/rkisp1-config.h:1033:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1033 |         RKISP1_EXT_PARAMS_BLS = RKISP1_EXT_PARAMS_BLOCK_ID_BLS |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1034 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1035:59: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1035 |         RKISP1_EXT_PARAMS_DPCC = RKISP1_EXT_PARAMS_BLOCK_ID_DPCC |
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1036 |                                  RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1037:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1037 |         RKISP1_EXT_PARAMS_SDG = RKISP1_EXT_PARAMS_BLOCK_ID_SDG |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1038 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1039:69: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1039 |         RKISP1_EXT_PARAMS_AWB_GAINS = RKISP1_EXT_PARAMS_BLOCK_ID_AWB_GAINS |
-         |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1040 |                                       RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1041:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1041 |         RKISP1_EXT_PARAMS_FLT = RKISP1_EXT_PARAMS_BLOCK_ID_FLT |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1042 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1043:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1043 |         RKISP1_EXT_PARAMS_BDM = RKISP1_EXT_PARAMS_BLOCK_ID_BDM |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1044 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1045:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1045 |         RKISP1_EXT_PARAMS_CTK = RKISP1_EXT_PARAMS_BLOCK_ID_CTK |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1046 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1047:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1047 |         RKISP1_EXT_PARAMS_GOC = RKISP1_EXT_PARAMS_BLOCK_ID_GOC |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1048 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1049:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1049 |         RKISP1_EXT_PARAMS_DPF = RKISP1_EXT_PARAMS_BLOCK_ID_DPF |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1050 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1051:75: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1051 |         RKISP1_EXT_PARAMS_DPF_STRENGHT = RKISP1_EXT_PARAMS_BLOCK_ID_DPF_STRENGHT |
-         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1052 |                                          RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1053:61: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1053 |         RKISP1_EXT_PARAMS_CPROC = RKISP1_EXT_PARAMS_BLOCK_ID_CPROC |
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1054 |                                   RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1055:55: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1055 |         RKISP1_EXT_PARAMS_IE = RKISP1_EXT_PARAMS_BLOCK_ID_IE |
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1056 |                                RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1059:57: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1059 |         RKISP1_EXT_PARAMS_LSC = RKISP1_EXT_PARAMS_BLOCK_ID_LSC |
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1060 |                                 RKISP1_EXT_PARAMS_BLOCK_GROUP_LSC,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1063:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1063 |         RKISP1_EXT_PARAMS_AWB_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AWB_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1064 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1065:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1065 |         RKISP1_EXT_PARAMS_HST_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_HST_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1066 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1067:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1067 |         RKISP1_EXT_PARAMS_AEC_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AEC_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1068 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/rkisp1-config.h:1069:67: warning: bitwise operation between different enumeration types ('enum rkisp1_ext_params_block_id' and 'enum rkisp1_ext_params_block_group') [-Wenum-enum-conversion]
-    1069 |         RKISP1_EXT_PARAMS_AFC_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AFC_MEAS |
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    1070 |                                      RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.c:11:
-   In file included from drivers/media/platform/rockchip/rkisp1/rkisp1-common.h:18:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:2693:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   24 warnings generated.
-
-
-vim +1033 include/uapi/linux/rkisp1-config.h
-
-  1027	
-  1028	/**
-  1029	 * enum rkisp1_ext_params_block_type - RkISP1 extensible params block type
-  1030	 */
-  1031	enum rkisp1_ext_params_block_type {
-  1032		/* "Other" block group types. */
-> 1033		RKISP1_EXT_PARAMS_BLS = RKISP1_EXT_PARAMS_BLOCK_ID_BLS |
-  1034				        RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1035		RKISP1_EXT_PARAMS_DPCC = RKISP1_EXT_PARAMS_BLOCK_ID_DPCC |
-  1036				         RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1037		RKISP1_EXT_PARAMS_SDG = RKISP1_EXT_PARAMS_BLOCK_ID_SDG |
-  1038				        RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1039		RKISP1_EXT_PARAMS_AWB_GAINS = RKISP1_EXT_PARAMS_BLOCK_ID_AWB_GAINS |
-  1040					      RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1041		RKISP1_EXT_PARAMS_FLT = RKISP1_EXT_PARAMS_BLOCK_ID_FLT |
-  1042					RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1043		RKISP1_EXT_PARAMS_BDM = RKISP1_EXT_PARAMS_BLOCK_ID_BDM |
-  1044					RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1045		RKISP1_EXT_PARAMS_CTK = RKISP1_EXT_PARAMS_BLOCK_ID_CTK |
-  1046					RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1047		RKISP1_EXT_PARAMS_GOC = RKISP1_EXT_PARAMS_BLOCK_ID_GOC |
-  1048					RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1049		RKISP1_EXT_PARAMS_DPF = RKISP1_EXT_PARAMS_BLOCK_ID_DPF |
-  1050					RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1051		RKISP1_EXT_PARAMS_DPF_STRENGHT = RKISP1_EXT_PARAMS_BLOCK_ID_DPF_STRENGHT |
-  1052						 RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1053		RKISP1_EXT_PARAMS_CPROC = RKISP1_EXT_PARAMS_BLOCK_ID_CPROC |
-  1054					  RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1055		RKISP1_EXT_PARAMS_IE = RKISP1_EXT_PARAMS_BLOCK_ID_IE |
-  1056				       RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
-  1057	
-  1058		/* "LSC" block group types. */
-  1059		RKISP1_EXT_PARAMS_LSC = RKISP1_EXT_PARAMS_BLOCK_ID_LSC |
-  1060					RKISP1_EXT_PARAMS_BLOCK_GROUP_LSC,
-  1061	
-  1062		/* "Meas" block group types. */
-  1063		RKISP1_EXT_PARAMS_AWB_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AWB_MEAS |
-  1064					     RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-  1065		RKISP1_EXT_PARAMS_HST_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_HST_MEAS |
-  1066					     RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-  1067		RKISP1_EXT_PARAMS_AEC_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AEC_MEAS |
-  1068					     RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-  1069		RKISP1_EXT_PARAMS_AFC_MEAS = RKISP1_EXT_PARAMS_BLOCK_ID_AFC_MEAS |
-  1070					     RKISP1_EXT_PARAMS_BLOCK_GROUP_MEAS,
-  1071	};
-  1072	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
