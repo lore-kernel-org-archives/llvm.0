@@ -1,59 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7473745D5;
-	Fri, 31 May 2024 02:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6249B2B9C8;
+	Fri, 31 May 2024 03:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717121665; cv=none; b=k4Pj6DJXsxkJvLwvqC/aDFCVJbgHoV7Lz6jFvxXPBQcwuq802lhOjBjTCLBnOeodbC64qLJ32av0cVFUGAnLsoYzMrak19su5n1ASURFgoEx3veQa2eaCvgR7YrKuxAgwlNGFScRbZGOWCAnatQV/vRE99tA3sYWdj7a/hfgnWA=
+	t=1717125408; cv=none; b=PaMb2Ez5v0P3c4dhbxDcIZsNvOmanJ7hBjley1wm9KttoZTcQpMBrI2HtbpfFmwtWWtfixVe+fXCWdSz3GG9CZG88W6X6Zk44vjftvgILdCj8NXdbkIsAiD/JBtQ1rgy9xPrFtJuxMMYXTpawepifjG7E+/H3fHWxASvlmfKRWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717121665; c=relaxed/simple;
-	bh=eOHKQ8JxHfWVlQJItled/hhtg9RG1QB7ZNY++VrthUQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SElRrfyHAfdpgmIYLrdyZxQ9U9lIQ31CX5mugdwx2mH+LFc+itUbbIl1Fdg3QtWRENonWwhtVtoXxwTERuqX+w8KjWZbGbvj2UONwrO/HeP3DGHCkizU5EJkFpeQcggYXzNp6pfCTGEH38+eroQjYT5zUXu2lnNv7gY0yKRPsus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jOeb/Yeq; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1717125408; c=relaxed/simple;
+	bh=iyCW7kFSKDXz/X1KwEbJdlMwEoExWyUSJt412bkH+VM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MlNn7I4Ay2Yv96o+LidYbErLWXgm+32EDR1/bQPGH1Dyhc9g/a8h3KXdTpJPs2UK8TfZp09vVLcBgi+Lx1fQLh/4U+Wi77SQOl/1oX/whkCklT2pkL3zZ8ZVCB97XngaIUDpAEWxH8pl375ynXnIZtNX/2tVwHID9q/9wkThtbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UmrytSbx; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jOeb/Yeq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UmrytSbx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717121665; x=1748657665;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eOHKQ8JxHfWVlQJItled/hhtg9RG1QB7ZNY++VrthUQ=;
-  b=jOeb/YeqGPDEW9piMET/j5VfZXgbXtWTMUr+h2ZPIcwQpOmMAb42RL13
-   jgr7J2R+yMyLIjW/xK8TMvaPimYvlTZlMAEDaL6MNpJjrSl8X/YXejwHr
-   5LEYf7pzJVFyF2t0gliedt2dbJQ8ZRapNWOVQ1LRTZDSSe1zpWLQVn6ae
-   y9NJbWE43BJvSSJ3vt4xI8XZa2rfcfHBQuvHxDlk0ukLQvWpa17C+KYeZ
-   JqLr5W4Baf4NYDJY7C+joaY2SwJpf3x4WQif5dokXgaefX3d65o1Kad2g
-   xwJFQsL9paNWQFehyR8lQ2EkpzXYw36iaRAFww6+EQJlqaIwZOg35Rhcv
-   g==;
-X-CSE-ConnectionGUID: XoYb8ceOSiSP0nb1OaZe3g==
-X-CSE-MsgGUID: GYdhvIUBTo6z9mKMUdp7pQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="17480809"
-X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
-   d="scan'208";a="17480809"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 19:14:23 -0700
-X-CSE-ConnectionGUID: O4lSNZqvRwGOrqolWsiLgw==
-X-CSE-MsgGUID: fkoyztfgTwqq7Rw0I1d7XQ==
+  t=1717125406; x=1748661406;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iyCW7kFSKDXz/X1KwEbJdlMwEoExWyUSJt412bkH+VM=;
+  b=UmrytSbxHO9IECaBfeKVTqU81xuxLR6XH8asFAoCZ2ZoIvLcdX2lVcPe
+   ck0PdFYVRC9+FFd3T1+Ecd77/SVQ4K9SPd2p2GN0bH62h9m10n+vsk7hc
+   CtMAApqyubM+oJ7CaslxVOyjtLBucA6L8GEyQ++PW2fRNi/iicFNh87xe
+   bJdzd7UYXa0XZihdFC1ZWxdDuS6ZD8CaYTsWN3F+45V6k4WBrwXQxhzsw
+   VG9m073K+ZmvRq7eOFJhwwnOpgkn3QQ7hEgsLSKJeLpo/MN2Pm9DSG15B
+   jdu+q7Ls/qWOLeKccLLcp9V2bEhCgF+vKSX/eM7XvYtQlhZkL6+XxuN5B
+   w==;
+X-CSE-ConnectionGUID: jlKELclOS9aap0xbebe5EQ==
+X-CSE-MsgGUID: xfR0GWyQQc+EvUBsQdgqYA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13879848"
+X-IronPort-AV: E=Sophos;i="6.08,203,1712646000"; 
+   d="scan'208";a="13879848"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 20:16:45 -0700
+X-CSE-ConnectionGUID: 7RCSr1coRSadS/8n1Im5Ww==
+X-CSE-MsgGUID: TJKVUWf4SJ6j9iBpxstteA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
-   d="scan'208";a="40940467"
+X-IronPort-AV: E=Sophos;i="6.08,203,1712646000"; 
+   d="scan'208";a="40477855"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 30 May 2024 19:14:20 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 30 May 2024 20:16:42 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sCrmc-000GOL-0C;
-	Fri, 31 May 2024 02:14:18 +0000
-Date: Fri, 31 May 2024 10:14:00 +0800
+	id 1sCsky-000GRT-2p;
+	Fri, 31 May 2024 03:16:40 +0000
+Date: Fri, 31 May 2024 11:16:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Radu Sabau <radu.sabau@analog.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 93/93] ERROR: modpost: "do_exit"
- [fs/bcachefs/bcachefs.ko] undefined!
-Message-ID: <202405311008.oux1PVXS-lkp@intel.com>
+	Radu Sabau <radu.sabau@analog.com>
+Subject: Re: [PATCH v5] drivers: hwmon: max31827: Add PEC support
+Message-ID: <202405311134.f2ALUwLL-lkp@intel.com>
+References: <20240530112505.14831-1-radu.sabau@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,74 +66,254 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240530112505.14831-1-radu.sabau@analog.com>
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   ce6297d0475422fa2de0db1d4f955633ba70d031
-commit: ce6297d0475422fa2de0db1d4f955633ba70d031 [93/93] bcachefs: twf: Switch to create_io_thread()
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240531/202405311008.oux1PVXS-lkp@intel.com/config)
+Hi Radu,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.10-rc1 next-20240529]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Sabau/drivers-hwmon-max31827-Add-PEC-support/20240530-192727
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240530112505.14831-1-radu.sabau%40analog.com
+patch subject: [PATCH v5] drivers: hwmon: max31827: Add PEC support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240531/202405311134.f2ALUwLL-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405311008.oux1PVXS-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405311134.f2ALUwLL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405311008.oux1PVXS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405311134.f2ALUwLL-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/mm/cmm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/kvm/kvm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs_common/nfs_acl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs_common/grace.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp437.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp850.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-15.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_utf8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_misc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/cramfs/cramfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv2.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv3.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_arc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_md4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/autofs/autofs4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/encrypted-keys/encrypted-keys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/cast_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/af_alg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/algif_hash.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/algif_skcipher.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/curve25519-generic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libchacha.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libarc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libpoly1305.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bpf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_kprobes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ts_kmp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ts_bm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ts_fsm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/lib/test_kprobes_s390.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/lib/test_unwind.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/lib/test_modules.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/loop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/cio/vfio_ccw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/block/dcssblk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/net/lcs.o
->> ERROR: modpost: "do_exit" [fs/bcachefs/bcachefs.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [fs/bcachefs/bcachefs.ko] undefined!
->> ERROR: modpost: "__set_task_comm" [fs/bcachefs/bcachefs.ko] undefined!
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/max31827.c:336:32: error: declaration of anonymous struct must be a definition
+     336 | static int max31827_chip_write(struct *regmap, u32 attr, long val)
+         |                                ^
+>> drivers/hwmon/max31827.c:339:7: error: use of undeclared identifier 'hwmon_chip_pec'; did you mean 'hwmon_chip'?
+     339 |         case hwmon_chip_pec:
+         |              ^~~~~~~~~~~~~~
+         |              hwmon_chip
+   include/linux/hwmon.h:21:2: note: 'hwmon_chip' declared here
+      21 |         hwmon_chip,
+         |         ^
+>> drivers/hwmon/max31827.c:340:29: error: use of undeclared identifier 'regmap'
+     340 |                 return regmap_update_bits(regmap, MAX31827_CONFIGURATION_REG,
+         |                                           ^
+>> drivers/hwmon/max31827.c:341:8: error: use of undeclared identifier 'MAX38127_CONFIGURATION_PEC_EN_MASK'
+     341 |                                           MAX38127_CONFIGURATION_PEC_EN_MASK,
+         |                                           ^
+   drivers/hwmon/max31827.c:342:14: error: use of undeclared identifier 'MAX38127_CONFIGURATION_PEC_EN_MASK'
+     342 |                                           val ? MAX38127_CONFIGURATION_PEC_EN_MASK : 0);
+         |                                                 ^
+>> drivers/hwmon/max31827.c:357:48: error: too many arguments to function call, expected 2, have 3
+     357 |                 return max31827_chip_write(st->regmap, attr, val);
+         |                        ~~~~~~~~~~~~~~~~~~~                   ^~~
+   drivers/hwmon/max31827.c:336:12: note: 'max31827_chip_write' declared here
+     336 | static int max31827_chip_write(struct *regmap, u32 attr, long val)
+         |            ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/max31827.c:399:7: error: duplicate case value 'hwmon_chip'
+     399 |         case hwmon_chip:
+         |              ^
+   drivers/hwmon/max31827.c:356:7: note: previous case defined here
+     356 |         case hwmon_chip:
+         |              ^
+>> drivers/hwmon/max31827.c:601:53: error: use of undeclared identifier 'HWMON_C_PEC'
+     601 |         HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL | HWMON_C_PEC),
+         |                                                            ^
+   7 warnings and 8 errors generated.
+
+
+vim +336 drivers/hwmon/max31827.c
+
+   335	
+ > 336	static int max31827_chip_write(struct *regmap, u32 attr, long val)
+   337	{
+   338		switch (attr) {
+ > 339		case hwmon_chip_pec:
+ > 340			return regmap_update_bits(regmap, MAX31827_CONFIGURATION_REG,
+ > 341						  MAX38127_CONFIGURATION_PEC_EN_MASK,
+ > 342						  val ? MAX38127_CONFIGURATION_PEC_EN_MASK : 0);
+   343		default:
+   344			return -EOPNOTSUPP;
+   345		}
+   346	}
+   347	
+   348	static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
+   349				  u32 attr, int channel, long val)
+   350	{
+   351		struct max31827_state *st = dev_get_drvdata(dev);
+   352		int res = 1;
+   353		int ret;
+   354	
+   355		switch (type) {
+   356		case hwmon_chip:
+ > 357			return max31827_chip_write(st->regmap, attr, val);
+   358		case hwmon_temp:
+   359			switch (attr) {
+   360			case hwmon_temp_enable:
+   361				if (val >> 1)
+   362					return -EINVAL;
+   363	
+   364				mutex_lock(&st->lock);
+   365				/**
+   366				 * The chip should not be enabled while a conversion is
+   367				 * performed. Neither should the chip be enabled when
+   368				 * the alarm values are changed.
+   369				 */
+   370	
+   371				st->enable = val;
+   372	
+   373				ret = regmap_update_bits(st->regmap,
+   374							 MAX31827_CONFIGURATION_REG,
+   375							 MAX31827_CONFIGURATION_1SHOT_MASK |
+   376							 MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   377							 MAX31827_DEVICE_ENABLE(val));
+   378	
+   379				mutex_unlock(&st->lock);
+   380	
+   381				return ret;
+   382	
+   383			case hwmon_temp_max:
+   384				return write_alarm_val(st, MAX31827_TH_REG, val);
+   385	
+   386			case hwmon_temp_max_hyst:
+   387				return write_alarm_val(st, MAX31827_TH_HYST_REG, val);
+   388	
+   389			case hwmon_temp_min:
+   390				return write_alarm_val(st, MAX31827_TL_REG, val);
+   391	
+   392			case hwmon_temp_min_hyst:
+   393				return write_alarm_val(st, MAX31827_TL_HYST_REG, val);
+   394	
+   395			default:
+   396				return -EOPNOTSUPP;
+   397			}
+   398	
+ > 399		case hwmon_chip:
+   400			if (attr == hwmon_chip_update_interval) {
+   401				if (!st->enable)
+   402					return -EINVAL;
+   403	
+   404				/*
+   405				 * Convert the desired conversion rate into register
+   406				 * bits. res is already initialized with 1.
+   407				 *
+   408				 * This was inspired by lm73 driver.
+   409				 */
+   410				while (res < ARRAY_SIZE(max31827_conversions) &&
+   411				       val < max31827_conversions[res])
+   412					res++;
+   413	
+   414				if (res == ARRAY_SIZE(max31827_conversions))
+   415					res = ARRAY_SIZE(max31827_conversions) - 1;
+   416	
+   417				res = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   418						 res);
+   419	
+   420				ret = regmap_update_bits(st->regmap,
+   421							 MAX31827_CONFIGURATION_REG,
+   422							 MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   423							 res);
+   424				if (ret)
+   425					return ret;
+   426	
+   427				st->update_interval = val;
+   428			}
+   429			break;
+   430	
+   431		default:
+   432			return -EOPNOTSUPP;
+   433		}
+   434	
+   435		return 0;
+   436	}
+   437	
 
 -- 
 0-DAY CI Kernel Test Service
