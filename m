@@ -1,75 +1,82 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CAD7E788
-	for <llvm@lists.linux.dev>; Fri, 31 May 2024 21:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88477249F9;
+	Fri, 31 May 2024 21:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717191610; cv=none; b=PKRS057qJrknUSfNuWZKDJJD1awKq8/vxp/uYb+27oOGY27W3Si1ARjlf+U++2M+NmXlq4cCs4UOHDxuqt490EK/rWAXrlUI3H0KQ/QxDXknLlz7DmmfctQYYRSucnC+7ZKBlVynfbvLIPWOHJo3vXuMna7scRMbKl8okVuwhGE=
+	t=1717192403; cv=none; b=XULAQ1oHeoaTCRZfJ+CIR0DvYRvOkOc+2uaD9Yt9ZWZBNzwhKGK2eruAv69L47I5gQdSZLbpHhedvwHFxezc2QFViFDDxZa7aWJ55KOEnll4m3nR6UuGKFusajuzewWXD4YUf6bYjjsZGc94Wab7A2boUHm2r9bwG2lqyiDEdKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717191610; c=relaxed/simple;
-	bh=+mZi4Mdqo9n1pYWIVXTvtvOG+w0wloffDYS2OkMLVMc=;
+	s=arc-20240116; t=1717192403; c=relaxed/simple;
+	bh=CPHoggbhzNf5ibw9VbBbdMg/tioqAhC9EB19f97+qc8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LyL7/MZdNZzBkNkmnOmBT9cETSfp9SF3BFORRcnS3gCJ0pbC2skBm4kvXRH5r8sX4mUu0ZLLwQSGCFyHRHb8Sdc2cRiLx5BoVu6cQTfqyPkC7aZG6UOO0kt28TUF3blagu+ePZKXapnPmVV+fyQl5MDZW2li6D79N++OWPfd1kI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Rghcd41w; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=exDUB/s4QVKEO9Bei+6G/FcbLsMG4rt8SXGcM7KuqqWZnvJ7bVY0jfXCCU+jDaImalKkVVxVpzfUwJv3NSmJnbcWGY5xtinH8/lfPRNWfMf02yjxnqsNFT5BeG2CWipnFGyuHT0t4zEI4a5+355hXN1bRDoDUi3rNivacXzCI1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iZPZx4Zm; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Rghcd41w"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f630e35a01so12213065ad.1
-        for <llvm@lists.linux.dev>; Fri, 31 May 2024 14:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717191608; x=1717796408; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbxzTHPbCC9+OSlgnBZBAHLV896CAURuJytC4yPNa7k=;
-        b=Rghcd41w/TQcgESrNu2XIdXPLNmqRZshjBsO8OnrA4y85uq3VKRafYJzOlPRFlFlYm
-         br8EMzivDztGSpaEFiPpc1WOwdQD7ZfUogfjizeXGYdihsbW8Mvvb1AxZM8g1A9cOWLF
-         b9G6etaguVjTO+oa6lYa1F3LkbU1uZly2hHr8G6rPljHn2PfI+/IAyDMYQMPgFqAaND6
-         SxthbUeUONHCWf51SoexVm+RhaGXTA1v98JN2RSqUatv92wOAVJi13ntSk7Fgfmv8+lm
-         TZe88nEF/eKEkFIQDqIz+NkzqyadZ6m5cUNrbBA7m8Uh9Sehb4IZqlTryYiWQ2JaqLbM
-         PYiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717191608; x=1717796408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CbxzTHPbCC9+OSlgnBZBAHLV896CAURuJytC4yPNa7k=;
-        b=ScRMuHUE78kxVcK/1ecaDaOS1FWl1Okw45OdD/plPnqCzgYJZFkmcpfZbVBZt9KnXr
-         mQIdm6fJq4O7+odMMlDXxg/cZJLwx2LKyvzSzTC/vdTqOoK+zw9Nym4L1NpQ7A+f1GZA
-         VYj7qIFnMRAAXYdx1zG3LQnF5UcDerFwEmpggjkI0CG1i4N6HFH9dcXZdCy7Rn1ijgim
-         qtEtnSCSesI/JUk/gdUHWZtEVtAKcj5m9DaDtTfpFf8ydxbU5uL24XKYsbb9gt6xWlJk
-         zBYF3nJZ2tEln52p9dl3mjca0G5fayDCsn2+8y/kwmti9dISVbnwIaNRbs8rkEBsH8xf
-         /ARQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUm7r7097EsdyFpruziX0yniAsc3y1FURyni0G5q0r9xMTXSPQY1TpQjpA4OzEy4vEFXH4sZH0ebUN0G+GFA1ve/o3JAA==
-X-Gm-Message-State: AOJu0YwWM3dVvYqF9hj10h0cZymEuSZoLK7lWbqKDS+Q8k+sDjlDBiVd
-	ryzHzCA4EYEz5IUNOY8vIy872yOmU9NERshA+hoAasMWU+pwSabwS3+bV+nu5DQ=
-X-Google-Smtp-Source: AGHT+IH2kNxy+DP2BxFop3mrfOTKvOonyr2h+6QlVJwdZ5WJPUZsjyyTJNbm91WWm+wlyt9/NWx0sA==
-X-Received: by 2002:a17:902:f9ce:b0:1f4:b7ff:ac41 with SMTP id d9443c01a7336-1f63701f241mr26562825ad.36.1717191608125;
-        Fri, 31 May 2024 14:40:08 -0700 (PDT)
-Received: from ghost ([2601:647:5700:6860:4d3b:392b:5722:91c1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f63235ae5csm21720615ad.79.2024.05.31.14.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 14:40:07 -0700 (PDT)
-Date: Fri, 31 May 2024 14:40:05 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: Jesse Taube <jesse@rivosinc.com>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
-Message-ID: <ZlpDtR7ch+nE08lm@ghost>
-References: <20240531162327.2436962-1-jesse@rivosinc.com>
- <20240531-uselessly-spied-262ecf44e694@spud>
- <ZlowwohstpT0sJVl@ghost>
- <20240531-cough-yearling-bdfd49244885@spud>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZPZx4Zm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717192401; x=1748728401;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CPHoggbhzNf5ibw9VbBbdMg/tioqAhC9EB19f97+qc8=;
+  b=iZPZx4Zmd0Uv33R+UfDeJrR8f7Hui7ZD3E0lQjWb2e7fGwbkDEYMO3AM
+   2GifN+f8UnsZCE51gT1THeq25Fhl1zGUVKTTOX5KkuPiTx5VSb53+fmJz
+   rHciiI4ubPgm++xPQBQutqSYtxiBsYyNzg0LIM3LKnKtfvZIyUa5VUJT8
+   6d3o7+URY6wEumUK8e83Vx8FBokce51YazWb6WdbApRK67fE2//908GbJ
+   U/KqSGGZmtzCIC/3YBZyHZ5GLKmE+VzKgFGv5xBUO1dMT3/MGnCntp0W7
+   /aZu1tlgVbknaDiHuinirnSxmU/LxgwAhFGbhHBVgYF6pRuVHuGBU5plP
+   w==;
+X-CSE-ConnectionGUID: Yf3iTXhwRFqWbVfNueRZAQ==
+X-CSE-MsgGUID: Cob2fOilSdy9aChw4Q+nVg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="17600226"
+X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
+   d="scan'208";a="17600226"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 14:53:21 -0700
+X-CSE-ConnectionGUID: c9OWndSkQPeEQpneVeUCbA==
+X-CSE-MsgGUID: BhUsEDPER0eHdbxJaGJzaQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
+   d="scan'208";a="36205908"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 31 May 2024 14:53:14 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sDABU-000Hsc-0O;
+	Fri, 31 May 2024 21:53:12 +0000
+Date: Sat, 1 Jun 2024 05:52:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Rob Herring <robh@kernel.org>,
+	Weidong Wang <wangweidong.a@awinic.com>,
+	Mark Brown <broonie@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Shenghao Ding <shenghao-ding@ti.com>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Alper Nebi Yasak <alpernebiyasak@gmail.com>,
+	Chancel Liu <chancel.liu@nxp.com>, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+	patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nicolin Chen <nicoleotsuka@gmail.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Shengjiu Wang <shengjiu.wang@gmail.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Xiubo Li <Xiubo.Lee@gmail.com>, Takashi Iwai <tiwai@suse.com>,
+	David Rhodes <david.rhodes@cirrus.com>, Kevin Lu <kevin-lu@ti.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: Re: [PATCH v2 1/6] ASoC: codecs: Remove unused of_gpio.h
+Message-ID: <202406010556.2MUAFCcz-lkp@intel.com>
+References: <20240531153038.1590171-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,100 +85,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240531-cough-yearling-bdfd49244885@spud>
+In-Reply-To: <20240531153038.1590171-2-andriy.shevchenko@linux.intel.com>
 
-On Fri, May 31, 2024 at 10:36:46PM +0100, Conor Dooley wrote:
-> On Fri, May 31, 2024 at 01:19:14PM -0700, Charlie Jenkins wrote:
-> > On Fri, May 31, 2024 at 06:31:09PM +0100, Conor Dooley wrote:
-> > > On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
-> > > > Dectect the Zkr extension and use it to seed the kernel base address.
-> > > > 
-> > > > Detection of the extension can not be done in the typical fashion, as
-> > > > this is very early in the boot process. Instead, add a trap handler
-> > > > and run it to see if the extension is present.
-> > > 
-> > > You can't rely on the lack of a trap meaning that Zkr is present unless
-> > > you know that the platform implements Ssstrict. The CSR with that number
-> > > could do anything if not Ssstrict compliant, so this approach gets a
-> > > nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
-> > > it, so you're stuck with getting that information from firmware.
-> > 
-> > The Scalar Cryptography v1.0.1 spec says "If Zkr is not implemented, the
-> > [s,u]seed bits must be hardwired to zero". It also says "Without the
-> > corresponding access control bit set to 1, any attempted access to seed
-> > from U, S, or HS modes will raise an illegal instruction exception."
-> > 
-> > There is a slight nuance here as the definition of Ssstrict is:
-> > 
-> > "No non-conforming extensions are present. Attempts to execute
-> > unimplemented opcodes or access unimplemented CSRs in the standard or
-> > reserved encoding spaces raises an illegal instruction exception that
-> > results in a contained trap to the supervisor-mode trap handler."
-> > 
-> > The trap that Jesse is relying on in the code here is related to access
-> > bits and not related to the CSR being unimplemented. Since the access
-> > bits are required to be 0 on an implementation without Zkr, it is
-> > required to trap if seed is accessed, regardless of Ssstrict.
-> > 
-> > The situation here is slightly odd because the spec is defining behavior
-> > for what to do if the extension is not supported, and requires
-> > implementations to follow this aspect of the Scalar Cryptography spec
-> > even though they may not implement any of the instructions in the spec.
-> 
-> Firstly, you absolutely cannot rely on the behaviour defined by a new
-> extension by systems that implement a version of the ISA that predates
-> it. Secondly, we're talking about non-conforming implementations that
-> use a reserved CSR number for other purposes, you cannot rely on the
-> behaviour that the Scalar Crypto spec prescribes for access to the
-> register.
+Hi Andy,
 
-Yes that is definitely a slippery slope.
+kernel test robot noticed the following build errors:
 
-> 
-> "Non-conforming" is also a moving target btw - the Andes PMU (I think
-> it's that) uses an interrupt number that was moved from "platform
-> specific use" to "reserved" by the AIA spec. If you only looked the
-> current specs, the Andes PMU is a "non-conforming extension" but at the
-> time that it was created it was compliant. I think we're gonna have a
-> fun conversation defining what "Ssstrict" actually means when someone
-> actually tries to document that.
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on shawnguo/for-next rockchip/for-next linus/master v6.10-rc1 next-20240531]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sounds fun ;)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ASoC-codecs-Remove-unused-of_gpio-h/20240531-233513
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20240531153038.1590171-2-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v2 1/6] ASoC: codecs: Remove unused of_gpio.h
+config: i386-buildonly-randconfig-006-20240601 (https://download.01.org/0day-ci/archive/20240601/202406010556.2MUAFCcz-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406010556.2MUAFCcz-lkp@intel.com/reproduce)
 
-> 
-> > > For DT systems, you can actually parse the DT in the pi, we do it to get
-> > > the kaslr seed if present, so you can actually check for Zkr. With ACPI
-> > > I have no idea how you can get that information, I amn't an ACPI-ist.
-> > 
-> > It is feasible to check if Zkr is present in the device tree at this
-> > stage in boot, but at first glance does not seem feasible to read the
-> > ACPI tables this early.
-> > 
-> > The CSR being read is just for entropy so even if the seed CSR doesn't
-> > trap and provides an arbitrary value on an implementation that does not
-> > support Zkr, it can still be used as a source of entropy. If the
-> > implementation does trap, the entropy will be set to 0 which is just a
-> > different hard-coded arbitrary value. 
-> 
-> Right. I can see value in doing something that may contain entropy, and
-> is at worst no better than the 0 we can currently get. But the patch
-> we're talking about here mentions nothing of the sort, it presents itself
-> as detection of Zkr and an actually random number - but all it actually
-> detects is whether or not the CSR at CSR_SEED traps.
-> 
-> To be acceptable, the patch would need to stop claiming that it is a valid
-> way to detect Zkr. The commit message, and a comment, must also explain
-> what may happen on systems that do not implement Zkr as you have done
-> here.
-> For example, `if (!riscv_has_zkr()) return 0` would have to be something
-> like `if (riscv_csr_seed_traps()) return 0`.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406010556.2MUAFCcz-lkp@intel.com/
 
-That is reasonable, thank you for your input!
+All errors (new ones prefixed by >>):
 
-- Charlie
-
-> 
-> Thanks,
-> Conor.
+>> sound/soc/codecs/aw88399.c:1791:3: error: call to undeclared function 'gpiod_set_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1791 |                 gpiod_set_value_cansleep(aw88399->reset_gpio, 1);
+         |                 ^
+>> sound/soc/codecs/aw88399.c:1868:24: error: call to undeclared function 'devm_gpiod_get_optional'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1868 |         aw88399->reset_gpio = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_LOW);
+         |                               ^
+   sound/soc/codecs/aw88399.c:1868:24: note: did you mean 'devm_regulator_get_optional'?
+   include/linux/regulator/consumer.h:347:1: note: 'devm_regulator_get_optional' declared here
+     347 | devm_regulator_get_optional(struct device *dev, const char *id)
+         | ^
+>> sound/soc/codecs/aw88399.c:1868:68: error: use of undeclared identifier 'GPIOD_OUT_LOW'
+    1868 |         aw88399->reset_gpio = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_LOW);
+         |                                                                           ^
+   3 errors generated.
 
 
+vim +/gpiod_set_value_cansleep +1791 sound/soc/codecs/aw88399.c
+
+8ade6cc7e26175 Weidong Wang 2023-10-25  1787  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1788  static void aw88399_hw_reset(struct aw88399 *aw88399)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1789  {
+8ade6cc7e26175 Weidong Wang 2023-10-25  1790  	if (aw88399->reset_gpio) {
+8ade6cc7e26175 Weidong Wang 2023-10-25 @1791  		gpiod_set_value_cansleep(aw88399->reset_gpio, 1);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1792  		usleep_range(AW88399_1000_US, AW88399_1000_US + 10);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1793  		gpiod_set_value_cansleep(aw88399->reset_gpio, 0);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1794  		usleep_range(AW88399_1000_US, AW88399_1000_US + 10);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1795  		gpiod_set_value_cansleep(aw88399->reset_gpio, 1);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1796  		usleep_range(AW88399_1000_US, AW88399_1000_US + 10);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1797  	}
+8ade6cc7e26175 Weidong Wang 2023-10-25  1798  }
+8ade6cc7e26175 Weidong Wang 2023-10-25  1799  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1800  static void aw88399_parse_channel_dt(struct aw_device *aw_dev)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1801  {
+8ade6cc7e26175 Weidong Wang 2023-10-25  1802  	struct device_node *np = aw_dev->dev->of_node;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1803  	u32 channel_value;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1804  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1805  	of_property_read_u32(np, "awinic,audio-channel", &channel_value);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1806  	aw_dev->channel = channel_value;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1807  }
+8ade6cc7e26175 Weidong Wang 2023-10-25  1808  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1809  static int aw88399_init(struct aw88399 *aw88399, struct i2c_client *i2c, struct regmap *regmap)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1810  {
+8ade6cc7e26175 Weidong Wang 2023-10-25  1811  	struct aw_device *aw_dev;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1812  	unsigned int chip_id;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1813  	int ret;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1814  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1815  	ret = regmap_read(regmap, AW88399_ID_REG, &chip_id);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1816  	if (ret) {
+8ade6cc7e26175 Weidong Wang 2023-10-25  1817  		dev_err(&i2c->dev, "%s read chipid error. ret = %d", __func__, ret);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1818  		return ret;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1819  	}
+8ade6cc7e26175 Weidong Wang 2023-10-25  1820  	if (chip_id != AW88399_CHIP_ID) {
+8ade6cc7e26175 Weidong Wang 2023-10-25  1821  		dev_err(&i2c->dev, "unsupported device");
+8ade6cc7e26175 Weidong Wang 2023-10-25  1822  		return -ENXIO;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1823  	}
+8ade6cc7e26175 Weidong Wang 2023-10-25  1824  	dev_dbg(&i2c->dev, "chip id = %x\n", chip_id);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1825  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1826  	aw_dev = devm_kzalloc(&i2c->dev, sizeof(*aw_dev), GFP_KERNEL);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1827  	if (!aw_dev)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1828  		return -ENOMEM;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1829  	aw88399->aw_pa = aw_dev;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1830  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1831  	aw_dev->i2c = i2c;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1832  	aw_dev->dev = &i2c->dev;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1833  	aw_dev->regmap = regmap;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1834  	mutex_init(&aw_dev->dsp_lock);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1835  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1836  	aw_dev->chip_id = chip_id;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1837  	aw_dev->acf = NULL;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1838  	aw_dev->prof_info.prof_desc = NULL;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1839  	aw_dev->prof_info.count = 0;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1840  	aw_dev->prof_info.prof_type = AW88395_DEV_NONE_TYPE_ID;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1841  	aw_dev->channel = AW88399_DEV_DEFAULT_CH;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1842  	aw_dev->fw_status = AW88399_DEV_FW_FAILED;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1843  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1844  	aw_dev->fade_step = AW88399_VOLUME_STEP_DB;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1845  	aw_dev->volume_desc.ctl_volume = AW88399_VOL_DEFAULT_VALUE;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1846  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1847  	aw88399_parse_channel_dt(aw_dev);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1848  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1849  	return 0;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1850  }
+8ade6cc7e26175 Weidong Wang 2023-10-25  1851  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1852  static int aw88399_i2c_probe(struct i2c_client *i2c)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1853  {
+8ade6cc7e26175 Weidong Wang 2023-10-25  1854  	struct aw88399 *aw88399;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1855  	int ret;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1856  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1857  	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C))
+8ade6cc7e26175 Weidong Wang 2023-10-25  1858  		return dev_err_probe(&i2c->dev, -ENXIO, "check_functionality failed");
+8ade6cc7e26175 Weidong Wang 2023-10-25  1859  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1860  	aw88399 = devm_kzalloc(&i2c->dev, sizeof(*aw88399), GFP_KERNEL);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1861  	if (!aw88399)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1862  		return -ENOMEM;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1863  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1864  	mutex_init(&aw88399->lock);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1865  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1866  	i2c_set_clientdata(i2c, aw88399);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1867  
+8ade6cc7e26175 Weidong Wang 2023-10-25 @1868  	aw88399->reset_gpio = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_LOW);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1869  	if (IS_ERR(aw88399->reset_gpio))
+8ade6cc7e26175 Weidong Wang 2023-10-25  1870  		return dev_err_probe(&i2c->dev, PTR_ERR(aw88399->reset_gpio),
+8ade6cc7e26175 Weidong Wang 2023-10-25  1871  							"reset gpio not defined\n");
+8ade6cc7e26175 Weidong Wang 2023-10-25  1872  	aw88399_hw_reset(aw88399);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1873  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1874  	aw88399->regmap = devm_regmap_init_i2c(i2c, &aw88399_remap_config);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1875  	if (IS_ERR(aw88399->regmap))
+8ade6cc7e26175 Weidong Wang 2023-10-25  1876  		return dev_err_probe(&i2c->dev, PTR_ERR(aw88399->regmap),
+8ade6cc7e26175 Weidong Wang 2023-10-25  1877  							"failed to init regmap\n");
+8ade6cc7e26175 Weidong Wang 2023-10-25  1878  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1879  	/* aw pa init */
+8ade6cc7e26175 Weidong Wang 2023-10-25  1880  	ret = aw88399_init(aw88399, i2c, aw88399->regmap);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1881  	if (ret)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1882  		return ret;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1883  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1884  	ret = devm_snd_soc_register_component(&i2c->dev,
+8ade6cc7e26175 Weidong Wang 2023-10-25  1885  			&soc_codec_dev_aw88399,
+8ade6cc7e26175 Weidong Wang 2023-10-25  1886  			aw88399_dai, ARRAY_SIZE(aw88399_dai));
+8ade6cc7e26175 Weidong Wang 2023-10-25  1887  	if (ret)
+8ade6cc7e26175 Weidong Wang 2023-10-25  1888  		dev_err(&i2c->dev, "failed to register aw88399: %d", ret);
+8ade6cc7e26175 Weidong Wang 2023-10-25  1889  
+8ade6cc7e26175 Weidong Wang 2023-10-25  1890  	return ret;
+8ade6cc7e26175 Weidong Wang 2023-10-25  1891  }
+8ade6cc7e26175 Weidong Wang 2023-10-25  1892  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
