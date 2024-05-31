@@ -1,158 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B4A16A360;
-	Fri, 31 May 2024 17:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1DA80C1F;
+	Fri, 31 May 2024 17:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717174893; cv=none; b=Du9fs/S0GLM9cNSFxfF9yZ4rtRVmk4APlceGJTEvjuN/GlzOuVCbh0ybLM4T4XVm23gXEZN6WX539Cgz0Pm/2P++qF7fEE4OBgjqaDGQgNYzidzfKZdf8srOUjdzBBTYXYw9gvdI627nXqPIauIn7OqNQvmuu0P3Aq9ntoCAIr0=
+	t=1717176674; cv=none; b=thZ6iRy07nOUFNTzGaktEOia7DXAXHTjqQboSjU2kLsbQfzp2pmVLA30JWrRfWs7dQiuuXY1DPt00x01mRz9gtdshtReSdbcVX492xYJJ4l3WyzCrcO/lH+x8foirs0wSA/bMmOBey9v45NhALBJe7vSZgFIuR242Lj55020CSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717174893; c=relaxed/simple;
-	bh=Yjqo3hlhlx9yKevXhDT1MNENp9AFIIad+z8zrRdLuUs=;
+	s=arc-20240116; t=1717176674; c=relaxed/simple;
+	bh=ugKsI1n0ps5BfECIOYx/A6IymgUIGBxwn3EHv/Id8mE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OlzSi6nHVoXcjs8VYtiqqKqZuHxwD1HGlcOcZimkOejIVh8PPzT6+Yq6SleKr9G/YErkva9doFMI6rGNv1zPfiR3ldUvZadPvZY4EWiCf/JHalbEFUEfl9J8HHzexr6YuTFuUFSYSTfWgiti1Qp8bn2at+HkfNcmuBrQfl9Xn/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=faGKBjHC; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wd810kmF6q5Zg6VWoqIPyl8gwHH41PMPY+Ay0+pgOqfpUYY0Gz5rlDsofUqI+jO/tCBCmKmugoDf/BZbrOFOOt5iHmujs6gplCPgKPBJh0tSenX+/fGhC9H/0lEPYBqGBLLSZpsihsN+HEEYOswbEwXAS5VmTotZ1ViYEwOVkZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rGf8CKyH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="faGKBjHC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717174891; x=1748710891;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Yjqo3hlhlx9yKevXhDT1MNENp9AFIIad+z8zrRdLuUs=;
-  b=faGKBjHCipfYarK+ZtyukSvXvuDJ9nLLhH83jsdCuoPRrcXL4V7i0QDX
-   KcQiwrp5uQyql6B0usuSccvDUAwWVCaBBp+8kNBzoa9HAFcAxmoNAT5XN
-   +JJGQ08xnXTI2qFu4Y+uQ2Dg+as0/V0lfE6kIw/WdvPsxQJ6rXNmLtSKd
-   lYbjN+ROiJ22MB5zzstaDoLd8qphUrMi1tg32HsiKJIfFUK6bWka5ByAN
-   k2l/e+gl0Q63f2JqkE95EbNRxROzWFI3D9T3NYSGA84FCyKETVbdv6/9C
-   51n3RUX6zDAQGEmL6uDNqv40pUeHcMr6GEO37OxGqQ50jZpGdD2MqFNcj
-   w==;
-X-CSE-ConnectionGUID: LE9rXJb3TZarAvoUF0HTfg==
-X-CSE-MsgGUID: EB9njq2VR9K4GXq2tb5/Rw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="31223125"
-X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="31223125"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 10:01:31 -0700
-X-CSE-ConnectionGUID: kwv4Ne6VSaWer/Fbg//lww==
-X-CSE-MsgGUID: UWrQa+u+SWK1A29eqgaOlw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="36800309"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 31 May 2024 10:01:29 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sD5d8-000HUA-1N;
-	Fri, 31 May 2024 17:01:26 +0000
-Date: Sat, 1 Jun 2024 01:01:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	don <zds100@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, mhiramat@kernel.org
-Subject: Re: [PATCH] tracing/fprobe: Support raw tracepoint events on modules
-Message-ID: <202406010034.fsNP9Rsq-lkp@intel.com>
-References: <171714888633.198965.13093663631481169611.stgit@devnote2>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGf8CKyH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8966DC2BD10;
+	Fri, 31 May 2024 17:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717176674;
+	bh=ugKsI1n0ps5BfECIOYx/A6IymgUIGBxwn3EHv/Id8mE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rGf8CKyHFijgLDSqYePnQ5BCTYnBTXCTIR7yFEJknvnNOQ/hdxJ2qZAs0M7kcsxLm
+	 pk76gkHxefmIVBYIrtYbxwMb5x2CbUZ7sqalM1gvrqc4uMBNY+Z7fH1UBhsXarwcxp
+	 FTLaEWHCxtKiJzjjNd0CIsJJe+3tiWuqjfkoRefwjTFy3PCs6UTm7hi4YqP1XzHG1g
+	 eaJ/meSnXuj1Li4yDdzDFHZ0XctqhnbxhWTcPCLffmGOaXdTeCkPH2pEnFnBHvLe51
+	 10OondmOCzovC/AY9gpGpxUzdQJSI2OuorxHNORYMDnuHTBbAoNMtyYN5NLjetfX7A
+	 OEaogdLCfTaBg==
+Date: Fri, 31 May 2024 18:31:09 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
+Message-ID: <20240531-uselessly-spied-262ecf44e694@spud>
+References: <20240531162327.2436962-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="xt66x2nsbKVBAiZs"
+Content-Disposition: inline
+In-Reply-To: <20240531162327.2436962-1-jesse@rivosinc.com>
+
+
+--xt66x2nsbKVBAiZs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <171714888633.198965.13093663631481169611.stgit@devnote2>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Masami,
+On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
+> Dectect the Zkr extension and use it to seed the kernel base address.
+>=20
+> Detection of the extension can not be done in the typical fashion, as
+> this is very early in the boot process. Instead, add a trap handler
+> and run it to see if the extension is present.
 
-kernel test robot noticed the following build errors:
+You can't rely on the lack of a trap meaning that Zkr is present unless
+you know that the platform implements Ssstrict. The CSR with that number
+could do anything if not Ssstrict compliant, so this approach gets a
+nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
+it, so you're stuck with getting that information from firmware.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.10-rc1 next-20240531]
-[cannot apply to rostedt-trace/for-next rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+For DT systems, you can actually parse the DT in the pi, we do it to get
+the kaslr seed if present, so you can actually check for Zkr. With ACPI
+I have no idea how you can get that information, I amn't an ACPI-ist.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/tracing-fprobe-Support-raw-tracepoint-events-on-modules/20240531-175013
-base:   linus/master
-patch link:    https://lore.kernel.org/r/171714888633.198965.13093663631481169611.stgit%40devnote2
-patch subject: [PATCH] tracing/fprobe: Support raw tracepoint events on modules
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240601/202406010034.fsNP9Rsq-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406010034.fsNP9Rsq-lkp@intel.com/reproduce)
+Thanks,
+Conor.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406010034.fsNP9Rsq-lkp@intel.com/
+--xt66x2nsbKVBAiZs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All errors (new ones prefixed by >>):
+-----BEGIN PGP SIGNATURE-----
 
-   In file included from kernel/tracepoint.c:5:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> kernel/tracepoint.c:751:34: error: no member named '__start___tracepoints_ptrs' in 'struct module'
-     751 |                 for_each_tracepoint_range(mod->__start___tracepoints_ptrs,
-         |                                           ~~~  ^
-   5 warnings and 1 error generated.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZloJXQAKCRB4tDGHoIJi
+0q+NAQDg7dQm4yIuqIpJJUx6xVHNdm7QHRH1oZhb6KTvKdauPAEAjlDPmXth3suH
+EyUEa4xRA2F6Bpo7l3BF2i0FndH74gw=
+=J8qv
+-----END PGP SIGNATURE-----
 
-
-vim +751 kernel/tracepoint.c
-
-   738	
-   739	void for_each_module_tracepoint(void (*fct)(struct tracepoint *tp, void *priv),
-   740					void *priv)
-   741	{
-   742		struct tp_module *tp_mod;
-   743		struct module *mod;
-   744	
-   745		if (!mod->num_tracepoints)
-   746			return;
-   747	
-   748		mutex_lock(&tracepoint_module_list_mutex);
-   749		list_for_each_entry(tp_mod, &tracepoint_module_list, list) {
-   750			mod = tp_mod->mod;
- > 751			for_each_tracepoint_range(mod->__start___tracepoints_ptrs,
-   752				mod->tracepoints_ptrs + mod->num_tracepoints,
-   753				fct, priv);
-   754		}
-   755		mutex_unlock(&tracepoint_module_list_mutex);
-   756	}
-   757	#endif /* CONFIG_MODULES */
-   758	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--xt66x2nsbKVBAiZs--
