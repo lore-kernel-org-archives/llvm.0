@@ -1,190 +1,117 @@
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01924AD53
-	for <llvm@lists.linux.dev>; Sat,  1 Jun 2024 01:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717206345; cv=fail; b=dwMMBKiYv2cb203KUO5eM/VgBVv7qJqPZvjvL9mAHQr9ImczaNuuy3MjwhvnpzCBScHigmdCINGm/o7TftlMd79Ue6WybaFs5/4MFvEpnzEk14iA4bvjlGsucdQN+8kKpoEECivOx9NEqJOsnXG+qbQFG2Nm/YKci1mPxsqM9Wk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717206345; c=relaxed/simple;
-	bh=0rIzFoSjnVNBrlg1Hvb7HDWaFzYqIQGGE5smqzh35jg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YkZqpSp1B0NrQkA6nZXyJ9C/HOB7TRUlS99ZbsHvPNklSrKL0NxDrKC6kCM3FwJcQeWUTAoIBX9eKwL5BsS/iQeYwuM5mPtSx+33HPrnelduD2LjfmzQSYC8vLyHsgMcdojdanBMtbX9mShLNg/dH6cz9cIQ/jYHM3x6a7vvCMw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=e9LnV4OP; arc=fail smtp.client-ip=40.107.223.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8072914;
+	Sat,  1 Jun 2024 02:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717209164; cv=none; b=bXS7OTXF9dW7wkouzKKnhClXg1py1loz7pvgi0xNIjZJxxoLWaMh2sK54rK1Ef5XLUOGuJ6fLiqL3OVvvdNU8yX3DloRLYdu3rk2+G7K2yqtMkEEoIU79dlrVgskWC/+vIeevTQSVgIcBrO7Dz+yfYJ5cvxyw3LDkdl07WcDahg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717209164; c=relaxed/simple;
+	bh=DiWSyQtftc8aPwNB1nMgQRYl58NlU2baAGwiCrM3a98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P2iFoFO5RByFS6xaMVxttmyxB7hskxJqDQ6Y1BlowXrFzyqX743R36Ivst6YngKxcATTaHTz5ja0BJDMSFovFC/Dh1eSalrGX1EW1DsqrTqq33Z6SNWfurN1LbQlCqibQKA88tCmQhv2UbZ764j1v32yTl0Ey7Ml8Lg4vfpmTqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dYbph24F; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="e9LnV4OP"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kgzgVRPX7TvfFJmtWFIM1/feF/tAl92KniQ+jRQMQW+w3xx//jQTBFSw3GavL/1QicqKv9YZSqGfFRyZAKQNhZ3p0zjNg2OssrL0OOcm3gwlplc8n5ASTjz2ABgDEIpcTjF9MUodqOX6LSXQANUmUJ9vBpnoEESuOGlwjRvunIVOratuyenusptV+4YuD0u2kVn+gPWtShQESlPdAjHIsVs0Ouz9TQG57T4WPM22oHtJGxSufIs1ZlAw9Y1gzSS7yEtybtdYv97oZ+k6+gUKkSeGLDBv2yXfmfnnJibgYn57o/7jN8/jc3Hn+YgD1zKyapBKtAe9joGQkClEdPSRwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xwapW2MSa1l71cJBmo5BkSbBN6be7mpzKOxU6OmdV38=;
- b=TeBjjjYY40HH+EjTBcRjx/+c0lLPCra2YglKh9qiVxUCTiMn6NNoMiJKmHKfM3HDNQlMfaQusLtK0kBsMV8S2bJmXz23R8FhXKWGyzhSBNFl/NElYM4+N+6XL0FtvTKyDEZ6ilFBFW448WVneUT5riCwPPSt2opfYoEp5EsrOu5rjnYFV3R8GaTEoGFUw6556y7fvSs2neCu2DM+zXRRHrSMp7IH3Fqp6dVwqD3IUwP4ErgemFxOgbqaAVkiYswchYBeDpiZMS82z14QNdwQH+bq755GTxbbpj14h/XKiVikhtIGduKvel1THlV1MQUZErqec5U9M+sQO3PSKIwbPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xwapW2MSa1l71cJBmo5BkSbBN6be7mpzKOxU6OmdV38=;
- b=e9LnV4OPuprggLlTpc1s60NtOJfkCwmL5JrmGsHcx94YipINEHt+miBFZ0EPoXAdDJ3isHXP02TFG2aYns437wgbnAxXcOMZ/OpzerdQSAHqG6211Az+/L16Fi03lX5PtZCLjzxgR6FcnOIp3eFiGiYMWacKdrFhS4+3J7h3fdPpJ1sZMdgPLtK7ZvkU9flwadN8d/uCzvHiRNZKofbpJba44h1Eh/V+L07tw40KllWuRBQSKKLlQbMRgl1eZHVpHIVBOH8sMQI9elcrE0Z1i2ylFVfRH0qFhclfmvtmwfQdeEB3UR9Hu3FSxSKzTlQFXn7UZfVxBzhy1itRPjUKTA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by MN0PR12MB5931.namprd12.prod.outlook.com (2603:10b6:208:37e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.25; Sat, 1 Jun
- 2024 01:45:38 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7633.021; Sat, 1 Jun 2024
- 01:45:38 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Alexey Gladkov <legion@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 2/2] selftests/fchmodat2: fix clang build failure due to -static-libasan
-Date: Fri, 31 May 2024 18:45:34 -0700
-Message-ID: <20240601014534.268360-3-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240601014534.268360-1-jhubbard@nvidia.com>
-References: <20240601014534.268360-1-jhubbard@nvidia.com>
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0296.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::31) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dYbph24F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717209162; x=1748745162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DiWSyQtftc8aPwNB1nMgQRYl58NlU2baAGwiCrM3a98=;
+  b=dYbph24F7CRKeR9IRL/dTz/Eo7EHZP595Ad0d+txFSzLWwwweig+IEP2
+   zL4m1xKYbDH9Le3jqFNAzTHjy9zb2JjUchaf9AurbLWQF3dFL6g2KqKDf
+   hbDgRoLEyEW02KPuGFGGh1H7knudlAWAjjxFxSGWv3gAAFhi4tZqfha8R
+   EEnj2IUTJk0e44i9dxF6ktHfxM3cvv220B0wAHt6GgF1X0xpS20vQ5C6m
+   IeCFb+av2o19CMhECjBghSohYzmYQYXlqUS1A4zlU9DzM5q71wBreYAgu
+   KoCgr5JrZbXSKWnAf5Ump8DZBHhLhmtBTuQMpISi+bZ5666CuMkDbaK10
+   A==;
+X-CSE-ConnectionGUID: DXmYToP0TEqPStPGN7oulA==
+X-CSE-MsgGUID: glsmNKrzQVGTrEvpPv/naA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="17616814"
+X-IronPort-AV: E=Sophos;i="6.08,206,1712646000"; 
+   d="scan'208";a="17616814"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 19:32:42 -0700
+X-CSE-ConnectionGUID: 9b6zvCUFTx2Kd9sWoprvDQ==
+X-CSE-MsgGUID: /99hga84RqK3PvkY4gZoNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,206,1712646000"; 
+   d="scan'208";a="59512300"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 31 May 2024 19:32:37 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sDEXe-000IAX-2g;
+	Sat, 01 Jun 2024 02:32:27 +0000
+Date: Sat, 1 Jun 2024 10:31:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
+	Daniel Thompson <daniel.thompson@linaro.org>,
+	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
+	Johan Hovold <jhovold@gmail.com>
+Subject: Re: [PATCH v1 4/4] mfd: lm3533: Remove the driver
+Message-ID: <202406011025.2DhlyP3G-lkp@intel.com>
+References: <20240531170844.1595468-5-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|MN0PR12MB5931:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d6bced3-57fa-4a00-e4d8-08dc81dc8941
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015|7416005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TcN355kNuomKL2nP0+MZ8sH/iPPb4Ofiwu3tDnP3AQ3OSXy4j3I7zRk2xJh1?=
- =?us-ascii?Q?jL1MukvYkFMan/gexvwqrggrsQKf3CYlM0bSm+zMxoONyxsHrjuGNaVdegqo?=
- =?us-ascii?Q?o5WaZfKfVH1Dvx4v4VNwkwrIVsGNOWm2VG+GEpBhZmYIyqtXe7q/37d947uR?=
- =?us-ascii?Q?YngBneQ37jxmM08ZLN8k+NmPdNrxrcjifBlvrIabguDqu4Y7/ADvAE5rphnp?=
- =?us-ascii?Q?thAifVXC4tM4kSxHho2UWP0NuWRjLd1vQHsUW0OW3KsToUaLihGRvN3H2ZN8?=
- =?us-ascii?Q?H0Ob1f7XhFfCWXqqPKtn3Xf5up375mstgJSjcmLi6+goBF08jsqA/ogKC/K+?=
- =?us-ascii?Q?NG7fGKvf07TI+Oj+S7HPE9PVMmKnEWZR7PFaaYfxAYHO0GPu2PRmcq4ax3Ss?=
- =?us-ascii?Q?GMA3VP0RYLb1f54whB0nwr9tFV18xbgNbBH/F9pbtddVDaXwFwY8SfAtoW10?=
- =?us-ascii?Q?qnFxZldSJhmFagEkVlDKN0vL+lbKuxwGoicwOtRPK1ERAhajCOa/ZmAgQI7g?=
- =?us-ascii?Q?IYEipoSYxgrOeYPVpH1JrjSz2l2kio9IMHpwJsI97kdTg9CvYSEDt6OZs93Y?=
- =?us-ascii?Q?uUnprUUee/rWUNmiO77vZrJBM6jR3aYbvU+jTBMq0nQIbT/SJ9zeW7QVR2tb?=
- =?us-ascii?Q?medrl/sTZWij1ZFWyC66AxQDl7rxe4Wt1092SVgEqpJ7ImaWSgtfp49g7eMh?=
- =?us-ascii?Q?fSYSKGswynhk+SUPJNDIz1VkOGLgAeF4Z6iABAzfBiCPN2PiJouUGI3XNHqW?=
- =?us-ascii?Q?rWq9yl3zDxf9kcIqAcBYpfYTPLBu08KtRGNyPtHwxBO2khVOYZva3ncawuIP?=
- =?us-ascii?Q?nFdj5N21ojyAxNgeicx4nIP4+ke2jo6kOsrloKgJjeeiFlez6FLmyBZaT2YF?=
- =?us-ascii?Q?/RFmimt73LiCMOfxXIXk4pKwCcHmWHGrryZS++VENUIfnq5Mj1mbstqXWvZg?=
- =?us-ascii?Q?jQk92hRGAbv2mZEIljnmcdIBI2Lh77mhwjqzcZgjDs0Df3UNDRvokx38Eg6S?=
- =?us-ascii?Q?N5XiVAS4Rz6hovGozO7MZB9n2WqBYELudHEomCNw28tIdsNOrrQ5YfBC96kt?=
- =?us-ascii?Q?87pXp4iuGB2Zno+1vtXQcmGvAdX4lAGmcnuMDesfvkRqHiNL8pmdMdTdhs6I?=
- =?us-ascii?Q?DNGmJUPFNDKRCfChMtUgwKzxLR9X7mpfZd55HxPgz99bCtzqZ/ZyZVHpLrIw?=
- =?us-ascii?Q?qJcerKjAvXhm5toTw4Nlnsu0UF1T9uTsHBYMJyljnPUBYtgsvlNx1Q8KV3Dz?=
- =?us-ascii?Q?fyx14NTsgObG8U5LunTQyJ0RvIVhPvOSxa100/kuRA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WrUx7RSxmOPzHK/+ZgaZrZZbueHsFEbfHaK+j7kI1W78KeArUg7ffDwnIA9b?=
- =?us-ascii?Q?Mcz4OmwOwEfnVgybEdKekPXJoF4SnX6BOYulMHXsNQoV10rFl2pg20oxtM8K?=
- =?us-ascii?Q?glzk7gGwzpkfBiAfrh2wfhwAAIBeMigkIYKiGBxPqGld1cZz0ghPYkNO0gp9?=
- =?us-ascii?Q?5/cUEky3VNJZueQTY/s5T5SgYXI0gXIXOyY6WoQPp3KMVICFXW7yJrTvrSLZ?=
- =?us-ascii?Q?Qtwa3C/LrNUvRzYdxoXkIw9Qp3Ro/WUK+b7N1+1mYL47VUuft8O0KFGGKy6P?=
- =?us-ascii?Q?im/XBJ5z3bcMg3wMVDmnEJGmk27d995wQGjWYvpqEAIkDc5vXFWFNbM/8gex?=
- =?us-ascii?Q?3Fm9gEwoqmQ0tv9T0q2XhOKf74HLvuYC+z2LK/l0z7cSbT0hmoeGCp+zPToK?=
- =?us-ascii?Q?ZwXs0Wk5tX8WsAW3rVFOV87vdPrfhRkSmMSfA/hIV4Tf1tXdTFIW19SxZTMh?=
- =?us-ascii?Q?l3gVrxL3rcIIKfcvXPnkWFpNLv0cGOKiye/kWZ0+BjNGUmr1GSqICGun5UfZ?=
- =?us-ascii?Q?HM8ZRjG7deaMNvEV5BCIO8PkAPIQ1KYnkxmFK9+fnTJ7YVCfRWjKGD4E+pb4?=
- =?us-ascii?Q?Y6Zv8zY1uZTJRhCJI3SH/WwR0hq15eweObZvZp4Du8YAzVkI1FsdZmMTASaC?=
- =?us-ascii?Q?qKAMUqVq0g2rotE/1ADHZpDCwUyMc2iQ3vuXWTc94r8o3FDkz+8CA2KS5GG1?=
- =?us-ascii?Q?Nz/nqJuaFRSuiyuQFMIztKualgvGd+pUt4bQSbrh8UiGnx5+lwW9jL8N5s+B?=
- =?us-ascii?Q?wZGD7VuEnNNDpVfLA2dsVxVvUeBwyXI5efdsrIZ+Vi+jet/270dfl0LsqqVS?=
- =?us-ascii?Q?kWVOXjnNhIOFik8T2j/ovDB8jhwLomo6gv/z00CdH8URlLS3JuR1Sx5FigAl?=
- =?us-ascii?Q?YELrw3EbDk2NwwnYWmHtcf5dfFQpMIqWIbq5zrsVikXluTiM/RCjIKqEmG1W?=
- =?us-ascii?Q?7lS5IaA76mbzezwrszOcuPQfHvuWfH5B7ItC2EHpQ1qAvLoEO0AmSOnbw34d?=
- =?us-ascii?Q?6dbpQzViKmGGGMvHdEoRp4n2MYB2pnlwTrQ45fNGDC5Hmguo1VWDle654T9s?=
- =?us-ascii?Q?HqGRsMV1Sjqei1QI6XsXk7CcRQfBK/zNclhqPjzlGfUJs18kd0GcEzVVwQJ4?=
- =?us-ascii?Q?VJ2gSQM5hGPvH/cYiZDOibBVDOuOBnICRQybHeT09oPZMU8pN2zB1DbAJMi3?=
- =?us-ascii?Q?fO/Bot0j/ch07ZgSz+PmeNHOSgDuLHsXyM/sA4jXrrUYeUaP1kd2sqQK39Jn?=
- =?us-ascii?Q?lSuu0MBnvjMyKA8UD9EjmetW5/RNF1ctn95SkFfhE2CSGuiaFQFUvvppDT3C?=
- =?us-ascii?Q?Sm8jJrWKHIEWioYwmaCbw9LN/Szym29PAMOB397fZnbYFe8RaDUsKpdC1XjU?=
- =?us-ascii?Q?aBdOzvdrcM64ucEEOP+bRp650ZiymWtAjhru6z6okt3W0KBZh8ulSUFOLzH4?=
- =?us-ascii?Q?LhhoNj/qiqMDQtaNOcSJJTf5HL8rE7gFEhKp0fTmdHTwX4p9+XbVtQTxkznP?=
- =?us-ascii?Q?Ow9UP6djQCnKzj9S/i57m6jbljt1r11wgjLYXrhozpUTJG5lPR/Z2FSziO7U?=
- =?us-ascii?Q?Fmg8pzqsLquV/gADbnMIdzGSp8PHlThXAsrqePxy?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d6bced3-57fa-4a00-e4d8-08dc81dc8941
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2024 01:45:37.6058
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B1bpij5keAzFKN9qQVJZ9KOcV/W+TSYirA64O0pQYLgDDe8nuLuSenhmvV1tzWckn3c1hbkmkheoAzpvUrdxLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5931
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240531170844.1595468-5-andriy.shevchenko@linux.intel.com>
 
-gcc requires -static-libasan in order to ensure that Address Sanitizer's
-library is the first one loaded. However, this leads to build failures
-on clang, when building via:
+Hi Andy,
 
-    make LLVM=1 -C tools/testing/selftests
+kernel test robot noticed the following build errors:
 
-However, clang already does the right thing by default: it statically
-links the Address Sanitizer if -fsanitize is specified. Therefore,
-simply omit -static-libasan for clang builds. And leave behind a
-comment, because the whole reason for static linking might not be
-obvious.
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on lee-backlight/for-backlight-fixes linus/master v6.10-rc1 next-20240531]
+[cannot apply to lee-backlight/for-backlight-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cc: Ryan Roberts <ryan.roberts@arm.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/fchmodat2/Makefile | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/backlight-lm3533_bl-Remove-the-driver/20240601-011153
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20240531170844.1595468-5-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 4/4] mfd: lm3533: Remove the driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240601/202406011025.2DhlyP3G-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406011025.2DhlyP3G-lkp@intel.com/reproduce)
 
-diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-index 71ec34bf1501..4373cea79b79 100644
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -1,6 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
- 
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-+
-+# gcc requires -static-libasan in order to ensure that Address Sanitizer's
-+# library is the first one loaded. However, clang already statically links the
-+# Address Sanitizer if -fsanitize is specified. Therefore, simply omit
-+# -static-libasan for clang builds.
-+ifeq ($(LLVM),)
-+    CFLAGS += -static-libasan
-+endif
-+
- TEST_GEN_PROGS := fchmodat2_test
- 
- include ../lib.mk
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406011025.2DhlyP3G-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mfd/lm3533-ctrlbank.c:13:10: fatal error: 'linux/mfd/lm3533.h' file not found
+      13 | #include <linux/mfd/lm3533.h>
+         |          ^~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +13 drivers/mfd/lm3533-ctrlbank.c
+
+16c5c023aac862 Johan Hovold 2012-05-03  12  
+16c5c023aac862 Johan Hovold 2012-05-03 @13  #include <linux/mfd/lm3533.h>
+16c5c023aac862 Johan Hovold 2012-05-03  14  
+16c5c023aac862 Johan Hovold 2012-05-03  15  
+
 -- 
-2.45.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
