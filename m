@@ -1,65 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA0DF9D4;
-	Sat,  1 Jun 2024 05:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE9D824A7;
+	Sat,  1 Jun 2024 11:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717219152; cv=none; b=OM6qPcxj1XS0+32A6Mzqg8JwLyiA+2ReoJBbbbAMJRdya3RbwcKXHCVcVceFA+DkajPrMBJjZDpG8QEF2JinwxuGWe0j/9C08YPcko3wkvlsSkBhTGJiJS0JAqt0dYpGOEOrGwVMzgutCnW+Ygvx8rxTdN7eqWkOGt0Rw+3P4Mg=
+	t=1717240283; cv=none; b=PV0LKiHr+zpBLrl8cWud6VQvDTZkdTT0QBqSXvR3meoaLgLIQVTRcBXIAyCLmIBFaRXwFs9Bou0rvYikiNIMaeBNzerOzwl6R38x8gyVVVzpvTzFlkGsNu5nQ5MJIrEJ6SP+/K0skpn5VRWl7T632/alBY3+kyf0RuWRdzs33KI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717219152; c=relaxed/simple;
-	bh=RmGTeDB7gSE6+bdtPqnjC5zB/xCa0YNAJAARczN2gPQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HXVaqKiZzZd7/di84+HrZV6tPRPJaVjwATSQT41+VjCgQa91CPBaza/D0ynxcj5ztEirVzd1qhwqRL6UPnc35/LudW9qHgx6r1xlxvecWKqx8k6IVTbgbkDerA8HBQFU12NLhMlph51aEf+OXQFNjZcro9tyXr+MqFddHFuu0Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lHARu/ux; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1717240283; c=relaxed/simple;
+	bh=PsCrz80mQHu0e2miGshruCXgw5Mob3LuBbuGWo0WC7Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nvCxxoAXrYn72jC5vGm/efPIHgNuybUGgZLOoRkarSs/pFhGoqdtOKSZL2FdcTEkRh4QrGXK3x/R7aTCWZ/h5bOnyJi8V/z72KN7NG3qGClmdMxIxQSARfWTUOsUXbUpN+w1Tjj6LLMJODHJtlnOpI1jv8vOTLq+acKitFiiq5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TOpNvzSW; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lHARu/ux"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TOpNvzSW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717219150; x=1748755150;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RmGTeDB7gSE6+bdtPqnjC5zB/xCa0YNAJAARczN2gPQ=;
-  b=lHARu/uxiXlGxDzmUTL0FxqMSm2lWHUvArIL4V4UO7U67tF7AsNHcjeA
-   1TuzUs33WPF7g8wd+4KD/gZs0nVNrtp0mR/JqYrSICCa1etN00Wj0AfY8
-   lrPVgRO/142LKTsPN+S2M5ohHTc5rhRDMNaQB6EFRU9/2zzBioqoYzo2f
-   mEgwI7aQ0oVuihRYC0cX3lw3B89KX6d1cGFAMy4AcNUdn8BUbR1gzPthJ
-   048NHstYU54k2oh/WPM3oz3GEBk2hKv94WEDnVI8YZSnXqz9IC81260y8
-   3dQouE3u42vVRUM5zEKH0LQGjs5mmp+vLJRJjgRMu0vbhZZRC2ngebaMK
+  t=1717240283; x=1748776283;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PsCrz80mQHu0e2miGshruCXgw5Mob3LuBbuGWo0WC7Y=;
+  b=TOpNvzSWi0tOI+2HdU/8nvK/sSgjohgmqjuj8CORoF57WeLoNhqfeMQW
+   dnHEXzrWTuTU6Q3Vc8cVmSzEuu5szrVy0J4ep/p9QXUT28wFPWoWipC1l
+   hf7q17lYW02DxNF9gGwdeJ+fRrpbcYihp9knFT7yWvrho+Qg7OchzEuOj
+   l9ANe9jBR64Hc7WkPx7IKU/Lzy22F8BjnwTG5Bt/ODeX35/8fKWlWYOHc
+   6F8oCMnhBRgMXvKhYOFP1gQ33ShHj+OU71IbIflU5e4e5t/HYBX+8Ttx8
+   D/OvvstzhNfIUNKgeIYKptPQCtYSQSlIRi5FJTCtzgSvIaL9fz2xv9alO
    g==;
-X-CSE-ConnectionGUID: jwxUy2/tSn6/uKlxhlVTgA==
-X-CSE-MsgGUID: BBy3jKxwQsa4Am83P8IblQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="24894528"
-X-IronPort-AV: E=Sophos;i="6.08,206,1712646000"; 
-   d="scan'208";a="24894528"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 22:19:10 -0700
-X-CSE-ConnectionGUID: EG35p8h0R6O2sKJanIuclA==
-X-CSE-MsgGUID: JzwWgfBrTlqUJNu/d0aJfQ==
+X-CSE-ConnectionGUID: VupDb9+vTCaAJgNCOzbJcA==
+X-CSE-MsgGUID: h3YjR4f6RP+GjwIv/+Cqxw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="24443589"
+X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
+   d="scan'208";a="24443589"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 04:11:20 -0700
+X-CSE-ConnectionGUID: JxL1XLEWRROYxIUQdFxY2A==
+X-CSE-MsgGUID: o1TZPTqqQy6yjWkJptshtw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,206,1712646000"; 
-   d="scan'208";a="36447216"
+X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
+   d="scan'208";a="36428673"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 31 May 2024 22:19:06 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 01 Jun 2024 04:11:18 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sDH8y-000IQn-0l;
-	Sat, 01 Jun 2024 05:19:04 +0000
-Date: Sat, 1 Jun 2024 13:18:47 +0800
+	id 1sDMdn-000Il0-1e;
+	Sat, 01 Jun 2024 11:11:15 +0000
+Date: Sat, 1 Jun 2024 19:10:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Zhang Lixu <lixu.zhang@intel.com>
+To: Julien Massot <julien.massot@collabora.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] HID: intel-ish-hid: fix endian-conversion
-Message-ID: <202406011319.hk4MAysc-lkp@intel.com>
-References: <20240531162836.157891-1-arnd@kernel.org>
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [sailus-media-tree:test 53/55] drivers/media/i2c/max96717.c:124:46:
+ error: too many arguments to function call, expected 3, have 4
+Message-ID: <202406011955.oq2igodk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,78 +63,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240531162836.157891-1-arnd@kernel.org>
 
-Hi Arnd,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on hid/for-next]
-[also build test WARNING on next-20240531]
-[cannot apply to linus/master v6.10-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/HID-intel-ish-hid-fix-endian-conversion/20240601-003303
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20240531162836.157891-1-arnd%40kernel.org
-patch subject: [PATCH] [v2] HID: intel-ish-hid: fix endian-conversion
-config: x86_64-buildonly-randconfig-002-20240601 (https://download.01.org/0day-ci/archive/20240601/202406011319.hk4MAysc-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406011319.hk4MAysc-lkp@intel.com/reproduce)
+tree:   git://linuxtv.org/sailus/media_tree.git test
+head:   94e408a1547ef00f59477a072c6f943d62d7a097
+commit: b22ddf6b6ea346fb256ed4adca4cb8c085a2d7fb [53/55] media: i2c: add MAX96717 driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240601/202406011955.oq2igodk-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406011955.oq2igodk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406011319.hk4MAysc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406011955.oq2igodk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hid/intel-ish-hid/ishtp/loader.c:170: warning: Function parameter or struct member 'fragment_count' not described in 'prepare_dma_bufs'
+   In file included from drivers/media/i2c/max96717.c:13:
+   In file included from include/linux/gpio/driver.h:8:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/max96717.c:13:
+   In file included from include/linux/gpio/driver.h:8:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/max96717.c:13:
+   In file included from include/linux/gpio/driver.h:8:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/i2c/max96717.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/media/i2c/max96717.c:124:46: error: too many arguments to function call, expected 3, have 4
+     124 |         return i2c_mux_add_adapter(priv->mux, 0, 0, 0);
+         |                ~~~~~~~~~~~~~~~~~~~                  ^
+   include/linux/i2c-mux.h:58:5: note: 'i2c_mux_add_adapter' declared here
+      58 | int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
+         |     ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+      59 |                         u32 force_nr, u32 chan_id);
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+   7 warnings and 1 error generated.
 
 
-vim +170 drivers/hid/intel-ish-hid/ishtp/loader.c
+vim +124 drivers/media/i2c/max96717.c
 
-579a267e4617d7 Zhang Lixu    2024-05-06  155  
-579a267e4617d7 Zhang Lixu    2024-05-06  156  /**
-579a267e4617d7 Zhang Lixu    2024-05-06  157   * prepare_dma_bufs() - Prepare the DMA buffer for transferring firmware fragments
-579a267e4617d7 Zhang Lixu    2024-05-06  158   * @dev: The ISHTP device
-579a267e4617d7 Zhang Lixu    2024-05-06  159   * @ish_fw: The ISH firmware
-579a267e4617d7 Zhang Lixu    2024-05-06  160   * @fragment: The ISHTP firmware fragment descriptor
-579a267e4617d7 Zhang Lixu    2024-05-06  161   * @dma_bufs: The array of DMA fragment buffers
-579a267e4617d7 Zhang Lixu    2024-05-06  162   * @fragment_size: The size of a single DMA fragment
-579a267e4617d7 Zhang Lixu    2024-05-06  163   *
-579a267e4617d7 Zhang Lixu    2024-05-06  164   * Return: 0 on success, negative error code on failure
-579a267e4617d7 Zhang Lixu    2024-05-06  165   */
-579a267e4617d7 Zhang Lixu    2024-05-06  166  static int prepare_dma_bufs(struct ishtp_device *dev,
-579a267e4617d7 Zhang Lixu    2024-05-06  167  			    const struct firmware *ish_fw,
-579a267e4617d7 Zhang Lixu    2024-05-06  168  			    struct loader_xfer_dma_fragment *fragment,
-5180be24abbcc0 Arnd Bergmann 2024-05-31  169  			    void **dma_bufs, u32 fragment_size, u32 fragment_count)
-579a267e4617d7 Zhang Lixu    2024-05-06 @170  {
-2360497238261f Zhang Lixu    2024-05-23  171  	dma_addr_t dma_addr;
-579a267e4617d7 Zhang Lixu    2024-05-06  172  	u32 offset = 0;
-5180be24abbcc0 Arnd Bergmann 2024-05-31  173  	u32 length;
-579a267e4617d7 Zhang Lixu    2024-05-06  174  	int i;
-579a267e4617d7 Zhang Lixu    2024-05-06  175  
-5180be24abbcc0 Arnd Bergmann 2024-05-31  176  	for (i = 0; i < fragment_count && offset < ish_fw->size; i++) {
-2360497238261f Zhang Lixu    2024-05-23  177  		dma_bufs[i] = dma_alloc_coherent(dev->devc, fragment_size, &dma_addr, GFP_KERNEL);
-579a267e4617d7 Zhang Lixu    2024-05-06  178  		if (!dma_bufs[i])
-579a267e4617d7 Zhang Lixu    2024-05-06  179  			return -ENOMEM;
-579a267e4617d7 Zhang Lixu    2024-05-06  180  
-2360497238261f Zhang Lixu    2024-05-23  181  		fragment->fragment_tbl[i].ddr_adrs = cpu_to_le64(dma_addr);
-5180be24abbcc0 Arnd Bergmann 2024-05-31  182  		length = clamp(ish_fw->size - offset, 0, fragment_size);
-5180be24abbcc0 Arnd Bergmann 2024-05-31  183  		fragment->fragment_tbl[i].length = cpu_to_le32(length);
-5180be24abbcc0 Arnd Bergmann 2024-05-31  184  		fragment->fragment_tbl[i].fw_off = cpu_to_le32(offset);
-5180be24abbcc0 Arnd Bergmann 2024-05-31  185  		memcpy(dma_bufs[i], ish_fw->data + offset, length);
-579a267e4617d7 Zhang Lixu    2024-05-06  186  		clflush_cache_range(dma_bufs[i], fragment_size);
-579a267e4617d7 Zhang Lixu    2024-05-06  187  
-5180be24abbcc0 Arnd Bergmann 2024-05-31  188  		offset += length;
-579a267e4617d7 Zhang Lixu    2024-05-06  189  	}
-579a267e4617d7 Zhang Lixu    2024-05-06  190  
-579a267e4617d7 Zhang Lixu    2024-05-06  191  	return 0;
-579a267e4617d7 Zhang Lixu    2024-05-06  192  }
-579a267e4617d7 Zhang Lixu    2024-05-06  193  
+   115	
+   116	static int max96717_i2c_mux_init(struct max96717_priv *priv)
+   117	{
+   118		priv->mux = i2c_mux_alloc(priv->client->adapter, &priv->client->dev,
+   119					  1, 0, I2C_MUX_LOCKED | I2C_MUX_GATE,
+   120					  max96717_i2c_mux_select, NULL);
+   121		if (!priv->mux)
+   122			return -ENOMEM;
+   123	
+ > 124		return i2c_mux_add_adapter(priv->mux, 0, 0, 0);
+   125	}
+   126	
 
 -- 
 0-DAY CI Kernel Test Service
