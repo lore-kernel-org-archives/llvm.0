@@ -1,260 +1,313 @@
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01olkn2038.outbound.protection.outlook.com [40.92.65.38])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD817154BE2
-	for <llvm@lists.linux.dev>; Sat,  1 Jun 2024 16:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.65.38
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717261018; cv=fail; b=hk9A4RNf8AwYOgF3TqwT1ZahY83oqiZ4fdGf4mLm89aCv5mHF2oHirt0YV1IzaPmsFLKhw/AkVkcdYg61qGekNYwW8U2CbR6JLAKWmWYBtb5QJ1mBwQTdS82pu4nYIoWFIU6PKIDeIXb9j1J2q9ZufpxM0hPVKX2uRO2UXX/i20=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717261018; c=relaxed/simple;
-	bh=gOtst8h9RuljVsy21oj8WcjbC8wfPg/lGHLpU3534lQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Zy43gxvq/mYQMN97/NRBypzuddrqhmo3OFzOkqI/9qNoxI64zHNosm67pGjgZ4RMATww3unX9ffz6TKcE+LLUvJ1A2/hERZdL9b4dmwuDFONrtXssC88df/NTNRQ6m4Y7E6sfna5TKnTJ5BCU3mrNLYP4sqHXwrqUqK2ia38Ah4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=lg0W9sSd; arc=fail smtp.client-ip=40.92.65.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FD91E898;
+	Sat,  1 Jun 2024 17:15:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717262159; cv=none; b=pXd89lJaLZPb5FDnahBUr1x8pvBOoClCLgLAEErzF46X7TYB2lggcg/VNy8dERoF99itSfHO4B3bfNCJHN6fssAGbTybl0H3iPxB+TC0VnZR0QQbentdmSAiWQq3dG8UL8/f2JrQ01B1qJLlys1WwuFEVq3oXCEIcvCJmt1awpc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717262159; c=relaxed/simple;
+	bh=QT0/E9Yiy8jGP3WrJjpfhCJZG2LSMCz7oy8UufZ8jHo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mjr17vtUnannRpINwXc+LmbLHW8oBhB+aueu2l9REXEhnm5qg8IGg20sYgTLbvcLVbsFXzsjPk66I3j3JvFpxAAJBRp3jdCpSNOrCBDAlvU/gyj4S2euURfazc9BL+D8pMKAyzbNKVHGeQnP6kZnVF8SWQGKljwRU8wJSuVq67g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nyuTJsmD; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="lg0W9sSd"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NczhW1JIaHQQ1n9RydYpOEcf60530rnMMovH80nQyPGhz7jqadKiv7JSdf+wjRjZ888inz0k05XFW4UptK4yOrLDAbqNsu6Cxf+857uyKgTsS8QuBK1UK1LHvvzJKn2DkDVSBZ4WPgLDLi8S9AZ4SAXqJLMevoAUaPSBeV5jsr/ziNNVA9ei+xR2AMW2psioIeDLn+BZMbSvCNnvRG5pvw62zYRFROKglJzQ0eEujYlPXk4DkcbFL7h5zJdogzk+zXEQjRT7juGrhDrobMSYuQdF7AIzqJdmsB5P8XbAVRxjslM4mEv80srg2X2kb9aa9H29u/qwmehsc8f143aevQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o0LRofeL7sn2e6PoBCwIy2JEjQsAf4pdnyi3QAUeokU=;
- b=F0LJ+UyZcRdUtDVMy5PBzNpIB2j6ww2dRDCH0aM6PWG+/lkwUTDHq2WEZJJAEfzDSwOBbWIUORN6ulB8ruAgh2d9UsDn4j0PLzQ59/dmVoWrtmfxhqanpdTEaUax5av1bifGHSLak75I94dlJzjNGXVWvEmT9yo4Tttvr2fe18rQ6dbFy9ie8oBOYYtOg5qbWlMEkC3cdQxH7wdRNew7x67fbXXUqH3J/aLdui6Ejo5iavGVcDRy7a2xusgNv2HmDskbidA7BDo/yuFHqc3GPrT0h4UQ9qV7mfxNA0/l6Yphd1Zugqhx2jw/qAKKhr0hAHw/0Re2WTmFPZIdVQEQ4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o0LRofeL7sn2e6PoBCwIy2JEjQsAf4pdnyi3QAUeokU=;
- b=lg0W9sSdxc/Tq3VPh1+gpWNV5HWYKjl6Qyu4J1FosrmgcJxVN1CWK7Q1rvSzLY0gfEfn24pea5Fn+bC8QZGt+ac/ZE4TDf2bzd4y9ooA1KVHERIu3VkBt3+HlNvisTMqd8NsjPOhIXovICuIiVF9soKGOBzLL1tcQWNFPr8mmPtFRyda2suWevrry5z15E727VhtQG2XSHQRJcQad95q7yJN8NlOW1rmhrHXwDaxneDX3LJZTkIHn2YRp1SA9K5R5TeNVxBe1XFPzrQ5e2QpnFjzq8cYrDjKIoFJJPO2KjdRdXp0aM6NXzwr0/C/DAhUDZW/uyfekMiBFUkgoNFgSA==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by GV2PR02MB9373.eurprd02.prod.outlook.com (2603:10a6:150:d2::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.21; Sat, 1 Jun
- 2024 16:56:51 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7633.021; Sat, 1 Jun 2024
- 16:56:51 +0000
-From: Erick Archer <erick.archer@outlook.com>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Matthew Wilcox <mawilcox@microsoft.com>
-Cc: Erick Archer <erick.archer@outlook.com>,
-	x86@kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v4 3/3] perf/ring_buffer: Prefer struct_size over open coded arithmetic
-Date: Sat,  1 Jun 2024 18:56:18 +0200
-Message-ID:
- <AS8PR02MB7237DCB69448D5BE9E0615888BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240601165618.10020-1-erick.archer@outlook.com>
-References: <20240601165618.10020-1-erick.archer@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [Cqac6udP/mVsrAgL9nOq8iGXfFGVlXqx]
-X-ClientProxiedBy: MA2P292CA0022.ESPP292.PROD.OUTLOOK.COM (2603:10a6:250::11)
- To AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID:
- <20240601165618.10020-4-erick.archer@outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nyuTJsmD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717262157; x=1748798157;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QT0/E9Yiy8jGP3WrJjpfhCJZG2LSMCz7oy8UufZ8jHo=;
+  b=nyuTJsmD08wZLC41cgbD6WdO6BTD3iM9k8Ms8DOYLt3oR8yJxursp4Ix
+   SSBm8t7pdkQzWi3NGPkS2MI+wytQa9DBNnGVBa5tWIYmqvZBKZ/Ac3/dQ
+   /Daq+pnIw7CLVF4y5Ws0bUdU7ABd2mF1NmXKZzzxOkd9AnLMWCIObstxh
+   7wusBhbXV76LVRbSMY57geESbVZZa85/BqcDJ7ErPgvepjREiopL2aG4M
+   aEXLWq8/i/n1ylfOMi+mpyCc8GGl9U0sgv/gFpS75l65sjUFoNhHMs38y
+   Fln1vYMfjk0K3WusMMY1zc90syvrasHLxx4RvKx9ox4G4MlWrWrfj/3Cp
+   g==;
+X-CSE-ConnectionGUID: 3dWBRO51QMWzQpUINSS3xA==
+X-CSE-MsgGUID: PPirK3QhQ62jPURfCULrgw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11090"; a="39200161"
+X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
+   d="scan'208";a="39200161"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 10:15:57 -0700
+X-CSE-ConnectionGUID: fh2X1d6hTGqjZBpzWWpz1g==
+X-CSE-MsgGUID: EPn/z0lATWOf0HFkYD5mSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
+   d="scan'208";a="41004444"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 01 Jun 2024 10:15:50 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sDSKZ-000JAV-2x;
+	Sat, 01 Jun 2024 17:15:47 +0000
+Date: Sun, 2 Jun 2024 01:15:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Sandy Huang <hjc@rock-chips.com>,
+	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+	Andy Yan <andy.yan@rock-chips.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mark Yao <markyao0591@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+	kernel@collabora.com, Alexandre ARNOUD <aarnoud@me.com>,
+	Luis de Arquer <ldearquer@gmail.com>,
+	Algea Cao <algea.cao@rock-chips.com>
+Subject: Re: [PATCH 14/14] drm/rockchip: dw_hdmi: Add basic RK3588 support
+Message-ID: <202406020122.7LHytbS3-lkp@intel.com>
+References: <20240601-b4-rk3588-bridge-upstream-v1-14-f6203753232b@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|GV2PR02MB9373:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3f81c36-2bec-4744-8d4d-08dc825bd52a
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|3412199016|440099019|1602099003|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	npApg7Iy88JN6VNfIRSeDn9zCfGdPflyt+yleOZjxP/GqbVa/GZPXjgD9886TpRUa4Xj/T1ELIfaCTpOlLc7/iRGlpOOgdpGN+5mfDCC32AlRybvyTf2OQCR2cWcd91U+T0/iFY8eVl8BRptWtzeW/AFckfuzf/5RXvWet4JYTGAoDucFSfvA4/JvBN4HWrigyklBcAnbkBUSziKu/h6a/63hoa7VFg20hvJ3EGd6khWp9/NFlv60LvMfC2J0Kcxo3LPh1AqlLn4KAIqAQn++QUPE4XQWfBez2IY+hpZHqh8ULovV1ai5/t9JiHKO432CZZ3wgxRHcaF4bpiLoyd6nO4UDRwCDfZNtYoaELDxKbdLWfTZiqOIX1TbWrvFv8AF/rbAXnWwH5rezOH+541/lCJeJOmBDaQVDPF4QS3eruE6XBiRzg2WGkhLnmO1hlOEvviR2tySaGJQ+IuZumJS4ZW2Pv9YbJ3+s4oq9eJEPsXhTm7T/0oksYQOHcqo/hvue97XIy62zuFr/6jFexvbChm5cmCp9gKOwad4nbQ0HlpamBgvMXvltQaIRJ9JagPw6S4b9WCC7Q0rCbadzfyANb95/bJ0VriCzQeJMyjS7XA7q/3bTRExmwhJqPZgTqJfA7TXfbbIRIyd8yr36wYavzI4mt0OsxEDPfM/RPkaGvPjJJU4CMuk1w8TPhHoBaC/sI2fKomJjJxlkCx1DRuWw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IN8FiE/QItlcjl0cHBadWUe4RhZkfrAFf5Xeo/TVdNAaDme1b5VJvl0zXeUg?=
- =?us-ascii?Q?9KKOMO1TCcvB+n/Q36wx8fBGjNBkwwqxZLZr28riT1+t/74Zc6SOOmr/1I+y?=
- =?us-ascii?Q?zTtfOpzL/P7hrPsIC1UXBfnnPx0VlGYqfTu1u2uJuHkIP1VjHFRSn+vZwrBY?=
- =?us-ascii?Q?3hCjTgaDn8HpPBpydn2lUl/qAjXzja9iOETsrfIwoVKnVTZdtysdL1YjSQjf?=
- =?us-ascii?Q?5YK2nTaSL6BnvBQj6nwogZRlhC71iN3cfBqhC3IZ5zcCjmFlcxM3iNtxZhKi?=
- =?us-ascii?Q?ucd6TIMncCiYr7EYynDVXU670HH/DvsrKgZixWKrURRwn6tU8UP3JEKrOUJc?=
- =?us-ascii?Q?zFMyL2ujtaVOx36r5a0bq4fJOOCEJE2BQB6tYdxH/KxoDaCnojZK0xWBWlzh?=
- =?us-ascii?Q?ibIp6imrbDRyTcZdggdrp1aQmpSKUz5U6adJ+vf9FgYx+UX8bjAWSAA7uHjL?=
- =?us-ascii?Q?ukpzdbsmOoCttXfe12XG5feNoG/revvFbftsbH+pNQ57U4tat732wzzWTUJE?=
- =?us-ascii?Q?KefHCATtfGs54PWF9JbyJk8qa0qkd/5uepDaJgWsFk78JUsFNkfTLxQLOkCz?=
- =?us-ascii?Q?qXA2NRWU9Wlmh0YTQHdlKndJ/KchfWQ8Ev5dWIRGIEvOImvMbGr0/4CyZ5Bh?=
- =?us-ascii?Q?BZsnH0Esi2bOI3GpAMS+XtBZbEqTV26AA/Hg+fxrQEH42zpbDW4O96Q9rj0O?=
- =?us-ascii?Q?sFzNmQ2/nBOLunQAJszdPkEuE2Ad+cLGdkIVnlar0+cVONMV7QAnVKoE6B4k?=
- =?us-ascii?Q?dZpmx+dX2FekUtQ6eCxGisy9x9QIMygJ3JzbUQPT742tEN91h8/g0V6Ekz7I?=
- =?us-ascii?Q?ctDzmD5iKYLBjIiXs2IDOe1My8aJCcRItrJjY7cUr8EonZclQjTlHmftFlrx?=
- =?us-ascii?Q?U+zykOXtAk5TA2sgrJc6zhiEyDwVXNbGgJs/rrWRNGO5v1IG2XVZ1d6dcaGS?=
- =?us-ascii?Q?trbfVPsHEE9JEOq53wBJ54chit8jrKtedblu0QJYrIiwkTdbKy9CiMl7AaNQ?=
- =?us-ascii?Q?i04H4EisVQyRQcb19R860i62rZVK0oY4adQXqXOQu7Tl57hfmtb0w0IEVIGx?=
- =?us-ascii?Q?3vk5JrmiPPsG36r4C4/h6p1gJiZWEtT8uMXfszguUDAxKwKjOoKXQjC6LWgo?=
- =?us-ascii?Q?WegnNXeXYpzfPtBB8BcEYLW08A79PyxWdxMn4jSgJk7Lu6PkZWvs6yboLtin?=
- =?us-ascii?Q?SeHB96yrVJpyFRJ8m2qsldHa5qT5b/cpgLcd2w15MJyG4N/o04Ub7now7UVM?=
- =?us-ascii?Q?peiSizDiXA88zoQpMSV/?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3f81c36-2bec-4744-8d4d-08dc825bd52a
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2024 16:56:51.1191
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR02MB9373
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240601-b4-rk3588-bridge-upstream-v1-14-f6203753232b@collabora.com>
 
-This is an effort to get rid of all multiplications from allocation
-functions in order to prevent integer overflows [1][2].
+Hi Cristian,
 
-As the "rb" variable is a pointer to "struct perf_buffer" and this
-structure ends in a flexible array:
+kernel test robot noticed the following build errors:
 
-struct perf_buffer {
-	[...]
-	void	*data_pages[];
-};
+[auto build test ERROR on 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0]
 
-the preferred way in the kernel is to use the struct_size() helper to
-do the arithmetic instead of the calculation "size + count * size" in
-the kzalloc_node() functions.
+url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Ciocaltea/drm-bridge-dw-hdmi-Simplify-clock-handling/20240601-211531
+base:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+patch link:    https://lore.kernel.org/r/20240601-b4-rk3588-bridge-upstream-v1-14-f6203753232b%40collabora.com
+patch subject: [PATCH 14/14] drm/rockchip: dw_hdmi: Add basic RK3588 support
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240602/202406020122.7LHytbS3-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240602/202406020122.7LHytbS3-lkp@intel.com/reproduce)
 
-In the "rb_alloc" function defined in the else branch of the macro
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406020122.7LHytbS3-lkp@intel.com/
 
- #ifndef CONFIG_PERF_USE_VMALLOC
+All errors (new ones prefixed by >>):
 
-the count in the struct_size helper is the literal "1" since only one
-pointer to void is allocated. Also, remove the "size" variable as it
-is no longer needed.
+>> drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:280:26: error: implicit declaration of function 'devm_gpiod_get_optional' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   hdmi->qp_enable_gpio = devm_gpiod_get_optional(hdmi->dev, "enable",
+                                          ^
+   drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:280:26: note: did you mean 'devm_clk_get_optional'?
+   include/linux/clk.h:597:13: note: 'devm_clk_get_optional' declared here
+   struct clk *devm_clk_get_optional(struct device *dev, const char *id);
+               ^
+>> drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:281:15: error: use of undeclared identifier 'GPIOD_OUT_HIGH'
+                                                                  GPIOD_OUT_HIGH);
+                                                                  ^
+>> drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:364:3: error: implicit declaration of function 'gpiod_set_value' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   gpiod_set_value(hdmi->qp_enable_gpio, 1);
+                   ^
+   3 errors generated.
 
-At the same time, prepare for the coming implementation by GCC and Clang
-of the __counted_by attribute. Flexible array members annotated with
-__counted_by can have their accesses bounds-checked at run-time via
-CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE (for
-strcpy/memcpy-family functions). In this case, it is important to note
-that the logic needs a little refactoring to ensure that the "nr_pages"
-member is initialized before the first access to the flex array.
 
-In one case, it is only necessary to move the "nr_pages" assignment
-before the array-writing loop while in the other case the access to the
-flex array needs to be moved inside the if branch and after the
-"nr_pages" assignment.
+vim +/devm_gpiod_get_optional +280 drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
 
-This way, the code is more safer.
+   226	
+   227	static int rockchip_hdmi_parse_dt(struct rockchip_hdmi *hdmi)
+   228	{
+   229		static const char * const qp_clk_names[] = {
+   230			"pclk", "hdp", "earc", "aud", "hclk_vo1",
+   231		};
+   232		struct device_node *np = hdmi->dev->of_node;
+   233		struct clk *qp_clk;
+   234		int ret, i;
+   235	
+   236		hdmi->regmap = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
+   237		if (IS_ERR(hdmi->regmap)) {
+   238			drm_err(hdmi, "Unable to get rockchip,grf\n");
+   239			return PTR_ERR(hdmi->regmap);
+   240		}
+   241	
+   242		hdmi->ref_clk = devm_clk_get_optional_enabled(hdmi->dev, "ref");
+   243		if (!hdmi->ref_clk)
+   244			hdmi->ref_clk = devm_clk_get_optional_enabled(hdmi->dev, "vpll");
+   245	
+   246		if (IS_ERR(hdmi->ref_clk)) {
+   247			ret = PTR_ERR(hdmi->ref_clk);
+   248			if (ret != -EPROBE_DEFER)
+   249				drm_err(hdmi, "failed to get reference clock\n");
+   250			return ret;
+   251		}
+   252	
+   253		hdmi->grf_clk = devm_clk_get_optional(hdmi->dev, "grf");
+   254		if (IS_ERR(hdmi->grf_clk)) {
+   255			ret = PTR_ERR(hdmi->grf_clk);
+   256			if (ret != -EPROBE_DEFER)
+   257				drm_err(hdmi, "failed to get grf clock\n");
+   258			return ret;
+   259		}
+   260	
+   261		if (hdmi->is_hdmi_qp) {
+   262			hdmi->vo1_regmap = syscon_regmap_lookup_by_phandle(np, "rockchip,vo1_grf");
+   263			if (IS_ERR(hdmi->vo1_regmap)) {
+   264				drm_err(hdmi, "Unable to get rockchip,vo1_grf\n");
+   265				return PTR_ERR(hdmi->vo1_regmap);
+   266			}
+   267	
+   268			for (i = 0; i < ARRAY_SIZE(qp_clk_names); i++) {
+   269				qp_clk = devm_clk_get_optional_enabled(hdmi->dev, qp_clk_names[i]);
+   270	
+   271				if (IS_ERR(qp_clk)) {
+   272					ret = PTR_ERR(qp_clk);
+   273					if (ret != -EPROBE_DEFER)
+   274						drm_err(hdmi, "failed to get %s clock: %d\n",
+   275							qp_clk_names[i], ret);
+   276					return ret;
+   277				}
+   278			}
+   279	
+ > 280			hdmi->qp_enable_gpio = devm_gpiod_get_optional(hdmi->dev, "enable",
+ > 281								       GPIOD_OUT_HIGH);
+   282			if (IS_ERR(hdmi->qp_enable_gpio)) {
+   283				ret = PTR_ERR(hdmi->qp_enable_gpio);
+   284				drm_err(hdmi, "failed to request enable GPIO: %d\n", ret);
+   285				return ret;
+   286			}
+   287		}
+   288	
+   289		ret = devm_regulator_get_enable(hdmi->dev, "avdd-0v9");
+   290		if (ret)
+   291			return ret;
+   292	
+   293		ret = devm_regulator_get_enable(hdmi->dev, "avdd-1v8");
+   294	
+   295		return ret;
+   296	}
+   297	
+   298	static enum drm_mode_status
+   299	dw_hdmi_rockchip_mode_valid(struct dw_hdmi *dw_hdmi, void *data,
+   300				    const struct drm_display_info *info,
+   301				    const struct drm_display_mode *mode)
+   302	{
+   303		struct rockchip_hdmi *hdmi = data;
+   304		const struct dw_hdmi_mpll_config *mpll_cfg = rockchip_mpll_cfg;
+   305		int pclk = mode->clock * 1000;
+   306		bool exact_match = hdmi->plat_data->phy_force_vendor;
+   307		int i;
+   308	
+   309		if (hdmi->ref_clk) {
+   310			int rpclk = clk_round_rate(hdmi->ref_clk, pclk);
+   311	
+   312			if (abs(rpclk - pclk) > pclk / 1000)
+   313				return MODE_NOCLOCK;
+   314		}
+   315	
+   316		for (i = 0; mpll_cfg[i].mpixelclock != (~0UL); i++) {
+   317			/*
+   318			 * For vendor specific phys force an exact match of the pixelclock
+   319			 * to preserve the original behaviour of the driver.
+   320			 */
+   321			if (exact_match && pclk == mpll_cfg[i].mpixelclock)
+   322				return MODE_OK;
+   323			/*
+   324			 * The Synopsys phy can work with pixelclocks up to the value given
+   325			 * in the corresponding mpll_cfg entry.
+   326			 */
+   327			if (!exact_match && pclk <= mpll_cfg[i].mpixelclock)
+   328				return MODE_OK;
+   329		}
+   330	
+   331		return MODE_BAD;
+   332	}
+   333	
+   334	static void dw_hdmi_rockchip_encoder_disable(struct drm_encoder *encoder)
+   335	{
+   336	}
+   337	
+   338	static bool
+   339	dw_hdmi_rockchip_encoder_mode_fixup(struct drm_encoder *encoder,
+   340					    const struct drm_display_mode *mode,
+   341					    struct drm_display_mode *adj_mode)
+   342	{
+   343		return true;
+   344	}
+   345	
+   346	static void dw_hdmi_rockchip_encoder_mode_set(struct drm_encoder *encoder,
+   347						      struct drm_display_mode *mode,
+   348						      struct drm_display_mode *adj_mode)
+   349	{
+   350		struct rockchip_hdmi *hdmi = to_rockchip_hdmi(encoder);
+   351	
+   352		clk_set_rate(hdmi->ref_clk, adj_mode->clock * 1000);
+   353	}
+   354	
+   355	static void dw_hdmi_rockchip_encoder_enable(struct drm_encoder *encoder)
+   356	{
+   357		struct rockchip_hdmi *hdmi = to_rockchip_hdmi(encoder);
+   358		struct drm_crtc *crtc = encoder->crtc;
+   359		u32 val;
+   360		int ret, rate;
+   361	
+   362		if (hdmi->is_hdmi_qp) {
+   363			/* Unconditionally switch to TMDS as FRL is not yet supported */
+ > 364			gpiod_set_value(hdmi->qp_enable_gpio, 1);
+   365	
+   366			if (crtc && crtc->state) {
+   367				clk_set_rate(hdmi->ref_clk,
+   368					     crtc->state->adjusted_mode.crtc_clock * 1000);
+   369				/*
+   370				 * FIXME: Temporary workaround to pass pixel clock rate
+   371				 * to the PHY driver until phy_configure_opts_hdmi
+   372				 * becomes available in the PHY API. See also the related
+   373				 * comment in rk_hdptx_phy_power_on() from
+   374				 * drivers/phy/rockchip/phy-rockchip-samsung-hdptx.c
+   375				 */
+   376				if (hdmi->phy) {
+   377					rate = crtc->state->mode.clock * 10;
+   378					phy_set_bus_width(hdmi->phy, rate);
+   379					drm_dbg(hdmi, "%s set bus_width=%u\n",
+   380						__func__, rate);
+   381				}
+   382			}
+   383		}
+   384	
+   385		if (hdmi->chip_data->lcdsel_grf_reg < 0)
+   386			return;
+   387	
+   388		ret = drm_of_encoder_active_endpoint_id(hdmi->dev->of_node, encoder);
+   389		if (ret)
+   390			val = hdmi->chip_data->lcdsel_lit;
+   391		else
+   392			val = hdmi->chip_data->lcdsel_big;
+   393	
+   394		ret = clk_prepare_enable(hdmi->grf_clk);
+   395		if (ret < 0) {
+   396			drm_err(hdmi, "failed to enable grfclk %d\n", ret);
+   397			return;
+   398		}
+   399	
+   400		ret = regmap_write(hdmi->regmap, hdmi->chip_data->lcdsel_grf_reg, val);
+   401		if (ret != 0)
+   402			drm_err(hdmi, "Could not write to GRF: %d\n", ret);
+   403	
+   404		clk_disable_unprepare(hdmi->grf_clk);
+   405		drm_dbg(hdmi, "vop %s output to hdmi\n", ret ? "LIT" : "BIG");
+   406	}
+   407	
 
-This code was detected with the help of Coccinelle, and audited and
-modified manually.
-
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
-Link: https://github.com/KSPP/linux/issues/160 [2]
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Erick Archer <erick.archer@outlook.com>
----
- kernel/events/internal.h    |  2 +-
- kernel/events/ring_buffer.c | 15 ++++-----------
- 2 files changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/events/internal.h b/kernel/events/internal.h
-index 5150d5f84c03..dc8d39b01adb 100644
---- a/kernel/events/internal.h
-+++ b/kernel/events/internal.h
-@@ -55,7 +55,7 @@ struct perf_buffer {
- 	void				*aux_priv;
- 
- 	struct perf_event_mmap_page	*user_page;
--	void				*data_pages[];
-+	void				*data_pages[] __counted_by(nr_pages);
- };
- 
- extern void rb_free(struct perf_buffer *rb);
-diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-index 4013408ce012..d123fa2096cf 100644
---- a/kernel/events/ring_buffer.c
-+++ b/kernel/events/ring_buffer.c
-@@ -822,9 +822,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
- 	unsigned long size;
- 	int i, node;
- 
--	size = sizeof(struct perf_buffer);
--	size += nr_pages * sizeof(void *);
--
-+	size = struct_size(rb, data_pages, nr_pages);
- 	if (order_base_2(size) > PAGE_SHIFT+MAX_PAGE_ORDER)
- 		goto fail;
- 
-@@ -833,6 +831,7 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
- 	if (!rb)
- 		goto fail;
- 
-+	rb->nr_pages = nr_pages;
- 	rb->user_page = perf_mmap_alloc_page(cpu);
- 	if (!rb->user_page)
- 		goto fail_user_page;
-@@ -843,8 +842,6 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
- 			goto fail_data_pages;
- 	}
- 
--	rb->nr_pages = nr_pages;
--
- 	ring_buffer_init(rb, watermark, flags);
- 
- 	return rb;
-@@ -916,15 +913,11 @@ void rb_free(struct perf_buffer *rb)
- struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
- {
- 	struct perf_buffer *rb;
--	unsigned long size;
- 	void *all_buf;
- 	int node;
- 
--	size = sizeof(struct perf_buffer);
--	size += sizeof(void *);
--
- 	node = (cpu == -1) ? cpu : cpu_to_node(cpu);
--	rb = kzalloc_node(size, GFP_KERNEL, node);
-+	rb = kzalloc_node(struct_size(rb, data_pages, 1), GFP_KERNEL, node);
- 	if (!rb)
- 		goto fail;
- 
-@@ -935,9 +928,9 @@ struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)
- 		goto fail_all_buf;
- 
- 	rb->user_page = all_buf;
--	rb->data_pages[0] = all_buf + PAGE_SIZE;
- 	if (nr_pages) {
- 		rb->nr_pages = 1;
-+		rb->data_pages[0] = all_buf + PAGE_SIZE;
- 		rb->page_order = ilog2(nr_pages);
- 	}
- 
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
