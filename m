@@ -1,95 +1,188 @@
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2225A335A7;
-	Sat,  1 Jun 2024 11:38:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60CE14F9DE;
+	Sat,  1 Jun 2024 12:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717241900; cv=none; b=TFdqByyJrjHhQx5F21kMbXTwTBi1iUbszvk1uni3fKbdN8W9DNlv9asaVeJYoaEx0xss0CA2BCnaRodRsVwNraCRRmPRpaDEVxs3lZOC6YR1vkIH33EdXXHooBoNCv6DCJB0VWryu7XVI3o2WGxxeK/Hw2G22HNGTNu43RwBtuE=
+	t=1717244066; cv=none; b=HA28Bqn46Iy30yxHhbyHn4cBjqmB2uRRLQZdm+CLWyaZxHEMxLZKV7MSTh1uU9mR5ggI0CtVks5nxLdjmLGRQDwFjjrA2PK89pR4LgtQnAHK+Zi6uSqnPYeDEQQcwzm/PQNp1WrI0bIHL/3VUJPJPSHjrI3l5tRYnjUu50rd6Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717241900; c=relaxed/simple;
-	bh=uAJlqDMiuKeV1HJo6t1t12QkEwDuIC/XqQuiy4tqFGg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jDT/OIUq7w7Ct+baVrz2EmrULe6pq8x85J126yZVNxZK9cLKcJDauWMotQprKsDd9C9OOT9nPHg4tn+M0hmBP336RVoe/BElwljUdxv4EGf60MYtN6F6D6MhBIpQPqnxm4ySi/NHMHe6HedywPyd+X1eNFkz1bx5lbnMAWClRQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 451Ao3b6025787;
-	Sat, 1 Jun 2024 11:37:57 GMT
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [147.11.82.252])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3yfrux8a77-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Sat, 01 Jun 2024 11:37:56 +0000 (GMT)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Sat, 1 Jun 2024 04:37:55 -0700
-Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
- 15.1.2507.39 via Frontend Transport; Sat, 1 Jun 2024 04:37:50 -0700
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <lkp@intel.com>
-CC: <coreteam@netfilter.org>, <davem@davemloft.net>, <ebiggers@kernel.org>,
-        <fw@strlen.de>, <jaegeuk@kernel.org>, <kadlec@netfilter.org>,
-        <kuba@kernel.org>, <linux-fscrypt@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lizhi.xu@windriver.com>,
-        <llvm@lists.linux.dev>, <netdev@vger.kernel.org>,
-        <netfilter-devel@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
-        <pablo@netfilter.org>,
-        <syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com>,
-        <syzkaller-bugs@googlegroups.com>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>
-Subject: [PATCH V5] ext4: check hash version and filesystem casefolded consistent
-Date: Sat, 1 Jun 2024 19:37:49 +0800
-Message-ID: <20240601113749.473058-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240531185519.GB1153@sol.localdomain>
-References: <20240531185519.GB1153@sol.localdomain>
+	s=arc-20240116; t=1717244066; c=relaxed/simple;
+	bh=k11lqHrOQhsOHCYMEj4yuruA+H/x5bXadIEbvdi+3po=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=c7jA0p/fnEUOIML7/EaczEORKFcrvy412F5WjnfNI6y/fXUYWPlQM6XpAPE+yXqKDjc3qGwpZ0/VHgWzzDzS3h8SjXL2o/lyodNHWotIFldsasFKEiS9ux0MoXsyAMzQZeTYair45i98ZkRyqoEAybQUCgkuVz1/lRkniioaM7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wskx9gVp; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wskx9gVp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717244065; x=1748780065;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=k11lqHrOQhsOHCYMEj4yuruA+H/x5bXadIEbvdi+3po=;
+  b=Wskx9gVptsn6t9266HYNYDAdpb26d1pV0ldxxkJ0I2qOvN15Rt+0LTsd
+   gmP+R1BEgCtIgdgaup1JWhkd3EDUlpmGzxtzx3t/3spM/iwNST2KLIUVh
+   KDtHYi3slBY7gY9AE9krP1h/ciH6/TUDEHvfCFvHk1G0Xwh9ciYrMNfRR
+   r7ofxcZ1zUCokjuH8rqmORHJ7ISZ8w2FuKXSlncE75HO+HsW+QA7MJbNz
+   O92yK/5m9agEAh7OuMKygFfM+1jU3+M6bbiy1TX3hcSLIj8HwDFoap46R
+   69UxyKTUriZSqS47G9OlzYMSMcxNGeU/5KHtiF1I8zAhiA+ER+hC5/6j5
+   Q==;
+X-CSE-ConnectionGUID: VUHthNJARX+AbZ503sxuSQ==
+X-CSE-MsgGUID: ceLVvmecTWGzj4vjDKD6/Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="36319525"
+X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
+   d="scan'208";a="36319525"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 05:14:25 -0700
+X-CSE-ConnectionGUID: sT2CjJIMROq89006CKiVWA==
+X-CSE-MsgGUID: tJVaUD8eSVmlBBZHEkrwGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
+   d="scan'208";a="36509482"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 01 Jun 2024 05:14:23 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sDNcq-000Ipd-21;
+	Sat, 01 Jun 2024 12:14:20 +0000
+Date: Sat, 1 Jun 2024 20:13:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Julien Massot <julien.massot@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [sailus-media-tree:test 54/55] drivers/media/i2c/max96714.c:675:46:
+ error: too many arguments to function call, expected 3, have 4
+Message-ID: <202406012008.jtWUB0XV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: SajYroC-HqTmjkX9D0lmFQznohzPr4mF
-X-Proofpoint-GUID: SajYroC-HqTmjkX9D0lmFQznohzPr4mF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-06-01_05,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- bulkscore=0 spamscore=0 mlxscore=0 priorityscore=1501 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.21.0-2405170001 definitions=main-2406010091
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When mounting the ext4 filesystem, if the hash version and casefolded are not
-consistent, exit the mounting.
+tree:   git://linuxtv.org/sailus/media_tree.git test
+head:   94e408a1547ef00f59477a072c6f943d62d7a097
+commit: 3cef6383eec3ec8ac81afe294a669c2ecd8882ef [54/55] media: i2c: add MAX96714 driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240601/202406012008.jtWUB0XV-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406012008.jtWUB0XV-lkp@intel.com/reproduce)
 
-Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
----
- fs/ext4/super.c | 5 +++++
- 1 file changed, 5 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406012008.jtWUB0XV-lkp@intel.com/
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index c682fb927b64..0ad326504c50 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -5262,6 +5262,11 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 		goto failed_mount;
- 
- 	ext4_hash_info_init(sb);
-+	if (es->s_def_hash_version == DX_HASH_SIPHASH && 
-+	    !ext4_has_feature_casefold(sb)) {
-+		err = -EINVAL;
-+		goto failed_mount;
-+	}
- 
- 	err = ext4_handle_clustersize(sb);
- 	if (err)
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/media/i2c/max96714.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/max96714.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/max96714.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/i2c/max96714.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/media/i2c/max96714.c:675:46: error: too many arguments to function call, expected 3, have 4
+     675 |         return i2c_mux_add_adapter(priv->mux, 0, 0, 0);
+         |                ~~~~~~~~~~~~~~~~~~~                  ^
+   include/linux/i2c-mux.h:58:5: note: 'i2c_mux_add_adapter' declared here
+      58 | int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
+         |     ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+      59 |                         u32 force_nr, u32 chan_id);
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+   7 warnings and 1 error generated.
+
+
+vim +675 drivers/media/i2c/max96714.c
+
+   666	
+   667	static int max96714_i2c_mux_init(struct max96714_priv *priv)
+   668	{
+   669		priv->mux = i2c_mux_alloc(priv->client->adapter, &priv->client->dev,
+   670					  1, 0, I2C_MUX_LOCKED | I2C_MUX_GATE,
+   671					  max96714_i2c_mux_select, NULL);
+   672		if (!priv->mux)
+   673			return -ENOMEM;
+   674	
+ > 675		return i2c_mux_add_adapter(priv->mux, 0, 0, 0);
+   676	}
+   677	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
