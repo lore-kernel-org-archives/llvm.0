@@ -1,81 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FD91E898;
-	Sat,  1 Jun 2024 17:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD3F1CAA6;
+	Sat,  1 Jun 2024 20:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717262159; cv=none; b=pXd89lJaLZPb5FDnahBUr1x8pvBOoClCLgLAEErzF46X7TYB2lggcg/VNy8dERoF99itSfHO4B3bfNCJHN6fssAGbTybl0H3iPxB+TC0VnZR0QQbentdmSAiWQq3dG8UL8/f2JrQ01B1qJLlys1WwuFEVq3oXCEIcvCJmt1awpc=
+	t=1717275073; cv=none; b=V+gN6ZSCcd3XWLhtQXtarSJQrCJ/efm0eVh6+WZfkjvu5VjsgpmvLWzC26jMgArUDoq3mxGfEEe0qzVC750nBC1DWZMdGW1PI2N2L0zfmzbR1Ocg25IlY1qEs5FZP91P9st+g+lFIaryJPJmFQPzePC/c78XLmPKkkKpOMwo5lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717262159; c=relaxed/simple;
-	bh=QT0/E9Yiy8jGP3WrJjpfhCJZG2LSMCz7oy8UufZ8jHo=;
+	s=arc-20240116; t=1717275073; c=relaxed/simple;
+	bh=NK8j9UGLpfCjTYjcM2PbmEMcNxeoo86/1fcojIA7+Uc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mjr17vtUnannRpINwXc+LmbLHW8oBhB+aueu2l9REXEhnm5qg8IGg20sYgTLbvcLVbsFXzsjPk66I3j3JvFpxAAJBRp3jdCpSNOrCBDAlvU/gyj4S2euURfazc9BL+D8pMKAyzbNKVHGeQnP6kZnVF8SWQGKljwRU8wJSuVq67g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nyuTJsmD; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=FJ4No+ooQQvnpU9GgUR6kMd3+rXYJmmyaihm/z3qj4xvDX47PR6wvf48tWWd5jfJnHTXKqGdntfPaaNspJw9HZbdzPuNUd2Llgkcmq9E4T/oZFuEJJoen9c9k6hiUDvVT003MJ88wRcGNv/Fnx3onJArfT7ySvLbz3jRABCwvVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kK8Rz+zl; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nyuTJsmD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kK8Rz+zl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717262157; x=1748798157;
+  t=1717275071; x=1748811071;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QT0/E9Yiy8jGP3WrJjpfhCJZG2LSMCz7oy8UufZ8jHo=;
-  b=nyuTJsmD08wZLC41cgbD6WdO6BTD3iM9k8Ms8DOYLt3oR8yJxursp4Ix
-   SSBm8t7pdkQzWi3NGPkS2MI+wytQa9DBNnGVBa5tWIYmqvZBKZ/Ac3/dQ
-   /Daq+pnIw7CLVF4y5Ws0bUdU7ABd2mF1NmXKZzzxOkd9AnLMWCIObstxh
-   7wusBhbXV76LVRbSMY57geESbVZZa85/BqcDJ7ErPgvepjREiopL2aG4M
-   aEXLWq8/i/n1ylfOMi+mpyCc8GGl9U0sgv/gFpS75l65sjUFoNhHMs38y
-   Fln1vYMfjk0K3WusMMY1zc90syvrasHLxx4RvKx9ox4G4MlWrWrfj/3Cp
-   g==;
-X-CSE-ConnectionGUID: 3dWBRO51QMWzQpUINSS3xA==
-X-CSE-MsgGUID: PPirK3QhQ62jPURfCULrgw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11090"; a="39200161"
-X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
-   d="scan'208";a="39200161"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 10:15:57 -0700
-X-CSE-ConnectionGUID: fh2X1d6hTGqjZBpzWWpz1g==
-X-CSE-MsgGUID: EPn/z0lATWOf0HFkYD5mSw==
+  bh=NK8j9UGLpfCjTYjcM2PbmEMcNxeoo86/1fcojIA7+Uc=;
+  b=kK8Rz+zlYUZXYmzUQntwGs+G+Y9OCla1ag6DpcVPqXjQXDnhnuWTTya3
+   HlVwMxmnhOvO6yWnP47y4MYLoj9Mbh0VHLVHcKU5giK69tI5rjHg8mHiE
+   RkDOGAGRshNPalrX7mx9xpUo0qWQimrRoJjk0lzmxpxIIyOLynX+OYaTC
+   d5F46JuVPdmgD8p0AFMZdPpkwUKNO4DciXLbMB9i1YOzrHpNcmN4iSNqW
+   wvc6+Rwg1mdBkTtqcV/o3RPGtGEAdphEENns507KUoUPKEDKWdGObBMZv
+   /ENZoTAyP4QtElXC11vkGdxAnba5ImNy+4ZDVwrdMR303/nFmgP2YfndV
+   Q==;
+X-CSE-ConnectionGUID: Hn+tW0IzQkeVh9yuaEVLvA==
+X-CSE-MsgGUID: CS2PmcW3TiWU0IVC2sq1mQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11090"; a="13652018"
+X-IronPort-AV: E=Sophos;i="6.08,208,1712646000"; 
+   d="scan'208";a="13652018"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 13:51:10 -0700
+X-CSE-ConnectionGUID: beW2idpTT3KBZYatnIHp6Q==
+X-CSE-MsgGUID: YOsL1a+8RO6AoszTCTqrHQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
-   d="scan'208";a="41004444"
+X-IronPort-AV: E=Sophos;i="6.08,208,1712646000"; 
+   d="scan'208";a="67672133"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 01 Jun 2024 10:15:50 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 01 Jun 2024 13:51:09 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sDSKZ-000JAV-2x;
-	Sat, 01 Jun 2024 17:15:47 +0000
-Date: Sun, 2 Jun 2024 01:15:38 +0800
+	id 1sDVfn-000JKh-0F;
+	Sat, 01 Jun 2024 20:50:23 +0000
+Date: Sun, 2 Jun 2024 04:48:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Andy Yan <andy.yan@rock-chips.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mark Yao <markyao0591@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-	kernel@collabora.com, Alexandre ARNOUD <aarnoud@me.com>,
-	Luis de Arquer <ldearquer@gmail.com>,
-	Algea Cao <algea.cao@rock-chips.com>
-Subject: Re: [PATCH 14/14] drm/rockchip: dw_hdmi: Add basic RK3588 support
-Message-ID: <202406020122.7LHytbS3-lkp@intel.com>
-References: <20240601-b4-rk3588-bridge-upstream-v1-14-f6203753232b@collabora.com>
+To: Radu Sabau <radu.sabau@analog.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v6 1/2] hwmon: Add PEC attribute support to hardware
+ monitoring core
+Message-ID: <202406020416.G7zcrbxZ-lkp@intel.com>
+References: <20240531084645.12935-1-radu.sabau@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,229 +63,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240601-b4-rk3588-bridge-upstream-v1-14-f6203753232b@collabora.com>
+In-Reply-To: <20240531084645.12935-1-radu.sabau@analog.com>
 
-Hi Cristian,
+Hi Radu,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0]
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.10-rc1 next-20240531]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Ciocaltea/drm-bridge-dw-hdmi-Simplify-clock-handling/20240601-211531
-base:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-patch link:    https://lore.kernel.org/r/20240601-b4-rk3588-bridge-upstream-v1-14-f6203753232b%40collabora.com
-patch subject: [PATCH 14/14] drm/rockchip: dw_hdmi: Add basic RK3588 support
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240602/202406020122.7LHytbS3-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240602/202406020122.7LHytbS3-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Sabau/drivers-hwmon-max31827-Add-PEC-support/20240531-165035
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240531084645.12935-1-radu.sabau%40analog.com
+patch subject: [PATCH v6 1/2] hwmon: Add PEC attribute support to hardware monitoring core
+config: arm-imxrt_defconfig (https://download.01.org/0day-ci/archive/20240602/202406020416.G7zcrbxZ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240602/202406020416.G7zcrbxZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406020122.7LHytbS3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406020416.G7zcrbxZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:280:26: error: implicit declaration of function 'devm_gpiod_get_optional' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   hdmi->qp_enable_gpio = devm_gpiod_get_optional(hdmi->dev, "enable",
-                                          ^
-   drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:280:26: note: did you mean 'devm_clk_get_optional'?
-   include/linux/clk.h:597:13: note: 'devm_clk_get_optional' declared here
-   struct clk *devm_clk_get_optional(struct device *dev, const char *id);
-               ^
->> drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:281:15: error: use of undeclared identifier 'GPIOD_OUT_HIGH'
-                                                                  GPIOD_OUT_HIGH);
-                                                                  ^
->> drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c:364:3: error: implicit declaration of function 'gpiod_set_value' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   gpiod_set_value(hdmi->qp_enable_gpio, 1);
-                   ^
-   3 errors generated.
+   In file included from drivers/hwmon/hwmon.c:17:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/hwmon.c:400:7: error: call to undeclared function 'i2c_check_functionality'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     400 |             !i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
+         |              ^
+   1 warning and 1 error generated.
 
 
-vim +/devm_gpiod_get_optional +280 drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
+vim +/i2c_check_functionality +400 drivers/hwmon/hwmon.c
 
-   226	
-   227	static int rockchip_hdmi_parse_dt(struct rockchip_hdmi *hdmi)
-   228	{
-   229		static const char * const qp_clk_names[] = {
-   230			"pclk", "hdp", "earc", "aud", "hclk_vo1",
-   231		};
-   232		struct device_node *np = hdmi->dev->of_node;
-   233		struct clk *qp_clk;
-   234		int ret, i;
-   235	
-   236		hdmi->regmap = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
-   237		if (IS_ERR(hdmi->regmap)) {
-   238			drm_err(hdmi, "Unable to get rockchip,grf\n");
-   239			return PTR_ERR(hdmi->regmap);
-   240		}
-   241	
-   242		hdmi->ref_clk = devm_clk_get_optional_enabled(hdmi->dev, "ref");
-   243		if (!hdmi->ref_clk)
-   244			hdmi->ref_clk = devm_clk_get_optional_enabled(hdmi->dev, "vpll");
-   245	
-   246		if (IS_ERR(hdmi->ref_clk)) {
-   247			ret = PTR_ERR(hdmi->ref_clk);
-   248			if (ret != -EPROBE_DEFER)
-   249				drm_err(hdmi, "failed to get reference clock\n");
-   250			return ret;
-   251		}
-   252	
-   253		hdmi->grf_clk = devm_clk_get_optional(hdmi->dev, "grf");
-   254		if (IS_ERR(hdmi->grf_clk)) {
-   255			ret = PTR_ERR(hdmi->grf_clk);
-   256			if (ret != -EPROBE_DEFER)
-   257				drm_err(hdmi, "failed to get grf clock\n");
-   258			return ret;
-   259		}
-   260	
-   261		if (hdmi->is_hdmi_qp) {
-   262			hdmi->vo1_regmap = syscon_regmap_lookup_by_phandle(np, "rockchip,vo1_grf");
-   263			if (IS_ERR(hdmi->vo1_regmap)) {
-   264				drm_err(hdmi, "Unable to get rockchip,vo1_grf\n");
-   265				return PTR_ERR(hdmi->vo1_regmap);
-   266			}
-   267	
-   268			for (i = 0; i < ARRAY_SIZE(qp_clk_names); i++) {
-   269				qp_clk = devm_clk_get_optional_enabled(hdmi->dev, qp_clk_names[i]);
-   270	
-   271				if (IS_ERR(qp_clk)) {
-   272					ret = PTR_ERR(qp_clk);
-   273					if (ret != -EPROBE_DEFER)
-   274						drm_err(hdmi, "failed to get %s clock: %d\n",
-   275							qp_clk_names[i], ret);
-   276					return ret;
-   277				}
-   278			}
-   279	
- > 280			hdmi->qp_enable_gpio = devm_gpiod_get_optional(hdmi->dev, "enable",
- > 281								       GPIOD_OUT_HIGH);
-   282			if (IS_ERR(hdmi->qp_enable_gpio)) {
-   283				ret = PTR_ERR(hdmi->qp_enable_gpio);
-   284				drm_err(hdmi, "failed to request enable GPIO: %d\n", ret);
-   285				return ret;
-   286			}
-   287		}
-   288	
-   289		ret = devm_regulator_get_enable(hdmi->dev, "avdd-0v9");
-   290		if (ret)
-   291			return ret;
-   292	
-   293		ret = devm_regulator_get_enable(hdmi->dev, "avdd-1v8");
-   294	
-   295		return ret;
-   296	}
-   297	
-   298	static enum drm_mode_status
-   299	dw_hdmi_rockchip_mode_valid(struct dw_hdmi *dw_hdmi, void *data,
-   300				    const struct drm_display_info *info,
-   301				    const struct drm_display_mode *mode)
-   302	{
-   303		struct rockchip_hdmi *hdmi = data;
-   304		const struct dw_hdmi_mpll_config *mpll_cfg = rockchip_mpll_cfg;
-   305		int pclk = mode->clock * 1000;
-   306		bool exact_match = hdmi->plat_data->phy_force_vendor;
-   307		int i;
-   308	
-   309		if (hdmi->ref_clk) {
-   310			int rpclk = clk_round_rate(hdmi->ref_clk, pclk);
-   311	
-   312			if (abs(rpclk - pclk) > pclk / 1000)
-   313				return MODE_NOCLOCK;
-   314		}
-   315	
-   316		for (i = 0; mpll_cfg[i].mpixelclock != (~0UL); i++) {
-   317			/*
-   318			 * For vendor specific phys force an exact match of the pixelclock
-   319			 * to preserve the original behaviour of the driver.
-   320			 */
-   321			if (exact_match && pclk == mpll_cfg[i].mpixelclock)
-   322				return MODE_OK;
-   323			/*
-   324			 * The Synopsys phy can work with pixelclocks up to the value given
-   325			 * in the corresponding mpll_cfg entry.
-   326			 */
-   327			if (!exact_match && pclk <= mpll_cfg[i].mpixelclock)
-   328				return MODE_OK;
-   329		}
-   330	
-   331		return MODE_BAD;
-   332	}
-   333	
-   334	static void dw_hdmi_rockchip_encoder_disable(struct drm_encoder *encoder)
-   335	{
-   336	}
-   337	
-   338	static bool
-   339	dw_hdmi_rockchip_encoder_mode_fixup(struct drm_encoder *encoder,
-   340					    const struct drm_display_mode *mode,
-   341					    struct drm_display_mode *adj_mode)
-   342	{
-   343		return true;
-   344	}
-   345	
-   346	static void dw_hdmi_rockchip_encoder_mode_set(struct drm_encoder *encoder,
-   347						      struct drm_display_mode *mode,
-   348						      struct drm_display_mode *adj_mode)
-   349	{
-   350		struct rockchip_hdmi *hdmi = to_rockchip_hdmi(encoder);
-   351	
-   352		clk_set_rate(hdmi->ref_clk, adj_mode->clock * 1000);
-   353	}
-   354	
-   355	static void dw_hdmi_rockchip_encoder_enable(struct drm_encoder *encoder)
-   356	{
-   357		struct rockchip_hdmi *hdmi = to_rockchip_hdmi(encoder);
-   358		struct drm_crtc *crtc = encoder->crtc;
-   359		u32 val;
-   360		int ret, rate;
-   361	
-   362		if (hdmi->is_hdmi_qp) {
-   363			/* Unconditionally switch to TMDS as FRL is not yet supported */
- > 364			gpiod_set_value(hdmi->qp_enable_gpio, 1);
-   365	
-   366			if (crtc && crtc->state) {
-   367				clk_set_rate(hdmi->ref_clk,
-   368					     crtc->state->adjusted_mode.crtc_clock * 1000);
-   369				/*
-   370				 * FIXME: Temporary workaround to pass pixel clock rate
-   371				 * to the PHY driver until phy_configure_opts_hdmi
-   372				 * becomes available in the PHY API. See also the related
-   373				 * comment in rk_hdptx_phy_power_on() from
-   374				 * drivers/phy/rockchip/phy-rockchip-samsung-hdptx.c
-   375				 */
-   376				if (hdmi->phy) {
-   377					rate = crtc->state->mode.clock * 10;
-   378					phy_set_bus_width(hdmi->phy, rate);
-   379					drm_dbg(hdmi, "%s set bus_width=%u\n",
-   380						__func__, rate);
-   381				}
-   382			}
-   383		}
-   384	
-   385		if (hdmi->chip_data->lcdsel_grf_reg < 0)
-   386			return;
-   387	
-   388		ret = drm_of_encoder_active_endpoint_id(hdmi->dev->of_node, encoder);
-   389		if (ret)
-   390			val = hdmi->chip_data->lcdsel_lit;
-   391		else
-   392			val = hdmi->chip_data->lcdsel_big;
    393	
-   394		ret = clk_prepare_enable(hdmi->grf_clk);
-   395		if (ret < 0) {
-   396			drm_err(hdmi, "failed to enable grfclk %d\n", ret);
-   397			return;
-   398		}
-   399	
-   400		ret = regmap_write(hdmi->regmap, hdmi->chip_data->lcdsel_grf_reg, val);
-   401		if (ret != 0)
-   402			drm_err(hdmi, "Could not write to GRF: %d\n", ret);
-   403	
-   404		clk_disable_unprepare(hdmi->grf_clk);
-   405		drm_dbg(hdmi, "vop %s output to hdmi\n", ret ? "LIT" : "BIG");
-   406	}
-   407	
+   394	static int hwmon_pec_register(struct device *hdev)
+   395	{
+   396		struct i2c_client *client = i2c_verify_client(hdev->parent);
+   397		int err;
+   398	
+   399		if (!client ||
+ > 400		    !i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
+   401			return 0;
+   402	
+   403		err = device_create_file(&client->dev, &dev_attr_pec);
+   404		if (err)
+   405			return err;
+   406	
+   407		return devm_add_action_or_reset(hdev, hwmon_remove_pec, &client->dev);
+   408	}
+   409	
 
 -- 
 0-DAY CI Kernel Test Service
