@@ -1,117 +1,306 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8072914;
-	Sat,  1 Jun 2024 02:32:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E37F524F
+	for <llvm@lists.linux.dev>; Sat,  1 Jun 2024 03:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717209164; cv=none; b=bXS7OTXF9dW7wkouzKKnhClXg1py1loz7pvgi0xNIjZJxxoLWaMh2sK54rK1Ef5XLUOGuJ6fLiqL3OVvvdNU8yX3DloRLYdu3rk2+G7K2yqtMkEEoIU79dlrVgskWC/+vIeevTQSVgIcBrO7Dz+yfYJ5cvxyw3LDkdl07WcDahg=
+	t=1717211438; cv=none; b=C2qx9Pryx0KyW8cYhhNUsbAQGJnQoTv5uUH9idxEzjgRWZenJjbMuLZPgbWKZ8r+UjfsNnnpDv4VJQgAiVAMdEFFA8WMtuWVvOrPc513rMJRSFVzVveyfDwPtATjY9Ufc6eQxsR/zmMzcvGAHRaiUWu/5Cn77nnuqnckQCopy0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717209164; c=relaxed/simple;
-	bh=DiWSyQtftc8aPwNB1nMgQRYl58NlU2baAGwiCrM3a98=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P2iFoFO5RByFS6xaMVxttmyxB7hskxJqDQ6Y1BlowXrFzyqX743R36Ivst6YngKxcATTaHTz5ja0BJDMSFovFC/Dh1eSalrGX1EW1DsqrTqq33Z6SNWfurN1LbQlCqibQKA88tCmQhv2UbZ764j1v32yTl0Ey7Ml8Lg4vfpmTqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dYbph24F; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717211438; c=relaxed/simple;
+	bh=oSGW82qH1pk7AijenKYz6iWCOpYTl6GSAI49mjY7zTY=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=pMsMsnEElbpP7cXjjg1Jhgg3iHI6tQuCh+Gw8gaJiDazcRmm2HCMF2cBM8dF8KEcjb0bqLfZXDwGhM+oD1M1ymaFY3MH3gukFoTkGDTEhGWE7C4G3Calr0tpU+GzBsVH759xSCBpBE1JXmNO5t4WYt+pzweC0WCRXle9jtQjtu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SJAgSahg; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dYbph24F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717209162; x=1748745162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DiWSyQtftc8aPwNB1nMgQRYl58NlU2baAGwiCrM3a98=;
-  b=dYbph24F7CRKeR9IRL/dTz/Eo7EHZP595Ad0d+txFSzLWwwweig+IEP2
-   zL4m1xKYbDH9Le3jqFNAzTHjy9zb2JjUchaf9AurbLWQF3dFL6g2KqKDf
-   hbDgRoLEyEW02KPuGFGGh1H7knudlAWAjjxFxSGWv3gAAFhi4tZqfha8R
-   EEnj2IUTJk0e44i9dxF6ktHfxM3cvv220B0wAHt6GgF1X0xpS20vQ5C6m
-   IeCFb+av2o19CMhECjBghSohYzmYQYXlqUS1A4zlU9DzM5q71wBreYAgu
-   KoCgr5JrZbXSKWnAf5Ump8DZBHhLhmtBTuQMpISi+bZ5666CuMkDbaK10
-   A==;
-X-CSE-ConnectionGUID: DXmYToP0TEqPStPGN7oulA==
-X-CSE-MsgGUID: glsmNKrzQVGTrEvpPv/naA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="17616814"
-X-IronPort-AV: E=Sophos;i="6.08,206,1712646000"; 
-   d="scan'208";a="17616814"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 19:32:42 -0700
-X-CSE-ConnectionGUID: 9b6zvCUFTx2Kd9sWoprvDQ==
-X-CSE-MsgGUID: /99hga84RqK3PvkY4gZoNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,206,1712646000"; 
-   d="scan'208";a="59512300"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 31 May 2024 19:32:37 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sDEXe-000IAX-2g;
-	Sat, 01 Jun 2024 02:32:27 +0000
-Date: Sat, 1 Jun 2024 10:31:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
-	Johan Hovold <jhovold@gmail.com>
-Subject: Re: [PATCH v1 4/4] mfd: lm3533: Remove the driver
-Message-ID: <202406011025.2DhlyP3G-lkp@intel.com>
-References: <20240531170844.1595468-5-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SJAgSahg"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f48e9414e9so21920025ad.0
+        for <llvm@lists.linux.dev>; Fri, 31 May 2024 20:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717211436; x=1717816236; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SZapLPythn+7OkdKcS6JWdxzNsHsHOH/K7Ra5EurPq0=;
+        b=SJAgSahge5FBR9tvl6e0obuOkgXpXJsFD+T+rTVGOR1Nk+grUGJMXg3/d7xRnkIkXm
+         nG5dD14oYYI2quOgGOcE8mqekoysz4a+c+l1iELND/vMWjrs8DL6UYHbXsOouqoCGwf1
+         WZrbOg6kfBT5Ycx1g13XiWulpBbXBdATKb78dUsBmAQuNCMPMSOiIjLkqSc8f5Kwt3xb
+         oRsQ62r9x/PzV/am8A2bzu4kdLIPd7Q1Uuyof0vEw5ph4exxrIiqMsc02s74rw6yd7YL
+         lDb1vAYlPj0pl7wsGPHHnX3FkfmYHHheYJLDN8/jBUEPhcx7wx2K/M0xGQucs0BiTQcc
+         GcfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717211436; x=1717816236;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SZapLPythn+7OkdKcS6JWdxzNsHsHOH/K7Ra5EurPq0=;
+        b=bPx/3Crwnw8Q+ADd+skH4Buwg7F2JhwEvsuE95txBMMoXFjOqI7oiZ2qJPfTsCj94c
+         sNzF9pWaOH7Tk7FsYmW9CuUof2fg7/CQF3gHRQHoM+Fty9y8dzhlHnedlewiwqYfOxOc
+         HmbTzvWPf1HlyGYFxgZAzJyzVkJ/3nwkKZlADGSuKag0U4EN85e0LkzaIeZOt2a3+BPd
+         e8PiCr42n2x8PHVUbzJIxb5Arsx3L4KQv3laB3ddaE826M5BPo+H3D2eBectkmwBvvMZ
+         3ca/DQ0Oa/OnV0k8S/i+mnne78rm7C/LWPKuFSl1TYSkXxqcRHJDORJwnFlVxnFz3O/f
+         zLUw==
+X-Forwarded-Encrypted: i=1; AJvYcCWTiKbrgL1RDLsgTZSbKecefuvV/IK5YPJvUG37jvate9XcDxvgMhGtvOYo1z8NzSosM2J8EvL1k+cE9ZyCLTmAIfkn7g==
+X-Gm-Message-State: AOJu0YxAi3m/kC5uBDeehQ8G4oJg1KbDA7yBBtnWDznGcmr4kpRRl4Jb
+	Ri0weu2T/8Oxm1muG/QtDzI1DnqAT8mve4J9DxtLrM7zMpzpk/MQ
+X-Google-Smtp-Source: AGHT+IFhsqiVz9EDeD/CbXvtEMgU+B5unGFQLECQrx8z9hlXmFFpKVSwe+ozJKX0foC9phVtE7m7Cw==
+X-Received: by 2002:a17:902:780c:b0:1f1:8fd9:b99d with SMTP id d9443c01a7336-1f61bfa6dc5mr71550035ad.23.1717211436189;
+        Fri, 31 May 2024 20:10:36 -0700 (PDT)
+Received: from localhost.localdomain ([2604:a880:4:1d0::427:6000])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-1f6323ddac9sm24097325ad.173.2024.05.31.20.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 May 2024 20:10:35 -0700 (PDT)
+From: Gatlin Newhouse <gatlin.newhouse@gmail.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Kees Cook <keescook@chromium.org>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Gatlin Newhouse <gatlin.newhouse@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Baoquan He <bhe@redhat.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	Pengfei Xu <pengfei.xu@intel.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Xin Li <xin3.li@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Tina Zhang <tina.zhang@intel.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] x86/traps: Enable UBSAN traps on x86
+Date: Sat,  1 Jun 2024 03:10:05 +0000
+Message-Id: <20240601031019.3708758-1-gatlin.newhouse@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240531170844.1595468-5-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: 7bit
 
-Hi Andy,
+Bring x86 to parity with arm64, similar to commit 25b84002afb9
+("arm64: Support Clang UBSAN trap codes for better reporting").
+Enable the output of UBSAN type information on x86 architectures
+compiled with clang when CONFIG_UBSAN_TRAP=y. Currently ARM
+architectures output which specific sanitizer caused the trap,
+via the encoded data in the trap instruction. Clang on x86
+currently encodes the same data in ud1 instructions but the x86
+handle_bug() and is_valid_bugaddr() functions currently only look
+at ud2s.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Gatlin Newhouse <gatlin.newhouse@gmail.com>
+---
+Changes in v2:
+  - Name the new constants 'LEN_ASOP' and 'INSN_ASOP' instead of
+    'LEN_REX' and 'INSN_REX'
+  - Change handle_ubsan_failure() from enum bug_trap_type to void
+    function
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on lee-backlight/for-backlight-fixes linus/master v6.10-rc1 next-20240531]
-[cannot apply to lee-backlight/for-backlight-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+v1: https://lore.kernel.org/linux-hardening/20240529022043.3661757-1-gatlin.newhouse@gmail.com/
+---
+ MAINTAINERS                  |  2 ++
+ arch/x86/include/asm/bug.h   |  8 ++++++++
+ arch/x86/include/asm/ubsan.h | 18 ++++++++++++++++++
+ arch/x86/kernel/Makefile     |  1 +
+ arch/x86/kernel/traps.c      | 29 +++++++++++++++++++++++------
+ arch/x86/kernel/ubsan.c      | 30 ++++++++++++++++++++++++++++++
+ 6 files changed, 82 insertions(+), 6 deletions(-)
+ create mode 100644 arch/x86/include/asm/ubsan.h
+ create mode 100644 arch/x86/kernel/ubsan.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/backlight-lm3533_bl-Remove-the-driver/20240601-011153
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20240531170844.1595468-5-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 4/4] mfd: lm3533: Remove the driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240601/202406011025.2DhlyP3G-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406011025.2DhlyP3G-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406011025.2DhlyP3G-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/mfd/lm3533-ctrlbank.c:13:10: fatal error: 'linux/mfd/lm3533.h' file not found
-      13 | #include <linux/mfd/lm3533.h>
-         |          ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +13 drivers/mfd/lm3533-ctrlbank.c
-
-16c5c023aac862 Johan Hovold 2012-05-03  12  
-16c5c023aac862 Johan Hovold 2012-05-03 @13  #include <linux/mfd/lm3533.h>
-16c5c023aac862 Johan Hovold 2012-05-03  14  
-16c5c023aac862 Johan Hovold 2012-05-03  15  
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 28e20975c26f..b8512887ffb1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22635,6 +22635,8 @@ L:	kasan-dev@googlegroups.com
+ L:	linux-hardening@vger.kernel.org
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
++F:	arch/x86/include/asm/ubsan.h
++F:	arch/x86/kernel/ubsan.c
+ F:	Documentation/dev-tools/ubsan.rst
+ F:	include/linux/ubsan.h
+ F:	lib/Kconfig.ubsan
+diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+index a3ec87d198ac..1023c149f93d 100644
+--- a/arch/x86/include/asm/bug.h
++++ b/arch/x86/include/asm/bug.h
+@@ -13,6 +13,14 @@
+ #define INSN_UD2	0x0b0f
+ #define LEN_UD2		2
+ 
++/*
++ * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
++ */
++#define INSN_UD1	0xb90f
++#define LEN_UD1		2
++#define INSN_ASOP	0x67
++#define LEN_ASOP	1
++
+ #ifdef CONFIG_GENERIC_BUG
+ 
+ #ifdef CONFIG_X86_32
+diff --git a/arch/x86/include/asm/ubsan.h b/arch/x86/include/asm/ubsan.h
+new file mode 100644
+index 000000000000..896ad7bf587f
+--- /dev/null
++++ b/arch/x86/include/asm/ubsan.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_UBSAN_H
++#define _ASM_X86_UBSAN_H
++
++/*
++ * Clang Undefined Behavior Sanitizer trap mode support.
++ */
++#include <linux/bug.h>
++#include <linux/ubsan.h>
++#include <asm/ptrace.h>
++
++#ifdef CONFIG_UBSAN_TRAP
++void handle_ubsan_failure(struct pt_regs *regs, int insn);
++#else
++static inline void handle_ubsan_failure(struct pt_regs *regs, int insn) { return; }
++#endif /* CONFIG_UBSAN_TRAP */
++
++#endif /* _ASM_X86_UBSAN_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 74077694da7d..fe1d9db27500 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -145,6 +145,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+ 
+ obj-$(CONFIG_CFI_CLANG)			+= cfi.o
++obj-$(CONFIG_UBSAN_TRAP)		+= ubsan.o
+ 
+ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ 
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 4fa0b17e5043..ee77c868090a 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -67,6 +67,7 @@
+ #include <asm/vdso.h>
+ #include <asm/tdx.h>
+ #include <asm/cfi.h>
++#include <asm/ubsan.h>
+ 
+ #ifdef CONFIG_X86_64
+ #include <asm/x86_init.h>
+@@ -79,6 +80,9 @@
+ 
+ DECLARE_BITMAP(system_vectors, NR_VECTORS);
+ 
++/*
++ * Check for UD1, UD2, with or without Address Size Override Prefixes instructions.
++ */
+ __always_inline int is_valid_bugaddr(unsigned long addr)
+ {
+ 	if (addr < TASK_SIZE_MAX)
+@@ -88,7 +92,13 @@ __always_inline int is_valid_bugaddr(unsigned long addr)
+ 	 * We got #UD, if the text isn't readable we'd have gotten
+ 	 * a different exception.
+ 	 */
+-	return *(unsigned short *)addr == INSN_UD2;
++	if (*(u16 *)addr == INSN_UD2)
++		return INSN_UD2;
++	if (*(u16 *)addr == INSN_UD1)
++		return INSN_UD1;
++	if (*(u8 *)addr == INSN_ASOP && *(u16 *)(addr + 1) == INSN_UD1)
++		return INSN_ASOP;
++	return 0;
+ }
+ 
+ static nokprobe_inline int
+@@ -216,6 +226,7 @@ static inline void handle_invalid_op(struct pt_regs *regs)
+ static noinstr bool handle_bug(struct pt_regs *regs)
+ {
+ 	bool handled = false;
++	int insn;
+ 
+ 	/*
+ 	 * Normally @regs are unpoisoned by irqentry_enter(), but handle_bug()
+@@ -223,7 +234,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+ 	 * irqentry_enter().
+ 	 */
+ 	kmsan_unpoison_entry_regs(regs);
+-	if (!is_valid_bugaddr(regs->ip))
++	insn = is_valid_bugaddr(regs->ip);
++	if (insn == 0)
+ 		return handled;
+ 
+ 	/*
+@@ -236,10 +248,15 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+ 	 */
+ 	if (regs->flags & X86_EFLAGS_IF)
+ 		raw_local_irq_enable();
+-	if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+-	    handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
+-		regs->ip += LEN_UD2;
+-		handled = true;
++
++	if (insn == INSN_UD2) {
++		if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
++		handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
++			regs->ip += LEN_UD2;
++			handled = true;
++		}
++	} else {
++		handle_ubsan_failure(regs, insn);
+ 	}
+ 	if (regs->flags & X86_EFLAGS_IF)
+ 		raw_local_irq_disable();
+diff --git a/arch/x86/kernel/ubsan.c b/arch/x86/kernel/ubsan.c
+new file mode 100644
+index 000000000000..35b2039a3b8f
+--- /dev/null
++++ b/arch/x86/kernel/ubsan.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Clang Undefined Behavior Sanitizer trap mode support.
++ */
++#include <linux/bug.h>
++#include <linux/string.h>
++#include <linux/printk.h>
++#include <linux/ubsan.h>
++#include <asm/ptrace.h>
++#include <asm/ubsan.h>
++
++/*
++ * Checks for the information embedded in the UD1 trap instruction
++ * for the UB Sanitizer in order to pass along debugging output.
++ */
++void handle_ubsan_failure(struct pt_regs *regs, int insn)
++{
++	u32 type = 0;
++
++	if (insn == INSN_ASOP) {
++		type = (*(u16 *)(regs->ip + LEN_ASOP + LEN_UD1));
++		if ((type & 0xFF) == 0x40)
++			type = (type >> 8) & 0xFF;
++	} else {
++		type = (*(u16 *)(regs->ip + LEN_UD1));
++		if ((type & 0xFF) == 0x40)
++			type = (type >> 8) & 0xFF;
++	}
++	pr_crit("%s at %pS\n", report_ubsan_failure(regs, type), (void *)regs->ip);
++}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
