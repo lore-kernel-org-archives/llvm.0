@@ -1,211 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D291A14F9F0;
-	Sat,  1 Jun 2024 12:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A90F1D52D;
+	Sat,  1 Jun 2024 13:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717246652; cv=none; b=uP1YuFUraVSDwq3811XEa1lpd8BcRqFfc9K2DO+CgKv0G6kPd4RSzkOAbHdQRXftCFWRDtBk5CcYBSggthLXYmIJWXtNSMAA/N0S3SLpiy5c9R8RK/9V72Rovxm0A+F/Cs4TDEtMTV5qTNS8VYzN7p/b22mBtoewy9yqqs5tHwo=
+	t=1717248181; cv=none; b=n4lQxF0IPzMegpNAUGsEVnfq6jg5USZ1Zuu+T4EbkEZ7aSWx/laiKbinr09NC9zE92WuHNqv/2+kDlCWxjoI3lzwk+9Og9Vynbp0HshrjlFecnpyBlyH3TrevtJmZdHrsdv/yH710uoOS/86mMd97BYsAl6aRe0YVG30pq5TVZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717246652; c=relaxed/simple;
-	bh=Fivm1LCR0dzG7lVPX86f9+7qvWYNkdEYGCX/xoEl5AU=;
+	s=arc-20240116; t=1717248181; c=relaxed/simple;
+	bh=uemKakUr8vZOqaAGlWk2WVIUnDQWBAtUrKhYYseMLMM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ipaYDNn/ehmnEj7zgTf9Hw7whfG1z1Dp6nxNgdyRuSg9x00bppCyZj1XzsV6TVnQZPl1AD8d0J3pHicw2uUoE7vQCdZrom1JXZ3E/PaKMs/39vorwNYaxXIkZor7Vn0rK+tlcEVexAdQtX6F+idFck/E/Fv3P6IKTmHO+Hid4KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9LKGrkK; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=MC7/FkDcLmZIdQu9J4FT4WBcPn8YRqH13d2Q6EhY5Mf7BuVw42k0m/mJM75IPGzpTx4KHgNwKABd8WEKoe/GQC1tu1wb7lKh/BSqxLb10+C0iCZk+49r3WcuEznYUnGQgW54Vw2PyE1ZaTj08QoKvNYircJPkIAbk2ORUPoaBI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOEoxg1c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9LKGrkK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717246650; x=1748782650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fivm1LCR0dzG7lVPX86f9+7qvWYNkdEYGCX/xoEl5AU=;
-  b=d9LKGrkKry5EnGDqz8656HoIcBG/z5r903cCvBHpp5rMgh/DfV25/I+W
-   MUQZdOK9YD1fMGol6Wb3QviRlIoKScm5uvdVnW+D1OztzS9JSXaO1IPMd
-   DE+xrXNzt1PVrb4zWvozxvC6BRsq2cne+fKsCGLPJkGsdBpQx3LlNhMTv
-   r105PxSn0diG9wClk2b3iUhb7Dr1THQlPtEzUJfw4kcmF9INZIkUAhbX1
-   xqJ0JqRrGAsR9pu/jLo8ahhWNfOeYbVUaht6DCMHJpnCBra13phRU9nr7
-   bLKqBmJp1Nj02kKjOgBKHJi7EWrD7fgQbRkoq0EqkwL9OC75DJpHbBxUm
-   Q==;
-X-CSE-ConnectionGUID: /1o0LNBXTzeT0QwAY7zOZg==
-X-CSE-MsgGUID: we6GQ+MaQKGwqMk5m76q0Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11090"; a="17635434"
-X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
-   d="scan'208";a="17635434"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 05:57:26 -0700
-X-CSE-ConnectionGUID: HphK+o8BQDmOtu3tXry3jg==
-X-CSE-MsgGUID: u6r6+95rSdSN1QPSDHhjcA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,207,1712646000"; 
-   d="scan'208";a="67270705"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 01 Jun 2024 05:57:26 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sDOIU-000ItD-35;
-	Sat, 01 Jun 2024 12:57:22 +0000
-Date: Sat, 1 Jun 2024 20:56:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yan Zhai <yan@cloudflare.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC v2 net-next 1/7] net: add rx_sk to trace_kfree_skb
-Message-ID: <202406012054.AjuaAUPn-lkp@intel.com>
-References: <451ae2a5c2ddb3c127cfddaf4a6579d6e85791f3.1717206060.git.yan@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOEoxg1c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DEB2C116B1;
+	Sat,  1 Jun 2024 13:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717248180;
+	bh=uemKakUr8vZOqaAGlWk2WVIUnDQWBAtUrKhYYseMLMM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TOEoxg1chOjfRE/E4b5As7oYDoY3J10V3tBaL6M6PTfqJ4e0WTYhrkav8NfTfTBrN
+	 dD/ap9/w0VHqNGtdFeyWoQR2OIl5UAf0EnnywWch8I4HNnhbfBDTNMAYOK/JnEZkIn
+	 il6ie2YmaAmz82jNyBD7f2efX5+0IVGHCFxT6blV/DNNcuW9ZAdtlxiH9IOEkEFjls
+	 x8nebtFOi4fOfBg9Xc1wNk9XGR9z/sSbJQAcZc79jfD7Ut+pK2wpVQN1hNs/063sW3
+	 JjQ3yF6RQA9om3uqpKdjdoJ+OA7nl1wdwkf/wkSA54OFaf/IPuzpAh9cctwAncNrPc
+	 uHUxB4z559Tsg==
+Date: Sat, 1 Jun 2024 14:22:56 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Jesse Taube <jesse@rivosinc.com>, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
+Message-ID: <20240601-powdering-herbicide-7bfe85717536@spud>
+References: <20240531162327.2436962-1-jesse@rivosinc.com>
+ <20240531-uselessly-spied-262ecf44e694@spud>
+ <ZlowwohstpT0sJVl@ghost>
+ <20240531-cough-yearling-bdfd49244885@spud>
+ <ZlpDtR7ch+nE08lm@ghost>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="qb94X1QeeBV02Dig"
+Content-Disposition: inline
+In-Reply-To: <ZlpDtR7ch+nE08lm@ghost>
+
+
+--qb94X1QeeBV02Dig
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <451ae2a5c2ddb3c127cfddaf4a6579d6e85791f3.1717206060.git.yan@cloudflare.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yan,
+On Fri, May 31, 2024 at 02:40:05PM -0700, Charlie Jenkins wrote:
+> On Fri, May 31, 2024 at 10:36:46PM +0100, Conor Dooley wrote:
+> > On Fri, May 31, 2024 at 01:19:14PM -0700, Charlie Jenkins wrote:
+> > > On Fri, May 31, 2024 at 06:31:09PM +0100, Conor Dooley wrote:
+> > > > On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
+> > > > > Dectect the Zkr extension and use it to seed the kernel base addr=
+ess.
+> > > > >=20
+> > > > > Detection of the extension can not be done in the typical fashion=
+, as
+> > > > > this is very early in the boot process. Instead, add a trap handl=
+er
+> > > > > and run it to see if the extension is present.
+> > > >=20
+> > > > You can't rely on the lack of a trap meaning that Zkr is present un=
+less
+> > > > you know that the platform implements Ssstrict. The CSR with that n=
+umber
+> > > > could do anything if not Ssstrict compliant, so this approach gets a
+> > > > nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
+> > > > it, so you're stuck with getting that information from firmware.
+> > >=20
+> > > The Scalar Cryptography v1.0.1 spec says "If Zkr is not implemented, =
+the
+> > > [s,u]seed bits must be hardwired to zero". It also says "Without the
+> > > corresponding access control bit set to 1, any attempted access to se=
+ed
+> > > from U, S, or HS modes will raise an illegal instruction exception."
+> > >=20
+> > > There is a slight nuance here as the definition of Ssstrict is:
+> > >=20
+> > > "No non-conforming extensions are present. Attempts to execute
+> > > unimplemented opcodes or access unimplemented CSRs in the standard or
+> > > reserved encoding spaces raises an illegal instruction exception that
+> > > results in a contained trap to the supervisor-mode trap handler."
+> > >=20
+> > > The trap that Jesse is relying on in the code here is related to acce=
+ss
+> > > bits and not related to the CSR being unimplemented. Since the access
+> > > bits are required to be 0 on an implementation without Zkr, it is
+> > > required to trap if seed is accessed, regardless of Ssstrict.
+> > >=20
+> > > The situation here is slightly odd because the spec is defining behav=
+ior
+> > > for what to do if the extension is not supported, and requires
+> > > implementations to follow this aspect of the Scalar Cryptography spec
+> > > even though they may not implement any of the instructions in the spe=
+c.
+> >=20
+> > Firstly, you absolutely cannot rely on the behaviour defined by a new
+> > extension by systems that implement a version of the ISA that predates
+> > it. Secondly, we're talking about non-conforming implementations that
+> > use a reserved CSR number for other purposes, you cannot rely on the
+> > behaviour that the Scalar Crypto spec prescribes for access to the
+> > register.
+>=20
+> Yes that is definitely a slippery slope.
+>=20
+> >=20
+> > "Non-conforming" is also a moving target btw - the Andes PMU (I think
+> > it's that) uses an interrupt number that was moved from "platform
+> > specific use" to "reserved" by the AIA spec. If you only looked the
+> > current specs, the Andes PMU is a "non-conforming extension" but at the
+> > time that it was created it was compliant. I think we're gonna have a
+> > fun conversation defining what "Ssstrict" actually means when someone
+> > actually tries to document that.
+>=20
+> Sounds fun ;)
+>=20
+> >=20
+> > > > For DT systems, you can actually parse the DT in the pi, we do it t=
+o get
+> > > > the kaslr seed if present, so you can actually check for Zkr. With =
+ACPI
+> > > > I have no idea how you can get that information, I amn't an ACPI-is=
+t.
+> > >=20
+> > > It is feasible to check if Zkr is present in the device tree at this
+> > > stage in boot, but at first glance does not seem feasible to read the
+> > > ACPI tables this early.
+> > >=20
+> > > The CSR being read is just for entropy so even if the seed CSR doesn't
+> > > trap and provides an arbitrary value on an implementation that does n=
+ot
+> > > support Zkr, it can still be used as a source of entropy. If the
+> > > implementation does trap, the entropy will be set to 0 which is just a
+> > > different hard-coded arbitrary value.=20
+> >=20
+> > Right. I can see value in doing something that may contain entropy, and
+> > is at worst no better than the 0 we can currently get. But the patch
+> > we're talking about here mentions nothing of the sort, it presents itse=
+lf
+> > as detection of Zkr and an actually random number - but all it actually
+> > detects is whether or not the CSR at CSR_SEED traps.
+> >=20
+> > To be acceptable, the patch would need to stop claiming that it is a va=
+lid
+> > way to detect Zkr. The commit message, and a comment, must also explain
+> > what may happen on systems that do not implement Zkr as you have done
+> > here.
+> > For example, `if (!riscv_has_zkr()) return 0` would have to be something
+> > like `if (riscv_csr_seed_traps()) return 0`.
+>=20
+> That is reasonable, thank you for your input!
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Another thing to consider is that writing a zero to CSR_SEED may have
+side effects on a non-conforming implementation.
 
-[auto build test ERROR on net-next/main]
+--qb94X1QeeBV02Dig
+Content-Type: application/pgp-signature; name="signature.asc"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yan-Zhai/net-add-rx_sk-to-trace_kfree_skb/20240601-094726
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/451ae2a5c2ddb3c127cfddaf4a6579d6e85791f3.1717206060.git.yan%40cloudflare.com
-patch subject: [RFC v2 net-next 1/7] net: add rx_sk to trace_kfree_skb
-config: arm-randconfig-002-20240601 (https://download.01.org/0day-ci/archive/20240601/202406012054.AjuaAUPn-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406012054.AjuaAUPn-lkp@intel.com/reproduce)
+-----BEGIN PGP SIGNATURE-----
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406012054.AjuaAUPn-lkp@intel.com/
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZlsgsAAKCRB4tDGHoIJi
+0mpAAP9Wf2UEJYEbxtEQlARVw3uO6tK/Rw99oZhzzH6rx7bt5gD7BLLU4j5MVT6g
+xpvg+3vpip6nI973bF8fq8d0T537UQM=
+=RU7v
+-----END PGP SIGNATURE-----
 
-All errors (new ones prefixed by >>):
-
-   In file included from net/core/drop_monitor.c:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> net/core/drop_monitor.c:1162:32: error: incompatible function pointer types passing 'void (*const)(void *, struct sk_buff *, void *, enum skb_drop_reason)' to parameter of type 'void (*)(void *, struct sk_buff *, void *, enum skb_drop_reason, struct sock *)' [-Wincompatible-function-pointer-types]
-    1162 |         rc = register_trace_kfree_skb(ops->kfree_skb_probe, NULL);
-         |                                       ^~~~~~~~~~~~~~~~~~~~
-   include/trace/events/skb.h:24:1: note: passing argument to parameter 'probe' here
-      24 | TRACE_EVENT(kfree_skb,
-         | ^
-   include/linux/tracepoint.h:568:2: note: expanded from macro 'TRACE_EVENT'
-     568 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/linux/tracepoint.h:434:2: note: expanded from macro 'DECLARE_TRACE'
-     434 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
-         |         ^
-   include/linux/tracepoint.h:270:31: note: expanded from macro '__DECLARE_TRACE'
-     270 |         register_trace_##name(void (*probe)(data_proto), void *data)    \
-         |                                      ^
-   net/core/drop_monitor.c:1177:29: error: incompatible function pointer types passing 'void (*const)(void *, struct sk_buff *, void *, enum skb_drop_reason)' to parameter of type 'void (*)(void *, struct sk_buff *, void *, enum skb_drop_reason, struct sock *)' [-Wincompatible-function-pointer-types]
-    1177 |         unregister_trace_kfree_skb(ops->kfree_skb_probe, NULL);
-         |                                    ^~~~~~~~~~~~~~~~~~~~
-   include/trace/events/skb.h:24:1: note: passing argument to parameter 'probe' here
-      24 | TRACE_EVENT(kfree_skb,
-         | ^
-   include/linux/tracepoint.h:568:2: note: expanded from macro 'TRACE_EVENT'
-     568 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/linux/tracepoint.h:434:2: note: expanded from macro 'DECLARE_TRACE'
-     434 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
-         |         ^
-   include/linux/tracepoint.h:283:33: note: expanded from macro '__DECLARE_TRACE'
-     283 |         unregister_trace_##name(void (*probe)(data_proto), void *data)  \
-         |                                        ^
-   net/core/drop_monitor.c:1200:29: error: incompatible function pointer types passing 'void (*const)(void *, struct sk_buff *, void *, enum skb_drop_reason)' to parameter of type 'void (*)(void *, struct sk_buff *, void *, enum skb_drop_reason, struct sock *)' [-Wincompatible-function-pointer-types]
-    1200 |         unregister_trace_kfree_skb(ops->kfree_skb_probe, NULL);
-         |                                    ^~~~~~~~~~~~~~~~~~~~
-   include/trace/events/skb.h:24:1: note: passing argument to parameter 'probe' here
-      24 | TRACE_EVENT(kfree_skb,
-         | ^
-   include/linux/tracepoint.h:568:2: note: expanded from macro 'TRACE_EVENT'
-     568 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/linux/tracepoint.h:434:2: note: expanded from macro 'DECLARE_TRACE'
-     434 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
-         |         ^
-   include/linux/tracepoint.h:283:33: note: expanded from macro '__DECLARE_TRACE'
-     283 |         unregister_trace_##name(void (*probe)(data_proto), void *data)  \
-         |                                        ^
-   1 warning and 3 errors generated.
-
-
-vim +1162 net/core/drop_monitor.c
-
-8e94c3bc922e70 Ido Schimmel 2019-08-17  1135  
-7c747838a55818 Ido Schimmel 2019-08-11  1136  static int net_dm_trace_on_set(struct netlink_ext_ack *extack)
-9a8afc8d3962f3 Neil Horman  2009-03-11  1137  {
-28315f7999870b Ido Schimmel 2019-08-11  1138  	const struct net_dm_alert_ops *ops;
-70c69274f354ec Ido Schimmel 2019-08-11  1139  	int cpu, rc;
-4b706372f18de5 Neil Horman  2010-07-20  1140  
-28315f7999870b Ido Schimmel 2019-08-11  1141  	ops = net_dm_alert_ops_arr[net_dm_alert_mode];
-28315f7999870b Ido Schimmel 2019-08-11  1142  
-cad456d5abbb63 Neil Horman  2012-05-17  1143  	if (!try_module_get(THIS_MODULE)) {
-965100966efe85 Ido Schimmel 2019-08-06  1144  		NL_SET_ERR_MSG_MOD(extack, "Failed to take reference on module");
-7c747838a55818 Ido Schimmel 2019-08-11  1145  		return -ENODEV;
-cad456d5abbb63 Neil Horman  2012-05-17  1146  	}
-cad456d5abbb63 Neil Horman  2012-05-17  1147  
-70c69274f354ec Ido Schimmel 2019-08-11  1148  	for_each_possible_cpu(cpu) {
-70c69274f354ec Ido Schimmel 2019-08-11  1149  		struct per_cpu_dm_data *data = &per_cpu(dm_cpu_data, cpu);
-44075f56379388 Ido Schimmel 2019-08-11  1150  		struct sk_buff *skb;
-70c69274f354ec Ido Schimmel 2019-08-11  1151  
-28315f7999870b Ido Schimmel 2019-08-11  1152  		INIT_WORK(&data->dm_alert_work, ops->work_item_func);
-70c69274f354ec Ido Schimmel 2019-08-11  1153  		timer_setup(&data->send_timer, sched_send_work, 0);
-44075f56379388 Ido Schimmel 2019-08-11  1154  		/* Allocate a new per-CPU skb for the summary alert message and
-44075f56379388 Ido Schimmel 2019-08-11  1155  		 * free the old one which might contain stale data from
-44075f56379388 Ido Schimmel 2019-08-11  1156  		 * previous tracing.
-44075f56379388 Ido Schimmel 2019-08-11  1157  		 */
-44075f56379388 Ido Schimmel 2019-08-11  1158  		skb = reset_per_cpu_data(data);
-44075f56379388 Ido Schimmel 2019-08-11  1159  		consume_skb(skb);
-70c69274f354ec Ido Schimmel 2019-08-11  1160  	}
-70c69274f354ec Ido Schimmel 2019-08-11  1161  
-28315f7999870b Ido Schimmel 2019-08-11 @1162  	rc = register_trace_kfree_skb(ops->kfree_skb_probe, NULL);
-7c747838a55818 Ido Schimmel 2019-08-11  1163  	if (rc) {
-7c747838a55818 Ido Schimmel 2019-08-11  1164  		NL_SET_ERR_MSG_MOD(extack, "Failed to connect probe to kfree_skb() tracepoint");
-7c747838a55818 Ido Schimmel 2019-08-11  1165  		goto err_module_put;
-7c747838a55818 Ido Schimmel 2019-08-11  1166  	}
-cad456d5abbb63 Neil Horman  2012-05-17  1167  
-28315f7999870b Ido Schimmel 2019-08-11  1168  	rc = register_trace_napi_poll(ops->napi_poll_probe, NULL);
-7c747838a55818 Ido Schimmel 2019-08-11  1169  	if (rc) {
-7c747838a55818 Ido Schimmel 2019-08-11  1170  		NL_SET_ERR_MSG_MOD(extack, "Failed to connect probe to napi_poll() tracepoint");
-7c747838a55818 Ido Schimmel 2019-08-11  1171  		goto err_unregister_trace;
-7c747838a55818 Ido Schimmel 2019-08-11  1172  	}
-7c747838a55818 Ido Schimmel 2019-08-11  1173  
-7c747838a55818 Ido Schimmel 2019-08-11  1174  	return 0;
-7c747838a55818 Ido Schimmel 2019-08-11  1175  
-7c747838a55818 Ido Schimmel 2019-08-11  1176  err_unregister_trace:
-28315f7999870b Ido Schimmel 2019-08-11  1177  	unregister_trace_kfree_skb(ops->kfree_skb_probe, NULL);
-7c747838a55818 Ido Schimmel 2019-08-11  1178  err_module_put:
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1179  	for_each_possible_cpu(cpu) {
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1180  		struct per_cpu_dm_data *data = &per_cpu(dm_cpu_data, cpu);
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1181  		struct sk_buff *skb;
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1182  
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1183  		del_timer_sync(&data->send_timer);
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1184  		cancel_work_sync(&data->dm_alert_work);
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1185  		while ((skb = __skb_dequeue(&data->drop_queue)))
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1186  			consume_skb(skb);
-9398e9c0b1d44e Ido Schimmel 2021-03-10  1187  	}
-7c747838a55818 Ido Schimmel 2019-08-11  1188  	module_put(THIS_MODULE);
-7c747838a55818 Ido Schimmel 2019-08-11  1189  	return rc;
-7c747838a55818 Ido Schimmel 2019-08-11  1190  }
-7c747838a55818 Ido Schimmel 2019-08-11  1191  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--qb94X1QeeBV02Dig--
