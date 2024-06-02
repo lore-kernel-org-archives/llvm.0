@@ -1,248 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn2079.outbound.protection.outlook.com [40.92.89.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B32A21
-	for <llvm@lists.linux.dev>; Sun,  2 Jun 2024 10:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717323678; cv=none; b=sMYWy0M0IfJVie19qEIJBmJQyiOjEA1GEeJK40qF3ksiGHg9TZ3KVf5+EaAlT2L/tbVUt1e20bTGRc4ihO02B1wfir/AL4bNdXDDuLOb2/n0DbBIIvnFFPdNS/d6+wWMjpDP/xYo1lZ1Tyu8j7Yxbvb9J1TH7sXs+ct6ch5lhjs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717323678; c=relaxed/simple;
-	bh=BL51VA467JF7GyLk+j6G6TjgQ1mIF9zhiAF+KwK5LwI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Q3Bx1VD6JQMKO089cd9SJdkrU3WJybbOYxxNFc8gdZMIQNIcuvEnP7wj0PuraKx9Bpi1lQzr6DX5H+JxGwsi1Iuq1towWNN9EkZJthaiocK6iMiJXmKeCepN2IWiF4UeZHGvd2djx/DjZKGv+8VPAflZJV8aDuEzQE7rn6U3A00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G9BuasiS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCFA4CE13
+	for <llvm@lists.linux.dev>; Sun,  2 Jun 2024 16:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.89.79
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717344816; cv=fail; b=FY6yuMvdj1Llh93sXmVo15L+5ISBGiA4wvgt203RJXbLBDsp3XWPPuIiIm6N3ywwRjtGVBi/noYVCLISDtO3wKZYUN0/jxcyG+SLt02GCeMaBTCNkhJK4OzuYNBzIY1EYiUO0dR65h0V+Ki+ffikIWiAyDzS02sTEj54Cm/6eEc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717344816; c=relaxed/simple;
+	bh=mjDoxKsP3WTmpqfBIZbNgtnHfvB287/Sjy/yhhXlE8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=HhkEuY/HERE+linOgHvihkQLVyqiS+qPrqdBNuXZjvFypZviy21Ji6uU5DAyzPBnpq3ReWSq8bNkFiBeeUDU+fW9yhhqFSehMIMBozixsIbLlCjak4bYON58BCqdZoUQlCpSeRX5cNCBw9PWKcTQozD/p2IdtKd3dk2HSyfSn2k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=uT2BGPXT; arc=fail smtp.client-ip=40.92.89.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G9BuasiS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717323675;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=D5SyPhJdM/mhxkKJzISKomFBHWQ0xZBpL0v5VMdMEZA=;
-	b=G9BuasiS8+VdxBmVxDOuJtvHCPhbUOpeFuozpoyQUQ3Jq1m6lCTSXLF22xwE3BHnIZ6qbN
-	2nx73ztvDWpkHhDhuAJC9veWDHXUM66J6+6c9fdpB/ncRl3BlHl9KUc05kEMIDYHj7TaXH
-	HdfjRQdB1W/dI4JI1t9Q6i1xkEZSMnM=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-36-_aBjMBseOXScTypWGa8p4Q-1; Sun,
- 02 Jun 2024 06:21:12 -0400
-X-MC-Unique: _aBjMBseOXScTypWGa8p4Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0978B1C05129;
-	Sun,  2 Jun 2024 10:21:12 +0000 (UTC)
-Received: from [172.64.13.36] (unknown [10.30.32.93])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 81D2A40C123D;
-	Sun,  2 Jun 2024 10:21:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 192): Test report for master
- (6.10.0-rc1, mainline.kernel.org-clang, ec9eeb89)
-Date: Sun, 02 Jun 2024 10:21:11 -0000
-To: jbastian@redhat.com, shinichiro.kawasaki@wdc.com, yiche@redhat.com,
- jiji@redhat.com, zlang@redhat.com, yizhan@redhat.com, bgoncalv@redhat.com,
- jishi@redhat.com, haliu@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="uT2BGPXT"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DcCj5fl8x1O2l8Cm87P29nxDCyPD7nQpOZpmgYY1aN4KdtUUyIuTdYehrmev1Z6Um47DWsHw04fg7SiStgeA+/xme6FDPUN1rEjJO5LXbBVeUAT84Q97hVpIGw2kfYFxdgx4acCP4yzzeZSva6e0yAaZfbjzXK7CjnwitptSqhduo9m13gJbjEV5YfIfZhJrnQPyhw1ZR1qs+qqqpjKW4WYkUU3oj3G/G6NAe7Y0aUm8VmyfshohF5JZobVWSEp8B6FpwrkEbduD+gp1XdywGOSddve5w6dXHqiezXtjDyhE2s1URsf0P1NN2nUJ3l1ckMWJKmMsf7NEXtt3Pd0Dvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3heqShnV9rcsVWKCOJahCr/q/jH5bAyJbwsMOKB7PUg=;
+ b=BnsstJnsJ92ZYTdPyr1o9CqtDs5dEP7YoOxJECfQdLY6UTbivL2dxB8DqYLuyCnokcSfhZf9dOkNkL7sWEI6/Iy+lm6QyvEp02TxIqh57A/+Y17+U13d7hRA/OE67tn3KgLMs+johKGjxcEvYQ9hBkLO4gx66JTP4JZMDqo6HqgovxlDVmGRA5P383v229bQBWvnb/kW9z76UUlGZMyWBllO5c7kCFsbKkw9hhxWmSl3113yeTNJRuK7gTlMcQSrRdZUfjqHxHArryahiwoFVD8iKoHhvODOdoPOg7CqZvlSG64yc9gDAUcKijyvm+vA3lneUDCpbJEf9aCWDVfYpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3heqShnV9rcsVWKCOJahCr/q/jH5bAyJbwsMOKB7PUg=;
+ b=uT2BGPXTCKhP1I+i61l5CmGWS+iLFr3Rn4m09Qx/ENCas6ZfUBBnK7b8xeG7XS5irxlJUfxux4yTE6Wlhi01CWEQnJZeLBfE1porG5CblJlrePPpzDIYZUuNGLHFfwWcfybNAw/a+AXqfL0YWgXxFPIjjjf/JMiz4pJgoEeuHqW3biHGqHyENV6xHQcGAHZdmM53B9pBNARMMnryfqpF4bszxu2FSgsLDZST7kh6mU6Imsvjc0J2pXcnYPJDZGNhZw6eLHKb7bxeGhR2ZCgpooibAghp4HPux2Mb98OT/IBaZ+XludS/IaVMuur3aIT4afsU8b5FeH6c/M7MO372CA==
+Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
+ by DB8PR02MB5770.eurprd02.prod.outlook.com (2603:10a6:10:fa::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.23; Sun, 2 Jun
+ 2024 16:13:31 +0000
+Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
+ ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
+ ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7633.021; Sun, 2 Jun 2024
+ 16:13:31 +0000
+From: Erick Archer <erick.archer@outlook.com>
+To: Kalle Valo <kvalo@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Alan Stern <stern@rowland.harvard.edu>
+Cc: Erick Archer <erick.archer@outlook.com>,
+	linux-wireless@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/2] atmel: at76c50x: improve code robustness
+Date: Sun,  2 Jun 2024 18:13:08 +0200
+Message-ID:
+ <AS8PR02MB7237E215724E0E76C6A50C698BFE2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN: [nFFslZofQzBzvzFCAlgS6ugklWOoWbUC]
+X-ClientProxiedBy: MA4P292CA0012.ESPP292.PROD.OUTLOOK.COM
+ (2603:10a6:250:2d::9) To AS8PR02MB7237.eurprd02.prod.outlook.com
+ (2603:10a6:20b:3f1::10)
+X-Microsoft-Original-Message-ID:
+ <20240602161310.5671-1-erick.archer@outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-Message-Id: <85844.124060206211200283@us-mta-36.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|DB8PR02MB5770:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fde4410-a189-4712-c0cd-08dc831ef1ca
+X-MS-Exchange-SLBlob-MailProps:
+	iS5pQZgsAQDCnzYXbDrEqffj9TNTzq274zgD0ghQ6GNBjcM44VqSgrncecWltcTsxG9F+agAJYDXfQx7Gw+Ha9UWJqFVwC6OLiuHQKLkXpnC9+v2MSZU1Az8ZzWqTyW2nuNc0NmdrFhlsH7gLBup3c99BN9ld360rSaxVBF90ztgyuj6I+XsqPo1R5ASMuXEON2lx8vPYH3kVzExqTujOKwmA/yTn9OqRoWEaEmb4bhI7ij9SA768/V7pjF53nzY6ri6lJUI7uKTp/Ye8RA0j/V7zQHE+fgPTXigEhmkbDG0BIlE+92RF1SBH5MykSFS8o16o17mHsuwzMFBdn6Z16+kuvULak3BdZ0MmiLg0uUiqdoYuHYM1XSNa+0hscBP3rC4T7LUL05rkQGggnoavJGXbGd1wovap9uowDKgSJjDOPF3KfS18opUKhJlX7i744uiJ/95Qna4cZu2H5+l19mS1N+fxVrycLDA6zumfycsvYpiae/6/J39o02My3DY3XzfOhuz2nZOHEAO6vfptHHoFMXsbClNIbu9+gYKdjT0eonUuAGTBU4o4dyg0vvUvlzA5gObx1KgxBO0eOR9UH+qOxOfiWmfNq4n8+81G7Wz+rEvu+uue/tFOyPHyZxFkCDK34/rzQe4J+Vox5wpiUTguOMJkXo2vstYVQK8VwzET6Uimg52EgqREcC2rgD0gnDw/NUH9ihUh4Y4Vy3BPuhb2xL1uFcH//OrEbTxw9HEpoSrGoAkLX8a8VpF56BY9MuXXKDak7j/8bZ/0lcC+QtWRk32/1QB4KS4oWLuOmffjVXcOSuqvORD/7hCADJf
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|461199019|1602099003|3412199016|440099019|1710799017;
+X-Microsoft-Antispam-Message-Info:
+	9Frcwk+g6ZHSyttjCccOOzao9mUFeshS+SK96HYTA3YK3Jepb49VWTt+GGQ/UbtoDTnpXfeHl+iO1icONYNZ7ZX4ajAJfE7I+9mnYLokUy9TfIdEG+QUaioAVuxlJf50ZOTKRZytPl8OYa2euiuF8877wp0BFkhswVLsBPUzDetFChoqSyORJsQtBMmTnMODr8UIWWJt4PzKBHBqn3ZpVioh1wH7gyq4xSMdogIU/9lgO9ttMvIBnMtIENEfQOf9cbzu2Ser3yIC8k42nbfsQAD/Zb56QYyvajqB4r50BBLWderKmCCjJQ3aHeGzrXING1FjHSlv1rwifl7Nh6f215acm2p7c21msRjbuZuoUwfgyXMf/RTqPDUb8omJWYGMEeozkNHPdbWKpEW40QW9jWZo9+0iryBxOKUweuQwX037i8ekC9A3GoYxXz+wU61O+hi7mrSG3EfoniV4BI5iYyIRAFGhg8EaJ9MCwbz2f17XWI5LpBl8jZkjc381aEjUEbFQk+p7T7lUDrhHtRxaqcCdeGJuxJFBS0n6yGrAG58C/2ocea2+ShJcl0ByHYIFkyi5qwyGaIn1uaTLg6MPm/Q8iymANQB1zjj4M2k2OQosEAPpwp+4DF2C+91LUlc43fBdq55tsCpUgI7v4z0J6EWfSgfgJgN1aabDn4rLzn7qo449i+ibt0LonyPIf3x0skFDWRelEDXSVB3Gmz7KiA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?wSexXu2AZxFo1+aWDjCqEpCdZ2MgCIboCRpbM0+Bv2W9Nycia/96mYR4ZAc2?=
+ =?us-ascii?Q?W6DdJJzNPPlANKO8TchnVSPsu3+vfu1JllwlJXjJsgC4MmUml/L6A3S2JQEy?=
+ =?us-ascii?Q?OyjNXejt0VD3mfA/6zC3qgYcOQWHLGNUDFcLBhRz4IaudeRrknsCPhXc1R9Y?=
+ =?us-ascii?Q?8Ot2dR6lbB0q0P6+MkvQAIEyyickPtbYifK9E/n96/a7G1RAURcTlubVFYQf?=
+ =?us-ascii?Q?Kr15aBokpBBnzzkp1zgaL3Dl2vNX3eU7ecIHQlGHhx7bj2+x/y/wRG/+oG6H?=
+ =?us-ascii?Q?/qt6q9IyW60XbfzvVjcN46tjghqzbpAQ2ZVH+cmndwZv6AHldl3BVBn70L0H?=
+ =?us-ascii?Q?Omhqfi9mJ2Ik79g0PlVuL2MhRTt1SRar2akv+hUUFoKDCSh6zKXbrfvAZz1o?=
+ =?us-ascii?Q?ozKslU76PWz3ujN6434cvNhazx3uIMT0/iGL9nxzV/PiBSQc4NDPLzbHBjpf?=
+ =?us-ascii?Q?ussYpxw2Ep53HtPG5BG0ij0gJg25/pwVP4gSDnHoJfE3RjAzJEBT1j5jV7aC?=
+ =?us-ascii?Q?/oBITf0yZlLEo5WAKPPKuKMsewzw2vdI7CtD+v5oy8x8lhokCajzaqx0aStq?=
+ =?us-ascii?Q?LL80Jlb9nxgMUDBZG0P62WGt0m3MJqC2PuautVbYMEJ+jevMXWRslGg5DmpP?=
+ =?us-ascii?Q?MOcDLha2f4lthIDbg7imYC/o9pnq+V9dhB3cZ+vEXH2Z/eDc9BsoC4akF+s6?=
+ =?us-ascii?Q?P7q714IW7scM6QM53uELbHnO33unUI/noYVD9KVTLQGdELSPLdlaHcxSIGGn?=
+ =?us-ascii?Q?M0ib0tmWwD7ezfHwpv/01LBk96W/MhJ7tD1TqHJIo1EzQfoTb+mQ3hdZkU/g?=
+ =?us-ascii?Q?pk72JiMoMIGsCDAUMrSgSDThcaeT/vZvePdZIuabVyyZ5DCUjulAGJFukddg?=
+ =?us-ascii?Q?I2JRJudL1uwD35zWYJfKSWhxsiVBlqRIzM/Ki39WLDgK6kyOYaQ6fcfA3M9d?=
+ =?us-ascii?Q?MifjjL5lVxgk9ahOJzLL8YXkUcLyKwYg443ydYaNwdG/0Q1agXFoZfMlGB8t?=
+ =?us-ascii?Q?XVa0fleG4pvRziY5Pmo9fli/LaSAEneglHm+ieR541iAgDsb3QfkFuNXx705?=
+ =?us-ascii?Q?ICiDxZUV3G6PGsLFUisEkPmofvixVwLgd6k5D2JE+OXtSq0m2KxJ9WBh3Ye2?=
+ =?us-ascii?Q?W16lYaPICGaVopxoaBpHoeCVTyQhvlEh7EZ+9/LAariWEzlXpD1gnu7JqaJg?=
+ =?us-ascii?Q?3Zc6Upfs7lVQ5daMuh166OKYNuCIMC+UcSwogGGH3ZpCOOId/SmPUyL0RAlU?=
+ =?us-ascii?Q?dHKeawNl1a1PpeiRPohg?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fde4410-a189-4712-c0cd-08dc831ef1ca
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2024 16:13:31.1643
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR02MB5770
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+This series of patches attempts to improve the at76c50x code
+robustness.
 
+In the first patch, it is preferred to use sizeof(*pointer) instead
+of sizeof(type) due to the type of the variable can change and one
+needs not change the former (unlike the latter).
 
-Kernel information:
-    Commit message: Merge tag 'kbuild-fixes-v6.10' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+The second patch is an effort to get rid of all multiplications
+from allocation functions in order to prevent integer overflows
+[1][2]. As the "struct at76_command" ends in a flexible array the
+preferred way in the kernel is to use the struct_size() helper to
+do the arithmetic instead of the calculation "size + count" in the
+kmalloc() function.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1314510789
+At the same time, prepare for the coming implementation by GCC and
+Clang of the __counted_by attribute. Flexible array members annotated
+with __counted_by can have their accesses bounds-checked at run-time
+via CONFIG_UBSAN_BOUNDS (for array indexing) and CONFIG_FORTIFY_SOURCE
+(for strcpy/memcpy-family functions).
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Networking cki netfilter test
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_20
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_20
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        Networking vnic: ipvlan/basic
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_21
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_21
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        POSIX pjd-fstest suites
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_15
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_15
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        Storage - blktests - blk - upstream
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_5
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        stress: stress-ng - cpu-cache
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-        stress: stress-ng - memory
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_39
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_48
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/207
-                       =E2=9D=8C FAIL generic/208
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_50
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/207
-                       =E2=9D=8C FAIL generic/208
-        xfstests - ext4
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_37
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_46
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-        xfstests - xfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-aarch64-kernel_upt_38
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1314510789-x86_64-kernel_upt_47
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
+This way, the code is more readable and safer.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { ioctl } for  pid=3D326068 comm=3D"=
-systemd-coredum" path=3D"/dev/z90crypt" dev=3D"devtmpfs" ino=3D99 ioctlcmd=
-=3D0x7a05 scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontext=3Dsys=
-tem_u:object_r:crypt_device_t:s0 tclass=3Dchr_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2283367
-            Affected tests:
-                Boot test [s390x]
-        Issue: [eln] avc:  denied  { create } for  pid=3D1 comm=3D"systemd"=
- scontext=3Dsystem_u:system_r:init_t:s0 tcontext=3Dsystem_u:system_r:sshd_t=
-:s0-s0:c0.c1023 tclass=3Dvsock_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2280320
-            Affected tests:
-                Boot test [ppc64le]
-                Reboot test [ppc64le]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+Regards,
+Erick
 
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
+Link: https://github.com/KSPP/linux/issues/160 [2]
+---
+Erick Archer (2):
+  atmel: at76c50x: use sizeof(*pointer) instead of sizeof(type)
+  atmel: at76c50x: prefer struct_size over open coded arithmetic
 
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [ppc64le, s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
+ drivers/net/wireless/atmel/at76c50x-usb.c | 56 ++++++++++-------------
+ drivers/net/wireless/atmel/at76c50x-usb.h |  2 +-
+ 2 files changed, 26 insertions(+), 32 deletions(-)
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+-- 
+2.25.1
 
