@@ -1,117 +1,164 @@
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522B758AC4
-	for <llvm@lists.linux.dev>; Mon,  3 Jun 2024 08:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9EA58AA5
+	for <llvm@lists.linux.dev>; Mon,  3 Jun 2024 09:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717403215; cv=none; b=iYol2YQKlwW1jlqCd8AdN3g8wSnQ3WGTa8hPyA93smXTWyDZzJVg6Cp2m+UR7Bz7/Y6c2vdsYpIL9XfO2dbrVU8TGfmWo69g42+puK91V4Dpz/TF/Hxm5dxLZaZQIf2PMePCtoB0JT2ylr4Yb1GJ5qDUtcVI4URfmj3yYuu2M2o=
+	t=1717406002; cv=none; b=l2p4VzfDaguoLJiMzrZTrScsrtMeKDoFG0F6OjWJstw4kjAZ6mKpmcldn+qzW/tljVVIGf+5cHRI6btzah+OVSk0Fv1zFwXDVTk4u4V1IKJ0eXuTsKW2oda5KrVBBF6I9ruoR8lcmXxDZcak1FaJRn6l8/FoOAcoJ4JB/pjl8uI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717403215; c=relaxed/simple;
-	bh=DCx2r/p/OFxtmxhQQlPl/IZZVkzLeeoV7K53BAsOblg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TK0bhPiIHvB6YgcJqhbfJWNXMrftvlxJDBBMN+IrUyMGxYsCcx17PF9PECzHbc5/YQaQL4s7B11BdHhHvlNBVbcrtsNGOmTjHkduMmZs7iMtdHSVWbkE60oq6JcfZBBherIE0IJLUlGzkRcV+BCANDldosWJtXn4lW4z5LlEh78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=e2WBLhak; arc=none smtp.client-ip=44.202.169.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	s=arc-20240116; t=1717406002; c=relaxed/simple;
+	bh=UUJ/u6Jum1hxyaC0tZphU6l6+SwdIUNR2yTzwcgGj/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PL/IgQyRbECboHwW+AKoYmFowyk6QZc3mNFULIK2yhsBe1Exkvho5GSFlF1Ab+lNgWYyn6qIOlvUc8LaDXZK7gT8lXNn4qNJwk9F8UaSED0r/x83Jrs03eKmmK2O90HMEWZwGQsYdTtgxPOcfBkmvLjq4pd6T86Tpv+TmldDEIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ko0oq1LC; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="e2WBLhak"
-Received: from eig-obgw-5007a.ext.cloudfilter.net ([10.0.29.141])
-	by cmsmtp with ESMTPS
-	id E1KtsHqYnSqshE31jsNjQE; Mon, 03 Jun 2024 08:26:47 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id E31isR2MzQJKPE31is8Tkx; Mon, 03 Jun 2024 08:26:47 +0000
-X-Authority-Analysis: v=2.4 cv=EeHOQumC c=1 sm=1 tr=0 ts=665d7e47
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=oyxFDGXHj6VF3crgWAIVWQ==:17
- a=IkcTkHD0fZMA:10 a=T1WGqf2p2xoA:10 a=wYkD_t78qR0A:10 a=xGRsDScCAAAA:8
- a=rifHBRH1XTZtWdLw4JwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=zEVfNvAIcUWeczMkmY0T:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CpKO348auTtOkpaYxnYFFOrDsx8VkfciEW5JtRsobmk=; b=e2WBLhak2xvyRkPsJmDRs3IROQ
-	YVXA+bZDSAY8Di4iBWMtbISchapu1sHGzDwmq/5+dXSgHIAW1ie9mIg/BIVkkKh5yUT9QCAnMOoER
-	j7xlKy9eSy2nlP0AO2CI+owhmjla/lpFxGA1aGCZF1itJUBajvl5H5sv4y64nx0kNFb9Vf/UotnDq
-	Kfs/u85G0HY1vlLlw6mQkyHXties1riA0UUskDbyrXCRcRRrYYffJ9zGn3Jw6PlALiVo3cEuBAqWv
-	qsXMfvNBe72rde9k84Mkwis5PZl0W5HpniYIM7KzwpmXgyRB0RHuPNE3RZfCFamzBsj45qDWU6Y/n
-	BDTgayGg==;
-Received: from 81-67-36-78.rev.numericable.fr ([81.67.36.78]:35236 helo=[10.7.154.191])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1sE31f-0022kp-1V;
-	Mon, 03 Jun 2024 03:26:44 -0500
-Message-ID: <4da5ba72-6dff-46f1-b596-158c62b34f18@embeddedor.com>
-Date: Mon, 3 Jun 2024 10:26:31 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ko0oq1LC"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6ae0c4d23ddso21542286d6.0
+        for <llvm@lists.linux.dev>; Mon, 03 Jun 2024 02:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717405999; x=1718010799; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1vAMkiFmM1PgwLYJXTqfVoK4qXe/84aecwt6VcYF0jA=;
+        b=ko0oq1LCO3y4Vgtmav6dykb7CGqQtOzpXCgK3/iLQ+DxszQTZBdDQvezX6QhF63R5S
+         syEdwVwskMPWn4mWMru9tfYQ+zafG4lDGAK+/F/ta4mtVnJ7fkyKafLHY6GEKFyOyORI
+         H+uxaV3Ln8i25qFHs8IUlNjAH63vC3xOM0P1UuzN2zwPvrf+tK1+Tyvtgu5l1biTv8C0
+         TIkOzed2R1dMfXQJpokzmZsSO+WFHl4gzyVVHwL66uMlz2LBuUurXV/dEi/mmxPoo3c6
+         D2Caa6qlI9dIXoNErJsI7u9mM2HHrCiiWnVGmOeT8KHtUSWGtQgms+u7KYQ5kxLAPPM9
+         orSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717405999; x=1718010799;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1vAMkiFmM1PgwLYJXTqfVoK4qXe/84aecwt6VcYF0jA=;
+        b=lRxAHbApOhaZszLkralAYiELUiemDDLnuEaxyMb6O8oCwqAh5VcCROvNx3pwTW42m7
+         7bPcBquS9EUru3xvzhu6G7Hm4HnBVVJKV7qApI1gKSnZNz9jEacIbOMsb2qd4wa4UQvD
+         OqIYUK6y9NtfjGeCSjdG4xJxutVoxkpqyNx/J2L7UeQqwDTury2wEh2Fuhl0f8MKFYK6
+         qf8p5H3wJZnY14zkkBGI6rpUHWuVIN3kjGzqCyvWk3ETrHNOe7EPfVjy7N0KbuyEh6Y5
+         cParXiOPeLGoSXtPIjHPS2TTDgpbLE7H5qVw6SXMxNQ9zQ/wUMn3JqYPG9PL72QC7LvI
+         290g==
+X-Forwarded-Encrypted: i=1; AJvYcCUIqEBl1K7ZaSb8ZTnRy42snlylojCwJK4idycU0Lf/c6IBc3Q2rIh2DZ0i/M0T9FccchgouOlZ2M//8aQKISO+I2eKYA==
+X-Gm-Message-State: AOJu0YycY/MGSzR5lDQH/DNgWFvvpUgIcx/mda/pFRbnW/mIdjjaWmui
+	86UK8xWAzAeKtq1xv1JM0RZ9TtndCYLvkiR3IO9vAv2/mtjO+4dt+6d3bAVrf6SPWdEFcjluzPS
+	z3MAfJl5BBu+AavSYoExJuo5FRjI+TKN9rIh5
+X-Google-Smtp-Source: AGHT+IGqq0cvFr6S2FwTQ2uRwFai5j3ZKERTTAH2hrIr3+mXsUbWQBgzIzKF98yyF10YV36n4zlwP7k6cd1/9ppj1ok=
+X-Received: by 2002:a05:6214:5890:b0:6af:c308:ee31 with SMTP id
+ 6a1803df08f44-6afc30938f9mr25119606d6.49.1717405999358; Mon, 03 Jun 2024
+ 02:13:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tty: mxser: Remove __counted_by from mxser_board.ports[]
-To: Jiri Slaby <jirislaby@kernel.org>, Bill Wendling <morbo@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Justin Stitt <justinstitt@google.com>, linux-serial@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, stable@vger.kernel.org
-References: <20240529-drop-counted-by-ports-mxser-board-v1-1-0ab217f4da6d@kernel.org>
- <d7c19866-6883-4f98-b178-a5ccf8726895@kernel.org>
- <2024053008-sadly-skydiver-92be@gregkh>
- <09445a96-4f86-4d34-9984-4769bd6f4bc1@embeddedor.com>
- <68293959-9141-4184-a436-ea67efa9aa7c@kernel.org>
- <6170ad64-ee1c-4049-97d3-33ce26b4b715@kernel.org>
- <CAGG=3QU6kREyhAoRC+68UFX4txAKK-qK-HNvgzeqphj5-1te_g@mail.gmail.com>
- <bee7240b-d143-4613-bde4-822d9c598834@embeddedor.com>
- <1313c7a5-d074-4a8f-9ab9-07e4a7716fb9@kernel.org>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <1313c7a5-d074-4a8f-9ab9-07e4a7716fb9@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 81.67.36.78
-X-Source-L: No
-X-Exim-ID: 1sE31f-0022kp-1V
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 81-67-36-78.rev.numericable.fr ([10.7.154.191]) [81.67.36.78]:35236
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfHdBSC5bXnP4S3HFTbmBp/pFiCFi+X9krArPzHh4mcPtmJ1Ux+okyZPXt8h9UnTE7LTQGY5Dn/8H12Ei0uEhuFyVVGBByEdwFqSMbsF/8flGGyesAFw1
- 1OV3tqfqvliep55SuxykbDXj34EE56NpRIOi5IMnk2gQC67dwEy8ZStIJHDthUuV8sFZUHpcHgc199JYCl1RlmQ+hD2ww47LGxY=
+References: <986294ee-8bb1-4bf4-9f23-2bc25dbad561@efficios.com>
+ <vu7w6if47tv3kwnbbbsdchu3wpsbkqlvlkvewtvjx5hkq57fya@rgl6bp33eizt>
+ <944d79b5-177d-43ea-a130-25bd62fc787f@efficios.com> <7236a148-c513-4053-9778-0bce6657e358@efficios.com>
+ <jqj6do7lodrrvpjmk6vlhasdigs23jkyvznniudhebcizstsn7@6cetkluh4ehl>
+ <CAG_fn=Vp+WoxWw_aA9vr9yf_4qRvu1zqfLDWafR8J41Zd9tX5g@mail.gmail.com> <63zx2cnrf5u2slmabde2wptxvq6a3opvrj2zrkcolw3gdkjdpf@bttdonbctura>
+In-Reply-To: <63zx2cnrf5u2slmabde2wptxvq6a3opvrj2zrkcolw3gdkjdpf@bttdonbctura>
+From: Alexander Potapenko <glider@google.com>
+Date: Mon, 3 Jun 2024 11:12:37 +0200
+Message-ID: <CAG_fn=W86C4F=nqYqrOCbNgioN5QjOrMjmU9jXYmx-fnZXQXag@mail.gmail.com>
+Subject: Re: Use of zero-length arrays in bcachefs structures inner fields
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Brian Foster <bfoster@redhat.com>, 
+	Kees Cook <keescook@chromium.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-bcachefs@vger.kernel.org, Marco Elver <elver@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, May 28, 2024 at 5:02=E2=80=AFPM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> On Tue, May 28, 2024 at 01:36:11PM +0200, Alexander Potapenko wrote:
+> > On Fri, May 24, 2024 at 7:30=E2=80=AFPM Kent Overstreet
+> > <kent.overstreet@linux.dev> wrote:
+> > >
+> > > On Fri, May 24, 2024 at 12:04:11PM -0400, Mathieu Desnoyers wrote:
+> > > > On 2024-05-24 11:35, Mathieu Desnoyers wrote:
+> > > > > [ Adding clang/llvm and KMSAN maintainers/reviewers in CC. ]
+> > > > >
+> > > > > On 2024-05-24 11:28, Kent Overstreet wrote:
+> > > > > > On Thu, May 23, 2024 at 01:53:42PM -0400, Mathieu Desnoyers wro=
+te:
+> > > > > > > Hi Kent,
+> > > > > > >
+> > > > > > > Looking around in the bcachefs code for possible causes of th=
+is KMSAN
+> > > > > > > bug report:
+> > > > > > >
+> > > > > > > https://lore.kernel.org/lkml/000000000000fd5e7006191f78dc@goo=
+gle.com/
+> > > > > > >
+> > > > > > > I notice the following pattern in the bcachefs structures: ze=
+ro-length
+> > > > > > > arrays members are inserted in structures (not always at the =
+end),
+> > > > > > > seemingly to achieve a result similar to what could be done w=
+ith a
+> > > > > > > union:
+> > > > > > >
+> > > > > > > fs/bcachefs/bcachefs_format.h:
+> > > > > > >
+> > > > > > > struct bkey_packed {
+> > > > > > >          __u64           _data[0];
+> > > > > > >
+> > > > > > >          /* Size of combined key and value, in u64s */
+> > > > > > >          __u8            u64s;
+> > > > > > > [...]
+> > > > > > > };
+> > > > > > >
+> > > > > > > likewise:
+> > > > > > >
+> > > > > > > struct bkey_i {
+> > > > > > >          __u64                   _data[0];
+> > > > > > >
+> > > > > > >          struct bkey     k;
+> > > > > > >          struct bch_val  v;
+> > > > > > > };
+> >
+> > I took a glance at the LLVM IR for fs/bcachefs/bset.c, and it defines
+> > struct bkey_packed and bkey_i as:
+> >
+> >     %struct.bkey_packed =3D type { [0 x i64], i8, i8, i8, [0 x i8], [37=
+ x i8] }
+> >     %struct.bkey_i =3D type { [0 x i64], %struct.bkey, %struct.bch_val =
+}
+> >
+> > , which more or less looks as expected, so I don't think it could be
+> > causing problems with KMSAN right now.
+> > Moreover, there are cases in e.g. include/linux/skbuff.h where
+> > zero-length arrays are used for the same purpose, and KMSAN handles
+> > them just fine.
+> >
+> > Yet I want to point out that even GCC discourages the use of
+> > zero-length arrays in the middle of a struct:
+> > https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html, so Clang is not
+> > unique here.
+> >
+> > Regarding the original KMSAN bug, as noted in
+> > https://lore.kernel.org/all/0000000000009f9447061833d477@google.com/T/,
+> > we might be missing the event of copying data from the disk to
+> > bcachefs structs.
+> > I'd appreciate help from someone knowledgeable about how disk I/O is
+> > implemented in the kernel.
+>
+> If that was missing I'd expect everything to be breaking. What's the
+> helper that marks memory as initialized?
 
-> FWIW undoing:
-> commit 7391ee16950e772076d321792d9fbf030f921345
-> Author: Peter Hurley <peter@hurleysoftware.com>
-> Date:   Sat Jun 15 09:36:07 2013 -0400
-> 
->      tty: Simplify flip buffer list with 0-sized sentinel
-> 
-> 
-> would do the job, IMO.
-
-So, not even _sentinel_ is actually needed? Awesome!
-
-I wish all of these FAMs-in-the-middle were like this one. :)
-
---
-Gustavo
+There's kmsan_unpoison_memory()
+(https://elixir.bootlin.com/linux/latest/source/include/linux/kmsan-checks.=
+h#L37).
+include/linux/kmsan.h also has several more specific helpers for
+various subsystems - we probably need something like that.
+I was expecting kmsan_handle_dma() to cover disk IO as well, but
+apparently I was wrong.
