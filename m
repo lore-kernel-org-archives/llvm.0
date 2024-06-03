@@ -1,117 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A79A126F1A;
-	Mon,  3 Jun 2024 12:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00CA4A1B;
+	Mon,  3 Jun 2024 14:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717418865; cv=none; b=VTRrejY6uyjGlb5U0LtAukQFvyU98xWbHt3HID/zywfTHiG47dKWFr+WaQFwtERsgGeu4ab5XizJKpe7nkjTmpLxCc3j9U2zyVdm9QSh0dj9j+Ktyzd6BUN/c/9hcxn1f/DK9bak48tR/0uGXFVsbyYZS9snkzXeCGxaEaRK68c=
+	t=1717426261; cv=none; b=Brsfv4yGNd5Lcl8DmFmcrD/FiF0zjQ1Kelf5POXg5LjjGnIT2RHSbnOqiaW2lHBhAzTJjO4btmYCzvqcYVivY3O6c2cIxuOymR7WTi0DHTL92aZbyc8arG/FmjUtcd7FsR5ceciu3gaimn4TS9APJONnEpg0k643JBe1fEQcdeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717418865; c=relaxed/simple;
-	bh=xjvuuOdnqOIhK5ZBtlN6ndKEQrQUjVsyjGmdjk8KDM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UuP3WjoChYwmVRPvDD0PjTsOyzDb4B/duvsX7dgCJ+vaPuo0P+GyRLu2oAx4TWyHKxuNrTv00Leq0X5qPHpuZynA69MYDfsNeJ0AtmssrHtRZINFl3l4XVlhCnlC7UZCihhqXHWry53mGwhfnUU6WXq2on3LQJHwIIM03hhiYnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jx9j+DBz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717426261; c=relaxed/simple;
+	bh=zG98KLJbkM25RRn+j3UuuXqg165jOeRk2KEUp6rpJ8I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=NkTXH9ifQOlZax2Yvc2eWWQGMh31n6z5mxXek+bu4fTb1/kageyBE+twsH85KIHa33hBvwdUS74pi6L2Y9jyBsNlWejvTy7wcbFjHKi6sXj6uXNBuojICQKRLKpqL5eln5LAOIMqOnVB9RwemMd+zebPV/nMCpQ6vrhVBrfrhz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SDeMR4vU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EtXdY/cY; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SDeMR4vU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EtXdY/cY; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jx9j+DBz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18AA1C4AF07;
-	Mon,  3 Jun 2024 12:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717418864;
-	bh=xjvuuOdnqOIhK5ZBtlN6ndKEQrQUjVsyjGmdjk8KDM8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jx9j+DBzZp16t8GUoTabwdp9sySO5qFu4XyiaobyhE0bWZwGYAOot9E1RKFHAGYn1
-	 RFsK6myrrIx2X2exvfkwD06gQ3WHr6ZYP0rC6kRpLfp+Yw6+qyPFIJ3wNt2Do8lDRw
-	 XlKSVa+zhpiYpdo4ATR6iTBlhCqmlI3pK90eRLAdF6y3vgSkOu2HfFxLuH0vBaSdb0
-	 8Nb4ZCCxOVH8GQ/30htNKhSoPm2sqqExt91urxrj4zWKfMiSKE7BtkWjaZBi3V02Dl
-	 cvSBUIfXhsLmcP4umDOyuEW90vH3ruTPyFgiFAQYhyREH7WHaicWHcBssMiWSzb+HU
-	 BrCqREjhNes9g==
-Date: Mon, 3 Jun 2024 13:47:40 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Alexandre Ghiti <alex@ghiti.fr>
-Cc: Jesse Taube <jesse@rivosinc.com>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
-Message-ID: <20240603-stinking-roster-cfad46696ae5@spud>
-References: <20240531162327.2436962-1-jesse@rivosinc.com>
- <20240531-uselessly-spied-262ecf44e694@spud>
- <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SDeMR4vU";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EtXdY/cY";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SDeMR4vU";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EtXdY/cY"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 25F8420041;
+	Mon,  3 Jun 2024 14:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717426258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oe7YXIZQ2xQOr2btlbRQ08j1/YVZeKV53iC/f6cqlfw=;
+	b=SDeMR4vUjc/iiTjnSjIxaV3KqI4m+Fqopb1EOGNnw/9s5+CEXaC8dmFLl6VN5WTGy9TsJs
+	z2hGnUUsGddeCq8i3DsmdQTslbD1r8Dtx/K+Ha+71eaadY6Tabf8+2DlPch+xL608XHU+3
+	0f3TMd3/nxeRO++zBmJIgwUODsKJtnE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717426258;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oe7YXIZQ2xQOr2btlbRQ08j1/YVZeKV53iC/f6cqlfw=;
+	b=EtXdY/cYXTA1Cs9Y0HwyWtAG3TQRjf5bD+HdC+5tdH7VsZpHYIfONy3IDXpRl5Qf9NVrf+
+	wfvEITRAl3DsckCQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717426258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oe7YXIZQ2xQOr2btlbRQ08j1/YVZeKV53iC/f6cqlfw=;
+	b=SDeMR4vUjc/iiTjnSjIxaV3KqI4m+Fqopb1EOGNnw/9s5+CEXaC8dmFLl6VN5WTGy9TsJs
+	z2hGnUUsGddeCq8i3DsmdQTslbD1r8Dtx/K+Ha+71eaadY6Tabf8+2DlPch+xL608XHU+3
+	0f3TMd3/nxeRO++zBmJIgwUODsKJtnE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717426258;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oe7YXIZQ2xQOr2btlbRQ08j1/YVZeKV53iC/f6cqlfw=;
+	b=EtXdY/cYXTA1Cs9Y0HwyWtAG3TQRjf5bD+HdC+5tdH7VsZpHYIfONy3IDXpRl5Qf9NVrf+
+	wfvEITRAl3DsckCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D2F0113A93;
+	Mon,  3 Jun 2024 14:50:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id jlr0LFHYXWaLbAAAD6G6ig
+	(envelope-from <krisman@suse.de>); Mon, 03 Jun 2024 14:50:57 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Lizhi Xu <lizhi.xu@windriver.com>
+Cc: <lkp@intel.com>,  <coreteam@netfilter.org>,  <davem@davemloft.net>,
+  <ebiggers@kernel.org>,  <fw@strlen.de>,  <jaegeuk@kernel.org>,
+  <kadlec@netfilter.org>,  <kuba@kernel.org>,
+  <linux-fscrypt@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <llvm@lists.linux.dev>,  <netdev@vger.kernel.org>,
+  <netfilter-devel@vger.kernel.org>,  <oe-kbuild-all@lists.linux.dev>,
+  <pablo@netfilter.org>,
+  <syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com>,
+  <syzkaller-bugs@googlegroups.com>,  <tytso@mit.edu>,
+  <adilger.kernel@dilger.ca>,  <linux-ext4@vger.kernel.org>
+Subject: Re: [PATCH V5] ext4: check hash version and filesystem casefolded
+ consistent
+In-Reply-To: <20240601113749.473058-1-lizhi.xu@windriver.com> (Lizhi Xu's
+	message of "Sat, 1 Jun 2024 19:37:49 +0800")
+References: <20240531185519.GB1153@sol.localdomain>
+	<20240601113749.473058-1-lizhi.xu@windriver.com>
+Date: Mon, 03 Jun 2024 10:50:51 -0400
+Message-ID: <87plsym65w.fsf@mailhost.krisman.be>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="iJdrl4qDKkXrEMBS"
-Content-Disposition: inline
-In-Reply-To: <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
+Content-Type: text/plain
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.51 / 50.00];
+	BAYES_HAM(-2.71)[98.71%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TAGGED_RCPT(0.00)[340581ba9dceb7e06fb3];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -2.51
+X-Spam-Flag: NO
 
+Lizhi Xu <lizhi.xu@windriver.com> writes:
 
---iJdrl4qDKkXrEMBS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> When mounting the ext4 filesystem, if the hash version and casefolded are not
+> consistent, exit the mounting.
+>
+> Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
+> Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+> ---
+>  fs/ext4/super.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index c682fb927b64..0ad326504c50 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -5262,6 +5262,11 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>  		goto failed_mount;
+>  
+>  	ext4_hash_info_init(sb);
+> +	if (es->s_def_hash_version == DX_HASH_SIPHASH && 
+> +	    !ext4_has_feature_casefold(sb)) {
 
-On Mon, Jun 03, 2024 at 11:14:49AM +0200, Alexandre Ghiti wrote:
-> Hi Conor,
->=20
-> On 31/05/2024 19:31, Conor Dooley wrote:
-> > On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
-> > > Dectect the Zkr extension and use it to seed the kernel base address.
-> > >=20
-> > > Detection of the extension can not be done in the typical fashion, as
-> > > this is very early in the boot process. Instead, add a trap handler
-> > > and run it to see if the extension is present.
-> > You can't rely on the lack of a trap meaning that Zkr is present unless
-> > you know that the platform implements Ssstrict. The CSR with that number
-> > could do anything if not Ssstrict compliant, so this approach gets a
-> > nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
-> > it, so you're stuck with getting that information from firmware.
->=20
->=20
-> FYI, this patch is my idea, so I'm the one to blame here :)
->=20
->=20
-> >=20
-> > For DT systems, you can actually parse the DT in the pi, we do it to get
-> > the kaslr seed if present, so you can actually check for Zkr. With ACPI
-> > I have no idea how you can get that information, I amn't an ACPI-ist.
->=20
->=20
-> I took a look at how to access ACPI tables this early when implementing t=
-he
-> Zabha/Zacas patches, but it seems not possible.
->=20
-> But I'll look into this more, this is not the first time we need the
-> extensions list very early and since we have no way to detect the presence
-> of an extension at runtime, something needs to be done.
+Can we ever have DX_HASH_SIPHASH set up in the super block?  I thought
+it was used solely for directories where ext4_hash_in_dirent(inode) is
+true.
 
-Aye, having remembered that reading CSR_SEED could have side-effects on a
-system with non-conforming extensions, it'd be good to see if we can
-actually do this via detection on ACPI - especially for some other
-extensions that we may need to turn on very early (I forget which ones we
-talked about this before for). I didn't arm64 do anything with ACPI in the
-pi code, is the code arch/x86/boot/compressed run at an equivilent-ish point
-in boot?
+If this is only for the case of a superblock corruption, perhaps we
+should always reject the mount, whether casefold is enabled or not?
 
---iJdrl4qDKkXrEMBS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZl27awAKCRB4tDGHoIJi
-0qGGAP0dROI2kQOiSz/LUNHcEMeZPOeCAtT2w2ieJ5CnnqdxFAEA0+On5DOHDyHW
-ScDD2IjkJxreOi0zn1lj8uq2WccodwI=
-=fWLb
------END PGP SIGNATURE-----
-
---iJdrl4qDKkXrEMBS--
+-- 
+Gabriel Krisman Bertazi
