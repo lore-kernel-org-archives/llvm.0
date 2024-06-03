@@ -1,104 +1,197 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2DB1366
-	for <llvm@lists.linux.dev>; Mon,  3 Jun 2024 17:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717435987; cv=none; b=skNE59+Bn9Us2mABq2uOL9k4Zch06FzSZTGX+k7VXh0ggST8Jdeu2+uBY4SDMv1lq7Y4QAGDNMtVf8Hzbp+gEuTX2VS4RuRGpCqCcewzkcUs6DsCh+V35OI+1Cv/Fwn1Y0NQr+YU0a+ueiVoV/97DtElQgjjsx8G7Bp3vkiiIxw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717435987; c=relaxed/simple;
-	bh=SCS3NyFRHLvKa8kxcZORZb92HGeSMLnT4wZwbH56iQo=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YehNBfaMqR2SEMAzKgjkWl106DsRpIyT7/A+cuiFwD8Ns1/pDBfhNwNXsXOKT9einP9i7ayMQdaADHpRbBBaltk3EorUKtaoLIZXGyDWzYu0xoo81F4O3FpyVB3pyxmf3Kw2c8Le9di8JF0TK1riW/m/DXcQgjHfxIEikfH3KBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c4ezpv5S; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B02135A5A
+	for <llvm@lists.linux.dev>; Mon,  3 Jun 2024 20:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717445538; cv=fail; b=P+8Z4jp3uYQm6jrutb48NJMBxJjPPXiZh10QLnyvMGkSNbBxNysF80sp70zEBQOqlH/z/YrADZjSvyN8mVzcp2bjlYAEE0ZMZW3ckk+6psTMxbzSJu8w2OlS6IdBYxQzIzKoswELU5aoBdcOOHYWRPwzPZ1Pw31TuTO0FYAWSwg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717445538; c=relaxed/simple;
+	bh=h9u41ekSBKwelnPSWJXz+DjA9y5hoiGve0rt9fhsFKQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=gRuYmM20DE6lH5lVELFub7bI4UuTYLduvtTyuhFi2sFcOu6lk75hEM+uCHV+VqOYGCtN15xP8hA/2tBEakVowbXp+AL1M/q9E6Z+Ma8nqeBalmtvdSnvIr9GldNozoVkJtXHwQwghoAZjEsW+vQkUyFklvcUFBSFA8OxfdW171w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lYf2bfWf; arc=fail smtp.client-ip=40.107.220.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c4ezpv5S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717435984;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=w5Hp6W3C9U4VGmLgZTRMhZxChsW2EWwS2vSv2CKgJJw=;
-	b=c4ezpv5SwpjEhK/svGY4EMWkShMji9eNXEE5o2IW6aIVJwVDk4W+IqieJPl3D42ETFaMkd
-	gC84jiDz3gF7kk4KqjvwIVk995g1mS8JtoddvBWAPHcQavmAVcjf9Z+v1fn7v8UU3HOdcL
-	GX3vaATQekoTNln6iPejGiHh+Fw7xkU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-527-FcekpMEuNpe4DE0lsZwUtg-1; Mon,
- 03 Jun 2024 13:33:03 -0400
-X-MC-Unique: FcekpMEuNpe4DE0lsZwUtg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 320973806703
-	for <llvm@lists.linux.dev>; Mon,  3 Jun 2024 17:33:02 +0000 (UTC)
-Received: from [172.64.4.49] (unknown [10.30.33.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E19DB49103D;
-	Mon,  3 Jun 2024 17:33:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0-rc2,
- mainline.kernel.org-clang, f06ce441)
-Date: Mon, 03 Jun 2024 17:33:01 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lYf2bfWf"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G+pnJUGnHiqxfuHkjttsCmPU7+k7EqH7Y4qY9AaHRY2d1nW4vaT6jI269kr0i9N9WD/l0y5+ztJ3GQv+TflP2mzlnHXQp27CFgz7CkP+mzjj5XKxdpFEUY9HR58lA5+mznhpxXIBUns6TmemyrxkXGp3sO2Bz9Ko8eb8sBruSWaTouYiodmJs9Anui9/2sKCJO5TMeCYMOETpt5gUP4RD3bo5sCDizwtSuFBTw53Fk/g399zQucBKqnnzdlnDnp8O5NxIe/8sNbaIR300LCclcDku9uVmA2cdTHcQHwGWyR/EjYTiBNajrR1OipVEodfkq7n+fsHlhCzSSqo+JGtVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PdYayFlTQxq04QDWUElZrQgpVN83oeiGXaSXz/7mswE=;
+ b=LZX9how7TSDUcQn2hY9XkvZyQ2D9reuM1rGVO/qnMIteqoZe0RYVlhBVZt6sT8lCk0Snv986g+acv++cJn+NGvgqUYTOoquwOjGN/NKG0FrWrcBnocRTmWzYB31Yy6qncrxDCXH55g7mLqjGs0d8VsGxN2BnHPmQvyzKvuJW20Q99GsXHYCAzGodAzzlWHzXJGTvRGPXNHOWojlwyEF8aAZGpUnY438WMvQyNDhqJsK5oTLJDkEoPqkbhzXsugbw3m7jx0qVMvluQMoS5OC2OQfMkQMhrrbbMxJ4yX3jDFg8RVZRTJSrXO9wgRpZThAfq+jtCnzjgqlsf4HiFClEvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PdYayFlTQxq04QDWUElZrQgpVN83oeiGXaSXz/7mswE=;
+ b=lYf2bfWfld4zvEkdnaiiJxCdlirr5EVgCMIg1PU76G2gzW143QUDFgGfTNNpi+UQa5ykcThIrALghnB4WhLQo6ycA2Wt3v7L6wViUqvn7Amv+geMBBj16oPb1KmRcTHP/U9fFDmydURu70O4uqQc+5bsFbZwkh6y1mzyeO9zo03T3UudrSZwr2U5jM8ZBGsT+YV5OPLvsPAdSCj13+8Umrh+OH7pEZnh4IQGnSfd9eSd3ykBwhmmR7ZjsOwLXpfuDe6EmX3ROPwbID81lOZbS8Ryrh3vt1M1fyuFb1KZ0ornnWTSA0g4ACacbNBeio7YpdgtF9suwANmfbINFVH1LA==
+Received: from BL0PR02CA0130.namprd02.prod.outlook.com (2603:10b6:208:35::35)
+ by MN2PR12MB4304.namprd12.prod.outlook.com (2603:10b6:208:1d0::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.27; Mon, 3 Jun
+ 2024 20:12:13 +0000
+Received: from BL6PEPF0001AB4B.namprd04.prod.outlook.com
+ (2603:10b6:208:35:cafe::c2) by BL0PR02CA0130.outlook.office365.com
+ (2603:10b6:208:35::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.27 via Frontend
+ Transport; Mon, 3 Jun 2024 20:12:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL6PEPF0001AB4B.mail.protection.outlook.com (10.167.242.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7633.15 via Frontend Transport; Mon, 3 Jun 2024 20:12:10 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 3 Jun 2024
+ 13:11:48 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 3 Jun 2024
+ 13:11:48 -0700
+Message-ID: <d3b4bc6a-36ba-4716-b94e-c0e9217f6ff0@nvidia.com>
+Date: Mon, 3 Jun 2024 13:11:47 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-Message-Id: <84507.124060313330301238@us-mta-527.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
+ builds
+From: John Hubbard <jhubbard@nvidia.com>
+To: Mark Brown <broonie@kernel.org>
+CC: Shuah Khan <shuah@kernel.org>, Muhammad Usama Anjum
+	<usama.anjum@collabora.com>, Beau Belgrave <beaub@linux.microsoft.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Naresh Kamboju
+	<naresh.kamboju@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
+	sunliming <sunliming@kylinos.cn>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>, <linux-kselftest@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, "Nathan
+ Chancellor" <nathan@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>
+References: <20240531183751.100541-1-jhubbard@nvidia.com>
+ <20240531183751.100541-2-jhubbard@nvidia.com>
+ <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
+ <96216e54-ba8f-4fd7-b95a-13477c143575@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <96216e54-ba8f-4fd7-b95a-13477c143575@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4B:EE_|MN2PR12MB4304:EE_
+X-MS-Office365-Filtering-Correlation-Id: 16d63e2a-a61c-47a1-6a3a-08dc840973b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|7416005|36860700004|82310400017|376005|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SWxaSlRqU0pKay9oOVhzTC9QNmVkSm8rdnBTQjM1azdtV29pK0kxUThERjRS?=
+ =?utf-8?B?c1hYbHUza1VKcEE4SVJZMkxQWU85RnRCbTVGTHFIMDVWRXErYWk4UHRTdmVj?=
+ =?utf-8?B?Y1B4WkZ5d25FY0xwNG4wN2s2Y29ka3pXSWRsU1poaHBiNHVIbWdBaWZOdXJZ?=
+ =?utf-8?B?bXRtQlhKb3J3VTdUdG9zdEFsYmQ4ZnloYSt2eGZ2aHFXbnBpekZSZFJCbTV4?=
+ =?utf-8?B?WHlId0cwMDk5QVJ3dk1qMCs1dEltQndWdWFwcm1pbkEvNSt5V3NuTVQ4ZXNK?=
+ =?utf-8?B?bVRNS05jK3kzOWVBbGtxbFRWcWdOZWxhSjZvOFlRVmFyMTJtYWo5aFh3NzRU?=
+ =?utf-8?B?cWkwM1QvdDVuLzJzSzhndTJpbk5pcy8rbWQ4eEx5VWhCamZYR21Db3ZVSm50?=
+ =?utf-8?B?M3hXaTg1bjBndjExdFBWSDNUVm44VnZ5NWZUNUN6RnJGZzl1L2hVelYveG5E?=
+ =?utf-8?B?WlhabXRRclJnemhtMGdHcmdyNjBCOEdSTFBxWDc0RkZ1aHdMZEx1ZTQ3MkE1?=
+ =?utf-8?B?bUlxT3QvaXg1LzByK1Rldm5lWjdKOUI2NW80STZWc044SFVlZUtReDdjOHpp?=
+ =?utf-8?B?MTJjQ1hnTVFzVThtN05RWk5ZN2pDeTczUEZvMmJuOVFMaXZ0L1F3dVJoL1Fx?=
+ =?utf-8?B?VUJVakcxd3hFWlA5NTdrYTlwK0orNVdHT203a09iaTgvN1ZhM1l2dVQ0WXZ1?=
+ =?utf-8?B?ejlST1VBRXFhRFpSejl2d3NsWER0dmw3alYzbEpmUEFOQ1dMSEN1ZlluZnN0?=
+ =?utf-8?B?ZTM3MTlPYjV2WFpmdXNUMUtuZ3FTeTg4azRXSWk4ZEV1bGdmSGNSRVg4L3Yv?=
+ =?utf-8?B?Q0dock9iMjUrY2poaWN2OGFaRXk4MEdHSjdnTHE2bUxveWcwd1NEWXJaVm1v?=
+ =?utf-8?B?RE1pNGtld1RkSTlNZkNtNFF6cWMrR0M5VFcyTkg5cTFYUHZRUnZIbWxNams4?=
+ =?utf-8?B?ekM5MWs4OFZVSThPWmVDeGZ2aDFUNVZoNjBadVBuQ2tQZGMxWXNtTCtuS3JT?=
+ =?utf-8?B?bXYrWGJyc2Q0UncvSTF3YTZac0hBaFpmalM0UXNhNkY3NmRzZERLTS96Tkx1?=
+ =?utf-8?B?Mkh2cDZVMEl3b1FUZXhjRGx1VS9wQXI2bzg5OU5OVUZyNWtuenE2anRpeDZB?=
+ =?utf-8?B?QWk3eTBEODhzR052RDlWcFNNclZRM3NmUFNGQUcwTzNUdTl6bE43eUFzdkQ1?=
+ =?utf-8?B?cjVMcTlhMmRlS1NUTmlLRzkxTWl6L1E0UHV5MTFSNWdFWlpra2t3RnFnN1A3?=
+ =?utf-8?B?TVl3dVRjM1YzOWt3NmJ3cnlLclRKNk5tZW40bXppWkJpSSs1c3VnMW8ya3dp?=
+ =?utf-8?B?cTdVdmlzLzhrRDBCQmt0SUxXb0xJTldDUlpNTnRxc0lWQVZHVTNycXF2ejdN?=
+ =?utf-8?B?QUYzVHdydyt5eG02dW4rTG02a2pDaXpIZWcxdW9OSFV3aXVBdHl3aDBFbTl0?=
+ =?utf-8?B?Z2doWDdMbGFqUFJGNTZDa0hwMzBka1IzODB5SnJDTU8vQWFNcFUxajM0OC9a?=
+ =?utf-8?B?SkFwbDM3ak83bzkxbHRZdnhEWFExbHZPbGI2OXJ6cjdadm85S0o5QW9qT2p6?=
+ =?utf-8?B?R0lYaEZQMkVzMVFvR3Y4M0kzNjBQS1FnU3lUSVJpS0I1bithNEhMODJjMUl6?=
+ =?utf-8?B?VnlXdUFtM2JyMmJjWjFMZDJxdW9EMng2RThSWkVHRHg3MTJNSFIxSjI3dk4v?=
+ =?utf-8?B?eDdFYXZpSjUzYjJEMEhyVVNEUzVwRnZpNElEWkFWTndXNWxVMm5QY1VURlhG?=
+ =?utf-8?B?c0prUGh0VHRFbUdrdnVzaCt0bnRSRkxmUDR5cGJGd295TWtpU001dWlUYlIr?=
+ =?utf-8?Q?z7UWkjRXF5WiHLAHhzoeaQDT8wDTooI4pnF18=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(36860700004)(82310400017)(376005)(1800799015);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2024 20:12:10.8577
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16d63e2a-a61c-47a1-6a3a-08dc840973b5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB4B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4304
 
-Hi, we tested your kernel and here are the results:
+On 6/3/24 10:09 AM, John Hubbard wrote:
+> On 6/3/24 8:32 AM, Mark Brown wrote:
+>> On Fri, May 31, 2024 at 11:37:50AM -0700, John Hubbard wrote:
+>>> The kselftests may be built in a couple different ways:
+>>>      make LLVM=1
+>>>      make CC=clang
+>>>
+>>> In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest
+>>> of lib.mk, and any Makefiles that include lib.mk, can base decisions
+>>> solely on whether or not LLVM is set.
+>>
+>> ICBW but I believe there are still some architectures with clang but not
+>> lld support where there's a use case for using CC=clang.
+> 
+> I'm inclined to wait for those to make themselves known... :)
+> 
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'loongarch-fixes-6.10-1' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1316452952
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1316452952-aarch64-kernel
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1316452952-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1316452952-s390x-kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1316452952-x86_64-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1316452952-x86_64-kernel-debug
+...but thinking about this some more, maybe this patch is actually
+a Bad Idea. Because it is encouraging weirdness and divergence from
+how kbuild does it. And kbuild is very clear [1]:
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Building with LLVM
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Invoke make via:
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+make LLVM=1
+
+to compile for the host target. For cross compiling:
+
+make LLVM=1 ARCH=arm64
+
+The LLVM= argument
+
+LLVM has substitutes for GNU binutils utilities. They can be enabled individually. The full list of supported make variables:
+
+make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
+   OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
+   HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+
+LLVM=1 expands to the above.
+
+[1] https://docs.kernel.org/kbuild/llvm.html
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
