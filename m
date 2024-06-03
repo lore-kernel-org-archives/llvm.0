@@ -1,23 +1,48 @@
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CCB77620
-	for <llvm@lists.linux.dev>; Mon,  3 Jun 2024 09:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F64B757E0;
+	Mon,  3 Jun 2024 09:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717406097; cv=none; b=ZfecDtj9zm1C26y2q2G2PjJbZ+SDCU2IIKKoomF8CkR6h1RLLlxCpLsa2IV1ZLXOZvU5bx1XxESplwXLWTdnwZWrBHcklppEiQ7YEhAK6BTLP0uOCBrhuvSMZ03FqSkJYFc6ZlJixQbq8eMdqjL3OS63Yh7EwWNL4B1G5nZwAto=
+	t=1717406849; cv=none; b=jIcjNxt7XgDcU4DpfQ27swh77tiHiYUh45cMpegpZfl9a8KdRI9jGdgFtu1J7gIctwNHmRLhEiBXfq3qzEjDMTwcUj4GhAg79HIx8Pb3LssaYflYoRtA3/TthacNBzPYGyIn7/6w7aEPUSICx1OODZRk1tgkPuYqpyja60bdwLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717406097; c=relaxed/simple;
-	bh=RBHxbEbPrdDXGVgs9JAV6IdcubHw5Ps3pU1smttww4I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ke/U+H8MY3ylSvy3U/yytkLonGV9B6Ew9QU2WxJQ5rx/Px1lLj6clM2uFeirgxQM9RNWJLoF4Qi3aXcPnAbBoCtj/FctF+ordXKqxU0pvxrqVOx6ZKwVXtltg02IL2ezNUjfwtOIeUOlT/Yel/Z/Dtv4QpVC6Gz6SPqTPGRLn9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8477CC0005;
-	Mon,  3 Jun 2024 09:14:50 +0000 (UTC)
-Message-ID: <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
-Date: Mon, 3 Jun 2024 11:14:49 +0200
+	s=arc-20240116; t=1717406849; c=relaxed/simple;
+	bh=x9ikFYNncfJUkrFfp9JJ8ryQsRSyVgqBkaGtU/Z/r4g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=e6D8ItrMCgju+w/k0WdwhHVn6GQaOBdPiGMmwoP6zhU+BdfScH4mCRC9+F3wTrjHC7ajIYzoaY9w8SlKrkqwt5kLKCBWAS4rHOOsjY4S6Gns4AmOjaL1IWQwdbr4N20l5YCg9PjMmS7a1xpKPso4VXaY0GScfdAphrVv3Rw56s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=PdLafWwM; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="PdLafWwM"
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4539R1xf081601;
+	Mon, 3 Jun 2024 04:27:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1717406821;
+	bh=SB5jmnTW30z7D427AIs51/dYcHrGUq+FjEIld/CWbLY=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=PdLafWwMwv4a4/btdJOZNlxq40sxLkDWcVu8S6JJci8GPFuqmKiNi1Zi9ycjoEiy9
+	 KaqJotzBQ8VgW3hK52PLTDCu2zBJ60yxLZzxQfCdz7/5SBaTFBE/5EA9TffFE17Ge4
+	 V8U+2IqNS9TwWaCtaYPGjaxijP8HeoCoOkm6czLM=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4539R1ec110664
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 3 Jun 2024 04:27:01 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 3
+ Jun 2024 04:27:00 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 3 Jun 2024 04:27:00 -0500
+Received: from [172.24.227.57] (linux-team-01.dhcp.ti.com [172.24.227.57])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4539Qsjq056761;
+	Mon, 3 Jun 2024 04:26:55 -0500
+Message-ID: <c1380aa4-d8ae-4e77-88a8-59555dffdd57@ti.com>
+Date: Mon, 3 Jun 2024 14:56:53 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -25,67 +50,110 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
+Subject: Re: [PATCH net-next v2 2/3] net: ethernet: ti: Register the RPMsg
+ driver as network device
+To: kernel test robot <lkp@intel.com>, <schnelle@linux.ibm.com>,
+        <wsa+renesas@sang-engineering.com>, <diogo.ivo@siemens.com>,
+        <rdunlap@infradead.org>, <horms@kernel.org>, <vigneshr@ti.com>,
+        <rogerq@ti.com>, <danishanwar@ti.com>, <pabeni@redhat.com>,
+        <kuba@kernel.org>, <edumazet@google.com>, <davem@davemloft.net>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <srk@ti.com>,
+        <rogerq@kernel.org>, <s-vadapalli@ti.com>, <y-mallik@ti.com>
+References: <20240531064006.1223417-3-y-mallik@ti.com>
+ <202406011038.AwLZhQpy-lkp@intel.com>
 Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>, Jesse Taube <jesse@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Masahiro Yamada <masahiroy@kernel.org>
-References: <20240531162327.2436962-1-jesse@rivosinc.com>
- <20240531-uselessly-spied-262ecf44e694@spud>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20240531-uselessly-spied-262ecf44e694@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Yojana Mallik <y-mallik@ti.com>
+In-Reply-To: <202406011038.AwLZhQpy-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
-
-Hi Conor,
-
-On 31/05/2024 19:31, Conor Dooley wrote:
-> On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
->> Dectect the Zkr extension and use it to seed the kernel base address.
->>
->> Detection of the extension can not be done in the typical fashion, as
->> this is very early in the boot process. Instead, add a trap handler
->> and run it to see if the extension is present.
-> You can't rely on the lack of a trap meaning that Zkr is present unless
-> you know that the platform implements Ssstrict. The CSR with that number
-> could do anything if not Ssstrict compliant, so this approach gets a
-> nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
-> it, so you're stuck with getting that information from firmware.
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
 
-FYI, this patch is my idea, so I'm the one to blame here :)
 
+On 6/1/24 08:43, kernel test robot wrote:
+> Hi Yojana,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on net-next/main]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yojana-Mallik/net-ethernet-ti-RPMsg-based-shared-memory-ethernet-driver/20240531-144258
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20240531064006.1223417-3-y-mallik%40ti.com
+> patch subject: [PATCH net-next v2 2/3] net: ethernet: ti: Register the RPMsg driver as network device
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240601/202406011038.AwLZhQpy-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240601/202406011038.AwLZhQpy-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202406011038.AwLZhQpy-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/net/ethernet/ti/inter_core_virt_eth.c:76:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>       76 |         if (wait) {
+>          |             ^~~~
+>    drivers/net/ethernet/ti/inter_core_virt_eth.c:87:9: note: uninitialized use occurs here
+>       87 |         return ret;
+>          |                ^~~
+>    drivers/net/ethernet/ti/inter_core_virt_eth.c:76:2: note: remove the 'if' if its condition is always true
+>       76 |         if (wait) {
+>          |         ^~~~~~~~~
+>    drivers/net/ethernet/ti/inter_core_virt_eth.c:65:9: note: initialize the variable 'ret' to silence this warning
+>       65 |         int ret;
+>          |                ^
+>          |                 = 0
+>    drivers/net/ethernet/ti/inter_core_virt_eth.c:330:24: error: use of undeclared identifier 'icve_del_mc_addr'
+>      330 |         __dev_mc_unsync(ndev, icve_del_mc_addr);
+>          |                               ^
+>    drivers/net/ethernet/ti/inter_core_virt_eth.c:331:26: error: no member named 'mc_list' in 'struct icve_common'
+>      331 |         __hw_addr_init(&common->mc_list);
+>          |                         ~~~~~~  ^
+>    drivers/net/ethernet/ti/inter_core_virt_eth.c:337:28: error: no member named 'rx_mode_work' in 'struct icve_common'
+>      337 |         cancel_work_sync(&common->rx_mode_work);
+>          |                           ~~~~~~  ^
+>    1 warning and 3 errors generated.
+> 
+> 
+> vim +76 drivers/net/ethernet/ti/inter_core_virt_eth.c
+> 
+>     59	
+>     60	static int icve_create_send_request(struct icve_common *common,
+>     61					    enum icve_rpmsg_type rpmsg_type,
+>     62					    bool wait)
+>     63	{
+>     64		unsigned long flags;
+>     65		int ret;
+>     66	
+>     67		if (wait)
+>     68			reinit_completion(&common->sync_msg);
+>     69	
+>     70		spin_lock_irqsave(&common->send_msg_lock, flags);
+>     71		create_request(common, rpmsg_type);
+>     72		rpmsg_send(common->rpdev->ept, (void *)(&common->send_msg),
+>     73			   sizeof(common->send_msg));
+>     74		spin_unlock_irqrestore(&common->send_msg_lock, flags);
+>     75	
+>   > 76		if (wait) {
+>     77			ret = wait_for_completion_timeout(&common->sync_msg,
+>     78							  ICVE_REQ_TIMEOUT);
+>     79	
+>     80			if (!ret) {
+>     81				dev_err(common->dev, "Failed to receive response within %ld jiffies\n",
+>     82					ICVE_REQ_TIMEOUT);
+>     83				ret = -ETIMEDOUT;
+>     84				return ret;
+>     85			}
+>     86		}
+>     87		return ret;
+>     88	}
+>     89	
+> 
 
->
-> For DT systems, you can actually parse the DT in the pi, we do it to get
-> the kaslr seed if present, so you can actually check for Zkr. With ACPI
-> I have no idea how you can get that information, I amn't an ACPI-ist.
+I will fix all these issues in v3.
 
-
-I took a look at how to access ACPI tables this early when implementing 
-the Zabha/Zacas patches, but it seems not possible.
-
-But I'll look into this more, this is not the first time we need the 
-extensions list very early and since we have no way to detect the 
-presence of an extension at runtime, something needs to be done.
-
-Thanks,
-
-Alex
-
-
->
-> Thanks,
-> Conor.
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Regards,
+Yojana Mallik
