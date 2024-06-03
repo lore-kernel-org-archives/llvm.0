@@ -1,97 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2711EF1A;
-	Mon,  3 Jun 2024 15:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066511304BF;
+	Mon,  3 Jun 2024 15:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717428757; cv=none; b=B63aQh2uM2j8z1rlvviSVaxEdAg5TQoiY9uDGMdCpTD66PhZLa2OYS1qMnD7XN52DEL3YG1eB4I+pXpueJKSt2PFVS68S0w3TymbMqXH+JNIpwFyHSUxhzKubQzA7YJA+ou4M2xncXVRvpFAjRAnYnJQwpHOtKMeDXSm1O4TuM0=
+	t=1717429026; cv=none; b=B8ZchsqcHPQoemOR6IWA7D2Qhq3L47q+x6T2DcQz6X8I7qERHG3rZraMPsRaUkVeoxbPHLx6qzjcqabAXB3HFRWl1SwDtQEv6uf09qwed+leo8bK8QTE4oLLxQn9s0LnCtjpfOKjCkcqWxQh9JydK9z7etOCfWGEiIuLzh3ZGvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717428757; c=relaxed/simple;
-	bh=q4oMvhBk1KUtZfzGp4xFNoiHbYTq2R2RFWXRAm7gEIs=;
+	s=arc-20240116; t=1717429026; c=relaxed/simple;
+	bh=qLGutChqnX9e8a3ha4iN2YiLfsS82Seh0CnbTGwsF+c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P9xJ73HZulkDm10lk3kZSyjO7MdLKMFIp3CJUul+vYsZtdx+HYBWv664VJ33PXY53W7mf1FkWskiAvx3KvmcSubo5Vf9B6z4XLr/ZJ7XtiFMwm+HtqIZUy2GzmRhvW0CEzxwZ06yCGVl8phv+YyGmQOp+AVZ4nOYFsRBk3esQQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQ3CYvko; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=EnvVxXMV6ujBtDymi8vCV2w2x7JcLHYX3Raqc4ntM+03ji1x7Ivt0BaqLjI1I2iCqGul41TeHH5xJLTJ6eqUXk/MICUOQXskgbQaeYwERurHSso0lmAhWeLwuJ3ziLV/MVODUPfDYGJMd/ciboVZMPo7jxSkrdJHv9yiGJYt+BA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BiIdf16g; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQ3CYvko"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9563EC2BD10;
-	Mon,  3 Jun 2024 15:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717428757;
-	bh=q4oMvhBk1KUtZfzGp4xFNoiHbYTq2R2RFWXRAm7gEIs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kQ3CYvkoed4OsodNkOOI4ar7YyO8scOxmVRmL0iGhN/hBCO0WtqknKQ0lZSyScNsz
-	 PB0dZg2Tc8Skvf+4YhW5x7P59xBfwV5cVrOB5b7R6H076cDR1I9xmSdHBWpydPn3ke
-	 T1pZA51NGcAF/zHSZOL6dZ5t461Yp9sqAc70Rdw85VzBiTItI3BxDYZb9lPKzaTyY3
-	 hDpAVxjrta8A9R5r4nDbss3Q1mJ+59bpQK8RaPzAYmc3V/93NG9mZt/GDUbrWcXrMM
-	 D9WxB5G8JI92oPPDW4IpLX+cyOZAZO8PECRB70bBR3W2L0Z0RLsTHjDd/ysi670E94
-	 PjH8GJmvn4+sA==
-Date: Mon, 3 Jun 2024 16:32:30 +0100
-From: Mark Brown <broonie@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Beau Belgrave <beaub@linux.microsoft.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Bill Wendling <morbo@google.com>, sunliming <sunliming@kylinos.cn>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Ryan Roberts <ryan.roberts@arm.com>
-Subject: Re: [PATCH v2 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
- builds
-Message-ID: <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
-References: <20240531183751.100541-1-jhubbard@nvidia.com>
- <20240531183751.100541-2-jhubbard@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BiIdf16g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717429025; x=1748965025;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qLGutChqnX9e8a3ha4iN2YiLfsS82Seh0CnbTGwsF+c=;
+  b=BiIdf16g8NwaxOzJhS5+stZ186oe6VAZzB6JIHYle3d1mGXKhdUYBQQC
+   z2IL9lO1A4ZDWg7SfEKgSng6UE4DVJuLUa8443NmjD++5FIJOPwb8Y4qz
+   /QQFWmtxJYMduvAkWgdsdb5IqaHkoMcEqZA1lWvJaZvklN8eWpYRoyFVS
+   sqG3EPbBFqIGjx5wqQ25qvSAgcwgnZ1hCz4OFPAIBladB7IpnUylKR1+K
+   2Vx+sYKWz8cCHrxvdiuDmq8JIgLGBftOT3D0HdUWMFW/6h9qryxknYcrV
+   GDLZVIu0jHk0I31CEPExqdiwRZXb4TOxCMI9mwQx8kTYswpyeeKsqsH8I
+   w==;
+X-CSE-ConnectionGUID: fBwOed9aTyKe1DFQkDZLnA==
+X-CSE-MsgGUID: uDxfF/cWS5aj9qh//nAOng==
+X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="17753468"
+X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
+   d="scan'208";a="17753468"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 08:37:05 -0700
+X-CSE-ConnectionGUID: 7gY6C+GHQda2OASj6mtLdA==
+X-CSE-MsgGUID: wJTKSMQ0Qd68nog43sZDLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
+   d="scan'208";a="41996853"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 03 Jun 2024 08:37:02 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sE9k4-000LpL-05;
+	Mon, 03 Jun 2024 15:37:00 +0000
+Date: Mon, 3 Jun 2024 23:36:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiu Jianfeng <xiujianfeng@huawei.com>, akpm@linux-foundation.org,
+	muchun.song@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next 2/3] mm/hugetlb_cgroup: prepare cftypes based on
+ template
+Message-ID: <202406032321.OzAKgNBA-lkp@intel.com>
+References: <20240603120506.1837322-3-xiujianfeng@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="LwQaHvdHhiWHyo0G"
-Content-Disposition: inline
-In-Reply-To: <20240531183751.100541-2-jhubbard@nvidia.com>
-X-Cookie: Don't let your status become too quo!
-
-
---LwQaHvdHhiWHyo0G
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240603120506.1837322-3-xiujianfeng@huawei.com>
 
-On Fri, May 31, 2024 at 11:37:50AM -0700, John Hubbard wrote:
-> The kselftests may be built in a couple different ways:
->     make LLVM=3D1
->     make CC=3Dclang
->=20
-> In order to handle both cases, set LLVM=3D1 if CC=3Dclang. That way,the r=
-est
-> of lib.mk, and any Makefiles that include lib.mk, can base decisions
-> solely on whether or not LLVM is set.
+Hi Xiu,
 
-ICBW but I believe there are still some architectures with clang but not
-lld support where there's a use case for using CC=3Dclang.
+kernel test robot noticed the following build warnings:
 
---LwQaHvdHhiWHyo0G
-Content-Type: application/pgp-signature; name="signature.asc"
+[auto build test WARNING on akpm-mm/mm-everything]
 
------BEGIN PGP SIGNATURE-----
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiu-Jianfeng/mm-hugetlb_cgroup-identify-the-legacy-using-cgroup_subsys_on_dfl/20240603-201513
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240603120506.1837322-3-xiujianfeng%40huawei.com
+patch subject: [PATCH -next 2/3] mm/hugetlb_cgroup: prepare cftypes based on template
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240603/202406032321.OzAKgNBA-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240603/202406032321.OzAKgNBA-lkp@intel.com/reproduce)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZd4g4ACgkQJNaLcl1U
-h9BEXQf/WsN/S/yg0X/HYWR3Takul1/6IMH2x/VHC82HyAOKMHvVPItAmDPw0ZM1
-ubOFi/vRuKTuThZO95BKg8SSMDBty71Hwo8MZCtps7cjrK+3OUXr46IDJNXcu2dN
-6CcRlPBSSJUJG1FcrcgjezJ+KWSJJPbuTkpr+baKpKN4AHdHjIwM/D2v1xWwZDaR
-rt6c0R43kWKBhKRDXaNgbebxbvb7abFK1rnzkZs6W+7Xh0jTf3+GFerai7sF5oKs
-4a0oPQqX3QGDJmndGAvi5uSIQAxHN6m0afLd3FCH4/Vn0NvTu5e0hsd/RJk8A9R1
-u+L6RzjaMPkL2SNIYUL4T8Q1fBas7A==
-=wAUi
------END PGP SIGNATURE-----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406032321.OzAKgNBA-lkp@intel.com/
 
---LwQaHvdHhiWHyo0G--
+All warnings (new ones prefixed by >>):
+
+   In file included from mm/hugetlb_cgroup.c:20:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2245:
+   include/linux/vmstat.h:498:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     498 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> mm/hugetlb_cgroup.c:828:13: warning: address of array 'tmpl->name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     828 |                 if (tmpl->name)
+         |                 ~~  ~~~~~~^~~~
+   2 warnings generated.
+
+
+vim +828 mm/hugetlb_cgroup.c
+
+   814	
+   815	static void __init
+   816	hugetlb_cgroup_cfttypes_init(struct hstate *h, struct cftype *cft,
+   817				     struct cftype *tmpl, int tmpl_size)
+   818	{
+   819		char buf[32];
+   820		int i, idx = hstate_index(h);
+   821	
+   822		/* format the size */
+   823		mem_fmt(buf, sizeof(buf), huge_page_size(h));
+   824	
+   825		for (i = 0; i < tmpl_size; cft++, tmpl++, i++) {
+   826			*cft = *tmpl;
+   827			/* rebuild the name */
+ > 828			if (tmpl->name)
+   829				snprintf(cft->name, MAX_CFTYPE_NAME, "%s.%s", buf, tmpl->name);
+   830			/* rebuild the private */
+   831			if (tmpl->private)
+   832				cft->private = MEMFILE_PRIVATE(idx, tmpl->private);
+   833			/* rebuild the file_offset */
+   834			if (tmpl->file_offset) {
+   835				unsigned int offset = tmpl->file_offset;
+   836	
+   837				cft->file_offset = MEMFILE_OFFSET0(offset) +
+   838						   MEMFILE_FIELD_SIZE(offset) * idx;
+   839			}
+   840		}
+   841	}
+   842	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
