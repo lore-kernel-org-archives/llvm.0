@@ -1,140 +1,258 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066511304BF;
-	Mon,  3 Jun 2024 15:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC9A12DDAF
+	for <llvm@lists.linux.dev>; Mon,  3 Jun 2024 16:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717429026; cv=none; b=B8ZchsqcHPQoemOR6IWA7D2Qhq3L47q+x6T2DcQz6X8I7qERHG3rZraMPsRaUkVeoxbPHLx6qzjcqabAXB3HFRWl1SwDtQEv6uf09qwed+leo8bK8QTE4oLLxQn9s0LnCtjpfOKjCkcqWxQh9JydK9z7etOCfWGEiIuLzh3ZGvs=
+	t=1717431237; cv=none; b=FbLzZJu3cyROWfps1nTIEVT2XdmZyv65KUfqg1O6syDHmy4NSjUDEJXHl9e4+81oV4I+CuR1n12m6EPGCCTXe8+0V0nN/+c/YUNqsIrpfx0hsvqFjQ0JxbXFSv8mWxbPrpOWqm0GJLTw6NmI+7gAIZIRex0S62OBqGcT4vyzjGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717429026; c=relaxed/simple;
-	bh=qLGutChqnX9e8a3ha4iN2YiLfsS82Seh0CnbTGwsF+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EnvVxXMV6ujBtDymi8vCV2w2x7JcLHYX3Raqc4ntM+03ji1x7Ivt0BaqLjI1I2iCqGul41TeHH5xJLTJ6eqUXk/MICUOQXskgbQaeYwERurHSso0lmAhWeLwuJ3ziLV/MVODUPfDYGJMd/ciboVZMPo7jxSkrdJHv9yiGJYt+BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BiIdf16g; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717431237; c=relaxed/simple;
+	bh=/Nbr+owWYREElZ+Q0mbfwVbveFRjO/m10UrMZYRRH8s=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LAeoS5Xw838pxYFud7YxZFW8prNTzDAuesZOeY+nfQErb2NPCeWyxeTJul61oz76CacpzWznpy2dky+19vaXdP9dFpU/S+lPQcBrnC22LP9C3/fo1Y7R6/ghU13X5oOgMamSx755rYLDfeEv0xdQwKeMM2dC7xMxTauOkz7gajs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jtIS63tC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=me2lGRgz; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BiIdf16g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717429025; x=1748965025;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qLGutChqnX9e8a3ha4iN2YiLfsS82Seh0CnbTGwsF+c=;
-  b=BiIdf16g8NwaxOzJhS5+stZ186oe6VAZzB6JIHYle3d1mGXKhdUYBQQC
-   z2IL9lO1A4ZDWg7SfEKgSng6UE4DVJuLUa8443NmjD++5FIJOPwb8Y4qz
-   /QQFWmtxJYMduvAkWgdsdb5IqaHkoMcEqZA1lWvJaZvklN8eWpYRoyFVS
-   sqG3EPbBFqIGjx5wqQ25qvSAgcwgnZ1hCz4OFPAIBladB7IpnUylKR1+K
-   2Vx+sYKWz8cCHrxvdiuDmq8JIgLGBftOT3D0HdUWMFW/6h9qryxknYcrV
-   GDLZVIu0jHk0I31CEPExqdiwRZXb4TOxCMI9mwQx8kTYswpyeeKsqsH8I
-   w==;
-X-CSE-ConnectionGUID: fBwOed9aTyKe1DFQkDZLnA==
-X-CSE-MsgGUID: uDxfF/cWS5aj9qh//nAOng==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="17753468"
-X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
-   d="scan'208";a="17753468"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 08:37:05 -0700
-X-CSE-ConnectionGUID: 7gY6C+GHQda2OASj6mtLdA==
-X-CSE-MsgGUID: wJTKSMQ0Qd68nog43sZDLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
-   d="scan'208";a="41996853"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 03 Jun 2024 08:37:02 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sE9k4-000LpL-05;
-	Mon, 03 Jun 2024 15:37:00 +0000
-Date: Mon, 3 Jun 2024 23:36:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiu Jianfeng <xiujianfeng@huawei.com>, akpm@linux-foundation.org,
-	muchun.song@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next 2/3] mm/hugetlb_cgroup: prepare cftypes based on
- template
-Message-ID: <202406032321.OzAKgNBA-lkp@intel.com>
-References: <20240603120506.1837322-3-xiujianfeng@huawei.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jtIS63tC";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="me2lGRgz"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1717431233;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QCBBZJLHh7XXomoDX6GxiwpPupsy6ADT629bR0qasGs=;
+	b=jtIS63tCYfjWvRU2Igs6e0UiizUnhuCkfFZs3qPlIHqtVqv1P2rvMXYBDu6Ho4ip2ZJiIs
+	QQrKBiytMw7j3yAMyee/qzLdmx0rNLosIMUbpnSKhOCwpmZCbIRX6xravFOxE/LpfzmM4Y
+	nVI+FwbEQ8bXE0EbKpcMDBDl0uJku8JxpFg+CB54Tk0h05oW8UostXsaqlqRopamZwyPMi
+	SuJQOlRGbSJIELdLuGNTICffRgkvnxuMXzUgrD85EzMfwdYhu56+Nq8G+/x5YRg6tDSFgo
+	cFkX5cuiDnFsBeRWAeKYDtk5XvcgbGA862p2FvGlTiXCyxaQKkTD56dGhIGCdg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1717431233;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QCBBZJLHh7XXomoDX6GxiwpPupsy6ADT629bR0qasGs=;
+	b=me2lGRgztqsDfCutkLB/uTn+8yycRq2sYAB3UNAJXjHf2Mj3i961nVH4l7zjVaer9RHxe2
+	tiaYHkoHLSmsmrBg==
+To: Gatlin Newhouse <gatlin.newhouse@gmail.com>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Kees Cook <keescook@chromium.org>, Marco Elver
+ <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Andrey
+ Ryabinin <ryabinin.a.a@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Gatlin Newhouse
+ <gatlin.newhouse@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>, Baoquan He <bhe@redhat.com>,
+ Changbin Du <changbin.du@huawei.com>, Pengfei Xu <pengfei.xu@intel.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Tina Zhang <tina.zhang@intel.com>, Uros Bizjak
+ <ubizjak@gmail.com>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, linux-kernel@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v2] x86/traps: Enable UBSAN traps on x86
+In-Reply-To: <20240601031019.3708758-1-gatlin.newhouse@gmail.com>
+References: <20240601031019.3708758-1-gatlin.newhouse@gmail.com>
+Date: Mon, 03 Jun 2024 18:13:53 +0200
+Message-ID: <878qzm6m2m.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240603120506.1837322-3-xiujianfeng@huawei.com>
+Content-Type: text/plain
 
-Hi Xiu,
+On Sat, Jun 01 2024 at 03:10, Gatlin Newhouse wrote:
 
-kernel test robot noticed the following build warnings:
+> Bring x86 to parity with arm64, similar to commit 25b84002afb9
+> ("arm64: Support Clang UBSAN trap codes for better reporting").
+> Enable the output of UBSAN type information on x86 architectures
+> compiled with clang when CONFIG_UBSAN_TRAP=y. Currently ARM
+> architectures output which specific sanitizer caused the trap,
+> via the encoded data in the trap instruction. Clang on x86
+> currently encodes the same data in ud1 instructions but the x86
+> handle_bug() and is_valid_bugaddr() functions currently only look
+> at ud2s.
 
-[auto build test WARNING on akpm-mm/mm-everything]
+Please structure your change log properly instead of one paragraph of
+unstructured word salad. See:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiu-Jianfeng/mm-hugetlb_cgroup-identify-the-legacy-using-cgroup_subsys_on_dfl/20240603-201513
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240603120506.1837322-3-xiujianfeng%40huawei.com
-patch subject: [PATCH -next 2/3] mm/hugetlb_cgroup: prepare cftypes based on template
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240603/202406032321.OzAKgNBA-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240603/202406032321.OzAKgNBA-lkp@intel.com/reproduce)
+  https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
+  
+> +/*
+> + * Check for UD1, UD2, with or without Address Size Override Prefixes instructions.
+> + */
+>  __always_inline int is_valid_bugaddr(unsigned long addr)
+>  {
+>  	if (addr < TASK_SIZE_MAX)
+> @@ -88,7 +92,13 @@ __always_inline int is_valid_bugaddr(unsigned long addr)
+>  	 * We got #UD, if the text isn't readable we'd have gotten
+>  	 * a different exception.
+>  	 */
+> -	return *(unsigned short *)addr == INSN_UD2;
+> +	if (*(u16 *)addr == INSN_UD2)
+> +		return INSN_UD2;
+> +	if (*(u16 *)addr == INSN_UD1)
+> +		return INSN_UD1;
+> +	if (*(u8 *)addr == INSN_ASOP && *(u16 *)(addr + 1) == INSN_UD1)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406032321.OzAKgNBA-lkp@intel.com/
+	s/1/LEN_ASOP/ ?
 
-All warnings (new ones prefixed by >>):
+> +		return INSN_ASOP;
+> +	return 0;
 
-   In file included from mm/hugetlb_cgroup.c:20:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2245:
-   include/linux/vmstat.h:498:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     498 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> mm/hugetlb_cgroup.c:828:13: warning: address of array 'tmpl->name' will always evaluate to 'true' [-Wpointer-bool-conversion]
-     828 |                 if (tmpl->name)
-         |                 ~~  ~~~~~~^~~~
-   2 warnings generated.
+I'm not really a fan of the reuse of the INSN defines here. Especially
+not about INSN_ASOP. Also 0 is just lame.
 
+Neither does the function name make sense anymore. is_valid_bugaddr() is
+clearly telling that it's a boolean check (despite the return value
+being int for hysterical raisins). But now you turn it into a
+non-boolean integer which returns a instruction encoding. That's
+hideous. Programming should result in obvious code and that should be
+pretty obvious to people who create tools to validate code.
 
-vim +828 mm/hugetlb_cgroup.c
+Also all UBSAN cares about is the actual failure type and not the
+instruction itself:
 
-   814	
-   815	static void __init
-   816	hugetlb_cgroup_cfttypes_init(struct hstate *h, struct cftype *cft,
-   817				     struct cftype *tmpl, int tmpl_size)
-   818	{
-   819		char buf[32];
-   820		int i, idx = hstate_index(h);
-   821	
-   822		/* format the size */
-   823		mem_fmt(buf, sizeof(buf), huge_page_size(h));
-   824	
-   825		for (i = 0; i < tmpl_size; cft++, tmpl++, i++) {
-   826			*cft = *tmpl;
-   827			/* rebuild the name */
- > 828			if (tmpl->name)
-   829				snprintf(cft->name, MAX_CFTYPE_NAME, "%s.%s", buf, tmpl->name);
-   830			/* rebuild the private */
-   831			if (tmpl->private)
-   832				cft->private = MEMFILE_PRIVATE(idx, tmpl->private);
-   833			/* rebuild the file_offset */
-   834			if (tmpl->file_offset) {
-   835				unsigned int offset = tmpl->file_offset;
-   836	
-   837				cft->file_offset = MEMFILE_OFFSET0(offset) +
-   838						   MEMFILE_FIELD_SIZE(offset) * idx;
-   839			}
-   840		}
-   841	}
-   842	
+#define INSN_UD_MASK		0xFFFF
+#define INSN_ASOP_MASK		0x00FF
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+#define BUG_UD_NONE		0xFFFF
+#define BUG_UD2			0xFFFE
+
+__always_inline u16 get_ud_type(unsigned long addr)
+{
+	u16 insn;
+
+	if (addr < TASK_SIZE_MAX)
+        	return BUD_UD_NONE;
+
+        insn = *(u16 *)addr;
+        if ((insn & INSN_UD_MASK) == INSN_UD2)
+        	return BUG_UD2;
+
+	if ((insn & INSN_ASOP_MASK) == INSN_ASOP)
+        	insn = *(u16 *)(++addr);
+
+	// UBSAN encodes the failure type in the two bytes after UD1
+        if ((insn & INSN_UD_MASK) == INSN_UD1)
+        	return *(u16 *)(addr + LEN_UD1);
+
+	return BUG_UD_NONE;
+}
+
+No?
+
+>  static nokprobe_inline int
+> @@ -216,6 +226,7 @@ static inline void handle_invalid_op(struct pt_regs *regs)
+>  static noinstr bool handle_bug(struct pt_regs *regs)
+>  {
+>  	bool handled = false;
+> +	int insn;
+>  
+>  	/*
+>  	 * Normally @regs are unpoisoned by irqentry_enter(), but handle_bug()
+> @@ -223,7 +234,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+>  	 * irqentry_enter().
+>  	 */
+>  	kmsan_unpoison_entry_regs(regs);
+> -	if (!is_valid_bugaddr(regs->ip))
+> +	insn = is_valid_bugaddr(regs->ip);
+> +	if (insn == 0)
+
+Sigh.
+
+But with the above sanitized (pun intended) this becomes obvious by
+itself:
+
+        ud_type = get_ud_type(regs->ip);
+        if (ud_type == BUG_UD_NONE)
+        	return false;
+
+See?
+
+>  		return handled;
+>  
+>  	/*
+> @@ -236,10 +248,15 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+>  	 */
+>  	if (regs->flags & X86_EFLAGS_IF)
+>  		raw_local_irq_enable();
+> -	if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+> -	    handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
+> -		regs->ip += LEN_UD2;
+> -		handled = true;
+> +
+> +	if (insn == INSN_UD2) {
+> +		if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+> +		handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
+
+Please indent the second condition properly:
+
+       if (a ||
+           b) {
+
+I know you just added another tab, but when touching code, then please
+do it right.
+
+> +			regs->ip += LEN_UD2;
+> +			handled = true;
+
+> +/*
+> + * Checks for the information embedded in the UD1 trap instruction
+> + * for the UB Sanitizer in order to pass along debugging output.
+> + */
+> +void handle_ubsan_failure(struct pt_regs *regs, int insn)
+> +{
+> +	u32 type = 0;
+
+Pointless initialization.
+
+> +	if (insn == INSN_ASOP) {
+> +		type = (*(u16 *)(regs->ip + LEN_ASOP + LEN_UD1));
+> +		if ((type & 0xFF) == 0x40)
+
+No magic constants please. What does 0x40 mean?
+
+> +			type = (type >> 8) & 0xFF;
+
+That mask is pointless as u16 is zero extended when assigned to u32, but
+why not using u16 in the first place to make it clear?
+
+> +	} else {
+> +		type = (*(u16 *)(regs->ip + LEN_UD1));
+> +		if ((type & 0xFF) == 0x40)
+> +			type = (type >> 8) & 0xFF;
+> +	}
+
+Copy & pasta rules!
+
+	unsigned long addr = regs->ip + LEN_UD1;
+	u16 type;
+
+        type = insn == INSN_UD1 ? *(u16 *)addr : *(u16 *)(addr + LEN_ASOP);
+
+	if ((type & 0xFF) == UBSAN_MAGICALLY_USE_2ND_BYTE)
+		type >>= 8;
+	pr_crit("%s\n", report_ubsan_failure(regs, type));
+
+I don't see the point for printing regs->ip as this is followed by a
+stack trace anyway, but I don't have a strong opinion about it either.
+
+Though with the above get_ud_type() variant this becomes even simpler:
+
+void handle_ubsan_failure(struct pt_regs *regs, u16 type)
+{
+	if ((type & 0xFF) == UBSAN_MAGICALLY_USE_2ND_BYTE)
+		type >>= 8;
+	pr_crit("%s\n", report_ubsan_failure(regs, type));
+}
+
+Thanks,
+
+        tglx
