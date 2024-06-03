@@ -1,50 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9464A13D24F;
-	Mon,  3 Jun 2024 22:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D5D13B791;
+	Mon,  3 Jun 2024 22:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717454379; cv=none; b=VH3na866c1goF+J0OkNDAZxQFZXTSCg7oYNCKrSdamwRLrvhlgVRAVS6y54kHVJwxEY7CKdTWIKfrzIGJG1ZPpxhZFcHVx8eujosdbc1DGXIMtgutRBLoZ97YYspbC8xQmD9hs9JxmHH+bRr534JUv1AYworB1FNOo7AiNhIN5g=
+	t=1717454831; cv=none; b=kr91nHR806BI7E97zHE4jAtv4KDMXKxpzAIOPeNGANzkvBZheQwq7yk/l/ztODnm33mKJjE1wmHrWVYSiFZjq3kWbvtVVeaqJ9dTsXfvgIYzB5GP54vtfS+ZJ1ooDMkp9UdJ9zABQO7KiefKHo+DRgwjVpetNB6Dqbl0Yg8ELTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717454379; c=relaxed/simple;
-	bh=0LLQ5lJZ6hnYFLe6WYRyFDFSE/8SfEOMOLofPf58dFA=;
+	s=arc-20240116; t=1717454831; c=relaxed/simple;
+	bh=viU1XXBpM47eqpx2+Q22SLTf97RsegF6lP9ebaCxH3g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PPCQ2kedPEV7ANqFSjqldetKMqFg8ANSxLaJwZcXgBH/bWM9/2t1dOFpDXU1GRyURr58GDaGgu8E6v9dD6wsdFQ4cdOgCZ4yuKNOm/BLhmiPmR5wAjAF3gRCjojr12crRTrGg5HXb091zgY9VlCoqDMJr0HHQTbWCczAExtMD/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aoepBxpF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=VlOOVUsFrSMu2NGEQ3Ji3qqEMLrCPkWdKn7RDnZ6/3gyjjqn1USqLMpE5l2aPdVxUYbhMPKJLsHkRCYDH3o1vNeh2Kxwa0W6/7JyFeMDGLD7rgsNFvS9m2W+QDMo6nEJxbdZqhC/kCgj1NzsfF9mETrn/doy0GAEs+azAEyKoPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fibaACtf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aoepBxpF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6542DC2BD10;
-	Mon,  3 Jun 2024 22:39:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fibaACtf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A6FEC2BD10;
+	Mon,  3 Jun 2024 22:47:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717454379;
-	bh=0LLQ5lJZ6hnYFLe6WYRyFDFSE/8SfEOMOLofPf58dFA=;
+	s=k20201202; t=1717454829;
+	bh=viU1XXBpM47eqpx2+Q22SLTf97RsegF6lP9ebaCxH3g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aoepBxpFjr2LAhAoJKoYel6/6PvGXzK1S4ag/igyDvx9vH8rCGE7IIXvv73xV+uzp
-	 78Kp9vASY84ZpXhgyxj2YjVTCJSiUnK0WHS0i4IsZZp9ch5KQN1dLdTTR2EGDVT5Ic
-	 VM7xTk6hHPbWh0mUhNCk3ufK6IeeT3Xvc+okI/W+zTWpKVq51kaz6vI5LUAMGjg4VT
-	 2KDFb3SQBZmUOZzKv+1sDOe8Cbu2kfgws9rpaHGKJuQv7RQPmAvdcEbrqWX15uxS2c
-	 PPYC3f4dYDy3tecrIeaN0DgGoNsUxkKUZaRvXzTaXqqLyxarf6iXxqYQZNGxOtpJKW
-	 7oup501SAYyog==
-Date: Mon, 3 Jun 2024 15:39:36 -0700
+	b=fibaACtfiFsAyDwOQ8T4iWHN6EJUe1UdfAOBceRjSifasIW0VkEXocDArEp3L55OF
+	 F5M7HInrIYVfen/XSGHB1Z0h7pLUD9yumTMpjLDYbfOko9bH0uanfSpARwi5pW9hBa
+	 EBnHNOr54fmrk9YNfq2Um7YB0mtrBcQZB/FO68+MPXvGdaWyXBrUzfbPP9UR4yNwCh
+	 N/mEJe0f75f8DB8G5dez4l0Z9c8pQzg1G6hbsLYdJ8MBcSsRJ1SIgSmqALWobgVokT
+	 p2aK5BDkEAW04ieNySDTH861kjrIWFzcT01e/P3zcy3wu6vzzefvwHwcj9lMTxo5DT
+	 ph7xhvmetK5zA==
+Date: Mon, 3 Jun 2024 15:47:06 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Christian Brauner <brauner@kernel.org>,
+To: Mark Brown <broonie@kernel.org>
+Cc: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>,
 	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Alexey Gladkov <legion@kernel.org>,
+	Beau Belgrave <beaub@linux.microsoft.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Bill Wendling <morbo@google.com>, sunliming <sunliming@kylinos.cn>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
 	Valentin Obst <kernel@valentinobst.de>,
 	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] selftests/fchmodat2: fix clang build failure due
- to -static-libasan
-Message-ID: <20240603223936.GF1802995@thelio-3990X>
-References: <20240601014534.268360-1-jhubbard@nvidia.com>
- <20240601014534.268360-3-jhubbard@nvidia.com>
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+	Ryan Roberts <ryan.roberts@arm.com>
+Subject: Re: [PATCH v2 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
+ builds
+Message-ID: <20240603224706.GA245774@thelio-3990X>
+References: <20240531183751.100541-1-jhubbard@nvidia.com>
+ <20240531183751.100541-2-jhubbard@nvidia.com>
+ <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,54 +56,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240601014534.268360-3-jhubbard@nvidia.com>
+In-Reply-To: <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
 
-On Fri, May 31, 2024 at 06:45:34PM -0700, John Hubbard wrote:
-> gcc requires -static-libasan in order to ensure that Address Sanitizer's
-> library is the first one loaded. However, this leads to build failures
-> on clang, when building via:
+On Mon, Jun 03, 2024 at 04:32:30PM +0100, Mark Brown wrote:
+> On Fri, May 31, 2024 at 11:37:50AM -0700, John Hubbard wrote:
+> > The kselftests may be built in a couple different ways:
+> >     make LLVM=1
+> >     make CC=clang
+> > 
+> > In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest
+> > of lib.mk, and any Makefiles that include lib.mk, can base decisions
+> > solely on whether or not LLVM is set.
 > 
->     make LLVM=1 -C tools/testing/selftests
-> 
-> However, clang already does the right thing by default: it statically
-> links the Address Sanitizer if -fsanitize is specified. Therefore,
-> simply omit -static-libasan for clang builds. And leave behind a
-> comment, because the whole reason for static linking might not be
-> obvious.
-> 
-> Cc: Ryan Roberts <ryan.roberts@arm.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ICBW but I believe there are still some architectures with clang but not
+> lld support where there's a use case for using CC=clang.
 
-Assuming that $(LLVM) is the correct conditional to test for:
+Does CC=clang even work for the selftests? lib.mk here uses 'CC :=' so
+won't CC=clang get overridden to CC=$(CROSS_COMPILE)gcc?
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  tools/testing/selftests/fchmodat2/Makefile | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-> index 71ec34bf1501..4373cea79b79 100644
-> --- a/tools/testing/selftests/fchmodat2/Makefile
-> +++ b/tools/testing/selftests/fchmodat2/Makefile
-> @@ -1,6 +1,15 @@
->  # SPDX-License-Identifier: GPL-2.0-or-later
->  
-> -CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
-> +CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-> +
-> +# gcc requires -static-libasan in order to ensure that Address Sanitizer's
-> +# library is the first one loaded. However, clang already statically links the
-> +# Address Sanitizer if -fsanitize is specified. Therefore, simply omit
-> +# -static-libasan for clang builds.
-> +ifeq ($(LLVM),)
-> +    CFLAGS += -static-libasan
-> +endif
-> +
->  TEST_GEN_PROGS := fchmodat2_test
->  
->  include ../lib.mk
-> -- 
-> 2.45.1
-> 
-> 
+Cheers,
+Nathan
