@@ -1,78 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D5D13B791;
-	Mon,  3 Jun 2024 22:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8573E6FD5;
+	Tue,  4 Jun 2024 01:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717454831; cv=none; b=kr91nHR806BI7E97zHE4jAtv4KDMXKxpzAIOPeNGANzkvBZheQwq7yk/l/ztODnm33mKJjE1wmHrWVYSiFZjq3kWbvtVVeaqJ9dTsXfvgIYzB5GP54vtfS+ZJ1ooDMkp9UdJ9zABQO7KiefKHo+DRgwjVpetNB6Dqbl0Yg8ELTE=
+	t=1717463864; cv=none; b=GPu6g56l9xFRn3nEpjbO8o1wDNhcWFlZ0DVlpUZ+jzaldXQp1Qo5fKAOEF7qGiD+RY5pVmKkR7CtSZoEHhlFXr/fnOfknJGaybSNtqeBg4xUFNz6ZYknEhOkFJZVCsomJpjpe8BZovRxRMOofeTFtl7DptebVUNO1MI6leUs1w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717454831; c=relaxed/simple;
-	bh=viU1XXBpM47eqpx2+Q22SLTf97RsegF6lP9ebaCxH3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VlOOVUsFrSMu2NGEQ3Ji3qqEMLrCPkWdKn7RDnZ6/3gyjjqn1USqLMpE5l2aPdVxUYbhMPKJLsHkRCYDH3o1vNeh2Kxwa0W6/7JyFeMDGLD7rgsNFvS9m2W+QDMo6nEJxbdZqhC/kCgj1NzsfF9mETrn/doy0GAEs+azAEyKoPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fibaACtf; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fibaACtf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A6FEC2BD10;
-	Mon,  3 Jun 2024 22:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717454829;
-	bh=viU1XXBpM47eqpx2+Q22SLTf97RsegF6lP9ebaCxH3g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fibaACtfiFsAyDwOQ8T4iWHN6EJUe1UdfAOBceRjSifasIW0VkEXocDArEp3L55OF
-	 F5M7HInrIYVfen/XSGHB1Z0h7pLUD9yumTMpjLDYbfOko9bH0uanfSpARwi5pW9hBa
-	 EBnHNOr54fmrk9YNfq2Um7YB0mtrBcQZB/FO68+MPXvGdaWyXBrUzfbPP9UR4yNwCh
-	 N/mEJe0f75f8DB8G5dez4l0Z9c8pQzg1G6hbsLYdJ8MBcSsRJ1SIgSmqALWobgVokT
-	 p2aK5BDkEAW04ieNySDTH861kjrIWFzcT01e/P3zcy3wu6vzzefvwHwcj9lMTxo5DT
-	 ph7xhvmetK5zA==
-Date: Mon, 3 Jun 2024 15:47:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Beau Belgrave <beaub@linux.microsoft.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Bill Wendling <morbo@google.com>, sunliming <sunliming@kylinos.cn>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Ryan Roberts <ryan.roberts@arm.com>
-Subject: Re: [PATCH v2 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
- builds
-Message-ID: <20240603224706.GA245774@thelio-3990X>
-References: <20240531183751.100541-1-jhubbard@nvidia.com>
- <20240531183751.100541-2-jhubbard@nvidia.com>
- <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
+	s=arc-20240116; t=1717463864; c=relaxed/simple;
+	bh=OzRQPXtvsFdD9jyp6q+9LTW2h0h6y9O369n2NTJKpDE=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z4E1+7KUTJzW6/xFFS2sCuIUUzyMOMQmxEvW+Yd9zmWdw9VSm8k8TKr9UWIaahMTrwX6z1ikbql9WSy5EuqXcVD2YFwCzS/pbnT9KFZ7triCaVeiQ6PkOhjyTTaWffGMGGLKgEE+/j4uWTlxaBQX2iOe8yPdILsb6r0K0v1AV2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 453NrBxt028282;
+	Mon, 3 Jun 2024 18:17:24 -0700
+Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3yg35f24n9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 03 Jun 2024 18:17:24 -0700 (PDT)
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 3 Jun 2024 18:17:23 -0700
+Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2507.39 via Frontend Transport; Mon, 3 Jun 2024 18:17:18 -0700
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <krisman@suse.de>
+CC: <adilger.kernel@dilger.ca>, <coreteam@netfilter.org>,
+        <davem@davemloft.net>, <ebiggers@kernel.org>, <fw@strlen.de>,
+        <jaegeuk@kernel.org>, <kadlec@netfilter.org>, <kuba@kernel.org>,
+        <linux-ext4@vger.kernel.org>, <linux-fscrypt@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lizhi.xu@windriver.com>,
+        <lkp@intel.com>, <llvm@lists.linux.dev>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
+        <pablo@netfilter.org>,
+        <syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com>,
+        <syzkaller-bugs@googlegroups.com>, <tytso@mit.edu>
+Subject: Re: [PATCH V5] ext4: check hash version and filesystem casefolded consistent
+Date: Tue, 4 Jun 2024 09:17:17 +0800
+Message-ID: <20240604011718.3360272-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <87plsym65w.fsf@mailhost.krisman.be>
+References: <87plsym65w.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: gfcExZLBCFyH3mjBVyUMLZjSXIlULXV0
+X-Proofpoint-ORIG-GUID: gfcExZLBCFyH3mjBVyUMLZjSXIlULXV0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-06-03_17,2024-05-30_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 adultscore=0 mlxscore=0 phishscore=0
+ clxscore=1011 malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.21.0-2405170001 definitions=main-2406040008
 
-On Mon, Jun 03, 2024 at 04:32:30PM +0100, Mark Brown wrote:
-> On Fri, May 31, 2024 at 11:37:50AM -0700, John Hubbard wrote:
-> > The kselftests may be built in a couple different ways:
-> >     make LLVM=1
-> >     make CC=clang
-> > 
-> > In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest
-> > of lib.mk, and any Makefiles that include lib.mk, can base decisions
-> > solely on whether or not LLVM is set.
+On Mon, 03 Jun 2024 10:50:51 -0400, Gabriel Krisman Bertazi wrote:
+> > When mounting the ext4 filesystem, if the hash version and casefolded are not
+> > consistent, exit the mounting.
+> >
+> > Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
+> > Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+> > ---
+> >  fs/ext4/super.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> > index c682fb927b64..0ad326504c50 100644
+> > --- a/fs/ext4/super.c
+> > +++ b/fs/ext4/super.c
+> > @@ -5262,6 +5262,11 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+> >  		goto failed_mount;
+> >  
+> >  	ext4_hash_info_init(sb);
+> > +	if (es->s_def_hash_version == DX_HASH_SIPHASH && 
+> > +	    !ext4_has_feature_casefold(sb)) {
 > 
-> ICBW but I believe there are still some architectures with clang but not
-> lld support where there's a use case for using CC=clang.
+> Can we ever have DX_HASH_SIPHASH set up in the super block?  I thought
+> it was used solely for directories where ext4_hash_in_dirent(inode) is
+> true.
+The value of s'def_hash_version is obtained by reading the super block from the
+buffer cache of the block device in ext4_load_super().
+> 
+> If this is only for the case of a superblock corruption, perhaps we
+> should always reject the mount, whether casefold is enabled or not?
+Based on the existing information, it cannot be confirmed whether the superblock
+is corrupt, but one thing is clear: if the default hash version of the superblock
+is set to DX_HASH_SIPHASH, but the casefold feature is not set at the same time,
+it is definitely an error.
 
-Does CC=clang even work for the selftests? lib.mk here uses 'CC :=' so
-won't CC=clang get overridden to CC=$(CROSS_COMPILE)gcc?
-
-Cheers,
-Nathan
+Lizhi
