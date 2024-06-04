@@ -1,185 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C14214C5A4;
-	Tue,  4 Jun 2024 21:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DB8142900
+	for <llvm@lists.linux.dev>; Tue,  4 Jun 2024 21:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717534813; cv=none; b=FGOBrSAmD+AovojPOyhHCwQY5vIMDICSckJSwdnOCuTzBaiewEpvVlz9PJZyoCz1XE0cXRdxPZHCsyGpiFinDV0smzF9gtikHxY1RoJ8QuavBbQErp0+ThL4hHSGs4QP95Mt7l7SHUY7WxP3CcrmpFv85ceTwaSuBtIXIEu+TFc=
+	t=1717535890; cv=none; b=AvzaM7r6igTZOSixxlCsKRHAhhK/hsiAc8MA3tq7ncDSMyslEt1Ux9tgvjWKXMA4ZObcUQTd0O9uGg1WkPixGaeJBkj+PTPLnkGCKfAj9XdHY9ngreW2LT0g2M8l8Gu6zyLR61ZeIzSio6aqee61MD9IiIBRFZ2jtkkd7LdRUUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717534813; c=relaxed/simple;
-	bh=y52S5zxbaNTrVsYNz4/Zpv7hHHKljA7FdC9ZJu7Vx30=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IDF/Bwp8EGNnQyvigwz3KsdrJGsJCzmjE4OzzDn7kK8TtMFYCRgqcpXgodyr6oNglszvF5Jw4kYs3W+2N1eHjR6PoDJTzWvsw693NBghzu/Xkr6FetD4RTjdytz0oagSq5VbCGB69pcDxj6wbVYBnbycHuwzPZN8x/ku371aGS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KZUoecq5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717535890; c=relaxed/simple;
+	bh=EgRuah0/TRiXG54boWXHiSKTgeu2TjH60bxBlJq2m+Q=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=EzYYPJArR3J6aJuk7Ps6LIpFO/zXiTkrXmOyyKXRuwcs9PFYWihsZO1dfVhd4YE3Vqp5oytFloPhka5LpsSRvafuLWewDefD8FDkfuYz+f7O02WJ5FR2O8ujuMaeSMqp+DvXkEaaC/Bj7r4iiu41I0rDhIOMvuAo3x0WtwXV6cE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xPPJDIru; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZUoecq5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA68C4AF09;
-	Tue,  4 Jun 2024 21:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717534812;
-	bh=y52S5zxbaNTrVsYNz4/Zpv7hHHKljA7FdC9ZJu7Vx30=;
-	h=From:To:Cc:Subject:Date:From;
-	b=KZUoecq5aI430xa+CHC/bW84mQfUoktWIDmalft8Y7CZBnqzMGvi5Z9K6xCw7xYWE
-	 /LT9jUMOnns5TMkiMoGnaVvd7MRVn8g7aBEyFP78lYZmsnOSfOFLnc6/Rn1q5cbNM0
-	 YdlYYox+iHCo1baIxGYa83wv9wDVhobB8cUmBpjAyIyQKB3rUlQRbvN2Aa4V6hunZo
-	 kWTkyy75BVEf//pkTwMJ/wRG7TvrvnCSxMuPiHaad+vZQCtH8UtK6HhM1oSZs0ZjXS
-	 zY1HuhofyLhx7b2wdZ3YnJfGgi1OLpNbeixjvlyPXExBW4qIdtSZUSpPenpRWdDBM9
-	 yZ7/BPy1CKybg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Baoquan He <bhe@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] [v3] arm64/io: add constant-argument check
-Date: Tue,  4 Jun 2024 22:59:57 +0200
-Message-Id: <20240604210006.668912-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xPPJDIru"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6fc395e8808so5264356b3a.0
+        for <llvm@lists.linux.dev>; Tue, 04 Jun 2024 14:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717535888; x=1718140688; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JXzykZZ9JJXw7AgnDk6GCl6oohCsbGImlRtIa4olDvk=;
+        b=xPPJDIruoHbxjX6n6vGGx795rtrKvDjm/5/NSKXudgMrZhl6F1GDp9Pd1tKCieTSRD
+         rm1cN7wqPrivcks8l9rR2aZicQ3CYZOKli6wHsyDXZPbnr2BZIzcsAveWzZ4McFExOpR
+         jRjztKwtr1EULyZsWvfjQXO9SWzy+2PKlW7eS2aXW6bjVKwZnbS5xKbYq0jwDIC1hum+
+         +3hDrJd0uj/SeaZRRYvDFG8dtI748D6TowpHlvzCjse+TWJj8Qe6H/3wU8QW7Ej1wGPR
+         0u9R8oo11dNCcKPTlw9tXX7KMHDEuEdHBKGzGOxXMmAWls41l/+E7ZPFjj+0KNzVESBd
+         A2FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717535888; x=1718140688;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JXzykZZ9JJXw7AgnDk6GCl6oohCsbGImlRtIa4olDvk=;
+        b=sofxhsg04e1KNZsHHHrfl/FRilP7Z3tZqI1iZTa/PFswuQLf6w7zq+L7gaH7AiPNgB
+         6qYEQQhugz06ElqEWocZztyLufU46bLuRsiukgawdUDYjWkddsUWAOSG8DrvwZcKPiCJ
+         p3aqlazgaD02quy8ec1WlZRamwLAeUbriYVoXFNP5QSrAOmWFzFBqfhbmvvn7ZHHYYTC
+         L48Su9hzMSdbyo8SncPHGQnFnO9ADr93P/F4cU5gD0D2cYFC2lKCp0NTgO0a+ET15qVg
+         VdTld6b+v4z6oy5o2bDnnEoF9ZzHvNWtqZVTov63hOe7g+pRwkQ0iyByfMUhMLwvyfDt
+         wCag==
+X-Forwarded-Encrypted: i=1; AJvYcCUnsJ9L5m/D3CD3n4r3CI8JkVYOk9ztAXnWwxyThwyuyqFWJ2KNMisdxAj3Y1P3OPzb4wHrkLTviOaehHxQ4DI0/3xgEQ==
+X-Gm-Message-State: AOJu0YwalZs1JKDKYCFE+mn5eDodUOS04eTT8nuvF9I/dmpftIz94w6y
+	muNcmQQIvz3m2lo75/xu83yBNlG4EvadFuhgGcMVT/gpqkwtkhmkcKVRy3Q1+vsS+rnkotxNf8S
+	NsA==
+X-Google-Smtp-Source: AGHT+IG1fFwR8lR801PpAJE2pvdJcatHkMcU5d4DGeT5QbazeoQ/iCgq2FlISNqWLoU2mRIVMMZp7+XVmUg=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a05:6a00:2d93:b0:702:2ab4:b12f with SMTP id
+ d2e1a72fcca58-703e59dd3femr2814b3a.2.1717535887888; Tue, 04 Jun 2024 14:18:07
+ -0700 (PDT)
+Date: Tue,  4 Jun 2024 21:18:00 +0000
+In-Reply-To: <20240527211622.290635-1-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
+Message-ID: <20240604211801.404181-1-edliaw@google.com>
+Subject: Re: [v2] selftests/vDSO: fix clang build errors and warnings
+From: Edward Liaw <edliaw@google.com>
+To: jhubbard@nvidia.com, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Colin Ian King <colin.i.king@gmail.com>, 
+	Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Edward Liaw <edliaw@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Arnd Bergmann <arnd@arndb.de>
+> When building with clang, via:
+>
+>     make LLVM=1 -C tools/testing/selftests
+>
+> ...there are several warnings, and an error. This fixes all of those and
+> allows these tests to run and pass.
+>
+> 1. Fix linker error (undefined reference to memcpy) by providing a local
+>    version of memcpy.
+>
+> 2. clang complains about using this form:
+>
+>     if (g = h & 0xf0000000)
+>
+> ...so factor out the assignment into a separate step.
+>
+> 3. The code is passing a signed const char* to elf_hash(), which expects
+>    a const unsigned char *. There are several callers, so fix this at
+>    the source by allowing the function to accept a signed argument, and
+>    then converting to unsigned operations, once inside the function.
+>
+> 4. clang doesn't have __attribute__((externally_visible)) and generates
+>    a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
+>    to require that attribute in order to build, run and pass tests here,
+>    so remove it.
+>
+> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
+>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>
+> Changes since the first version:
+>
+> 1) Rebased onto Linux 6.10-rc1
+>
+> thanks,
+> John Hubbard
+>
+>  tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
+>  .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
+>  2 files changed, 27 insertions(+), 7 deletions(-)
+>
+>
+> base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
+> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+> index 413f75620a35..4ae417372e9e 100644
+> --- a/tools/testing/selftests/vDSO/parse_vdso.c
+> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
+> @@ -55,14 +55,20 @@ static struct vdso_info
+>  	ELF(Verdef) *verdef;
+>  } vdso_info;
+>
+> -/* Straight from the ELF specification. */
+> -static unsigned long elf_hash(const unsigned char *name)
+> +/*
+> + * Straight from the ELF specification...and then tweaked slightly, in order to
+> + * avoid a few clang warnings.
+> + */
+> +static unsigned long elf_hash(const char *name)
+>  {
+>  	unsigned long h = 0, g;
+> -	while (*name)
+> +	const unsigned char *uch_name = (const unsigned char *)name;
+> +
+> +	while (*uch_name)
+>  	{
+> -		h = (h << 4) + *name++;
+> -		if (g = h & 0xf0000000)
+> +		h = (h << 4) + *uch_name++;
+> +		g = h & 0xf0000000;
+> +		if (g)
+>  			h ^= g >> 24;
+>  		h &= ~g;
+>  	}
+> diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> index 8a44ff973ee1..27f6fdf11969 100644
+> --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> @@ -18,7 +18,7 @@
+>
+>  #include "parse_vdso.h"
+>
+> -/* We need a libc functions... */
+> +/* We need some libc functions... */
+>  int strcmp(const char *a, const char *b)
+>  {
+>  	/* This implementation is buggy: it never returns -1. */
+> @@ -34,6 +34,20 @@ int strcmp(const char *a, const char *b)
+>  	return 0;
+>  }
+>
+> +/*
+> + * The clang build needs this, although gcc does not.
+> + * Stolen from lib/string.c.
+> + */
+> +void *memcpy(void *dest, const void *src, size_t count)
+> +{
+> +	char *tmp = dest;
+> +	const char *s = src;
+> +
+> +	while (count--)
+> +		*tmp++ = *s++;
+> +	return dest;
+> +}
+> +
+>  /* ...and two syscalls.  This is x86-specific. */
+>  static inline long x86_syscall3(long nr, long a0, long a1, long a2)
+>  {
+> @@ -70,7 +84,7 @@ void to_base10(char *lastdig, time_t n)
+>  	}
+>  }
+>
+> -__attribute__((externally_visible)) void c_main(void **stack)
+> +void c_main(void **stack)
+>  {
+>  	/* Parse the stack */
+>  	long argc = (long)*stack;
+>
 
-In some configurations __const_iowrite32_copy() does not get inlined
-and gcc runs into the BUILD_BUG():
+These work for me for compiling with clang.
 
-In file included from <command-line>:
-In function '__const_memcpy_toio_aligned32',
-    inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:203:3,
-    inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:199:20:
-include/linux/compiler_types.h:487:45: error: call to '__compiletime_assert_538' declared with attribute error: BUILD_BUG failed
-  487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |                                             ^
-include/linux/compiler_types.h:468:25: note: in definition of macro '__compiletime_assert'
-  468 |                         prefix ## suffix();                             \
-      |                         ^~~~~~
-include/linux/compiler_types.h:487:9: note: in expansion of macro '_compiletime_assert'
-  487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |         ^~~~~~~~~~~~~~~~~~~
-include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-      |                                     ^~~~~~~~~~~~~~~~~~
-include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-      |                     ^~~~~~~~~~~~~~~~
-arch/arm64/include/asm/io.h:193:17: note: in expansion of macro 'BUILD_BUG'
-  193 |                 BUILD_BUG();
-      |                 ^~~~~~~~~
-
-Move the check for constant arguments into the inline function to ensure
-it is still constant if the compiler decides against inlining it, and
-mark them as __always_inline to override the logic that sometimes leads
-to the compiler not producing the simplified output.
-
-Note that either the __always_inline annotation or the check for a
-constant value are sufficient here, but combining the two looks cleaner
-as it also avoids the macro. With clang-8 and older, the macro was still
-needed, but all versions of gcc and clang can reliably perform constant
-folding here.
-
-Fixes: ead79118dae6 ("arm64/io: Provide a WC friendly __iowriteXX_copy()")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v3:
- - also mark functions as __always_inline
-v2:
- - fix both 32-bit and 64-bit copies
- - remove now-redundant macros
----
- arch/arm64/include/asm/io.h | 36 ++++++++++++++++--------------------
- 1 file changed, 16 insertions(+), 20 deletions(-)
-
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 4ff0ae3f6d66..bc239371323a 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -153,8 +153,9 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
-  * emit the large TLP from the CPU.
-  */
- 
--static inline void __const_memcpy_toio_aligned32(volatile u32 __iomem *to,
--						 const u32 *from, size_t count)
-+static __always_inline void
-+__const_memcpy_toio_aligned32(volatile u32 __iomem *to, const u32 *from,
-+			      size_t count)
- {
- 	switch (count) {
- 	case 8:
-@@ -196,24 +197,22 @@ static inline void __const_memcpy_toio_aligned32(volatile u32 __iomem *to,
- 
- void __iowrite32_copy_full(void __iomem *to, const void *from, size_t count);
- 
--static inline void __const_iowrite32_copy(void __iomem *to, const void *from,
--					  size_t count)
-+static __always_inline void
-+__iowrite32_copy(void __iomem *to, const void *from, size_t count)
- {
--	if (count == 8 || count == 4 || count == 2 || count == 1) {
-+	if (__builtin_constant_p(count) &&
-+	    (count == 8 || count == 4 || count == 2 || count == 1)) {
- 		__const_memcpy_toio_aligned32(to, from, count);
- 		dgh();
- 	} else {
- 		__iowrite32_copy_full(to, from, count);
- 	}
- }
-+#define __iowrite32_copy(to, from, count) __iowrite32_copy(to, from, count)
- 
--#define __iowrite32_copy(to, from, count)                  \
--	(__builtin_constant_p(count) ?                     \
--		 __const_iowrite32_copy(to, from, count) : \
--		 __iowrite32_copy_full(to, from, count))
--
--static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
--						 const u64 *from, size_t count)
-+static __always_inline void
-+__const_memcpy_toio_aligned64(volatile u64 __iomem *to, const u64 *from,
-+			      size_t count)
- {
- 	switch (count) {
- 	case 8:
-@@ -255,21 +254,18 @@ static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
- 
- void __iowrite64_copy_full(void __iomem *to, const void *from, size_t count);
- 
--static inline void __const_iowrite64_copy(void __iomem *to, const void *from,
--					  size_t count)
-+static __always_inline void
-+__iowrite64_copy(void __iomem *to, const void *from, size_t count)
- {
--	if (count == 8 || count == 4 || count == 2 || count == 1) {
-+	if (__builtin_constant_p(count) &&
-+	    (count == 8 || count == 4 || count == 2 || count == 1)) {
- 		__const_memcpy_toio_aligned64(to, from, count);
- 		dgh();
- 	} else {
- 		__iowrite64_copy_full(to, from, count);
- 	}
- }
--
--#define __iowrite64_copy(to, from, count)                  \
--	(__builtin_constant_p(count) ?                     \
--		 __const_iowrite64_copy(to, from, count) : \
--		 __iowrite64_copy_full(to, from, count))
-+#define __iowrite64_copy(to, from, count) __iowrite64_copy(to, from, count)
- 
- /*
-  * I/O memory mapping functions.
--- 
-2.39.2
-
+Reviewed-by: Edward Liaw <edliaw@google.com>
