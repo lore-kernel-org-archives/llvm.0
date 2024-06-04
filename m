@@ -1,147 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97B1A5F;
-	Tue,  4 Jun 2024 22:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A895814B08E
+	for <llvm@lists.linux.dev>; Tue,  4 Jun 2024 22:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717539867; cv=none; b=ChbqY7PuFkx3Gv2new49217KY7Y1NNqARzzLzmbmcURART3UigzwiWEnW1XZpOrc5PE1SumyE6ZQmq9l7ysC6aVAZDSYacdAr5Sihu3waWEJL73Qpia3a5HwR85+RMCO2qqSQ3BEPfhxesgsKqVuETxVqlB+YzugYMOgSekYPaU=
+	t=1717540885; cv=none; b=GNTB4bi2jzLL7pm7h1aECFBWgH9wq++m8jlHpRs2M0qFTq1HhRI19cOJMdb0pV5veTiJSHvPArcv7O3Um4qz9L49NJNfSn4sDUFuRuPvuy/zwf25rjHoiULBOBgbyCbYhU8/lfHlW0e1jXq/iTcJ2oLSpvToIGHiQ1GJDXzbyC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717539867; c=relaxed/simple;
-	bh=DaIF5g4h026kkd8Kr4YOZqYE2KAv1GfAwYsB1XchsE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ae0mkNx72feKRj5vp9bm2BAO0/fhYmxOy29RsaXd93JQd4SdNbsmJYFwjG0fo0/4M2j+6CKcXDjLIkmtUjv0TH1sl0UTqwDNYAGZVAm+UjqZ+ms5WihLcIUwJTHLtlb8KTIPFmulRszuBWPuRqCK8wji1yZezVzxnMYfPM6Kl7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ftm47uv/; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717540885; c=relaxed/simple;
+	bh=48X2qgdP1gIxKDJW40AJ3Odff8DBYT35+62pDzTjg8s=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RHUc/CaSVmfk5T8UyZAug93zCMC3JGnaaThliOXD8B/vmekP7DvH2YE9qVmYQ8KDVm0bZ1yBF25U2lKaoq1jBg1EsnWPjfj8SqRZoLZdI976u2O4lgRRHDv7w533oBvrZMVvDMCUHhArKFpg+kixjBC/wjxhlSGdH1lR3O1agqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1Nui8xto; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ftm47uv/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717539865; x=1749075865;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DaIF5g4h026kkd8Kr4YOZqYE2KAv1GfAwYsB1XchsE4=;
-  b=Ftm47uv/v7DR/k+AOT+nqPzW0WAqlS71CuxQkAOv9KfkVbOCLybDAajz
-   57Q69XniicpF1FxLR6tQFnhK2p5JsaZMaAPW2BOP2678maxCAAaCtfqZ4
-   3pK2C5mT0TT552j1KOmiCVYzG90xO/gLQePF91lNwDjRDszXiDmqaXlXG
-   UqgR7vdw/7vsAzTfBqXAmm2DHdYJ6BeoK4qwlDGItiFYB4yqQ88iY34kS
-   8EjR04HNqnjMAcWgO/reelP6boYOol/Ie1RjoqyWnytiKHmhSBAqU4iZG
-   xR9izLTQauO0JRAaTQL0rTXrnDDkYUoKZzmT19IB2SrDAtunvoKKYu9cb
-   A==;
-X-CSE-ConnectionGUID: VjeRE8UqR9GCu7Y+AILgEA==
-X-CSE-MsgGUID: EYvtql4pR6aNaa6XhmjxQA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="17055281"
-X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
-   d="scan'208";a="17055281"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 15:24:23 -0700
-X-CSE-ConnectionGUID: MsEbv0eRSfyggnUHnYc7hg==
-X-CSE-MsgGUID: brjN/PJ7Q3CeK9nWn8TRCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
-   d="scan'208";a="37442901"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 04 Jun 2024 15:24:22 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sEcZm-0000bz-1k;
-	Tue, 04 Jun 2024 22:24:18 +0000
-Date: Wed, 5 Jun 2024 06:23:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Lijo Lazar <lijo.lazar@amd.com>
-Subject: [linux-next:master 1323/3381]
- drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:4: error: format specifies type
- 'unsigned char' but the argument has type 'int'
-Message-ID: <202406050622.SmOX6DL6-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1Nui8xto"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dfabae20b47so2586367276.0
+        for <llvm@lists.linux.dev>; Tue, 04 Jun 2024 15:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717540882; x=1718145682; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5BFhMURlOxwbCZPlt3t+cMRvFnuBznLgUYvajgNDozE=;
+        b=1Nui8xto7TMllKgd0NsWZt41nU/DjwbQxYCmTSgwJ/s7aAEz1rNzlRK3+VFmu7EsyW
+         GwC4BWlya+yckU+260MNB/O9q4L00Bjnyj8LQLk559ypLmblGqWAOHxOheVNa2HUUW3T
+         Auke6dXJcYuU6E1uYTWeY0KuNLY5fjv1YfOGJWKOoVj5nkU/8ra6eN1CpwI7b53Bz1mq
+         Fqpw+8+7aqjroC2v7IjVmtadyLF4d7WJBja4hmQSRYdYHEk+SiXdvpB9yuSoUDhJwbpq
+         v9Uif/QhYqP5bi/dpkWzqAsd2tge3J1dIKPmJYiZ/MJdRhrplXi+kwdXGDB6P7IHeOaH
+         qAPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717540882; x=1718145682;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5BFhMURlOxwbCZPlt3t+cMRvFnuBznLgUYvajgNDozE=;
+        b=r55q4I3P3i+zwllV9G4gLba9jBt46HskCfyEfEDL5EjvAGS+54N5oWsUYOnQfcpJy/
+         y+m73WtFsLVcNI0bDnmB8lp8k+Ct+4L9I1EGotT1cuJzT7UmwaQbIbgSJKAGEZ2eB93d
+         Y8WDS1Z9wP/jeDApgrQo3nKVJRrwoiphHRsbqtCuOKF/1Jih9xFjGbCdJ/+7snXfxLc3
+         MxqlLq8fbF98JKUMzsPkhBmfX02V5HuH5bC0p9mEVxXHsYHpeXDYYSzSZ87IJcsmw7n4
+         I0RmLozosydKvdnvM6S2V+GCNTBgi3uspB3gmfAoC3AYmRkwGd7+uEFSvNhgCbhkW06M
+         PMaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWEgIcPAq+eFtzb5lZA31NrdWfWkIjTwNli5nOAOXK8mN2awwcZlURfnrIbeArMgH0aB1zw5un7srl80b87a6YZEtErgA==
+X-Gm-Message-State: AOJu0Yy1GF5FlmuV2XjccAnNn3M06l5VVE/055maw3N4pz/wNE2+u6kk
+	zv1OAZijlI2rAMSiQRkA9Fc4ofWBd4qBnWkPtQZGTHQomQwIdzlxgNdA16p1dW8S5rNMcuXYVAR
+	hn0KmWrRvVQ==
+X-Google-Smtp-Source: AGHT+IFe9doWPRL9bdOBiprw606KPAUV1/yCDGjKHg9/0f16jSpDeFrPKk08bm1aGwBuEsC7VjTpzn499oFw4w==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6902:120d:b0:dcb:e982:4e40 with SMTP
+ id 3f1490d57ef6-dfacad28c85mr236994276.12.1717540882585; Tue, 04 Jun 2024
+ 15:41:22 -0700 (PDT)
+Date: Wed,  5 Jun 2024 06:40:50 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
+Message-ID: <20240604224052.3138504-1-davidgow@google.com>
+Subject: [PATCH] arch: um: rust: Add i386 support for Rust
+From: David Gow <davidgow@google.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>
+Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org, 
+	rust-for-linux@vger.kernel.org, x86@kernel.org, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   d97496ca23a2d4ee80b7302849404859d9058bcd
-commit: 0ea55445554209913a72eab86b60f5788776c4d6 [1323/3381] drm/amdgpu: Fix snprintf usage in amdgpu_gfx_kiq_init_ring
-config: arm64-randconfig-003-20240605 (https://download.01.org/0day-ci/archive/20240605/202406050622.SmOX6DL6-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050622.SmOX6DL6-lkp@intel.com/reproduce)
+At present, Rust in the kernel only supports 64-bit x86, so UML has
+followed suit. However, it's significantly easier to support 32-bit i386
+on UML than on bare metal, as UML does not use the -mregparm option
+(which alters the ABI), which is not yet supported by rustc[1].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406050622.SmOX6DL6-lkp@intel.com/
+Add support for CONFIG_RUST on um/i386, by adding a new target config to
+generate_rust_target, and replacing various checks on CONFIG_X86_64 to
+also support CONFIG_X86_32.
 
-All errors (new ones prefixed by >>):
+We still use generate_rust_target, rather than a built-in rustc target,
+in order to match x86_64, provide a future place for -mregparm, and more
+easily disable floating point instructions.
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:4: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-                    xcc_id, ring->me, ring->pipe, ring->queue);
-                    ^~~~~~
->> drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:12: error: format specifies type 'unsigned char' but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
-                    xcc_id, ring->me, ring->pipe, ring->queue);
-                            ^~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:22: error: format specifies type 'unsigned char' but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
-                    xcc_id, ring->me, ring->pipe, ring->queue);
-                                      ^~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:34: error: format specifies type 'unsigned char' but the argument has type 'u32' (aka 'unsigned int') [-Werror,-Wformat]
-                    xcc_id, ring->me, ring->pipe, ring->queue);
-                                                  ^~~~~~~~~~~
-   4 errors generated.
+With these changes, the KUnit tests pass with:
+kunit.py run --make_options LLVM=1 --kconfig_add CONFIG_RUST=y
+--kconfig_add CONFIG_64BIT=n --kconfig_add CONFIG_FORTIFY_SOURCE=n
 
+An earlier version of these changes was proposed on the Rust-for-Linux
+github[2].
 
-vim +333 drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
+[1]: https://github.com/rust-lang/rust/issues/116972
+[2]: https://github.com/Rust-for-Linux/linux/pull/966
 
-71c37505e7eaa0 Alex Deucher         2017-06-07  306  
-4acd31e6c2b97c Ma Jun               2024-02-18  307  int amdgpu_gfx_kiq_init_ring(struct amdgpu_device *adev, int xcc_id)
-71c37505e7eaa0 Alex Deucher         2017-06-07  308  {
-def799c6596d07 Le Ma                2022-05-24  309  	struct amdgpu_kiq *kiq = &adev->gfx.kiq[xcc_id];
-4acd31e6c2b97c Ma Jun               2024-02-18  310  	struct amdgpu_irq_src *irq = &kiq->irq;
-4acd31e6c2b97c Ma Jun               2024-02-18  311  	struct amdgpu_ring *ring = &kiq->ring;
-71c37505e7eaa0 Alex Deucher         2017-06-07  312  	int r = 0;
-71c37505e7eaa0 Alex Deucher         2017-06-07  313  
-43ca8efa46d9b1 pding                2017-10-13  314  	spin_lock_init(&kiq->ring_lock);
-71c37505e7eaa0 Alex Deucher         2017-06-07  315  
-71c37505e7eaa0 Alex Deucher         2017-06-07  316  	ring->adev = NULL;
-71c37505e7eaa0 Alex Deucher         2017-06-07  317  	ring->ring_obj = NULL;
-71c37505e7eaa0 Alex Deucher         2017-06-07  318  	ring->use_doorbell = true;
-def799c6596d07 Le Ma                2022-05-24  319  	ring->xcc_id = xcc_id;
-3566938b3491bb Le Ma                2021-12-20  320  	ring->vm_hub = AMDGPU_GFXHUB(xcc_id);
-233bb3733bd439 Lijo Lazar           2023-01-19  321  	ring->doorbell_index =
-233bb3733bd439 Lijo Lazar           2023-01-19  322  		(adev->doorbell_index.kiq +
-233bb3733bd439 Lijo Lazar           2023-01-19  323  		 xcc_id * adev->doorbell_index.xcc_doorbell_range)
-233bb3733bd439 Lijo Lazar           2023-01-19  324  		<< 1;
-71c37505e7eaa0 Alex Deucher         2017-06-07  325  
-def799c6596d07 Le Ma                2022-05-24  326  	r = amdgpu_gfx_kiq_acquire(adev, ring, xcc_id);
-71c37505e7eaa0 Alex Deucher         2017-06-07  327  	if (r)
-71c37505e7eaa0 Alex Deucher         2017-06-07  328  		return r;
-71c37505e7eaa0 Alex Deucher         2017-06-07  329  
-71c37505e7eaa0 Alex Deucher         2017-06-07  330  	ring->eop_gpu_addr = kiq->eop_gpu_addr;
-a783910d5c8b45 Alex Deucher         2020-04-09  331  	ring->no_scheduler = true;
-0ea55445554209 Srinivasan Shanmugam 2024-05-21  332  	snprintf(ring->name, sizeof(ring->name), "kiq_%hhu.%hhu.%hhu.%hhu",
-345a36c4f1baa0 Jani Nikula          2024-01-10 @333  		 xcc_id, ring->me, ring->pipe, ring->queue);
-c107171b8d3241 Christian König      2021-02-02  334  	r = amdgpu_ring_init(adev, ring, 1024, irq, AMDGPU_CP_KIQ_IRQ_DRIVER0,
-c107171b8d3241 Christian König      2021-02-02  335  			     AMDGPU_RING_PRIO_DEFAULT, NULL);
-71c37505e7eaa0 Alex Deucher         2017-06-07  336  	if (r)
-71c37505e7eaa0 Alex Deucher         2017-06-07  337  		dev_warn(adev->dev, "(%d) failed to init kiq ring\n", r);
-71c37505e7eaa0 Alex Deucher         2017-06-07  338  
-71c37505e7eaa0 Alex Deucher         2017-06-07  339  	return r;
-71c37505e7eaa0 Alex Deucher         2017-06-07  340  }
-71c37505e7eaa0 Alex Deucher         2017-06-07  341  
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ Documentation/rust/arch-support.rst |  2 +-
+ arch/um/Kconfig                     |  2 +-
+ rust/Makefile                       |  2 +-
+ scripts/Makefile                    |  2 +-
+ scripts/generate_rust_target.rs     | 17 +++++++++++++++++
+ 5 files changed, 21 insertions(+), 4 deletions(-)
 
-:::::: The code at line 333 was first introduced by commit
-:::::: 345a36c4f1baa03275d88cd13747c6c1748b1fc0 drm/amdgpu: prefer snprintf over sprintf
-
-:::::: TO: Jani Nikula <jani.nikula@intel.com>
-:::::: CC: Jani Nikula <jani.nikula@intel.com>
-
+diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+index b13e19d84744..750ff371570a 100644
+--- a/Documentation/rust/arch-support.rst
++++ b/Documentation/rust/arch-support.rst
+@@ -18,7 +18,7 @@ Architecture   Level of support  Constraints
+ ``arm64``      Maintained        Little Endian only.
+ ``loongarch``  Maintained        \-
+ ``riscv``      Maintained        ``riscv64`` only.
+-``um``         Maintained        ``x86_64`` only.
++``um``         Maintained        \-
+ ``x86``        Maintained        ``x86_64`` only.
+ =============  ================  ==============================================
+ 
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 93a5a8999b07..b6ac49fec5bb 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -31,7 +31,7 @@ config UML
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 	select TTY # Needed for line.c
+ 	select HAVE_ARCH_VMAP_STACK
+-	select HAVE_RUST			if X86_64
++	select HAVE_RUST
+ 
+ config MMU
+ 	bool
+diff --git a/rust/Makefile b/rust/Makefile
+index f70d5e244fee..83f675adbfab 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -426,7 +426,7 @@ $(obj)/core.o: private rustc_objcopy = $(foreach sym,$(redirect-intrinsics),--re
+ $(obj)/core.o: private rustc_target_flags = $(core-cfgs)
+ $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs FORCE
+ 	+$(call if_changed_dep,rustc_library)
+-ifdef CONFIG_X86_64
++ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
+ $(obj)/core.o: scripts/target.json
+ endif
+ 
+diff --git a/scripts/Makefile b/scripts/Makefile
+index fe56eeef09dd..dccef663ca82 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -12,7 +12,7 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
+ hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_builder
+ hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_gen
+ 
+-ifdef CONFIG_X86_64
++ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
+ always-$(CONFIG_RUST)					+= target.json
+ filechk_rust_target = $< < include/config/auto.conf
+ 
+diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
+index 641b713a033a..87f34925eb7b 100644
+--- a/scripts/generate_rust_target.rs
++++ b/scripts/generate_rust_target.rs
+@@ -169,6 +169,23 @@ fn main() {
+         ts.push("features", features);
+         ts.push("llvm-target", "x86_64-linux-gnu");
+         ts.push("target-pointer-width", "64");
++    } else if cfg.has("X86_32") {
++        // This only works on UML, as i386 otherwise needs regparm support in rustc
++        if !cfg.has("UML") {
++            panic!("32-bit x86 only works under UML");
++        }
++        ts.push("arch", "x86");
++        ts.push(
++            "data-layout",
++            "e-m:e-p:32:32-p270:32:32-p271:32:32-p272:64:64-i128:128-f64:32:64-f80:32-n8:16:32-S128",
++        );
++        let mut features = "-3dnow,-3dnowa,-mmx,+soft-float".to_string();
++        if cfg.has("MITIGATION_RETPOLINE") {
++            features += ",+retpoline-external-thunk";
++        }
++        ts.push("features", features);
++        ts.push("llvm-target", "i386-unknown-linux-gnu");
++        ts.push("target-pointer-width", "32");
+     } else if cfg.has("LOONGARCH") {
+         panic!("loongarch uses the builtin rustc loongarch64-unknown-none-softfloat target");
+     } else {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.1.288.g0e0cd299f1-goog
+
