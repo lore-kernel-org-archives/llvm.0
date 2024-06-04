@@ -1,102 +1,141 @@
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8573E6FD5;
-	Tue,  4 Jun 2024 01:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AC04A07;
+	Tue,  4 Jun 2024 01:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717463864; cv=none; b=GPu6g56l9xFRn3nEpjbO8o1wDNhcWFlZ0DVlpUZ+jzaldXQp1Qo5fKAOEF7qGiD+RY5pVmKkR7CtSZoEHhlFXr/fnOfknJGaybSNtqeBg4xUFNz6ZYknEhOkFJZVCsomJpjpe8BZovRxRMOofeTFtl7DptebVUNO1MI6leUs1w8=
+	t=1717465292; cv=none; b=GtpgVXcmOMqFtA3geEsv4DH0Cf3QGwMlQVW5sRC667SVUIKndw0bXtHbZgAYjSEhjOS4w5vb7/9paGW5/ITJCeAUUvQdsFunWshPFJmjIqlWE01DfQGT8VF914IbXK0GmIQd56VvagrEBNwqy1BID2fWR0Taly8lDOMV9Ja7nFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717463864; c=relaxed/simple;
-	bh=OzRQPXtvsFdD9jyp6q+9LTW2h0h6y9O369n2NTJKpDE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z4E1+7KUTJzW6/xFFS2sCuIUUzyMOMQmxEvW+Yd9zmWdw9VSm8k8TKr9UWIaahMTrwX6z1ikbql9WSy5EuqXcVD2YFwCzS/pbnT9KFZ7triCaVeiQ6PkOhjyTTaWffGMGGLKgEE+/j4uWTlxaBQX2iOe8yPdILsb6r0K0v1AV2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 453NrBxt028282;
-	Mon, 3 Jun 2024 18:17:24 -0700
-Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3yg35f24n9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 03 Jun 2024 18:17:24 -0700 (PDT)
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 3 Jun 2024 18:17:23 -0700
-Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2507.39 via Frontend Transport; Mon, 3 Jun 2024 18:17:18 -0700
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <krisman@suse.de>
-CC: <adilger.kernel@dilger.ca>, <coreteam@netfilter.org>,
-        <davem@davemloft.net>, <ebiggers@kernel.org>, <fw@strlen.de>,
-        <jaegeuk@kernel.org>, <kadlec@netfilter.org>, <kuba@kernel.org>,
-        <linux-ext4@vger.kernel.org>, <linux-fscrypt@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lizhi.xu@windriver.com>,
-        <lkp@intel.com>, <llvm@lists.linux.dev>, <netdev@vger.kernel.org>,
-        <netfilter-devel@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
-        <pablo@netfilter.org>,
-        <syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com>,
-        <syzkaller-bugs@googlegroups.com>, <tytso@mit.edu>
-Subject: Re: [PATCH V5] ext4: check hash version and filesystem casefolded consistent
-Date: Tue, 4 Jun 2024 09:17:17 +0800
-Message-ID: <20240604011718.3360272-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <87plsym65w.fsf@mailhost.krisman.be>
-References: <87plsym65w.fsf@mailhost.krisman.be>
+	s=arc-20240116; t=1717465292; c=relaxed/simple;
+	bh=+IlcEpeLInZMsPQNqW7j6WVXPHrM+sm6GR24FdelvMc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ad/nSzwuc1/5fGN3jDaTmvWnS07b3EI6QQucONHyFvYtMWH8pbIlGcH01yjFQH1H5pCU/EC91HVkIwKOpSYPHkygHjaE0ZQUHlTQRHEJ2zEoFHh+I27qzOFS6LOctZHQt4yzii5pIwLXbmIKhUkpwab7AGecH44EOlX9v7oeFYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z6C/CMF+; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z6C/CMF+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717465291; x=1749001291;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+IlcEpeLInZMsPQNqW7j6WVXPHrM+sm6GR24FdelvMc=;
+  b=Z6C/CMF+uIYehhDsBqSAQbwK7CZiUC+dXPSB6eiHQuPeoQj04vyZmDt6
+   y5rc+3yQKh30dxtXwg8XGvUisZBqx6z24+hOZsuJG3mgx1Xv9UmSsbHUt
+   lMV+GoREhB4eo71wNCrD30mpbSMj7UTz677w4bNScI10VLWKOuQe433tI
+   00D3HwUZ87DVwfKEUyHQNXYCfXql+YKK8H3A5GHA8ybeB74YB/6LT3xI+
+   xNBN1LLPiWMOg4BLBwv38EoxjJ1wRLhfNsQ9oeEjL90fJaDwtunQEIznc
+   KX55tRPSKrgVkwqZ3fkpPSuGcR2ekyzwEhvqIpZven262gnj/FwgcCPVj
+   Q==;
+X-CSE-ConnectionGUID: lZxmnkNGSlKv7JLewwdVrQ==
+X-CSE-MsgGUID: sub9p904Rc2oYEoaoq+zSw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="13931608"
+X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
+   d="scan'208";a="13931608"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 18:41:30 -0700
+X-CSE-ConnectionGUID: t/Jbv0P2SbWe4+8ixqNhwg==
+X-CSE-MsgGUID: /tc9JLHIS/CjZeTxIoAlyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
+   d="scan'208";a="37181243"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 03 Jun 2024 18:41:27 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sEJAy-000MQB-2E;
+	Tue, 04 Jun 2024 01:41:24 +0000
+Date: Tue, 4 Jun 2024 09:40:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:io_uring-6.10 5/5] io_uring/napi.c:284:4: error:
+ incompatible pointer types passing 'unsigned int *' to parameter of type
+ 'uint64_t *' (aka 'unsigned long long *')
+Message-ID: <202406040947.kFGqTrFC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: gfcExZLBCFyH3mjBVyUMLZjSXIlULXV0
-X-Proofpoint-ORIG-GUID: gfcExZLBCFyH3mjBVyUMLZjSXIlULXV0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-06-03_17,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 mlxscore=0 phishscore=0
- clxscore=1011 malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.21.0-2405170001 definitions=main-2406040008
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 03 Jun 2024 10:50:51 -0400, Gabriel Krisman Bertazi wrote:
-> > When mounting the ext4 filesystem, if the hash version and casefolded are not
-> > consistent, exit the mounting.
-> >
-> > Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
-> > Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
-> > ---
-> >  fs/ext4/super.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> > index c682fb927b64..0ad326504c50 100644
-> > --- a/fs/ext4/super.c
-> > +++ b/fs/ext4/super.c
-> > @@ -5262,6 +5262,11 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
-> >  		goto failed_mount;
-> >  
-> >  	ext4_hash_info_init(sb);
-> > +	if (es->s_def_hash_version == DX_HASH_SIPHASH && 
-> > +	    !ext4_has_feature_casefold(sb)) {
-> 
-> Can we ever have DX_HASH_SIPHASH set up in the super block?  I thought
-> it was used solely for directories where ext4_hash_in_dirent(inode) is
-> true.
-The value of s'def_hash_version is obtained by reading the super block from the
-buffer cache of the block device in ext4_load_super().
-> 
-> If this is only for the case of a superblock corruption, perhaps we
-> should always reject the mount, whether casefold is enabled or not?
-Based on the existing information, it cannot be confirmed whether the superblock
-is corrupt, but one thing is clear: if the default hash version of the superblock
-is set to DX_HASH_SIPHASH, but the casefold feature is not set at the same time,
-it is definitely an error.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-6.10
+head:   104fdbcf07a71a2435c3737c57b2927d0af260af
+commit: 104fdbcf07a71a2435c3737c57b2927d0af260af [5/5] io_uring/napi: fix timeout calculation
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240604/202406040947.kFGqTrFC-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240604/202406040947.kFGqTrFC-lkp@intel.com/reproduce)
 
-Lizhi
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406040947.kFGqTrFC-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> io_uring/napi.c:284:4: warning: comparison of distinct pointer types ('typeof ((poll_to)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+                           do_div(poll_to, 1000);
+                           ^~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> io_uring/napi.c:284:4: error: incompatible pointer types passing 'unsigned int *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+                           do_div(poll_to, 1000);
+                           ^~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> io_uring/napi.c:284:4: warning: shift count >= width of type [-Wshift-count-overflow]
+                           do_div(poll_to, 1000);
+                           ^~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   2 warnings and 1 error generated.
+
+
+vim +284 io_uring/napi.c
+
+   262	
+   263	/*
+   264	 * __io_napi_adjust_timeout() - adjust busy loop timeout
+   265	 * @ctx: pointer to io-uring context structure
+   266	 * @iowq: pointer to io wait queue
+   267	 * @ts: pointer to timespec or NULL
+   268	 *
+   269	 * Adjust the busy loop timeout according to timespec and busy poll timeout.
+   270	 * If the specified NAPI timeout is bigger than the wait timeout, then adjust
+   271	 * the NAPI timeout accordingly.
+   272	 */
+   273	void __io_napi_adjust_timeout(struct io_ring_ctx *ctx, struct io_wait_queue *iowq,
+   274				      struct timespec64 *ts)
+   275	{
+   276		unsigned int poll_to = READ_ONCE(ctx->napi_busy_poll_to);
+   277	
+   278		if (ts) {
+   279			struct timespec64 poll_to_ts;
+   280	
+   281			poll_to_ts = ns_to_timespec64(1000 * (s64)poll_to);
+   282			if (timespec64_compare(ts, &poll_to_ts) < 0) {
+   283				poll_to = timespec64_to_ns(ts);
+ > 284				do_div(poll_to, 1000);
+   285			}
+   286		}
+   287	
+   288		iowq->napi_busy_poll_to = poll_to;
+   289	}
+   290	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
