@@ -1,141 +1,223 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AC04A07;
-	Tue,  4 Jun 2024 01:41:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717465292; cv=none; b=GtpgVXcmOMqFtA3geEsv4DH0Cf3QGwMlQVW5sRC667SVUIKndw0bXtHbZgAYjSEhjOS4w5vb7/9paGW5/ITJCeAUUvQdsFunWshPFJmjIqlWE01DfQGT8VF914IbXK0GmIQd56VvagrEBNwqy1BID2fWR0Taly8lDOMV9Ja7nFg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717465292; c=relaxed/simple;
-	bh=+IlcEpeLInZMsPQNqW7j6WVXPHrM+sm6GR24FdelvMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ad/nSzwuc1/5fGN3jDaTmvWnS07b3EI6QQucONHyFvYtMWH8pbIlGcH01yjFQH1H5pCU/EC91HVkIwKOpSYPHkygHjaE0ZQUHlTQRHEJ2zEoFHh+I27qzOFS6LOctZHQt4yzii5pIwLXbmIKhUkpwab7AGecH44EOlX9v7oeFYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z6C/CMF+; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CE113D50F;
+	Tue,  4 Jun 2024 01:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717466253; cv=fail; b=XD9baZNP5wy27kLRbbkCwrQ7F5FOKNEqcCHccHBsj9w4ef+qz2Z3o/TAvNse4iS5bc4K8xPrXx9wg97eFxKK1yRt/yI/Rktv09AnsUh8Sec4NMFBKKFh3eq//2ZrWKBgNPfXOQubFbyfr4/cIR9ywu6JgolG/svIfgwcOE2uftM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717466253; c=relaxed/simple;
+	bh=ZNibBsH33APzqhcrrtHkPQOWmbksV/pgAL/8i1J14Nk=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=odud9DptYRRIVIHv4OTK3Sh7SrcHVVzO9U4Bbozkhrff/7BeD43GFhn/KBAppybOYx8ZCoxxzrqVjAguLkvtNBUfqHqUATc4ZrPVSiDRHvPL1FGwD2rz3BO3E9hTpgFeE6v+KSjO2yFPhug7OM5Vy+WNciIAoj6HHMs+q55o2Jc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XZ2hJiVH; arc=fail smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z6C/CMF+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XZ2hJiVH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717465291; x=1749001291;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+IlcEpeLInZMsPQNqW7j6WVXPHrM+sm6GR24FdelvMc=;
-  b=Z6C/CMF+uIYehhDsBqSAQbwK7CZiUC+dXPSB6eiHQuPeoQj04vyZmDt6
-   y5rc+3yQKh30dxtXwg8XGvUisZBqx6z24+hOZsuJG3mgx1Xv9UmSsbHUt
-   lMV+GoREhB4eo71wNCrD30mpbSMj7UTz677w4bNScI10VLWKOuQe433tI
-   00D3HwUZ87DVwfKEUyHQNXYCfXql+YKK8H3A5GHA8ybeB74YB/6LT3xI+
-   xNBN1LLPiWMOg4BLBwv38EoxjJ1wRLhfNsQ9oeEjL90fJaDwtunQEIznc
-   KX55tRPSKrgVkwqZ3fkpPSuGcR2ekyzwEhvqIpZven262gnj/FwgcCPVj
-   Q==;
-X-CSE-ConnectionGUID: lZxmnkNGSlKv7JLewwdVrQ==
-X-CSE-MsgGUID: sub9p904Rc2oYEoaoq+zSw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="13931608"
+  t=1717466251; x=1749002251;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   mime-version;
+  bh=ZNibBsH33APzqhcrrtHkPQOWmbksV/pgAL/8i1J14Nk=;
+  b=XZ2hJiVHHyAbJWEd5OHPid3zEeSHAB/eXY6Zpt890yGJ2ok5Y2bQBf1o
+   pj03xeiTTOdjdReKHoKgD4OagM+d09E6gW2OhQ4j4mkTHxWxL5LhynILn
+   xuW18jYLwFMmR9SpiWjDIjaDueiVU9pua+T6HlN0tpmLzM+vWGyqWT/ic
+   tP5ktiUMxgwNbDUGvRbI5Vxm7PjyA0Qc38sikPhUDvu+EAEgRAmyK5Tih
+   7vJmM+Vwdp4PK4Ob4jwH6DYRICVxmFim6pe1UlLb/Wh7ssK0fCPKNnEQF
+   hDjGvSq9YMLu4w7n1lD8hLAQmtpJL4p9SprdFBK2V1SP3DFBP0p4mwbxM
+   g==;
+X-CSE-ConnectionGUID: UdQdErPIT8+GVro0BDiUSg==
+X-CSE-MsgGUID: OJxmXtwgT0yv4j7bolmIzQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="17820520"
 X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
-   d="scan'208";a="13931608"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 18:41:30 -0700
-X-CSE-ConnectionGUID: t/Jbv0P2SbWe4+8ixqNhwg==
-X-CSE-MsgGUID: /tc9JLHIS/CjZeTxIoAlyg==
+   d="scan'208";a="17820520"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 18:57:16 -0700
+X-CSE-ConnectionGUID: Za3FKz0tR+Ox+KxIjdlgOA==
+X-CSE-MsgGUID: 3BjCJgIER2eEi3rKXsr/1g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
-   d="scan'208";a="37181243"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 03 Jun 2024 18:41:27 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sEJAy-000MQB-2E;
-	Tue, 04 Jun 2024 01:41:24 +0000
-Date: Tue, 4 Jun 2024 09:40:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:io_uring-6.10 5/5] io_uring/napi.c:284:4: error:
- incompatible pointer types passing 'unsigned int *' to parameter of type
- 'uint64_t *' (aka 'unsigned long long *')
-Message-ID: <202406040947.kFGqTrFC-lkp@intel.com>
+   d="scan'208";a="37018830"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orviesa010.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 Jun 2024 18:57:16 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 3 Jun 2024 18:57:15 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 3 Jun 2024 18:57:14 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Mon, 3 Jun 2024 18:57:14 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.44) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 3 Jun 2024 18:57:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZZP9vMYuz7Wjw0gXIhplsPEaS+SiytaZ4iyS/0qS/dox07vDWelZqOALYN81wT8WdCMED3iFRwg005mCax8Rqfx6/IbUq/hqqQNNxhIN8WSpeGDSF6G0jfAUEcWuqw8Ic/xRt3M9E78wscivZKepj8QlcCoJW4aoGDQJkbPCxvEW8/SPrgshbRaEdD277roMtvxo6TuK+nweCECl/2rMqreA76903zqA6jCON0ZowZWMwHpuQdnpWZ6UaBU081V2Qq5JxpJU8lrUbee1774/+KMG8oVmmlvsXqlobDCDrbrZE+Pmk0Bq9xNAU8shjcjZ5CgkYC0Ctf2Uoyxj75DvCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AtUkDJLE7NbXyadRkTfwn24XRccomvI6VaFcRbipn2o=;
+ b=WLXiOmrsUgMkbMERDC/pHQ1i88u0+Es2mrIk4/KPrRhDqyhsc0jqlGhpEDcdhU3nBmj6nrMo7smr/g6TtORcIXXpvGWx3vpco4GBWGEO1rwd/QkntVCFHf3C0qL71bPmaYZY3hK1qYGaHwiZZJkpPjvMC9wShAwdRPZr6d66AVtm+xzpwdLouQHJzxaGOi28YepBB7sauyaNBWEKjsm/1oMa69joKRWojO9RB0d9tHamy0JhqsCEKDIho86bzx98Dq0arYUTz0++hKxjOTaTrgF+fZn+FtsYeB1ruCAj1mQrHaomBySIYYCTj4v9v6RZXJjph5+hk/4uXEiXJxSldA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB8393.namprd11.prod.outlook.com (2603:10b6:806:373::21)
+ by DS0PR11MB6544.namprd11.prod.outlook.com (2603:10b6:8:d0::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7633.21; Tue, 4 Jun 2024 01:57:12 +0000
+Received: from SA1PR11MB8393.namprd11.prod.outlook.com
+ ([fe80::1835:328e:6bb5:3a45]) by SA1PR11MB8393.namprd11.prod.outlook.com
+ ([fe80::1835:328e:6bb5:3a45%6]) with mapi id 15.20.7611.034; Tue, 4 Jun 2024
+ 01:57:11 +0000
+Date: Tue, 4 Jun 2024 09:48:50 +0800
+From: kernel test robot <yujie.liu@intel.com>
+To: Adrian Hunter <adrian.hunter@intel.com>, Peter Zijlstra
+	<peterz@infradead.org>
+CC: <oe-kbuild-all@lists.linux.dev>, Ingo Molnar <mingo@redhat.com>, "Mark
+ Rutland" <mark.rutland@arm.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Heiko Carstens <hca@linux.ibm.com>,
+	Thomas Richter <tmricht@linux.ibm.com>, Hendrik Brueckner
+	<brueckner@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, "Mike
+ Leach" <mike.leach@linaro.org>, James Clark <james.clark@arm.com>,
+	<coresight@lists.linaro.org>, <linux-arm-kernel@lists.infradead.org>, "Yicong
+ Yang" <yangyicong@hisilicon.com>, Jonathan Cameron
+	<jonathan.cameron@huawei.com>, Will Deacon <will@kernel.org>, "Arnaldo
+ Carvalho de Melo" <acme@kernel.org>, Jiri Olsa <jolsa@kernel.org>, "Namhyung
+ Kim" <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, Andi Kleen
+	<ak@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+	<linux-perf-users@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH V7 08/12] perf tools: Parse aux-action
+Message-ID: <202406022020.WJ2gdPJF-lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240531055731.12541-9-adrian.hunter@intel.com>
+X-ClientProxiedBy: SG2PR01CA0163.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:28::19) To SA1PR11MB8393.namprd11.prod.outlook.com
+ (2603:10b6:806:373::21)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB8393:EE_|DS0PR11MB6544:EE_
+X-MS-Office365-Filtering-Correlation-Id: e55d9e72-df1c-4a3b-9ec7-08dc8439a644
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|7416005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?lCa/YQnNU6v8YeZe/r65ONubP1Dq3I3mU7AE/p4bkInJ4PWtXNZNHFSUQMTf?=
+ =?us-ascii?Q?lxTwmpfbqnKgKPgYipoNFjZtWyl9TiyZUGcvUpxZiLQn/Q5EIfbbjN2vw3sr?=
+ =?us-ascii?Q?Oz44uoFNLFFb7RJsbPj5lzadHKPBCrXXndZUUQr4lolN8L04aekoH92h0HWR?=
+ =?us-ascii?Q?zzpVFIjWhoKAD75OQguLHhEBC4VNhGKENABEUXiIX80400gGA3q6vAREkYRd?=
+ =?us-ascii?Q?9u1MCNEuip+oJwrbWjclSnvXd0sjxL7R+QbH/yQXJHk9eTI0OvCoPu9Z9O1q?=
+ =?us-ascii?Q?orubSKxAAt3+Sey6LtgbyNRbNYKdAV/1M3I2utNcoeeWIo2FU9+bYfrS6lPJ?=
+ =?us-ascii?Q?PYl2ds5MOrXE4aWv2jdNm7Ozwk4s9MQWFW5DjZN4WiRvZIArZ0qbbPDX+Yyu?=
+ =?us-ascii?Q?e+ZOyL4uMdPzu2m5SG5E1Nyl8waDGBKZAztluAeSd81EIYXL4AgtoWcHk7f5?=
+ =?us-ascii?Q?oOGOKobaaFB9fR6I6uEv9ELXW6nL4QA1T1/wM0+wqCSR2SXvHerJ19ZkUfJ9?=
+ =?us-ascii?Q?D2bLkl5N5P+Sk9+IRLeNvnGNNDXu8rrze6j1keHRZIyxXSjOv29x8PtSKvCE?=
+ =?us-ascii?Q?gsiiLNX4eA1bLFZe+y0V2I4nG6HaQWAssLYMlN+0MsvY5iqlMfyqqGkgEIoe?=
+ =?us-ascii?Q?vpvOx3khQuVbKb4JI4hixEHLhZBlH5DWx9KpXhPeETPLvyA6DPSUrmLrc77F?=
+ =?us-ascii?Q?rtE4OBs2hWoq38ATk+iDZoO1Srj1dvlZfhJIM3mSZeUVpm4CC0sXHnNAM5FD?=
+ =?us-ascii?Q?8ugBzl8MWhfTObqSIuTpW1oYYQVfnz2wNceS9zjco3fN+j8wtGSTPVfBX+lj?=
+ =?us-ascii?Q?wk9ENg6qR2qt38nOxLsdW8jEbC5+L/i9PCMLb3IxItp8bfV5esA/cR/mucRG?=
+ =?us-ascii?Q?PEoOkX39A2XdtOLvPfMkSAIioBdvPgjp86NOC2Xes4R/u7lzFCwFiapeGDED?=
+ =?us-ascii?Q?/HO1lWmhAduOLx2nmVozwsrNDVZ0FsUoNDu1x8baHn4N0cHUuZL6GSOuqtxB?=
+ =?us-ascii?Q?DNkAzgRSidsVo+4luPZPNFopyf1SUFG2JAm0taoZYDt+UaaVT9wcsd7ev2fM?=
+ =?us-ascii?Q?kGNXrDPMySp/I5uCzMBfb7BzziaGSlXuOQP5pk+KoNyyS6e7JrkyHnQ0oPFx?=
+ =?us-ascii?Q?FtLQuUrNYG+Krq4HoKdvC3rNZ448/GT1BZPgVa9mIOmP//zbsIQbf5xIQyx6?=
+ =?us-ascii?Q?JnfwvblIv3BSiVWJiJQbaSNKnFcE2UTJKORVeO3UisUP77jB8hdxDoumqPI?=
+ =?us-ascii?Q?=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB8393.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(366007)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4t5ZDNfSTbwl822hbKUU5Vv0GZzAvQQ1USbA/jUuC8Z5clEyPjS+bnSE6NDO?=
+ =?us-ascii?Q?Iz59lYpRTeQcf9XEk3JqEhlQRTJOmjw5ZwLQ2wdYyyfWjyIkRm+1aZG3O0tn?=
+ =?us-ascii?Q?+ptYIKZwjsle1uD7KdkO3OfovZO8tgBY8TyOC/c5SOdkH/AqjYcKEzGE8SW6?=
+ =?us-ascii?Q?5FYHh/aIEWfTMUf569yicO6MT9VcQVKgEgy0qpGOEdRijqHo+BvBhnaMADB4?=
+ =?us-ascii?Q?O9aKye4pIiClespwqc1Jg0EhSPq1QYHi7NNH4ujtOHeU/OFsntI12B1EbH1w?=
+ =?us-ascii?Q?mzuCPvydzezgKoHAMgTaiBakQm/WUfMGSDgBa8RxxPpAY5lFzAulq/rp0R9V?=
+ =?us-ascii?Q?3L/atZZqqykfLN6zcgNgxb8nDgslqo9xc1Sc8Gxu1+V8XqngNQ/5SOWA3u6g?=
+ =?us-ascii?Q?awMaMpWGT/lZ+UHpF/TIgagt6z9Xvb63CnQxP5L9zWKhvkJYS8rSLJJye84j?=
+ =?us-ascii?Q?rfv/wBsUSK98aqhvCwT0X59Lvhwg0PkyYetVbr5M0uEj0vtRhiIfIH5tRJlK?=
+ =?us-ascii?Q?PY1k0OSZTd3fYdKdbonDA4rTiQju5+T2HOQt4qhQO2OmpwtsS0FerNAyurVH?=
+ =?us-ascii?Q?y1U+rDHokl+tJ0mdEBpIjEXE+gSXXAinPhlbDH1kxUNrZxN43dv7cFSogO/C?=
+ =?us-ascii?Q?6PClBJXUrIEwlcmmJNylqgTnSF8rYT0ku5DpMVHBUd8ucaOmIM1pnpM6t6O+?=
+ =?us-ascii?Q?aDYMkE24+L8samepg0ru5KqsI/mBy59cMsPlVJDD0U1/xaJZ0Qjua9ElrTiP?=
+ =?us-ascii?Q?VoIrmSFE16LqzXiSCvXqk4h1gOocUQvzqxmaV4aIkT8FmeVu5JnqLDyiXBz+?=
+ =?us-ascii?Q?ARvhMzFbJjcfXPe0lYK2Fxo649U35ULdm63T3IC5+PhTYXwlyxxHuDPYirqL?=
+ =?us-ascii?Q?kF6OT9X/bYU5AH97f+pqxzqG+RK1/tbsJOly6wSCANr/SdpQiiswDGgKGCZ1?=
+ =?us-ascii?Q?qEoJs+FjCjRPUrRG9PmuLO2lA5tSYa0mp9j2JQcDZBhL1DQ4BuhrZ3FONOUz?=
+ =?us-ascii?Q?byuCVlWp9ZTqux0JmZs/QiCimFQfS0rp6+qDYeYFCTUpx18CvMbWwiv3Qyqk?=
+ =?us-ascii?Q?bZAzMB1QuYeYJrvhbDvyA0XP/LBM+vLHYKgfiMjKPRivHNFB3ngByj7T4qdB?=
+ =?us-ascii?Q?ZIMHb5nI6cmXDhiG5L+ocgu5cMUu8AHq8XgQAVLMtxpMJB0ORPk2HKKqNukZ?=
+ =?us-ascii?Q?3A7fy4N1f0jSfMa6lLPLTCvQD285+AOayT7sM6waG4EzOXJftxfvN7bJXsQg?=
+ =?us-ascii?Q?dmyewnDcxxV+Za08Rn38m2N16fjQhZuJ/P0zL6jxW2pYiad/YI9jU4WKyCXp?=
+ =?us-ascii?Q?bFNPWf9TSynKB4+Iqs4wt4dopUz4aInjHN894YXHnQFe2WPkeNEOU0lQYnFJ?=
+ =?us-ascii?Q?1FwwnuMIlfyXlRxVuCWR8cSY/dHWITxcakQ9HWD+UWnyiPE+orw3mfjqVp7s?=
+ =?us-ascii?Q?EenHsmYB6WEHTF77+H7i+fJuNr9YUsmLF75V4BIKRet+2lV1wlustfkQNWv9?=
+ =?us-ascii?Q?Ew5It5vAlClRhxTC9tatwMKDqNaQtg7hYlTa9RZSzj2ASeRMJ9j9Y9/zkB1p?=
+ =?us-ascii?Q?lEAfKlyxX6AFUvD+R1fYeWO/s564OgM+LE2yZg1M?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e55d9e72-df1c-4a3b-9ec7-08dc8439a644
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB8393.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2024 01:57:11.8499
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WI9G+LmFW+93ors7Rfls5wrWG+n4KFJdMO5pDTsHJCxigI8EZLPWlTcGsBWQCy4KN/rH6nE+s7HDqjiFSbPzKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6544
+X-OriginatorOrg: intel.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-6.10
-head:   104fdbcf07a71a2435c3737c57b2927d0af260af
-commit: 104fdbcf07a71a2435c3737c57b2927d0af260af [5/5] io_uring/napi: fix timeout calculation
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240604/202406040947.kFGqTrFC-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240604/202406040947.kFGqTrFC-lkp@intel.com/reproduce)
+Hi Adrian,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on perf-tools-next/perf-tools-next]
+[also build test ERROR on perf-tools/perf-tools linus/master v6.10-rc1 next-20240531]
+[cannot apply to tip/perf/core acme/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Adrian-Hunter/perf-core-Add-aux_pause-aux_resume-aux_start_paused/20240531-140321
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
+patch link:    https://lore.kernel.org/r/20240531055731.12541-9-adrian.hunter%40intel.com
+patch subject: [PATCH V7 08/12] perf tools: Parse aux-action
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce: cd tools/perf; make LLVM=1
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406040947.kFGqTrFC-lkp@intel.com/
+| Reported-by: kernel test robot <yujie.liu@intel.com>
+| Closes: https://lore.kernel.org/r/202406022020.WJ2gdPJF-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> io_uring/napi.c:284:4: warning: comparison of distinct pointer types ('typeof ((poll_to)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-                           do_div(poll_to, 1000);
-                           ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> io_uring/napi.c:284:4: error: incompatible pointer types passing 'unsigned int *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-                           do_div(poll_to, 1000);
-                           ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-                   __rem = __div64_32(&(n), __base);       \
-                                      ^~~~
-   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
-   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-                                               ^
->> io_uring/napi.c:284:4: warning: shift count >= width of type [-Wshift-count-overflow]
-                           do_div(poll_to, 1000);
-                           ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-           } else if (likely(((n) >> 32) == 0)) {          \
-                                  ^  ~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   2 warnings and 1 error generated.
-
-
-vim +284 io_uring/napi.c
-
-   262	
-   263	/*
-   264	 * __io_napi_adjust_timeout() - adjust busy loop timeout
-   265	 * @ctx: pointer to io-uring context structure
-   266	 * @iowq: pointer to io wait queue
-   267	 * @ts: pointer to timespec or NULL
-   268	 *
-   269	 * Adjust the busy loop timeout according to timespec and busy poll timeout.
-   270	 * If the specified NAPI timeout is bigger than the wait timeout, then adjust
-   271	 * the NAPI timeout accordingly.
-   272	 */
-   273	void __io_napi_adjust_timeout(struct io_ring_ctx *ctx, struct io_wait_queue *iowq,
-   274				      struct timespec64 *ts)
-   275	{
-   276		unsigned int poll_to = READ_ONCE(ctx->napi_busy_poll_to);
-   277	
-   278		if (ts) {
-   279			struct timespec64 poll_to_ts;
-   280	
-   281			poll_to_ts = ns_to_timespec64(1000 * (s64)poll_to);
-   282			if (timespec64_compare(ts, &poll_to_ts) < 0) {
-   283				poll_to = timespec64_to_ns(ts);
- > 284				do_div(poll_to, 1000);
-   285			}
-   286		}
-   287	
-   288		iowq->napi_busy_poll_to = poll_to;
-   289	}
-   290	
+>> util/auxtrace.c:821:7: error: missing field 'aux_action' initializer [-Werror,-Wmissing-field-initializers]
+     821 |         {NULL},
+         |              ^
+   1 error generated.
+   make[7]: *** [tools/build/Makefile.build:106: tools/perf/util/auxtrace.o] Error 1
+   make[7]: *** Waiting for unfinished jobs....
+   make[6]: *** [tools/build/Makefile.build:158: util] Error 2
+   make[5]: *** [Makefile.perf:727: tools/perf/perf-in.o] Error 2
+   make[5]: *** Waiting for unfinished jobs....
+   make[4]: *** [Makefile.perf:264: sub-make] Error 2
+   make[3]: *** [Makefile:70: all] Error 2
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
+
