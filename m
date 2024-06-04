@@ -1,195 +1,169 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DB8142900
-	for <llvm@lists.linux.dev>; Tue,  4 Jun 2024 21:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1512AEEC;
+	Tue,  4 Jun 2024 22:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717535890; cv=none; b=AvzaM7r6igTZOSixxlCsKRHAhhK/hsiAc8MA3tq7ncDSMyslEt1Ux9tgvjWKXMA4ZObcUQTd0O9uGg1WkPixGaeJBkj+PTPLnkGCKfAj9XdHY9ngreW2LT0g2M8l8Gu6zyLR61ZeIzSio6aqee61MD9IiIBRFZ2jtkkd7LdRUUc=
+	t=1717538606; cv=none; b=iKOVEUcHICWQD2TjxSMlDS2DfPc+xqDUlWVs3aUGGy0UZGAC4DAgxgtqO+5hvMBRf+kyh0mGLg0f0L/8Ex6d/t7871IsVdeWVexfzXdqTsRg1dRso6KtcasMgPLjNP6DkZylp6dwS0JqJ0UglflSEJGNwtccG/mIZcDdqV+N6do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717535890; c=relaxed/simple;
-	bh=EgRuah0/TRiXG54boWXHiSKTgeu2TjH60bxBlJq2m+Q=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=EzYYPJArR3J6aJuk7Ps6LIpFO/zXiTkrXmOyyKXRuwcs9PFYWihsZO1dfVhd4YE3Vqp5oytFloPhka5LpsSRvafuLWewDefD8FDkfuYz+f7O02WJ5FR2O8ujuMaeSMqp+DvXkEaaC/Bj7r4iiu41I0rDhIOMvuAo3x0WtwXV6cE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xPPJDIru; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+	s=arc-20240116; t=1717538606; c=relaxed/simple;
+	bh=CdweWsBT2h3TnPIPbtdmDLzScqzZs1E5mhA5mOqMskA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eSJeBbzS8nvaMYEaowG6Pn77PihO0zDk0tJ3qIFO9noVz0q4mYnL3hf4120PYnqmeeT/fRqJxzHBCkKyq6N0Bug11oMY7qjqXoGbUIEbo2u4vfnQfMzL41TgoGdMrfYMVfSYNxc/Qkckyhd0PtMifgGkAZG9WWsQBB5xLllv4f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L35xg0zI; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xPPJDIru"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6fc395e8808so5264356b3a.0
-        for <llvm@lists.linux.dev>; Tue, 04 Jun 2024 14:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717535888; x=1718140688; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JXzykZZ9JJXw7AgnDk6GCl6oohCsbGImlRtIa4olDvk=;
-        b=xPPJDIruoHbxjX6n6vGGx795rtrKvDjm/5/NSKXudgMrZhl6F1GDp9Pd1tKCieTSRD
-         rm1cN7wqPrivcks8l9rR2aZicQ3CYZOKli6wHsyDXZPbnr2BZIzcsAveWzZ4McFExOpR
-         jRjztKwtr1EULyZsWvfjQXO9SWzy+2PKlW7eS2aXW6bjVKwZnbS5xKbYq0jwDIC1hum+
-         +3hDrJd0uj/SeaZRRYvDFG8dtI748D6TowpHlvzCjse+TWJj8Qe6H/3wU8QW7Ej1wGPR
-         0u9R8oo11dNCcKPTlw9tXX7KMHDEuEdHBKGzGOxXMmAWls41l/+E7ZPFjj+0KNzVESBd
-         A2FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717535888; x=1718140688;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JXzykZZ9JJXw7AgnDk6GCl6oohCsbGImlRtIa4olDvk=;
-        b=sofxhsg04e1KNZsHHHrfl/FRilP7Z3tZqI1iZTa/PFswuQLf6w7zq+L7gaH7AiPNgB
-         6qYEQQhugz06ElqEWocZztyLufU46bLuRsiukgawdUDYjWkddsUWAOSG8DrvwZcKPiCJ
-         p3aqlazgaD02quy8ec1WlZRamwLAeUbriYVoXFNP5QSrAOmWFzFBqfhbmvvn7ZHHYYTC
-         L48Su9hzMSdbyo8SncPHGQnFnO9ADr93P/F4cU5gD0D2cYFC2lKCp0NTgO0a+ET15qVg
-         VdTld6b+v4z6oy5o2bDnnEoF9ZzHvNWtqZVTov63hOe7g+pRwkQ0iyByfMUhMLwvyfDt
-         wCag==
-X-Forwarded-Encrypted: i=1; AJvYcCUnsJ9L5m/D3CD3n4r3CI8JkVYOk9ztAXnWwxyThwyuyqFWJ2KNMisdxAj3Y1P3OPzb4wHrkLTviOaehHxQ4DI0/3xgEQ==
-X-Gm-Message-State: AOJu0YwalZs1JKDKYCFE+mn5eDodUOS04eTT8nuvF9I/dmpftIz94w6y
-	muNcmQQIvz3m2lo75/xu83yBNlG4EvadFuhgGcMVT/gpqkwtkhmkcKVRy3Q1+vsS+rnkotxNf8S
-	NsA==
-X-Google-Smtp-Source: AGHT+IG1fFwR8lR801PpAJE2pvdJcatHkMcU5d4DGeT5QbazeoQ/iCgq2FlISNqWLoU2mRIVMMZp7+XVmUg=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:6a00:2d93:b0:702:2ab4:b12f with SMTP id
- d2e1a72fcca58-703e59dd3femr2814b3a.2.1717535887888; Tue, 04 Jun 2024 14:18:07
- -0700 (PDT)
-Date: Tue,  4 Jun 2024 21:18:00 +0000
-In-Reply-To: <20240527211622.290635-1-jhubbard@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L35xg0zI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717538603; x=1749074603;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CdweWsBT2h3TnPIPbtdmDLzScqzZs1E5mhA5mOqMskA=;
+  b=L35xg0zIjw7O/7qrab+Jwcmpa5FonxJ1P716NppPmnkrpG4OOHObVdT+
+   OEmq6llk8hyemgdAMqNA7G+KYgGRVqhjTWnwKf5ySn4cXqXhwxLFi+GMn
+   r4WVsuqtMOfhBrv3wmM+gBwKb/Q4fbbSh+ZE7TdtOa9NQYLeMv02Szhwx
+   3cwut2OJG5G0IBERkA60MSa6S36SA/SRbi7XAfc4oemFEcKpC24Vbnk0T
+   NcKL1c+RlnUeYb05k1X/APREVyxdAb/BrnUG73dHsx6E1upIoszGuKjYW
+   frXe/ic9rVvHhDu1V80RquGE/pAv5rYPRoCpsTSRvaykw7CWnsvNqgBmP
+   g==;
+X-CSE-ConnectionGUID: xDJmniZCQhyUmb6fZChVOw==
+X-CSE-MsgGUID: BDl/6PgSTGOLL6FEbOcI/Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="11907377"
+X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
+   d="scan'208";a="11907377"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 15:03:23 -0700
+X-CSE-ConnectionGUID: tCXYFfx6QmiRxhYBhHZCkA==
+X-CSE-MsgGUID: kROVTUFBQT2qeMExz84iYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
+   d="scan'208";a="41801343"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Jun 2024 15:03:20 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sEcFR-0000al-30;
+	Tue, 04 Jun 2024 22:03:17 +0000
+Date: Wed, 5 Jun 2024 06:02:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+	linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
+	akpm@linux-foundation.org, liam.howlett@oracle.com,
+	zhangpeng.00@bytedance.com, willy@infradead.org,
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Subject: Re: [PATCH 11/18] maple_tree: use store type in mas_wr_store_entry()
+Message-ID: <202406050515.BP3o0Meg-lkp@intel.com>
+References: <20240604174145.563900-12-sidhartha.kumar@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
-Message-ID: <20240604211801.404181-1-edliaw@google.com>
-Subject: Re: [v2] selftests/vDSO: fix clang build errors and warnings
-From: Edward Liaw <edliaw@google.com>
-To: jhubbard@nvidia.com, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Colin Ian King <colin.i.king@gmail.com>, 
-	Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	Edward Liaw <edliaw@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240604174145.563900-12-sidhartha.kumar@oracle.com>
 
-> When building with clang, via:
->
->     make LLVM=1 -C tools/testing/selftests
->
-> ...there are several warnings, and an error. This fixes all of those and
-> allows these tests to run and pass.
->
-> 1. Fix linker error (undefined reference to memcpy) by providing a local
->    version of memcpy.
->
-> 2. clang complains about using this form:
->
->     if (g = h & 0xf0000000)
->
-> ...so factor out the assignment into a separate step.
->
-> 3. The code is passing a signed const char* to elf_hash(), which expects
->    a const unsigned char *. There are several callers, so fix this at
->    the source by allowing the function to accept a signed argument, and
->    then converting to unsigned operations, once inside the function.
->
-> 4. clang doesn't have __attribute__((externally_visible)) and generates
->    a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
->    to require that attribute in order to build, run and pass tests here,
->    so remove it.
->
-> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
->
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->
-> Changes since the first version:
->
-> 1) Rebased onto Linux 6.10-rc1
->
-> thanks,
-> John Hubbard
->
->  tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
->  .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
->  2 files changed, 27 insertions(+), 7 deletions(-)
->
->
-> base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
-> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-> index 413f75620a35..4ae417372e9e 100644
-> --- a/tools/testing/selftests/vDSO/parse_vdso.c
-> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
-> @@ -55,14 +55,20 @@ static struct vdso_info
->  	ELF(Verdef) *verdef;
->  } vdso_info;
->
-> -/* Straight from the ELF specification. */
-> -static unsigned long elf_hash(const unsigned char *name)
-> +/*
-> + * Straight from the ELF specification...and then tweaked slightly, in order to
-> + * avoid a few clang warnings.
-> + */
-> +static unsigned long elf_hash(const char *name)
->  {
->  	unsigned long h = 0, g;
-> -	while (*name)
-> +	const unsigned char *uch_name = (const unsigned char *)name;
-> +
-> +	while (*uch_name)
->  	{
-> -		h = (h << 4) + *name++;
-> -		if (g = h & 0xf0000000)
-> +		h = (h << 4) + *uch_name++;
-> +		g = h & 0xf0000000;
-> +		if (g)
->  			h ^= g >> 24;
->  		h &= ~g;
->  	}
-> diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> index 8a44ff973ee1..27f6fdf11969 100644
-> --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> @@ -18,7 +18,7 @@
->
->  #include "parse_vdso.h"
->
-> -/* We need a libc functions... */
-> +/* We need some libc functions... */
->  int strcmp(const char *a, const char *b)
->  {
->  	/* This implementation is buggy: it never returns -1. */
-> @@ -34,6 +34,20 @@ int strcmp(const char *a, const char *b)
->  	return 0;
->  }
->
-> +/*
-> + * The clang build needs this, although gcc does not.
-> + * Stolen from lib/string.c.
-> + */
-> +void *memcpy(void *dest, const void *src, size_t count)
-> +{
-> +	char *tmp = dest;
-> +	const char *s = src;
-> +
-> +	while (count--)
-> +		*tmp++ = *s++;
-> +	return dest;
-> +}
-> +
->  /* ...and two syscalls.  This is x86-specific. */
->  static inline long x86_syscall3(long nr, long a0, long a1, long a2)
->  {
-> @@ -70,7 +84,7 @@ void to_base10(char *lastdig, time_t n)
->  	}
->  }
->
-> -__attribute__((externally_visible)) void c_main(void **stack)
-> +void c_main(void **stack)
->  {
->  	/* Parse the stack */
->  	long argc = (long)*stack;
->
+Hi Sidhartha,
 
-These work for me for compiling with clang.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Edward Liaw <edliaw@google.com>
+[auto build test WARNING on akpm-mm/mm-nonmm-unstable]
+[also build test WARNING on linus/master v6.10-rc2 next-20240604]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sidhartha-Kumar/maple_tree-introduce-store_type-enum/20240605-014633
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20240604174145.563900-12-sidhartha.kumar%40oracle.com
+patch subject: [PATCH 11/18] maple_tree: use store type in mas_wr_store_entry()
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240605/202406050515.BP3o0Meg-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050515.BP3o0Meg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406050515.BP3o0Meg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   lib/maple_tree.c:351:21: warning: unused function 'mte_set_full' [-Wunused-function]
+     351 | static inline void *mte_set_full(const struct maple_enode *node)
+         |                     ^~~~~~~~~~~~
+   lib/maple_tree.c:356:21: warning: unused function 'mte_clear_full' [-Wunused-function]
+     356 | static inline void *mte_clear_full(const struct maple_enode *node)
+         |                     ^~~~~~~~~~~~~~
+   lib/maple_tree.c:361:20: warning: unused function 'mte_has_null' [-Wunused-function]
+     361 | static inline bool mte_has_null(const struct maple_enode *node)
+         |                    ^~~~~~~~~~~~
+>> lib/maple_tree.c:4206:21: warning: stack frame size (1032) exceeds limit (1024) in 'mas_wr_store_entry' [-Wframe-larger-than]
+    4206 | static inline void *mas_wr_store_entry(struct ma_wr_state *wr_mas)
+         |                     ^
+   lib/maple_tree.c:4151:13: warning: stack frame size (1048) exceeds limit (1024) in 'mas_wr_bnode' [-Wframe-larger-than]
+    4151 | static void mas_wr_bnode(struct ma_wr_state *wr_mas)
+         |             ^
+   5 warnings generated.
+
+
+vim +/mas_wr_store_entry +4206 lib/maple_tree.c
+
+54a611b605901c Liam R. Howlett 2022-09-06  4198  
+54a611b605901c Liam R. Howlett 2022-09-06  4199  /*
+54a611b605901c Liam R. Howlett 2022-09-06  4200   * mas_wr_store_entry() - Internal call to store a value
+54a611b605901c Liam R. Howlett 2022-09-06  4201   * @mas: The maple state
+54a611b605901c Liam R. Howlett 2022-09-06  4202   * @entry: The entry to store.
+54a611b605901c Liam R. Howlett 2022-09-06  4203   *
+54a611b605901c Liam R. Howlett 2022-09-06  4204   * Return: The contents that was stored at the index.
+54a611b605901c Liam R. Howlett 2022-09-06  4205   */
+54a611b605901c Liam R. Howlett 2022-09-06 @4206  static inline void *mas_wr_store_entry(struct ma_wr_state *wr_mas)
+54a611b605901c Liam R. Howlett 2022-09-06  4207  {
+54a611b605901c Liam R. Howlett 2022-09-06  4208  	struct ma_state *mas = wr_mas->mas;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4209  	unsigned char new_end = mas_wr_new_end(wr_mas);
+54a611b605901c Liam R. Howlett 2022-09-06  4210  
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4211  	switch (mas->store_type) {
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4212  	case wr_invalid:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4213  		MT_BUG_ON(mas->tree, 1);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4214  		return NULL;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4215  	case wr_new_root:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4216  		mas_new_root(mas, wr_mas->entry);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4217  		break;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4218  	case wr_store_root:
+54a611b605901c Liam R. Howlett 2022-09-06  4219  		mas_store_root(mas, wr_mas->entry);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4220  		break;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4221  	case wr_exact_fit:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4222  		rcu_assign_pointer(wr_mas->slots[mas->offset], wr_mas->entry);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4223  		if (!!wr_mas->entry ^ !!wr_mas->content)
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4224  			mas_update_gap(mas);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4225  		break;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4226  	case wr_append:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4227  		mas_wr_append(wr_mas, new_end);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4228  		break;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4229  	case wr_slot_store:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4230  		mas_wr_slot_store(wr_mas);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4231  		break;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4232  	case wr_node_store:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4233  		mas_wr_node_store(wr_mas, new_end);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4234  		break;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4235  	case wr_spanning_store:
+54a611b605901c Liam R. Howlett 2022-09-06  4236  		mas_wr_spanning_store(wr_mas);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4237  		break;
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4238  	case wr_split_store:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4239  	case wr_rebalance:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4240  	case wr_bnode:
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4241  		mas_wr_bnode(wr_mas);
+7ad45cca258711 Sidhartha Kumar 2024-06-04  4242  		break;
+54a611b605901c Liam R. Howlett 2022-09-06  4243  	}
+54a611b605901c Liam R. Howlett 2022-09-06  4244  
+54a611b605901c Liam R. Howlett 2022-09-06  4245  	return wr_mas->content;
+54a611b605901c Liam R. Howlett 2022-09-06  4246  }
+54a611b605901c Liam R. Howlett 2022-09-06  4247  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
