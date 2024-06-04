@@ -1,145 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB7C12A1CF;
-	Tue,  4 Jun 2024 20:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C14214C5A4;
+	Tue,  4 Jun 2024 21:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717534037; cv=none; b=n0lYqrcLYEDjNCDSMp8bp6fFiAsBHgME4nBgT7+Hk9AlhfTn3k5rn9mdPjm7EGqQx/ZTK5GR524YCj95gRV0RqxezztBwr9l6zfqTeYggNxoBcmjzus8RmSucArd1GAokGlE7HF2SAuZiXEWD+1GX0RVIL3/f8vAVSiKogl0rX8=
+	t=1717534813; cv=none; b=FGOBrSAmD+AovojPOyhHCwQY5vIMDICSckJSwdnOCuTzBaiewEpvVlz9PJZyoCz1XE0cXRdxPZHCsyGpiFinDV0smzF9gtikHxY1RoJ8QuavBbQErp0+ThL4hHSGs4QP95Mt7l7SHUY7WxP3CcrmpFv85ceTwaSuBtIXIEu+TFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717534037; c=relaxed/simple;
-	bh=IJFHMgoH26v1CExj3lKJDiXLct4JZFh9UhxQh1Qp0Us=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hCXAct8o01G5nli/9bO44R/mFkCvSPgU7mszz/eLIoGzFKtu00QWyte9CO5yFTiN7bpkufivWyoRPvl0k581M5pR4juS5cA6XHCWB6EKGdmhj8/FkxEqoNyZTcLXRj+jGHBscGQ0QMRiN965IrPRjbJbEFlHXbDZBhE9OMVGg7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FwS770UD; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717534813; c=relaxed/simple;
+	bh=y52S5zxbaNTrVsYNz4/Zpv7hHHKljA7FdC9ZJu7Vx30=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IDF/Bwp8EGNnQyvigwz3KsdrJGsJCzmjE4OzzDn7kK8TtMFYCRgqcpXgodyr6oNglszvF5Jw4kYs3W+2N1eHjR6PoDJTzWvsw693NBghzu/Xkr6FetD4RTjdytz0oagSq5VbCGB69pcDxj6wbVYBnbycHuwzPZN8x/ku371aGS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KZUoecq5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FwS770UD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717534036; x=1749070036;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IJFHMgoH26v1CExj3lKJDiXLct4JZFh9UhxQh1Qp0Us=;
-  b=FwS770UDH9e+l+6Bcs8PD8fqvViYz5BKU3Ipk5QTV8bZs/EHvHqRoewO
-   XAH4tfs+2njfpQnUeT37yUTiTqSW+xf0Zbif0M4HScGrckQZhjTXzi+sX
-   rnXvX/mjmkafXGirflt8GKGARDn9Mj/ht1Zrx8KzPJSt8qN6KccH+Owk4
-   DPtNmIECqH6pu9GVn23m+00vEDgpBHaaiB6dvrOW/qO9psFzgL7mnJA7w
-   q/xdZQmcDMw3KijfAeiZn0HAvfh4wCMwsNGlkJFnPMs5pjTgmSgQo3rZH
-   KDyuH5BIle+gd3+bWYGdT3xlkRtUoSlFqLWSo7PiQtwbtuBboca+jMpuu
-   A==;
-X-CSE-ConnectionGUID: sBJPvQAxSLidx3H4/TWXvA==
-X-CSE-MsgGUID: YPPHQ743QKm4O+B5tJQQ0w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="25515469"
-X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
-   d="scan'208";a="25515469"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 13:47:15 -0700
-X-CSE-ConnectionGUID: e4kRaR4lTd2p5eemiru3sg==
-X-CSE-MsgGUID: +N5m/9ZMRtCMdFewntT/4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
-   d="scan'208";a="38015444"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 04 Jun 2024 13:47:13 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sEb3m-0000Wp-1z;
-	Tue, 04 Jun 2024 20:47:10 +0000
-Date: Wed, 5 Jun 2024 04:47:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kamil =?iso-8859-1?Q?Hor=E1k?= - 2N <kamilh@axis.com>,
-	florian.fainelli@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com, andrew@lunn.ch,
-	hkallweit1@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kamilh@axis.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] net: phy: bcm-phy-lib: Implement BroadR-Reach
- link modes
-Message-ID: <202406050455.vukoabPJ-lkp@intel.com>
-References: <20240604133654.2626813-4-kamilh@axis.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZUoecq5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA68C4AF09;
+	Tue,  4 Jun 2024 21:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717534812;
+	bh=y52S5zxbaNTrVsYNz4/Zpv7hHHKljA7FdC9ZJu7Vx30=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KZUoecq5aI430xa+CHC/bW84mQfUoktWIDmalft8Y7CZBnqzMGvi5Z9K6xCw7xYWE
+	 /LT9jUMOnns5TMkiMoGnaVvd7MRVn8g7aBEyFP78lYZmsnOSfOFLnc6/Rn1q5cbNM0
+	 YdlYYox+iHCo1baIxGYa83wv9wDVhobB8cUmBpjAyIyQKB3rUlQRbvN2Aa4V6hunZo
+	 kWTkyy75BVEf//pkTwMJ/wRG7TvrvnCSxMuPiHaad+vZQCtH8UtK6HhM1oSZs0ZjXS
+	 zY1HuhofyLhx7b2wdZ3YnJfGgi1OLpNbeixjvlyPXExBW4qIdtSZUSpPenpRWdDBM9
+	 yZ7/BPy1CKybg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Baoquan He <bhe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] [v3] arm64/io: add constant-argument check
+Date: Tue,  4 Jun 2024 22:59:57 +0200
+Message-Id: <20240604210006.668912-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240604133654.2626813-4-kamilh@axis.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Kamil,
+From: Arnd Bergmann <arnd@arndb.de>
 
-kernel test robot noticed the following build warnings:
+In some configurations __const_iowrite32_copy() does not get inlined
+and gcc runs into the BUILD_BUG():
 
-[auto build test WARNING on net/main]
-[also build test WARNING on net-next/main linus/master v6.10-rc2 next-20240604]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+In file included from <command-line>:
+In function '__const_memcpy_toio_aligned32',
+    inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:203:3,
+    inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:199:20:
+include/linux/compiler_types.h:487:45: error: call to '__compiletime_assert_538' declared with attribute error: BUILD_BUG failed
+  487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:468:25: note: in definition of macro '__compiletime_assert'
+  468 |                         prefix ## suffix();                             \
+      |                         ^~~~~~
+include/linux/compiler_types.h:487:9: note: in expansion of macro '_compiletime_assert'
+  487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+      |                     ^~~~~~~~~~~~~~~~
+arch/arm64/include/asm/io.h:193:17: note: in expansion of macro 'BUILD_BUG'
+  193 |                 BUILD_BUG();
+      |                 ^~~~~~~~~
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kamil-Hor-k-2N/net-phy-bcm54811-New-link-mode-for-BroadR-Reach/20240604-214127
-base:   net/main
-patch link:    https://lore.kernel.org/r/20240604133654.2626813-4-kamilh%40axis.com
-patch subject: [PATCH v4 3/3] net: phy: bcm-phy-lib: Implement BroadR-Reach link modes
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240605/202406050455.vukoabPJ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050455.vukoabPJ-lkp@intel.com/reproduce)
+Move the check for constant arguments into the inline function to ensure
+it is still constant if the compiler decides against inlining it, and
+mark them as __always_inline to override the logic that sometimes leads
+to the compiler not producing the simplified output.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406050455.vukoabPJ-lkp@intel.com/
+Note that either the __always_inline annotation or the check for a
+constant value are sufficient here, but combining the two looks cleaner
+as it also avoids the macro. With clang-8 and older, the macro was still
+needed, but all versions of gcc and clang can reliably perform constant
+folding here.
 
-All warnings (new ones prefixed by >>):
+Fixes: ead79118dae6 ("arm64/io: Provide a WC friendly __iowriteXX_copy()")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v3:
+ - also mark functions as __always_inline
+v2:
+ - fix both 32-bit and 64-bit copies
+ - remove now-redundant macros
+---
+ arch/arm64/include/asm/io.h | 36 ++++++++++++++++--------------------
+ 1 file changed, 16 insertions(+), 20 deletions(-)
 
->> drivers/net/phy/broadcom.c:641:6: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
-                   on ? 0 : BCM54811_EXP_BROADREACH_LRE_OVERLAY_CTL_OVERRIDE_VAL);
-                   ~~ ^
-   drivers/net/phy/broadcom.c:641:6: note: place parentheses around the '|' expression to silence this warning
-                   on ? 0 : BCM54811_EXP_BROADREACH_LRE_OVERLAY_CTL_OVERRIDE_VAL);
-                   ~~ ^
-   drivers/net/phy/broadcom.c:641:6: note: place parentheses around the '?:' expression to evaluate it first
-                   on ? 0 : BCM54811_EXP_BROADREACH_LRE_OVERLAY_CTL_OVERRIDE_VAL);
-                   ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +641 drivers/net/phy/broadcom.c
-
-   614	
-   615	static int bcm5481x_set_brrmode(struct phy_device *phydev, bool on)
-   616	{
-   617		int reg;
-   618		int err;
-   619	
-   620		reg = bcm_phy_read_exp(phydev, BCM54810_EXP_BROADREACH_LRE_MISC_CTL);
-   621	
-   622		if (on)
-   623			reg |= BCM54810_EXP_BROADREACH_LRE_MISC_CTL_EN;
-   624		else
-   625			reg &= ~BCM54810_EXP_BROADREACH_LRE_MISC_CTL_EN;
-   626	
-   627		err = bcm_phy_write_exp(phydev, BCM54810_EXP_BROADREACH_LRE_MISC_CTL, reg);
-   628		if (err)
-   629			return err;
-   630	
-   631		/* Update the abilities based on the current brr on/off setting */
-   632		err = bcm54811_read_abilities(phydev);
-   633		if (err)
-   634			return err;
-   635	
-   636		/* Ensure LRE or IEEE register set is accessed according to the brr on/off,
-   637		 *  thus set the override
-   638		 */
-   639		return bcm_phy_write_exp(phydev, BCM54811_EXP_BROADREACH_LRE_OVERLAY_CTL,
-   640			BCM54811_EXP_BROADREACH_LRE_OVERLAY_CTL_EN |
- > 641			on ? 0 : BCM54811_EXP_BROADREACH_LRE_OVERLAY_CTL_OVERRIDE_VAL);
-   642	}
-   643	
-
+diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
+index 4ff0ae3f6d66..bc239371323a 100644
+--- a/arch/arm64/include/asm/io.h
++++ b/arch/arm64/include/asm/io.h
+@@ -153,8 +153,9 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
+  * emit the large TLP from the CPU.
+  */
+ 
+-static inline void __const_memcpy_toio_aligned32(volatile u32 __iomem *to,
+-						 const u32 *from, size_t count)
++static __always_inline void
++__const_memcpy_toio_aligned32(volatile u32 __iomem *to, const u32 *from,
++			      size_t count)
+ {
+ 	switch (count) {
+ 	case 8:
+@@ -196,24 +197,22 @@ static inline void __const_memcpy_toio_aligned32(volatile u32 __iomem *to,
+ 
+ void __iowrite32_copy_full(void __iomem *to, const void *from, size_t count);
+ 
+-static inline void __const_iowrite32_copy(void __iomem *to, const void *from,
+-					  size_t count)
++static __always_inline void
++__iowrite32_copy(void __iomem *to, const void *from, size_t count)
+ {
+-	if (count == 8 || count == 4 || count == 2 || count == 1) {
++	if (__builtin_constant_p(count) &&
++	    (count == 8 || count == 4 || count == 2 || count == 1)) {
+ 		__const_memcpy_toio_aligned32(to, from, count);
+ 		dgh();
+ 	} else {
+ 		__iowrite32_copy_full(to, from, count);
+ 	}
+ }
++#define __iowrite32_copy(to, from, count) __iowrite32_copy(to, from, count)
+ 
+-#define __iowrite32_copy(to, from, count)                  \
+-	(__builtin_constant_p(count) ?                     \
+-		 __const_iowrite32_copy(to, from, count) : \
+-		 __iowrite32_copy_full(to, from, count))
+-
+-static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
+-						 const u64 *from, size_t count)
++static __always_inline void
++__const_memcpy_toio_aligned64(volatile u64 __iomem *to, const u64 *from,
++			      size_t count)
+ {
+ 	switch (count) {
+ 	case 8:
+@@ -255,21 +254,18 @@ static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
+ 
+ void __iowrite64_copy_full(void __iomem *to, const void *from, size_t count);
+ 
+-static inline void __const_iowrite64_copy(void __iomem *to, const void *from,
+-					  size_t count)
++static __always_inline void
++__iowrite64_copy(void __iomem *to, const void *from, size_t count)
+ {
+-	if (count == 8 || count == 4 || count == 2 || count == 1) {
++	if (__builtin_constant_p(count) &&
++	    (count == 8 || count == 4 || count == 2 || count == 1)) {
+ 		__const_memcpy_toio_aligned64(to, from, count);
+ 		dgh();
+ 	} else {
+ 		__iowrite64_copy_full(to, from, count);
+ 	}
+ }
+-
+-#define __iowrite64_copy(to, from, count)                  \
+-	(__builtin_constant_p(count) ?                     \
+-		 __const_iowrite64_copy(to, from, count) : \
+-		 __iowrite64_copy_full(to, from, count))
++#define __iowrite64_copy(to, from, count) __iowrite64_copy(to, from, count)
+ 
+ /*
+  * I/O memory mapping functions.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
