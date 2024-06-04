@@ -1,192 +1,161 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A895814B08E
-	for <llvm@lists.linux.dev>; Tue,  4 Jun 2024 22:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09F6143C4D;
+	Tue,  4 Jun 2024 22:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717540885; cv=none; b=GNTB4bi2jzLL7pm7h1aECFBWgH9wq++m8jlHpRs2M0qFTq1HhRI19cOJMdb0pV5veTiJSHvPArcv7O3Um4qz9L49NJNfSn4sDUFuRuPvuy/zwf25rjHoiULBOBgbyCbYhU8/lfHlW0e1jXq/iTcJ2oLSpvToIGHiQ1GJDXzbyC0=
+	t=1717541794; cv=none; b=E9p8+rHok8WB4Cgiznx0118nrpmmBZXJ1ixv4IjmWBzO9/SM2Y9020Zg8IAf5EYVUTCQAReIAwtvd+/rKkc1u+b09advxg6DWVXQMxKo21E+K+gYzjK2uVMm2qys1EOY5Kh/rJ5joatl+ye5hFjko50dtAM2bEX0SYocU0E79Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717540885; c=relaxed/simple;
-	bh=48X2qgdP1gIxKDJW40AJ3Odff8DBYT35+62pDzTjg8s=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RHUc/CaSVmfk5T8UyZAug93zCMC3JGnaaThliOXD8B/vmekP7DvH2YE9qVmYQ8KDVm0bZ1yBF25U2lKaoq1jBg1EsnWPjfj8SqRZoLZdI976u2O4lgRRHDv7w533oBvrZMVvDMCUHhArKFpg+kixjBC/wjxhlSGdH1lR3O1agqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1Nui8xto; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+	s=arc-20240116; t=1717541794; c=relaxed/simple;
+	bh=nZNryhcoFtzW/5oT7/zR2d7gRfCNJX+kKOGg4rbpdrs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qAZpEWYSCFhOA04/PCGffqwxWqW3hjhIIOigQcsnGcLIbhXH6rFaK98XTkUnsMP3YblIVZLDu34Ki3bn9n2V7frpHWHLxHaYdBzfWWxjwiluRu8YaQoQ0DzlMMUlcfLBKHtL2myasZeHjaAjT6y5U03BQVLld29H3HZRorUolcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TxOJ0mnX; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1Nui8xto"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dfabae20b47so2586367276.0
-        for <llvm@lists.linux.dev>; Tue, 04 Jun 2024 15:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717540882; x=1718145682; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5BFhMURlOxwbCZPlt3t+cMRvFnuBznLgUYvajgNDozE=;
-        b=1Nui8xto7TMllKgd0NsWZt41nU/DjwbQxYCmTSgwJ/s7aAEz1rNzlRK3+VFmu7EsyW
-         GwC4BWlya+yckU+260MNB/O9q4L00Bjnyj8LQLk559ypLmblGqWAOHxOheVNa2HUUW3T
-         Auke6dXJcYuU6E1uYTWeY0KuNLY5fjv1YfOGJWKOoVj5nkU/8ra6eN1CpwI7b53Bz1mq
-         Fqpw+8+7aqjroC2v7IjVmtadyLF4d7WJBja4hmQSRYdYHEk+SiXdvpB9yuSoUDhJwbpq
-         v9Uif/QhYqP5bi/dpkWzqAsd2tge3J1dIKPmJYiZ/MJdRhrplXi+kwdXGDB6P7IHeOaH
-         qAPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717540882; x=1718145682;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5BFhMURlOxwbCZPlt3t+cMRvFnuBznLgUYvajgNDozE=;
-        b=r55q4I3P3i+zwllV9G4gLba9jBt46HskCfyEfEDL5EjvAGS+54N5oWsUYOnQfcpJy/
-         y+m73WtFsLVcNI0bDnmB8lp8k+Ct+4L9I1EGotT1cuJzT7UmwaQbIbgSJKAGEZ2eB93d
-         Y8WDS1Z9wP/jeDApgrQo3nKVJRrwoiphHRsbqtCuOKF/1Jih9xFjGbCdJ/+7snXfxLc3
-         MxqlLq8fbF98JKUMzsPkhBmfX02V5HuH5bC0p9mEVxXHsYHpeXDYYSzSZ87IJcsmw7n4
-         I0RmLozosydKvdnvM6S2V+GCNTBgi3uspB3gmfAoC3AYmRkwGd7+uEFSvNhgCbhkW06M
-         PMaw==
-X-Forwarded-Encrypted: i=1; AJvYcCWEgIcPAq+eFtzb5lZA31NrdWfWkIjTwNli5nOAOXK8mN2awwcZlURfnrIbeArMgH0aB1zw5un7srl80b87a6YZEtErgA==
-X-Gm-Message-State: AOJu0Yy1GF5FlmuV2XjccAnNn3M06l5VVE/055maw3N4pz/wNE2+u6kk
-	zv1OAZijlI2rAMSiQRkA9Fc4ofWBd4qBnWkPtQZGTHQomQwIdzlxgNdA16p1dW8S5rNMcuXYVAR
-	hn0KmWrRvVQ==
-X-Google-Smtp-Source: AGHT+IFe9doWPRL9bdOBiprw606KPAUV1/yCDGjKHg9/0f16jSpDeFrPKk08bm1aGwBuEsC7VjTpzn499oFw4w==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:120d:b0:dcb:e982:4e40 with SMTP
- id 3f1490d57ef6-dfacad28c85mr236994276.12.1717540882585; Tue, 04 Jun 2024
- 15:41:22 -0700 (PDT)
-Date: Wed,  5 Jun 2024 06:40:50 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TxOJ0mnX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717541793; x=1749077793;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nZNryhcoFtzW/5oT7/zR2d7gRfCNJX+kKOGg4rbpdrs=;
+  b=TxOJ0mnXoMJhIDZWv48L/qwv19UTvLWVNgXIjSWDEd+/m8h16pS8/6br
+   FyRhCQv8ZaMDeuElZmSzudOlRjUPml6h0tdF+PSVSDwK2vKyQpN5yG+CY
+   fhusRlcVX7ZhlPo8YIZ/97LaQWgHkTpHZgK05K4Y9QJobaqUAIrZoELAp
+   xV5Gj3C2GBw2PyVsl4a+qERlrsR7hYfbf4+hiEru59Gq3SUHNXmWi2j7J
+   1qGLg+OAApmsRAR4X76Vl7MRbbH2AMJ2VpS2NkF14rpNukhXNvD96xBI3
+   KDwBwEopszVrl2U1awQhpp4Cw74bXDVcw6A7O3T8n7imtUBtEeSMNcspW
+   Q==;
+X-CSE-ConnectionGUID: LYRA6saBTaqvvB+eUO7dIw==
+X-CSE-MsgGUID: 674EyYCJSkGxLreP6IyYbg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="14254516"
+X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
+   d="scan'208";a="14254516"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 15:56:33 -0700
+X-CSE-ConnectionGUID: ZMAMxOhORbWpZ8KjiouN6Q==
+X-CSE-MsgGUID: /JwtXkokRTqQRniM+lvvKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
+   d="scan'208";a="60577794"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 04 Jun 2024 15:56:25 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sEd4o-0000dh-2N;
+	Tue, 04 Jun 2024 22:56:22 +0000
+Date: Wed, 5 Jun 2024 06:55:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yuanchu Xie <yuanchu@google.com>, David Hildenbrand <david@redhat.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+	Khalid Aziz <khalid.aziz@oracle.com>,
+	Henry Huang <henry.hj@antgroup.com>, Yu Zhao <yuzhao@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Gregory Price <gregory.price@memverge.com>,
+	Huang Ying <ying.huang@intel.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kalesh Singh <kaleshsingh@google.com>, Wei Xu <weixugc@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+	Kairui Song <kasong@tencent.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Vasily Averin <vasily.averin@linux.dev>,
+	Nhat Pham <nphamcs@gmail.com>, Miaohe Lin <linmiaohe@huawei.com>,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH v2 5/8] mm: extend working set reporting to memcgs
+Message-ID: <202406050600.hZAG0KTL-lkp@intel.com>
+References: <20240604020549.1017540-6-yuanchu@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
-Message-ID: <20240604224052.3138504-1-davidgow@google.com>
-Subject: [PATCH] arch: um: rust: Add i386 support for Rust
-From: David Gow <davidgow@google.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>
-Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org, 
-	rust-for-linux@vger.kernel.org, x86@kernel.org, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240604020549.1017540-6-yuanchu@google.com>
 
-At present, Rust in the kernel only supports 64-bit x86, so UML has
-followed suit. However, it's significantly easier to support 32-bit i386
-on UML than on bare metal, as UML does not use the -mregparm option
-(which alters the ABI), which is not yet supported by rustc[1].
+Hi Yuanchu,
 
-Add support for CONFIG_RUST on um/i386, by adding a new target config to
-generate_rust_target, and replacing various checks on CONFIG_X86_64 to
-also support CONFIG_X86_32.
+kernel test robot noticed the following build errors:
 
-We still use generate_rust_target, rather than a built-in rustc target,
-in order to match x86_64, provide a future place for -mregparm, and more
-easily disable floating point instructions.
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.10-rc2 next-20240604]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-With these changes, the KUnit tests pass with:
-kunit.py run --make_options LLVM=1 --kconfig_add CONFIG_RUST=y
---kconfig_add CONFIG_64BIT=n --kconfig_add CONFIG_FORTIFY_SOURCE=n
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuanchu-Xie/mm-multi-gen-LRU-ignore-non-leaf-pmd_young-for-force_scan-true/20240604-100824
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20240604020549.1017540-6-yuanchu%40google.com
+patch subject: [PATCH v2 5/8] mm: extend working set reporting to memcgs
+config: s390-randconfig-002-20240605 (https://download.01.org/0day-ci/archive/20240605/202406050600.hZAG0KTL-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050600.hZAG0KTL-lkp@intel.com/reproduce)
 
-An earlier version of these changes was proposed on the Rust-for-Linux
-github[2].
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406050600.hZAG0KTL-lkp@intel.com/
 
-[1]: https://github.com/rust-lang/rust/issues/116972
-[2]: https://github.com/Rust-for-Linux/linux/pull/966
+All errors (new ones prefixed by >>):
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- Documentation/rust/arch-support.rst |  2 +-
- arch/um/Kconfig                     |  2 +-
- rust/Makefile                       |  2 +-
- scripts/Makefile                    |  2 +-
- scripts/generate_rust_target.rs     | 17 +++++++++++++++++
- 5 files changed, 21 insertions(+), 4 deletions(-)
+   In file included from mm/workingset_report.c:6:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/workingset_report.c:14:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> mm/workingset_report.c:45:37: error: incomplete definition of type 'struct mem_cgroup'
+      45 |                 wsr->page_age_cgroup_file = &memcg->workingset_page_age_file;
+         |                                              ~~~~~^
+   include/linux/mm_types.h:33:8: note: forward declaration of 'struct mem_cgroup'
+      33 | struct mem_cgroup;
+         |        ^
+>> mm/workingset_report.c:551:3: error: call to undeclared function 'cgroup_file_notify'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     551 |                 cgroup_file_notify(wsr->page_age_cgroup_file);
+         |                 ^
+   3 warnings and 2 errors generated.
 
-diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-index b13e19d84744..750ff371570a 100644
---- a/Documentation/rust/arch-support.rst
-+++ b/Documentation/rust/arch-support.rst
-@@ -18,7 +18,7 @@ Architecture   Level of support  Constraints
- ``arm64``      Maintained        Little Endian only.
- ``loongarch``  Maintained        \-
- ``riscv``      Maintained        ``riscv64`` only.
--``um``         Maintained        ``x86_64`` only.
-+``um``         Maintained        \-
- ``x86``        Maintained        ``x86_64`` only.
- =============  ================  ==============================================
- 
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 93a5a8999b07..b6ac49fec5bb 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -31,7 +31,7 @@ config UML
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select TTY # Needed for line.c
- 	select HAVE_ARCH_VMAP_STACK
--	select HAVE_RUST			if X86_64
-+	select HAVE_RUST
- 
- config MMU
- 	bool
-diff --git a/rust/Makefile b/rust/Makefile
-index f70d5e244fee..83f675adbfab 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -426,7 +426,7 @@ $(obj)/core.o: private rustc_objcopy = $(foreach sym,$(redirect-intrinsics),--re
- $(obj)/core.o: private rustc_target_flags = $(core-cfgs)
- $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs FORCE
- 	+$(call if_changed_dep,rustc_library)
--ifdef CONFIG_X86_64
-+ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
- $(obj)/core.o: scripts/target.json
- endif
- 
-diff --git a/scripts/Makefile b/scripts/Makefile
-index fe56eeef09dd..dccef663ca82 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -12,7 +12,7 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
- hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_builder
- hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_gen
- 
--ifdef CONFIG_X86_64
-+ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
- always-$(CONFIG_RUST)					+= target.json
- filechk_rust_target = $< < include/config/auto.conf
- 
-diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
-index 641b713a033a..87f34925eb7b 100644
---- a/scripts/generate_rust_target.rs
-+++ b/scripts/generate_rust_target.rs
-@@ -169,6 +169,23 @@ fn main() {
-         ts.push("features", features);
-         ts.push("llvm-target", "x86_64-linux-gnu");
-         ts.push("target-pointer-width", "64");
-+    } else if cfg.has("X86_32") {
-+        // This only works on UML, as i386 otherwise needs regparm support in rustc
-+        if !cfg.has("UML") {
-+            panic!("32-bit x86 only works under UML");
-+        }
-+        ts.push("arch", "x86");
-+        ts.push(
-+            "data-layout",
-+            "e-m:e-p:32:32-p270:32:32-p271:32:32-p272:64:64-i128:128-f64:32:64-f80:32-n8:16:32-S128",
-+        );
-+        let mut features = "-3dnow,-3dnowa,-mmx,+soft-float".to_string();
-+        if cfg.has("MITIGATION_RETPOLINE") {
-+            features += ",+retpoline-external-thunk";
-+        }
-+        ts.push("features", features);
-+        ts.push("llvm-target", "i386-unknown-linux-gnu");
-+        ts.push("target-pointer-width", "32");
-     } else if cfg.has("LOONGARCH") {
-         panic!("loongarch uses the builtin rustc loongarch64-unknown-none-softfloat target");
-     } else {
+
+vim +45 mm/workingset_report.c
+
+    36	
+    37	void wsr_init_lruvec(struct lruvec *lruvec)
+    38	{
+    39		struct wsr_state *wsr = &lruvec->wsr;
+    40		struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+    41	
+    42		memset(wsr, 0, sizeof(*wsr));
+    43		mutex_init(&wsr->page_age_lock);
+    44		if (memcg && !mem_cgroup_is_root(memcg))
+  > 45			wsr->page_age_cgroup_file = &memcg->workingset_page_age_file;
+    46	}
+    47	
+
 -- 
-2.45.1.288.g0e0cd299f1-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
