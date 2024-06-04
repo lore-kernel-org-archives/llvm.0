@@ -1,176 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D200214A62E;
-	Tue,  4 Jun 2024 19:01:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A15414A635;
+	Tue,  4 Jun 2024 19:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717527668; cv=none; b=o+hEba8INI5b6Y4pVEIhfNxkS92alNE8ComVc3C1NY8y3In7YTmv2fF5yzoaFwfEQVjf7jOUr4W7ZolNFCgTOEHFIPeuOKWIAxwBm7zaZFeMr0hNMrqjj0/9sHLyIxIUOJC64zpPUXk07sK5O6gg8wmdG8xImmaucMoj/fhJZhk=
+	t=1717528010; cv=none; b=FtHm1Hm8gG23o+HxgPo+daI5Z2RYIRx7GU2KdAWQxWihrFbI40uPI8JDD9hXFZCzFst9WnIBFGtPQ5swTBupYdlUgfUh/XfRLFP+/ia9LDdO9KcO0/ARQkI/pwTn5Ccud4axRDkLqRo630SypdojwaMeoTiiijt77k02Ls3Ex7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717527668; c=relaxed/simple;
-	bh=RqzDd6PqyNpUbR3KegZSUVXG8pajX9LJcIatMv0cgDU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fnh/AztbMCT2QBICGxyS+s3vcSSmoOAef81MvtpLyOrV1O3xpDyEOvgO/l54uSAHRv9CP5zZlgc0vr0W3dn4rtMtvb2FGFurpHKNuhDsu8gmOI1/uCIYU1ItI7JvUhYQDGDfl0tMjKjJF/H2ZbE9N4E5fjh93K+Us9JRgPhwma0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jP8JzlMG; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717528010; c=relaxed/simple;
+	bh=w+z51GOxz6CgOvEKGk3Y4qP1o260i7X7s60eVfx6w8g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=IKcbQ1rtaR3MZ+T4V80c66IJIjTLrICeyDES8QMqTTm3jvwIud+OaeGrVHE4arlAS1kWNl+w+2L4I6A6Tdh4bEhs9fdgxpGV33RVfSLNissEeW7NL1xXM+msZ6kIH1n878GvnN5FLjaWebmCmQAJBkDGpaV5/n6IL1RXgKxg/SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xpVmld3U; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Sub/LDfg; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xpVmld3U; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Sub/LDfg; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jP8JzlMG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717527667; x=1749063667;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RqzDd6PqyNpUbR3KegZSUVXG8pajX9LJcIatMv0cgDU=;
-  b=jP8JzlMGx4yWB3AHd3A2zhX05dS2zW5YY0InmsXVDQ2hNBwTtWCVfXmV
-   udmrsjuZeZNYfWzom3/h6nvC4F9fqGq4tFqVUD5o4aVEldMOjvZVCB/Z0
-   5TDNS5MbgoX/oMOjQ89GzF8PI5Y5dXv6r74QhwNx+CQl9VpbWh/ALCqoj
-   w3q3a1Uh9DRdMEVZ7K+MZOjfvh1DCtwm7IWAC37tsgIrayTzAsELCxw47
-   ytlfxgoQt8POUuwByCXFt+Jb5xniKYuI9nLO5REoJU3G2QB/E+ULWNVOY
-   Tguk7tKcdT5iIBmw6/45oq/MRRQQ5DRjrfBP7I7cVG3kfvxeWvhfshsPN
-   w==;
-X-CSE-ConnectionGUID: TjKptoJdRh6rE95xChVJ2A==
-X-CSE-MsgGUID: qOJtHOJzST+AhuyCQXtKEw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="11903032"
-X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
-   d="scan'208";a="11903032"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 12:01:07 -0700
-X-CSE-ConnectionGUID: iY0xvanZRzqrvzsDJnXbdg==
-X-CSE-MsgGUID: sth1H5/sS2yVeM9gjrFlaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
-   d="scan'208";a="68149973"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 04 Jun 2024 12:01:02 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sEZP0-0000Pz-2Y;
-	Tue, 04 Jun 2024 19:00:58 +0000
-Date: Wed, 5 Jun 2024 03:00:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christophe Roullier <christophe.roullier@foss.st.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/11] net: ethernet: stmmac: add management of
- stm32mp13 for stm32
-Message-ID: <202406050248.rGgTkevY-lkp@intel.com>
-References: <20240604143502.154463-8-christophe.roullier@foss.st.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xpVmld3U";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Sub/LDfg";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xpVmld3U";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Sub/LDfg"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 398E21F37C;
+	Tue,  4 Jun 2024 19:06:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717528007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TXBboWW451VBPbHdzoF/IPP9YUNWIilu8/IAXa2j64I=;
+	b=xpVmld3U5rCSlYA+RS3LZvZSmgEP04a9DhPwJTUWgJ6Mqdan4i7dfYHA4JH+u4Rr6GzE2P
+	GK06r+QZDHElrI4eDogAq3kYyd9GvsOpXf6dfJEn6QoPPmuva1wI+ic/K/tU2OmKmqdaad
+	52fu0xlxtHW7AmnDbEecQpzxYKdW6ok=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717528007;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TXBboWW451VBPbHdzoF/IPP9YUNWIilu8/IAXa2j64I=;
+	b=Sub/LDfgBk8LEnfeHQ5e0GjMGwc+RlDeU1LiGDsIpcv2LArYPL7mmsyoi6FdC4RTqmZ3EU
+	ajAGh0JzEvzQgqBA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717528007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TXBboWW451VBPbHdzoF/IPP9YUNWIilu8/IAXa2j64I=;
+	b=xpVmld3U5rCSlYA+RS3LZvZSmgEP04a9DhPwJTUWgJ6Mqdan4i7dfYHA4JH+u4Rr6GzE2P
+	GK06r+QZDHElrI4eDogAq3kYyd9GvsOpXf6dfJEn6QoPPmuva1wI+ic/K/tU2OmKmqdaad
+	52fu0xlxtHW7AmnDbEecQpzxYKdW6ok=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717528007;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TXBboWW451VBPbHdzoF/IPP9YUNWIilu8/IAXa2j64I=;
+	b=Sub/LDfgBk8LEnfeHQ5e0GjMGwc+RlDeU1LiGDsIpcv2LArYPL7mmsyoi6FdC4RTqmZ3EU
+	ajAGh0JzEvzQgqBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E6E1B13A93;
+	Tue,  4 Jun 2024 19:06:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id pNiQMsZlX2YBYQAAD6G6ig
+	(envelope-from <krisman@suse.de>); Tue, 04 Jun 2024 19:06:46 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Lizhi Xu <lizhi.xu@windriver.com>
+Cc: <adilger.kernel@dilger.ca>,  <coreteam@netfilter.org>,
+  <davem@davemloft.net>,  <ebiggers@kernel.org>,  <fw@strlen.de>,
+  <jaegeuk@kernel.org>,  <kadlec@netfilter.org>,  <kuba@kernel.org>,
+  <linux-ext4@vger.kernel.org>,  <linux-fscrypt@vger.kernel.org>,
+  <linux-kernel@vger.kernel.org>,  <lkp@intel.com>,
+  <llvm@lists.linux.dev>,  <netdev@vger.kernel.org>,
+  <netfilter-devel@vger.kernel.org>,  <oe-kbuild-all@lists.linux.dev>,
+  <pablo@netfilter.org>,
+  <syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com>,
+  <syzkaller-bugs@googlegroups.com>,  <tytso@mit.edu>
+Subject: Re: [PATCH V5] ext4: check hash version and filesystem casefolded
+ consistent
+In-Reply-To: <20240604011718.3360272-1-lizhi.xu@windriver.com> (Lizhi Xu's
+	message of "Tue, 4 Jun 2024 09:17:17 +0800")
+Organization: SUSE
+References: <87plsym65w.fsf@mailhost.krisman.be>
+	<20240604011718.3360272-1-lizhi.xu@windriver.com>
+Date: Tue, 04 Jun 2024 15:06:32 -0400
+Message-ID: <87le3kle87.fsf@mailhost.krisman.be>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240604143502.154463-8-christophe.roullier@foss.st.com>
+Content-Type: text/plain
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[340581ba9dceb7e06fb3];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email]
 
-Hi Christophe,
+Lizhi Xu <lizhi.xu@windriver.com> writes:
 
-kernel test robot noticed the following build warnings:
+> On Mon, 03 Jun 2024 10:50:51 -0400, Gabriel Krisman Bertazi wrote:
+>> > When mounting the ext4 filesystem, if the hash version and casefolded are not
+>> > consistent, exit the mounting.
+>> >
+>> > Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
+>> > Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+>> > ---
+>> >  fs/ext4/super.c | 5 +++++
+>> >  1 file changed, 5 insertions(+)
+>> >
+>> > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+>> > index c682fb927b64..0ad326504c50 100644
+>> > --- a/fs/ext4/super.c
+>> > +++ b/fs/ext4/super.c
+>> > @@ -5262,6 +5262,11 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>> >  		goto failed_mount;
+>> >  
+>> >  	ext4_hash_info_init(sb);
+>> > +	if (es->s_def_hash_version == DX_HASH_SIPHASH && 
+>> > +	    !ext4_has_feature_casefold(sb)) {
+>> 
+>> Can we ever have DX_HASH_SIPHASH set up in the super block?  I thought
+>> it was used solely for directories where ext4_hash_in_dirent(inode) is
+>> true.
+> The value of s'def_hash_version is obtained by reading the super block from the
+> buffer cache of the block device in ext4_load_super().
 
-[auto build test WARNING on cd0057ad75116bacf16fea82e48c1db642971136]
+Yes, I know.  My point is whether this check should just be:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Roullier/dt-bindings-net-add-STM32MP13-compatible-in-documentation-for-stm32/20240604-224324
-base:   cd0057ad75116bacf16fea82e48c1db642971136
-patch link:    https://lore.kernel.org/r/20240604143502.154463-8-christophe.roullier%40foss.st.com
-patch subject: [PATCH v4 07/11] net: ethernet: stmmac: add management of stm32mp13 for stm32
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240605/202406050248.rGgTkevY-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050248.rGgTkevY-lkp@intel.com/reproduce)
+if (es->s_def_hash_version == DX_HASH_SIPHASH)
+	goto failed_mount;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406050248.rGgTkevY-lkp@intel.com/
+Since, IIUC, DX_HASH_SIPHASH is done per-directory and not written to
+the sb.
 
-All warnings (new ones prefixed by >>):
+>> If this is only for the case of a superblock corruption, perhaps we
+>> should always reject the mount, whether casefold is enabled or not?
+> Based on the existing information, it cannot be confirmed whether the superblock
+> is corrupt, but one thing is clear: if the default hash version of the superblock
+> is set to DX_HASH_SIPHASH, but the casefold feature is not set at the same time,
+> it is definitely an error.
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c:239:4: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-                           val |= SYSCFG_PMCR_ETH_SEL_MII;
-                           ^~~
-   drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c:228:9: note: initialize the variable 'val' to silence this warning
-           int val;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/val +239 drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c
-
-   223	
-   224	static int stm32mp1_configure_pmcr(struct plat_stmmacenet_data *plat_dat)
-   225	{
-   226		struct stm32_dwmac *dwmac = plat_dat->bsp_priv;
-   227		u32 reg = dwmac->mode_reg;
-   228		int val;
-   229	
-   230		switch (plat_dat->mac_interface) {
-   231		case PHY_INTERFACE_MODE_MII:
-   232			/*
-   233			 * STM32MP15xx supports both MII and GMII, STM32MP13xx MII only.
-   234			 * SYSCFG_PMCSETR ETH_SELMII is present only on STM32MP15xx and
-   235			 * acts as a selector between 0:GMII and 1:MII. As STM32MP13xx
-   236			 * supports only MII, ETH_SELMII is not present.
-   237			 */
-   238			if (!dwmac->is_mp13)	/* Select MII mode on STM32MP15xx */
- > 239				val |= SYSCFG_PMCR_ETH_SEL_MII;
-   240			break;
-   241		case PHY_INTERFACE_MODE_GMII:
-   242			val = SYSCFG_PMCR_ETH_SEL_GMII;
-   243			if (dwmac->enable_eth_ck)
-   244				val |= SYSCFG_PMCR_ETH_CLK_SEL;
-   245			break;
-   246		case PHY_INTERFACE_MODE_RMII:
-   247			val = SYSCFG_PMCR_ETH_SEL_RMII;
-   248			if (dwmac->enable_eth_ck)
-   249				val |= SYSCFG_PMCR_ETH_REF_CLK_SEL;
-   250			break;
-   251		case PHY_INTERFACE_MODE_RGMII:
-   252		case PHY_INTERFACE_MODE_RGMII_ID:
-   253		case PHY_INTERFACE_MODE_RGMII_RXID:
-   254		case PHY_INTERFACE_MODE_RGMII_TXID:
-   255			val = SYSCFG_PMCR_ETH_SEL_RGMII;
-   256			if (dwmac->enable_eth_ck)
-   257				val |= SYSCFG_PMCR_ETH_CLK_SEL;
-   258			break;
-   259		default:
-   260			dev_err(dwmac->dev, "Mode %s not supported",
-   261				phy_modes(plat_dat->mac_interface));
-   262			/* Do not manage others interfaces */
-   263			return -EINVAL;
-   264		}
-   265	
-   266		dev_dbg(dwmac->dev, "Mode %s", phy_modes(plat_dat->mac_interface));
-   267	
-   268		/* Shift value at correct ethernet MAC offset in SYSCFG_PMCSETR */
-   269		val <<= ffs(dwmac->mode_mask) - ffs(SYSCFG_MP1_ETH_MASK);
-   270	
-   271		/* Need to update PMCCLRR (clear register) */
-   272		regmap_write(dwmac->regmap, dwmac->ops->syscfg_clr_off,
-   273			     dwmac->mode_mask);
-   274	
-   275		/* Update PMCSETR (set register) */
-   276		return regmap_update_bits(dwmac->regmap, reg,
-   277					 dwmac->mode_mask, val);
-   278	}
-   279	
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Gabriel Krisman Bertazi
