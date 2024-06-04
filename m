@@ -1,100 +1,130 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xry111.site (xry111.site [89.208.246.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AC41482FC
-	for <llvm@lists.linux.dev>; Tue,  4 Jun 2024 13:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0AE8BF7;
+	Tue,  4 Jun 2024 15:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717508331; cv=none; b=CI4jXsq1z8UBVT6MHhsiV3USP6dDr5T0ugkiZ3MHkd3JS57pyGBtLhgdEnHtwtoR+Dhjj4Yrmd7lA+z8dxBdSZCpjs6TBOUT5MhNCdbJR+6ZVtT5zgKe+zyWHvbWLnTNUH40zWkn+ylMVex1K8eE8vzVHw3DJKXMoaRmPQOXlcs=
+	t=1717513707; cv=none; b=unjaYFK7b1v/usL/sb3y5vpDIYOtgGJaonMFH1ojIkd/awOUwCvOtnf4tRoSHbJcwFg1ktIdquK01IyLJGepg+nCI1acyudC6ipxHy1G3Ltv5R/eaVm3GqWmHEcrBzEdhZgCyU/2dScL7qI9aDnx+JVrTnQTXN87/hsZlvsWCgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717508331; c=relaxed/simple;
-	bh=mLOB/pRDSaqep4kaNRLrvlUmHU00bgxlnVyjfSPtsEk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=s/H/rEoZMhi1Mp0n0NYINituM2hR5OAqOXX4NzWaoBh92s/8hWsLHhLf+r9zV4gZJ4wZ6JNjpM/80kkdyzzv6/F3yr4tQhFI5zuzpfezOzmWbmvmSyh/iL50eR6Yr/UV7pRO+TlvCmeDHA1BJxeM/PNclzxJPR7jW1c5ItouoyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=XN1919te; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1717513707; c=relaxed/simple;
+	bh=l+dy70sDHZRUGv472okJcpGybgCB3YYbbShGSa334AE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JA85ERFM1s3Kf1thmhDJfp3uRC1VRnPHfRw1zWLBbZZ0bxS8gjsDAxgmbmzfUut1Cq1ZbiqnMg2MPHOHzXjIxx2Y/mAhyOkYoT/vHlsAWbmTgkD99DP0a8Nlq3mlyK93NrzAImdEPFAAzs5dDexUIbVMEXe2NVppbQDUfL1VQuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=XPkOJh9F; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="XN1919te"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-6c53be088b1so496976a12.1
-        for <llvm@lists.linux.dev>; Tue, 04 Jun 2024 06:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1717508329; x=1718113129; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wyXYBZ9yf/+pq+sDdhkihpXpTq6hpcaT1psfHyvcipQ=;
-        b=XN1919terQZk61j08C4l6xI0OqyUA/B25GWuZI7Nw1QYlpLt3En1Z68okfhtgGOWq3
-         Utj6h0faCZnDVu1DtyROsCleg50Of/iw6lwqj2vQUT6GYnMbi7aiFMKd7Md8wjdXUgkS
-         sUA1OIezVH3VTLAXL2HgbzK0GwmORhHynOkPky8qTXOIWE2Y69u+ZqDXtn601mExTEoQ
-         Rmlz2iUE0oeIsWM4b5x4jwQ80SMTSwkWbAeQp9vMh0X9f7VBt1p8JVGD9vHKDdF53cFZ
-         Wtnvwjt7pgcT9mltTKmgaYwenATnyAN4fc3TmF+uKFhRaUF4v8hxLzCLxvi8t1zLZMrL
-         12Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717508329; x=1718113129;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wyXYBZ9yf/+pq+sDdhkihpXpTq6hpcaT1psfHyvcipQ=;
-        b=viO3kyLm7961BcXpHMlM64QU2yQIlHsbWOPiRbbupMrnRBeXo/I1GXfD42cJbTSkoR
-         2qQIb0TC7y831DH9LGUtQ566Rp766o6irKLZA8LyESck3t9chVsbfHDEcDkT5yiUx8nX
-         3Ynhf1mG+ZptOqvb52pyDcSWc7XrrWpYGBQqAkYZ+HI/z5UxR+muLjKvaIwXD+TI50+U
-         HzEnUwn5unxmY/AzihfWIBB7yurVMnjb2yyRTH8sBOqaW20jyCKZIomsSPkUuOXaD9pn
-         tdUQfod7thC44HyeU0N/gy+3XAEk3qF/WnXCcJpfygxOUdq8Ojhdzm1NtD1Wx08dr63Q
-         fJ1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWmX3WyyO97U2yhhiYZY++fdCaDAIcJhps8/bI08B7/1POKsQWtRB+FIifwN1MTh2F2X5qvNFXenSKG3Lss7pTRNl7GcA==
-X-Gm-Message-State: AOJu0YzNq/ugvL+WNDJEYCyms69N6QVfaBsOIlK27uN4pBU6sj6mQLuO
-	vypenc+vI9olZdO1d8SAOknYcUXZwy6ivfIPwmcnu/RdhfILewtUv/uQDG/RFVY=
-X-Google-Smtp-Source: AGHT+IGgE1PUAohyvsVgmtFENCcomUvJIkWVXPFd7SdjzctUJnwKJA25eUqbhTVsMlgms0m7bEff7Q==
-X-Received: by 2002:a05:6a21:338f:b0:1b2:53c5:9e67 with SMTP id adf61e73a8af0-1b2a46feafemr2610730637.4.1717508329280;
-        Tue, 04 Jun 2024 06:38:49 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a77bab23sm10440745a91.48.2024.06.04.06.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 06:38:48 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: asml.silence@gmail.com, nathan@kernel.org, ndesaulniers@google.com, 
- morbo@google.com, justinstitt@google.com, Su Hui <suhui@nfschina.com>
-Cc: haoxu@linux.alibaba.com, io-uring@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- kernel-janitors@vger.kernel.org
-In-Reply-To: <20240604121242.2661244-1-suhui@nfschina.com>
-References: <20240604121242.2661244-1-suhui@nfschina.com>
-Subject: Re: [PATCH] io_uring/io-wq: avoid garbge value of 'match' in
- io_wq_enqueue()
-Message-Id: <171750832792.373240.8767021460699358833.b4-ty@kernel.dk>
-Date: Tue, 04 Jun 2024 07:38:47 -0600
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="XPkOJh9F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1717513694;
+	bh=l+dy70sDHZRUGv472okJcpGybgCB3YYbbShGSa334AE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XPkOJh9FSsEt9Ma5ALXJ5TT5tCLPOIr96QoVoqvptlVowV6iJLvqTrhl90/q6GFm5
+	 L8lEH66gDtHyMSfNJ2ve+1co7mb+cDXLP6cpEvmA9sJSg8Y++koepPSf1lA4WFG4T4
+	 JnOafEoX1iQEpSgb07q3Sqiwnm6Z2JKhbWwJWKCQ=
+Received: from stargazer.. (unknown [IPv6:240e:457:1110:1471:fd75:6c0d:bd6f:6068])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 1C37E67245;
+	Tue,  4 Jun 2024 11:08:00 -0400 (EDT)
+From: Xi Ruoyao <xry111@xry111.site>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Youling Tang <tangyouling@kylinos.cn>,
+	Jinyang He <hejinyang@loongson.cn>,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	mengqinggang@loongson.cn,
+	cailulu@loongson.cn,
+	wanglei@loongson.cn,
+	luweining@loongson.cn,
+	Yujie Liu <yujie.liu@intel.com>,
+	Heng Qi <hengqi@linux.alibaba.com>,
+	Tejun Heo <tj@kernel.org>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
+Date: Tue,  4 Jun 2024 23:07:41 +0800
+Message-ID: <20240604150741.30252-1-xry111@xry111.site>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.5-dev-2aabd
+Content-Transfer-Encoding: 8bit
 
+GAS <= 2.41 does not support generating R_LARCH_{32,64}_PCREL for
+"label - ." and it generates R_LARCH_{ADD,SUB}{32,64} pairs instead.
+objtool cannot handle R_LARCH_{ADD,SUB}{32,64} pair in __jump_table
+(static key implementation) and etc. so it will produce some warnings.
+This is causing the kernel CI systems to complain everywhere.
 
-On Tue, 04 Jun 2024 20:12:43 +0800, Su Hui wrote:
-> Clang static checker (scan-build) warning:
-> o_uring/io-wq.c:line 1051, column 3
-> The expression is an uninitialized value. The computed value will
-> also be garbage.
-> 
-> 'match.nr_pending' is used in io_acct_cancel_pending_work(), but it is
-> not initialized. Change the order of assignment for 'match' to fix
-> this problem.
-> 
-> [...]
+For GAS we can check if -mthin-add-sub option is available to know if
+R_LARCH_{32,64}_PCREL are supported.
 
-Applied, thanks!
+For Clang, we require Clang >= 18 and Clang >= 17 already supports
+R_LARCH_{32,64}_PCREL, so we can always assume Clang is fine for
+objtool.
 
-[1/1] io_uring/io-wq: avoid garbge value of 'match' in io_wq_enqueue()
-      commit: e87863ed45a1c36b0d8a5b70134caf8c794d8d57
+Note that __jump_table is not generated by the compiler so
+-fno-jump-table is completely irrelevant for this issue.
 
-Best regards,
+Fixes: cb8a2ef0848c ("LoongArch: Add ORC stack unwinder support")
+Closes: https://lore.kernel.org/loongarch/Zl5m1ZlVmGKitAof@yujie-X299/
+Closes: https://lore.kernel.org/loongarch/ZlY1gDDPi_mNrwJ1@slm.duckdns.org/
+Closes: https://lore.kernel.org/loongarch/1717478006.038663-1-hengqi@linux.alibaba.com/
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=816029e06768
+Link: https://github.com/llvm/llvm-project/commit/42cb3c6346fc
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+---
+ arch/loongarch/Kconfig       | 5 ++++-
+ arch/loongarch/Kconfig.debug | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index e38139c576ee..e461a6c59f15 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -143,7 +143,7 @@ config LOONGARCH
+ 	select HAVE_LIVEPATCH
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_NMI
+-	select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS
++	select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS && AS_HAS_THIN_ADD_SUB
+ 	select HAVE_PCI
+ 	select HAVE_PERF_EVENTS
+ 	select HAVE_PERF_REGS
+@@ -273,6 +273,9 @@ config AS_HAS_LBT_EXTENSION
+ config AS_HAS_LVZ_EXTENSION
+ 	def_bool $(as-instr,hvcl 0)
+ 
++config AS_HAS_THIN_ADD_SUB
++	def_bool $(cc-option,-Wa$(comma)-mthin-add-sub) || CC_IS_CLANG
++
+ menu "Kernel type and options"
+ 
+ source "kernel/Kconfig.hz"
+diff --git a/arch/loongarch/Kconfig.debug b/arch/loongarch/Kconfig.debug
+index 98d60630c3d4..8b2ce5b5d43e 100644
+--- a/arch/loongarch/Kconfig.debug
++++ b/arch/loongarch/Kconfig.debug
+@@ -28,6 +28,7 @@ config UNWINDER_PROLOGUE
+ 
+ config UNWINDER_ORC
+ 	bool "ORC unwinder"
++	depends on HAVE_OBJTOOL
+ 	select OBJTOOL
+ 	help
+ 	  This option enables the ORC (Oops Rewind Capability) unwinder for
 -- 
-Jens Axboe
-
-
+2.45.2
 
