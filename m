@@ -1,111 +1,95 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1553BE7F;
-	Tue,  4 Jun 2024 12:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB502146016;
+	Tue,  4 Jun 2024 13:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717503862; cv=none; b=ZPhSJhUYz6HQ3y0V2/liULBcNaUmOATvtRyW31lFRsSYViySoUIRoo2N4TH/U2UaMTy5E60Wp6wCf20FKRXtLn/6qlP06huvlTdS5LslLLBcrBkxfQTy1211oZclchqGRuAMrVCJUblgSBAEYIsZ9+ELVthfrlfAZOCJZJxX1Tw=
+	t=1717506899; cv=none; b=PpYKbDwXQKfRaRhI7xk02NQ6sS6eyW/sr+VdQ6npg0snHJ+mIVehEir0sHPspuD/0JwfiWoKN86ppnCeR536Y4ikAxlOQY3Tmsn7W1T/L9onMRh+65ryot+iaAFUaaNICsMF3C7qiHqGnQ+p9BNt1z1W/A1C2aIKj0FnWetqDqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717503862; c=relaxed/simple;
-	bh=KYNTKxCkCSdAEIqfCEKebtPK54gznQEOU5xNfgE5S6k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ql3BfF8mJ+Wea8ZdKJP+lPYkUaVRCM9u8dj9I3NM11HYzAHOuMLdSx2iyAxAXvjMd4Edkia4W0YEu1Fxle1E0OEz8UIRCkP69rSvWhfRvAam5l8QtcdNLHINjC7+bL0In+IgGRXvd58YDiHcAYCQgceO3bN3rMa0dVV8wUjvw4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MVDPiKoP; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717506899; c=relaxed/simple;
+	bh=OE4saAuELWugESCc+U2+rPB+AbB3NFl9UxVwjKH6csE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sb4neHG4oXhqaZ0Odmv+WWzUGuEKxKWzbZoUYOKM+I69sn4l5xEIe4SDELC8TrME5RUp8Bm0j0h5k9ToCKXR7AyyURQ+x6owdBN2acBPO086VUTMaWfMj80a+veVAYGj5A4OACsZsBxzlKrPlObipy1wXkZnE4SP0gZdKW9hHuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bl4zO631; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MVDPiKoP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717503860; x=1749039860;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KYNTKxCkCSdAEIqfCEKebtPK54gznQEOU5xNfgE5S6k=;
-  b=MVDPiKoP0kowbTM02I2dFN7I60d8CR+uiahb9lJF2HS5BUYeYRBDNLw3
-   U+IogffujlWqdEV8gtCaDvVarRbmlFS2bJXS6vUptKPa2o64ZHUOAl05k
-   52pJbRANALtRBMbmlhtKeeZE51J15L8I2NTfmwWueYp9wyQ2yortidFnk
-   LIW2HayXd3zbxcnnyhHWovayqY+PdWBB//DvPUTNbuT6ol22mvvroRYg9
-   k3GIU/gWmhJW6lloQfOkMaQIzybWnBIx/0QQnguq1FWas/p0mcXjCTLe6
-   nLtS1LuaG/t4L4w0JK0MWqlmGvTUb0pHJvHZ0ERkse0KfK4K9QoOBxTfD
-   A==;
-X-CSE-ConnectionGUID: lxaddq5WSkyEHYQCZZPJkQ==
-X-CSE-MsgGUID: VrEvH6MMRTuASBYJRi/F3w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="13997044"
-X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
-   d="scan'208";a="13997044"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 05:24:19 -0700
-X-CSE-ConnectionGUID: CBV4qmLYSuSF3vwNIT5iYQ==
-X-CSE-MsgGUID: hssAZTJIQqSYkjf+xnJ86Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
-   d="scan'208";a="37822469"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 04 Jun 2024 05:24:18 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sETD5-000NCl-30;
-	Tue, 04 Jun 2024 12:24:15 +0000
-Date: Tue, 4 Jun 2024 20:24:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:sched/eevdf 9/23] kernel/sched/core.c:2032:2: error:
- statement requires expression of scalar type ('void' invalid)
-Message-ID: <202406042054.VgbWMkmS-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bl4zO631"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6783C2BBFC;
+	Tue,  4 Jun 2024 13:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717506898;
+	bh=OE4saAuELWugESCc+U2+rPB+AbB3NFl9UxVwjKH6csE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bl4zO631XFuKkKm+uT8b4uFOHoHB13GN2UC+mFmCxBvMWEOCr9aEGlRF+tjl5SBMq
+	 tXE1mpsGD60VZz+SvYn5WbjLciRCnjW+i+zFyWvgX2ucsLMtToUP36wBart1gOWLTh
+	 d5N3q/u3blB0uWbxCsbis4GUP77TxVo5GgxUC210mO1VQl2jJKM7k7AtI26RVDReVU
+	 pStQPdgaBvikaXDnuTQQ15VZLxQ8mfaiQ0Q0pS9Q/A+lA4t8wLUMWQJnRIgCj4qJpF
+	 +ODO4WGx7A52mQmzThYZQxujfs5YtaFSGUH573yEZMuqmUTs7Sr2QbfYgoEuc3k80W
+	 f0AvGBsA6/nbg==
+Date: Tue, 4 Jun 2024 14:14:51 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Beau Belgrave <beaub@linux.microsoft.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Bill Wendling <morbo@google.com>, sunliming <sunliming@kylinos.cn>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+	Ryan Roberts <ryan.roberts@arm.com>
+Subject: Re: [PATCH v2 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
+ builds
+Message-ID: <720aa2c5-5cc0-4021-ae0e-8fc4a78995e3@sirena.org.uk>
+References: <20240531183751.100541-1-jhubbard@nvidia.com>
+ <20240531183751.100541-2-jhubbard@nvidia.com>
+ <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
+ <20240603224706.GA245774@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Czvh9zDO7UJp9RNF"
+Content-Disposition: inline
+In-Reply-To: <20240603224706.GA245774@thelio-3990X>
+X-Cookie: Is it clean in other dimensions?
+
+
+--Czvh9zDO7UJp9RNF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/eevdf
-head:   642ed673fcd170ce20c64fb0e1970259fbb05cba
-commit: b381ee6ec4656ac6679c956cb1ae370554bb835f [9/23] sched: Split DEQUEUE_SLEEP from deactivate_task()
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240604/202406042054.VgbWMkmS-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240604/202406042054.VgbWMkmS-lkp@intel.com/reproduce)
+On Mon, Jun 03, 2024 at 03:47:06PM -0700, Nathan Chancellor wrote:
+> On Mon, Jun 03, 2024 at 04:32:30PM +0100, Mark Brown wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406042054.VgbWMkmS-lkp@intel.com/
+> > ICBW but I believe there are still some architectures with clang but not
+> > lld support where there's a use case for using CC=clang.
 
-All errors (new ones prefixed by >>):
+> Does CC=clang even work for the selftests? lib.mk here uses 'CC :=' so
+> won't CC=clang get overridden to CC=$(CROSS_COMPILE)gcc?
 
-   In file included from kernel/sched/core.c:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   kernel/sched/core.c:1992:13: error: conflicting types for 'dequeue_task'
-    1992 | inline bool dequeue_task(struct rq *rq, struct task_struct *p, int flags)
-         |             ^
-   kernel/sched/sched.h:3569:13: note: previous declaration is here
-    3569 | extern void dequeue_task(struct rq *rq, struct task_struct *p, int flags);
-         |             ^
->> kernel/sched/core.c:2032:2: error: statement requires expression of scalar type ('void' invalid)
-    2032 |         if (dequeue_task(rq, p, DEQUEUE_SLEEP | flags))
-         |         ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+No idea, it's not a configuration I'm interested in myself.
 
+--Czvh9zDO7UJp9RNF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-vim +2032 kernel/sched/core.c
+-----BEGIN PGP SIGNATURE-----
 
-  2029	
-  2030	static void block_task(struct rq *rq, struct task_struct *p, int flags)
-  2031	{
-> 2032		if (dequeue_task(rq, p, DEQUEUE_SLEEP | flags))
-  2033			__block_task(rq, p);
-  2034	}
-  2035	
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZfE0sACgkQJNaLcl1U
+h9BiTwf/aqeENJmdBeAWWPhMRKY1YW39uwcdusyhYZ53o47QTHVkbDIAYhuRspO2
+CWolKkBg3xMKc8tKtpRvChHaTli5n3at69kRGjDYtyGp0Bvo1sekQhqJ7MicbE/8
+2zh6LqLpKjN6a8a9DlkhyFh6lkhLh4+/kOS2O1zEcUZyftK03EvbtSOtY94uN1xp
+G8bbwu1tps4iKuPbTTrAa+zkbP9t7Zbuio1bDMPXuEGPpevzmRlXD62pXOtk/JgY
+sbDfwKd2VBa05yDTHWnWj4aQCBuCMm88eLki2Ytdo8h0XaAQFf8/AnrVBPRyamoi
+Z/RA5udP5eYkRRe/LqsG9MTzx9QS0Q==
+=sDhS
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--Czvh9zDO7UJp9RNF--
