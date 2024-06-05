@@ -1,133 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A6B8F44;
-	Wed,  5 Jun 2024 01:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4818C5490F;
+	Wed,  5 Jun 2024 01:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717551280; cv=none; b=rgtb3xHrXJLGptX+PQRfUglksDwoLosO+/sdZlwDZ0SfgHeaQDSrzqgMAzBY5OVLJY/ud1qW+4aOeoPz245CeFZG7FC8q6CZwhzcWFwlDRVZY4GLK5aStHsAtILT/nYkeaiTzrC9Q8HXPxk2EIfx4Ks3xX46j7ufvm6gVDXBibo=
+	t=1717552356; cv=none; b=TloAmOL/hVgbq7icH5T3scxSFNo75QV87SePx3aRV+pivvCCs1W5SqyPPCuvp34opU7b/uS95aWNAkujqHQBNQUD35moszuM7Wr7FrQmMj9+dmkRITHHW4XIOwT1qEZL1OGcaUKYDI3SCtZXlUrnM0mnOwMLetVJusq/zqVgFvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717551280; c=relaxed/simple;
-	bh=9+rM/5HKztZ3XHOcKnoDMJ97EOLdst/cWA1TwQP/mJs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Q+UpXz6LjTv62Ets1qgnAsF5+2K5tZJcQd1Gf9RKqz/M1d2zC9Y9JNs8VycOYPO2nME30lgtqWrCGKINgpZI0JnGYaBPqVSQ/1wPf68bBCDXR5d1gN8IzfFwQsXkuTLYAY6lIsDzt8G5za5yCsD5I/9Z2RSw+R5n7vls/nFxmIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VWRgZIk0; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717552356; c=relaxed/simple;
+	bh=CxC5Siz2EwYJkmy2c6bMNSLW4Zz2VgkST85W+vaTB8E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pZV30Sjk9dsd5RplWLXULCfsnMllwzWkmaMuaWID2t1HzlibWWC5jWIykGfCL4aFHjnrXdAAcdzCtW3RSv16RnNYoi7W0agPSIPS2g6HeK4HsGLkTrikA7goTCpM+ALyJsSCd39ogEy+eezAbO1xHwXfwm6SJfcP3ZFAnAsRZjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QVd3Fof0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VWRgZIk0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717551278; x=1749087278;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9+rM/5HKztZ3XHOcKnoDMJ97EOLdst/cWA1TwQP/mJs=;
-  b=VWRgZIk0vfPo4aNBf6MCLD0ZO9W4Du94RXOkAA2VU5ZYG9jGpU2RyxTh
-   /y00knaP9im/73e3Tfa+SdYCKXcSqcwt1ZXjlKpuPY0isc1/P00Ru/23A
-   iZOAB6bcY9m+KvVK0AEp6/a1KQ6eYBCRYZ3IPb7eeV+fZ+ogU8QC4e9lf
-   SGXsy1JPWyASXiU8PZGHLLqkrPKB+enz0796d9q6SQuPcjwoEdVaP8KVC
-   pcZXBfSZzYqZ21qQTSvIFwB3QuGk3uWnx7KAPctcr+V6f8q5F5TsEjJ7c
-   KicyR0oN3EMo9qVMSQ50rLWLjP41agof1R63fty07QOcgxaetTzSyO78P
-   w==;
-X-CSE-ConnectionGUID: aRYfrdDzREimGDczzss0rA==
-X-CSE-MsgGUID: tUFNTEYwS7ubVueY9uiGdw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="24790958"
-X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
-   d="scan'208";a="24790958"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 18:34:27 -0700
-X-CSE-ConnectionGUID: uhmQxwGWT461MmOV2g0F/A==
-X-CSE-MsgGUID: MZSoxDrFR1qQd26y/gyBhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
-   d="scan'208";a="74906284"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 04 Jun 2024 18:34:25 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sEfXi-0000mF-2F;
-	Wed, 05 Jun 2024 01:34:22 +0000
-Date: Wed, 5 Jun 2024 09:33:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:19:62:
- warning: omitting the parameter name in a function definition is a C23
- extension
-Message-ID: <202406050908.1kL1C69p-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QVd3Fof0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CD6C4AF09;
+	Wed,  5 Jun 2024 01:52:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717552355;
+	bh=CxC5Siz2EwYJkmy2c6bMNSLW4Zz2VgkST85W+vaTB8E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QVd3Fof0Xov4zp76ezEnn0K2GY3wdzLSXY71H1dbjZMarfp/BCTClLq7ak0gEfRZP
+	 8CgebLxnH+m7g//Qb0UWEQZ2J0W9qwUwj6HPqcmnZ35r9Ai5IQyzVfYeoSDSs38hgi
+	 FWLrKAi0Gw5T0xGXNbVpYrOFPOZ+7wAeFaZW0wwBIuaOrLn2Q5+fEqB3+gzO1FlFr8
+	 4krdExcNYpCCeQ9bjHOxqDSw7LxSn9wLAGHdiM5HdwOFukUTsujMCA48Bv4w6TVucM
+	 hWKyMMHr4mb2JO7825Y1aTJ0HYAAjgX2xvu7ZSXYUTG5+97kbcUo3/q7IMeTp0m7aL
+	 tmSGAjUXkVNHg==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-57a033c2e9fso8138385a12.2;
+        Tue, 04 Jun 2024 18:52:35 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVAqHBegvQDov7Tk/0yYF/PqkLB044W6mEssQvNs43u8aZVqCttipBwvRuLe+Gax4y0gqMjMPsS84E6XE2xIjFSbAkMQlIqZVlUjbiIvbDiPBdHtkbfTvF8F2pvPXSGZA==
+X-Gm-Message-State: AOJu0YwUOKai97NY7ZnEfE0gP4EzGHIMiNvcopvAZaFjj/ux99TBAM0U
+	KZonw8QSgX9hQVH2vUMW8DgN0d8b8f6GtGZG4UZT1dGeyp6s2gF69jz5Chxovk3HeUFaSu9mdYl
+	qWFpdLoRPxE5/hUIMbYlrD7yDeuc=
+X-Google-Smtp-Source: AGHT+IE4b3yf9p6USfzE9jEmzB05l3qegRhZxUBpf9jHqVZRyyTocqNF4Zexjq4STbS6DsrUhMoeURbUpZCcnUD1BDQ=
+X-Received: by 2002:a17:906:700f:b0:a62:c238:b229 with SMTP id
+ a640c23a62f3a-a69a002b89amr76766666b.74.1717552354325; Tue, 04 Jun 2024
+ 18:52:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240604150741.30252-1-xry111@xry111.site>
+In-Reply-To: <20240604150741.30252-1-xry111@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 5 Jun 2024 09:52:24 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7CF5wUSj5qfSs-+YTUrB2R9STO7LLu7LG2RpsYE719Og@mail.gmail.com>
+Message-ID: <CAAhV-H7CF5wUSj5qfSs-+YTUrB2R9STO7LLu7LG2RpsYE719Og@mail.gmail.com>
+Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
+ unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: WANG Xuerui <kernel@xen0n.name>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Youling Tang <tangyouling@kylinos.cn>, Jinyang He <hejinyang@loongson.cn>, 
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	mengqinggang@loongson.cn, cailulu@loongson.cn, wanglei@loongson.cn, 
+	luweining@loongson.cn, Yujie Liu <yujie.liu@intel.com>, 
+	Heng Qi <hengqi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   32f88d65f01bf6f45476d7edbe675e44fb9e1d58
-commit: e22b4973ee201486a7147efaa80b6562d3a749d1 media: c8sectpfe: Do not depend on DEBUG_FS
-date:   7 weeks ago
-config: arm64-randconfig-004-20240605 (https://download.01.org/0day-ci/archive/20240605/202406050908.1kL1C69p-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050908.1kL1C69p-lkp@intel.com/reproduce)
+Hi, Ruoyao,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406050908.1kL1C69p-lkp@intel.com/
+On Tue, Jun 4, 2024 at 11:08=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrot=
+e:
+>
+> GAS <=3D 2.41 does not support generating R_LARCH_{32,64}_PCREL for
+> "label - ." and it generates R_LARCH_{ADD,SUB}{32,64} pairs instead.
+> objtool cannot handle R_LARCH_{ADD,SUB}{32,64} pair in __jump_table
+> (static key implementation) and etc. so it will produce some warnings.
+> This is causing the kernel CI systems to complain everywhere.
+>
+> For GAS we can check if -mthin-add-sub option is available to know if
+> R_LARCH_{32,64}_PCREL are supported.
+I think we should give a chance to toolchains without the
+-mthin-add-sub option, so I hope Tiezhu can resubmit this patch to
+solve this problem.
+https://lore.kernel.org/loongarch/1690272910-11869-6-git-send-email-yangtie=
+zhu@loongson.cn/
 
-All warnings (new ones prefixed by >>):
+Huacai
 
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:38:
->> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:19:62: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-      19 | static inline void c8sectpfe_debugfs_init(struct c8sectpfei *) {};
-         |                                                              ^
-   drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:20:62: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-      20 | static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *) {};
-         |                                                              ^
-   7 warnings generated.
-
-
-vim +19 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
-
-    14	
-    15	#if defined(CONFIG_DEBUG_FS)
-    16	void c8sectpfe_debugfs_init(struct c8sectpfei *);
-    17	void c8sectpfe_debugfs_exit(struct c8sectpfei *);
-    18	#else
-  > 19	static inline void c8sectpfe_debugfs_init(struct c8sectpfei *) {};
-    20	static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *) {};
-    21	#endif
-    22	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> For Clang, we require Clang >=3D 18 and Clang >=3D 17 already supports
+> R_LARCH_{32,64}_PCREL, so we can always assume Clang is fine for
+> objtool.
+>
+> Note that __jump_table is not generated by the compiler so
+> -fno-jump-table is completely irrelevant for this issue.
+>
+> Fixes: cb8a2ef0848c ("LoongArch: Add ORC stack unwinder support")
+> Closes: https://lore.kernel.org/loongarch/Zl5m1ZlVmGKitAof@yujie-X299/
+> Closes: https://lore.kernel.org/loongarch/ZlY1gDDPi_mNrwJ1@slm.duckdns.or=
+g/
+> Closes: https://lore.kernel.org/loongarch/1717478006.038663-1-hengqi@linu=
+x.alibaba.com/
+> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommitdiff;h=
+=3D816029e06768
+> Link: https://github.com/llvm/llvm-project/commit/42cb3c6346fc
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> ---
+>  arch/loongarch/Kconfig       | 5 ++++-
+>  arch/loongarch/Kconfig.debug | 1 +
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index e38139c576ee..e461a6c59f15 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -143,7 +143,7 @@ config LOONGARCH
+>         select HAVE_LIVEPATCH
+>         select HAVE_MOD_ARCH_SPECIFIC
+>         select HAVE_NMI
+> -       select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS
+> +       select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS && AS_HAS_THIN_ADD_=
+SUB
+>         select HAVE_PCI
+>         select HAVE_PERF_EVENTS
+>         select HAVE_PERF_REGS
+> @@ -273,6 +273,9 @@ config AS_HAS_LBT_EXTENSION
+>  config AS_HAS_LVZ_EXTENSION
+>         def_bool $(as-instr,hvcl 0)
+>
+> +config AS_HAS_THIN_ADD_SUB
+> +       def_bool $(cc-option,-Wa$(comma)-mthin-add-sub) || CC_IS_CLANG
+> +
+>  menu "Kernel type and options"
+>
+>  source "kernel/Kconfig.hz"
+> diff --git a/arch/loongarch/Kconfig.debug b/arch/loongarch/Kconfig.debug
+> index 98d60630c3d4..8b2ce5b5d43e 100644
+> --- a/arch/loongarch/Kconfig.debug
+> +++ b/arch/loongarch/Kconfig.debug
+> @@ -28,6 +28,7 @@ config UNWINDER_PROLOGUE
+>
+>  config UNWINDER_ORC
+>         bool "ORC unwinder"
+> +       depends on HAVE_OBJTOOL
+>         select OBJTOOL
+>         help
+>           This option enables the ORC (Oops Rewind Capability) unwinder f=
+or
+> --
+> 2.45.2
+>
