@@ -1,224 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CB1323D;
-	Wed,  5 Jun 2024 01:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EB53D6D;
+	Wed,  5 Jun 2024 01:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717550003; cv=none; b=FtLmCRiWDBi25/ppeB6XxL63iwWmKKeAeuuc6N2Xvgh6EeVUVS7oYPJOoVloe4fvPOMW6OUICBj20ebMkkGNf+cQAXlP88Gs8tAUglz6t1CFs7qktKwZBy0oDQbOkKF9BkpUmeIk9a3BKblwGHnOAAeIgORiHicX9V6uJ9izVPo=
+	t=1717550225; cv=none; b=A4cBS/BrHHip/ReL3FAN2QWtmaigcyxqfRo5zvVzqYvyqi9sLunBVcIcx96wPiQY2yy4MpqCiKv88s27V/86T0rNui0tPTGdpy2yrPckrOjW5HNelT7T+vFr3xOIaSfh4ht/Ulpkup0HhF3NnMa4AShonE7XV8z5tgXcV7abeps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717550003; c=relaxed/simple;
-	bh=ZnhpO+SaaVe7SfQ18lvTRbjoL1A+aSktVBV4/zdfVPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=od8GbttWhKcDTMiCrKpUl45D6pmmtLEMw5fyk6LQJZmzj9D+jEIHwFrrF5dBP5t8/3Qu1Jh0nv9zYPI2Pbp4IoF6lWF1n3lR2zpaBhYpBtaaQdFYJk+lcXJFVi6X0yLTkn2vK4cniMRYCR2UvtU2uY4hTmK/yXMNetNZ+VybNew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=STfehG6A; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="STfehG6A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717550002; x=1749086002;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZnhpO+SaaVe7SfQ18lvTRbjoL1A+aSktVBV4/zdfVPo=;
-  b=STfehG6A6LEKL4FenoPS/L+1vM/PPplcS07hvVPXQqJmAHf9pe3aNR2h
-   HkPwyaZMVuzKsfJv2byWybfN9D8r3V4z51tspy1z8QEgMC8VdyZPTc1et
-   JE/ed2+F7fQT0Fnv7dhkUOjHnMTwCnU5+j6fHL2JGOCfauOJJP1Pc+w9E
-   6r/T0ugrwRXFmP6xuqiUiguZrrQYTNEjniPixx01OhfMg7tuOqhMz4les
-   RQFxwJDU1cy7yCirUff37fHGXujLg5Y0RpuIqkYXLcxs1kcTkD5GJXmwO
-   df+quYzXM2jjquVoaB8t1ZTHGOEm+TjZklzvXelZKXsb9rmEBlKXokHIu
-   Q==;
-X-CSE-ConnectionGUID: RLIfFoVuQY6HSfVlHVtRtA==
-X-CSE-MsgGUID: XhIADWCaTHCLhoXhMNxsDQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="13972685"
-X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
-   d="scan'208";a="13972685"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 18:13:22 -0700
-X-CSE-ConnectionGUID: /ryimpufTHep+SAbhphPnQ==
-X-CSE-MsgGUID: yLBGF5lvSpK5r9LkbsI3ZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
-   d="scan'208";a="42363945"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 04 Jun 2024 18:13:18 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sEfDH-0000k3-0x;
-	Wed, 05 Jun 2024 01:13:15 +0000
-Date: Wed, 5 Jun 2024 09:12:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH 4/5] ftrace: Convert "filter_hash" and "inc" to bool in
- ftrace_hash_rec_update_modify()
-Message-ID: <202406050838.7r32JzDI-lkp@intel.com>
-References: <20240604212855.046127611@goodmis.org>
+	s=arc-20240116; t=1717550225; c=relaxed/simple;
+	bh=HLpoLdstnucicsvT5jMONV0hC5aA5fX3wp6EmkQr7ro=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b/G1iwlnejN862RWOmrGGRJYddLk47FXe+hbCsDoDSFQyvrl76IqT+NGe5DEyyfi1xJUQD27GXEAmohM71Ek71TBa0jnxQopDOZRlt1R/3zJEfMAtLrdgCNThAA/ZYd0FbmgrTVRrF1zu1YILkJSdivp1I49Gqb1Ik5MfDwgwvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45518rnG006051;
+	Wed, 5 Jun 2024 01:16:52 GMT
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [147.11.82.252])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3yfruxbkk2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 05 Jun 2024 01:16:52 +0000 (GMT)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 4 Jun 2024 18:16:51 -0700
+Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
+ 15.1.2507.39 via Frontend Transport; Tue, 4 Jun 2024 18:16:45 -0700
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <krisman@suse.de>
+CC: <adilger.kernel@dilger.ca>, <coreteam@netfilter.org>,
+        <davem@davemloft.net>, <ebiggers@kernel.org>, <fw@strlen.de>,
+        <jaegeuk@kernel.org>, <kadlec@netfilter.org>, <kuba@kernel.org>,
+        <linux-ext4@vger.kernel.org>, <linux-fscrypt@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lizhi.xu@windriver.com>,
+        <lkp@intel.com>, <llvm@lists.linux.dev>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
+        <pablo@netfilter.org>,
+        <syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com>,
+        <syzkaller-bugs@googlegroups.com>, <tytso@mit.edu>
+Subject: Re: [PATCH V5] ext4: check hash version and filesystem casefolded consistent
+Date: Wed, 5 Jun 2024 09:16:44 +0800
+Message-ID: <20240605011644.1878-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <87le3kle87.fsf@mailhost.krisman.be>
+References: <87le3kle87.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240604212855.046127611@goodmis.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: eSwt-QjaTDEty4IdYCpGVD27kbz6EKap
+X-Proofpoint-GUID: eSwt-QjaTDEty4IdYCpGVD27kbz6EKap
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-04_11,2024-06-04_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 spamscore=0 mlxscore=0 priorityscore=1501 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.21.0-2405170001 definitions=main-2406050008
 
-Hi Steven,
+On Tue, 04 Jun 2024 15:06:32 -0400, Gabriel Krisman Bertazi wrote:
+> >> > When mounting the ext4 filesystem, if the hash version and casefolded are not
+> >> > consistent, exit the mounting.
+> >> >
+> >> > Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
+> >> > Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+> >> > ---
+> >> >  fs/ext4/super.c | 5 +++++
+> >> >  1 file changed, 5 insertions(+)
+> >> >
+> >> > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> >> > index c682fb927b64..0ad326504c50 100644
+> >> > --- a/fs/ext4/super.c
+> >> > +++ b/fs/ext4/super.c
+> >> > @@ -5262,6 +5262,11 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+> >> >  		goto failed_mount;
+> >> >  
+> >> >  	ext4_hash_info_init(sb);
+> >> > +	if (es->s_def_hash_version == DX_HASH_SIPHASH && 
+> >> > +	    !ext4_has_feature_casefold(sb)) {
+> >> 
+> >> Can we ever have DX_HASH_SIPHASH set up in the super block?  I thought
+> >> it was used solely for directories where ext4_hash_in_dirent(inode) is
+> >> true.
+> > The value of s'def_hash_version is obtained by reading the super block from the
+> > buffer cache of the block device in ext4_load_super().
+> 
+> Yes, I know.  My point is whether this check should just be:
+Based on the existing information, it cannot be confirmed that it is incorrect
+to separately determine the value of s_def_hash_version as DX_HASH_SIPHASH.
+Additionally, I have come up with a better solution, and I will issue the next
+fixed version in a while.
+> 
+> if (es->s_def_hash_version == DX_HASH_SIPHASH)
+> 	goto failed_mount;
+> 
+> Since, IIUC, DX_HASH_SIPHASH is done per-directory and not written to
+> the sb.
+> 
+> >> If this is only for the case of a superblock corruption, perhaps we
+> >> should always reject the mount, whether casefold is enabled or not?
+> > Based on the existing information, it cannot be confirmed whether the superblock
+> > is corrupt, but one thing is clear: if the default hash version of the superblock
+> > is set to DX_HASH_SIPHASH, but the casefold feature is not set at the same time,
+> > it is definitely an error.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.10-rc2 next-20240604]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/ftrace-Rename-dup_hash-and-comment-it/20240605-053138
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240604212855.046127611%40goodmis.org
-patch subject: [PATCH 4/5] ftrace: Convert "filter_hash" and "inc" to bool in ftrace_hash_rec_update_modify()
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240605/202406050838.7r32JzDI-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050838.7r32JzDI-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406050838.7r32JzDI-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/trace/ftrace.c:17:
-   In file included from include/linux/stop_machine.h:5:
-   In file included from include/linux/cpu.h:17:
-   In file included from include/linux/node.h:18:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2245:
-   include/linux/vmstat.h:484:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     484 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     485 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:491:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     491 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     492 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:498:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     498 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:512:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     512 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     513 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> kernel/trace/ftrace.c:1961:13: error: conflicting types for 'ftrace_hash_rec_disable_modify'
-    1961 | static void ftrace_hash_rec_disable_modify(struct ftrace_ops *ops,
-         |             ^
-   kernel/trace/ftrace.c:1384:1: note: previous declaration is here
-    1384 | ftrace_hash_rec_disable_modify(struct ftrace_ops *ops, int filter_hash);
-         | ^
->> kernel/trace/ftrace.c:1967:13: error: conflicting types for 'ftrace_hash_rec_enable_modify'
-    1967 | static void ftrace_hash_rec_enable_modify(struct ftrace_ops *ops,
-         |             ^
-   kernel/trace/ftrace.c:1386:1: note: previous declaration is here
-    1386 | ftrace_hash_rec_enable_modify(struct ftrace_ops *ops, int filter_hash);
-         | ^
-   17 warnings and 2 errors generated.
-
-
-vim +/ftrace_hash_rec_disable_modify +1961 kernel/trace/ftrace.c
-
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18  1960) 
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18 @1961) static void ftrace_hash_rec_disable_modify(struct ftrace_ops *ops,
-5177364f840058a Steven Rostedt (Google   2024-06-04  1962) 					   bool filter_hash)
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18  1963) {
-5177364f840058a Steven Rostedt (Google   2024-06-04  1964) 	ftrace_hash_rec_update_modify(ops, filter_hash, false);
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18  1965) }
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18  1966) 
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18 @1967) static void ftrace_hash_rec_enable_modify(struct ftrace_ops *ops,
-5177364f840058a Steven Rostedt (Google   2024-06-04  1968) 					  bool filter_hash)
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18  1969) {
-5177364f840058a Steven Rostedt (Google   2024-06-04  1970) 	ftrace_hash_rec_update_modify(ops, filter_hash, true);
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18  1971) }
-84261912ebee412 Steven Rostedt (Red Hat  2014-08-18  1972) 
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Lizhi
