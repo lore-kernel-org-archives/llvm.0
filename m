@@ -1,100 +1,218 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7E63DABE7;
-	Wed,  5 Jun 2024 06:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717568834; cv=none; b=lcGyltRD/aWY4cO8eY5blCtyhoC9xjiq5bsosthsqhVxXQr8xV2ZISwoDeqH3qMnMdI5IzzJel6YLaGkcAikOpJ/3hBWvkaCl9JfT4b3Lim9VX/OZ3aXkq8cVdc9CXiZZ11/XWPZ3rsvtXQ4A+09pBjIRvlR9l7DdiIX4FVc924=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717568834; c=relaxed/simple;
-	bh=Wd9zHKEWoslbcFRSGouPKc8Ft0c6guz9BhPzn40/nuM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iPPDug9y700z4G+rSZlMdObwzDSeKg8viWBSXMp6aIIaYYY/Tk9R5KKatjOtSm6u0I2HaWGr/fiX6XAVvfMlBPpP+zGHa+YMhGKdoDAd6p/6vxpCeyeO49LctMPvwDLKzW1EUjTNoML+61NBCG1WxD6n22VUHtCLMNM/A9IdSz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZiIOGz4; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0163C42AA5
+	for <llvm@lists.linux.dev>; Wed,  5 Jun 2024 07:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.156.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717570857; cv=fail; b=oBxyzm0WlMskJ0kuP7BptOzc22yUUB6qMX+wi/tZF7fVVaKQhedYXarlCdq8/DTJ49Uf3NhpUOSFM2E/WCPFL2TIV6/FCmZ3OqEDS2Sxfd2VGEBVjzjLOyEVnFjEJga1ef2gVHudJDYUPnn+i5vTYgXlCYIpOf2i5vxUwtC+CFs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717570857; c=relaxed/simple;
+	bh=BAMN4489cndOrxoKYWkJeAdSrTrv5XetF6vAYTeHxgA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=DYaTWrjK+QDxh+f4atYhdCu+gTb/lwulZsTkbxqh8jXDXenEKTUbeG4L8wGOZjIk0mPYYcqcilCp0DhEaEwTXuXn8UMnRMc6wNkRdb145C9lQsV96BIJRq5HPU14fV0vqSDF3FgiBFBZdCnX5wNj0ffpMSr+VxePzbzJhqYP9FA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=aB1KD2Au; arc=fail smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZiIOGz4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7580BC3277B;
-	Wed,  5 Jun 2024 06:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717568834;
-	bh=Wd9zHKEWoslbcFRSGouPKc8Ft0c6guz9BhPzn40/nuM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sZiIOGz4mAcMqlnKuBer+zLB4OUW3wdfc5gosaOSBEw1eL/POE2vzP7s0WNUWMtHV
-	 NENT1uic9AFL30H5ImFRf+cc48gSmBZiGejFv69bhfZEv704LjBZ3170vgq3QZB3kq
-	 ve2nk3H4BVGOkx0JY1pyez7Qws7SWdYg/1qU0/0zF9Wx6IDGDm9l+uKPXI3JDSzuaB
-	 wWnont51qD49rNlt3+HwY+R5H2PQCLFdaYLFxvGplL62pD6yl3wRyujWW+sEmY6ype
-	 GD3RV4aM/E9Ig3RfZOwqQJnXys9jE9ef5xvFiEitlcrlAwGk8pE6VrjT0wfBlko3oO
-	 jqGnnh1ga6tRw==
-Date: Tue, 4 Jun 2024 23:27:11 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Edward Liaw <edliaw@google.com>
-Cc: shuah@kernel.org, Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@android.com,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/timers: Guard LONG_MAX / LONG_MIN defines
-Message-ID: <20240605062711.GG279426@thelio-3990X>
-References: <20240604231219.444603-1-edliaw@google.com>
+	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="aB1KD2Au"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 454KRqR6004139;
+	Wed, 5 Jun 2024 00:00:42 -0700
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3yj167c7r4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Jun 2024 00:00:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XnPpNZhlQnnS2dZQBXlPbnoszGbOYKlIM+B2h8AmEgcrjnnXY4rywSDThNTAIY4pbKGPOg+9JpCPbF0rztGMsMBCi4JOlaPiUe1b6oYZo/j9TMm8OZ0SfPRrgl9ywjYJQSShRvjIBRzAEkMvlDREPU5/uczAIG1HN3R4bZaLycy1PP737gkUxOSTrqV9/DPnHyRYHIprhr6uz00YTrjSJERM+zrSBw9SRwosTI5ien5v83ovpHlNahCxMGHsVvP8LpGBkV/ZuAg/dpkbcjkqW86BnJIN7BbSoYN11x19jg9KebElbHRggf8ZiYEFQ4Jy3IDA73XWbdtkaEeDJLkI1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hvstH8AtHu9Vbf5GktQaC4OtwqIMvso0tnNR8lsV7KY=;
+ b=a1tEYCdzRNlhd+Qu4XvjyW678UbfkhwwTNvl0ei3lds26g2lqq3JGV3CFht251xwkAHpte2R1oVQpiowrDiySmuPVCzRPhpwscZKI9HyEmTyAuBIx0kJkuXfJ85HW0/TQCdF8OPS5to1qt9oTEAI0ZaR5uw600mDJO49Z+LCy4ZDcJDSpJgtMeelX8eTQkWhILJm9YLxcaeC8j5JEBqnyfE0ZVUkBaFYMPc5wCDq4YfaMfZp0riRfPRXUt5P16IExmRxR+0X5e39OY7x9GWw7le0sd+2VK3s0ixAqluHdv2zXnWrlqr/eepPKbZvgNwAlE/IQdB4+4Vxmoehfs3f+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hvstH8AtHu9Vbf5GktQaC4OtwqIMvso0tnNR8lsV7KY=;
+ b=aB1KD2AuRluCJj3cGIpdD2C9Ccp3+SEdaODYbM2wTbmUm04onnS1+kSpNVEszTbJQIONCC4IlgqlSrVnMCv1rE0FBqSuiYjmmkEKNN8n0CqYVyMW4kDjZW2eogO64JuSRGHI/6muRUPSG7s1VPgdqkPg27FYfCHs6Py6/cGHzX8=
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com (2603:10b6:510:ea::22)
+ by PH0PR18MB5210.namprd18.prod.outlook.com (2603:10b6:510:166::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.22; Wed, 5 Jun
+ 2024 07:00:38 +0000
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::ba6a:d051:575b:324e]) by PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::ba6a:d051:575b:324e%4]) with mapi id 15.20.7633.021; Wed, 5 Jun 2024
+ 07:00:38 +0000
+From: Hariprasad Kelam <hkelam@marvell.com>
+To: Su Hui <suhui@nfschina.com>, "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org"
+	<kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com"
+	<ndesaulniers@google.com>,
+        "morbo@google.com" <morbo@google.com>,
+        "justinstitt@google.com" <justinstitt@google.com>
+CC: "andrew@lunn.ch" <andrew@lunn.ch>,
+        "ahmed.zaki@intel.com"
+	<ahmed.zaki@intel.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "justin.chen@broadcom.com" <justin.chen@broadcom.com>,
+        "jdamato@fastly.com"
+	<jdamato@fastly.com>,
+        "gerhard@engleder-embedded.com"
+	<gerhard@engleder-embedded.com>,
+        "d-tatianin@yandex-team.ru"
+	<d-tatianin@yandex-team.ru>,
+        "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        "kernel-janitors@vger.kernel.org"
+	<kernel-janitors@vger.kernel.org>
+Subject: net: ethtool: fix the error condition in
+ ethtool_get_phy_stats_ethtool()
+Thread-Topic: net: ethtool: fix the error condition in
+ ethtool_get_phy_stats_ethtool()
+Thread-Index: AQHatxYSXfoPHCepTkml03iA540XAw==
+Date: Wed, 5 Jun 2024 07:00:38 +0000
+Message-ID: 
+ <PH0PR18MB4474096265EED015A2A7FBE0DEF92@PH0PR18MB4474.namprd18.prod.outlook.com>
+References: <20240605034742.921751-1-suhui@nfschina.com>
+In-Reply-To: <20240605034742.921751-1-suhui@nfschina.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR18MB4474:EE_|PH0PR18MB5210:EE_
+x-ms-office365-filtering-correlation-id: 4fa3abc5-4b01-47b4-fd3e-08dc852d34b4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: 
+ BCL:0;ARA:13230031|376005|366007|1800799015|7416005|38070700009;
+x-microsoft-antispam-message-info: 
+ =?us-ascii?Q?kT+jg6iNqMihmQZkwfBivYNRC+Ua+G/zwE9QLMPtjW4lDKwAGGE39vttb5Ps?=
+ =?us-ascii?Q?0AZ1YLIiE5k98weeXkQ3BtHC8jirDCitv6j1P63DE/Foks4CFXZ0fSwg5Z4U?=
+ =?us-ascii?Q?7WJ4EpBCwRL3+XTJ4U13rFiCfjrPxJ0oBA9eK/f9p0N1mJTPTlNHaE+Oa2sD?=
+ =?us-ascii?Q?lS7F5dahJWYqPDBIDoD16w3ijzUsftMZYTCbPkGg1ySmKvki5ferEFl6K+Ip?=
+ =?us-ascii?Q?zd2EGsqngvR8efTFUulJjjhPujEWA8RnDbbJihaSOKyGhpp49vsJq1fXAzwX?=
+ =?us-ascii?Q?c+x+ivU24jYrZ1X7lktMAJcTOEtIhIKMn/tB4qMnFU7hd7oXToUjIp+L5KMR?=
+ =?us-ascii?Q?8uE3mvlv67Ap9iqokXzh53DsC7qx7YrsOLYsjwwAubhpoYghn4RT/kxjf0/8?=
+ =?us-ascii?Q?TD80xDwtzTiTDAmPKnF4qlJYzGMaawfjPd66+QsnWsGychCVX+KA2+i3nuk+?=
+ =?us-ascii?Q?QOe0xJhGO4Y1TeS4ozBEmnKg3GlHgQaMraOrdfEzl2rgmDMBUm7GuWBXxhJS?=
+ =?us-ascii?Q?qP2EzvV+Bcp9uFkVXOMLUg7Lya1YWgV8ybFeTKQdf+RiwdLy0jAd2VP5WVXE?=
+ =?us-ascii?Q?lcB3yJL/FbWgiFa/XLjH9048bmfIQfUEMvdJP/FD85fMkx123uhpFvrFzzLb?=
+ =?us-ascii?Q?hK4U67Ff9z+XqrmfhNWGerlTsE5E09liPVH7tZvGVqr/oou8bhYOx3FtWjQP?=
+ =?us-ascii?Q?68gDK+BSd50/RaWlbcwyWRudZNuKPuRVbvaQ+awEbWnj6cTEoPOMtQzMeBYX?=
+ =?us-ascii?Q?tAF//5QD8sOQpRXO92sKQLn5nBrIkaWOi9VQR+NStydP+6xsBEwO0IhtGSW9?=
+ =?us-ascii?Q?4wzTbRfQNCFHoTZOQ/QznIVV0MCa45Gi5Uh1COAZ9XheVLahXr1zOTcV267r?=
+ =?us-ascii?Q?kCyPccCgbnVYeyOgweo3MUFajCz/RWDwMmZcPiDFFJxmW4WFemoiC3MVahNk?=
+ =?us-ascii?Q?6Hko1PKiMSTSKskuC5XNBINPDoTWD1SM0QC9sQUwMdUeWfFR/4P8YiNDLeHH?=
+ =?us-ascii?Q?FF9Uiik2gxuBPNXGeEBIBE9wgZCVQaDTElHjv3ecTIQRPIjv60JbETPZrkIL?=
+ =?us-ascii?Q?9U0dkVxzTyW6tfdiJK8ejUKRwrj+m+aKeD9Ui3GkPc7tpUXep/Wja8WMyyBR?=
+ =?us-ascii?Q?H+Db3gTAX+g3hHN5ll2NfIA76XQygF38EyrfJgIKS7rX709+hcGARqdrFfCs?=
+ =?us-ascii?Q?yMlu95Xh9PczFGtzoQD7M6kFyCQJjqYLwYyO0sDxvfjWa9vzfKRdzObyjZg5?=
+ =?us-ascii?Q?vuJkLOluRBmcJ1WR1my4YyQF0CYZzIGOU2AW7jPSu1agfNw9P/nDL+XCqSki?=
+ =?us-ascii?Q?+vjZezo1jgW8gcjPzKpSgNqRG8Cw9SSqUhCfbcTsyK0Q7FuIqFzFxjzTSYWj?=
+ =?us-ascii?Q?n6WElIM=3D?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR18MB4474.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?4lJ4Q2PGCEPueivPBIPvgQYGx+30ehwnJK/f+1ah8qyTJZKwk3kWvilgWnOg?=
+ =?us-ascii?Q?WpWAxlJ78ZgICz4mQBBIh5YXzBsnLRQ6ddi4bqm7XxU6wXNSEa1pw0i0hN1F?=
+ =?us-ascii?Q?LqHs7lhjQkjz3yhPuY9KA5EWfKe2YYYeYLtuxlTO6eq0JfT6e3tULXHjHJUv?=
+ =?us-ascii?Q?JgM+5UN/NEcNrM+Iq5ix1/i4Z9NWoaKACzzgsR40sc6mdwInCXmRxK9IhPXw?=
+ =?us-ascii?Q?7479Xi1HpK+61YsEAQGfq6yEj6UYM3x90zM8F9fLkAr9isG4vvz0noDKGzAj?=
+ =?us-ascii?Q?KbKqfmeIZ7mI/S1c2Xg0hBn+0WooPCNB/R75NcySdUWMiHKwG6vqz4xIIwbM?=
+ =?us-ascii?Q?7EYsE1+uLlAG6V5SHqnFWbThJRbUgEuIV9V0Syze119dy+0GipNforyoWcCL?=
+ =?us-ascii?Q?DCZAcMKqATA3ixRbzzVWZX6IS8bJN2mf0f+odqh0yIlM/AKWgTSLm1mMN9MK?=
+ =?us-ascii?Q?T7yHK56HFiu5wZf6sJRxPTq8LG7gqBx2w2eSN2F5Oi6WArRg/59yBKGnK2Xj?=
+ =?us-ascii?Q?J8CvwN1L5QIEsmmgGPTfHCDpwt8Rv2cbQBjx/i6c+OoEHe/1St5Z8CIilGYm?=
+ =?us-ascii?Q?IUyBH1fluuwTM37LcX1GuR+T6CHeQtTgG1q2QFzFF3SHzZ30DsX2L1Nl5Grd?=
+ =?us-ascii?Q?lNVaWEoou7LnU08LEFn3CIRugLNmF3DhwuGAZfkXqb6H7XEm7XOtXVJdbREg?=
+ =?us-ascii?Q?H66MlUAUgiB6+Xz7COLyhB7BIpCnhcI1SZfVzhn35Beo6oU7AVWjQVCwvcdL?=
+ =?us-ascii?Q?d9Npa6PZf8gN65Z9aigrAupngz5LFOpGXNjYa6v1RBEDXdQ0efbZ4DXv1iZw?=
+ =?us-ascii?Q?i4Nudm9cHACxefWMBjEVvTvLnpwIKRiuRbpVA9YB97q0mtkUzQX0NAEpMDLP?=
+ =?us-ascii?Q?RP4Scuuc5h/O9Pfd36VpQtH3soZv87/xW6tewxABuzn7UxbjjQ5SZD5xxan4?=
+ =?us-ascii?Q?dGXENwpQjONR2lp13yAz5rGPyVPPJmyZ/pPta0ekiZPeZ2NXqyihzAuuwUrn?=
+ =?us-ascii?Q?l46rH4EUr6LMbjity0r57Cq1Xib0aQNG3bay1IH2D2Ap3rD53AI9IGjWvowy?=
+ =?us-ascii?Q?Eq36E5j9MJ3Ax95kJgIzdpLtow2a/zqnSsI9SqP8roc+rAjT/0NK8CuL+NfW?=
+ =?us-ascii?Q?mKm8zICGd7WrazbKsVIvu4w3B6jpqelCV5TbWKkrnIkJyVD6n3+AVbkcG39N?=
+ =?us-ascii?Q?wwSMNjgRMpl6JeixllHijaMVbGAs662lQKUje9er1uhWRIEsZEwNPNtnP2fu?=
+ =?us-ascii?Q?omvwDx3lRrqSAS0Xjouad/uI2jASEDV0FgfDjZiMgpQhnROk99PZr0dmzxFj?=
+ =?us-ascii?Q?2ibRDWiWFE+PnmwuXg8bEvPQvU+H4OesyUpSaGlMpc+DMHnLZ2wwWycAeyw1?=
+ =?us-ascii?Q?L90cnPLcmKj8K0TEjape07acgsgXvSMaoQdSxsE+QuiOTI0xjFcq5bknL3Kb?=
+ =?us-ascii?Q?qt8M0oAPWqwAQM/8DRFugARuXEqi7h8HNY1w+W9fRJ7RBRtbkHyv5yHVIszH?=
+ =?us-ascii?Q?cPlLJrGFRXhxkFti5IH8qv+g0CxjXq6jKNL8FjF1ge5xY/dnMWDvhXblDVJn?=
+ =?us-ascii?Q?V8DxZYyE6WqYxIm/Rt4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240604231219.444603-1-edliaw@google.com>
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR18MB4474.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fa3abc5-4b01-47b4-fd3e-08dc852d34b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2024 07:00:38.3881
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QGbls36K8j3JbOvXt+JjEeI02o8YK9zIqSF2LpEawvmFAzAA27Viyo/7gRXCNuVscDbB4OeXOcw1PR9hxD3g8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR18MB5210
+X-Proofpoint-ORIG-GUID: bOU1_Y3k0uGnyvPzksPpn52BoZZNAaEK
+X-Proofpoint-GUID: bOU1_Y3k0uGnyvPzksPpn52BoZZNAaEK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-04_11,2024-06-05_01,2024-05-17_01
 
-On Tue, Jun 04, 2024 at 11:12:18PM +0000, Edward Liaw wrote:
-> Add ifndef guards around LONG_MAX / LONG_MIN defines. When building with
-> Android bionic, these macros are redefined because bionic's time.h will
-> include linux/time.h, which includes limit.h.
-> 
-> INFO: From Compiling common/tools/testing/selftests/timers/valid-adjtimex.c:
-> common/tools/testing/selftests/timers/valid-adjtimex.c:107:9: warning: 'LONG_MAX' macro redefined [-Wmacro-redefined]
->   107 | #define LONG_MAX (~0UL>>1)
->       |         ^
-> prebuilts/clang/host/linux-x86/clang-r522817/lib/clang/18/include/limits.h:47:9: note: previous definition is here
->    47 | #define LONG_MAX  __LONG_MAX__
->       |         ^
-> common/tools/testing/selftests/timers/valid-adjtimex.c:108:9: warning: 'LONG_MIN' macro redefined [-Wmacro-redefined]
->   108 | #define LONG_MIN (-LONG_MAX - 1)
->       |         ^
-> prebuilts/clang/host/linux-x86/clang-r522817/lib/clang/18/include/limits.h:52:9: note: previous definition is here
->    52 | #define LONG_MIN  (-__LONG_MAX__ -1L)
->       |         ^
-> 
-> Signed-off-by: Edward Liaw <edliaw@google.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
+> Clang static checker (scan-build) warning:
+> net/ethtool/ioctl.c:line 2233, column 2
+> Called function pointer is null (null dereference).
+>=20
+> Return '-EOPNOTSUPP' when 'ops->get_ethtool_phy_stats' is NULL to fix thi=
+s
+> typo error.
+>=20
+> Fixes: 201ed315f967 ("net/ethtool/ioctl: split ethtool_get_phy_stats into
+> multiple helpers")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
 > ---
->  tools/testing/selftests/timers/valid-adjtimex.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-> index d500884801d8..3d9f1baff86e 100644
-> --- a/tools/testing/selftests/timers/valid-adjtimex.c
-> +++ b/tools/testing/selftests/timers/valid-adjtimex.c
-> @@ -102,8 +102,12 @@ long outofrange_freq[NUM_FREQ_OUTOFRANGE] = {
->  	 1000 * SHIFTED_PPM,
->  };
->  
-> +#ifndef LONG_MAX
->  #define LONG_MAX (~0UL>>1)
-> +#endif
-> +#ifndef LONG_MIN
->  #define LONG_MIN (-LONG_MAX - 1)
-> +#endif
->  
->  long invalid_freq[NUM_FREQ_INVALID] = {
->  	LONG_MAX,
-> -- 
-> 2.45.1.288.g0e0cd299f1-goog
-> 
+>  net/ethtool/ioctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c index
+> 5a55270aa86e..e645d751a5e8 100644
+> --- a/net/ethtool/ioctl.c
+> +++ b/net/ethtool/ioctl.c
+> @@ -2220,7 +2220,7 @@ static int ethtool_get_phy_stats_ethtool(struct
+> net_device *dev,
+>  	const struct ethtool_ops *ops =3D dev->ethtool_ops;
+>  	int n_stats, ret;
+>=20
+> -	if (!ops || !ops->get_sset_count || ops->get_ethtool_phy_stats)
+> +	if (!ops || !ops->get_sset_count || !ops->get_ethtool_phy_stats)
+>  		return -EOPNOTSUPP;
+>=20
+>  	n_stats =3D ops->get_sset_count(dev, ETH_SS_PHY_STATS);
+> --
+> 2.30.2
+>=20
+Good catch!!
+
+Reviewed-by: Hariprasad Kelam <hkelam@marvell.com>
+
