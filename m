@@ -1,98 +1,133 @@
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6EE33F7;
-	Wed,  5 Jun 2024 01:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A6B8F44;
+	Wed,  5 Jun 2024 01:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717550644; cv=none; b=AwO2Bl5biazalvbAPne5y7t8eOP1YvegrzuQc/sSF8R5NQGqJh4NgeVC3Kun82cV0E1sw0knyQ1onSaVWCaSXqdAxmaVevtPRs3rNciEVtZJOQSrLGeMXVWhjZh0z0zMcKNMUGBN1/N9iVI35hH33vUKFukUVSHQgPCp1IuM+wQ=
+	t=1717551280; cv=none; b=rgtb3xHrXJLGptX+PQRfUglksDwoLosO+/sdZlwDZ0SfgHeaQDSrzqgMAzBY5OVLJY/ud1qW+4aOeoPz245CeFZG7FC8q6CZwhzcWFwlDRVZY4GLK5aStHsAtILT/nYkeaiTzrC9Q8HXPxk2EIfx4Ks3xX46j7ufvm6gVDXBibo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717550644; c=relaxed/simple;
-	bh=Id9sImMrkS3WBgztVALbU9ktfSbg5X5ksatQi+bWftI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k8XpZI+0KbJkzsrmy7NoXUXeN0cTq/lTxfCPJOYWhGPUbwPdXv3BgbzJmarkH8V475QcqPVjPhbi2YaY+1AK9940mfW0TsHdjVF+snlzA9M1CHHiuPLvef0gh+Y9IMFzp+q05nBIvJL612Bq0j/SOWkTpGpzAqVnbYAqwyHnZqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4550LIkK016063;
-	Tue, 4 Jun 2024 18:23:44 -0700
-Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3yg35f3a8n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 04 Jun 2024 18:23:44 -0700 (PDT)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 4 Jun 2024 18:23:43 -0700
-Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
- 15.1.2507.39 via Frontend Transport; Tue, 4 Jun 2024 18:23:36 -0700
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <krisman@suse.de>
-CC: <adilger.kernel@dilger.ca>, <coreteam@netfilter.org>,
-        <davem@davemloft.net>, <ebiggers@kernel.org>, <fw@strlen.de>,
-        <jaegeuk@kernel.org>, <kadlec@netfilter.org>, <kuba@kernel.org>,
-        <linux-ext4@vger.kernel.org>, <linux-fscrypt@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lizhi.xu@windriver.com>,
-        <lkp@intel.com>, <llvm@lists.linux.dev>, <netdev@vger.kernel.org>,
-        <netfilter-devel@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
-        <pablo@netfilter.org>,
-        <syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com>,
-        <syzkaller-bugs@googlegroups.com>, <tytso@mit.edu>
-Subject: [PATCH V6] fs/ext4: Filesystem without casefold feature cannot be mounted with spihash
-Date: Wed, 5 Jun 2024 09:23:35 +0800
-Message-ID: <20240605012335.44086-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <87le3kle87.fsf@mailhost.krisman.be>
-References: <87le3kle87.fsf@mailhost.krisman.be>
+	s=arc-20240116; t=1717551280; c=relaxed/simple;
+	bh=9+rM/5HKztZ3XHOcKnoDMJ97EOLdst/cWA1TwQP/mJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Q+UpXz6LjTv62Ets1qgnAsF5+2K5tZJcQd1Gf9RKqz/M1d2zC9Y9JNs8VycOYPO2nME30lgtqWrCGKINgpZI0JnGYaBPqVSQ/1wPf68bBCDXR5d1gN8IzfFwQsXkuTLYAY6lIsDzt8G5za5yCsD5I/9Z2RSw+R5n7vls/nFxmIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VWRgZIk0; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VWRgZIk0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717551278; x=1749087278;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9+rM/5HKztZ3XHOcKnoDMJ97EOLdst/cWA1TwQP/mJs=;
+  b=VWRgZIk0vfPo4aNBf6MCLD0ZO9W4Du94RXOkAA2VU5ZYG9jGpU2RyxTh
+   /y00knaP9im/73e3Tfa+SdYCKXcSqcwt1ZXjlKpuPY0isc1/P00Ru/23A
+   iZOAB6bcY9m+KvVK0AEp6/a1KQ6eYBCRYZ3IPb7eeV+fZ+ogU8QC4e9lf
+   SGXsy1JPWyASXiU8PZGHLLqkrPKB+enz0796d9q6SQuPcjwoEdVaP8KVC
+   pcZXBfSZzYqZ21qQTSvIFwB3QuGk3uWnx7KAPctcr+V6f8q5F5TsEjJ7c
+   KicyR0oN3EMo9qVMSQ50rLWLjP41agof1R63fty07QOcgxaetTzSyO78P
+   w==;
+X-CSE-ConnectionGUID: aRYfrdDzREimGDczzss0rA==
+X-CSE-MsgGUID: tUFNTEYwS7ubVueY9uiGdw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="24790958"
+X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
+   d="scan'208";a="24790958"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 18:34:27 -0700
+X-CSE-ConnectionGUID: uhmQxwGWT461MmOV2g0F/A==
+X-CSE-MsgGUID: MZSoxDrFR1qQd26y/gyBhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
+   d="scan'208";a="74906284"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 04 Jun 2024 18:34:25 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sEfXi-0000mF-2F;
+	Wed, 05 Jun 2024 01:34:22 +0000
+Date: Wed, 5 Jun 2024 09:33:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:19:62:
+ warning: omitting the parameter name in a function definition is a C23
+ extension
+Message-ID: <202406050908.1kL1C69p-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 2upWjM2V16NiGPCPyDb6ZG4I8yCG6TLl
-X-Proofpoint-ORIG-GUID: 2upWjM2V16NiGPCPyDb6ZG4I8yCG6TLl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-04_11,2024-06-04_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 mlxscore=0 phishscore=0
- clxscore=1015 malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.21.0-2405170001 definitions=main-2406050009
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When mounting the ext4 filesystem, if the default hash version is set to 
-DX_HASH_SIPHASH but the casefold feature is not set, exit the mounting.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   32f88d65f01bf6f45476d7edbe675e44fb9e1d58
+commit: e22b4973ee201486a7147efaa80b6562d3a749d1 media: c8sectpfe: Do not depend on DEBUG_FS
+date:   7 weeks ago
+config: arm64-randconfig-004-20240605 (https://download.01.org/0day-ci/archive/20240605/202406050908.1kL1C69p-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050908.1kL1C69p-lkp@intel.com/reproduce)
 
-Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
----
- fs/ext4/super.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406050908.1kL1C69p-lkp@intel.com/
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index c682fb927b64..d0645af3e66e 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3593,6 +3593,14 @@ int ext4_feature_set_ok(struct super_block *sb, int readonly)
- 			 "mounted without CONFIG_UNICODE");
- 		return 0;
- 	}
-+#else
-+	if (EXT4_SB(sb)->s_es->s_def_hash_version == DX_HASH_SIPHASH &&
-+	    !ext4_has_feature_casefold(sb)) {
-+		ext4_msg(sb, KERN_ERR,
-+			 "Filesystem without casefold feature cannot be "
-+			 "mounted with spihash");
-+		return 0;
-+	}
- #endif
- 
- 	if (readonly)
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:38:
+>> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:19:62: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+      19 | static inline void c8sectpfe_debugfs_init(struct c8sectpfei *) {};
+         |                                                              ^
+   drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:20:62: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+      20 | static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *) {};
+         |                                                              ^
+   7 warnings generated.
+
+
+vim +19 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
+
+    14	
+    15	#if defined(CONFIG_DEBUG_FS)
+    16	void c8sectpfe_debugfs_init(struct c8sectpfei *);
+    17	void c8sectpfe_debugfs_exit(struct c8sectpfei *);
+    18	#else
+  > 19	static inline void c8sectpfe_debugfs_init(struct c8sectpfei *) {};
+    20	static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *) {};
+    21	#endif
+    22	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
