@@ -1,140 +1,129 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCA1C133;
-	Wed,  5 Jun 2024 19:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C15DDD2
+	for <llvm@lists.linux.dev>; Wed,  5 Jun 2024 19:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717614360; cv=none; b=p8htz40xRQ9HndfpbSGl/gWan/V2kg+EPBoGDUK9F/+km6E+mokmhmGFMfND9lhJZROXMyMa0U1qonbGd2sKoP1B5xjJ+/cp58/Hw5laW+gz8e5UzrzmfgP0MmeJ4/WmeDv14FYPura8n/eJbshdkit7PmGPSpcx8Wur3n5lHuA=
+	t=1717615924; cv=none; b=SQaPvosHtqClLYYsNgPiUtkPPvwlIZ6t34WQUvoxjgaDzs0Jo979U9ndt31JUJxC/g8RDczfDiUdizGbTVsa1ijt4BQ+/DHRcKJrIDR+2DNwUeGVNoj0a+oQv90FlvDKbh6CBUauVhZ5MW2GgoJU3AydzdCkWXQ0oNSatW8mjrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717614360; c=relaxed/simple;
-	bh=Ce36X2cTUtKRp4XTVyTLX9lqpwhRE2M6qyo6ifMz/3E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JTsciG1Z19QHbWj82FGY/2PINd7L+XnwDpsb/Hmfi51klcYpeC4CyN2G4pVCecgnFolCP6eEJwbre4MKa1UwyqGV9CgALa9U9AKsUqyGY2WQKQkP3H9ZrXVqqrZx78oUzqFLuLCsm0kd17POB8lccPxE3CL+lkvgvtnHw4KZ370=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=NUG7dJI0; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1717615924; c=relaxed/simple;
+	bh=m0CXhwJL3QSo1uinEHiWUBm+QL6SC5BUk6YFU+VFrX4=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e8aztSujy7YZWHCX3gmwiCe//0c8PXKNXP+CSmXKu4vvlhWIUC8QMBbRGPVHL44NhoJdL+Hydxv2cae6dSyIWK5gzhZh/ttHMZBm9lHE3QnfGh3jVaz+RsEntuCeie8Cc1FCxqkq2k/+Ws8py9uLhzT4yjCH5qMar4MSNiwaDCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KGt7JhRk; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="NUG7dJI0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1717614355;
-	bh=Ce36X2cTUtKRp4XTVyTLX9lqpwhRE2M6qyo6ifMz/3E=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=NUG7dJI0TZhq3N24yuUjWEb/1BemaYA0qTnft/6rhAwhurP9cWQm30U6C6FUij9oT
-	 i/9O+75Zon9/mP70/IY+zpr5G0esJ6PK6asMLdiLm7rXnh24EDI97pA/ik8sdCG4cO
-	 l37Eqj8uct9cvswqrRg5EghtyT124LeGjVvySKG4=
-Received: from [IPv6:240e:358:111d:4300:dc73:854d:832e:6] (unknown [IPv6:240e:358:111d:4300:dc73:854d:832e:6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 6D50766DF6;
-	Wed,  5 Jun 2024 15:05:47 -0400 (EDT)
-Message-ID: <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
-Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
- unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
-From: Xi Ruoyao <xry111@xry111.site>
-To: Jinyang He <hejinyang@loongson.cn>, Nathan Chancellor
- <nathan@kernel.org>,  Peter Zijlstra <peterz@infradead.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Tiezhu Yang <yangtiezhu@loongson.cn>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, Youling Tang <tangyouling@kylinos.cn>,
- loongarch@lists.linux.dev,  linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, mengqinggang@loongson.cn,  cailulu@loongson.cn,
- wanglei@loongson.cn, luweining@loongson.cn, Yujie Liu
- <yujie.liu@intel.com>, Heng Qi <hengqi@linux.alibaba.com>, Tejun Heo
- <tj@kernel.org>
-Date: Thu, 06 Jun 2024 03:05:41 +0800
-In-Reply-To: <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn>
-References: <20240604150741.30252-1-xry111@xry111.site>
-	 <20240605054328.GA279426@thelio-3990X>
-	 <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
-	 <20240605062548.GF279426@thelio-3990X>
-	 <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
-	 <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
-	 <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
-	 <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KGt7JhRk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1717615920;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wAUzjKjHQT48MT1CEnySduYKvPnHNLGmCrzOZbluMf0=;
+	b=KGt7JhRk5KQBKVwEiR/yhyMJhBDGGYg/2fgf0yn7Dd7UeqRcD3DDt2GxQEKBBdSoLqHM+H
+	grIU8XMM6sIeuS4Ws2PVFDrJejMu9TzNwKoy0M0fTbv1x5OFnGqupmxki3xe670WOOAuqN
+	S6p98ixmFsXdWUfLUbJEbkkdRGDpKvU=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-6jOILh3nP7-70yMF-qCoYQ-1; Wed, 05 Jun 2024 15:31:58 -0400
+X-MC-Unique: 6jOILh3nP7-70yMF-qCoYQ-1
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-5b9b37de6e6so81837eaf.3
+        for <llvm@lists.linux.dev>; Wed, 05 Jun 2024 12:31:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717615917; x=1718220717;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wAUzjKjHQT48MT1CEnySduYKvPnHNLGmCrzOZbluMf0=;
+        b=E/XDAx2ENenC5ITD8PYuSsuzEUbSxTK+U2TwKG63BoWMGPgm2t7ZGLWKHYzi641Y7w
+         zpe0DLf0pEnC0V/6P7TJZl2mf5PMgCIzhU8/kQH6meBzhqa+Fw3s8Bpo4rzlPtLIbujj
+         l7C3OTQFGznZcui4/+wOHrKTPpVde11UXK7Ftuyndsk0DGdulbLmEm9Aws4FZjHf2Vz+
+         cJYzagyrPcJTAlPjf9samXro5C2ZJ32hPYb2+yyqIHswtzHtukSAXdsC99GESynhHLn4
+         ZgL8xVYzaRXTZR3lBs5FfxBZY5rAZhpu/E5NJRyuZ4W3yAgcUTSyFD70tfWu9Oyf7VVC
+         rtOg==
+X-Forwarded-Encrypted: i=1; AJvYcCVbnoXi90Zmetbi8W+wgstPmFj703XLgX3GYhUZA5FeX/397ZBGd7VMEDNdagzUpAYc8xtVX5+1yl9KUxBhDgM30Whf2w==
+X-Gm-Message-State: AOJu0YxJNk2TI0yFKMRXlDCjOMF8MdWzoUX7AMpOw4FgXjTLcP3wiyOu
+	l0mr85yZ/IY0/KzdakH2h+Ua7KVk4DRgEO8mCOYH+JxakTxAL6qX090W2yOielaMrlbOXaqvl2J
+	mYFiII9VgHJCPSnfB8JbuzFQhm+p72mZapiE1aq8T70XL750L6GJ//CK+pTIyWESnZXZVtMz9Tl
+	1gDQn/0huOUGAx+shr+p5U6tji7g==
+X-Received: by 2002:a05:6359:4103:b0:183:612d:44a1 with SMTP id e5c5f4694b2df-19c6ca19ed9mr443019655d.28.1717615917163;
+        Wed, 05 Jun 2024 12:31:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGqzqeFCvtmsiZCw2U1K3HXxO/IPPSvtKOjW3/Ru2mn4jCUk47tlrWhigUB8CObse5CiTfalvEzZeA4Lp6TeH8=
+X-Received: by 2002:a05:6359:4103:b0:183:612d:44a1 with SMTP id
+ e5c5f4694b2df-19c6ca19ed9mr443017355d.28.1717615916756; Wed, 05 Jun 2024
+ 12:31:56 -0700 (PDT)
+Received: from 311643009450 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 5 Jun 2024 19:31:55 +0000
+From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
+References: <20240603185647.2310748-6-amorenoz@redhat.com> <202406050852.hDtfskO0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <202406050852.hDtfskO0-lkp@intel.com>
+Date: Wed, 5 Jun 2024 19:31:55 +0000
+Message-ID: <CAG=2xmOQBaUki43jpUnP7F-RvkxXroQ46_CuXvbQyps=MvvYAg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 5/9] net: openvswitch: add emit_sample action
+To: kernel test robot <lkp@intel.com>
+Cc: netdev@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, aconole@redhat.com, echaudro@redhat.com, 
+	horms@kernel.org, i.maximets@ovn.org, dev@openvswitch.org, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Pravin B Shelar <pshelar@ovn.org>, linux-kernel@vger.kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2024-06-05 at 23:47 +0800, Jinyang He wrote:
-> In our 419 repo this func has been renamed arch_update_insn_state (, now =
-it
-> should be arch_update_cfi_state) and give some actions to deal with the
-> frame pointer case. If we support it we may deal with some case but for=
-=20
-> clang...
->=20
-> .global test
-> .type test,@function
-> test:
->=20
-> addi.d=C2=A0 $sp,$sp,-448
-> st.d=C2=A0=C2=A0=C2=A0 $ra,$sp,440
-> st.d=C2=A0=C2=A0=C2=A0 $fp,$sp,432
-> addi.d=C2=A0 $fp,$sp,448
->=20
-> # do something=C2=A0 <- not change $sp
+On Wed, Jun 05, 2024 at 08:29:22AM GMT, kernel test robot wrote:
+> Hi Adrian,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on net-next/main]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Adrian-Moreno/net-psample-add-user-cookie/20240604-030055
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20240603185647.2310748-6-amorenoz%40redhat.com
+> patch subject: [PATCH net-next v2 5/9] net: openvswitch: add emit_sample action
+> config: s390-randconfig-002-20240605 (https://download.01.org/0day-ci/archive/20240605/202406050852.hDtfskO0-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406050852.hDtfskO0-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202406050852.hDtfskO0-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    s390x-linux-ld: net/openvswitch/actions.o: in function `do_execute_actions':
+> >> actions.c:(.text+0x1d5c): undefined reference to `psample_sample_packet'
+>
 
-This is simplified.  In the real code $sp is changed, something like:
+Thanks robot!
 
-bstrins.d $sp, $zero, 5, 0
+OK, I think I know what's wrong. There is an optional dependency with
+PSAMPLE. Openvswitch module does compile without PSAMPLE but there is a
+link error if OPENVSWITCH=y and PSAMPLE=m.
 
-$fp is needed to allow restoring $sp after realigning $sp for some local
-over-aligned variables, as demonstrated by this example:
+Looking into how to express this in the Kconfig, I'm planning to add the
+following to the next version of the series.
 
-struct x { _Alignas(64) char buf[128]; };
+diff --git a/net/openvswitch/Kconfig b/net/openvswitch/Kconfig
+index 29a7081858cd..2535f3f9f462 100644
+--- a/net/openvswitch/Kconfig
++++ b/net/openvswitch/Kconfig
+@@ -10,6 +10,7 @@ config OPENVSWITCH
+ 		   (NF_CONNTRACK && ((!NF_DEFRAG_IPV6 || NF_DEFRAG_IPV6) && \
+ 				     (!NF_NAT || NF_NAT) && \
+ 				     (!NETFILTER_CONNCOUNT || NETFILTER_CONNCOUNT)))
++	depends on PSAMPLE || !PSAMPLE
+ 	select LIBCRC32C
+ 	select MPLS
+ 	select NET_MPLS_GSO
 
-void f(struct x *p);
-void g()
-{
-	struct x x =3D { .buf =3D "1145141919810" };
-	f(&x);
-}
-
-GCC does not align $sp, it produces the aligned address for x from an
-unaligned $sp instead:
-
-addi.d $a0, $sp, 63
-srli.d $a0, $a0, 6
-slli.d $a0, $a0, 6
-
-thus there's no need to use $fp.
-
-/* snip */
-
-> <- restore regs from non-cfa ?
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ld.d=C2=A0=C2=A0=C2=A0 $=
-ra, $sp, 8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 # 8-byte Folded R=
-eload=C2=A0=20
-
-/* snip */
-
-> Maybe Clang have anything wrong?
-
-I don't think we must restore regs based on $fp just because CFA is
-based on $fp.  The .cfi directives only provides *one* possible way to
-restore the regs.  This way is convenient to the unwinder, but not
-necessarily convenient to the CPU thus the real instruction sequence can
-use a different way.  They only need to be "equivalent", not necessarily
-"exactly same."
-
-Also note that .cfi_* directives are completely irrelevant for objtool.
-THe objtool synthesizes the ORC unwind info from the machine
-instructions, not the DWARF unwind info coded with .cfi_*.
-
-The entire point of ORC is avoiding DWARF.  It's even named ORC because
-ORC and DWARF are sworn enemies in some tales.
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
