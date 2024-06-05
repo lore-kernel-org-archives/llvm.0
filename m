@@ -1,107 +1,120 @@
-Received: from wfhigh5-smtp.messagingengine.com (wfhigh5-smtp.messagingengine.com [64.147.123.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02E149645
-	for <llvm@lists.linux.dev>; Wed,  5 Jun 2024 11:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21531990D1;
+	Wed,  5 Jun 2024 11:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717585960; cv=none; b=mrNoAEjlDtvV7ox2VyC2w9/gQJw9MJwLurNaRffODeHizLDnF1+x/Aw2ub7DWJTx+7aksXfGpvWspKeh7qBCLGFFl8VBpiNU9KPMkxuOXeFPcjhV1eLs0J3mMpl4c+KqEIYJWTHXgb9nqCjtKgZ8qTK/gHvbxWwwQ6/Jl9mo7tg=
+	t=1717588548; cv=none; b=IdxrwX7bIn4AVyw7t3z4SfjwaAvNY2bsRsZtaUYuZub/Mm22Yqfb8UulPgshbn6l8iZx8Ne76+XFBgJmnePCOHEvN5SOJYLGRe7duPyewuDa6XeXLwSnCDzuyW9XAmCVOJG7MGXx4CRkqZz9Sbgk0ybCZYn0eOMchez2JxJoIa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717585960; c=relaxed/simple;
-	bh=H4OeqS4v9XYBERN4WeYcxJy12iXmfI3Lsg5bERbc2ZE=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=mNUpaUQN9KJ35pyqI8acKV4Zprvr2TwzmAsbfybzwMoj0Rhn2pRfzV7BGzJJ5b9PuzFRouvWNgAJrXIk5V5yv0ohnFuzednNnrgRzIdxGHWZmxqWArBOCxUXr4BCDViDPRDg16DTuTj8821S6/sZijcEoI8ji+CsR+MybGqvLjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Z/dW1V/n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HKZb8F41; arc=none smtp.client-ip=64.147.123.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1717588548; c=relaxed/simple;
+	bh=IVGQzZ+Bfy2JscfdzeCCEvI9b1mRIh6om/vowOSNLVI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YbhOjjadCpayKfosrbFvC4hA49fFkoY28j0CvLzuBhm5LwnsThnkPeVFYvjgAbJFdyogpBmD4eLE0CbwiQ3tmx/pwEBVyi2IP/y8F1JI7h3TJHFSM5BjrMscgtcXbBMRfFyeYQpZnzIJJKjFbQXIkv1xTKBDWe1P1FZv5j8Fj60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfO+/7Ew; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Z/dW1V/n";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HKZb8F41"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id EE04B18000F4;
-	Wed,  5 Jun 2024 07:12:36 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 05 Jun 2024 07:12:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1717585956; x=1717672356; bh=CP7e2tWVOJ
-	LS21Dk/fSKZ9nuJKGzlXo1Ih4NyojX3uo=; b=Z/dW1V/n+WUV3r2WWfRVFQA2sb
-	ufSrMZqxPlv7r6p0mAooOi7Hsx7OTVvwjy40SRxTZxhY7wkN1HIx4Kz2joo+1NPn
-	N18ADVM1OY+SS5LvRvxL2s1AK+4yqP4LiTsBqQZyVDAbcIyrDipYFDdid4rY5lcO
-	k8B5W3r6vRcN07qMorNHbYGYWSLgKJI2XM4f3nxXokcvgY2MLAypGfKSZQgFnPbU
-	DDfV2ocaSsiH/wDlv6XoImzk1RAfhnCrC8SV2UWZ6B9bap495nDi/EsXmyXJc5LV
-	h6C60IOyu5sWgWzk3L6eHlvU4EyXlVnDDa0RPBPMjBJSlehIA8sVg1X2lFwA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1717585956; x=1717672356; bh=CP7e2tWVOJLS21Dk/fSKZ9nuJKGz
-	lXo1Ih4NyojX3uo=; b=HKZb8F41Jnm/5dF6omNRUZPh+pd8A19LNEV7ZXDwTyU+
-	z4LkoqzJNVG4dCT4AKdKuiYsmCSdvYb65Zou/2zLvsyowGpkJ/+KGhEsZSnOd82c
-	jzwCm0UPL1B1QbelXfgQ0vtYn93UYuqwETMB6g1RVL6gILww6al2oCJIUIHEIWey
-	IFgTNIYIFdG9hdqQg0WB1KFbRq501o3ZO8eDqehp2dEkQBBzNti0tm6eXVWYNNrG
-	5I4VVYoDsQLdIcKt+3FXG5j8P3AhKr2FHOamkA8LPtKZngIxlNL+xMaNRMnAVssM
-	HVU/N0/oCus4g94JE14JXjzRiuAvosd/8jncA8VFFA==
-X-ME-Sender: <xms:JEhgZjK5vk-6POQhs7O4cjRRyuni_i-tlo0FKvKIuCl-9Ka6zqTeaQ>
-    <xme:JEhgZnLipayPRV8umdBh-WRq72PjzDP40NZmAfBwBt_qnK64ExxO-0ZfFGIASBHPa
-    CueX7ZZ7H2hX_oD0C4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeliedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:JEhgZrsujCBcsJa2t2APDSyrYnbakOeT7blFAHNQARQUpCF05UJneQ>
-    <xmx:JEhgZsZT81DgbfcohrWcioie6BPkQw0jUs9U7QSBofBxnSfNWh8enw>
-    <xmx:JEhgZqZTqj8zAxmUwHQxdkYSpEprSJIa3uNVDbwE0UnUM3tzNiBveA>
-    <xmx:JEhgZgBem7ROT7J0wPWaI8z3fqkUPIG_HoJ-00BwyewMPDk2pqco1w>
-    <xmx:JEhgZgyCKYJ4tIG1EOZP4tq-emKtdJ_oLT3tyGqrH0MWeLRgZ76Qaiu9>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1D5B2B6008D; Wed,  5 Jun 2024 07:12:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-497-g97f96844c-fm-20240526.001-g97f96844
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfO+/7Ew"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5013BC32781;
+	Wed,  5 Jun 2024 11:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717588548;
+	bh=IVGQzZ+Bfy2JscfdzeCCEvI9b1mRIh6om/vowOSNLVI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EfO+/7EweVyIdjCKePVRB6pJY69KHHX1q+SC5XnZ83MeraZS1Q66Nb8sGHscuSMKz
+	 Mt9+ueyw1OJg3NJG7uJfUHyMX2K4NY1OJeWs7MiTRI5guXmtBL9OfLRGUrDhGJaVLe
+	 hokXjRsWQmiXBvN0Td9wYkQvDnTwhGSZrB5/NOW3C5kUqfLq80qZ+k1WUeJ0T+nRar
+	 p1o+gxFT+wBJ8WEnSwSK/ikVVvMAVngJxDhUKHP9BUCBOSZN9gWLnV4duT8dVS19RW
+	 iiC8zGseuVyFlifM9c0LheUJxKOK2Hr2di6kLwpbJvT0lt0BsZUUGAgPcAGQEP9oG+
+	 q0eKy7Bf6syLA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Justin Stitt <justinstitt@google.com>,
+	linux-hardening@vger.kernel.org,
+	Phillip Potter <phil@philpotter.co.uk>,
+	Jens Axboe <axboe@kernel.dk>,
+	Sasha Levin <sashal@kernel.org>,
+	nathan@kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.9 2/6] cdrom: rearrange last_media_change check to avoid unintentional overflow
+Date: Wed,  5 Jun 2024 07:55:37 -0400
+Message-ID: <20240605115545.2964850-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240605115545.2964850-1-sashal@kernel.org>
+References: <20240605115545.2964850-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <73051ed4-248e-4a33-828b-c34093d5ce4b@app.fastmail.com>
-In-Reply-To: <20240605111008.GA21651@willie-the-truck>
-References: <20240604210006.668912-1-arnd@kernel.org>
- <ZmAsutGzL5_Kx8Pn@J2N7QTR9R3> <20240605111008.GA21651@willie-the-truck>
-Date: Wed, 05 Jun 2024 13:12:15 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Will Deacon" <will@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Nathan Chancellor" <nathan@kernel.org>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Mike Rapoport" <rppt@kernel.org>, "Baoquan He" <bhe@redhat.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] [v3] arm64/io: add constant-argument check
-Content-Type: text/plain
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.9.3
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 5, 2024, at 13:10, Will Deacon wrote:
-> On Wed, Jun 05, 2024 at 10:15:38AM +0100, Mark Rutland wrote:
+From: Justin Stitt <justinstitt@google.com>
 
->> > +#define __iowrite32_copy(to, from, count) __iowrite32_copy(to, from, count)
->> 
->> Normally we'd make this:
->> 
->> #define __iowrite32_copy __iowrite32_copy
->> 
->
-> I can fold these two changes in.
+[ Upstream commit efb905aeb44b0e99c0e6b07865b1885ae0471ebf ]
 
-Sounds good, thanks!
+When running syzkaller with the newly reintroduced signed integer wrap
+sanitizer we encounter this splat:
 
-    Arnd
+[  366.015950] UBSAN: signed-integer-overflow in ../drivers/cdrom/cdrom.c:2361:33
+[  366.021089] -9223372036854775808 - 346321 cannot be represented in type '__s64' (aka 'long long')
+[  366.025894] program syz-executor.4 is using a deprecated SCSI ioctl, please convert it to SG_IO
+[  366.027502] CPU: 5 PID: 28472 Comm: syz-executor.7 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
+[  366.027512] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[  366.027518] Call Trace:
+[  366.027523]  <TASK>
+[  366.027533]  dump_stack_lvl+0x93/0xd0
+[  366.027899]  handle_overflow+0x171/0x1b0
+[  366.038787] ata1.00: invalid multi_count 32 ignored
+[  366.043924]  cdrom_ioctl+0x2c3f/0x2d10
+[  366.063932]  ? __pm_runtime_resume+0xe6/0x130
+[  366.071923]  sr_block_ioctl+0x15d/0x1d0
+[  366.074624]  ? __pfx_sr_block_ioctl+0x10/0x10
+[  366.077642]  blkdev_ioctl+0x419/0x500
+[  366.080231]  ? __pfx_blkdev_ioctl+0x10/0x10
+...
+
+Historically, the signed integer overflow sanitizer did not work in the
+kernel due to its interaction with `-fwrapv` but this has since been
+changed [1] in the newest version of Clang. It was re-enabled in the
+kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+sanitizer").
+
+Let's rearrange the check to not perform any arithmetic, thus not
+tripping the sanitizer.
+
+Link: https://github.com/llvm/llvm-project/pull/82432 [1]
+Closes: https://github.com/KSPP/linux/issues/354
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+Link: https://lore.kernel.org/lkml/20240507-b4-sio-ata1-v1-1-810ffac6080a@google.com
+Reviewed-by: Phillip Potter <phil@philpotter.co.uk>
+Link: https://lore.kernel.org/lkml/ZjqU0fbzHrlnad8D@equinox
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+Link: https://lore.kernel.org/r/20240507222520.1445-2-phil@philpotter.co.uk
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/cdrom/cdrom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index a5e07270e0d41..20c90ebb3a3f6 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -2358,7 +2358,7 @@ static int cdrom_ioctl_timed_media_change(struct cdrom_device_info *cdi,
+ 		return -EFAULT;
+ 
+ 	tmp_info.media_flags = 0;
+-	if (tmp_info.last_media_change - cdi->last_media_change_ms < 0)
++	if (cdi->last_media_change_ms > tmp_info.last_media_change)
+ 		tmp_info.media_flags |= MEDIA_CHANGED_FLAG;
+ 
+ 	tmp_info.last_media_change = cdi->last_media_change_ms;
+-- 
+2.43.0
+
