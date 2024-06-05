@@ -1,133 +1,206 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D118D61FD0;
-	Wed,  5 Jun 2024 02:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAB11373;
+	Wed,  5 Jun 2024 03:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717553204; cv=none; b=GQij1lUJCzEB88AA5UaIiQzNOPYT32NOby+KZHVSKjx6/4dDHE9JSuSkOSDdOKonbpOfRYrHzkB26Tjbbvln9r++PCMVzZBqtV6To/g6geGrlz5LJF06AV1+AMDXIvIi1bAUfrFBCjXOOTcOE/zoSBkfe0Z2GEXwlAqBmbmMKTs=
+	t=1717556911; cv=none; b=QajIHAWGg5RKG2EDT9Nqb3GKt36IrROrfIwkELXrRpx8s9ezPJnSFKXWCApY/qRKeCemgIC6V6WkGRMdljSofkogJGm0OY7r/W3V1mN/bMPNjgJ9Ri59cjMa2XREGSawaqU3TFHETYEAnSCydmkqzaRQVMB7PypNjzvh3IIquMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717553204; c=relaxed/simple;
-	bh=ReFUp7pweTh2zzhDpxSwTrxIMDTmjvQ8dRKlAIkhyPY=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=PZV71v73c7YMjNddZtMBUgnhQXPjR80ueMQxUXDKSOXhODf0zzynohvRxVr0RkS7iAP5+ja7N0VzJKTTtKD+lAKJHFKayM6FRA3kYJg+t3NCYTcrBtDuzTaEwV41jAWgkBqn5dW2P0iNzwyPTGoEsIzlzr1uzDBayZ3XDizB6WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=oVrrSsqq; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1717556911; c=relaxed/simple;
+	bh=cLTnZmN7WefsGBhZncfftF9OXsRuL3K8+gTIrI8ugdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qXE4MP2uEMPXXzWsS6YxqRQJ2Oqu/UuJdy9WNw7Wu/VVS/gbdlTIW7cbfYCJaj+6/uHSgj9UygjBDgDGNtTSQZOx+hC/WH+X2J7lWycRT+CxKjOeUWfNuZ/hRbogh3WqTGpqNnO+ZTqiNQl8hG5oal7nNfDtZHA3HDakfMqNYhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RyhFzrpr; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="oVrrSsqq"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1717553192; h=Message-ID:Subject:Date:From:To;
-	bh=+hLssxSftTAbTK2MPi0VtFqUyURlszSjmWyA2r06aas=;
-	b=oVrrSsqqdu8KbJx3rdGORmvX7f9YjcNZiOlZ1I7xsBw9jtaYvEDMfRqBRZ6Nuc4VbRJjoaK08T81yaq0NBHtn4X7KNtYK0w6+F4Y4YY86b5LvCYueq8ZoUZO0fW+llUpMO89N47dxrgEGVaVzpeuGWMPBqoHfCMi75Kv151x624=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033068173054;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W7sYmF-_1717553191;
-Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0W7sYmF-_1717553191)
-          by smtp.aliyun-inc.com;
-          Wed, 05 Jun 2024 10:06:32 +0800
-Message-ID: <1717553058.033336-2-hengqi@linux.alibaba.com>
-Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
-Date: Wed, 5 Jun 2024 10:04:18 +0800
-From: Heng Qi <hengqi@linux.alibaba.com>
-To: Xi Ruoyao <xry111@xry111.site>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- Youling Tang <tangyouling@kylinos.cn>,
- Jinyang He <hejinyang@loongson.cn>,
- loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev,
- mengqinggang@loongson.cn,
- cailulu@loongson.cn,
- wanglei@loongson.cn,
- luweining@loongson.cn,
- Yujie Liu <yujie.liu@intel.com>,
- Tejun Heo <tj@kernel.org>,
- Xi Ruoyao <xry111@xry111.site>,
- Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>,
- Tiezhu Yang <yangtiezhu@loongson.cn>
-References: <20240604150741.30252-1-xry111@xry111.site>
-In-Reply-To: <20240604150741.30252-1-xry111@xry111.site>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RyhFzrpr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717556910; x=1749092910;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cLTnZmN7WefsGBhZncfftF9OXsRuL3K8+gTIrI8ugdU=;
+  b=RyhFzrprby7M+uVf7w01DA4NedCfXyYHmeMbX+Ahpql1dx/ZVryf8r9/
+   pauHTqcbMdz3ymZs5J/4wlZkb3s48stWyjXIp3R4+lDotuqEEpgGnC+fN
+   lKbdvYLcx3OA2Ov7DxUrSu5unD0037YtlW5l92ff8uVPu10RMDERjXn2p
+   8mDKffbG9a7g+Q/zhuOUbOqfYHncSJTyKlmw/EPaoNWw6re33VCxfjI1i
+   P80bK1+rvgGyDeEXghGSJ2Czl9x0ADOnp/Nt/rTlwGy29TG7Fjzd1HzKo
+   EATNfJpLOBk6RLUOBk+PadYPiY3MTHmU00XRdzU/TQv5h2owhdZRLL7DL
+   g==;
+X-CSE-ConnectionGUID: duwGAT9PSNWpn/4vUUmDDg==
+X-CSE-MsgGUID: fEWOD4+8Sseg8TLlWJXQug==
+X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="13980806"
+X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
+   d="scan'208";a="13980806"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 20:08:30 -0700
+X-CSE-ConnectionGUID: +cf5ikEoQC6INHZ9Zl0pzA==
+X-CSE-MsgGUID: pPK1o8PmQBWK3WiTxJ5vGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,215,1712646000"; 
+   d="scan'208";a="37559639"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 04 Jun 2024 20:08:27 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sEh0j-0000qj-1V;
+	Wed, 05 Jun 2024 03:08:25 +0000
+Date: Wed, 5 Jun 2024 11:07:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mark:perf/overflow 2/3] drivers/perf/arm_pmuv3.c:730:3: error:
+ implicit declaration of function 'write_pmovsset' is invalid in C99
+Message-ID: <202406051047.nP5dqnth-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue,  4 Jun 2024 23:07:41 +0800, Xi Ruoyao <xry111@xry111.site> wrote:
-> GAS <= 2.41 does not support generating R_LARCH_{32,64}_PCREL for
-> "label - ." and it generates R_LARCH_{ADD,SUB}{32,64} pairs instead.
-> objtool cannot handle R_LARCH_{ADD,SUB}{32,64} pair in __jump_table
-> (static key implementation) and etc. so it will produce some warnings.
-> This is causing the kernel CI systems to complain everywhere.
-> 
-> For GAS we can check if -mthin-add-sub option is available to know if
-> R_LARCH_{32,64}_PCREL are supported.
-> 
-> For Clang, we require Clang >= 18 and Clang >= 17 already supports
-> R_LARCH_{32,64}_PCREL, so we can always assume Clang is fine for
-> objtool.
-> 
-> Note that __jump_table is not generated by the compiler so
-> -fno-jump-table is completely irrelevant for this issue.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git perf/overflow
+head:   7ab04d8b93343f66852f7eb1adf24a2b86b6ba48
+commit: df650c44ea1f39e58bbc020847950f04f61137cd [2/3] arm_pmu: rework overflow handling
+config: arm-randconfig-002-20240605 (https://download.01.org/0day-ci/archive/20240605/202406051047.nP5dqnth-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240605/202406051047.nP5dqnth-lkp@intel.com/reproduce)
 
-Hi Xi Ruoyao,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406051047.nP5dqnth-lkp@intel.com/
 
-I want to know does this patch fix the following warning:
-https://lore.kernel.org/all/202406040645.6z95FW1f-lkp@intel.com/ ?
+All errors (new ones prefixed by >>):
 
-Thanks.
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:148:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:133:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD                         0x004E
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:149:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR,
+                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:134:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR                         0x004F
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:150:42: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_READ)][C(RESULT_MISS)]   = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:131:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD                  0x004C
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:151:43: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]  = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:132:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR                  0x004D
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:153:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(NODE)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:148:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD'
+   #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD                      0x0060
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:154:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(NODE)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR,
+                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:149:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR'
+   #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR                      0x0061
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:141:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+>> drivers/perf/arm_pmuv3.c:730:3: error: implicit declaration of function 'write_pmovsset' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   write_pmovsset(BIT(counter));
+                   ^
+   drivers/perf/arm_pmuv3.c:730:3: note: did you mean 'write_pmovsclr'?
+   arch/arm/include/asm/arm_pmuv3.h:180:20: note: 'write_pmovsclr' declared here
+   static inline void write_pmovsclr(u32 val)
+                      ^
+   55 warnings and 1 error generated.
 
-> Fixes: cb8a2ef0848c ("LoongArch: Add ORC stack unwinder support")
-> Closes: https://lore.kernel.org/loongarch/Zl5m1ZlVmGKitAof@yujie-X299/
-> Closes: https://lore.kernel.org/loongarch/ZlY1gDDPi_mNrwJ1@slm.duckdns.org/
-> Closes: https://lore.kernel.org/loongarch/1717478006.038663-1-hengqi@linux.alibaba.com/
-> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=816029e06768
-> Link: https://github.com/llvm/llvm-project/commit/42cb3c6346fc
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
-> ---
->  arch/loongarch/Kconfig       | 5 ++++-
->  arch/loongarch/Kconfig.debug | 1 +
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index e38139c576ee..e461a6c59f15 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -143,7 +143,7 @@ config LOONGARCH
->  	select HAVE_LIVEPATCH
->  	select HAVE_MOD_ARCH_SPECIFIC
->  	select HAVE_NMI
-> -	select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS
-> +	select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS && AS_HAS_THIN_ADD_SUB
->  	select HAVE_PCI
->  	select HAVE_PERF_EVENTS
->  	select HAVE_PERF_REGS
-> @@ -273,6 +273,9 @@ config AS_HAS_LBT_EXTENSION
->  config AS_HAS_LVZ_EXTENSION
->  	def_bool $(as-instr,hvcl 0)
->  
-> +config AS_HAS_THIN_ADD_SUB
-> +	def_bool $(cc-option,-Wa$(comma)-mthin-add-sub) || CC_IS_CLANG
-> +
->  menu "Kernel type and options"
->  
->  source "kernel/Kconfig.hz"
-> diff --git a/arch/loongarch/Kconfig.debug b/arch/loongarch/Kconfig.debug
-> index 98d60630c3d4..8b2ce5b5d43e 100644
-> --- a/arch/loongarch/Kconfig.debug
-> +++ b/arch/loongarch/Kconfig.debug
-> @@ -28,6 +28,7 @@ config UNWINDER_PROLOGUE
->  
->  config UNWINDER_ORC
->  	bool "ORC unwinder"
-> +	depends on HAVE_OBJTOOL
->  	select OBJTOOL
->  	help
->  	  This option enables the ORC (Oops Rewind Capability) unwinder for
-> -- 
-> 2.45.2
-> 
+
+vim +/write_pmovsset +730 drivers/perf/arm_pmuv3.c
+
+   723	
+   724	static void armv8pmu_enable_event_irq(struct perf_event *event)
+   725	{
+   726		u32 counter = ARMV8_IDX_TO_COUNTER(event->hw.idx);
+   727		armv8pmu_enable_intens(BIT(counter));
+   728	
+   729		if (local64_read(&event->hw.period_left) <= 0) {
+ > 730			write_pmovsset(BIT(counter));
+   731			isb();
+   732		}
+   733	}
+   734	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
