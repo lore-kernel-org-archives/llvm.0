@@ -1,120 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEFB19ADA2;
-	Wed,  5 Jun 2024 11:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9368A1BF90F
+	for <llvm@lists.linux.dev>; Wed,  5 Jun 2024 11:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588595; cv=none; b=A3D2M/xCLBakooKqKcjKO2K/gUp4u7KhQOGdlbSyzTRNXxDhIRfi6EPt0enOJHZmUYy2qtqrOZ9B6hEvWcSRpflQFdkOMhKCPJ4AjOd/KfNAn9EvN4oXpFw1VPbbDjMpZffhBy0S3bJQjCvwmNqvhA8HE2pZETVuyft8ajAp8UI=
+	t=1717588621; cv=none; b=FdguOrJ+ft53P3pezxXtCUnxS2bqkXoFOeamNKaMcrYm103JdEBWkf27d84QUYXkwutrd2aLVK43nFgXpwB6b4K2KxJDrVDB/g56ItfC2Qq6tg16OhLFJtYTXYjagOcghOdKPjlnzvcLYaByOREEGP1/KKJ13GEbUiFsCCOC5uU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588595; c=relaxed/simple;
-	bh=t5Sn7yEgNRHa1tbVuwIPEcuPKVsV1fgRHVGNSAGD4dE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mduV0DKN6gDvafRRbCj/hGw6VCXjwP8QeueXrJULXutmxzCDuEslcOOhsbINoFFM8TvQdlMVlDoDx3B13b1XjIIHBqbfoot++4os9jXzYl24/4kwEYGwZBkPS1eo6Xc/RgSp2lE6dD+CniqJ05+K9Zf/vNYIS3fnemf55qXleRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SGsx4Jda; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717588621; c=relaxed/simple;
+	bh=UbH1/7grnRdpXvuxHfEUVkrSJnWawHkx/2SBGGKAPgE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZGWYHKEQLhlC/rSjaYZ0YmTIUyoZl20W/yHzmsmqIAcvB54txrpCnnsq/zmE37AI4ApVXprsy2Tv64wKi3zXa6o4o4DVZI5YxStJ+hEYGGwpiNXkYYypr81mmrtsMZHm6B5r+ITzta0NprHw+fUnJZjJvrm81aIamfVRnxWvXsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=jkCsUNtc; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SGsx4Jda"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B672EC32781;
-	Wed,  5 Jun 2024 11:56:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588594;
-	bh=t5Sn7yEgNRHa1tbVuwIPEcuPKVsV1fgRHVGNSAGD4dE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SGsx4JdaWRMtEZl7Fs5wWzCzqJuqXo5rcneKUeEpPFffEUyitI3xdFo2eL9dB4VI6
-	 lqHrSdgcLk6cldXy1x26dPtz9arEqSdon+SDJ+LeHSxzW3gM+T5+ZQop1j96ettA7i
-	 qTQroR+uSeRiu7ZosIq4VDHLpGGftJ51xdu9EALrZqGqQ1BWhhC6DVszmvJSNghR+N
-	 yZfdnZaCEbbYJRAmC0X8L7Gw2j8UYDlgYqtUdxYfQT9aVKZonKSFQuPh1SYPXNKWJh
-	 T+Z2xevS6epAPvoR/grN5QIFvWjw9uW/REBq25L4iJ9JeoqmzMVFM1UanrUux7GP1z
-	 Dos2/PYVXeoaw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Justin Stitt <justinstitt@google.com>,
-	linux-hardening@vger.kernel.org,
-	Phillip Potter <phil@philpotter.co.uk>,
-	Jens Axboe <axboe@kernel.dk>,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="jkCsUNtc"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-79509b390a4so63615185a.0
+        for <llvm@lists.linux.dev>; Wed, 05 Jun 2024 04:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1717588617; x=1718193417; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=17rQdjGRIN2CSga/YFCaGswU6lwvjB6GqByaiI2V+ko=;
+        b=jkCsUNtc0lSC+CSggrWLwrXzbp3M64kRKsvm2W7kz1A+kygio/bJ+/mpasogF06w4f
+         oCibZh/7w/jN+IS+YNXlrywB9jlzCJN+Ct8a6hEqvYnznEiepUi57vuIsG5HZ5ABsTjB
+         UnW+fwMKlowI9BZ3BUR7/yk+KSIFUhREfPa23hsORC0MrvZtT5l0OvsEMPI3hEDk5k0u
+         smg70VcSABSXzGqIo/Y1afnLyoL7lI6Db8TgAuYE3DngaF+t64FvUzY+XqsYkWg9Yao7
+         T/5N9XyWguVXnvVZIiTom1Y/IpidEuj/ThZNa3as5B2w5Z5dMNhs0i9Ca8iVSvaHxO9z
+         4Gfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717588617; x=1718193417;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=17rQdjGRIN2CSga/YFCaGswU6lwvjB6GqByaiI2V+ko=;
+        b=LF3R7eOxb3HirqlNwAy21a8gppxEO5VL9KgpdShdjlV4aF8RptJnYK5KTRGTAO8zcX
+         GDCkRTfkxHt03dr1VIWH6behD2dR/kbdILClurZaESiMOSnQ6EemjfQHflC5pP78V8KP
+         AZ3xUzaSXS+TzcJ9YYzGssF/MZ6dm83qv1t6Z7Hz6Ox17uG3fnK/+U9ZHCw/7+qba6+P
+         XCANLQROQ4V/U3w04SPEf/p94/tAaVF4N8OT+kLK1wiW4CyEeletIaXWevUc8zq8sTTf
+         WgohDG7OCzdmTcVlPGldyQk49Z93HRjfsrk3RnGuXLWJqsUP0sufbz69bpHSUnwZbqKT
+         m1ww==
+X-Forwarded-Encrypted: i=1; AJvYcCVfXNsRb3wQCHCeadY/+ArCzrvIbKH3++V3AILab/NvuKs2rAt5MVTpiL4+7+mboLDEtq3Le6/3mfHKmSi7Nh0S9Ojurg==
+X-Gm-Message-State: AOJu0YzUQDZie7T0+mWy+f0O9i0qc96kLW+nWpoGv4hdXbf41I1g5HgE
+	sU8pl5DBMDNkpujqiTcZPKdnu1CQpaOAHsH4NrapxpCXr5Fv9aiUV7vCD7KVrb0=
+X-Google-Smtp-Source: AGHT+IH87Vgxi0u/6B6nOPz3Js4whNZ+PxPB9EPNZ3t7mrmfAT1RKqbTJL+X2xFL1FK3wwFqMewlsQ==
+X-Received: by 2002:a05:620a:1362:b0:790:efef:af55 with SMTP id af79cd13be357-79522fa4bbbmr417688985a.3.1717588617261;
+        Wed, 05 Jun 2024 04:56:57 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7952b8e99d4sm12315185a.72.2024.06.05.04.56.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 04:56:56 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1sEpGC-006ZOM-6l;
+	Wed, 05 Jun 2024 08:56:56 -0300
+Date: Wed, 5 Jun 2024 08:56:56 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Baoquan He <bhe@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 2/3] cdrom: rearrange last_media_change check to avoid unintentional overflow
-Date: Wed,  5 Jun 2024 07:56:27 -0400
-Message-ID: <20240605115631.2965331-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605115631.2965331-1-sashal@kernel.org>
-References: <20240605115631.2965331-1-sashal@kernel.org>
+Subject: Re: [PATCH] [v3] arm64/io: add constant-argument check
+Message-ID: <20240605115656.GC791043@ziepe.ca>
+References: <20240604210006.668912-1-arnd@kernel.org>
+ <ZmAsutGzL5_Kx8Pn@J2N7QTR9R3>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.92
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZmAsutGzL5_Kx8Pn@J2N7QTR9R3>
 
-From: Justin Stitt <justinstitt@google.com>
+On Wed, Jun 05, 2024 at 10:15:38AM +0100, Mark Rutland wrote:
+> On Tue, Jun 04, 2024 at 10:59:57PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > In some configurations __const_iowrite32_copy() does not get inlined
+> > and gcc runs into the BUILD_BUG():
+> > 
+> > In file included from <command-line>:
+> > In function '__const_memcpy_toio_aligned32',
+> >     inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:203:3,
+> >     inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:199:20:
+> > include/linux/compiler_types.h:487:45: error: call to '__compiletime_assert_538' declared with attribute error: BUILD_BUG failed
+> >   487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >       |                                             ^
+> > include/linux/compiler_types.h:468:25: note: in definition of macro '__compiletime_assert'
+> >   468 |                         prefix ## suffix();                             \
+> >       |                         ^~~~~~
+> > include/linux/compiler_types.h:487:9: note: in expansion of macro '_compiletime_assert'
+> >   487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >       |         ^~~~~~~~~~~~~~~~~~~
+> > include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+> >    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> >       |                                     ^~~~~~~~~~~~~~~~~~
+> > include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+> >    59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+> >       |                     ^~~~~~~~~~~~~~~~
+> > arch/arm64/include/asm/io.h:193:17: note: in expansion of macro 'BUILD_BUG'
+> >   193 |                 BUILD_BUG();
+> >       |                 ^~~~~~~~~
+> > 
+> > Move the check for constant arguments into the inline function to ensure
+> > it is still constant if the compiler decides against inlining it, and
+> > mark them as __always_inline to override the logic that sometimes leads
+> > to the compiler not producing the simplified output.
+> > 
+> > Note that either the __always_inline annotation or the check for a
+> > constant value are sufficient here, but combining the two looks cleaner
+> > as it also avoids the macro. With clang-8 and older, the macro was still
+> > needed, but all versions of gcc and clang can reliably perform constant
+> > folding here.
+> > 
+> > Fixes: ead79118dae6 ("arm64/io: Provide a WC friendly __iowriteXX_copy()")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> I have a trivial nit below, but either way this looks good to me, so
+> regardless of that:
+> 
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 
-[ Upstream commit efb905aeb44b0e99c0e6b07865b1885ae0471ebf ]
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-When running syzkaller with the newly reintroduced signed integer wrap
-sanitizer we encounter this splat:
+Still codegens what I expect on clang-17 at least, agree with Mark's
+note
 
-[  366.015950] UBSAN: signed-integer-overflow in ../drivers/cdrom/cdrom.c:2361:33
-[  366.021089] -9223372036854775808 - 346321 cannot be represented in type '__s64' (aka 'long long')
-[  366.025894] program syz-executor.4 is using a deprecated SCSI ioctl, please convert it to SG_IO
-[  366.027502] CPU: 5 PID: 28472 Comm: syz-executor.7 Not tainted 6.8.0-rc2-00035-gb3ef86b5a957 #1
-[  366.027512] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[  366.027518] Call Trace:
-[  366.027523]  <TASK>
-[  366.027533]  dump_stack_lvl+0x93/0xd0
-[  366.027899]  handle_overflow+0x171/0x1b0
-[  366.038787] ata1.00: invalid multi_count 32 ignored
-[  366.043924]  cdrom_ioctl+0x2c3f/0x2d10
-[  366.063932]  ? __pm_runtime_resume+0xe6/0x130
-[  366.071923]  sr_block_ioctl+0x15d/0x1d0
-[  366.074624]  ? __pfx_sr_block_ioctl+0x10/0x10
-[  366.077642]  blkdev_ioctl+0x419/0x500
-[  366.080231]  ? __pfx_blkdev_ioctl+0x10/0x10
-...
-
-Historically, the signed integer overflow sanitizer did not work in the
-kernel due to its interaction with `-fwrapv` but this has since been
-changed [1] in the newest version of Clang. It was re-enabled in the
-kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
-sanitizer").
-
-Let's rearrange the check to not perform any arithmetic, thus not
-tripping the sanitizer.
-
-Link: https://github.com/llvm/llvm-project/pull/82432 [1]
-Closes: https://github.com/KSPP/linux/issues/354
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Justin Stitt <justinstitt@google.com>
-Link: https://lore.kernel.org/lkml/20240507-b4-sio-ata1-v1-1-810ffac6080a@google.com
-Reviewed-by: Phillip Potter <phil@philpotter.co.uk>
-Link: https://lore.kernel.org/lkml/ZjqU0fbzHrlnad8D@equinox
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-Link: https://lore.kernel.org/r/20240507222520.1445-2-phil@philpotter.co.uk
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cdrom/cdrom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-index 416f723a2dbb3..8e3eeb96db63e 100644
---- a/drivers/cdrom/cdrom.c
-+++ b/drivers/cdrom/cdrom.c
-@@ -2372,7 +2372,7 @@ static int cdrom_ioctl_timed_media_change(struct cdrom_device_info *cdi,
- 		return -EFAULT;
- 
- 	tmp_info.media_flags = 0;
--	if (tmp_info.last_media_change - cdi->last_media_change_ms < 0)
-+	if (cdi->last_media_change_ms > tmp_info.last_media_change)
- 		tmp_info.media_flags |= MEDIA_CHANGED_FLAG;
- 
- 	tmp_info.last_media_change = cdi->last_media_change_ms;
--- 
-2.43.0
-
+Thanks,
+Jason
