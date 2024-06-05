@@ -1,142 +1,103 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9368A1BF90F
-	for <llvm@lists.linux.dev>; Wed,  5 Jun 2024 11:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1559E1C158B;
+	Wed,  5 Jun 2024 12:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588621; cv=none; b=FdguOrJ+ft53P3pezxXtCUnxS2bqkXoFOeamNKaMcrYm103JdEBWkf27d84QUYXkwutrd2aLVK43nFgXpwB6b4K2KxJDrVDB/g56ItfC2Qq6tg16OhLFJtYTXYjagOcghOdKPjlnzvcLYaByOREEGP1/KKJ13GEbUiFsCCOC5uU=
+	t=1717588983; cv=none; b=XM9IQ52oaVqdr4SX8ZUHsp6wpEoZKIQnmgBY7VRJeNZ2T+x4v5fQUiVZtsYINUTvnuTJfm/FjNWnQ0F0/UgmzQTTkRr+r6/Nzwk9C3WMdl1KciaVg6RPhXxbq0XxbEWbbMQjtgzly43zUqLBiCMznQdeqCTfSCfW3nGAT6UHICE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588621; c=relaxed/simple;
-	bh=UbH1/7grnRdpXvuxHfEUVkrSJnWawHkx/2SBGGKAPgE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZGWYHKEQLhlC/rSjaYZ0YmTIUyoZl20W/yHzmsmqIAcvB54txrpCnnsq/zmE37AI4ApVXprsy2Tv64wKi3zXa6o4o4DVZI5YxStJ+hEYGGwpiNXkYYypr81mmrtsMZHm6B5r+ITzta0NprHw+fUnJZjJvrm81aIamfVRnxWvXsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=jkCsUNtc; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1717588983; c=relaxed/simple;
+	bh=zKphogx/8wYxjzGfOYOpMTs9aysgexbDswaF4oPT8KU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LT2bbtmBkHv8n/Ot8B81oa0YQ5r5l2ebJwfO+LjyseVlCBCbo67WN0wgRZzXmXQYjdd8Umxz2i/tO3ZF9lLrQDKWlv1FDMlqnvu/cgd0xhv6+XgyNrPoTzFVOqckHiNq4C0dqjccHvDBqGg/A1LSmQ/6fUhi/ynZhlTnf5I7JNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cegeb1HP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="jkCsUNtc"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-79509b390a4so63615185a.0
-        for <llvm@lists.linux.dev>; Wed, 05 Jun 2024 04:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1717588617; x=1718193417; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=17rQdjGRIN2CSga/YFCaGswU6lwvjB6GqByaiI2V+ko=;
-        b=jkCsUNtc0lSC+CSggrWLwrXzbp3M64kRKsvm2W7kz1A+kygio/bJ+/mpasogF06w4f
-         oCibZh/7w/jN+IS+YNXlrywB9jlzCJN+Ct8a6hEqvYnznEiepUi57vuIsG5HZ5ABsTjB
-         UnW+fwMKlowI9BZ3BUR7/yk+KSIFUhREfPa23hsORC0MrvZtT5l0OvsEMPI3hEDk5k0u
-         smg70VcSABSXzGqIo/Y1afnLyoL7lI6Db8TgAuYE3DngaF+t64FvUzY+XqsYkWg9Yao7
-         T/5N9XyWguVXnvVZIiTom1Y/IpidEuj/ThZNa3as5B2w5Z5dMNhs0i9Ca8iVSvaHxO9z
-         4Gfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717588617; x=1718193417;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=17rQdjGRIN2CSga/YFCaGswU6lwvjB6GqByaiI2V+ko=;
-        b=LF3R7eOxb3HirqlNwAy21a8gppxEO5VL9KgpdShdjlV4aF8RptJnYK5KTRGTAO8zcX
-         GDCkRTfkxHt03dr1VIWH6behD2dR/kbdILClurZaESiMOSnQ6EemjfQHflC5pP78V8KP
-         AZ3xUzaSXS+TzcJ9YYzGssF/MZ6dm83qv1t6Z7Hz6Ox17uG3fnK/+U9ZHCw/7+qba6+P
-         XCANLQROQ4V/U3w04SPEf/p94/tAaVF4N8OT+kLK1wiW4CyEeletIaXWevUc8zq8sTTf
-         WgohDG7OCzdmTcVlPGldyQk49Z93HRjfsrk3RnGuXLWJqsUP0sufbz69bpHSUnwZbqKT
-         m1ww==
-X-Forwarded-Encrypted: i=1; AJvYcCVfXNsRb3wQCHCeadY/+ArCzrvIbKH3++V3AILab/NvuKs2rAt5MVTpiL4+7+mboLDEtq3Le6/3mfHKmSi7Nh0S9Ojurg==
-X-Gm-Message-State: AOJu0YzUQDZie7T0+mWy+f0O9i0qc96kLW+nWpoGv4hdXbf41I1g5HgE
-	sU8pl5DBMDNkpujqiTcZPKdnu1CQpaOAHsH4NrapxpCXr5Fv9aiUV7vCD7KVrb0=
-X-Google-Smtp-Source: AGHT+IH87Vgxi0u/6B6nOPz3Js4whNZ+PxPB9EPNZ3t7mrmfAT1RKqbTJL+X2xFL1FK3wwFqMewlsQ==
-X-Received: by 2002:a05:620a:1362:b0:790:efef:af55 with SMTP id af79cd13be357-79522fa4bbbmr417688985a.3.1717588617261;
-        Wed, 05 Jun 2024 04:56:57 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7952b8e99d4sm12315185a.72.2024.06.05.04.56.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jun 2024 04:56:56 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1sEpGC-006ZOM-6l;
-	Wed, 05 Jun 2024 08:56:56 -0300
-Date: Wed, 5 Jun 2024 08:56:56 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Baoquan He <bhe@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cegeb1HP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B7AC32786;
+	Wed,  5 Jun 2024 12:03:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717588983;
+	bh=zKphogx/8wYxjzGfOYOpMTs9aysgexbDswaF4oPT8KU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=cegeb1HPeeJXgdaBxlkr8llciIflxHKuyz5agMRtVDKyRnLe5lKd4bIK7wbIKu+jw
+	 B14BI37p6+mVzC2T/JMMtl5y/uD5rTXxfWpuF0Auq8Um0H+NFlNsKg5y32HQfy4fh0
+	 y32cwXn4JnqFpB+jeHJ+Ek3ZJlPAruGBDA44KChZYVxxCK2miKx3szV575vdu3WR8C
+	 tZlilqaFTeuOn3L5eTeSS7FypyLISwg5oF3O/IkvsNqC/YvYlb/YteQcA4YsnlWFKT
+	 6ddEv6c4hbbDMWTjE6JcHmqb47GsvvcuFY41MVMIW321xc0A4AZpHq+5+aDYMG4Evr
+	 +51VgoaI1EhMQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Alex Deucher <alexander.deucher@amd.com>,
+	Feifei Xu <Feifei.Xu@amd.com>,
+	Feifei Xu <feifei.xu@amd.com>,
+	Sasha Levin <sashal@kernel.org>,
+	Felix.Kuehling@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH] [v3] arm64/io: add constant-argument check
-Message-ID: <20240605115656.GC791043@ziepe.ca>
-References: <20240604210006.668912-1-arnd@kernel.org>
- <ZmAsutGzL5_Kx8Pn@J2N7QTR9R3>
+Subject: [PATCH AUTOSEL 6.9 21/23] Revert "drm/amdkfd: fix gfx_target_version for certain 11.0.3 devices"
+Date: Wed,  5 Jun 2024 08:02:04 -0400
+Message-ID: <20240605120220.2966127-21-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240605120220.2966127-1-sashal@kernel.org>
+References: <20240605120220.2966127-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZmAsutGzL5_Kx8Pn@J2N7QTR9R3>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.9.3
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 05, 2024 at 10:15:38AM +0100, Mark Rutland wrote:
-> On Tue, Jun 04, 2024 at 10:59:57PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > In some configurations __const_iowrite32_copy() does not get inlined
-> > and gcc runs into the BUILD_BUG():
-> > 
-> > In file included from <command-line>:
-> > In function '__const_memcpy_toio_aligned32',
-> >     inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:203:3,
-> >     inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:199:20:
-> > include/linux/compiler_types.h:487:45: error: call to '__compiletime_assert_538' declared with attribute error: BUILD_BUG failed
-> >   487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >       |                                             ^
-> > include/linux/compiler_types.h:468:25: note: in definition of macro '__compiletime_assert'
-> >   468 |                         prefix ## suffix();                             \
-> >       |                         ^~~~~~
-> > include/linux/compiler_types.h:487:9: note: in expansion of macro '_compiletime_assert'
-> >   487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >       |         ^~~~~~~~~~~~~~~~~~~
-> > include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-> >    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >       |                                     ^~~~~~~~~~~~~~~~~~
-> > include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-> >    59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-> >       |                     ^~~~~~~~~~~~~~~~
-> > arch/arm64/include/asm/io.h:193:17: note: in expansion of macro 'BUILD_BUG'
-> >   193 |                 BUILD_BUG();
-> >       |                 ^~~~~~~~~
-> > 
-> > Move the check for constant arguments into the inline function to ensure
-> > it is still constant if the compiler decides against inlining it, and
-> > mark them as __always_inline to override the logic that sometimes leads
-> > to the compiler not producing the simplified output.
-> > 
-> > Note that either the __always_inline annotation or the check for a
-> > constant value are sufficient here, but combining the two looks cleaner
-> > as it also avoids the macro. With clang-8 and older, the macro was still
-> > needed, but all versions of gcc and clang can reliably perform constant
-> > folding here.
-> > 
-> > Fixes: ead79118dae6 ("arm64/io: Provide a WC friendly __iowriteXX_copy()")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> I have a trivial nit below, but either way this looks good to me, so
-> regardless of that:
-> 
-> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+[ Upstream commit dd2b75fd9a79bf418e088656822af06fc253dbe3 ]
 
-Still codegens what I expect on clang-17 at least, agree with Mark's
-note
+This reverts commit 28ebbb4981cb1fad12e0b1227dbecc88810b1ee8.
 
-Thanks,
-Jason
+Revert this commit as apparently the LLVM code to take advantage of
+this never landed.
+
+Reviewed-by: Feifei Xu <Feifei.Xu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: Feifei Xu <feifei.xu@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_device.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
+index 719d6d365e150..ff01610fbce3b 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
+@@ -408,15 +408,8 @@ struct kfd_dev *kgd2kfd_probe(struct amdgpu_device *adev, bool vf)
+ 			f2g = &gfx_v11_kfd2kgd;
+ 			break;
+ 		case IP_VERSION(11, 0, 3):
+-			if ((adev->pdev->device == 0x7460 &&
+-			     adev->pdev->revision == 0x00) ||
+-			    (adev->pdev->device == 0x7461 &&
+-			     adev->pdev->revision == 0x00))
+-				/* Note: Compiler version is 11.0.5 while HW version is 11.0.3 */
+-				gfx_target_version = 110005;
+-			else
+-				/* Note: Compiler version is 11.0.1 while HW version is 11.0.3 */
+-				gfx_target_version = 110001;
++			/* Note: Compiler version is 11.0.1 while HW version is 11.0.3 */
++			gfx_target_version = 110001;
+ 			f2g = &gfx_v11_kfd2kgd;
+ 			break;
+ 		case IP_VERSION(11, 5, 0):
+-- 
+2.43.0
+
