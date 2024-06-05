@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5471A3689;
-	Wed,  5 Jun 2024 12:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8331CA2FA;
+	Wed,  5 Jun 2024 12:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717589033; cv=none; b=kG+JZOZspg+z+JP7wx0c98n333eAPjWcvUh3ym7pI/mw9oEaMLuGy+ECnKYhapMZYKz/4AklkNhKKksRiEBjLVAk0szbNHSMafRSwgkWwRHdVlqPiGBJiX+hLr1y+GJA2ys+aX6hBMyqVX+I1Lm4w6jPAmQAvWVUsJOr6Et/FwU=
+	t=1717589083; cv=none; b=rrmnmp/cUrF99NuphEb3aXw5DUznNsWyYFH3/4O1jevaUg5B2INLUXoA3fJ/nqr5WljzKd9FGtvpIh+DuUAVws9Ba3x3Ei5UsovSV92fA6e3kejQMmuvCeotzzPbstrW0lvdy+jQ2r+IJ2dDUjN2EcqhFEV7pQlLvlgaE3d4/tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717589033; c=relaxed/simple;
-	bh=huM3Hia/E8C/3CGVJFNUtJsHYsCR6y3z74t2rsw1sPI=;
+	s=arc-20240116; t=1717589083; c=relaxed/simple;
+	bh=ak9Vp86IkHKL5lFnKpGX/0AEgziySgCTH33SslKVXYU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eiG8Sa0u0WZvinlR0Gxmlu0Dd/60fdLgzmcCRqt8I8zQp8ADo9XzgejANMBcPeUSFc9acsdktNBsoAvllT5kCFaN4UQX4CV7q71TBbLu59l4kHqyyQ8RvoenCe+SG+AShAElKbX5Lk6m8WPvmmT88gIL/N39zfz1IJjX3pX2EqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bxSef32A; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=HDwvEYiJ2cJyzZTK7hZG2kwKhejDZVKOMyDboKQXjyiYv6sx5sEwoUJ9g5Fzmn50o3qwnOk9qlaODXwCkoJTVZBH0fZ3WNfm35aSwW3vTP+4d66TblZp5AgLpkXB1rkcEVKPXjMx/q8XletV/cUHamAj6bq2L6868351MSPXAio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LTWxmSWx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bxSef32A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A77C32781;
-	Wed,  5 Jun 2024 12:03:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LTWxmSWx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58380C3277B;
+	Wed,  5 Jun 2024 12:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717589033;
-	bh=huM3Hia/E8C/3CGVJFNUtJsHYsCR6y3z74t2rsw1sPI=;
+	s=k20201202; t=1717589082;
+	bh=ak9Vp86IkHKL5lFnKpGX/0AEgziySgCTH33SslKVXYU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bxSef32AZ8FligZkolP9iURMo5sTk4PMJaN4QHVQUMwKp1yaT0aoGApIuyzDT0/5N
-	 eLgXV//WzlKnY9orInUmPd5xAt3h6mvQkSu2XAHHKS5Pj+J968u6+o9Fl6k6r7J/XF
-	 6Tpxjj4bhq8Ezha3gs55OyqG9vMuWZaPrkTBKxhLsBDH7l9KgBUOKJ9G4lWfWKlacs
-	 8ig/78ocJmsj3oegqOACr7Z9mqejLFPFjyAaJj9iAQSW6YsdIrCQgJZBuADGYjtT6l
-	 41mBBAUZwDwcCNygK92LotA314NDuDRR4Dkwuax1WSMsNJRg+wqgiPdfOnluyQ6FfI
-	 lSrpwp+zRepYA==
+	b=LTWxmSWxWpvxHjinDHvCqR7244M+HHVY/BuhoXd8TXf3t57EVAJuBF4Nu4GvVhwOt
+	 FQIlqVzRTOO4E3rV6u4mDzw5c9IyXHcj/7RYDxxBcsL2PzOF54L7qdNVGTRUfiYrQd
+	 09oQO+REXNIxOBGkmfAftiepmIu4f2rngr2ZKYDC9oRDDx9PpxbKcCHfjVwRJdDt4P
+	 rGbjWYODnVbh8xpc2BZvwgaurDRckxbVXwgHLYfXTYM1HiF2uqPl0OFKarz6ut3xN2
+	 2b+I6wWbrT0ckKsIuJvYru0IFqBvhWMsxPFa5JF9pPX6AbJm71mHHvd583czoQs42W
+	 m2+6llNRtLU9A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -42,12 +42,12 @@ Cc: Alex Deucher <alexander.deucher@amd.com>,
 	amd-gfx@lists.freedesktop.org,
 	dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.8 17/18] Revert "drm/amdkfd: fix gfx_target_version for certain 11.0.3 devices"
-Date: Wed,  5 Jun 2024 08:03:07 -0400
-Message-ID: <20240605120319.2966627-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 17/18] Revert "drm/amdkfd: fix gfx_target_version for certain 11.0.3 devices"
+Date: Wed,  5 Jun 2024 08:03:56 -0400
+Message-ID: <20240605120409.2967044-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605120319.2966627-1-sashal@kernel.org>
-References: <20240605120319.2966627-1-sashal@kernel.org>
+In-Reply-To: <20240605120409.2967044-1-sashal@kernel.org>
+References: <20240605120409.2967044-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.8.12
+X-stable-base: Linux 6.6.32
 Content-Transfer-Encoding: 8bit
 
 From: Alex Deucher <alexander.deucher@amd.com>
@@ -77,10 +77,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-index fcf6558d019e5..7d39982bf74e2 100644
+index 913c70a0ef44f..0c94bdfadaabf 100644
 --- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
 +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-@@ -405,15 +405,8 @@ struct kfd_dev *kgd2kfd_probe(struct amdgpu_device *adev, bool vf)
+@@ -402,15 +402,8 @@ struct kfd_dev *kgd2kfd_probe(struct amdgpu_device *adev, bool vf)
  			f2g = &gfx_v11_kfd2kgd;
  			break;
  		case IP_VERSION(11, 0, 3):
@@ -97,7 +97,7 @@ index fcf6558d019e5..7d39982bf74e2 100644
 +			gfx_target_version = 110001;
  			f2g = &gfx_v11_kfd2kgd;
  			break;
- 		case IP_VERSION(11, 5, 0):
+ 		default:
 -- 
 2.43.0
 
