@@ -1,102 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2274B199226;
-	Wed,  5 Jun 2024 12:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA60519AA6E;
+	Wed,  5 Jun 2024 13:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717590883; cv=none; b=iYFW6mEo3AC0wcljevNWuJdttZVibWbyaLJx+vPTqCrlkdsuLlBbiky1k1VyeyemNwBsiHP46aWYbPOnOZxfR/YRsbWCFxUXemjsY3eJ45rngn+L99PEIHoHeXMi8iLBQPCfUx/lsRO1eKPIKdqZPxu06wgjM5Vl3n6SKstMJ7Y=
+	t=1717593499; cv=none; b=bhxzAdUVhLTPYJ5mKJEqqF/LOna39FqDuA4IRZAiPVrSLmAP4DbwYquNC3hc/kMEkT6Dc8E5noU6fAldhsDiprw9V36dBktlwinfa8iMTIn1HK2I4y50OCt0dprZouKkGQvFUCqFVscjk7dKJEu5pytLho0tBTxfR3+sOPM8Cgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717590883; c=relaxed/simple;
-	bh=pNDoDNrZ3B1jVzbxPDtsTQTkg5Yf7y5alzwsLd7nATY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XI/E+/+94QdzfVeam34nJU73WvFmgO0q2Qo3X5tMFOQa/A4jLTgQRBXTRw0tZ/uGtuW72pfurmi4bsAy/CTKjjHuWvJuixeFAVB91VDSynk4fvgtoC4t9olqSAyiXxYKtoHAYv3nZMB4407WjDAUHrq6YrQvQzIWd5msV1N4/fA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjHeks8r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717593499; c=relaxed/simple;
+	bh=aSGeY//DKOc9pUfHYgBFU7c6uqdrSP0BOyUSG+ubbnc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=W1vKr4NPqVOYYG4PjuDx+wkUmsAyW66P4LvpnIYzZRJjlFoOIoB5Qz9HZTJa6mtYOba3lMqevCxGiV98Jm7PbBQDVJfbCIf0NCLe+22TE0usSMFqkA06dhrHWnrmDhHfPd7I6bfesgFdsP1I+VNGzjJzkEiScUWqDksa7AydAlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=K/QYeyeS; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjHeks8r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A994FC3277B;
-	Wed,  5 Jun 2024 12:34:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717590882;
-	bh=pNDoDNrZ3B1jVzbxPDtsTQTkg5Yf7y5alzwsLd7nATY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VjHeks8rM0Vyb1HBC3lHJS7ZDLtV9+7yyNju/hRuQoRjaNfgMnSeEWcKm0moeHdkv
-	 gVE9ViubqElB+28i+G/Fwh3L1fYZBpYJjXCmbkWX7V0ibSY0q8dBlXkqLwm0a0S2cf
-	 XVJtrQVtzYhXt+2jTu4V9exwQzPLSAbFy30bfFOQ2gNb6Izun9or3RcxcAys+KEyuO
-	 Ueg1or2myKmucEc80obTYj1WY+EHhylIPU8UcmyL0TI244VlpfwDM+Z+HVGDKC8K0V
-	 tf9q+2NLKh3OAWWUKYEoPgytoR8A6b/gr7lhAFgh23P+xQ9dDDXWxr4QfKFKEolBec
-	 tEyEsmCOyLBzQ==
-From: Will Deacon <will@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Arnd Bergmann <arnd@kernel.org>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Baoquan He <bhe@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] [v3] arm64/io: add constant-argument check
-Date: Wed,  5 Jun 2024 13:34:32 +0100
-Message-Id: <171758272445.3626757.4886694115081361174.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20240604210006.668912-1-arnd@kernel.org>
-References: <20240604210006.668912-1-arnd@kernel.org>
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="K/QYeyeS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1717593493;
+	bh=aSGeY//DKOc9pUfHYgBFU7c6uqdrSP0BOyUSG+ubbnc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=K/QYeyeSpUarJlYgGgAyIAl4Fd+JhbABsGC8TCH2Hn4w42JBjAcm37/+UPyjiPAiS
+	 FXqo2AgIrAo3JpeegFXyKyanW+LLvUOsnxx66xVFVXJVJCEME/Rclz++AQPGIMeI5U
+	 CkSNEPqyletl8w4nPPNuC6JwFEfS5d5LgrHDLEpE=
+Received: from [192.168.124.13] (unknown [113.140.11.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id E912F6760C;
+	Wed,  5 Jun 2024 09:18:08 -0400 (EDT)
+Message-ID: <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
+Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
+ unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
+From: Xi Ruoyao <xry111@xry111.site>
+To: Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, Youling Tang <tangyouling@kylinos.cn>, Jinyang He
+ <hejinyang@loongson.cn>,  loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ mengqinggang@loongson.cn, cailulu@loongson.cn, wanglei@loongson.cn, 
+ luweining@loongson.cn, Yujie Liu <yujie.liu@intel.com>, Heng Qi
+ <hengqi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>
+Date: Wed, 05 Jun 2024 21:18:06 +0800
+In-Reply-To: <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
+References: <20240604150741.30252-1-xry111@xry111.site>
+	 <20240605054328.GA279426@thelio-3990X>
+	 <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
+	 <20240605062548.GF279426@thelio-3990X>
+	 <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-On Tue, 04 Jun 2024 22:59:57 +0200, Arnd Bergmann wrote:
-> In some configurations __const_iowrite32_copy() does not get inlined
-> and gcc runs into the BUILD_BUG():
-> 
-> In file included from <command-line>:
-> In function '__const_memcpy_toio_aligned32',
->     inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:203:3,
->     inlined from '__const_iowrite32_copy' at arch/arm64/include/asm/io.h:199:20:
-> include/linux/compiler_types.h:487:45: error: call to '__compiletime_assert_538' declared with attribute error: BUILD_BUG failed
->   487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->       |                                             ^
-> include/linux/compiler_types.h:468:25: note: in definition of macro '__compiletime_assert'
->   468 |                         prefix ## suffix();                             \
->       |                         ^~~~~~
-> include/linux/compiler_types.h:487:9: note: in expansion of macro '_compiletime_assert'
->   487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->       |         ^~~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
->    59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
->       |                     ^~~~~~~~~~~~~~~~
-> arch/arm64/include/asm/io.h:193:17: note: in expansion of macro 'BUILD_BUG'
->   193 |                 BUILD_BUG();
->       |                 ^~~~~~~~~
-> 
-> [...]
+On Wed, 2024-06-05 at 18:57 +0800, Xi Ruoyao wrote:
+> On Tue, 2024-06-04 at 23:25 -0700, Nathan Chancellor wrote:
+> > On Wed, Jun 05, 2024 at 01:54:24PM +0800, Xi Ruoyao wrote:
+> > > On Tue, 2024-06-04 at 22:43 -0700, Nathan Chancellor wrote:
+> > > > For what it's worth, I have noticed some warnings with clang that I
+> > > > don't see with GCC but I only filed an issue on our GitHub and neve=
+r
+> > > > followed up on the mailing list, so sorry about that.
+> > > >=20
+> > > > https://github.com/ClangBuiltLinux/linux/issues/2024
+> > > >=20
+> > > > Might be tangential to this patch though but I felt it was worth
+> > > > mentioning.
+> > >=20
+> > > The warnings in GCC build is definitely the issue handled by this pat=
+ch.
+> > > But the warnings in Clang build should be a different issue.=C2=A0 Ca=
+n you
+> > > attach the kernel/events/core.o file from the Clang build for analysi=
+s?
+> > > I guess we need to disable more optimization...
+> >=20
+> > Sure thing. Let me know if there are any issues with the attachment.
+>=20
+> Thanks!=C2=A0 I've simplified it and now even...
+>=20
+> .global test
+> .type test,@function
+> test:
+>=20
+> addi.d	$sp,$sp,-448
+> st.d	$ra,$sp,440
+> st.d	$fp,$sp,432
+> addi.d	$fp,$sp,448
+>=20
+> # do something
+>=20
+> addi.d	$sp,$fp,-448
+> ld.d	$fp,$sp,432
+> ld.d	$ra,$sp,440
+> addi.d	$sp,$sp,448
+> ret
+>=20
+> .size test,.-test
+>=20
+> is enough to trigger a objtool warning:
+>=20
+> /home/xry111/t1.o: warning: objtool: test+0x20: return with modified stac=
+k frame
+>=20
+> And to me this warning is bogus?
 
-Applied to arm64 (for-next/fixes), thanks!
+Minimal C reproducer:
 
-[1/1] arm64/io: add constant-argument check
-      https://git.kernel.org/arm64/c/5c40e428aea6
+struct x { _Alignas(64) char buf[128]; };
 
-Cheers,
--- 
-Will
+void f(struct x *p);
+void g()
+{
+	struct x x =3D { .buf =3D "1145141919810" };
+	f(&x);
+}
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+Then objtool is unhappy to the object file produced with "clang -c -O2"
+from this translation unit:
+
+/home/xry111/t2.o: warning: objtool: g+0x50: return with modified stack fra=
+me
+
+It seems CFI_BP has a very specific semantic in objtool and Clang does
+not operates $fp in the expected way.  I'm not sure about my conclusion
+though.  Maybe Peter can explain it better.
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
