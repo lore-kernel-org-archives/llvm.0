@@ -1,172 +1,113 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27F9114AB8;
-	Thu,  6 Jun 2024 02:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493D03FB87;
+	Thu,  6 Jun 2024 04:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717639816; cv=none; b=L+l/WwY4lMq1yuH6PvC0DbSXVMhZeW5LXZo7M9CQYS4uV91tgEwzXKCGTTAraGGj6kdxCYKhGyUz0+6+UtpOSViXkxl/NMXz6GySEwMEXgjMVDUi06MWtpJUYVKgvV0rEhZkLr0wE6rQMgjxmUwLqQezKF5AE7Gc5m6AjPyr9G0=
+	t=1717649944; cv=none; b=efDYZPhEsSCLwsyFZqND58jr6lXyKV7mcdZNZ5wFFziLHUN/qXh8z+rpwN5NXyLw224fsY0l1v1Xhm/1h4Nm4OPgzssvrIxKYolj67VkmlVcIFHVjH85hiXA15bgajjC89P/CCwzjPv4pN0pRZvEr/GWVkTVJpvH+VJJrug9qoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717639816; c=relaxed/simple;
-	bh=Z0CYkHleD15nnISvbRfPMD7qgij7i9JhEyEYYx5DE2E=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=IDY8i4xXS7jOEuAHdalpYDGMvVlNaiabDcU1CYKFcQ7b1YJW0st/5IE6jDUoYGoiiwKILaufk4lYGxqYSq4a4w6VIc/KTk1m87zGqJPMMOWSaKV2EfPsFB0Nsra7MF2BAFNribD4G9ZrCrxSV1uUmv1CJYYgLdhxRuPVJdXoXh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [111.9.175.10])
-	by gateway (Coremail) with SMTP id _____8DxzOqDGmFmkQwEAA--.17302S3;
-	Thu, 06 Jun 2024 10:10:11 +0800 (CST)
-Received: from [10.136.12.26] (unknown [111.9.175.10])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8Axw8R9GmFmaV4WAA--.45165S3;
-	Thu, 06 Jun 2024 10:10:10 +0800 (CST)
-Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
- unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
-To: Xi Ruoyao <xry111@xry111.site>, Nathan Chancellor <nathan@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Tiezhu Yang <yangtiezhu@loongson.cn>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Youling Tang <tangyouling@kylinos.cn>, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- mengqinggang@loongson.cn, cailulu@loongson.cn, wanglei@loongson.cn,
- luweining@loongson.cn, Yujie Liu <yujie.liu@intel.com>,
- Heng Qi <hengqi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>
-References: <20240604150741.30252-1-xry111@xry111.site>
- <20240605054328.GA279426@thelio-3990X>
- <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
- <20240605062548.GF279426@thelio-3990X>
- <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
- <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
- <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
- <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn>
- <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
-From: Jinyang He <hejinyang@loongson.cn>
-Message-ID: <2bf11cd2-8449-acda-f5ad-659c38cb018e@loongson.cn>
-Date: Thu, 6 Jun 2024 10:10:05 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1717649944; c=relaxed/simple;
+	bh=cuvgkfPcqhko2rNaqoaO/WdaJ5XA4m4ov2DN5/fwas4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gLV8zl7NY/O3DvVjyoPyS2sNIKwtGRlxi4ekCPRkeFok81y5xqofyKHEB2/p7m9hFsNGxa/7jYOdC7KotegGOdGWH2ePE+6Eh7FMnhpw9l4jsagfvl8Ce+T3PVZwkU7kqdGIsMIwj4QP+eaYz0wNHyH58e384a/Zd4pRA8qcTIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mXFXGqY9; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mXFXGqY9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717649942; x=1749185942;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cuvgkfPcqhko2rNaqoaO/WdaJ5XA4m4ov2DN5/fwas4=;
+  b=mXFXGqY9LipbFLmz1e4bBKev6B/S/tHK4Z1hNWLXZx3X63piD4nEyPL0
+   ZI3HfWwR+JwSFdKmlsPkRHvh/8/J0LrTpuSIO9kRZyCcAooDETp6wStjb
+   fKdgMYdXcEmm5FpR7NWydR4BWPXIs05n7stYZfqpu4/aMnil1As2JsuKP
+   /H62x5YXYDSbMCylDQnp3/MmiKoUAXY6FavJvN2pUrBre58j2iGIezHeZ
+   1d2GHtP5MwDkbbHCCyBt0d3pD1w2pMAoZCU7gEEZnH+6M65L+HAnrxpdy
+   Hxg4HkY5DmVjVaSWZbXo9tERF3Kj0syn++DlpgLOv+j3alJKxRXyhULvP
+   w==;
+X-CSE-ConnectionGUID: 0Gk9PxJ3QJe7RMbJhaX/DQ==
+X-CSE-MsgGUID: 5V9lYWAFRKasVTA7SNNtZw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="14476310"
+X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
+   d="scan'208";a="14476310"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 21:59:01 -0700
+X-CSE-ConnectionGUID: fRMfObciRl+LzmSAJ58YDQ==
+X-CSE-MsgGUID: R8l8R+2bS76YF0gDUIE36w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
+   d="scan'208";a="61036868"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 05 Jun 2024 21:59:01 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sF5DG-0002gT-21;
+	Thu, 06 Jun 2024 04:58:58 +0000
+Date: Thu, 6 Jun 2024 12:58:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:io_uring-msg-ring.1 7/9] io_uring/io_uring.c:585:6:
+ warning: no previous prototype for function 'io_cq_unlock_post'
+Message-ID: <202406061201.htRM9t09-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:AQAAf8Axw8R9GmFmaV4WAA--.45165S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxGFW3Aw17Xw4rur43XrWftFc_yoW5ur43pF
-	y8Jr1UJryUJr18Jr1UJr4UXryUJr1UJw1UJr1rJF1UJr1UJr1jqF17Xr1j9r18Xr4kJr1U
-	tr4UJr1Uury5JrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2-VyUUUUU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2024-06-06 03:05, Xi Ruoyao wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-msg-ring.1
+head:   9c799821c57ae3670fef01abd6746b33685c07d6
+commit: 7de82d2e1d5af1210e8f631b7d994957c602a8d4 [7/9] hack
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240606/202406061201.htRM9t09-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240606/202406061201.htRM9t09-lkp@intel.com/reproduce)
 
-> On Wed, 2024-06-05 at 23:47 +0800, Jinyang He wrote:
->> In our 419 repo this func has been renamed arch_update_insn_state (, now it
->> should be arch_update_cfi_state) and give some actions to deal with the
->> frame pointer case. If we support it we may deal with some case but for
->> clang...
->>
->> .global test
->> .type test,@function
->> test:
->>
->> addi.d  $sp,$sp,-448
->> st.d    $ra,$sp,440
->> st.d    $fp,$sp,432
->> addi.d  $fp,$sp,448
->>
->> # do something  <- not change $sp
-> This is simplified.  In the real code $sp is changed, something like:
->
-> bstrins.d $sp, $zero, 5, 0
->
-> $fp is needed to allow restoring $sp after realigning $sp for some local
-> over-aligned variables, as demonstrated by this example:
->
-> struct x { _Alignas(64) char buf[128]; };
->
-> void f(struct x *p);
-> void g()
-> {
-> 	struct x x = { .buf = "1145141919810" };
-> 	f(&x);
-> }
->
-> GCC does not align $sp, it produces the aligned address for x from an
-> unaligned $sp instead:
->
-> addi.d $a0, $sp, 63
-> srli.d $a0, $a0, 6
-> slli.d $a0, $a0, 6
->
-> thus there's no need to use $fp.
->
-> /* snip */
->
->> <- restore regs from non-cfa ?
->>           ld.d    $ra, $sp, 8                     # 8-byte Folded Reload
-> /* snip */
->
->> Maybe Clang have anything wrong?
-> I don't think we must restore regs based on $fp just because CFA is
-> based on $fp.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406061201.htRM9t09-lkp@intel.com/
 
-You are right.
+All warnings (new ones prefixed by >>):
+
+   In file included from io_uring/io_uring.c:45:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> io_uring/io_uring.c:585:6: warning: no previous prototype for function 'io_cq_unlock_post' [-Wmissing-prototypes]
+     585 | void io_cq_unlock_post(struct io_ring_ctx *ctx)
+         |      ^
+   io_uring/io_uring.c:585:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     585 | void io_cq_unlock_post(struct io_ring_ctx *ctx)
+         | ^
+         | static 
+   2 warnings generated.
 
 
-> The .cfi directives only provides *one* possible way to
-> restore the regs.
-What I just confused is that there is no ".cfi_*"
-in the eplogue by clang, which may cause wrong backtrace if gdb set
+vim +/io_cq_unlock_post +585 io_uring/io_uring.c
 
-breakpoint there and backtrace. (But this is out of this topic.)
+   584	
+ > 585	void io_cq_unlock_post(struct io_ring_ctx *ctx)
+   586		__releases(ctx->completion_lock)
+   587	{
+   588		io_commit_cqring(ctx);
+   589		spin_unlock(&ctx->completion_lock);
+   590		io_cqring_wake(ctx);
+   591		io_commit_cqring_flush(ctx);
+   592	}
+   593	
 
-
-
-> This way is convenient to the unwinder, but not
-> necessarily convenient to the CPU thus the real instruction sequence can
-> use a different way.  They only need to be "equivalent", not necessarily
-> "exactly same."
->
-> Also note that .cfi_* directives are completely irrelevant for objtool.
-> THe objtool synthesizes the ORC unwind info from the machine
-> instructions, not the DWARF unwind info coded with .cfi_*.
-> The entire point of ORC is avoiding DWARF.  It's even named ORC because
-> ORC and DWARF are sworn enemies in some tales.
-Yes.
-The yestorday attachment has something wrong.
-Enmmmm.... (It seems I'm careless.) diff is,
-
-                 switch (op->src.type) {
-                 case OP_SRC_ADD:
-                         if (op->dest.reg == CFI_SP && op->src.reg == 
-CFI_SP) {
--                               /* addi.d sp, sp, imm */
--                               cfi->stack_size -= op->src.offset;
--                               if (cfa->base == CFI_SP)
-                                 /* addi.d sp, sp, imm */
-                                 cfi->stack_size -= op->src.offset;
-                                 if (cfa->base == CFI_SP)
-
-Or you can get the tmp fix by [1].
-
-[1]: 
-https://github.com/MQ-mengqing/linux/commit/c1f7df3eb2a2bb7a1c10c2aa6e0e3d585b457352
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
