@@ -1,288 +1,96 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D05F181315;
-	Thu,  6 Jun 2024 10:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329682E639;
+	Thu,  6 Jun 2024 10:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717669984; cv=none; b=Si8721+oKnwxyUflu3U1PGQZZXkgWeeZWj+HbMcyVjlmFrGe5sfNYJ6PUDprJeZ+bPrifABrIP8TOU1rwYtkbTxLUpW8YMf1N2w9aEt5ZQTqBb8a4CZddaTd9aRmGNGcidfT/AoSD5s1ygpNgLTz6cwNiPs2qRDCesrIwtsJKRI=
+	t=1717670946; cv=none; b=SNK7ss/ZtgOaKgQM9kwD/uG9B8NQjOjK1i1Dp/2LzoUpDKhitJpsUEG1e+OXLxSzww52vDNy08Cq7Rz46FiNt4Q16OGcMmggG/+Qk4OmZ6wCQchk4+2mFtmbAtWFXjjVehFuewgft+SuAYGvgIfe8v1WYeRuqY3IQkOUOkZXkJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717669984; c=relaxed/simple;
-	bh=7oulF61J/1Ld/MRF929qgvIcKwcBsekXr7qO9gCsAS8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uNFYBVEA2S+C3bWlZWn9Jc0fOogAQWHcn7EiBqJUYgb5d1Qk//lbPbyKHegXpR9jhl0GuiZgWJHtQmjMSUt218chsJ4+yrBU6knqQRvLgvbeJ0VrJzRosXnI1c9hIOfuBexVRdQTfyRtYHsti375MpuRy3UeU+VEKJ/xkhjuoOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=NB7IlQ0b; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1717670946; c=relaxed/simple;
+	bh=0Ik9IHA30dbpyjCuVFkRunHddok3/QXHaB1yZ6glyCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ktFTxw/ieB+wTtQpnXuUO3nCJilRnXHeHLAgrvugjYXUMklyX3KZggvv+hgwmmC8+sW00OMNAgau+KFb1AZ1XozjrH3KjjYAtP4p5Ye6qtQKAH30oHnGVoGdAWGy6aQF0pocApYsyMa+bx+iL4mhVXCzA58/ujVZI2GsyMFFcV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IXELZb/4; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="NB7IlQ0b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IXELZb/4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1717669982; x=1749205982;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717670944; x=1749206944;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7oulF61J/1Ld/MRF929qgvIcKwcBsekXr7qO9gCsAS8=;
-  b=NB7IlQ0buBEAnpN/0VQTYqszZSB64l5jrHUJsmMR8PvIw07G5eSQGig/
-   mMiQcA2/4eQy6yka9KpHC9H9AZCy4XQWXT9usdXQjxJmALeIR9QVCMo9X
-   hs/DrNGiyYEhYnr41xpWHNbQYodurse9dZ6R09rfbBvYBmrV6LsZbrL46
-   OJQCFnTNB5BXexR9xBpTx68bR/OyJHIR/iUcGSHt7klv/554bDsrC0jBM
-   Fif0+DOW3QcvDr8Pvt8HBPXt4BYjvbQP1uZfCEL88N/u+iPEM4pHBy+YX
-   YzBX59MjL14jzzTB//AJTGpo4kfoUk32s3PCsYYh1KaK3Y6zlftGopzez
+  bh=0Ik9IHA30dbpyjCuVFkRunHddok3/QXHaB1yZ6glyCs=;
+  b=IXELZb/48PTW1Q5IRtv06i4IUWZhZQpRne79C80mxLyhAxZZOL5Jp9ff
+   fRoF6VMXzPEkhg2w3xlM/TXubqwouYNVb1kXgUh/mfIteeA6Gl/wZOVlI
+   KEHj+eMVbwv1o4aV38bMSty32qB8xhSQ6VT/DaXBblNPJlVwj1fs3X1IG
+   W6/x8JB/xfEBRHZaSxkImjOnkG+U6znrY+vb8Rmy8XrzhIDxs9ySI1aaE
+   RrIh7iMJvMIRPToOZ+kCQJPAOvDgkN61BlmbrKjt3jFM2yzyiO3NgDniU
+   VsytwH9xONG917Wn9n+Ek3Y6fNWUV+pHPLtNZ5cbEI70/XIOCSQijpGIb
    A==;
-X-CSE-ConnectionGUID: wRNOMPcPTNSQ93tseZzK/w==
-X-CSE-MsgGUID: fEw/lNs7RdWnASCtNNjC9A==
+X-CSE-ConnectionGUID: VvQ587kDTBakpxS+BlXYbQ==
+X-CSE-MsgGUID: kKxveBThQ66zYich5qCWWw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="25728109"
 X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="194466390"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Jun 2024 03:33:01 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 6 Jun 2024 03:33:00 -0700
-Received: from localhost (10.10.85.11) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Thu, 6 Jun 2024 03:33:00 -0700
-Date: Thu, 6 Jun 2024 16:00:20 +0530
-From: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-To: kernel test robot <lkp@intel.com>
-CC: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>, <netdev@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<davem@davemloft.net>, <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bryan.whitehead@microchip.com>, <andrew@lunn.ch>, <linux@armlinux.org.uk>,
-	<sbauer@blackbox.su>, <hmehrtens@maxlinear.com>, <lxu@maxlinear.com>,
-	<hkallweit1@gmail.com>, <edumazet@google.com>, <pabeni@redhat.com>,
-	<UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net V3 2/3] net: lan743x: Support WOL at both the PHY and
- MAC appropriately
-Message-ID: <ZmGPvNOOZ5EvZFne@HYD-DK-UNGSW21.microchip.com>
-References: <20240605101611.18791-3-Raju.Lakkaraju@microchip.com>
- <202406060612.UBlHLtM8-lkp@intel.com>
+   d="scan'208";a="25728109"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 03:49:03 -0700
+X-CSE-ConnectionGUID: DJWkUU2PRdutNzRpsdzi6A==
+X-CSE-MsgGUID: ivawZ1bhSKqf+/sWXHL5yQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="42388895"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 06 Jun 2024 03:49:02 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFAg0-00031g-1n;
+	Thu, 06 Jun 2024 10:49:00 +0000
+Date: Thu, 6 Jun 2024 18:48:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: "David E. Box" <david.e.box@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH V3 1/3] platform/x86/intel/sdsi: Add ioctl SPDM transport
+Message-ID: <202406061832.LY1udPGK-lkp@intel.com>
+References: <20240606011617.557264-1-david.e.box@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202406060612.UBlHLtM8-lkp@intel.com>
+In-Reply-To: <20240606011617.557264-1-david.e.box@linux.intel.com>
 
-"phy_wolopts" and "phy_wol_supported" variable define in struct lan743x_adapter
-under CONFIG_PM compiler build option.
+Hi David,
 
-These variable define in drivers/net/ethernet/microchip/lan743x_main.h file.
-Can you please add the config (CONFIG_PM=y) to build?
+kernel test robot noticed the following build errors:
 
-Thanks,
-Raju
+[auto build test ERROR on c3f38fa61af77b49866b006939479069cd451173]
 
-The 06/06/2024 06:25, kernel test robot wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> Hi Raju,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on net/main]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Raju-Lakkaraju/net-lan743x-disable-WOL-upon-resume-to-restore-full-data-path-operation/20240605-182110
-> base:   net/main
-> patch link:    https://lore.kernel.org/r/20240605101611.18791-3-Raju.Lakkaraju%40microchip.com
-> patch subject: [PATCH net V3 2/3] net: lan743x: Support WOL at both the PHY and MAC appropriately
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240606/202406060612.UBlHLtM8-lkp@intel.com/config)
-> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240606/202406060612.UBlHLtM8-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202406060612.UBlHLtM8-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/net/ethernet/microchip/lan743x_main.c:4:
->    In file included from include/linux/module.h:19:
->    In file included from include/linux/elf.h:6:
->    In file included from arch/s390/include/asm/elf.h:173:
->    In file included from arch/s390/include/asm/mmu_context.h:11:
->    In file included from arch/s390/include/asm/pgalloc.h:18:
->    In file included from include/linux/mm.h:2253:
->    include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      501 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      508 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      520 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      529 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    In file included from drivers/net/ethernet/microchip/lan743x_main.c:5:
->    In file included from include/linux/pci.h:39:
->    In file included from include/linux/io.h:14:
->    In file included from arch/s390/include/asm/io.h:93:
->    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      548 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
->          |                                                           ^
->    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
->      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->          |                                                      ^
->    In file included from drivers/net/ethernet/microchip/lan743x_main.c:5:
->    In file included from include/linux/pci.h:39:
->    In file included from include/linux/io.h:14:
->    In file included from arch/s390/include/asm/io.h:93:
->    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
->          |                                                           ^
->    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
->      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
->          |                                                      ^
->    In file included from drivers/net/ethernet/microchip/lan743x_main.c:5:
->    In file included from include/linux/pci.h:39:
->    In file included from include/linux/io.h:14:
->    In file included from arch/s390/include/asm/io.h:93:
->    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      585 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      693 |         readsb(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      701 |         readsw(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      709 |         readsl(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      718 |         writesb(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      727 |         writesw(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      736 |         writesl(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
-> >> drivers/net/ethernet/microchip/lan743x_main.c:3126:12: error: no member named 'phy_wol_supported' in 'struct lan743x_adapter'
->     3126 |                 adapter->phy_wol_supported = wol.supported;
->          |                 ~~~~~~~  ^
-> >> drivers/net/ethernet/microchip/lan743x_main.c:3127:12: error: no member named 'phy_wolopts' in 'struct lan743x_adapter'
->     3127 |                 adapter->phy_wolopts = wol.wolopts;
->          |                 ~~~~~~~  ^
->    17 warnings and 2 errors generated.
-> 
-> 
-> vim +3126 drivers/net/ethernet/microchip/lan743x_main.c
-> 
->   3085
->   3086  static int lan743x_netdev_open(struct net_device *netdev)
->   3087  {
->   3088          struct lan743x_adapter *adapter = netdev_priv(netdev);
->   3089          int index;
->   3090          int ret;
->   3091
->   3092          ret = lan743x_intr_open(adapter);
->   3093          if (ret)
->   3094                  goto return_error;
->   3095
->   3096          ret = lan743x_mac_open(adapter);
->   3097          if (ret)
->   3098                  goto close_intr;
->   3099
->   3100          ret = lan743x_phy_open(adapter);
->   3101          if (ret)
->   3102                  goto close_mac;
->   3103
->   3104          ret = lan743x_ptp_open(adapter);
->   3105          if (ret)
->   3106                  goto close_phy;
->   3107
->   3108          lan743x_rfe_open(adapter);
->   3109
->   3110          for (index = 0; index < LAN743X_USED_RX_CHANNELS; index++) {
->   3111                  ret = lan743x_rx_open(&adapter->rx[index]);
->   3112                  if (ret)
->   3113                          goto close_rx;
->   3114          }
->   3115
->   3116          for (index = 0; index < adapter->used_tx_channels; index++) {
->   3117                  ret = lan743x_tx_open(&adapter->tx[index]);
->   3118                  if (ret)
->   3119                          goto close_tx;
->   3120          }
->   3121
->   3122          if (adapter->netdev->phydev) {
->   3123                  struct ethtool_wolinfo wol = { .cmd = ETHTOOL_GWOL };
->   3124
->   3125                  phy_ethtool_get_wol(netdev->phydev, &wol);
-> > 3126                  adapter->phy_wol_supported = wol.supported;
-> > 3127                  adapter->phy_wolopts = wol.wolopts;
->   3128          }
->   3129
->   3130          return 0;
->   3131
->   3132  close_tx:
->   3133          for (index = 0; index < adapter->used_tx_channels; index++) {
->   3134                  if (adapter->tx[index].ring_cpu_ptr)
->   3135                          lan743x_tx_close(&adapter->tx[index]);
->   3136          }
->   3137
->   3138  close_rx:
->   3139          for (index = 0; index < LAN743X_USED_RX_CHANNELS; index++) {
->   3140                  if (adapter->rx[index].ring_cpu_ptr)
->   3141                          lan743x_rx_close(&adapter->rx[index]);
->   3142          }
->   3143          lan743x_ptp_close(adapter);
->   3144
->   3145  close_phy:
->   3146          lan743x_phy_close(adapter);
->   3147
->   3148  close_mac:
->   3149          lan743x_mac_close(adapter);
->   3150
->   3151  close_intr:
->   3152          lan743x_intr_close(adapter);
->   3153
->   3154  return_error:
->   3155          netif_warn(adapter, ifup, adapter->netdev,
->   3156                     "Error opening LAN743x\n");
->   3157          return ret;
->   3158  }
->   3159
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+url:    https://github.com/intel-lab-lkp/linux/commits/David-E-Box/tools-arch-x86-intel_sdsi-Rework-Makefile/20240606-091801
+base:   c3f38fa61af77b49866b006939479069cd451173
+patch link:    https://lore.kernel.org/r/20240606011617.557264-1-david.e.box%40linux.intel.com
+patch subject: [PATCH V3 1/3] platform/x86/intel/sdsi: Add ioctl SPDM transport
+config: i386-buildonly-randconfig-003-20240606 (https://download.01.org/0day-ci/archive/20240606/202406061832.LY1udPGK-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240606/202406061832.LY1udPGK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406061832.LY1udPGK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/linux/intel_sdsi.h:13:10: fatal error: 'linux/sizes.h' file not found
+      13 | #include <linux/sizes.h>
+         |          ^~~~~~~~~~~~~~~
+   1 error generated.
 
 -- 
---------                                                                        
-Thanks,                                                                         
-Raju
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
