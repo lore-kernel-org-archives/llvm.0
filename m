@@ -1,156 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76604646;
-	Thu,  6 Jun 2024 00:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27F9114AB8;
+	Thu,  6 Jun 2024 02:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717634465; cv=none; b=qqHtrjM5TVALvm42b9LF7Kd+pml0fUghFOrv4L4h4WeOkqHGUTLRXlsHiHgyzyVMDmtGDFFQ+OYnLdVD2vstnzzcGWRS+0mIpYISK5C/37+Xl6vlZaU24vrWzsNMfNSRyHiLAkxtWxZUj92xtTp8iRQG4LcEXTlx2QouKVgv/Js=
+	t=1717639816; cv=none; b=L+l/WwY4lMq1yuH6PvC0DbSXVMhZeW5LXZo7M9CQYS4uV91tgEwzXKCGTTAraGGj6kdxCYKhGyUz0+6+UtpOSViXkxl/NMXz6GySEwMEXgjMVDUi06MWtpJUYVKgvV0rEhZkLr0wE6rQMgjxmUwLqQezKF5AE7Gc5m6AjPyr9G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717634465; c=relaxed/simple;
-	bh=d8Pdnajr5Jp3uRMQuGYWWv+KOBPfqtgFMVQb/GIHpCA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qHXWQhZlosZEnMIS5J06V4jBsTFrJYG6mr8oSJM3P0I/CKKapDYeq3kYeg2+IKkEIlxnYpmETWrWYgoftN61n1grzDfYMUesnY6av+4WR8L9xlweCT3andfd+dpHxqehfCgjYq54HIvq53UKF4FY0Rx9b/ESJuwR3/W5laGsoeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vx1R3yaG; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vx1R3yaG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717634463; x=1749170463;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d8Pdnajr5Jp3uRMQuGYWWv+KOBPfqtgFMVQb/GIHpCA=;
-  b=Vx1R3yaGoEq8eevBOoNiWm0DHEuJZPPHbZpVx9x4R3YSjBXRzw3Sof6w
-   o2iAuqmVgPYaILmJnmLJljEfVc/9XO8HJldQvfR1P16aHo9hsPEIAQsXk
-   MpcovbtFXxTIpV5XBlvqNU1g4ExZ6dwtGHnemNHfmaiM2PAemsgfHjrfA
-   0irpcEalHiBiJQw9RamQ70yiWgdSXUHBe1Eu92Un9YHWdQ9YYcjPpX3cr
-   UQcw5E6RQcOO+D/i5DlVhpNJgxERpx/MH7m8yj6FPXEBDsbvZ7ssyvTqE
-   T7fIa7Qts3+cHwY1uMSVzFv+VWf+w+XoEuU70Aos8LneGZwPvOFxuWsiH
-   A==;
-X-CSE-ConnectionGUID: HDTctKd4SeKsEbmBAC0c9g==
-X-CSE-MsgGUID: XyiYLwCcTweVDsjrxH89pQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="14234053"
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="14234053"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 17:41:03 -0700
-X-CSE-ConnectionGUID: h4Hr9I05QbyxpdQN1ROHqw==
-X-CSE-MsgGUID: T+3KgnMhSLiDXOMDu2BN7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="42735289"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 05 Jun 2024 17:40:59 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sF1BZ-0002U4-0X;
-	Thu, 06 Jun 2024 00:40:57 +0000
-Date: Thu, 6 Jun 2024 08:40:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fred Griffoul <fgriffo@amazon.co.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, griffoul@gmail.com,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Yi Liu <yi.l.liu@intel.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Eric Auger <eric.auger@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Ankit Agrawal <ankita@nvidia.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Ye Bin <yebin10@huawei.com>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vfio/pci: add msi interrupt affinity support
-Message-ID: <202406060731.L3NSR1Hy-lkp@intel.com>
-References: <20240605155509.53536-1-fgriffo@amazon.co.uk>
+	s=arc-20240116; t=1717639816; c=relaxed/simple;
+	bh=Z0CYkHleD15nnISvbRfPMD7qgij7i9JhEyEYYx5DE2E=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=IDY8i4xXS7jOEuAHdalpYDGMvVlNaiabDcU1CYKFcQ7b1YJW0st/5IE6jDUoYGoiiwKILaufk4lYGxqYSq4a4w6VIc/KTk1m87zGqJPMMOWSaKV2EfPsFB0Nsra7MF2BAFNribD4G9ZrCrxSV1uUmv1CJYYgLdhxRuPVJdXoXh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [111.9.175.10])
+	by gateway (Coremail) with SMTP id _____8DxzOqDGmFmkQwEAA--.17302S3;
+	Thu, 06 Jun 2024 10:10:11 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Axw8R9GmFmaV4WAA--.45165S3;
+	Thu, 06 Jun 2024 10:10:10 +0800 (CST)
+Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
+ unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
+To: Xi Ruoyao <xry111@xry111.site>, Nathan Chancellor <nathan@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Youling Tang <tangyouling@kylinos.cn>, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ mengqinggang@loongson.cn, cailulu@loongson.cn, wanglei@loongson.cn,
+ luweining@loongson.cn, Yujie Liu <yujie.liu@intel.com>,
+ Heng Qi <hengqi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>
+References: <20240604150741.30252-1-xry111@xry111.site>
+ <20240605054328.GA279426@thelio-3990X>
+ <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
+ <20240605062548.GF279426@thelio-3990X>
+ <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
+ <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
+ <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
+ <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn>
+ <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
+From: Jinyang He <hejinyang@loongson.cn>
+Message-ID: <2bf11cd2-8449-acda-f5ad-659c38cb018e@loongson.cn>
+Date: Thu, 6 Jun 2024 10:10:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240605155509.53536-1-fgriffo@amazon.co.uk>
+In-Reply-To: <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:AQAAf8Axw8R9GmFmaV4WAA--.45165S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFW3Aw17Xw4rur43XrWftFc_yoW5ur43pF
+	y8Jr1UJryUJr18Jr1UJr4UXryUJr1UJw1UJr1rJF1UJr1UJr1jqF17Xr1j9r18Xr4kJr1U
+	tr4UJr1Uury5JrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2-VyUUUUU
 
-Hi Fred,
+On 2024-06-06 03:05, Xi Ruoyao wrote:
 
-kernel test robot noticed the following build errors:
+> On Wed, 2024-06-05 at 23:47 +0800, Jinyang He wrote:
+>> In our 419 repo this func has been renamed arch_update_insn_state (, now it
+>> should be arch_update_cfi_state) and give some actions to deal with the
+>> frame pointer case. If we support it we may deal with some case but for
+>> clang...
+>>
+>> .global test
+>> .type test,@function
+>> test:
+>>
+>> addi.d  $sp,$sp,-448
+>> st.d    $ra,$sp,440
+>> st.d    $fp,$sp,432
+>> addi.d  $fp,$sp,448
+>>
+>> # do something  <- not change $sp
+> This is simplified.  In the real code $sp is changed, something like:
+>
+> bstrins.d $sp, $zero, 5, 0
+>
+> $fp is needed to allow restoring $sp after realigning $sp for some local
+> over-aligned variables, as demonstrated by this example:
+>
+> struct x { _Alignas(64) char buf[128]; };
+>
+> void f(struct x *p);
+> void g()
+> {
+> 	struct x x = { .buf = "1145141919810" };
+> 	f(&x);
+> }
+>
+> GCC does not align $sp, it produces the aligned address for x from an
+> unaligned $sp instead:
+>
+> addi.d $a0, $sp, 63
+> srli.d $a0, $a0, 6
+> slli.d $a0, $a0, 6
+>
+> thus there's no need to use $fp.
+>
+> /* snip */
+>
+>> <- restore regs from non-cfa ?
+>>           ld.d    $ra, $sp, 8                     # 8-byte Folded Reload
+> /* snip */
+>
+>> Maybe Clang have anything wrong?
+> I don't think we must restore regs based on $fp just because CFA is
+> based on $fp.
 
-[auto build test ERROR on awilliam-vfio/next]
-[also build test ERROR on awilliam-vfio/for-linus linus/master v6.10-rc2 next-20240605]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You are right.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fred-Griffoul/vfio-pci-add-msi-interrupt-affinity-support/20240605-235753
-base:   https://github.com/awilliam/linux-vfio.git next
-patch link:    https://lore.kernel.org/r/20240605155509.53536-1-fgriffo%40amazon.co.uk
-patch subject: [PATCH v2] vfio/pci: add msi interrupt affinity support
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240606/202406060731.L3NSR1Hy-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240606/202406060731.L3NSR1Hy-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406060731.L3NSR1Hy-lkp@intel.com/
+> The .cfi directives only provides *one* possible way to
+> restore the regs.
+What I just confused is that there is no ".cfi_*"
+in the eplogue by clang, which may cause wrong backtrace if gdb set
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+breakpoint there and backtrace. (But this is out of this topic.)
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/mm/cmm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/kvm/kvm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs_common/nfs_acl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs_common/grace.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp437.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp850.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-15.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_utf8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_misc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/cramfs/cramfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv3.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_arc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_md4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/autofs/autofs4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/encrypted-keys/encrypted-keys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/cast_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/af_alg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/algif_hash.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/algif_skcipher.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/ecc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/curve25519-generic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libchacha.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libarc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libpoly1305.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bpf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_kprobes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ts_kmp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ts_bm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/ts_fsm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/lib/test_kprobes_s390.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/lib/test_unwind.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/s390/lib/test_modules.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/loop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/cio/vfio_ccw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/block/dcssblk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/net/lcs.o
->> ERROR: modpost: "cpuset_cpus_allowed" [drivers/vfio/pci/vfio-pci-core.ko] undefined!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+> This way is convenient to the unwinder, but not
+> necessarily convenient to the CPU thus the real instruction sequence can
+> use a different way.  They only need to be "equivalent", not necessarily
+> "exactly same."
+>
+> Also note that .cfi_* directives are completely irrelevant for objtool.
+> THe objtool synthesizes the ORC unwind info from the machine
+> instructions, not the DWARF unwind info coded with .cfi_*.
+> The entire point of ORC is avoiding DWARF.  It's even named ORC because
+> ORC and DWARF are sworn enemies in some tales.
+Yes.
+The yestorday attachment has something wrong.
+Enmmmm.... (It seems I'm careless.) diff is,
+
+                 switch (op->src.type) {
+                 case OP_SRC_ADD:
+                         if (op->dest.reg == CFI_SP && op->src.reg == 
+CFI_SP) {
+-                               /* addi.d sp, sp, imm */
+-                               cfi->stack_size -= op->src.offset;
+-                               if (cfa->base == CFI_SP)
+                                 /* addi.d sp, sp, imm */
+                                 cfi->stack_size -= op->src.offset;
+                                 if (cfa->base == CFI_SP)
+
+Or you can get the tmp fix by [1].
+
+[1]: 
+https://github.com/MQ-mengqing/linux/commit/c1f7df3eb2a2bb7a1c10c2aa6e0e3d585b457352
+
