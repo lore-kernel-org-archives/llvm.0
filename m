@@ -1,250 +1,223 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302C6197509
-	for <llvm@lists.linux.dev>; Thu,  6 Jun 2024 15:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7EA91EEF7;
+	Thu,  6 Jun 2024 17:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717689068; cv=none; b=fJdNe1/rGZNrviMjnHb7OGHRAS0uJJQtHAG1Cmqk5gU5zPKDCq1hInq5fUC7nt4Dbd00bVTP1wFeIjYnrsW4SvXetlupz9ct2BBI5RW0jZsoE/pmedHjxThUJBIntS9vhDnQsnZ2aSSGXGL8u763mCakBtwlMDUpyJOcFaFcm60=
+	t=1717694157; cv=none; b=GUbO5fdmt9WF5EdurDD7w8BxqN1wBrqyp90CuJAcgChqjHeksSoqyYubHo+Jc5CCOFx7VWmlt5Dk07XVQ1IJRpQLTPzH+rJq3ImTwxPFoM3PTfWithyB2uBdiFV002kNzekW6XQheK230Hz88kWHi7bCwxo+hZNzrZrXRVeV5fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717689068; c=relaxed/simple;
-	bh=adIEv1ABiv2Y/+wtwJ0SEGkRWG7wXeRgEZiP/ll5KEM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sxl/8mwHk7tJnPa57fIYiMTyNtLdfpUWrLpnplTcb7Ga9q+Bc7n2InWWslwN2Xm/fy/NqtE5RKmGiWbKb3ozJdo4NmiwR2mz/KPKxO1LRLxIxNKgQPv+n/eKbtQ9/1/ZIVHZ3j36d2G4MEG+oKmtKKQi3wgUn/ZwXyilxjiTCUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=toyMQmcF; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1717694157; c=relaxed/simple;
+	bh=lPjcqcSWuWxCoriLQm41bPi1MkJTbWLXuj16OXIGMDo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ba+9gtrL+5x+PrE3JrOdg4xXXXb4z4xiHbt6Rtq6BIQZAdsoTcmPiqnZv+U9xayfuW4kUpb74SVYM3iFJJ8HHO2RxwkF1A+aX7nBG8+nw+lM5u5aRl25HidmNPHAB4VxDLAex8lZi6xUW4UUbsbTEH+elimMpQKaSPN+Qr250tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BqNG71IV; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="toyMQmcF"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2c1a9b151bcso902695a91.3
-        for <llvm@lists.linux.dev>; Thu, 06 Jun 2024 08:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717689066; x=1718293866; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zDmlKGnxhvteIYdGoZUuN1H/FeEZVR1GpReejN7otNE=;
-        b=toyMQmcFpAe5yPKqvr1J6mzDGsXfWyb3LszYvRV/UotTpKVI/czHD03rrbLL0iPlto
-         tlJLIO3Kkw5cFY/FDAHTixaOtUAavWE/q2exf9WZIML1O5jyQTkYIgwXhOc1gKdmEls1
-         iZaiGj/kYbls7rOFlPZLmsR8pgkHGy4xkwnrzK1nJRcUVXXULfK/rHrf2PcsvBcEpN3V
-         ovmfA3e3AVsLoWwBHbMLurZ1cVpnrngm+XtRw93MlAmxXoqhQfgNk7nJEHukDjQ4vVRF
-         CKwARivSQ7MgCK4ZDwFFQKjYkwe7HU6GYTpg15q2TVQgJDUIyak/oO58BrL9qLXtL6oo
-         CFEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717689066; x=1718293866;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zDmlKGnxhvteIYdGoZUuN1H/FeEZVR1GpReejN7otNE=;
-        b=ZkDafhRwkuzQRJDLUThcwSrUUn1GwL8yxeA8YfJPLKI07OcUnzg46E1I/gqxXx/noc
-         JTuGQWBFJg5l5BPiMvtB8CWJxB6K9Oga/R5KcvHkaHrsZbXbcFTJ297twrV9HX0bXhfs
-         uGbVBWaoVikuXR21LGVEb7Q6tFolnwYn33rjr6CrLH06OufxmxcIEd143EU7SJgT+QPd
-         UlBNH7dUOdKMQpy6JbljkSqC5NB4XcsEaMODU3pk9qhIrGWnsdHEQTIKfhWvq4olQyaR
-         sQ7c0qSaZr/HL2C3dFqJiAJTtYXW0XKDnz8FTcFYOO81L68+GImHawMx0wirltH908ye
-         hKKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUT3qAvNpDv9c4OHLUc+LIbELQYmo3J3rMrTG730CYhSwR1s3Zo/+6GTBrJaS+8zlXJGTae5P8/0QPF+UdzNMlYSpKiuA==
-X-Gm-Message-State: AOJu0Yzhk5o2nOVa/fz4Rlw5tQnqY0+7KY9bI1YGNxmejuxbT4vB9I8p
-	eQ56/1Yck0FkFyFH7kG0vH0Tkvah96B9ojwww0C20j1LpiqCvDOcLybKM6HHhN8=
-X-Google-Smtp-Source: AGHT+IGDNf+n2WEFOQ3uys+exa6v8+p9xOEthb5+b/G77zFZwY+Wcx90+vRsnhUCfmsd12xUa2qWiA==
-X-Received: by 2002:a17:90a:9ac:b0:2c2:5341:7ed6 with SMTP id 98e67ed59e1d1-2c27db58f5dmr6165630a91.38.1717689066272;
-        Thu, 06 Jun 2024 08:51:06 -0700 (PDT)
-Received: from [10.4.10.38] (pool-108-26-179-17.bstnma.fios.verizon.net. [108.26.179.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c28063a7fcsm3756281a91.7.2024.06.06.08.51.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 08:51:05 -0700 (PDT)
-Message-ID: <bd3b89cb-07fc-4b9f-9f10-9b0f3664ec5e@rivosinc.com>
-Date: Thu, 6 Jun 2024 11:50:56 -0400
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BqNG71IV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717694156; x=1749230156;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lPjcqcSWuWxCoriLQm41bPi1MkJTbWLXuj16OXIGMDo=;
+  b=BqNG71IV86+33KOd9Lf25DMiWfUQbrK0VvArZBVLiFUf/nXhRNb0rdPg
+   IGnvUvWZsztYAfBmkmPPU8ud/vlQtaXQzAMmUGNGDrlXyK9q9aufZdPpL
+   l/9oEafypDFXTLsa4/Q+yhqRQgyqgAadXruxJC93nt7CBleLh2/u9fGr9
+   8KJ1uYep9uCBzieMmd4vJSWwSjBdNvgqqI/A2Qy9M42diLEe2RUumzBhK
+   HxRe9FiF39qy/ALYW+nmPaCsciVjKKx7KuS8zJ/CDz+3GSmqJoNwNqoxm
+   ZutcMNcgTbSH3F5ASHvcM2/+NleY9/Jj4RFwnZEq87x7llOtH1CZ2FZSL
+   Q==;
+X-CSE-ConnectionGUID: BBy2AZKkQsmbhyNIpcm/5g==
+X-CSE-MsgGUID: UqubLjwTRVS+22+aAoWmRg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14605253"
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="14605253"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 10:15:55 -0700
+X-CSE-ConnectionGUID: 9umwJTieRDe+HOPyFqd1vA==
+X-CSE-MsgGUID: NCPggjqkR9qQ1OtBeyaD3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="38485310"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 06 Jun 2024 10:15:54 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFGiN-0003TN-1h;
+	Thu, 06 Jun 2024 17:15:51 +0000
+Date: Fri, 7 Jun 2024 01:15:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Akiva Goldberger <agoldberger@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Leon Romanovsky <leon@kernel.org>
+Subject: [leon-rdma:rdma-next 34/35]
+ drivers/infiniband/sw/siw/siw_main.c:235:15: error: incompatible function
+ pointer types initializing 'int (*)(struct ib_cq *, const struct
+ ib_cq_init_attr *, struct uverbs_attr_bundle *)' with an expression of type
+ 'int (struct ib_cq *, const struct ib_cq...
+Message-ID: <202406070100.fWRYgpgd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
-To: Zong Li <zong.li@sifive.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Masahiro Yamada <masahiroy@kernel.org>
-References: <20240531162327.2436962-1-jesse@rivosinc.com>
- <CANXhq0pYNWvMxkkNPpYW4OrOXK19Rehdy3yO8u1sforyVjdTZg@mail.gmail.com>
-Content-Language: en-US
-From: Jesse Taube <jesse@rivosinc.com>
-In-Reply-To: <CANXhq0pYNWvMxkkNPpYW4OrOXK19Rehdy3yO8u1sforyVjdTZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
+head:   2ed5b0102c333dc3a591c2b79c6065c3ded2ddc2
+commit: fbb0777c51553ab933d70fe1518ea3d6afa5d6a7 [34/35] RDMA: Pass entire uverbs attr bundle to create cq function
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240607/202406070100.fWRYgpgd-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070100.fWRYgpgd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406070100.fWRYgpgd-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/infiniband/sw/siw/siw_main.c:8:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/infiniband/sw/siw/siw_main.c:8:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/infiniband/sw/siw/siw_main.c:8:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/infiniband/sw/siw/siw_main.c:8:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/infiniband/sw/siw/siw_main.c:235:15: error: incompatible function pointer types initializing 'int (*)(struct ib_cq *, const struct ib_cq_init_attr *, struct uverbs_attr_bundle *)' with an expression of type 'int (struct ib_cq *, const struct ib_cq_init_attr *, struct ib_udata *)' [-Wincompatible-function-pointer-types]
+     235 |         .create_cq = siw_create_cq,
+         |                      ^~~~~~~~~~~~~
+   7 warnings and 1 error generated.
 
 
+vim +235 drivers/infiniband/sw/siw/siw_main.c
 
-On 6/5/24 00:51, Zong Li wrote:
-> On Sat, Jun 1, 2024 at 12:23 AM Jesse Taube <jesse@rivosinc.com> wrote:
->>
->> Dectect the Zkr extension and use it to seed the kernel base address.
->>
->> Detection of the extension can not be done in the typical fashion, as
->> this is very early in the boot process. Instead, add a trap handler
->> and run it to see if the extension is present.
->>
->> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
->> ---
->>   arch/riscv/kernel/pi/Makefile           |  2 +-
->>   arch/riscv/kernel/pi/archrandom_early.c | 71 +++++++++++++++++++++++++
->>   arch/riscv/mm/init.c                    |  3 ++
->>   3 files changed, 75 insertions(+), 1 deletion(-)
->>   create mode 100644 arch/riscv/kernel/pi/archrandom_early.c
->>
->> diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
->> index 50bc5ef7dd2f..9025eb52945a 100644
->> --- a/arch/riscv/kernel/pi/Makefile
->> +++ b/arch/riscv/kernel/pi/Makefile
->> @@ -32,5 +32,5 @@ $(obj)/string.o: $(srctree)/lib/string.c FORCE
->>   $(obj)/ctype.o: $(srctree)/lib/ctype.c FORCE
->>          $(call if_changed_rule,cc_o_c)
->>
->> -obj-y          := cmdline_early.pi.o fdt_early.pi.o string.pi.o ctype.pi.o lib-fdt.pi.o lib-fdt_ro.pi.o
->> +obj-y          := cmdline_early.pi.o fdt_early.pi.o string.pi.o ctype.pi.o lib-fdt.pi.o lib-fdt_ro.pi.o archrandom_early.pi.o
->>   extra-y                := $(patsubst %.pi.o,%.o,$(obj-y))
->> diff --git a/arch/riscv/kernel/pi/archrandom_early.c b/arch/riscv/kernel/pi/archrandom_early.c
->> new file mode 100644
->> index 000000000000..311be9388b5c
->> --- /dev/null
->> +++ b/arch/riscv/kernel/pi/archrandom_early.c
->> @@ -0,0 +1,71 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +
->> +/*
->> + * To avoid rewriteing code include asm/archrandom.h and create macros
->> + * for the functions that won't be included.
->> + */
->> +
->> +#define riscv_has_extension_likely(...) false
->> +#define pr_err_once(...)
->> +
->> +#include <linux/types.h>
->> +#include <asm/hwcap.h>
->> +#include <asm/archrandom.h>
->> +
->> +/*
->> + * Asm goto is needed so that the compiler does not remove the label.
->> + */
->> +
->> +#define csr_goto_swap(csr, val)                                                \
->> +({                                                                     \
->> +       unsigned long __v;                                              \
->> +       __asm__ __volatile__ goto("csrrw %0, " __ASM_STR(csr) ", %1"    \
->> +                                 : "=r" (__v) : "rK" (&&val)           \
->> +                                 : "memory" : val);                    \
->> +       __v;                                                            \
->> +})
->> +
->> +/*
->> + * Declare the functions that are exported (but prefixed) here so that LLVM
->> + * does not complain it lacks the 'static' keyword (which, if added, makes
->> + * LLVM complain because the function is actually unused in this file).
->> + */
->> +
->> +u64 get_kaslr_seed_zkr(void);
->> +
->> +/*
->> + * This function is called by setup_vm to check if the kernel has the ZKR.
->> + * Traps haven't been set up yet, but save and restore the TVEC to avoid
->> + * any side effects.
->> + */
->> +
->> +static inline bool __must_check riscv_has_zkr(void)
->> +{
->> +       unsigned long tvec;
->> +
->> +       tvec = csr_goto_swap(CSR_TVEC, not_zkr);
->> +       csr_swap(CSR_SEED, 0);
->> +       csr_write(CSR_TVEC, tvec);
->> +       return true;
->> +not_zkr:
->> +       csr_write(CSR_TVEC, tvec);
->> +       return false;
->> +}
->> +
->> +u64 get_kaslr_seed_zkr(void)
->> +{
->> +       const int needed_seeds = sizeof(u64) / sizeof(long);
->> +       int i = 0;
->> +       u64 seed = 0;
->> +       long *entropy = (long *)(&seed);
->> +
->> +       if (!riscv_has_zkr())
->> +               return 0;
->> +
->> +       for (i = 0; i < needed_seeds; i++) {
->> +               if (!csr_seed_long(&entropy[i]))
->> +                       return 0;
->> +       }
->> +
->> +       return seed;
->> +}
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index 9940171c79f0..8ef1edd2cddd 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -1025,6 +1025,7 @@ static void __init pt_ops_set_late(void)
->>   #ifdef CONFIG_RANDOMIZE_BASE
->>   extern bool __init __pi_set_nokaslr_from_cmdline(uintptr_t dtb_pa);
->>   extern u64 __init __pi_get_kaslr_seed(uintptr_t dtb_pa);
->> +extern u64 __init __pi_get_kaslr_seed_zkr(void);
->>
->>   static int __init print_nokaslr(char *p)
->>   {
->> @@ -1049,6 +1050,8 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>                  u32 kernel_size = (uintptr_t)(&_end) - (uintptr_t)(&_start);
->>                  u32 nr_pos;
->>
->> +               if (kaslr_seed == 0)
->> +                       kaslr_seed = __pi_get_kaslr_seed_zkr();
-> 
-> Could you elaborate on why we try to get the seed from DT first,
-> rather than from ZKR? 
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  226  
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  227  static const struct ib_device_ops siw_device_ops = {
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  228  	.owner = THIS_MODULE,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  229  	.uverbs_abi_ver = SIW_ABI_VERSION,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  230  	.driver_id = RDMA_DRIVER_SIW,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  231  
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  232  	.alloc_mr = siw_alloc_mr,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  233  	.alloc_pd = siw_alloc_pd,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  234  	.alloc_ucontext = siw_alloc_ucontext,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20 @235  	.create_cq = siw_create_cq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  236  	.create_qp = siw_create_qp,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  237  	.create_srq = siw_create_srq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  238  	.dealloc_driver = siw_device_cleanup,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  239  	.dealloc_pd = siw_dealloc_pd,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  240  	.dealloc_ucontext = siw_dealloc_ucontext,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  241  	.dereg_mr = siw_dereg_mr,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  242  	.destroy_cq = siw_destroy_cq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  243  	.destroy_qp = siw_destroy_qp,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  244  	.destroy_srq = siw_destroy_srq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  245  	.get_dma_mr = siw_get_dma_mr,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  246  	.get_port_immutable = siw_get_port_immutable,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  247  	.iw_accept = siw_accept,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  248  	.iw_add_ref = siw_qp_get_ref,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  249  	.iw_connect = siw_connect,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  250  	.iw_create_listen = siw_create_listen,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  251  	.iw_destroy_listen = siw_destroy_listen,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  252  	.iw_get_qp = siw_get_base_qp,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  253  	.iw_reject = siw_reject,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  254  	.iw_rem_ref = siw_qp_put_ref,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  255  	.map_mr_sg = siw_map_mr_sg,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  256  	.mmap = siw_mmap,
+11f1a75567c43e Michal Kalderon 2019-10-30  257  	.mmap_free = siw_mmap_free,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  258  	.modify_qp = siw_verbs_modify_qp,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  259  	.modify_srq = siw_modify_srq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  260  	.poll_cq = siw_poll_cq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  261  	.post_recv = siw_post_receive,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  262  	.post_send = siw_post_send,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  263  	.post_srq_recv = siw_post_srq_recv,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  264  	.query_device = siw_query_device,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  265  	.query_gid = siw_query_gid,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  266  	.query_port = siw_query_port,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  267  	.query_qp = siw_query_qp,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  268  	.query_srq = siw_query_srq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  269  	.req_notify_cq = siw_req_notify_cq,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  270  	.reg_user_mr = siw_reg_user_mr,
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  271  
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  272  	INIT_RDMA_OBJ_SIZE(ib_cq, siw_cq, base_cq),
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  273  	INIT_RDMA_OBJ_SIZE(ib_pd, siw_pd, base_pd),
+514aee660df493 Leon Romanovsky 2021-07-23  274  	INIT_RDMA_OBJ_SIZE(ib_qp, siw_qp, base_qp),
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  275  	INIT_RDMA_OBJ_SIZE(ib_srq, siw_srq, base_srq),
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  276  	INIT_RDMA_OBJ_SIZE(ib_ucontext, siw_ucontext, base_ucontext),
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  277  };
+bdcf26bf9b3acb Bernard Metzler 2019-06-20  278  
 
-The ordering preference doesn't matter to much,
-but my thought was if someone wanted to set a seed they could override
-the Zkr provided seed. Alexandre said privately to use the DT as a
-fallback rather than the way we have it now.
+:::::: The code at line 235 was first introduced by commit
+:::::: bdcf26bf9b3acb03c8f90387cfc6474fc8ac5521 rdma/siw: network and RDMA core interface
 
-> Also, I was wondering if, by any chance, it can
-> leverage arch_get_random_seed_longs() to get the seed instead of
-> __pi_get_kasler_seed_zkr()? Thanks
+:::::: TO: Bernard Metzler <bmt@zurich.ibm.com>
+:::::: CC: Jason Gunthorpe <jgg@mellanox.com>
 
-
-arch_get_random_seed_longs() is almost equivalent to
-__pi_get_kasler_seed_zkr()
-in the sense they do they will both use Zkr for entropy
-if its accessible.
-
-The problem is that we are very early in the boot process so the check 
-arch_get_random_seed_longs uses to detect if Zkr is present 
-(__riscv_isa_extension_available) is not set up yet. This is why 
-riscv_has_zkr is used to check if Zkr is present. Unfortunately, which I 
-didn't realize is that how riscv_has_zkr works isn't a valid way to 
-check if Zkr is present.
-
-The only solution seems to be parsing the ISA string from DT and ACPI.
-The hard part is parsing ACPI this early in boot.
-
-Thanks,
-Jesse Taube
-
-> 
->>                  /*
->>                   * Compute the number of positions available: we are limited
->>                   * by the early page table that only has one PUD and we must
->> --
->> 2.43.0
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
