@@ -1,111 +1,114 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCD9364
-	for <llvm@lists.linux.dev>; Thu,  6 Jun 2024 13:01:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73410196C89
+	for <llvm@lists.linux.dev>; Thu,  6 Jun 2024 14:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717678873; cv=none; b=ZiudPV/4cgGzwqWehjmW5jdHfxc7GiL4JyRuHGQ5uUmnPAsYRO1lFCRKJYf2xXrpvRTHY860Mr3DU+Jvty3KvY/z6hsNrcBOUKx14AiPuYzS9KZMN/i0Dz9Le6jT7FeZfZO3T5M6tXtdBi8zJSyl+rHqSJ8bv2VeVVDDx3KZIPU=
+	t=1717684615; cv=none; b=llR76mdFU0B60cCHy0SZs+lq1q/rhikERDWkDec4s2ZOehl10TAf2I7L5yAPdwkkCUwUNe1jG4D7lvvpzwZEpqQIVJ0yRTp0ZQyHoP9E1LLoxs3K/vlq/YxfmGX8d2UO+WPBkqeHHEng8A6W/0+cH5n61I3AmGdSNHWjxp3nXg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717678873; c=relaxed/simple;
-	bh=JuUsKChiLT+vfrAvapauPrs05KYeEB5xAXVHns6YIng=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ze1AKM+k1c0vHrC6KJsCHZ0LsK/+sr1MQMm6tyyfv52ABan6sFnmTT4kV18mFL4YXNLuNEZ6oxldlhTC4NWNZdY9dN649oO18EPYFF7jg7bjnNVrGsHzBy+gDpf77nZywJ3VDUgGiETTpeIstWkvcrB+ExySiuFYk0VuEF/rji8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IzssLhcJ; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1717684615; c=relaxed/simple;
+	bh=HYbaZvNxTbJKa5f2sNO1p1OoBPjJdhGaLI/bsnkYCJE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AYH3Ar4ISMbeq3P0hZOOxX6wTpt8+tdqXE86LkBIAwLeVl7Ty7OJD89QeQskDkSQ//aqzgmTKkEEC/C1Ft2zGQXJyiCrrriULdNKEXjQA2woantVaUocfScM2xcfQfaS+FufnbXvO3iJSjLmkxLztiI71oOsS/cU4kjDtFdbzEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YACCMcyk; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IzssLhcJ"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-440299bcf53so4436311cf.3
-        for <llvm@lists.linux.dev>; Thu, 06 Jun 2024 06:01:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YACCMcyk"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42155143bb6so10966055e9.1
+        for <llvm@lists.linux.dev>; Thu, 06 Jun 2024 07:36:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1717678869; x=1718283669; darn=lists.linux.dev;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c+/smkBmATmw+XKww99raJg0ggR9T5aTjmAVyB+/Cqc=;
-        b=IzssLhcJ+UZntDs1+Wu1GmBBuf77Qjb2rV0m0zce8TamYWV/WDiACEUPQe2HsMjXz8
-         jlxoGvbM8jEScAdGH6kKHZM5tgsNfu3WwECnUsFf3dSzwJDA+4iZQPytJzNVE8lZcUiE
-         6u4/GNMOCRx/12TesoW/qP5XEciT6v6NmK3NQ=
+        d=linaro.org; s=google; t=1717684612; x=1718289412; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BEGX/YRM4abY7OJ5gwhaYjtg7TEA+2R15UHkn44kNAM=;
+        b=YACCMcykr8os8IREvnNpEwMbFCq4Gd3GQXgeWS0YqyTDg7E4NISivyIn/Y4OvUnDJ6
+         B5Mxu/A7UF5KwiLgW4aDCaQiassHwaPAjuErmHIeETS+Nt2yFhWfjMw4GUIjKXo8NGTU
+         I4a3PKwNgn8E1aVH9FElXgGOiS65bKOEdJY98AdtOTCtDj0h09VXiJHWP/B4wkK4jCWv
+         oQBllAvK71p22pthzRTz1f+yNy3+ERAKu8QXSVfwi2mZzlpHkb7/iRGzPBG52s/DDJjB
+         N5U017gTTi/0Ojz5ldcdOOuVqWMvThPS+3DRdFo1x0tF04oZDKlQEHC4pr2v1zlyUX8C
+         Qwgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717678869; x=1718283669;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1717684612; x=1718289412;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=c+/smkBmATmw+XKww99raJg0ggR9T5aTjmAVyB+/Cqc=;
-        b=J5rNlsoog1yxkBgYNl5q5x3hM7oUEonOZJen/6C9lDRpDmXELMKo6EqOXUsteeqtyF
-         HRmwMzCtMXpxVOyhKE/Sp/+4Ou6k38uiLzIKRcAiFxS3ZFP4bHDlKARYDjgLvMdWqDQE
-         6urxyN1JldLQSv9MhZm3cUqdhsUlhclmSNTDZAMjE2JoC5mKymyJ7StBFXB0J0azYZjH
-         +KxYnPkGjCv7G3dg9kQPvtvCuha4M3SXcbXCgLDyptsyZJyDtLHyK658AtYdMt3ufFC6
-         HHM5ucUXQIDrV51eB7wvU+uGPD1fNFoWkpypgD5+oJtgT3kmX2oIkxv8T6lpt5f49MtP
-         kaMw==
-X-Forwarded-Encrypted: i=1; AJvYcCV8xnVM147FAf7otjkjD9SHTAHo99k6UC5K7Y23w0NebYSY06ni6+uIjNNr8SajnwMu0RrWb2JDnWF47RBYvxkN5Kw83A==
-X-Gm-Message-State: AOJu0Yx/4CccMvrynA+v/Uq21SheEHILUWUZqI9brcmTcPsUGcbP9WTX
-	9+EOYTsX31SHa5aejpwwVBVFV3tmUJhxkysMr0AJ5gJOlRdRrAEy7oPO/6a9ow==
-X-Google-Smtp-Source: AGHT+IH6JUdnRck7CPLLbnhrGIHcZXdHdRadjMOXloMShAFg/P7yO2dY07pA9eCBWDpCwxUBYv7E1A==
-X-Received: by 2002:a05:6214:5d8b:b0:6ab:83a5:195 with SMTP id 6a1803df08f44-6b030a96731mr59407256d6.41.1717678869377;
-        Thu, 06 Jun 2024 06:01:09 -0700 (PDT)
-Received: from denia.c.googlers.com (123.178.145.34.bc.googleusercontent.com. [34.145.178.123])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b04f6c4022sm5998646d6.51.2024.06.06.06.01.08
+        bh=BEGX/YRM4abY7OJ5gwhaYjtg7TEA+2R15UHkn44kNAM=;
+        b=Z621KVG1esR/jtFQ26/ULh08YbZwLP63/ezWAGc/b9HqRYd3OeAb5u1MVNsekJ3fWB
+         YzvzKddLtnQelK1k3AIvGrZG2j12tIj1vElOFRPSPy1ZPTa9R4aVj2JUC5/xoCLY27gr
+         SPYIvB8lQV3B5nt37Z939BfGDJBSAm3DvHl8aMVKbErF6RoTekz1X739oee80A0hG9cU
+         5u+gjtX/8qq5rWY8g3WWzRgY35y0EERy5xA+nshqRGesoY/6+TcOKwKjGJeqSFM7J/rO
+         3q65Hg4aOywORoWDa4vlrWuJRO8pU2TdVjEAsySe81z3f4ugw/FeqJ3/o80zFaynz7az
+         H9Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCWu1MbkKwOk6X8gC2f/twCjlW1wo+qHuMvp9kyBipPee4iRCEpYDxfIM4AR/EOJZ8YGHYuUlhjeHyrJebl95qrF3+gb5w==
+X-Gm-Message-State: AOJu0Yz64sJD95PhG08YMYXGvLLAeibZf0TCIVL09NgKW5k8SE7C9x6o
+	9WuhAfEI0GXcwOrSDYSIAErTZYk/iORvW34BM6yGCivRVU7dW6BHdOoXftLeE1M=
+X-Google-Smtp-Source: AGHT+IEzOvqTcqQFVTM/zPrDfgG4Ch2gvXbBob36jdrxqP8DV2hXHRxxXD0hBtX3K+evZarwhWDdKQ==
+X-Received: by 2002:a05:600c:4714:b0:41f:afa6:3d85 with SMTP id 5b1f17b1804b1-421563504aamr51262215e9.31.1717684611808;
+        Thu, 06 Jun 2024 07:36:51 -0700 (PDT)
+Received: from krzk-bin.. ([110.93.11.116])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42158148ffasm59540865e9.38.2024.06.06.07.36.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 06:01:08 -0700 (PDT)
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Thu, 06 Jun 2024 13:01:07 +0000
-Subject: [PATCH] media: c8sectpfe: Add missing parameter names
+        Thu, 06 Jun 2024 07:36:51 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	patches@opensource.cirrus.com,
+	llvm@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/3] mfd: max14577: Fix Wvoid-pointer-to-enum-cast warning (again)
+Date: Thu,  6 Jun 2024 16:36:46 +0200
+Message-ID: <20240606143648.152668-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240606-c8sectpfe-v1-1-c4b18f38295d@chromium.org>
-X-B4-Tracking: v=1; b=H4sIABKzYWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDMwMz3WSL4tTkkoK0VF3TNAODJEsLM/M0YzMloPqCotS0zAqwWdGxtbU
- Au5rR9VsAAAA=
-To: Patrice Chotard <patrice.chotard@foss.st.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- kernel test robot <lkp@intel.com>, Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
-clang 19 complains about the missing parameter name. Let's add it.
+'type' is an enum, thus cast of pointer on 64-bit compile test with
+clang and W=1 causes:
 
-drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:19:62: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+  max14577.c:400:23: error: cast to smaller integer type 'enum maxim_device_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202406050908.1kL1C69p-lkp@intel.com/
-Fixes: e22b4973ee20 ("media: c8sectpfe: Do not depend on DEBUG_FS")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Year ago this was solved, although LKML discussion suggested warning is
+not suitable for kernel.  Nothing changed in this regard for a year, so
+assume the warning will stay and we want to have warnings-free builds.
+
+Link: https://lore.kernel.org/all/20230814160457.GA2836@dev-arch.thelio-3990X/
+Link: https://lore.kernel.org/all/20230810095849.123321-1-krzysztof.kozlowski@linaro.org/
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mfd/max14577.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
-index 8e1bfd860524..3fe177b59b16 100644
---- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
-+++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
-@@ -16,8 +16,8 @@
- void c8sectpfe_debugfs_init(struct c8sectpfei *);
- void c8sectpfe_debugfs_exit(struct c8sectpfei *);
- #else
--static inline void c8sectpfe_debugfs_init(struct c8sectpfei *) {};
--static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *) {};
-+static inline void c8sectpfe_debugfs_init(struct c8sectpfei *fei) {};
-+static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *fei) {};
- #endif
+diff --git a/drivers/mfd/max14577.c b/drivers/mfd/max14577.c
+index 8f7472c76009..67bf4de4c0c1 100644
+--- a/drivers/mfd/max14577.c
++++ b/drivers/mfd/max14577.c
+@@ -397,7 +397,7 @@ static int max14577_i2c_probe(struct i2c_client *i2c)
+ 		return ret;
+ 	}
  
- #endif /* __C8SECTPFE_DEBUG_H */
-
----
-base-commit: 1aea3d1d4a21e3e7895663b848ffae79ee82e065
-change-id: 20240606-c8sectpfe-5f00b9867f36
-
-Best regards,
+-	max14577->dev_type = (enum maxim_device_type)i2c_get_match_data(i2c);
++	max14577->dev_type = (kernel_ulong_t)i2c_get_match_data(i2c);
+ 
+ 	max14577_print_dev_type(max14577);
+ 
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.43.0
 
