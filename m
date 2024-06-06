@@ -1,58 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493D03FB87;
-	Thu,  6 Jun 2024 04:59:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD0D2E3E5;
+	Thu,  6 Jun 2024 06:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717649944; cv=none; b=efDYZPhEsSCLwsyFZqND58jr6lXyKV7mcdZNZ5wFFziLHUN/qXh8z+rpwN5NXyLw224fsY0l1v1Xhm/1h4Nm4OPgzssvrIxKYolj67VkmlVcIFHVjH85hiXA15bgajjC89P/CCwzjPv4pN0pRZvEr/GWVkTVJpvH+VJJrug9qoo=
+	t=1717655225; cv=none; b=M2F7O0duzuxWRUZSHKSr5xeURBOnQ4v1DZWuWLqtXHkKaGjxw46PNxpzSQnBKOJL80Wt0hb23b3aj1xap+E3NYUvA9fhJ6+Q8y5zJX0BOXNyOs5JAnKdg0ymae642HrE+jRngz++JTmsZEXpU41RBzPvxR+BdAH0vChHE+zHznQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717649944; c=relaxed/simple;
-	bh=cuvgkfPcqhko2rNaqoaO/WdaJ5XA4m4ov2DN5/fwas4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gLV8zl7NY/O3DvVjyoPyS2sNIKwtGRlxi4ekCPRkeFok81y5xqofyKHEB2/p7m9hFsNGxa/7jYOdC7KotegGOdGWH2ePE+6Eh7FMnhpw9l4jsagfvl8Ce+T3PVZwkU7kqdGIsMIwj4QP+eaYz0wNHyH58e384a/Zd4pRA8qcTIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mXFXGqY9; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717655225; c=relaxed/simple;
+	bh=8sTAUFN6ttVGBTSIkP0SK1wk1W07q2GV6zvcwY4KfEg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hk+d+yd8PSr6Nu+wIs/iU8loloFlKwiANLUyN90K23/HW1N/qKR8g44rssy/jY2Eu9LBwpqaMMwBbbYHlbbpMdF8Qh2WdIbStIJMZQ4ZU7Ea9DVW4H4Jioj2vh2GCRNuI/Dc+6LcepoyxSugm9u7Ema1C/RJtJPN/brJ4i7tI1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hMAxBSoY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mXFXGqY9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717649942; x=1749185942;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cuvgkfPcqhko2rNaqoaO/WdaJ5XA4m4ov2DN5/fwas4=;
-  b=mXFXGqY9LipbFLmz1e4bBKev6B/S/tHK4Z1hNWLXZx3X63piD4nEyPL0
-   ZI3HfWwR+JwSFdKmlsPkRHvh/8/J0LrTpuSIO9kRZyCcAooDETp6wStjb
-   fKdgMYdXcEmm5FpR7NWydR4BWPXIs05n7stYZfqpu4/aMnil1As2JsuKP
-   /H62x5YXYDSbMCylDQnp3/MmiKoUAXY6FavJvN2pUrBre58j2iGIezHeZ
-   1d2GHtP5MwDkbbHCCyBt0d3pD1w2pMAoZCU7gEEZnH+6M65L+HAnrxpdy
-   Hxg4HkY5DmVjVaSWZbXo9tERF3Kj0syn++DlpgLOv+j3alJKxRXyhULvP
-   w==;
-X-CSE-ConnectionGUID: 0Gk9PxJ3QJe7RMbJhaX/DQ==
-X-CSE-MsgGUID: 5V9lYWAFRKasVTA7SNNtZw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="14476310"
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="14476310"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 21:59:01 -0700
-X-CSE-ConnectionGUID: fRMfObciRl+LzmSAJ58YDQ==
-X-CSE-MsgGUID: R8l8R+2bS76YF0gDUIE36w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="61036868"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Jun 2024 21:59:01 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sF5DG-0002gT-21;
-	Thu, 06 Jun 2024 04:58:58 +0000
-Date: Thu, 6 Jun 2024 12:58:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:io_uring-msg-ring.1 7/9] io_uring/io_uring.c:585:6:
- warning: no previous prototype for function 'io_cq_unlock_post'
-Message-ID: <202406061201.htRM9t09-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hMAxBSoY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C0CC3277B;
+	Thu,  6 Jun 2024 06:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717655225;
+	bh=8sTAUFN6ttVGBTSIkP0SK1wk1W07q2GV6zvcwY4KfEg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hMAxBSoYXBBoBY0kVL+6E1ZIwPc9R2E8g8BsWNAew0O67OH1Vdfh0MAJKtvwQwKuY
+	 nwJODBJ9IxbpJEQr0wK6EIyTyWnwCTxRpVcdqylsNxRCpLIfGH7StnLAJIqnYYZDzB
+	 MBgLOBBcKP4SjkHeLLJ2pvLXMrLzkUVR+Qu1kvpSVLjUZFxhsISQ/DfQS/Q2VOG0fd
+	 PjKalyhJ2coX1fOqJ7WIOV6BDMC0RjA8XZrCBSAraTf7amjb6RUHNqHUGxV48bGDCd
+	 TRj5iBRl8H0L69Et80wLxSWBzJZuROt3WysTC9Ek7qo83gVulHqKHzvKxaOLjbnZWB
+	 VT7gFRRky73QA==
+Date: Wed, 5 Jun 2024 23:27:02 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Gabriel Krisman Bertazi <krisman@suse.de>
+Cc: Lizhi Xu <lizhi.xu@windriver.com>, adilger.kernel@dilger.ca,
+	coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
+	jaegeuk@kernel.org, kadlec@netfilter.org, kuba@kernel.org,
+	linux-ext4@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lkp@intel.com, llvm@lists.linux.dev,
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	oe-kbuild-all@lists.linux.dev, pablo@netfilter.org,
+	syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Subject: Re: [PATCH V5] ext4: check hash version and filesystem casefolded
+ consistent
+Message-ID: <20240606062702.GB324380@sol.localdomain>
+References: <87plsym65w.fsf@mailhost.krisman.be>
+ <20240604011718.3360272-1-lizhi.xu@windriver.com>
+ <87le3kle87.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,53 +52,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <87le3kle87.fsf@mailhost.krisman.be>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-msg-ring.1
-head:   9c799821c57ae3670fef01abd6746b33685c07d6
-commit: 7de82d2e1d5af1210e8f631b7d994957c602a8d4 [7/9] hack
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240606/202406061201.htRM9t09-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240606/202406061201.htRM9t09-lkp@intel.com/reproduce)
+On Tue, Jun 04, 2024 at 03:06:32PM -0400, Gabriel Krisman Bertazi wrote:
+> Lizhi Xu <lizhi.xu@windriver.com> writes:
+> 
+> > On Mon, 03 Jun 2024 10:50:51 -0400, Gabriel Krisman Bertazi wrote:
+> >> > When mounting the ext4 filesystem, if the hash version and casefolded are not
+> >> > consistent, exit the mounting.
+> >> >
+> >> > Reported-by: syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com
+> >> > Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+> >> > ---
+> >> >  fs/ext4/super.c | 5 +++++
+> >> >  1 file changed, 5 insertions(+)
+> >> >
+> >> > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> >> > index c682fb927b64..0ad326504c50 100644
+> >> > --- a/fs/ext4/super.c
+> >> > +++ b/fs/ext4/super.c
+> >> > @@ -5262,6 +5262,11 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+> >> >  		goto failed_mount;
+> >> >  
+> >> >  	ext4_hash_info_init(sb);
+> >> > +	if (es->s_def_hash_version == DX_HASH_SIPHASH && 
+> >> > +	    !ext4_has_feature_casefold(sb)) {
+> >> 
+> >> Can we ever have DX_HASH_SIPHASH set up in the super block?  I thought
+> >> it was used solely for directories where ext4_hash_in_dirent(inode) is
+> >> true.
+> > The value of s'def_hash_version is obtained by reading the super block from the
+> > buffer cache of the block device in ext4_load_super().
+> 
+> Yes, I know.  My point is whether this check should just be:
+> 
+> if (es->s_def_hash_version == DX_HASH_SIPHASH)
+> 	goto failed_mount;
+> 
+> Since, IIUC, DX_HASH_SIPHASH is done per-directory and not written to
+> the sb.
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406061201.htRM9t09-lkp@intel.com/
+That seems right to me.  SipHash can never be the default because it's only used
+on directories that are both encrypted and casefolded.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from io_uring/io_uring.c:45:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> io_uring/io_uring.c:585:6: warning: no previous prototype for function 'io_cq_unlock_post' [-Wmissing-prototypes]
-     585 | void io_cq_unlock_post(struct io_ring_ctx *ctx)
-         |      ^
-   io_uring/io_uring.c:585:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     585 | void io_cq_unlock_post(struct io_ring_ctx *ctx)
-         | ^
-         | static 
-   2 warnings generated.
-
-
-vim +/io_cq_unlock_post +585 io_uring/io_uring.c
-
-   584	
- > 585	void io_cq_unlock_post(struct io_ring_ctx *ctx)
-   586		__releases(ctx->completion_lock)
-   587	{
-   588		io_commit_cqring(ctx);
-   589		spin_unlock(&ctx->completion_lock);
-   590		io_cqring_wake(ctx);
-   591		io_commit_cqring_flush(ctx);
-   592	}
-   593	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Eric
