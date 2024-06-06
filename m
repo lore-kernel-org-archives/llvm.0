@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5042199E8D;
-	Thu,  6 Jun 2024 20:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674C0197A88;
+	Thu,  6 Jun 2024 21:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717706112; cv=none; b=r0p6Hcr5r9+kU02A8/eWwtVvWCjWa9pSsZmKPumTM5aJ7xsj+nGnZVZj0TJheHOR0xg2J9yKNRsqEjr3sgtNYoxEKRUltMLFfDNEa4UcYtD/VCRjnagnJRxv5M8jiDftuE7L1ha/qeW4booZZjBX3EoXj0jE+5rra/MQH8JtW/w=
+	t=1717707994; cv=none; b=jvi3w79LEzWMvR6EzqMycgzOX7TUHIQqygGJwnM9gGXRS0IvG6OfifM683zxLUlkO8O5FG1iOirMEYT518/Rbj1NthRG6vD++GF1q/Wc5hCO4w1mUH3y9NAp2sZI6UecmqhFCCv2X9HNLFAqwvWAZpZPkE/wqfCTJxOw1+i9ajA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717706112; c=relaxed/simple;
-	bh=0hWLNf3Qux6YwlgVPzUwqQ7I4rmjkePIxnoozYuX59U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=E7uql11TOLK/LBCZ84G5TU7o/5AAZNWVYseVXS30UReqvJitBAzkjHLlZDmS5sPoX+Qi4BeVWqq7V/wXJeFKNaJWh+Kw2eJRx0HfaklUbQtn0/F8xC2RCPIMNR9iwfxGiqXj4bVxokXdc5WCLwnfeiP1PCqX+XYdlcou/GPPHxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dfs2fQDv; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1717707994; c=relaxed/simple;
+	bh=myErEFKGd7WTw5a/R1ArvBSUdsAjVQ3aR0gIgnuUV9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ERnK7DYI55/7EoLDRU4GlDkZ2dv2vwchoUkhsGe6Sj0Z19nQPFmHmtenTIdtGypQ0aa2R13IEXUyZuDhRFPYK2Rmu8ytqIr/ZMjDCwOJoFXkv9sfIMtRB7zwbeDa9tIJ0trgsn1nOi5lqJcB7bPnoeDuXRh/rhnB6dj4KkNyhM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mz5CMrgT; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dfs2fQDv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mz5CMrgT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717706111; x=1749242111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0hWLNf3Qux6YwlgVPzUwqQ7I4rmjkePIxnoozYuX59U=;
-  b=Dfs2fQDvSRb17enF0zGLhX57HoaRB21UdpxUkcLwmFvLy1d1JVcbHZba
-   JIAJQXRwMAYH1+z/aksKPcwizgzT1/voJhaaQCJFpxSZWMqaKPUBfz6Gw
-   3ePNLmEKljd1+FWQW4hky2E9u3S4aalgVsl77St0ZdKmK3qVxi79gzykY
-   vNZffN+FdI/MKZQdDcSSX+VYa27tBjzDK12DXKQ09UWGV/WinbSA+T+6J
-   zffZdE0adVAb4etGaw0TM6l9gCzQKeuUrBwELa6GM/UWwTaU9zaIAWBEB
-   GGCY7jHGfAvg1j8sMghD1FncMHHgZNTEdYqpVehj9SuIVyOdKm6/KJQFL
+  t=1717707992; x=1749243992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=myErEFKGd7WTw5a/R1ArvBSUdsAjVQ3aR0gIgnuUV9c=;
+  b=mz5CMrgTfpaboVxVq84zG9jTbt1rw9UQT7gop/9YOJsrWHgG0C3i3ax9
+   WcQZeO4NtmRVv3qcaJ5b8LXJ4qW7UqDC6msn1Ar3sGVzZYyBfNlCo5wwU
+   8GJfXvfWQ9065HtyZI7uy33vrViGYe6g2wL/fLLudAWCAEKfC/K4F3D9K
+   g04BodclAd44EKX2l7NJhRbgOgCC+RHbuW7MFmZcUb4BBiKG3bn0ww/AV
+   HmOl+EvS1o2s0vQtTg7ZIXo4/pE/IaGrRSc/WXN0AbBw/y7ksaGBHddyU
+   OeQHgaWhSsw0axc39U8TJkQ+Vpf86tOI6DpmoRmfCxkSs3cyrfogU0v8q
    Q==;
-X-CSE-ConnectionGUID: k7nFLQRkRFuFEyeI1w2xWw==
-X-CSE-MsgGUID: UgggbvOcSWODiZCZj03uSA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14244951"
+X-CSE-ConnectionGUID: OPxxnNZNTcmWq0Zm45coIA==
+X-CSE-MsgGUID: 2XijoUlfTzaz/MFoQf/zrw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="36933984"
 X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="14244951"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 13:35:09 -0700
-X-CSE-ConnectionGUID: qZQduw5SS1ObR6Xhs8OOAQ==
-X-CSE-MsgGUID: 3TC1oPouQbiHXBJIgF19Wg==
+   d="scan'208";a="36933984"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 14:06:31 -0700
+X-CSE-ConnectionGUID: 1UdwruAUTO2nx3yCepDPIQ==
+X-CSE-MsgGUID: y1VKI3blScyvvxw+zorO4g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="37943321"
+   d="scan'208";a="38048841"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 06 Jun 2024 13:35:07 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 06 Jun 2024 14:06:28 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sFJpB-0003gQ-1s;
-	Thu, 06 Jun 2024 20:35:05 +0000
-Date: Fri, 7 Jun 2024 04:34:07 +0800
+	id 1sFKJW-0003iy-20;
+	Thu, 06 Jun 2024 21:06:26 +0000
+Date: Fri, 7 Jun 2024 05:05:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
+To: syzbot <syzbot+9d95beb2a3c260622518@syzkaller.appspotmail.com>,
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:io_uring-msg-ring.1 6/7] io_uring/msg_ring.c:95:6:
- warning: variable 'flags' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202406070408.EifgtOJu-lkp@intel.com>
+Subject: Re: possible deadlock in trie_delete_elem
+Message-ID: <202406070456.Ke0WsZ9X-lkp@intel.com>
+References: <000000000000277099061a394d13@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,82 +63,499 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <000000000000277099061a394d13@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-msg-ring.1
-head:   0ffab2e0e86e525c59448ded8bac7bbf256e650f
-commit: d11afec0fbe1eaf03077a755e2b9cb5386c22d19 [6/7] io_uring/msg_ring: improve handling of target CQE posting
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240607/202406070408.EifgtOJu-lkp@intel.com/config)
+Hi syzbot,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+[also build test ERROR on bpf/master linus/master v6.10-rc2 next-20240606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/syzbot/possible-deadlock-in-trie_delete_elem/20240606-230435
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/000000000000277099061a394d13%40google.com
+patch subject: possible deadlock in trie_delete_elem
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240607/202406070456.Ke0WsZ9X-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070408.EifgtOJu-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070456.Ke0WsZ9X-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406070408.EifgtOJu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406070456.Ke0WsZ9X-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from io_uring/msg_ring.c:11:
-   In file included from io_uring/io_uring.h:6:
-   In file included from include/linux/resume_user_mode.h:8:
-   In file included from include/linux/memcontrol.h:21:
+   In file included from kernel/tracepoint.c:5:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
    In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> io_uring/msg_ring.c:95:6: warning: variable 'flags' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-      95 |         if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   io_uring/msg_ring.c:100:35: note: uninitialized use occurs here
-     100 |         io_req_set_res(target, msg->len, flags);
-         |                                          ^~~~~
-   io_uring/msg_ring.c:95:2: note: remove the 'if' if its condition is always true
-      95 |         if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      96 |                 flags = msg->cqe_flags;
-   io_uring/msg_ring.c:86:11: note: initialize the variable 'flags' to silence this warning
-      86 |         u32 flags;
-         |                  ^
-         |                   = 0
-   2 warnings generated.
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:318:9: note: expanded from macro '__pcpu_size_call_return'
+     318 |         typeof(variable) pscr_ret__;                                    \
+         |                ^~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:319:22: note: expanded from macro '__pcpu_size_call_return'
+     319 |         __verify_pcpu_ptr(&(variable));                                 \
+         |                             ^~~~~~~~
+   include/linux/percpu-defs.h:219:47: note: expanded from macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:320:16: note: expanded from macro '__pcpu_size_call_return'
+     320 |         switch(sizeof(variable)) {                                      \
+         |                       ^~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   include/asm-generic/percpu.h:144:9: note: expanded from macro 'this_cpu_generic_read'
+     144 |         typeof(pcp) __ret;                                              \
+         |                ^~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   include/asm-generic/percpu.h:145:20: note: expanded from macro 'this_cpu_generic_read'
+     145 |         if (__native_word(pcp))                                         \
+         |                           ^~~
+   include/linux/compiler_types.h:454:10: note: expanded from macro '__native_word'
+     454 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                 ^
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   include/asm-generic/percpu.h:145:20: note: expanded from macro 'this_cpu_generic_read'
+     145 |         if (__native_word(pcp))                                         \
+         |                           ^~~
+   include/linux/compiler_types.h:454:39: note: expanded from macro '__native_word'
+     454 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                                              ^
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   include/asm-generic/percpu.h:145:20: note: expanded from macro 'this_cpu_generic_read'
+     145 |         if (__native_word(pcp))                                         \
+         |                           ^~~
+   include/linux/compiler_types.h:455:10: note: expanded from macro '__native_word'
+     455 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                 ^
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   include/asm-generic/percpu.h:145:20: note: expanded from macro 'this_cpu_generic_read'
+     145 |         if (__native_word(pcp))                                         \
+         |                           ^~~
+   include/linux/compiler_types.h:455:38: note: expanded from macro '__native_word'
+     455 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                                             ^
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   include/asm-generic/percpu.h:146:45: note: expanded from macro 'this_cpu_generic_read'
+     146 |                 __ret = __this_cpu_generic_read_nopreempt(pcp);         \
+         |                                                           ^~~
+   include/asm-generic/percpu.h:125:9: note: expanded from macro '__this_cpu_generic_read_nopreempt'
+     125 |         typeof(pcp) ___ret;                                             \
+         |                ^~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:16: error: indirection requires pointer operand ('void' invalid)
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:489:29: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:321:23: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                              ^~~~~~~~~~~~~~~~~
+   <scratch space>:68:1: note: expanded from here
+      68 | this_cpu_read_1
+         | ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+>> kernel/tracepoint.c:178:36: error: incomplete definition of type 'struct bpf_raw_tp_link'
+     178 |                 int active = this_cpu_read(*(link->link.prog->active));
+         |                                              ~~~~^
+   include/linux/percpu-defs.h:489:69: note: expanded from macro 'this_cpu_read'
+     489 | #define this_cpu_read(pcp)              __pcpu_size_call_return(this_cpu_read_, pcp)
+         |                                                                                 ^~~
+   include/linux/percpu-defs.h:321:31: note: expanded from macro '__pcpu_size_call_return'
+     321 |         case 1: pscr_ret__ = stem##1(variable); break;                  \
+         |                                      ^~~~~~~~
+   include/asm-generic/percpu.h:375:53: note: expanded from macro 'this_cpu_read_1'
+     375 | #define this_cpu_read_1(pcp)            this_cpu_generic_read(pcp)
+         |                                                               ^~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:487:22: note: expanded from macro 'compiletime_assert'
+     487 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:475:23: note: expanded from macro '_compiletime_assert'
+     475 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:467:9: note: expanded from macro '__compiletime_assert'
+     467 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   kernel/tracepoint.c:171:9: note: forward declaration of 'struct bpf_raw_tp_link'
+     171 |         struct bpf_raw_tp_link *link;
+         |                ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   5 warnings and 20 errors generated.
 
 
-vim +95 io_uring/msg_ring.c
+vim +178 kernel/tracepoint.c
 
-56d8e3180c065c Pavel Begunkov 2023-01-20   80  
-d11afec0fbe1ea Jens Axboe     2024-03-28   81  static int io_msg_data_remote(struct io_kiocb *req)
-6d043ee1164ca3 Pavel Begunkov 2022-12-07   82  {
-6d043ee1164ca3 Pavel Begunkov 2022-12-07   83  	struct io_ring_ctx *target_ctx = req->file->private_data;
-d11afec0fbe1ea Jens Axboe     2024-03-28   84  	struct io_msg *msg = io_kiocb_to_cmd(req, struct io_msg);
-d11afec0fbe1ea Jens Axboe     2024-03-28   85  	struct io_kiocb *target;
-d11afec0fbe1ea Jens Axboe     2024-03-28   86  	u32 flags;
-6d043ee1164ca3 Pavel Begunkov 2022-12-07   87  
-d11afec0fbe1ea Jens Axboe     2024-03-28   88  	BUILD_BUG_ON(sizeof_field(struct io_kiocb, cmd) <
-d11afec0fbe1ea Jens Axboe     2024-03-28   89  			sizeof(struct io_overflow_cqe) + sizeof(struct io_uring_cqe));
-d11afec0fbe1ea Jens Axboe     2024-03-28   90  
-d11afec0fbe1ea Jens Axboe     2024-03-28   91  	target = kmem_cache_alloc(req_cachep, GFP_ATOMIC | __GFP_ZERO);
-d11afec0fbe1ea Jens Axboe     2024-03-28   92  	if (!target)
-d11afec0fbe1ea Jens Axboe     2024-03-28   93  		return -ENOMEM;
-8572df941cbef2 Jens Axboe     2023-01-21   94  
-8572df941cbef2 Jens Axboe     2023-01-21  @95  	if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
-8572df941cbef2 Jens Axboe     2023-01-21   96  		flags = msg->cqe_flags;
-8572df941cbef2 Jens Axboe     2023-01-21   97  
-d11afec0fbe1ea Jens Axboe     2024-03-28   98  	target->flags = REQ_F_NOCACHE;
-d11afec0fbe1ea Jens Axboe     2024-03-28   99  	target->cqe.user_data = msg->user_data;
-d11afec0fbe1ea Jens Axboe     2024-03-28  100  	io_req_set_res(target, msg->len, flags);
-d11afec0fbe1ea Jens Axboe     2024-03-28  101  	target->ctx = target_ctx;
-d11afec0fbe1ea Jens Axboe     2024-03-28  102  	target->io_task_work.func = io_req_task_complete;
-d11afec0fbe1ea Jens Axboe     2024-03-28  103  	target->task = get_task_struct(READ_ONCE(target_ctx->submitter_task));
-d11afec0fbe1ea Jens Axboe     2024-03-28  104  	io_req_task_work_add_remote(target, target_ctx, IOU_F_TWQ_LAZY_WAKE);
-d11afec0fbe1ea Jens Axboe     2024-03-28  105  	return 0;
-6d043ee1164ca3 Pavel Begunkov 2022-12-07  106  }
-6d043ee1164ca3 Pavel Begunkov 2022-12-07  107  
-
-:::::: The code at line 95 was first introduced by commit
-:::::: 8572df941cbef2b295282535b013828e7df39471 io_uring/msg-ring: ensure flags passing works for task_work completions
-
-:::::: TO: Jens Axboe <axboe@kernel.dk>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+   167	
+   168	static void debug_print_probes(struct tracepoint_func *funcs)
+   169	{
+   170		int i;
+   171		struct bpf_raw_tp_link *link;
+   172	
+   173		if (!tracepoint_debug || !funcs)
+   174			return;
+   175	
+   176		for (i = 0; funcs[i].func; i++) {
+   177			link = funcs[i].data;
+ > 178			int active = this_cpu_read(*(link->link.prog->active));
+   179			printk("Probe %d : %p / %p: %s/%d / %i\n", i,
+   180					funcs[i].func,
+   181					link,
+   182					link->link.prog->aux->name,
+   183					active,
+   184					funcs[i].prio);
+   185		}
+   186	}
+   187	
 
 -- 
 0-DAY CI Kernel Test Service
