@@ -1,129 +1,209 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C5413C8E0;
-	Thu,  6 Jun 2024 22:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D6213B5B9;
+	Thu,  6 Jun 2024 22:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717711837; cv=none; b=gjAIuGI3eHlehdhLUDCRAmSWyauEq6R7+Gswyz2g0uYByxYUq7XtrA8MX0bA/60/Tj+yOrZsgjoX7wFRhwplU8zoFD29se0q7KSq+m0jFBjp/NTAbImortgxbifZtGXOoipKbZW15hCMEukCoRSBf1WmgwQr/t+27s87Yhj2hcg=
+	t=1717712049; cv=none; b=R4Kka8dGX22xBVn2P75d2hY9IaecsZWoaW/EygO59iipf85I3BX0+/vJPjlERSQRBT65zQvXDfSMmuzRBtPwoZ0GCxLl/1/UywqvdhNvip7Wcka6AmZYa5noXhPe9zcHThzFpFQvMfiLm+oPp/teL+jb/tO3YvPm0d61/sTCAM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717711837; c=relaxed/simple;
-	bh=PMhKFVZSaMbvLkqpk7BfxQD1Pb6Zjy3rMEeEuR9p7fk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LAbwxZ69beHjXoVG48U0CUK7sjgYpSlydmSwlkOZmnfYT37D2NUIymhdvfIpGLulc6HvqpwjX+MOf2Xg6vWHzip5NxKtyn33MHSa2R5o0P5nwH1lNmLqQf4Sl1xMKLCNWCJ2th6fbiW/Pta8wms1CaoXK2OzitKHdK/pjNh7x60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=njkqUULt; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="njkqUULt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717711835; x=1749247835;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PMhKFVZSaMbvLkqpk7BfxQD1Pb6Zjy3rMEeEuR9p7fk=;
-  b=njkqUULt33p4Fm8KqKqoaj17lK0vwhU2cF3KhbNgNjzR/cz/gB1TLaeA
-   6tt2Dm9sl6hbcZmtgMnoMI40s+xU1fcC5xfHljByg2CWPTGGKaZ9yb4T2
-   5cCVxy3tYU9qUuOcKm98o0z7JtToNz5PV6a+qBmh1b8Vlp26Cy5DRpZVn
-   wNkQjQGOgHr3NLzFpSVZC0PtV3+kpylpAj811yfKioVahrT3PAs7k93i1
-   vnFVT3Mz2HOm5Ihphg2nztC50URh/jqm9MpL6jv8Xo+vaSJZLsBKnkial
-   ns89dFAWrm+la6ZTohdJZZI/d804/62J76gWJ7lquaTeNdaaJMiYLW2Bn
-   w==;
-X-CSE-ConnectionGUID: BgoT0ixJRFafFWplqOZR3Q==
-X-CSE-MsgGUID: 6w20Kt4ISLGzkcSfniy/mg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14638428"
-X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="14638428"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 15:10:34 -0700
-X-CSE-ConnectionGUID: X22tVJAzQVy8HprLnr0eMQ==
-X-CSE-MsgGUID: vOEagHS3RiedO254s5cNbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="38235354"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 06 Jun 2024 15:10:32 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sFLJW-0003mk-02;
-	Thu, 06 Jun 2024 22:10:30 +0000
-Date: Fri, 7 Jun 2024 06:09:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
-	linux-edac@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	rric@kernel.org, bp@alien8.de, tony.luck@intel.com,
-	james.morse@arm.com, mchehab@kernel.org,
-	shubhrajyoti.datta@gmail.com
-Subject: Re: [PATCH v2] EDAC/synopsys: Fix the injection of the errors
-Message-ID: <202406070554.klyVxRJT-lkp@intel.com>
-References: <20240603114026.4927-1-shubhrajyoti.datta@amd.com>
+	s=arc-20240116; t=1717712049; c=relaxed/simple;
+	bh=wITPT8+SzWNQAIy86Cb/We74pMwS0/kYgOwZaLW0IU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ctZkX4jd03QnWskTDjs8sHKJRJoMOHx0NDGTsYXu+zAghic9nVi1d5JgdN6mW3vlRPrEEtl+bmR4RYIBZ2hTZSb1xFmAxCIefGBc+YEJFxsG/lCq2At1Cn1q3UhN6yrWjCqVq0Wvtdu6YTcGgALpgV/f23bqK4TO66acGzb4Nqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E74C2BD10;
+	Thu,  6 Jun 2024 22:14:08 +0000 (UTC)
+Date: Thu, 6 Jun 2024 18:14:21 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Vincent Donnefort <vdonnefort@google.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev
+Subject: Re: [trace:ring-buffer/for-next 1/1]
+ kernel/trace/ring_buffer.c:6279:11: warning: unsequenced modification and
+ access to 'p'
+Message-ID: <20240606181421.3aca9a36@rorschach.local.home>
+In-Reply-To: <202406070523.lVekXLDq-lkp@intel.com>
+References: <202406070523.lVekXLDq-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240603114026.4927-1-shubhrajyoti.datta@amd.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Shubhrajyoti,
+On Fri, 7 Jun 2024 05:37:32 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace ring-buffer/for-next
+> head:   ff74f987504fe90e88fdba8d80197202868ce342
+> commit: ff74f987504fe90e88fdba8d80197202868ce342 [1/1] ring-buffer: Align meta-page to sub-buffers for improved TLB usage
+> config: s390-defconfig (https://download.01.org/0day-ci/archive/20240607/202406070523.lVekXLDq-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070523.lVekXLDq-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202406070523.lVekXLDq-lkp@intel.com/
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.10-rc2 next-20240606]
-[cannot apply to xilinx-xlnx/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Vincent,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shubhrajyoti-Datta/EDAC-synopsys-Fix-the-injection-of-the-errors/20240603-195015
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240603114026.4927-1-shubhrajyoti.datta%40amd.com
-patch subject: [PATCH v2] EDAC/synopsys: Fix the injection of the errors
-config: arm-randconfig-002-20240607 (https://download.01.org/0day-ci/archive/20240607/202406070554.klyVxRJT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070554.klyVxRJT-lkp@intel.com/reproduce)
+Can you fix this? I'm going to remove your change from my for-next
+branch, as it's the only one sitting in the ring-buffer/for-next at the
+moment.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406070554.klyVxRJT-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/edac/synopsys_edac.c:423:18: warning: result of comparison of constant 34359738368 with expression of type 'ulong' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-           if (linear_addr >= SZ_32G)
-               ~~~~~~~~~~~ ^  ~~~~~~
-   1 warning generated.
+-- Steve
 
 
-vim +423 drivers/edac/synopsys_edac.c
 
-   409	
-   410	#ifdef CONFIG_EDAC_DEBUG
-   411	/**
-   412	 * zynqmp_get_mem_info - Get the current memory info.
-   413	 * @priv:	DDR memory controller private instance data.
-   414	 *
-   415	 * Return: host interface address.
-   416	 */
-   417	static ulong zynqmp_get_mem_info(struct synps_edac_priv *priv)
-   418	{
-   419		ulong hif_addr = 0;
-   420		ulong linear_addr;
-   421	
-   422		linear_addr = priv->poison_addr;
- > 423		if (linear_addr >= SZ_32G)
-   424			linear_addr = linear_addr - SZ_32G + SZ_2G;
-   425		hif_addr = linear_addr >> 3;
-   426		return hif_addr;
-   427	}
-   428	#endif
-   429	
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from kernel/trace/ring_buffer.c:8:
+>    In file included from include/linux/trace_events.h:6:
+>    In file included from include/linux/ring_buffer.h:5:
+>    In file included from include/linux/mm.h:2253:
+>    include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      501 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      508 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      520 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      529 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+> >> kernel/trace/ring_buffer.c:6279:11: warning: unsequenced modification and access to 'p' [-Wunsequenced]  
+>     6279 |                         pages[p++] = ZERO_PAGE(vma->vm_start + (PAGE_SIZE * p));
+>          |                                ^                                            ~
+>    6 warnings generated.
+> 
+> 
+> vim +/p +6279 kernel/trace/ring_buffer.c
+> 
+>   6213	
+>   6214	/*
+>   6215	 *   +--------------+  pgoff == 0
+>   6216	 *   |   meta page  |
+>   6217	 *   +--------------+  pgoff == 1
+>   6218	 *   | subbuffer 0  |
+>   6219	 *   |              |
+>   6220	 *   +--------------+  pgoff == (1 + (1 << subbuf_order))
+>   6221	 *   | subbuffer 1  |
+>   6222	 *   |              |
+>   6223	 *         ...
+>   6224	 */
+>   6225	#ifdef CONFIG_MMU
+>   6226	static int __rb_map_vma(struct ring_buffer_per_cpu *cpu_buffer,
+>   6227				struct vm_area_struct *vma)
+>   6228	{
+>   6229		unsigned long nr_subbufs, nr_pages, vma_pages, pgoff = vma->vm_pgoff;
+>   6230		unsigned int subbuf_pages, subbuf_order;
+>   6231		struct page **pages;
+>   6232		int p = 0, s = 0;
+>   6233		int err;
+>   6234	
+>   6235		/* Refuse MP_PRIVATE or writable mappings */
+>   6236		if (vma->vm_flags & VM_WRITE || vma->vm_flags & VM_EXEC ||
+>   6237		    !(vma->vm_flags & VM_MAYSHARE))
+>   6238			return -EPERM;
+>   6239	
+>   6240		subbuf_order = cpu_buffer->buffer->subbuf_order;
+>   6241		subbuf_pages = 1 << subbuf_order;
+>   6242	
+>   6243		if (subbuf_order && pgoff % subbuf_pages)
+>   6244			return -EINVAL;
+>   6245	
+>   6246		/*
+>   6247		 * Make sure the mapping cannot become writable later. Also tell the VM
+>   6248		 * to not touch these pages (VM_DONTCOPY | VM_DONTEXPAND).
+>   6249		 */
+>   6250		vm_flags_mod(vma, VM_DONTCOPY | VM_DONTEXPAND | VM_DONTDUMP,
+>   6251			     VM_MAYWRITE);
+>   6252	
+>   6253		lockdep_assert_held(&cpu_buffer->mapping_lock);
+>   6254	
+>   6255		nr_subbufs = cpu_buffer->nr_pages + 1; /* + reader-subbuf */
+>   6256		nr_pages = ((nr_subbufs + 1) << subbuf_order) - pgoff; /* + meta-page */
+>   6257	
+>   6258		vma_pages = (vma->vm_end - vma->vm_start) >> PAGE_SHIFT;
+>   6259		if (!vma_pages || vma_pages > nr_pages)
+>   6260			return -EINVAL;
+>   6261	
+>   6262		nr_pages = vma_pages;
+>   6263	
+>   6264		pages = kcalloc(nr_pages, sizeof(*pages), GFP_KERNEL);
+>   6265		if (!pages)
+>   6266			return -ENOMEM;
+>   6267	
+>   6268		if (!pgoff) {
+>   6269			unsigned long meta_page_padding;
+>   6270	
+>   6271			pages[p++] = virt_to_page(cpu_buffer->meta_page);
+>   6272	
+>   6273			/*
+>   6274			 * Pad with the zero-page to align the meta-page with the
+>   6275			 * sub-buffers.
+>   6276			 */
+>   6277			meta_page_padding = subbuf_pages - 1;
+>   6278			while (meta_page_padding-- && p < nr_pages)
+> > 6279				pages[p++] = ZERO_PAGE(vma->vm_start + (PAGE_SIZE * p));  
+>   6280		} else {
+>   6281			/* Skip the meta-page */
+>   6282			pgoff -= subbuf_pages;
+>   6283	
+>   6284			s += pgoff / subbuf_pages;
+>   6285		}
+>   6286	
+>   6287		while (p < nr_pages) {
+>   6288			struct page *page = virt_to_page((void *)cpu_buffer->subbuf_ids[s]);
+>   6289			int off = 0;
+>   6290	
+>   6291			if (WARN_ON_ONCE(s >= nr_subbufs)) {
+>   6292				err = -EINVAL;
+>   6293				goto out;
+>   6294			}
+>   6295	
+>   6296			for (; off < (1 << (subbuf_order)); off++, page++) {
+>   6297				if (p >= nr_pages)
+>   6298					break;
+>   6299	
+>   6300				pages[p++] = page;
+>   6301			}
+>   6302			s++;
+>   6303		}
+>   6304	
+>   6305		err = vm_insert_pages(vma, vma->vm_start, pages, &nr_pages);
+>   6306	
+>   6307	out:
+>   6308		kfree(pages);
+>   6309	
+>   6310		return err;
+>   6311	}
+>   6312	#else
+>   6313	static int __rb_map_vma(struct ring_buffer_per_cpu *cpu_buffer,
+>   6314				struct vm_area_struct *vma)
+>   6315	{
+>   6316		return -EOPNOTSUPP;
+>   6317	}
+>   6318	#endif
+>   6319	
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
