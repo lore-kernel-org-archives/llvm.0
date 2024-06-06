@@ -1,209 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D6213B5B9;
-	Thu,  6 Jun 2024 22:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7608821;
+	Thu,  6 Jun 2024 23:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717712049; cv=none; b=R4Kka8dGX22xBVn2P75d2hY9IaecsZWoaW/EygO59iipf85I3BX0+/vJPjlERSQRBT65zQvXDfSMmuzRBtPwoZ0GCxLl/1/UywqvdhNvip7Wcka6AmZYa5noXhPe9zcHThzFpFQvMfiLm+oPp/teL+jb/tO3YvPm0d61/sTCAM0=
+	t=1717718007; cv=none; b=JTSVSWnl70kxrcq8v81YpKgCdhdeVDvTqoFqDPQWW9vSM9AxNV8FP1zC8TDT+bka6ORBbHs6JBAwkRqbk8VoKVmXypGZQbhXaX9rMCQWtI332HoA5b1u6vSgjqeNSRaJYDhCNNjG+zKpjNAS0JTqKaDFe5+dlkP1fMh2vO67L9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717712049; c=relaxed/simple;
-	bh=wITPT8+SzWNQAIy86Cb/We74pMwS0/kYgOwZaLW0IU8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ctZkX4jd03QnWskTDjs8sHKJRJoMOHx0NDGTsYXu+zAghic9nVi1d5JgdN6mW3vlRPrEEtl+bmR4RYIBZ2hTZSb1xFmAxCIefGBc+YEJFxsG/lCq2At1Cn1q3UhN6yrWjCqVq0Wvtdu6YTcGgALpgV/f23bqK4TO66acGzb4Nqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E74C2BD10;
-	Thu,  6 Jun 2024 22:14:08 +0000 (UTC)
-Date: Thu, 6 Jun 2024 18:14:21 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Vincent Donnefort <vdonnefort@google.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev
-Subject: Re: [trace:ring-buffer/for-next 1/1]
- kernel/trace/ring_buffer.c:6279:11: warning: unsequenced modification and
- access to 'p'
-Message-ID: <20240606181421.3aca9a36@rorschach.local.home>
-In-Reply-To: <202406070523.lVekXLDq-lkp@intel.com>
-References: <202406070523.lVekXLDq-lkp@intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1717718007; c=relaxed/simple;
+	bh=E/psiguQLxhslxk3Ia2n2N/Obzi4NeEoU2JEow9x5zs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=duBEGQQE8tn0aUd0BfQw4OfpFrlsIjxJItsWLFOD7Iifm6VKbp/4qTkWo58+s45wjDr/m9L0dTtdktwkk+zTjYr0mhbhQ/EdE0RiGo87+TR8dz2LlLguV11tyoroqzcG9lUGDzUbVtKyQ0AwSJ6mqqezdAG4sXrZGWjBsxE46GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VdUsvxNc; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VdUsvxNc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717718006; x=1749254006;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E/psiguQLxhslxk3Ia2n2N/Obzi4NeEoU2JEow9x5zs=;
+  b=VdUsvxNc5mZQB+HrpNGPIbvVIXwkUXWNSzfErSeLSAqpJbfAfD/JWsW+
+   lSAJyuK+5FlSrgc3iEpIStd7Qx5Zh6qLTVqunXi6QKjgxhE3RsJUtoU6m
+   wd4ySzwpTy/28c1nv/f41zhV7tlQuU6TkE+KtLzH/4CbAlLPzIu9F6JNU
+   ikoR0/k5BaY8DPqINtB7TskN8JCe6IZuWlWhL5AfVVK1nUt29i9YdZzXd
+   tSonMZW0+DguskG5GuQ8YdP5JQz3TrDkg9VFTdVnFnKUSgayV3xQDRrwI
+   jiY8R16jtT9/5ofKvLfQ3/o+bhbBQrHhIZCiskkAOsdMd/wihDLFQtRxi
+   w==;
+X-CSE-ConnectionGUID: Jj+p1Vs1QZa0a7PoR2UB0Q==
+X-CSE-MsgGUID: NazJGa8BSReG8+KMLWgA5w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14256668"
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="14256668"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 16:53:26 -0700
+X-CSE-ConnectionGUID: qzxj3XGARuOCaxb2qIW7vg==
+X-CSE-MsgGUID: ZUVJ06S5QWeSRKnoNgHKqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="69310958"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 06 Jun 2024 16:53:23 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFMv2-0003se-2y;
+	Thu, 06 Jun 2024 23:53:20 +0000
+Date: Fri, 7 Jun 2024 07:52:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Lu <chris.lu@mediatek.com>, Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Luiz Von Dentz <luiz.dentz@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sean Wang <sean.wang@mediatek.com>,
+	Deren Wu <deren.Wu@mediatek.com>,
+	Aaron Hou <aaron.hou@mediatek.com>,
+	Steve Lee <steve.lee@mediatek.com>,
+	linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	linux-mediatek <linux-mediatek@lists.infradead.org>,
+	Chris Lu <chris.lu@mediatek.com>
+Subject: Re: [PATCH v4 4/4] Bluetooth: btusb: mediatek: add ISO data
+ transmission functions
+Message-ID: <202406070759.EDNrdv4q-lkp@intel.com>
+References: <20240606114321.30515-5-chris.lu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240606114321.30515-5-chris.lu@mediatek.com>
 
-On Fri, 7 Jun 2024 05:37:32 +0800
-kernel test robot <lkp@intel.com> wrote:
+Hi Chris,
 
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace ring-buffer/for-next
-> head:   ff74f987504fe90e88fdba8d80197202868ce342
-> commit: ff74f987504fe90e88fdba8d80197202868ce342 [1/1] ring-buffer: Align meta-page to sub-buffers for improved TLB usage
-> config: s390-defconfig (https://download.01.org/0day-ci/archive/20240607/202406070523.lVekXLDq-lkp@intel.com/config)
-> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070523.lVekXLDq-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202406070523.lVekXLDq-lkp@intel.com/
+kernel test robot noticed the following build errors:
 
-Vincent,
+[auto build test ERROR on bluetooth-next/master]
+[also build test ERROR on next-20240606]
+[cannot apply to bluetooth/master linus/master v6.10-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Can you fix this? I'm going to remove your change from my for-next
-branch, as it's the only one sitting in the ring-buffer/for-next at the
-moment.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Lu/Bluetooth-net-add-hci_iso_hdr-function-for-iso-data/20240606-194619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20240606114321.30515-5-chris.lu%40mediatek.com
+patch subject: [PATCH v4 4/4] Bluetooth: btusb: mediatek: add ISO data transmission functions
+config: x86_64-buildonly-randconfig-003-20240607 (https://download.01.org/0day-ci/archive/20240607/202406070759.EDNrdv4q-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070759.EDNrdv4q-lkp@intel.com/reproduce)
 
--- Steve
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406070759.EDNrdv4q-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/bluetooth/btusb.c:28:
+>> drivers/bluetooth/btmtk.h:259:9: error: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+     259 |         return ERR_PTR(-EOPNOTSUPP);
+         |                ^~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +259 drivers/bluetooth/btmtk.h
 
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from kernel/trace/ring_buffer.c:8:
->    In file included from include/linux/trace_events.h:6:
->    In file included from include/linux/ring_buffer.h:5:
->    In file included from include/linux/mm.h:2253:
->    include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      501 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      508 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      520 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      529 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >> kernel/trace/ring_buffer.c:6279:11: warning: unsequenced modification and access to 'p' [-Wunsequenced]  
->     6279 |                         pages[p++] = ZERO_PAGE(vma->vm_start + (PAGE_SIZE * p));
->          |                                ^                                            ~
->    6 warnings generated.
-> 
-> 
-> vim +/p +6279 kernel/trace/ring_buffer.c
-> 
->   6213	
->   6214	/*
->   6215	 *   +--------------+  pgoff == 0
->   6216	 *   |   meta page  |
->   6217	 *   +--------------+  pgoff == 1
->   6218	 *   | subbuffer 0  |
->   6219	 *   |              |
->   6220	 *   +--------------+  pgoff == (1 + (1 << subbuf_order))
->   6221	 *   | subbuffer 1  |
->   6222	 *   |              |
->   6223	 *         ...
->   6224	 */
->   6225	#ifdef CONFIG_MMU
->   6226	static int __rb_map_vma(struct ring_buffer_per_cpu *cpu_buffer,
->   6227				struct vm_area_struct *vma)
->   6228	{
->   6229		unsigned long nr_subbufs, nr_pages, vma_pages, pgoff = vma->vm_pgoff;
->   6230		unsigned int subbuf_pages, subbuf_order;
->   6231		struct page **pages;
->   6232		int p = 0, s = 0;
->   6233		int err;
->   6234	
->   6235		/* Refuse MP_PRIVATE or writable mappings */
->   6236		if (vma->vm_flags & VM_WRITE || vma->vm_flags & VM_EXEC ||
->   6237		    !(vma->vm_flags & VM_MAYSHARE))
->   6238			return -EPERM;
->   6239	
->   6240		subbuf_order = cpu_buffer->buffer->subbuf_order;
->   6241		subbuf_pages = 1 << subbuf_order;
->   6242	
->   6243		if (subbuf_order && pgoff % subbuf_pages)
->   6244			return -EINVAL;
->   6245	
->   6246		/*
->   6247		 * Make sure the mapping cannot become writable later. Also tell the VM
->   6248		 * to not touch these pages (VM_DONTCOPY | VM_DONTEXPAND).
->   6249		 */
->   6250		vm_flags_mod(vma, VM_DONTCOPY | VM_DONTEXPAND | VM_DONTDUMP,
->   6251			     VM_MAYWRITE);
->   6252	
->   6253		lockdep_assert_held(&cpu_buffer->mapping_lock);
->   6254	
->   6255		nr_subbufs = cpu_buffer->nr_pages + 1; /* + reader-subbuf */
->   6256		nr_pages = ((nr_subbufs + 1) << subbuf_order) - pgoff; /* + meta-page */
->   6257	
->   6258		vma_pages = (vma->vm_end - vma->vm_start) >> PAGE_SHIFT;
->   6259		if (!vma_pages || vma_pages > nr_pages)
->   6260			return -EINVAL;
->   6261	
->   6262		nr_pages = vma_pages;
->   6263	
->   6264		pages = kcalloc(nr_pages, sizeof(*pages), GFP_KERNEL);
->   6265		if (!pages)
->   6266			return -ENOMEM;
->   6267	
->   6268		if (!pgoff) {
->   6269			unsigned long meta_page_padding;
->   6270	
->   6271			pages[p++] = virt_to_page(cpu_buffer->meta_page);
->   6272	
->   6273			/*
->   6274			 * Pad with the zero-page to align the meta-page with the
->   6275			 * sub-buffers.
->   6276			 */
->   6277			meta_page_padding = subbuf_pages - 1;
->   6278			while (meta_page_padding-- && p < nr_pages)
-> > 6279				pages[p++] = ZERO_PAGE(vma->vm_start + (PAGE_SIZE * p));  
->   6280		} else {
->   6281			/* Skip the meta-page */
->   6282			pgoff -= subbuf_pages;
->   6283	
->   6284			s += pgoff / subbuf_pages;
->   6285		}
->   6286	
->   6287		while (p < nr_pages) {
->   6288			struct page *page = virt_to_page((void *)cpu_buffer->subbuf_ids[s]);
->   6289			int off = 0;
->   6290	
->   6291			if (WARN_ON_ONCE(s >= nr_subbufs)) {
->   6292				err = -EINVAL;
->   6293				goto out;
->   6294			}
->   6295	
->   6296			for (; off < (1 << (subbuf_order)); off++, page++) {
->   6297				if (p >= nr_pages)
->   6298					break;
->   6299	
->   6300				pages[p++] = page;
->   6301			}
->   6302			s++;
->   6303		}
->   6304	
->   6305		err = vm_insert_pages(vma, vma->vm_start, pages, &nr_pages);
->   6306	
->   6307	out:
->   6308		kfree(pages);
->   6309	
->   6310		return err;
->   6311	}
->   6312	#else
->   6313	static int __rb_map_vma(struct ring_buffer_per_cpu *cpu_buffer,
->   6314				struct vm_area_struct *vma)
->   6315	{
->   6316		return -EOPNOTSUPP;
->   6317	}
->   6318	#endif
->   6319	
-> 
+   256	
+   257	static int btmtk_isopkt_pad(struct hci_dev *hdev, struct sk_buff *skb)
+   258	{
+ > 259		return ERR_PTR(-EOPNOTSUPP);
+   260	}
+   261	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
