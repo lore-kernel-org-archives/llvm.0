@@ -1,92 +1,136 @@
-Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9AABD27A
-	for <llvm@lists.linux.dev>; Fri,  7 Jun 2024 18:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E543043AB9
+	for <llvm@lists.linux.dev>; Fri,  7 Jun 2024 18:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717785202; cv=none; b=Jfz0yZZ6e4TLX2RJSWslzjs7hec12RQZ2n1NL0QNmnF8F8Qk5eWRfj7hITTE6PH+i15sZKTnkMyvaMixm21BmCrVSEG3lRYOpLL/MWmB076mMKcsufJaRC1EDFs4YcESlXaGvScQBHO2IbUB40iyAZfWwCVbajOjcRxKeXcbF6c=
+	t=1717786272; cv=none; b=YuyrpQi6gFL5QcDR+/CgnZ3YdUCWy6w9oVWn1muFJgqw8VEjNBQzC0IStDauS6gt58XIMCJOnIS7/4ZFcnefwqIKe0RReUNHz3lJ+A442XC4wKghUN7VHIGaUSvvktD43sDB4zj5Kc8HdXb8juHKLkwN4cOAnFtJBFw1w1Xsjro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717785202; c=relaxed/simple;
-	bh=K3XX1ZGrNqgevvYtO1jhNZo5tT+1jItizRltt7qdc88=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d3PCnBpZMAJ6EA29xQfP2XMjokN/r7/BV6DzCHNPyToGXH3/gYnL+ZXbM034C2uPWG7hf70vE8KVKXd+DIi1pDAAsBA3JpUMeHUxii7zEeZFr+Vn0GO6vte5PpATBM2ck+9pT6oHhC0giCYpGVM/2FrkF+1wSVQoAuRBE80ytpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=hZ136Q9m; arc=none smtp.client-ip=213.160.73.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+	s=arc-20240116; t=1717786272; c=relaxed/simple;
+	bh=spdlnQosYbgxz0z1aI+nHwJdAm4uQJgtsueSAk82Hto=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I8mSJA7e0tU7Ccm/5W0XVZv+SsQWoWZ60ZNhNUPjvCgcb+EE7IuiibUCPLUtNytKRHOFtHVj5f+VkAGvWi6XuwoD3SuARr8XjIa+7wJ4TfsneOLtIgeN6HCLAekXnG+QI1Tx31aYSz+1M6oQBmj5gfDQUISzVygze4PfZT+mMrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=hgLGbMPf; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="hZ136Q9m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-	s=20121; t=1717785191;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FFEyK0DY8IpFcUTkeSbNeWt4t8L56sLzjHekE18/ezc=;
-	b=hZ136Q9m/YuxRSuKeRtrrdjnpbDqDlC0VZr5Soq51LKx+eI2e74hXat/0nxoBYDWn65akr
-	9JrqnR8/r6RKuvbfjU7MwCkuPxL22cJWF1EIf5KXKiE+2Wcx+/VAd+Z3d4kuoUaaGPBGTX
-	Iz7VCRzkYMkgkzYT+01PwTc2tOqRbIs=
-From: Sven Eckelmann <sven@narfation.org>
-To: Marek Lindner <mareklindner@neomailbox.ch>,
- Simon Wunderlich <sw@simonwunderlich.de>, Antonio Quartulli <a@unstable.cc>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Kees Cook <keescook@chromium.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Erick Archer <erick.archer@outlook.com>
-Cc: Erick Archer <erick.archer@outlook.com>, b.a.t.m.a.n@lists.open-mesh.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject:
- Re: [PATCH v4] batman-adv: Add flex array to struct batadv_tvlv_tt_data
-Date: Fri, 07 Jun 2024 20:33:08 +0200
-Message-ID: <2529523.GKX7oQKdZx@ripper>
-In-Reply-To:
- <AS8PR02MB7237205E3231CD335CB988648BFB2@AS8PR02MB7237.eurprd02.prod.outlook.com>
-References:
- <AS8PR02MB7237205E3231CD335CB988648BFB2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="hgLGbMPf"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f44b5b9de6so20779245ad.3
+        for <llvm@lists.linux.dev>; Fri, 07 Jun 2024 11:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717786270; x=1718391070; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=spdlnQosYbgxz0z1aI+nHwJdAm4uQJgtsueSAk82Hto=;
+        b=hgLGbMPfyTHz7gZbtvjFesKTTrT+zV1jDAc6eYHK8z10oBBwAgp274YKqdjq5QS58h
+         13WecgH4FtRM0cYrr7duuR0jNn0Ifo6NpdyC6K2yPNrB0Xj56Svxnefmf1T6dhNn2NVe
+         DvrCDrtRwHNnX6KfmY+LPlkSUXOfDmNh3+AX0KufPArDmsiQI2zRlcgi1w3cHp76aMjO
+         opNu7sq5osdOj8aunyRfxThpDO336RqvUmDkSPhDTmtNXfgrWNLQXY1+Vfooqam8ZcCG
+         UMCDe4wZDJnPHNbz4YpR3J8Pd47TVZ9GAEDbGzy77bcT/WmxJ1ynei7E9ZR/VMd0QsMN
+         dmZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717786270; x=1718391070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=spdlnQosYbgxz0z1aI+nHwJdAm4uQJgtsueSAk82Hto=;
+        b=RXEK5eZOUI/2lOz1h9YjyMzhlZasSDIBnQqGkqXVGBtwWMvAkqo92Xf69LW9B3sV5g
+         ey/LTZeZMDlUJEczJ1oWOd2Nwyif9X4v/NZfNc4m8s3gvyuH3hA88qJYGoGZjTe0ru+O
+         FXfQEySelMLyp0J+7zXCkirGoO6/d0AlKAiBMJFHDwv5DRpxj3QJ53O/vkD+u9TGcQjJ
+         MfMHGcsCP/64XoqsNGf4SEu86Ks46Hxwk0IA67MElURiUI5VSIst/MgneDYv9b4dM/C2
+         zMphh88s7IsVMtPP4kEk+GH9q48mSeCt9UZT/YUCObms9doL5jA1t/nd2tw1ALJDX3aw
+         i9Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/aa7SmqMpaDmY664KNL+FTplGSbKw92S9/e8K9DLLYMOpExNZ9QR2djmIOHa954+vipN4kI/XJGmJlQDSmEQX5MI1Bg==
+X-Gm-Message-State: AOJu0YywGjYVcyClnIh+PjfKR2sg4hx3kK3wGzlO2w8fvJnCMAKL7HRy
+	21/qpqXJCIG8Z3xAI24skGgJdGT4HtkQs1bHxIbOQ6rcZgP+KHpbLs+qqZhRie0=
+X-Google-Smtp-Source: AGHT+IGMjAuAS3XI2gD8/NyTDV8hJlKEUmolHeTNHvKFVpM0ZupPk3AuvNMIhwwVwTDX8d6lLV85Cg==
+X-Received: by 2002:a17:902:e887:b0:1f6:8081:6818 with SMTP id d9443c01a7336-1f6d03c0e1dmr36550955ad.52.1717786270083;
+        Fri, 07 Jun 2024 11:51:10 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6ea2d17c5sm7512365ad.46.2024.06.07.11.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jun 2024 11:51:09 -0700 (PDT)
+Date: Fri, 7 Jun 2024 11:51:07 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Jesse Taube <jesse@rivosinc.com>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
+Message-ID: <ZmNWmxak9Rc80Kpb@debug.ba.rivosinc.com>
+References: <20240531162327.2436962-1-jesse@rivosinc.com>
+ <20240531-uselessly-spied-262ecf44e694@spud>
+ <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
+ <20240603-stinking-roster-cfad46696ae5@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2954765.bcXerOTE6V";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240603-stinking-roster-cfad46696ae5@spud>
 
---nextPart2954765.bcXerOTE6V
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Sven Eckelmann <sven@narfation.org>
-Date: Fri, 07 Jun 2024 20:33:08 +0200
-Message-ID: <2529523.GKX7oQKdZx@ripper>
-MIME-Version: 1.0
+On Mon, Jun 03, 2024 at 01:47:40PM +0100, Conor Dooley wrote:
+>On Mon, Jun 03, 2024 at 11:14:49AM +0200, Alexandre Ghiti wrote:
+>> Hi Conor,
+>>
+>> On 31/05/2024 19:31, Conor Dooley wrote:
+>> > On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
+>> > > Dectect the Zkr extension and use it to seed the kernel base address.
+>> > >
+>> > > Detection of the extension can not be done in the typical fashion, as
+>> > > this is very early in the boot process. Instead, add a trap handler
+>> > > and run it to see if the extension is present.
+>> > You can't rely on the lack of a trap meaning that Zkr is present unless
+>> > you know that the platform implements Ssstrict. The CSR with that number
+>> > could do anything if not Ssstrict compliant, so this approach gets a
+>> > nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
+>> > it, so you're stuck with getting that information from firmware.
+>>
+>>
+>> FYI, this patch is my idea, so I'm the one to blame here :)
+>>
+>>
+>> >
+>> > For DT systems, you can actually parse the DT in the pi, we do it to get
+>> > the kaslr seed if present, so you can actually check for Zkr. With ACPI
+>> > I have no idea how you can get that information, I amn't an ACPI-ist.
+>>
+>>
+>> I took a look at how to access ACPI tables this early when implementing the
+>> Zabha/Zacas patches, but it seems not possible.
+>>
+>> But I'll look into this more, this is not the first time we need the
+>> extensions list very early and since we have no way to detect the presence
+>> of an extension at runtime, something needs to be done.
+>
+>Aye, having remembered that reading CSR_SEED could have side-effects on a
+>system with non-conforming extensions, it'd be good to see if we can
+>actually do this via detection on ACPI - especially for some other
+>extensions that we may need to turn on very early (I forget which ones we
+>talked about this before for). I didn't arm64 do anything with ACPI in the
+>pi code, is the code arch/x86/boot/compressed run at an equivilent-ish point
+>in boot?
 
-On Friday, 7 June 2024 18:19:12 CEST Erick Archer wrote:
-> Hi,
-> 
-> As it was decided in version 3, I resend this path since -r2 has been
-> released. I hope that this time the patch can be applied ;)
+cc: +Clement and Atish
 
-Thanks, applied.
+I don't know all the details but on first glance it seems like instead of ACPI,
+may be FWFT is a better place for discovery ?
+https://lists.riscv.org/g/tech-prs/topic/patch_v12_add_firmware/106479571
 
-Kind regards,
-	Sven
---nextPart2954765.bcXerOTE6V
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS81G/PswftH/OW8cVND3cr0xT1ywUCZmNSZAAKCRBND3cr0xT1
-y5B6AQCskTowCR93AUyerf8R+T/LbG434M61OZgxyimamI09YAD8CmdPzu35Sh+O
-P7MqIU9qdXBCNKqbNf8jYJhR8W44awE=
-=+VlR
------END PGP SIGNATURE-----
-
---nextPart2954765.bcXerOTE6V--
-
+Supervisor could query if Sstrict is implemented and then it can check for
+lack of trap on CSR_SEED or straight-away check for presence of Zkr.
 
 
