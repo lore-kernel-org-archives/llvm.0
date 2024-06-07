@@ -1,151 +1,492 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE74194A6D;
-	Fri,  7 Jun 2024 14:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652821A0AFD
+	for <llvm@lists.linux.dev>; Fri,  7 Jun 2024 14:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717770812; cv=none; b=e85c33LGvAz7wmhvmF1Ga69He5IWTBSLYYUYsyKfujB2Dvx3Ik//UfK2UMmAO/2RbTDCwYQdmQx+t0uBBV8GPgnOoUqupC9BOHowL+wXDx53y7uEhApSBpogF3IBoFrV/+QiF83wBb1OhO4EyVEBBZDUkVuRExGvx3hmC7CYGi4=
+	t=1717771263; cv=none; b=e2PC8BjYZeroyGwVU02TkpN0+1KNzvN47elk7V9ZCtRsVE3ftX+hOx2H479ABD0bKT1+twQKdk6jz3c9uaWWozsUN6NhlQmI+ZS/I4FwelaSn+P00lOCuDI1MWz++yCxw+e+Kuj1kst5kCx4VFzTcDWoOKzp6EGXTSHtFaU/dGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717770812; c=relaxed/simple;
-	bh=1fJgL+gvkpFtIMZd+hZjnYhZnWd6hhbAFJ2oi8aDz+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O7TitMDNTthksOMMM6YYnsqHeTF8GVbwpJ3IR+NxLPlI8YTIAmZpbnTbAKGPAym9crvMs7In3KxhkomnVjfju//Zja2TRQLD++wwgSw5Ds2WNpc/8E/7tBv29Xgjf3yH7zkWkPRirxEBm4rO2HVzB80B+Fr9CcXxtxIbN9Ue/7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qcHJ5YQB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717771263; c=relaxed/simple;
+	bh=+8evMGg2n1u/8yOm9qRPDDeti+4TBuqjZRybbC+w58U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EEpc0BjS0YOfpVmnofUlBl5iJ2JkTUPaBa4+y9L+MLQLims5HexZ+l7OrJvCAq9BgIjTKMqMgxnq4nStm0kt22HmUslrm4VqB3naxWsJVZsetcm/OXStI7oeliQIERRqo8LTc8RM9BpzIrw1UnHdUBESKrgVjnF6qzLU9rhkMR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YgZH8gUf; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qcHJ5YQB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A68C2BBFC;
-	Fri,  7 Jun 2024 14:33:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717770811;
-	bh=1fJgL+gvkpFtIMZd+hZjnYhZnWd6hhbAFJ2oi8aDz+o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qcHJ5YQBJrRPMtyAFbLlu9GHAeC9NT5Q3u8NINORsfudV7rkwjCMJMj+oDlRlJAmG
-	 aKhGbMSICzRp1f56c9eAY7NrYb8ydXDLOp//wJKwCnPTbjiefiQZScBZraJstzyLFt
-	 kfwFAf9X/51yuaGMBhTMoql4H8J2W/z+5rlPrlEyNavWtgiDzEZMlL0RHzvBkvA2Cg
-	 XVltm72MTlhxeYj9bqhnuCOQwpwqXIqcbm8zofCqufbBS0kt6VKbiimDOReS+YNvh3
-	 psJi6sGRhCFoNEMP7os6sCDSMN7e5ocsxTPYM5FIPZBBhLv7LgYB/EL6jl/ZfIHwkC
-	 R7zQwnzaruNRw==
-Date: Fri, 7 Jun 2024 07:33:29 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Christian Schrefl <chrisi.schrefl@gmail.com>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Kees Cook <keescook@chromium.org>
-Subject: Re: [Bug] Failing kunit test on ARCH=arm and LLVM=1
-Message-ID: <20240607143329.GA2483293@thelio-3990X>
-References: <0bfc6b38-8bc5-4971-b6fb-dc642a73fbfe@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YgZH8gUf"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5750a8737e5so17456a12.0
+        for <llvm@lists.linux.dev>; Fri, 07 Jun 2024 07:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717771260; x=1718376060; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kt9qUYYFSO6k5VmbzbT82tlK3CSHJaSCL9vF7bZshII=;
+        b=YgZH8gUfNzHTV71m62rCpUCgh/Q/jUSsdvyQfTzJRagrhYLfudNrTniFgluasspmYf
+         LB8ftzvOgFgk/YX2x6TIGvagNAJcbzqp5W7F0fJLUNcplBWOVkkAwLQQGWfNBxgBtULu
+         UEr0jDzR38fjWl1N3tlytfOB5jaes5KgJc4+9mF0lBBKH4xq0KZlZNNsmMWDhjOeb6/I
+         o9S7p8K1U3MCp4lWHd8cGXWjX0fMxE5PJhOV2Om1b/hvz93n3rlcemjYGNK6Up3ThZ5R
+         JS6Y/dD/lzcVWb///UacGk0I6cOnqqUDLE2HjXioVDIUZwH0FElhfmRtIuaUhgLSXJ4F
+         H6ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717771260; x=1718376060;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kt9qUYYFSO6k5VmbzbT82tlK3CSHJaSCL9vF7bZshII=;
+        b=FEKsmY/QstFhDjGMMBkzkUbrRM7XNiTkKnyLylhlcTUtILWlWJ0wZmlod79WnHrl9T
+         gyAPSkveiqFVDyDqEGABkt4M/wWChA5KJC6a7ee+1jvEE0Fev0iD5me5IK9Nh8Al7lbo
+         CclnowNZhXgkAbXpogmqshKipzjMzhKIW/lqHROq8pCpNEgk9DXYIsImN2UZ8C6hRY7Q
+         E6BCxaPLtrV3lgD/uD3/I9VhbE+NwwG50R2q40R0wj+h2Y6F1g9zuhvRwT3zy/Sd08oT
+         5Iq60t2kaF9PB13A9Tj+SzKbFIE9lUbf2WBvqvqR68hw1AyflYvUJTcgwzl4Ber9pns0
+         HyFA==
+X-Forwarded-Encrypted: i=1; AJvYcCW/zx93RTGM+rS35VHutfUinqlNiISVXwft48qKu2UMcHL856RBLdO5/Y37ygFNNYBERBUkdaOecHV7iiHsNcKxSAzfhw==
+X-Gm-Message-State: AOJu0Ywd2vmyLRYRdOMaaoJay98NV0NJVQIm2KxGEA/i8WPVM7eY+tXU
+	hpdTFYq6HKSXroKiLUos9KDnlfSRHTW8KBv1jvoDaU02fcjQx9RJsMBAGwIYnXmshBRW67I7dZN
+	oO+KXb7kHbCNV7CV9PS6O+W2m4NepwSj9gsIU
+X-Google-Smtp-Source: AGHT+IF+7OYsf/plphBn251y9C5NvZgYDGnF0KHYss+k6I+DerkG8/c8obCD4hxD/phsyZpCPyJATvuDvQDsX4YBKoA=
+X-Received: by 2002:aa7:c0c5:0:b0:57c:5ffb:9917 with SMTP id
+ 4fb4d7f45d1cf-57c5ffb99b5mr114826a12.4.1717771257885; Fri, 07 Jun 2024
+ 07:40:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0bfc6b38-8bc5-4971-b6fb-dc642a73fbfe@gmail.com>
+References: <20240529202817.3641974-1-gary@garyguo.net> <20240529202817.3641974-3-gary@garyguo.net>
+In-Reply-To: <20240529202817.3641974-3-gary@garyguo.net>
+From: Matthew Maurer <mmaurer@google.com>
+Date: Fri, 7 Jun 2024 07:40:45 -0700
+Message-ID: <CAGSQo02_siEiS07H+7MCi_T2REGoyF6FFuGHVmiUFi4EocLizQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] kbuild: rust: provide an option to inline C
+ helpers into Rust
+To: Gary Guo <gary@garyguo.net>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Andrew Morton <akpm@linux-foundation.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christian,
+The LLVM `.ll` textual bitcode representation may change from version
+to version, which makes using `sed` to edit it potentially fragile.
+Would it be possible to attach similar attributes without this? (Or
+other attributes that can accomplish something similar, see the second
+part.)
 
-On Fri, Jun 07, 2024 at 02:37:19PM +0200, Christian Schrefl wrote:
-> Greetings,
-> 
-> when trying to port Rust to ARM I noticed that the DEFINE_FLEX_test
-> kunit test in lib/overflow_kunit.c:1188 fails when combining LLVM=1
-> and ARCH=arm.
-> 
-> I have reproduced this on v6.10-rc1 and next-20240606.
-> 
-> Here is the clang/llvm version I'm using:
-> clang version 18.1.6 (Fedora 18.1.6-3.fc40)
-> Target: x86_64-redhat-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/bin
-> Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
-> 
-> I have not looked closer at the failure so I'm unsure if this is a
-> problem with LLVM or if the test case is to speciffic.
+Would it be possible to use a Rust-only-LTO (actual LTO) flag rather
+than a `llvm-link`? It seems likely that someone that wants to use a
+synced `clang` and `rustc` to allow helpers to be inlined would be
+unlikely to object to thin LTO of Rust. This would avoid introducing a
+new tool.
 
-Thanks a lot for the report! I can reproduce this with tip of tree LLVM
-as well.
+As one possible route around editing the `.ll` file, we could consider
+*not* hiding these symbols, just marking them as "good idea to inline
+if possible", and then masking any symbol that ends up in the final
+`.o` via `objcopy --localize-symbol=3Dblah`. If we're doing full-kernel
+LTO rather than rust-only LTO, we'd need to use `llvm-objcopy`
+instead, but the same process would follow - a postprocessing step on
+the final crate object that localizes the symbol, with LTO giving the
+compiler the option (but not requirement) to inline these functions if
+it seems like a good idea.
 
-$ echo 'CONFIG_KUNIT=y
-CONFIG_OVERFLOW_KUNIT_TEST=y
-CONFIG_RUNTIME_KERNEL_TESTING_MENU=y' >kernel/configs/repro.config
 
-$ make -skj"$(nproc)" ARCH=arm LLVM=1 {def,repro.}config zImage
-
-$ boot-qemu.py -a arm -k .
-...
-[    0.000000] Linux version 6.10.0-rc2-00235-g8a92980606e3 (nathan@thelio-3990X) (ClangBuiltLinux clang version 19.0.0git (https://github.com/llvm/llvm-project e635520be888335dd59874038d33e60cca3a7143), ClangBuiltLinux LLD 19.0.0) #1 SMP Fri Jun  7 06:12:02 MST 2024
-...
-[    1.832472]     # castable_to_type_test: 75 castable_to_type() tests finished
-[    1.833483]     ok 21 castable_to_type_test
-[    1.834122]     # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1188
-[    1.834122]     Expected __builtin_dynamic_object_size(two, 0) == sizeof(struct foo) + sizeof(s16) + sizeof(s16), but
-[    1.834122]         __builtin_dynamic_object_size(two, 0) == 8 (0x8)
-[    1.834122]         sizeof(struct foo) + sizeof(s16) + sizeof(s16) == 12 (0xc)
-[    1.834746]     not ok 22 DEFINE_FLEX_test
-...
-
-I don't see the same failure with GCC 13.2.0. This test fails when
-building for arm64 and x86_64 as well, so it does not appear to be
-architecture specific.
-
-I think I see what is going on here. Looking at the documentation for
-DEFINE_RAW_FLEX(), it states "Define an on-stack instance of structure
-with a trailing flexible array member, when it does not have a
-__counted_by annotation." but commit d8e45f2929b9 ("overflow: Change
-DEFINE_FLEX to take __counted_by member") defined 'struct foo' with
-__counted_by on it. __counted_by informs __builtin_dynamic_object_size()
-about the size of the flexible array. With DEFINE_FLEX_RAW, the counter
-is zero, so the size of array in 'struct foo' is zero, meaning this test
-is incorrect when built with a compiler that supports __counted_by,
-which is just Clang 18+ right now (it should land in GCC 15 if I
-understand correctly).
-
-I see two potential solutions that work for me.
-
-One would be to stop using DEFINE_RAW_FLEX() and match the other uses
-(but I assume testing DEFINE_RAW_FLEX() was intentional):
-
-diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-index 4ef31b0bb74d..883670adf0cc 100644
---- a/lib/overflow_kunit.c
-+++ b/lib/overflow_kunit.c
-@@ -1180,7 +1180,7 @@ struct foo {
- 
- static void DEFINE_FLEX_test(struct kunit *test)
- {
--	DEFINE_RAW_FLEX(struct foo, two, array, 2);
-+	DEFINE_FLEX(struct foo, two, array, counter, 2);
- 	DEFINE_FLEX(struct foo, eight, array, counter, 8);
- 	DEFINE_FLEX(struct foo, empty, array, counter, 0);
- 
-
-The other would be making the size of the array conditional on not
-having __counted_by support (which is admittedly ugly):
-
-diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-index 4ef31b0bb74d..7eed0890e25f 100644
---- a/lib/overflow_kunit.c
-+++ b/lib/overflow_kunit.c
-@@ -1185,7 +1185,11 @@ static void DEFINE_FLEX_test(struct kunit *test)
- 	DEFINE_FLEX(struct foo, empty, array, counter, 0);
- 
- 	KUNIT_EXPECT_EQ(test, __struct_size(two),
--			sizeof(struct foo) + sizeof(s16) + sizeof(s16));
-+			sizeof(struct foo)
-+#if !__has_attribute(__counted_by__)
-+			+ sizeof(s16) + sizeof(s16)
-+#endif
-+			);
- 	KUNIT_EXPECT_EQ(test, __struct_size(eight), 24);
- 	KUNIT_EXPECT_EQ(test, __struct_size(empty), sizeof(struct foo));
- }
-
-Kees, am I missing anything here?
-
-Cheers,
-Nathan
+On Wed, May 29, 2024 at 1:30=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+>
+> A new Kconfig option, `RUST_LTO_HELPERS` is added to allow C helpers
+> (which was created to allow Rust to call into inline/macro C functions
+> without having to re-implement the logic in Rust) to be inlined into
+> Rust crates without performing a global LTO.
+>
+> If the option is enabled, the following is performed:
+> * For helpers, instead of compiling them to object file to be linked
+>   into vmlinux, we compile them to LLVM IR.
+> * The LLVM IR is patched to add `linkonce_odr` linkage. This linkage
+>   means that the function is inlineable (effect of `_odr`), and the
+>   symbols generated will have weak linkage if emitted into object file
+>   (important since as later described, we might have multiple copies of
+>   the same symbol) and it will may be discarded if it is not invoked or
+>   all invocations are inlined.
+> * The LLVM IR is compiled to bitcode (This is step is not necessary, but
+>   is a performance optimisation to prevent LLVM from always have to
+>   reparse the same IR).
+> * When a Rust crate is compiled, instead of generating object file, we
+>   ask LLVM bitcode to be generated.
+> * llvm-link is invoked to combine the helper bitcode with the crate
+>   bitcode. This step is similar to what's done in a full LTO, hence the
+>   option name, but this is much faster since it only needs to inline the
+>   helpers.
+> * clang is invoked to turn the combined bitcode into object file.
+>
+> Some caveats with the option:
+> * clang and Rust doesn't have the exact target string. Manual inspection
+>   shows that they should be compatible, but since they are not exactly
+>   the same LLVM seems to prefer not inlining them. This is bypassed with
+>   `--ignore-tti-inline-compatible`.
+> * LLVM doesn't want to inline functions combined with
+>   `-fno-delete-null-pointer-checks` with code compiled without. So we
+>   remove this command when compiling helpers. I think this should be
+>   okay since this is one of the hardening features and we shouldn't have
+>   null pointer dereferences in these helpers.
+>
+> The checks can also be bypassed with force inlining (`__always_inline`)
+> but the behaviour is the same with extra options.
+>
+> This option requires clang to be used for CC and the LLVM version of
+> clang and rustc to be matching (at least to the same major version), and
+> therefore is gated as EXPERT option.
+>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> ---
+>  Makefile               |  4 +++-
+>  lib/Kconfig.debug      | 10 ++++++++++
+>  rust/Makefile          | 34 ++++++++++++++++++++++++++++++----
+>  rust/exports.c         |  3 +++
+>  rust/helpers.c         | 41 +++++++++++++++++++++--------------------
+>  scripts/Makefile.build |  5 ++++-
+>  6 files changed, 71 insertions(+), 26 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index f975b6396328..c6f12093fb1c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -492,6 +492,8 @@ OBJCOPY             =3D $(LLVM_PREFIX)llvm-objcopy$(L=
+LVM_SUFFIX)
+>  OBJDUMP                =3D $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+>  READELF                =3D $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+>  STRIP          =3D $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+> +LLVM_LINK      =3D $(LLVM_PREFIX)llvm-link$(LLVM_SUFFIX)
+> +LLVM_AS        =3D $(LLVM_PREFIX)llvm-as$(LLVM_SUFFIX)
+>  else
+>  CC             =3D $(CROSS_COMPILE)gcc
+>  LD             =3D $(CROSS_COMPILE)ld
+> @@ -601,7 +603,7 @@ endif
+>  export RUSTC_BOOTSTRAP :=3D 1
+>
+>  export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COM=
+PILE LD CC HOSTPKG_CONFIG
+> -export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDG=
+EN CARGO
+> +export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDG=
+EN CARGO LLVM_LINK LLVM_AS
+>  export HOSTRUSTC KBUILD_HOSTRUSTFLAGS
+>  export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX=
+ YACC AWK INSTALLKERNEL
+>  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 59b6765d86b8..8b9a1bd8ce71 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -3049,6 +3049,16 @@ config RUST_KERNEL_DOCTESTS
+>
+>           If unsure, say N.
+>
+> +config RUST_LTO_HELPERS
+> +    bool "LTO C helpers with Rust crates"
+> +    depends on RUST && CC_IS_CLANG && EXPERT
+> +    help
+> +      Links C helpers together with Rust crates using LTO.
+> +
+> +      This is achieved by compiling both helpers and Rust crates into
+> +      LLVM bitcode and use llvm-link to combine them.
+> +
+> +      This requires a matching LLVM version for Clang and rustc.
+> +
+> +      If unsure, say N.
+> +
+>  endmenu # "Rust"
+>
+>  endmenu # Kernel hacking
+> diff --git a/rust/Makefile b/rust/Makefile
+> index b4d63ea9209f..ad0797467102 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -6,9 +6,14 @@ rustdoc_output :=3D $(objtree)/Documentation/output/rust=
+/rustdoc
+>  obj-$(CONFIG_RUST) +=3D core.o compiler_builtins.o
+>  always-$(CONFIG_RUST) +=3D exports_core_generated.h
+>
+> +ifdef CONFIG_RUST_LTO_HELPERS
+> +always-$(CONFIG_RUST) +=3D helpers.bc
+> +else
+> +obj-$(CONFIG_RUST) +=3D helpers.o
+> +always-$(CONFIG_RUST) +=3D exports_helpers_generated.h
+> +endif
+>  # Missing prototypes are expected in the helpers since these are exporte=
+d
+>  # for Rust only, thus there is no header nor prototypes.
+> -obj-$(CONFIG_RUST) +=3D helpers.o
+>  CFLAGS_REMOVE_helpers.o =3D -Wmissing-prototypes -Wmissing-declarations
+>
+>  always-$(CONFIG_RUST) +=3D libmacros.so
+> @@ -17,7 +22,7 @@ no-clean-files +=3D libmacros.so
+>  always-$(CONFIG_RUST) +=3D bindings/bindings_generated.rs bindings/bindi=
+ngs_helpers_generated.rs
+>  obj-$(CONFIG_RUST) +=3D alloc.o bindings.o kernel.o
+>  always-$(CONFIG_RUST) +=3D exports_alloc_generated.h exports_bindings_ge=
+nerated.h \
+> -    exports_kernel_generated.h exports_helpers_generated.h
+> +    exports_kernel_generated.h
+>
+>  always-$(CONFIG_RUST) +=3D uapi/uapi_generated.rs
+>  obj-$(CONFIG_RUST) +=3D uapi.o
+> @@ -350,12 +355,24 @@ $(obj)/bindings/bindings_helpers_generated.rs: priv=
+ate bindgen_target_flags =3D \
+>      --blocklist-type '.*' --allowlist-var '' \
+>      --allowlist-function 'rust_helper_.*'
+>  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_cf=
+lags =3D \
+> -    -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declaration=
+s
+> +    -I$(objtree)/$(obj) $(CFLAGS_helpers.o) -Wno-missing-prototypes -Wno=
+-missing-declarations
+>  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_ex=
+tra =3D ; \
+>      sed -Ei 's/pub fn rust_helper_([a-zA-Z0-9_]*)/#[link_name=3D"rust_he=
+lper_\1"]\n    pub fn \1/g' $@
+>  $(obj)/bindings/bindings_helpers_generated.rs: $(src)/helpers.c FORCE
+>         $(call if_changed_dep,bindgen)
+>
+> +# When compiling helpers, filter `-fno-delete-null-pointer-checks` since=
+ LLVM
+> +# prevents inlining such functions to be inlined into functions compiled
+> +# without the option (e.g. Rust functions).
+> +quiet_cmd_rust_helper =3D HELPER  $@
+> +      cmd_rust_helper =3D \
+> +       $(CC) $(filter-out -fno-delete-null-pointer-checks $(CFLAGS_REMOV=
+E_helpers.o), $(c_flags) $(CFLAGS_helpers.o)) -S $< -emit-llvm -o $(patsubs=
+t %.bc,%.ll,$@); \
+> +       sed -i 's/^define dso_local/define linkonce_odr dso_local/g' $(pa=
+tsubst %.bc,%.ll,$@); \
+> +       $(LLVM_AS) $(patsubst %.bc,%.ll,$@) -o $@
+> +
+> +$(obj)/helpers.bc: $(obj)/helpers.c FORCE
+> +       +$(call if_changed_dep,rust_helper)
+> +
+>  quiet_cmd_exports =3D EXPORTS $@
+>        cmd_exports =3D \
+>         $(NM) -p --defined-only $< \
+> @@ -396,11 +413,13 @@ quiet_cmd_rustc_library =3D $(if $(skip_clippy),RUS=
+TC,$(RUSTC_OR_CLIPPY_QUIET)) L
+>         OBJTREE=3D$(abspath $(objtree)) \
+>         $(if $(skip_clippy),$(RUSTC),$(RUSTC_OR_CLIPPY)) \
+>                 $(filter-out $(skip_flags),$(rust_flags) $(rustc_target_f=
+lags)) \
+> -               --emit=3Ddep-info=3D$(depfile) --emit=3Dobj=3D$@ \
+> +               --emit=3Ddep-info=3D$(depfile) --emit=3D$(if $(link_helpe=
+r),llvm-bc=3D$(patsubst %.o,%.bc,$@),obj=3D$@) \
+>                 --emit=3Dmetadata=3D$(dir $@)$(patsubst %.o,lib%.rmeta,$(=
+notdir $@)) \
+>                 --crate-type rlib -L$(objtree)/$(obj) \
+>                 --crate-name $(patsubst %.o,%,$(notdir $@)) $< \
+>                 --sysroot=3D/dev/null \
+> +       $(if $(link_helper),;$(LLVM_LINK) $(patsubst %.o,%.bc,$@) $(obj)/=
+helpers.bc -o $(patsubst %.o,%.m.bc,$@); \
+> +               $(CC) $(KBUILD_CFLAGS) -mllvm=3D--ignore-tti-inline-compa=
+tible -c $(patsubst %.o,%.m.bc,$@) -o $@) \
+>         $(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
+>
+>  rust-analyzer:
+> @@ -463,4 +482,11 @@ $(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o=
+ $(obj)/build_error.o \
+>      $(obj)/libmacros.so $(obj)/bindings.o $(obj)/uapi.o FORCE
+>         +$(call if_changed_dep,rustc_library)
+>
+> +ifdef CONFIG_RUST_LTO_HELPERS
+> +
+> +$(obj)/kernel.o: private link_helper =3D 1
+> +$(obj)/kernel.o: $(obj)/helpers.bc
+> +
+> +endif
+> +
+>  endif # CONFIG_RUST
+> diff --git a/rust/exports.c b/rust/exports.c
+> index aa1218b325e5..212c1ec1d38b 100644
+> --- a/rust/exports.c
+> +++ b/rust/exports.c
+> @@ -19,7 +19,10 @@
+>  #include "exports_alloc_generated.h"
+>  #include "exports_bindings_generated.h"
+>  #include "exports_kernel_generated.h"
+> +
+> +#ifndef CONFIG_RUST_LTO_HELPERS
+>  #include "exports_helpers_generated.h"
+> +#endif
+>
+>  // For modules using `rust/build_error.rs`.
+>  #ifdef CONFIG_RUST_BUILD_ASSERT_ALLOW
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index 895f4b696962..3abf96f14148 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -32,18 +32,19 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/wait.h>
+>  #include <linux/workqueue.h>
+> +#include "helpers.h"
+>
+> -__noreturn void rust_helper_BUG(void)
+> +__rust_helper __noreturn void rust_helper_BUG(void)
+>  {
+>         BUG();
+>  }
+>
+> -void rust_helper_mutex_lock(struct mutex *lock)
+> +__rust_helper void rust_helper_mutex_lock(struct mutex *lock)
+>  {
+>         mutex_lock(lock);
+>  }
+>
+> -void rust_helper___spin_lock_init(spinlock_t *lock, const char *name,
+> +__rust_helper void rust_helper___spin_lock_init(spinlock_t *lock, const =
+char *name,
+>                                   struct lock_class_key *key)
+>  {
+>  #ifdef CONFIG_DEBUG_SPINLOCK
+> @@ -53,82 +54,82 @@ void rust_helper___spin_lock_init(spinlock_t *lock, c=
+onst char *name,
+>  #endif
+>  }
+>
+> -void rust_helper_spin_lock(spinlock_t *lock)
+> +__rust_helper void rust_helper_spin_lock(spinlock_t *lock)
+>  {
+>         spin_lock(lock);
+>  }
+>
+> -void rust_helper_spin_unlock(spinlock_t *lock)
+> +__rust_helper void rust_helper_spin_unlock(spinlock_t *lock)
+>  {
+>         spin_unlock(lock);
+>  }
+>
+> -void rust_helper_init_wait(struct wait_queue_entry *wq_entry)
+> +__rust_helper void rust_helper_init_wait(struct wait_queue_entry *wq_ent=
+ry)
+>  {
+>         init_wait(wq_entry);
+>  }
+>
+> -int rust_helper_signal_pending(struct task_struct *t)
+> +__rust_helper int rust_helper_signal_pending(struct task_struct *t)
+>  {
+>         return signal_pending(t);
+>  }
+>
+> -refcount_t rust_helper_REFCOUNT_INIT(int n)
+> +__rust_helper refcount_t rust_helper_REFCOUNT_INIT(int n)
+>  {
+>         return (refcount_t)REFCOUNT_INIT(n);
+>  }
+>
+> -void rust_helper_refcount_inc(refcount_t *r)
+> +__rust_helper void rust_helper_refcount_inc(refcount_t *r)
+>  {
+>         refcount_inc(r);
+>  }
+>
+> -bool rust_helper_refcount_dec_and_test(refcount_t *r)
+> +__rust_helper bool rust_helper_refcount_dec_and_test(refcount_t *r)
+>  {
+>         return refcount_dec_and_test(r);
+>  }
+>
+> -__force void *rust_helper_ERR_PTR(long err)
+> +__rust_helper __force void *rust_helper_ERR_PTR(long err)
+>  {
+>         return ERR_PTR(err);
+>  }
+>
+> -bool rust_helper_IS_ERR(__force const void *ptr)
+> +__rust_helper bool rust_helper_IS_ERR(__force const void *ptr)
+>  {
+>         return IS_ERR(ptr);
+>  }
+>
+> -long rust_helper_PTR_ERR(__force const void *ptr)
+> +__rust_helper long rust_helper_PTR_ERR(__force const void *ptr)
+>  {
+>         return PTR_ERR(ptr);
+>  }
+>
+> -const char *rust_helper_errname(int err)
+> +__rust_helper const char *rust_helper_errname(int err)
+>  {
+>         return errname(err);
+>  }
+>
+> -struct task_struct *rust_helper_get_current(void)
+> +__rust_helper struct task_struct *rust_helper_get_current(void)
+>  {
+>         return current;
+>  }
+>
+> -void rust_helper_get_task_struct(struct task_struct *t)
+> +__rust_helper void rust_helper_get_task_struct(struct task_struct *t)
+>  {
+>         get_task_struct(t);
+>  }
+>
+> -void rust_helper_put_task_struct(struct task_struct *t)
+> +__rust_helper void rust_helper_put_task_struct(struct task_struct *t)
+>  {
+>         put_task_struct(t);
+>  }
+>
+> -struct kunit *rust_helper_kunit_get_current_test(void)
+> +__rust_helper struct kunit *rust_helper_kunit_get_current_test(void)
+>  {
+>         return kunit_get_current_test();
+>  }
+>
+> -void rust_helper_init_work_with_key(struct work_struct *work, work_func_=
+t func,
+> +__rust_helper void rust_helper_init_work_with_key(struct work_struct *wo=
+rk, work_func_t func,
+>                                     bool onstack, const char *name,
+>                                     struct lock_class_key *key)
+>  {
+> @@ -139,7 +140,7 @@ void rust_helper_init_work_with_key(struct work_struc=
+t *work, work_func_t func,
+>         work->func =3D func;
+>  }
+>
+> -void * __must_check __realloc_size(2)
+> +__rust_helper void * __must_check __realloc_size(2)
+>  rust_helper_krealloc(const void *objp, size_t new_size, gfp_t flags)
+>  {
+>         return krealloc(objp, new_size, flags);
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index efacca63c897..201e7dc5ae5d 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -288,7 +288,10 @@ rust_common_cmd =3D \
+>  # would not match each other.
+>
+>  quiet_cmd_rustc_o_rs =3D $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+> -      cmd_rustc_o_rs =3D $(rust_common_cmd) --emit=3Dobj=3D$@ $<
+> +      cmd_rustc_o_rs =3D $(rust_common_cmd) --emit=3D$(if $(CONFIG_RUST_=
+LTO_HELPERS),llvm-bc=3D$(patsubst %.o,%.bc,$@),obj=3D$@) $< \
+> +       $(if $(CONFIG_RUST_LTO_HELPERS),;$(LLVM_LINK) $(patsubst %.o,%.bc=
+,$@) $(objtree)/rust/helpers.bc -o $(patsubst %.o,%.m.bc,$@); \
+> +               $(CC) $(KBUILD_CFLAGS) -mllvm=3D--ignore-tti-inline-compa=
+tible -c $(patsubst %.o,%.m.bc,$@) -o $@)
+> +
+>
+>  $(obj)/%.o: $(obj)/%.rs FORCE
+>         +$(call if_changed_dep,rustc_o_rs)
+> --
+> 2.42.0
+>
+>
