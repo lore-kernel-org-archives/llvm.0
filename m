@@ -1,56 +1,50 @@
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C8E4502C
-	for <llvm@lists.linux.dev>; Fri,  7 Jun 2024 20:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5C213DDC5
+	for <llvm@lists.linux.dev>; Fri,  7 Jun 2024 21:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717793413; cv=none; b=AJggF45xXQVi8ZNB4ngXzZFTMrprh2N6VvinXfRsk5o4tI8P+pd+MSORCJ2Ar7FpdNSgLAOC79KFSZlyvm9bDr80jk0j4LEl2miuwlXyC1MzxQVkb4zEXdYpMxGJMXxh2CDtf/MITWXCsqVmoe7WNVwF1Ktgk3AArQiL5XoTrPc=
+	t=1717795078; cv=none; b=CmomZsHgnBxhGZ7oDzBmXxqi7KIdsekORulUam4MdMD0EMTKzh8gB/y3xK7vkeT+WQfNl1Ltwc9cEeKoyH6dl/S6pj+9vyrr1ydRlytaazil4vsSqrE5DiKCGlklEOdzwfw3YJWqJTxY/LaSFrDrJqJ8hUVibv8JfwMAgf44eq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717793413; c=relaxed/simple;
-	bh=4lBB1i6D3CMpL1sebVA4MOEu5mbvTFNJGHklLktW92s=;
+	s=arc-20240116; t=1717795078; c=relaxed/simple;
+	bh=gMfT1nqMcMkmvRhmDSiozWbW3k+5D7LwfUsg9JY1GWk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fo4h9kUdVT7XU5sAQDa8CI527tiU/Gn2CddM1VpZ2YKShG4FR83IC6Okg87BWTS3gtkPkwxTYkUSuHKmiBYE4g51J0qOJk62rJmIAy2rywa5VVuqExJTlm2kZPLGpvwcJu7zAX++y7R8Pk95Gm1OC27IT6zyPtyJKuGNvBQrfnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fdAESv0x; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 In-Reply-To:Content-Type; b=khjNaOC+Xrrzh2c3WEm1myXQHtaCUjZwAOKhVpLeuMIzkbSDj1KTpWRYAbsoDFHKms+y4EGeiEIR9Q9JDCv1Tjvo4r4kR4JZElVbnFRQnxazQHw/fJFyyuda3XRSCqncpA3zfjRQNs14o8YCa6buIuqeSJMQlOHvykq98YWzD1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B4gHKq0g; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fdAESv0x"
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3758a53133aso608905ab.3
-        for <llvm@lists.linux.dev>; Fri, 07 Jun 2024 13:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1717793411; x=1718398211; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tsn/qL+mtDdN74WcgHwSLEegNRkW7b6+85p+wM/SaY=;
-        b=fdAESv0xT6oUi1F9oVcmmlwDUxHxQS8YV6oF4OB6F5dy7fVneAkNrYrFGpJ0y4BW+g
-         tA4ETLIvOpvP7K6Jn91ULg3RUWdS9aQdgbK6lNjXHjBXYoYoEIJjzNptt0UJljSFmG16
-         PvFr0y+jU6jpthnjQtZxkqbiWw1OuzbiA3FWM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717793411; x=1718398211;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tsn/qL+mtDdN74WcgHwSLEegNRkW7b6+85p+wM/SaY=;
-        b=FT9WntIG4fOGClMwqU1GDdtlQyL87M+phEua1huB+0sl8SwUcNqQwq3tRM/1TGu6T5
-         T1uV8ImlYjZNKayzXUxcI1FrmzqZ0E40vgjm3WTdDmIGxw8RkgbTGVM/EM1JESajGYU/
-         PgigA/2tBghkK6gqLokKT7JvYs2Bvr6AclaBCFweSOuUFOumb0WrUOstF2J2lGkxQ5wR
-         pDHqlcx/9w0+Vtvrka5vhiUGwn9hJeMdEnh9eMoG4dOVSxzQF9ryrDDeMQ0OpmJsj58F
-         +yyPxiRCKXzt7hO6080aILn5uyPiacTurZZPtC8+4MRUarwaiE4fl0oKr3/iIctbo8Ak
-         nhbw==
-X-Forwarded-Encrypted: i=1; AJvYcCXo2SvueONPmYjFeEtK3m+9SoAxyXCs25tmlkte3LkbcQP1lVFvrh4U6hJcdjkzargdbc/K//YxTa0wv/PARQj9BdurRQ==
-X-Gm-Message-State: AOJu0YyvnEFt7OZzzHkv8VCGajY7lysEc+DD6bs7LaDCWBaGHFQhIDe4
-	Boag/h71S1T5HIBG1FkKOVStvOt6XiX3YRvRXzGDDj1Qz9M+dRTbwsL/oyfz8a0=
-X-Google-Smtp-Source: AGHT+IG0EQ7MhW11fWVoakWksB7r9JzyxuZOJBpSz3susQA94dzCMF30DRNUqUZkVfYKgBXT5GGdcQ==
-X-Received: by 2002:a05:6e02:20c5:b0:374:9916:67 with SMTP id e9e14a558f8ab-37580391410mr40701005ab.3.1717793411129;
-        Fri, 07 Jun 2024 13:50:11 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-374bc14cb50sm9719115ab.32.2024.06.07.13.50.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jun 2024 13:50:10 -0700 (PDT)
-Message-ID: <5b8e50e1-8705-4ec5-94ae-2eae010cdf20@linuxfoundation.org>
-Date: Fri, 7 Jun 2024 14:50:09 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B4gHKq0g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717795077; x=1749331077;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gMfT1nqMcMkmvRhmDSiozWbW3k+5D7LwfUsg9JY1GWk=;
+  b=B4gHKq0gw+4J1Qi8Zl0wFyzze/Q/mr3aXIrrRDWUbY85zZs5NXF8O6Wg
+   l70t8P3Jrcjyc2/VCGzNolKE6JBvnSf5mv2LpbTyKccXardKbO+Iow1Rl
+   Ay4t9iL2sB1Xm7NK5nHnDS9JRyfzjVwd3s2NXe3639OTfp8ZXudOYkONg
+   5UPmPoZDvVDmy6bPFkCQ7QiSW5ARTFwYhHh80amSWiP746tfMKFVgH6wf
+   x1oHtLx+9ne+NRLyzi0pUMdYFlWsmN1f6DzRyRSuhkH1L7+GTYS5uDDFs
+   rk8C3fqnAazP2/15i8C+LVxRa/RvaaxnXMPsVFmXLam8wziedggqFoB4X
+   w==;
+X-CSE-ConnectionGUID: eQMFX51aQUCx3789dQQJoA==
+X-CSE-MsgGUID: BRnkZjVpQVS2dnn/BkvAQw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="14376779"
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="14376779"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 14:17:57 -0700
+X-CSE-ConnectionGUID: aA1AmYPBTZ6oobhGd24KJQ==
+X-CSE-MsgGUID: FSJMiBpMQ2qF+sEXNQMp7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="39109856"
+Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.109.219]) ([10.125.109.219])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 14:17:55 -0700
+Message-ID: <01105cdd-38f7-4f33-a358-11a33df2a66a@intel.com>
+Date: Fri, 7 Jun 2024 14:17:55 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,7 +53,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/8] selftests: x86: build suite with clang
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
  Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
  <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
@@ -70,60 +65,72 @@ To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
  <binbin.wu@linux.intel.com>, "Chang S. Bae" <chang.seok.bae@intel.com>,
  "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Cc: kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
+ llvm@lists.linux.dev, John Hubbard <jhubbard@nvidia.com>
+Cc: kernel@collabora.com
 References: <20240501122918.3831734-1-usama.anjum@collabora.com>
  <ae9de160-c8dc-4e5e-9ec9-4846a5dc643e@collabora.com>
+ <5b8e50e1-8705-4ec5-94ae-2eae010cdf20@linuxfoundation.org>
+From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ae9de160-c8dc-4e5e-9ec9-4846a5dc643e@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <5b8e50e1-8705-4ec5-94ae-2eae010cdf20@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 5/27/24 23:04, Muhammad Usama Anjum wrote:
-> Soft reminder
+On 6/7/24 13:50, Shuah Khan wrote:
+> These patches usually go through x86 repo.
 > 
-> On 5/1/24 5:29 PM, Muhammad Usama Anjum wrote:
->> This series fixes build errors found by clang to allow the x86 suite to
->> get built with the clang.
->>
->> Unfortunately, there is one bug [1] in the clang becuase of which
->> extended asm isn't handled correctly by it and build fails for
->> sysret_rip.c. Hence even after this series the build of this test would
->> fail with clang. Should we disable this test for now when clang is used
->> until the bug is fixed in clang? Not sure. Any opinions?
->>
->> [1] https://github.com/llvm/llvm-project/issues/53728
->>
->> Muhammad Usama Anjum (8):
->>    selftests: x86: Remove dependence of headers file
->>    selftests: x86: check_initial_reg_state: remove -no-pie while using
->>      -static
->>    selftests: x86: test_vsyscall: remove unused function
->>    selftests: x86: fsgsbase_restore: fix asm directive from =rm to =r
->>    selftests: x86: syscall_arg_fault_32: remove unused variable
->>    selftests: x86: test_FISTTP: use fisttps instead of ambigous fisttp
->>    selftests: x86: fsgsbase: Remove unused function and variable
->>    selftests: x86: amx: Remove unused functions
->>
->>   tools/testing/selftests/x86/Makefile            |  9 +++++----
->>   tools/testing/selftests/x86/amx.c               | 16 ----------------
->>   tools/testing/selftests/x86/fsgsbase.c          |  6 ------
->>   tools/testing/selftests/x86/fsgsbase_restore.c  |  2 +-
->>   tools/testing/selftests/x86/syscall_arg_fault.c |  1 -
->>   tools/testing/selftests/x86/test_FISTTP.c       |  8 ++++----
->>   tools/testing/selftests/x86/test_vsyscall.c     |  5 -----
->>   7 files changed, 10 insertions(+), 37 deletions(-)
->>
+> I need ack from x86 maintainers to take these. I don't see x86 list
+> cc'ed.
 > 
+> Please make sure to include everybody on these threads to get quicker
+> response.
 
-These patches usually go through x86 repo.
+John Hubbard (cc'd) had a partially overlapping set with these.  He and
+Muhammad were going to work together to get a set they could both get
+behind.  I _think_ John picked up one of Muhammad's, but we haven't
+heard back from Muhammad last I checked.
 
-I need ack from x86 maintainers to take these. I don't see x86 list
-cc'ed.
 
-Please make sure to include everybody on these threads to get quicker
-response.
-
-thanks,
--- Shuah
