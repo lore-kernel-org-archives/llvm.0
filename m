@@ -1,112 +1,100 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7E315B0F3;
-	Fri,  7 Jun 2024 08:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AF515B148
+	for <llvm@lists.linux.dev>; Fri,  7 Jun 2024 09:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717748968; cv=none; b=vEaVO+Pj4ATWi7t6sfsl2raJOBvdnuC+VijTaS4zA6tXLjI3iQ5MNENZK18jasLlKh4Alc2kftwkIV3lwIHnrRc1bXo2VHk2Z5K8gI9L2WczAHmOWfZajlERIjdpa31pY6PSw119L6kJqj7GebY3Zn6ZIQF1sJtvr4yA+8x0DFc=
+	t=1717753463; cv=none; b=mbpR8/pbZSsK76E3HlUM43xfWYSrf7tL+mh7/MDyn3kmcStbbsljw3/zbZ8MR07XZSoN1reZ6r7JMEEv3W4oIVS30O+hGwzUV5HMeDZCEaW9ahOhcxiYYBVWuB1ghtFY45tlIrb+A9db4nIuPNMtU42jacNsGeHXV5XTtsjfCSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717748968; c=relaxed/simple;
-	bh=aK10eVoy1pHPzRBaMWuJDogzvbBebhllculFYvTNhSk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QZac+go+Bn6CO7RF/BFQ5feXcNMuiqIrb61YD6cmSKmT5c0fsnQ9EIgzhD1OTfePqPZquvnIjkpOjzQ9to3pfRTIBpGU/WXELzZhvGnxBps/RMQ4hfwv0nbm0N8j2we0cwr2AXOH5tjyajqAcZPCaKqwfotsrrDF6IgiF68NQy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=MHI9wAYF; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1717753463; c=relaxed/simple;
+	bh=dQkXUytkyefTpJTOjW53oGPquKBi+JFRsTG1LaCoypQ=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dMm5yfeeytbIeZZzSW90i1Xdo3nPq7nOZ0bLPtNutP2Gp5F3z/lZqosmCm+HQmaIc34tX/L9FxB1E15+/9wCoHoOj1LuwiKLt5PdHkMTwMWCry/O9ZliWL1ERDC0vcSpRVVnoe43PRoCnnwgEyFbi/mTkqJbvI5pl7Lv8qYoIf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0edyv3px; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="MHI9wAYF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1717748954;
-	bh=aK10eVoy1pHPzRBaMWuJDogzvbBebhllculFYvTNhSk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=MHI9wAYFhtYurtAizVkehIHAmwceOkFYntOBS7R63hOUkb1teR2c/+603lWI4bevD
-	 RZDCTUB1xIGLwYx0xEqV7cLsfKATMUsDTzbYxeJf2S929RFhEZs1sysIK6CKsxwti8
-	 jCyoVTysq/k2e41RpmIF0+lfXv0iohfCf9AEUX8s=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 359A76709A;
-	Fri,  7 Jun 2024 04:29:11 -0400 (EDT)
-Message-ID: <329dac82e09dfc75e77ae93ebbeacdec1dc9ff7f.camel@xry111.site>
-Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
- unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
-From: Xi Ruoyao <xry111@xry111.site>
-To: Jinyang He <hejinyang@loongson.cn>, Nathan Chancellor
- <nathan@kernel.org>,  Peter Zijlstra <peterz@infradead.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Tiezhu Yang <yangtiezhu@loongson.cn>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, Youling Tang <tangyouling@kylinos.cn>,
- loongarch@lists.linux.dev,  linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, mengqinggang@loongson.cn,  cailulu@loongson.cn,
- wanglei@loongson.cn, luweining@loongson.cn, Yujie Liu
- <yujie.liu@intel.com>, Heng Qi <hengqi@linux.alibaba.com>, Tejun Heo
- <tj@kernel.org>
-Date: Fri, 07 Jun 2024 16:29:09 +0800
-In-Reply-To: <2bd6ae20-ec56-c1a2-c5dd-e8c978a376d3@loongson.cn>
-References: <20240604150741.30252-1-xry111@xry111.site>
-	 <20240605054328.GA279426@thelio-3990X>
-	 <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
-	 <20240605062548.GF279426@thelio-3990X>
-	 <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
-	 <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
-	 <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
-	 <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn>
-	 <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
-	 <2bf11cd2-8449-acda-f5ad-659c38cb018e@loongson.cn>
-	 <96a2e8a80c06772b64fcbdba42e1dae2d68a53a7.camel@xry111.site>
-	 <2bd6ae20-ec56-c1a2-c5dd-e8c978a376d3@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0edyv3px"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1717753460;
+	bh=dQkXUytkyefTpJTOjW53oGPquKBi+JFRsTG1LaCoypQ=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=0edyv3px19syu5RPaQqFOA4Iew+3rFhQjoIYCjce4DL3tIFEGwZKamNgJjlD0Yvoz
+	 jRaJsNZlpwkfRyRa0GE4my+Vs60ypVSOtmOtdr8fVNTvTszWFiYt+D55PpfVwFhENa
+	 WEQ3tPBWskovf5o0I7eyFIPrtYXysUuGRf5O0Dxr5HLcb8MvoWSa9SjXPxvooCK6OJ
+	 43J+gZbTV1wg6L89aiSF+h7hqJarpw8rEM03kc943zgD7hi7L9faVKxOUBdCVB7/WJ
+	 LCswp/yySfsku6IWwcgnqava8tY+ZAy2gk/TX9U+P2n3B4yD62q/c/8wsyyTbDLYCs
+	 k3yKZ1yVnkjSg==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E306537811D1;
+	Fri,  7 Jun 2024 09:44:15 +0000 (UTC)
+Message-ID: <b5e4ca79-8be0-4085-adfa-e8ee1c855fdb@collabora.com>
+Date: Fri, 7 Jun 2024 14:44:50 +0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, cmllamas@google.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, llvm@lists.linux.dev, linux-mm@kvack.org
+Subject: Re: [PATCH v1 1/2] selftests/mm: Include linux/mman.h
+To: Edward Liaw <edliaw@google.com>, shuah@kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+References: <20240605223637.1374969-1-edliaw@google.com>
+ <20240605223637.1374969-2-edliaw@google.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240605223637.1374969-2-edliaw@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2024-06-07 at 15:14 +0800, Jinyang He wrote:
-> > =C2=A0=C2=A0=C2=A0=C2=A0 Note: on RISC-V and LoongArch, the stack slot =
-for the previous frame
-> > =C2=A0=C2=A0=C2=A0=C2=A0 pointer is stored at fp[-2] instead of fp[0]. =
-See [Consider
-> > =C2=A0=C2=A0=C2=A0=C2=A0 standardising which stack slot fp points
-> > =C2=A0=C2=A0=C2=A0=C2=A0 to](https://github.com/riscv-non-isa/riscv-elf=
--psabi-doc/issues/18)
-> > =C2=A0=C2=A0=C2=A0=C2=A0 for the RISC-V discussion.
->=20
-> In most cases the $fp is saved at cfa-16. But for va args, something
-> becomes different at LoongArch (I do not know the case of riscv), the
-> $fp isn't saved at cfa-16. (e.g. printk?)
+On 6/6/24 3:36 AM, Edward Liaw wrote:
+> thuge-gen defines MAP_HUGE_* macros that are provided by linux/mman.h
+> since 4.15. Removes the macros and includes linux/mman.h instead.
+> 
+> Signed-off-by: Edward Liaw <edliaw@google.com>
+> ---
+>  tools/testing/selftests/mm/thuge-gen.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
+> index ea7fd8fe2876..034635317935 100644
+> --- a/tools/testing/selftests/mm/thuge-gen.c
+> +++ b/tools/testing/selftests/mm/thuge-gen.c
+> @@ -15,6 +15,7 @@
+>  
+>  #define _GNU_SOURCE 1
+>  #include <sys/mman.h>
+> +#include <linux/mman.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+>  #include <sys/ipc.h>
+> @@ -28,10 +29,6 @@
+>  #include "vm_util.h"
+>  #include "../kselftest.h"
+>  
+> -#define MAP_HUGE_2MB    (21 << MAP_HUGE_SHIFT)
+> -#define MAP_HUGE_1GB    (30 << MAP_HUGE_SHIFT)
+> -#define MAP_HUGE_SHIFT  26
+> -#define MAP_HUGE_MASK   0x3f
+Totally makes sense.
+Reviewed-by: Muhammad Usama Anjum <usama.anju@collabora.com>
 
-Oops indeed.  Even with a very simple case:
+>  #if !defined(MAP_HUGETLB)
+>  #define MAP_HUGETLB	0x40000
+>  #endif
 
-int sum(int a, int b) {
-	return a + b;
-}
-
-with -fno-omit-frame-pointer we get:
-
-sum:
-	addi.d	$r3,$r3,-16
-	st.d	$r22,$r3,8
-	addi.d	$r22,$r3,16
-	ld.d	$r22,$r3,8
-	add.w	$r4,$r4,$r5
-	addi.d	$r3,$r3,16
-	jr	$r1
-
-So for leaf functions (where we don't save $ra) $fp is saved at cfa-8.
-
-> I feel that the update_cfi_state should be arch specific. I believe
-> that some logic can be reused, but each arch may have its own logic.
-
-I agree it now.
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+-- 
+BR,
+Muhammad Usama Anjum
