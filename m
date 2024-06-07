@@ -1,66 +1,41 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5BD194AC9;
-	Fri,  7 Jun 2024 13:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE74194A6D;
+	Fri,  7 Jun 2024 14:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717768155; cv=none; b=uDABSbtg43WYKLcgCxPh2dy4qM1QezjgkvuK60wW8Iz5GCzMScGZI4mGI5YcXFcyAIcw0S2YZq6zE2UcMue2tfiqWGdXHl+xJ9Gpnm/pdSwWCBy+Ev4uIXnMU+PDjxnK53nKxyeO+SWPbPKH85zbUkQdeu/jhr5kdfN4/+oxoM4=
+	t=1717770812; cv=none; b=e85c33LGvAz7wmhvmF1Ga69He5IWTBSLYYUYsyKfujB2Dvx3Ik//UfK2UMmAO/2RbTDCwYQdmQx+t0uBBV8GPgnOoUqupC9BOHowL+wXDx53y7uEhApSBpogF3IBoFrV/+QiF83wBb1OhO4EyVEBBZDUkVuRExGvx3hmC7CYGi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717768155; c=relaxed/simple;
-	bh=6tBWrLoq2JL/28m9DOqPDcuz6HYtkpUgfLGc+DHWGcU=;
+	s=arc-20240116; t=1717770812; c=relaxed/simple;
+	bh=1fJgL+gvkpFtIMZd+hZjnYhZnWd6hhbAFJ2oi8aDz+o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hpngrxgQaah+Y+KI6BEpa0L33UgSNU7SDXoPv6c89ro8Elusp+dSv3KLHJ1wNFNxDwHUKo0fv/37Ts2DBQJf0QAOAmsI2WAela3YWtlW82zRl1jE8uci5OIocHBBM4zw/mCRN0r/9eqP/uJVnxrFDQzUZWND1v+WIR0daSHbdTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IIG4J86z; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=O7TitMDNTthksOMMM6YYnsqHeTF8GVbwpJ3IR+NxLPlI8YTIAmZpbnTbAKGPAym9crvMs7In3KxhkomnVjfju//Zja2TRQLD++wwgSw5Ds2WNpc/8E/7tBv29Xgjf3yH7zkWkPRirxEBm4rO2HVzB80B+Fr9CcXxtxIbN9Ue/7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qcHJ5YQB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IIG4J86z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717768154; x=1749304154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6tBWrLoq2JL/28m9DOqPDcuz6HYtkpUgfLGc+DHWGcU=;
-  b=IIG4J86zXEGiWeYW3COnS/03FEhMd/6ijKHz3B9RgEukWTgPREKuAc3Y
-   zS/oJoCGXBZpZHsg+uqnWEiahItMnUO6X/2cSQnDW1coFwWD6ATOZzMkB
-   euT81tB0HjFE/+T93nTqPtfVrHI/YppAbiWL5/+QaR0Q1Vfne187LhCC7
-   8x31K1Nr5Wr5tlXhiOkI/sxvJDk7KZl3b0Z/PC5JOoqRWV8PrXu4uoESZ
-   UlPXAqadZwlHRhaa1jHWySg42Qx+Yyn1y+UUghM21OUVZYD+O+KFIko9U
-   4cGb/d2sBSYmTYad95YVvztso3V6dHmTASkz2NVzckbcduPwSnxpaZLhQ
-   w==;
-X-CSE-ConnectionGUID: kv0VskpCT6yw6A7sL/NNoA==
-X-CSE-MsgGUID: BmPBLaRhRCqEyZ5WuLsiqA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="25062195"
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="25062195"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 06:49:13 -0700
-X-CSE-ConnectionGUID: 7je1gDvWQ/WAxzEUj89UdA==
-X-CSE-MsgGUID: fyC2pXJJSAyqBmvvqdheaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="69495146"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 07 Jun 2024 06:49:10 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sFZxs-0004se-12;
-	Fri, 07 Jun 2024 13:49:08 +0000
-Date: Fri, 7 Jun 2024 21:48:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>, mka@chromium.org,
-	gregkh@linuxfoundation.org, javier.carrasco@wolfvision.net,
-	benjamin.bara@skidata.com, m.felsch@pengutronix.de,
-	jbrunet@baylibre.com, frieder.schrempf@kontron.de,
-	stefan.eichenberger@toradex.com, michal.simek@amd.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	git@amd.com, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: Re: [PATCH] usb: misc: add Microchip usb5744 SMBus programming
- support
-Message-ID: <202406072150.57XLel7f-lkp@intel.com>
-References: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qcHJ5YQB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A68C2BBFC;
+	Fri,  7 Jun 2024 14:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717770811;
+	bh=1fJgL+gvkpFtIMZd+hZjnYhZnWd6hhbAFJ2oi8aDz+o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qcHJ5YQBJrRPMtyAFbLlu9GHAeC9NT5Q3u8NINORsfudV7rkwjCMJMj+oDlRlJAmG
+	 aKhGbMSICzRp1f56c9eAY7NrYb8ydXDLOp//wJKwCnPTbjiefiQZScBZraJstzyLFt
+	 kfwFAf9X/51yuaGMBhTMoql4H8J2W/z+5rlPrlEyNavWtgiDzEZMlL0RHzvBkvA2Cg
+	 XVltm72MTlhxeYj9bqhnuCOQwpwqXIqcbm8zofCqufbBS0kt6VKbiimDOReS+YNvh3
+	 psJi6sGRhCFoNEMP7os6sCDSMN7e5ocsxTPYM5FIPZBBhLv7LgYB/EL6jl/ZfIHwkC
+	 R7zQwnzaruNRw==
+Date: Fri, 7 Jun 2024 07:33:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christian Schrefl <chrisi.schrefl@gmail.com>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [Bug] Failing kunit test on ARCH=arm and LLVM=1
+Message-ID: <20240607143329.GA2483293@thelio-3990X>
+References: <0bfc6b38-8bc5-4971-b6fb-dc642a73fbfe@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,37 +44,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1717676883-2876611-1-git-send-email-radhey.shyam.pandey@amd.com>
+In-Reply-To: <0bfc6b38-8bc5-4971-b6fb-dc642a73fbfe@gmail.com>
 
-Hi Radhey,
+Hi Christian,
 
-kernel test robot noticed the following build errors:
+On Fri, Jun 07, 2024 at 02:37:19PM +0200, Christian Schrefl wrote:
+> Greetings,
+> 
+> when trying to port Rust to ARM I noticed that the DEFINE_FLEX_test
+> kunit test in lib/overflow_kunit.c:1188 fails when combining LLVM=1
+> and ARCH=arm.
+> 
+> I have reproduced this on v6.10-rc1 and next-20240606.
+> 
+> Here is the clang/llvm version I'm using:
+> clang version 18.1.6 (Fedora 18.1.6-3.fc40)
+> Target: x86_64-redhat-linux-gnu
+> Thread model: posix
+> InstalledDir: /usr/bin
+> Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+> 
+> I have not looked closer at the failure so I'm unsure if this is a
+> problem with LLVM or if the test case is to speciffic.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.10-rc2 next-20240607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks a lot for the report! I can reproduce this with tip of tree LLVM
+as well.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Radhey-Shyam-Pandey/usb-misc-add-Microchip-usb5744-SMBus-programming-support/20240606-203028
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1717676883-2876611-1-git-send-email-radhey.shyam.pandey%40amd.com
-patch subject: [PATCH] usb: misc: add Microchip usb5744 SMBus programming support
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240607/202406072150.57XLel7f-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406072150.57XLel7f-lkp@intel.com/reproduce)
+$ echo 'CONFIG_KUNIT=y
+CONFIG_OVERFLOW_KUNIT_TEST=y
+CONFIG_RUNTIME_KERNEL_TESTING_MENU=y' >kernel/configs/repro.config
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406072150.57XLel7f-lkp@intel.com/
+$ make -skj"$(nproc)" ARCH=arm LLVM=1 {def,repro.}config zImage
 
-All errors (new ones prefixed by >>):
+$ boot-qemu.py -a arm -k .
+...
+[    0.000000] Linux version 6.10.0-rc2-00235-g8a92980606e3 (nathan@thelio-3990X) (ClangBuiltLinux clang version 19.0.0git (https://github.com/llvm/llvm-project e635520be888335dd59874038d33e60cca3a7143), ClangBuiltLinux LLD 19.0.0) #1 SMP Fri Jun  7 06:12:02 MST 2024
+...
+[    1.832472]     # castable_to_type_test: 75 castable_to_type() tests finished
+[    1.833483]     ok 21 castable_to_type_test
+[    1.834122]     # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1188
+[    1.834122]     Expected __builtin_dynamic_object_size(two, 0) == sizeof(struct foo) + sizeof(s16) + sizeof(s16), but
+[    1.834122]         __builtin_dynamic_object_size(two, 0) == 8 (0x8)
+[    1.834122]         sizeof(struct foo) + sizeof(s16) + sizeof(s16) == 12 (0xc)
+[    1.834746]     not ok 22 DEFINE_FLEX_test
+...
 
->> ld.lld: error: undefined symbol: onboard_dev_5744_i2c_init
-   >>> referenced by onboard_usb_dev_pdevs.c
-   >>>               drivers/usb/misc/onboard_usb_dev_pdevs.o:(microchip_usb5744_data) in archive vmlinux.a
+I don't see the same failure with GCC 13.2.0. This test fails when
+building for arm64 and x86_64 as well, so it does not appear to be
+architecture specific.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I think I see what is going on here. Looking at the documentation for
+DEFINE_RAW_FLEX(), it states "Define an on-stack instance of structure
+with a trailing flexible array member, when it does not have a
+__counted_by annotation." but commit d8e45f2929b9 ("overflow: Change
+DEFINE_FLEX to take __counted_by member") defined 'struct foo' with
+__counted_by on it. __counted_by informs __builtin_dynamic_object_size()
+about the size of the flexible array. With DEFINE_FLEX_RAW, the counter
+is zero, so the size of array in 'struct foo' is zero, meaning this test
+is incorrect when built with a compiler that supports __counted_by,
+which is just Clang 18+ right now (it should land in GCC 15 if I
+understand correctly).
+
+I see two potential solutions that work for me.
+
+One would be to stop using DEFINE_RAW_FLEX() and match the other uses
+(but I assume testing DEFINE_RAW_FLEX() was intentional):
+
+diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+index 4ef31b0bb74d..883670adf0cc 100644
+--- a/lib/overflow_kunit.c
++++ b/lib/overflow_kunit.c
+@@ -1180,7 +1180,7 @@ struct foo {
+ 
+ static void DEFINE_FLEX_test(struct kunit *test)
+ {
+-	DEFINE_RAW_FLEX(struct foo, two, array, 2);
++	DEFINE_FLEX(struct foo, two, array, counter, 2);
+ 	DEFINE_FLEX(struct foo, eight, array, counter, 8);
+ 	DEFINE_FLEX(struct foo, empty, array, counter, 0);
+ 
+
+The other would be making the size of the array conditional on not
+having __counted_by support (which is admittedly ugly):
+
+diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+index 4ef31b0bb74d..7eed0890e25f 100644
+--- a/lib/overflow_kunit.c
++++ b/lib/overflow_kunit.c
+@@ -1185,7 +1185,11 @@ static void DEFINE_FLEX_test(struct kunit *test)
+ 	DEFINE_FLEX(struct foo, empty, array, counter, 0);
+ 
+ 	KUNIT_EXPECT_EQ(test, __struct_size(two),
+-			sizeof(struct foo) + sizeof(s16) + sizeof(s16));
++			sizeof(struct foo)
++#if !__has_attribute(__counted_by__)
++			+ sizeof(s16) + sizeof(s16)
++#endif
++			);
+ 	KUNIT_EXPECT_EQ(test, __struct_size(eight), 24);
+ 	KUNIT_EXPECT_EQ(test, __struct_size(empty), sizeof(struct foo));
+ }
+
+Kees, am I missing anything here?
+
+Cheers,
+Nathan
