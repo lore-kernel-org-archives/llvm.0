@@ -1,158 +1,148 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B5B3B782;
-	Fri,  7 Jun 2024 07:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748D315444F;
+	Fri,  7 Jun 2024 07:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717744492; cv=none; b=Rg6uVuHFunp2ZqNj07mBI4D8sr4ALZT0I+RqrxuDFOoSqGHFymMH6e+2BFI3HiKnE8KPDZEJZWm94/BtSJCn5M+filKgEF+baNvjXgt1TvDXyRz53Cy3ARFilZoQX26HHJ6wUeTmGu40Fji9mZH/53OrPh/Ve2249HGK1rBiKU8=
+	t=1717745387; cv=none; b=QEDTCy9hTszrfOHrxE7HplFOwH+NyYA4JdjhD8qFlJKQxY6e7yHqAWDiq045NDfRerO4zA+nI95luQny5n9+S/jdNG4mTqEoe3Lj/yECLKLP43LgrGoT/NqIM3ON8sbFRjEd2s/tl0NeKqOMEnr5jirr7FHwU31e9WyZB+BObpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717744492; c=relaxed/simple;
-	bh=noukMO3+jRs+9c7owGXF7Wluq9C2LqsXKD62IPTB79w=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=NGiZvNUJEjsuVAosMD8hUoznftwp6q1kHlYyouX72oGtvSl8fZLIJ44Jwz43nN46lArGgDzaUMKeF+X+pkp5GDTtSjBmB+/yvpxHB+1XgTNH6PTXQ53W22uSiEuPo0yEt54Q9GF98xUeUC0fPPW849UEUsMWM5yJOdlHOX1MrYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [111.9.175.10])
-	by gateway (Coremail) with SMTP id _____8Cx_epms2Jm8YgEAA--.18998S3;
-	Fri, 07 Jun 2024 15:14:46 +0800 (CST)
-Received: from [10.136.12.26] (unknown [111.9.175.10])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxnsdhs2JmmOkXAA--.60131S3;
-	Fri, 07 Jun 2024 15:14:44 +0800 (CST)
-Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
- unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
-To: Xi Ruoyao <xry111@xry111.site>, Nathan Chancellor <nathan@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Tiezhu Yang <yangtiezhu@loongson.cn>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Youling Tang <tangyouling@kylinos.cn>, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- mengqinggang@loongson.cn, cailulu@loongson.cn, wanglei@loongson.cn,
- luweining@loongson.cn, Yujie Liu <yujie.liu@intel.com>,
- Heng Qi <hengqi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>
-References: <20240604150741.30252-1-xry111@xry111.site>
- <20240605054328.GA279426@thelio-3990X>
- <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
- <20240605062548.GF279426@thelio-3990X>
- <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
- <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
- <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
- <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn>
- <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
- <2bf11cd2-8449-acda-f5ad-659c38cb018e@loongson.cn>
- <96a2e8a80c06772b64fcbdba42e1dae2d68a53a7.camel@xry111.site>
-From: Jinyang He <hejinyang@loongson.cn>
-Message-ID: <2bd6ae20-ec56-c1a2-c5dd-e8c978a376d3@loongson.cn>
-Date: Fri, 7 Jun 2024 15:14:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1717745387; c=relaxed/simple;
+	bh=2zqhKlVxrz3mbaDx+3zFhoMg3wKeoW+Xa3Fjl4ex1ps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lZSGMBjcX8GhTs/QzFhiwa8YZ3BMDcyFTHrf5dFuSSliA12y86STwiz9ECJz761oCTZm9+aBMG90pMR1TQySuUY0cBlOVzD3+a9vi8HocXEYtrCanLQn48weci9VcGyRfTapXeZeVQyXtl7o7P61fE/enYAl5p4uCZmgwP6Blqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m374OOYZ; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m374OOYZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717745386; x=1749281386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2zqhKlVxrz3mbaDx+3zFhoMg3wKeoW+Xa3Fjl4ex1ps=;
+  b=m374OOYZSxrltHsP8cPkm/cqRSxhZR1IzW6tZx19N5k6oYzJ7bSGAiMZ
+   NdHymeUkNg5Z2F7d0GIqdc+U3RwsN+B3g3SdMlNN8/lElaVoVsQv35pVc
+   0DZ/cx7ls2eJzh05n+hfN7Y+BPJSrUSKq/9w5FBJ810engEQr8lRed3K/
+   66EG4Z54qCZrpGIy1LwcADvMqsBFglQpTzAsonCx1sypCrENZvWTK1Dab
+   mEdw5yULh9eozChrMlvb37UkyHMbKgmc7EaipvcoyrHMw70a2ptNHGU10
+   fOgDyRLCKKEau2Mjgnm6MAOCN4q3yMUk8ydOBEni9YM04ZV9D8zWtNaPZ
+   g==;
+X-CSE-ConnectionGUID: /jVQf+0mQuas5anKO+CXdQ==
+X-CSE-MsgGUID: KY4KzXgLQ1+DGWawbAwXzw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14634927"
+X-IronPort-AV: E=Sophos;i="6.08,220,1712646000"; 
+   d="scan'208";a="14634927"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 00:29:41 -0700
+X-CSE-ConnectionGUID: dhQ+h4aLSba7BzGhhFJOzQ==
+X-CSE-MsgGUID: LkN6+gQpQWOYS9MWDiSS/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,220,1712646000"; 
+   d="scan'208";a="75713087"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 07 Jun 2024 00:29:37 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFU2X-0004D9-2b;
+	Fri, 07 Jun 2024 07:29:33 +0000
+Date: Fri, 7 Jun 2024 15:29:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tao Zeng via B4 Relay <devnull+tao.zeng.amlogic.com@kernel.org>,
+	Gao Xiang <xiang@kernel.org>, Chao Yu <yuchao0@huawei.com>,
+	Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
+	Jeffle Xu <jefflexu@linux.alibaba.com>,
+	Sandeep Dhavale <dhavale@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	Tao Zeng <tao.zeng@amlogic.com>
+Subject: Re: [PATCH] erofs: support external crypto for decompression
+Message-ID: <202406071506.XHwo54ej-lkp@intel.com>
+References: <20240606-erofs-decompression-v1-1-ec5f31396e04@amlogic.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <96a2e8a80c06772b64fcbdba42e1dae2d68a53a7.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:AQAAf8Bxnsdhs2JmmOkXAA--.60131S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZrWDZF1xWFy3GF15AF15Jrc_yoW5uF4rpr
-	4rGr4UJryUJr18Ar1Utr1UWryUJr1UJw1UJr4DJFyUJr1UGryjqF1UXr4j9r18Jr4kJw1j
-	vr1UJryUZFyDJFcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUU
-	UU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240606-erofs-decompression-v1-1-ec5f31396e04@amlogic.com>
+
+Hi Tao,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on ee78a17615ad0cfdbbc27182b1047cd36c9d4d5f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tao-Zeng-via-B4-Relay/erofs-support-external-crypto-for-decompression/20240606-155702
+base:   ee78a17615ad0cfdbbc27182b1047cd36c9d4d5f
+patch link:    https://lore.kernel.org/r/20240606-erofs-decompression-v1-1-ec5f31396e04%40amlogic.com
+patch subject: [PATCH] erofs: support external crypto for decompression
+config: arm64-randconfig-004-20240607 (https://download.01.org/0day-ci/archive/20240607/202406071506.XHwo54ej-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406071506.XHwo54ej-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406071506.XHwo54ej-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from fs/erofs/zdata.c:7:
+   In file included from fs/erofs/compress.h:9:
+   In file included from fs/erofs/internal.h:11:
+   In file included from include/linux/dax.h:6:
+   In file included from include/linux/mm.h:2241:
+   include/linux/vmstat.h:484:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     484 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     485 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:491:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     491 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     492 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:498:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     498 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     504 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:512:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     512 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     513 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/erofs/zdata.c:7:
+>> fs/erofs/compress.h:120:1: error: expected identifier or '('
+     120 | {
+         | ^
+   5 warnings and 1 error generated.
 
 
-On 2024-06-07 13:42, Xi Ruoyao wrote:
-> On Thu, 2024-06-06 at 10:10 +0800, Jinyang He wrote:
->> What I just confused is that there is no ".cfi_*"
->> in the eplogue by clang, which may cause wrong backtrace if gdb set
->>
->> breakpoint there and backtrace. (But this is out of this topic.)
-> I don't think it'll cause wrong backtrace.  The real assemble code has
-> restored the registers and missing .cfi_restore will just make unwinder
-> restore them again.  There are redundant works but not breakages.
+vim +120 fs/erofs/compress.h
 
-$ cat hello.c:
-extern void __attribute__((noinline)) foo() {}
-int main() {
-   foo();
-   return (int)(long)__builtin_frame_address(0);
-}
-$ clang hello.c -S -g -o hello.s -O0 -fPIC
-$ cat hello.s:
-[...]
-         addi.d  $sp, $sp, -32
-         .cfi_def_cfa_offset 32
-         st.d    $ra, $sp, 24                    # 8-byte Folded Spill
-         st.d    $fp, $sp, 16                    # 8-byte Folded Spill
-         .cfi_offset 1, -8
-         .cfi_offset 22, -16
-         addi.d  $fp, $sp, 32
-         .cfi_def_cfa 22, 0
-         move    $a0, $zero
-         st.w    $a0, $fp, -20
-.Ltmp2:
-         .loc    0 3 3 prologue_end              # hello.c:3:3
-         bl      %plt(foo)
-         .loc    0 4 21                          # hello.c:4:21
-         move    $a0, $fp
-         .loc    0 4 3 is_stmt 0                 # hello.c:4:3
-         addi.w  $a0, $a0, 0
-         ld.d    $fp, $sp, 16                    # 8-byte Folded Reload
-<use gdb and set break ponint there>
-         ld.d    $ra, $sp, 24                    # 8-byte Folded Reload
-         .loc    0 4 3 epilogue_begin            # hello.c:4:3
-         addi.d  $sp, $sp, 32
-         ret
-[...]
+   115	
+   116	static inline int z_erofs_load_crypto_config(struct super_block *sb,
+   117						     struct erofs_super_block *dsb,
+   118						     void *data,
+   119						     int size);
+ > 120	{
+   121		if (crypto) {
+   122			erofs_err(sb, "crypto algorithm isn't enabled");
+   123			return -EINVAL;
+   124		}
+   125		return 0;
+   126	}
+   127	#endif
+   128	
 
-So how unwinder do if we <use gdb and set break ponint there>? I think
-if we not give ".cfi_restore 22" or others info, it will consider
-   1) the $ra is in cfa-8
-   2) the cfa is $fp
-So it will get $ra by $ra = *(long*)($fp-8). So it may unwind failed
-because $fp has been restored and not the CFA now.
-
-> For objtool the main difference seems a thing explained in
-> https://maskray.me/blog/2020-11-08-stack-unwinding by Fangrui:
->
->     Note: on RISC-V and LoongArch, the stack slot for the previous frame
->     pointer is stored at fp[-2] instead of fp[0]. See [Consider
->     standardising which stack slot fp points
->     to](https://github.com/riscv-non-isa/riscv-elf-psabi-doc/issues/18)
->     for the RISC-V discussion.
-
-In most cases the $fp is saved at cfa-16. But for va args, something
-becomes different at LoongArch (I do not know the case of riscv), the
-$fp isn't saved at cfa-16. (e.g. printk?)
-
-> So perhaps we just need to code a constant named "PREV_BP_OFFSET"
-Can you give some detail?
->   or
-> something in arch/ and use it in update_cfi_state() instead of fully re-
-> implement the entire function?
-
-I feel that the update_cfi_state should be arch specific. I believe
-that some logic can be reused, but each arch may have its own logic.
-
-
-Thanks,
-Jinyang
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
