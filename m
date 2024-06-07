@@ -1,46 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800CC195804;
-	Fri,  7 Jun 2024 16:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7FD199EBB;
+	Fri,  7 Jun 2024 17:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717778133; cv=none; b=GrC1pepWK4D6aGEiiQ1H5tdhInVHwcvTXsFoL9Fr+qKPp2irG93+vwG7joiv54xj5/QCN1FGFAOjjpKJ77CBTdUVQSSjj6AgWrueCbaSeRSl8FkYAfk4pAtxqmVShTKB35oZZenF4cojH19ccd/I5ysFSvWgLu4GjOApIicIPp4=
+	t=1717780537; cv=none; b=g0K7xWJSP9VKUOPNRZ/2X60TZBLEFnbg3Ly8/60pXRhWLIiGCklJewcMEnFsqOlWI5OEzsZbFXvyKGmdDgGnGV+191pauyWE69dQ82H882DIK5SK29ZyMb5CWSy14jucKB9i9xyCodV75Uvd253JfmEE/SL5N3j13TlguRz0VK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717778133; c=relaxed/simple;
-	bh=zcmYl3RMG+9CalkrxbsEE5yzEf0SPPRbktmruT0o8D0=;
+	s=arc-20240116; t=1717780537; c=relaxed/simple;
+	bh=+1C+CfkaqQH+43CNlS0hRJijJsoUJkiaCU9L0PzDf6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dQgNROPxxAY4xPHceQntwii7Dv3s4xAuXn05Mp3ACtimvTw6tcvOSaXQ9xxvlMQKeJ/LZZM3GgZYUl482aPBCgBtPzdjszS15v/WaFond9wfkHpHG1gyn77elOJQMgU0XGbQAHW8Eseyzm/Fkq0gTq606wo5FXXO0CPvgf+oif0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QUjZYsZN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=RCHwS0EOFcmY7gm/PTIN974tuGbsCG4c4+S9F2/WRZ6X+6E6ZftpKYVaVcBSnsXzCZGL7LriFKBYMgYAA/ppTo4q2xU4f7LKJlwb8rIpINgmISb5sORKv5NCLomgrHGOshIxry43MDj4ypkm+ihiTcBOGJuMDx1hE88kks/swHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fM8NZo7Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QUjZYsZN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D28C2BBFC;
-	Fri,  7 Jun 2024 16:35:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fM8NZo7Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CA0C2BBFC;
+	Fri,  7 Jun 2024 17:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717778133;
-	bh=zcmYl3RMG+9CalkrxbsEE5yzEf0SPPRbktmruT0o8D0=;
+	s=k20201202; t=1717780536;
+	bh=+1C+CfkaqQH+43CNlS0hRJijJsoUJkiaCU9L0PzDf6Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QUjZYsZNIlmdexktlGNJYhtVVJm6brOK3QTHdkQJKbRonLo2pdbBBQHiYJKA4j654
-	 O+qYzSfgn6KWNdmbdeHd1vOImhTOoCGtHXnbSHim+xlxw2rzhOscUPkuvaqLHVTF3b
-	 2YnWra1lchyoNzqGqoDBKGXAokPc6UPZ2x/79RcUGmodcP/KacCwAII3g1EN79kWFw
-	 2SPY1yjvR27DrrGLtO4IHpv/xVfROriH4pxZqzX3fjNZt/yAZx4r3SX7z2coHBSudG
-	 7MCU4HxTXsR+aDES/wyAMN+AhU4tWnZXWAk/uQOaSvs/LNHOPb1QT36uL3HDL7JsBp
-	 TLfuwknCR65Fw==
-Date: Fri, 7 Jun 2024 09:35:30 -0700
+	b=fM8NZo7QiMbiOjncaSHQmkLJcdUUvEjs7fAgxeEAEARDTOCBwcXIckBlzncP7EjUx
+	 UZ+Bbz06enLZ/mz/hq3naYTZsM/3p45Sec3xumZ+RCS7O4ZIxE0l5Exglb9+K/JFCZ
+	 TJhmBS+xUrpvhQMMxa2Au/rTd1im+oYbDZxLohejJbj53UBEs1wFhpMZMhDIKtvCH+
+	 iM5RvUOD8s0UjbH/LU/TJrebaFV9fUpf3F2GFm5NysD7+6zQzc0qWL+dXpvOInnM4G
+	 9mnMhpeVCTayhdwqPnTIqxzA7XY3W7pwR/fJkuphGrzWukf34BXjshkq2AQ2idH26p
+	 xbLQK98LGFaKg==
+Date: Fri, 7 Jun 2024 10:15:33 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: John Hubbard <jhubbard@nvidia.com>, Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Beau Belgrave <beaub@linux.microsoft.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] media: c8sectpfe: Add missing parameter names
-Message-ID: <20240607163530.GC2483293@thelio-3990X>
-References: <20240606-c8sectpfe-v1-1-c4b18f38295d@chromium.org>
+	Bill Wendling <morbo@google.com>, sunliming <sunliming@kylinos.cn>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
+ builds
+Message-ID: <20240607171533.GA2636750@thelio-3990X>
+References: <20240531183751.100541-1-jhubbard@nvidia.com>
+ <20240531183751.100541-2-jhubbard@nvidia.com>
+ <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
+ <20240603224706.GA245774@thelio-3990X>
+ <2c57be33-77b8-419b-a708-e99aa9b44395@nvidia.com>
+ <0d3fd536-5036-40e7-9783-80533914e32d@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,45 +59,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240606-c8sectpfe-v1-1-c4b18f38295d@chromium.org>
+In-Reply-To: <0d3fd536-5036-40e7-9783-80533914e32d@arm.com>
 
-On Thu, Jun 06, 2024 at 01:01:07PM +0000, Ricardo Ribalda wrote:
-> clang 19 complains about the missing parameter name. Let's add it.
+On Fri, Jun 07, 2024 at 12:12:19PM +0100, Ryan Roberts wrote:
+> On 04/06/2024 05:55, John Hubbard wrote:
+> > On 6/3/24 3:47 PM, Nathan Chancellor wrote:
+> >> Does CC=clang even work for the selftests? lib.mk here uses 'CC :=' so
+> >> won't CC=clang get overridden to CC=$(CROSS_COMPILE)gcc?
+> >>
+> > 
+> > I received a report that someone (I forget who or what) was definitely
+> > attempting to just set CC=clang. But yes, it definitely doesn't work
+> > properly for CROSS_COMPILE.
 > 
-> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h:19:62: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+> This history as I recall, is that I got a bug report [1] stating that:
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202406050908.1kL1C69p-lkp@intel.com/
-> Fixes: e22b4973ee20 ("media: c8sectpfe: Do not depend on DEBUG_FS")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> # tools/testing/selftests/fchmodat2$ make CC=clang
+> 
+> and
+> 
+> # tools/testing/selftests/openat2$ make CC=clang
+> 
+> were both failing due to the -static-libsan / -static-libasan difference between
+> gcc and clang. I attempted to fix that with [2], which used cc-option to
+> determine which variant to use. That never got picked up, and John
+> coincidentally did a similar fix, but relying on LLVM=1 instead.
+> 
+> If we are concluding that CC=clang is an invalid way to do this, then I guess we
+> should report that back to [1]?
+> 
+> [1] https://lore.kernel.org/all/202404141807.LgsqXPY5-lkp@intel.com/
+> [2]
+> https://lore.kernel.org/linux-kselftest/20240417160740.2019530-1-ryan.roberts@arm.com/
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+I can only speak from the perspective of the main kernel build, as I
+don't really know much if anything about the selftests, but I think
+CC=clang and LLVM=1 should both be valid. Ideally, they would behave as
+they do for the main kernel build (i.e., CC=clang just uses clang for
+the compiler and LLVM=1 uses the entire LLVM tools). I realize that for
+the selftests, there is probably little use for tools other than the
+compiler, assembler, and linker but I think consistency is desirable
+here.
 
-> ---
->  drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
-> index 8e1bfd860524..3fe177b59b16 100644
-> --- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
-> +++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-debugfs.h
-> @@ -16,8 +16,8 @@
->  void c8sectpfe_debugfs_init(struct c8sectpfei *);
->  void c8sectpfe_debugfs_exit(struct c8sectpfei *);
->  #else
-> -static inline void c8sectpfe_debugfs_init(struct c8sectpfei *) {};
-> -static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *) {};
-> +static inline void c8sectpfe_debugfs_init(struct c8sectpfei *fei) {};
-> +static inline void c8sectpfe_debugfs_exit(struct c8sectpfei *fei) {};
->  #endif
->  
->  #endif /* __C8SECTPFE_DEBUG_H */
-> 
-> ---
-> base-commit: 1aea3d1d4a21e3e7895663b848ffae79ee82e065
-> change-id: 20240606-c8sectpfe-5f00b9867f36
-> 
-> Best regards,
-> -- 
-> Ricardo Ribalda <ribalda@chromium.org>
-> 
+I am not at all familiar with the selftests build system, which is
+completely different from Kbuild, but I would ack a patch that does
+that. Otherwise, I think having a different meaning or handling of
+CC=clang or LLVM=1 is the end of the world, but I do think that it
+should be documented.
+
+Cheers,
+Nathan
